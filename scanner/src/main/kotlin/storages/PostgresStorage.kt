@@ -28,6 +28,9 @@ import java.io.IOException
 import java.sql.Connection
 import java.sql.SQLException
 
+import kotlin.time.measureTime
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -40,6 +43,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.showStackTrace
 
 /**
@@ -145,12 +149,25 @@ class PostgresStorage(
                 setString(1, id.toCoordinates())
             }
 
-            val resultSet = statement.executeQuery()
+            val (resultSet, queryDuration) = measureTimedValue { statement.executeQuery() }
+
+            log.perf {
+                "Fetched scan results for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                        "${queryDuration.inMilliseconds}ms."
+            }
+
             val scanResults = mutableListOf<ScanResult>()
 
-            while (resultSet.next()) {
-                val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
-                scanResults += scanResult
+            val deserializationDuration = measureTime {
+                while (resultSet.next()) {
+                    val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
+                    scanResults += scanResult
+                }
+            }
+
+            log.perf {
+                "Deserialized ${scanResults.size} scan results for '${id.toCoordinates()}' in " +
+                        "${deserializationDuration.inMilliseconds}ms."
             }
 
             Success(ScanResultContainer(id, scanResults))
@@ -191,12 +208,25 @@ class PostgresStorage(
                 setString(4, scannerDetails.configuration)
             }
 
-            val resultSet = statement.executeQuery()
+            val (resultSet, queryDuration) = measureTimedValue { statement.executeQuery() }
+
+            log.perf {
+                "Fetched scan results for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                        "${queryDuration.inMilliseconds}ms."
+            }
+
             val scanResults = mutableListOf<ScanResult>()
 
-            while (resultSet.next()) {
-                val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
-                scanResults += scanResult
+            val deserializationDuration = measureTime {
+                while (resultSet.next()) {
+                    val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
+                    scanResults += scanResult
+                }
+            }
+
+            log.perf {
+                "Deserialized ${scanResults.size} scan results for '${pkg.id.toCoordinates()}' in " +
+                        "${deserializationDuration.inMilliseconds}ms."
             }
 
             // TODO: Currently the query only accounts for the scanner details. Ideally also the provenance should be
@@ -228,13 +258,25 @@ class PostgresStorage(
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
         val query = "INSERT INTO $schema.$table (identifier, scan_result) VALUES (?, to_json(?::json)::jsonb)"
 
-        val scanResultJson = jsonMapper.writeValueAsString(scanResult).escapeNull()
+        val (scanResultJson, serializationDuration) = measureTimedValue {
+            jsonMapper.writeValueAsString(scanResult).escapeNull()
+        }
+
+        log.perf {
+            "Serialized scan result for '${id.toCoordinates()}' in ${serializationDuration.inMilliseconds}ms."
+        }
 
         try {
             val statement = connection.prepareStatement(query)
             statement.setString(1, id.toCoordinates())
             statement.setString(2, scanResultJson)
-            statement.execute()
+
+            val insertDuration = measureTime { statement.execute() }
+
+            log.perf {
+                "Inserted scan result for '${id.toCoordinates()}' into ${javaClass.simpleName} in " +
+                        "${insertDuration.inMilliseconds}ms."
+            }
         } catch (e: SQLException) {
             e.showStackTrace()
 
