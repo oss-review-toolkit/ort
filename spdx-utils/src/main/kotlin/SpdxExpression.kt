@@ -413,7 +413,7 @@ class SpdxLicenseIdExpression(
         SpdxSimpleLicenseMapping.map(toString(), mapDeprecated) ?: this
 
     override fun validate(strictness: Strictness) {
-        val isValid = when (strictness) {
+        val isValid = SpdxConstants.isNotPresent(id) || when (strictness) {
             Strictness.ALLOW_ANY -> true
             Strictness.ALLOW_DEPRECATED -> spdxLicense != null
             Strictness.ALLOW_CURRENT -> spdxLicense?.deprecated == false
