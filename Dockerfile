@@ -37,7 +37,7 @@ RUN --mount=type=cache,target=/root/.gradle/ \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
-    ./gradlew --no-daemon --stacktrace :cli:distTar
+    ./gradlew --no-daemon --stacktrace --no-configure-on-demand :cli:distTar
 
 FROM adoptopenjdk:11-jre-hotspot-bionic
 
