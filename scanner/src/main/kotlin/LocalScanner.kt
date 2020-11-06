@@ -28,6 +28,7 @@ import java.io.IOException
 import java.time.Instant
 import java.util.concurrent.Executors
 
+import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.CoroutineDispatcher
@@ -367,9 +368,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         archiveFiles(downloadResult.downloadDirectory, pkg.id, provenance)
 
-        val scanResult = scanPathInternal(downloadResult.downloadDirectory, resultsFile)
-            .copy(provenance = provenance)
-            .filterByVcsPath()
+        val (scanResult, scanDuration) = measureTimedValue {
+            scanPathInternal(downloadResult.downloadDirectory, resultsFile)
+                .copy(provenance = provenance)
+                .filterByVcsPath()
+        }
+
+        log.perf {
+            "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in " +
+                    "${scanDuration.inMilliseconds}ms."
+        }
 
         return when (val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)) {
             is Success -> scanResult
@@ -391,7 +399,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         val path = "${id.toPath()}/${provenance.hash()}"
 
-        archiver.archive(directory, path)
+        val duration = measureTime { archiver.archive(directory, path) }
+
+        log.perf { "Archived files for '${id.toCoordinates()}' in ${duration.inMilliseconds}ms." }
     }
 
     /**
