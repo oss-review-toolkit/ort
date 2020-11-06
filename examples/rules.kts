@@ -26,7 +26,7 @@
  *******************************************************/
 
 /**
- * Import license configuration from licenses.yml.
+ * Import license configuration from license-classifications.yml.
  */
 
 fun getLicenseSet(setId: String) = licenseConfiguration.getLicensesForSet(setId).map { it.id }.toSet()

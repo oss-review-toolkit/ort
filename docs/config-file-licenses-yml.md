@@ -1,8 +1,9 @@
-# The `licenses.yml` file
+# The `license-classifications.yml` file
 
-The `licenses.yml` file holds a user-defined categorization of licenses.
+The `license-classifications.yml` file holds a user-defined categorization of licenses.
 
-You can use the [licenses.yml example](../examples/licenses.yml) as the base configuration file for your scans.
+You can use the [license-classifications.yml example](../examples/license-classifications.yml) as the base configuration
+file for your scans.
 
 ### When to Use
 
@@ -13,15 +14,15 @@ Licenses can be assigned to license sets like "permissive" or "public domain" wh
 
 ## Command Line
 
-To use the `licenses.yml` file put it to `$ORT_CONFIG_DIR/licenses.yml` or pass it to the `--license-configuration-file`
-option of the _evaluator_:
+To use the `license-classifications.yml` file put it to `$ORT_CONFIG_DIR/license-classifications.yml` or pass it to the
+`--license-configuration-file` option of the _evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
+  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
   --rules-file $ORT_CONFIG_DIR/rules.kts
 ```
