@@ -107,7 +107,7 @@ cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
+  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
   --rules-file $ORT_CONFIG_DIR/rules.kts
 ```

@@ -7,8 +7,9 @@ For each policy rule violation, you can define 'How to fix' follow-up actions to
 violations by themselves.
 
 You can use the [rules.kts example](../examples/rules.kts) as the base script file for your policy rules. Note that this
-example depends on the licenses categorizations defined in the [licenses.yml example](../examples/licenses.yml), see the
-[licenses.yml docs](config-file-licenses-yml.md).
+example depends on the licenses categorizations defined in the 
+[license-classifications.yml example](../examples/license-classifications.yml), see the
+[license-classifications.yml docs](config-file-licenses-yml.md).
 
 ## Command Line
 
@@ -20,7 +21,7 @@ cli/build/install/ort/bin/ort evaluate \
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir] \
   --output-formats YAML \
-  --license-configuration-file $ORT_CONFIG_DIR/licenses.yml \
+  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml \
   --package-curations-file $ORT_CONFIG_DIR/curations.yml  \
   --rules-file $ORT_CONFIG_DIR/rules.kts
 ```

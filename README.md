@@ -257,7 +257,7 @@ A file that contains user-defined categorization of licenses.
 
 | Format | Scope | Default location | Default value |
 | ------ | ----- | ---------------- | ------------- |
-| YAML / JSON | Global | `$ORT_CONFIG_DIR/licenses.yml` | Empty (n/a) |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/license-classifications.yml` | Empty (n/a) |
 
 #### [Resolution file](./docs/config-file-resolutions-yml.md)
 

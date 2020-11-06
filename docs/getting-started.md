@@ -304,7 +304,7 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 
 The evaluator can apply a set of rules against the scan result created above.
 ORT provides examples for the policy rules file [(rules.kts)](../examples/rules.kts),
-[user-defined categorization of licenses (licenses.yml)](../examples/licenses.yml) and
+[user-defined categorization of licenses (license-classifications.yml)](../examples/license-classifications.yml) and
 [user-defined package curations (curations.yml)](../examples/curations.yml) that can be used for testing the
 _evaluator_. 
 
@@ -314,14 +314,14 @@ To run the example rules use:
 cli/build/install/ort/bin/ort evaluate
   --package-curations-file curations.yml
   --rules-file rules.kts
-  --license-configuration-file licenses.yml
+  --license-configuration-file license-classifications.yml
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]/mime-types
 ```
 
 See the [curations.yml documentation](config-file-curations-yml.md) to learn more about using curations to correct
-invalid or missing package metadata and the [licenses.yml documentation](config-file-licenses-yml.md) on how you can
-classify licenses to simplify writing the policy rules.
+invalid or missing package metadata and the [license-classifications.yml documentation](config-file-licenses-yml.md) on
+how you can classify licenses to simplify writing the policy rules.
 
 It is possible to write your own evaluator rules as a Kotlin script and pass it to the _evaluator_ using `--rules-file`.
 Note that detailed documentation for writing custom rules is not yet available.

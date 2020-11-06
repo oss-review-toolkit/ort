@@ -86,9 +86,9 @@ class ExamplesFunTest : StringSpec() {
             }
         }
 
-        "licenses.yml can be deserialized" {
+        "license-classifications.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                takeExampleFile("licenses.yml").readValue<LicenseConfiguration>()
+                takeExampleFile("license-classifications.yml").readValue<LicenseConfiguration>()
             }
         }
 
