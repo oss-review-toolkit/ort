@@ -37,7 +37,8 @@ import org.ossreviewtoolkit.utils.storage.FileStorage
 @JsonSubTypes(
     Type(ClearlyDefinedStorageConfiguration::class),
     Type(FileBasedStorageConfiguration::class),
-    Type(PostgresStorageConfiguration::class)
+    Type(PostgresStorageConfiguration::class),
+    Type(Sw360StorageConfiguration::class)
 )
 sealed class ScanStorageConfiguration
 
@@ -114,4 +115,39 @@ data class PostgresStorageConfiguration(
      * TODO: Make additional parameters configurable, see:
      *       https://jdbc.postgresql.org/documentation/head/connect.html
      */
+) : ScanStorageConfiguration()
+
+/**
+ * A class to hold the configuration for SW360.
+ */
+data class Sw360StorageConfiguration(
+    /**
+     * The REST API URL of SW360.
+     */
+    val restUrl: String,
+
+    /**
+     * The authentication URL of your SW360 instance.
+     */
+    val authUrl: String,
+
+    /**
+     * The username for the requests to SW360.
+     */
+    val username: String,
+
+    /**
+     * The password of the SW360 user.
+     */
+    val password: String,
+
+    /**
+     * The client ID of the SW360 instance for the two step authentication.
+     */
+    val clientId: String,
+
+    /**
+     * The password of the client ID.
+     */
+    val clientPassword: String
 ) : ScanStorageConfiguration()
