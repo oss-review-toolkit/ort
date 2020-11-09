@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.log
@@ -96,6 +97,7 @@ abstract class ScanResultsStorage {
                 is FileBasedStorageConfiguration -> createFileBasedStorage(config)
                 is PostgresStorageConfiguration -> createPostgresStorage(config)
                 is ClearlyDefinedStorageConfiguration -> createClearlyDefinedStorage(config)
+                is Sw360StorageConfiguration -> TODO()
             }
 
         /**

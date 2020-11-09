@@ -19,6 +19,7 @@
  * License-Filename: LICENSE
  */
 
+val antennaVersion: String by project
 val cliktVersion: String by project
 val config4kVersion: String by project
 val jacksonVersion: String by project
@@ -131,6 +132,7 @@ dependencies {
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
+    implementation("org.eclipse.sw360.antenna:sw360-client:$antennaVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("org.reflections:reflections:$reflectionsVersion")

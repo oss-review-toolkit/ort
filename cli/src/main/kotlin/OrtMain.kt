@@ -126,7 +126,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
             RequirementsCommand(),
             ScannerCommand(),
             UploadCurationsCommand(),
-            UploadResultToPostgresCommand()
+            UploadResultToPostgresCommand(),
+            UploadResultToSw360Command()
         )
 
         versionOption(
