@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.helper.commands.ImportCopyrightGarbageCommand
 import org.ossreviewtoolkit.helper.commands.ImportLicenseFindingCurationsCommand
 import org.ossreviewtoolkit.helper.commands.ImportPathExcludesCommand
 import org.ossreviewtoolkit.helper.commands.ListCopyrightsCommand
+import org.ossreviewtoolkit.helper.commands.ListLicenseCategoriesCommand
 import org.ossreviewtoolkit.helper.commands.ListLicensesCommand
 import org.ossreviewtoolkit.helper.commands.ListPackagesCommand
 import org.ossreviewtoolkit.helper.commands.ListStoredScanResultsCommand
@@ -89,6 +90,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             ImportLicenseFindingCurationsCommand(),
             ImportPathExcludesCommand(),
             ListCopyrightsCommand(),
+            ListLicenseCategoriesCommand(),
             ListLicensesCommand(),
             ListPackagesCommand(),
             ListStoredScanResultsCommand(),
