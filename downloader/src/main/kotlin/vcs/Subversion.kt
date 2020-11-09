@@ -80,7 +80,7 @@ class Subversion : VersionControlSystem() {
 
             override fun isShallow() = false
 
-            override fun getRemoteUrl() = doSvnInfo()?.url?.toDecodedString().orEmpty()
+            override fun getRemoteUrl() = doSvnInfo()?.url?.toString().orEmpty()
 
             override fun getRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
 
@@ -91,7 +91,7 @@ class Subversion : VersionControlSystem() {
                 val remoteUrl = getRemoteUrl()
 
                 val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
-                    doSvnInfo()?.repositoryRootURL?.toDecodedString().orEmpty()
+                    doSvnInfo()?.repositoryRootURL?.toString().orEmpty()
                 } else {
                     remoteUrl
                 }
@@ -263,7 +263,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
                 previousAuth: SVNAuthentication?,
                 authMayBeStored: Boolean
             ): SVNAuthentication? {
-                val url = URL(svnurl.toDecodedString())
+                val url = URL(svnurl.toString())
 
                 val auth = ortAuthenticator?.requestPasswordAuthenticationInstance(
                     svnurl.host, null, svnurl.port, svnurl.protocol, null, null, url, Authenticator.RequestorType.SERVER
@@ -284,7 +284,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
     }
 
     override fun getProxyManager(url: SVNURL): ISVNProxyManager? {
-        val proxy = ortProxySelector.select(URI(url.toDecodedString())).firstOrNull() ?: return null
+        val proxy = ortProxySelector.select(URI(url.toString())).firstOrNull() ?: return null
         val proxyAddress = (proxy.address() as? InetSocketAddress) ?: return null
         val authentication = ortProxySelector.getProxyAuthentication(proxy)
 
