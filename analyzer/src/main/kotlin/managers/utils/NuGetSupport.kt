@@ -88,7 +88,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             val configFile = definitionFile.parentFile.searchUpwardsForFile("nuget.config", ignoreCase = true)
             val serviceIndexUrls = configFile?.let { configXmlReader.getRegistrationsBaseUrls(it) }
 
-            return NuGetSupport(serviceIndexUrls.orEmpty())
+            return serviceIndexUrls?.let { NuGetSupport(it) } ?: NuGetSupport()
         }
     }
 
