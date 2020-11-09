@@ -21,12 +21,14 @@ package org.ossreviewtoolkit.model.licenses
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import java.util.SortedSet
-
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 /**
  * A class for configuring meta data for a specific license referred to by a SPDX license identifier.
+ *
+ * The meta data consists of assignments to generic categories whose exact meaning is customer specific.
+ * The categories a license belong to can be evaluated by other components, such as rules or templates,
+ * which can decide - based on this information - how to handle a specific license.
  */
 data class License(
     /**
@@ -38,15 +40,5 @@ data class License(
      * The identifiers of the [license categories][LicenseCategory] this license is assigned to.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val categories: SortedSet<String>,
-
-    /**
-     * Defines whether the license text should be placed inside the NOTICE file.
-     */
-    val includeInNoticeFile: Boolean,
-
-    /**
-     * Defines whether a source code offer should be made for this license.
-     */
-    val includeSourceCodeOfferInNoticeFile: Boolean
+    val categories: Set<String>
 )

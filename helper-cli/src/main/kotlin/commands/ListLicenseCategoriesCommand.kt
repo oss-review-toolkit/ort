@@ -89,23 +89,13 @@ class ListLicenseCategoriesCommand : CliktCommand(
         }
 
     private fun License.description(ignoreCategory: String? = null): String {
-        val categories = categories.toMutableList().apply {
-            if (includeInNoticeFile) {
-                add("include-in-notices")
-            }
-
-            if (includeSourceCodeOfferInNoticeFile) {
-                add("include-source-code-offer-in-notices")
-            }
-
-            ignoreCategory?.let { remove(it) }
-        }
+        val filteredCategories = categories.filterNot { it == ignoreCategory }
 
         return buildString {
             append(id)
 
-            if (categories.isNotEmpty()) {
-                append(": [${categories.joinToString()}]")
+            if (filteredCategories.isNotEmpty()) {
+                append(": [${filteredCategories.joinToString()}]")
             }
         }
     }
