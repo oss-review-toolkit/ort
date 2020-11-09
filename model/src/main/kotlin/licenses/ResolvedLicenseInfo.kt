@@ -176,7 +176,7 @@ data class ResolvedLicenseLocation(
     val provenance: Provenance,
 
     /**
-     * The text location.
+     * The text location relative to the root of the VCS or source artifact defined by [provenance].
      */
     val location: TextLocation,
 
