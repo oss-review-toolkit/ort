@@ -31,6 +31,8 @@ Git has the `-s` option (lower case) for `commit` that can sign off a commit for
 
 In order to maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 
+- [Ensure that your commit messages will make your mom proud](https://www.robertcooper.me/git-commit-messages) :wink:
+
 - Each commit in a pull request should be atomic, in the sense that it passes all checks (build, static code analysis,
   tests) individually, and deals with one thing at a time while being self-contained. Do not add commits to a pull
   request that (partly) undo changes from an earlier commit in the same pull request, as that makes a reviewer's life
