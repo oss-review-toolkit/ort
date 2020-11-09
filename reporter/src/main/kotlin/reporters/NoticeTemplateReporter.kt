@@ -190,7 +190,7 @@ class NoticeTemplateReporter : Reporter {
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterIncludeInNoticeFile(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                licenseConfiguration.licenses.find { it.id == resolvedLicense.license }?.includeInNoticeFile ?: true
+                licenseConfiguration.categorizations.find { it.id == resolvedLicense.license }?.includeInNoticeFile ?: true
             }
 
         /**
@@ -201,7 +201,7 @@ class NoticeTemplateReporter : Reporter {
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterIncludeSourceCodeOfferInNoticeFile(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                licenseConfiguration.licenses.find { it.id == resolvedLicense.license }
+                licenseConfiguration.categorizations.find { it.id == resolvedLicense.license }
                     ?.includeSourceCodeOfferInNoticeFile ?: false
             }
 

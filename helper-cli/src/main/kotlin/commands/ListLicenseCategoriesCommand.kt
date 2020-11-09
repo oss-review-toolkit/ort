@@ -61,16 +61,16 @@ class ListLicenseCategoriesCommand : CliktCommand(
 
     private fun LicenseConfiguration.summary(): String =
         buildString {
-            appendLine("Found ${licenses.size} licenses categorized as:\n")
+            appendLine("Found ${categorizations.size} licenses categorized as:\n")
 
-            licenses.groupByCategory().toList().sortedBy { it.first }.forEach { (category, licenses) ->
+            categorizations.groupByCategory().toList().sortedBy { it.first }.forEach { (category, licenses) ->
                 appendLine("  $category (${licenses.size})")
             }
         }
 
     private fun LicenseConfiguration.licensesByCategory(): String =
         buildString {
-            licenses.groupByCategory().forEach { (category, licenses) ->
+            categorizations.groupByCategory().forEach { (category, licenses) ->
                 appendLine("$category (${licenses.size}):")
                 appendLine()
 
@@ -83,13 +83,13 @@ class ListLicenseCategoriesCommand : CliktCommand(
 
     private fun LicenseConfiguration.licensesList(): String =
         buildString {
-            licenses.sortedBy { it.id.toString() }.forEach { license ->
+            categorizations.sortedBy { it.id.toString() }.forEach { license ->
                 appendLine(license.description())
             }
         }
 
     private fun License.description(ignoreCategory: String? = null): String {
-        val categories = sets.toMutableList().apply {
+        val categories = categories.toMutableList().apply {
             if (includeInNoticeFile) {
                 add("include-in-notices")
             }
@@ -112,6 +112,6 @@ class ListLicenseCategoriesCommand : CliktCommand(
 
     private fun Collection<License>.groupByCategory(): Map<String, List<License>> =
         flatMap { license ->
-            license.sets.map { category -> license to category }
+            license.categories.map { category -> license to category }
         }.groupBy({ it.second }, { it.first })
 }

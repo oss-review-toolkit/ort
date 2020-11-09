@@ -22,27 +22,22 @@ package org.ossreviewtoolkit.model.licenses
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
- * A set where [License]s can be assigned to.
+ * A category where [License]s can be assigned to. This does not have any specific semantic, but users are free to
+ * define their own set of categories.
  */
-data class LicenseSet(
+data class LicenseCategory(
     /**
-     * The unique identifier of this [LicenseSet].
+     * The name of this [LicenseCategory]. The name can be chosen freely, but must be unique over all categories.
      */
-    val id: String,
+    val name: String,
 
     /**
-     * The name of this [LicenseSet].
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val name: String = "",
-
-    /**
-     * A description for this [LicenseSet].
+     * A description for this [LicenseCategory].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val description: String = ""
 ) {
     init {
-        require(id.isNotEmpty()) { "The identifier must not be empty." }
+        require(name.isNotEmpty()) { "The name must not be empty." }
     }
 }
