@@ -661,13 +661,8 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
         }
 
         vcsInfo != null && vcsInfo != VcsInfo.EMPTY -> {
-            val path = listOfNotNull(
-                vcsInfo.path.takeIf { it.isNotEmpty() },
-                location.path
-            ).joinToString("/")
-
             VcsHost.toPermalink(
-                vcsInfo.copy(path = path),
+                vcsInfo.copy(path = location.path),
                 location.startLine, location.endLine
             )
         }

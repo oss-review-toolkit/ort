@@ -272,28 +272,28 @@ scanner:
           licenses:
           - license: "LicenseRef-test-Apache-2.0-multi-line"
             location:
-              path: "build.gradle"
+              path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
               start_line: 19
               end_line: 20
           - license: "LicenseRef-test-Apache-2.0-single-line"
             location:
-              path: "build.gradle"
+              path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
               start_line: 19
               end_line: 19
           - license: "LicenseRef-test-Apache-2.0-single-line"
             location:
-              path: "build.gradle"
+              path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
               start_line: 20
               end_line: 20
           - license: "GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-3-Clause OR MIT"
             location:
-              path: "src/code.cpp"
+              path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp"
               start_line: 1
               end_line: 1
           copyrights:
           - statement: "Copyright (c) example authors."
             location:
-              path: "build.gradle"
+              path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
               start_line: 20
               end_line: 20
           issues:

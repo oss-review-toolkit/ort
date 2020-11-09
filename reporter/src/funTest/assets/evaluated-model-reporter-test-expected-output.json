@@ -248,56 +248,56 @@
     "findings" : [ {
       "type" : "LICENSE",
       "license" : 0,
-      "path" : "src/code.cpp",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp",
       "start_line" : 1,
       "end_line" : 1,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
       "license" : 1,
-      "path" : "src/code.cpp",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp",
       "start_line" : 1,
       "end_line" : 1,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
       "license" : 2,
-      "path" : "src/code.cpp",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp",
       "start_line" : 1,
       "end_line" : 1,
       "scan_result" : 0
     }, {
       "type" : "COPYRIGHT",
       "copyright" : 0,
-      "path" : "build.gradle",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
       "start_line" : 20,
       "end_line" : 20,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
       "license" : 3,
-      "path" : "build.gradle",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
       "start_line" : 19,
       "end_line" : 20,
       "scan_result" : 0
     }, {
       "type" : "COPYRIGHT",
       "copyright" : 0,
-      "path" : "build.gradle",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
       "start_line" : 20,
       "end_line" : 20,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
       "license" : 4,
-      "path" : "build.gradle",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
       "start_line" : 19,
       "end_line" : 19,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
       "license" : 4,
-      "path" : "build.gradle",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
       "start_line" : 20,
       "end_line" : 20,
       "scan_result" : 0
