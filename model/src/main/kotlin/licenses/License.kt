@@ -35,10 +35,10 @@ data class License(
     val id: SpdxSingleLicenseExpression,
 
     /**
-     * The identifiers of the [LicenseSet]s this license is assigned to.
+     * The identifiers of the [license categories][LicenseCategory] this license is assigned to.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val sets: SortedSet<String>,
+    val categories: SortedSet<String>,
 
     /**
      * Defines whether the license text should be placed inside the NOTICE file.

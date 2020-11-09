@@ -19,52 +19,65 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
- * A configuration for licenses which allows to assign meta data to licenses. It allows assigning licenses to sets which
- * are useful for making license classifications. The available license sets are implicitly defined by the references
- * from the [licenses] and it is optional to define the meta data for any license set via an entry in [licenseSets].
+ * A classification for licenses which allows to assign meta data to licenses. It allows defining rather generic
+ * categories and assigning licenses to these. That way flexible classifications can be created based on
+ * customizable categories. The available license categories need to be declared explicitly; when creating an
+ * instance, it is checked that all the references from the [categorizations] point to existing [categories].
  */
 data class LicenseConfiguration(
     /**
-     * Defines meta data for the license sets.
+     * Defines meta data for the license categories.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenseSets: List<LicenseSet> = emptyList(),
+    @JsonAlias("license_sets")
+    val categories: List<LicenseCategory> = emptyList(),
 
     /**
      * Defines meta data for licenses.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenses: List<License> = emptyList()
+    @JsonAlias("licenses")
+    val categorizations: List<License> = emptyList()
 ) {
     init {
-        licenseSets.groupBy { it.id }.values.filter { it.size > 1 }.let { groups ->
+        categories.groupBy { it.name }.values.filter { it.size > 1 }.let { groups ->
             require(groups.isEmpty()) {
-                "Found multiple license set entries with the same Id: ${groups.joinToString { it.first().id }}."
+                "Found multiple license category entries with the same name: " +
+                        groups.joinToString { it.first().name }
             }
         }
-        licenses.groupBy { it.id }.values.filter { it.size > 1 }.let { groups ->
+
+        categorizations.groupBy { it.id }.values.filter { it.size > 1 }.let { groups ->
             require(groups.isEmpty()) {
                 "Found multiple license entries with the same Id: ${groups.joinToString { it.first().id.toString() }}."
+            }
+        }
+
+        val categoryNames = categories.map { it.name }.toSet()
+        categorizations.filterNot { it.categories.all(categoryNames::contains) }.let { lic ->
+            require(lic.isEmpty()) {
+                "Found licenses that reference non-existing categories: ${lic.joinToString { it.id.toString() }}"
             }
         }
     }
 
     /**
-     * A property for fast look-ups of licenses for a given set.
+     * A property for fast look-ups of licenses for a given category.
      */
-    private val licensesBySetId: Map<String, Set<License>> by lazy {
+    private val licensesByCategoryName: Map<String, Set<License>> by lazy {
         val result = mutableMapOf<String, MutableSet<License>>()
 
-        licenseSets.forEach { set ->
-            result[set.id] = mutableSetOf()
+        categories.forEach { category ->
+            result[category.name] = mutableSetOf()
         }
 
-        licenses.forEach { license ->
-            license.sets.forEach { setId ->
-                result.getOrPut(setId) { mutableSetOf() } += license
+        categorizations.forEach { license ->
+            license.categories.forEach { categoryId ->
+                result.getOrPut(categoryId) { mutableSetOf() } += license
             }
         }
 
@@ -72,8 +85,8 @@ data class LicenseConfiguration(
     }
 
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getLicensesForSet(setId: String): Set<License> =
-        licensesBySetId[setId] ?: error("Unknown license set identifier: $setId.")
+    fun getLicensesForCategory(categoryName: String): Set<License> =
+        licensesByCategoryName[categoryName] ?: error("Unknown license category name: $categoryName.")
 }
 
 fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()

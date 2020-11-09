@@ -5,374 +5,375 @@
 # To demonstrate how one can insert a custom written offer
 # include_source_code_offer_in_notice_file has been set to
 # true for all licenses of the GPL family.
-license_sets:
-- id: "copyleft"
-- id: "copyleft-limited"
-- id: "permissive"
-- id: "public-domain"
-licenses:
+categories:
+- name: "copyleft"
+- name: "strong-copyleft"
+- name: "copyleft-limited"
+- name: "permissive"
+- name: "public-domain"
+categorizations:
 - id: "AGPL-1.0"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "AGPL-1.0-only"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "AGPL-1.0-or-later"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "AGPL-3.0"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "AGPL-3.0-only"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "AGPL-3.0-or-later"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "Apache-2.0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
-  include_source_code_offer_in_notice_file: false 
+  include_source_code_offer_in_notice_file: false
 - id: "Artistic-1.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "Artistic-2.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "BSD-1-Clause"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "BSD-2-Clause"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "BSD-2-Clause-FreeBSD"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "BSD-2-Clause-NetBSD"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "BSD-3-Clause"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "BSD-4-Clause"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "BSD-4-Clause-UC"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CC-BY-1.0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CC-BY-2.0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CC-BY-2.5"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CC-BY-3.0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CC-BY-4.0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CC0-1.0"
-  sets:
+  categories:
   - "public-domain"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CDDL-1.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "CDDL-1.1"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "EPL-1.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "EPL-2.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "EUPL-1.1"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "EUPL-1.2"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "GPL-1.0+"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-1.0-only"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-1.0-or-later"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-2.0"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-2.0+"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-2.0-only"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-2.0-only WITH Classpath-exception-2.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-2.0-only WITH Font-exception-2.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-2.0-or-later"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-3.0"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-3.0+"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-3.0-only"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "GPL-3.0-or-later"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "JSON"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "LGPL-2.0-only"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "LGPL-2.0-or-later"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "LGPL-2.1-only"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "LGPL-2.1-or-later"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "LGPL-3.0-only"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "LGPL-3.0-or-later"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: true
 - id: "Libpng"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MIT"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MIT-0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MIT-feh"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MPL-1.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MPL-1.1"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MPL-2.0"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MS-PL"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "MS-RL"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "ODbL-1.0"
-  sets:
+  categories:
   - "copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "OFL-1.0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "OFL-1.1"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "OpenSSL"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "PSF"
-  sets:
+  categories:
   - "strong-copyleft"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "Python-2.0"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "Ruby"
-  sets:
+  categories:
   - "copyleft-limited"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "SAX-PD"
-  sets:
+  categories:
   - "public-domain"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "Unlicense"
-  sets:
+  categories:
   - "public-domain"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "W3C"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "WTFPL"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "X11"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "Zlib"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "bzip2-1.0.5"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "bzip2-1.0.6"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
 - id: "curl"
-  sets:
+  categories:
   - "permissive"
   include_in_notice_file: true
   include_source_code_offer_in_notice_file: false
