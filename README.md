@@ -413,13 +413,15 @@ this defines a priority for look-up operations. Each storage backend can act as 
 support updates and thus cannot serve as writers. If a storage backend is referenced both as reader and writer, the
 scanner creates only a single instance of this storage class.
 
-The following subsections describe the different storage backend implementations supported by ORT.
+The following subsections describe the different storage backend implementations supported by ORT. Note that the name of
+a storage entry (like `fileBasedStorage`) can be freely chosen. That name is then used to refer to the storage from the
+`storageReaders` and `storageWriters` sections.
 
 ### Local File Storage
 
-By default the _scanner_ stores scan results on the local file system in the current user's home directory (i.e.
-`~/.ort/scanner/scan-results`) for later reuse. The storage directory can be customized by passing an ORT configuration
-file (`-c`) that contains a respective local file storage configuration:
+By default, the _scanner_ stores scan results on the local file system in the current user's home directory (i.e.
+`~/.ort/scanner/scan-results`) for later reuse. Settings like the storage directory and the compression flag can be
+customized in the ORT configuration file (`-c`) with a respective storage configuration:
 
 ```hocon
 ort {
