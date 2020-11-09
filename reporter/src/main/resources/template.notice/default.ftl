@@ -36,7 +36,7 @@ Merge the licenses and copyrights of all projects into a single list. The defaul
 projects cannot have a concluded license (compare with the handling of packages below). Also filter all licenses that
 are configured not to be included in notice files.
 --]
-[#assign mergedLicenses = helper.filterIncludeInNoticeFile(helper.mergeLicenses(projects))]
+[#assign mergedLicenses = helper.filterForCategory(helper.mergeLicenses(projects), "include-in-notice-file")]
 [#list mergedLicenses as resolvedLicense]
 [#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
 [#if licenseText?has_content]
@@ -96,8 +96,8 @@ license those statements are kept. Also filter all licenses that are configured 
 filter all licenses that are contained in the license files already printed above.
 --]
 [#assign
-resolvedLicenses = helper.filterIncludeInNoticeFile(
-    helper.licenseView("CONCLUDED_OR_REST").filter(package.licensesNotInLicenseFiles())
+resolvedLicenses = helper.filterForCategory(
+    helper.licenseView("CONCLUDED_OR_REST").filter(package.licensesNotInLicenseFiles()), "include-in-notice-file"
 )
 ]
 [#if resolvedLicenses?has_content]

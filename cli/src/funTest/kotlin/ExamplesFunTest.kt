@@ -23,6 +23,8 @@ import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -46,6 +48,7 @@ import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
@@ -88,7 +91,13 @@ class ExamplesFunTest : StringSpec() {
 
         "license-classifications.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                takeExampleFile("license-classifications.yml").readValue<LicenseConfiguration>()
+                val config = takeExampleFile("license-classifications.yml").readValue<LicenseConfiguration>()
+
+                config.categories.filter { it.description.isNotEmpty() } shouldNot beEmpty()
+                config.categoryNames shouldContain "public-domain"
+                val licMIT = config["MIT".toSpdx()]
+                licMIT.shouldNotBeNull()
+                licMIT.categories shouldContain "permissive"
             }
         }
 

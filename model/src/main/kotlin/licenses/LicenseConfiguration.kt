@@ -22,6 +22,11 @@ package org.ossreviewtoolkit.model.licenses
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.SortedSet
+
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+
 /**
  * A classification for licenses which allows to assign meta data to licenses. It allows defining rather generic
  * categories and assigning licenses to these. That way flexible classifications can be created based on
@@ -58,11 +63,21 @@ data class LicenseConfiguration(
         }
 
         val categoryNames = categories.map { it.name }.toSet()
-        categorizations.filterNot { it.categories.all(categoryNames::contains) }.let { lic ->
-            require(lic.isEmpty()) {
-                "Found licenses that reference non-existing categories: ${lic.joinToString { it.id.toString() }}"
+        categorizations.associateWith { lic -> lic.categories.filterNot(categoryNames::contains) }
+            .filterNot { it.value.isEmpty() }
+            .let { invalidCategorizations ->
+                require(invalidCategorizations.isEmpty()) {
+                    val licenseIds = invalidCategorizations.keys.joinToString { it.id.toString() }
+                    val categories = invalidCategorizations.values.flatten().toSet()
+                    "Found licenses that reference non-existing categories: $licenseIds; " +
+                            "unknown categories are $categories."
+                }
             }
-        }
+    }
+
+    /** A property allowing convenient access to the names of all categories defined. */
+    val categoryNames: SortedSet<String> by lazy {
+        categories.mapTo(sortedSetOf()) { it.name }
     }
 
     /**
@@ -84,9 +99,23 @@ data class LicenseConfiguration(
         result
     }
 
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    /**
+     * Return a set with the licenses that are assigned to the category with the given [name][categoryName].
+     * If the there is no category with the name provided, throw an [IllegalStateException].
+     * This is intended to be mostly used via scripting.
+     */
     fun getLicensesForCategory(categoryName: String): Set<License> =
         licensesByCategoryName[categoryName] ?: error("Unknown license category name: $categoryName.")
+
+    /** A property for fast-lookups of licenses by their ID. */
+    private val licensesById: Map<SpdxSingleLicenseExpression, License> by lazy {
+        categorizations.associateBy { it.id }
+    }
+
+    /**
+     * A convenience operator to return the [License] for the given [id] or *null* if no such license can be found.
+     */
+    operator fun get(id: SpdxExpression): License? = licensesById[id]
 }
 
 fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()

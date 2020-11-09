@@ -29,7 +29,6 @@ import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.licenses.License
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
@@ -183,26 +182,10 @@ class NoticeTemplateReporter : Reporter {
             return packages.filter { pkg -> pkg.id in dependencies }
         }
 
-        /**
-         * Return licenses that are configured to be [included in the notice file][License.includeInNoticeFile] in the
-         * [LicenseConfiguration].
-         */
         @Suppress("UNUSED") // This function is used in the templates.
-        fun filterIncludeInNoticeFile(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
+        fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                licenseConfiguration.categorizations.find { it.id == resolvedLicense.license }?.includeInNoticeFile ?: true
-            }
-
-        /**
-         * Return licenses that are configured to require a
-         * [source code offer in the notice file][License.includeSourceCodeOfferInNoticeFile] in the
-         * [LicenseConfiguration].
-         */
-        @Suppress("UNUSED") // This function is used in the templates.
-        fun filterIncludeSourceCodeOfferInNoticeFile(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
-            licenses.filter { resolvedLicense ->
-                licenseConfiguration.categorizations.find { it.id == resolvedLicense.license }
-                    ?.includeSourceCodeOfferInNoticeFile ?: false
+                licenseConfiguration[resolvedLicense.license]?.categories?.contains(category) ?: true
             }
 
         /**
