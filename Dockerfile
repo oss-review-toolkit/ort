@@ -17,7 +17,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-FROM frolvlad/alpine-java:jdk8-slim AS build
+FROM adoptopenjdk/openjdk11:jdk-11.0.9_11.1-alpine-slim AS build
 
 # Apk install commands.
 RUN apk add --no-cache \
