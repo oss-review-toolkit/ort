@@ -24,9 +24,10 @@ import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
@@ -122,18 +123,23 @@ class ExamplesFunTest : StringSpec() {
             howToFixText shouldContain "Manually verify that the file does not contain any license information."
         }
 
-        "rules.kts can be compiled" {
+        "rules.kts can be compiled and executed" {
+            val resultFile = File("src/funTest/assets/semver4j-analyzer-result.yml")
+            val licenseFile = File("../examples/license-classifications.yml")
+            val ortResult = resultFile.readValue<OrtResult>()
             val evaluator = Evaluator(
-                ortResult = OrtResult.EMPTY,
-                licenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
-                licenseConfiguration = LicenseConfiguration()
+                ortResult = ortResult,
+                licenseInfoResolver = ortResult.createLicenseInfoResolver(),
+                licenseConfiguration = licenseFile.readValue()
             )
 
             val script = takeExampleFile("rules.kts").readText()
 
-            evaluator.checkSyntax(script) shouldBe true
+            val result = evaluator.run(script)
 
-            // TODO: It should also be verified that the script works as expected.
+            result.violations shouldHaveSize 2
+            val failedRules = result.violations.map { it.rule }
+            failedRules shouldContainExactlyInAnyOrder listOf("UNHANDLED_LICENSE", "COPYLEFT_LIMITED_IN_SOURCE")
         }
 
         "PDF files are valid Antenna templates" {
