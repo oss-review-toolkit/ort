@@ -53,6 +53,14 @@ plugins {
     id("org.jetbrains.gradle.plugin.idea-ext")
 }
 
+// TODO: Replace this with Gradle's toolchain mechanism [1] once the Kotlin plugin supports it [2].
+// [1] https://blog.gradle.org/java-toolchains
+// [2] https://youtrack.jetbrains.com/issue/KT-43095
+val javaVersion = JavaVersion.current()
+if (!javaVersion.isCompatibleWith(JavaVersion.VERSION_11)) {
+    throw GradleException("At least Java 11 is required, but Java $javaVersion is being used.")
+}
+
 reckon {
     scopeFromProp()
     snapshotFromProp()
@@ -199,7 +207,7 @@ subprojects {
 
         kotlinOptions {
             allWarningsAsErrors = true
-            jvmTarget = "1.8"
+            jvmTarget = "11"
             apiVersion = "1.4"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
         }
