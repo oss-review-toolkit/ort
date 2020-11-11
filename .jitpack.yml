@@ -1,5 +1,5 @@
 jdk:
-  - openjdk8
+  - openjdk11
 
 install:
   # Exclude dokkaJavadoc tasks to save build time.

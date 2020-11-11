@@ -2,7 +2,7 @@
 
 &nbsp;
 
-| Linux (OpenJDK 11)             | Windows (Oracle JDK 11)         | JitPack (OpenJDK 8)             |
+| Linux (OpenJDK 11)             | Windows (Oracle JDK 11)         | JitPack (OpenJDK 11)            |
 | :----------------------------- | :------------------------------ | :------------------------------ |
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
 | [![Linux code coverage][7]][8] |                                 |                                 |
@@ -81,8 +81,7 @@ Change into the directory with ORT's source code and run `docker build -t ort .`
 
 Install these additional prerequisites:
 
-* OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler); also remember to set the
-  `JAVA_HOME` environment variable accordingly.
+* Java Development Kit (JDK) version 11 or later; also remember to set the `JAVA_HOME` environment variable accordingly.
 
 Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap
 Gradle and download all required dependencies).
@@ -598,10 +597,9 @@ ORT is being continuously used on Linux, Windows and macOS by the
 [core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are
 considered to be well supported.
 
-To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least a Java Runtime Environment
-(JRE) version 8 is required, but using version 11 is recommended. Memory and CPU requirements vary depending on the size
-and type of project(s) to analyze / scan, but the general recommendation is to configure the JRE with 8 GiB of memory
-(`-Xmx=8g`) and to use a CPU with at least 4 cores.
+To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least Java 11 is required. Memory and
+CPU requirements vary depending on the size and type of project(s) to analyze / scan, but the general recommendation is
+to configure Java with 8 GiB of memory (`-Xmx=8g`) and to use a CPU with at least 4 cores.
 
 If ORT requires external tools in order to analyze a project, these tools are listed by the `ort requirements` command.
 If a package manager is not list listed there, support for it is integrated directly into ORT and does not require any
