@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
+import org.ossreviewtoolkit.reporter.reporters.AsciidocTemplateReporter
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
@@ -161,6 +162,22 @@ class ExamplesFunTest : StringSpec() {
             )
 
             report should beEmpty()
+        }
+
+        "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
+            val outputDir = createTempDirectory("$ORT_NAME-${ExamplesFunTest::class.simpleName}").toFile().apply {
+                deleteOnExit()
+            }
+
+            takeExampleFile("asciidoctor-pdf-theme.yml")
+
+            val report = AsciidocTemplateReporter().generateReport(
+                ReporterInput(OrtResult.EMPTY),
+                outputDir,
+                mapOf("pdf-theme.path" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path)
+            )
+
+            report shouldHaveSize 1
         }
 
         "All example files should have been tested" {
