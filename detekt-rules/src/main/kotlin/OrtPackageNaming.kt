@@ -59,6 +59,7 @@ class OrtPackageNaming : Rule() {
             "clearly-defined" -> ".clearlydefined"
             "cli" -> ""
             "detekt-rules" -> ".detekt"
+            "fossid-webapp" -> ".fossid"
             "helper-cli" -> ".helper"
             "nexus-iq" -> ".nexusiq"
             "spdx-utils" -> ".spdx"
