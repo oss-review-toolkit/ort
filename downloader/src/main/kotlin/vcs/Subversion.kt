@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.OrtAuthenticator
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.log
@@ -250,6 +251,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
     /* passphrase = */ charArrayOf()
 ) {
     private val ortProxySelector = installAuthenticatorAndProxySelector()
+    private val ortAuthenticator = OrtAuthenticator.getDefaultAuthenticator()
 
     init {
         authenticationProvider = object : ISVNAuthenticationProvider {
@@ -263,7 +265,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
             ): SVNAuthentication? {
                 val url = URL(svnurl.toString())
 
-                val auth = Authenticator.getDefault()?.requestPasswordAuthenticationInstance(
+                val auth = ortAuthenticator?.requestPasswordAuthenticationInstance(
                     svnurl.host, null, svnurl.port, svnurl.protocol, null, null, url, Authenticator.RequestorType.SERVER
                 ) ?: return null
 

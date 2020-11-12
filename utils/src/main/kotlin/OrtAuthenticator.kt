@@ -33,12 +33,19 @@ import org.apache.logging.log4j.Level
  */
 class OrtAuthenticator(private val original: Authenticator? = null) : Authenticator() {
     companion object {
+        fun getDefaultAuthenticator(): Authenticator? {
+            // The getDefault() method is only available as of Java 9, see
+            // https://docs.oracle.com/javase/9/docs/api/java/net/Authenticator.html#getDefault--
+            val method = runCatching { Authenticator::class.java.getMethod("getDefault") }.getOrNull()
+            return method?.invoke(null) as? Authenticator
+        }
+
         /**
          * Install this authenticator as the global default.
          */
         @Synchronized
         fun install(): OrtAuthenticator {
-            val current = getDefault()
+            val current = getDefaultAuthenticator()
             return if (current is OrtAuthenticator) {
                 logOnce(Level.INFO) { "Authenticator is already installed." }
                 current
@@ -55,7 +62,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
          */
         @Synchronized
         fun uninstall(): Authenticator? {
-            val current = getDefault()
+            val current = getDefaultAuthenticator()
             return if (current is OrtAuthenticator) {
                 current.original.also {
                     setDefault(it)
