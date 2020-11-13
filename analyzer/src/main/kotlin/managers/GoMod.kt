@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.CommandLineTool
@@ -182,16 +183,27 @@ class GoMod(
         return result
     }
 
-    private fun createPackage(id: Identifier) =
-        Package(
+    private fun createPackage(id: Identifier): Package {
+        val vcsFromId = if (id.name.startsWith("github.com")) {
+            VcsInfo(
+                type = VcsType.GIT,
+                url = "https://${id.name.removeSuffix("/")}.git",
+                revision = id.version
+            )
+        } else {
+            VcsInfo.EMPTY
+        }
+
+        return Package(
             id = Identifier(managerName, "", id.name, id.version),
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = getSourceArtifactForPackage(id),
-            vcs = VcsInfo.EMPTY
+            vcs = vcsFromId
         )
+    }
 
     private fun getSourceArtifactForPackage(id: Identifier): RemoteArtifact {
         /**
