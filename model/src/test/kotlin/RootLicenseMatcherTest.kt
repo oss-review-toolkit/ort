@@ -61,7 +61,7 @@ class RootLicenseMatcherTest : WordSpec({
                 "a" to setOf("a/LICENSE", "PATENTS"),
                 "a/a" to setOf("a/LICENSE", "PATENTS"),
                 "a/a/a" to setOf("a/a/a/LICENSE", "PATENTS"),
-                "a/a/a/a" to setOf("a/a/a/LICENSE", "a/a/a/a/PATENTS"),
+                "a/a/a/a" to setOf("a/a/a/LICENSE", "a/a/a/a/PATENTS")
             )
         }
 
