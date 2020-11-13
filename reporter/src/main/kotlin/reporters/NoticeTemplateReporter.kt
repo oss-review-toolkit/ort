@@ -97,7 +97,7 @@ class NoticeTemplateReporter : Reporter {
 
         val templateFiles = templatePaths.map { path ->
             File(path).expandTilde().also {
-                require(it.exists()) { "Could not find template file at ${it.absolutePath}." }
+                require(it.isFile) { "Could not find template file at ${it.absolutePath}." }
             }
         }
 
