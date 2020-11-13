@@ -63,7 +63,7 @@ internal class NuGetAllPackageData(
         // Optional fields.
         val description: String? = null,
         val projectUrl: String? = null,
-        val dependencyGroups: List<DependencyGroup> = emptyList(),
+        val dependencyGroups: List<DependencyGroup> = emptyList()
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -94,7 +94,7 @@ internal class NuGetAllPackageData(
         // See https://docs.microsoft.com/en-us/nuget/reference/nuspec#optional-metadata-elements.
         val licenseUrl: String? = null,
         val license: License? = null,
-        val repository: Repository? = null,
+        val repository: Repository? = null
     )
 
     data class License(
