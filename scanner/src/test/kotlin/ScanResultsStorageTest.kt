@@ -21,12 +21,12 @@ package org.ossreviewtoolkit.scanner
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.beInstanceOf
 
 import java.io.File
 
@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 class ScanResultsStorageTest : WordSpec({
     "ScanResultsStorage.configure()" should {
         "use no storage if not configured" {
-            ScanResultsStorage.storage.shouldBeInstanceOf<NoStorage>()
+            ScanResultsStorage.storage should beInstanceOf<NoStorage>()
         }
 
         "configure a local file storage" {
@@ -58,15 +58,11 @@ class ScanResultsStorageTest : WordSpec({
                 storageWriters = listOf("local")
             )
 
-            val storage = configureStorage(config)
-
-            storage.readers.shouldBeEmpty()
-            storage.writers shouldHaveSize 1
-            val fileStorage = storage.writers[0]
-            fileStorage.shouldBeInstanceOf<FileBasedStorage>()
-            val backend = fileStorage.backend
-            backend.shouldBeInstanceOf<LocalFileStorage>()
-            backend.directory.absolutePath shouldBe fileStorageConfig.directory.absolutePath
+            val storage = ScanResultsStorage.configure(config)
+            storage should beInstanceOf<FileBasedStorage>()
+            val backend = (storage as FileBasedStorage).backend
+            backend should beInstanceOf<LocalFileStorage>()
+            (backend as LocalFileStorage).directory.absolutePath shouldBe fileStorageConfig.directory.absolutePath
         }
 
         "configure an HTTP file storage" {
@@ -82,15 +78,11 @@ class ScanResultsStorageTest : WordSpec({
                 storageWriters = listOf("http")
             )
 
-            val storage = configureStorage(config)
-
-            storage.readers shouldHaveSize 1
-            storage.writers shouldBe storage.readers
-            val httpStorage = storage.readers[0]
-            httpStorage.shouldBeInstanceOf<FileBasedStorage>()
-            val backend = httpStorage.backend
-            backend.shouldBeInstanceOf<HttpFileStorage>()
-            backend.url shouldBe httpStorageConfig.url
+            val storage = ScanResultsStorage.configure(config)
+            storage should beInstanceOf<FileBasedStorage>()
+            val backend = (storage as FileBasedStorage).backend
+            backend should beInstanceOf<HttpFileStorage>()
+            (backend as HttpFileStorage).url shouldBe httpStorageConfig.url
         }
 
         "configure a ClearlyDefined storage" {
@@ -101,19 +93,16 @@ class ScanResultsStorageTest : WordSpec({
                 storageWriters = listOf()
             )
 
-            val storage = configureStorage(config)
-
-            storage.readers shouldHaveSize 1
-            val cdStorage = storage.readers[0]
-            cdStorage.shouldBeInstanceOf<ClearlyDefinedStorage>()
-            cdStorage.configuration shouldBe cdConfig
+            val storage = ScanResultsStorage.configure(config)
+            storage should beInstanceOf<ClearlyDefinedStorage>()
+            (storage as ClearlyDefinedStorage).configuration shouldBe cdConfig
         }
 
         "configure the default if no storages are specified" {
             ScanResultsStorage.configure(ScannerConfiguration())
             val storage = ScanResultsStorage.storage
 
-            storage.shouldBeInstanceOf<FileBasedStorage>()
+            storage should beInstanceOf<FileBasedStorage>()
         }
 
         "order storage readers and writers correctly" {
@@ -127,49 +116,44 @@ class ScanResultsStorageTest : WordSpec({
                 storageReaders = listOf("cd", "file")
             )
 
-            val storage = configureStorage(config)
-
-            storage.readers shouldHaveSize 2
+            val storage = ScanResultsStorage.configure(config)
+            storage should beInstanceOf<CompositeStorage>()
+            (storage as CompositeStorage).readers shouldHaveSize 2
             val cdStorage = storage.readers[0]
             val fileStorage = storage.readers[1]
-            cdStorage.shouldBeInstanceOf<ClearlyDefinedStorage>()
-            fileStorage.shouldBeInstanceOf<FileBasedStorage>()
+            cdStorage should beInstanceOf<ClearlyDefinedStorage>()
+            fileStorage should beInstanceOf<FileBasedStorage>()
             storage.writers shouldContainExactly listOf(fileStorage, cdStorage)
         }
 
         "detect references to unknown storage readers" {
-            val ex = shouldThrow<IllegalArgumentException> {
+            val exception = shouldThrow<IllegalArgumentException> {
                 val config = ScannerConfiguration(
-                    storages = mapOf("reader" to ClearlyDefinedStorageConfiguration("http://url")),
+                    storages = mapOf(
+                        "cdProd" to ClearlyDefinedStorageConfiguration("http://prod.cd"),
+                        "cdDev" to ClearlyDefinedStorageConfiguration("http://dev.cd")
+                    ),
                     storageReaders = listOf("nonExistingReader")
                 )
-                configureStorage(config)
+                ScanResultsStorage.configure(config)
             }
 
-            ex.message shouldContain "'nonExistingReader'"
+            exception.message shouldContain "'nonExistingReader'"
         }
 
         "detect references to unknown storage writers" {
-            val ex = shouldThrow<IllegalArgumentException> {
+            val exception = shouldThrow<IllegalArgumentException> {
                 val config = ScannerConfiguration(
-                    storages = mapOf("writer" to ClearlyDefinedStorageConfiguration("http://url")),
+                    storages = mapOf(
+                        "cdProd" to ClearlyDefinedStorageConfiguration("http://prod.cd"),
+                        "cdDev" to ClearlyDefinedStorageConfiguration("http://dev.cd")
+                    ),
                     storageWriters = listOf("nonExistingWriter")
                 )
-                configureStorage(config)
+                ScanResultsStorage.configure(config)
             }
 
-            ex.message shouldContain "'nonExistingWriter'"
+            exception.message shouldContain "'nonExistingWriter'"
         }
     }
 })
-
-/**
- * Invoke the configure() function of the [ScanResultsStorage] singleton with the passed in [config].
- * Return the resulting [CompositeStorage].
- */
-private fun configureStorage(config: ScannerConfiguration): CompositeStorage {
-    ScanResultsStorage.configure(config)
-    val storage = ScanResultsStorage.storage
-    storage.shouldBeInstanceOf<CompositeStorage>()
-    return storage
-}
