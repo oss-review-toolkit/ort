@@ -65,11 +65,15 @@ abstract class ScanResultsStorage {
          * [FileBasedStorage] using a [XZCompressedLocalFileStorage] as backend is configured.
          */
         fun configure(config: ScannerConfiguration): ScanResultsStorage {
-            storage = if (config.storages.isNullOrEmpty()) {
-                createDefaultStorage()
-            } else {
-                createCompositeStorage(config)
+            // Unfortunately, the smart cast does not work when moving this to a capturing "when" subject.
+            val configuredStorages = config.storages
+
+            storage = when {
+                configuredStorages.isNullOrEmpty() -> createDefaultStorage()
+                configuredStorages.size == 1 -> createStorage(configuredStorages.values.first())
+                else -> createCompositeStorage(config)
             }
+
             log.info { "ScanResultStorage has been configured to ${storage.name}." }
 
             return storage
