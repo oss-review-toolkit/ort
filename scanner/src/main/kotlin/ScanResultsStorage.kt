@@ -64,13 +64,15 @@ abstract class ScanResultsStorage {
          * Configure the [ScanResultsStorage]. If [config] does not contain a storage configuration by default a
          * [FileBasedStorage] using a [XZCompressedLocalFileStorage] as backend is configured.
          */
-        fun configure(config: ScannerConfiguration) {
+        fun configure(config: ScannerConfiguration): ScanResultsStorage {
             storage = if (config.storages.isNullOrEmpty()) {
                 createDefaultStorage()
             } else {
                 createCompositeStorage(config)
             }
             log.info { "ScanResultStorage has been configured to ${storage.name}." }
+
+            return storage
         }
 
         /**
