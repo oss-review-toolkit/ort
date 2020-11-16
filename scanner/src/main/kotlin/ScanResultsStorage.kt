@@ -74,6 +74,14 @@ abstract class ScanResultsStorage {
         }
 
         /**
+         * Create a [FileBasedStorage] to be used as default if no other storage has been configured.
+         */
+        private fun createDefaultStorage(): ScanResultsStorage {
+            val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
+            return FileBasedStorage(localFileStorage)
+        }
+
+        /**
          * Create a [CompositeStorage] that manages all storages defined in the given [config].
          */
         private fun createCompositeStorage(config: ScannerConfiguration): ScanResultsStorage {
@@ -99,14 +107,6 @@ abstract class ScanResultsStorage {
                 is PostgresStorageConfiguration -> createPostgresStorage(config)
                 is ClearlyDefinedStorageConfiguration -> createClearlyDefinedStorage(config)
             }
-
-        /**
-         * Create a [FileBasedStorage] to be used as default if no other storage has been configured.
-         */
-        private fun createDefaultStorage(): ScanResultsStorage {
-            val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
-            return FileBasedStorage(localFileStorage)
-        }
 
         /**
          * Create a [FileBasedStorage] based on the [config] passed in.
