@@ -58,7 +58,7 @@ ENV \
     SBT_VERSION=1.3.8 \
     YARN_VERSION=1.22.4 \
     # SDK versions.
-    ANDROID_SDK_VERSION=6609375 \
+    ANDROID_SDK_VERSION=6858069 \
     # Scanner versions.
     SCANCODE_VERSION=3.2.1rc2 \
     # Installation directories.
@@ -144,7 +144,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi && \
-    yes | $ANDROID_HOME/tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
+    yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
     # Add scanners (in versions known to work).
     curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
