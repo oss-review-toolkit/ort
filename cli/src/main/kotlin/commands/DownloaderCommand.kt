@@ -174,23 +174,28 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             is StringType -> {
                 val projectUrl = (input as StringType).string
 
-                val vcs = VersionControlSystem.forUrl(projectUrl)
-                val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
-                val vcsRevision = vcsRevisionOption ?: vcs?.defaultBranchName.orEmpty()
+                val archiveType = ArchiveType.getType(projectUrl)
+                val projectNameFromUrl = projectUrl.substringAfterLast('/')
 
-                val projectFile = File(projectUrl)
-                val projectName = projectNameOption ?: projectFile.nameWithoutExtension
+                val projectName = projectNameOption ?: archiveType.extensions.fold(projectNameFromUrl) { name, ext ->
+                    name.removeSuffix(ext)
+                }
 
                 val dummyId = Identifier("Downloader::$projectName:")
-                val dummyPackage = if (ArchiveType.getType(projectFile.name) != ArchiveType.NONE) {
+                val dummyPackage = if (archiveType != ArchiveType.NONE) {
                     Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
                 } else {
+                    val vcs = VersionControlSystem.forUrl(projectUrl)
+                    val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
+                    val vcsRevision = vcsRevisionOption ?: vcs?.defaultBranchName.orEmpty()
+
                     val vcsInfo = VcsInfo(
                         type = vcsType,
                         url = projectUrl,
                         revision = vcsRevision,
                         path = vcsPath
                     )
+
                     Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
                 }
 
