@@ -111,8 +111,8 @@ class DownloaderFunTest : StringSpec() {
             exception.suppressed[0]!!.message shouldBe "No VCS URL provided for 'Maven:junit:junit:4.12'. " +
                     "Please define the \"connection\" tag within the \"scm\" tag in the POM file, " +
                     "see: http://maven.apache.org/pom.html#SCM"
-            exception.suppressed[1]!!.message shouldBe "Source artifact does not match expected SHA-1 hash " +
-                    "'0123456789abcdef0123456789abcdef01234567'."
+            exception.suppressed[1]!!.message shouldBe "Source artifact does not match expected " +
+                    "Hash(value=0123456789abcdef0123456789abcdef01234567, algorithm=SHA-1)."
         }
 
         "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
