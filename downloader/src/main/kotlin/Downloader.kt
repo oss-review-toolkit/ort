@@ -322,6 +322,8 @@ object Downloader {
                         throw DownloadException("Failed to download source artifact: $response")
                     }
 
+                    val candidateNames = mutableSetOf<String>()
+
                     // Depending on the package manager / registry, we may only get a useful source artifact file name
                     // when looking at the response header or at a redirected URL. For example for Cargo, we want to
                     // resolve
@@ -336,15 +338,13 @@ object Downloader {
                     //
                     // So first look for a dedicated header in the response, but then also try both redirected and
                     // original URLs to find a name which has a recognized archive type extension.
-                    val candidateNamesFromHeaders = response.headers("Content-disposition").mapNotNull { value ->
+                    response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
                         value.removePrefix("attachment; filename=").takeIf { it != value }
                     }
 
-                    val candidateNamesFromUrls = listOf(response.request.url, request.url).map {
+                    listOf(response.request.url, request.url).mapTo(candidateNames) {
                         it.pathSegments.last()
                     }
-
-                    val candidateNames = candidateNamesFromHeaders + candidateNamesFromUrls
 
                     val tempFileName = candidateNames.find {
                         ArchiveType.getType(it) != ArchiveType.NONE
