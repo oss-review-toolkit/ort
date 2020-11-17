@@ -32,6 +32,7 @@ import okio.buffer
 import okio.sink
 
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -354,15 +355,16 @@ object Downloader {
             }
         }
 
-        if (!pkg.sourceArtifact.hash.canVerify) {
-            log.warn {
-                "Cannot verify source artifact hash ${pkg.sourceArtifact.hash}, skipping verification."
+        if (pkg.sourceArtifact.hash.algorithm != HashAlgorithm.NONE) {
+            if (pkg.sourceArtifact.hash.algorithm == HashAlgorithm.UNKNOWN) {
+                log.warn {
+                    "Cannot verify source artifact with ${pkg.sourceArtifact.hash}, skipping verification."
+                }
+            } else if (!pkg.sourceArtifact.hash.verify(sourceArchive)) {
+                throw DownloadException(
+                    "Source artifact does not match expected ${pkg.sourceArtifact.hash}."
+                )
             }
-        } else if (!pkg.sourceArtifact.hash.verify(sourceArchive)) {
-            throw DownloadException(
-                "Source artifact does not match expected ${pkg.sourceArtifact.hash.algorithm} hash " +
-                        "'${pkg.sourceArtifact.hash.value}'."
-            )
         }
 
         try {
