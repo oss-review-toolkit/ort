@@ -308,7 +308,7 @@ object Downloader {
                 // find a tar.gz file, thus failing to unpack the archive.
                 // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
                 // http/BridgeInterceptor.java#L79
-                .addHeader("Accept-Encoding", "identity")
+                .header("Accept-Encoding", "identity")
                 .get()
                 .url(pkg.sourceArtifact.url)
                 .build()
