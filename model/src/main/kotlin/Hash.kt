@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
@@ -83,16 +82,10 @@ data class Hash(
     }
 
     /**
-     * Whether values can be calculated for this algorithm.
-     */
-    @JsonIgnore
-    val canVerify = algorithm in HashAlgorithm.VERIFIABLE
-
-    /**
      * Verify that the [file] matches this hash.
      */
     fun verify(file: File): Boolean {
-        require(canVerify) {
+        require(algorithm in HashAlgorithm.VERIFIABLE) {
             "Cannot verify algorithm '$algorithm'. Supported algorithms are ${HashAlgorithm.VERIFIABLE}."
         }
 
