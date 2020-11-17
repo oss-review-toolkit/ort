@@ -32,6 +32,7 @@ import okio.buffer
 import okio.sink
 
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
+import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -309,6 +310,7 @@ object Downloader {
                 // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
                 // http/BridgeInterceptor.java#L79
                 .header("Accept-Encoding", "identity")
+                .header("User-Agent", "$ORT_NAME/${Environment.ORT_VERSION}")
                 .get()
                 .url(pkg.sourceArtifact.url)
                 .build()
