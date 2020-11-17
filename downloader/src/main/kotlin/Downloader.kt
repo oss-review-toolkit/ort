@@ -130,8 +130,11 @@ object Downloader {
         val vcsMark = TimeSource.Monotonic.markNow()
 
         try {
-            // Cargo in general builds from source tarballs, so we prefer source artifacts to VCS.
-            if (pkg.id.type != "Cargo" || pkg.sourceArtifact == RemoteArtifact.EMPTY) {
+            // Cargo in general builds from source tarballs, so we prefer source artifacts over VCS, but still use VCS
+            // if no source artifact is given.
+            val isCargoPackageWithSourceArtifact = pkg.id.type == "Cargo" && pkg.sourceArtifact != RemoteArtifact.EMPTY
+
+            if (!isCargoPackageWithSourceArtifact) {
                 val result = downloadFromVcs(pkg, outputDirectory, allowMovingRevisions)
 
                 log.perf {
