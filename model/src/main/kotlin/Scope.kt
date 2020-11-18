@@ -31,7 +31,7 @@ import java.util.SortedSet
 @JsonIgnoreProperties("delivered", "distributed")
 data class Scope(
     /**
-     * The respective package manager's native name for the scope, e.g. "compile", " provided" etc. for Maven, or
+     * The respective package manager's native name for the scope, e.g. "compile", "provided" etc. for Maven, or
      * "dependencies", "devDependencies" etc. for NPM.
      */
     val name: String,
