@@ -57,8 +57,9 @@ packages:
   declared_licenses:
   - "http://json.codeplex.com/license"
   declared_licenses_processed:
-    unmapped:
-    - "http://json.codeplex.com/license"
+    spdx_expression: "MIT"
+    mapped:
+      http://json.codeplex.com/license: "MIT"
   description: "Json.NET is a popular high-performance JSON framework for .NET"
   homepage_url: "http://james.newtonking.com/projects/json-net.aspx"
   binary_artifact:
