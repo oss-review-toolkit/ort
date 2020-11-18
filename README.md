@@ -181,6 +181,10 @@ The main configuration file for the operation of ORT. This configuration is main
 the ORT instance. In contrast to the configuration files in the following, this file rarely changes once ORT is
 operational.
 
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty ([built-in](./model/src/main/resources/default.conf)) |
+
 The [reference configuration file](./model/src/test/assets/reference.conf) gives a good impression about the content
 of the main ORT configuration file. It consists of sections related to different sub components of ORT. The meaning
 of these sections and the properties they can contain is described together with the corresponding sub components.
@@ -210,10 +214,6 @@ customize the configuration to a specific environment. The following options are
     password = ${POSTGRES_PASSWORD}
   }
   ```
-
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty ([built-in](./model/src/main/resources/default.conf)) |
 
 #### [Copyright garbage file](./docs/config-file-copyright-garbage-yml.md)
 
