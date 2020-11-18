@@ -59,7 +59,7 @@ data class OrtResult(
     val scanner: ScannerRun? = null,
 
     /**
-     * An [AdvisorRun] containing details about the advisor that was run using the result form [analyzer] as input.
+     * An [AdvisorRun] containing details about the advisor that was run using the result from [analyzer] as input.
      * Can be null if no advisor was run.
      */
     val advisor: AdvisorRun? = null,
