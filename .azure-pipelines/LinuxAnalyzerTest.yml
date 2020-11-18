@@ -134,8 +134,14 @@ jobs:
       gradleOptions: -Xmx8192m
 
   # Clean disk space before caching starts, otherwise the disk might run full.
-  - bash: ./gradlew --no-daemon clean
+  - task: Gradle@2
     displayName: Gradle Clean
+    inputs:
+      gradleWrapperFile: gradlew
+      options: --no-daemon
+      tasks: clean
+      javaHomeOption: JDKVersion
+      jdkVersionOption: 1.11
 
   # Ensure that any running Gradle daemon is stopped before caching starts.
   - bash: ./gradlew --stop
