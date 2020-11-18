@@ -168,6 +168,8 @@ class Gradle(
         }
 
         if (gradleConnector is DefaultGradleConnector) {
+            // Note that the Gradle Tooling API always uses the Gradle daemon, see
+            // https://docs.gradle.org/current/userguide/third_party_integration.html#sec:embedding_daemon.
             gradleConnector.daemonMaxIdleTime(10, TimeUnit.SECONDS)
         }
 
