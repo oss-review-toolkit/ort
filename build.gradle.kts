@@ -216,7 +216,7 @@ subprojects {
     tasks.dokkaHtml.configure {
         dokkaSourceSets {
             configureEach {
-                jdkVersion.set(8)
+                jdkVersion.set(11)
 
                 externalDocumentationLink {
                     val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs"
