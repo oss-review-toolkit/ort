@@ -354,7 +354,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      *
      * Return the [ScanResult], if the package could not be scanned a [ScanException] is thrown.
      */
-    private fun scanPackage(
+    fun scanPackage(
         scannerDetails: ScannerDetails,
         pkg: Package,
         outputDirectory: File,
