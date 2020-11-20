@@ -289,7 +289,7 @@ class ScannerOptionsTest : WordSpec({
         }
     }
 
-    "Supported options" should {
+    "Supported options with sub options" should {
         "include OutputFormatOption" {
             checkOptionWithSubOptions { OutputFormatOption(it) }
         }
@@ -316,6 +316,108 @@ class ScannerOptionsTest : WordSpec({
 
         "include UrlResultOption" {
             checkOptionWithSubOptions { UrlResultOption(it) }
+        }
+    }
+
+    "IgnoreFilterOption" should {
+        "detect a missing ignore option in strict mode" {
+            val ignoreOption = IgnoreFilterOption(setOf("pattern"))
+            val options = ScannerOptions(emptySet())
+
+            ignoreOption.isCompatible(options) shouldBe false
+        }
+
+        "be compatible with an exact match of patterns" {
+            val ignoreOption1 = IgnoreFilterOption(setOf("p1", "p2", "p3"))
+            val ignoreOption2 = IgnoreFilterOption(setOf("p3", "p2", "p1"))
+            val options = ScannerOptions(setOf(ignoreOption2))
+
+            ignoreOption1.isCompatible(options) shouldBe true
+            ignoreOption1.isCompatible(options, strict = false) shouldBe true
+        }
+
+        "not be compatible with a different set of patterns" {
+            val ignoreOption1 = IgnoreFilterOption(setOf("p1", "p2", "p3"))
+            val ignoreOption2 = IgnoreFilterOption(setOf("p4", "p2", "p1"))
+            val options = ScannerOptions(setOf(ignoreOption2))
+
+            ignoreOption1.isCompatible(options) shouldBe false
+            ignoreOption1.isCompatible(options, strict = false) shouldBe false
+        }
+
+        "be compatible with a subset of patterns in lenient mode" {
+            val ignoreOption1 = IgnoreFilterOption(setOf("p1", "p2", "p3"))
+            val ignoreOption2 = IgnoreFilterOption(setOf("p2", "p1"))
+            val options = ScannerOptions(setOf(ignoreOption2))
+
+            ignoreOption1.isCompatible(options) shouldBe false
+            ignoreOption1.isCompatible(options, strict = false) shouldBe true
+        }
+
+        "be compatible with a missing ignore option in lenient mode" {
+            val ignoreOption = IgnoreFilterOption(setOf("p1", "p2"))
+            val options = ScannerOptions(emptySet())
+
+            ignoreOption.isCompatible(options, strict = false) shouldBe true
+        }
+
+        "not be compatible with a missing ignore option in lenient mode if there is an include option" {
+            val ignoreOption = IgnoreFilterOption(setOf("p1", "p28"))
+            val includeOption = IncludeFilterOption(setOf("p2", "p29"))
+            val options = ScannerOptions(setOf(includeOption))
+
+            ignoreOption.isCompatible(options, strict = false) shouldBe false
+        }
+    }
+
+    "IncludeFilterOption" should {
+        "detect a missing include option in strict mode" {
+            val includeOption = IncludeFilterOption(setOf("aPattern"))
+            val options = ScannerOptions(emptySet())
+
+            includeOption.isCompatible(options) shouldBe false
+        }
+
+        "be compatible with an exact match of patterns" {
+            val includeOption1 = IncludeFilterOption(setOf("p1", "p2", "p3"))
+            val includeOption2 = IncludeFilterOption(setOf("p3", "p2", "p1"))
+            val options = ScannerOptions(setOf(includeOption2))
+
+            includeOption1.isCompatible(options) shouldBe true
+            includeOption1.isCompatible(options, strict = false) shouldBe true
+        }
+
+        "not be compatible with a different set of patterns" {
+            val includeOption1 = IncludeFilterOption(setOf("p1", "p2", "p3"))
+            val includeOption2 = IncludeFilterOption(setOf("p3", "p2", "p4"))
+            val options = ScannerOptions(setOf(includeOption2))
+
+            includeOption1.isCompatible(options) shouldBe false
+            includeOption1.isCompatible(options, strict = false) shouldBe false
+        }
+
+        "be compatible with a super set of patterns in lenient mode" {
+            val includeOption1 = IncludeFilterOption(setOf("p1", "p2", "p3"))
+            val includeOption2 = IncludeFilterOption(setOf("p4", "p3", "p2", "p1"))
+            val options = ScannerOptions(setOf(includeOption2))
+
+            includeOption1.isCompatible(options) shouldBe false
+            includeOption1.isCompatible(options, strict = false) shouldBe true
+        }
+
+        "be compatible with a missing include option in lenient mode" {
+            val includeOption = IncludeFilterOption(setOf("p1"))
+            val options = ScannerOptions(emptySet())
+
+            includeOption.isCompatible(options, strict = false) shouldBe true
+        }
+
+        "not be compatible with a missing include option in lenient mode if there is an ignore option" {
+            val ignoreOption = IgnoreFilterOption(setOf("p1", "p28"))
+            val includeOption = IncludeFilterOption(setOf("p2", "p29"))
+            val options = ScannerOptions(setOf(ignoreOption))
+
+            includeOption.isCompatible(options, strict = false) shouldBe false
         }
     }
 })
