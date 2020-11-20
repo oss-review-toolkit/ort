@@ -191,7 +191,7 @@ object Downloader {
         throw exception
     }
 
-    private fun downloadFromVcs(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
+    fun downloadFromVcs(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
         log.info {
             "Trying to download '${pkg.id.toCoordinates()}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
@@ -286,7 +286,7 @@ object Downloader {
             originalVcsInfo = pkg.vcsProcessed.takeIf { it != vcsInfo })
     }
 
-    private fun downloadSourceArtifact(pkg: Package, outputDirectory: File): DownloadResult {
+    fun downloadSourceArtifact(pkg: Package, outputDirectory: File): DownloadResult {
         log.info {
             "Trying to download source artifact for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact.url}..."
         }
