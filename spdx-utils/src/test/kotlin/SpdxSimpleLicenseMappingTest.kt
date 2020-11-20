@@ -39,6 +39,12 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
 
             keys should beEmpty()
         }
+
+        "not contain any deprecated values" {
+            SpdxSimpleLicenseMapping.customLicenseIdsMap.values.forAll {
+                it.deprecated shouldBe false
+            }
+        }
     }
 
     "The mapping" should {
