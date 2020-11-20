@@ -140,7 +140,7 @@ allprojects {
             "src/funTest/kotlin")
     }
 
-    tasks.withType<Detekt> {
+    tasks.withType<Detekt>().configureEach {
         dependsOn(":detekt-rules:assemble")
     }
 }

@@ -26,7 +26,7 @@ import java.io.FileNotFoundException
 import java.net.URL
 import java.time.Year
 
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 import org.ossreviewtoolkit.gradle.*
 
@@ -46,7 +46,7 @@ val generateGrammarSource by tasks.existing(AntlrTask::class) {
     arguments = arguments + listOf("-visitor")
 }
 
-tasks.withType(KotlinCompile::class) {
+tasks.withType<KotlinCompile>().configureEach {
     dependsOn(generateGrammarSource)
 }
 

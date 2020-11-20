@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 import org.ossreviewtoolkit.gradle.*
 
@@ -62,7 +62,7 @@ val generateVersionResource by tasks.registering {
     }
 }
 
-tasks.withType(KotlinCompile::class) {
+tasks.withType<KotlinCompile>().configureEach {
     dependsOn(generateVersionResource)
 }
 
