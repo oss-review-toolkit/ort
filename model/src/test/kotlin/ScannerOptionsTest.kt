@@ -317,6 +317,10 @@ class ScannerOptionsTest : WordSpec({
         "include UrlResultOption" {
             checkOptionWithSubOptions { UrlResultOption(it) }
         }
+
+        "include TimeoutOption" {
+            checkOptionWithSubOptions { TimeoutOption(it) }
+        }
     }
 
     "IgnoreFilterOption" should {
@@ -420,6 +424,54 @@ class ScannerOptionsTest : WordSpec({
             includeOption.isCompatible(options, strict = false) shouldBe false
         }
     }
+
+    "UnclassifiedOption" should {
+        "be compatible with equivalent options" {
+            val subOptions1 = SubOptions.create {
+                putStringOption(key = "some-option", value = "foo")
+                putStringOption(key = "ignore-option", value = "bar", relevant = false)
+            }
+            val subOptions2 = SubOptions.create {
+                putStringOption(key = "some-option", value = "foo")
+                putStringOption(key = "ignore-option", value = "baz", relevant = false)
+            }
+            val option1 = UnclassifiedOption(subOptions1)
+            val option2 = UnclassifiedOption(subOptions2)
+            val options = ScannerOptions(setOf(option2))
+
+            option1.isCompatible(options, strict = false) shouldBe true
+            option1.isCompatible(options) shouldBe true
+        }
+
+        "not be compatible with missing unclassified options" {
+            val subOptions = SubOptions.create {
+                putStringOption(key = "some-option", value = "foo")
+                putStringOption(key = "ignore-option", value = "bar", relevant = false)
+            }
+            val option = UnclassifiedOption(subOptions)
+            val options = ScannerOptions(emptySet())
+
+            option.isCompatible(options, strict = false) shouldBe false
+            option.isCompatible(options) shouldBe false
+        }
+
+        "not be compatible with other unclassified options in lenient mode" {
+            val subOptions1 = SubOptions.create {
+                putStringOption(key = "some-option", value = "foo")
+                putStringOption(key = "ignore-option", value = "bar", relevant = false)
+            }
+            val subOptions2 = SubOptions.create {
+                putStringOption(key = "some-option", value = "bar")
+                putStringOption(key = "ignore-option", value = "baz", relevant = false)
+            }
+            val option1 = UnclassifiedOption(subOptions1)
+            val option2 = UnclassifiedOption(subOptions2)
+            val options = ScannerOptions(setOf(option2))
+
+            option1.isCompatible(options, strict = false) shouldBe false
+            option1.isCompatible(options) shouldBe false
+        }
+    }
 })
 
 /**
@@ -492,6 +544,17 @@ private fun completeOptions(): ScannerOptions {
     val urlOption = UrlResultOption(
         SubOptions.create { putThresholdOption(key = "max-url", value = 64.0) }
     )
+    val includeFilterOption = IncludeFilterOption(setOf("*.java", "*.kt"))
+    val ignoreFilterOption = IgnoreFilterOption(setOf("*.class", "*.bin"))
+    val timeoutOption = TimeoutOption(
+        SubOptions.create { putThresholdOption(500.0) }
+    )
+    val unclassifiedOption = UnclassifiedOption(
+        SubOptions.create {
+            putStringOption(key = "strip-root", value = "true")
+            putStringOption(key = "verbose", value = "true", relevant = false)
+        }
+    )
 
     return ScannerOptions(
         setOf(
@@ -501,7 +564,11 @@ private fun completeOptions(): ScannerOptions {
             licenseOption,
             metadataOption,
             packageOption,
-            urlOption
+            urlOption,
+            includeFilterOption,
+            ignoreFilterOption,
+            timeoutOption,
+            unclassifiedOption
         )
     )
 }

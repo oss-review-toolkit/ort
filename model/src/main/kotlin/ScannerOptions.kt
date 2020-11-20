@@ -455,3 +455,37 @@ data class IncludeFilterOption(val patterns: Set<String>) : ScannerOption() {
         }
     }
 }
+
+/**
+ * A special scanner option defining a timeout for scanner runs.
+ *
+ * Some scanner implementations cancel the current scan operation if it takes too long. Then only limited results
+ * may be available. This implementation handles this case using the comparison logic provided by the
+ * [SubOptionType.THRESHOLD] type. The basic idea is that a scanner configured with a higher timeout is expected to
+ * produce more results than a scanner with a lower timeout.
+ *
+ * To make sure that this logic actually work as expected, scanner implementations supporting such a timeout should
+ * always include this option, even if it is not explicitly specified on the command line (with a default value then).
+ */
+data class TimeoutOption(override val subOptions: SubOptions) :
+    ScannerOptionWithSubOptions<TimeoutOption>(TimeoutOption::class.java)
+
+/**
+ * A scanner option acting as a container for other options that do not fall into a category which is handled by
+ * other classes.
+ *
+ * The semantic of this option is that it contains values and flags that impact scanner results and must match
+ * exactly for the results to be compatible. The [SubOptionType.STRINGS_IGNORE] can include other options not
+ * relevant for the results produced by the scanner; they are recorded for informational purposes.
+ */
+data class UnclassifiedOption(override val subOptions: SubOptions) :
+    ScannerOptionWithSubOptions<UnclassifiedOption>(UnclassifiedOption::class.java) {
+    /**
+     * Check whether the sub options contained in this option are compatible with the ones stored in [options].
+     * This implementation does always a [strict] comparison because the sub options managed by this class are
+     * relevant for the results produced by a scanner.
+     */
+    override fun isCompatible(options: ScannerOptions, strict: Boolean): Boolean {
+        return super.isCompatible(options, strict = true)
+    }
+}
