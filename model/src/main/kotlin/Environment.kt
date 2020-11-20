@@ -68,7 +68,7 @@ data class Environment(
         /**
          * The version of the OSS Review Toolkit as a string.
          */
-        val ORT_VERSION = this::class.java.getResource("/VERSION").readText()
+        val ORT_VERSION by lazy { this::class.java.`package`.implementationVersion ?: "IDE-SNAPSHOT" }
 
         private val RELEVANT_VARIABLES = listOf(
             // Windows variables.
