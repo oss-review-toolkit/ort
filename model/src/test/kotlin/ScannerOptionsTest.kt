@@ -112,6 +112,26 @@ class ScannerOptionsTest : WordSpec({
 
             options1.isSubsetOf(options2, strict = false) shouldBe true
         }
+
+        "support lenient checks on a per-option base" {
+            val copyrightOption1 = CopyrightResultOption(
+                SubOptions.create { putStringOption(key = "consolidate", value = "true") }
+            )
+            val licenseOption1 = LicenseResultOption(
+                SubOptions.create { putThresholdOption(key = "license-score", value = 50.0) }
+            )
+            val copyrightOption2 = CopyrightResultOption(
+                SubOptions(jsonMapper.createObjectNode())
+            )
+            val licenseOption2 = LicenseResultOption(
+                SubOptions.create { putThresholdOption(key = "license-score", value = 50.0) }
+            )
+            val options1 = ScannerOptions(setOf(copyrightOption1, licenseOption1))
+            val options2 = ScannerOptions(setOf(copyrightOption2, licenseOption2))
+
+            options1.isSubsetOf(options2,
+                nonStrictOptions = setOf(CopyrightResultOption::class.java.simpleName)) shouldBe true
+        }
     }
 
     "SubOptions" should {

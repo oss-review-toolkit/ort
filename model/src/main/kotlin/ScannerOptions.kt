@@ -321,8 +321,25 @@ data class ScannerOptions(val options: Set<ScannerOption>) {
      * would produce.
      */
     fun isSubsetOf(other: ScannerOptions, strict: Boolean): Boolean {
-        return options.all { it.isCompatible(other, strict) }
+        val nonStrictOptions = if (strict) {
+            emptySet()
+        } else {
+            optionsByClass.keys.map { it.simpleName }.toSet()
+        }
+
+        return isSubsetOf(other, nonStrictOptions)
     }
+
+    /**
+     * Check whether scan results produced by a scanner run with the options stored in this instance are a subset of
+     * the results produced by the options in [other], allowing for each option class to configure whether the check
+     * should be done in strict or lenient mode. If a specific options should be compared in lenient mode, put the
+     * simple class name of the option class into the [nonStrictOptions] set.
+     */
+    fun isSubsetOf(other: ScannerOptions, nonStrictOptions: Set<String>): Boolean =
+        options.all { option ->
+            option.isCompatible(other, !nonStrictOptions.contains(option.javaClass.simpleName))
+        }
 }
 
 /**
