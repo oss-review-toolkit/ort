@@ -18,8 +18,6 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 import org.ossreviewtoolkit.gradle.*
 
 val hopliteVersion: String by project
@@ -48,31 +46,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
 
-val generateVersionResource by tasks.registering {
-    group = "Build"
-    description = "Generates a plain text resource file containing the current application version."
-
-    val versionFile = file("$projectDir/src/main/resources/VERSION")
-
-    inputs.property("version", version.toString())
-    outputs.file(versionFile)
-
-    doLast {
-        versionFile.writeText(version.toString())
-    }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    dependsOn(generateVersionResource)
-}
-
-rootProject.idea {
-    project {
-        settings {
-            taskTriggers {
-                afterSync(generateVersionResource.get())
-                beforeBuild(generateVersionResource.get())
-            }
-        }
+tasks.withType<Jar>().configureEach {
+    manifest {
+        val versionCandidates = listOf(project.version, rootProject.version)
+        attributes["Implementation-Version"] = versionCandidates.find {
+            it != Project.DEFAULT_VERSION
+        } ?: "GRADLE-SNAPSHOT"
     }
 }
