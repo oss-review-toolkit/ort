@@ -195,6 +195,12 @@ object Downloader {
         throw exception
     }
 
+    /**
+     * Download the source code of the [package][pkg] to the [outputDirectory] using it's VCS information. The
+     * [allowMovingRevisions] parameter indicates whether the download accepts symbolic names, like branches, instead of
+     * only fixed revisions. A [DownloadResult] is returned on success or a [DownloadException] is thrown in case of
+     * failure.
+     */
     fun downloadFromVcs(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
         verifyOutputDirectory(outputDirectory)
 
@@ -292,6 +298,10 @@ object Downloader {
             originalVcsInfo = pkg.vcsProcessed.takeIf { it != vcsInfo })
     }
 
+    /**
+     * Download the source code of the [package][pkg] to the [outputDirectory] using it's source artifact. A
+     * [DownloadResult] is returned on success or a [DownloadException] is thrown in case of failure.
+     */
     fun downloadSourceArtifact(pkg: Package, outputDirectory: File): DownloadResult {
         verifyOutputDirectory(outputDirectory)
 
