@@ -108,17 +108,21 @@ object Downloader {
         }
     }
 
+    private fun verifyOutputDirectory(outputDirectory: File) {
+        require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
+            "The output directory '$outputDirectory' must not contain any files yet."
+        }
+
+        outputDirectory.apply { safeMkdirs() }
+    }
+
     /**
      * Download the source code of the [package][pkg] to the [outputDirectory]. The [allowMovingRevisions] parameter
      * indicates whether VCS downloads accept symbolic names, like branches, instead of only fixed revisions. A
      * [DownloadResult] is returned on success or a [DownloadException] is thrown in case of failure.
      */
     fun download(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
-        require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
-            "The output directory '$outputDirectory' must not contain any files yet."
-        }
-
-        outputDirectory.apply { safeMkdirs() }
+        verifyOutputDirectory(outputDirectory)
 
         if (pkg.isMetaDataOnly) return DownloadResult(dateTime = Instant.now(), downloadDirectory = outputDirectory)
 
@@ -192,6 +196,8 @@ object Downloader {
     }
 
     fun downloadFromVcs(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
+        verifyOutputDirectory(outputDirectory)
+
         log.info {
             "Trying to download '${pkg.id.toCoordinates()}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
@@ -287,6 +293,8 @@ object Downloader {
     }
 
     fun downloadSourceArtifact(pkg: Package, outputDirectory: File): DownloadResult {
+        verifyOutputDirectory(outputDirectory)
+
         log.info {
             "Trying to download source artifact for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact.url}..."
         }
