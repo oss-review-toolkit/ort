@@ -39,6 +39,12 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
 
             keys should beEmpty()
         }
+
+        "not contain any deprecated values" {
+            SpdxDeclaredLicenseMapping.rawMapping.values.forAll {
+                it.isValid(SpdxExpression.Strictness.ALLOW_CURRENT) shouldBe true
+            }
+        }
     }
 
     "The mapping" should {
