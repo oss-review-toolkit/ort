@@ -34,7 +34,6 @@ import okio.sink
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.HashAlgorithm
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -110,11 +109,9 @@ object Downloader {
     }
 
     /**
-     * Download the source code of [package][pkg] to a sub-directory inside [outputDirectory]. The sub-directory
-     * hierarchy is inferred from the [name][Identifier.name] and [version][Identifier.version] of the package. The
-     * [allowMovingRevisions] parameter indicates whether VCS downloads accept symbolic names, like branches, instead of
-     * only fixed revisions. A [DownloadResult] is returned on success or a [DownloadException] is thrown in case of
-     * failure.
+     * Download the source code of the [package][pkg] to the [outputDirectory]. The [allowMovingRevisions] parameter
+     * indicates whether VCS downloads accept symbolic names, like branches, instead of only fixed revisions. A
+     * [DownloadResult] is returned on success or a [DownloadException] is thrown in case of failure.
      */
     fun download(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
         require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
