@@ -27,9 +27,11 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
+import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.expandTilde
 
 class ListPackagesCommand : CliktCommand(
@@ -51,11 +53,17 @@ class ListPackagesCommand : CliktCommand(
     override fun run() {
         val ortResult = ortResultFile.readValue<OrtResult>()
 
+        val licenseInfoResolver = ortResult.createLicenseInfoResolver()
+
+        fun getDetectedLicenses(id: Identifier): List<String> =
+            licenseInfoResolver.resolveLicenseInfo(id)
+                .filter(LicenseView.ONLY_DETECTED)
+                .map { it.license.toString() }
+
         val packages = ortResult
             .collectProjectsAndPackages()
             .filter {
-                matchDetectedLicenses.isEmpty()
-                        || (matchDetectedLicenses - ortResult.getDetectedLicensesForId(it)).isEmpty()
+                matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(it)).isEmpty()
             }
             .sortedBy { it }
 
