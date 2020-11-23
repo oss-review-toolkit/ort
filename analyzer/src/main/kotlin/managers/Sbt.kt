@@ -26,6 +26,8 @@ import java.io.File
 import java.io.IOException
 import java.util.Properties
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -87,7 +89,10 @@ class Sbt(
 
         // Avoid newer Sbt versions to warn about "Neither build.sbt nor a 'project' directory in the current directory"
         // and prompt the user to continue or quit on Windows where the "-batch" option is not supported.
-        val dummyProjectDir = createTempDir(ORT_NAME, managerName).also { it.resolve("build.sbt").createNewFile() }
+        val dummyProjectDir = createTempDirectory("$ORT_NAME-$managerName").toFile().apply {
+            resolve("build.sbt").createNewFile()
+        }
+
         return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively() }
     }
 

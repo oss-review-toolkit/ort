@@ -24,6 +24,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
@@ -68,7 +70,9 @@ private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResul
         howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
     )
 
-    val outputDir = createTempDir(ORT_NAME, EvaluatedModelReporterFunTest::class.simpleName).apply { deleteOnExit() }
+    val outputDir = createTempDirectory("$ORT_NAME-${EvaluatedModelReporterFunTest::class.simpleName}").toFile().apply {
+        deleteOnExit()
+    }
 
     return reporter.generateReport(input, outputDir).single().readText()
 }

@@ -25,6 +25,8 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.time.Instant
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -101,7 +103,9 @@ private fun generateReport(ortResult: OrtResult, format: FileFormat): String {
         licenseTextProvider = DefaultLicenseTextProvider()
     )
 
-    val outputDir = createTempDir(ORT_NAME, SpdxDocumentReporterFunTest::class.simpleName).apply { deleteOnExit() }
+    val outputDir = createTempDirectory("$ORT_NAME-${SpdxDocumentReporterFunTest::class.simpleName}").toFile().apply {
+        deleteOnExit()
+    }
 
     val reportOptions = mapOf(
         SpdxDocumentReporter.OPTION_CREATION_INFO_COMMENT to "some creation info comment",

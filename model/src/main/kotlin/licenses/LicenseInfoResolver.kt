@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model.licenses
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
@@ -206,7 +208,7 @@ class LicenseInfoResolver(
         licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.map { it.provenance }
         }.forEach { provenance ->
-            val archiveDir = createTempDir(ORT_NAME, "archive").also { it.deleteOnExit() }
+            val archiveDir = createTempDirectory("$ORT_NAME-archive").toFile().apply { deleteOnExit() }
 
             val path = "${id.toPath()}/${provenance.hash()}"
             if (archiver.unarchive(archiveDir, path)) {

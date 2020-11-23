@@ -24,6 +24,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -47,9 +49,8 @@ class AntennaAttributionDocumentReporterFunTest : StringSpec({
 })
 
 private fun generateReport(ortResult: OrtResult): List<File> {
-    val outputDir = createTempDir(
-        ORT_NAME, AntennaAttributionDocumentReporterFunTest::class.simpleName
-    ).apply { deleteOnExit() }
+    val outputDir = createTempDirectory("$ORT_NAME-${AntennaAttributionDocumentReporterFunTest::class.simpleName}")
+        .toFile().apply { deleteOnExit() }
 
     return AntennaAttributionDocumentReporter().generateReport(ReporterInput(ortResult), outputDir)
 }

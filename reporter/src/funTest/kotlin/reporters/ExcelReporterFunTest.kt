@@ -28,6 +28,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
+import kotlin.io.path.createTempDirectory
+
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
@@ -41,7 +43,7 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 class ExcelReporterFunTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet" {
-            val outputDir = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
             val ortResult = readOrtResult(
                 "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
             )

@@ -26,6 +26,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -43,7 +45,7 @@ class GitRepoDownloadFunTest : StringSpec() {
     override fun beforeTest(testCase: TestCase) {
         // Do not use the class name as a suffix here to shorten the path. Otherwise the path will get too long for
         // Windows to handle.
-        outputDir = createTempDir(ORT_NAME)
+        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {

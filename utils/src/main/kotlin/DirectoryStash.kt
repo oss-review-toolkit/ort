@@ -25,6 +25,8 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
+import kotlin.io.path.createTempDirectory
+
 /**
  * A convenience function that stashes directories using a [DirectoryStash] instance.
  */
@@ -44,7 +46,7 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
             // directories.
             if (originalDir.isDirectory) {
                 // Create a temporary directory to move directories as-is into.
-                val stashDir = createTempDir(ORT_NAME, "stash", originalDir.parentFile)
+                val stashDir = createTempDirectory(originalDir.parentFile.toPath(), "$ORT_NAME-stash").toFile()
 
                 // Use a non-existing directory as the target to ensure the directory can be moved atomically.
                 val tempDir = stashDir.resolve(originalDir.name)

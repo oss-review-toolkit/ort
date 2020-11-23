@@ -23,6 +23,8 @@ import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
 
+import kotlin.io.path.createTempDirectory
+
 import org.eclipse.sw360.antenna.attribution.document.core.AttributionDocumentGeneratorImpl
 import org.eclipse.sw360.antenna.attribution.document.core.DocumentValues
 import org.eclipse.sw360.antenna.attribution.document.core.model.LicenseInfo
@@ -35,6 +37,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.AttributionDocumentPdfModel
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.toHexString
 
@@ -187,7 +190,7 @@ class AntennaAttributionDocumentReporter : Reporter {
                     input.licenseInfoResolver.resolveLicenseInfo(project.id).filter(LicenseView.CONCLUDED_OR_REST)
                 )
 
-                val workingDir = createTempDir()
+                val workingDir = createTempDirectory("$ORT_NAME-antenna-reporter").toFile()
 
                 val generator = AttributionDocumentGeneratorImpl(
                     reportFilename,

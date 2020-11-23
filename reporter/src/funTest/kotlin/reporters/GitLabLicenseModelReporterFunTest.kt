@@ -24,6 +24,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -71,9 +73,8 @@ private fun expectedOutput(assetName: String): String = File("src/funTest/assets
 private fun generateReport(ortResult: OrtResult, skipExcluded: Boolean): String =
     GitLabLicenseModelReporter().generateReport(
         input = ReporterInput(ortResult = ortResult),
-        outputDir = createTempDir(ORT_NAME, GitLabLicenseModelReporterFunTest::class.simpleName).apply {
-            deleteOnExit()
-        },
+        outputDir = createTempDirectory("$ORT_NAME-${GitLabLicenseModelReporterFunTest::class.simpleName}").toFile()
+            .apply { deleteOnExit() },
         options = mapOf(GitLabLicenseModelReporter.OPTION_SKIP_EXCLUDED to skipExcluded.toString())
     ).single().readText().normalizeLineBreaks()
 

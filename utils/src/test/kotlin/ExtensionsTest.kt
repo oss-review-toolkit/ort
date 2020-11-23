@@ -31,6 +31,9 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.io.IOException
 
+import kotlin.io.path.createTempDirectory
+import kotlin.io.path.createTempFile
+
 import org.ossreviewtoolkit.utils.test.containExactly
 
 class ExtensionsTest : WordSpec({
@@ -52,7 +55,7 @@ class ExtensionsTest : WordSpec({
 
     "File.hash" should {
         "calculate the correct SHA1" {
-            val file = createTempFile(ORT_NAME, javaClass.simpleName).apply {
+            val file = createTempFile(ORT_NAME, javaClass.simpleName).toFile().apply {
                 writeText("test")
                 deleteOnExit()
             }
@@ -62,7 +65,7 @@ class ExtensionsTest : WordSpec({
     }
 
     "File.isSymbolicLink" should {
-        val tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        val tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
         val file = tempDir.resolve("file").apply { createNewFile() }
         val directory = tempDir.resolve("directory").apply { safeMkdirs() }
 
@@ -155,7 +158,7 @@ class ExtensionsTest : WordSpec({
 
     "File.safeMkDirs" should {
         "succeed if directory already exists" {
-            val directory = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val directory = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
 
             directory.isDirectory shouldBe true
             shouldNotThrow<IOException> { directory.safeMkdirs() }
@@ -163,7 +166,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "succeed if directory could be created" {
-            val parent = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val parent = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
             val child = File(parent, "child").apply { deleteOnExit() }
 
             parent.isDirectory shouldBe true
@@ -175,7 +178,7 @@ class ExtensionsTest : WordSpec({
             // Test case for an unexpected behaviour of File.mkdirs() which returns false for
             // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
             // directory was successfully created.
-            val parent = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val parent = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
             val nonExistingParent = File(parent, "parent1/parent2").apply { deleteOnExit() }
             val child = File(nonExistingParent, "/").apply { deleteOnExit() }
 
@@ -187,7 +190,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "throw exception if file is not a directory" {
-            val file = createTempFile(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val file = createTempFile(ORT_NAME, javaClass.simpleName).toFile().apply { deleteOnExit() }
 
             file.isFile shouldBe true
             shouldThrow<IOException> { file.safeMkdirs() }
@@ -269,7 +272,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "create a valid file name" {
-            val tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
+            val tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
             val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
 
             fileFromStr.isFile shouldBe true

@@ -28,6 +28,8 @@ import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -42,7 +44,7 @@ class SubversionWorkingTreeFunTest : StringSpec() {
     override fun beforeSpec(spec: Spec) {
         val zipFile = File("src/funTest/assets/docutils-2018-01-03-svn-trunk.zip")
 
-        zipContentDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        zipContentDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
 
         print("Extracting '$zipFile' to '$zipContentDir'... ")
         zipFile.unpack(zipContentDir)

@@ -30,6 +30,8 @@ import io.kotest.matchers.shouldNot
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 class DirectoryStashTest : StringSpec() {
     private lateinit var sandboxDir: File
     private lateinit var a: File
@@ -38,7 +40,7 @@ class DirectoryStashTest : StringSpec() {
     private lateinit var b1: File
 
     override fun beforeTest(testCase: TestCase) {
-        sandboxDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        sandboxDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
         a = sandboxDir.resolve("a")
         a1 = a.resolve("a1")
         b = sandboxDir.resolve("b")

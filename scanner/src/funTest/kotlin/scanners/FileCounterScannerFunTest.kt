@@ -24,6 +24,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -39,7 +41,7 @@ class FileCounterScannerFunTest : StringSpec() {
 
     init {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
-            outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
+            outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
 
             val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
             val expectedResult = patchExpectedResult(

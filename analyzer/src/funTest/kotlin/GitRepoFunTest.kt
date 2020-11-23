@@ -25,6 +25,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.analyzer.managers.toYaml
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
@@ -48,7 +50,7 @@ class GitRepoFunTest : StringSpec() {
     override fun beforeSpec(spec: Spec) {
         // Do not use the class name as a suffix here to shorten the path. Otherwise the path will get too long for
         // Windows to handle.
-        outputDir = createTempDir(ORT_NAME)
+        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
 
         val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)
         val pkg = Package.EMPTY.copy(vcsProcessed = vcs)

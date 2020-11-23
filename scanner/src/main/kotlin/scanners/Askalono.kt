@@ -26,6 +26,8 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.time.Instant
 
+import kotlin.io.path.createTempDirectory
+
 import okhttp3.Request
 
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
@@ -88,7 +90,9 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$expectedVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDirectory("$ORT_NAME-$scannerName-$expectedVersion").toFile().apply {
+                deleteOnExit()
+            }
 
             log.info { "Unpacking '$archive' to '$unpackDir'... " }
             body.bytes().unpackZip(unpackDir)

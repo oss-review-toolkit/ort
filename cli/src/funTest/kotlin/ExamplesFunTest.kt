@@ -35,6 +35,8 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -143,9 +145,9 @@ class ExamplesFunTest : StringSpec() {
         }
 
         "PDF files are valid Antenna templates" {
-            val outputDir = createTempDir(
-                ORT_NAME, ExamplesFunTest::class.simpleName
-            ).apply { deleteOnExit() }
+            val outputDir = createTempDirectory("$ORT_NAME-${ExamplesFunTest::class.simpleName}").toFile().apply {
+                deleteOnExit()
+            }
 
             takeExampleFile("back.pdf")
             takeExampleFile("content.pdf")

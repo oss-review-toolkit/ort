@@ -27,6 +27,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -40,7 +42,7 @@ class BeanUtilsFunTest : StringSpec() {
     private lateinit var outputDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {

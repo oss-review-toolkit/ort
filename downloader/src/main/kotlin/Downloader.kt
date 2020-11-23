@@ -24,6 +24,8 @@ import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
+import kotlin.io.path.createTempDirectory
+import kotlin.io.path.createTempFile
 import kotlin.time.TimeSource
 
 import okhttp3.Request
@@ -365,7 +367,7 @@ object Downloader {
                         ArchiveType.getType(it) != ArchiveType.NONE
                     } ?: candidateNames.first()
 
-                    createTempFile(ORT_NAME, tempFileName).also { tempFile ->
+                    createTempFile(ORT_NAME, tempFileName).toFile().also { tempFile ->
                         tempFile.sink().buffer().use { it.writeAll(body.source()) }
                         tempFile.deleteOnExit()
                     }
@@ -390,7 +392,7 @@ object Downloader {
         try {
             if (sourceArchive.extension == "gem") {
                 // Unpack the nested data archive for Ruby Gems.
-                val gemDirectory = createTempDir(ORT_NAME, "gem")
+                val gemDirectory = createTempDirectory("$ORT_NAME-gem").toFile()
                 val dataFile = gemDirectory.resolve("data.tar.gz")
 
                 try {

@@ -31,6 +31,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -53,7 +55,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
-        inputDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        inputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
 
         // Copy our own root license under different names to a temporary directory so we have something to operate on.
         val ortLicense = File("../LICENSE")
@@ -62,7 +64,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
 
     override fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
-        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
