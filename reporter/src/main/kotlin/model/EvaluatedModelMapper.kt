@@ -112,7 +112,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             dependencyTrees = dependencyTrees,
             ruleViolationResolutions = ruleViolationResolutions,
             ruleViolations = ruleViolations,
-            statistics = StatisticsCalculator().getStatistics(input.ortResult, input.resolutionProvider),
+            statistics = StatisticsCalculator().getStatistics(
+                input.ortResult,
+                input.resolutionProvider,
+                input.licenseInfoResolver
+            ),
             repository = input.ortResult.repository,
             repositoryConfiguration = yamlMapper.writeValueAsString(input.ortResult.repository.config),
             labels = input.ortResult.labels

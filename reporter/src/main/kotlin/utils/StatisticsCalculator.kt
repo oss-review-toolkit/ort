@@ -19,12 +19,15 @@
 
 package org.ossreviewtoolkit.reporter.utils
 
+import java.util.SortedMap
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.reporter.model.DependencyTreeStatistics
 import org.ossreviewtoolkit.reporter.model.IssueStatistics
 import org.ossreviewtoolkit.reporter.model.LicenseStatistics
@@ -38,7 +41,11 @@ internal class StatisticsCalculator {
     /**
      * Return the [Statistics] for the given [ortResult].
      */
-    fun getStatistics(ortResult: OrtResult, resolutionProvider: ResolutionProvider) = Statistics(
+    fun getStatistics(
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        licenseInfoResolver: LicenseInfoResolver
+    ) = Statistics(
         openIssues = getOpenIssues(ortResult, resolutionProvider),
         openRuleViolations = getOpenRuleViolations(ortResult, resolutionProvider),
         dependencyTree = DependencyTreeStatistics(
@@ -51,7 +58,7 @@ internal class StatisticsCalculator {
             includedScopes = getIncludedScopes(ortResult).toSortedSet(),
             excludedScopes = getExcludedScopes(ortResult).toSortedSet()
         ),
-        licenses = getLicenseStatistics(ortResult)
+        licenses = getLicenseStatistics(ortResult, licenseInfoResolver)
     )
 
     private fun getOpenRuleViolations(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
@@ -109,28 +116,19 @@ internal class StatisticsCalculator {
                 allScopes - getIncludedScopes(ortResult)
             }
 
-    private fun getLicenseStatistics(ortResult: OrtResult): LicenseStatistics {
-        val declaredLicenses = sortedMapOf<String, Int>()
+    private fun getLicenseStatistics(
+        ortResult: OrtResult,
+        licenseInfoResolver: LicenseInfoResolver
+    ): LicenseStatistics {
+        val ids = ortResult.getProjectAndPackageIds()
 
-        ortResult.analyzer?.result?.let { analyzerResult ->
-            analyzerResult.projects.forEach { project ->
-                project.declaredLicensesProcessed.allLicenses.forEach { license ->
-                    declaredLicenses[license] = declaredLicenses.getOrDefault(license, 0) + 1
-                }
-            }
+        fun countLicenses(view: LicenseView): SortedMap<String, Int> =
+            ids.flatMap { id ->
+                licenseInfoResolver.resolveLicenseInfo(id).filter(view).map { it.license.toString() }
+            }.groupingBy { it }.eachCount().toSortedMap()
 
-            analyzerResult.packages.forEach { pkg ->
-                pkg.pkg.declaredLicensesProcessed.allLicenses.forEach { license ->
-                    declaredLicenses[license] = declaredLicenses.getOrDefault(license, 0) + 1
-                }
-            }
-        }
-
-        val packageLicenses = ortResult.collectLicenseFindings().mapValues { (_, findingsMap) ->
-            findingsMap.mapTo(mutableSetOf()) { it.key.license.toString() }
-        }
-
-        val detectedLicenses = packageLicenses.flatMap { it.value }.groupingBy { it }.eachCount().toSortedMap()
+        val declaredLicenses = countLicenses(LicenseView.ONLY_DECLARED)
+        val detectedLicenses = countLicenses(LicenseView.ONLY_DETECTED)
 
         return LicenseStatistics(
             declared = declaredLicenses,
