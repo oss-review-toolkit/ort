@@ -79,34 +79,6 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
 
     private val licenseSources = licenseSources.toSet()
 
-    fun licenses(
-        pkg: Package,
-        detectedLicenses: List<SpdxSingleLicenseExpression>
-    ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> {
-        val declaredLicenses = pkg.declaredLicensesProcessed.spdxExpression?.decompose().orEmpty()
-        val concludedLicenses = pkg.concludedLicense?.decompose().orEmpty()
-
-        fun getLicenseForSources(
-            sources: Collection<LicenseSource>
-        ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> =
-            sources.flatMap { source ->
-                when (source) {
-                    LicenseSource.DECLARED -> declaredLicenses
-                    LicenseSource.DETECTED -> detectedLicenses
-                    LicenseSource.CONCLUDED -> concludedLicenses
-                }.mapTo(mutableSetOf()) { license -> Pair(license, source) }
-            }
-
-        licenseSources.forEach { sources ->
-            val licenses = getLicenseForSources(sources)
-            if (licenses.isNotEmpty()) {
-                return licenses
-            }
-        }
-
-        return emptyList()
-    }
-
     /**
      * Use this [LicenseView] to filter a [ResolvedLicenseInfo]. This function will filter the [ResolvedLicense]s based
      * on the configured [LicenseSource]s, but it will not remove information from other sources. For example, if
