@@ -20,9 +20,10 @@
 package org.ossreviewtoolkit.utils
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containAll
+import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 class LicenseFilenamePatternsTest : WordSpec({
     "globFileInDirectoryOrAncestors" should {
@@ -34,9 +35,7 @@ class LicenseFilenamePatternsTest : WordSpec({
                 "/LICENSE",
                 "/PATENTS",
                 "/some/LICENSE",
-                "/some/PATENTS",
-                "/some/path/**/LICENSE",
-                "/some/path/**/PATENTS"
+                "/some/PATENTS"
             )
         }
 
@@ -44,18 +43,14 @@ class LicenseFilenamePatternsTest : WordSpec({
             LicenseFilenamePatterns.getFileGlobsForDirectoryAndAncestors(
                 directory = "/",
                 filenamePatterns = listOf("LICENSE", "PATENTS")
-            ) should containExactly(
-                "**/LICENSE",
-                "**/PATENTS"
-            )
+            ) shouldBe emptyList()
         }
     }
 
     "getLicenseFileGlobsForDirectory" should {
         "return a list containing the expected patterns for the LICENSE file" {
-            LicenseFilenamePatterns.getLicenseFileGlobsForDirectory("/dir") should containAll(
-                "/LICENSE*",
-                "/dir/**/LICENSE*"
+            LicenseFilenamePatterns.getLicenseFileGlobsForDirectory("/dir") should contain(
+                "/LICENSE*"
             )
         }
     }

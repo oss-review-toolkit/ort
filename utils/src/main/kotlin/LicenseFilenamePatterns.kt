@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.utils
 
-import java.io.File
-
 private fun List<String>.generateCapitalizationVariants() = flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
 
 object LicenseFilenamePatterns {
@@ -60,8 +58,8 @@ object LicenseFilenamePatterns {
     val ALL_LICENSE_FILENAMES = LICENSE_FILENAMES + PATENT_FILENAMES + ROOT_LICENSE_FILENAMES
 
     /**
-     * Return glob patterns which match all files which may contain license information residing recursively within the
-     * given absolute [directory] or in any of its ancestor directories.
+     * Return glob patterns which match all files which may contain license information in [directory] or within its
+     * ancestor directories.
      */
     fun getLicenseFileGlobsForDirectory(directory: String): List<String> =
         getFileGlobsForDirectoryAndAncestors(directory, ALL_LICENSE_FILENAMES)
@@ -90,8 +88,8 @@ object LicenseFilenamePatterns {
     }
 
     /**
-     * Return glob patterns which match files in [directory], in any ancestor directory of [directory] recursively
-     * and in any sub-directory of directory, if the filename matches any of the [filenamePatterns].
+     * Return glob patterns which match files in [directory] and its ancestor directories, if the filename matches any
+     * of the [filenamePatterns].
      */
     internal fun getFileGlobsForDirectoryAndAncestors(
         directory: String,
@@ -99,14 +97,8 @@ object LicenseFilenamePatterns {
     ): List<String> {
         val distinctPatterns = filenamePatterns.toSet()
 
-        val patternsForDir = distinctPatterns.map {
-            getFileGlobForDirectory(File(directory).invariantSeparatorsPath, it, true)
-        }
-
-        val patternsForAncestorDirs = getAllAncestorDirectories(directory).flatMap { dir ->
+        return getAllAncestorDirectories(directory).flatMap { dir ->
             distinctPatterns.map { getFileGlobForDirectory(dir, it, false) }
-        }
-
-        return (patternsForDir + patternsForAncestorDirs).sorted()
+        }.sorted()
     }
 }
