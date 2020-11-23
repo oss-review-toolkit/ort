@@ -50,10 +50,10 @@ class DefaultLicenseInfoProvider(
         )
 
     private fun createConcludedLicenseInfo(id: Identifier): ConcludedLicenseInfo =
-        ortResult.getPackage(id)?.let { curatedPkg ->
+        ortResult.getPackage(id)?.let { (pkg, curations) ->
             ConcludedLicenseInfo(
-                concludedLicense = curatedPkg.pkg.concludedLicense,
-                appliedCurations = curatedPkg.curations.filter { it.curation.concludedLicense != null }
+                concludedLicense = pkg.concludedLicense,
+                appliedCurations = curations.filter { it.curation.concludedLicense != null }
             )
         } ?: ConcludedLicenseInfo(concludedLicense = null, appliedCurations = emptyList())
 
@@ -64,11 +64,11 @@ class DefaultLicenseInfoProvider(
                 processed = project.declaredLicensesProcessed,
                 appliedCurations = emptyList()
             )
-        } ?: ortResult.getPackage(id)?.let { curatedPkg ->
+        } ?: ortResult.getPackage(id)?.let { (pkg, curations) ->
             DeclaredLicenseInfo(
-                licenses = curatedPkg.pkg.declaredLicenses,
-                processed = curatedPkg.pkg.declaredLicensesProcessed,
-                appliedCurations = curatedPkg.curations.filter { it.curation.declaredLicenses != null }
+                licenses = pkg.declaredLicenses,
+                processed = pkg.declaredLicensesProcessed,
+                appliedCurations = curations.filter { it.curation.declaredLicenses != null }
             )
         } ?: DeclaredLicenseInfo(
             licenses = emptySet(),
@@ -79,14 +79,14 @@ class DefaultLicenseInfoProvider(
     private fun createDetectedLicenseInfo(id: Identifier): DetectedLicenseInfo {
         val findings = mutableListOf<Findings>()
 
-        ortResult.getScanResultsForId(id).forEach { scanResult ->
+        ortResult.getScanResultsForId(id).forEach { (provenance, _, summary) ->
             val (licenseFindingCurations, pathExcludes, relativeFindingsPath) =
-                getConfiguration(id, scanResult.provenance)
+                getConfiguration(id, provenance)
 
             findings += Findings(
-                provenance = scanResult.provenance,
-                licenses = scanResult.summary.licenseFindings,
-                copyrights = scanResult.summary.copyrightFindings,
+                provenance = provenance,
+                licenses = summary.licenseFindings,
+                copyrights = summary.copyrightFindings,
                 licenseFindingCurations = licenseFindingCurations,
                 pathExcludes = pathExcludes,
                 relativeFindingsPath = relativeFindingsPath
