@@ -23,8 +23,10 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintStream
 
+import kotlin.io.path.createTempFile
+
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val tempFile = createTempFile(ORT_NAME, "redirect").apply { deleteOnExit() }
+    val tempFile = createTempFile(ORT_NAME, "redirect").toFile().apply { deleteOnExit() }
     val fileStream = FileOutputStream(tempFile)
 
     try {

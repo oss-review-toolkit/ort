@@ -24,6 +24,8 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.time.Instant
 
+import kotlin.io.path.createTempDirectory
+import kotlin.io.path.createTempFile
 import kotlin.math.max
 
 import okhttp3.Request
@@ -183,10 +185,12 @@ class ScanCode(
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerArchive = createTempFile(ORT_NAME, "$scannerName-${url.substringAfterLast("/")}")
+            val scannerArchive = createTempFile(ORT_NAME, "$scannerName-${url.substringAfterLast("/")}").toFile()
             scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$expectedVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDirectory("$ORT_NAME-$scannerName-$expectedVersion").toFile().apply {
+                deleteOnExit()
+            }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)

@@ -32,6 +32,8 @@ import io.kotest.matchers.shouldNot
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.analyzer.ManagedProjectFiles
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
@@ -81,7 +83,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     override fun beforeSpec(spec: Spec) {
         // Do not use the usual simple class name as the suffix here to shorten the path which otherwise gets too long
         // on Windows for SimpleFormIntegrationTest.
-        outputDir = createTempDir(ORT_NAME)
+        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
         downloadResult = Downloader.download(pkg, outputDir)
     }
 

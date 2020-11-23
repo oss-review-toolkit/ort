@@ -26,6 +26,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempFile
+
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
 
@@ -34,9 +36,7 @@ class ScannerConfigurationTest : WordSpec({
         "support a serialization round-trip via an ObjectMapper" {
             val refConfig = File("src/test/assets/reference.conf")
             val ortConfig = OrtConfiguration.load(configFile = refConfig)
-            val file = createTempFile(suffix = ".yml").apply {
-                deleteOnExit()
-            }
+            val file = createTempFile(suffix = ".yml").toFile().apply { deleteOnExit() }
 
             file.mapper().writeValue(file, ortConfig.scanner)
             val loadedConfig = file.readValue<ScannerConfiguration>()

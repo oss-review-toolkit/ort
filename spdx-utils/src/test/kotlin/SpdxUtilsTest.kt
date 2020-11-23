@@ -33,13 +33,15 @@ import io.kotest.matchers.string.startWith
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.utils.ORT_NAME
 
 class SpdxUtilsTest : WordSpec() {
     private lateinit var tempDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {

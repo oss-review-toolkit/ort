@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils.storage
 import java.io.File
 import java.io.IOException
 
+import kotlin.io.path.createTempFile
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -82,7 +83,7 @@ class FileArchiver(
      * are zipped in the file '[storagePath]/[ARCHIVE_FILE_NAME]'.
      */
     fun archive(directory: File, storagePath: String) {
-        val zipFile = createTempFile(ORT_NAME, ".zip")
+        val zipFile = createTempFile(ORT_NAME, ".zip").toFile()
         zipFile.deleteOnExit()
 
         val zipDuration = measureTime {

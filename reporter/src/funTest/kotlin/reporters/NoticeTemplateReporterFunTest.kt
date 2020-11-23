@@ -24,6 +24,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
@@ -99,7 +101,9 @@ private fun generateReport(
         licenseConfiguration = createLicenseConfiguration()
     )
 
-    val outputDir = createTempDir(ORT_NAME, NoticeTemplateReporterFunTest::class.simpleName).apply { deleteOnExit() }
+    val outputDir = createTempDirectory("$ORT_NAME-${NoticeTemplateReporterFunTest::class.simpleName}").toFile().apply {
+        deleteOnExit()
+    }
 
     return NoticeTemplateReporter().generateReport(input, outputDir, options).single().readText()
 }

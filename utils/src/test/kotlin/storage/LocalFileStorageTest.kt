@@ -28,13 +28,16 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileNotFoundException
 
+import kotlin.io.path.createTempDirectory
+import kotlin.io.path.createTempFile
+
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class LocalFileStorageTest : WordSpec() {
     private fun storage(block: (LocalFileStorage, File) -> Unit) {
-        val directory = createTempDir(ORT_NAME, javaClass.simpleName)
+        val directory = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
         val storage = LocalFileStorage(directory)
         block(storage, directory)
         directory.safeDeleteRecursively()
@@ -44,12 +47,12 @@ class LocalFileStorageTest : WordSpec() {
         "Creating the storage" should {
             "succeed if the directory exists" {
                 shouldNotThrowAny {
-                    LocalFileStorage(createTempDir(ORT_NAME, javaClass.simpleName))
+                    LocalFileStorage(createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile())
                 }
             }
 
             "succeed if the directory does not exist and must be created" {
-                val directory = createTempDir(ORT_NAME, javaClass.simpleName)
+                val directory = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
                 val storageDirectory = directory.resolve("create/storage")
 
                 LocalFileStorage(storageDirectory)
@@ -58,7 +61,7 @@ class LocalFileStorageTest : WordSpec() {
             }
 
             "fail if the directory is a file" {
-                val storageDirectory = createTempFile(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+                val storageDirectory = createTempFile(ORT_NAME, javaClass.simpleName).toFile().apply { deleteOnExit() }
 
                 shouldThrow<IllegalArgumentException> {
                     LocalFileStorage(storageDirectory)

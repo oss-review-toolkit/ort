@@ -33,6 +33,8 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.net.InetSocketAddress
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ProtocolProxyMap
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
@@ -264,7 +266,7 @@ class NodeSupportTest : WordSpec() {
 
     override fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
-        tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
         definitionFiles.clear()
     }
 

@@ -29,6 +29,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.cyclonedx.CycloneDxSchema
 import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.parsers.XmlParser
@@ -45,7 +47,7 @@ class CycloneDxReporterFunTest : WordSpec({
 
     "A generated BOM" should {
         "be valid according to schema version 1.1" {
-            val outputDir = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, options).single()
 
             XmlParser().validate(bomFile, CycloneDxSchema.Version.VERSION_11) should beEmpty()
@@ -62,7 +64,7 @@ class CycloneDxReporterFunTest : WordSpec({
                 )
             )
 
-            val outputDir = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
             val bomFileFromReporter = CycloneDxReporter().generateReport(
                 ReporterInput(ortResult),
                 outputDir,

@@ -26,6 +26,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -38,9 +40,9 @@ class FileArchiverTest : StringSpec() {
     private lateinit var storage: LocalFileStorage
 
     override fun beforeTest(testCase: TestCase) {
-        workingDir = createTempDir(ORT_NAME, "${javaClass.simpleName}-workingDir")
-        storageDir = createTempDir(ORT_NAME, "${javaClass.simpleName}-storageDir")
-        targetDir = createTempDir(ORT_NAME, "${javaClass.simpleName}-targetDir")
+        workingDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-workingDir").toFile()
+        storageDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-storageDir").toFile()
+        targetDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-targetDir").toFile()
         storage = LocalFileStorage(storageDir)
     }
 

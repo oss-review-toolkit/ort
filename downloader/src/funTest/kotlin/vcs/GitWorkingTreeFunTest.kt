@@ -29,6 +29,8 @@ import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -44,7 +46,7 @@ class GitWorkingTreeFunTest : StringSpec() {
     override fun beforeSpec(spec: Spec) {
         val zipFile = File("src/funTest/assets/pipdeptree-2018-01-03-git.zip")
 
-        zipContentDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        zipContentDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
 
         println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)

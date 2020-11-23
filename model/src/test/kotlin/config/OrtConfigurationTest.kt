@@ -34,6 +34,8 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import java.io.File
 import java.lang.IllegalArgumentException
 
+import kotlin.io.path.createTempFile
+
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -231,7 +233,7 @@ class OrtConfigurationTest : WordSpec({
  * Create a test configuration with the [data] specified.
  */
 private fun createTestConfig(data: String): File =
-    createTempFile(ORT_NAME, ".conf").apply {
+    createTempFile(ORT_NAME, ".conf").toFile().apply {
         writeText(data)
         deleteOnExit()
     }

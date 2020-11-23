@@ -31,6 +31,8 @@ import java.lang.NumberFormatException
 import java.net.HttpURLConnection
 import java.util.SortedSet
 
+import kotlin.io.path.createTempDirectory
+
 import okhttp3.Request
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -486,7 +488,7 @@ class Pip(
     }
 
     private fun createVirtualEnv(workingDir: File, pythonVersion: Int): File {
-        val virtualEnvDir = createTempDir(ORT_NAME, "${workingDir.name}-virtualenv")
+        val virtualEnvDir = createTempDirectory("$ORT_NAME-${workingDir.name}-virtualenv").toFile()
 
         val pythonInterpreter = PythonVersion.getPythonInterpreter(pythonVersion)
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()

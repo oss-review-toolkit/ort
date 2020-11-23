@@ -26,6 +26,8 @@ import java.io.File
 
 import javax.xml.transform.TransformerFactory
 
+import kotlin.io.path.createTempDirectory
+
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -77,7 +79,9 @@ private fun generateReport(ortResult: OrtResult): String {
         howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
     )
 
-    val outputDir = createTempDir(ORT_NAME, StaticHtmlReporterFunTest::class.simpleName).apply { deleteOnExit() }
+    val outputDir = createTempDirectory("$ORT_NAME-${StaticHtmlReporterFunTest::class.simpleName}").toFile().apply {
+        deleteOnExit()
+    }
 
     return StaticHtmlReporter().generateReport(input, outputDir).single().readText()
 }

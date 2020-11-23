@@ -23,6 +23,10 @@ package org.ossreviewtoolkit.helper.common
 
 import java.io.File
 import java.io.IOException
+import java.nio.file.Paths
+
+import kotlin.io.path.createTempDirectory
+import kotlin.io.path.createTempFile
 
 import okhttp3.Request
 
@@ -102,7 +106,7 @@ internal fun download(url: String): File {
 
         // Use the filename from the request for the last redirect.
         val tempFileName = response.request.url.pathSegments.last()
-        return createTempFile(ORT_NAME, tempFileName).also { tempFile ->
+        return createTempFile(ORT_NAME, tempFileName).toFile().also { tempFile ->
             tempFile.sink().buffer().use { it.writeAll(body.source()) }
             tempFile.deleteOnExit()
         }
@@ -183,7 +187,7 @@ internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<Scop
  * the given [id] depending on whether a scan result is present with matching [Provenance].
  */
 internal fun OrtResult.fetchScannedSources(id: Identifier): File {
-    val tempDir = createTempDir(ORTH_NAME, directory = File("."))
+    val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
 
     val pkg = getPackageOrProject(id)!!.let {
         if (getProvenance(id)!!.sourceArtifact != null) {
