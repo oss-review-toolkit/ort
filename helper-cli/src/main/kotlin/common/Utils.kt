@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -63,7 +64,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
-import org.ossreviewtoolkit.model.utils.collectLicenseFindings
+import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
@@ -243,18 +244,25 @@ internal fun OrtResult.processAllCopyrightStatements(
 
     val processor = CopyrightStatementsProcessor()
 
-    collectLicenseFindings(packageConfigurationProvider, omitExcluded = omitExcluded).forEach { (id, findings) ->
-        findings.forEach innerForEach@{ (licenseFindings, pathExcludes) ->
-            if (omitExcluded && pathExcludes.isNotEmpty()) return@innerForEach
+    val licenseInfoResolver = createLicenseInfoResolver(
+        packageConfigurationProvider = packageConfigurationProvider,
+        copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet())
+    )
 
-            val processResult = processor.process(
-                licenseFindings.copyrights.map { it.statement }.filterNot { it in copyrightGarbage }
-            )
+    getProjectAndPackageIds().forEach { id ->
+        licenseInfoResolver.resolveLicenseInfo(id).forEach innerForEach@{ resolvedLicense ->
+            if (omitExcluded && resolvedLicense.isDetectedExcluded) return@innerForEach
+
+            val copyrights = resolvedLicense.getResolvedCopyrights(omitExcluded).flatMap { resolvedCopyright ->
+                resolvedCopyright.findings.map { it.statement }
+            }
+
+            val processResult = processor.process(copyrights)
 
             processResult.processedStatements.filterNot { it.key in copyrightGarbage }.forEach {
                 result += ProcessedCopyrightStatement(
                     packageId = id,
-                    license = licenseFindings.license,
+                    license = resolvedLicense.license,
                     statement = it.key,
                     rawStatements = it.value.toSet()
                 )
@@ -263,7 +271,7 @@ internal fun OrtResult.processAllCopyrightStatements(
             processResult.unprocessedStatements.filterNot { it in copyrightGarbage }.forEach {
                 result += ProcessedCopyrightStatement(
                     packageId = id,
-                    license = licenseFindings.license,
+                    license = resolvedLicense.license,
                     statement = it,
                     rawStatements = setOf(it)
                 )
