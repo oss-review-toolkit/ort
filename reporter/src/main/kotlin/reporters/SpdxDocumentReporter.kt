@@ -70,7 +70,7 @@ class SpdxDocumentReporter : Reporter {
 
         val spdxDocument = SpdxDocumentModelMapper.map(
             input.ortResult,
-            input.packageConfigurationProvider,
+            input.licenseInfoResolver,
             input.licenseTextProvider,
             params
         )
