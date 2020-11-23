@@ -521,7 +521,7 @@ class LicenseInfoResolverTest : WordSpec() {
         copyrightGarbage: Set<String> = emptySet(),
         archiver: FileArchiver = FileArchiver.DEFAULT
     ) = LicenseInfoResolver(
-        data.toProvider(),
+        SimpleLicenseInfoProvider(data),
         CopyrightGarbage(copyrightGarbage.toSortedSet()),
         archiver
     )
@@ -549,12 +549,12 @@ class LicenseInfoResolverTest : WordSpec() {
         )
 }
 
-private class SimpleLicenseInfoProvider(val licenseInfo: Map<Identifier, LicenseInfo>) : LicenseInfoProvider {
-    override fun get(id: Identifier) =
-        licenseInfo[id] ?: throw IllegalArgumentException("No license info for '${id.toCoordinates()}' available.")
-}
+private class SimpleLicenseInfoProvider(licenseInfo: List<LicenseInfo>) : LicenseInfoProvider {
+    private val licenseInfoById = licenseInfo.associateBy { it.id }
 
-private fun List<LicenseInfo>.toProvider() = SimpleLicenseInfoProvider(associateBy { it.id })
+    override fun get(id: Identifier) =
+        licenseInfoById[id] ?: throw IllegalArgumentException("No license info for '${id.toCoordinates()}' available.")
+}
 
 private fun Map<String, List<TextLocation>>.toFindingsSet(): Set<LicenseFinding> =
     flatMap { (license, locations) ->
