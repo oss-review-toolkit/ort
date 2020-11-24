@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
 
+import kotlin.io.path.createTempDirectory
+
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.AttributesBuilder
 import org.asciidoctor.OptionsBuilder
@@ -28,6 +30,8 @@ import org.asciidoctor.SafeMode
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.FreemarkerTemplateProcessor
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 /**
  * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [Asciidoc][2]
@@ -85,7 +89,8 @@ class AsciidocTemplateReporter : Reporter {
             asciidoctorAttributes.attribute("pdf-theme", themePath)
         }
 
-        val asciidocFiles = templateProcessor.processTemplates(input, outputDir, options)
+        val asciidocTempDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
+        val asciidocFiles = templateProcessor.processTemplates(input, asciidocTempDir, options)
 
         val outputFiles = mutableListOf<File>()
 
@@ -103,6 +108,8 @@ class AsciidocTemplateReporter : Reporter {
             outputFiles += outputFile
             file.delete()
         }
+
+        asciidocTempDir.safeDeleteRecursively()
 
         return outputFiles
     }
