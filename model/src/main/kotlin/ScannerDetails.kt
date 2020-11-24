@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.vdurmont.semver4j.Semver
 
 import java.util.EnumSet
@@ -40,7 +41,15 @@ data class ScannerDetails(
     /**
      * The configuration of the scanner, could be command line arguments for example.
      */
-    val configuration: String
+    val configuration: String,
+
+    /**
+     * An object with a representation of the scanner's command line options. While the [configuration] property
+     * holds the exact configuration of the scanner, this field supports advanced compatibility checks of
+     * configuration options.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val options: ScannerOptions? = null
 ) {
     companion object {
         /**
