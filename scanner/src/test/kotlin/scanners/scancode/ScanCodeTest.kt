@@ -20,10 +20,20 @@
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
+import org.ossreviewtoolkit.model.CopyrightResultOption
+import org.ossreviewtoolkit.model.IgnoreFilterOption
+import org.ossreviewtoolkit.model.LicenseResultOption
+import org.ossreviewtoolkit.model.MetadataResultOption
+import org.ossreviewtoolkit.model.OutputFormatOption
+import org.ossreviewtoolkit.model.ScannerOptions
+import org.ossreviewtoolkit.model.SubOptions
+import org.ossreviewtoolkit.model.UnclassifiedOption
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 class ScanCodeTest : WordSpec({
@@ -58,8 +68,8 @@ class ScanCodeTest : WordSpec({
         "contain the default values if the scanner configuration is empty" {
             scanner.commandLineOptions.joinToString(" ") shouldMatch
                     "--copyright --license --ignore \\*$ORT_REPO_CONFIG_FILENAME --info --strip-root --timeout 300 " +
-                        "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --processes \\d+ --license-diag " +
-                        "--verbose"
+                    "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --processes \\d+ --license-diag " +
+                    "--verbose"
         }
 
         "contain the values from the scanner configuration" {
@@ -78,6 +88,40 @@ class ScanCodeTest : WordSpec({
 
             scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
                     "--command --line --commandLineNonConfig --debug --commandLine --debugCommandLineNonConfig"
+        }
+    }
+
+    "getScannerOptions" should {
+        "return the default values if the configuration is empty" {
+            val outputOption = OutputFormatOption(
+                SubOptions.create { putStringOption("JSON") }
+            )
+            val copyrightOption = CopyrightResultOption(SubOptions(jsonMapper.createObjectNode()))
+            val licenseOption = LicenseResultOption(SubOptions(jsonMapper.createObjectNode()))
+            val infoOption = MetadataResultOption(SubOptions(jsonMapper.createObjectNode()))
+            val ignoreOption = IgnoreFilterOption(
+                setOf("path:*$ORT_REPO_CONFIG_FILENAME", "path:HERE_NOTICE", "path:META-INF/DEPENDENCIES")
+            )
+            val unclassifiedOption = UnclassifiedOption(
+                SubOptions.create {
+                    putStringOption(key = "license-diag", value = "true")
+                    putStringOption(key = "strip-root", value = "true")
+                }
+            )
+            val options = ScannerOptions(
+                setOf(
+                    outputOption,
+                    copyrightOption,
+                    licenseOption,
+                    infoOption,
+                    ignoreOption,
+                    unclassifiedOption
+                )
+            )
+
+            val scannerOptions = scanner.getScannerOptions()
+            scannerOptions.shouldNotBeNull()
+            options.isSubsetOf(scannerOptions, true) shouldBe true
         }
     }
 })

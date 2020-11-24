@@ -38,11 +38,13 @@ import org.apache.logging.log4j.Level
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerOptions
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.scanners.parseScannerOptionsFromCommandLine
 import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
@@ -61,11 +63,11 @@ import org.ossreviewtoolkit.utils.unpack
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
  *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
- *   considered in [getConfiguration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
+ *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  * * **"debugCommandLine":** Debug command line options that modify the result. Only used if the [log] level is set to
  *   [Level.DEBUG]. Defaults to [DEFAULT_DEBUG_CONFIGURATION_OPTIONS].
  * * **"debugCommandLineNonConfig":** Debug command line options that do not modify the result and should therefore not
- *   be considered in [getConfiguration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
+ *   be considered in [configuration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
  *   [DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS].
  */
 class ScanCode(
@@ -83,7 +85,7 @@ class ScanCode(
         internal const val TIMEOUT = 300
 
         /**
-         * Configuration options that are relevant for [getConfiguration] because they change the result file.
+         * Configuration options that are relevant for [configuration] because they change the result file.
          */
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
             "--copyright",
@@ -95,7 +97,7 @@ class ScanCode(
         ) + NON_LICENSE_FILENAMES.flatMap { listOf("--ignore", it) }
 
         /**
-         * Configuration options that are not relevant for [getConfiguration] because they do not change the result
+         * Configuration options that are not relevant for [configuration] because they do not change the result
          * file.
          */
         private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
@@ -103,12 +105,12 @@ class ScanCode(
         )
 
         /**
-         * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
+         * Debug configuration options that are relevant for [configuration] because they change the result file.
          */
         private val DEFAULT_DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
 
         /**
-         * Debug configuration options that are not relevant for [getConfiguration] because they do not change the
+         * Debug configuration options that are not relevant for [configuration] because they do not change the
          * result file.
          */
         private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
@@ -215,6 +217,12 @@ class ScanCode(
         }
     }
 
+    override fun getScannerOptions(): ScannerOptions? {
+        val commandLine = commandLineOptions.toMutableList()
+        commandLine.add(OUTPUT_FORMAT_OPTION)
+        return parseScannerOptionsFromCommandLine(commandLine, emptyList(), false)
+    }
+
     override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
@@ -250,7 +258,7 @@ class ScanCode(
     }
 
     override fun getVersion(workingDir: File?): String =
-        // The release candidate version names lack a hyphen in between the minor version and the extension, e.g.
+    // The release candidate version names lack a hyphen in between the minor version and the extension, e.g.
         // 3.2.1rc2. Insert that hyphen for compatibility with Semver.
         super.getVersion(workingDir).let {
             val index = it.indexOf("rc")
