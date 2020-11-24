@@ -52,5 +52,5 @@ class NoticeTemplateReporter : Reporter {
     )
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>) =
-         templateProcessor.processTemplates(input, outputDir, options)
+        templateProcessor.processTemplates(input, outputDir, options)
 }
