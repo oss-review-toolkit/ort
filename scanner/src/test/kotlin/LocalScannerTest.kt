@@ -26,6 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class LocalScannerTest : WordSpec({
@@ -70,11 +71,12 @@ class LocalScannerTest : WordSpec({
 
         "use an exact configuration matcher" {
             val scanner = createScanner(createConfig(emptyMap()))
+            val details = ScannerDetails(SCANNER_NAME, SCANNER_VERSION, scanner.configuration)
 
             val criteria = scanner.getScannerCriteria()
 
-            criteria.configMatcher(scanner.configuration) shouldBe true
-            criteria.configMatcher(scanner.configuration + "_other") shouldBe false
+            criteria.configMatcher(details) shouldBe true
+            criteria.configMatcher(details.copy(configuration = details.configuration + "_other")) shouldBe false
         }
     }
 })

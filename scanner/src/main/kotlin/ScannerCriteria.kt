@@ -22,18 +22,17 @@ package org.ossreviewtoolkit.scanner
 import com.vdurmont.semver4j.Semver
 
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerOptions
 
 /**
  * Definition of a predicate to check whether the configuration of a scanner is compatible with the requirements
  * specified by a [ScannerCriteria] object.
  *
  * When testing whether a scan result is compatible with specific criteria this function is invoked on the
- * scanner configuration data stored in the result. By having different, scanner-specific matcher functions, this
+ * [ScannerDetails] data stored in the result. By having different, scanner-specific matcher functions, this
  * compatibility check can be made very flexible.
- *
- * TODO: Switch to a more advanced type than String to represent the scanner configuration.
  */
-typealias ScannerConfigMatcher = (String) -> Boolean
+typealias ScannerConfigMatcher = (ScannerDetails) -> Boolean
 
 /**
  * A data class defining selection criteria for scanners.
@@ -79,10 +78,33 @@ data class ScannerCriteria(
         val ALL_CONFIG_MATCHER: ScannerConfigMatcher = { true }
 
         /**
-         * A matcher for scanner configurations that accepts only exact matches of the [originalConfig]. This
-         * function can be used by scanners that are extremely sensitive about their configuration.
+         * Return a matcher for scanner configurations that yields *true* only if the _configuration_ property of the
+         * passed in [ScannerDetails] matches exactly the [originalConfig]. This function can be used by scanners that
+         * are extremely sensitive about their configuration.
          */
-        fun exactConfigMatcher(originalConfig: String): ScannerConfigMatcher = { config -> originalConfig == config }
+        fun exactConfigMatcher(originalConfig: String): ScannerConfigMatcher = { details ->
+            originalConfig == details.configuration
+        }
+
+        /**
+         * Return a matcher for scanner configurations that does a compatibility check based on the [options] provided.
+         * If the [ScannerDetails] object to check has defined [ScannerOptions], the matcher returns *true* if the
+         * options provided are [a subset of][ScannerOptions.isSubsetOf] the options stored in the details, taking the
+         * [nonStrictOptions] specified into account. Otherwise, an exact check of the [originalConfig] is done,
+         * analogously to [exactConfigMatcher].
+         */
+        fun compatibleConfigMatcher(
+            originalConfig: String,
+            options: ScannerOptions,
+            nonStrictOptions: Set<String>
+        ): ScannerConfigMatcher = { details ->
+            val resultOptions = details.options
+            if (resultOptions != null) {
+                options.isSubsetOf(resultOptions, nonStrictOptions)
+            } else {
+                originalConfig == details.configuration
+            }
+        }
     }
 
     /** The regular expression to match for the scanner name. */
@@ -99,6 +121,6 @@ data class ScannerCriteria(
         }
 
         val version = Semver(details.version)
-        return minVersion <= version && maxVersion > version && configMatcher(details.configuration)
+        return minVersion <= version && maxVersion > version && configMatcher(details)
     }
 }
