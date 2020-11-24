@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.reporter.utils.FreemarkerTemplateProcessor
 class AsciidocTemplateReporter : Reporter {
     companion object {
         private const val ASCIIDOC_FILE_PREFIX = "Asciidoc_"
+        private const val ASCIIDOC_FILE_EXTENSION = "adoc"
         private const val ASCIIDOC_TEMPLATE_DIRECTORY = "asciidoc"
 
         private const val OPTION_PDF_THEME_PATH = "pdf-theme.path"
@@ -66,6 +67,7 @@ class AsciidocTemplateReporter : Reporter {
 
     private val templateProcessor = FreemarkerTemplateProcessor(
         ASCIIDOC_FILE_PREFIX,
+        ASCIIDOC_FILE_EXTENSION,
         ASCIIDOC_TEMPLATE_DIRECTORY
     )
     private val asciidoctor = Asciidoctor.Factory.create()
