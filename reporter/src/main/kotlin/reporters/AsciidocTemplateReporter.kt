@@ -75,12 +75,11 @@ class AsciidocTemplateReporter : Reporter {
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val asciidoctorAttributes = AttributesBuilder.attributes()
 
-        val themePath = options[OPTION_PDF_THEME_PATH]
-
-        if (themePath != null) {
+        options[OPTION_PDF_THEME_PATH]?.let { themePath ->
             File(themePath).also {
                 require(it.isFile) { "Could not find pdf-theme file at '${it.absolutePath}'." }
             }
+
             asciidoctorAttributes.attribute("pdf-theme", themePath)
         }
 
