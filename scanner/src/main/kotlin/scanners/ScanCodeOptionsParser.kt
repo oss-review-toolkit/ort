@@ -21,6 +21,8 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import org.ossreviewtoolkit.model.CopyrightResultOption
 import org.ossreviewtoolkit.model.EmailResultOption
 import org.ossreviewtoolkit.model.IgnoreFilterOption
@@ -199,7 +201,7 @@ private fun notRelevantOption(key: String): SubOptionMapping =
  * into options that are [always applied][commandLine] and options to be used in [debug mode][debugCommandLine];
  * the latter are taken into account only if the [includeDebug] flag is *true*.
  */
-internal fun parseScannerOptions(
+internal fun parseScannerOptionsFromCommandLine(
     commandLine: List<String>,
     debugCommandLine: List<String>,
     includeDebug: Boolean
@@ -218,6 +220,39 @@ internal fun parseScannerOptions(
     optionsSet.addAll(generateSubOptions(subOptions))
     addDefaultTimeoutIfUnspecified(optionsSet)
     return ScannerOptions(optionsSet)
+}
+
+/**
+ * Generate a [ScannerOptions] objects from the command line representation of a stored ScanCode result represented
+ * by the [root JSON node][options] containing this data.
+ */
+internal fun parseScannerOptionsFromResult(options: JsonNode?): ScannerOptions {
+    val commandLine = options?.let { optionsNode ->
+        optionsNode.fieldNames().asSequence().fold(mutableListOf<String>()) { list, opt ->
+            val node = optionsNode[opt]
+            when {
+                node.isBoolean ->
+                    if (node.asBoolean()) {
+                        list.add(opt)
+                    }
+
+                node.isEmpty -> {
+                    list.add(opt)
+                    list.add(node.asText())
+                }
+
+                else ->
+                    node.forEach {
+                        list.add(opt)
+                        list.add(it.asText())
+                    }
+            }
+
+            list
+        }
+    } ?: emptyList()
+
+    return parseScannerOptionsFromCommandLine(commandLine, emptyList(), includeDebug = false)
 }
 
 /**

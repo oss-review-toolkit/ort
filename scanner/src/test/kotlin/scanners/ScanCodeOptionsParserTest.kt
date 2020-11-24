@@ -23,6 +23,8 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
@@ -43,9 +45,10 @@ import org.ossreviewtoolkit.model.SubOptions
 import org.ossreviewtoolkit.model.TimeoutOption
 import org.ossreviewtoolkit.model.UnclassifiedOption
 import org.ossreviewtoolkit.model.UrlResultOption
+import org.ossreviewtoolkit.model.jsonMapper
 
 class ScanCodeOptionsParserTest : WordSpec({
-    "parseScanCodeOptions()" should {
+    "parseScanCodeOptionsFromCommandLine()" should {
         "generate a correct ScannerOptions object" {
             val commandLineOptions = listOf(
                 "--copyright", "--consolidate", "--license", "--license-score", "33", "--license-text",
@@ -124,14 +127,14 @@ class ScanCodeOptionsParserTest : WordSpec({
                 )
             )
 
-            val options = parseScannerOptions(commandLineOptions, emptyList(), includeDebug = true)
+            val options = parseScannerOptionsFromCommandLine(commandLineOptions, emptyList(), includeDebug = true)
 
             options.isSubsetOf(expectedOptions, strict = true) shouldBe true
             expectedOptions.isSubsetOf(options, strict = true) shouldBe true
         }
 
         "skip debug options if they are disabled" {
-            val options = parseScannerOptions(
+            val options = parseScannerOptionsFromCommandLine(
                 listOf("--copyright"),
                 listOf("--verbose"),
                 includeDebug = false
@@ -143,7 +146,7 @@ class ScanCodeOptionsParserTest : WordSpec({
         }
 
         "not crash for a command line that does not start with an option" {
-            val options = parseScannerOptions(
+            val options = parseScannerOptionsFromCommandLine(
                 listOf("foo", "--ignore", "a_pattern", "--alpha"),
                 emptyList(), includeDebug = false
             )
@@ -153,7 +156,7 @@ class ScanCodeOptionsParserTest : WordSpec({
 
         "replace aliases by their full option names" {
             val aliases = listOf("-clp", "-e", "-ui", "-n", "10")
-            val options = parseScannerOptions(aliases, emptyList(), includeDebug = false)
+            val options = parseScannerOptionsFromCommandLine(aliases, emptyList(), includeDebug = false)
 
             options.contains<CopyrightResultOption>() shouldBe true
             options.contains<LicenseResultOption>() shouldBe true
@@ -166,20 +169,28 @@ class ScanCodeOptionsParserTest : WordSpec({
         }
 
         "handle unknown aliases gracefully" {
-            val options = parseScannerOptions(listOf("-exi"), emptyList(), includeDebug = false)
+            val options = parseScannerOptionsFromCommandLine(listOf("-exi"), emptyList(), includeDebug = false)
 
             options.valueNode<UnclassifiedOption>(SubOptionType.STRINGS, "x").asText() shouldBe "true"
         }
 
         "only contain result options referenced on the command line" {
-            val options = parseScannerOptions(listOf("--copyright", "--license"), emptyList(), includeDebug = false)
+            val options = parseScannerOptionsFromCommandLine(
+                listOf("--copyright", "--license"),
+                emptyList(),
+                includeDebug = false
+            )
 
             options.contains<MetadataResultOption>() shouldBe false
             options.contains<PackageResultOption>() shouldBe false
         }
 
         "always generate an unclassified option" {
-            val options = parseScannerOptions(listOf("--copyright", "--license"), emptyList(), includeDebug = false)
+            val options = parseScannerOptionsFromCommandLine(
+                listOf("--copyright", "--license"),
+                emptyList(),
+                includeDebug = false
+            )
 
             val unclassifiedOption = options.getOption<UnclassifiedOption>()
             unclassifiedOption.shouldNotBeNull()
@@ -187,7 +198,7 @@ class ScanCodeOptionsParserTest : WordSpec({
         }
 
         "generate a timeout option with the standard timeout" {
-            val options = parseScannerOptions(listOf("--info"), emptyList(), includeDebug = false)
+            val options = parseScannerOptionsFromCommandLine(listOf("--info"), emptyList(), includeDebug = false)
 
             options.valueNode<TimeoutOption>(SubOptionType.THRESHOLD, SubOptions.DEFAULT_KEY).asInt() shouldBe 120
         }
@@ -216,7 +227,95 @@ class ScanCodeOptionsParserTest : WordSpec({
             testOutputOption("spdx-tv", "SPDX-TV")
         }
     }
+
+    "parseScannerOptionsFromResult" should {
+        "return a basic options object for a null JSON node" {
+            val options = parseScannerOptionsFromResult(null)
+
+            options.options shouldHaveSize 2 // contains only default options
+            val unclassifiedOption = options.getOption<UnclassifiedOption>()
+            unclassifiedOption.shouldNotBeNull()
+            unclassifiedOption.subOptions.values.fieldNames().asSequence().toList() should beEmpty()
+            options.valueNode<TimeoutOption>(SubOptionType.THRESHOLD, SubOptions.DEFAULT_KEY).asInt() shouldBe 120
+        }
+
+        "parse boolean options" {
+            val json = """{
+                |"--info": true,
+                |"--copyright": true,
+                |"--license": true
+                |}
+            """.trimMargin()
+
+            val options = parseOptionsFromJson(json)
+
+            options.contains<MetadataResultOption>() shouldBe true
+            options.contains<CopyrightResultOption>() shouldBe true
+            options.contains<LicenseResultOption>() shouldBe true
+            options.contains<PackageResultOption>() shouldBe false
+        }
+
+        "drop boolean options with a value of false" {
+            val json = """{
+                |"--info": false,
+                |"--copyright": true,
+                |"--license": true
+                |}
+            """.trimMargin()
+
+            val options = parseOptionsFromJson(json)
+
+            options.contains<MetadataResultOption>() shouldBe false
+        }
+
+        "parse options with a different type" {
+            val json = """{
+                |"--info": true,
+                |"--timeout": 42,
+                |"--license": true,
+                |"--license-score": "50"
+                |}
+            """.trimMargin()
+
+            val options = parseOptionsFromJson(json)
+
+            options.valueNode<TimeoutOption>(SubOptionType.THRESHOLD, SubOptions.DEFAULT_KEY).intValue() shouldBe 42
+            options.valueNode<LicenseResultOption>(
+                SubOptionType.THRESHOLD,
+                "license-score"
+            ).doubleValue() shouldBe 50.0
+        }
+
+        "handle options with multiple values" {
+            val json = """{
+                |"--info": true,
+                |"--ignore": [
+                |  "a_pattern",
+                |  "c pattern",
+                |  "b_pattern"
+                |]
+                |}
+            """.trimMargin()
+
+            val options = parseOptionsFromJson(json)
+
+            val ignoreOption = options.getOption<IgnoreFilterOption>()
+            ignoreOption.shouldNotBeNull()
+            ignoreOption.patterns should containExactlyInAnyOrder(
+                "path:a_pattern",
+                "path:b_pattern", "path:c pattern"
+            )
+        }
+    }
 })
+
+/**
+ * Parse the given [json] string and pass the resulting node to the _parseScannerOptionsFromResult()_ function.
+ */
+private fun parseOptionsFromJson(json: String): ScannerOptions {
+    val node = jsonMapper.readTree(json)
+    return parseScannerOptionsFromResult(node)
+}
 
 /**
  * Check that there is an option of the given option type, which has a value of a specific [type] and [key].
@@ -237,7 +336,7 @@ private inline fun <reified T : ScannerOptionWithSubOptions<T>> ScannerOptions.v
  * Test whether an output format option is created with the correct format.
  */
 private fun testOutputOption(key: String, expectedFormat: String) {
-    val options = parseScannerOptions(listOf("--$key", "output.txt"), emptyList(), includeDebug = false)
+    val options = parseScannerOptionsFromCommandLine(listOf("--$key", "output.txt"), emptyList(), includeDebug = false)
 
     options.valueNode<OutputFormatOption>(
         SubOptionType.STRINGS,
