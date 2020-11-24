@@ -52,7 +52,9 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently only the "default"
  *                  template is available.
  * - *template.path*: A comma-separated list of paths to template files provided by the user.
- * - *pdf-theme.path*: A path to an Asciidoc PDF theme file.
+ * - *backend*: The name of the Asciidoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
+ *              fake backend is used to indicate that no backend should be used but the Asciidoc files should be kept.
+ * - *pdf-theme.path*: A path to an Asciidoc PDF theme file. Only used with the "pdf" backend.
  *
  * [1]: https://freemarker.apache.org
  * [2]: https://asciidoc.org/
@@ -66,7 +68,10 @@ class AsciidocTemplateReporter : Reporter {
         private const val ASCIIDOC_FILE_EXTENSION = "adoc"
         private const val ASCIIDOC_TEMPLATE_DIRECTORY = "asciidoc"
 
+        private const val OPTION_BACKEND = "backend"
         private const val OPTION_PDF_THEME_PATH = "pdf-theme.path"
+
+        private const val BACKEND_PDF = "pdf"
     }
 
     private val templateProcessor = FreemarkerTemplateProcessor(
@@ -81,12 +86,17 @@ class AsciidocTemplateReporter : Reporter {
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val asciidoctorAttributes = AttributesBuilder.attributes()
 
-        options[OPTION_PDF_THEME_PATH]?.let { themePath ->
-            File(themePath).also {
-                require(it.isFile) { "Could not find pdf-theme file at '${it.absolutePath}'." }
-            }
+        // Also see https://github.com/asciidoctor/asciidoctorj/issues/438 for supported backends.
+        val backend = options[OPTION_BACKEND] ?: BACKEND_PDF
 
-            asciidoctorAttributes.attribute("pdf-theme", themePath)
+        if (backend.equals(BACKEND_PDF, ignoreCase = true)) {
+            options[OPTION_PDF_THEME_PATH]?.let { themePath ->
+                File(themePath).also {
+                    require(it.isFile) { "Could not find pdf-theme file at '${it.absolutePath}'." }
+                }
+
+                asciidoctorAttributes.attribute("pdf-theme", themePath)
+            }
         }
 
         val asciidocTempDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
@@ -94,19 +104,26 @@ class AsciidocTemplateReporter : Reporter {
 
         val outputFiles = mutableListOf<File>()
 
-        asciidocFiles.forEach { file ->
-            val outputFile = outputDir.resolve("${file.nameWithoutExtension}.pdf")
+        if (backend.equals(ASCIIDOC_FILE_EXTENSION, ignoreCase = true)) {
+            asciidocFiles.forEach { file ->
+                val outputFile = outputDir.resolve(file.name)
+                file.copyTo(outputFile)
+            }
+        } else {
+            asciidocFiles.forEach { file ->
+                val outputFile = outputDir.resolve("${file.nameWithoutExtension}.$backend")
 
-            val asciidoctorOptions = OptionsBuilder.options()
-                .backend("pdf")
-                .toFile(outputFile)
-                .attributes(asciidoctorAttributes)
-                .safe(SafeMode.UNSAFE)
+                val asciidoctorOptions = OptionsBuilder.options()
+                    .backend(backend)
+                    .toFile(outputFile)
+                    .attributes(asciidoctorAttributes)
+                    .safe(SafeMode.UNSAFE)
 
-            asciidoctor.convertFile(file, asciidoctorOptions)
+                asciidoctor.convertFile(file, asciidoctorOptions)
+                file.delete()
 
-            outputFiles += outputFile
-            file.delete()
+                outputFiles += outputFile
+            }
         }
 
         asciidocTempDir.safeDeleteRecursively()

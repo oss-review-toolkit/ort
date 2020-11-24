@@ -19,7 +19,9 @@ the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 * `template.id`: A comma-separated list of IDs of templates provided by ORT. Currently only the "default" template is
                  available.
 * `template.path`: A comma-separated list of paths to template files provided by the user.
-* `pdf-theme.path`: A path to an Asciidoc PDF theme file.
+* `backend`: The name of the Asciidoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
+             fake backend is used to indicate that no backend should be used but the Asciidoc files should be kept.
+* `pdf-theme.path`: A path to an Asciidoc PDF theme file. Only used with the "pdf" backend.
 
 ## Command Line
 
