@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.reporter.utils.FreemarkerTemplateProcessor
 class NoticeTemplateReporter : Reporter {
     companion object {
         private const val NOTICE_FILE_PREFIX = "NOTICE_"
+        private const val NOTICE_FILE_EXTENSION = ""
         private const val NOTICE_TEMPLATE_DIRECTORY = "notice"
     }
 
@@ -48,6 +49,7 @@ class NoticeTemplateReporter : Reporter {
 
     private val templateProcessor = FreemarkerTemplateProcessor(
         NOTICE_FILE_PREFIX,
+        NOTICE_FILE_EXTENSION,
         NOTICE_TEMPLATE_DIRECTORY
     )
 

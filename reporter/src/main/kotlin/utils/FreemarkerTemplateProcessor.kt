@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.utils.log
  */
 class FreemarkerTemplateProcessor(
     private val filePrefix: String,
+    private val fileExtension: String,
     private val templateDirectory: String
 ) {
     companion object {
@@ -98,12 +99,13 @@ class FreemarkerTemplateProcessor(
             }
         }
 
+        val fileExtensionWithDot = fileExtension.takeIf { it.isEmpty() } ?: ".$fileExtension"
         val outputFiles = mutableListOf<File>()
 
         templateIds.forEach { id ->
             log.info { "Generating output file using template id '$id'." }
 
-            val outputFile = outputDir.resolve("${filePrefix}$id")
+            val outputFile = outputDir.resolve("$filePrefix$id$fileExtensionWithDot")
             outputFiles += outputFile
 
             val template = freemarkerConfig.getTemplate("$id.ftl")
@@ -113,7 +115,7 @@ class FreemarkerTemplateProcessor(
         templateFiles.forEach { file ->
             log.info { "Generating output file using template file '${file.absolutePath}'." }
 
-            val outputFile = outputDir.resolve("${filePrefix}${file.nameWithoutExtension}")
+            val outputFile = outputDir.resolve("$filePrefix${file.nameWithoutExtension}$fileExtensionWithDot")
             outputFiles += outputFile
 
             freemarkerConfig.setDirectoryForTemplateLoading(file.parentFile)
