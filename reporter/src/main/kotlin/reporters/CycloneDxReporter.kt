@@ -221,7 +221,13 @@ class CycloneDxReporter : Reporter {
             // TODO: Support license expressions once we have fully converted to them.
             licenseChoice = LicenseChoice().apply { licenses = licenseObjects }
 
+            // TODO: Find a way to associate copyrights to the license they belong to, see
+            //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
+            copyright = resolvedLicenseInfo.flatMap { it.getCopyrights(process = true) }.joinToString()
+                .takeUnless { it.isEmpty() }
+
             purl = pkg.purl + purlQualifier
+            isModified = pkg.isModified
 
             // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
             type = Component.Type.LIBRARY
