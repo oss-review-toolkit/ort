@@ -32,7 +32,7 @@ Excluded projects and packages are ignored.
 :toc: preamble
 
 = Attribution Document
-:author-name: ORT User
+:author-name: OSS Review Toolkit
 :revdate: 2020-11-16
 :revnumber: 1.0.0
 
