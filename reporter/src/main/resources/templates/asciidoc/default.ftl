@@ -33,7 +33,8 @@ Excluded projects and packages are ignored.
 
 = Attribution Document
 :author-name: OSS Review Toolkit
-:revdate: 2020-11-16
+[#assign now = .now]
+:revdate: ${now?date?iso_local}
 :revnumber: 1.0.0
 
 [#if projects?has_content]
