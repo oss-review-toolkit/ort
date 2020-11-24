@@ -39,7 +39,7 @@ RUN --mount=type=cache,target=/root/.gradle/ \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
-    ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar
+    ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
 FROM adoptopenjdk:11-jre-hotspot-bionic
 
@@ -160,5 +160,8 @@ COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.
 RUN tar xf /opt/ort.tar -C /opt/ort --strip-components 1 && \
     rm /opt/ort.tar && \
     /opt/ort/bin/ort requirements
+
+COPY --from=build /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
+COPY --from=build /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
