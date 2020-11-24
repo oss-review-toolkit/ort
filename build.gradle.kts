@@ -47,6 +47,7 @@ plugins {
 
     id("com.github.ben-manes.versions")
     id("io.gitlab.arturbosch.detekt")
+    id("org.barfuin.gradle.taskinfo")
     id("org.jetbrains.dokka")
     id("org.jetbrains.gradle.plugin.idea-ext")
 }
