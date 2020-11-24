@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.scanner
 
 import com.fasterxml.jackson.databind.JsonNode
@@ -55,6 +57,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerOptions
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
@@ -92,12 +95,14 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         /**
          * The name of the property defining the minimum version of the scanner as part of [ScannerCriteria].
          */
-        const val PROP_CRITERIA_MIN_VERSION = "minVersion"
+        const val PROP_CRITERIA_MIN_VERSION = "criteria.minVersion"
 
         /**
          * The name of the property defining the maximum version of the scanner as part of [ScannerCriteria].
          */
-        const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
+        const val PROP_CRITERIA_MAX_VERSION = "criteria.maxVersion"
+
+        const val PROP_CRITERIA_NON_STRICT_OPTIONS = "criteria.nonStrictOptions"
     }
 
     private val archiver by lazy {
@@ -171,7 +176,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     /**
      * The [ScannerDetails] of this [LocalScanner].
      */
-    val details by lazy { ScannerDetails(scannerName, version, configuration) }
+    val details by lazy { ScannerDetails(scannerName, version, configuration, getScannerOptions()) }
 
     override fun getVersionRequirement(): Requirement = Requirement.buildLoose(expectedVersion)
 
@@ -189,15 +194,52 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * property: Use properties of the form _scannerName.criteria.property_, where _scannerName_ is the name of
      * the scanner the configuration applies to, and _property_ is the name of a property of the [ScannerCriteria]
      * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
-     * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
+     * `options.ScanCode.criteria.minVersion=3.0.2`.
      */
     open fun getScannerCriteria(): ScannerCriteria {
         val options = config.options?.get(scannerName).orEmpty()
         val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(expectedVersion))
         val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
         val name = options[PROP_CRITERIA_NAME] ?: scannerName
-        return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(configuration))
+        return ScannerCriteria(name, minVersion, maxVersion, getConfigMatcher())
     }
+
+    /**
+     * Return an object representing the current options of this scanner if available. Scanner implementations
+     * supporting the logic model of [ScannerOptions] can return a description of their current options here. This
+     * is then used to match existing results from a [ScanResultsStorage]. This base implementation returns *null*.
+     */
+    open fun getScannerOptions(): ScannerOptions? = null
+
+    /**
+     * Return the [ScannerConfigMatcher] for the [ScannerCriteria][getScannerCriteria] produced by this scanner.
+     * This implementation checks whether [getScannerOptions] returns a non-null result. If so, a matcher based on
+     * this result is constructed; otherwise, this function returns an exact matcher against this scanner's
+     * [configuration].
+     *
+     * If [ScannerOptions] are available, the matching against these options can be fine-tuned by setting the
+     * _scannerName.criteria.nonStrictOptions_ property in the [ScannerConfiguration.options] to a comma-separated
+     * list of options class names, which should be matched in a non-strict way. This typically means that a result
+     * only need to contain specific data, but the exact configuration of the data is irrelevant. For instance, if the
+     * result only needs to contain some sort of license information, set the property:
+     * `options.scannerName.criteria.nonStrictOptions=LicenseResultOption`
+     */
+    protected open fun getConfigMatcher(): ScannerConfigMatcher {
+        val options = getScannerOptions()
+        return if (options != null) {
+            ScannerCriteria.compatibleConfigMatcher(configuration, options, getNonStrictOptions())
+        } else {
+            ScannerCriteria.exactConfigMatcher(configuration)
+        }
+    }
+
+    /**
+     * Return a set with the names of options classes from the scanner configuration that should be matched in
+     * non-strict mode.
+     */
+    private fun getNonStrictOptions(): Set<String> =
+        config.options?.get(scannerName)?.get(PROP_CRITERIA_NON_STRICT_OPTIONS)
+            ?.split(",")?.toSet() ?: emptySet()
 
     override suspend fun scanPackages(
         packages: List<Package>,
@@ -439,7 +481,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
     /**
      * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
-     * scanner's native file format. The results file name is derived from [inputPath] and [getDetails].
+     * scanner's native file format. The results file name is derived from [inputPath] and [details].
      *
      * No scan results storage is used by this function.
      *
