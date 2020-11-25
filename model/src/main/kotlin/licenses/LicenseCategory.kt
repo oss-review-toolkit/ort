@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.model.licenses
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
- * A category where [License]s can be assigned to. This does not have any specific semantic, but users are free to
- * define their own set of categories.
+ * A category where licenses can be assigned to. The assignment is expressed via a [LicenseCategorization]. Categories
+ * do not have any specific semantic, but users are free to define their own set of categories.
  */
 data class LicenseCategory(
     /**

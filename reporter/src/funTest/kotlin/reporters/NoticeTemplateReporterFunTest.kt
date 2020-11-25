@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.config.FileStorageConfiguration
 import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.licenses.License
+import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.reporter.ORT_RESULT
@@ -111,10 +111,10 @@ private fun generateReport(
 private fun createLicenseConfiguration(): LicenseConfiguration {
     val includeNoticeCategory = LicenseCategory("include-in-notice-file")
     val includeSourceCategory = LicenseCategory("include-source-code-offer-in-notice-file")
-    val mitLicense = License(
+    val mitLicense = LicenseCategorization(
         SpdxSingleLicenseExpression.parse("MIT"), sortedSetOf(includeNoticeCategory.name)
     )
-    val bsdLicense = License(
+    val bsdLicense = LicenseCategorization(
         SpdxSingleLicenseExpression.parse("BSD-3-Clause"), sortedSetOf(includeSourceCategory.name)
     )
     return LicenseConfiguration(

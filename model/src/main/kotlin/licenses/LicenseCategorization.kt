@@ -30,9 +30,9 @@ import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
  * The categories a license belong to can be evaluated by other components, such as rules or templates,
  * which can decide - based on this information - how to handle a specific license.
  */
-data class License(
+data class LicenseCategorization(
     /**
-     * The [SpdxSingleLicenseExpression] of this [License].
+     * The [SpdxSingleLicenseExpression] of this [LicenseCategorization].
      */
     val id: SpdxSingleLicenseExpression,
 

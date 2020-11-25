@@ -45,13 +45,13 @@ class LicenseConfigurationTest : WordSpec({
         }
 
         "detect duplicate license IDs" {
-            val lic1 = License(
+            val lic1 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-1"), emptySortedSet()
             )
-            val lic2 = License(
+            val lic2 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-2"), emptySortedSet()
             )
-            val lic3 = License(
+            val lic3 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-1"), sortedSetOf("permissive")
             )
 
@@ -63,13 +63,13 @@ class LicenseConfigurationTest : WordSpec({
         "detect licenses referencing non-existing categories" {
             val cat1 = LicenseCategory("Category 1")
             val cat2 = LicenseCategory("Category 2")
-            val lic1 = License(
+            val lic1 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-1"), sortedSetOf(cat1.name)
             )
-            val lic2 = License(
+            val lic2 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-2"), sortedSetOf("unknownCategory")
             )
-            val lic3 = License(
+            val lic3 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("BSD"), sortedSetOf("anotherUnknownCategory")
             )
 
@@ -87,13 +87,13 @@ class LicenseConfigurationTest : WordSpec({
         "fetch all licenses for a specific category" {
             val cat1 = LicenseCategory("permissive", "Permissive licenses")
             val cat2 = LicenseCategory("non permissive", "Strict licenses")
-            val lic1 = License(
+            val lic1 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-1"), sortedSetOf("permissive")
             )
-            val lic2 = License(
+            val lic2 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-2"), sortedSetOf("permissive")
             )
-            val lic3 = License(
+            val lic3 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("GPL"), sortedSetOf("non permissive")
             )
             val licenseConfiguration = LicenseConfiguration(
@@ -108,7 +108,7 @@ class LicenseConfigurationTest : WordSpec({
 
         "throw an exception when querying the licenses for an unknown category" {
             val cat = LicenseCategory("oneAndOnlyCategory")
-            val lic = License(
+            val lic = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("LICENSE"), sortedSetOf(cat.name)
             )
             val licenseConfiguration = LicenseConfiguration(categorizations = listOf(lic), categories = listOf(cat))
@@ -121,10 +121,10 @@ class LicenseConfigurationTest : WordSpec({
 
     "LicenseConfiguration" should {
         "allow querying a license by ID" {
-            val lic1 = License(
+            val lic1 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-1"), emptySortedSet()
             )
-            val lic2 = License(
+            val lic2 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-2"), emptySortedSet()
             )
             val licenseConfiguration = LicenseConfiguration(categorizations = listOf(lic1, lic2))
