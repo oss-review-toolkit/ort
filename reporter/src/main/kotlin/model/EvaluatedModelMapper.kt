@@ -536,46 +536,51 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
             .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
-        val decomposedFindings = curatedFindings.flatMap { finding ->
+        val decomposedFindings = curatedFindings.flatMapTo(mutableSetOf()) { finding ->
             finding.license.decompose().map { finding.copy(license = it) }
         }
-        val matchedFindings = findingsMatcher.match(decomposedFindings, scanResult.summary.copyrightFindings)
+        val matchResult = findingsMatcher.matchFindings(decomposedFindings, scanResult.summary.copyrightFindings)
+        val matchedFindings = matchResult.matchedFindings.entries.groupBy { it.key.license }.mapValues { entry ->
+            val licenseFindings = entry.value.map { it.key }
+            val copyrightFindings = entry.value.flatMapTo(mutableSetOf()) { it.value }
+            Pair(licenseFindings, copyrightFindings)
+        }
 
-        matchedFindings.forEach { licenseFindings ->
-            licenseFindings.copyrights.forEach { copyrightFinding ->
+        matchedFindings.forEach { (license, findingPairs) ->
+            val (licenseFindings, copyrightFindings) = findingPairs
+            copyrightFindings.forEach { copyrightFinding ->
                 val actualCopyright = copyrights.addIfRequired(CopyrightStatement(copyrightFinding.statement))
 
-                copyrightFinding.locations.forEach { location ->
-                    val evaluatedPathExcludes = pathExcludes.filter { it.matches(location.getRelativePathToRoot(id)) }
-                        .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it) }
+                val evaluatedPathExcludes = pathExcludes
+                    .filter { it.matches(copyrightFinding.location.getRelativePathToRoot(id)) }
+                    .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it) }
 
-                    findings += EvaluatedFinding(
-                        type = EvaluatedFindingType.COPYRIGHT,
-                        license = null,
-                        copyright = actualCopyright,
-                        path = location.path,
-                        startLine = location.startLine,
-                        endLine = location.endLine,
-                        scanResult = evaluatedScanResult,
-                        pathExcludes = evaluatedPathExcludes
-                    )
-                }
+                findings += EvaluatedFinding(
+                    type = EvaluatedFindingType.COPYRIGHT,
+                    license = null,
+                    copyright = actualCopyright,
+                    path = copyrightFinding.location.path,
+                    startLine = copyrightFinding.location.startLine,
+                    endLine = copyrightFinding.location.endLine,
+                    scanResult = evaluatedScanResult,
+                    pathExcludes = evaluatedPathExcludes
+                )
             }
 
-            val actualLicense = licenses.addIfRequired(LicenseId(licenseFindings.license.toString()))
+            val actualLicense = licenses.addIfRequired(LicenseId(license.toString()))
 
-            licenseFindings.locations.forEach { location ->
-                val evaluatedPathExcludes = pathExcludes.filter { it.matches(location.getRelativePathToRoot(id)) }
-                    .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it)
-                }
+            licenseFindings.forEach { licenseFinding ->
+                val evaluatedPathExcludes = pathExcludes
+                    .filter { it.matches(licenseFinding.location.getRelativePathToRoot(id)) }
+                    .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it) }
 
                 findings += EvaluatedFinding(
                     type = EvaluatedFindingType.LICENSE,
                     license = actualLicense,
                     copyright = null,
-                    path = location.path,
-                    startLine = location.startLine,
-                    endLine = location.endLine,
+                    path = licenseFinding.location.path,
+                    startLine = licenseFinding.location.startLine,
+                    endLine = licenseFinding.location.endLine,
                     scanResult = evaluatedScanResult,
                     pathExcludes = evaluatedPathExcludes
                 )
