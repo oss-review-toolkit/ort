@@ -260,8 +260,7 @@ class PostgresStorage(
                     // TODO: Currently the query only accounts for the scanner criteria. Ideally also the provenance
                     //       should be checked in the query to reduce the downloaded data.
                     scanResults.retainAll { it.provenance.matches(pkg) }
-                    // The scanner compatibility is already checked in the query, but filter here again to be on the
-                    // safe side.
+            // The scanner compatibility is partly checked in the query; filter here again to adhere to all criteria.
                     scanResults.retainAll { scannerCriteria.matches(it.scanner) }
 
                     Success(ScanResultContainer(pkg.id, scanResults))
