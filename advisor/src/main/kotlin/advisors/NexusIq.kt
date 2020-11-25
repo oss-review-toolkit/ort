@@ -114,7 +114,7 @@ class NexusIq(
                 packages.associateWith {
                     listOf(
                         AdvisorResult(
-                            vulnerability = emptyList(),
+                            vulnerabilities = emptyList(),
                             advisor = AdvisorDetails(advisorName),
                             summary = AdvisorSummary(
                                 startTime = now,

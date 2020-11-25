@@ -26,7 +26,7 @@ data class AdvisorResult(
     /**
      * The found vulnerabilities.
      */
-    val vulnerability: List<Vulnerability>,
+    val vulnerabilities: List<Vulnerability>,
 
     /**
      * Details about the used advisor.
