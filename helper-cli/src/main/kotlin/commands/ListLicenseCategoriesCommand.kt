@@ -27,7 +27,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
@@ -48,7 +48,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val licenseConfiguration = licenseConfigurationFile.readValue<LicenseConfiguration>()
+        val licenseConfiguration = licenseConfigurationFile.readValue<LicenseClassifications>()
 
         println(licenseConfiguration.summary())
 
@@ -59,7 +59,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
         }
     }
 
-    private fun LicenseConfiguration.summary(): String =
+    private fun LicenseClassifications.summary(): String =
         buildString {
             appendLine("Found ${categorizations.size} licenses categorized as:\n")
 
@@ -68,7 +68,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
             }
         }
 
-    private fun LicenseConfiguration.licensesByCategory(): String =
+    private fun LicenseClassifications.licensesByCategory(): String =
         buildString {
             categorizations.groupByCategory().forEach { (category, licenses) ->
                 appendLine("$category (${licenses.size}):")
@@ -81,7 +81,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
             }
         }
 
-    private fun LicenseConfiguration.licensesList(): String =
+    private fun LicenseClassifications.licensesList(): String =
         buildString {
             categorizations.sortedBy { it.id.toString() }.forEach { license ->
                 appendLine(license.description())

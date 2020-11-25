@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
@@ -95,11 +95,12 @@ class ExamplesFunTest : StringSpec() {
 
         "license-classifications.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                val config = takeExampleFile("license-classifications.yml").readValue<LicenseConfiguration>()
+                val classifications =
+                    takeExampleFile("license-classifications.yml").readValue<LicenseClassifications>()
 
-                config.categories.filter { it.description.isNotEmpty() } shouldNot beEmpty()
-                config.categoryNames shouldContain "public-domain"
-                val licMIT = config["MIT".toSpdx()]
+                classifications.categories.filter { it.description.isNotEmpty() } shouldNot beEmpty()
+                classifications.categoryNames shouldContain "public-domain"
+                val licMIT = classifications["MIT".toSpdx()]
                 licMIT.shouldNotBeNull()
                 licMIT.categories shouldContain "permissive"
             }
@@ -133,7 +134,7 @@ class ExamplesFunTest : StringSpec() {
             val evaluator = Evaluator(
                 ortResult = ortResult,
                 licenseInfoResolver = ortResult.createLicenseInfoResolver(),
-                licenseConfiguration = licenseFile.readValue()
+                licenseClassifications = licenseFile.readValue()
             )
 
             val script = takeExampleFile("rules.kts").readText()

@@ -24,7 +24,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.EvaluatorRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.ScriptRunner
@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.ScriptRunner
 class Evaluator(
     ortResult: OrtResult = OrtResult.EMPTY,
     licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
-    licenseConfiguration: LicenseConfiguration = LicenseConfiguration()
+    licenseClassifications: LicenseClassifications = LicenseClassifications()
 ) : ScriptRunner() {
     override val preface = """
             import org.ossreviewtoolkit.evaluator.*
@@ -58,7 +58,7 @@ class Evaluator(
     init {
         engine.put("ortResult", ortResult)
         engine.put("licenseInfoResolver", licenseInfoResolver)
-        engine.put("licenseConfiguration", licenseConfiguration)
+        engine.put("licenseConfiguration", licenseClassifications)
     }
 
     override fun run(script: String): EvaluatorRun {

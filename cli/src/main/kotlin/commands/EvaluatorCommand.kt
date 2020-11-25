@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.mapper
@@ -252,9 +252,9 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
         )
 
-        val licenseConfiguration =
-            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
-        val evaluator = Evaluator(finalOrtResult, licenseInfoResolver, licenseConfiguration)
+        val licenseClassifications =
+            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
+        val evaluator = Evaluator(finalOrtResult, licenseInfoResolver, licenseClassifications)
 
         val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }
 

@@ -29,7 +29,7 @@ import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
@@ -72,7 +72,7 @@ class FreemarkerTemplateProcessor(
             "packages" to packages,
             "ortResult" to input.ortResult,
             "licenseTextProvider" to input.licenseTextProvider,
-            "helper" to TemplateHelper(input.ortResult, input.licenseConfiguration)
+            "helper" to TemplateHelper(input.ortResult, input.licenseClassifications)
         )
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
@@ -165,7 +165,7 @@ class FreemarkerTemplateProcessor(
     /**
      * A collection of helper functions for the Freemarker templates.
      */
-    class TemplateHelper(private val ortResult: OrtResult, private val licenseConfiguration: LicenseConfiguration) {
+    class TemplateHelper(private val ortResult: OrtResult, private val licenseClassifications: LicenseClassifications) {
         /**
          * Return [packages] that are a dependency of at least one of the provided [projects][projectIds].
          */
@@ -183,7 +183,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                licenseConfiguration[resolvedLicense.license]?.categories?.contains(category) ?: true
+                licenseClassifications[resolvedLicense.license]?.categories?.contains(category) ?: true
             }
 
         /**

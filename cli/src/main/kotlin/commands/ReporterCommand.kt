@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
@@ -222,8 +222,8 @@ class ReporterCommand : CliktCommand(
             archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
         )
 
-        val licenseConfiguration =
-            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
+        val licenseClassifications =
+            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
 
         val howToFixTextProvider = howToFixTextProviderScript.takeIf { it.isFile }?.let {
             HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult)
@@ -239,7 +239,7 @@ class ReporterCommand : CliktCommand(
             DefaultLicenseTextProvider(customLicenseTextsDir.takeIf { it.isDirectory }),
             copyrightGarbage,
             licenseInfoResolver,
-            licenseConfiguration,
+            licenseClassifications,
             howToFixTextProvider
         )
 
