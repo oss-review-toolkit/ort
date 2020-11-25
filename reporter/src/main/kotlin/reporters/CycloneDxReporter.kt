@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.isTrue
 
-private const val REPORT_BASE_FILENAME = "bom"
+private const val REPORT_BASE_FILENAME = "CycloneDX-BOM"
 private const val REPORT_EXTENSION = "xml"
 
 /**
@@ -101,7 +101,7 @@ class CycloneDxReporter : Reporter {
         val createSingleBom = options["single.bom"].isTrue()
 
         if (createSingleBom && projects.size > 1) {
-            val reportFilename = "bom.xml"
+            val reportFilename = "$REPORT_BASE_FILENAME.$REPORT_EXTENSION"
             val outputFile = outputDir.resolve(reportFilename)
 
             val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
