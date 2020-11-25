@@ -103,27 +103,28 @@ class FreemarkerTemplateProcessor(
         val outputFiles = mutableListOf<File>()
 
         templateIds.forEach { id ->
-            log.info { "Generating output file using template id '$id'." }
-
             val outputFile = outputDir.resolve("$filePrefix$id$fileExtensionWithDot")
-            outputFiles += outputFile
+
+            log.info { "Generating output file '$outputFile' using template id '$id'." }
 
             val template = freemarkerConfig.getTemplate("$id.ftl")
             outputFile.writer().use { template.process(dataModel, it) }
+
+            outputFiles += outputFile
         }
 
         templateFiles.forEach { file ->
-            log.info { "Generating output file using template file '${file.absolutePath}'." }
-
             val outputFile = outputDir.resolve("$filePrefix${file.nameWithoutExtension}$fileExtensionWithDot")
-            outputFiles += outputFile
 
+            log.info { "Generating output file '$outputFile' using template file '${file.absolutePath}'." }
 
             val template = freemarkerConfig.run {
                 setDirectoryForTemplateLoading(file.parentFile)
                 getTemplate(file.name)
             }
             outputFile.writer().use { template.process(dataModel, it) }
+
+            outputFiles += outputFile
         }
 
         return outputFiles
