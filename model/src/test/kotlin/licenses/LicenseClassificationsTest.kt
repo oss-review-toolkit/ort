@@ -32,15 +32,15 @@ import java.util.Collections.emptySortedSet
 
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
-class LicenseConfigurationTest : WordSpec({
-    "LicenseConfiguration.init" should {
+class LicenseClassificationsTest : WordSpec({
+    "LicenseClassifications.init" should {
         "detect duplicate category names" {
             val cat1 = LicenseCategory("Category 1")
             val cat2 = LicenseCategory("Category 2", "Another category")
             val cat3 = LicenseCategory("Category 1", "Duplicate; should cause a failure")
 
             shouldThrow<IllegalArgumentException> {
-                LicenseConfiguration(categories = listOf(cat1, cat2, cat3))
+                LicenseClassifications(categories = listOf(cat1, cat2, cat3))
             }
         }
 
@@ -56,7 +56,7 @@ class LicenseConfigurationTest : WordSpec({
             )
 
             shouldThrow<IllegalArgumentException> {
-                LicenseConfiguration(categorizations = listOf(lic1, lic2, lic3))
+                LicenseClassifications(categorizations = listOf(lic1, lic2, lic3))
             }
         }
 
@@ -74,7 +74,7 @@ class LicenseConfigurationTest : WordSpec({
             )
 
             val exception = shouldThrow<IllegalArgumentException> {
-                LicenseConfiguration(categories = listOf(cat1, cat2), categorizations = listOf(lic1, lic2, lic3))
+                LicenseClassifications(categories = listOf(cat1, cat2), categorizations = listOf(lic1, lic2, lic3))
             }
             exception.message shouldContain lic2.id.toString()
             exception.message shouldContain lic3.id.toString()
@@ -83,7 +83,7 @@ class LicenseConfigurationTest : WordSpec({
         }
     }
 
-    "LicenseConfiguration.getLicensesForCategory" should {
+    "LicenseClassifications.getLicensesForCategory" should {
         "fetch all licenses for a specific category" {
             val cat1 = LicenseCategory("permissive", "Permissive licenses")
             val cat2 = LicenseCategory("non permissive", "Strict licenses")
@@ -96,12 +96,12 @@ class LicenseConfigurationTest : WordSpec({
             val lic3 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("GPL"), sortedSetOf("non permissive")
             )
-            val licenseConfiguration = LicenseConfiguration(
+            val licenseClassifications = LicenseClassifications(
                 categories = listOf(cat1, cat2),
                 categorizations = listOf(lic1, lic2, lic3)
             )
 
-            val permissiveLicenses = licenseConfiguration.getLicensesForCategory(cat1.name)
+            val permissiveLicenses = licenseClassifications.getLicensesForCategory(cat1.name)
 
             permissiveLicenses should containExactlyInAnyOrder(lic1, lic2)
         }
@@ -111,15 +111,15 @@ class LicenseConfigurationTest : WordSpec({
             val lic = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("LICENSE"), sortedSetOf(cat.name)
             )
-            val licenseConfiguration = LicenseConfiguration(categorizations = listOf(lic), categories = listOf(cat))
+            val licenseClassifications = LicenseClassifications(categorizations = listOf(lic), categories = listOf(cat))
 
             shouldThrow<IllegalStateException> {
-                licenseConfiguration.getLicensesForCategory("nonExistingCategory")
+                licenseClassifications.getLicensesForCategory("nonExistingCategory")
             }
         }
     }
 
-    "LicenseConfiguration" should {
+    "LicenseClassifications" should {
         "allow querying a license by ID" {
             val lic1 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-1"), emptySortedSet()
@@ -127,20 +127,20 @@ class LicenseConfigurationTest : WordSpec({
             val lic2 = LicenseCategorization(
                 SpdxSingleLicenseExpression.parse("ASL-2"), emptySortedSet()
             )
-            val licenseConfiguration = LicenseConfiguration(categorizations = listOf(lic1, lic2))
+            val licenseClassifications = LicenseClassifications(categorizations = listOf(lic1, lic2))
 
-            licenseConfiguration[SpdxSingleLicenseExpression.parse("ASL-2")] shouldBe lic2
+            licenseClassifications[SpdxSingleLicenseExpression.parse("ASL-2")] shouldBe lic2
         }
     }
 
-    "LicenseConfiguration.categoryNames" should {
+    "LicenseClassifications.categoryNames" should {
         "contain the expected licenses" {
             val cat1 = LicenseCategory("permissive", "Permissive licenses")
             val cat2 = LicenseCategory("non permissive", "Strict licenses")
             val cat3 = LicenseCategory("other", "Completely different licenses")
-            val licenseConfiguration = LicenseConfiguration(categories = listOf(cat1, cat2, cat3))
+            val licenseClassifications = LicenseClassifications(categories = listOf(cat1, cat2, cat3))
 
-            licenseConfiguration.categoryNames should containExactly("non permissive", "other", "permissive")
+            licenseClassifications.categoryNames should containExactly("non permissive", "other", "permissive")
         }
     }
 })

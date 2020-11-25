@@ -28,12 +28,12 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 /**
- * A classification for licenses which allows to assign meta data to licenses. It allows defining rather generic
+ * Classifications for licenses which allow to assign meta data to licenses. This allows defining rather generic
  * categories and assigning licenses to these. That way flexible classifications can be created based on
  * customizable categories. The available license categories need to be declared explicitly; when creating an
  * instance, it is checked that all the references from the [categorizations] point to existing [categories].
  */
-data class LicenseConfiguration(
+data class LicenseClassifications(
     /**
      * Defines meta data for the license categories.
      */
@@ -119,4 +119,4 @@ data class LicenseConfiguration(
     operator fun get(id: SpdxExpression): LicenseCategorization? = licensesById[id]
 }
 
-fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()
+fun LicenseClassifications?.orEmpty(): LicenseClassifications = this ?: LicenseClassifications()

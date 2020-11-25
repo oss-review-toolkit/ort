@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
@@ -98,7 +98,7 @@ private fun generateReport(
         ortResult,
         config,
         copyrightGarbage = copyrightGarbage,
-        licenseConfiguration = createLicenseConfiguration()
+        licenseClassifications = createLicenseClassifications()
     )
 
     val outputDir = createTempDirectory("$ORT_NAME-${NoticeTemplateReporterFunTest::class.simpleName}").toFile().apply {
@@ -108,7 +108,7 @@ private fun generateReport(
     return NoticeTemplateReporter().generateReport(input, outputDir, options).single().readText()
 }
 
-private fun createLicenseConfiguration(): LicenseConfiguration {
+private fun createLicenseClassifications(): LicenseClassifications {
     val includeNoticeCategory = LicenseCategory("include-in-notice-file")
     val includeSourceCategory = LicenseCategory("include-source-code-offer-in-notice-file")
     val mitLicense = LicenseCategorization(
@@ -117,7 +117,7 @@ private fun createLicenseConfiguration(): LicenseConfiguration {
     val bsdLicense = LicenseCategorization(
         SpdxSingleLicenseExpression.parse("BSD-3-Clause"), sortedSetOf(includeSourceCategory.name)
     )
-    return LicenseConfiguration(
+    return LicenseClassifications(
         categories = listOf(includeNoticeCategory, includeSourceCategory),
         categorizations = listOf(mitLicense, bsdLicense)
     )

@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
-import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
@@ -78,10 +78,10 @@ data class ReporterInput(
     ),
 
     /**
-     * A [LicenseConfiguration], can be used to handle licenses based on the user's configuration, for example to
+     * [LicenseClassifications], can be used to handle licenses based on the user's configuration, for example to
      * determine which licenses to include in a notice file.
      */
-    val licenseConfiguration: LicenseConfiguration = LicenseConfiguration(),
+    val licenseClassifications: LicenseClassifications = LicenseClassifications(),
 
     /**
      * A [HowToFixTextProvider], can be used to integrate how to fix texts for [OrtIssue]s into reports.
