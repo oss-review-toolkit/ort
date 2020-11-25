@@ -46,7 +46,7 @@ data class LicenseConfiguration(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonAlias("licenses")
-    val categorizations: List<License> = emptyList()
+    val categorizations: List<LicenseCategorization> = emptyList()
 ) {
     init {
         categories.groupBy { it.name }.values.filter { it.size > 1 }.let { groups ->
@@ -83,8 +83,8 @@ data class LicenseConfiguration(
     /**
      * A property for fast look-ups of licenses for a given category.
      */
-    private val licensesByCategoryName: Map<String, Set<License>> by lazy {
-        val result = mutableMapOf<String, MutableSet<License>>()
+    private val licensesByCategoryName: Map<String, Set<LicenseCategorization>> by lazy {
+        val result = mutableMapOf<String, MutableSet<LicenseCategorization>>()
 
         categories.forEach { category ->
             result[category.name] = mutableSetOf()
@@ -104,18 +104,19 @@ data class LicenseConfiguration(
      * If the there is no category with the name provided, throw an [IllegalStateException].
      * This is intended to be mostly used via scripting.
      */
-    fun getLicensesForCategory(categoryName: String): Set<License> =
+    fun getLicensesForCategory(categoryName: String): Set<LicenseCategorization> =
         licensesByCategoryName[categoryName] ?: error("Unknown license category name: $categoryName.")
 
     /** A property for fast-lookups of licenses by their ID. */
-    private val licensesById: Map<SpdxSingleLicenseExpression, License> by lazy {
+    private val licensesById: Map<SpdxSingleLicenseExpression, LicenseCategorization> by lazy {
         categorizations.associateBy { it.id }
     }
 
     /**
-     * A convenience operator to return the [License] for the given [id] or *null* if no such license can be found.
+     * A convenience operator to return the [LicenseCategorization] for the given [id] or *null* if no such
+     * categorization can be found.
      */
-    operator fun get(id: SpdxExpression): License? = licensesById[id]
+    operator fun get(id: SpdxExpression): LicenseCategorization? = licensesById[id]
 }
 
 fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()

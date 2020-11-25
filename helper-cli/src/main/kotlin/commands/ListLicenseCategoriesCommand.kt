@@ -26,7 +26,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.model.licenses.License
+import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -88,7 +88,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
             }
         }
 
-    private fun License.description(ignoreCategory: String? = null): String {
+    private fun LicenseCategorization.description(ignoreCategory: String? = null): String {
         val filteredCategories = categories.filterNot { it == ignoreCategory }
 
         return buildString {
@@ -100,7 +100,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
         }
     }
 
-    private fun Collection<License>.groupByCategory(): Map<String, List<License>> =
+    private fun Collection<LicenseCategorization>.groupByCategory(): Map<String, List<LicenseCategorization>> =
         flatMap { license ->
             license.categories.map { category -> license to category }
         }.groupBy({ it.second }, { it.first })
