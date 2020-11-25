@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.advisor.advisors
 
 import java.io.IOException
-import java.net.URL
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -58,14 +57,6 @@ class NexusIq(
     class Factory : AbstractAdvisorFactory<NexusIq>("NexusIQ") {
         override fun create(config: AdvisorConfiguration) = NexusIq(advisorName, config)
     }
-
-    data class NexusIqVulnerability(
-        override val id: String,
-        override val severity: Float,
-
-        // URL to http://mitre.org for more information about the CVE.
-        val url: URL
-    ) : Vulnerability
 
     private val nexusIqConfig = config as NexusIqConfiguration
 
@@ -145,7 +136,7 @@ class NexusIq(
 
     private fun Collection<NexusIqService.SecurityIssue>.mapToVulnerabilities() =
         map {
-            NexusIqVulnerability(
+            Vulnerability(
                 it.reference,
                 it.severity,
                 it.url
