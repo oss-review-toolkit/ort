@@ -118,9 +118,11 @@ class FreemarkerTemplateProcessor(
             val outputFile = outputDir.resolve("$filePrefix${file.nameWithoutExtension}$fileExtensionWithDot")
             outputFiles += outputFile
 
-            freemarkerConfig.setDirectoryForTemplateLoading(file.parentFile)
 
-            val template = freemarkerConfig.getTemplate(file.name)
+            val template = freemarkerConfig.run {
+                setDirectoryForTemplateLoading(file.parentFile)
+                getTemplate(file.name)
+            }
             outputFile.writer().use { template.process(dataModel, it) }
         }
 
