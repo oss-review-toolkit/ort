@@ -13,6 +13,10 @@ jobs:
       architecture: x64
 
   # Install required tools.
+  - task: CmdLine@2
+    inputs:
+      script: 'set'
+
   - pwsh: |
       # Install Chocolatey packages.
       cinst dep --version $env:GO_DEP_VERSION -y --no-progress
