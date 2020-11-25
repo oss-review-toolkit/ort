@@ -79,7 +79,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding(license = "some-id", path = "LICENSE")
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
                 val (licenseFindings, copyrightFindings) = result.getFindings("some-id")
 
                 licenseFindings.map { it.location.path } should containExactlyInAnyOrder("LICENSE")
@@ -93,7 +93,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding(license = "some-other-id", path = "some/other/file")
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.getCopyrights("some-id") should beEmpty()
             }
@@ -106,7 +106,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding(license = "license-b1", path = "b/LICENSE")
                 setupCopyrightFinding(statement = "some stmt", path = "some/file")
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 with(result) {
                     matchedFindings should haveSize(3)
@@ -129,7 +129,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupCopyrightFinding(statement = "stmt 14", path = "some/file", line = 14)
                 setupCopyrightFinding(statement = "stmt 15", path = "some/file", line = 15)
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 with(result) {
                     matchedFindings should haveSize(2)
@@ -151,7 +151,7 @@ class FindingsMatcherTest : WordSpec() {
             "discard that copyright" {
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.matchedFindings should beEmptyMap()
             }
@@ -162,7 +162,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding(license = "some-license", path = "some/file")
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.matchedFindings should haveSize(1)
                 result.matchedFindings.values.flatten() should beEmpty()
@@ -175,7 +175,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding(license = "some-other-id", path = "some/file", line = 6)
                 setupCopyrightFinding(statement = "some stmt", path = "some/file", line = 4)
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 with(result) {
                     matchedFindings should haveSize(2)
@@ -199,7 +199,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding("statement4", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES + 1)
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 with(result) {
                     getCopyrights("license-nearby").map { it.statement } should containExactlyInAnyOrder(
@@ -218,7 +218,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupCopyrightFinding("statement 1", "path", 2 + DEFAULT_TOLERANCE_LINES + 1)
                 setupLicenseFinding("root-license-1", "LICENSE", 102)
 
-                val result = matcher.matchFindings(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.getCopyrights("root-license-1").map { it.statement } should containExactly("statement 1")
             }

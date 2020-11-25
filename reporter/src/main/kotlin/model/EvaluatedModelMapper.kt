@@ -539,7 +539,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val decomposedFindings = curatedFindings.flatMapTo(mutableSetOf()) { finding ->
             finding.license.decompose().map { finding.copy(license = it) }
         }
-        val matchResult = findingsMatcher.matchFindings(decomposedFindings, scanResult.summary.copyrightFindings)
+        val matchResult = findingsMatcher.match(decomposedFindings, scanResult.summary.copyrightFindings)
         val matchedFindings = matchResult.matchedFindings.entries.groupBy { it.key.license }.mapValues { entry ->
             val licenseFindings = entry.value.map { it.key }
             val copyrightFindings = entry.value.flatMapTo(mutableSetOf()) { it.value }
