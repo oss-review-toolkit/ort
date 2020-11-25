@@ -161,7 +161,7 @@ class FindingsMatcher(
      * Associate the given [copyrightFindings] to its corresponding applicable root licenses. If no root license is
      * applicable to a given copyright finding, that copyright finding is not contained in the result.
      */
-    fun matchWithRootLicenses(
+    private fun matchWithRootLicenses(
         licenseFindings: Set<LicenseFinding>,
         copyrightFindings: Set<CopyrightFinding>
     ): Map<LicenseFinding, Set<CopyrightFinding>> {
