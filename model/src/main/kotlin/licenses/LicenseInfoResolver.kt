@@ -139,7 +139,7 @@ class LicenseInfoResolver(
             //       resolved license for completeness, e.g. to show in a report that a license finding was marked as
             //       false positive.
             val curatedLicenseFindings = licenseCurationResults.keys.filterNotNull().toSet()
-            val matchResult = FindingsMatcher().matchFindings(curatedLicenseFindings, findings.copyrights)
+            val matchResult = FindingsMatcher().match(curatedLicenseFindings, findings.copyrights)
 
             matchResult.matchedFindings.forEach { (licenseFinding, copyrightFindings) ->
                 val resolvedCopyrightFindings = resolveCopyrights(

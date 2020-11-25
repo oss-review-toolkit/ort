@@ -129,10 +129,7 @@ class FindingsMatcher(
      * associated to the root licenses instead. The root licenses are the licenses found in any of the license files
      * defined by [rootLicenseMatcher].
      */
-    fun matchFindings(
-        licenseFindings: Set<LicenseFinding>,
-        copyrightFindings: Set<CopyrightFinding>
-    ): FindingsMatcherResult {
+    fun match(licenseFindings: Set<LicenseFinding>, copyrightFindings: Set<CopyrightFinding>): FindingsMatcherResult {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
         val copyrightFindingsByPath = copyrightFindings.groupBy { it.location.path }
         val paths = (licenseFindingsByPath.keys + copyrightFindingsByPath.keys).toSet()
