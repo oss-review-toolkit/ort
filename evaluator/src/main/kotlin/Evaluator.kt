@@ -58,7 +58,7 @@ class Evaluator(
     init {
         engine.put("ortResult", ortResult)
         engine.put("licenseInfoResolver", licenseInfoResolver)
-        engine.put("licenseConfiguration", licenseClassifications)
+        engine.put("licenseClassifications", licenseClassifications)
     }
 
     override fun run(script: String): EvaluatorRun {
