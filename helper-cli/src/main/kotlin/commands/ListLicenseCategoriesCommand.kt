@@ -34,9 +34,9 @@ import org.ossreviewtoolkit.utils.expandTilde
 class ListLicenseCategoriesCommand : CliktCommand(
     help = "Lists the license categories."
 ) {
-    private val licenseConfigurationFile by option(
-        "--license-configuration-file",
-        help = "The license configuration file."
+    private val licenseClassificationsFile by option(
+        "--license-classifications-file",
+        help = "The license classifications file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -48,14 +48,14 @@ class ListLicenseCategoriesCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val licenseConfiguration = licenseConfigurationFile.readValue<LicenseClassifications>()
+        val licenseClassifications = licenseClassificationsFile.readValue<LicenseClassifications>()
 
-        println(licenseConfiguration.summary())
+        println(licenseClassifications.summary())
 
         if (groupByCategory) {
-            println(licenseConfiguration.licensesByCategory())
+            println(licenseClassifications.licensesByCategory())
         } else {
-            println(licenseConfiguration.licensesList())
+            println(licenseClassifications.licensesList())
         }
     }
 
