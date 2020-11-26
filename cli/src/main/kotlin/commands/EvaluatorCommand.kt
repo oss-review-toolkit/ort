@@ -117,10 +117,9 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         .default(ortConfigDirectory.resolve(ORT_COPYRIGHT_GARBAGE_FILENAME))
         .configurationGroup()
 
-    private val licenseConfigurationFile by option(
-        "--license-configuration-file",
-        help = "A file containing the license configuration. That license configuration is passed as parameter to " +
-                "the rules script."
+    private val licenseClassificationsFile by option(
+        "--license-classifications-file",
+        help = "A file containing the license classificationsm which are passed as parameter to the rules script."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -253,7 +252,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         )
 
         val licenseClassifications =
-            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
+            licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
         val evaluator = Evaluator(finalOrtResult, licenseInfoResolver, licenseClassifications)
 
         val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }

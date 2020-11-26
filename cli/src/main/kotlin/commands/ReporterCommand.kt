@@ -134,9 +134,9 @@ class ReporterCommand : CliktCommand(
         .default(ortConfigDirectory.resolve(ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME))
         .configurationGroup()
 
-    private val licenseConfigurationFile by option(
-        "--license-configuration-file",
-        help = "A file containing the license configuration."
+    private val licenseClassificationsFile by option(
+        "--license-classifications-file",
+        help = "A file containing the license classifications."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -223,7 +223,7 @@ class ReporterCommand : CliktCommand(
         )
 
         val licenseClassifications =
-            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
+            licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
 
         val howToFixTextProvider = howToFixTextProviderScript.takeIf { it.isFile }?.let {
             HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult)
