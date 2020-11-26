@@ -320,7 +320,7 @@ cli/build/install/ort/bin/ort evaluate
 ```
 
 See the [curations.yml documentation](config-file-curations-yml.md) to learn more about using curations to correct
-invalid or missing package metadata and the [license-classifications.yml documentation](config-file-licenses-yml.md) on
+invalid or missing package metadata and the [license-classifications.yml documentation](config-file-license-classifications-yml.md) on
 how you can classify licenses to simplify writing the policy rules.
 
 It is possible to write your own evaluator rules as a Kotlin script and pass it to the _evaluator_ using `--rules-file`.
