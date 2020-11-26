@@ -33,7 +33,6 @@ import org.apache.logging.log4j.core.config.Configurator
 import org.ossreviewtoolkit.helper.commands.ExportLicenseFindingCurationsCommand
 import org.ossreviewtoolkit.helper.commands.ExportPathExcludesCommand
 import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
-import org.ossreviewtoolkit.helper.commands.ImportScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.FormatRepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.GeneratePackageConfigurationsCommand
 import org.ossreviewtoolkit.helper.commands.GenerateProjectExcludesCommand
@@ -43,6 +42,7 @@ import org.ossreviewtoolkit.helper.commands.GenerateTimeoutErrorResolutionsComma
 import org.ossreviewtoolkit.helper.commands.ImportCopyrightGarbageCommand
 import org.ossreviewtoolkit.helper.commands.ImportLicenseFindingCurationsCommand
 import org.ossreviewtoolkit.helper.commands.ImportPathExcludesCommand
+import org.ossreviewtoolkit.helper.commands.ImportScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.ListCopyrightsCommand
 import org.ossreviewtoolkit.helper.commands.ListLicenseCategoriesCommand
 import org.ossreviewtoolkit.helper.commands.ListLicensesCommand
