@@ -37,7 +37,7 @@ class AsciidocTemplateReporterFunTest : StringSpec({
     "PDF output is created successfully from an existing result and default template" {
         val report = generateReport(ORT_RESULT)
 
-        report.single().length() shouldBe 84514L
+        report.single().length() shouldBe 82361L
     }
 
     "Report generation is aborted when path to non-existing pdf-them file is given" {
