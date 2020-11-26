@@ -26,11 +26,11 @@
  *******************************************************/
 
 /**
- * Import license configuration from license-classifications.yml.
+ * Import the license classifications from license-classifications.yml.
  */
 
 fun getLicenseCategory(categoryId: String) =
-    licenseConfiguration.getLicensesForCategory(categoryId).map { it.id }.toSet()
+    licenseClassifications.getLicensesForCategory(categoryId).map { it.id }.toSet()
 
 val permissiveLicenses = getLicenseCategory("permissive")
 
