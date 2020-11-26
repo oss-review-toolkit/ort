@@ -51,14 +51,15 @@ The applicable license information is listed below:
 == Project Licenses
 [#list mergedLicenses as resolvedLicense]
 
-* <<${resolvedLicense.license}, ${resolvedLicense.license}>>
+* License: <<${resolvedLicense.license}, ${resolvedLicense.license}>>
 
 [#assign copyrights = resolvedLicense.getCopyrights(true)]
 [#list copyrights as copyright]
-
-** ${copyright}
-
+** +${copyright}+
+[#else]
+** No copyright found
 [/#list]
+
 [/#list]
 [/#if]
 <<<
@@ -79,21 +80,15 @@ Package: [#if package.id.namespace?has_content]${package.id.namespace}:[/#if]${p
 [#-- List the content of archived license files and associated copyrights. --]
 [#list package.licenseFiles.files as licenseFile]
 
-License File:
-
-* <<${licenseFile.path}, ${licenseFile.path}>>
-
-* Copyrights:
+License File: <<${licenseFile.path}, ${licenseFile.path}>>
 
 [#assign copyrights = licenseFile.getCopyrights()]
-[#if copyrights?has_content]
-
 [#list copyrights as copyright]
-
 ** +${copyright}+
-
+[#else]
+** No copyright found
 [/#list]
-[/#if]
+
 [/#list]
 [#--
 Filter the licenses of the package using LicenseView.CONCLUDED_OR_REST. This is the default view which ignores declared
@@ -106,23 +101,20 @@ resolvedLicenses =
 ]
 [#if resolvedLicenses?has_content]
 
-The following copyrights and licenses were found in the source code of this package:
+The following licenses and copyrights were found in the source code of this package:
 [/#if]
 
 [#list resolvedLicenses as resolvedLicense]
 
-License:
-
-* <<${resolvedLicense.license}, ${resolvedLicense.license}>>
-
-* Copyrights:
+* License: <<${resolvedLicense.license}, ${resolvedLicense.license}>>
 
 [#assign copyrights = resolvedLicense.getCopyrights(true)]
 [#list copyrights as copyright]
-
 ** +${copyright}+
-
+[#else]
+** No copyright found
 [/#list]
+
 [/#list]
 [/#if]
 [/#list]
@@ -143,9 +135,7 @@ Append the text of all licenses that have been listed in the above lists for lic
 
 [#assign copyrights = resolvedLicense.getCopyrights(true)]
 [#list copyrights as copyright]
-
 ${copyright}
-
 [/#list]
 
 ${licenseText}
@@ -171,9 +161,7 @@ ${exceptionText}
 [#assign copyrights = licenseFile.getCopyrights()]
 [#if copyrights?has_content]
 [#list copyrights as copyright]
-
 ${copyright}
-
 [/#list]
 
 ${licenseFile.readFile()}
