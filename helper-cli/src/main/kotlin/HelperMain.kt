@@ -33,6 +33,7 @@ import org.apache.logging.log4j.core.config.Configurator
 import org.ossreviewtoolkit.helper.commands.ExportLicenseFindingCurationsCommand
 import org.ossreviewtoolkit.helper.commands.ExportPathExcludesCommand
 import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
+import org.ossreviewtoolkit.helper.commands.ImportScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.FormatRepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.GeneratePackageConfigurationsCommand
 import org.ossreviewtoolkit.helper.commands.GenerateProjectExcludesCommand
@@ -89,6 +90,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             ImportCopyrightGarbageCommand(),
             ImportLicenseFindingCurationsCommand(),
             ImportPathExcludesCommand(),
+            ImportScanResultsCommand(),
             ListCopyrightsCommand(),
             ListLicenseCategoriesCommand(),
             ListLicensesCommand(),
