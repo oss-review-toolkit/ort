@@ -30,25 +30,26 @@ import java.io.File
 
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 internal class GeneratePackageConfigurationsCommand : CliktCommand(
     help = "Generates one package configuration for the source artifact scan and one for the VCS scan, if " +
             "a corresponding scan result exists in the given ORT result for the respective provenance. The output " +
             "package configuration YAML files are written to the given output directory."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file",
-        help = "The input ORT file containing the package for which the package configurations shall be generated."
+    private val scanResultsStorageDir by option(
+        "--scan-results-storage-dir",
+        help = "The scan results storage to extract the scan results to."
     ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
 
@@ -74,8 +75,8 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
     override fun run() {
         outputDir.safeMkdirs()
 
-        val ortResult = ortResultFile.readValue<OrtResult>()
-        val scanResults = ortResult.getScanResultsForId(packageId)
+        val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
+        val scanResults = (scanResultsStorage.read(packageId) as? Success)?.result?.results ?: emptyList()
 
         scanResults.find { it.provenance.vcsInfo != null }?.provenance
             ?.writePackageConfigurationFile("vcs.yml")
