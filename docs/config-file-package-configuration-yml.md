@@ -83,7 +83,7 @@ cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
+  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
   --package-configuration-dir $ORT_CONFIG_DIR/packages
   --rules-file $ORT_CONFIG_DIR/rules.kts
@@ -96,7 +96,7 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats NoticeTemplate,WebApp
-  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
+  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-configuration-dir $ORT_CONFIG_DIR/packages
 ```
  
@@ -110,7 +110,7 @@ cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
+  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
   --package-configuration-file $ORT_CONFIG_DIR/packages.yml
   --rules-file $ORT_CONFIG_DIR/rules.kts
@@ -123,7 +123,7 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats NoticeTemplate,WebApp
-  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
+  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-configuration-file $ORT_CONFIG_DIR/packages.yml
 ```
 

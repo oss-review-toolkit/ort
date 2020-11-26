@@ -94,6 +94,6 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats NoticeTemplate,StaticHtml,WebApp
-  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
+  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --resolutions-file $ORT_CONFIG_DIR/resolutions.yml
 ```

@@ -39,14 +39,14 @@ multiple orthogonal, partly overlapping sets of categories with different meanin
 ## Command Line
 
 To use the `license-classifications.yml` file put it to `$ORT_CONFIG_DIR/license-classifications.yml` or pass it to the
-`--license-configuration-file` option of the _evaluator_:
+`--license-classifications-file` option of the _evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file $ORT_CONFIG_DIR/license-classifications.yml
+  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
   --rules-file $ORT_CONFIG_DIR/rules.kts
 ```

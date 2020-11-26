@@ -314,7 +314,7 @@ To run the example rules use:
 cli/build/install/ort/bin/ort evaluate
   --package-curations-file curations.yml
   --rules-file rules.kts
-  --license-configuration-file license-classifications.yml
+  --license-classifications-file license-classifications.yml
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]/mime-types
 ```
