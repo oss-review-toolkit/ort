@@ -74,6 +74,8 @@ import org.ossreviewtoolkit.utils.searchUpwardsForFile
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
 private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
 
+private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',')
+
 class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX_URL)) {
     companion object {
         val JSON_MAPPER = JsonMapper().registerKotlinModule()
@@ -225,11 +227,13 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                         all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
 
                     buildDependencyTree(
-                        referredDependencies.map {
-                            // Simply take the minimum of the Ivy-style version range.
-                            val version = it.range.removePrefix("[").substringBefore(",").trim()
+                        referredDependencies.map { dependency ->
+                            // Resolve to the lowest applicable version, see
+                            // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
+                            val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
+                                .split(",").first().trim()
 
-                            getIdentifier(it.id, version)
+                            getIdentifier(dependency.id, version)
                         },
                         pkgRef.dependencies,
                         packages,
