@@ -173,8 +173,8 @@ class AntennaAttributionDocumentReporter : Reporter {
                 }
 
                 val artifacts = packages.map { pkg ->
-                    val resolvedLicense =
-                        input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filter(LicenseView.CONCLUDED_OR_REST)
+                    val resolvedLicense = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+                        .filterExcluded().filter(LicenseView.CONCLUDED_OR_REST)
 
                     AttributionDocumentPdfModel(
                         purl = pkg.purl,
@@ -187,7 +187,8 @@ class AntennaAttributionDocumentReporter : Reporter {
                 }.toList()
 
                 val projectCopyright = createCopyrightStatement(
-                    input.licenseInfoResolver.resolveLicenseInfo(project.id).filter(LicenseView.CONCLUDED_OR_REST)
+                    input.licenseInfoResolver.resolveLicenseInfo(project.id)
+                        .filterExcluded().filter(LicenseView.CONCLUDED_OR_REST)
                 )
 
                 val workingDir = createTempDirectory("$ORT_NAME-antenna-reporter").toFile()

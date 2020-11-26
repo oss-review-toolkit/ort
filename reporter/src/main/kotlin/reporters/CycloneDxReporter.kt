@@ -149,7 +149,7 @@ class CycloneDxReporter : Reporter {
 
                 bom.addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
 
-                val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id)
+                val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
                     .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
 
                 bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString(", "))
@@ -182,7 +182,7 @@ class CycloneDxReporter : Reporter {
     }
 
     private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom, dependencyType: String) {
-        val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+        val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
 
         val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
         val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)

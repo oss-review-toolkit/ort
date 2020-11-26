@@ -146,7 +146,7 @@ class FreemarkerTemplateProcessor(
          * The resolved license information for the package.
          */
         val license: ResolvedLicenseInfo by lazy {
-            val resolved = input.licenseInfoResolver.resolveLicenseInfo(id)
+            val resolved = input.licenseInfoResolver.resolveLicenseInfo(id).filterExcluded()
             resolved.copy(licenses = resolved.licenses.sortedBy { it.license.toString() })
         }
 
