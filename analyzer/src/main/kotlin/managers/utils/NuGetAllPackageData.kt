@@ -35,6 +35,7 @@ internal class NuGetAllPackageData(
         val resources: List<ServiceResource>
     )
 
+    // See https://docs.microsoft.com/en-us/nuget/api/service-index#resource.
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class ServiceResource(
         @JsonProperty("@id")
@@ -66,15 +67,19 @@ internal class NuGetAllPackageData(
         val dependencyGroups: List<DependencyGroup> = emptyList()
     )
 
+    // See https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource#package-dependency-group.
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class DependencyGroup(
         val targetFramework: String? = null,
         val dependencies: List<Dependency> = emptyList()
     )
 
+    // See https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource#package-dependency.
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class Dependency(
         val id: String,
+
+        // See https://docs.microsoft.com/en-us/nuget/concepts/package-versioning#version-ranges.
         val range: String
     )
 
@@ -97,6 +102,7 @@ internal class NuGetAllPackageData(
         val repository: Repository? = null
     )
 
+    // See https://docs.microsoft.com/en-us/nuget/reference/nuspec#license.
     data class License(
         @JacksonXmlProperty(isAttribute = true)
         val type: String,
@@ -107,6 +113,7 @@ internal class NuGetAllPackageData(
         val value: String
     )
 
+    // See https://docs.microsoft.com/en-us/nuget/reference/nuspec#repository.
     data class Repository(
         @JacksonXmlProperty(isAttribute = true)
         val type: String? = null,
