@@ -28,14 +28,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 @JsonSubTypes(
-    JsonSubTypes.Type(NexusIqConfiguration::class)
+    JsonSubTypes.Type(BasicAuthConfiguration::class)
 )
 sealed class AdvisorConfiguration
 
 /**
- * The configuration for the Nexus IQ Server security vulnerability provider.
+ * The configuration for a security vulnerability provider using basic auth as authentication method.
  */
-data class NexusIqConfiguration(
+data class BasicAuthConfiguration(
     /**
      * The base URL of the provider.
      */

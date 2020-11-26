@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.NexusIqConfiguration
+import org.ossreviewtoolkit.model.config.BasicAuthConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.nexusiq.NexusIqService
 import org.ossreviewtoolkit.utils.NamedThreadFactory
@@ -58,7 +58,7 @@ class NexusIq(
         override fun create(config: AdvisorConfiguration) = NexusIq(advisorName, config)
     }
 
-    private val nexusIqConfig = config as NexusIqConfiguration
+    private val nexusIqConfig = config as BasicAuthConfiguration
 
     override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val service = NexusIqService.create(
