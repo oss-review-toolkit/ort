@@ -248,7 +248,7 @@ A Kotlin script that enables the injection of how-to-fix texts in markdown forma
 | ------ | ----- | ---------------- | ------------- |
 | Kotlin script | Global | `$ORT_CONFIG_DIR/how-to-fix-text-provider.kts` | Empty (n/a) |
 
-#### [License classifications file](./docs/config-file-licenses-yml.md)
+#### [License classifications file](docs/config-file-license-classifications-yml.md)
 
 A file that contains user-defined categorization of licenses.
 

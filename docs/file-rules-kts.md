@@ -9,7 +9,7 @@ violations by themselves.
 You can use the [rules.kts example](../examples/rules.kts) as the base script file for your policy rules. Note that this
 example depends on the licenses categorizations defined in the 
 [license-classifications.yml example](../examples/license-classifications.yml), see the
-[license-classifications.yml docs](config-file-licenses-yml.md).
+[license-classifications.yml docs](config-file-license-classifications-yml.md).
 
 ## Command Line
 
