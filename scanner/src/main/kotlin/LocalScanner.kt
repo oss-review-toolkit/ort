@@ -337,7 +337,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         }
 
         if (scanResults.isNotEmpty()) {
-            // Some external tools rely on the raw results filer to be written to the scan results directory, so write
+            // Some external tools rely on the raw results files to be written to the scan results directory, so write
             // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
             // available.
             resultsFile.mapper().writeValue(resultsFile, scanResults.first().rawResult)
