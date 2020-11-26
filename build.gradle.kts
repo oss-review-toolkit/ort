@@ -70,7 +70,7 @@ if (version == Project.DEFAULT_VERSION) {
     }
 }
 
-logger.quiet("Building ORT version '$version'.")
+logger.quiet("Building ORT version $version.")
 
 // TODO: Replace this with Gradle's toolchain mechanism [1] once the Kotlin plugin supports it [2].
 // [1] https://blog.gradle.org/java-toolchains
