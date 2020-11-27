@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.net.URL
+import java.util.UUID
 import okhttp3.Credentials
 
 import okhttp3.OkHttpClient
@@ -50,20 +51,24 @@ interface NexusIqService {
             password: String? = null,
             client: OkHttpClient? = null
         ): NexusIqService {
-            val authenticatedClient = (client ?: OkHttpClient()).newBuilder().apply {
-                if (user != null && password != null) {
-                    addInterceptor { chain ->
-                        val request = chain.request()
-                        val authenticatedRequest = request.newBuilder()
-                            .header("Authorization", Credentials.basic(user, password))
-                            .build()
-                        chain.proceed(authenticatedRequest)
+            val nexusIqClient = (client ?: OkHttpClient()).newBuilder().apply {
+                addInterceptor { chain ->
+                    val request = chain.request()
+                    val token = UUID.randomUUID().toString()
+                    val requestBuilder = request.newBuilder()
+                        .header("X-CSRF-TOKEN", token)
+                        .header("Cookie", "CLM-CSRF-TOKEN=$token")
+
+                    if (user != null && password != null) {
+                        requestBuilder.header("Authorization", Credentials.basic(user, password))
                     }
+
+                    chain.proceed(requestBuilder.build())
                 }
             }.build()
 
             val retrofit = Retrofit.Builder()
-                .client(authenticatedClient)
+                .client(nexusIqClient)
                 .baseUrl(url)
                 .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
                 .build()
