@@ -368,6 +368,16 @@ data class OrtResult(
         }
 
     /**
+     * Return all [AdvisorResultContainer]s contained in this [OrtResult] or only the non-excluded ones if
+     * [omitExcluded] is true.
+     */
+    @JsonIgnore
+    fun getAdvisorResultContainers(omitExcluded: Boolean = false): Set<AdvisorResultContainer> =
+        advisor?.results?.advisorResults.orEmpty().filterTo(mutableSetOf()) { result ->
+            !omitExcluded || !isExcluded(result.id)
+        }
+
+    /**
      * Return all [RuleViolation]s contained in this [OrtResult].
      */
     @JsonIgnore
