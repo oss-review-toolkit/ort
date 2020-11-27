@@ -84,6 +84,6 @@ data class ScanResult(
             copyrightFindings = copyrightFindings
         )
 
-        return ScanResult(newProvenance, scanner, summary)
+        return ScanResult(newProvenance, scanner, summary, rawResult)
     }
 }
