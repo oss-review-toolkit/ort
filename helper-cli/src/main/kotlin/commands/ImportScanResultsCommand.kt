@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
@@ -57,7 +58,7 @@ internal class ImportScanResultsCommand : CliktCommand(
 
         ids.forEach { id ->
             ortResult.getScanResultsForId(id).forEach { scanResult ->
-                scanResultsStorage.add(id, scanResult)
+                scanResultsStorage.add(id, scanResult.copy(rawResult = EMPTY_JSON_NODE))
             }
         }
     }
