@@ -48,18 +48,19 @@ class SimplePackageConfigurationProvider(
          * configuration per [Identifier] and [Provenance].
          */
         fun forDirectory(directory: File): SimplePackageConfigurationProvider {
-            val entries = directory.walkBottomUp()
-                .filter { !it.isHidden && it.isFile }
-                .mapTo(mutableListOf()) { file ->
-                    try {
-                        file.readValue<PackageConfiguration>()
-                    } catch (e: IOException) {
-                        throw IOException("Error reading package configuration from '${file.absoluteFile}'.", e)
-                    }
+            val entries = findPackageConfigurationFiles(directory).mapTo(mutableListOf()) { file ->
+                try {
+                    file.readValue<PackageConfiguration>()
+                } catch (e: IOException) {
+                    throw IOException("Error reading package configuration from '${file.absoluteFile}'.", e)
                 }
+            }
 
             return SimplePackageConfigurationProvider(entries)
         }
+
+        fun findPackageConfigurationFiles(directory: File): List<File> =
+            directory.walkBottomUp().filter { !it.isHidden && it.isFile }.toList()
 
         /**
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found in the given
