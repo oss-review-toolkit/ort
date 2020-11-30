@@ -105,22 +105,25 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
      * Add a [proxy with optional password authentication][authenticatedProxy] that can handle the [protocol]. The
      * [origin] is a string that helps to identify where a proxy definition comes from.
      */
-    fun addProxy(origin: String, protocol: String, authenticatedProxy: AuthenticatedProxy) {
-        val (proxy, authentication) = authenticatedProxy
-        proxyAuthentication[proxy] = authentication
+    fun addProxy(origin: String, protocol: String, authenticatedProxy: AuthenticatedProxy) =
+        apply {
+            val (proxy, authentication) = authenticatedProxy
+            proxyAuthentication[proxy] = authentication
 
-        val proxiesForOrigin = proxyOrigins.getOrPut(origin) { mutableMapOf() }
-        val proxiesForProtocol = proxiesForOrigin.getOrPut(protocol) { mutableListOf() }
-        proxiesForProtocol += proxy
-    }
+            val proxiesForOrigin = proxyOrigins.getOrPut(origin) { mutableMapOf() }
+            val proxiesForProtocol = proxiesForOrigin.getOrPut(protocol) { mutableListOf() }
+            proxiesForProtocol += proxy
+        }
 
     /**
      * Add multiple [proxies for specific protocols][proxyMap] whose definitions come from [origin].
      */
     fun addProxies(origin: String, proxyMap: ProtocolProxyMap) =
-        proxyMap.forEach { (protocol, proxies) ->
-            proxies.forEach { proxy ->
-                addProxy(origin, protocol, proxy)
+        apply {
+            proxyMap.forEach { (protocol, proxies) ->
+                proxies.forEach { proxy ->
+                    addProxy(origin, protocol, proxy)
+                }
             }
         }
 
