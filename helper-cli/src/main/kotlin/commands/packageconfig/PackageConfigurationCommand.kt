@@ -29,7 +29,8 @@ internal class PackageConfigurationCommand : CliktCommand(
         subcommands(
             FindCommand(),
             FormatCommand(),
-            SortCommand()
+            SortCommand(),
+            RemoveEntriesCommand()
         )
     }
 
