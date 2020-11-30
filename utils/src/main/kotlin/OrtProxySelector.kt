@@ -128,6 +128,15 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
         }
 
     /**
+     * Remove any previously added proxies.
+     */
+    fun removeAllProxies() =
+        apply {
+            proxyAuthentication.clear()
+            proxyOrigins.clear()
+        }
+
+    /**
      * Return whether the [proxy] has been defined from some origin.
      */
     fun hasOrigin(proxy: Proxy) =
