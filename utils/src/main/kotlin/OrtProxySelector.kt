@@ -79,6 +79,12 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
     private val proxyAuthentication = mutableMapOf<Proxy, PasswordAuthentication?>()
     private val proxyOrigins = mutableMapOf<String, MutableMap<String, MutableList<Proxy>>>()
 
+    private val proxyIncludes = listOfNotNull(
+        Os.env["only_proxy"],
+        System.getProperty("http.proxyIncludes"),
+        System.getProperty("https.proxyIncludes")
+    ).flatMapTo(mutableListOf()) { list -> list.split(',').map { it.trim() } }
+
     private val proxyExcludes = listOfNotNull(
         Os.env["no_proxy"],
         System.getProperty("http.proxyExcludes"),
@@ -171,9 +177,12 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
     override fun select(uri: URI?): List<Proxy> {
         requireNotNull(uri)
 
-        if (proxyExcludes.any { it.isNotEmpty() && (uri.authority.endsWith(it) || uri.host.endsWith(it)) }) {
-            return NO_PROXY_LIST
-        }
+        fun URI.matches(suffix: String) = suffix.isNotEmpty() && (authority.endsWith(suffix) || host.endsWith(suffix))
+
+        // An empty list of proxy includes means there are no restrictions as to which hosts proxies apply.
+        if (proxyIncludes.isNotEmpty() && proxyIncludes.none { uri.matches(it) }) return NO_PROXY_LIST
+
+        if (proxyExcludes.any { uri.matches(it) }) return NO_PROXY_LIST
 
         val proxies = proxyOrigins.flatMap { (_, proxiesForProtocol) ->
             proxiesForProtocol.getOrDefault(uri.scheme, mutableListOf())

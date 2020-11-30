@@ -53,6 +53,18 @@ class OrtProxySelectorTest : WordSpec({
                 selector.select(URI("http://fake-host")) shouldBe OrtProxySelector.NO_PROXY_LIST
             }
         }
+
+        "only be used for included hosts" {
+            temporaryProperties("http.proxyIncludes" to "fake-host-1") {
+                val selector = createProxySelector("http")
+
+                selector.select(URI("http://fake-host-1")).map {
+                    it.toGenericString()
+                }.single() shouldBe "HTTP @ fake-proxy:8080"
+
+                selector.select(URI("http://fake-host-2")) shouldBe OrtProxySelector.NO_PROXY_LIST
+            }
+        }
     }
 
     "An added HTTPS proxy" should {
@@ -79,6 +91,18 @@ class OrtProxySelectorTest : WordSpec({
                 val selector = createProxySelector("https")
 
                 selector.select(URI("https://fake-host")) shouldBe OrtProxySelector.NO_PROXY_LIST
+            }
+        }
+
+        "only be used for included hosts" {
+            temporaryProperties("https.proxyIncludes" to "fake-host-1") {
+                val selector = createProxySelector("https")
+
+                selector.select(URI("https://fake-host-1")).map {
+                    it.toGenericString()
+                }.single() shouldBe "HTTP @ fake-proxy:8080"
+
+                selector.select(URI("https://fake-host-2")) shouldBe OrtProxySelector.NO_PROXY_LIST
             }
         }
     }
