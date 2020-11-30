@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.getScanResultFor
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ScanResult
@@ -34,7 +35,7 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class RemoveEntriesCommand : CliktCommand(
-    help = "Removes all non-matching path excludes and license finding curations."
+    help = "Removes all path excludes and license finding curations which do not match any files or license findings."
 ) {
     private val packageConfigurationFile by option(
         "--package-configuration-file",
@@ -92,11 +93,6 @@ internal class RemoveEntriesCommand : CliktCommand(
         }.let { println(it) }
     }
 }
-
-private fun OrtResult.getScanResultFor(packageConfiguration: PackageConfiguration): ScanResult? =
-    getScanResultsForId(packageConfiguration.id).find { scanResult ->
-        packageConfiguration.matches(packageConfiguration.id, scanResult.provenance)
-    }
 
 private fun ScanResult.getAllFiles(): List<String> =
     with(summary) {
