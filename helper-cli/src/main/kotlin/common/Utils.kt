@@ -789,6 +789,33 @@ internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): Li
     return result
 }
 
+internal fun importLicenseFindingCurations(
+    sourceCodeDir: File,
+    licenseFindingCurationsFile: File
+): List<LicenseFindingCuration> {
+    println("Analyzing $sourceCodeDir...")
+    val repositoryPaths = findRepositoryPaths(sourceCodeDir)
+    println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumBy { it.size }} locations.")
+
+    println("Loading $licenseFindingCurationsFile...")
+    val curations = licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>()
+    println("Found ${curations.values.sumBy { it.size }} curations for ${curations.size} repositories.")
+
+    val result = mutableListOf<LicenseFindingCuration>()
+
+    repositoryPaths.forEach { (vcsUrl, relativePaths) ->
+        curations[vcsUrl]?.let { curationsForRepository ->
+            curationsForRepository.forEach { curation ->
+                relativePaths.forEach { path ->
+                    result += curation.copy(path = path + '/' + curation.path)
+                }
+            }
+        }
+    }
+
+    return result
+}
+
 /**
  * Return the scan result matching the given package configuration if any or null otherwise.
  */
