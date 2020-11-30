@@ -29,6 +29,7 @@ internal class PackageConfigurationCommand : CliktCommand(
         subcommands(
             FindCommand(),
             FormatCommand(),
+            ImportPathExcludesCommand(),
             SortCommand(),
             RemoveEntriesCommand()
         )
