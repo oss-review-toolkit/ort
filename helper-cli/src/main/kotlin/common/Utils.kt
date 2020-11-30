@@ -498,9 +498,7 @@ internal fun RepositoryConfiguration.sortEntries(): RepositoryConfiguration =
 internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryConfiguration =
     copy(
         curations = curations.copy(
-            licenseFindings = curations.licenseFindings.sortedBy { curation ->
-                curation.path.removePrefix("*").removePrefix("*")
-            }
+            licenseFindings = curations.licenseFindings.sortLicenseFindingCurations()
         )
     )
 
@@ -654,6 +652,14 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
 
     return result.values.toList()
 }
+
+/**
+ * Return a copy with the [LicenseFindingCuration]s sorted.
+ */
+internal fun Collection<LicenseFindingCuration>.sortLicenseFindingCurations(): List<LicenseFindingCuration> =
+    sortedBy { curation ->
+        curation.path.removePrefix("*").removePrefix("*")
+    }
 
 private data class LicenseFindingCurationHashKey(
     val path: String,
