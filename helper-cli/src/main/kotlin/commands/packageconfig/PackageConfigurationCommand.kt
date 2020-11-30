@@ -28,7 +28,8 @@ internal class PackageConfigurationCommand : CliktCommand(
     init {
         subcommands(
             FindCommand(),
-            FormatCommand()
+            FormatCommand(),
+            SortCommand()
         )
     }
 

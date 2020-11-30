@@ -455,6 +455,15 @@ fun OrtResult.replaceConfig(respositoryConfigurationFile: File?): OrtResult =
     } ?: this
 
 /**
+ * Return a copy with sorting applied to all entry types which are to be sorted.
+ */
+internal fun PackageConfiguration.sortEntries(): PackageConfiguration =
+    copy(
+        pathExcludes = pathExcludes.sortPathExcludes(),
+        licenseFindingCurations = licenseFindingCurations.sortLicenseFindingCurations()
+    )
+
+/**
  * Return a copy with the [IssueResolution]s replaced by the given [issueResolutions].
  */
 internal fun RepositoryConfiguration.replaceIssueResolutions(
