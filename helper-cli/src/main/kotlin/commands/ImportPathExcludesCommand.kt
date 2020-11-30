@@ -26,14 +26,12 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.findFilesRecursive
-import org.ossreviewtoolkit.helper.common.findRepositoryPaths
+import org.ossreviewtoolkit.helper.common.importPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
 import org.ossreviewtoolkit.helper.common.replacePathExcludes
 import org.ossreviewtoolkit.helper.common.sortPathExcludes
 import org.ossreviewtoolkit.helper.common.writeAsYaml
-import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -81,7 +79,7 @@ internal class ImportPathExcludesCommand : CliktCommand(
         }
 
         val existingPathExcludes = repositoryConfiguration.excludes.paths
-        val importedPathExcludes = importPathExcludes().filter { pathExclude ->
+        val importedPathExcludes = importPathExcludes(sourceCodeDir, pathExcludesFile).filter { pathExclude ->
             allFiles.any { pathExclude.matches(it) }
         }
 
@@ -91,29 +89,5 @@ internal class ImportPathExcludesCommand : CliktCommand(
             .replacePathExcludes(pathExcludes)
             .sortPathExcludes()
             .writeAsYaml(repositoryConfigurationFile)
-    }
-
-    private fun importPathExcludes(): List<PathExclude> {
-        println("Analyzing $sourceCodeDir...")
-        val repositoryPaths = findRepositoryPaths(sourceCodeDir)
-        println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumBy { it.size }} locations.")
-
-        println("Loading $pathExcludesFile...")
-        val pathExcludes = pathExcludesFile.readValue<RepositoryPathExcludes>()
-        println("Found ${pathExcludes.values.sumBy { it.size }} excludes for ${pathExcludes.size} repositories.")
-
-        val result = mutableListOf<PathExclude>()
-
-        repositoryPaths.forEach { (vcsUrl, relativePaths) ->
-            pathExcludes[vcsUrl]?.let { pathExcludesForRepository ->
-                pathExcludesForRepository.forEach { pathExclude ->
-                    relativePaths.forEach { path ->
-                        result += pathExclude.copy(pattern = path + '/' + pathExclude.pattern)
-                    }
-                }
-            }
-        }
-
-        return result
     }
 }

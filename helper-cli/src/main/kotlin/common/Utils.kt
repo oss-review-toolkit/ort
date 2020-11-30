@@ -763,3 +763,27 @@ internal fun PackageConfiguration.writeAsYaml(targetFile: File) {
     targetFile.absoluteFile.parentFile.safeMkdirs()
     yamlMapper.writeValue(targetFile, this)
 }
+
+internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): List<PathExclude> {
+    println("Analyzing $sourceCodeDir...")
+    val repositoryPaths = findRepositoryPaths(sourceCodeDir)
+    println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumBy { it.size }} locations.")
+
+    println("Loading $pathExcludesFile...")
+    val pathExcludes = pathExcludesFile.readValue<RepositoryPathExcludes>()
+    println("Found ${pathExcludes.values.sumBy { it.size }} excludes for ${pathExcludes.size} repositories.")
+
+    val result = mutableListOf<PathExclude>()
+
+    repositoryPaths.forEach { (vcsUrl, relativePaths) ->
+        pathExcludes[vcsUrl]?.let { pathExcludesForRepository ->
+            pathExcludesForRepository.forEach { pathExclude ->
+                relativePaths.forEach { path ->
+                    result += pathExclude.copy(pattern = path + '/' + pathExclude.pattern)
+                }
+            }
+        }
+    }
+
+    return result
+}
