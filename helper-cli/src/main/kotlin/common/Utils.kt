@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
@@ -787,3 +788,11 @@ internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): Li
 
     return result
 }
+
+/**
+ * Return the scan result matching the given package configuration if any or null otherwise.
+ */
+internal fun OrtResult.getScanResultFor(packageConfiguration: PackageConfiguration): ScanResult? =
+    getScanResultsForId(packageConfiguration.id).find { scanResult ->
+        packageConfiguration.matches(packageConfiguration.id, scanResult.provenance)
+    }
