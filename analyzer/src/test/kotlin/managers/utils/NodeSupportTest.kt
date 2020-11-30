@@ -31,7 +31,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.net.InetSocketAddress
 
 import kotlin.io.path.createTempDirectory
 
@@ -40,6 +39,7 @@ import org.ossreviewtoolkit.utils.ProtocolProxyMap
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
+import org.ossreviewtoolkit.utils.test.toGenericString
 
 class NodeSupportTest : WordSpec() {
     companion object {
@@ -207,9 +207,8 @@ class NodeSupportTest : WordSpec() {
                 fun ProtocolProxyMap.mapSingleValuesToString() =
                     mapValues { (_, proxies) ->
                         val (proxy, authentication) = proxies.single()
-                        val address = proxy.address() as InetSocketAddress
                         listOfNotNull(
-                            "${proxy.type()} @ ${address.hostString}:${address.port}",
+                            proxy.toGenericString(),
                             authentication?.userName,
                             authentication?.password?.let { String(it) }
                         )
