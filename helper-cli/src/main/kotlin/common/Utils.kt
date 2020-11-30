@@ -510,9 +510,7 @@ internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryCo
 internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration =
     copy(
         excludes = excludes.copy(
-            paths = excludes.paths.sortedBy { pathExclude ->
-                pathExclude.pattern.removePrefix("*").removePrefix("*")
-            }
+            paths = excludes.paths.sortPathExcludes()
         )
     )
 
@@ -688,6 +686,12 @@ internal fun Collection<PathExclude>.mergePathExcludes(
 
     return result.values.toList()
 }
+
+/**
+ * Return a copy with the [PathExclude]s sorted.
+ */
+internal fun Collection<PathExclude>.sortPathExcludes(): List<PathExclude> =
+    sortedBy { it.pattern.removePrefix("*").removePrefix("*") }
 
 /**
  * Merge the given [ScopeExclude]s replacing entries with equal [ScopeExclude.pattern].
