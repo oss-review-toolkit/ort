@@ -21,6 +21,9 @@ package org.ossreviewtoolkit.utils.test
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.maps.MapContainsMatcher
+
 import java.io.File
 import java.time.Instant
 
@@ -43,6 +46,8 @@ private val ENV_VAR_REGEX = Regex(
 private val DOWNLOAD_TIME_REGEX = Regex("(download_time): \".*\"")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
+
+fun <K, V> containExactly(vararg expected: Pair<K, V>): Matcher<Map<K, V>> = MapContainsMatcher(expected.toMap())
 
 fun patchExpectedResult(
     result: File,
