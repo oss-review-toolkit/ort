@@ -177,6 +177,15 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
+        val configurationFiles = listOfNotNull(
+                copyrightGarbageFile,
+                licenseClassificationsFile,
+                packageCurationsFile,
+                repositoryConfigurationFile
+        ).map { it.absolutePath }
+        println("The following configuration files are used:")
+        println("\t" + configurationFiles.joinToString("\n\t"))
+
         // Fail early if output files exist and must not be overwritten.
         val outputFiles = mutableSetOf<File>()
 

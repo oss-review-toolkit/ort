@@ -142,8 +142,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             }
         }
 
-        val distinctPackageManagers = packageManagers.distinct()
+        val configurationFiles = listOfNotNull(packageCurationsFile, repositoryConfigurationFile)
+                .map { it.absolutePath }
+        println("The following configuration files are used:")
+        println("\t" + configurationFiles.joinToString("\n\t"))
 
+        val distinctPackageManagers = packageManagers.distinct()
         println("The following package managers are activated:")
         println("\t" + distinctPackageManagers.joinToString(", "))
 
