@@ -39,7 +39,7 @@ const val DEFAULT_PROXY_PORT = 8080
  */
 class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelector() {
     companion object {
-        private val NO_PROXY_LIST = listOf(Proxy.NO_PROXY)
+        internal val NO_PROXY_LIST = listOf(Proxy.NO_PROXY)
 
         /**
          * Install this proxy selector as the global default. The previous default selector is used as a fallback.
