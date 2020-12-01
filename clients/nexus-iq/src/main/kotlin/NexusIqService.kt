@@ -95,7 +95,7 @@ interface NexusIqService {
     data class SecurityIssue(
         val reference: String,
         val severity: Float,
-        val url: URL
+        val url: URL?
     )
 
     data class ComponentsWrapper(
