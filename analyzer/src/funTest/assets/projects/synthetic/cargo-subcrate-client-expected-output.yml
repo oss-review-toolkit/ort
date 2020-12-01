@@ -18,13 +18,13 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "Cargo::lib:0.1.0"
+    - id: "Crate::lib:0.1.0"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Cargo::cfg-if:0.1.9"
+      - id: "Crate::cfg-if:0.1.9"
         linkage: "STATIC"
 packages:
-- id: "Cargo::cfg-if:0.1.9"
+- id: "Crate::cfg-if:0.1.9"
   purl: "pkg:cargo/cfg-if@0.1.9"
   declared_licenses:
   - "MIT OR Apache-2.0"

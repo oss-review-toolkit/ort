@@ -79,7 +79,7 @@ class Cargo(
 
     private fun extractPackageId(node: JsonNode) =
         Identifier(
-            type = "Cargo",
+            type = "Crate",
             namespace = "",
             name = node["name"].textValueOrEmpty(),
             version = node["version"].textValueOrEmpty()
@@ -278,7 +278,7 @@ class Cargo(
 
         val projectPkg = packages.values.single { pkg ->
             pkg.id.name == projectName && pkg.id.version == projectVersion
-        }
+        }.let { it.copy(id = it.id.copy(type = managerName)) }
 
         val homepageUrl = pkgDefinition.getString("package.homepage").orEmpty()
         val project = Project(

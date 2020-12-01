@@ -20,19 +20,19 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "Cargo::cfg-if:0.1.9"
+    - id: "Crate::cfg-if:0.1.9"
       linkage: "STATIC"
   - name: "dev-dependencies"
     dependencies:
-    - id: "Cargo::integration:0.1.0"
+    - id: "Crate::integration:0.1.0"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Cargo::spin:0.4.10"
+      - id: "Crate::spin:0.4.10"
         linkage: "STATIC"
-    - id: "Cargo::spin:0.5.0"
+    - id: "Crate::spin:0.5.0"
       linkage: "STATIC"
 packages:
-- id: "Cargo::cfg-if:0.1.9"
+- id: "Crate::cfg-if:0.1.9"
   purl: "pkg:cargo/cfg-if@0.1.9"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -62,7 +62,7 @@ packages:
     url: "https://github.com/alexcrichton/cfg-if.git"
     revision: ""
     path: ""
-- id: "Cargo::spin:0.4.10"
+- id: "Crate::spin:0.4.10"
   purl: "pkg:cargo/spin@0.4.10"
   declared_licenses:
   - "MIT"
@@ -91,7 +91,7 @@ packages:
     url: "https://github.com/mvdnes/spin-rs.git"
     revision: ""
     path: ""
-- id: "Cargo::spin:0.5.0"
+- id: "Crate::spin:0.5.0"
   purl: "pkg:cargo/spin@0.5.0"
   declared_licenses:
   - "MIT"

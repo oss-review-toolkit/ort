@@ -20,110 +20,110 @@ project:
   scopes:
   - name: "build-dependencies"
     dependencies:
-    - id: "Cargo::spin:0.5.0"
+    - id: "Crate::spin:0.5.0"
       linkage: "STATIC"
   - name: "dependencies"
     dependencies:
-    - id: "Cargo::cfg-if:0.1.9"
+    - id: "Crate::cfg-if:0.1.9"
       linkage: "STATIC"
   - name: "dev-dependencies"
     dependencies:
-    - id: "Cargo::rand:0.6.5"
+    - id: "Crate::rand:0.6.5"
       linkage: "STATIC"
       dependencies:
-      - id: "Cargo::libc:0.2.62"
+      - id: "Crate::libc:0.2.62"
         linkage: "STATIC"
-      - id: "Cargo::rand_chacha:0.1.1"
-        linkage: "STATIC"
-        dependencies:
-        - id: "Cargo::rand_core:0.3.1"
-          linkage: "STATIC"
-          dependencies:
-          - id: "Cargo::rand_core:0.4.2"
-            linkage: "STATIC"
-      - id: "Cargo::rand_core:0.4.2"
-        linkage: "STATIC"
-      - id: "Cargo::rand_hc:0.1.0"
+      - id: "Crate::rand_chacha:0.1.1"
         linkage: "STATIC"
         dependencies:
-        - id: "Cargo::rand_core:0.3.1"
+        - id: "Crate::rand_core:0.3.1"
           linkage: "STATIC"
           dependencies:
-          - id: "Cargo::rand_core:0.4.2"
+          - id: "Crate::rand_core:0.4.2"
             linkage: "STATIC"
-      - id: "Cargo::rand_isaac:0.1.1"
+      - id: "Crate::rand_core:0.4.2"
+        linkage: "STATIC"
+      - id: "Crate::rand_hc:0.1.0"
         linkage: "STATIC"
         dependencies:
-        - id: "Cargo::rand_core:0.3.1"
+        - id: "Crate::rand_core:0.3.1"
           linkage: "STATIC"
           dependencies:
-          - id: "Cargo::rand_core:0.4.2"
+          - id: "Crate::rand_core:0.4.2"
             linkage: "STATIC"
-      - id: "Cargo::rand_jitter:0.1.4"
+      - id: "Crate::rand_isaac:0.1.1"
         linkage: "STATIC"
         dependencies:
-        - id: "Cargo::libc:0.2.62"
-          linkage: "STATIC"
-        - id: "Cargo::rand_core:0.4.2"
-          linkage: "STATIC"
-        - id: "Cargo::winapi:0.3.8"
+        - id: "Crate::rand_core:0.3.1"
           linkage: "STATIC"
           dependencies:
-          - id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
+          - id: "Crate::rand_core:0.4.2"
             linkage: "STATIC"
-          - id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
-            linkage: "STATIC"
-      - id: "Cargo::rand_os:0.1.3"
+      - id: "Crate::rand_jitter:0.1.4"
         linkage: "STATIC"
         dependencies:
-        - id: "Cargo::cloudabi:0.0.3"
+        - id: "Crate::libc:0.2.62"
+          linkage: "STATIC"
+        - id: "Crate::rand_core:0.4.2"
+          linkage: "STATIC"
+        - id: "Crate::winapi:0.3.8"
           linkage: "STATIC"
           dependencies:
-          - id: "Cargo::bitflags:1.1.0"
+          - id: "Crate::winapi-i686-pc-windows-gnu:0.4.0"
             linkage: "STATIC"
-        - id: "Cargo::fuchsia-cprng:0.1.1"
-          linkage: "STATIC"
-        - id: "Cargo::libc:0.2.62"
-          linkage: "STATIC"
-        - id: "Cargo::rand_core:0.4.2"
-          linkage: "STATIC"
-        - id: "Cargo::rdrand:0.4.0"
+          - id: "Crate::winapi-x86_64-pc-windows-gnu:0.4.0"
+            linkage: "STATIC"
+      - id: "Crate::rand_os:0.1.3"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Crate::cloudabi:0.0.3"
           linkage: "STATIC"
           dependencies:
-          - id: "Cargo::rand_core:0.3.1"
+          - id: "Crate::bitflags:1.1.0"
+            linkage: "STATIC"
+        - id: "Crate::fuchsia-cprng:0.1.1"
+          linkage: "STATIC"
+        - id: "Crate::libc:0.2.62"
+          linkage: "STATIC"
+        - id: "Crate::rand_core:0.4.2"
+          linkage: "STATIC"
+        - id: "Crate::rdrand:0.4.0"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Crate::rand_core:0.3.1"
             linkage: "STATIC"
             dependencies:
-            - id: "Cargo::rand_core:0.4.2"
+            - id: "Crate::rand_core:0.4.2"
               linkage: "STATIC"
-        - id: "Cargo::winapi:0.3.8"
+        - id: "Crate::winapi:0.3.8"
           linkage: "STATIC"
           dependencies:
-          - id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
+          - id: "Crate::winapi-i686-pc-windows-gnu:0.4.0"
             linkage: "STATIC"
-          - id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
+          - id: "Crate::winapi-x86_64-pc-windows-gnu:0.4.0"
             linkage: "STATIC"
-      - id: "Cargo::rand_pcg:0.1.2"
+      - id: "Crate::rand_pcg:0.1.2"
         linkage: "STATIC"
         dependencies:
-        - id: "Cargo::rand_core:0.4.2"
+        - id: "Crate::rand_core:0.4.2"
           linkage: "STATIC"
-      - id: "Cargo::rand_xorshift:0.1.1"
+      - id: "Crate::rand_xorshift:0.1.1"
         linkage: "STATIC"
         dependencies:
-        - id: "Cargo::rand_core:0.3.1"
+        - id: "Crate::rand_core:0.3.1"
           linkage: "STATIC"
           dependencies:
-          - id: "Cargo::rand_core:0.4.2"
+          - id: "Crate::rand_core:0.4.2"
             linkage: "STATIC"
-      - id: "Cargo::winapi:0.3.8"
+      - id: "Crate::winapi:0.3.8"
         linkage: "STATIC"
         dependencies:
-        - id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
+        - id: "Crate::winapi-i686-pc-windows-gnu:0.4.0"
           linkage: "STATIC"
-        - id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
+        - id: "Crate::winapi-x86_64-pc-windows-gnu:0.4.0"
           linkage: "STATIC"
 packages:
-- id: "Cargo::autocfg:0.1.6"
+- id: "Crate::autocfg:0.1.6"
   purl: "pkg:cargo/autocfg@0.1.6"
   declared_licenses:
   - "Apache-2.0 OR MIT"
@@ -151,7 +151,7 @@ packages:
     url: "https://github.com/cuviper/autocfg.git"
     revision: ""
     path: ""
-- id: "Cargo::bitflags:1.1.0"
+- id: "Crate::bitflags:1.1.0"
   purl: "pkg:cargo/bitflags@1.1.0"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -179,7 +179,7 @@ packages:
     url: "https://github.com/bitflags/bitflags.git"
     revision: ""
     path: ""
-- id: "Cargo::cfg-if:0.1.9"
+- id: "Crate::cfg-if:0.1.9"
   purl: "pkg:cargo/cfg-if@0.1.9"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -209,7 +209,7 @@ packages:
     url: "https://github.com/alexcrichton/cfg-if.git"
     revision: ""
     path: ""
-- id: "Cargo::cloudabi:0.0.3"
+- id: "Crate::cloudabi:0.0.3"
   purl: "pkg:cargo/cloudabi@0.0.3"
   declared_licenses:
   - "BSD-2-Clause"
@@ -238,7 +238,7 @@ packages:
     url: "https://github.com/nuxinl/cloudabi.git"
     revision: ""
     path: ""
-- id: "Cargo::fuchsia-cprng:0.1.1"
+- id: "Crate::fuchsia-cprng:0.1.1"
   purl: "pkg:cargo/fuchsia-cprng@0.1.1"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -265,7 +265,7 @@ packages:
     url: "https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng"
     revision: ""
     path: ""
-- id: "Cargo::libc:0.2.62"
+- id: "Crate::libc:0.2.62"
   purl: "pkg:cargo/libc@0.2.62"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -293,7 +293,7 @@ packages:
     url: "https://github.com/rust-lang/libc.git"
     revision: ""
     path: ""
-- id: "Cargo::rand:0.6.5"
+- id: "Crate::rand:0.6.5"
   purl: "pkg:cargo/rand@0.6.5"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -321,7 +321,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_chacha:0.1.1"
+- id: "Crate::rand_chacha:0.1.1"
   purl: "pkg:cargo/rand_chacha@0.1.1"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -349,7 +349,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_core:0.3.1"
+- id: "Crate::rand_core:0.3.1"
   purl: "pkg:cargo/rand_core@0.3.1"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -377,7 +377,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_core:0.4.2"
+- id: "Crate::rand_core:0.4.2"
   purl: "pkg:cargo/rand_core@0.4.2"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -405,7 +405,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_hc:0.1.0"
+- id: "Crate::rand_hc:0.1.0"
   purl: "pkg:cargo/rand_hc@0.1.0"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -433,7 +433,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_isaac:0.1.1"
+- id: "Crate::rand_isaac:0.1.1"
   purl: "pkg:cargo/rand_isaac@0.1.1"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -461,7 +461,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_jitter:0.1.4"
+- id: "Crate::rand_jitter:0.1.4"
   purl: "pkg:cargo/rand_jitter@0.1.4"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -489,7 +489,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_os:0.1.3"
+- id: "Crate::rand_os:0.1.3"
   purl: "pkg:cargo/rand_os@0.1.3"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -517,7 +517,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_pcg:0.1.2"
+- id: "Crate::rand_pcg:0.1.2"
   purl: "pkg:cargo/rand_pcg@0.1.2"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -545,7 +545,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rand_xorshift:0.1.1"
+- id: "Crate::rand_xorshift:0.1.1"
   purl: "pkg:cargo/rand_xorshift@0.1.1"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -573,7 +573,7 @@ packages:
     url: "https://github.com/rust-random/rand.git"
     revision: ""
     path: ""
-- id: "Cargo::rdrand:0.4.0"
+- id: "Crate::rdrand:0.4.0"
   purl: "pkg:cargo/rdrand@0.4.0"
   declared_licenses:
   - "ISC"
@@ -602,7 +602,7 @@ packages:
     url: "https://github.com/nagisa/rust_rdrand.git"
     revision: ""
     path: ""
-- id: "Cargo::spin:0.5.0"
+- id: "Crate::spin:0.5.0"
   purl: "pkg:cargo/spin@0.5.0"
   declared_licenses:
   - "MIT"
@@ -631,7 +631,7 @@ packages:
     url: "https://github.com/mvdnes/spin-rs.git"
     revision: ""
     path: ""
-- id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
+- id: "Crate::winapi-i686-pc-windows-gnu:0.4.0"
   purl: "pkg:cargo/winapi-i686-pc-windows-gnu@0.4.0"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -660,7 +660,7 @@ packages:
     url: "https://github.com/retep998/winapi-rs.git"
     revision: ""
     path: ""
-- id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
+- id: "Crate::winapi-x86_64-pc-windows-gnu:0.4.0"
   purl: "pkg:cargo/winapi-x86_64-pc-windows-gnu@0.4.0"
   declared_licenses:
   - "MIT OR Apache-2.0"
@@ -689,7 +689,7 @@ packages:
     url: "https://github.com/retep998/winapi-rs.git"
     revision: ""
     path: ""
-- id: "Cargo::winapi:0.3.8"
+- id: "Crate::winapi:0.3.8"
   purl: "pkg:cargo/winapi@0.3.8"
   declared_licenses:
   - "MIT OR Apache-2.0"
