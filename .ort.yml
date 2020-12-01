@@ -55,7 +55,7 @@ curations:
     reason: "DATA_OF"
     comment: "This file contains official SPDX.org license ids. SPDX is licensed under\
       \ CC0-1.0, see https://github.com/spdx/license-list-XML/blob/master/package.json#L33"
-  - path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/{empty-deps,lockfile,no-lockfile,no-deps,with-provide,with-replace}/composer.phar"
+  - path: "analyzer/src/funTest/assets/projects/synthetic/composer/{empty-deps,lockfile,no-lockfile,no-deps,with-provide,with-replace}/composer.phar"
     concluded_license: "MIT"
     reason: "DATA_OF"
     comment: "These files are part of PHP Composer and include a mapping from human\

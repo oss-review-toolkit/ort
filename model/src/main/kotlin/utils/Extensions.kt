@@ -40,13 +40,13 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>?
     when (type) {
         "Bower" -> ComponentType.GIT to Provider.GITHUB
         "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
+        "Composer" -> ComponentType.COMPOSER to Provider.PACKAGIST
         "Crate" -> ComponentType.CRATE to Provider.CRATES_IO
         "DotNet", "NuGet" -> ComponentType.NUGET to Provider.NUGET
         "Gem" -> ComponentType.GEM to Provider.RUBYGEMS
         "GoDep", "GoMod" -> ComponentType.GIT to Provider.GITHUB
         "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
         "NPM" -> ComponentType.NPM to Provider.NPM_JS
-        "PhpComposer" -> ComponentType.COMPOSER to Provider.PACKAGIST
         "PyPI" -> ComponentType.PYPI to Provider.PYPI
         "Pub" -> ComponentType.GIT to Provider.GITHUB
         else -> null

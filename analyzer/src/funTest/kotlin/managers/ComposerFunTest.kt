@@ -34,8 +34,8 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class PhpComposerFunTest : StringSpec() {
-    private val projectsDir = File("src/funTest/assets/projects/synthetic/php-composer").absoluteFile
+class ComposerFunTest : StringSpec() {
+    private val projectsDir = File("src/funTest/assets/projects/synthetic/composer").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -44,9 +44,9 @@ class PhpComposerFunTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val definitionFile = projectsDir.resolve("lockfile/composer.json")
 
-            val result = createPhpComposer().resolveSingleProject(definitionFile)
+            val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("php-composer-expected-output.yml"),
+                projectsDir.parentFile.resolve("composer-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -57,15 +57,15 @@ class PhpComposerFunTest : StringSpec() {
 
         "Error is shown when no lockfile is present" {
             val definitionFile = projectsDir.resolve("no-lockfile/composer.json")
-            val result = createPhpComposer().resolveSingleProject(definitionFile)
+            val result = createComposer().resolveSingleProject(definitionFile)
 
             with(result) {
                 project.id shouldBe Identifier(
-                    "PhpComposer::src/funTest/assets/projects/synthetic/" +
-                            "php-composer/no-lockfile/composer.json:"
+                    "Composer::src/funTest/assets/projects/synthetic/" +
+                            "composer/no-lockfile/composer.json:"
                 )
                 project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
+                        "analyzer/src/funTest/assets/projects/synthetic/composer/no-lockfile/composer.json"
                 packages.size shouldBe 0
                 issues.size shouldBe 1
                 issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
@@ -75,9 +75,9 @@ class PhpComposerFunTest : StringSpec() {
         "No composer.lock is required for projects without dependencies" {
             val definitionFile = projectsDir.resolve("no-deps/composer.json")
 
-            val result = createPhpComposer().resolveSingleProject(definitionFile)
+            val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("php-composer-expected-output-no-deps.yml"),
+                projectsDir.parentFile.resolve("composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -90,9 +90,9 @@ class PhpComposerFunTest : StringSpec() {
         "No composer.lock is required for projects with empty dependencies" {
             val definitionFile = projectsDir.resolve("empty-deps/composer.json")
 
-            val result = createPhpComposer().resolveSingleProject(definitionFile)
+            val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("php-composer-expected-output-no-deps.yml"),
+                projectsDir.parentFile.resolve("composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -105,9 +105,9 @@ class PhpComposerFunTest : StringSpec() {
         "Packages defined as provided are not reported as missing" {
             val definitionFile = projectsDir.resolve("with-provide/composer.json")
 
-            val result = createPhpComposer().resolveSingleProject(definitionFile)
+            val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("php-composer-expected-output-with-provide.yml"),
+                projectsDir.parentFile.resolve("composer-expected-output-with-provide.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -119,9 +119,9 @@ class PhpComposerFunTest : StringSpec() {
         "Packages defined as replaced are not reported as missing" {
             val definitionFile = projectsDir.resolve("with-replace/composer.json")
 
-            val result = createPhpComposer().resolveSingleProject(definitionFile)
+            val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("php-composer-expected-output-with-replace.yml"),
+                projectsDir.parentFile.resolve("composer-expected-output-with-replace.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -131,6 +131,6 @@ class PhpComposerFunTest : StringSpec() {
         }
     }
 
-    private fun createPhpComposer() =
-        PhpComposer("PhpComposer", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createComposer() =
+        Composer("Composer", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

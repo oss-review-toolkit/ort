@@ -1,7 +1,7 @@
 ---
 project:
-  id: "PhpComposer:ort:composer-test-project:0.1.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/with-replace/composer.json"
+  id: "Composer:ort:composer-test-project:0.1.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/composer/with-replace/composer.json"
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
@@ -21,12 +21,12 @@ project:
   scopes:
   - name: "require"
     dependencies:
-    - id: "PhpComposer:ort:child2:1.0.0"
+    - id: "Composer:ort:child2:1.0.0"
   - name: "require-dev"
     dependencies: []
 packages:
-- id: "PhpComposer:ort:child2:1.0.0"
-  purl: "pkg:phpcomposer/ort/child2@1.0.0"
+- id: "Composer:ort:child2:1.0.0"
+  purl: "pkg:composer/ort/child2@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
