@@ -21,11 +21,13 @@ package org.ossreviewtoolkit.scanner
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+import java.nio.file.Files
 import java.time.Instant
 
 import kotlin.io.path.createTempDirectory
@@ -39,6 +41,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
@@ -50,12 +53,12 @@ class ScannerFunTest : StringSpec() {
 
     private lateinit var outputDir: File
 
-    override fun beforeSpec(spec: Spec) {
+    override fun beforeEach(testCase: TestCase) {
         downloadDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-download").toFile()
         outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-output").toFile()
     }
 
-    override fun afterSpec(spec: Spec) {
+    override fun afterEach(testCase: TestCase, result: TestResult) {
         outputDir.safeDeleteRecursively(force = true)
         downloadDir.safeDeleteRecursively(force = true)
         ScanResultsStorage.storage.stats.reset()
@@ -63,13 +66,25 @@ class ScannerFunTest : StringSpec() {
 
     init {
         "Scanner should scan an OrtResult in memory" {
-            val analyzerResult = assetsDir.resolve("analyzer-result.yml")
             val builder = InMemoryScannerResultBuilder()
             val scanner = createScanner()
 
             scanner.scanOrtResult(builder, analyzerResult, outputDir, downloadDir, labels = labels)
 
             checkResult(builder.result())
+        }
+
+        "Scanner should stream results to a file on disk" {
+            val outputFile = Files.createTempFile("scan-result", ".yml").toFile()
+            outputFile.deleteOnExit()
+            val scanner = createScanner()
+
+            StreamingScannerResultBuilder(outputFile).use {
+                scanner.scanOrtResult(it, analyzerResult, outputDir, downloadDir, labels = labels)
+            }
+
+            val result = outputFile.mapper().readValue(outputFile, OrtResult::class.java)
+            checkResult(result)
         }
     }
 
@@ -126,6 +141,9 @@ private const val EXPECTED_RESULT_FILE_NAME = "test-scanner-expected-output-for-
 /** Path to test files. */
 private val assetsDir = File("src/funTest/assets")
 
+/** The file storing the analyzer result to be processed. */
+private val analyzerResult = assetsDir.resolve("analyzer-result.yml")
+
 /**
  * Regular expression to match temporary download paths in a scan result. As these paths change on each test run,
  * they have to be dealt with when comparing results.
@@ -171,7 +189,7 @@ private fun stripVariables(result: String): String =
 private fun constructExpectedResult(): OrtResult {
     val expectedResultYaml = patchResult(
         patchExpectedResult(
-            assetsDir.resolve("test-scanner-expected-output-for-analyzer-result.yml"),
+            assetsDir.resolve(EXPECTED_RESULT_FILE_NAME),
             revision = "HEAD"
         )
     )

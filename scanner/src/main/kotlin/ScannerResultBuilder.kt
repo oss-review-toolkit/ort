@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.scanner
 
+import com.fasterxml.jackson.core.JsonEncoding
+
+import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.AccessStatistics
@@ -28,6 +31,8 @@ import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.utils.safeMkdirs
 
 /**
  * Definition of an interface that allows a scanner to construct an [OrtResult] with a scanner result without
@@ -120,4 +125,80 @@ class InMemoryScannerResultBuilder : ScannerResultBuilder {
      * final result.
      */
     fun result(): OrtResult = ortResult
+}
+
+/**
+ * An implementation of [ScannerResultBuilder] that uses the Jackson Streaming API to construct result files.
+ *
+ * Whenever new data becomes available, it is directly written to the output file. So the memory consumed by this
+ * builder class is reduced.
+ */
+class StreamingScannerResultBuilder(
+    /** The file to write the result to. */
+    val outputFile: File
+) : ScannerResultBuilder {
+    /** Store a reference to the object mapper. */
+    private val mapper = outputFile.mapper()
+
+    /** The generator to produce the result in a streaming fashion. */
+    private val generator = mapper.createGenerator(outputFile.safeMkdirsParent(), JsonEncoding.UTF8)
+
+    /** Stores the labels from the analyzer result. */
+    private var analyzerLabels: Map<String, String>? = null
+
+    override fun initFromAnalyzerResult(analyzerResult: OrtResult) {
+        analyzerLabels = analyzerResult.labels
+
+        with(generator) {
+            writeStartObject()
+            writeObjectField("repository", analyzerResult.repository)
+            writeObjectField("analyzer", analyzerResult.analyzer)
+            writeObjectField("advisor", analyzerResult.advisor)
+            writeObjectField("evaluator", analyzerResult.evaluator)
+
+            writeObjectFieldStart("scanner")
+            writeObjectFieldStart("results")
+            writeArrayFieldStart("scan_results")
+        }
+    }
+
+    override fun addScanResult(resultContainer: ScanResultContainer) {
+        mapper.writeValue(generator, resultContainer)
+    }
+
+    override fun complete(
+        startTime: Instant,
+        endTime: Instant,
+        environment: Environment,
+        config: ScannerConfiguration,
+        storageStats: AccessStatistics,
+        labels: Map<String, String>
+    ) {
+        val allLabels = analyzerLabels.orEmpty() + labels
+
+        with(generator) {
+            writeEndArray()
+            writeObjectField("storage_stats", storageStats)
+            writeEndObject()
+            writeObjectField("start_time", startTime)
+            writeObjectField("end_time", endTime)
+            writeObjectField("environment", environment)
+            writeObjectField("config", config)
+            writeEndObject()
+            writeObjectField("labels", allLabels)
+            writeEndObject()
+        }
+    }
+
+    override fun close() {
+        generator.close()
+    }
+
+    /**
+     * Make sure that the parent directory of this file exists.
+     */
+    private fun File.safeMkdirsParent(): File {
+        parentFile?.safeMkdirs()
+        return this
+    }
 }
