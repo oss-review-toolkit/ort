@@ -146,10 +146,8 @@ data class Identifier(
         }
 
     /**
-     * Map a package manager type to the String representation of the respective [PurlType].
-     * Falls back to the lower case package manager type if the [PurlType] cannot be determined.
-     *
-     * E.g. PIP to [PurlType.PYPI] or Gradle to [PurlType.MAVEN].
+     * Map a [Package]'s type to the string representation of the respective [PurlType], or fall back to the lower-case
+     * [Package]'s type if the [PurlType] cannot be determined.
      */
     fun getPurlType() =
         when (val lowerType = type.toLowerCase()) {
@@ -157,12 +155,12 @@ data class Identifier(
             "composer" -> PurlType.COMPOSER
             "conan" -> PurlType.CONAN
             "crate" -> PurlType.CARGO
-            "dep", "glide", "godep", "gomod" -> PurlType.GOLANG
-            "dotnet", "nuget" -> PurlType.NUGET
+            "godep", "gomod" -> PurlType.GOLANG
             "gem" -> PurlType.GEM
-            "gradle", "maven", "sbt" -> PurlType.MAVEN
-            "npm", "yarn" -> PurlType.NPM
-            "pip", "pipenv" -> PurlType.PYPI
+            "maven" -> PurlType.MAVEN
+            "npm" -> PurlType.NPM
+            "nuget" -> PurlType.NUGET
+            "pypi" -> PurlType.PYPI
             else -> lowerType
         }.toString()
 
