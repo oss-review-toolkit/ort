@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.VcsType
 class SimpleFormIntegrationFunTest : AbstractIntegrationSpec() {
     override val pkg = Package(
         id = Identifier(
-            type = "Bundler",
+            type = "Gem",
             namespace = "",
             name = "Simple Form",
             version = ""
