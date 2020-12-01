@@ -154,12 +154,12 @@ data class Identifier(
     fun getPurlType() =
         when (val lowerType = type.toLowerCase()) {
             "bower" -> PurlType.BOWER
-            "bundler" -> PurlType.GEM
             "cargo" -> PurlType.CARGO
             "composer" -> PurlType.COMPOSER
             "conan" -> PurlType.CONAN
             "dep", "glide", "godep", "gomod" -> PurlType.GOLANG
             "dotnet", "nuget" -> PurlType.NUGET
+            "gem" -> PurlType.GEM
             "gradle", "maven", "sbt" -> PurlType.MAVEN
             "npm", "yarn" -> PurlType.NPM
             "pip", "pipenv" -> PurlType.PYPI

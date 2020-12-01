@@ -197,7 +197,7 @@ object Downloader {
 
         if (pkg.vcsProcessed.url.isBlank()) {
             val hint = when (pkg.id.type) {
-                "Bundler" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, " +
+                "Bundler", "Gem" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, " +
                         "see: https://guides.rubygems.org/specification-reference/#metadata"
                 "Gradle" -> " Please make sure the release POM file includes the SCM connection, see: " +
                         "https://docs.gradle.org/current/userguide/publishing_maven.html#" +

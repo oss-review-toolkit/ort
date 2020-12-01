@@ -39,10 +39,10 @@ internal fun TextLocation.prependPath(prefix: String): String =
 fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>? =
     when (type) {
         "Bower" -> ComponentType.GIT to Provider.GITHUB
-        "Bundler" -> ComponentType.GEM to Provider.RUBYGEMS
         "Cargo" -> ComponentType.CRATE to Provider.CRATES_IO
         "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
         "DotNet", "NuGet" -> ComponentType.NUGET to Provider.NUGET
+        "Gem" -> ComponentType.GEM to Provider.RUBYGEMS
         "GoDep", "GoMod" -> ComponentType.GIT to Provider.GITHUB
         "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
         "NPM" -> ComponentType.NPM to Provider.NPM_JS
