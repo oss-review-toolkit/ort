@@ -18,10 +18,10 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "Cargo::spin:0.4.10"
+    - id: "Crate::spin:0.4.10"
       linkage: "STATIC"
 packages:
-- id: "Cargo::spin:0.4.10"
+- id: "Crate::spin:0.4.10"
   purl: "pkg:cargo/spin@0.4.10"
   declared_licenses:
   - "MIT"
