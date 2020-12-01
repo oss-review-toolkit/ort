@@ -107,6 +107,13 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development only."
             )
         )
+        "Composer" -> listOf(
+            ScopeExclude(
+                pattern = "require-dev",
+                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
+                comment = "Packages for development only."
+            )
+        )
         "GoMod" -> listOf(
             ScopeExclude(
                 pattern = "all",
@@ -201,13 +208,6 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
         "NPM" -> listOf(
             ScopeExclude(
                 pattern = "devDependencies",
-                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
-                comment = "Packages for development only."
-            )
-        )
-        "PhpComposer" -> listOf(
-            ScopeExclude(
-                pattern = "require-dev",
                 reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
                 comment = "Packages for development only."
             )

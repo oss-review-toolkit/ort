@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.analyzer.integration
 
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.analyzer.managers.Composer
 import org.ossreviewtoolkit.analyzer.managers.Npm
-import org.ossreviewtoolkit.analyzer.managers.PhpComposer
 import org.ossreviewtoolkit.analyzer.managers.Yarn
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.VcsType
 class DrupalIntegrationFunTest : AbstractIntegrationSpec() {
     override val pkg = Package(
         id = Identifier(
-            type = "PhpComposer",
+            type = "Composer",
             namespace = "",
             name = "Drupal",
             version = ""
@@ -54,7 +54,7 @@ class DrupalIntegrationFunTest : AbstractIntegrationSpec() {
         val downloadDir = downloadResult.downloadDirectory
 
         mapOf(
-            PhpComposer.Factory() as PackageManagerFactory to listOf(
+            Composer.Factory() as PackageManagerFactory to listOf(
                 downloadDir.resolve("core/modules/system/tests/fixtures/HtaccessTest/composer.json"),
                 downloadDir.resolve("core/lib/Drupal/Component/Uuid/composer.json"),
                 downloadDir.resolve("core/lib/Drupal/Component/Utility/composer.json"),
@@ -94,7 +94,7 @@ class DrupalIntegrationFunTest : AbstractIntegrationSpec() {
 
     override val managedFilesForTest by lazy {
         mapOf(
-            PhpComposer.Factory() as PackageManagerFactory to
+            Composer.Factory() as PackageManagerFactory to
                     // Limit to definition files that come long with a lock file.
                     listOf(downloadResult.downloadDirectory.resolve("composer.json"))
         )
