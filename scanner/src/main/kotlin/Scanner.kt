@@ -33,10 +33,8 @@ import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
-import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxLicense
@@ -80,15 +78,17 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
     /**
      * Scan the [Project]s and [Package]s specified in [ortResultFile] and store the scan results in [outputDirectory].
-     * The [downloadDirectory] is used to download the source code to for scanning. Return scan results as an
-     * [OrtResult].
+     * The [downloadDirectory] is used to download the source code to for scanning. Use the [builder] provided to
+     * construct an [OrtResult] with the results of this scan operation.
      */
     fun scanOrtResult(
+        builder: ScannerResultBuilder,
         ortResultFile: File,
         outputDirectory: File,
         downloadDirectory: File,
-        skipExcluded: Boolean = false
-    ): OrtResult {
+        skipExcluded: Boolean = false,
+        labels: Map<String, String> = emptyMap()
+    ) {
         require(ortResultFile.isFile) {
             "The provided ORT result file '${ortResultFile.canonicalPath}' does not exist."
         }
@@ -107,6 +107,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
                     "result."
         }
 
+        builder.initFromAnalyzerResult(ortResult)
         // Add the projects as packages to scan.
         val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
         val consolidatedReferencePackages = consolidatedProjects.keys.map { it.toCuratedPackage() }
@@ -135,14 +136,9 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
             }
         }
 
-        val scanRecord = ScanRecord(resultContainers, ScanResultsStorage.storage.stats)
-
+        resultContainers.forEach(builder::addScanResult)
         val endTime = Instant.now()
-
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
-
-        // Note: This overwrites any existing ScannerRun from the input file.
-        return ortResult.copy(scanner = scannerRun)
+        builder.complete(startTime, endTime, Environment(), config, ScanResultsStorage.storage.stats, labels)
     }
 
     /**

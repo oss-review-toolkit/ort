@@ -191,3 +191,5 @@ analyzer:
     has_issues: false
 scanner: null
 evaluator: null
+labels:
+  analyzed: "complete"

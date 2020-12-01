@@ -28,6 +28,7 @@ import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.scanner.InMemoryScannerResultBuilder
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
@@ -48,9 +49,10 @@ class FileCounterScannerFunTest : StringSpec() {
                 assetsDir.resolve("file-counter-expected-output-for-analyzer-result.yml")
             )
 
+            val builder = InMemoryScannerResultBuilder()
             val scanner = FileCounter("FileCounter", ScannerConfiguration())
-            val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir, outputDir.resolve("downloads"))
-            val result = yamlMapper.writeValueAsString(ortResult)
+            scanner.scanOrtResult(builder, analyzerResultFile, outputDir, outputDir.resolve("downloads"))
+            val result = yamlMapper.writeValueAsString(builder.result())
 
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
 

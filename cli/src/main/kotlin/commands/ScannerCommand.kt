@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.scanner.InMemoryScannerResultBuilder
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
@@ -171,12 +172,15 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         val scanner = configureScanner(config.scanner)
 
         val ortResult = if (input.isFile) {
+            val builder = InMemoryScannerResultBuilder()
             scanner.scanOrtResult(
+                builder = builder,
                 ortResultFile = input,
                 outputDirectory = nativeOutputDir,
                 downloadDirectory = downloadDir ?: outputDir.resolve("downloads"),
                 skipExcluded = skipExcluded
             )
+            builder.result()
         } else {
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."

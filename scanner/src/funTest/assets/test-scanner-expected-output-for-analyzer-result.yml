@@ -15,7 +15,7 @@ analyzer:
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
   environment:
-    ort_version: "HEAD"
+    ort_version: "<REPLACE_REVISION>"
     java_version: "<REPLACE_JAVA>"
     os: "Linux"
     processors: "<REPLACE_PROCESSORS>"
@@ -196,12 +196,16 @@ scanner:
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
   environment:
-    ort_version: "HEAD"
+    ort_version: "<REPLACE_REVISION>"
     java_version: "<REPLACE_JAVA>"
     os: "<REPLACE_OS>"
     processors: "<REPLACE_PROCESSORS>"
     max_memory: "<REPLACE_MAX_MEMORY>"
-    variables: {}
+    variables:
+      SHELL: "/bin/bash"
+      http_proxy: "http://127.0.0.1:3128/"
+      https_proxy: "http://127.0.0.1:3128/"
+      JAVA_HOME: "/opt/jdk-11.0.2"
     tool_versions: {}
   config:
     archive: null
@@ -216,9 +220,9 @@ scanner:
       - provenance:
           download_time: "1970-01-01T00:00:00Z"
         scanner:
-          name: "FileCounter"
-          version: "1.0"
-          configuration: ""
+          name: "TestScanner"
+          version: "1.0.0"
+          configuration: "testScannerConfig"
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
@@ -228,7 +232,7 @@ scanner:
           copyrights: []
           issues:
           - timestamp: "1970-01-01T00:00:00Z"
-            source: "FileCounter"
+            source: "TestScanner"
             message: "Could not download 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0':\
               \ DownloadException: Download failed for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\n\
               Suppressed: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\
@@ -246,16 +250,32 @@ scanner:
               value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
               algorithm: "SHA-1"
         scanner:
-          name: "FileCounter"
-          version: "1.0"
-          configuration: ""
+          name: "TestScanner"
+          version: "1.0.0"
+          configuration: "testScannerConfig"
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          file_count: 234
-          package_verification_code: "a86513854c8896d354a2d84f51beeaf9b378c233"
-          licenses: []
-          copyrights: []
+          file_count: 1
+          package_verification_code: ""
+          licenses:
+          - license: "ASL-2"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/junit/junit/4.12"
+              start_line: 1
+              end_line: 8
+          copyrights:
+          - statement: "(C) 4.12"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/junit/junit/4.12"
+              start_line: 3
+              end_line: 4
+          issues:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "NoStorage"
+            message: "Not storing scan result for 'Maven:junit:junit:4.12' because\
+              \ the raw result is null."
+            severity: "WARNING"
     - id: "Maven:org.apache.commons:commons-lang3:3.5"
       results:
       - provenance:
@@ -266,16 +286,32 @@ scanner:
               value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
               algorithm: "SHA-1"
         scanner:
-          name: "FileCounter"
-          version: "1.0"
-          configuration: ""
+          name: "TestScanner"
+          version: "1.0.0"
+          configuration: "testScannerConfig"
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          file_count: 168
-          package_verification_code: "bff2d5982a9b1985295c372b3ae2f90a7a860747"
-          licenses: []
-          copyrights: []
+          file_count: 1
+          package_verification_code: ""
+          licenses:
+          - license: "ASL-2"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/org.apache.commons/commons-lang3/3.5"
+              start_line: 1
+              end_line: 8
+          copyrights:
+          - statement: "(C) 3.5"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/org.apache.commons/commons-lang3/3.5"
+              start_line: 3
+              end_line: 4
+          issues:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "NoStorage"
+            message: "Not storing scan result for 'Maven:org.apache.commons:commons-lang3:3.5'\
+              \ because the raw result is null."
+            severity: "WARNING"
     - id: "Maven:org.apache.commons:commons-text:1.1"
       results:
       - provenance:
@@ -286,16 +322,32 @@ scanner:
               value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
               algorithm: "SHA-1"
         scanner:
-          name: "FileCounter"
-          version: "1.0"
-          configuration: ""
+          name: "TestScanner"
+          version: "1.0.0"
+          configuration: "testScannerConfig"
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          file_count: 80
-          package_verification_code: "78daf07d29c2b84b09766a98c1728b2daeeb59e6"
-          licenses: []
-          copyrights: []
+          file_count: 1
+          package_verification_code: ""
+          licenses:
+          - license: "ASL-2"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/org.apache.commons/commons-text/1.1"
+              start_line: 1
+              end_line: 8
+          copyrights:
+          - statement: "(C) 1.1"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/org.apache.commons/commons-text/1.1"
+              start_line: 3
+              end_line: 4
+          issues:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "NoStorage"
+            message: "Not storing scan result for 'Maven:org.apache.commons:commons-text:1.1'\
+              \ because the raw result is null."
+            severity: "WARNING"
     - id: "Maven:org.hamcrest:hamcrest-core:1.3"
       results:
       - provenance:
@@ -306,16 +358,32 @@ scanner:
               value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
               algorithm: "SHA-1"
         scanner:
-          name: "FileCounter"
-          version: "1.0"
-          configuration: ""
+          name: "TestScanner"
+          version: "1.0.0"
+          configuration: "testScannerConfig"
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          file_count: 47
-          package_verification_code: "a42897bec728695ae0e3ecdcc891ced065dae355"
-          licenses: []
-          copyrights: []
+          file_count: 1
+          package_verification_code: ""
+          licenses:
+          - license: "ASL-2"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/org.hamcrest/hamcrest-core/1.3"
+              start_line: 1
+              end_line: 8
+          copyrights:
+          - statement: "(C) 1.3"
+            location:
+              path: "/tmp/ort-ScannerFunTest-download5339913367497143930/Maven/org.hamcrest/hamcrest-core/1.3"
+              start_line: 3
+              end_line: 4
+          issues:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "NoStorage"
+            message: "Not storing scan result for 'Maven:org.hamcrest:hamcrest-core:1.3'\
+              \ because the raw result is null."
+            severity: "WARNING"
     storage_stats:
       num_reads: 5
       num_hits: 0
@@ -324,3 +392,5 @@ advisor: null
 evaluator: null
 labels:
   analyzed: "complete"
+  test: "true"
+  scan: "full"

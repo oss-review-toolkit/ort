@@ -46,7 +46,7 @@ class ExcelReporterFunTest : WordSpec({
             val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
             val ortResult = readOrtResult(
                 "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
-            )
+            ).copy(labels = emptyMap())
 
             val report = ExcelReporter().generateReport(ReporterInput(ortResult), outputDir).single()
             val actualWorkbook = WorkbookFactory.create(report)
