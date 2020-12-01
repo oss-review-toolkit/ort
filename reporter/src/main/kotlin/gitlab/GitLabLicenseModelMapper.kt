@@ -119,6 +119,6 @@ private fun Identifier.toPackageManagerName(): String =
         "PIP" -> "pip"
         "Yarn" -> "yarn"
         else -> type.toLowerCase().also {
-            log.info { "No mapping defined for package manager '$type', guessing '$it'" }
+            log.info { "No mapping defined for package manager '$type', guessing '$it'." }
         }
     }
