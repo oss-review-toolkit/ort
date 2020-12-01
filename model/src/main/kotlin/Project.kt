@@ -161,14 +161,15 @@ data class Project(
     /**
      * Return a [Package] representation of this [Project].
      */
-    fun toPackage() = Package(
-        id = id,
-        declaredLicenses = declaredLicenses,
-        description = "",
-        homepageUrl = homepageUrl,
-        binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = RemoteArtifact.EMPTY,
-        vcs = vcs,
-        vcsProcessed = vcsProcessed
-    )
+    fun toPackage() =
+        Package(
+            id = id,
+            declaredLicenses = declaredLicenses,
+            description = "",
+            homepageUrl = homepageUrl,
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = vcs,
+            vcsProcessed = vcsProcessed
+        )
 }
