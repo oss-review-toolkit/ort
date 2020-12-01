@@ -77,9 +77,11 @@ class NexusIq(
             val components = packages.map { pkg ->
                 val packageUrl = buildString {
                     append(pkg.purl)
-                    val purlType = pkg.id.getPurlType()
-                    if (purlType == Identifier.PurlType.MAVEN) append("?type=jar")
-                    if (purlType == Identifier.PurlType.PYPI) append("?extension=tar.gz")
+
+                    when (pkg.id.getPurlType()) {
+                        Identifier.PurlType.MAVEN.toString() -> append("?type=jar")
+                        Identifier.PurlType.PYPI.toString() -> append("?extension=tar.gz")
+                    }
                 }
 
                 NexusIqService.Component(packageUrl)
