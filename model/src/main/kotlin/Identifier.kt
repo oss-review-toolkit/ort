@@ -131,8 +131,7 @@ data class Identifier(
     fun toPurl() = "".takeIf { this == EMPTY }
         ?: buildString {
             append("pkg:")
-            val purlType = getPurlType()?.toString() ?: type.toLowerCase()
-            append(purlType)
+            append(getPurlType())
 
             if (namespace.isNotEmpty()) {
                 append('/')
@@ -147,23 +146,25 @@ data class Identifier(
         }
 
     /**
-     * Map a package manager type as to a package url using the package type.
-     * Returns null when package manager cannot be mapped to a package type.
+     * Map a package manager type to the String representation of the respective [PurlType].
+     * Falls back to the lower case package manager type if the [PurlType] cannot be determined.
+     *
+     * E.g. PIP to [PurlType.PYPI] or Gradle to [PurlType.MAVEN].
      */
-    fun getPurlType() = when (type.toLowerCase()) {
-        "bower" -> PurlType.BOWER
-        "bundler" -> PurlType.GEM
-        "cargo" -> PurlType.CARGO
-        "carthage", "pub", "spdx", "stack" -> null
-        "composer" -> PurlType.COMPOSER
-        "conan" -> PurlType.CONAN
-        "dep", "glide", "godep", "gomod" -> PurlType.GOLANG
-        "dotnet", "nuget" -> PurlType.NUGET
-        "gradle", "maven", "sbt" -> PurlType.MAVEN
-        "npm", "yarn" -> PurlType.NPM
-        "pip", "pipenv" -> PurlType.PYPI
-        else -> null
-    }
+    fun getPurlType() =
+        when (val lowerType = type.toLowerCase()) {
+            "bower" -> PurlType.BOWER
+            "bundler" -> PurlType.GEM
+            "cargo" -> PurlType.CARGO
+            "composer" -> PurlType.COMPOSER
+            "conan" -> PurlType.CONAN
+            "dep", "glide", "godep", "gomod" -> PurlType.GOLANG
+            "dotnet", "nuget" -> PurlType.NUGET
+            "gradle", "maven", "sbt" -> PurlType.MAVEN
+            "npm", "yarn" -> PurlType.NPM
+            "pip", "pipenv" -> PurlType.PYPI
+            else -> lowerType
+        }.toString()
 
     enum class PurlType(private val value: String) {
         ALPINE("alpine"),
