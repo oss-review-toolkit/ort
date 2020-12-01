@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 
 /**
- * The [Carthage](https://github.com/Carthage/Carthage) package manager for Swift.
+ * The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift.
  */
 class Carthage(
     name: String,
