@@ -210,11 +210,12 @@ open class PackageRule(
             object : RuleMatcher {
                 override val description = "isSpdxLicense($license)"
 
-                override fun matches() = when (license) {
-                    is SpdxLicenseIdExpression, is SpdxLicenseWithExceptionExpression ->
-                        license.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED)
-                    else -> false
-                }
+                override fun matches() =
+                    when (license) {
+                        is SpdxLicenseIdExpression, is SpdxLicenseWithExceptionExpression ->
+                            license.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED)
+                        else -> false
+                    }
             }
 
         fun issue(severity: Severity, message: String, howToFix: String) =

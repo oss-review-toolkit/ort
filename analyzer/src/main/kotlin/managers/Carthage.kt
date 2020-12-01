@@ -219,23 +219,24 @@ class Carthage(
         )
     }
 
-    private fun createPackageFromBinarySpec(binarySpec: Map<String, String>, id: String, revision: String) = Package(
-        id = Identifier(
-            type = managerName,
-            namespace = "",
-            name = id.substringAfterLast("/").removeSuffix(".json"),
-            version = revision
-        ),
-        declaredLicenses = sortedSetOf(),
-        description = "",
-        homepageUrl = "",
-        binaryArtifact = RemoteArtifact(
-            url = binarySpec[revision].orEmpty(),
-            hash = Hash.NONE
-        ),
-        sourceArtifact = RemoteArtifact.EMPTY,
-        vcs = VcsInfo.EMPTY
-    )
+    private fun createPackageFromBinarySpec(binarySpec: Map<String, String>, id: String, revision: String) =
+        Package(
+            id = Identifier(
+                type = managerName,
+                namespace = "",
+                name = id.substringAfterLast("/").removeSuffix(".json"),
+                version = revision
+            ),
+            declaredLicenses = sortedSetOf(),
+            description = "",
+            homepageUrl = "",
+            binaryArtifact = RemoteArtifact(
+                url = binarySpec[revision].orEmpty(),
+                hash = Hash.NONE
+            ),
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = VcsInfo.EMPTY
+        )
 
     private fun isFilePath(workingDir: String, path: String) =
         // This covers the two cases supported by Carthage, where either the path start with "file://" and points to a
