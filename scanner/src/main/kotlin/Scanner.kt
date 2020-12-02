@@ -25,6 +25,8 @@ import java.time.Instant
 import java.util.ServiceLoader
 
 import kotlin.time.measureTimedValue
+import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 
 import kotlinx.coroutines.runBlocking
 
@@ -60,15 +62,17 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
     /**
      * Scan the list of [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to
-     * download the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may
-     * contain multiple results for the same [Package] if the storage contains more than one result for the
-     * specification of this scanner.
+     * download the source code to for scanning. The scan operation can be executed in parallel to increase
+     * performance. [ScanResult]s are returned associated by the [Package]. They are passed to the [channel] provided
+     * when they become available. There may be multiple results for the same [Package] if the storage contains more
+     * than one result for the specification of this scanner.
      */
     protected abstract suspend fun scanPackages(
+        channel: Channel<Pair<Package, List<ScanResult>>>,
         packages: List<Package>,
         outputDirectory: File,
         downloadDirectory: File
-    ): Map<Package, List<ScanResult>>
+    )
 
     /**
      * Return the scanner-specific SPDX idstring for the given [license].
@@ -88,13 +92,12 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         downloadDirectory: File,
         skipExcluded: Boolean = false,
         labels: Map<String, String> = emptyMap()
-    ) {
+    ) = runBlocking {
         require(ortResultFile.isFile) {
             "The provided ORT result file '${ortResultFile.canonicalPath}' does not exist."
         }
 
         val startTime = Instant.now()
-
         val (ortResult, duration) = measureTimedValue { ortResultFile.readValue<OrtResult>() }
 
         log.perf {
@@ -111,35 +114,59 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         // Add the projects as packages to scan.
         val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
         val consolidatedReferencePackages = consolidatedProjects.keys.map { it.toCuratedPackage() }
-
         val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages(skipExcluded)).map { it.pkg }
-        val results = runBlocking { scanPackages(packagesToScan, outputDirectory, downloadDirectory) }
-        val resultContainers = results.map { (pkg, results) ->
-            ScanResultContainer(pkg.id, results)
-        }.toSortedSet()
 
-        // Add scan results from de-duplicated project packages to result.
-        consolidatedProjects.forEach { (referencePackage, deduplicatedPackages) ->
-            resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
-                deduplicatedPackages.forEach { deduplicatedPackage ->
-                    ortResult.getProject(deduplicatedPackage.id)?.let { project ->
-                        resultContainers += filterProjectScanResults(project, resultContainer)
-                    } ?: throw IllegalArgumentException(
-                        "Could not find project '${deduplicatedPackage.id.toCoordinates()}'."
-                    )
-                }
+        val channel = Channel<Pair<Package, List<ScanResult>>>()
+        async { scanPackages(channel, packagesToScan, outputDirectory, downloadDirectory) }
 
-                ortResult.getProject(referencePackage.id)?.let { project ->
-                    resultContainers.remove(resultContainer)
-                    resultContainers += filterProjectScanResults(project, resultContainer)
-                } ?: throw IllegalArgumentException("Could not find project '${referencePackage.id.toCoordinates()}'.")
-            }
+        for ((pkg, results) in channel) {
+            passResultsToBuilder(builder, ortResult, consolidatedProjects, pkg, results)
         }
 
-        resultContainers.forEach(builder::addScanResult)
         val endTime = Instant.now()
         builder.complete(startTime, endTime, Environment(), config, ScanResultsStorage.storage.stats, labels)
     }
+
+    /**
+     * Pass the [results] for the given [package][pkg] to the [builder]. If the result is for one of the projects
+     * in [consolidatedProjects], corresponding filtered results are produced for all sub packages making use of
+     * the given [ortResult].
+     */
+    private fun passResultsToBuilder(
+        builder: ScannerResultBuilder,
+        ortResult: OrtResult,
+        consolidatedProjects: Map<Package, List<Package>>,
+        pkg: Package,
+        results: List<ScanResult>
+    ) {
+        log.debug { "Received scan result for ${pkg.id.toCoordinates()}." }
+        val resultContainer = ScanResultContainer(pkg.id, results)
+        val deduplicatedPackages = consolidatedProjects[pkg]
+
+        if (deduplicatedPackages != null) {
+            deduplicatedPackages.forEach { deduplicatedPackage ->
+                builder.addScanResult(filterPackageScanResults(ortResult, deduplicatedPackage, resultContainer))
+            }
+
+            builder.addScanResult(filterPackageScanResults(ortResult, pkg, resultContainer))
+        } else {
+            builder.addScanResult(resultContainer)
+        }
+    }
+
+    /**
+     * Filter the scan results in the [resultContainer] for only license findings that are in a specific subdirectory
+     * identified by the [pkg] provided. The project of the package is looked up in the given [ortResult]. If it
+     * cannot be resolved, throw an [IllegalArgumentException].
+     */
+    private fun filterPackageScanResults(
+        ortResult: OrtResult,
+        pkg: Package,
+        resultContainer: ScanResultContainer
+    ): ScanResultContainer =
+        ortResult.getProject(pkg.id)?.let { project ->
+            filterProjectScanResults(project, resultContainer)
+        } ?: throw IllegalArgumentException("Could not find project '${pkg.id.toCoordinates()}'.")
 
     /**
      * Filter the scan results in the [resultContainer] for only license findings that are in the same subdirectory as
