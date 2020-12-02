@@ -288,6 +288,39 @@ class PackageCurationTest : WordSpec({
 
             curatedPkg.pkg.isModified shouldBe false
         }
+
+        "work with Ivy version ranges" {
+            val pkgVersionInsideRange = Package.EMPTY.copy(
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "androidx.constraintlayout",
+                    name = "constraintlayout",
+                    version = "2.0.3"
+                )
+            )
+
+            val pkgVersionOutsideRange = Package.EMPTY.copy(
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "androidx.constraintlayout",
+                    name = "constraintlayout",
+                    version = "2.0.5"
+                )
+            )
+
+            val curation = PackageCuration(
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "androidx.constraintlayout",
+                    name = "constraintlayout",
+                    version = "[2.0.1,2.0.4]"
+                ),
+                data = PackageCurationData()
+            )
+
+            curation.isApplicable(pkgVersionInsideRange.id) shouldBe true
+            curation.isApplicable(pkgVersionOutsideRange.id) shouldBe false
+        }
     }
 
     "Applying multiple curations" should {
