@@ -169,7 +169,6 @@ packages:
   id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
   is_project: true
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
-  purl: "pkg:maven/org.ossreviewtoolkit.gradle.example/lib@1.0.0"
   declared_licenses_processed: {}
   detected_licenses:
   - 0
@@ -256,7 +255,6 @@ packages:
   id: "Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0"
   is_project: true
   definition_file_path: "project/build.gradle"
-  purl: "pkg:maven/org.ossreviewtoolkit/nested-fake-project@1.0.0"
   declared_licenses:
   - 5
   declared_licenses_processed:

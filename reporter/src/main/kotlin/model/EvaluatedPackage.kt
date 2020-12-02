@@ -40,7 +40,8 @@ data class EvaluatedPackage(
     val id: Identifier,
     val isProject: Boolean,
     val definitionFilePath: String,
-    val purl: String = id.toPurl(),
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val purl: String? = null,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val declaredLicenses: List<LicenseId>,
     val declaredLicensesProcessed: EvaluatedProcessedDeclaredLicense,
