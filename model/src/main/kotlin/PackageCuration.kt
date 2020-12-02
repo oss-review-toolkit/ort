@@ -21,8 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import com.vdurmont.semver4j.Semver
-import com.vdurmont.semver4j.SemverException
+import com.vdurmont.semver4j.Requirement
 
 /**
  * Return true if this string equals the [other] string, or if either string is blank.
@@ -58,12 +57,7 @@ data class PackageCuration(
      * package with the given [identifier][pkgId].
      */
     private fun isApplicableIvyVersion(pkgId: Identifier) =
-        try {
-            val pkgIvyVersion = Semver(pkgId.version, Semver.SemverType.IVY)
-            pkgIvyVersion.satisfies(id.version)
-        } catch (e: SemverException) {
-            false
-        }
+        runCatching { Requirement.buildIvy(id.version).isSatisfiedBy(pkgId.version) }.getOrDefault(false)
 
     /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId]. The
