@@ -58,7 +58,7 @@ data class OrtConfiguration(
          */
         fun load(args: Map<String, String> = emptyMap(), configFile: File): OrtConfiguration {
             if (configFile.isFile) {
-                log.debug { "Using ORT configuration file at '$configFile'." }
+                log.info { "Using ORT configuration file at '$configFile'." }
             }
 
             val result = ConfigLoader.Builder()
