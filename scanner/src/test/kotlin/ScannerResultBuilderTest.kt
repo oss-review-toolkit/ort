@@ -22,6 +22,12 @@ package org.ossreviewtoolkit.scanner
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
+import java.io.IOException
 
 import java.io.File
 import java.nio.file.Files
@@ -33,6 +39,7 @@ import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -87,6 +94,91 @@ class ScannerResultBuilderTest : WordSpec({
             outputFile.isFile shouldBe true
 
             outputDir.safeDeleteRecursively(force = true)
+        }
+    }
+
+    "MultiScannerResultBuilder" should {
+        "initialize all child builders with an analyzer result" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            val analyzerResult = mockk<OrtResult>()
+            every { child1.initFromAnalyzerResult(analyzerResult) } just runs
+            every { child2.initFromAnalyzerResult(analyzerResult) } just runs
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.initFromAnalyzerResult(analyzerResult)
+
+            verify {
+                child1.initFromAnalyzerResult(analyzerResult)
+                child2.initFromAnalyzerResult(analyzerResult)
+            }
+        }
+
+        "pass a new scan result to all child builders" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            val resultContainer = mockk<ScanResultContainer>()
+            every { child1.addScanResult(resultContainer) } just runs
+            every { child2.addScanResult(resultContainer) } just runs
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.addScanResult(resultContainer)
+
+            verify {
+                child1.addScanResult(resultContainer)
+                child2.addScanResult(resultContainer)
+            }
+        }
+
+        "complete all child builders" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            val startTime = Instant.now().minusSeconds(180)
+            val endTime = Instant.now()
+            val environment = mockk<Environment>()
+            val scannerConfig = mockk<ScannerConfiguration>()
+            val stats = mockk<AccessStatistics>()
+            val labels = mapOf("test" to "true")
+            every { child1.complete(startTime, endTime, environment, scannerConfig, stats, labels) } just runs
+            every { child2.complete(startTime, endTime, environment, scannerConfig, stats, labels) } just runs
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.complete(startTime, endTime, environment, scannerConfig, stats, labels)
+
+            verify {
+                child1.complete(startTime, endTime, environment, scannerConfig, stats, labels)
+                child2.complete(startTime, endTime, environment, scannerConfig, stats, labels)
+            }
+        }
+
+        "close all child builders" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            every { child1.close() } just runs
+            every { child2.close() } just runs
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.close()
+
+            verify {
+                child1.close()
+                child2.close()
+            }
+        }
+
+        "close all child builders even if exceptions occur" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            every { child1.close() } throws IOException("Not closed!")
+            every { child2.close() } just runs
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.close()
+
+            verify {
+                child1.close()
+                child2.close()
+            }
         }
     }
 })

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner
 import com.fasterxml.jackson.core.JsonEncoding
 
 import java.io.File
+import java.io.IOException
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.AccessStatistics
@@ -32,6 +33,7 @@ import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 /**
@@ -200,5 +202,47 @@ class StreamingScannerResultBuilder(
     private fun File.safeMkdirsParent(): File {
         parentFile?.safeMkdirs()
         return this
+    }
+}
+
+/**
+ * A composite implementation of [ScannerResultBuilder], which forwards all invocations to its [childBuilders].
+ *
+ * By making use of this builder class, it is possible to generate multiple results for a single scan operation.
+ * This is needed for the scan command when multiple output formats are specified. Then, rather than creating a
+ * result once and saving it multiple times to different formats (which would again require to have the complete
+ * result in memory), multiple streaming builders can be configured writing their output files in parallel.
+ */
+class MultiScannerResultBuilder(
+    /** The list of child builders to manage by this multi builder. */
+    val childBuilders: List<ScannerResultBuilder>
+) : ScannerResultBuilder {
+    override fun initFromAnalyzerResult(analyzerResult: OrtResult) {
+        childBuilders.forEach { it.initFromAnalyzerResult(analyzerResult) }
+    }
+
+    override fun addScanResult(resultContainer: ScanResultContainer) {
+        childBuilders.forEach { it.addScanResult(resultContainer) }
+    }
+
+    override fun complete(
+        startTime: Instant,
+        endTime: Instant,
+        environment: Environment,
+        config: ScannerConfiguration,
+        storageStats: AccessStatistics,
+        labels: Map<String, String>
+    ) {
+        childBuilders.forEach { it.complete(startTime, endTime, environment, config, storageStats, labels) }
+    }
+
+    override fun close() {
+        childBuilders.forEach {
+            try {
+                it.close()
+            } catch (e: IOException) {
+                log.warn(e) { "Failed to close child builder $it." }
+            }
+        }
     }
 }
