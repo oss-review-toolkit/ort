@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 import org.ossreviewtoolkit.utils.encodeOr
-import org.ossreviewtoolkit.utils.percentEncode
 
 /**
  * A unique identifier for a software package.
@@ -118,73 +117,4 @@ data class Identifier(
      */
     fun toPath(separator: String = "/", emptyValue: String = "unknown"): String =
         components.joinToString(separator) { it.encodeOr(emptyValue) }
-
-    /**
-     * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
-     * the [Identifier]. Some issues remain with this specification
-     * (see e.g. https://github.com/package-url/purl-spec/issues/33).
-     *
-     * This implementation uses the package type as 'type' purl element as it is used
-     * [in the documentation](https://github.com/package-url/purl-spec/blob/master/README.rst#purl).
-     * E.g. 'maven' for Gradle projects.
-     */
-    fun toPurl() = "".takeIf { this == EMPTY }
-        ?: buildString {
-            append("pkg:")
-            append(getPurlType())
-
-            if (namespace.isNotEmpty()) {
-                append('/')
-                append(namespace.percentEncode())
-            }
-
-            append('/')
-            append(name.percentEncode())
-
-            append('@')
-            append(version.percentEncode())
-        }
-
-    /**
-     * Map a [Package]'s type to the string representation of the respective [PurlType], or fall back to the lower-case
-     * [Package]'s type if the [PurlType] cannot be determined.
-     */
-    fun getPurlType() =
-        when (val lowerType = type.toLowerCase()) {
-            "bower" -> PurlType.BOWER
-            "composer" -> PurlType.COMPOSER
-            "conan" -> PurlType.CONAN
-            "crate" -> PurlType.CARGO
-            "godep", "gomod" -> PurlType.GOLANG
-            "gem" -> PurlType.GEM
-            "maven" -> PurlType.MAVEN
-            "npm" -> PurlType.NPM
-            "nuget" -> PurlType.NUGET
-            "pypi" -> PurlType.PYPI
-            else -> lowerType
-        }.toString()
-
-    enum class PurlType(private val value: String) {
-        ALPINE("alpine"),
-        A_NAME("a-name"),
-        BOWER("bower"),
-        CARGO("cargo"),
-        COCOAPODS("cocoapods"),
-        COMPOSER("composer"),
-        CONAN("conan"),
-        CONDA("conda"),
-        CRAN("cran"),
-        DEBIAN("debian"),
-        DRUPAL("drupal"),
-        GEM("gem"),
-        GOLANG("golang"),
-        MAVEN("maven"),
-        NPM("npm"),
-        NUGET("nuget"),
-        PECOFF("pecoff"),
-        PYPI("pypi"),
-        RPM("rpm");
-
-        override fun toString() = value
-    }
 }

@@ -30,6 +30,7 @@ import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldNotStartWith
 import io.kotest.matchers.string.shouldStartWith
 
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.containExactly
 
 class IdentifierTest : WordSpec({

@@ -32,12 +32,14 @@ import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.BasicAuthConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.PurlType
+import org.ossreviewtoolkit.model.utils.getPurlType
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.nexusiq.NexusIqService
 import org.ossreviewtoolkit.utils.NamedThreadFactory
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -84,8 +86,8 @@ class NexusIq(
                     append(pkg.purl)
 
                     when (pkg.id.getPurlType()) {
-                        Identifier.PurlType.MAVEN.toString() -> append("?type=jar")
-                        Identifier.PurlType.PYPI.toString() -> append("?extension=tar.gz")
+                        PurlType.MAVEN.toString() -> append("?type=jar")
+                        PurlType.PYPI.toString() -> append("?extension=tar.gz")
                     }
                 }
 

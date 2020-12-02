@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.formatSizeInMib
