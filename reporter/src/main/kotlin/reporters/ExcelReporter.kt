@@ -113,7 +113,7 @@ class ExcelReporter : Reporter {
         val workbook = XSSFWorkbook()
 
         defaultStyle = workbook.createCellStyle().apply {
-            setVerticalAlignment(VerticalAlignment.TOP)
+            verticalAlignment = VerticalAlignment.TOP
             wrapText = true
 
             setBorder(BorderStyle.THIN)
@@ -142,25 +142,25 @@ class ExcelReporter : Reporter {
         successStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
             setFillForegroundColor(successColor)
-            setFillPattern(FillPatternType.SOLID_FOREGROUND)
+            fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         warningStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
             setFillForegroundColor(warningColor)
-            setFillPattern(FillPatternType.SOLID_FOREGROUND)
+            fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         errorStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
             setFillForegroundColor(errorColor)
-            setFillPattern(FillPatternType.SOLID_FOREGROUND)
+            fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         excludedStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
             setFillForegroundColor(excludedColor)
-            setFillPattern(FillPatternType.SOLID_FOREGROUND)
+            fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         creationHelper = workbook.creationHelper
@@ -487,10 +487,10 @@ internal fun createUniqueSheetName(workbook: XSSFWorkbook, name: String): String
 }
 
 private fun XSSFCellStyle.setBorder(borderStyle: BorderStyle) {
-    setBorderTop(borderStyle)
-    setBorderRight(borderStyle)
-    setBorderBottom(borderStyle)
-    setBorderLeft(borderStyle)
+    borderTop = borderStyle
+    borderRight = borderStyle
+    borderBottom = borderStyle
+    borderLeft = borderStyle
 }
 
 private fun XSSFCellStyle.setBorderColor(borderColor: XSSFColor) {
