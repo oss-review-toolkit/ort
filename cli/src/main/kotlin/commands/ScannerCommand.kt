@@ -37,6 +37,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.GlobalOptions
@@ -44,10 +46,11 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.InMemoryScannerResultBuilder
 import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.scanner.MultiScannerResultBuilder
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.StreamingScannerResultBuilder
 import org.ossreviewtoolkit.scanner.scanners.ScanCode
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
@@ -171,26 +174,44 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         val config = globalOptionsForSubcommands.config
         val scanner = configureScanner(config.scanner)
 
-        val ortResult = if (input.isFile) {
-            val builder = InMemoryScannerResultBuilder()
+        if (input.isFile) {
+            scanAnalyzerResult(scanner, nativeOutputDir, outputFiles)
+        } else {
+            scanPath(scanner, nativeOutputDir, outputFiles)
+        }
+    }
+
+    /**
+     * Execute the scan operation if an input file with analyzer results has been provided.
+     */
+    private fun scanAnalyzerResult(scanner: Scanner, nativeOutputDir: File, outputFiles: Set<File>) {
+        val childBuilders = outputFiles.map { StreamingScannerResultBuilder(it) }
+        MultiScannerResultBuilder(childBuilders).use { builder ->
             scanner.scanOrtResult(
                 builder = builder,
                 ortResultFile = input,
                 outputDirectory = nativeOutputDir,
                 downloadDirectory = downloadDir ?: outputDir.resolve("downloads"),
-                skipExcluded = skipExcluded
+                skipExcluded = skipExcluded,
+                labels
             )
-            builder.result()
-        } else {
-            require(scanner is LocalScanner) {
-                "To scan local files the chosen scanner must be a local scanner."
-            }
 
-            scanner.scanPath(
-                inputPath = input,
-                outputDirectory = nativeOutputDir
-            )
-        }.mergeLabels(labels)
+            checkResultStatus(builder.hasResults(), builder.hasIssues())
+        }
+    }
+
+    /**
+     * Execute the scan operation if a local path is to be scanned.
+     */
+    private fun scanPath(scanner: Scanner, nativeOutputDir: File, outputFiles: Set<File>) {
+        require(scanner is LocalScanner) {
+            "To scan local files the chosen scanner must be a local scanner."
+        }
+
+        val ortResult = scanner.scanPath(
+            inputPath = input,
+            outputDirectory = nativeOutputDir
+        ).mergeLabels(labels)
 
         outputDir.safeMkdirs()
 
@@ -205,12 +226,20 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
         val scanResults = ortResult.scanner?.results
 
-        if (scanResults == null) {
+        checkResultStatus(scanResults != null, scanResults?.hasIssues ?: false)
+    }
+
+    /**
+     * Do some checks on the outcome of the scan operation. Check whether [results have been found][hasResults] and if
+     * [issues were detected][hasIssues]. If necessary, exit with an error code.
+     */
+    private fun checkResultStatus(hasResults: Boolean, hasIssues: Boolean) {
+        if (!hasResults) {
             println("There was an error creating the scan results.")
             throw ProgramResult(1)
         }
 
-        if (scanResults.hasIssues) {
+        if (hasIssues) {
             println("The scan result contains issues.")
             throw ProgramResult(2)
         }
