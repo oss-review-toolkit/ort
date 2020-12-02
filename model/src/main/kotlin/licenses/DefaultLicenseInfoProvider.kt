@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
  */
 class DefaultLicenseInfoProvider(
     val ortResult: OrtResult,
-    val packageConfigurationProvider: PackageConfigurationProvider
+    private val packageConfigurationProvider: PackageConfigurationProvider
 ) : LicenseInfoProvider {
     private val licenseInfo: ConcurrentMap<Identifier, LicenseInfo> = ConcurrentHashMap()
 
