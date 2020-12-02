@@ -75,6 +75,17 @@ interface ScannerResultBuilder : AutoCloseable {
         storageStats: AccessStatistics,
         labels: Map<String, String>
     )
+
+    /**
+     * Return a flag whether results have been added to this builder. This can be used as an indicator whether a
+     * scan operation was successful.
+     */
+    fun hasResults(): Boolean
+
+    /**
+     * Return a flag whether at least one result added to this builder has issues set.
+     */
+    fun hasIssues(): Boolean
 }
 
 /**
@@ -118,6 +129,10 @@ class InMemoryScannerResultBuilder : ScannerResultBuilder {
         )
     }
 
+    override fun hasResults(): Boolean = scanResults.isNotEmpty()
+
+    override fun hasIssues(): Boolean = scanResults.any { it.hasIssues() }
+
     override fun close() {
         // Nothing to do here.
     }
@@ -148,6 +163,12 @@ class StreamingScannerResultBuilder(
     /** Stores the labels from the analyzer result. */
     private var analyzerLabels: Map<String, String>? = null
 
+    /** Records whether this builder was passed a result. */
+    private var resultsAdded = false
+
+    /** Records whether a result with issues has been added to this builder. */
+    private var issuesFound = false
+
     override fun initFromAnalyzerResult(analyzerResult: OrtResult) {
         analyzerLabels = analyzerResult.labels
 
@@ -166,6 +187,8 @@ class StreamingScannerResultBuilder(
 
     override fun addScanResult(resultContainer: ScanResultContainer) {
         mapper.writeValue(generator, resultContainer)
+        resultsAdded = true
+        issuesFound = issuesFound || resultContainer.hasIssues()
     }
 
     override fun complete(
@@ -191,6 +214,10 @@ class StreamingScannerResultBuilder(
             writeEndObject()
         }
     }
+
+    override fun hasResults(): Boolean = resultsAdded
+
+    override fun hasIssues(): Boolean = issuesFound
 
     override fun close() {
         generator.close()
@@ -236,6 +263,10 @@ class MultiScannerResultBuilder(
         childBuilders.forEach { it.complete(startTime, endTime, environment, config, storageStats, labels) }
     }
 
+    override fun hasResults(): Boolean = childBuilders.any { it.hasResults() }
+
+    override fun hasIssues(): Boolean = childBuilders.any { it.hasIssues() }
+
     override fun close() {
         childBuilders.forEach {
             try {
@@ -246,3 +277,9 @@ class MultiScannerResultBuilder(
         }
     }
 }
+
+/**
+ * Return a flag whether the [ScanResultContainer] contains at least one result with an issue.
+ */
+private fun ScanResultContainer.hasIssues(): Boolean =
+    results.any { it.summary.issues.isNotEmpty() }

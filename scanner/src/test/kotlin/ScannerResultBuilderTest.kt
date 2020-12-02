@@ -27,9 +27,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import java.io.IOException
 
 import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 import java.time.Instant
 
@@ -37,9 +37,15 @@ import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -47,6 +53,38 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 class ScannerResultBuilderTest : WordSpec({
+    "InMemoryScannerResultBuilder" should {
+        "initially not have results" {
+            val builder = InMemoryScannerResultBuilder()
+
+            builder.hasResults() shouldBe false
+        }
+
+        "correctly report that results have been added" {
+            val builder = InMemoryScannerResultBuilder()
+            builder.initFromAnalyzerResult(OrtResult.EMPTY)
+            builder.addScanResult(ScanResultContainer(id, emptyList()))
+
+            builder.hasResults() shouldBe true
+        }
+
+        "correctly report that there are no issues" {
+            val builder = InMemoryScannerResultBuilder()
+
+            builder.hasIssues() shouldBe false
+
+            builder.addScanResult(ScanResultContainer(id, emptyList()))
+            builder.hasIssues() shouldBe false
+        }
+
+        "correctly report that there are some issues" {
+            val builder = InMemoryScannerResultBuilder()
+            builder.addScanResult(ScanResultContainer(id, listOf(resultWithIssues())))
+
+            builder.hasIssues() shouldBe true
+        }
+    }
+
     "StreamingScannerResultBuilder" should {
         "handle null fields in the result from the analyzer" {
             val outputFile = Files.createTempFile("scan-result", ".yml").toFile()
@@ -94,6 +132,35 @@ class ScannerResultBuilderTest : WordSpec({
             outputFile.isFile shouldBe true
 
             outputDir.safeDeleteRecursively(force = true)
+        }
+
+        "initially not have results" {
+            val builder = StreamingScannerResultBuilder(createTempOutputFile())
+
+            builder.hasResults() shouldBe false
+        }
+
+        "correctly report that it has results" {
+            val builder = StreamingScannerResultBuilder(createTempOutputFile())
+            builder.addScanResult(ScanResultContainer(id, emptyList()))
+
+            builder.hasResults() shouldBe true
+        }
+
+        "correctly report that there are no issues" {
+            val builder = StreamingScannerResultBuilder(createTempOutputFile())
+
+            builder.hasIssues() shouldBe false
+
+            builder.addScanResult(ScanResultContainer(id, emptyList()))
+            builder.hasIssues() shouldBe false
+        }
+
+        "correctly report that there are some issues" {
+            val builder = StreamingScannerResultBuilder(createTempOutputFile())
+            builder.addScanResult(ScanResultContainer(id, listOf(resultWithIssues())))
+
+            builder.hasIssues() shouldBe true
         }
     }
 
@@ -180,5 +247,74 @@ class ScannerResultBuilderTest : WordSpec({
                 child2.close()
             }
         }
+
+        "return false if no child builder has results" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            every { child1.hasResults() } returns false
+            every { child2.hasResults() } returns false
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.hasResults() shouldBe false
+        }
+
+        "return true if any child builder has results" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            every { child1.hasResults() } returns true
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.hasResults() shouldBe true
+        }
+
+        "return false if no child builder has issues" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            every { child1.hasIssues() } returns false
+            every { child2.hasIssues() } returns false
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.hasIssues() shouldBe false
+        }
+
+        "return true if any child builder has issues" {
+            val child1 = mockk<ScannerResultBuilder>()
+            val child2 = mockk<ScannerResultBuilder>()
+            every { child1.hasIssues() } returns true
+            val builder = MultiScannerResultBuilder(listOf(child1, child2))
+
+            builder.hasIssues() shouldBe true
+        }
     }
 })
+
+/** A test identifier. */
+private val id = Identifier("GIT", "test", "name", "1.0")
+
+/**
+ * Return a [ScanResult] that reports an issue.
+ */
+private fun resultWithIssues(): ScanResult {
+    val summary = ScanSummary(
+        startTime = Instant.now(),
+        endTime = Instant.now(),
+        fileCount = 42,
+        packageVerificationCode = "foo",
+        licenseFindings = sortedSetOf(),
+        copyrightFindings = sortedSetOf(),
+        issues = listOf(OrtIssue(source = "test", message = "an issue"))
+    )
+    return ScanResult(
+        Provenance(),
+        ScannerDetails("testScanner", "0815", "aConfig"),
+        summary
+    )
+}
+
+/**
+ * Create a temporary file to be used as output file for a streaming builder.
+ */
+private fun createTempOutputFile(): File =
+    Files.createTempFile("scan-result", ".yml").toFile().apply {
+        deleteOnExit()
+    }
