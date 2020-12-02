@@ -26,14 +26,12 @@ import org.ossreviewtoolkit.utils.ScriptRunner
 /**
  * Provides how-to-fix texts in Markdown format for any given [OrtIssue].
  */
-interface HowToFixTextProvider {
+fun interface HowToFixTextProvider {
     companion object {
         /**
          * A [HowToFixTextProvider] which returns null for any given [OrtIssue].
          */
-        val NONE = object : HowToFixTextProvider {
-            override fun getHowToFixText(issue: OrtIssue): String? = null
-        }
+        val NONE = HowToFixTextProvider { null }
 
         /**
          * Return the [HowToFixTextProvider] which in-turn has to be returned by the given [script].
