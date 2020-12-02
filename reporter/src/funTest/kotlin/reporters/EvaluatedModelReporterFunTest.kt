@@ -26,20 +26,12 @@ import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
-import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.readOrtResult
-
-private val HOW_TO_FIX_TEXT_PROVIDER: HowToFixTextProvider = object : HowToFixTextProvider {
-    override fun getHowToFixText(issue: OrtIssue): String? {
-        return "Some how to fix text.".trimIndent()
-    }
-}
 
 class EvaluatedModelReporterFunTest : WordSpec({
     "EvaluatedModelReporter" should {
@@ -67,7 +59,7 @@ private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResul
     val input = ReporterInput(
         ortResult = ortResult,
         resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions()),
-        howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
+        howToFixTextProvider = { "Some how to fix text." }
     )
 
     val outputDir = createTempDirectory("$ORT_NAME-${EvaluatedModelReporterFunTest::class.simpleName}").toFile().apply {
