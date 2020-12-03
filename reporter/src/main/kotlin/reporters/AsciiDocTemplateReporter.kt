@@ -38,8 +38,6 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  * with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
  * For each Freemarker template provided using the options described below a separate intermediate file is created
  * that can be processed by AsciidoctorJ. If no options are provided the "default" template is used.
- * The name of the template id or template path (without extension) is used for the intermediate file,
- * so be careful to not use two different templates with the same name.
  *
  * After the intermediate files are generated, they are processed by  AsciidoctorJ PDF.
  * A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or images displayed in the PDF can
