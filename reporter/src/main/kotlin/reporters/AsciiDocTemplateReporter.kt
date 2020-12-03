@@ -82,13 +82,14 @@ class AsciiDocTemplateReporter : Reporter {
     override val reporterName = "AsciiDocTemplate"
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+        val templateOptions = options.toMutableMap()
         val asciidoctorAttributes = AttributesBuilder.attributes()
 
         // Also see https://github.com/asciidoctor/asciidoctorj/issues/438 for supported backends.
-        val backend = options[OPTION_BACKEND] ?: BACKEND_PDF
+        val backend = templateOptions.remove(OPTION_BACKEND) ?: BACKEND_PDF
 
         if (backend.equals(BACKEND_PDF, ignoreCase = true)) {
-            options[OPTION_PDF_THEME_PATH]?.let { themePath ->
+            templateOptions.remove(OPTION_PDF_THEME_PATH)?.let { themePath ->
                 File(themePath).also {
                     require(it.isFile) { "Could not find pdf-theme file at '${it.absolutePath}'." }
                 }
@@ -98,7 +99,7 @@ class AsciiDocTemplateReporter : Reporter {
         }
 
         val asciiDocTempDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
-        val asciiDocFiles = templateProcessor.processTemplates(input, asciiDocTempDir, options)
+        val asciiDocFiles = templateProcessor.processTemplates(input, asciiDocTempDir, templateOptions)
 
         val outputFiles = mutableListOf<File>()
 
