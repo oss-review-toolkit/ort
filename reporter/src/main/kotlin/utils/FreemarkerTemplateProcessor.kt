@@ -51,8 +51,8 @@ class FreemarkerTemplateProcessor(
     private val templatesResourceDirectory: String
 ) {
     companion object {
-        private const val OPTION_TEMPLATE_ID = "template.id"
-        private const val OPTION_TEMPLATE_PATH = "template.path"
+        const val OPTION_TEMPLATE_ID = "template.id"
+        const val OPTION_TEMPLATE_PATH = "template.path"
     }
 
     /**
