@@ -1,6 +1,6 @@
-# AsciidocTemplateReporter
+# AsciiDocTemplateReporter
 
-The AsciidocTemplateReporter creates PDF files using a combination of [Apache Freemarker][1] templates and [Asciidoc][2]
+The AsciiDocTemplateReporter creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
 with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
 For each Freemarker template provided using the options described below a separate intermediate file is created that can be
 processed by AsciidoctorJ. If no options are provided the "default" template is used.
@@ -19,13 +19,13 @@ the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 * `template.id`: A comma-separated list of IDs of templates provided by ORT. Currently only the "default" template is
                  available.
 * `template.path`: A comma-separated list of paths to template files provided by the user.
-* `backend`: The name of the Asciidoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
-             fake backend is used to indicate that no backend should be used but the Asciidoc files should be kept.
-* `pdf-theme.path`: A path to an Asciidoc PDF theme file. Only used with the "pdf" backend.
+* `backend`: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
+             fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
+* `pdf-theme.path`: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
 
 ## Command Line
 
-To use the _AsciidocAttributionDocumentReporter_ report format with a Freemarker template and an Asciidoc PDF theme,
+To use the _AsciiDocAttributionDocumentReporter_ report format with a Freemarker template and an AsciiDoc PDF theme,
 pass it as the template.id and pdf-them.path, respectively, via the --report-option (or -O) option to the _report_ 
 command:
 
@@ -33,9 +33,9 @@ command:
 cli/build/install/ort/bin/ort report
   -i [scanner-output-dir]/scanner-result.yml
   -o [reporter-output-dir]
-  -f Asciidoc
-  --report-option AsciidocTemplate=template.id=[template-id]
-  --report-option AsciidocTemplate=pdf-theme.path=pdf-theme.yml
+  -f AsciiDoc
+  --report-option AsciiDocTemplate=template.id=[template-id]
+  --report-option AsciiDocTemplate=pdf-theme.path=pdf-theme.yml
 ```
 
 [1]: https://freemarker.apache.org

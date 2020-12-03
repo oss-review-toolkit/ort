@@ -579,9 +579,9 @@ following formats are supported (reporter names are case-insensitive):
 
 * [Amazon OSS Attribution Builder](https://github.com/amzn/oss-attribution-builder) document (*experimental*, `-f AmazonOssAttributionBuilder`)
 * [Antenna Attribution Document (PDF)](./docs/reporters/AntennaAttributionDocumentReporter.md) (`-f AntennaAttributionDocument`)
-* [Asciidoc Template](docs/reporters/AsciidocTemplateReporter.md) (`-f AsciidocTemplate`)
-  * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [Asciidoc](https://asciidoc.org/)
-  * Supports all Asciidoc backends
+* [AsciiDoc Template](docs/reporters/AsciiDocTemplateReporter.md) (`-f AsciiDocTemplate`)
+  * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
+  * Supports all AsciiDoc backends
   * PDF style customizable with Asciidoctor [PDF themes](https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)

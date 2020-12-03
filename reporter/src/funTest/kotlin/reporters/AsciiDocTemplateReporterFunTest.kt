@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
 
-class AsciidocTemplateReporterFunTest : StringSpec({
+class AsciiDocTemplateReporterFunTest : StringSpec({
     "PDF output is created successfully from an existing result and default template" {
         val report = generateReport(ORT_RESULT)
 
@@ -53,8 +53,8 @@ private fun generateReport(
 ): List<File> {
     val input = ReporterInput(ortResult)
 
-    val outputDir = createTempDirectory("$ORT_NAME-${AsciidocTemplateReporterFunTest::class.simpleName}")
+    val outputDir = createTempDirectory("$ORT_NAME-${AsciiDocTemplateReporterFunTest::class.simpleName}")
         .toFile().apply { deleteOnExit() }
 
-    return AsciidocTemplateReporter().generateReport(input, outputDir, options)
+    return AsciiDocTemplateReporter().generateReport(input, outputDir, options)
 }
