@@ -48,6 +48,11 @@ import org.ossreviewtoolkit.utils.showStackTrace
 import retrofit2.Call
 
 /**
+ * The number of packages to request from Nexus IQ in one request.
+ */
+private const val REQUEST_CHUNK_SIZE = 100
+
+/**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
 class NexusIq(
@@ -88,11 +93,19 @@ class NexusIq(
             }
 
             try {
-                val componentDetails =
-                    execute(withContext(advisorDispatcher) {
-                        service.getComponentDetails(NexusIqService.ComponentsWrapper(components))
-                    }).componentDetails
-                        .associateBy { it.component.packageUrl.substringBefore("?") }
+                val componentDetails = mutableMapOf<String, NexusIqService.ComponentDetails>()
+
+                components.chunked(REQUEST_CHUNK_SIZE).forEach { component ->
+                    val serviceCall = withContext(advisorDispatcher) {
+                        service.getComponentDetails(NexusIqService.ComponentsWrapper(component))
+                    }
+
+                    val requestResults = execute(serviceCall).componentDetails.associateBy {
+                        it.component.packageUrl.substringBefore("?")
+                    }
+
+                    componentDetails += requestResults
+                }
 
                 val endTime = Instant.now()
 
