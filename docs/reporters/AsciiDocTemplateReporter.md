@@ -23,9 +23,8 @@ the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 
 ## Command Line
 
-To use the _AsciiDocAttributionDocumentReporter_ report format with a Freemarker template and an AsciiDoc PDF theme,
-pass it as the template.id and pdf-them.path, respectively, via the --report-option (or -O) option to the _report_ 
-command:
+To use the _AsciiDocTemplateReporter_ report format with a Freemarker template and an AsciiDoc PDF theme, pass it as
+the template.id and pdf-them.path, respectively, via the --report-option (or -O) option to the _report_ command:
 
 ```bash
 cli/build/install/ort/bin/ort report
