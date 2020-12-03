@@ -53,6 +53,8 @@ class FreemarkerTemplateProcessor(
     companion object {
         const val OPTION_TEMPLATE_ID = "template.id"
         const val OPTION_TEMPLATE_PATH = "template.path"
+
+        const val DEFAULT_TEMPLATE_ID = "default"
     }
 
     /**
@@ -91,7 +93,7 @@ class FreemarkerTemplateProcessor(
 
         val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(",").orEmpty()
         val templateIds = options[OPTION_TEMPLATE_ID]?.split(",")
-            ?: if (templatePaths.isEmpty()) listOf("default") else emptyList()
+            ?: if (templatePaths.isEmpty()) listOf(DEFAULT_TEMPLATE_ID) else emptyList()
 
         val templateFiles = templatePaths.map { path ->
             File(path).expandTilde().also {
