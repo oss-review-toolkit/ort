@@ -138,6 +138,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Run vulnerability d
         }
 
         if (advisorResults.hasIssues) {
+            println("The advisor result contains issues.")
             throw ProgramResult(2)
         }
     }
