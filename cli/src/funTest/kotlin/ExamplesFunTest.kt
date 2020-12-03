@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
 import org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -144,25 +143,6 @@ class ExamplesFunTest : StringSpec() {
             result.violations shouldHaveSize 2
             val failedRules = result.violations.map { it.rule }
             failedRules shouldContainExactlyInAnyOrder listOf("UNHANDLED_LICENSE", "COPYLEFT_LIMITED_IN_SOURCE")
-        }
-
-        "PDF files are valid Antenna templates" {
-            val outputDir = createTempDirectory("$ORT_NAME-${ExamplesFunTest::class.simpleName}").toFile().apply {
-                deleteOnExit()
-            }
-
-            takeExampleFile("back.pdf")
-            takeExampleFile("content.pdf")
-            takeExampleFile("copyright.pdf")
-            takeExampleFile("cover.pdf")
-
-            val report = AntennaAttributionDocumentReporter().generateReport(
-                ReporterInput(OrtResult.EMPTY),
-                outputDir,
-                mapOf("template.path" to examplesDir.resolve("AntennaAttributionDocumentReporter").path)
-            )
-
-            report should beEmpty()
         }
 
         "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {

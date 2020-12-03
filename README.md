@@ -578,7 +578,6 @@ The _reporter_ generates a wide variety of documents in different formats from O
 following formats are supported (reporter names are case-insensitive):
 
 * [Amazon OSS Attribution Builder](https://github.com/amzn/oss-attribution-builder) document (*experimental*, `-f AmazonOssAttributionBuilder`)
-* [Antenna Attribution Document (PDF)](./docs/reporters/AntennaAttributionDocumentReporter.md) (`-f AntennaAttributionDocument`)
 * [AsciiDoc Template](docs/reporters/AsciiDocTemplateReporter.md) (`-f AsciiDocTemplate`)
   * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
   * Supports all AsciiDoc backends
