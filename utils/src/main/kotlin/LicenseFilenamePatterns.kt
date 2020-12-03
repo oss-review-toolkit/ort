@@ -19,7 +19,8 @@
 
 package org.ossreviewtoolkit.utils
 
-private fun List<String>.generateCapitalizationVariants() = flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
+private fun Collection<String>.generateCapitalizationVariants() =
+    flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
 
 object LicenseFilenamePatterns {
     /**
