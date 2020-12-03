@@ -31,7 +31,7 @@ Excluded projects and packages are ignored.
 :sectnums:
 :toc: preamble
 
-= Attribution Document
+= Disclosure Document
 :author-name: OSS Review Toolkit
 [#assign now = .now]
 :revdate: ${now?date?iso_local}
