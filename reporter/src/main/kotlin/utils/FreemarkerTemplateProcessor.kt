@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.log
 class FreemarkerTemplateProcessor(
     private val filePrefix: String,
     private val fileExtension: String,
-    private val templateDirectory: String
+    private val templatesResourceDirectory: String
 ) {
     companion object {
         private const val OPTION_TEMPLATE_ID = "template.id"
@@ -84,7 +84,7 @@ class FreemarkerTemplateProcessor(
             templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
             templateLoader = ClassTemplateLoader(
                 this@FreemarkerTemplateProcessor.javaClass.classLoader,
-                "templates/$templateDirectory"
+                "templates/$templatesResourceDirectory"
             )
             wrapUncheckedExceptions = true
         }
