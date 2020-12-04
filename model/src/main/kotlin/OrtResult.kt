@@ -112,32 +112,49 @@ data class OrtResult(
         result
     }
 
-    private data class PackageEntry(val curatedPackage: CuratedPackage, val isExcluded: Boolean)
+    private data class PackageEntry(val curatedPackage: CuratedPackage?, val isExcluded: Boolean)
 
     private val packages: Map<Identifier, PackageEntry> by lazy {
         log.info { "Computing excluded packages which may take a while..." }
 
+        val projects = getProjects()
+        val allPackages = mutableSetOf<Identifier>()
         val includedPackages = mutableSetOf<Identifier>()
-        getProjects().forEach { project ->
+        projects.forEach { project ->
             project.scopes.forEach { scope ->
                 val isScopeExcluded = getExcludes().isScopeExcluded(scope)
 
+                val dependencies = scope.collectDependencies()
+                allPackages += dependencies
+
                 if (!isProjectExcluded(project.id) && !isScopeExcluded) {
-                    val dependencies = scope.collectDependencies()
-                    includedPackages.addAll(dependencies)
+                    includedPackages += dependencies
                 }
             }
         }
 
-        val result = getPackages().associateBy(
+        val packages = getPackages()
+        val result = getPackages().associateByTo(
+            mutableMapOf(),
             { curatedPackage -> curatedPackage.pkg.id },
             { curatedPackage ->
                 PackageEntry(
                     curatedPackage = curatedPackage,
-                    isExcluded = !includedPackages.contains(curatedPackage.pkg.id)
+                    isExcluded = curatedPackage.pkg.id !in includedPackages
                 )
             }
         )
+
+        // Sometimes as a result of an analyzer issue a dependency is not added to the list of packages in the analyzer
+        // result but appears in the dependency tree. We cannot provide package metadata for those, but we can calculate
+        // if the dependency is excluded.
+        val unhandledPackages = allPackages - projects.map { it.id } - packages.map { it.pkg.id }
+        unhandledPackages.associateWithTo(result) { id ->
+            PackageEntry(
+                curatedPackage = null,
+                isExcluded = id !in includedPackages
+            )
+        }
 
         log.info { "Computing excluded packages done." }
         result
@@ -306,16 +323,7 @@ data class OrtResult(
             return false
         }
 
-        val pkg = getPackage(id)
-        if (pkg != null && !packages.getValue(id).isExcluded) {
-            return false
-        }
-
-        if (project == null && pkg == null) {
-            return true
-        }
-
-        return project != null || pkg != null
+        return packages[id]?.isExcluded ?: false
     }
 
     /**
