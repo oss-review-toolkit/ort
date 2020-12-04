@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.utils
 
-private fun Collection<String>.generateCapitalizationVariants() =
-    flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
-
 object LicenseFilenamePatterns {
     /**
      * A list of globs that match default license file names.
@@ -35,26 +32,26 @@ object LicenseFilenamePatterns {
         "*.license",
         "unlicence",
         "unlicense"
-    ).generateCapitalizationVariants()
+    )
 
     /**
-     * A list of globs that match default patent file names.
+     * A list of globs that match default patent file names. The patterns are supposed to be used case-insensitively.
      */
     val PATENT_FILENAMES = listOf(
         "patents"
-    ).generateCapitalizationVariants()
+    )
 
     /**
      * A list of globs that match files that often define the root license of a project, but are no license files and
-     * are therefore not contained in [LICENSE_FILENAMES].
+     * are therefore not contained in [LICENSE_FILENAMES]. The patterns are supposed to be used case-insensitively.
      */
     val ROOT_LICENSE_FILENAMES = listOf(
         "readme*"
-    ).generateCapitalizationVariants()
+    )
 
     /**
      * A list of globs that match all kind of license file names, equaling the union of [LICENSE_FILENAMES],
-     * [PATENT_FILENAMES] and [ROOT_LICENSE_FILENAMES].
+     * [PATENT_FILENAMES] and [ROOT_LICENSE_FILENAMES]. The patterns are supposed to be used case-insensitively.
      */
     val ALL_LICENSE_FILENAMES = LICENSE_FILENAMES + PATENT_FILENAMES + ROOT_LICENSE_FILENAMES
 }
