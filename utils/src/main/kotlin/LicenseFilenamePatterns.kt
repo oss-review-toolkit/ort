@@ -57,49 +57,4 @@ object LicenseFilenamePatterns {
      * [PATENT_FILENAMES] and [ROOT_LICENSE_FILENAMES].
      */
     val ALL_LICENSE_FILENAMES = LICENSE_FILENAMES + PATENT_FILENAMES + ROOT_LICENSE_FILENAMES
-
-    /**
-     * Return glob patterns which match all files which may contain license information in [directory] or within its
-     * ancestor directories.
-     */
-    fun getLicenseFileGlobsForDirectory(directory: String): List<String> =
-        getFileGlobsForDirectoryAndAncestors(directory, ALL_LICENSE_FILENAMES)
-
-    /**
-     * Return a glob pattern which matches files in [directory], in any ancestor directory of [directory] and
-     * [optionally][matchSubDirs] recursively in any sub-directory of directory, if the filename matches the
-     * [filenamePattern].
-     */
-    internal fun getFileGlobForDirectory(
-        directory: String,
-        filenamePattern: String,
-        matchSubDirs: Boolean
-    ): String {
-        val separator = "/".takeIf { !directory.endsWith("/") }.orEmpty()
-        val globStar = "**/".takeIf { matchSubDirs }.orEmpty()
-
-        val glob = "$directory$separator$globStar$filenamePattern"
-
-        return if (glob.startsWith("/**/")) {
-            // Simplify "/**/SUFFIX" to "**/SUFFIX":
-            glob.substring(1)
-        } else {
-            glob
-        }
-    }
-
-    /**
-     * Return glob patterns which match files in [directory] and its ancestor directories, if the filename matches any
-     * of the [filenamePatterns].
-     */
-    internal fun getFileGlobsForDirectoryAndAncestors(
-        directory: String,
-        filenamePatterns: Collection<String>
-    ): List<String> {
-        val distinctPatterns = filenamePatterns.toSet()
-
-        return getAllAncestorDirectories(directory).flatMap { dir ->
-            distinctPatterns.map { getFileGlobForDirectory(dir, it, false) }
-        }.sorted()
-    }
 }

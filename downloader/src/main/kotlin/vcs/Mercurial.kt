@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
@@ -122,10 +122,8 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {
             log.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
 
-            val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-            val licenseFileGlobs = LicenseFilenamePatterns.getLicenseFileGlobsForDirectory(path).map {
-                it.removePrefix("/") // Mercurial does not accept absolute paths.
-            }
+            // Mercurial does not accept absolute paths.
+            val licenseFileGlobs = ALL_LICENSE_FILENAMES.map { "**/$it" }
 
             run(
                 targetDir, "debugsparse", "-I", "${vcs.path}/**",
