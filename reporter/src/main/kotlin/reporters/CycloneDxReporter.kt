@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.isTrue
 
 private const val REPORT_BASE_FILENAME = "CycloneDX-BOM"
@@ -87,7 +88,7 @@ class CycloneDxReporter : Reporter {
                         text = input.licenseTextProvider.getLicenseText(licenseName)
                     }
                 )
-                extensibleTypes = listOf(ExtensibleType("ort", "origin", origin))
+                extensibleTypes = listOf(ExtensibleType(ORT_NAME, "origin", origin))
             }
         }
 
@@ -225,7 +226,7 @@ class CycloneDxReporter : Reporter {
             // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
             type = Component.Type.LIBRARY
 
-            extensibleTypes = listOf(ExtensibleType("ort", "dependencyType", dependencyType))
+            extensibleTypes = listOf(ExtensibleType(ORT_NAME, "dependencyType", dependencyType))
         }
 
         bom.addComponent(component)
