@@ -67,8 +67,8 @@ class AsciiDocTemplateReporter : Reporter {
         private const val ASCII_DOC_FILE_EXTENSION = "adoc"
         private const val ASCII_DOC_TEMPLATE_DIRECTORY = "asciidoc"
 
-        private const val DISCLOSURE_TEMPLATE = "disclosure_document"
-        private const val VULNERABILITY_TEMPLATE = "vulnerability_report"
+        private const val DISCLOSURE_TEMPLATE_ID = "disclosure_document"
+        private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
 
         private const val OPTION_BACKEND = "backend"
         private const val OPTION_PDF_THEME_PATH = "pdf-theme.path"
@@ -102,12 +102,14 @@ class AsciiDocTemplateReporter : Reporter {
             }
         }
 
-        templateOptions[FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID] = buildString {
-            append(DISCLOSURE_TEMPLATE)
+        if (!templateOptions.contains(FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH)) {
+            templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, buildString {
+                append(DISCLOSURE_TEMPLATE_ID)
 
-            if (input.ortResult.getAdvisorResultContainers().isNotEmpty()) {
-                append(",$VULNERABILITY_TEMPLATE")
-            }
+                if (input.ortResult.getAdvisorResultContainers().isNotEmpty()) {
+                    append(",$VULNERABILITY_TEMPLATE_ID")
+                }
+            })
         }
 
         val asciiDocTempDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
