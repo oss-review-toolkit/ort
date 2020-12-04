@@ -188,6 +188,7 @@ class CycloneDxReporter : Reporter {
         val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
         val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
 
+        // Get all licenses, but note down their origins inside of an extensible type.
         val licenseObjects = mapLicenseNamesToObjects(concludedLicenseNames, "concluded license", input) +
                 mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
                 mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)
