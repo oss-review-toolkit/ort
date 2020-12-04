@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("MaxLineLength")
+
 package org.ossreviewtoolkit.model.config
 
 import io.kotest.core.spec.style.WordSpec
@@ -41,6 +43,8 @@ import org.ossreviewtoolkit.model.Scope
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
+    private val pkg = CuratedPackage(pkg = Package.EMPTY.copy(id = id))
+
     private val projectId1 = id.copy(name = "project1")
     private val projectId2 = id.copy(name = "project2")
     private val projectId3 = id.copy(name = "project3")
@@ -56,9 +60,11 @@ class ExcludesTest : WordSpec() {
 
     private val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
     private val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
+    private val scopeProject1 = Scope("scopeProject1", sortedSetOf(PackageReference(project1.id)))
 
     private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
     private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
+    private val scopeExcludeProject1 = ScopeExclude("scopeProject1", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
 
     private lateinit var ortResult: OrtResult
 
@@ -68,13 +74,13 @@ class ExcludesTest : WordSpec() {
             analyzer = AnalyzerRun(
                 environment = Environment(),
                 config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
-                result = AnalyzerResult.EMPTY.copy(
-                    packages = sortedSetOf(
-                        CuratedPackage(pkg = Package.EMPTY.copy(id = id))
-                    )
-                )
+                result = AnalyzerResult.EMPTY
             )
         )
+    }
+
+    private fun setExcludes(paths: List<PathExclude> = emptyList(), scopes: List<ScopeExclude> = emptyList()) {
+        setExcludes(Excludes(paths = paths, scopes = scopes))
     }
 
     private fun setExcludes(excludes: Excludes) {
@@ -83,7 +89,12 @@ class ExcludesTest : WordSpec() {
     }
 
     private fun setProjects(vararg projects: Project) {
-        val analyzerResult = ortResult.analyzer!!.result.copy(projects = projects.toSortedSet())
+        val packages = sortedSetOf<CuratedPackage>()
+        if (id in projects.flatMap { it.collectDependencies() }) packages += pkg
+        val analyzerResult = ortResult.analyzer!!.result.copy(
+            projects = projects.toSortedSet(),
+            packages = packages
+        )
         ortResult = ortResult.copy(analyzer = ortResult.analyzer!!.copy(result = analyzerResult))
     }
 
@@ -133,50 +144,288 @@ class ExcludesTest : WordSpec() {
             }
         }
 
+        "isExcluded" should {
+            "return false if the project is not found" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1))
+                )
+
+                ortResult.isExcluded(project2.id) shouldBe false
+            }
+
+            "return false if the package is not found" {
+                setProjects(
+                    project1
+                )
+
+                ortResult.isExcluded(id) shouldBe false
+            }
+
+            "return false if the package is not excluded" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1))
+                )
+
+                ortResult.isExcluded(id) shouldBe false
+            }
+
+            "return true if all projects depending on a package are excluded by path excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1, pathExclude2)
+                )
+
+                ortResult.isExcluded(id) shouldBe true
+            }
+
+            "return false if only part of the projects depending on a package are excluded by path excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1)
+                )
+
+                ortResult.isExcluded(id) shouldBe false
+            }
+
+            "return true if all scopes containing the package are excluded by scope excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    scopes = listOf(scopeExclude1, scopeExclude2)
+                )
+
+                ortResult.isExcluded(id) shouldBe true
+            }
+
+            "return false if only part of the scopes containing the package are excluded by scope excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    scopes = listOf(scopeExclude1)
+                )
+
+                ortResult.isExcluded(id) shouldBe false
+            }
+
+            "return true if all dependencies on the package are excluded by path or scope excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1),
+                    scopes = listOf(scopeExclude2)
+                )
+
+                ortResult.isExcluded(id) shouldBe true
+            }
+
+            "return true if a project is excluded by path excludes" {
+                setProjects(
+                    project1
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1)
+                )
+
+                ortResult.isExcluded(project1.id) shouldBe true
+            }
+
+            "return true if a project and all dependencies on the project are excluded by path excludes" {
+                setProjects(
+                    project1,
+                    project2.copy(scopes = sortedSetOf(scopeProject1))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1, pathExclude2)
+                )
+
+                ortResult.isExcluded(project1.id) shouldBe true
+            }
+
+            "return true if a project is excluded by path excludes and all dependencies on the project are excluded by scope excludes" {
+                setProjects(
+                    project1,
+                    project2.copy(scopes = sortedSetOf(scopeProject1))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1),
+                    scopes = listOf(scopeExcludeProject1)
+                )
+
+                ortResult.isExcluded(project1.id) shouldBe true
+            }
+
+            "return false if a project is excluded by path excludes but not all dependencies on the project are excluded" {
+                setProjects(
+                    project1,
+                    project2.copy(scopes = sortedSetOf(scopeProject1))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1)
+                )
+
+                ortResult.isExcluded(project1.id) shouldBe false
+            }
+
+            "return false if a project is not excluded but all dependencies on the project are excluded" {
+                setProjects(
+                    project1,
+                    project2.copy(scopes = sortedSetOf(scopeProject1))
+                )
+
+                setExcludes(
+                    scopes = listOf(scopeExcludeProject1)
+                )
+
+                ortResult.isExcluded(project1.id) shouldBe false
+            }
+        }
+
         "isPackageExcluded" should {
-            "return true if the package does not appear in the analyzer result" {
-                ortResult.isPackageExcluded(id) shouldBe true
-            }
-
-            "return true if all occurrences of the package are excluded" {
-                setExcludes(
-                    Excludes(
-                        paths = listOf(pathExclude1),
-                        scopes = listOf(scopeExclude2)
-                    )
-                )
-
+            "return false if the package is not found" {
                 setProjects(
-                    project1.copy(scopes = sortedSetOf(scope1)),
-                    project2.copy(scopes = sortedSetOf(scope2))
-                )
-
-                ortResult.isPackageExcluded(id) shouldBe true
-            }
-
-            "return false if not all occurrences of the package are excluded" {
-                setExcludes(
-                    Excludes(
-                        paths = listOf(pathExclude1),
-                        scopes = listOf(scopeExclude2)
-                    )
-                )
-
-                setProjects(
-                    project1.copy(scopes = sortedSetOf(scope1)),
-                    project2.copy(scopes = sortedSetOf(scope1, scope2))
+                    project1
                 )
 
                 ortResult.isPackageExcluded(id) shouldBe false
             }
 
-            "return false if no occurrences of the package are excluded" {
+            "return false if the package is not excluded" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1))
+                )
+
+                ortResult.isPackageExcluded(id) shouldBe false
+            }
+
+            "return true if all projects depending on a package are excluded by path excludes" {
                 setProjects(
                     project1.copy(scopes = sortedSetOf(scope1)),
                     project2.copy(scopes = sortedSetOf(scope2))
                 )
 
+                setExcludes(
+                    paths = listOf(pathExclude1, pathExclude2)
+                )
+
+                ortResult.isPackageExcluded(id) shouldBe true
+            }
+
+            "return false if only part of the projects depending on a package are excluded by path excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1)
+                )
+
                 ortResult.isPackageExcluded(id) shouldBe false
+            }
+
+            "return true if all scopes containing the package are excluded by scope excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    scopes = listOf(scopeExclude1, scopeExclude2)
+                )
+
+                ortResult.isPackageExcluded(id) shouldBe true
+            }
+
+            "return false if only part of the scopes containing the package are excluded by scope excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    scopes = listOf(scopeExclude1)
+                )
+
+                ortResult.isPackageExcluded(id) shouldBe false
+            }
+
+            "return true if all dependencies on the package are excluded by path or scope excludes" {
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope1)),
+                    project2.copy(scopes = sortedSetOf(scope2))
+                )
+
+                setExcludes(
+                    paths = listOf(pathExclude1),
+                    scopes = listOf(scopeExclude2)
+                )
+
+                ortResult.isPackageExcluded(id) shouldBe true
+            }
+
+            "return true if all dependencies on the project are excluded" {
+                setProjects(
+                    project1,
+                    project2.copy(scopes = sortedSetOf(scopeProject1, scopeProject1.copy(name = "scope")))
+                )
+
+                setExcludes(
+                    scopes = listOf(scopeExcludeProject1, scopeExcludeProject1.copy(pattern = "scope"))
+                )
+
+                ortResult.isPackageExcluded(project1.id) shouldBe true
+            }
+
+            "return false if not all dependencies on the project are excluded" {
+                setProjects(
+                    project1,
+                    project2.copy(scopes = sortedSetOf(scopeProject1, scopeProject1.copy(name = "scope")))
+                )
+
+                setExcludes(
+                    scopes = listOf(scopeExcludeProject1)
+                )
+
+                ortResult.isPackageExcluded(project1.id) shouldBe false
+            }
+
+            "return false if no dependencies on the project are excluded" {
+                setProjects(
+                    project1,
+                    project2.copy(scopes = sortedSetOf(scopeProject1))
+                )
+
+                ortResult.isPackageExcluded(project1.id) shouldBe false
+            }
+
+            "return false if there are no dependencies on the project" {
+                setProjects(
+                    project1,
+                    project2
+                )
+
+                ortResult.isPackageExcluded(project1.id) shouldBe false
             }
         }
 
@@ -215,7 +464,14 @@ class ExcludesTest : WordSpec() {
                 ortResult.isProjectExcluded(project1.id) shouldBe true
             }
 
-            "return false if nothing is excluded" {
+            "return false if the definition file path is not matched by a path exclude" {
+                setExcludes(Excludes(paths = listOf(pathExclude2)))
+                setProjects(project1)
+
+                ortResult.isProjectExcluded(project1.id) shouldBe false
+            }
+
+            "return false if there are no path excludes" {
                 setProjects(project1)
 
                 ortResult.isProjectExcluded(project1.id) shouldBe false

@@ -94,6 +94,10 @@ data class OrtResult(
 
     private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
 
+    /**
+     * A map of projects and their excluded state. Calculating this map once brings massive performance improvements
+     * when querying projects in large analyzer results.
+     */
     private val projects: Map<Identifier, ProjectEntry> by lazy {
         log.info { "Computing excluded projects which may take a while..." }
 
@@ -112,32 +116,41 @@ data class OrtResult(
         result
     }
 
-    private data class PackageEntry(val curatedPackage: CuratedPackage, val isExcluded: Boolean)
+    private data class PackageEntry(val curatedPackage: CuratedPackage?, val isExcluded: Boolean)
 
+    /**
+     * A map of packages and their excluded state. Calculating this map once brings massive performance improvements
+     * when querying packages in large analyzer results. This map can also contain projects if they appear as
+     * dependencies of other projects, but for them only the excluded state is provided, no [CuratedPackage] instance.
+     */
     private val packages: Map<Identifier, PackageEntry> by lazy {
         log.info { "Computing excluded packages which may take a while..." }
 
-        val includedPackages = mutableSetOf<Identifier>()
-        getProjects().forEach { project ->
+        val projects = getProjects()
+        val packages = getPackages().associateBy { it.pkg.id }
+
+        val allDependencies = packages.keys.toMutableSet()
+        val includedDependencies = mutableSetOf<Identifier>()
+
+        projects.forEach { project ->
             project.scopes.forEach { scope ->
                 val isScopeExcluded = getExcludes().isScopeExcluded(scope)
 
+                val dependencies = scope.collectDependencies()
+                allDependencies += dependencies
+
                 if (!isProjectExcluded(project.id) && !isScopeExcluded) {
-                    val dependencies = scope.collectDependencies()
-                    includedPackages.addAll(dependencies)
+                    includedDependencies += dependencies
                 }
             }
         }
 
-        val result = getPackages().associateBy(
-            { curatedPackage -> curatedPackage.pkg.id },
-            { curatedPackage ->
-                PackageEntry(
-                    curatedPackage = curatedPackage,
-                    isExcluded = !includedPackages.contains(curatedPackage.pkg.id)
-                )
-            }
-        )
+        val result = allDependencies.associateWithTo(mutableMapOf()) { id ->
+            PackageEntry(
+                curatedPackage = packages[id],
+                isExcluded = id !in includedDependencies
+            )
+        }
 
         log.info { "Computing excluded packages done." }
         result
@@ -235,7 +248,7 @@ data class OrtResult(
         val vendorPackages = sortedSetOf<Package>()
 
         getProjects().filter {
-            it.id.isFromOrg(*names) && (!omitExcluded || !isProjectExcluded(it.id))
+            it.id.isFromOrg(*names) && (!omitExcluded || !isExcluded(it.id))
         }.mapTo(vendorPackages) {
             it.toPackage()
         }
@@ -288,38 +301,44 @@ data class OrtResult(
     }
 
     /**
-     * Return true if the project or package with the given identifier is excluded.
+     * Return `true` if the project or package with the given [id] is excluded.
+     *
+     * If the [id] references a [Project] it is seen as excluded if the project itself is excluded and also all
+     * dependencies on this project in other projects are excluded.
+     *
+     * If the [id] references a [Package] it is seen as excluded if all dependencies on this package are excluded.
+     *
+     * Return `false` if there is no project or package with this [id].
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun isExcluded(id: Identifier): Boolean =
-        getProject(id)?.let {
+        if (isProject(id)) {
             // An excluded project could still be included as a dependency of another non-excluded project.
-            isProjectExcluded(id) && isPackageExcluded(id)
-        } ?: isPackageExcluded(id)
+            isProjectExcluded(id) && (id !in packages || isPackageExcluded(id))
+        } else {
+            isPackageExcluded(id)
+        }
 
     /**
-     * Return true if all occurrences of the package identified by the given [id] are excluded.
+     * Return `true` if all dependencies on the package or project identified by the given [id] are excluded. This is
+     * the case if all [Project]s or [Scope]s that have a dependency on this [id] are excluded.
+     *
+     * If the [id] references a [Project] it is only checked if all dependencies on this project are excluded, not if
+     * the project itself is excluded. If you need to check that also the project itself is excluded use [isExcluded]
+     * instead.
+     *
+     * Return `false` if there is no dependency on this [id].
      */
-    fun isPackageExcluded(id: Identifier): Boolean {
-        val project = getProject(id)
-        if (project != null && !isProjectExcluded(id)) {
-            return false
-        }
-
-        val pkg = getPackage(id)
-        if (pkg != null && !packages.getValue(id).isExcluded) {
-            return false
-        }
-
-        if (project == null && pkg == null) {
-            return true
-        }
-
-        return project != null || pkg != null
-    }
+    fun isPackageExcluded(id: Identifier): Boolean = packages[id]?.isExcluded ?: false
 
     /**
-     * True if the [Project] with the given [id] is excluded.
+     * Return `true` if the [Project] with the given [id] is excluded.
+     *
+     * This function only checks if the project itself is excluded, not if another non-excluded project has a dependency
+     * on this project. If you need to check that also all dependencies on this project are excluded use [isExcluded]
+     * instead.
+     *
+     * Return `false` if no project with the given [id] is found.
      */
     fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded ?: false
 
