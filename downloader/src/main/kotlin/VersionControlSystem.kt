@@ -133,7 +133,11 @@ abstract class VersionControlSystem {
         /**
          * Return glob patterns matching all potential license or patent files.
          */
-        internal fun getLicenseFileGlobPatterns(): List<String> = ALL_LICENSE_FILENAMES.map { "**/$it" }
+        internal fun getLicenseFileGlobPatterns(): List<String> =
+            ALL_LICENSE_FILENAMES.generateCapitalizationVariants().map { "**/$it" }
+
+        private fun Collection<String>.generateCapitalizationVariants() =
+            flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
     }
 
     /**
