@@ -210,7 +210,7 @@ class CycloneDxReporter : Reporter {
             description = pkg.description
 
             // TODO: Map package-manager-specific OPTIONAL scopes.
-            scope = if (input.ortResult.isPackageExcluded(pkg.id)) {
+            scope = if (input.ortResult.isExcluded(pkg.id)) {
                 Component.Scope.EXCLUDED
             } else {
                 Component.Scope.REQUIRED
