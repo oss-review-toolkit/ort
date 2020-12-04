@@ -123,12 +123,9 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             log.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
 
             // Mercurial does not accept absolute paths.
-            val licenseFileGlobs = ALL_LICENSE_FILENAMES.map { "**/$it" }
+            val globPatterns = ALL_LICENSE_FILENAMES.map { "**/$it" } + "${vcs.path}/**"
 
-            run(
-                targetDir, "debugsparse", "-I", "${vcs.path}/**",
-                *licenseFileGlobs.flatMap { listOf("-I", it) }.toTypedArray()
-            )
+            run(targetDir, "debugsparse", *globPatterns.flatMap { listOf("-I", it) }.toTypedArray())
         }
 
         return getWorkingTree(targetDir)
