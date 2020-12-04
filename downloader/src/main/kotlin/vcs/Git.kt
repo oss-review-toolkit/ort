@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
@@ -146,7 +145,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
                     val gitInfoDir = targetDir.resolve(".git/info").apply { safeMkdirs() }
                     val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-                    val sparseCheckoutPatterns = "$path\n" + ALL_LICENSE_FILENAMES.map { "**/$it" }.joinToString("\n")
+                    val sparseCheckoutPatterns = "$path\n" + getLicenseFileGlobPatterns().joinToString("\n")
 
                     gitInfoDir.resolve("sparse-checkout").writeText(sparseCheckoutPatterns)
                 }
