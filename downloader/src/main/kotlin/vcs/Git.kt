@@ -145,9 +145,9 @@ class Git : VersionControlSystem(), CommandLineTool {
 
                     val gitInfoDir = targetDir.resolve(".git/info").apply { safeMkdirs() }
                     val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-                    val sparseCheckoutPatterns = "$path\n" + getLicenseFileGlobPatterns().joinToString("\n")
+                    val globPatterns = getLicenseFileGlobPatterns() + path
 
-                    gitInfoDir.resolve("sparse-checkout").writeText(sparseCheckoutPatterns)
+                    gitInfoDir.resolve("sparse-checkout").writeText(globPatterns.joinToString("\n"))
                 }
 
                 git.repository.config.save()
