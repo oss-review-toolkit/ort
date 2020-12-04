@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -128,6 +129,11 @@ abstract class VersionControlSystem {
                 workingTree.getInfo().copy(path = workingTree.getPathToRoot(path))
             } ?: VcsInfo.EMPTY
         }
+
+        /**
+         * Return glob patterns matching all potential license or patent files.
+         */
+        internal fun getLicenseFileGlobPatterns(): List<String> = ALL_LICENSE_FILENAMES.map { "**/$it" }
     }
 
     /**
