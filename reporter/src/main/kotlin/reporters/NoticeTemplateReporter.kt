@@ -43,6 +43,8 @@ class NoticeTemplateReporter : Reporter {
         private const val NOTICE_FILE_PREFIX = "NOTICE_"
         private const val NOTICE_FILE_EXTENSION = ""
         private const val NOTICE_TEMPLATE_DIRECTORY = "notice"
+
+        private const val DEFAULT_TEMPLATE_ID = "default"
     }
 
     override val reporterName = "NoticeTemplate"
@@ -53,6 +55,13 @@ class NoticeTemplateReporter : Reporter {
         NOTICE_TEMPLATE_DIRECTORY
     )
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>) =
-        templateProcessor.processTemplates(input, outputDir, options)
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+        val templateOptions = options.toMutableMap()
+
+        if (!templateOptions.contains(FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH)) {
+            templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, DEFAULT_TEMPLATE_ID)
+        }
+
+        return templateProcessor.processTemplates(input, outputDir, templateOptions)
+    }
 }
