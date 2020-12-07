@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
+import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyright / license scanners.") {
@@ -186,6 +187,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
                 outputDirectory = nativeOutputDir
             )
         }.mergeLabels(labels)
+
+        outputDir.safeMkdirs()
 
         outputFiles.forEach { file ->
             println("Writing scan result to '$file'.")
