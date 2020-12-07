@@ -33,7 +33,6 @@ import io.kotest.matchers.types.beOfType
 import java.time.Duration
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -49,7 +48,6 @@ import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
@@ -128,9 +126,6 @@ abstract class AbstractStorageFunTest : StringSpec() {
         mutableListOf()
     )
 
-    private val rawResultWithContent = jsonMapper.readTree("\"key 1\": \"value 1\"")
-    private val rawResultEmpty = EMPTY_JSON_NODE
-
     abstract fun createStorage(): ScanResultsStorage
 
     /**
@@ -147,10 +142,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
     init {
         "Scan result can be added to the storage" {
             val storage = createStorage()
-            val scanResult = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
+            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
 
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(id)
@@ -163,7 +155,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
             }
         }
 
-        "Does not add scan result without raw result to storage" {
+        "Does not add scan result with fileCount 0 to storage" {
             val storage = createStorage()
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles)
 
@@ -180,32 +172,9 @@ abstract class AbstractStorageFunTest : StringSpec() {
             }
         }
 
-        "Does not add scan result with fileCount 0 to storage" {
-            val storage = createStorage()
-            val scanResult = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles,
-                rawResultWithContent
-            )
-
-            val addResult = storage.add(id, scanResult)
-            val readResult = storage.read(id)
-
-            addResult should beOfType(Failure::class)
-            (addResult as Failure).error shouldBe
-                    "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should beEmpty()
-            }
-        }
-
         "Does not add scan result without provenance information to storage" {
             val storage = createStorage()
-            val scanResult = ScanResult(
-                provenanceEmpty, scannerDetails1, scanSummaryWithFiles,
-                rawResultEmpty
-            )
+            val scanResult = ScanResult(provenanceEmpty, scannerDetails1, scanSummaryWithFiles)
 
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(id)
@@ -222,14 +191,8 @@ abstract class AbstractStorageFunTest : StringSpec() {
 
         "Can retrieve all scan results from storage" {
             val storage = createStorage()
-            val scanResult1 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
-            val scanResult2 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles,
-                rawResultWithContent
-            )
+            val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+            val scanResult2 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
 
             val addResult1 = storage.add(id, scanResult1)
             val addResult2 = storage.add(id, scanResult2)
@@ -246,18 +209,9 @@ abstract class AbstractStorageFunTest : StringSpec() {
 
         "Can retrieve all scan results for specific scanner from storage" {
             val storage = createStorage()
-            val scanResult1 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
-            val scanResult2 = ScanResult(
-                provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
-            val scanResult3 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles,
-                rawResultWithContent
-            )
+            val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+            val scanResult2 = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles)
+            val scanResult3 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
 
             val addResult1 = storage.add(id, scanResult1)
             val addResult2 = storage.add(id, scanResult2)
@@ -278,18 +232,11 @@ abstract class AbstractStorageFunTest : StringSpec() {
             val storage = createStorage()
             val detailsCompatibleOtherScanner = scannerDetails1.copy(name = "name 2")
             val detailsIncompatibleOtherScanner = scannerDetails1.copy(name = "other Scanner name")
-            val scanResult1 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
-            val scanResult2 = ScanResult(
-                provenanceWithSourceArtifact, detailsCompatibleOtherScanner, scanSummaryWithFiles,
-                rawResultWithContent
-            )
-            val scanResult3 = ScanResult(
-                provenanceWithSourceArtifact, detailsIncompatibleOtherScanner, scanSummaryWithFiles,
-                rawResultWithContent
-            )
+            val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+            val scanResult2 =
+                ScanResult(provenanceWithSourceArtifact, detailsCompatibleOtherScanner, scanSummaryWithFiles)
+            val scanResult3 =
+                ScanResult(provenanceWithSourceArtifact, detailsIncompatibleOtherScanner, scanSummaryWithFiles)
             val criteria = criteriaForDetails(scannerDetails1).copy(regScannerName = "name.+")
 
             val addResult1 = storage.add(id, scanResult1)
@@ -309,22 +256,13 @@ abstract class AbstractStorageFunTest : StringSpec() {
 
         "Can retrieve all scan results for compatible scanners from storage" {
             val storage = createStorage()
-            val scanResult = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
-            val scanResultCompatible1 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1,
-                scanSummaryWithFiles, rawResultWithContent
-            )
-            val scanResultCompatible2 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2,
-                scanSummaryWithFiles, rawResultWithContent
-            )
-            val scanResultIncompatible = ScanResult(
-                provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion,
-                scanSummaryWithFiles, rawResultWithContent
-            )
+            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+            val scanResultCompatible1 =
+                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
+            val scanResultCompatible2 =
+                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
+            val scanResultIncompatible =
+                ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
 
             val addResult = storage.add(id, scanResult)
             val addResultCompatible1 = storage.add(id, scanResultCompatible1)
@@ -349,22 +287,13 @@ abstract class AbstractStorageFunTest : StringSpec() {
 
         "Can retrieve all scan results for a scanner in a version range" {
             val storage = createStorage()
-            val scanResult = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
-            val scanResultCompatible1 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1,
-                scanSummaryWithFiles, rawResultWithContent
-            )
-            val scanResultCompatible2 = ScanResult(
-                provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2,
-                scanSummaryWithFiles, rawResultWithContent
-            )
-            val scanResultIncompatible = ScanResult(
-                provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion,
-                scanSummaryWithFiles, rawResultWithContent
-            )
+            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+            val scanResultCompatible1 =
+                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
+            val scanResultCompatible2 =
+                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
+            val scanResultIncompatible =
+                ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
             val criteria = criteriaForDetails(scannerDetails1).copy(maxVersion = Semver("1.5.0"))
 
             val addResult = storage.add(id, scanResult)
@@ -391,28 +320,19 @@ abstract class AbstractStorageFunTest : StringSpec() {
 
         "Returns only packages with matching provenance" {
             val storage = createStorage()
-            val scanResultSourceArtifactMatching = ScanResult(
-                provenanceWithSourceArtifact, scannerDetails1,
-                scanSummaryWithFiles, rawResultWithContent
-            )
-            val scanResultVcsMatching = ScanResult(
-                provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
+            val scanResultSourceArtifactMatching =
+                ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+            val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles)
             val provenanceSourceArtifactNonMatching = provenanceWithSourceArtifact.copy(
                 sourceArtifact = sourceArtifact.copy(hash = Hash.create("0123456789012345678901234567890123456789"))
             )
-            val scanResultSourceArtifactNonMatching = ScanResult(
-                provenanceSourceArtifactNonMatching, scannerDetails1,
-                scanSummaryWithFiles, rawResultWithContent
-            )
+            val scanResultSourceArtifactNonMatching =
+                ScanResult(provenanceSourceArtifactNonMatching, scannerDetails1, scanSummaryWithFiles)
             val provenanceVcsInfoNonMatching = provenanceWithVcsInfo.copy(
                 vcsInfo = vcs.copy(revision = "revision2", resolvedRevision = "resolvedRevision2")
             )
-            val scanResultVcsInfoNonMatching = ScanResult(
-                provenanceVcsInfoNonMatching, scannerDetails1,
-                scanSummaryWithFiles, rawResultWithContent
-            )
+            val scanResultVcsInfoNonMatching =
+                ScanResult(provenanceVcsInfoNonMatching, scannerDetails1, scanSummaryWithFiles)
 
             val addResult1 = storage.add(id, scanResultSourceArtifactMatching)
             val addResult2 = storage.add(id, scanResultVcsMatching)
@@ -436,10 +356,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
 
         "Stored result is found if revision was detected from version" {
             val storage = createStorage()
-            val scanResult = ScanResult(
-                provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles,
-                rawResultWithContent
-            )
+            val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
 
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))

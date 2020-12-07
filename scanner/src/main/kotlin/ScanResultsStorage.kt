@@ -239,25 +239,16 @@ abstract class ScanResultsStorage {
     }
 
     /**
-     * Add the given [scanResult], which must include a [ScanResult.rawResult], to the [ScanResultContainer] for the
-     * scanned [Package] with the provided [id]. Depending on the storage implementation this might first read any
-     * existing [ScanResultContainer] and write the new [ScanResultContainer] to the storage again, implicitly deleting
-     * the original storage entry by overwriting it. Return a [Result] describing whether the operation was successful.
+     * Add the given [scanResult] to the [ScanResultContainer] for the scanned [Package] with the provided [id].
+     * Depending on the storage implementation this might first read any existing [ScanResultContainer] and write the
+     * new [ScanResultContainer] to the storage again, implicitly deleting the original storage entry by overwriting it.
+     * Return a [Result] describing whether the operation was successful.
      */
     fun add(id: Identifier, scanResult: ScanResult): Result<Unit> {
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
         // it is cheap to re-create them.
         if (scanResult.summary.fileCount == 0) {
             val message = "Not storing scan result for '${id.toCoordinates()}' because no files were scanned."
-            log.info { message }
-
-            return Failure(message)
-        }
-
-        // Do not store scan results without raw result. The raw result can be set to null for other usages, but in the
-        // storage it must never be null.
-        if (scanResult.rawResult == null) {
-            val message = "Not storing scan result for '${id.toCoordinates()}' because the raw result is null."
             log.info { message }
 
             return Failure(message)

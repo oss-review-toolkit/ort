@@ -240,7 +240,7 @@ class ScanCode(
 
         with(process) {
             if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(Provenance(), getDetails(), summary.copy(issues = issues), result)
+                return ScanResult(Provenance(), getDetails(), summary.copy(issues = issues))
             } else {
                 throw ScanException(errorMessage)
             }

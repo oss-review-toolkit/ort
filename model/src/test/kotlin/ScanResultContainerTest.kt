@@ -108,13 +108,8 @@ class ScanResultContainerTest : WordSpec() {
         mutableListOf(issue21, issue22)
     )
 
-    private val rawResult1 = jsonMapper.readTree("\"key 1\": \"value 1\"")
-    private val rawResult2 = jsonMapper.readTree("\"key 2\": \"value 2\"")
-
-    private val scanResult1 =
-        ScanResult(provenance1, scannerDetails1, scanSummary1, rawResult1)
-    private val scanResult2 =
-        ScanResult(provenance2, scannerDetails2, scanSummary2, rawResult2)
+    private val scanResult1 = ScanResult(provenance1, scannerDetails1, scanSummary1)
+    private val scanResult2 = ScanResult(provenance2, scannerDetails2, scanSummary2)
 
     private val scanResults = ScanResultContainer(id, listOf(scanResult1, scanResult2))
 

@@ -70,7 +70,7 @@ class PostgresStorage(
         private const val VERSION_EXPRESSION = "$VERSION_ARRAY::int[]"
 
         /**
-         * The null character "\u0000" can appear in raw scan results, for example in ScanCode if the matched text for a
+         * The null character "\u0000" can appear in scan results, for example in ScanCode if the matched text for a
          * license or copyright contains this character. Since it is not allowed in PostgreSQL JSONB columns we need to
          * escape it before writing a string to the database.
          * See: [https://www.postgresql.org/docs/11/datatype-json.html]

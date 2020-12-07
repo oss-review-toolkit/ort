@@ -41,7 +41,6 @@ import kotlinx.coroutines.withContext
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
@@ -63,7 +62,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.NamedThreadFactory
@@ -246,7 +244,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                             "$scannerCriteria $packageIndex."
                 }
 
-                readFromStorage(scannerDetails, scannerCriteria, pkg, outputDirectory)
+                readFromStorage(scannerCriteria, pkg)
             }
 
             if (storedResults.isNotEmpty()) {
@@ -276,10 +274,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                         }
                     )
                 }
-            }.map {
-                // Remove the now unneeded reference to rawResult here to allow garbage collection to
-                // clean it up.
-                it.copy(rawResult = null)
             }
         } catch (e: ScanException) {
             e.showStackTrace()
@@ -303,8 +297,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                         licenseFindings = sortedSetOf(),
                         copyrightFindings = sortedSetOf(),
                         issues = listOf(issue)
-                    ),
-                    rawResult = EMPTY_JSON_NODE
+                    )
                 )
             )
         }
@@ -323,28 +316,11 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * Return matching [ScanResult]s for this [Package][pkg] from the [ScanResultsStorage]. If no results are found an
      * empty list is returned.
      */
-    private fun readFromStorage(
-        scannerDetails: ScannerDetails,
-        scannerCriteria: ScannerCriteria,
-        pkg: Package,
-        outputDirectory: File
-    ): List<ScanResult> {
-        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
-
-        val scanResults = when (val storageResult = ScanResultsStorage.storage.read(pkg, scannerCriteria)) {
+    private fun readFromStorage(scannerCriteria: ScannerCriteria, pkg: Package): List<ScanResult> =
+        when (val storageResult = ScanResultsStorage.storage.read(pkg, scannerCriteria)) {
             is Success -> storageResult.result.deduplicateScanResults().results
             is Failure -> emptyList()
         }
-
-        if (scanResults.isNotEmpty()) {
-            // Some external tools rely on the raw results files to be written to the scan results directory, so write
-            // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
-            // available.
-            resultsFile.mapper().writeValue(resultsFile, scanResults.first().rawResult)
-        }
-
-        return scanResults
-    }
 
     /**
      * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
@@ -384,8 +360,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                             message = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
                         )
                     )
-                ),
-                EMPTY_JSON_NODE
+                )
             )
         }
 
