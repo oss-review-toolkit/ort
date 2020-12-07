@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.MissingNode
@@ -30,7 +30,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategy.SNAKE_CASE as PropertyNamingStrategy.PropertyNamingStrategyBase
+val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategies.SNAKE_CASE as PropertyNamingStrategies.NamingBase
 
 /**
  * A lambda expression that can be [applied][apply] to all [ObjectMapper]s to configure them the same way.
