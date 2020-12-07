@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import com.fasterxml.jackson.databind.node.TextNode
 import com.vdurmont.semver4j.Semver
 
 import io.kotest.assertions.fail
@@ -88,7 +87,7 @@ private fun createScanResult(resultCount: Int): ScanResult {
     )
     val provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY)
     val scanner = ScannerDetails("scanner$resultCount", "v$resultCount", "testConfig")
-    return ScanResult(provenance, scanner, summary, TextNode("some result"))
+    return ScanResult(provenance, scanner, summary)
 }
 
 class CompositeStorageTest : WordSpec({

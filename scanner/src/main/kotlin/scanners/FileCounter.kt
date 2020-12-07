@@ -65,7 +65,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
         val result = getRawResult(resultsFile)
         val summary = generateSummary(startTime, endTime, path, result)
-        return ScanResult(Provenance(), getDetails(), summary, result)
+        return ScanResult(Provenance(), getDetails(), summary)
     }
 
     override fun getRawResult(resultsFile: File) =
