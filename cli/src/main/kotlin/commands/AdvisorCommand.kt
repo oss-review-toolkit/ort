@@ -124,9 +124,10 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Run vulnerability d
 
         val ortResult = advisor.retrieveVulnerabilityInformation(input, skipExcluded).mergeLabels(labels)
 
+        outputDir.safeMkdirs()
+
         outputFiles.forEach { file ->
             println("Writing advisor result to '$file'.")
-            outputDir.safeMkdirs()
             file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
         }
 
