@@ -90,7 +90,7 @@ fun File.unpack7Zip(targetDirectory: File) {
         while (true) {
             val entry = zipFile.nextEntry ?: break
 
-            if (entry.isDirectory || entry.isAntiItem) {
+            if (entry.isDirectory || entry.isAntiItem || File(entry.name).isAbsolute) {
                 continue
             }
 
@@ -157,7 +157,7 @@ fun File.packZip(
 fun InputStream.unpackTar(targetDirectory: File) =
     TarArchiveInputStream(this).unpack(
         targetDirectory,
-        { entry -> !(entry as TarArchiveEntry).isFile },
+        { entry -> !(entry as TarArchiveEntry).isFile || File(entry.name).isAbsolute },
         { entry -> (entry as TarArchiveEntry).mode }
     )
 
@@ -168,7 +168,7 @@ fun InputStream.unpackTar(targetDirectory: File) =
 fun InputStream.unpackZip(targetDirectory: File) =
     ZipArchiveInputStream(this).unpack(
         targetDirectory,
-        { entry -> (entry as ZipArchiveEntry).let { it.isDirectory || it.isUnixSymlink } },
+        { entry -> (entry as ZipArchiveEntry).let { it.isDirectory || it.isUnixSymlink || File(it.name).isAbsolute } },
         { entry -> (entry as ZipArchiveEntry).unixMode }
     )
 
@@ -226,7 +226,7 @@ private fun ZipFile.unpack(targetDirectory: File) =
         while (entries.hasMoreElements()) {
             val entry = entries.nextElement()
 
-            if (entry.isDirectory || entry.isUnixSymlink) {
+            if (entry.isDirectory || entry.isUnixSymlink || File(entry.name).isAbsolute) {
                 continue
             }
 
