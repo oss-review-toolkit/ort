@@ -259,6 +259,5 @@ class ScanCode(
             }
         }
 
-    override fun getRawResult(resultsFile: File) =
-        parseScanCodeResult(resultsFile)
+    override fun getRawResult(resultsFile: File) = parseScanCodeResult(resultsFile)
 }
