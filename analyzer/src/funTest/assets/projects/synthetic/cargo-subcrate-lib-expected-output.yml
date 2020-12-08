@@ -18,8 +18,6 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: "https://example.org"
   scopes:
-  - name: "build-dependencies"
-    dependencies: []
   - name: "dependencies"
     dependencies:
     - id: "Cargo::cfg-if:0.1.9"

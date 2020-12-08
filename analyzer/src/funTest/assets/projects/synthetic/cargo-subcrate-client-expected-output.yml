@@ -16,8 +16,6 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
-  - name: "build-dependencies"
-    dependencies: []
   - name: "dependencies"
     dependencies:
     - id: "Cargo::lib:0.1.0"
@@ -25,8 +23,6 @@ project:
       dependencies:
       - id: "Cargo::cfg-if:0.1.9"
         linkage: "STATIC"
-  - name: "dev-dependencies"
-    dependencies: []
 packages:
 - id: "Cargo::cfg-if:0.1.9"
   purl: "pkg:cargo/cfg-if@0.1.9"
