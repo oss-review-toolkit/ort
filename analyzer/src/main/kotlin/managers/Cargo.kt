@@ -253,9 +253,10 @@ class Cargo(
         val projectNode = metadata["packages"].single { it["id"].textValueOrEmpty() == projectId }
         val groupedDependencies = projectNode["dependencies"].groupBy { it["kind"].textValueOrEmpty() }
 
-        fun getTransitiveDependencies(directDependencies: List<JsonNode>?, scope: String): Scope {
+        fun getTransitiveDependencies(directDependencies: List<JsonNode>?, scope: String): Scope? {
+            if (directDependencies == null) return null
+
             val transitiveDependencies = directDependencies
-                .orEmpty()
                 .mapNotNull { dependency ->
                     val dependencyName = dependency["name"].textValue()
                     val version = getResolvedVersion(projectName, projectVersion, dependencyName, metadata)
@@ -266,12 +267,14 @@ class Cargo(
                 }
                 .toSortedSet()
 
-            return Scope(name = scope, dependencies = transitiveDependencies)
+            return Scope(scope, transitiveDependencies)
         }
 
-        val dependenciesScope = getTransitiveDependencies(groupedDependencies[""], "dependencies")
-        val devDependenciesScope = getTransitiveDependencies(groupedDependencies["dev"], "dev-dependencies")
-        val buildDependenciesScope = getTransitiveDependencies(groupedDependencies["build"], "build-dependencies")
+        val scopes = listOfNotNull(
+            getTransitiveDependencies(groupedDependencies[""], "dependencies"),
+            getTransitiveDependencies(groupedDependencies["dev"], "dev-dependencies"),
+            getTransitiveDependencies(groupedDependencies["build"], "build-dependencies")
+        )
 
         val projectPkg = packages.values.single { pkg ->
             pkg.id.name == projectName && pkg.id.version == projectVersion
@@ -285,7 +288,7 @@ class Cargo(
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = sortedSetOf(dependenciesScope, devDependenciesScope, buildDependenciesScope)
+            scopes = scopes.toSortedSet()
         )
 
         val nonProjectPackages = packages
