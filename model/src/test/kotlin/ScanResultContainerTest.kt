@@ -66,7 +66,7 @@ class ScanResultContainerTest : WordSpec() {
         sortedSetOf(
             LicenseFinding(
                 "license-1.1",
-                TextLocation("path 1.1", 1, 1)
+                TextLocation("path 1.1", 1)
             ),
             LicenseFinding(
                 "license-1.2",
@@ -76,7 +76,7 @@ class ScanResultContainerTest : WordSpec() {
         sortedSetOf(
             CopyrightFinding(
                 "copyright 1",
-                TextLocation("copyright path 1.1", 1, 1)
+                TextLocation("copyright path 1.1", 1)
             ),
             CopyrightFinding(
                 "copyright 2",

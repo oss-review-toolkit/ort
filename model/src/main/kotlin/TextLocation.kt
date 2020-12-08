@@ -56,5 +56,10 @@ data class TextLocation(
         }
     }
 
+    /**
+     * A convenience constructor that sets [startLine] and [endLine] to the same [line].
+     */
+    constructor(path: String, line: Int) : this(path, line, line)
+
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
 }

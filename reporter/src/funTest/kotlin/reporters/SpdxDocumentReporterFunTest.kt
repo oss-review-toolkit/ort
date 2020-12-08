@@ -304,17 +304,17 @@ private fun createOrtResult(): OrtResult {
                                     licenseFindings = sortedSetOf(
                                         LicenseFinding(
                                             license = "Apache-2.0",
-                                            location = TextLocation(path = "LICENSE", startLine = 1, endLine = 1)
+                                            location = TextLocation("LICENSE", 1)
                                         )
                                     ),
                                     copyrightFindings = sortedSetOf(
                                         CopyrightFinding(
                                             statement = "Copyright 2020 Some copyright holder in source artifact",
-                                            location = TextLocation(path = "some/file", startLine = 1, endLine = 1)
+                                            location = TextLocation("some/file", 1)
                                         ),
                                         CopyrightFinding(
                                             statement = "Copyright 2020 Some other copyright holder in source artifact",
-                                            location = TextLocation(path = "some/file", startLine = 7, endLine = 7)
+                                            location = TextLocation("some/file", 7)
                                         )
                                     )
                                 )
@@ -338,13 +338,13 @@ private fun createOrtResult(): OrtResult {
                                     licenseFindings = sortedSetOf(
                                         LicenseFinding(
                                             license = "BSD-2-Clause",
-                                            location = TextLocation(path = "LICENSE", startLine = 1, endLine = 1)
+                                            location = TextLocation("LICENSE", 1)
                                         )
                                     ),
                                     copyrightFindings = sortedSetOf(
                                         CopyrightFinding(
                                             statement = "Copyright 2020 Some copyright holder in VCS",
-                                            location = TextLocation(path = "some/file", startLine = 1, endLine = 1)
+                                            location = TextLocation("some/file", 1)
                                         )
                                     )
                                 )

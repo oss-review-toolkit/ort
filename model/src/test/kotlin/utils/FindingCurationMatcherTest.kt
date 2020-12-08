@@ -225,19 +225,19 @@ class FindingCurationMatcherTest : WordSpec() {
                 val findings = listOf(
                     LicenseFinding(
                         license = "MIT",
-                        location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                        location = TextLocation("some/path", 1)
                     ),
                     LicenseFinding(
                         license = "MIT",
-                        location = TextLocation(path = "another/path", startLine = 2, endLine = 2)
+                        location = TextLocation("another/path", 2)
                     ),
                     LicenseFinding(
                         license = "MIT",
-                        location = TextLocation(path = "some/other/path", startLine = 3, endLine = 3)
+                        location = TextLocation("some/other/path", 3)
                     ),
                     LicenseFinding(
                         license = "MIT",
-                        location = TextLocation(path = "one/more/path", startLine = 4, endLine = 4)
+                        location = TextLocation("one/more/path", 4)
                     )
                 )
                 val curations = listOf(
@@ -267,21 +267,21 @@ class FindingCurationMatcherTest : WordSpec() {
                     LicenseFindingCurationResult(
                         curatedFinding = LicenseFinding(
                             license = "Apache-2.0",
-                            location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                            location = TextLocation("some/path", 1)
                         ),
                         originalFindings = listOf(Pair(findings[0], curations[0]))
                     ),
                     LicenseFindingCurationResult(
                         curatedFinding = LicenseFinding(
                             license = "BSD-3-Clause",
-                            location = TextLocation(path = "another/path", startLine = 2, endLine = 2)
+                            location = TextLocation("another/path", 2)
                         ),
                         originalFindings = listOf(Pair(findings[1], curations[1]))
                     ),
                     LicenseFindingCurationResult(
                         curatedFinding = LicenseFinding(
                             license = "MIT",
-                            location = TextLocation(path = "some/other/path", startLine = 3, endLine = 3)
+                            location = TextLocation("some/other/path", 3)
                         ),
                         originalFindings = emptyList()
                     ),
@@ -298,7 +298,7 @@ class FindingCurationMatcherTest : WordSpec() {
                 val findings = listOf(
                     LicenseFinding(
                         license = "MIT",
-                        location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                        location = TextLocation("some/path", 1)
                     )
                 )
                 val curations = listOf(
@@ -322,7 +322,7 @@ class FindingCurationMatcherTest : WordSpec() {
                     LicenseFindingCurationResult(
                         curatedFinding = LicenseFinding(
                             license = "MIT-old-style",
-                            location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                            location = TextLocation("some/path", 1)
                         ),
                         originalFindings = listOf(
                             Pair(findings.first(), curations[0])
@@ -331,7 +331,7 @@ class FindingCurationMatcherTest : WordSpec() {
                     LicenseFindingCurationResult(
                         curatedFinding = LicenseFinding(
                             license = "Apache-2.0",
-                            location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                            location = TextLocation("some/path", 1)
                         ),
                         originalFindings = listOf(
                             Pair(findings.first(), curations[1])

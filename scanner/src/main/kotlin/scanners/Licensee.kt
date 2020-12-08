@@ -133,7 +133,6 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 location = TextLocation(
                     // The path is already relative.
                     filePath.path,
-                    TextLocation.UNKNOWN_LINE,
                     TextLocation.UNKNOWN_LINE
                 )
             )

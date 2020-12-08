@@ -92,17 +92,17 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = provenance,
                                 licenses = mapOf(
                                     "Apache-2.0 WITH LLVM-exception" to listOf(
-                                        TextLocation("LICENSE", 1, 1),
-                                        TextLocation("LICENSE", 21, 21)
+                                        TextLocation("LICENSE", 1),
+                                        TextLocation("LICENSE", 21)
                                     ),
                                     "MIT" to listOf(
-                                        TextLocation("LICENSE", 31, 31),
-                                        TextLocation("LICENSE", 41, 41)
+                                        TextLocation("LICENSE", 31),
+                                        TextLocation("LICENSE", 41)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("Copyright Apache-2.0", TextLocation("LICENSE", 1, 1)),
-                                    CopyrightFinding("Copyright MIT", TextLocation("LICENSE", 31, 31))
+                                    CopyrightFinding("Copyright Apache-2.0", TextLocation("LICENSE", 1)),
+                                    CopyrightFinding("Copyright MIT", TextLocation("LICENSE", 31))
                                 ),
                                 licenseFindingCurations = emptyList(),
                                 pathExcludes = emptyList(),
@@ -123,14 +123,14 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containLocationForLicense(
                     license = "Apache-2.0 WITH LLVM-exception",
                     provenance = provenance,
-                    location = TextLocation("LICENSE", 1, 1),
+                    location = TextLocation("LICENSE", 1),
                     copyrights = setOf(
                         ResolvedCopyright(
                             statement = "Copyright Apache-2.0",
                             findings = setOf(
                                 ResolvedCopyrightFinding(
                                     statement = "Copyright Apache-2.0",
-                                    location = TextLocation("LICENSE", 1, 1),
+                                    location = TextLocation("LICENSE", 1),
                                     matchingPathExcludes = emptyList()
                                 )
                             )
@@ -140,20 +140,20 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containLocationForLicense(
                     license = "Apache-2.0 WITH LLVM-exception",
                     provenance = provenance,
-                    location = TextLocation("LICENSE", 21, 21)
+                    location = TextLocation("LICENSE", 21)
                 )
                 result should containNumberOfLocationsForLicense("MIT", 2)
                 result should containLocationForLicense(
                     license = "MIT",
                     provenance = provenance,
-                    location = TextLocation("LICENSE", 31, 31),
+                    location = TextLocation("LICENSE", 31),
                     copyrights = setOf(
                         ResolvedCopyright(
                             statement = "Copyright MIT",
                             findings = setOf(
                                 ResolvedCopyrightFinding(
                                     statement = "Copyright MIT",
-                                    location = TextLocation("LICENSE", 31, 31),
+                                    location = TextLocation("LICENSE", 31),
                                     matchingPathExcludes = emptyList()
                                 )
                             )
@@ -163,7 +163,7 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containLocationForLicense(
                     license = "MIT",
                     provenance = provenance,
-                    location = TextLocation("LICENSE", 41, 41)
+                    location = TextLocation("LICENSE", 41)
                 )
             }
 
@@ -194,13 +194,13 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = provenance,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
-                                        TextLocation("LICENSE", 1, 1)
+                                        TextLocation("LICENSE", 1)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1, 1)),
-                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2, 2)),
-                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 3, 3))
+                                    CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1)),
+                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2)),
+                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 3))
                                 ),
                                 licenseFindingCurations = emptyList(),
                                 pathExcludes = emptyList(),
@@ -217,12 +217,12 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containCopyrightsExactly("(c) 2009-2010 Holder 1", "(c) 2010 Holder 2")
                 result should containFindingsForCopyrightExactly(
                     "(c) 2009-2010 Holder 1",
-                    "(c) 2009 Holder 1" to TextLocation("LICENSE", 1, 1),
-                    "(c) 2010 Holder 1" to TextLocation("LICENSE", 2, 2)
+                    "(c) 2009 Holder 1" to TextLocation("LICENSE", 1),
+                    "(c) 2010 Holder 1" to TextLocation("LICENSE", 2)
                 )
                 result should containFindingsForCopyrightExactly(
                     "(c) 2010 Holder 2",
-                    "(c) 2010 Holder 2" to TextLocation("LICENSE", 3, 3)
+                    "(c) 2010 Holder 2" to TextLocation("LICENSE", 3)
                 )
             }
 
@@ -235,17 +235,17 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = provenance,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
-                                        TextLocation("LICENSE", 1, 1)
+                                        TextLocation("LICENSE", 1)
                                     ),
                                     "MIT" to listOf(
-                                        TextLocation("LICENSE", 50, 50)
+                                        TextLocation("LICENSE", 50)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("(c) 2009 Holder", TextLocation("LICENSE", 1, 1)),
-                                    CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 2, 2)),
-                                    CopyrightFinding("(c) 2011 Holder", TextLocation("LICENSE", 50, 50)),
-                                    CopyrightFinding("(c) 2012 Holder", TextLocation("LICENSE", 51, 51))
+                                    CopyrightFinding("(c) 2009 Holder", TextLocation("LICENSE", 1)),
+                                    CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 2)),
+                                    CopyrightFinding("(c) 2011 Holder", TextLocation("LICENSE", 50)),
+                                    CopyrightFinding("(c) 2012 Holder", TextLocation("LICENSE", 51))
                                 ),
                                 licenseFindingCurations = emptyList(),
                                 pathExcludes = emptyList(),
@@ -272,15 +272,15 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = provenance,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
-                                        TextLocation("LICENSE", 1, 1)
+                                        TextLocation("LICENSE", 1)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1, 1)),
-                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2, 2)),
-                                    CopyrightFinding("(c) 2009 Holder 2", TextLocation("LICENSE", 3, 3)),
-                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 4, 4)),
-                                    CopyrightFinding("(c) 2010 Holder 3", TextLocation("LICENSE", 5, 5))
+                                    CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1)),
+                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2)),
+                                    CopyrightFinding("(c) 2009 Holder 2", TextLocation("LICENSE", 3)),
+                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 4)),
+                                    CopyrightFinding("(c) 2010 Holder 3", TextLocation("LICENSE", 5))
                                 ),
                                 licenseFindingCurations = emptyList(),
                                 pathExcludes = emptyList(),
@@ -300,13 +300,13 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containCopyrightsExactly("(c) 2010 Holder 2", "(c) 2010 Holder 3")
                 result should containFindingsForCopyrightExactly(
                     "(c) 2010 Holder 2",
-                    "(c) 2010 Holder 2" to TextLocation("LICENSE", 4, 4)
+                    "(c) 2010 Holder 2" to TextLocation("LICENSE", 4)
                 )
                 result should containCopyrightGarbageForProvenanceExactly(
                     provenance,
-                    "(c) 2009 Holder 1" to TextLocation("LICENSE", 1, 1),
-                    "(c) 2010 Holder 1" to TextLocation("LICENSE", 2, 2),
-                    "(c) 2009 Holder 2" to TextLocation("LICENSE", 3, 3)
+                    "(c) 2009 Holder 1" to TextLocation("LICENSE", 1),
+                    "(c) 2010 Holder 1" to TextLocation("LICENSE", 2),
+                    "(c) 2009 Holder 2" to TextLocation("LICENSE", 3)
                 )
             }
 
@@ -335,13 +335,13 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = provenance,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
-                                        TextLocation("LICENSE", 1, 1),
-                                        TextLocation("a/b", 1, 1)
+                                        TextLocation("LICENSE", 1),
+                                        TextLocation("a/b", 1)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1, 1)),
-                                    CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1, 1))
+                                    CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1)),
+                                    CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1))
                                 ),
                                 licenseFindingCurations = emptyList(),
                                 pathExcludes = listOf(vcsPathExclude),
@@ -351,13 +351,13 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = sourceArtifactProvenance,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
-                                        TextLocation("LICENSE", 1, 1),
-                                        TextLocation("a/b", 1, 1)
+                                        TextLocation("LICENSE", 1),
+                                        TextLocation("a/b", 1)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1, 1)),
-                                    CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1, 1))
+                                    CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1)),
+                                    CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1))
                                 ),
                                 licenseFindingCurations = emptyList(),
                                 pathExcludes = listOf(sourceArtifactPathExclude),
@@ -372,29 +372,29 @@ class LicenseInfoResolverTest : WordSpec() {
                 val result = resolver.resolveLicenseInfo(pkgId)
 
                 result.pathExcludesForLicense(
-                    "Apache-2.0", provenance, TextLocation("LICENSE", 1, 1)
+                    "Apache-2.0", provenance, TextLocation("LICENSE", 1)
                 ) should beEmpty()
                 result.pathExcludesForLicense(
-                    "Apache-2.0", provenance, TextLocation("a/b", 1, 1)
+                    "Apache-2.0", provenance, TextLocation("a/b", 1)
                 ) should containExactly(vcsPathExclude)
                 result.pathExcludesForLicense(
-                    "Apache-2.0", sourceArtifactProvenance, TextLocation("LICENSE", 1, 1)
+                    "Apache-2.0", sourceArtifactProvenance, TextLocation("LICENSE", 1)
                 ) should containExactly(sourceArtifactPathExclude)
                 result.pathExcludesForLicense(
-                    "Apache-2.0", sourceArtifactProvenance, TextLocation("a/b", 1, 1)
+                    "Apache-2.0", sourceArtifactProvenance, TextLocation("a/b", 1)
                 ) should beEmpty()
 
                 result.pathExcludesForCopyright(
-                    "(c) 2010 Holder", provenance, TextLocation("LICENSE", 1, 1)
+                    "(c) 2010 Holder", provenance, TextLocation("LICENSE", 1)
                 ) should beEmpty()
                 result.pathExcludesForCopyright(
-                    "(c) 2010 Holder", provenance, TextLocation("a/b", 1, 1)
+                    "(c) 2010 Holder", provenance, TextLocation("a/b", 1)
                 ) should containExactly(vcsPathExclude)
                 result.pathExcludesForCopyright(
-                    "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("LICENSE", 1, 1)
+                    "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("LICENSE", 1)
                 ) should containExactly(sourceArtifactPathExclude)
                 result.pathExcludesForCopyright(
-                    "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("a/b", 1, 1)
+                    "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("a/b", 1)
                 ) should beEmpty()
             }
 
@@ -414,11 +414,11 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = provenance,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
-                                        TextLocation("LICENSE", 1, 1)
+                                        TextLocation("LICENSE", 1)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 1, 1))
+                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 1))
                                 ),
                                 licenseFindingCurations = listOf(curation),
                                 pathExcludes = emptyList(),
@@ -436,7 +436,7 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containLocationForLicense(
                     license = "MIT",
                     provenance = provenance,
-                    location = TextLocation("LICENSE", 1, 1),
+                    location = TextLocation("LICENSE", 1),
                     appliedCuration = curation,
                     copyrights = setOf(
                         ResolvedCopyright(
@@ -444,7 +444,7 @@ class LicenseInfoResolverTest : WordSpec() {
                             findings = setOf(
                                 ResolvedCopyrightFinding(
                                     statement = "(c) 2010 Holder 1",
-                                    location = TextLocation("LICENSE", 1, 1),
+                                    location = TextLocation("LICENSE", 1),
                                     matchingPathExcludes = emptyList()
                                 )
                             )
@@ -464,14 +464,14 @@ class LicenseInfoResolverTest : WordSpec() {
                                 provenance = provenance,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
-                                        TextLocation("other", 1, 1)
+                                        TextLocation("other", 1)
                                     ),
                                     "MIT" to listOf(
                                         TextLocation("LICENSE", 3, 20)
                                     )
                                 ).toFindingsSet(),
                                 copyrights = setOf(
-                                    CopyrightFinding("Copyright 2020 Holder", TextLocation("LICENSE", 1, 1))
+                                    CopyrightFinding("Copyright 2020 Holder", TextLocation("LICENSE", 1))
                                 ),
                                 licenseFindingCurations = emptyList(),
                                 pathExcludes = emptyList(),
@@ -505,7 +505,7 @@ class LicenseInfoResolverTest : WordSpec() {
                             findings = setOf(
                                 ResolvedCopyrightFinding(
                                     statement = "Copyright 2020 Holder",
-                                    location = TextLocation("LICENSE", 1, 1),
+                                    location = TextLocation("LICENSE", 1),
                                     matchingPathExcludes = emptyList()
                                 )
                             )
