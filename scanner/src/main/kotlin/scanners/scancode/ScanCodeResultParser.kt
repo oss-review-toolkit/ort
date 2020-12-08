@@ -20,7 +20,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import com.fasterxml.jackson.databind.JsonNode
 
@@ -61,7 +61,7 @@ private val UNKNOWN_LICENSE_KEYS = listOf(
 /**
  * Parse a [resultsFile] from ScanCode to a JSON node, which can then be further processed.
  */
-internal fun parseScanCodeResult(resultsFile: File): JsonNode =
+internal fun parseResultsFile(resultsFile: File): JsonNode =
     if (resultsFile.isFile && resultsFile.length() > 0L) {
         jsonMapper.readTree(resultsFile)
     } else {
