@@ -80,10 +80,19 @@ import org.ossreviewtoolkit.utils.storage.FileArchiver
  */
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     companion object {
+        /**
+         * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
+         */
         const val PROP_CRITERIA_NAME = "regScannerName"
 
+        /**
+         * The name of the property defining the minimum version of the scanner as part of [ScannerCriteria].
+         */
         const val PROP_CRITERIA_MIN_VERSION = "minVersion"
 
+        /**
+         * The name of the property defining the maximum version of the scanner as part of [ScannerCriteria].
+         */
         const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
     }
 
