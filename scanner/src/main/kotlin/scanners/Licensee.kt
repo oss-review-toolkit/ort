@@ -53,6 +53,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     }
 
     override val expectedVersion = "9.13.0"
+    override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
     override val resultFileExt = "json"
 
     override fun command(workingDir: File?) =
@@ -86,8 +87,6 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
-    override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
-
     override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
@@ -109,7 +108,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 stdoutFile.copyTo(resultsFile)
                 val result = getRawResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, path, result)
-                return ScanResult(Provenance(), getDetails(), summary)
+                return ScanResult(Provenance(), details, summary)
             } else {
                 throw ScanException(errorMessage)
             }

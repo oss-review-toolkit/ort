@@ -121,6 +121,17 @@ class ScanCode(
     }
 
     override val expectedVersion = "3.2.1-rc2"
+
+    override val configuration by lazy {
+        mutableListOf<String>().apply {
+            addAll(configurationOptions)
+            add(OUTPUT_FORMAT_OPTION)
+            if (log.delegate.isDebugEnabled) {
+                addAll(debugConfigurationOptions)
+            }
+        }.joinToString(" ")
+    }
+
     override val resultFileExt = "json"
 
     private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
@@ -204,15 +215,6 @@ class ScanCode(
         }
     }
 
-    override fun getConfiguration() =
-        mutableListOf<String>().apply {
-            addAll(configurationOptions)
-            add(OUTPUT_FORMAT_OPTION)
-            if (log.delegate.isDebugEnabled) {
-                addAll(debugConfigurationOptions)
-            }
-        }.joinToString(" ")
-
     override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
@@ -240,7 +242,7 @@ class ScanCode(
 
         with(process) {
             if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(Provenance(), getDetails(), summary.copy(issues = issues))
+                return ScanResult(Provenance(), details, summary.copy(issues = issues))
             } else {
                 throw ScanException(errorMessage)
             }
