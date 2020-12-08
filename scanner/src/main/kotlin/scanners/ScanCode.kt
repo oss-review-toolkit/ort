@@ -205,13 +205,13 @@ class ScanCode(
     }
 
     override fun getConfiguration() =
-        configurationOptions.toMutableList().run {
+        mutableListOf<String>().apply {
+            addAll(configurationOptions)
             add(OUTPUT_FORMAT_OPTION)
             if (log.delegate.isDebugEnabled) {
                 addAll(debugConfigurationOptions)
             }
-            joinToString(" ")
-        }
+        }.joinToString(" ")
 
     override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
