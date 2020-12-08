@@ -46,13 +46,12 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
     data class FileCountResult(val fileCount: Int)
 
-    override val resultFileExt = "json"
     override val expectedVersion = "1.0"
     override val version = expectedVersion
+    override val configuration = ""
+    override val resultFileExt = "json"
 
     override fun command(workingDir: File?) = ""
-
-    override fun getConfiguration() = ""
 
     override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
@@ -65,7 +64,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
         val result = getRawResult(resultsFile)
         val summary = generateSummary(startTime, endTime, path, result)
-        return ScanResult(Provenance(), getDetails(), summary)
+        return ScanResult(Provenance(), details, summary)
     }
 
     override fun getRawResult(resultsFile: File) =

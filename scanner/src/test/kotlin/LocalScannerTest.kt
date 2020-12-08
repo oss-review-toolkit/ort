@@ -73,8 +73,8 @@ class LocalScannerTest : WordSpec({
 
             val criteria = scanner.getScannerCriteria()
 
-            criteria.configMatcher(scanner.getConfiguration()) shouldBe true
-            criteria.configMatcher(scanner.getConfiguration() + "_other") shouldBe false
+            criteria.configMatcher(scanner.configuration) shouldBe true
+            criteria.configMatcher(scanner.configuration + "_other") shouldBe false
         }
     }
 })
@@ -95,13 +95,13 @@ private fun createConfig(properties: Map<String, String>): ScannerConfiguration 
  */
 private fun createScanner(config: ScannerConfiguration): LocalScanner =
     object : LocalScanner(SCANNER_NAME, config) {
+        override val configuration = "someConfig"
+
         override val resultFileExt: String
             get() = "xml"
 
         override val expectedVersion: String
             get() = SCANNER_VERSION
-
-        override fun getConfiguration(): String = "someConfig"
 
         override fun scanPathInternal(path: File, resultsFile: File) = throw NotImplementedError()
 

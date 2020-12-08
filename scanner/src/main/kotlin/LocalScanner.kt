@@ -159,6 +159,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     open val version by lazy { getVersion(scannerDir) }
 
+    /**
+     * The configuration of this [LocalScanner].
+     */
+    abstract val configuration: String
+
+    /**
+     * The [ScannerDetails] of this [LocalScanner].
+     */
+    val details by lazy { ScannerDetails(scannerName, version, configuration) }
+
     override fun getVersionRequirement(): Requirement = Requirement.buildLoose(expectedVersion)
 
     /**
@@ -167,11 +177,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * @return The directory the scanner is installed in.
      */
     protected open fun bootstrap(): File = throw NotImplementedError()
-
-    /**
-     * Return the configuration of this [LocalScanner].
-     */
-    abstract fun getConfiguration(): String
 
     /**
      * Return a [ScannerCriteria] object to be used when looking up existing scan results from a [ScanResultsStorage].
@@ -187,13 +192,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(expectedVersion))
         val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
         val name = options[PROP_CRITERIA_NAME] ?: scannerName
-        return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(getConfiguration()))
+        return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(configuration))
     }
-
-    /**
-     * Return the [ScannerDetails] of this [LocalScanner].
-     */
-    fun getDetails() = ScannerDetails(scannerName, version, getConfiguration())
 
     override suspend fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
             Map<Package, List<ScanResult>> {
@@ -236,7 +236,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         storageDispatcher: CoroutineDispatcher,
         scanDispatcher: CoroutineDispatcher
     ): List<ScanResult> {
-        val scannerDetails = getDetails()
         val scannerCriteria = getScannerCriteria()
 
         if (pkg.isMetaDataOnly) {
@@ -274,7 +273,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     }
 
                     listOf(
-                        scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
+                        scanPackage(details, pkg, outputDirectory, downloadDirectory).also {
                             log.info {
                                 "Finished scanning ${pkg.id.toCoordinates()} in thread " +
                                         "'${Thread.currentThread().name}' $packageIndex."
@@ -296,7 +295,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             listOf(
                 ScanResult(
                     provenance = Provenance(),
-                    scanner = scannerDetails,
+                    scanner = details,
                     summary = ScanSummary(
                         startTime = now,
                         endTime = now,
@@ -446,13 +445,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             "Specified path '$absoluteInputPath' does not exist."
         }
 
-        val scannerDetails = getDetails()
-        log.info { "Scanning path '$absoluteInputPath' with $scannerDetails..." }
+        log.info { "Scanning path '$absoluteInputPath' with $details..." }
 
         val result = try {
             val resultsFile = File(
                 outputDirectory.apply { safeMkdirs() },
-                "${inputPath.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt"
+                "${inputPath.nameWithoutExtension}_${details.name}.$resultFileExt"
             )
             scanPathInternal(inputPath, resultsFile).also {
                 log.info {
@@ -477,7 +475,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     )
                 )
             )
-            ScanResult(Provenance(), getDetails(), summary)
+
+            ScanResult(Provenance(), details, summary)
         }
 
         // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
