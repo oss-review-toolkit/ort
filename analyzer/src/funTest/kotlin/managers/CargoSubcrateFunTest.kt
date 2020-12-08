@@ -25,7 +25,6 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -39,8 +38,7 @@ class CargoSubcrateFunTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        // Disabled on Azure Windows build because it fails with the pre-installed Rust version 1.42.0.
-        "Lib project dependencies are detected correctly".config(enabled = !Ci.isAzureWindows) {
+        "Lib project dependencies are detected correctly" {
             val packageFile = projectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
