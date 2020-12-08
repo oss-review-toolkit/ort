@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import java.io.File
 import java.io.IOException
@@ -261,5 +261,5 @@ class ScanCode(
             }
         }
 
-    override fun getRawResult(resultsFile: File) = parseScanCodeResult(resultsFile)
+    override fun getRawResult(resultsFile: File) = parseResultsFile(resultsFile)
 }

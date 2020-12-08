@@ -17,14 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner
+package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.scanners.ScanCode
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 class ScanCodeTest : WordSpec({
