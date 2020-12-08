@@ -229,13 +229,13 @@ val ORT_RESULT = OrtResult(
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "MIT",
-                                        location = TextLocation("project-with-findings/file", 1, 1)
+                                        location = TextLocation("project-with-findings/file", 1)
                                     )
                                 ),
                                 copyrightFindings = sortedSetOf(
                                     CopyrightFinding(
                                         statement = "Copyright 1",
-                                        location = TextLocation("project-with-findings/file", 1, 1)
+                                        location = TextLocation("project-with-findings/file", 1)
                                     )
                                 )
                             )
@@ -273,13 +273,13 @@ val ORT_RESULT = OrtResult(
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "MIT",
-                                        location = TextLocation("file", 1, 1)
+                                        location = TextLocation("file", 1)
                                     )
                                 ),
                                 copyrightFindings = sortedSetOf(
                                     CopyrightFinding(
                                         statement = "Copyright 1",
-                                        location = TextLocation("file", 1, 1)
+                                        location = TextLocation("file", 1)
                                     )
                                 )
                             )
@@ -305,21 +305,21 @@ val ORT_RESULT = OrtResult(
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "MIT",
-                                        location = TextLocation("LICENSE", 1, 1)
+                                        location = TextLocation("LICENSE", 1)
                                     ),
                                     LicenseFinding(
                                         license = "MIT",
-                                        location = TextLocation("file", 1, 1)
+                                        location = TextLocation("file", 1)
                                     )
                                 ),
                                 copyrightFindings = sortedSetOf(
                                     CopyrightFinding(
                                         statement = "Copyright 1",
-                                        location = TextLocation("LICENSE", 1, 1)
+                                        location = TextLocation("LICENSE", 1)
                                     ),
                                     CopyrightFinding(
                                         statement = "Copyright 2",
-                                        location = TextLocation("file", 1, 1)
+                                        location = TextLocation("file", 1)
                                     )
                                 )
                             )
@@ -345,29 +345,29 @@ val ORT_RESULT = OrtResult(
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "MIT",
-                                        location = TextLocation("LICENSE", 1, 1)
+                                        location = TextLocation("LICENSE", 1)
                                     ),
                                     LicenseFinding(
                                         license = "MIT",
-                                        location = TextLocation("file", 1, 1)
+                                        location = TextLocation("file", 1)
                                     ),
                                     LicenseFinding(
                                         license = "BSD-3-Clause",
-                                        location = TextLocation("file", 50, 50)
+                                        location = TextLocation("file", 50)
                                     )
                                 ),
                                 copyrightFindings = sortedSetOf(
                                     CopyrightFinding(
                                         statement = "Copyright 1",
-                                        location = TextLocation("LICENSE", 1, 1)
+                                        location = TextLocation("LICENSE", 1)
                                     ),
                                     CopyrightFinding(
                                         statement = "Copyright 2",
-                                        location = TextLocation("file", 1, 1)
+                                        location = TextLocation("file", 1)
                                     ),
                                     CopyrightFinding(
                                         statement = "Copyright 3",
-                                        location = TextLocation("file", 50, 50)
+                                        location = TextLocation("file", 50)
                                     )
                                 )
                             )
@@ -393,21 +393,21 @@ val ORT_RESULT = OrtResult(
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "MIT",
-                                        location = TextLocation("file1", 1, 1)
+                                        location = TextLocation("file1", 1)
                                     ),
                                     LicenseFinding(
                                         license = "BSD-2-Clause",
-                                        location = TextLocation("file2", 1, 1)
+                                        location = TextLocation("file2", 1)
                                     )
                                 ),
                                 copyrightFindings = sortedSetOf(
                                     CopyrightFinding(
                                         statement = "Copyright 1",
-                                        location = TextLocation("file1", 1, 1)
+                                        location = TextLocation("file1", 1)
                                     ),
                                     CopyrightFinding(
                                         statement = "Copyright 2",
-                                        location = TextLocation("file2", 1, 1)
+                                        location = TextLocation("file2", 1)
                                     )
                                 )
                             )
@@ -433,13 +433,13 @@ val ORT_RESULT = OrtResult(
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "BSD-3-Clause",
-                                        location = TextLocation("LICENSE", 1, 1)
+                                        location = TextLocation("LICENSE", 1)
                                     )
                                 ),
                                 copyrightFindings = sortedSetOf(
                                     CopyrightFinding(
                                         statement = "Copyright 1",
-                                        location = TextLocation("LICENSE", 1, 1)
+                                        location = TextLocation("LICENSE", 1)
                                     )
                                 )
                             )

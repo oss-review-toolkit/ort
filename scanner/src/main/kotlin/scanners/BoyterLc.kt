@@ -154,7 +154,6 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                     location = TextLocation(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, filePath),
-                        TextLocation.UNKNOWN_LINE,
                         TextLocation.UNKNOWN_LINE
                     )
                 )

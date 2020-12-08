@@ -118,7 +118,7 @@ private fun licenseFindings(vararg paths: String): List<LicenseFinding> =
     paths.map {
         LicenseFinding(
             license = "LicenseRef-not-relevant",
-            location = TextLocation(it, startLine = 1, endLine = 2)
+            location = TextLocation(it, 1, 2)
         )
     }
 

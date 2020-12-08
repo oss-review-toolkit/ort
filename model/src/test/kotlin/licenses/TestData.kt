@@ -57,8 +57,8 @@ val declaredLicenses = sortedSetOf("LicenseRef-a", "LicenseRef-b")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
 
 val licenseFindings = sortedSetOf(
-    LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1, 1)),
-    LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2, 2))
+    LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
+    LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
 )
 
 val packageWithoutLicense = Package.EMPTY.copy(
