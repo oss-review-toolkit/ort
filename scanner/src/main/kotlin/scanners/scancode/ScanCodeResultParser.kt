@@ -99,12 +99,10 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, verificationC
  * Generates an object with details about the ScanCode scanner that produced the given [result]. The
  * corresponding metadata from the result is evaluated.
  */
-internal fun generateScannerDetails(result: JsonNode): ScannerDetails {
-    result["headers"]?.let {
-        return generateScannerDetailsFromNode(it[0], "options", "tool_version")
-    }
-    return generateScannerDetailsFromNode(result, "scancode_options", "scancode_version")
-}
+internal fun generateScannerDetails(result: JsonNode) =
+    result["headers"]?.let { headers ->
+        generateScannerDetailsFromNode(headers.first(), "options", "tool_version")
+    } ?: generateScannerDetailsFromNode(result, "scancode_options", "scancode_version")
 
 private fun getFileCount(result: JsonNode): Int {
     // ScanCode 2.9.8 and above nest the files count in an extra header.
