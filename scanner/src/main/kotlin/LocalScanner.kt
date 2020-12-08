@@ -76,8 +76,7 @@ import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 /**
- * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
- * serial order. Scan results can be stored in a [ScanResultsStorage].
+ * Abstraction for a [Scanner] that operates locally. Scan results can be stored in a [ScanResultsStorage].
  */
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     companion object {
