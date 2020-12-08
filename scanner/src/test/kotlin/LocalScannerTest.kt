@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class LocalScannerTest : WordSpec({
-    "LocalScanner.getScannerCriteria()" should {
+    "getScannerCriteria()" should {
         "obtain default values from the scanner" {
             val scanner = createScanner(createConfig(emptyMap()))
 
