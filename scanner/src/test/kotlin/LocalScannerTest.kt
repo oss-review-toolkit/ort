@@ -19,16 +19,13 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.vdurmont.semver4j.Semver
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.lang.UnsupportedOperationException
 
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class LocalScannerTest : WordSpec({
@@ -106,15 +103,9 @@ private fun createScanner(config: ScannerConfiguration): LocalScanner =
 
         override fun getConfiguration(): String = "someConfig"
 
-        override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
-            throw UnsupportedOperationException("Unexpected call")
-        }
+        override fun scanPathInternal(path: File, resultsFile: File) = throw NotImplementedError()
 
-        override fun getRawResult(resultsFile: File): JsonNode {
-            throw UnsupportedOperationException("Unexpected call")
-        }
+        override fun getRawResult(resultsFile: File) = throw NotImplementedError()
 
-        override fun command(workingDir: File?): String {
-            throw UnsupportedOperationException("Unexpected call")
-        }
+        override fun command(workingDir: File?) = throw NotImplementedError()
     }
