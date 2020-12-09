@@ -118,7 +118,13 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     private val archive by option(
         "--archive",
         help = "Archive the downloaded source code as ZIP files to the output directory. Is ignored if " +
-                "'--project-url' is also specified."
+                "one of '--archive-all' or '--project-url' is also specified."
+    ).flag()
+
+    private val archiveAll by option(
+        "--archive-all",
+        help = "Archive all the downloaded source code as a single ZIP file to the output directory. Takes " +
+                "precedence over '--archive'. Is ignored if '--project-url' is also specified."
     ).flag()
 
     private val entities by option(
@@ -158,7 +164,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     try {
                         val downloadDir = outputDir.resolve(pkg.id.toPath())
                         Downloader.download(pkg, downloadDir, allowMovingRevisions)
-                        if (archive) archive(pkg, downloadDir, outputDir)
+                        if (archive && !archiveAll) archive(pkg, downloadDir, outputDir)
                     } catch (e: DownloadException) {
                         e.showStackTrace()
 
@@ -169,6 +175,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                         log.error { failureMessage }
                     }
                 }
+
+                if (archiveAll) archiveAll()
             }
 
             is StringType -> {
@@ -245,6 +253,19 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         } finally {
             val relativePath = outputDir.toPath().relativize(inputDir.toPath()).first()
             outputDir.resolve(relativePath.toString()).safeDeleteRecursively()
+        }
+    }
+
+    private fun archiveAll() {
+        val zipFile = outputDir.resolve("archive.zip")
+        val zipPath = zipFile.toPath()
+
+        log.info {
+            "Archiving the content of directory '$outputDir' to '$zipFile'."
+        }
+
+        outputDir.packZip(zipFile) { path ->
+            path != zipPath
         }
     }
 }
