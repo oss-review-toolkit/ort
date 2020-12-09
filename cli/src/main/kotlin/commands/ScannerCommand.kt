@@ -41,6 +41,7 @@ import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -53,6 +54,7 @@ import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.packZip
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
@@ -116,6 +118,11 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     private val skipExcluded by option(
         "--skip-excluded",
         help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
+    ).flag()
+
+    private val archiveAll by option(
+        "--archive-all",
+        help = "Archive the source code of all downloaded packages to a single zip file"
     ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
@@ -209,6 +216,25 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         if (scanResults.hasIssues) {
             println("The scan result contains issues.")
             throw ProgramResult(2)
+        }
+
+        if (archiveAll) archiveAll(ortResult)
+    }
+
+    private fun archiveAll(ortResult: OrtResult) {
+        val projectPathPrefixes = ortResult.getProjects().map {
+            it.id.toPath()
+        }.toList()
+
+        val directory = downloadDir ?: outputDir.resolve("downloads")
+        val zipFile = directory.resolve("archive.zip")
+        val zipPath = zipFile.toPath()
+
+        directory.packZip(zipFile) { path ->
+            val relativePath = path.toFile().relativeTo(directory).invariantSeparatorsPath
+            projectPathPrefixes.none {
+                relativePath.startsWith(it, ignoreCase = true)
+            }.and(path != zipPath)
         }
     }
 }
