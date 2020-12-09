@@ -262,7 +262,6 @@ data class OrtResult(
         return vendorPackages
     }
 
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getUncuratedPackageById(id: Identifier): Package? =
         getPackage(id)?.toUncuratedPackage()
             ?: getProject(id)?.toPackage()
@@ -310,7 +309,6 @@ data class OrtResult(
      *
      * Return `false` if there is no project or package with this [id].
      */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun isExcluded(id: Identifier): Boolean =
         if (isProject(id)) {
             // An excluded project could still be included as a dependency of another non-excluded project.
@@ -439,6 +437,5 @@ data class OrtResult(
     /**
      * Return true if and only if the given [id] denotes a [Project] contained in this [OrtResult].
      */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun isProject(id: Identifier): Boolean = getProject(id) != null
 }
