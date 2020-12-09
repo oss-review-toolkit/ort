@@ -82,7 +82,7 @@ class ScanResultContainerTest : WordSpec() {
                 "copyright 2",
                 TextLocation("copyright path 1.2", 1, 2)
             )
-         ),
+        ),
         mutableListOf(issue11, issue12)
     )
     private val scanSummary2 = ScanSummary(
