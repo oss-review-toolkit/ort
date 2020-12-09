@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.longs.beInRange
+import io.kotest.matchers.should
 
 import java.io.File
 
@@ -37,7 +38,7 @@ class AsciiDocTemplateReporterFunTest : StringSpec({
     "PDF output is created successfully from an existing result and default template" {
         val report = generateReport(ORT_RESULT)
 
-        report.single().length() shouldBe 82354L
+        report.single().length() should beInRange(80000L..85000L)
     }
 
     "Report generation is aborted when path to non-existing pdf-them file is given" {
