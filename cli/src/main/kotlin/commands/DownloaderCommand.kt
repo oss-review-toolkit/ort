@@ -258,14 +258,13 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
     private fun archiveAll() {
         val zipFile = outputDir.resolve("archive.zip")
-        val zipPath = zipFile.toPath()
 
         log.info {
             "Archiving the content of directory '$outputDir' to '$zipFile'."
         }
 
-        outputDir.packZip(zipFile) { path ->
-            path != zipPath
+        outputDir.packZip(zipFile) { file ->
+            file != zipFile
         }
     }
 }

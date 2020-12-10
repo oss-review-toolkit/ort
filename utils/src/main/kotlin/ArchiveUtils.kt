@@ -127,7 +127,7 @@ fun File.packZip(
     targetFile: File,
     prefix: String = "",
     overwrite: Boolean = false,
-    filter: (Path) -> Boolean = { true }
+    filter: (File) -> Boolean = { true }
 ) {
     require(overwrite || !targetFile.exists()) {
         "The target ZIP file '${targetFile.absolutePath}' must not exist."
@@ -135,10 +135,13 @@ fun File.packZip(
 
     ZipArchiveOutputStream(targetFile).use { output ->
         output.setLevel(Deflater.BEST_COMPRESSION)
+
         Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                if (attrs.isRegularFile && filter(file)) {
-                    val fileAsFile = file.toFile()
+                if (!attrs.isRegularFile) return FileVisitResult.CONTINUE
+
+                val fileAsFile = file.toFile()
+                if (filter(fileAsFile)) {
                     val packPath = prefix + fileAsFile.toRelativeString(this@packZip)
                     val entry = ZipArchiveEntry(fileAsFile, packPath)
                     output.putArchiveEntry(entry)
