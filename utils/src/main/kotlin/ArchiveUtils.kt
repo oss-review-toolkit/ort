@@ -121,13 +121,14 @@ fun ByteArray.unpackZip(targetDirectory: File) = ZipFile(SeekableInMemoryByteCha
  * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
  * recursively added to the archive. Only regular files are added, e.g. symbolic links or directories are skipped. If
  * a [prefix] is specified, it is added to the file names in the ZIP file.
- * If not all files shall be added to the archive a [filter] can be provided.
+ * If not all directories or files shall be added to the archive a [directoryFilter] or [fileFilter] can be provided.
  */
 fun File.packZip(
     targetFile: File,
     prefix: String = "",
     overwrite: Boolean = false,
-    filter: (File) -> Boolean = { true }
+    directoryFilter: (File) -> Boolean = { true },
+    fileFilter: (File) -> Boolean = { true }
 ) {
     require(overwrite || !targetFile.exists()) {
         "The target ZIP file '${targetFile.absolutePath}' must not exist."
@@ -137,11 +138,15 @@ fun File.packZip(
         output.setLevel(Deflater.BEST_COMPRESSION)
 
         Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
+            override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                return if (directoryFilter(dir.toFile())) FileVisitResult.CONTINUE else FileVisitResult.SKIP_SUBTREE
+            }
+
             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                 if (!attrs.isRegularFile) return FileVisitResult.CONTINUE
 
                 val fileAsFile = file.toFile()
-                if (filter(fileAsFile)) {
+                if (fileFilter(fileAsFile)) {
                     val packPath = prefix + fileAsFile.toRelativeString(this@packZip)
                     val entry = ZipArchiveEntry(fileAsFile, packPath)
                     output.putArchiveEntry(entry)
