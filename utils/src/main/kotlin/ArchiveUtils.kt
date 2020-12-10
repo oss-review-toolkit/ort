@@ -138,9 +138,11 @@ fun File.packZip(
         Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                 if (attrs.isRegularFile && filter(file)) {
-                    val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
+                    val fileAsFile = file.toFile()
+                    val packPath = prefix + fileAsFile.toRelativeString(this@packZip)
+                    val entry = ZipArchiveEntry(fileAsFile, packPath)
                     output.putArchiveEntry(entry)
-                    file.toFile().inputStream().use { input -> input.copyTo(output) }
+                    fileAsFile.inputStream().use { input -> input.copyTo(output) }
                     output.closeArchiveEntry()
                 }
 
