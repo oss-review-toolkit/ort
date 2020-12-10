@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
@@ -30,6 +31,7 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
@@ -116,17 +118,22 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 "are forbidden because they are not pointing to a fixed revision of the source code."
     ).flag()
 
-    private val archive by option(
-        "--archive",
-        help = "Archive the downloaded source code as ZIP files to the output directory. Is ignored if " +
-                "one of '--archive-all' or '--project-url' is also specified."
-    ).flag()
+    private enum class ArchiveMode {
+        NONE,
+        PER_PACKAGE,
+        BUNDLE
+    }
 
-    private val archiveAll by option(
-        "--archive-all",
-        help = "Archive all the downloaded source code as a single ZIP file to the output directory. Takes " +
-                "precedence over '--archive'. Is ignored if '--project-url' is also specified."
-    ).flag()
+    private val archiveMode by mutuallyExclusiveOptions(
+        option(
+            help = "Archive the downloaded source code as ZIP files to the output directory. Is ignored if " +
+                    "'--project-url' is also specified."
+        ).switch("--archive" to ArchiveMode.PER_PACKAGE),
+        option(
+            help = "Archive all the downloaded source code as a single ZIP file to the output directory. Is ignored " +
+                    "if '--project-url' is also specified."
+        ).switch("--archive-all" to ArchiveMode.BUNDLE)
+    ).single().default(ArchiveMode.NONE)
 
     private val entities by option(
         "--entities", "-e",
@@ -165,7 +172,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     try {
                         val downloadDir = outputDir.resolve(pkg.id.toPath())
                         Downloader.download(pkg, downloadDir, allowMovingRevisions)
-                        if (archive && !archiveAll) archive(pkg, downloadDir, outputDir)
+                        if (archiveMode == ArchiveMode.PER_PACKAGE) archive(pkg, downloadDir, outputDir)
                     } catch (e: DownloadException) {
                         e.showStackTrace()
 
@@ -177,7 +184,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     }
                 }
 
-                if (archiveAll) archiveAll()
+                if (archiveMode == ArchiveMode.BUNDLE) archiveAll()
             }
 
             is StringType -> {
