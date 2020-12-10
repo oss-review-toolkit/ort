@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.spdx.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ArchiveType
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.encodeOrUnknown
@@ -238,7 +239,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         try {
             inputDir.packZip(
                 zipFile,
-                "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
+                "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/",
+                directoryFilter = { it.name !in VCS_DIRECTORIES }
             )
         } catch (e: IllegalArgumentException) {
             e.showStackTrace()
@@ -255,8 +257,10 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
         log.info { "Archiving directory '$outputDir' to '$zipFile'." }
 
-        outputDir.packZip(zipFile) { file ->
-            file != zipFile
-        }
+        outputDir.packZip(
+            zipFile,
+            directoryFilter = { it.name !in VCS_DIRECTORIES },
+            fileFilter = { it != zipFile }
+        )
     }
 }
