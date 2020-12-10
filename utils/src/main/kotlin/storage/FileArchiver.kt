@@ -87,8 +87,8 @@ class FileArchiver(
         zipFile.deleteOnExit()
 
         val zipDuration = measureTime {
-            directory.packZip(zipFile, overwrite = true) { path ->
-                val relativePath = path.toFile().relativeTo(directory).invariantSeparatorsPath
+            directory.packZip(zipFile, overwrite = true) { file ->
+                val relativePath = file.relativeTo(directory).invariantSeparatorsPath
 
                 matcher.matches(relativePath).also { result ->
                     if (result) {
