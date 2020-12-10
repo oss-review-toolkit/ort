@@ -231,11 +231,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     }
 
     private fun archive(pkg: Package, inputDir: File, outputDir: File) {
-        val zipFile = File(
-            outputDir,
-            "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
-                    "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip"
-        )
+        val zipFile = File(outputDir, "${pkg.id.toPath("-")}.zip")
 
         log.info { "Archiving directory '$inputDir' to '$zipFile'." }
 
