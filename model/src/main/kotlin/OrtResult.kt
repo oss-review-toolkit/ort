@@ -25,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -32,6 +34,7 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.zipWithDefault
 
 /**
@@ -99,20 +102,23 @@ data class OrtResult(
      * when querying projects in large analyzer results.
      */
     private val projects: Map<Identifier, ProjectEntry> by lazy {
-        log.info { "Computing excluded projects which may take a while..." }
+        log.perf { "Computing excluded projects..." }
 
-        val result = getProjects().associateBy(
-            { project -> project.id },
-            { project ->
-                val pathExcludes = getExcludes().findPathExcludes(project, this)
-                ProjectEntry(
-                    project = project,
-                    isExcluded = pathExcludes.isNotEmpty()
-                )
-            }
-        )
+        val (result, duration) = measureTimedValue {
+            getProjects().associateBy(
+                { project -> project.id },
+                { project ->
+                    val pathExcludes = getExcludes().findPathExcludes(project, this)
+                    ProjectEntry(
+                        project = project,
+                        isExcluded = pathExcludes.isNotEmpty()
+                    )
+                }
+            )
+        }
 
-        log.info { "Computing excluded projects done." }
+        log.perf { "Computing excluded projects took ${duration.inSeconds}s." }
+
         result
     }
 
@@ -124,35 +130,38 @@ data class OrtResult(
      * dependencies of other projects, but for them only the excluded state is provided, no [CuratedPackage] instance.
      */
     private val packages: Map<Identifier, PackageEntry> by lazy {
-        log.info { "Computing excluded packages which may take a while..." }
+        log.perf { "Computing excluded packages..." }
 
-        val projects = getProjects()
-        val packages = getPackages().associateBy { it.pkg.id }
+        val (result, duration) = measureTimedValue {
+            val projects = getProjects()
+            val packages = getPackages().associateBy { it.pkg.id }
 
-        val allDependencies = packages.keys.toMutableSet()
-        val includedDependencies = mutableSetOf<Identifier>()
+            val allDependencies = packages.keys.toMutableSet()
+            val includedDependencies = mutableSetOf<Identifier>()
 
-        projects.forEach { project ->
-            project.scopes.forEach { scope ->
-                val isScopeExcluded = getExcludes().isScopeExcluded(scope)
+            projects.forEach { project ->
+                project.scopes.forEach { scope ->
+                    val isScopeExcluded = getExcludes().isScopeExcluded(scope)
 
-                val dependencies = scope.collectDependencies()
-                allDependencies += dependencies
+                    val dependencies = scope.collectDependencies()
+                    allDependencies += dependencies
 
-                if (!isProjectExcluded(project.id) && !isScopeExcluded) {
-                    includedDependencies += dependencies
+                    if (!isProjectExcluded(project.id) && !isScopeExcluded) {
+                        includedDependencies += dependencies
+                    }
                 }
+            }
+
+            allDependencies.associateWithTo(mutableMapOf()) { id ->
+                PackageEntry(
+                    curatedPackage = packages[id],
+                    isExcluded = id !in includedDependencies
+                )
             }
         }
 
-        val result = allDependencies.associateWithTo(mutableMapOf()) { id ->
-            PackageEntry(
-                curatedPackage = packages[id],
-                isExcluded = id !in includedDependencies
-            )
-        }
+        log.perf { "Computing excluded packages took ${duration.inSeconds}s." }
 
-        log.info { "Computing excluded packages done." }
         result
     }
 
