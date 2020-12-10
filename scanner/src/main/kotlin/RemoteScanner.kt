@@ -40,5 +40,5 @@ abstract class RemoteScanner(name: String, config: ScannerConfiguration) : Scann
     /**
      * Return the [ScannerDetails] of this [RemoteScanner].
      */
-    val details = ScannerDetails(scannerName, version, configuration)
+    val details by lazy { ScannerDetails(scannerName, version, configuration) }
 }
