@@ -20,7 +20,7 @@ the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 * `template.path`: A comma-separated list of paths to template files provided by the user.
 * `backend`: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
-* `pdf-theme.path`: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
+* `pdf.theme.file`: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
 
 ## Command Line
 
@@ -33,7 +33,7 @@ cli/build/install/ort/bin/ort report
   -o [reporter-output-dir]
   -f AsciiDoc
   --report-option AsciiDocTemplate=template.id=[template-id]
-  --report-option AsciiDocTemplate=pdf-theme.path=pdf-theme.yml
+  --report-option AsciiDocTemplate=pdf.theme.file=pdf-theme.yml
 ```
 
 [1]: https://freemarker.apache.org

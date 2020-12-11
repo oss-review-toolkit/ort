@@ -155,7 +155,7 @@ class ExamplesFunTest : StringSpec() {
             val report = AsciiDocTemplateReporter().generateReport(
                 ReporterInput(OrtResult.EMPTY),
                 outputDir,
-                mapOf("pdf-theme.path" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path)
+                mapOf("pdf.theme.file" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path)
             )
 
             report shouldHaveSize 1
