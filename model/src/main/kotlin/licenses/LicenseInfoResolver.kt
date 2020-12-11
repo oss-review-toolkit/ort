@@ -32,10 +32,10 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
+import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
-import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 
@@ -46,6 +46,7 @@ class LicenseInfoResolver(
 ) {
     private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
     private val resolvedLicenseFiles: ConcurrentMap<Identifier, ResolvedLicenseFileInfo> = ConcurrentHashMap()
+    private val rootLicenseMatcher = RootLicenseMatcher(rootLicenseFilenamePatterns = emptyList())
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
@@ -203,23 +204,30 @@ class LicenseInfoResolver(
 
         val licenseInfo = resolveLicenseInfo(id)
         val licenseFiles = mutableListOf<ResolvedLicenseFile>()
-        val matcher = FileMatcher(archiver.patterns)
 
         licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.map { it.provenance }
         }.forEach { provenance ->
             val archiveDir = createTempDirectory("$ORT_NAME-archive").toFile().apply { deleteOnExit() }
-
             val path = "${id.toPath()}/${provenance.hash()}"
-            if (archiver.unarchive(archiveDir, path)) {
-                archiveDir.walk().forEach { file ->
-                    val relativePath = file.toRelativeString(archiveDir)
-                    if (matcher.matches(relativePath)) {
-                        licenseFiles += ResolvedLicenseFile(
-                            provenance, licenseInfo.filter(provenance, relativePath), relativePath, file
-                        )
-                    }
-                }
+
+            if (!archiver.unarchive(archiveDir, path)) return@forEach
+
+            val directory = provenance.vcsInfo?.path.orEmpty()
+            val rootLicenseFiles = rootLicenseMatcher.getApplicableLicenseFilesForDirectories(
+                relativeFilePaths = archiveDir.walk().filter { it.isFile }.mapTo(mutableSetOf()) {
+                    it.toRelativeString(archiveDir)
+                },
+                directories = listOf(directory)
+            ).getValue(directory)
+
+            licenseFiles += rootLicenseFiles.map { relativePath ->
+                ResolvedLicenseFile(
+                    provenance = provenance,
+                    licenseInfo.filter(provenance, relativePath),
+                    relativePath,
+                    archiveDir.resolve(relativePath)
+                )
             }
         }
 
