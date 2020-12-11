@@ -59,9 +59,6 @@ class Bower(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
-        // We do not actually depend on any features specific to this Bower version, but we still want to
-        // stick to fixed versions to be sure to get consistent results.
-        private const val REQUIRED_BOWER_VERSION = "1.8.8"
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 
@@ -211,7 +208,7 @@ class Bower(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_BOWER_VERSION)
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.8.8,)")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 

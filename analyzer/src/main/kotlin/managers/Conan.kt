@@ -64,8 +64,6 @@ class Conan(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
-        private const val REQUIRED_CONAN_VERSION = "1.18.0"
-
         private const val SCOPE_NAME_DEPENDENCIES = "requires"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
     }
@@ -90,7 +88,7 @@ class Conan(
         // Conan version 1.18.0
         output.removePrefix("Conan version ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CONAN_VERSION)
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.18.0,)")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
