@@ -43,7 +43,7 @@ class AsciiDocTemplateReporterFunTest : StringSpec({
 
     "Report generation is aborted when path to non-existing pdf-them file is given" {
         shouldThrow<IllegalArgumentException> {
-            generateReport(ORT_RESULT, mapOf("pdf-theme.path" to "dummy.file"))
+            generateReport(ORT_RESULT, mapOf("pdf.theme.file" to "dummy.file"))
         }
     }
 })
