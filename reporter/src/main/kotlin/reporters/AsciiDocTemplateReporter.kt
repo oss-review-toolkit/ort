@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  * - *template.path*: A comma-separated list of paths to template files provided by the user.
  * - *backend*: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
  *              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
- * - *pdf-theme.path*: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
+ * - *pdf.theme.file*: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
  *
  * [1]: https://freemarker.apache.org
  * [2]: https://asciidoc.org/
@@ -71,7 +71,7 @@ class AsciiDocTemplateReporter : Reporter {
         private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
 
         private const val OPTION_BACKEND = "backend"
-        private const val OPTION_PDF_THEME_PATH = "pdf-theme.path"
+        private const val OPTION_PDF_THEME_FILE = "pdf.theme.file"
 
         private const val BACKEND_PDF = "pdf"
     }
@@ -93,12 +93,12 @@ class AsciiDocTemplateReporter : Reporter {
         val backend = templateOptions.remove(OPTION_BACKEND) ?: BACKEND_PDF
 
         if (backend.equals(BACKEND_PDF, ignoreCase = true)) {
-            templateOptions.remove(OPTION_PDF_THEME_PATH)?.let { themePath ->
-                File(themePath).also {
-                    require(it.isFile) { "Could not find pdf-theme file at '${it.absolutePath}'." }
+            templateOptions.remove(OPTION_PDF_THEME_FILE)?.let { pdfThemeFile ->
+                File(pdfThemeFile).also {
+                    require(it.isFile) { "Could not find PDF theme file at '${it.absolutePath}'." }
                 }
 
-                asciidoctorAttributes.attribute("pdf-theme", themePath)
+                asciidoctorAttributes.attribute("pdf-theme", pdfThemeFile)
             }
         }
 
