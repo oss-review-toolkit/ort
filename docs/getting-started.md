@@ -35,7 +35,7 @@ git clone --recurse-submodules https://github.com/oss-review-toolkit/ort.git
 To build the command line interface run:
 
 ```bash
-cd oss-review-toolkit
+cd ort
 ./gradlew installDist
 ```
 
