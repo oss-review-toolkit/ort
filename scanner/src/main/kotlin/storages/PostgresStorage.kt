@@ -27,7 +27,10 @@ import com.vdurmont.semver4j.Semver
 import java.io.IOException
 import java.sql.Array
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.SQLException
+import java.sql.Statement
+import javax.sql.DataSource
 
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
@@ -52,9 +55,9 @@ import org.ossreviewtoolkit.utils.showStackTrace
  */
 class PostgresStorage(
     /**
-     * The JDBC connection to the database.
+     * The JDBC data source to obtain database connections.
      */
-    private val connection: Connection,
+    private val dataSource: DataSource,
 
     /**
      * The name of the database to use.
@@ -89,40 +92,42 @@ class PostgresStorage(
      * Setup the database.
      */
     fun setupDatabase() {
-        val statement = connection.createStatement()
-        val resultSet = statement.executeQuery("SHOW client_encoding")
-        if (resultSet.next()) {
-            val clientEncoding = resultSet.getString(1)
-            if (clientEncoding != "UTF8") {
-                log.warn { "The database's client_encoding is '$clientEncoding' but should be 'UTF8'." }
-            }
-        }
+        executeStatement {
+            executeQuery("SHOW client_encoding").use { resultSet ->
+                if (resultSet.next()) {
+                    val clientEncoding = resultSet.getString(1)
+                    if (clientEncoding != "UTF8") {
+                        log.warn { "The database's client_encoding is '$clientEncoding' but should be 'UTF8'." }
+                    }
+                }
 
-        if (!tableExists()) {
-            log.info { "Trying to create table '$table'." }
-            if (!createTable()) {
-                throw IOException("Failed to create table '$table'.")
+                if (!tableExists()) {
+                    log.info { "Trying to create table '$table'." }
+                    if (!createTable()) {
+                        throw IOException("Failed to create table '$table'.")
+                    }
+                    log.info { "Successfully created table '$table'." }
+                }
             }
-            log.info { "Successfully created table '$table'." }
         }
     }
 
-    private fun tableExists(): Boolean {
-        val statement = connection.createStatement()
-        val resultSet = statement.executeQuery("SELECT to_regclass('$schema.$table')")
-        return resultSet.next() && resultSet.getString(1).let { result ->
-            // At least PostgreSQL 9.6 reports the result including the schema prefix.
-            result == table || result == "$schema.$table"
+    private fun tableExists(): Boolean =
+        executeStatement {
+            executeQuery("SELECT to_regclass('$schema.$table')").use { resultSet ->
+                resultSet.next() && resultSet.getString(1).let { result ->
+                    // At least PostgreSQL 9.6 reports the result including the schema prefix.
+                    result == table || result == "$schema.$table"
+                }
+            }
         }
-    }
 
     private fun createTable(): Boolean {
-        val statement = connection.createStatement()
+        executeStatement {
+            execute("CREATE SEQUENCE $schema.${table}_id_seq")
 
-        statement.execute("CREATE SEQUENCE $schema.${table}_id_seq")
-
-        statement.execute(
-            """
+            execute(
+                """
             CREATE TABLE $schema.$table
             (
                 id integer NOT NULL DEFAULT nextval('$schema.${table}_id_seq'::regclass),
@@ -135,19 +140,19 @@ class PostgresStorage(
             )
             TABLESPACE pg_default
             """.trimIndent()
-        )
+            )
 
-        statement.execute(
-            """
+            execute(
+                """
             CREATE INDEX identifier
                 ON $schema.$table USING btree
                 (identifier COLLATE pg_catalog."default")
                 TABLESPACE pg_default
             """.trimIndent()
-        )
+            )
 
-        statement.execute(
-            """
+            execute(
+                """
             CREATE INDEX identifier_and_scanner_version
                 ON $schema.$table USING btree
                 (
@@ -157,7 +162,8 @@ class PostgresStorage(
                 )
                 TABLESPACE pg_default
             """.trimIndent()
-        )
+            )
+        }
 
         return tableExists()
     }
@@ -167,32 +173,34 @@ class PostgresStorage(
 
         @Suppress("TooGenericExceptionCaught")
         return try {
-            val statement = connection.prepareStatement(query).apply {
+            executePreparedStatement(query) {
                 setString(1, id.toCoordinates())
-            }
 
-            val (resultSet, queryDuration) = measureTimedValue { statement.executeQuery() }
+                val (resultSet, queryDuration) = measureTimedValue { executeQuery() }
 
-            log.perf {
-                "Fetched scan results for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
-                        "${queryDuration.inMilliseconds}ms."
-            }
+                resultSet.use {
+                    log.perf {
+                        "Fetched scan results for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                                "${queryDuration.inMilliseconds}ms."
+                    }
 
-            val scanResults = mutableListOf<ScanResult>()
+                    val scanResults = mutableListOf<ScanResult>()
 
-            val deserializationDuration = measureTime {
-                while (resultSet.next()) {
-                    val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
-                    scanResults += scanResult
+                    val deserializationDuration = measureTime {
+                        while (it.next()) {
+                            val scanResult = jsonMapper.readValue<ScanResult>(it.getString(1).unescapeNull())
+                            scanResults += scanResult
+                        }
+                    }
+
+                    log.perf {
+                        "Deserialized ${scanResults.size} scan results for '${id.toCoordinates()}' in " +
+                                "${deserializationDuration.inMilliseconds}ms."
+                    }
+
+                    Success(ScanResultContainer(id, scanResults))
                 }
             }
-
-            log.perf {
-                "Deserialized ${scanResults.size} scan results for '${id.toCoordinates()}' in " +
-                        "${deserializationDuration.inMilliseconds}ms."
-            }
-
-            Success(ScanResultContainer(id, scanResults))
         } catch (e: Exception) {
             when (e) {
                 is JsonProcessingException, is SQLException -> {
@@ -221,41 +229,44 @@ class PostgresStorage(
 
         @Suppress("TooGenericExceptionCaught")
         return try {
-            val statement = connection.prepareStatement(query).apply {
+            executePreparedStatement(query) {
                 setString(1, pkg.id.toCoordinates())
                 setString(2, scannerCriteria.regScannerName)
-                setArray(3, scannerCriteria.minVersion.toSqlArray())
-                setArray(4, scannerCriteria.maxVersion.toSqlArray())
-            }
+                setArray(3, scannerCriteria.minVersion.toSqlArray(connection))
+                setArray(4, scannerCriteria.maxVersion.toSqlArray(connection))
 
-            val (resultSet, queryDuration) = measureTimedValue { statement.executeQuery() }
+                val (resultSet, queryDuration) = measureTimedValue { executeQuery() }
 
-            log.perf {
-                "Fetched scan results for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
-                        "${queryDuration.inMilliseconds}ms."
-            }
+                resultSet.use {
+                    log.perf {
+                        "Fetched scan results for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                                "${queryDuration.inMilliseconds}ms."
+                    }
 
-            val scanResults = mutableListOf<ScanResult>()
+                    val scanResults = mutableListOf<ScanResult>()
 
-            val deserializationDuration = measureTime {
-                while (resultSet.next()) {
-                    val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
-                    scanResults += scanResult
+                    val deserializationDuration = measureTime {
+                        while (it.next()) {
+                            val scanResult = jsonMapper.readValue<ScanResult>(it.getString(1).unescapeNull())
+                            scanResults += scanResult
+                        }
+                    }
+
+                    log.perf {
+                        "Deserialized ${scanResults.size} scan results for '${pkg.id.toCoordinates()}' in " +
+                                "${deserializationDuration.inMilliseconds}ms."
+                    }
+
+                    // TODO: Currently the query only accounts for the scanner criteria. Ideally also the provenance
+                    //       should be checked in the query to reduce the downloaded data.
+                    scanResults.retainAll { it.provenance.matches(pkg) }
+                    // The scanner compatibility is already checked in the query, but filter here again to be on the
+                    // safe side.
+                    scanResults.retainAll { scannerCriteria.matches(it.scanner) }
+
+                    Success(ScanResultContainer(pkg.id, scanResults))
                 }
             }
-
-            log.perf {
-                "Deserialized ${scanResults.size} scan results for '${pkg.id.toCoordinates()}' in " +
-                        "${deserializationDuration.inMilliseconds}ms."
-            }
-
-            // TODO: Currently the query only accounts for the scanner criteria. Ideally also the provenance should be
-            //       checked in the query to reduce the downloaded data.
-            scanResults.retainAll { it.provenance.matches(pkg) }
-            // The scanner compatibility is already checked in the query, but filter here again to be on the safe side.
-            scanResults.retainAll { scannerCriteria.matches(it.scanner) }
-
-            Success(ScanResultContainer(pkg.id, scanResults))
         } catch (e: Exception) {
             when (e) {
                 is JsonProcessingException, is SQLException -> {
@@ -287,15 +298,16 @@ class PostgresStorage(
         }
 
         try {
-            val statement = connection.prepareStatement(query)
-            statement.setString(1, id.toCoordinates())
-            statement.setString(2, scanResultJson)
+            executePreparedStatement(query) {
+                setString(1, id.toCoordinates())
+                setString(2, scanResultJson)
 
-            val insertDuration = measureTime { statement.execute() }
+                val insertDuration = measureTime { execute() }
 
-            log.perf {
-                "Inserted scan result for '${id.toCoordinates()}' into ${javaClass.simpleName} in " +
-                        "${insertDuration.inMilliseconds}ms."
+                log.perf {
+                    "Inserted scan result for '${id.toCoordinates()}' into ${javaClass.simpleName} in " +
+                            "${insertDuration.inMilliseconds}ms."
+                }
             }
         } catch (e: SQLException) {
             e.showStackTrace()
@@ -310,9 +322,38 @@ class PostgresStorage(
     }
 
     /**
-     * Generate an SQL array parameter for the version numbers contained in this [Semver].
+     * Obtain a connection from the data source and execute the given [block] with it. Make sure that the connection
+     * is correctly closed afterwards.
      */
-    private fun Semver.toSqlArray(): Array {
+    private fun <T> execute(block: (Connection) -> T): T =
+        dataSource.connection.use {
+            block(it)
+        }
+
+    /**
+     * Create a [PreparedStatement] defined by the given [SQL statement][sql] and execute the given [block] with it
+     * against the underlying database. Make sure that all resources are properly closed afterwards.
+     */
+    private fun <T> executePreparedStatement(sql: String, block: PreparedStatement.() -> T): T =
+        execute { connection ->
+            val statement = connection.prepareStatement(sql)
+            statement.use(block)
+        }
+
+    /**
+     * Create a [Statement] and execute the given [block] with it against the underlying database. Make sure that all
+     * resources are properly closed afterwards.
+     */
+    private fun <T> executeStatement(block: Statement.() -> T): T =
+        execute { connection ->
+            val statement = connection.createStatement()
+            statement.use(block)
+        }
+
+    /**
+     * Generate an SQL array parameter for the version numbers contained in this [Semver] using the given [connection].
+     */
+    private fun Semver.toSqlArray(connection: Connection): Array {
         val versionArray = intArrayOf(major, minor, patch)
         return connection.createArrayOf("int4", versionArray.toTypedArray())
     }

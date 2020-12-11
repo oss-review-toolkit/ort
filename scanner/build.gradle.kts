@@ -18,6 +18,7 @@
  * License-Filename: LICENSE
  */
 
+val hikariVersion: String by project
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
 val mockkVersion: String by project
@@ -38,6 +39,7 @@ dependencies {
     implementation(project(":utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
 

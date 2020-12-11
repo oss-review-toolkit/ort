@@ -20,8 +20,8 @@
 
 package org.ossreviewtoolkit.scanner
 
-import java.sql.DriverManager
-import java.util.Properties
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 
 import kotlin.time.measureTimedValue
 
@@ -152,22 +152,25 @@ abstract class ScanResultsStorage {
                 "Password for PostgreSQL storage is missing."
             }
 
-            val properties = Properties()
-            properties["user"] = config.username
-            properties["password"] = config.password
-            properties["ApplicationName"] = "$ORT_FULL_NAME - $TOOL_NAME"
+            val dataSourceConfig = HikariConfig().apply {
+                jdbcUrl = config.url
+                username = config.username
+                password = config.password
+                // Use a value slightly higher than the number of threads accessing the storage. This number is
+                // hard-coded in the scanPackages() function of the LocalScanner class.
+                maximumPoolSize = 8
+                addDataSourceProperty("ApplicationName", "$ORT_FULL_NAME - $TOOL_NAME")
 
-            // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
-            // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
-            // "sslmode", "ssl" is not required.
-            properties["sslmode"] = config.sslmode
-            config.sslcert?.let { properties["sslcert"] = it }
-            config.sslkey?.let { properties["sslkey"] = it }
-            config.sslrootcert?.let { properties["sslrootcert"] = it }
+                // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
+                // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
+                // "sslmode", "ssl" is not required.
+                addDataSourceProperty("sslmode", config.sslmode)
+                addDataSourcePropertyIfDefined("sslcert", config.sslcert)
+                addDataSourcePropertyIfDefined("sslkey", config.sslkey)
+                addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
+            }
 
-            val connection = DriverManager.getConnection(config.url, properties)
-
-            return PostgresStorage(connection, config.schema).also { it.setupDatabase() }
+            return PostgresStorage(HikariDataSource(dataSourceConfig), config.schema).also { it.setupDatabase() }
         }
 
         /**
@@ -175,6 +178,15 @@ abstract class ScanResultsStorage {
          */
         private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration): ScanResultsStorage =
             ClearlyDefinedStorage(config)
+
+        /**
+         * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this
+         * function has no effect. (It is not specified how the database driver deals with *null* values in its
+         * properties; so it is safer to avoid them.)
+         */
+        private fun HikariConfig.addDataSourcePropertyIfDefined(key: String, value: String?) {
+            value?.let { addDataSourceProperty(key, it) }
+        }
     }
 
     /**
