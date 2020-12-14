@@ -118,9 +118,23 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 "are forbidden because they are not pointing to a fixed revision of the source code."
     ).flag()
 
+    /**
+     * The mode to use for archiving downloaded source code.
+     */
     private enum class ArchiveMode {
+        /**
+         * Do not archive source code at all.
+         */
         NONE,
+
+        /**
+         * Create one archive per package.
+         */
         PER_PACKAGE,
+
+        /**
+         * Create a single archive containing all packages.
+         */
         BUNDLE
     }
 
