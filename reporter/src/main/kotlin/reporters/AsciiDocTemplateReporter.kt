@@ -93,12 +93,12 @@ class AsciiDocTemplateReporter : Reporter {
         val backend = templateOptions.remove(OPTION_BACKEND) ?: BACKEND_PDF
 
         if (backend.equals(BACKEND_PDF, ignoreCase = true)) {
-            templateOptions.remove(OPTION_PDF_THEME_FILE)?.let { pdfThemeFile ->
-                File(pdfThemeFile).also {
-                    require(it.isFile) { "Could not find PDF theme file at '${it.absolutePath}'." }
-                }
+            templateOptions.remove(OPTION_PDF_THEME_FILE)?.let {
+                val pdfThemeFile = File(it).absoluteFile
 
-                asciidoctorAttributes.attribute("pdf-theme", pdfThemeFile)
+                require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
+
+                asciidoctorAttributes.attribute("pdf-theme", pdfThemeFile.toString())
             }
         }
 
