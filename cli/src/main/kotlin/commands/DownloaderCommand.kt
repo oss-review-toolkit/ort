@@ -197,11 +197,15 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     }
                 }
 
-                packages.forEach { pkg ->
+                val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
+
+                packageDownloadDirs.forEach { (pkg, dir) ->
                     try {
-                        val downloadDir = outputDir.resolve(pkg.id.toPath())
-                        Downloader.download(pkg, downloadDir, allowMovingRevisions)
-                        if (archiveMode == ArchiveMode.PER_PACKAGE) archive(pkg, downloadDir, outputDir)
+                        Downloader.download(pkg, dir, allowMovingRevisions)
+
+                        if (archiveMode == ArchiveMode.PER_PACKAGE && archive(pkg, dir)) {
+                            dir.safeDeleteRecursively(baseDirectory = outputDir)
+                        }
                     } catch (e: DownloadException) {
                         e.showStackTrace()
 
@@ -213,7 +217,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     }
                 }
 
-                if (archiveMode == ArchiveMode.BUNDLE) archiveAll()
+                if (archiveMode == ArchiveMode.BUNDLE && archiveAll()) {
+                    packageDownloadDirs.forEach { (_, dir) ->
+                        dir.safeDeleteRecursively(baseDirectory = outputDir)
+                    }
+                }
             }
 
             is StringType -> {
@@ -267,36 +275,39 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         }
     }
 
-    private fun archive(pkg: Package, inputDir: File, outputDir: File) {
+    private fun archive(pkg: Package, inputDir: File): Boolean {
         val zipFile = File(outputDir, "${pkg.id.toPath("-")}.zip")
 
         log.info { "Archiving directory '$inputDir' to '$zipFile'." }
 
-        try {
+        return runCatching {
             inputDir.packZip(
                 zipFile,
                 "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/",
                 directoryFilter = { it.name !in VCS_DIRECTORIES }
             )
-        } catch (e: IllegalArgumentException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
-            log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
-        } finally {
-            val relativePath = outputDir.toPath().relativize(inputDir.toPath()).first()
-            outputDir.resolve(relativePath.toString()).safeDeleteRecursively()
-        }
+            log.error { "Could not archive '$inputDir': ${it.collectMessagesAsString()}" }
+        }.isSuccess
     }
 
-    private fun archiveAll() {
+    private fun archiveAll(): Boolean {
         val zipFile = outputDir.resolve("archive.zip")
 
         log.info { "Archiving directory '$outputDir' to '$zipFile'." }
 
-        outputDir.packZip(
-            zipFile,
-            directoryFilter = { it.name !in VCS_DIRECTORIES },
-            fileFilter = { it != zipFile }
-        )
+        return runCatching {
+            outputDir.packZip(
+                zipFile,
+                directoryFilter = { it.name !in VCS_DIRECTORIES },
+                fileFilter = { it != zipFile }
+            )
+        }.onFailure {
+            it.showStackTrace()
+
+            log.error { "Could not archive '$outputDir': ${it.collectMessagesAsString()}" }
+        }.isSuccess
     }
 }
