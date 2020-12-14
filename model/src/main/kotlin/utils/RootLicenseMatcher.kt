@@ -58,24 +58,43 @@ class RootLicenseMatcher(
         licenseFindings: Collection<LicenseFinding>,
         directories: Collection<String>
     ): Map<String, Set<LicenseFinding>> {
-        require(directories.none { it.startsWith("/") })
+        val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
 
-        fun licenseFindingPathsByDir(matcher: FileMatcher): Map<String, Set<LicenseFinding>> =
-            licenseFindings.filter { matcher.matches(it.absolutePath()) }.groupBy {
-                File(it.absolutePath()).parentFile.invariantSeparatorsPath
+        return getApplicableLicenseFilesForDirectories(
+            licenseFindingsByPath.keys, directories
+        ).mapValues { (_, rootLicenseFilePath) ->
+            rootLicenseFilePath.flatMapTo(mutableSetOf()) { licenseFindingsByPath.getValue(it) }
+        }
+    }
+
+    /**
+     * Return a mapping from the given relative [directories] to the relative paths of the (root) licenses files
+     * applicable to that respective directory. These values of the map entries are subsets of the given
+     * [relativeFilePaths].
+     */
+    fun getApplicableLicenseFilesForDirectories(
+        relativeFilePaths: Collection<String>,
+        directories: Collection<String>
+    ): Map<String, Set<String>> {
+        require(directories.none { it.startsWith("/") })
+        require(relativeFilePaths.none { it.startsWith("/") })
+
+        fun filePathsByDir(matcher: FileMatcher): Map<String, Set<String>> =
+            relativeFilePaths.filter { matcher.matches("/$it") }.groupBy {
+                File("/$it").parentFile.invariantSeparatorsPath
             }.mapValues { it.value.toSet() }
 
-        val licenseFiles = licenseFindingPathsByDir(licenseFileMatcher)
-        val patentFiles = licenseFindingPathsByDir(patentFileMatcher)
-        val rootLicenseFiles = licenseFindingPathsByDir(rootLicenseFileMatcher)
+        val licenseFiles = filePathsByDir(licenseFileMatcher)
+        val patentFiles = filePathsByDir(patentFileMatcher)
+        val rootLicenseFiles = filePathsByDir(rootLicenseFileMatcher)
 
-        val result = mutableMapOf<String, MutableSet<LicenseFinding>>()
+        val result = mutableMapOf<String, MutableSet<String>>()
 
         directories.map { "/$it" }.forEach { directory ->
             val directoriesOnPathToRoot = listOf(directory) + getAllAncestorDirectories(directory)
             val licenseFilesForDirectory = result.getOrPut(directory) { mutableSetOf() }
 
-            fun addApplicableLicenseFiles(licenseFilesByDir: Map<String, Collection<LicenseFinding>>) {
+            fun addApplicableLicenseFiles(licenseFilesByDir: Map<String, Collection<String>>) {
                 directoriesOnPathToRoot.forEach { currentDir ->
                     licenseFilesByDir[currentDir]?.let {
                         licenseFilesForDirectory += it
@@ -99,5 +118,3 @@ class RootLicenseMatcher(
 
 private fun createFileMatcher(filenamePatterns: Collection<String>): FileMatcher =
     FileMatcher(filenamePatterns.map { "/**/$it" }, true)
-
-private fun LicenseFinding.absolutePath(): String = "/${location.path}"
