@@ -46,7 +46,7 @@ private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
 class RootLicenseMatcherTest : WordSpec({
     "getApplicableLicenseFilesForDirectories" should {
         "override license files of ancestors as expected" {
-            RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+            RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                 licenseFindings = licenseFindings(
                     "README",
                     "PATENTS",
@@ -66,7 +66,7 @@ class RootLicenseMatcherTest : WordSpec({
         }
 
         "not use the readme if there is a license file" {
-            RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+            RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                 licenseFindings = licenseFindings(
                     "README",
                     "LICENSE"
@@ -76,7 +76,7 @@ class RootLicenseMatcherTest : WordSpec({
         }
 
         "use the readme if there is no license but a patents file" {
-            RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+            RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                 licenseFindings = licenseFindings(
                     "README",
                     "PATENTS"
@@ -87,7 +87,7 @@ class RootLicenseMatcherTest : WordSpec({
 
         "match commonly used license file paths in upper-case" {
             COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toUpperCase() }.forAll {
-                RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+                RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                     licenseFindings = licenseFindings(it),
                     directories = listOf("")
                 ).paths() shouldBe mapOf("" to setOf(it))
@@ -96,7 +96,7 @@ class RootLicenseMatcherTest : WordSpec({
 
         "match commonly used license file paths in lower-case" {
             COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toLowerCase() }.forAll {
-                RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+                RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                     licenseFindings = licenseFindings(it),
                     directories = listOf("")
                 ).paths() shouldBe mapOf("" to setOf(it))
@@ -105,7 +105,7 @@ class RootLicenseMatcherTest : WordSpec({
 
         "match commonly used license file paths in capital (case)" {
             COMMONLY_USED_LICENSE_FILE_NAMES.map { it.capitalize() }.forAll {
-                RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+                RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                     licenseFindings = licenseFindings(it),
                     directories = listOf("")
                 ).paths() shouldBe mapOf("" to setOf(it))

@@ -162,7 +162,7 @@ class FindingsMatcher(
         licenseFindings: Set<LicenseFinding>,
         copyrightFindings: Set<CopyrightFinding>
     ): Map<LicenseFinding, Set<CopyrightFinding>> {
-        val rootLicensesForDirectories = rootLicenseMatcher.getApplicableLicenseFilesForDirectories(
+        val rootLicensesForDirectories = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
             licenseFindings = licenseFindings,
             directories = copyrightFindings.map { it.location.directory() }
         )
