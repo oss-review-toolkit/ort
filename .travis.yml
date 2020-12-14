@@ -13,7 +13,6 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/dists/
     - $HOME/.ivy2/
-    - $HOME/.m2/repository/
     - $HOME/.ort/cache/
 
 env:
