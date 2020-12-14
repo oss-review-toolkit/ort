@@ -51,7 +51,7 @@ class RootLicenseMatcher(
 
     /**
      * Return a mapping from the given relative [directories] to the licenses findings for the (root) license files
-     * applicable to the respective directory. These values of the map entries are subsets of the given
+     * applicable to the respective directory. The values of the map entries are subsets of the given
      * [licenseFindings].
      */
     fun getApplicableRootLicenseFindingsForDirectories(
@@ -69,7 +69,7 @@ class RootLicenseMatcher(
 
     /**
      * Return a mapping from the given relative [directories] to the relative paths of the (root) licenses files
-     * applicable to that respective directory. These values of the map entries are subsets of the given
+     * applicable to that respective directory. The values of the map entries are subsets of the given
      * [relativeFilePaths].
      */
     fun getApplicableLicenseFilesForDirectories(
