@@ -149,11 +149,26 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         ).switch("--archive-all" to ArchiveMode.BUNDLE)
     ).single().default(ArchiveMode.NONE)
 
+    /**
+     * The choice of data entities to download.
+     */
+    enum class DataEntity {
+        /**
+         * Identifier for package entities.
+         */
+        PACKAGES,
+
+        /**
+         * Identifier for project entities.
+         */
+        PROJECTS
+    }
+
     private val entities by option(
         "--entities", "-e",
         help = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified, all " +
                 "data entities are downloaded."
-    ).enum<Downloader.DataEntity>().split(",").default(enumValues<Downloader.DataEntity>().asList())
+    ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
 
     override fun run() {
         val failureMessages = mutableListOf<String>()
@@ -173,11 +188,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 }
 
                 val packages = mutableListOf<Package>().apply {
-                    if (Downloader.DataEntity.PROJECTS in entities) {
+                    if (DataEntity.PROJECTS in entities) {
                         addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
                     }
 
-                    if (Downloader.DataEntity.PACKAGES in entities) {
+                    if (DataEntity.PACKAGES in entities) {
                         addAll(analyzerResult.packages.map { curatedPackage -> curatedPackage.pkg })
                     }
                 }
