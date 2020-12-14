@@ -134,11 +134,12 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
 }
 
 /**
- * Delete files recursively without following symbolic links (Unix) or junctions (Windows). If [force] is `true`, it is
- * tried to make undeletable files writable before trying again to delete them. Throws an [IOException] if a file could
- * not be deleted.
+ * Delete files recursively without following symbolic links (Unix) or junctions (Windows). If [force] is `true`, files
+ * which were not deleted in the first attempt are set to be writable and then tried to be deleted again. If
+ * [baseDirectory] is given, all empty parent directories along the path to [baseDirectory] are also deleted;
+ * [baseDirectory] itself is not deleted. Throws an [IOException] if a file could not be deleted.
  */
-fun File.safeDeleteRecursively(force: Boolean = false) {
+fun File.safeDeleteRecursively(force: Boolean = false, baseDirectory: File? = null) {
     if (isDirectory && !isSymbolicLink()) {
         Files.newDirectoryStream(toPath()).use { stream ->
             stream.forEach { path ->
@@ -150,6 +151,13 @@ fun File.safeDeleteRecursively(force: Boolean = false) {
     if (!delete() && force && setWritable(true)) {
         // Try again.
         delete()
+    }
+
+    if (baseDirectory != null) {
+        var parent = parentFile
+        while (parent != null && parent != baseDirectory && parent.delete()) {
+            parent = parent.parentFile
+        }
     }
 
     if (exists()) throw IOException("Could not delete file '$absolutePath'.")
