@@ -50,7 +50,7 @@ data class ScanResult(
     fun filterPath(path: String): ScanResult {
         if (path.isBlank()) return this
 
-        val applicableLicenseFiles = RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+        val applicableLicenseFiles = RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
             licenseFindings = summary.licenseFindings,
             directories = listOf(path)
         ).values.flatten().mapTo(mutableSetOf()) { it.location.path }

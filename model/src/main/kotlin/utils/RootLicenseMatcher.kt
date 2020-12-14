@@ -54,7 +54,7 @@ class RootLicenseMatcher(
      * applicable to the respective directory. These values of the map entries are subsets of the given
      * [licenseFindings].
      */
-    fun getApplicableLicenseFilesForDirectories(
+    fun getApplicableRootLicenseFindingsForDirectories(
         licenseFindings: Collection<LicenseFinding>,
         directories: Collection<String>
     ): Map<String, Set<LicenseFinding>> {
