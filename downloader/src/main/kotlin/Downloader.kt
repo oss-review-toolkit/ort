@@ -57,21 +57,6 @@ import org.ossreviewtoolkit.utils.unpack
  */
 object Downloader {
     /**
-     * The choice of data entities to download.
-     */
-    enum class DataEntity {
-        /**
-         * Identifier for package entities.
-         */
-        PACKAGES,
-
-        /**
-         * Identifier for project entities.
-         */
-        PROJECTS;
-    }
-
-    /**
      * This class describes what was downloaded by any of the download functions.
      */
     data class DownloadResult(
