@@ -151,7 +151,7 @@ private fun getLicenseId(license: JsonNode): String {
 
     // There is only one license [1] in the latest ScanCode 3.2.x which has a "LicenseRef-*" identifier set as value for
     // the 'spdx_license_key'. Use the 'key' property to derive the license identifier for now to avoid renaming the
-    // license from 'LicenseRef-scan-code-here-proprietary' to 'LicenseRef-Proprietary-HERE'.
+    // license from 'LicenseRef-scancode-here-proprietary' to 'LicenseRef-Proprietary-HERE'.
     //
     // ScanCode is planning to do 'LicenseRef-' license ids later on [2][3]. This seems to be a better time to start
     // using these 'LicenseRef-' IDs defined by ScanCode, if at all.
