@@ -4,7 +4,7 @@ The AsciiDocTemplateReporter creates PDF files using a combination of [Apache Fr
 with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
 For each Freemarker template provided using the options described below a separate intermediate file is created that can be
 processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if security
-vulnerability information is available also the "vulerability_report" template.
+vulnerability information is available also the "vulernability_report" template.
 
 After the intermediate files are generated, they are processed by AsciidoctorJ or to be more precise by its PDF
 implementation AsciidoctorJ PDF. A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or
@@ -16,7 +16,7 @@ the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 ## Report options
 
 * `template.id`: A comma-separated list of IDs of templates provided by ORT. Currently, the "disclosure_document" and
-                 "vulerability_report" templates are available.
+                 "vulnerability_report" templates are available.
 * `template.path`: A comma-separated list of paths to template files provided by the user.
 * `backend`: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
