@@ -36,6 +36,11 @@ data class ScannerConfiguration(
     val archive: FileArchiverConfiguration? = null,
 
     /**
+     * Create archives for packages that have a stored scan result but no license archive yet.
+     */
+    val createMissingArchives: Boolean = false,
+
+    /**
      * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */

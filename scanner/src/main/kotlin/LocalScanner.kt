@@ -269,6 +269,22 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                             "and $scannerCriteria, not scanning the package again $packageIndex."
                 }
 
+                if (config.createMissingArchives) {
+                    val packagePath = pkg.id.toPath()
+                    val missingArchives = HashSet<Provenance>()
+
+                    storedResults.mapNotNullTo(mutableSetOf()) { result ->
+                        result.provenance.takeUnless { archiver.hasArchive("$packagePath/${it.hash()}") }
+                    }
+
+                    if (missingArchives.isNotEmpty()) {
+                        val downloadResult = Downloader.download(pkg, downloadDirectory.resolve(packagePath))
+                        missingArchives.forEach {
+                            archiveFiles(downloadResult.downloadDirectory, pkg.id, it)
+                        }
+                    }
+                }
+
                 // Due to a temporary bug that has been fixed by now the scan results for packages were not properly
                 // filtered by VCS path. Filter them again to fix the problem.
                 // TODO: This filtering can be removed after a while.
