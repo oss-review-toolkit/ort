@@ -19,14 +19,25 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.util.StdConverter
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class HttpFileStorageConfiguration(
     /**
      * The URL of the HTTP server, e.g. "https://example.com/storage".
      */
     val url: String,
+
+    /**
+     * The query string that is appended to the combination of the URL and some additional path. Some storages process
+     * authentication via parameters that are within the final URL, so certain credentials can be stored in this
+     * query, e.g, "?user=standard&pwd=123". Thus, the final URL could be
+     * "https://example.com/storage/path?user=standard&pwd=123".
+     */
+    @JsonSerialize(converter = MaskStringConverter::class)
+    val query: String = "",
 
     /**
      * Custom headers that are added to all HTTP requests. As headers are likely to contain sensitive information like
@@ -37,5 +48,5 @@ data class HttpFileStorageConfiguration(
 )
 
 class MaskStringConverter : StdConverter<String, String>() {
-    override fun convert(value: String) = "***"
+    override fun convert(value: String) = if (value.isNotEmpty()) "***" else ""
 }

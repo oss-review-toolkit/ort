@@ -48,7 +48,11 @@ data class FileStorageConfiguration(
         }
 
         return httpFileStorage?.let { httpFileStorageConfiguration ->
-            HttpFileStorage(httpFileStorageConfiguration.url, httpFileStorageConfiguration.headers)
+            HttpFileStorage(
+                httpFileStorageConfiguration.url,
+                httpFileStorageConfiguration.query,
+                httpFileStorageConfiguration.headers
+            )
         } ?: localFileStorage!!.let { localFileStorageConfiguration ->
             val directory = localFileStorageConfiguration.directory.expandTilde()
 
