@@ -42,6 +42,14 @@ class HttpFileStorage(
     val url: String,
 
     /**
+     * The query string that is appended to the combination of the URL and some additional path. Some storages process
+     * authentication via parameters that are within the final URL, so certain credentials can be stored in this
+     * query, e.g, "?user=standard&pwd=123". Thus, the final URL could be
+     * "https://example.com/storage/path?user=standard&pwd=123".
+     */
+    val query: String = "",
+
+    /**
      * Custom headers that are added to all HTTP requests.
      */
     private val headers: Map<String, String> = emptyMap(),
@@ -108,5 +116,5 @@ class HttpFileStorage(
         }
     }
 
-    private fun urlForPath(path: String) = "$url/$path"
+    private fun urlForPath(path: String) = "$url/$path$query"
 }
