@@ -156,9 +156,10 @@ abstract class ScanResultsStorage {
                 jdbcUrl = config.url
                 username = config.username
                 password = config.password
-                // Use a value slightly higher than the number of threads accessing the storage. This number is
-                // hard-coded in the scanPackages() function of the LocalScanner class.
-                maximumPoolSize = 8
+
+                // Use a value slightly higher than the number of threads accessing the storage.
+                maximumPoolSize = LocalScanner.NUM_STORAGE_THREADS + 3
+
                 addDataSourceProperty("ApplicationName", "$ORT_FULL_NAME - $TOOL_NAME")
 
                 // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html

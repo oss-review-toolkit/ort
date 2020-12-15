@@ -81,6 +81,11 @@ import org.ossreviewtoolkit.utils.storage.FileArchiver
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     companion object {
         /**
+         * The number of threads to use for the storage dispatcher.
+         */
+        const val NUM_STORAGE_THREADS = 5
+
+        /**
          * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
          */
         const val PROP_CRITERIA_NAME = "regScannerName"
@@ -195,11 +200,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(configuration))
     }
 
-    override suspend fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
-            Map<Package, List<ScanResult>> {
+    override suspend fun scanPackages(
+        packages: List<Package>,
+        outputDirectory: File,
+        downloadDirectory: File
+    ): Map<Package, List<ScanResult>> {
+        val storageDispatcher = Executors.newFixedThreadPool(
+            NUM_STORAGE_THREADS,
+            NamedThreadFactory(ScanResultsStorage.storage.name)
+        ).asCoroutineDispatcher()
 
-        val storageDispatcher =
-            Executors.newFixedThreadPool(5, NamedThreadFactory(ScanResultsStorage.storage.name)).asCoroutineDispatcher()
         val scanDispatcher = Executors.newSingleThreadExecutor(NamedThreadFactory(scannerName)).asCoroutineDispatcher()
 
         return try {
