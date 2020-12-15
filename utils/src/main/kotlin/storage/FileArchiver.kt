@@ -84,7 +84,6 @@ class FileArchiver(
      */
     fun archive(directory: File, storagePath: String) {
         val zipFile = createTempFile(ORT_NAME, ".zip").toFile()
-        zipFile.deleteOnExit()
 
         val zipDuration = measureTime {
             directory.packZip(zipFile, overwrite = true) { file ->
@@ -108,6 +107,8 @@ class FileArchiver(
             "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in " +
                     "${writeDuration.inMilliseconds}ms."
         }
+
+        zipFile.delete()
     }
 
     /**
