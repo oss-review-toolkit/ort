@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  * - *backend*: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
  *              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
  * - *pdf.theme.file*: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
+ * - *pdf.fonts.dir*: A path to a directory containing custom fonts. Only used with the "pdf" backend.
  *
  * [1]: https://freemarker.apache.org
  * [2]: https://asciidoc.org/
@@ -72,6 +73,7 @@ class AsciiDocTemplateReporter : Reporter {
 
         private const val OPTION_BACKEND = "backend"
         private const val OPTION_PDF_THEME_FILE = "pdf.theme.file"
+        private const val OPTION_PDF_FONTS_DIR = "pdf.fonts.dir"
 
         private const val BACKEND_PDF = "pdf"
     }
@@ -99,6 +101,14 @@ class AsciiDocTemplateReporter : Reporter {
                 require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
 
                 asciidoctorAttributes.attribute("pdf-theme", pdfThemeFile.toString())
+            }
+
+            templateOptions.remove(OPTION_PDF_FONTS_DIR)?.let {
+                val pdfFontsDir = File(it).absoluteFile
+
+                require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
+
+                asciidoctorAttributes.attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
             }
         }
 

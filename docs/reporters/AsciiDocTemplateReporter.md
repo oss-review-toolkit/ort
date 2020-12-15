@@ -21,6 +21,7 @@ the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 * `backend`: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
 * `pdf.theme.file`: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
+* `pdf.fonts.dir`: A path to a directory containing custom fonts. Only used with the "pdf" backend.
 
 ## Command Line
 
@@ -36,8 +37,16 @@ cli/build/install/ort/bin/ort report
   --report-option AsciiDocTemplate=pdf.theme.file=pdf-theme.yml
 ```
 
+If you want to add your own custom fonts in the AsciiDoc PDF theme file using a [relative path][6],
+you need to add the directory in which the fonts are located as a report-specific option like
+
+    --report-option AsciiDocTemplate=pdf.fonts.dir=path/to/fonts/
+
+where `path/to/fonts` is the relative path to the font directory from the base execution directory.
+
 [1]: https://freemarker.apache.org
 [2]: https://asciidoc.org/
 [3]: https://github.com/asciidoctor/asciidoctorj
 [4]: https://github.com/asciidoctor/asciidoctorj-pdf
 [5]: https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc
+[6]: https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc#configuring-the-font-search-path

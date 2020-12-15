@@ -46,6 +46,12 @@ class AsciiDocTemplateReporterFunTest : StringSpec({
             generateReport(ORT_RESULT, mapOf("pdf.theme.file" to "dummy.file"))
         }
     }
+
+    "PDF output is aborted when a non-existent PDF fonts directory is given" {
+        shouldThrow<IllegalArgumentException> {
+            generateReport(ORT_RESULT, mapOf("pdf.fonts.dir" to "fake.path"))
+        }
+    }
 })
 
 private fun generateReport(
