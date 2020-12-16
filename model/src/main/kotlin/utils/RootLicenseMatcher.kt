@@ -41,9 +41,9 @@ import org.ossreviewtoolkit.utils.getAllAncestorDirectories
  * Patent files are assigned in an analog way, but without any fallback pattern.
  */
 class RootLicenseMatcher(
-    licenseFilenamePatterns: List<String> = LicenseFilenamePatterns.LICENSE_FILENAMES,
-    patentFilenamePatterns: List<String> = LicenseFilenamePatterns.PATENT_FILENAMES,
-    rootLicenseFilenamePatterns: List<String> = LicenseFilenamePatterns.ROOT_LICENSE_FILENAMES
+    licenseFilenamePatterns: List<String> = LicenseFilenamePatterns.DEFAULT.licenseFilenames,
+    patentFilenamePatterns: List<String> = LicenseFilenamePatterns.DEFAULT.patentFilenames,
+    rootLicenseFilenamePatterns: List<String> = LicenseFilenamePatterns.DEFAULT.rootLicenseFilenames
 ) {
     private val licenseFileMatcher = createFileMatcher(licenseFilenamePatterns)
     private val patentFileMatcher = createFileMatcher(patentFilenamePatterns)

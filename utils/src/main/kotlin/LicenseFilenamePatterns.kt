@@ -19,39 +19,47 @@
 
 package org.ossreviewtoolkit.utils
 
-object LicenseFilenamePatterns {
+data class LicenseFilenamePatterns(
     /**
      * A list of globs that match default license file names.
      */
-    val LICENSE_FILENAMES = listOf(
-        "copying*",
-        "copyright",
-        "licence*",
-        "license*",
-        "*.licence",
-        "*.license",
-        "unlicence",
-        "unlicense"
-    )
+    val licenseFilenames: List<String>,
 
     /**
      * A list of globs that match default patent file names. The patterns are supposed to be used case-insensitively.
      */
-    val PATENT_FILENAMES = listOf(
-        "patents"
-    )
+    val patentFilenames: List<String>,
 
     /**
      * A list of globs that match files that often define the root license of a project, but are no license files and
-     * are therefore not contained in [LICENSE_FILENAMES]. The patterns are supposed to be used case-insensitively.
+     * are therefore not contained in [licenseFilenames]. The patterns are supposed to be used case-insensitively.
      */
-    val ROOT_LICENSE_FILENAMES = listOf(
-        "readme*"
-    )
-
+    val rootLicenseFilenames: List<String>
+) {
     /**
-     * A list of globs that match all kind of license file names, equaling the union of [LICENSE_FILENAMES],
-     * [PATENT_FILENAMES] and [ROOT_LICENSE_FILENAMES]. The patterns are supposed to be used case-insensitively.
+     * A list of globs that match all kind of license file names, equaling the union of [licenseFilenames],
+     * [patentFilenames] and [rootLicenseFilenames]. The patterns are supposed to be used case-insensitively.
      */
-    val ALL_LICENSE_FILENAMES = LICENSE_FILENAMES + PATENT_FILENAMES + ROOT_LICENSE_FILENAMES
+    val allLicenseFilenames = (licenseFilenames + patentFilenames + rootLicenseFilenames).distinct()
+
+    companion object {
+        val DEFAULT = LicenseFilenamePatterns(
+            licenseFilenames = listOf(
+                "copying*",
+                "copyright",
+                "licence*",
+                "license*",
+                "*.licence",
+                "*.license",
+                "unlicence",
+                "unlicense"
+            ),
+            patentFilenames = listOf(
+                "patents"
+            ),
+            rootLicenseFilenames = listOf(
+                "readme*"
+            )
+        )
+    }
 }
