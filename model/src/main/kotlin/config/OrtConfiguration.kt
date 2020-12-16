@@ -29,6 +29,7 @@ import com.sksamuel.hoplite.parsers.toNode
 
 import java.io.File
 
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.log
 
 /**
@@ -39,6 +40,11 @@ data class OrtConfiguration(
      * The configuration of the scanner.
      */
     val scanner: ScannerConfiguration? = null,
+
+    /**
+     * The license file patterns.
+     */
+    val licenseFilePatterns: LicenseFilenamePatterns? = null,
 
     /**
      * The configuration of the advisors, using the advisor's name as the key.

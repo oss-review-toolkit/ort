@@ -61,5 +61,16 @@ data class LicenseFilenamePatterns(
                 "readme*"
             )
         )
+
+        private var instance: LicenseFilenamePatterns = DEFAULT
+
+        @Synchronized
+        fun configure(patterns: LicenseFilenamePatterns) {
+            log.info { "Configuring the license file patterns." }
+            instance = patterns
+        }
+
+        @Synchronized
+        fun getInstance(): LicenseFilenamePatterns = instance
     }
 }
