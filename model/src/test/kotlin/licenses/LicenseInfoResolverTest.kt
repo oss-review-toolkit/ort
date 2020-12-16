@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.getLicenseText
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
@@ -482,7 +482,10 @@ class LicenseInfoResolverTest : WordSpec() {
                 )
 
                 val archiveDir = File("src/test/assets/archive")
-                val archiver = FileArchiver(LICENSE_FILENAMES, LocalFileStorage(archiveDir))
+                val archiver = FileArchiver(
+                    patterns = LicenseFilenamePatterns.DEFAULT.licenseFilenames,
+                    storage = LocalFileStorage(archiveDir)
+                )
                 val resolver = createResolver(licenseInfos, archiver = archiver)
 
                 val result = resolver.resolveLicenseFiles(pkgId)

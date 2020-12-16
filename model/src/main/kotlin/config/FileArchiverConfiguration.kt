@@ -47,7 +47,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver =
         FileArchiver(patterns, storage.createFileStorage())
     } else {
         FileArchiver(
-            LicenseFilenamePatterns.ALL_LICENSE_FILENAMES,
+            LicenseFilenamePatterns.DEFAULT.allLicenseFilenames,
             LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR)
         )
     }

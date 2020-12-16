@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -134,7 +134,7 @@ abstract class VersionControlSystem {
          * Return glob patterns matching all potential license or patent files.
          */
         internal fun getLicenseFileGlobPatterns(): List<String> =
-            ALL_LICENSE_FILENAMES.generateCapitalizationVariants().map { "**/$it" }
+            LicenseFilenamePatterns.DEFAULT.allLicenseFilenames.generateCapitalizationVariants().map { "**/$it" }
 
         private fun Collection<String>.generateCapitalizationVariants() =
             flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }

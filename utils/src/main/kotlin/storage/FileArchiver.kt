@@ -27,7 +27,7 @@ import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.utils.FileMatcher
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
@@ -61,7 +61,7 @@ class FileArchiver(
          */
         val DEFAULT by lazy {
             FileArchiver(
-                patterns = ALL_LICENSE_FILENAMES.map { "**/$it" },
+                patterns = LicenseFilenamePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
                 storage = LocalFileStorage(DEFAULT_ARCHIVE_DIR)
             )
         }
