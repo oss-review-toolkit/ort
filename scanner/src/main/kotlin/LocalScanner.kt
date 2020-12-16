@@ -557,9 +557,9 @@ private fun ScanResultContainer.deduplicateScanResults(): ScanResultContainer {
 
     val deduplicatedResults = results.distinctBy { it.key() }
 
-    val duplicates = results.size - deduplicatedResults.size
-    if (duplicates > 0) {
-        log.info { "Removed $duplicates duplicates out of ${results.size} scan results." }
+    val duplicatesCount = results.size - deduplicatedResults.size
+    if (duplicatesCount > 0) {
+        log.info { "Removed $duplicatesCount duplicates out of ${results.size} scan results." }
     }
 
     return copy(results = deduplicatedResults)
