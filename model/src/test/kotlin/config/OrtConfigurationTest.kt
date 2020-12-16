@@ -90,6 +90,12 @@ class OrtConfigurationTest : WordSpec({
                 storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
                 storageWriters shouldContainExactly listOf("postgres")
             }
+
+            ortConfig.licenseFilePatterns shouldNotBeNull {
+                licenseFilenames shouldContainExactly listOf("license*")
+                patentFilenames shouldContainExactly listOf("patents")
+                rootLicenseFilenames shouldContainExactly listOf("readme*")
+            }
         }
 
         "correctly prioritize the sources" {
