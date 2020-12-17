@@ -47,7 +47,7 @@ data class ScanResult(
      * Filter all detected licenses and copyrights from the [summary] which are underneath [path], and set the [path]
      * for [provenance]. Findings which [RootLicenseMatcher] assigns as root license files for [path] are also kept.
      */
-    fun filterPath(path: String): ScanResult {
+    fun filterByPath(path: String): ScanResult {
         if (path.isBlank()) return this
 
         val applicableLicenseFiles = RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(

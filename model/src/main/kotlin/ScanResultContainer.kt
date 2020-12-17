@@ -51,7 +51,7 @@ data class ScanResultContainer(
             if (result.provenance.vcsInfo == null) {
                 result
             } else {
-                result.filterPath(parentPath)
+                result.filterByPath(parentPath)
             }
         }
 
