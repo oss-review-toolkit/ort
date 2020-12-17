@@ -49,6 +49,7 @@ class LicenseInfoResolver(
     private val resolvedLicenseFiles: ConcurrentMap<Identifier, ResolvedLicenseFileInfo> = ConcurrentHashMap()
     private val rootLicenseMatcher =
         RootLicenseMatcher(LicenseFilenamePatterns.DEFAULT.copy(rootLicenseFilenames = emptyList()))
+    private val findingsMatcher = FindingsMatcher()
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
@@ -142,7 +143,7 @@ class LicenseInfoResolver(
             //       resolved license for completeness, e.g. to show in a report that a license finding was marked as
             //       false positive.
             val curatedLicenseFindings = licenseCurationResults.keys.filterNotNull().toSet()
-            val matchResult = FindingsMatcher().match(curatedLicenseFindings, findings.copyrights)
+            val matchResult = findingsMatcher.match(curatedLicenseFindings, findings.copyrights)
 
             matchResult.matchedFindings.forEach { (licenseFinding, copyrightFindings) ->
                 val resolvedCopyrightFindings = resolveCopyrights(
