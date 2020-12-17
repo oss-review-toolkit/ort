@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.extensions.system.withEnvironment
-import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldBeNull
@@ -48,7 +47,6 @@ class OrtConfigurationTest : WordSpec({
 
             ortConfig.scanner shouldNotBeNull {
                 archive shouldNotBeNull {
-                    patterns should containExactly("LICENSE*", "COPYING*")
                     storage.httpFileStorage.shouldBeNull()
                     storage.localFileStorage shouldNotBeNull {
                         directory shouldBe File("~/.ort/scanner/archive")

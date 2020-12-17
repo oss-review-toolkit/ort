@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_NAME
 
 class NoticeTemplateReporterFunTest : WordSpec({
@@ -60,7 +59,6 @@ class NoticeTemplateReporterFunTest : WordSpec({
             val config = OrtConfiguration(
                 ScannerConfiguration(
                     archive = FileArchiverConfiguration(
-                        patterns = LicenseFilenamePatterns.DEFAULT.licenseFilenames,
                         storage = FileStorageConfiguration(
                             localFileStorage = LocalFileStorageConfiguration(
                                 directory = archiveDir,
