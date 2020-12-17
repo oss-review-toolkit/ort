@@ -44,6 +44,3 @@ PLATFORMS
 DEPENDENCIES
   rspec
   test-project!
-
-BUNDLED WITH
-   1.17.3
