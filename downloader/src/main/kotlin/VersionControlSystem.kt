@@ -134,7 +134,7 @@ abstract class VersionControlSystem {
          * Return glob patterns matching all potential license or patent files.
          */
         internal fun getLicenseFileGlobPatterns(): List<String> =
-            LicenseFilenamePatterns.DEFAULT.allLicenseFilenames.generateCapitalizationVariants().map { "**/$it" }
+            LicenseFilenamePatterns.getInstance().allLicenseFilenames.generateCapitalizationVariants().map { "**/$it" }
 
         private fun Collection<String>.generateCapitalizationVariants() =
             flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
