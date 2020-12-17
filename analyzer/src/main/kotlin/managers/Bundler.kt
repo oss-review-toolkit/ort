@@ -84,7 +84,7 @@ class Bundler(
 
     override fun transformVersion(output: String) = output.removePrefix("Bundler version ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.2[")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,)")
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
