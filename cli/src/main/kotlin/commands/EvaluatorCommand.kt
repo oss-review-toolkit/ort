@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
@@ -257,7 +258,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(finalOrtResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner?.archive.createFileArchiver()
+            archiver = globalOptionsForSubcommands.config.scanner?.archive.createFileArchiver(),
+            licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )
 
         val licenseClassifications =
