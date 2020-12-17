@@ -122,7 +122,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
             resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
                 deduplicatedPackages.forEach { deduplicatedPackage ->
                     ortResult.getProject(deduplicatedPackage.id)?.let { project ->
-                        resultContainers += filterProjectScanResults(project, resultContainer)
+                        resultContainers += resultContainer.filterByProject(project)
                     } ?: throw IllegalArgumentException(
                         "Could not find project '${deduplicatedPackage.id.toCoordinates()}'."
                     )
@@ -130,7 +130,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
                 ortResult.getProject(referencePackage.id)?.let { project ->
                     resultContainers.remove(resultContainer)
-                    resultContainers += filterProjectScanResults(project, resultContainer)
+                    resultContainers += resultContainer.filterByProject(project)
                 } ?: throw IllegalArgumentException("Could not find project '${referencePackage.id.toCoordinates()}'.")
             }
         }
@@ -143,27 +143,5 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
         // Note: This overwrites any existing ScannerRun from the input file.
         return ortResult.copy(scanner = scannerRun)
-    }
-
-    /**
-     * Filter the scan results in the [resultContainer] for only license findings that are in the same subdirectory as
-     * the [project]s definition file.
-     */
-    private fun filterProjectScanResults(project: Project, resultContainer: ScanResultContainer): ScanResultContainer {
-        var filteredResults = resultContainer.results
-
-        // Do not filter the results if the definition file is in the root of the repository.
-        val parentPath = File(project.definitionFilePath).parentFile?.path
-        if (parentPath != null) {
-            filteredResults = resultContainer.results.map { result ->
-                if (result.provenance.sourceArtifact != null) {
-                    result
-                } else {
-                    result.filterPath(parentPath)
-                }
-            }
-        }
-
-        return ScanResultContainer(project.id, filteredResults)
     }
 }
