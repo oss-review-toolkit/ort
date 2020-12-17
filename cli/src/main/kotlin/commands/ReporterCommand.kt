@@ -42,6 +42,7 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -219,7 +220,8 @@ class ReporterCommand : CliktCommand(
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner?.archive.createFileArchiver()
+            archiver = globalOptionsForSubcommands.config.scanner?.archive.createFileArchiver(),
+            licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )
 
         val licenseClassifications =

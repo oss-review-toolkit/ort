@@ -43,13 +43,15 @@ import org.ossreviewtoolkit.utils.storage.FileArchiver
 class LicenseInfoResolver(
     val provider: LicenseInfoProvider,
     val copyrightGarbage: CopyrightGarbage,
-    val archiver: FileArchiver?
+    val archiver: FileArchiver?,
+    licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT
 ) {
     private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
     private val resolvedLicenseFiles: ConcurrentMap<Identifier, ResolvedLicenseFileInfo> = ConcurrentHashMap()
-    private val rootLicenseMatcher =
-        RootLicenseMatcher(LicenseFilenamePatterns.DEFAULT.copy(rootLicenseFilenames = emptyList()))
-    private val findingsMatcher = FindingsMatcher()
+    private val rootLicenseMatcher = RootLicenseMatcher(
+        licenseFilenamePatterns = licenseFilenamePatterns.copy(rootLicenseFilenames = emptyList())
+    )
+    private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(licenseFilenamePatterns))
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
