@@ -29,7 +29,6 @@ import com.sksamuel.hoplite.parsers.toNode
 
 import java.io.File
 
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.log
 
 /**

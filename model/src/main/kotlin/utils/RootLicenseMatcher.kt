@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.model.utils
 import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.FileMatcher
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.getAllAncestorDirectories
 
 /**
