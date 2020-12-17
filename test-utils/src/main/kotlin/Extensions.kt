@@ -24,6 +24,10 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import java.net.InetSocketAddress
 import java.net.Proxy
 
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
+import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }
 
@@ -31,3 +35,9 @@ infix fun <T> T?.shouldNotBeNull(block: T.() -> Unit) {
     this.shouldNotBeNull()
     this.block()
 }
+
+fun FileArchiver.Companion.createDefault(): FileArchiver =
+    FileArchiver(
+        patterns = LicenseFilenamePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
+        storage = LocalFileStorage(DEFAULT_ARCHIVE_DIR)
+    )

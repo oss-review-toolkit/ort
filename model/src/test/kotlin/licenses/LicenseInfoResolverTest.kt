@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.test.createDefault
 
 class LicenseInfoResolverTest : WordSpec() {
     init {
@@ -522,7 +523,7 @@ class LicenseInfoResolverTest : WordSpec() {
     private fun createResolver(
         data: List<LicenseInfo>,
         copyrightGarbage: Set<String> = emptySet(),
-        archiver: FileArchiver = FileArchiver.DEFAULT
+        archiver: FileArchiver = FileArchiver.createDefault()
     ) = LicenseInfoResolver(
         SimpleLicenseInfoProvider(data),
         CopyrightGarbage(copyrightGarbage.toSortedSet()),

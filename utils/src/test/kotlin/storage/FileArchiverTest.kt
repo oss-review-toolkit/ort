@@ -31,6 +31,7 @@ import kotlin.io.path.createTempDirectory
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.unpack
 
 class FileArchiverTest : StringSpec() {
@@ -118,8 +119,9 @@ class FileArchiverTest : StringSpec() {
             createFile("LICENSE")
             createFile("path/LICENSE")
 
-            FileArchiver.DEFAULT.archive(workingDir, "save")
-            FileArchiver.DEFAULT.unarchive(targetDir, "save")
+            val archiver = FileArchiver.createDefault()
+            archiver.archive(workingDir, "save")
+            archiver.unarchive(targetDir, "save")
 
             with(targetDir) {
                 assertFileContent("LICENSE")
@@ -133,8 +135,9 @@ class FileArchiverTest : StringSpec() {
             createFile("c/license")
             createFile("d/LiCeNsE")
 
-            FileArchiver.DEFAULT.archive(workingDir, "save")
-            FileArchiver.DEFAULT.unarchive(targetDir, "save")
+            val archiver = FileArchiver.createDefault()
+            archiver.archive(workingDir, "save")
+            archiver.unarchive(targetDir, "save")
 
             with(targetDir) {
                 assertFileContent("a/LICENSE")
