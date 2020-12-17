@@ -31,12 +31,14 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
+import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.StatisticsCalculator
@@ -62,7 +64,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val ruleViolationResolutions = mutableListOf<RuleViolationResolution>()
 
     private val curationsMatcher = FindingCurationMatcher()
-    private val findingsMatcher = FindingsMatcher()
+    private val findingsMatcher =
+        FindingsMatcher(RootLicenseMatcher(input.ortConfig.licenseFilePatterns ?: LicenseFilenamePatterns.DEFAULT))
 
     private data class PackageExcludeInfo(
         var id: Identifier,
