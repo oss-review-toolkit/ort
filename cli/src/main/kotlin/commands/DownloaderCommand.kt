@@ -128,12 +128,12 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         NONE,
 
         /**
-         * Create one archive per package.
+         * Create one archive per project or package entity.
          */
-        PER_PACKAGE,
+        ENTITY,
 
         /**
-         * Create a single archive containing all packages.
+         * Create a single archive containing all project or package entities.
          */
         BUNDLE
     }
@@ -142,7 +142,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         option(
             help = "Archive the downloaded source code as ZIP files to the output directory. Is ignored if " +
                     "'--project-url' is also specified."
-        ).switch("--archive" to ArchiveMode.PER_PACKAGE),
+        ).switch("--archive" to ArchiveMode.ENTITY),
         option(
             help = "Archive all the downloaded source code as a single ZIP file to the output directory. Is ignored " +
                     "if '--project-url' is also specified."
@@ -203,7 +203,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     try {
                         Downloader.download(pkg, dir, allowMovingRevisions)
 
-                        if (archiveMode == ArchiveMode.PER_PACKAGE && archive(pkg, dir)) {
+                        if (archiveMode == ArchiveMode.ENTITY && archive(pkg, dir)) {
                             dir.safeDeleteRecursively(baseDirectory = outputDir)
                         }
                     } catch (e: DownloadException) {
