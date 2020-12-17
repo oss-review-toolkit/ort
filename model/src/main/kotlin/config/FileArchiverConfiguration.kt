@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.FileStorage
@@ -27,12 +29,8 @@ import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 /**
  * The configuration model for a [FileArchiver].
  */
+@JsonIgnoreProperties(value = ["patterns"])
 data class FileArchiverConfiguration(
-    /**
-     * A list of glob patterns that define which files will be archived.
-     */
-    val patterns: List<String>,
-
     /**
      * Configuration of the [FileStorage] used for archiving the files.
      */
@@ -42,12 +40,9 @@ data class FileArchiverConfiguration(
 /**
  * Create a [FileArchiver] based on this configuration.
  */
-fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver =
-    if (this != null) {
-        FileArchiver(patterns, storage.createFileStorage())
-    } else {
-        FileArchiver(
-            LicenseFilenamePatterns.DEFAULT.allLicenseFilenames,
-            LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR)
-        )
-    }
+fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver {
+    val storage = this?.storage?.createFileStorage() ?: LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR)
+    val patterns = LicenseFilenamePatterns.getInstance().allLicenseFilenames
+
+    return FileArchiver(patterns, storage)
+}
