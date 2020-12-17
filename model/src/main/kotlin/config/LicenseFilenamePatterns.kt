@@ -23,7 +23,7 @@ import org.ossreviewtoolkit.utils.log
 
 data class LicenseFilenamePatterns(
     /**
-     * A list of globs that match default license file names.
+     * A list of globs that match default license file names. The patterns are supposed to be used case-insensitively.
      */
     val licenseFilenames: List<String>,
 
