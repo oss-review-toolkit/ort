@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
@@ -46,7 +47,8 @@ class LicenseInfoResolver(
 ) {
     private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
     private val resolvedLicenseFiles: ConcurrentMap<Identifier, ResolvedLicenseFileInfo> = ConcurrentHashMap()
-    private val rootLicenseMatcher = RootLicenseMatcher(rootLicenseFilenamePatterns = emptyList())
+    private val rootLicenseMatcher =
+        RootLicenseMatcher(LicenseFilenamePatterns.DEFAULT.copy(rootLicenseFilenames = emptyList()))
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
