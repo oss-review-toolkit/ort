@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 
 /**
@@ -50,7 +51,8 @@ data class ScanResult(
     fun filterByPath(path: String): ScanResult {
         if (path.isBlank()) return this
 
-        val applicableLicenseFiles = RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
+        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilenamePatterns.getInstance())
+        val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
             licenseFindings = summary.licenseFindings,
             directories = listOf(path)
         ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
