@@ -24,7 +24,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
