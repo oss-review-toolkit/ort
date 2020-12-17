@@ -30,6 +30,3 @@ DEPENDENCIES
   nokogiri
   rack (~> 2.1)
   rspec
-
-BUNDLED WITH
-   1.17.1
