@@ -568,7 +568,7 @@ private fun ScanResultContainer.deduplicateScanResults(): ScanResultContainer {
 private fun ScanResult.filterByVcsPath(): ScanResult {
     val path = provenance.vcsInfo?.takeIf { it.type != VcsType.GIT_REPO }?.path.orEmpty()
 
-    return filterPath(path)
+    return filterByPath(path)
 }
 
 /**
