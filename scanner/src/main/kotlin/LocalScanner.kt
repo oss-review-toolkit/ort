@@ -60,6 +60,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.utils.CommandLineTool
@@ -72,7 +73,6 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 /**
  * Abstraction for a [Scanner] that operates locally. Scan results can be stored in a [ScanResultsStorage].
@@ -101,7 +101,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     }
 
     private val archiver by lazy {
-        config.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
+        config.archive.createFileArchiver()
     }
 
     /**

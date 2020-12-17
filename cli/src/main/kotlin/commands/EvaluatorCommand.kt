@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
@@ -67,7 +68,6 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules on ORT result files.") {
     private val ortFile by option(
@@ -257,7 +257,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(finalOrtResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
+            archiver = globalOptionsForSubcommands.config.scanner?.archive.createFileArchiver()
         )
 
         val licenseClassifications =

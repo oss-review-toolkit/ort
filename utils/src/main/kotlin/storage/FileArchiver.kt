@@ -54,7 +54,7 @@ class FileArchiver(
 ) {
     companion object {
         private const val ARCHIVE_FILE_NAME = "archive.zip"
-        internal val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
+        val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
 
         /**
          * A default [FileArchiver] that archives [license files][LICENSE_FILENAMES] in a local directory.
