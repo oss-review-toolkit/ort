@@ -77,4 +77,10 @@ data class ScanResult(
 
         return ScanResult(newProvenance, scanner, summary)
     }
+
+    /**
+     * Return a [ScanResult] whose [summary] contains only findings from the [provenance]'s [VcsInfo.path].
+     */
+    fun filterByVcsPath(): ScanResult =
+        filterByPath(provenance.vcsInfo?.takeUnless { it.type == VcsType.GIT_REPO }?.path.orEmpty())
 }
