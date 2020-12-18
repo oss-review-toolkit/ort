@@ -253,7 +253,7 @@ open class Npm(
                         response.body?.let { body ->
                             val packageInfo = jsonMapper.readTree(body.string())
 
-                            packageInfo["versions"][version]?.let { versionInfo ->
+                            packageInfo["versions"]?.get(version)?.let { versionInfo ->
                                 description = versionInfo["description"].textValueOrEmpty()
                                 homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
