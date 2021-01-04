@@ -57,13 +57,12 @@ import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 class ExamplesFunTest : StringSpec() {
     private val examplesDir = File("../examples")
-    private lateinit var exampleFiles: MutableList<File>
+    private val exampleFiles = examplesDir.walk().filterTo(mutableListOf()) { it.isFile }
 
     private fun takeExampleFile(name: String) = exampleFiles.single { it.name == name }.also { exampleFiles.remove(it) }
 
     init {
         "Listing examples files succeeded" {
-            exampleFiles = examplesDir.walk().filter { it.isFile }.toMutableList()
             exampleFiles shouldNot beEmpty()
         }
 
