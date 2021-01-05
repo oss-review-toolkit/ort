@@ -101,20 +101,9 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         .convert { it.absoluteFile.normalize() }
         .configurationGroup()
 
-    private val allowDynamicVersions by option(
-        "--allow-dynamic-versions",
-        help = "Allow dynamic versions of dependencies. This can result in unstable results when dependencies use " +
-                "version ranges. This option only affects package managers that support lock files, like NPM."
-    ).flag()
-
     private val useClearlyDefinedCurations by option(
         "--clearly-defined-curations",
         help = "Whether to fall back to package curation data from the ClearlyDefine service or not."
-    ).flag()
-
-    private val ignoreToolVersions by option(
-        "--ignore-tool-versions",
-        help = "Ignore versions of required tools. NOTE: This may lead to erroneous results."
     ).flag()
 
     private val useSw360Curations by option(
@@ -161,12 +150,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         println("Analyzing project path:\n\t$inputDir")
 
         val config = globalOptionsForSubcommands.config
-        val analyzerConfig = AnalyzerConfiguration(
-            ignoreToolVersions,
-            allowDynamicVersions,
-            config.analyzer?.sw360Configuration
-        )
-        val analyzer = Analyzer(analyzerConfig)
+        val analyzer = Analyzer(config.analyzer ?: AnalyzerConfiguration())
 
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
