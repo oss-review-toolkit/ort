@@ -1,0 +1,26 @@
+{
+  "id" : "45807a12-e115-46e9-9d67-f55a8fb85566",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"get_all_scans\",\"group\":\"projects\",\"data\":{\"username\":\"\",\"key\":\"\",\"project_code\":\"semver4j\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"get_all_scans\",\"status\":\"1\",\"data\":false}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "45807a12-e115-46e9-9d67-f55a8fb85566",
+  "persistent" : true,
+  "insertionIndex" : 4
+}

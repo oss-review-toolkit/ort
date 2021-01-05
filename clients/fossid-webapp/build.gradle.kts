@@ -19,6 +19,7 @@
 
 val jacksonVersion: String by project
 val retrofitVersion: String by project
+val wiremockVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -32,4 +33,6 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+
+    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
 }
