@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.detekt
 
-import io.github.detekt.psi.absolutePath
-
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -50,9 +48,10 @@ class OrtPackageNaming : Rule() {
 
         if (directive.qualifiedName.isEmpty()) return
 
-        val path = directive.containingKtFile.absolutePath().toString()
-        if (!path.contains(pathPattern)) return
+        // This returns the absolute path with a system-dependent separator.
+        val path = directive.containingKtFile.name
 
+        if (!path.contains(pathPattern)) return
         val (pathPrefix, pathSuffix) = path.split(pathPattern, 2)
 
         // Maintain a hard-coded mapping of exceptions to the general package naming rules.
