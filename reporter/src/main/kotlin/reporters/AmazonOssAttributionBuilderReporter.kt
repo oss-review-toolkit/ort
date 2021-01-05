@@ -26,11 +26,11 @@ import java.time.Instant
 
 import okhttp3.Credentials
 
+import org.ossreviewtoolkit.clients.amazon.OssAttributionBuilderService
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.utils.AmazonOssAttributionBuilderService
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -46,8 +46,8 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
     private val reportFilename = "OssAttribution.txt"
 
-    private val service = AmazonOssAttributionBuilderService.create(
-        AmazonOssAttributionBuilderService.Server.DEFAULT,
+    private val service = OssAttributionBuilderService.create(
+        OssAttributionBuilderService.Server.DEFAULT,
         OkHttpClientHelper.buildClient()
     )
 
@@ -68,13 +68,13 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
         try {
             // Create a new project which gives all permissions to everyone for simplicity.
-            val acl = mapOf("everyone" to AmazonOssAttributionBuilderService.Role.OWNER)
+            val acl = mapOf("everyone" to OssAttributionBuilderService.Role.OWNER)
 
             // Projects have a list of contacts, but at the moment the UI only supports one contact, the legal contact.
-            val contacts = AmazonOssAttributionBuilderService.ProjectContacts(listOf("Insert legal contact here."))
+            val contacts = OssAttributionBuilderService.ProjectContacts(listOf("Insert legal contact here."))
 
             val metadata = jsonMapper.createObjectNode().put("open_sourcing", true)
-            val newProject = AmazonOssAttributionBuilderService.NewProject(
+            val newProject = OssAttributionBuilderService.NewProject(
                 rootProject.id.name,
                 rootProject.id.version,
                 "Imported from results of the OSS Review Toolkit.",
@@ -99,7 +99,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 //       ORT model. Think about how to map that to the Attributon Builder.
                 //       If the package was modified is something that is not currently captured by ORT. Think about
                 //       whether this is something we should do.
-                val usage = AmazonOssAttributionBuilderService.Usage("No notes.", link = "dynamic", modified = false)
+                val usage = OssAttributionBuilderService.Usage("No notes.", link = "dynamic", modified = false)
 
                 // URL passed into the Amazon Oss Attribution Builder needs to be reachable!
                 val pkgUrl = pkg.homepageUrl.takeUnless { it.isEmpty() } ?: "https://github.com/404"
@@ -117,7 +117,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
                 val licenseText = license?.let { input.licenseTextProvider.getLicenseText(it) }
 
-                val attachPackage = AmazonOssAttributionBuilderService.AttachPackage(
+                val attachPackage = OssAttributionBuilderService.AttachPackage(
                     pkg.id.name,
                     pkg.id.version,
                     pkgUrl,
@@ -198,7 +198,7 @@ private fun <T> getBodyOrHandleError(response: Response<T>, errorTitle: String):
     val errorMessage = response.errorBody()?.let { errorBody ->
         val errorResponse = jsonMapper.readValue(
             errorBody.string(),
-            AmazonOssAttributionBuilderService.ErrorResponse::class.java
+            OssAttributionBuilderService.ErrorResponse::class.java
         )
 
         errorResponse.error
