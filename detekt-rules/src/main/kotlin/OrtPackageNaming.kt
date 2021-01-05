@@ -35,6 +35,9 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 private const val ORT_PACKAGE_NAMESPACE = "org.ossreviewtoolkit"
 
 class OrtPackageNaming : Rule() {
+    private val pathPattern = Regex("""[/\\]src[/\\][^/\\]+[/\\]kotlin[/\\]""")
+    private val forwardOrBackwardSlashPattern = Regex("""[/\\]""")
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
@@ -48,7 +51,6 @@ class OrtPackageNaming : Rule() {
         if (directive.qualifiedName.isEmpty()) return
 
         val path = directive.containingKtFile.absolutePath().toString()
-        val pathPattern = Regex("""[/\\]src[/\\][^/\\]+[/\\]kotlin[/\\]""")
         if (!path.contains(pathPattern)) return
 
         val (pathPrefix, pathSuffix) = path.split(pathPattern, 2)
@@ -67,7 +69,7 @@ class OrtPackageNaming : Rule() {
             else -> ".$projectDir"
         }
 
-        val nestedPath = File(pathSuffix).parent?.replace(Regex("""[/\\]"""), ".")?.let { ".$it" }.orEmpty()
+        val nestedPath = File(pathSuffix).parent?.replace(forwardOrBackwardSlashPattern, ".")?.let { ".$it" }.orEmpty()
         val expectedPackageName = ORT_PACKAGE_NAMESPACE + projectName + nestedPath
 
         if (directive.qualifiedName != expectedPackageName) {
