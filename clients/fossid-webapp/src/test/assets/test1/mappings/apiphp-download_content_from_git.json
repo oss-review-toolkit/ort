@@ -1,0 +1,26 @@
+{
+  "id" : "71f2a9c3-f439-4994-aa27-d53222da9c7e",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"download_content_from_git\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scan_download_content_from_git\",\"status\":\"1\",\"message\":\"Downloading data from git repository has started.\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "71f2a9c3-f439-4994-aa27-d53222da9c7e",
+  "persistent" : true,
+  "insertionIndex" : 6
+}

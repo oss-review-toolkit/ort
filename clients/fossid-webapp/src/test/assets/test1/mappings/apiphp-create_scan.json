@@ -1,0 +1,26 @@
+{
+  "id" : "82d729e0-e0a9-4b29-b850-70ab6f4a07c6",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"create\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"project_code\":\"semver4j\",\"git_repo_url\":\"https://github.com/gundy/semver4j.git\",\"git_branch\":\"671aa533f7e33c773bf620b9f466650c3b9ab26e\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scan_insert\",\"status\":\"1\",\"data\":{\"scan_id\":4920},\"message\":\"Scan semver4j_20201203_090342 has been created.\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:42 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "82d729e0-e0a9-4b29-b850-70ab6f4a07c6",
+  "persistent" : true,
+  "insertionIndex" : 5
+}

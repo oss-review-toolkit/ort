@@ -1,0 +1,26 @@
+{
+  "id" : "281f8051-a62f-42e3-8925-27fd3b48668e",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"run\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\",\"auto_identification_detect_declaration\":\"1\",\"auto_identification_detect_copyright\":\"1\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"run\",\"status\":\"1\",\"message\":\"Scan has been launched\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:03:44 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "281f8051-a62f-42e3-8925-27fd3b48668e",
+  "persistent" : true,
+  "insertionIndex" : 10
+}
