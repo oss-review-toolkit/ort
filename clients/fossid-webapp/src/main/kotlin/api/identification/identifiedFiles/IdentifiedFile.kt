@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.identification.identifiedFiles
+package org.ossreviewtoolkit.clients.fossid.api.identification.identifiedFiles
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 
-import org.ossreviewtoolkit.fossid.api.identification.common.Component
-import org.ossreviewtoolkit.fossid.api.summary.License
-import org.ossreviewtoolkit.fossid.api.summary.Summarizable
-import org.ossreviewtoolkit.fossid.api.summary.SummaryIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.api.identification.common.Component
+import org.ossreviewtoolkit.clients.fossid.api.summary.License
+import org.ossreviewtoolkit.clients.fossid.api.summary.Summarizable
+import org.ossreviewtoolkit.clients.fossid.api.summary.SummaryIdentifiedFile
 
 data class IdentifiedFile(
     val comment: String?,

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.identification.markedAsIdentified
+package org.ossreviewtoolkit.clients.fossid.api.identification.markedAsIdentified
 
 data class File(
     val id: String?,

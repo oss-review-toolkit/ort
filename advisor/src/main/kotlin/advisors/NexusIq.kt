@@ -29,6 +29,7 @@ import kotlinx.coroutines.withContext
 
 import org.ossreviewtoolkit.advisor.AbstractAdvisorFactory
 import org.ossreviewtoolkit.advisor.Advisor
+import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -40,7 +41,6 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.nexusiq.NexusIqService
 import org.ossreviewtoolkit.utils.NamedThreadFactory
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString

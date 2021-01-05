@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.identification.common
+package org.ossreviewtoolkit.clients.fossid.api.identification.common
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
-import org.ossreviewtoolkit.fossid.api.IntBooleanDeserializer
+import org.ossreviewtoolkit.clients.fossid.api.IntBooleanDeserializer
 
 data class Component(
     val copyright: String?,

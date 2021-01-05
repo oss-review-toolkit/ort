@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
-import org.ossreviewtoolkit.clearlydefined.ComponentType
-import org.ossreviewtoolkit.clearlydefined.Provider
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
+import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.Provider
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact

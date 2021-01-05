@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.identification.identifiedFiles
+package org.ossreviewtoolkit.clients.fossid.api.identification.identifiedFiles
 
-import org.ossreviewtoolkit.fossid.api.identification.common.LicenseMatchType
+import org.ossreviewtoolkit.clients.fossid.api.identification.common.LicenseMatchType
 
 data class License(
     val fileLicenseMatchType: LicenseMatchType,

@@ -24,7 +24,7 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 
 class ClearlyDefinedPackageCurationProviderTest : WordSpec({

@@ -19,15 +19,15 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.fossid
+package org.ossreviewtoolkit.clients.fossid
 
 import okhttp3.ResponseBody
 
-import org.ossreviewtoolkit.fossid.api.Project
-import org.ossreviewtoolkit.fossid.api.identification.identifiedFiles.IdentifiedFile
-import org.ossreviewtoolkit.fossid.api.result.FossIdScanResult
-import org.ossreviewtoolkit.fossid.api.status.DownloadStatus
-import org.ossreviewtoolkit.fossid.api.status.ScanStatus
+import org.ossreviewtoolkit.clients.fossid.api.Project
+import org.ossreviewtoolkit.clients.fossid.api.identification.identifiedFiles.IdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.api.result.FossIdScanResult
+import org.ossreviewtoolkit.clients.fossid.api.status.DownloadStatus
+import org.ossreviewtoolkit.clients.fossid.api.status.ScanStatus
 
 import retrofit2.Call
 import retrofit2.http.Body

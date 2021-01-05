@@ -44,7 +44,7 @@ import java.net.ServerSocket
 import java.time.Duration
 import java.time.Instant
 
-import org.ossreviewtoolkit.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier

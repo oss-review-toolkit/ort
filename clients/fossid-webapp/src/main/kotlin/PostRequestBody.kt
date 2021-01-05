@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid
+package org.ossreviewtoolkit.clients.fossid
 
 class PostRequestBody(
     val action: String,
