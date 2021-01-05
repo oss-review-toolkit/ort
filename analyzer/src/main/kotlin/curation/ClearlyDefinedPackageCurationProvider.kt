@@ -22,10 +22,10 @@ package org.ossreviewtoolkit.analyzer.curation
 import java.io.IOException
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
-import org.ossreviewtoolkit.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
+import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration

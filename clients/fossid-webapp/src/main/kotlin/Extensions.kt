@@ -19,7 +19,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.fossid
+package org.ossreviewtoolkit.clients.fossid
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

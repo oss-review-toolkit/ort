@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.result
+package org.ossreviewtoolkit.clients.fossid.api.result
 
 data class FossIdScanResult(
     val id: Int?,

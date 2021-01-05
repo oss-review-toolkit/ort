@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clearlydefined
+package org.ossreviewtoolkit.clients.clearlydefined
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
@@ -30,13 +30,13 @@ import io.kotest.matchers.string.shouldStartWith
 
 import java.net.HttpURLConnection
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionInfo
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curation
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class ClearlyDefinedServiceFunTest : WordSpec({

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api
+package org.ossreviewtoolkit.clients.fossid.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

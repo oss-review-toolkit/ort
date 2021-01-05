@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.summary
+package org.ossreviewtoolkit.clients.fossid.api.summary
 
 /**
  * This interface marks FossId file results that can be included in a scan summary

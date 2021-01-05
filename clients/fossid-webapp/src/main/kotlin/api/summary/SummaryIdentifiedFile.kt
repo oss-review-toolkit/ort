@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.summary
+package org.ossreviewtoolkit.clients.fossid.api.summary
 
 data class SummaryIdentifiedFile(
     val path: String,

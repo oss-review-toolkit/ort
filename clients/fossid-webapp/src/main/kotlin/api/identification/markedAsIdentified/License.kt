@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.fossid.api.identification.markedAsIdentified
+package org.ossreviewtoolkit.clients.fossid.api.identification.markedAsIdentified
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 
-import org.ossreviewtoolkit.fossid.api.identification.common.LicenseMatchType
+import org.ossreviewtoolkit.clients.fossid.api.identification.common.LicenseMatchType
 
 data class License(
     val id: Int,

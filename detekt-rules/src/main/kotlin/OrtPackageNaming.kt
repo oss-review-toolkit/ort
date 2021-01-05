@@ -57,12 +57,12 @@ class OrtPackageNaming : Rule() {
         // Maintain a hard-coded mapping of exceptions to the general package naming rules.
         val projectName = when (val projectDir = File(pathPrefix).name) {
             "buildSrc" -> ".gradle"
-            "clearly-defined" -> ".clearlydefined"
+            "clearly-defined" -> ".clients.clearlydefined"
             "cli" -> ""
             "detekt-rules" -> ".detekt"
-            "fossid-webapp" -> ".fossid"
+            "fossid-webapp" -> ".clients.fossid"
             "helper-cli" -> ".helper"
-            "nexus-iq" -> ".nexusiq"
+            "nexus-iq" -> ".clients.nexusiq"
             "spdx-utils" -> ".spdx"
             "test-utils" -> ".utils.test"
             else -> ".$projectDir"

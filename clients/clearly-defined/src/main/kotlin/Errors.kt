@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clearlydefined
+package org.ossreviewtoolkit.clients.clearlydefined
 
 /**
  * See https://github.com/clearlydefined/service/blob/c47a989/app.js#L201-L205.

@@ -23,7 +23,7 @@ import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.time.Instant
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
