@@ -195,14 +195,13 @@ private fun assertCurrentTime(time: Instant) {
 }
 
 class ClearlyDefinedStorageTest : WordSpec({
-    lateinit var wiremock: WireMockServer
+    val wiremock = WireMockServer(
+        WireMockConfiguration.options()
+            .dynamicPort()
+            .usingFilesUnderDirectory("src/test/assets/")
+    )
 
     beforeSpec {
-        wiremock = WireMockServer(
-            WireMockConfiguration.options()
-                .dynamicPort()
-                .usingFilesUnderDirectory("src/test/assets/")
-        )
         wiremock.start()
         WireMock.configureFor(wiremock.port())
     }
