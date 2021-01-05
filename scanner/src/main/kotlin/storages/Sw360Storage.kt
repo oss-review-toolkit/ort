@@ -114,7 +114,7 @@ class Sw360Storage(
         }
     }
 
-    private fun deleteScanResultAttachment(release: SW360Release?): SW360Release =
+    private fun deleteScanResultAttachment(release: SW360Release?) =
         releaseClient.deleteAttachments(
             release,
             release?.embedded?.attachments
@@ -122,20 +122,19 @@ class Sw360Storage(
                 ?.map { it.id }
         )
 
-    private fun isAttachmentAScanResult(attachment: SW360SparseAttachment): Boolean =
+    private fun isAttachmentAScanResult(attachment: SW360SparseAttachment) =
         attachment.attachmentType == SW360AttachmentType.SCAN_RESULT_REPORT
                 && attachment.filename == SCAN_RESULTS_FILE_NAME
 
-    private fun createReleaseName(id: Identifier): String =
+    private fun createReleaseName(id: Identifier) =
         listOfNotNull(id.namespace, id.name).joinToString("/")
 
-    private fun getScanResultOfRelease(release: SW360Release, output: Path): List<Path> =
+    private fun getScanResultOfRelease(release: SW360Release, output: Path) =
         release.embedded.attachments
             .filter { isAttachmentAScanResult(it) }
             .mapNotNull { releaseClient.downloadAttachment(release, it, output).orElse(null) }
 
-    private fun createAttachmentOfScanResult(release: SW360Release,
-                                             cachedScanResult: Path): AttachmentUploadRequest<SW360Release> =
+    private fun createAttachmentOfScanResult(release: SW360Release, cachedScanResult: Path) =
         AttachmentUploadRequest.builder(release)
             .addAttachment(cachedScanResult, SW360AttachmentType.SCAN_RESULT_REPORT)
             .build()
