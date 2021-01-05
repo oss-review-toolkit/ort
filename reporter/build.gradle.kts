@@ -71,13 +71,13 @@ repositories {
 dependencies {
     api(project(":model"))
 
+    implementation(project(":clients:oss-attribution-builder"))
     implementation(project(":downloader"))
     implementation(project(":spdx-utils"))
     implementation(project(":utils"))
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.vladsch.flexmark:flexmark:$flexmarkVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")

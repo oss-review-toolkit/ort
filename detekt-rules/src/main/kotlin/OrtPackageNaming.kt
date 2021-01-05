@@ -63,6 +63,7 @@ class OrtPackageNaming : Rule() {
             "fossid-webapp" -> ".clients.fossid"
             "helper-cli" -> ".helper"
             "nexus-iq" -> ".clients.nexusiq"
+            "oss-attribution-builder" -> ".clients.amazon"
             "spdx-utils" -> ".spdx"
             "test-utils" -> ".utils.test"
             else -> ".$projectDir"
