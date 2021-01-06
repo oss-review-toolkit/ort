@@ -178,7 +178,7 @@ class Maven(
                 createAndLogIssue(
                     managerName,
                     "Package '${pkg.id.toCoordinates()}' seem to use an auto-generated POM which might lack metadata.",
-                    Severity.WARNING
+                    Severity.HINT
                 )
             } else {
                 null
