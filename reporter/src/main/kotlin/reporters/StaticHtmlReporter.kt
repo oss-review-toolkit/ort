@@ -132,6 +132,15 @@ class StaticHtmlReporter : Reporter {
                         +", version ${Environment().ortVersion} on ${Instant.now()}."
                     }
 
+                    h2 { +"Project" }
+
+                    div {
+                        with(reportTableModel.vcsInfo) {
+                            val revision = resolvedRevision ?: revision
+                            +"Scanned revision $revision of $type repository $url"
+                        }
+                    }
+
                     if (reportTableModel.labels.isNotEmpty()) {
                         labelsTable(reportTableModel.labels)
                     }
