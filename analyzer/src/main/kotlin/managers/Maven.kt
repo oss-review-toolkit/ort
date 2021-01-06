@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -171,7 +172,20 @@ class Maven(
             scopes = scopesByName.values.toSortedSet()
         )
 
-        return listOf(ProjectAnalyzerResult(project, packagesById.values.toSortedSet()))
+        val packages = packagesById.values.toSortedSet()
+        val issues = packages.mapNotNull { pkg ->
+            if (pkg.description == "POM was created by Sonatype Nexus") {
+                createAndLogIssue(
+                    managerName,
+                    "Package '${pkg.id.toCoordinates()}' seem to use an auto-generated POM which might lack metadata.",
+                    Severity.WARNING
+                )
+            } else {
+                null
+            }
+        }
+
+        return listOf(ProjectAnalyzerResult(project, packages, issues))
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
