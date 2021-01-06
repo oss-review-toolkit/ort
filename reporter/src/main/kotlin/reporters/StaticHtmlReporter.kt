@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import com.vladsch.flexmark.parser.Parser
 
 import java.io.File
 import java.time.Instant
+import java.util.SortedMap
 
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -156,6 +158,15 @@ class StaticHtmlReporter : Reporter {
         return document.serialize().normalizeLineBreaks()
     }
 
+    private fun getRuleViolationSummaryString(ruleViolations: List<ReportTableModel.ResolvableViolation>): String {
+        val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
+        val errorCount = violations[Severity.ERROR].orEmpty().size
+        val warningCount = violations[Severity.WARNING].orEmpty().size
+        val hintCount = violations[Severity.HINT].orEmpty().size
+
+        return "Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
+    }
+
     private fun DIV.labelsTable(labels: Map<String, String>) {
         h2 { +"Labels" }
         table("ort-report-labels") {
@@ -175,15 +186,9 @@ class StaticHtmlReporter : Reporter {
 
         ul {
             reportTableModel.ruleViolations?.let { ruleViolations ->
-                val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
-                val errorCount = violations[Severity.ERROR].orEmpty().size
-                val warningCount = violations[Severity.WARNING].orEmpty().size
-                val hintCount = violations[Severity.HINT].orEmpty().size
-
                 li {
                     a("#rule-violation-summary") {
-                        +("Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to " +
-                                "resolve)")
+                        +getRuleViolationSummaryString(ruleViolations)
                     }
                 }
             }
@@ -222,14 +227,9 @@ class StaticHtmlReporter : Reporter {
     }
 
     private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
-        val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
-        val errorCount = issues[Severity.ERROR].orEmpty().size
-        val warningCount = issues[Severity.WARNING].orEmpty().size
-        val hintCount = issues[Severity.HINT].orEmpty().size
-
         h2 {
             id = "rule-violation-summary"
-            +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
+            +getRuleViolationSummaryString(ruleViolations)
         }
 
         if (ruleViolations.isEmpty()) {
@@ -329,6 +329,30 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
+    private fun TR.listIssues(issues: SortedMap<Identifier, List<ResolvableIssue>>) {
+        td {
+            issues.forEach { (id, issues) ->
+                a("#${id.toCoordinates()}") { +id.toCoordinates() }
+
+                ul {
+                    issues.forEach { issue ->
+                        li {
+                            issueDescription(issue)
+                            p { +issue.resolutionDescription }
+                        }
+
+                        if (!issue.isResolved && issue.howToFix.isNotBlank()) {
+                            details {
+                                unsafe { +"<summary>How to fix</summary>" }
+                                markdown(issue.howToFix)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun TBODY.issueRow(rowIndex: Int, row: ReportTableModel.IssueRow) {
         val rowId = "issue-$rowIndex"
 
@@ -350,57 +374,18 @@ class StaticHtmlReporter : Reporter {
 
         tr(cssClass) {
             id = rowId
+
             td {
                 a {
                     href = "#$rowId"
                     +rowIndex.toString()
                 }
             }
+
             td { +row.id.toCoordinates() }
 
-            td {
-                row.analyzerIssues.forEach { (id, issues) ->
-                    a("#${id.toCoordinates()}") { +id.toCoordinates() }
-
-                    ul {
-                        issues.forEach { issue ->
-                            li {
-                                issueDescription(issue)
-                                p { +issue.resolutionDescription }
-                            }
-
-                            if (!issue.isResolved && issue.howToFix.isNotBlank()) {
-                                details {
-                                    unsafe { +"<summary>How to fix</summary>" }
-                                    markdown(issue.howToFix)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            td {
-                row.scanIssues.forEach { (id, issues) ->
-                    a("#${id.toCoordinates()}") { +id.toCoordinates() }
-
-                    ul {
-                        issues.forEach { issue ->
-                            li {
-                                issueDescription(issue)
-                                p { +issue.resolutionDescription }
-                            }
-
-                            if (!issue.isResolved && issue.howToFix.isNotBlank()) {
-                                details {
-                                    unsafe { +"<summary>How to fix</summary>" }
-                                    markdown(issue.howToFix)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            listIssues(row.analyzerIssues)
+            listIssues(row.scanIssues)
         }
     }
 
