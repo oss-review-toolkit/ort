@@ -130,16 +130,16 @@ class Maven(
         val workingDir = definitionFile.parentFile
         val projectBuildingResult = mvn.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
-        val packages = mutableMapOf<String, Package>()
-        val scopes = mutableMapOf<String, Scope>()
+        val packagesById = mutableMapOf<String, Package>()
+        val scopesByName = mutableMapOf<String, Scope>()
 
         projectBuildingResult.dependencyResolutionResult.dependencyGraph.children.forEach { node ->
             val scopeName = node.dependency.scope
-            val scope = scopes.getOrPut(scopeName) {
+            val scope = scopesByName.getOrPut(scopeName) {
                 Scope(scopeName, sortedSetOf())
             }
 
-            scope.dependencies += parseDependency(node, packages)
+            scope.dependencies += parseDependency(node, packagesById)
         }
 
         val vcsFromPackage = MavenSupport.parseVcsInfo(mavenProject)
@@ -168,10 +168,10 @@ class Maven(
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),
-            scopes = scopes.values.toSortedSet()
+            scopes = scopesByName.values.toSortedSet()
         )
 
-        return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))
+        return listOf(ProjectAnalyzerResult(project, packagesById.values.toSortedSet()))
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
