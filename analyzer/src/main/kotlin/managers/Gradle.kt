@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -115,7 +116,7 @@ class Gradle(
         }
 
         override fun findVersions(artifact: Artifact) =
-            // Do not resolve versions of already locally available artifacts. This also ensures version resolution
+        // Do not resolve versions of already locally available artifacts. This also ensures version resolution
             // was done by Gradle.
             if (findArtifact(artifact)?.isFile == true) listOf(artifact.version) else emptyList()
 
@@ -335,5 +336,191 @@ class Gradle(
             val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
             PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), issues = issues)
         }
+    }
+}
+
+/**
+ * A helper class to construct a dependency graph when processing a Gradle project.
+ */
+internal class GradleDependencyGraphBuilder(
+    /** The name of the dependency manager to use as type of identifiers. */
+    private val managerName: String,
+
+    /** The helper object to resolve packages via Maven. */
+    private val maven: MavenSupport
+) {
+    /**
+     * A map storing all the references to packages that have been encountered so far. This is used to de-duplicate
+     * the packages in the dependency trees of the different scopes.
+     */
+    private val referenceMapping = mutableMapOf<String, PackageReference>()
+
+    /** The mapping from scopes to dependencies constructed by this builder. */
+    private val scopeMapping = mutableMapOf<String, Set<Identifier>>()
+
+    /** Stores all packages encountered in the dependency tree. */
+    private val resolvedPackages = mutableSetOf<Package>()
+
+    /**
+     * A set storing the packages that are direct dependencies of one of the scopes. These are the entry points into
+     * the dependency graph.
+     */
+    private val directDependencies = mutableSetOf<PackageReference>()
+
+    /**
+     * Add the scope with the given [scopeName] to this builder. In most cases, it is not necessary to add scopes
+     * explicitly, as they are recorded automatically by _addDependency()_. However, if there are scopes without
+     * dependencies, this function can be used to include them into the builder result.
+     */
+    fun addScope(scopeName: String) {
+        if (!scopeMapping.containsKey(scopeName)) {
+            scopeMapping[scopeName] = emptySet()
+        }
+    }
+
+    /**
+     * Add the given [dependency] for the scope with the given [scopeName] to this builder. Use the provided
+     * [repositories] to resolve the package if necessary.
+     */
+    fun addDependency(scopeName: String, dependency: Dependency, repositories: List<RemoteRepository>) {
+        addDependencyToGraph(scopeName, dependency, repositories, transitive = false)
+    }
+
+    /**
+     * Construct the [DependencyGraph] from the dependencies passed to this builder so far.
+     */
+    fun build(): DependencyGraph = DependencyGraph(directDependencies, scopeMapping)
+
+    /**
+     * Return a set with all the packages that have been encountered for the current project.
+     */
+    fun packages(): Set<Package> = resolvedPackages
+
+    /**
+     * Update the dependency graph by adding the given [dependency], which may be [transitive], for the scope with name
+     * [scopeName]. Use the provided [repositories] to resolve the package if necessary. All the dependencies of this
+     * dependency are processed recursively.
+     */
+    private fun addDependencyToGraph(
+        scopeName: String,
+        dependency: Dependency,
+        repositories: List<RemoteRepository>,
+        transitive: Boolean
+    ): PackageReference {
+        val identifier = "${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
+        val issues = issuesForDependency(dependency)
+
+        val ref = referenceMapping.getOrPut(identifier) {
+            updateResolvedPackages(identifier, dependency, repositories, issues)
+            val transitiveDependencies = dependency.dependencies
+                .map { addDependencyToGraph(scopeName, it, repositories, transitive = true) }
+
+            val ref = if (dependency.localPath != null) {
+                val id = Identifier(managerName, dependency.groupId, dependency.artifactId, dependency.version)
+                PackageReference(id, PackageLinkage.PROJECT_DYNAMIC, transitiveDependencies.toSortedSet(), issues)
+            } else {
+                val type = dependency.pomFile?.let { "Maven" } ?: "Unknown"
+                val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
+                PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), issues = issues)
+            }
+
+            updateDirectDependencies(ref, transitive)
+        }
+
+        return updateScopeMapping(scopeName, ref, transitive)
+    }
+
+    /**
+     * Return a list of issues that is initially populated with errors or warnings from the given [dependency].
+     */
+    private fun issuesForDependency(dependency: Dependency): MutableList<OrtIssue> {
+        val issues = mutableListOf<OrtIssue>()
+
+        dependency.error?.let {
+            issues += createAndLogIssue(
+                source = managerName,
+                message = it,
+                severity = Severity.ERROR
+            )
+        }
+
+        dependency.warning?.let {
+            issues += createAndLogIssue(
+                source = managerName,
+                message = it,
+                severity = Severity.WARNING
+            )
+        }
+
+        return issues
+    }
+
+    /**
+     * Construct a [Package] for the given [dependency] using the [repositories] provided. Add the new package to the
+     * set managed by this object. If this fails, record a corresponding message in [issues].
+     */
+    private fun updateResolvedPackages(
+        identifier: String,
+        dependency: Dependency,
+        repositories: List<RemoteRepository>,
+        issues: MutableList<OrtIssue>
+    ) {
+        // Only look for a package if there was no error resolving the dependency and it is no project dependency.
+        if (dependency.error == null && dependency.localPath == null) {
+            val pkg = try {
+                val artifact = DefaultArtifact(
+                    dependency.groupId, dependency.artifactId, dependency.classifier,
+                    dependency.extension, dependency.version
+                )
+
+                maven.parsePackage(artifact, repositories)
+            } catch (e: ProjectBuildingException) {
+                e.showStackTrace()
+
+                issues += createAndLogIssue(
+                    source = managerName,
+                    message = "Could not get package information for dependency '$identifier': " +
+                            e.collectMessagesAsString()
+                )
+
+                Package.EMPTY.copy(
+                    id = Identifier(
+                        type = "Maven",
+                        namespace = dependency.groupId,
+                        name = dependency.artifactId,
+                        version = dependency.version
+                    )
+                )
+            }
+
+            resolvedPackages += pkg
+        }
+    }
+
+    /**
+     * Add the given [package reference][ref] to the set of direct dependencies if it is not [transitive]. If one of
+     * the direct dependencies of this package is in this set, it is removed, as it is obviously no direct dependency.
+     * Because this function is called for all dependencies, all transitive dependencies are eventually removed.
+     */
+    private fun updateDirectDependencies(ref: PackageReference, transitive: Boolean): PackageReference {
+        directDependencies.removeAll(ref.dependencies)
+        if (!transitive) {
+            directDependencies += ref
+        }
+        return ref
+    }
+
+    /**
+     * Update the scope mapping for the given [scopeName] to depend on [ref], which may be a [transitive] dependency.
+     * The scope mapping records all the direct dependencies of scopes.
+     */
+    private fun updateScopeMapping(scopeName: String, ref: PackageReference, transitive: Boolean): PackageReference {
+        if (!transitive) {
+            scopeMapping.compute(scopeName) { _, ids ->
+                ids?.let { it + ref.id } ?: setOf(ref.id)
+            }
+        }
+
+        return ref
     }
 }
