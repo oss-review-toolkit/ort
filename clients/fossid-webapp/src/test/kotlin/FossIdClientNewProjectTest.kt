@@ -122,7 +122,7 @@ class FossIdClientNewProjectTest : StringSpec({
         }
     }
 
-    "Download from GIT can be triggered" {
+    "Download from Git can be triggered" {
         service.downloadFromGit("", "", SCAN_CODE).execute().body().shouldNotBeNull {
             checkResponse("download data from Git", false)
         }
