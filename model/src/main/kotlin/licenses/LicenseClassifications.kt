@@ -85,7 +85,6 @@ data class LicenseClassifications(
             }
         }
 
-        val categoryNames = categories.map { it.name }.toSet()
         categorizations.associateWith { it.categories.filterNot(categoryNames::contains) }
             .filterNot { it.value.isEmpty() }
             .let { invalidCategorizations ->
