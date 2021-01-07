@@ -26,8 +26,6 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-
     api("com.squareup.retrofit2:retrofit:$retrofitVersion")
 
     implementation(project(":utils"))
