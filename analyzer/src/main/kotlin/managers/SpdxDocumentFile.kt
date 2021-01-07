@@ -195,7 +195,7 @@ class SpdxDocumentFile(
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, projectPackage.homepage),
                 homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
-                scopes = scopes
+                scopeDependencies = scopes
             )
         } else {
             // TODO: Add support for "package.spdx.yml" files. How to deal with relationships between SPDX packages if

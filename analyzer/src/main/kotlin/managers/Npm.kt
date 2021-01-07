@@ -529,7 +529,7 @@ open class Npm(
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = scopes
+            scopeDependencies = scopes
         )
 
         return ProjectAnalyzerResult(project, packages)

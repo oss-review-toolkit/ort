@@ -136,7 +136,7 @@ class GoMod(
                         vcs = projectVcs,
                         vcsProcessed = projectVcs,
                         homepageUrl = "",
-                        scopes = scopes
+                        scopeDependencies = scopes
                     ),
                     packages = packages
                 )

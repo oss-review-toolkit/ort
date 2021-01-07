@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.lang.IllegalStateException
 
 import java.util.SortedSet
 
@@ -77,7 +80,15 @@ data class Project(
     /**
      * The dependency scopes defined by this project.
      */
-    val scopes: SortedSet<Scope>
+    @JsonProperty("scopes")
+    val scopeDependencies: SortedSet<Scope>,
+
+    /**
+     * Contains dependency information as a [DependencyGraph]. This is an alternative format to store the dependencies
+     * referenced by the various scopes. Use the [scopes] property to access dependency information independent on
+     * the concrete representation.
+     */
+    val dependencyGraph: DependencyGraph? = null
 ) : Comparable<Project> {
     companion object {
         /**
@@ -92,8 +103,36 @@ data class Project(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             homepageUrl = "",
-            scopes = sortedSetOf()
+            scopeDependencies = sortedSetOf()
         )
+
+        /**
+         * Construct the set of scopes and their dependencies from the given [graph].
+         */
+        private fun scopesFromDependencyGraph(graph: DependencyGraph): SortedSet<Scope> {
+            val idMapping = mutableMapOf<Identifier, PackageReference>()
+            graph.dependencies.forEach { constructPackageIdMapping(it, idMapping) }
+
+            return graph.scopeMapping.mapTo(sortedSetOf<Scope>()) { entry ->
+                Scope(entry.key, entry.value.mapTo(sortedSetOf<PackageReference>()) { id ->
+                    idMapping[id] ?: throw IllegalStateException("Cannot resolve dependency reference to $id.")
+                })
+            }
+        }
+
+        /**
+         * Populate a [mapping] allowing direct access to the given [package reference][ref] and all its dependencies.
+         */
+        private fun constructPackageIdMapping(ref: PackageReference,
+                                              mapping: MutableMap<Identifier, PackageReference>) {
+            mapping[ref.id] = ref
+            ref.dependencies.forEach { constructPackageIdMapping(it, mapping) }
+        }
+    }
+
+    @get:JsonIgnore
+    val scopes by lazy {
+        dependencyGraph?.let { scopesFromDependencyGraph(it) } ?: scopeDependencies
     }
 
     /**

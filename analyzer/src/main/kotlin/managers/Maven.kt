@@ -168,7 +168,7 @@ class Maven(
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),
-            scopes = scopes.values.toSortedSet()
+            scopeDependencies = scopes.values.toSortedSet()
         )
 
         return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))
