@@ -110,6 +110,9 @@ data class LicenseClassifications(
      * categorization can be found.
      */
     operator fun get(id: SpdxExpression): LicenseCategorization? = licensesById[id]
+
+    /** A convenience function to check whether there is a categorization for the given license [id]. */
+    fun isCategorized(id: SpdxExpression) = id in licensesById
 }
 
 fun LicenseClassifications?.orEmpty(): LicenseClassifications = this ?: LicenseClassifications()
