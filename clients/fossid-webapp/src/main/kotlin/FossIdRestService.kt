@@ -43,18 +43,19 @@ import retrofit2.http.POST
 
 interface FossIdRestService {
     companion object {
+        val JSON_MAPPER = JsonMapper()
+            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+            .registerKotlinModule()
+
         /**
          * Create a FossID service instance for communicating with a server running at the given [url],
          * optionally using a pre-built OkHttp [client].
          */
         fun create(url: String, client: OkHttpClient? = null): FossIdRestService {
-            val mapper = JsonMapper()
-                .registerKotlinModule()
-                .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
                 .baseUrl(url)
-                .addConverterFactory(JacksonConverterFactory.create(mapper))
+                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
             return retrofit.create(FossIdRestService::class.java)
