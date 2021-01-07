@@ -17,32 +17,31 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.result
+package org.ossreviewtoolkit.clients.fossid.model
 
-data class FossIdScanResult(
-    val id: Int?,
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-    val localPath: String?,
-    val created: String?,
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Project(
+    val id: Int,
 
-    val scanId: Int?,
-    val scanFileId: Int?,
-    val fileId: Int?,
-
-    val matchType: MatchType?,
-    val author: String?,
-    val artifact: String?,
-    val version: String?,
-
-    val artifactLicense: String?,
-    val mirror: String?,
-    val file: String?,
-
-    val fileLicense: String?,
-
-    val underlyingLicenses: String?,
-    val url: String?,
-    val hits: String?,
-    val size: Int?,
+    val created: String,
     val updated: String?,
+    val creator: String,
+
+    val projectCode: String,
+    val projectName: String,
+
+    val limitDate: String?,
+
+    val productCode: String,
+    val productName: String,
+
+    val description: String,
+    val comment: String,
+
+    val isArchived: Int,
+    val jiraProjectKey: String,
+    val creationDate: String,
+    val dateLimitDate: String?
 )

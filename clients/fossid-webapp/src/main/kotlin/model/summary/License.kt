@@ -17,21 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api
+package org.ossreviewtoolkit.clients.fossid.model.summary
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 
-/**
- * This class deserializes a String containing 0/1 to boolean.
- * Null string leads to null Boolean.
- */
-class IntBooleanDeserializer : StdDeserializer<Boolean>(Boolean::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Boolean =
-        when (val text = p.text) {
-            "0" -> false
-            "1" -> true
-            else -> text.toBoolean()
-        }
-}
+data class License(
+    val identifier: String,
+    val name: String?,
+    val origin: LicenseMatchType
+)

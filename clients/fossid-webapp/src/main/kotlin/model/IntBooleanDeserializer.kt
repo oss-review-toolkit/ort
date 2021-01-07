@@ -17,15 +17,21 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.identification.ignored
+package org.ossreviewtoolkit.clients.fossid.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
-data class IgnoredFile(
-        @JsonProperty("scan_file_id")
-        val id: Int,
-        @JsonProperty("local_path")
-        val path: String,
-        val reason: String,
-        val matchType: String
-)
+/**
+ * This class deserializes a String containing 0/1 to boolean.
+ * Null string leads to null Boolean.
+ */
+class IntBooleanDeserializer : StdDeserializer<Boolean>(Boolean::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Boolean =
+        when (val text = p.text) {
+            "0" -> false
+            "1" -> true
+            else -> text.toBoolean()
+        }
+}

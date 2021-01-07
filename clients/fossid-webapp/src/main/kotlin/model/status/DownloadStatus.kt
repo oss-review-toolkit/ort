@@ -17,16 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.status
+package org.ossreviewtoolkit.clients.fossid.model.status
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-enum class ScanState {
+enum class DownloadStatus {
     @JsonProperty("NOT STARTED")
     NOT_STARTED,
-    STARTED,
-    SCANNING,
-    @JsonProperty("AUTO-ID")
-    AUTO_ID,
+    @JsonProperty("NOT FINISHED")
+    NOT_FINISHED,
     FINISHED
 }

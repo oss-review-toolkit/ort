@@ -17,31 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api
+package org.ossreviewtoolkit.clients.fossid.model.result
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class Project(
-    val id: Int,
-
-    val created: String,
-    val updated: String?,
-    val creator: String,
-
-    val projectCode: String,
-    val projectName: String,
-
-    val limitDate: String?,
-
-    val productCode: String,
-    val productName: String,
-
-    val description: String,
-    val comment: String,
-
-    val isArchived: Int,
-    val jiraProjectKey: String,
-    val creationDate: String,
-    val dateLimitDate: String?
-)
+enum class MatchType {
+    @JsonProperty("none")
+    NONE,
+    @JsonProperty("Ignored")
+    IGNORED,
+    @JsonProperty("partial")
+    PARTIAL,
+    @JsonProperty("full")
+    FULL
+}

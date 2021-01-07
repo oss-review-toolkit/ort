@@ -28,11 +28,11 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
-import org.ossreviewtoolkit.clients.fossid.api.Project
-import org.ossreviewtoolkit.clients.fossid.api.identification.identifiedFiles.IdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.api.result.FossIdScanResult
-import org.ossreviewtoolkit.clients.fossid.api.status.DownloadStatus
-import org.ossreviewtoolkit.clients.fossid.api.status.ScanStatus
+import org.ossreviewtoolkit.clients.fossid.model.Project
+import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
+import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
+import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 
 import retrofit2.Call
 import retrofit2.Retrofit

@@ -17,19 +17,24 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.identification.identifiedFiles
+package org.ossreviewtoolkit.clients.fossid.model.summary
 
-import org.ossreviewtoolkit.clients.fossid.api.identification.common.LicenseMatchType
+/**
+ * This interface marks FossId file results that can be included in a scan summary
+ */
+interface Summarizable {
+    /**
+     * Convert the current FossId file to an Object suitable for a scan summary
+     */
+    fun toSummary(): SummaryIdentifiedFile
 
-data class License(
-    val fileLicenseMatchType: LicenseMatchType,
+    /**
+     * Get the file name of the FossId file result
+     */
+    fun getFileName(): String
 
-    val id: Int?,
-    val identifier: String,
-
-    val isFoss: Int?,
-    val isOsiApproved: Int?,
-    val isSpdxStandard: Int?,
-
-    val name: String?
-)
+    /**
+     * Get the copyright of the FossId file result
+     */
+    fun getCopyright(): String?
+}

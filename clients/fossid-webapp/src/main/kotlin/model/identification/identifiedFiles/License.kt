@@ -17,8 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.status
+package org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles
 
-enum class ScanStatusType {
-    SCAN, REPORT_IMPORT, DEPENDENCY_ANALYSIS
-}
+import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
+
+data class License(
+    val fileLicenseMatchType: LicenseMatchType,
+
+    val id: Int?,
+    val identifier: String,
+
+    val isFoss: Int?,
+    val isOsiApproved: Int?,
+    val isSpdxStandard: Int?,
+
+    val name: String?
+)

@@ -17,24 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.summary
+package org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified
 
-/**
- * This interface marks FossId file results that can be included in a scan summary
- */
-interface Summarizable {
-    /**
-     * Convert the current FossId file to an Object suitable for a scan summary
-     */
-    fun toSummary(): SummaryIdentifiedFile
+data class File(
+    val id: String?,
 
-    /**
-     * Get the file name of the FossId file result
-     */
-    fun getFileName(): String
+    val md5: String?,
+    val path: String?,
+    val sha1: String?,
+    val sha256: String?,
 
-    /**
-     * Get the copyright of the FossId file result
-     */
-    fun getCopyright(): String?
-}
+    val size: Int?,
+
+    val licenses: MutableMap<Int, License>?
+)

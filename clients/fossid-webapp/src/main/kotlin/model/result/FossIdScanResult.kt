@@ -17,17 +17,32 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.result
+package org.ossreviewtoolkit.clients.fossid.model.result
 
-import com.fasterxml.jackson.annotation.JsonProperty
+data class FossIdScanResult(
+    val id: Int?,
 
-enum class MatchType {
-    @JsonProperty("none")
-    NONE,
-    @JsonProperty("Ignored")
-    IGNORED,
-    @JsonProperty("partial")
-    PARTIAL,
-    @JsonProperty("full")
-    FULL
-}
+    val localPath: String?,
+    val created: String?,
+
+    val scanId: Int?,
+    val scanFileId: Int?,
+    val fileId: Int?,
+
+    val matchType: MatchType?,
+    val author: String?,
+    val artifact: String?,
+    val version: String?,
+
+    val artifactLicense: String?,
+    val mirror: String?,
+    val file: String?,
+
+    val fileLicense: String?,
+
+    val underlyingLicenses: String?,
+    val url: String?,
+    val hits: String?,
+    val size: Int?,
+    val updated: String?,
+)
