@@ -51,7 +51,6 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -232,13 +231,14 @@ class Gradle(
                     "The Gradle project '$projectName' uses the following Maven repositories: $repositories"
                 }
 
-                val packages = mutableMapOf<String, Package>()
-                val scopes = dependencyTreeModel.configurations.map { configuration ->
-                    val dependencies = configuration.dependencies.map { dependency ->
-                        parseDependency(dependency, packages, repositories)
+                val graphBuilder = GradleDependencyGraphBuilder(managerName, maven)
+                dependencyTreeModel.configurations.forEach { configuration ->
+                    configuration.dependencies.forEach { dependency ->
+                        graphBuilder.addDependency(configuration.name, dependency, repositories)
                     }
 
-                    Scope(configuration.name, dependencies.toSortedSet())
+                    // Make sure that scopes without dependencies are recorded.
+                    graphBuilder.addScope(configuration.name)
                 }
 
                 val project = Project(
@@ -253,7 +253,8 @@ class Gradle(
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",
-                    scopeDependencies = scopes.toSortedSet()
+                    scopeDependencies = sortedSetOf(),
+                    dependencyGraph = graphBuilder.build()
                 )
 
                 val issues = mutableListOf<OrtIssue>()
@@ -266,75 +267,8 @@ class Gradle(
                     createAndLogIssue(source = managerName, message = it, severity = Severity.WARNING)
                 }
 
-                listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues))
+                listOf(ProjectAnalyzerResult(project, graphBuilder.packages().toSortedSet(), issues))
             }
-        }
-    }
-
-    private fun parseDependency(
-        dependency: Dependency, packages: MutableMap<String, Package>,
-        repositories: List<RemoteRepository>
-    ): PackageReference {
-        val issues = mutableListOf<OrtIssue>()
-
-        dependency.error?.let {
-            issues += createAndLogIssue(
-                source = managerName,
-                message = it,
-                severity = Severity.ERROR
-            )
-        }
-
-        dependency.warning?.let {
-            issues += createAndLogIssue(
-                source = managerName,
-                message = it,
-                severity = Severity.WARNING
-            )
-        }
-
-        // Only look for a package if there was no error resolving the dependency and it is no project dependency.
-        if (dependency.error == null && dependency.localPath == null) {
-            val identifier = "${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
-
-            packages.getOrPut(identifier) {
-                try {
-                    val artifact = DefaultArtifact(
-                        dependency.groupId, dependency.artifactId, dependency.classifier,
-                        dependency.extension, dependency.version
-                    )
-
-                    maven.parsePackage(artifact, repositories)
-                } catch (e: ProjectBuildingException) {
-                    e.showStackTrace()
-
-                    issues += createAndLogIssue(
-                        source = managerName,
-                        message = "Could not get package information for dependency '$identifier': " +
-                                e.collectMessagesAsString()
-                    )
-
-                    Package.EMPTY.copy(
-                        id = Identifier(
-                            type = "Maven",
-                            namespace = dependency.groupId,
-                            name = dependency.artifactId,
-                            version = dependency.version
-                        )
-                    )
-                }
-            }
-        }
-
-        val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-
-        return if (dependency.localPath != null) {
-            val id = Identifier(managerName, dependency.groupId, dependency.artifactId, dependency.version)
-            PackageReference(id, PackageLinkage.PROJECT_DYNAMIC, transitiveDependencies.toSortedSet(), issues)
-        } else {
-            val type = dependency.pomFile?.let { "Maven" } ?: "Unknown"
-            val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
-            PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), issues = issues)
         }
     }
 }
@@ -408,6 +342,7 @@ internal class GradleDependencyGraphBuilder(
         transitive: Boolean
     ): PackageReference {
         val identifier = "${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
+        log.debug { "Add dependency $identifier to scope $scopeName." }
         val issues = issuesForDependency(dependency)
 
         val ref = referenceMapping.getOrPut(identifier) {

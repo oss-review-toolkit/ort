@@ -15,12 +15,8 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
   homepage_url: ""
-  scopes:
-  - name: "annotationProcessor"
-    dependencies: []
-  - name: "archives"
-    dependencies: []
-  - name: "compile"
+  scopes: []
+  dependency_graph:
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
@@ -29,84 +25,30 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "compileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "compileOnly"
-    dependencies: []
-  - name: "default"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "runtime"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "runtimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testAnnotationProcessor"
-    dependencies: []
-  - name: "testCompile"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testCompileOnly"
-    dependencies: []
-  - name: "testRuntime"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+    scope_mapping:
+      annotationProcessor: []
+      archives: []
+      compile:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      compileClasspath:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      compileOnly: []
+      default:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      runtime:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      runtimeClasspath:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      testAnnotationProcessor: []
+      testCompile:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      testCompileClasspath:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      testCompileOnly: []
+      testRuntime:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      testRuntimeClasspath:
+      - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
 packages:
 - id: "Maven:org.apache.commons:commons-lang3:3.5"
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"

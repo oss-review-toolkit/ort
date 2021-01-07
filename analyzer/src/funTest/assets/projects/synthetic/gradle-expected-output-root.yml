@@ -16,4 +16,7 @@ project:
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes: []
+  dependency_graph:
+    dependencies: []
+    scope_mapping: {}
 packages: []

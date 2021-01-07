@@ -15,12 +15,8 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
   homepage_url: ""
-  scopes:
-  - name: "annotationProcessor"
-    dependencies: []
-  - name: "archives"
-    dependencies: []
-  - name: "compile"
+  scopes: []
+  dependency_graph:
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
       issues:
@@ -30,52 +26,6 @@ project:
           \ dependency org.apache.commons:commons-text:1.1 because no repositories\
           \ are defined."
         severity: "ERROR"
-  - name: "compileClasspath"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "compileOnly"
-    dependencies: []
-  - name: "default"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "runtime"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "runtimeClasspath"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testAnnotationProcessor"
-    dependencies: []
-  - name: "testCompile"
-    dependencies:
     - id: "Unknown:junit:junit:4.12"
       issues:
       - timestamp: "1970-01-01T00:00:00Z"
@@ -83,65 +33,32 @@ project:
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
         severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testCompileClasspath"
-    dependencies:
-    - id: "Unknown:junit:junit:4.12"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency junit:junit:4.12 because no repositories are defined."
-        severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testCompileOnly"
-    dependencies: []
-  - name: "testRuntime"
-    dependencies:
-    - id: "Unknown:junit:junit:4.12"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency junit:junit:4.12 because no repositories are defined."
-        severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testRuntimeClasspath"
-    dependencies:
-    - id: "Unknown:junit:junit:4.12"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency junit:junit:4.12 because no repositories are defined."
-        severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
+    scope_mapping:
+      annotationProcessor: []
+      archives: []
+      compile:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      compileClasspath:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      compileOnly: []
+      default:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      runtime:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      runtimeClasspath:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      testAnnotationProcessor: []
+      testCompile:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      - "Unknown:junit:junit:4.12"
+      testCompileClasspath:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      - "Unknown:junit:junit:4.12"
+      testCompileOnly: []
+      testRuntime:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      - "Unknown:junit:junit:4.12"
+      testRuntimeClasspath:
+      - "Unknown:org.apache.commons:commons-text:1.1"
+      - "Unknown:junit:junit:4.12"
 packages: []

@@ -15,83 +15,53 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
   homepage_url: ""
-  scopes:
-  - name: "annotationProcessor"
-    dependencies: []
-  - name: "archives"
-    dependencies: []
-  - name: "compile"
+  scopes: []
+  dependency_graph:
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
       dependencies:
       - id: "Maven:org.apache.commons:commons-lang3:3.5"
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "compileClasspath"
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "compileOnly"
-    dependencies: []
-  - name: "default"
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "runtime"
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "runtimeClasspath"
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testAnnotationProcessor"
-    dependencies: []
-  - name: "testCompile"
-    dependencies:
     - id: "Maven:junit:junit:4.12"
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testCompileClasspath"
-    dependencies:
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testCompileOnly"
-    dependencies: []
-  - name: "testRuntime"
-    dependencies:
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testRuntimeClasspath"
-    dependencies:
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+    scope_mapping:
+      annotationProcessor: []
+      archives: []
+      compile:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      compileClasspath:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      compileOnly: []
+      default:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      runtime:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      runtimeClasspath:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      testAnnotationProcessor: []
+      testCompile:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - "Maven:junit:junit:4.12"
+      testCompileClasspath:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - "Maven:junit:junit:4.12"
+      testCompileOnly: []
+      testRuntime:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - "Maven:junit:junit:4.12"
+      testRuntimeClasspath:
+      - "Maven:org.apache.commons:commons-text:1.1"
+      - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - "Maven:junit:junit:4.12"
 packages:
 - id: "Maven:junit:junit:4.12"
   purl: "pkg:maven/junit/junit@4.12"
