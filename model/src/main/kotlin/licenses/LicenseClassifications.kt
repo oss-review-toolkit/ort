@@ -52,10 +52,6 @@ data class LicenseClassifications(
     private val licensesByCategoryName: Map<String, Set<LicenseCategorization>> by lazy {
         val result = mutableMapOf<String, MutableSet<LicenseCategorization>>()
 
-        categories.forEach { category ->
-            result[category.name] = mutableSetOf()
-        }
-
         categorizations.forEach { license ->
             license.categories.forEach { categoryId ->
                 result.getOrPut(categoryId) { mutableSetOf() } += license
