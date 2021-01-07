@@ -80,9 +80,7 @@ data class LicenseClassifications(
         categories.mapTo(sortedSetOf()) { it.name }
     }
 
-    /**
-     * A property for fast look-ups of licenses for a given category.
-     */
+    /** A property for fast look-ups of licenses for a given category. */
     private val licensesByCategoryName: Map<String, Set<LicenseCategorization>> by lazy {
         val result = mutableMapOf<String, MutableSet<LicenseCategorization>>()
 
