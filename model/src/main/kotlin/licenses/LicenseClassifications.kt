@@ -48,6 +48,33 @@ data class LicenseClassifications(
     @JsonAlias("licenses")
     val categorizations: List<LicenseCategorization> = emptyList()
 ) {
+    /** A property for fast look-ups of licenses for a given category. */
+    private val licensesByCategoryName: Map<String, Set<LicenseCategorization>> by lazy {
+        val result = mutableMapOf<String, MutableSet<LicenseCategorization>>()
+
+        categories.forEach { category ->
+            result[category.name] = mutableSetOf()
+        }
+
+        categorizations.forEach { license ->
+            license.categories.forEach { categoryId ->
+                result.getOrPut(categoryId) { mutableSetOf() } += license
+            }
+        }
+
+        result
+    }
+
+    /** A property for fast-lookups of licenses by their ID. */
+    private val licensesById: Map<SpdxSingleLicenseExpression, LicenseCategorization> by lazy {
+        categorizations.associateBy { it.id }
+    }
+
+    /** A property allowing convenient access to the names of all categories defined. */
+    val categoryNames: SortedSet<String> by lazy {
+        categories.mapTo(sortedSetOf()) { it.name }
+    }
+
     init {
         categories.groupBy { it.name }.values.filter { it.size > 1 }.let { groups ->
             require(groups.isEmpty()) {
@@ -75,28 +102,6 @@ data class LicenseClassifications(
             }
     }
 
-    /** A property allowing convenient access to the names of all categories defined. */
-    val categoryNames: SortedSet<String> by lazy {
-        categories.mapTo(sortedSetOf()) { it.name }
-    }
-
-    /** A property for fast look-ups of licenses for a given category. */
-    private val licensesByCategoryName: Map<String, Set<LicenseCategorization>> by lazy {
-        val result = mutableMapOf<String, MutableSet<LicenseCategorization>>()
-
-        categories.forEach { category ->
-            result[category.name] = mutableSetOf()
-        }
-
-        categorizations.forEach { license ->
-            license.categories.forEach { categoryId ->
-                result.getOrPut(categoryId) { mutableSetOf() } += license
-            }
-        }
-
-        result
-    }
-
     /**
      * Return a set with the licenses that are assigned to the category with the given [name][categoryName].
      * If the there is no category with the name provided, throw an [IllegalStateException].
@@ -104,11 +109,6 @@ data class LicenseClassifications(
      */
     fun getLicensesForCategory(categoryName: String): Set<LicenseCategorization> =
         licensesByCategoryName[categoryName] ?: error("Unknown license category name: $categoryName.")
-
-    /** A property for fast-lookups of licenses by their ID. */
-    private val licensesById: Map<SpdxSingleLicenseExpression, LicenseCategorization> by lazy {
-        categorizations.associateBy { it.id }
-    }
 
     /**
      * A convenience operator to return the [LicenseCategorization] for the given [id] or *null* if no such
