@@ -17,10 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.summary
+package org.ossreviewtoolkit.clients.fossid.model.identification.common
 
-data class SummaryIdentifiedFile(
-    val path: String,
-    val comment: String?,
-    val licences: List<License>
-)
+enum class LicenseMatchType {
+    SNIPPET, FILE
+}

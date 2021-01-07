@@ -17,28 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.identification.markedAsIdentified
+package org.ossreviewtoolkit.clients.fossid.model.summary
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped
-
-import org.ossreviewtoolkit.clients.fossid.api.identification.common.LicenseMatchType
-
-data class License(
-    val id: Int,
-
-    val type: LicenseMatchType,
-
-    val userId: Int,
-
-    val componentId: Int? = null,
-
-    val identificationId: Int,
-
-    val licenseId: Int,
-
-    val created: String,
-    val updated: String
-) {
-    @JsonUnwrapped(prefix = "file_")
-    lateinit var file: LicenseFile
-}
+data class SummaryIdentifiedFile(
+    val path: String,
+    val comment: String?,
+    val licences: List<License>
+)

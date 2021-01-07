@@ -17,30 +17,25 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.identification.identifiedFiles
+package org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 
-import org.ossreviewtoolkit.clients.fossid.api.identification.common.Component
-import org.ossreviewtoolkit.clients.fossid.api.summary.License
-import org.ossreviewtoolkit.clients.fossid.api.summary.Summarizable
-import org.ossreviewtoolkit.clients.fossid.api.summary.SummaryIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.common.Component
+import org.ossreviewtoolkit.clients.fossid.model.summary.License
+import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
+import org.ossreviewtoolkit.clients.fossid.model.summary.SummaryIdentifiedFile
 
-data class IdentifiedFile(
+data class MarkedAsIdentifiedFile(
     val comment: String?,
 
-    val identificationId: Int?,
+    val identificationId: Int,
+
     val identificationCopyright: String,
 
     val isDistributed: Int,
 
-    val rowId: Int,
-
-    val userName: String?,
-
-    val userSurname: String?,
-
-    val userUsername: String?,
+    val rowId: Int
 ) : Summarizable {
     @JsonUnwrapped(prefix = "component_")
     lateinit var component: Component // TODO: How to get the additional components? Only one is returned
@@ -52,9 +47,9 @@ data class IdentifiedFile(
         val licenses = file.licenses?.let { licenses ->
             licenses.values.map {
                 License(
-                    identifier = it.identifier,
-                    name = it.name,
-                    origin = it.fileLicenseMatchType
+                    identifier = it.file.licenseIdentifier!!,
+                    name = it.file.licenseName,
+                    origin = it.type
                 )
             }
         }.orEmpty()

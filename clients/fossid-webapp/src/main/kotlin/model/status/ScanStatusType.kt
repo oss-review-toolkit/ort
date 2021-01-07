@@ -17,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.fossid.api.identification.common
+package org.ossreviewtoolkit.clients.fossid.model.status
 
-enum class LicenseMatchType {
-    SNIPPET, FILE
+enum class ScanStatusType {
+    SCAN, REPORT_IMPORT, DEPENDENCY_ANALYSIS
 }

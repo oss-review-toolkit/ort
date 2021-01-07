@@ -30,11 +30,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
-import org.ossreviewtoolkit.clients.fossid.api.Scan
-import org.ossreviewtoolkit.clients.fossid.api.identification.ignored.IgnoredFile
-import org.ossreviewtoolkit.clients.fossid.api.identification.markedAsIdentified.MarkedAsIdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.api.status.DownloadStatus
-import org.ossreviewtoolkit.clients.fossid.api.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.checkScanStatus
@@ -47,6 +42,11 @@ import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
+import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
+import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.clients.fossid.toList
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
