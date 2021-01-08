@@ -117,7 +117,7 @@ class NexusIq(
                     }?.let { details ->
                         pkg to listOf(
                             AdvisorResult(
-                                details.securityData.securityIssues.mapToVulnerabilities(),
+                                details.securityData.securityIssues.map { it.toVulnerability() },
                                 AdvisorDetails(advisorName),
                                 AdvisorSummary(startTime, endTime)
                             )
@@ -151,14 +151,12 @@ class NexusIq(
         }
     }
 
-    private fun Collection<NexusIqService.SecurityIssue>.mapToVulnerabilities() =
-        map {
-            Vulnerability(
-                it.reference,
-                it.severity,
-                it.url
-            )
-        }
+    private fun NexusIqService.SecurityIssue.toVulnerability() =
+        Vulnerability(
+            reference,
+            severity,
+            url
+        )
 
     /**
      * Execute an HTTP request specified by the given [call]. The response status is checked. If everything went
