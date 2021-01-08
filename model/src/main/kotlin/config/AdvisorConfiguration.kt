@@ -37,9 +37,14 @@ sealed class AdvisorConfiguration
  */
 data class BasicAuthConfiguration(
     /**
-     * The base URL of the provider.
+     * The URL to use for REST API requests against the server.
      */
     val serverUrl: String,
+
+    /**
+     * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
+     */
+    val browseUrl: String = serverUrl,
 
     /**
      * Username of the provider. Used without authentication if no password or username is given.
