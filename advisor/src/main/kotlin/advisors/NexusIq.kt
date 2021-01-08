@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.advisor.advisors
 
 import java.io.IOException
+import java.net.URL
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -151,12 +152,15 @@ class NexusIq(
         }
     }
 
-    private fun NexusIqService.SecurityIssue.toVulnerability() =
-        Vulnerability(
-            reference,
-            severity,
+    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability {
+        val browseUrl = if (url == null && reference.startsWith("sonatype-")) {
+            URL("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
+        } else {
             url
-        )
+        }
+
+        return Vulnerability(reference, severity, browseUrl)
+    }
 
     /**
      * Execute an HTTP request specified by the given [call]. The response status is checked. If everything went
