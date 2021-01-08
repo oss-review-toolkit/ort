@@ -103,8 +103,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         }
 
         requireNotNull(ortResult.analyzer) {
-            "The provided ORT result file '${ortResultFile.invariantSeparatorsPath}' does not contain an analyzer " +
-                    "result."
+            "The provided ORT result file '${ortResultFile.canonicalPath}' does not contain an analyzer result."
         }
 
         // Add the projects as packages to scan.

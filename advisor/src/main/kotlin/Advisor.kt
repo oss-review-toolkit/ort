@@ -61,8 +61,7 @@ abstract class Advisor(val advisorName: String, protected val config: AdvisorCon
         val ortResult = ortResultFile.readValue<OrtResult>()
 
         requireNotNull(ortResult.analyzer) {
-            "The provided ORT result file '${ortResultFile.invariantSeparatorsPath}' does not contain an analyzer " +
-                    "result."
+            "The provided ORT result file '${ortResultFile.canonicalPath}' does not contain an analyzer result."
         }
 
         val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
