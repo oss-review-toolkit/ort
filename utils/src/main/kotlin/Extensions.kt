@@ -313,6 +313,11 @@ fun String.fileSystemEncode() =
         .take(255)
 
 /**
+ * Return true if the string represents a false value, otherwise return false.
+ */
+fun String?.isFalse() = this?.toBoolean()?.not() ?: false
+
+/**
  * Return true if the string represents a true value, otherwise return false.
  */
 fun String?.isTrue() = this?.toBoolean() ?: false
