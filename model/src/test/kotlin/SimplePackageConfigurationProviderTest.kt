@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider

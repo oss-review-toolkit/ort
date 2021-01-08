@@ -25,8 +25,8 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.net.URL
 import java.util.UUID
-import okhttp3.Credentials
 
+import okhttp3.Credentials
 import okhttp3.OkHttpClient
 
 import retrofit2.Call
