@@ -30,8 +30,8 @@ import kotlin.io.path.createTempFile
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
 
-class BasicAuthConfigurationTest : WordSpec({
-    "BasicAuthConfiguration" should {
+class NexusIqConfigurationTest : WordSpec({
+    "NexusIqConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
             val referenceOrtConfig = OrtConfiguration.load(configFile = File("src/test/assets/reference.conf"))
             val rereadOrtConfig = createTempFile(suffix = ".yml").toFile().apply {
@@ -39,13 +39,13 @@ class BasicAuthConfigurationTest : WordSpec({
                 deleteOnExit()
             }.readValue<OrtConfiguration>()
 
-            val expectedOrtBasicAuthConfig = referenceOrtConfig.advisor?.get("nexusiq")
-            val actualBasicAuthConfiguration = rereadOrtConfig.advisor?.get("nexusiq")
+            val expectedNexusIqConfig = referenceOrtConfig.advisor?.get("nexusiq")
+            val actualNexusIqConfiguration = rereadOrtConfig.advisor?.get("nexusiq")
 
-            expectedOrtBasicAuthConfig.shouldBeInstanceOf<BasicAuthConfiguration>()
-            actualBasicAuthConfiguration.shouldBeInstanceOf<BasicAuthConfiguration>()
-            actualBasicAuthConfiguration.serverUrl shouldBe expectedOrtBasicAuthConfig.serverUrl
-            actualBasicAuthConfiguration.username shouldBe expectedOrtBasicAuthConfig.username
+            expectedNexusIqConfig.shouldBeInstanceOf<NexusIqConfiguration>()
+            actualNexusIqConfiguration.shouldBeInstanceOf<NexusIqConfiguration>()
+            actualNexusIqConfiguration.serverUrl shouldBe expectedNexusIqConfig.serverUrl
+            actualNexusIqConfiguration.username shouldBe expectedNexusIqConfig.username
         }
     }
 })
