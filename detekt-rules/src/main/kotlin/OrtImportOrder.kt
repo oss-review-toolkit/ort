@@ -42,7 +42,6 @@ class OrtImportOrder : Rule() {
         Debt.FIVE_MINS
     )
 
-    @ExperimentalStdlibApi
     override fun visitImportList(importList: KtImportList) {
         super.visitImportList(importList)
 
