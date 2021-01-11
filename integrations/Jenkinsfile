@@ -293,16 +293,12 @@ pipeline {
                             STACKTRACE_OPTION="--stacktrace"
                         fi
 
-                        if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
-                            ALLOW_DYNAMIC_VERSIONS_OPTION="--allow-dynamic-versions"
-                        fi
-
                         if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
                             USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
                         fi
 
                         rm -fr out/results
-                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
+                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION analyze -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
                     '''
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
