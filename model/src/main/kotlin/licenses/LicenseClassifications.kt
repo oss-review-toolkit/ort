@@ -115,4 +115,7 @@ data class LicenseClassifications(
     fun isCategorized(id: SpdxExpression) = id in licensesById
 }
 
+/**
+ * A convenience extension function to return empty LicenseClassifications for null.
+ */
 fun LicenseClassifications?.orEmpty(): LicenseClassifications = this ?: LicenseClassifications()
