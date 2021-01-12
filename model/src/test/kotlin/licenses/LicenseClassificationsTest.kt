@@ -34,7 +34,7 @@ import java.util.Collections.emptySortedSet
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 class LicenseClassificationsTest : WordSpec({
-    "LicenseClassifications.init" should {
+    "init()" should {
         "detect duplicate category names" {
             val cat1 = LicenseCategory("Category 1")
             val cat2 = LicenseCategory("Category 2", "Another category")
@@ -87,7 +87,7 @@ class LicenseClassificationsTest : WordSpec({
         }
     }
 
-    "LicenseClassifications.getLicensesForCategory" should {
+    "getLicensesForCategory()" should {
         "fetch all licenses for a specific category" {
             val cat1 = LicenseCategory("permissive", "Permissive licenses")
             val cat2 = LicenseCategory("non permissive", "Strict licenses")
@@ -137,7 +137,7 @@ class LicenseClassificationsTest : WordSpec({
         }
     }
 
-    "LicenseClassifications.categoryNames" should {
+    "categoryNames" should {
         "contain the expected licenses" {
             val cat1 = LicenseCategory("permissive", "Permissive licenses")
             val cat2 = LicenseCategory("non permissive", "Strict licenses")
