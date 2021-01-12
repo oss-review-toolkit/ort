@@ -138,7 +138,7 @@ class LicenseClassificationsTest : WordSpec({
     }
 
     "categoryNames" should {
-        "contain the expected licenses" {
+        "contain the expected category names" {
             val cat1 = LicenseCategory("permissive", "Permissive licenses")
             val cat2 = LicenseCategory("non permissive", "Strict licenses")
             val cat3 = LicenseCategory("other", "Completely different licenses")
