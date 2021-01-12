@@ -167,7 +167,7 @@ class Stack(
             vcs = projectPackage.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
             homepageUrl = projectPackage.homepageUrl,
-            scopes = scopes
+            scopeDependencies = scopes
         )
 
         return listOf(ProjectAnalyzerResult(project, allPackages.values.toSortedSet()))

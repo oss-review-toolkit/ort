@@ -141,7 +141,7 @@ class Maven(
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),
-            scopes = scopesByName.values.toSortedSet()
+            scopeDependencies = scopesByName.values.toSortedSet()
         )
 
         val packages = packagesById.values.toSortedSet()

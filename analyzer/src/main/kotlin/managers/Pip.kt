@@ -380,7 +380,7 @@ class Pip(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
             homepageUrl = setupHomepage,
-            scopes = scopes
+            scopeDependencies = scopes
         )
 
         // Remove the virtualenv by simply deleting the directory.

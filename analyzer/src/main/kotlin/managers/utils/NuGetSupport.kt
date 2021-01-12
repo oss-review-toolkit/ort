@@ -295,7 +295,7 @@ fun PackageManager.resolveNuGetDependencies(
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),
         homepageUrl = "",
-        scopes = sortedSetOf(scope)
+        scopeDependencies = sortedSetOf(scope)
     )
 
     return ProjectAnalyzerResult(project, packages, issues)
