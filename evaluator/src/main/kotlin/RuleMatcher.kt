@@ -53,6 +53,15 @@ class AnyOf(vararg val matchers: RuleMatcher) : RuleMatcher {
 }
 
 /**
+ * A [RuleMatcher] that requires none of the provided [matchers] to match.
+ */
+class NoneOf(vararg val matchers: RuleMatcher) : RuleMatcher {
+    override val description = "!(${matchers.joinToString(" || ") { it.description }})"
+
+    override fun matches() = matchers.none { it.matches() }
+}
+
+/**
  * A [RuleMatcher] that inverts the result of the provided [matcher].
  */
 class Not(val matcher: RuleMatcher) : RuleMatcher {
