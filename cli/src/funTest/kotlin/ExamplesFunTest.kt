@@ -26,7 +26,6 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
@@ -54,6 +53,7 @@ import org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExamplesFunTest : StringSpec() {
     private val examplesDir = File("../examples")
@@ -98,9 +98,10 @@ class ExamplesFunTest : StringSpec() {
 
                 classifications.categories.filter { it.description.isNotEmpty() } shouldNot beEmpty()
                 classifications.categoryNames shouldContain "public-domain"
-                val licMIT = classifications["MIT".toSpdx()]
-                licMIT.shouldNotBeNull()
-                licMIT.categories shouldContain "permissive"
+                val classificationsForMit = classifications["MIT".toSpdx()]
+                classificationsForMit shouldNotBeNull {
+                    shouldContain("permissive")
+                }
             }
         }
 
