@@ -29,16 +29,13 @@
  * Import the license classifications from license-classifications.yml.
  */
 
-fun getLicenseCategory(categoryId: String) =
-    licenseClassifications.getLicensesForCategory(categoryId).map { it.id }.toSet()
+val permissiveLicenses = licenseClassifications.licensesByCategory["permissive"].orEmpty()
 
-val permissiveLicenses = getLicenseCategory("permissive")
+val copyleftLicenses = licenseClassifications.licensesByCategory["copyleft"].orEmpty()
 
-val copyleftLicenses = getLicenseCategory("copyleft")
+val copyleftLimitedLicenses = licenseClassifications.licensesByCategory["copyleft-limited"].orEmpty()
 
-val copyleftLimitedLicenses = getLicenseCategory("copyleft-limited")
-
-val publicDomainLicenses = getLicenseCategory("public-domain")
+val publicDomainLicenses = licenseClassifications.licensesByCategory["public-domain"].orEmpty()
 
 // The complete set of licenses covered by policy rules.
 val handledLicenses = listOf(

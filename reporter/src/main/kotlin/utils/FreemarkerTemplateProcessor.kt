@@ -188,7 +188,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                licenseClassifications[resolvedLicense.license]?.categories?.contains(category) ?: true
+                licenseClassifications[resolvedLicense.license]?.contains(category) ?: true
             }
 
         /**

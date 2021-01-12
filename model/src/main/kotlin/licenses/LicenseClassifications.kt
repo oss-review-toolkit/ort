@@ -50,21 +50,27 @@ data class LicenseClassifications(
     val categorizations: List<LicenseCategorization> = emptyList()
 ) {
     /** A property for fast look-ups of licenses for a given category. */
-    private val licensesByCategoryName: Map<String, Set<LicenseCategorization>> by lazy {
-        val result = mutableMapOf<String, MutableSet<LicenseCategorization>>()
+    val licensesByCategory: Map<String, Set<SpdxSingleLicenseExpression>> by lazy {
+        val result = mutableMapOf<String, MutableSet<SpdxSingleLicenseExpression>>()
 
         categorizations.forEach { license ->
-            license.categories.forEach { categoryId ->
-                result.getOrPut(categoryId) { mutableSetOf() } += license
+            license.categories.forEach { category ->
+                result.getOrPut(category) { mutableSetOf() } += license.id
             }
         }
 
         result
     }
 
-    /** A property for fast-lookups of licenses by their ID. */
-    private val licensesById: Map<SpdxSingleLicenseExpression, LicenseCategorization> by lazy {
-        categorizations.associateBy { it.id }
+    /** A property for fast look-ups of categories for a given license. */
+    val categoriesByLicense: Map<SpdxSingleLicenseExpression, Set<String>> by lazy {
+        val result = mutableMapOf<SpdxSingleLicenseExpression, Set<String>>()
+
+        categorizations.forEach { license ->
+            result[license.id] = license.categories
+        }
+
+        result
     }
 
     /** A property allowing convenient access to the names of all categories defined. */
@@ -98,21 +104,13 @@ data class LicenseClassifications(
     }
 
     /**
-     * Return a set with the licenses that are assigned to the category with the given [name][categoryName].
-     * If the there is no category with the name provided, throw an [IllegalStateException].
-     * This is intended to be mostly used via scripting.
+     * A convenience operator to return the categories for the given license [id], or null if the license is not
+     * categorized.
      */
-    fun getLicensesForCategory(categoryName: String): Set<LicenseCategorization> =
-        licensesByCategoryName[categoryName] ?: error("Unknown license category name: $categoryName.")
-
-    /**
-     * A convenience operator to return the [LicenseCategorization] for the given [id] or *null* if no such
-     * categorization can be found.
-     */
-    operator fun get(id: SpdxExpression): LicenseCategorization? = licensesById[id]
+    operator fun get(id: SpdxExpression) = categoriesByLicense[id]
 
     /** A convenience function to check whether there is a categorization for the given license [id]. */
-    fun isCategorized(id: SpdxExpression) = id in licensesById
+    fun isCategorized(id: SpdxExpression) = id in categoriesByLicense
 }
 
 /**
