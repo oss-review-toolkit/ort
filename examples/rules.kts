@@ -47,11 +47,12 @@ val handledLicenses = listOf(
     copyleftLicenses,
     copyleftLimitedLicenses
 ).flatten().let {
-    it.groupBy { it }.filter { it.value.size > 1 }.let {
-        require(it.isEmpty()) {
-            "The classifications for the following licenses overlap: ${it.keys.joinToString()}"
+    it.getDuplicates { it }.let { duplicates ->
+        require(duplicates.isEmpty()) {
+            "The classifications for the following licenses overlap: $duplicates"
         }
     }
+
     it.toSet()
 }
 

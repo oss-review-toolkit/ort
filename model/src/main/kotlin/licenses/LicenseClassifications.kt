@@ -26,6 +26,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.getDuplicates
 
 /**
  * Classifications for licenses which allow to assign meta data to licenses. This allows defining rather generic
@@ -72,16 +73,15 @@ data class LicenseClassifications(
     }
 
     init {
-        categories.groupBy { it.name }.values.filter { it.size > 1 }.let { groups ->
-            require(groups.isEmpty()) {
-                "Found multiple license category entries with the same name: " +
-                        groups.joinToString { it.first().name }
+        categories.getDuplicates { it.name }.let { duplicates ->
+            require(duplicates.isEmpty()) {
+                "Found multiple license category entries with the same name: $duplicates"
             }
         }
 
-        categorizations.groupBy { it.id }.values.filter { it.size > 1 }.let { groups ->
-            require(groups.isEmpty()) {
-                "Found multiple license entries with the same Id: ${groups.joinToString { it.first().id.toString() }}."
+        categorizations.getDuplicates { it.id }.let { duplicates ->
+            require(duplicates.isEmpty()) {
+                "Found multiple license entries with the same id: $duplicates"
             }
         }
 
