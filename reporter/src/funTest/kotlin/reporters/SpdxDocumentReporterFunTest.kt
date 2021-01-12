@@ -165,7 +165,7 @@ private fun createOrtResult(): OrtResult {
                         declaredLicenses = sortedSetOf("MIT"),
                         definitionFilePath = "",
                         homepageUrl = "first project's homepage",
-                        scopes = sortedSetOf(
+                        scopeDependencies = sortedSetOf(
                             Scope(
                                 name = "compile",
                                 dependencies = sortedSetOf(

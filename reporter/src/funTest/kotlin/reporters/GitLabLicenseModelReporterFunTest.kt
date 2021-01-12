@@ -100,7 +100,7 @@ private fun createOrtResult(): OrtResult {
                     Project.EMPTY.copy(
                         id = Identifier("Gradle:some-group:some-gradle-project:0.0.1"),
                         definitionFilePath = "some/path/build.gradle",
-                        scopes = sortedSetOf(
+                        scopeDependencies = sortedSetOf(
                             Scope(
                                 name = "compile",
                                 dependencies = sortedSetOf(
@@ -121,7 +121,7 @@ private fun createOrtResult(): OrtResult {
                     ),
                     Project.EMPTY.copy(
                         id = Identifier("PIP::some-pip-project:0.0.2"),
-                        scopes = sortedSetOf(
+                        scopeDependencies = sortedSetOf(
                             Scope(
                                 name = "install",
                                 dependencies = sortedSetOf(

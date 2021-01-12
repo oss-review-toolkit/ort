@@ -129,7 +129,7 @@ val scope = Scope(
 val project = Project.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:project-included:1.0"),
     definitionFilePath = "included/pom.xml",
-    scopes = sortedSetOf(scope)
+    scopeDependencies = sortedSetOf(scope)
 )
 
 val provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY)

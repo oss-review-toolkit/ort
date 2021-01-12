@@ -288,7 +288,7 @@ class Cargo(
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = scopes.toSortedSet()
+            scopeDependencies = scopes.toSortedSet()
         )
 
         val nonProjectPackages = packages

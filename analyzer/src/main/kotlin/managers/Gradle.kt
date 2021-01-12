@@ -252,7 +252,7 @@ class Gradle(
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",
-                    scopes = scopes.toSortedSet()
+                    scopeDependencies = scopes.toSortedSet()
                 )
 
                 val issues = mutableListOf<OrtIssue>()

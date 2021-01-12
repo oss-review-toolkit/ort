@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.util.SortedSet
 
@@ -75,9 +78,21 @@ data class Project(
     val homepageUrl: String,
 
     /**
-     * The dependency scopes defined by this project.
+     * Holds information about the scopes and their dependencies of this project if no [DependencyGraph] is available.
+     * NOTE: Do not use this property to access scope information. Use [scopes] instead, which is correctly initialized
+     * in all cases.
      */
-    val scopes: SortedSet<Scope>
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("scopes")
+    val scopeDependencies: SortedSet<Scope>? = null,
+
+    /**
+     * Contains dependency information as a [DependencyGraph]. This is an alternative format to store the dependencies
+     * referenced by the various scopes. Use the [scopes] property to access dependency information independent on
+     * the concrete representation.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val dependencyGraph: DependencyGraph? = null
 ) : Comparable<Project> {
     companion object {
         /**
@@ -92,8 +107,17 @@ data class Project(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             homepageUrl = "",
-            scopes = sortedSetOf()
+            scopeDependencies = sortedSetOf()
         )
+    }
+
+    /**
+     * The dependency scopes defined by this project. This property provides access to scope-related information, no
+     * matter whether this information has been initialized directly or has been encoded in a [DependencyGraph].
+     */
+    @get:JsonIgnore
+    val scopes by lazy {
+        dependencyGraph?.createScopes() ?: scopeDependencies ?: sortedSetOf()
     }
 
     /**

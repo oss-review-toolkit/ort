@@ -116,7 +116,7 @@ class Bundler(
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
                 homepageUrl = homepageUrl,
-                scopes = scopes.toSortedSet()
+                scopeDependencies = scopes.toSortedSet()
             )
 
             return listOf(ProjectAnalyzerResult(project, packages, issues))

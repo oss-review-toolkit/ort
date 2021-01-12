@@ -369,7 +369,7 @@ class Pub(
             vcs = vcs,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = scopes
+            scopeDependencies = scopes
         )
     }
 

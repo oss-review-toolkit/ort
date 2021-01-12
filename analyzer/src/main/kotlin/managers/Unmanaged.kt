@@ -111,7 +111,7 @@ class Unmanaged(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = vcsInfo,
             homepageUrl = "",
-            scopes = sortedSetOf()
+            scopeDependencies = sortedSetOf()
         )
 
         return listOf(ProjectAnalyzerResult(project, packages = sortedSetOf()))

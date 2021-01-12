@@ -81,7 +81,7 @@ val ORT_RESULT = OrtResult(
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "",
-                    scopes = sortedSetOf(
+                    scopeDependencies = sortedSetOf(
                         Scope(
                             name = "dependencies",
                             dependencies = sortedSetOf(
@@ -110,7 +110,7 @@ val ORT_RESULT = OrtResult(
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "",
-                    scopes = sortedSetOf(
+                    scopeDependencies = sortedSetOf(
                         Scope(
                             name = "dependencies",
                             dependencies = sortedSetOf()
@@ -123,7 +123,7 @@ val ORT_RESULT = OrtResult(
                     declaredLicenses = sortedSetOf("BSD-2-Clause"),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "",
-                    scopes = sortedSetOf()
+                    scopeDependencies = sortedSetOf()
                 )
             ),
             packages = sortedSetOf(
