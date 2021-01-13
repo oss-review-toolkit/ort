@@ -15,5 +15,8 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android"
   homepage_url: ""
-  scopes: []
+  dependency_graph:
+    packages: []
+    scope_roots: []
+    scopes: {}
 packages: []

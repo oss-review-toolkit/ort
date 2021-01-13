@@ -15,445 +15,213 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/app"
   homepage_url: ""
-  scopes:
-  - name: "amazonDemoDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonDemoDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+  dependency_graph:
+    packages:
+    - "Maven:com.squareup.okhttp3:okhttp:3.10.0"
+    - "Maven:com.squareup.okio:okio:1.14.0"
+    - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - "Maven:org.apache.commons:commons-text:1.2"
+    - "Maven:org.apache.commons:commons-lang3:3.7"
+    - "Maven:org.apache.commons:commons-compress:1.17"
+    - "Maven:junit:junit:4.12"
+    - "Maven:org.hamcrest:hamcrest-core:1.3"
+    - "Maven:org.apache.commons:commons-text:1.3"
+    scope_roots:
+    - dependencies:
+      - pkg: 1
+    - pkg: 2
       linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
+    - pkg: 2
+      fragment: 1
       dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
+      - pkg: 3
         dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonDemoDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+        - pkg: 4
+      - pkg: 5
       linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
+    - pkg: 6
       dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
+      - pkg: 7
+    - pkg: 2
+      fragment: 2
       dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
+      - pkg: 5
+      - pkg: 8
         dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonDemoDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+        - pkg: 4
       linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonDemoDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonDemoDebugWearBundling"
-    dependencies: []
-  - name: "amazonDemoReleaseAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonDemoReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonDemoReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonDemoReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonDemoReleaseWearBundling"
-    dependencies: []
-  - name: "amazonFullDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonFullDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonFullDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonFullDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullDebugWearBundling"
-    dependencies: []
-  - name: "amazonFullReleaseAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonFullReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "amazonFullReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullReleaseWearBundling"
-    dependencies: []
-  - name: "androidTestUtil"
-    dependencies: []
-  - name: "archives"
-    dependencies: []
-  - name: "compile"
-    dependencies: []
-  - name: "default"
-    dependencies: []
-  - name: "googleDemoDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleDemoDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleDemoDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleDemoDebugAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleDemoDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleDemoDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleDemoDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleDemoDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoDebugWearBundling"
-    dependencies: []
-  - name: "googleDemoReleaseAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleDemoReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleDemoReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleDemoReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleDemoReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoReleaseWearBundling"
-    dependencies: []
-  - name: "googleFullDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleFullDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleFullDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleFullDebugAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleFullDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleFullDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleFullDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleFullDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullDebugWearBundling"
-    dependencies: []
-  - name: "googleFullReleaseAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleFullReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleFullReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleFullReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
-  - name: "googleFullReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullReleaseWearBundling"
-    dependencies: []
-  - name: "lintChecks"
-    dependencies: []
-  - name: "lintClassPath"
-    dependencies: []
-  - name: "testCompile"
-    dependencies: []
+    scopes:
+      amazonDemoDebugAndroidTestAnnotationProcessorClasspath: []
+      amazonDemoDebugAndroidTestCompileClasspath:
+      - root: 0
+      - root: 2
+      amazonDemoDebugAndroidTestRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 1
+      amazonDemoDebugAnnotationProcessorClasspath: []
+      amazonDemoDebugCompileClasspath:
+      - root: 0
+      - root: 2
+      amazonDemoDebugRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 1
+      amazonDemoDebugUnitTestAnnotationProcessorClasspath: []
+      amazonDemoDebugUnitTestCompileClasspath:
+      - root: 0
+      - root: 2
+      - root: 6
+      amazonDemoDebugUnitTestRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 1
+      - root: 6
+      amazonDemoDebugWearBundling: []
+      amazonDemoReleaseAnnotationProcessorClasspath: []
+      amazonDemoReleaseCompileClasspath:
+      - root: 0
+      - root: 2
+      amazonDemoReleaseRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 1
+      amazonDemoReleaseUnitTestAnnotationProcessorClasspath: []
+      amazonDemoReleaseUnitTestCompileClasspath:
+      - root: 0
+      - root: 2
+      - root: 6
+      amazonDemoReleaseUnitTestRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 1
+      - root: 6
+      amazonDemoReleaseWearBundling: []
+      amazonFullDebugAndroidTestAnnotationProcessorClasspath: []
+      amazonFullDebugAndroidTestCompileClasspath:
+      - root: 0
+      - root: 2
+      amazonFullDebugAndroidTestRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 2
+      amazonFullDebugAnnotationProcessorClasspath: []
+      amazonFullDebugCompileClasspath:
+      - root: 0
+      - root: 2
+      amazonFullDebugRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 2
+      amazonFullDebugUnitTestAnnotationProcessorClasspath: []
+      amazonFullDebugUnitTestCompileClasspath:
+      - root: 0
+      - root: 2
+      - root: 6
+      amazonFullDebugUnitTestRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 2
+      - root: 6
+      amazonFullDebugWearBundling: []
+      amazonFullReleaseAnnotationProcessorClasspath: []
+      amazonFullReleaseCompileClasspath:
+      - root: 0
+      - root: 2
+      amazonFullReleaseRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 2
+      amazonFullReleaseUnitTestAnnotationProcessorClasspath: []
+      amazonFullReleaseUnitTestCompileClasspath:
+      - root: 0
+      - root: 2
+      - root: 6
+      amazonFullReleaseUnitTestRuntimeClasspath:
+      - root: 0
+      - root: 2
+        fragment: 2
+      - root: 6
+      amazonFullReleaseWearBundling: []
+      androidTestUtil: []
+      archives: []
+      compile: []
+      default: []
+      googleDemoDebugAndroidTestAnnotationProcessorClasspath: []
+      googleDemoDebugAndroidTestCompileClasspath:
+      - root: 2
+      googleDemoDebugAndroidTestRuntimeClasspath:
+      - root: 2
+        fragment: 1
+      googleDemoDebugAnnotationProcessorClasspath: []
+      googleDemoDebugCompileClasspath:
+      - root: 2
+      googleDemoDebugRuntimeClasspath:
+      - root: 2
+        fragment: 1
+      googleDemoDebugUnitTestAnnotationProcessorClasspath: []
+      googleDemoDebugUnitTestCompileClasspath:
+      - root: 2
+      - root: 6
+      googleDemoDebugUnitTestRuntimeClasspath:
+      - root: 2
+        fragment: 1
+      - root: 6
+      googleDemoDebugWearBundling: []
+      googleDemoReleaseAnnotationProcessorClasspath: []
+      googleDemoReleaseCompileClasspath:
+      - root: 2
+      googleDemoReleaseRuntimeClasspath:
+      - root: 2
+        fragment: 1
+      googleDemoReleaseUnitTestAnnotationProcessorClasspath: []
+      googleDemoReleaseUnitTestCompileClasspath:
+      - root: 2
+      - root: 6
+      googleDemoReleaseUnitTestRuntimeClasspath:
+      - root: 2
+        fragment: 1
+      - root: 6
+      googleDemoReleaseWearBundling: []
+      googleFullDebugAndroidTestAnnotationProcessorClasspath: []
+      googleFullDebugAndroidTestCompileClasspath:
+      - root: 2
+      googleFullDebugAndroidTestRuntimeClasspath:
+      - root: 2
+        fragment: 2
+      googleFullDebugAnnotationProcessorClasspath: []
+      googleFullDebugCompileClasspath:
+      - root: 2
+      googleFullDebugRuntimeClasspath:
+      - root: 2
+        fragment: 2
+      googleFullDebugUnitTestAnnotationProcessorClasspath: []
+      googleFullDebugUnitTestCompileClasspath:
+      - root: 2
+      - root: 6
+      googleFullDebugUnitTestRuntimeClasspath:
+      - root: 2
+        fragment: 2
+      - root: 6
+      googleFullDebugWearBundling: []
+      googleFullReleaseAnnotationProcessorClasspath: []
+      googleFullReleaseCompileClasspath:
+      - root: 2
+      googleFullReleaseRuntimeClasspath:
+      - root: 2
+        fragment: 2
+      googleFullReleaseUnitTestAnnotationProcessorClasspath: []
+      googleFullReleaseUnitTestCompileClasspath:
+      - root: 2
+      - root: 6
+      googleFullReleaseUnitTestRuntimeClasspath:
+      - root: 2
+        fragment: 2
+      - root: 6
+      googleFullReleaseWearBundling: []
+      lintChecks: []
+      lintClassPath: []
+      testCompile: []
 packages:
 - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
   purl: "pkg:maven/com.squareup.okhttp3/okhttp@3.10.0"
