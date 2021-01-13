@@ -15,222 +15,95 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/external/multi-kotlin-project/cli"
   homepage_url: ""
-  scopes:
-  - name: "annotationProcessor"
-    dependencies: []
-  - name: "apiDependenciesMetadata"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+  dependency_graph:
+    packages:
+    - "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+    - "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+    - "Maven:org.jetbrains:annotations:13.0"
+    - "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.11"
+    - "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.3.11"
+    - "Maven:org.jetbrains.kotlin:kotlin-reflect:1.3.11"
+    - "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.11"
+    scope_roots:
+    - dependencies:
+      - pkg: 1
+        dependencies:
+        - pkg: 2
+        - pkg: 3
       linkage: "PROJECT_DYNAMIC"
+    - pkg: 4
       dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      - pkg: 1
         dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "archives"
-    dependencies: []
-  - name: "compile"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+        - pkg: 2
+        - pkg: 3
+      - pkg: 5
+      - pkg: 6
         dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "compileClasspath"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "compileOnly"
-    dependencies: []
-  - name: "compileOnlyDependenciesMetadata"
-    dependencies: []
-  - name: "default"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "implementationDependenciesMetadata"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "kapt"
-    dependencies: []
-  - name: "kaptTest"
-    dependencies: []
-  - name: "kotlinCompilerClasspath"
-    dependencies:
-    - id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+        - pkg: 1
           dependencies:
-          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-          - id: "Maven:org.jetbrains:annotations:13.0"
-      - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.3.11"
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "kotlinCompilerPluginClasspath"
-    dependencies:
-    - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.11"
-  - name: "kotlinNativeCompilerPluginClasspath"
-    dependencies: []
-  - name: "kotlinScriptDef"
-    dependencies: []
-  - name: "runtime"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "runtimeClasspath"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "runtimeOnlyDependenciesMetadata"
-    dependencies: []
-  - name: "testAnnotationProcessor"
-    dependencies: []
-  - name: "testApiDependenciesMetadata"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "testCompile"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "testCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "testCompileOnly"
-    dependencies: []
-  - name: "testCompileOnlyDependenciesMetadata"
-    dependencies: []
-  - name: "testImplementationDependenciesMetadata"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "testKotlinScriptDef"
-    dependencies: []
-  - name: "testRuntime"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "testRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-      - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "testRuntimeOnlyDependenciesMetadata"
-    dependencies: []
+          - pkg: 2
+          - pkg: 3
+    - pkg: 7
+    scopes:
+      annotationProcessor: []
+      apiDependenciesMetadata:
+      - root: 0
+      - root: 1
+      archives: []
+      compile:
+      - root: 0
+      - root: 1
+      compileClasspath:
+      - root: 0
+      - root: 1
+      compileOnly: []
+      compileOnlyDependenciesMetadata: []
+      default:
+      - root: 0
+      - root: 1
+      implementationDependenciesMetadata:
+      - root: 0
+      - root: 1
+      kapt: []
+      kaptTest: []
+      kotlinCompilerClasspath:
+      - root: 4
+      kotlinCompilerPluginClasspath:
+      - root: 7
+      kotlinNativeCompilerPluginClasspath: []
+      kotlinScriptDef: []
+      runtime:
+      - root: 0
+      - root: 1
+      runtimeClasspath:
+      - root: 0
+      - root: 1
+      runtimeOnlyDependenciesMetadata: []
+      testAnnotationProcessor: []
+      testApiDependenciesMetadata:
+      - root: 0
+      - root: 1
+      testCompile:
+      - root: 0
+      - root: 1
+      testCompileClasspath:
+      - root: 0
+      - root: 1
+      testCompileOnly: []
+      testCompileOnlyDependenciesMetadata: []
+      testImplementationDependenciesMetadata:
+      - root: 0
+      - root: 1
+      testKotlinScriptDef: []
+      testRuntime:
+      - root: 0
+      - root: 1
+      testRuntimeClasspath:
+      - root: 0
+      - root: 1
+      testRuntimeOnlyDependenciesMetadata: []
 packages:
 - id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.11"
   purl: "pkg:maven/org.jetbrains.kotlin/kotlin-compiler-embeddable@1.3.11"
