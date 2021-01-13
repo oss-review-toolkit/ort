@@ -46,7 +46,9 @@ data class PathExclude(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
 ) {
-    private val glob by lazy { FileSystems.getDefault().getPathMatcher("glob:$pattern") }
+    private val glob by lazy {
+        FileSystems.getDefault().getPathMatcher("glob:${pattern.removePrefix("./")}")
+    }
 
     fun matches(path: String) = glob.matches(Paths.get(path))
 }
