@@ -143,8 +143,22 @@ data class OrtResult(
                 project.scopes.forEach { scope ->
                     val isScopeExcluded = getExcludes().isScopeExcluded(scope)
 
-                    val dependencies = scope.collectDependencies()
+                    val excludedDependencies = mutableSetOf<Identifier>()
+                    val dependencies = scope.collectDependencies(filterPredicate = { packageReference ->
+                        val curatedPackage = packages[packageReference.id]
+                        curatedPackage?.pkg?.vcs?.let {
+                            repository.getRelativePath(it)?.let { packagePath ->
+                                // BUG : package X is not matched by exclude "X/**" because the regex "^X/.*$ is used
+                                if (getExcludes().isPathExcluded(packagePath)) {
+                                    excludedDependencies.add(packageReference.id)
+                                    return@collectDependencies false
+                                }
+                            }
+                        }
+                        true
+                    })
                     allDependencies += dependencies
+                    allDependencies += excludedDependencies
 
                     if (!isProjectExcluded(project.id) && !isScopeExcluded) {
                         includedDependencies += dependencies

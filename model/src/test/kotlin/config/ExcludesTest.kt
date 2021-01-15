@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
 
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
@@ -426,6 +427,30 @@ class ExcludesTest : WordSpec() {
                 )
 
                 ortResult.isPackageExcluded(project1.id) shouldBe false
+            }
+
+            "return true if some dependencies are in the project tree and their paths are excluded" {
+                val excludedPackageId = id.copy(name = "packageToExclude")
+                val scope = Scope("scope1", sortedSetOf(PackageReference(id), PackageReference(excludedPackageId)))
+                setProjects(
+                    project1.copy(scopes = sortedSetOf(scope))
+                )
+                val packageToExclude = CuratedPackage(
+                    pkg = Package.EMPTY.copy(
+                        id = excludedPackageId,
+                        vcs = VcsInfo.EMPTY.copy(url = "http://example.com")
+                    )
+                )
+                ortResult.analyzer!!.result.packages.add(packageToExclude)
+
+                ortResult = ortResult.copy(repository = ortResult.repository.copy(nestedRepositories = mapOf("path2" to packageToExclude.pkg.vcs)))
+
+                setExcludes(
+                    paths = listOf(pathExclude2)
+                )
+
+                ortResult.isPackageExcluded(project1.id) shouldBe false
+                ortResult.isPackageExcluded(excludedPackageId) shouldBe true
             }
         }
 
