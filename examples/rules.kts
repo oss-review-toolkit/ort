@@ -107,7 +107,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         }
 
         // Define a rule that is executed for each license of the package.
-        licenseRule("UNHANDLED_LICENSE", LicenseView.CONCLUDED_OR_REST) {
+        licenseRule("UNHANDLED_LICENSE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
             require {
                 -isExcluded()
                 -isHandled()
@@ -142,7 +142,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
             -isExcluded()
         }
 
-        licenseRule("COPYLEFT_IN_SOURCE", LicenseView.CONCLUDED_OR_REST) {
+        licenseRule("COPYLEFT_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
             require {
                 -isExcluded()
                 +isCopyleft()

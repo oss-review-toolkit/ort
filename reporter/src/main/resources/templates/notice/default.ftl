@@ -90,16 +90,16 @@ ${copyright}
 [/#if]
 [/#list]
 [#--
-Filter the licenses of the package using LicenseView.CONCLUDED_OR_REST. This is the default view which ignores declared
-and detected licenses if a license conclusion for the package was made. If copyrights were detected for a concluded
-license those statements are kept. Also filter all licenses that are configured not to be included in notice files, and
-filter all licenses that are contained in the license files already printed above.
+Filter the licenses of the package using LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED. This is the default view which
+ignores declared and detected licenses if a license conclusion for the package was made. If copyrights were detected
+for a concluded license those statements are kept. Also filter all licenses that are configured not to be included in
+notice files, and filter all licenses that are contained in the license files already printed above.
 --]
 [#assign
 resolvedLicenses = helper.filterForCategory(
-    helper.licenseView("CONCLUDED_OR_REST").filter(package.licensesNotInLicenseFiles()), "include-in-notice-file"
-)
-]
+    helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED").filter(package.licensesNotInLicenseFiles()),
+    "include-in-notice-file"
+)]
 [#if resolvedLicenses?has_content]
 
 The following copyrights and licenses were found in the source code of this package:

@@ -38,7 +38,7 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
         /**
          * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
          */
-        val CONCLUDED_OR_REST = LicenseView(
+        val CONCLUDED_OR_DECLARED_AND_DETECTED = LicenseView(
             setOf(LicenseSource.CONCLUDED),
             setOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
         )
