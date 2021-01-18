@@ -152,8 +152,8 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
                 "The ScanCode copyleft categorized license $license was ${licenseSource.name.toLowerCase()} " +
                         "in package ${pkg.id.toCoordinates()}."
             } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} " +
-                        " ScanCode copyleft catalogized license $license."
+                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} ScanCode copyleft " +
+                        "catalogized license $license."
             }
 
             error(message, howToFixDefault())
@@ -174,8 +174,8 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
                             "in package ${pkg.id.toCoordinates()}."
                 }
             } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} " +
-                        " ScanCode copyleft-limited categorized license $license."
+                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} ScanCode " +
+                        "copyleft-limited categorized license $license."
             }
 
             error(message, howToFixDefault())
