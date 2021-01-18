@@ -31,12 +31,15 @@ This project contains or depends on third-party software components pursuant to 
 [#assign isFirst = true]
 [#--
 Merge the licenses and copyrights of all projects and packages into a single list. The licenses are filtered using
-LicenseView.CONCLUDED_OR_REST. This is the default view which ignores declared and detected licenses if a license
-conclusion for a package was made. For projects this is the same as LicenseView.ALL, because projects cannot have
-concluded licenses. If copyrights were detected for a concluded license those statements are kept. Also filter all
-licenses that are configured not to be included in notice files.
+LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED. This is the default view which ignores declared and detected licenses
+if a license conclusion for a package was made. For projects this is the same as LicenseView.ALL, because projects
+cannot have concluded licenses. If copyrights were detected for a concluded license those statements are kept. Also
+filter all licenses that are configured not to be included in notice files.
 --]
-[#assign mergedLicenses = helper.filterForCategory(helper.mergeLicenses(projects + packages, helper.licenseView("CONCLUDED_OR_REST")), "include-in-notice-file")]
+[#assign mergedLicenses = helper.filterForCategory(
+    helper.mergeLicenses(projects + packages, helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED")),
+    "include-in-notice-file"
+)]
 [#list mergedLicenses as resolvedLicense]
 [#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
 [#if licenseText?has_content]

@@ -132,9 +132,9 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "CONCLUDED_OR_REST" should {
+        "CONCLUDED_OR_DECLARED_AND_DETECTED" should {
             "return the correct licenses" {
-                val view = LicenseView.CONCLUDED_OR_REST
+                val view = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
 
                 view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
