@@ -138,25 +138,6 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
     }
 
     private static class DependencyTreeModelBuilder implements ToolingModelBuilder {
-        static DependencyImpl dependencyFromDisplayName(String displayName, List<Dependency> dependencies,
-                                                        String error, String warning) {
-            if (displayName.startsWith('project :')) {
-                def coordinates = displayName.split(':', 2)
-                return new DependencyImpl(groupId: '<project>', artifactId: coordinates[1], dependencies: dependencies,
-                        error: error?.toString(), warning: warning?.toString())
-            }
-
-            def coordinates = displayName.split(':')
-
-            if (coordinates.length == 3) {
-                return new DependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
-                        dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
-            }
-
-            return new DependencyImpl(groupId: '<unknown>', artifactId: displayName.replace(':', '_'),
-                    dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
-        }
-
         @Override
         boolean canBuild(String modelName) {
             return modelName == 'DependencyTreeModel'
@@ -306,6 +287,45 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                 cause = cause.cause
             }
             return result
+        }
+
+        /**
+         * Creates an object to represent the dependency identified by the given display name. This function is
+         * called if no valid dependency identifier is available. It therefore tries to extract the coordinates of
+         * the dependency from the display name.
+         *
+         * @param displayName the display name
+         * @param dependencies the list of dependencies of the package affected
+         * @param error an optional error message
+         * @param warning an optional warning message
+         * @return the newly created dependency representation
+         */
+        private static DependencyImpl dependencyFromDisplayName(String displayName, List<Dependency> dependencies,
+                                                        String error, String warning) {
+            def coordinates = displayNameToCoordinates(displayName)
+            return new DependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
+                    dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
+        }
+
+        /**
+         * Splits a display name for a component to an array of groupId, artifactId, and version.
+         *
+         * @param displayName the name to split
+         * @return the array with the coordinates (always 3 components)
+         */
+        private static String[] displayNameToCoordinates(String displayName) {
+            if (displayName.startsWith('project :')) {
+                def coordinates = displayName.split(':', 2)
+                return ['<project>', coordinates[1], '']
+            }
+
+            def coordinates = displayName.split(':')
+
+            if (coordinates.length == 3) {
+                return coordinates
+            }
+
+            return ['<unknown>', displayName.replace(':', '_'), '']
         }
     }
 
