@@ -51,11 +51,9 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.HttpDownloadError
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 /**
@@ -80,11 +78,10 @@ class Bundler(
         ) = Bundler(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "bundle.bat" else "bundle"
+    override fun command(workingDir: File?) = "ruby"
 
-    override fun transformVersion(output: String) = output.removePrefix("Bundler version ")
-
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,)")
+    override fun transformVersion(output: String) = output.removePrefix("ruby ").substringBefore("p")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.5.1,)")
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
@@ -93,60 +90,59 @@ class Bundler(
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+        requireLockfile(workingDir) { workingDir.resolve("Gemfile.lock").isFile }
 
-        stashDirectories(workingDir.resolve("vendor")).use {
-            val scopes = mutableSetOf<Scope>()
-            val packages = sortedSetOf<Package>()
-            val issues = mutableListOf<OrtIssue>()
+        val scopes = mutableSetOf<Scope>()
+        val issues = mutableListOf<OrtIssue>()
 
-            installDependencies(workingDir)
+        val gemSpecs = resolveGemsMetadata(workingDir)
 
-            val (projectName, version, homepageUrl, authors, declaredLicenses) = parseProject(workingDir)
-            val projectId = Identifier(managerName, "", projectName, version)
-            val groupedDeps = getDependencyGroups(workingDir)
+        val (projectName, version, homepageUrl, authors, declaredLicenses) = parseProject(workingDir, gemSpecs)
+        val projectId = Identifier(managerName, "", projectName, version)
+        val groupedDeps = getDependencyGroups(workingDir)
 
-            for ((groupName, dependencyList) in groupedDeps) {
-                parseScope(workingDir, projectId, groupName, dependencyList, scopes, packages, issues)
-            }
-
-            val project = Project(
-                id = projectId,
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                authors = authors,
-                declaredLicenses = declaredLicenses.toSortedSet(),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
-                homepageUrl = homepageUrl,
-                scopeDependencies = scopes.toSortedSet()
-            )
-
-            return listOf(ProjectAnalyzerResult(project, packages, issues))
+        for ((groupName, dependencyList) in groupedDeps) {
+            parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemSpecs, issues)
         }
+
+        val project = Project(
+            id = projectId,
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = authors,
+            declaredLicenses = declaredLicenses.toSortedSet(),
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
+            homepageUrl = homepageUrl,
+            scopeDependencies = scopes.toSortedSet()
+        )
+
+        val packages = gemSpecs.values.mapTo(sortedSetOf()) { getPackageFromGemspec(it) }
+        return listOf(ProjectAnalyzerResult(project, packages, issues))
     }
 
     private fun parseScope(
         workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-        scopes: MutableSet<Scope>, packages: MutableSet<Package>, issues: MutableList<OrtIssue>
+        scopes: MutableSet<Scope>, gemSpecs: MutableMap<String, GemSpec>, issues: MutableList<OrtIssue>
     ) {
         log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
 
         dependencyList.forEach {
-            parseDependency(workingDir, projectId, it, packages, scopeDependencies, issues)
+            parseDependency(workingDir, projectId, it, gemSpecs, scopeDependencies, issues)
         }
 
         scopes += Scope(groupName, scopeDependencies.toSortedSet())
     }
 
     private fun parseDependency(
-        workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
+        workingDir: File, projectId: Identifier, gemName: String, gemSpecs: MutableMap<String, GemSpec>,
         scopeDependencies: MutableSet<PackageReference>, issues: MutableList<OrtIssue>
     ) {
         log.debug { "Parsing dependency '$gemName'." }
 
-        try {
-            var gemSpec = getGemspec(gemName, workingDir)
+        runCatching {
+            val gemSpec = gemSpecs.getValue(gemName)
             val gemId = Identifier("Gem", "", gemSpec.name, gemSpec.version)
 
             // The project itself can be listed as a dependency if the project is a gem (i.e. there is a .gemspec file
@@ -154,39 +150,27 @@ class Bundler(
             // PackageReference objects and continue with the projects dependencies.
             if (gemId == projectId) {
                 gemSpec.runtimeDependencies.forEach {
-                    parseDependency(workingDir, projectId, it, packages, scopeDependencies, issues)
+                    parseDependency(workingDir, projectId, it, gemSpecs, scopeDependencies, issues)
                 }
             } else {
                 queryRubygems(gemId.name, gemId.version)?.apply {
-                    gemSpec = merge(gemSpec)
+                    gemSpecs[gemName] = merge(gemSpec)
                 }
-
-                packages += Package(
-                    id = gemId,
-                    authors = gemSpec.authors,
-                    declaredLicenses = gemSpec.declaredLicenses,
-                    description = gemSpec.description,
-                    homepageUrl = gemSpec.homepageUrl,
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = gemSpec.artifact,
-                    vcs = gemSpec.vcs,
-                    vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
-                )
 
                 val transitiveDependencies = mutableSetOf<PackageReference>()
 
                 gemSpec.runtimeDependencies.forEach {
-                    parseDependency(workingDir, projectId, it, packages, transitiveDependencies, issues)
+                    parseDependency(workingDir, projectId, it, gemSpecs, transitiveDependencies, issues)
                 }
 
                 scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies.toSortedSet())
             }
-        } catch (e: IOException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
             issues += createAndLogIssue(
                 source = managerName,
-                message = "Failed to parse spec for gem '$gemName': ${e.collectMessagesAsString()}"
+                message = "Failed to parse dependency '$gemName': ${it.collectMessagesAsString()}"
             )
         }
     }
@@ -197,9 +181,8 @@ class Bundler(
 
         try {
             val scriptCmd = run(
-                "exec", "ruby", scriptFile.path,
+                scriptFile.path,
                 workingDir = workingDir,
-                environment = mapOf("BUNDLE_PATH" to "vendor/bundle")
             )
             return jsonMapper.readValue(scriptCmd.stdout)
         } finally {
@@ -209,10 +192,45 @@ class Bundler(
         }
     }
 
-    private fun parseProject(workingDir: File) =
+    private fun resolveGemsMetadata(workingDir: File): MutableMap<String, GemSpec> {
+        val scriptFile = File.createTempFile("bundler_dependencies_metadata", ".rb")
+        scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies_metadata.rb").readBytes())
+
+        try {
+            val scriptCmd = run(
+                scriptFile.path,
+                workingDir = workingDir,
+            )
+
+            // The metadata produced by the "bundler_dependencies_metadata.rb" script separates specs for packages with
+            // the "\0" character as delimiter. Always drop the first "Fetching gem metadata from" entry.
+            val gemSpecs = scriptCmd.stdout.split('\u0000').drop(1).map {
+                GemSpec.createFromYaml(it)
+            }.associateByTo(mutableMapOf()) {
+                it.name
+            }
+
+            // Bundler itself always shows up as a dependency because the helper script requires it, but it should be
+            // removed unless it actually is a runtime dependency.
+            val isBundlerARuntimeDependency = gemSpecs.values.any { gemspec ->
+                gemspec.runtimeDependencies.any { name ->
+                    name.startsWith("bundler")
+                }
+            }
+            if (!isBundlerARuntimeDependency) gemSpecs.remove("bundler")
+
+            return gemSpecs
+        } finally {
+            if (!scriptFile.delete()) {
+                log.warn { "Helper script file '$scriptFile' could not be deleted." }
+            }
+        }
+    }
+
+    private fun parseProject(workingDir: File, gemSpecs: MutableMap<String, GemSpec>) =
         getGemspecFile(workingDir)?.let { gemspecFile ->
             // Project is a Gem, i.e. a library.
-            getGemspec(gemspecFile.nameWithoutExtension, workingDir)
+            gemSpecs[gemspecFile.nameWithoutExtension]
         } ?: GemSpec(
             workingDir.name,
             "",
@@ -225,26 +243,24 @@ class Bundler(
             RemoteArtifact.EMPTY
         )
 
-    private fun getGemspec(gemName: String, workingDir: File): GemSpec {
-        val spec = run(
-            "exec", "gem", "specification", gemName,
-            workingDir = workingDir,
-            environment = mapOf("BUNDLE_PATH" to "vendor/bundle")
-        ).stdout
+    private fun getPackageFromGemspec(gemSpec: GemSpec): Package {
+        val gemId = Identifier("Gem", "", gemSpec.name, gemSpec.version)
 
-        return GemSpec.createFromYaml(spec)
+        return Package(
+            id = gemId,
+            authors = gemSpec.authors,
+            declaredLicenses = gemSpec.declaredLicenses,
+            description = gemSpec.description,
+            homepageUrl = gemSpec.homepageUrl,
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = gemSpec.artifact,
+            vcs = gemSpec.vcs,
+            vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
+        )
     }
 
     private fun getGemspecFile(workingDir: File) =
         workingDir.walk().maxDepth(1).filter { it.isFile && it.extension == "gemspec" }.firstOrNull()
-
-    private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { workingDir.resolve("Gemfile.lock").isFile }
-
-        // Work around "--path" being deprecated since Bundler 2.1 and avoid tampering with the ".bundle/config" file at
-        // all by using the "BUNDLER_PATH" environment variable to specify where to install the Gems to.
-        run("install", workingDir = workingDir, environment = mapOf("BUNDLE_PATH" to "vendor/bundle"))
-    }
 
     private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
         // See http://guides.rubygems.org/rubygems-org-api-v2/.
