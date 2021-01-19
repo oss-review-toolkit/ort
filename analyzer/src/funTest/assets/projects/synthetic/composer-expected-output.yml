@@ -21,153 +21,75 @@ project:
   scopes:
   - name: "require"
     dependencies:
-    - id: "Composer:mailgun:mailgun-php:v2.4.0"
+    - id: "Composer:monolog:monolog:2.2.0"
       dependencies:
-      - id: "Composer:php-http:client-common:1.10.0"
-        dependencies:
-        - id: "Composer:php-http:httplug:v1.1.0"
-          dependencies:
-          - id: "Composer:php-http:promise:v1.0.0"
-          - id: "Composer:psr:http-message:1.0.1"
-        - id: "Composer:php-http:message-factory:v1.0.2"
-          dependencies:
-          - id: "Composer:psr:http-message:1.0.1"
-        - id: "Composer:php-http:message:1.8.0"
-          dependencies:
-          - id: "Composer:clue:stream-filter:v1.4.1"
-          - id: "Composer:php-http:message-factory:v1.0.2"
-            dependencies:
-            - id: "Composer:psr:http-message:1.0.1"
-          - id: "Composer:psr:http-message:1.0.1"
-        - id: "Composer:symfony:options-resolver:v5.0.7"
-      - id: "Composer:php-http:discovery:1.7.4"
-      - id: "Composer:php-http:httplug:v1.1.0"
-        dependencies:
-        - id: "Composer:php-http:promise:v1.0.0"
-        - id: "Composer:psr:http-message:1.0.1"
-      - id: "Composer:php-http:message:1.8.0"
-        dependencies:
-        - id: "Composer:clue:stream-filter:v1.4.1"
-        - id: "Composer:php-http:message-factory:v1.0.2"
-          dependencies:
-          - id: "Composer:psr:http-message:1.0.1"
-        - id: "Composer:psr:http-message:1.0.1"
-      - id: "Composer:php-http:multipart-stream-builder:1.1.0"
-        dependencies:
-        - id: "Composer:php-http:discovery:1.7.4"
-        - id: "Composer:php-http:message-factory:v1.0.2"
-          dependencies:
-          - id: "Composer:psr:http-message:1.0.1"
-        - id: "Composer:psr:http-factory:1.0.1"
-          dependencies:
-          - id: "Composer:psr:http-message:1.0.1"
-        - id: "Composer:psr:http-message:1.0.1"
-      - id: "Composer:webmozart:assert:1.7.0"
-        dependencies:
-        - id: "Composer:symfony:polyfill-ctype:v1.15.0"
-    - id: "Composer:monolog:monolog:1.0.2"
+      - id: "Composer:psr:log:1.1.3"
   - name: "require-dev"
     dependencies:
-    - id: "Composer:guzzlehttp:psr7:1.4.0"
+    - id: "Composer:phpunit:phpunit:8.5.14"
       dependencies:
-      - id: "Composer:psr:http-message:1.0.1"
-    - id: "Composer:php-http:guzzle6-adapter:v1.0.0"
-      dependencies:
-      - id: "Composer:guzzlehttp:guzzle:6.3.3"
+      - id: "Composer:doctrine:instantiator:1.4.0"
+      - id: "Composer:myclabs:deep-copy:1.10.2"
+      - id: "Composer:phar-io:manifest:2.0.1"
         dependencies:
-        - id: "Composer:guzzlehttp:promises:v1.3.1"
-        - id: "Composer:guzzlehttp:psr7:1.4.0"
+        - id: "Composer:phar-io:version:3.0.4"
+      - id: "Composer:phar-io:version:3.0.4"
+      - id: "Composer:phpspec:prophecy:1.12.2"
+        dependencies:
+        - id: "Composer:doctrine:instantiator:1.4.0"
+        - id: "Composer:phpdocumentor:reflection-docblock:5.2.2"
           dependencies:
-          - id: "Composer:psr:http-message:1.0.1"
-      - id: "Composer:php-http:httplug:v1.1.0"
-        dependencies:
-        - id: "Composer:php-http:promise:v1.0.0"
-        - id: "Composer:psr:http-message:1.0.1"
-    - id: "Composer:phpunit:phpunit:4.8.0"
-      dependencies:
-      - id: "Composer:phpspec:prophecy:v1.10.3"
-        dependencies:
-        - id: "Composer:doctrine:instantiator:1.3.0"
-        - id: "Composer:phpdocumentor:reflection-docblock:5.1.0"
+          - id: "Composer:phpdocumentor:reflection-common:2.2.0"
+          - id: "Composer:phpdocumentor:type-resolver:1.4.0"
+            dependencies:
+            - id: "Composer:phpdocumentor:reflection-common:2.2.0"
+          - id: "Composer:webmozart:assert:1.9.1"
+            dependencies:
+            - id: "Composer:symfony:polyfill-ctype:v1.22.0"
+        - id: "Composer:sebastian:comparator:3.0.3"
           dependencies:
-          - id: "Composer:phpdocumentor:reflection-common:2.0.0"
-          - id: "Composer:phpdocumentor:type-resolver:1.1.0"
+          - id: "Composer:sebastian:diff:3.0.3"
+          - id: "Composer:sebastian:exporter:3.1.3"
             dependencies:
-            - id: "Composer:phpdocumentor:reflection-common:2.0.0"
-          - id: "Composer:webmozart:assert:1.7.0"
-            dependencies:
-            - id: "Composer:symfony:polyfill-ctype:v1.15.0"
-        - id: "Composer:sebastian:comparator:1.2.4"
-          dependencies:
-          - id: "Composer:sebastian:diff:1.4.3"
-          - id: "Composer:sebastian:exporter:1.2.2"
-            dependencies:
-            - id: "Composer:sebastian:recursion-context:1.0.5"
-        - id: "Composer:sebastian:recursion-context:1.0.5"
-      - id: "Composer:phpunit:php-code-coverage:2.2.4"
+            - id: "Composer:sebastian:recursion-context:3.0.1"
+        - id: "Composer:sebastian:recursion-context:3.0.1"
+      - id: "Composer:phpunit:php-code-coverage:7.0.14"
         dependencies:
-        - id: "Composer:phpunit:php-file-iterator:1.4.5"
+        - id: "Composer:phpunit:php-file-iterator:2.0.3"
         - id: "Composer:phpunit:php-text-template:1.2.1"
-        - id: "Composer:phpunit:php-token-stream:1.4.12"
-        - id: "Composer:sebastian:environment:1.3.8"
-        - id: "Composer:sebastian:version:1.0.6"
-      - id: "Composer:phpunit:php-file-iterator:1.4.5"
+        - id: "Composer:phpunit:php-token-stream:3.1.2"
+        - id: "Composer:sebastian:code-unit-reverse-lookup:1.0.2"
+        - id: "Composer:sebastian:environment:4.2.4"
+        - id: "Composer:sebastian:version:2.0.1"
+        - id: "Composer:theseer:tokenizer:1.2.0"
+      - id: "Composer:phpunit:php-file-iterator:2.0.3"
       - id: "Composer:phpunit:php-text-template:1.2.1"
-      - id: "Composer:phpunit:php-timer:2.1.2"
-      - id: "Composer:phpunit:phpunit-mock-objects:2.3.8"
+      - id: "Composer:phpunit:php-timer:2.1.3"
+      - id: "Composer:sebastian:comparator:3.0.3"
         dependencies:
-        - id: "Composer:doctrine:instantiator:1.3.0"
-        - id: "Composer:phpunit:php-text-template:1.2.1"
-        - id: "Composer:sebastian:exporter:1.2.2"
+        - id: "Composer:sebastian:diff:3.0.3"
+        - id: "Composer:sebastian:exporter:3.1.3"
           dependencies:
-          - id: "Composer:sebastian:recursion-context:1.0.5"
-      - id: "Composer:sebastian:comparator:1.2.4"
+          - id: "Composer:sebastian:recursion-context:3.0.1"
+      - id: "Composer:sebastian:diff:3.0.3"
+      - id: "Composer:sebastian:environment:4.2.4"
+      - id: "Composer:sebastian:exporter:3.1.3"
         dependencies:
-        - id: "Composer:sebastian:diff:1.4.3"
-        - id: "Composer:sebastian:exporter:1.2.2"
-          dependencies:
-          - id: "Composer:sebastian:recursion-context:1.0.5"
-      - id: "Composer:sebastian:diff:1.4.3"
-      - id: "Composer:sebastian:environment:1.3.8"
-      - id: "Composer:sebastian:exporter:1.2.2"
+        - id: "Composer:sebastian:recursion-context:3.0.1"
+      - id: "Composer:sebastian:global-state:3.0.1"
         dependencies:
-        - id: "Composer:sebastian:recursion-context:1.0.5"
-      - id: "Composer:sebastian:global-state:1.1.1"
-      - id: "Composer:sebastian:version:1.0.6"
-      - id: "Composer:symfony:yaml:v3.4.39"
+        - id: "Composer:sebastian:object-reflector:1.1.2"
+        - id: "Composer:sebastian:recursion-context:3.0.1"
+      - id: "Composer:sebastian:object-enumerator:3.0.4"
         dependencies:
-        - id: "Composer:symfony:polyfill-ctype:v1.15.0"
+        - id: "Composer:sebastian:object-reflector:1.1.2"
+        - id: "Composer:sebastian:recursion-context:3.0.1"
+      - id: "Composer:sebastian:resource-operations:2.0.2"
+      - id: "Composer:sebastian:type:1.1.4"
+      - id: "Composer:sebastian:version:2.0.1"
 packages:
-- id: "Composer:clue:stream-filter:v1.4.1"
-  purl: "pkg:composer/clue/stream-filter@v1.4.1"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "A simple and modern approach to stream filtering in PHP"
-  homepage_url: "https://github.com/clue/php-stream-filter"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/clue/php-stream-filter/zipball/5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/clue/php-stream-filter.git"
-    revision: "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/clue/php-stream-filter.git"
-    revision: "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71"
-    path: ""
-- id: "Composer:doctrine:instantiator:1.3.0"
-  purl: "pkg:composer/doctrine/instantiator@1.3.0"
+- id: "Composer:doctrine:instantiator:1.4.0"
+  purl: "pkg:composer/doctrine/instantiator@1.4.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -181,386 +103,136 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/doctrine/instantiator/zipball/ae466f726242e637cebdd526a7d991b9433bacf1"
+    url: "https://api.github.com/repos/doctrine/instantiator/zipball/d56bf6102915de5702778fe20f2de3b2fe570b5b"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/doctrine/instantiator.git"
-    revision: "ae466f726242e637cebdd526a7d991b9433bacf1"
+    revision: "d56bf6102915de5702778fe20f2de3b2fe570b5b"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/doctrine/instantiator.git"
-    revision: "ae466f726242e637cebdd526a7d991b9433bacf1"
+    revision: "d56bf6102915de5702778fe20f2de3b2fe570b5b"
     path: ""
-- id: "Composer:guzzlehttp:guzzle:6.3.3"
-  purl: "pkg:composer/guzzlehttp/guzzle@6.3.3"
+- id: "Composer:monolog:monolog:2.2.0"
+  purl: "pkg:composer/monolog/monolog@2.2.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Guzzle is a PHP HTTP client library"
-  homepage_url: "http://guzzlephp.org/"
+  description: "Sends your logs to files, sockets, inboxes, databases and various\
+    \ web services"
+  homepage_url: "https://github.com/Seldaek/monolog"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/guzzle/guzzle/zipball/407b0cb880ace85c9b63c5f9551db498cb2d50ba"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/guzzle/guzzle.git"
-    revision: "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/guzzle/guzzle.git"
-    revision: "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
-    path: ""
-- id: "Composer:guzzlehttp:promises:v1.3.1"
-  purl: "pkg:composer/guzzlehttp/promises@v1.3.1"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Guzzle promises library"
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/guzzle/promises.git"
-    revision: "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/guzzle/promises.git"
-    revision: "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
-    path: ""
-- id: "Composer:guzzlehttp:psr7:1.4.0"
-  purl: "pkg:composer/guzzlehttp/psr7@1.4.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "PSR-7 message implementation that also provides common utility methods"
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/guzzle/psr7/zipball/04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/guzzle/psr7.git"
-    revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/guzzle/psr7.git"
-    revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
-    path: ""
-- id: "Composer:mailgun:mailgun-php:v2.4.0"
-  purl: "pkg:composer/mailgun/mailgun-php@v2.4.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "The Mailgun SDK provides methods for all API functions."
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/mailgun/mailgun-php/zipball/20783215042b181b0dec92c9e01947b93cb5d085"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/mailgun/mailgun-php.git"
-    revision: "20783215042b181b0dec92c9e01947b93cb5d085"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/mailgun/mailgun-php.git"
-    revision: "20783215042b181b0dec92c9e01947b93cb5d085"
-    path: ""
-- id: "Composer:monolog:monolog:1.0.2"
-  purl: "pkg:composer/monolog/monolog@1.0.2"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Logging for PHP 5.3"
-  homepage_url: "http://github.com/Seldaek/monolog"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/Seldaek/monolog/zipball/b704c49a3051536f67f2d39f13568f74615b9922"
+    url: "https://api.github.com/repos/Seldaek/monolog/zipball/1cb1cde8e8dd0f70cc0fe51354a59acad9302084"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/Seldaek/monolog.git"
-    revision: "b704c49a3051536f67f2d39f13568f74615b9922"
+    revision: "1cb1cde8e8dd0f70cc0fe51354a59acad9302084"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/Seldaek/monolog.git"
-    revision: "b704c49a3051536f67f2d39f13568f74615b9922"
+    revision: "1cb1cde8e8dd0f70cc0fe51354a59acad9302084"
     path: ""
-- id: "Composer:php-http:client-common:1.10.0"
-  purl: "pkg:composer/php-http/client-common@1.10.0"
+- id: "Composer:myclabs:deep-copy:1.10.2"
+  purl: "pkg:composer/myclabs/deep-copy@1.10.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Common HTTP Client implementations and tools for HTTPlug"
-  homepage_url: "http://httplug.io"
+  description: "Create deep copies (clones) of your objects"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/php-http/client-common/zipball/c0390ae3c8f2ae9d50901feef0127fb9e396f6b4"
+    url: "https://api.github.com/repos/myclabs/DeepCopy/zipball/776f831124e9c62e1a2c601ecc52e776d8bb7220"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/php-http/client-common.git"
-    revision: "c0390ae3c8f2ae9d50901feef0127fb9e396f6b4"
+    url: "https://github.com/myclabs/DeepCopy.git"
+    revision: "776f831124e9c62e1a2c601ecc52e776d8bb7220"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/php-http/client-common.git"
-    revision: "c0390ae3c8f2ae9d50901feef0127fb9e396f6b4"
+    url: "https://github.com/myclabs/DeepCopy.git"
+    revision: "776f831124e9c62e1a2c601ecc52e776d8bb7220"
     path: ""
-- id: "Composer:php-http:discovery:1.7.4"
-  purl: "pkg:composer/php-http/discovery@1.7.4"
+- id: "Composer:phar-io:manifest:2.0.1"
+  purl: "pkg:composer/phar-io/manifest@2.0.1"
   declared_licenses:
-  - "MIT"
+  - "BSD-3-Clause"
   declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Finds installed HTTPlug implementations and PSR-7 message factories"
-  homepage_url: "http://php-http.org"
+    spdx_expression: "BSD-3-Clause"
+  description: "Component for reading phar.io manifest information from a PHP Archive\
+    \ (PHAR)"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/php-http/discovery/zipball/82dbef649ccffd8e4f22e1953c3a5265992b83c0"
+    url: "https://api.github.com/repos/phar-io/manifest/zipball/85265efd3af7ba3ca4b2a2c34dbfc5788dd29133"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/php-http/discovery.git"
-    revision: "82dbef649ccffd8e4f22e1953c3a5265992b83c0"
+    url: "https://github.com/phar-io/manifest.git"
+    revision: "85265efd3af7ba3ca4b2a2c34dbfc5788dd29133"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/php-http/discovery.git"
-    revision: "82dbef649ccffd8e4f22e1953c3a5265992b83c0"
+    url: "https://github.com/phar-io/manifest.git"
+    revision: "85265efd3af7ba3ca4b2a2c34dbfc5788dd29133"
     path: ""
-- id: "Composer:php-http:guzzle6-adapter:v1.0.0"
-  purl: "pkg:composer/php-http/guzzle6-adapter@v1.0.0"
+- id: "Composer:phar-io:version:3.0.4"
+  purl: "pkg:composer/phar-io/version@3.0.4"
   declared_licenses:
-  - "MIT"
+  - "BSD-3-Clause"
   declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Guzzle 6 HTTP Adapter"
-  homepage_url: "http://httplug.io"
+    spdx_expression: "BSD-3-Clause"
+  description: "Library for handling version information and constraints"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/php-http/guzzle6-adapter/zipball/e884cf6dae5235fffd2a07f761e0066b9ebef170"
+    url: "https://api.github.com/repos/phar-io/version/zipball/e4782611070e50613683d2b9a57730e9a3ba5451"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/php-http/guzzle6-adapter.git"
-    revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
+    url: "https://github.com/phar-io/version.git"
+    revision: "e4782611070e50613683d2b9a57730e9a3ba5451"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/php-http/guzzle6-adapter.git"
-    revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
+    url: "https://github.com/phar-io/version.git"
+    revision: "e4782611070e50613683d2b9a57730e9a3ba5451"
     path: ""
-- id: "Composer:php-http:httplug:v1.1.0"
-  purl: "pkg:composer/php-http/httplug@v1.1.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "HTTPlug, the HTTP client abstraction for PHP"
-  homepage_url: "http://httplug.io"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/php-http/httplug/zipball/1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/php-http/httplug.git"
-    revision: "1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/php-http/httplug.git"
-    revision: "1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
-    path: ""
-- id: "Composer:php-http:message-factory:v1.0.2"
-  purl: "pkg:composer/php-http/message-factory@v1.0.2"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Factory interfaces for PSR-7 HTTP Message"
-  homepage_url: "http://php-http.org"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/php-http/message-factory/zipball/a478cb11f66a6ac48d8954216cfed9aa06a501a1"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/php-http/message-factory.git"
-    revision: "a478cb11f66a6ac48d8954216cfed9aa06a501a1"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/php-http/message-factory.git"
-    revision: "a478cb11f66a6ac48d8954216cfed9aa06a501a1"
-    path: ""
-- id: "Composer:php-http:message:1.8.0"
-  purl: "pkg:composer/php-http/message@1.8.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "HTTP Message related tools"
-  homepage_url: "http://php-http.org"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/php-http/message/zipball/ce8f43ac1e294b54aabf5808515c3554a19c1e1c"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/php-http/message.git"
-    revision: "ce8f43ac1e294b54aabf5808515c3554a19c1e1c"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/php-http/message.git"
-    revision: "ce8f43ac1e294b54aabf5808515c3554a19c1e1c"
-    path: ""
-- id: "Composer:php-http:multipart-stream-builder:1.1.0"
-  purl: "pkg:composer/php-http/multipart-stream-builder@1.1.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "A builder class that help you create a multipart stream"
-  homepage_url: "http://php-http.org"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/5d73adad53cf1d674dcc6c5b288a3ff3f76c4849"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/php-http/multipart-stream-builder.git"
-    revision: "5d73adad53cf1d674dcc6c5b288a3ff3f76c4849"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/php-http/multipart-stream-builder.git"
-    revision: "5d73adad53cf1d674dcc6c5b288a3ff3f76c4849"
-    path: ""
-- id: "Composer:php-http:promise:v1.0.0"
-  purl: "pkg:composer/php-http/promise@v1.0.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Promise used for asynchronous HTTP requests"
-  homepage_url: "http://httplug.io"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/php-http/promise/zipball/dc494cdc9d7160b9a09bd5573272195242ce7980"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/php-http/promise.git"
-    revision: "dc494cdc9d7160b9a09bd5573272195242ce7980"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/php-http/promise.git"
-    revision: "dc494cdc9d7160b9a09bd5573272195242ce7980"
-    path: ""
-- id: "Composer:phpdocumentor:reflection-common:2.0.0"
-  purl: "pkg:composer/phpdocumentor/reflection-common@2.0.0"
+- id: "Composer:phpdocumentor:reflection-common:2.2.0"
+  purl: "pkg:composer/phpdocumentor/reflection-common@2.2.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -574,22 +246,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/63a995caa1ca9e5590304cd845c15ad6d482a62a"
+    url: "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/1d01c49d4ed62f25aa84a747ad35d5a16924662b"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/phpDocumentor/ReflectionCommon.git"
-    revision: "63a995caa1ca9e5590304cd845c15ad6d482a62a"
+    revision: "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/phpDocumentor/ReflectionCommon.git"
-    revision: "63a995caa1ca9e5590304cd845c15ad6d482a62a"
+    revision: "1d01c49d4ed62f25aa84a747ad35d5a16924662b"
     path: ""
-- id: "Composer:phpdocumentor:reflection-docblock:5.1.0"
-  purl: "pkg:composer/phpdocumentor/reflection-docblock@5.1.0"
+- id: "Composer:phpdocumentor:reflection-docblock:5.2.2"
+  purl: "pkg:composer/phpdocumentor/reflection-docblock@5.2.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -603,22 +275,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/cd72d394ca794d3466a3b2fc09d5a6c1dc86b47e"
+    url: "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/069a785b2141f5bcf49f3e353548dc1cce6df556"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/phpDocumentor/ReflectionDocBlock.git"
-    revision: "cd72d394ca794d3466a3b2fc09d5a6c1dc86b47e"
+    revision: "069a785b2141f5bcf49f3e353548dc1cce6df556"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/phpDocumentor/ReflectionDocBlock.git"
-    revision: "cd72d394ca794d3466a3b2fc09d5a6c1dc86b47e"
+    revision: "069a785b2141f5bcf49f3e353548dc1cce6df556"
     path: ""
-- id: "Composer:phpdocumentor:type-resolver:1.1.0"
-  purl: "pkg:composer/phpdocumentor/type-resolver@1.1.0"
+- id: "Composer:phpdocumentor:type-resolver:1.4.0"
+  purl: "pkg:composer/phpdocumentor/type-resolver@1.4.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -632,22 +304,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/7462d5f123dfc080dfdf26897032a6513644fc95"
+    url: "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/phpDocumentor/TypeResolver.git"
-    revision: "7462d5f123dfc080dfdf26897032a6513644fc95"
+    revision: "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/phpDocumentor/TypeResolver.git"
-    revision: "7462d5f123dfc080dfdf26897032a6513644fc95"
+    revision: "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0"
     path: ""
-- id: "Composer:phpspec:prophecy:v1.10.3"
-  purl: "pkg:composer/phpspec/prophecy@v1.10.3"
+- id: "Composer:phpspec:prophecy:1.12.2"
+  purl: "pkg:composer/phpspec/prophecy@1.12.2"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -660,22 +332,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/phpspec/prophecy/zipball/451c3cd1418cf640de218914901e51b064abb093"
+    url: "https://api.github.com/repos/phpspec/prophecy/zipball/245710e971a030f42e08f4912863805570f23d39"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/phpspec/prophecy.git"
-    revision: "451c3cd1418cf640de218914901e51b064abb093"
+    revision: "245710e971a030f42e08f4912863805570f23d39"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/phpspec/prophecy.git"
-    revision: "451c3cd1418cf640de218914901e51b064abb093"
+    revision: "245710e971a030f42e08f4912863805570f23d39"
     path: ""
-- id: "Composer:phpunit:php-code-coverage:2.2.4"
-  purl: "pkg:composer/phpunit/php-code-coverage@2.2.4"
+- id: "Composer:phpunit:php-code-coverage:7.0.14"
+  purl: "pkg:composer/phpunit/php-code-coverage@7.0.14"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -689,22 +361,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979"
+    url: "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/bb7c9a210c72e4709cdde67f8b7362f672f2225c"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-code-coverage.git"
-    revision: "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
+    revision: "bb7c9a210c72e4709cdde67f8b7362f672f2225c"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-code-coverage.git"
-    revision: "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
+    revision: "bb7c9a210c72e4709cdde67f8b7362f672f2225c"
     path: ""
-- id: "Composer:phpunit:php-file-iterator:1.4.5"
-  purl: "pkg:composer/phpunit/php-file-iterator@1.4.5"
+- id: "Composer:phpunit:php-file-iterator:2.0.3"
+  purl: "pkg:composer/phpunit/php-file-iterator@2.0.3"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -718,19 +390,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/730b01bc3e867237eaac355e06a36b85dd93a8b4"
+    url: "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/4b49fb70f067272b659ef0174ff9ca40fdaa6357"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-file-iterator.git"
-    revision: "730b01bc3e867237eaac355e06a36b85dd93a8b4"
+    revision: "4b49fb70f067272b659ef0174ff9ca40fdaa6357"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-file-iterator.git"
-    revision: "730b01bc3e867237eaac355e06a36b85dd93a8b4"
+    revision: "4b49fb70f067272b659ef0174ff9ca40fdaa6357"
     path: ""
 - id: "Composer:phpunit:php-text-template:1.2.1"
   purl: "pkg:composer/phpunit/php-text-template@1.2.1"
@@ -760,8 +432,8 @@ packages:
     url: "https://github.com/sebastianbergmann/php-text-template.git"
     revision: "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
     path: ""
-- id: "Composer:phpunit:php-timer:2.1.2"
-  purl: "pkg:composer/phpunit/php-timer@2.1.2"
+- id: "Composer:phpunit:php-timer:2.1.3"
+  purl: "pkg:composer/phpunit/php-timer@2.1.3"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -774,22 +446,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/1038454804406b0b5f5f520358e78c1c2f71501e"
+    url: "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/2454ae1765516d20c4ffe103d85a58a9a3bd5662"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-timer.git"
-    revision: "1038454804406b0b5f5f520358e78c1c2f71501e"
+    revision: "2454ae1765516d20c4ffe103d85a58a9a3bd5662"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-timer.git"
-    revision: "1038454804406b0b5f5f520358e78c1c2f71501e"
+    revision: "2454ae1765516d20c4ffe103d85a58a9a3bd5662"
     path: ""
-- id: "Composer:phpunit:php-token-stream:1.4.12"
-  purl: "pkg:composer/phpunit/php-token-stream@1.4.12"
+- id: "Composer:phpunit:php-token-stream:3.1.2"
+  purl: "pkg:composer/phpunit/php-token-stream@3.1.2"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -802,50 +474,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/1ce90ba27c42e4e44e6d8458241466380b51fa16"
+    url: "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/472b687829041c24b25f475e14c2f38a09edf1c2"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-token-stream.git"
-    revision: "1ce90ba27c42e4e44e6d8458241466380b51fa16"
+    revision: "472b687829041c24b25f475e14c2f38a09edf1c2"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/php-token-stream.git"
-    revision: "1ce90ba27c42e4e44e6d8458241466380b51fa16"
+    revision: "472b687829041c24b25f475e14c2f38a09edf1c2"
     path: ""
-- id: "Composer:phpunit:phpunit-mock-objects:2.3.8"
-  purl: "pkg:composer/phpunit/phpunit-mock-objects@2.3.8"
-  declared_licenses:
-  - "BSD-3-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-  description: "Mock Object library for PHPUnit"
-  homepage_url: "https://github.com/sebastianbergmann/phpunit-mock-objects/"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ac8e7a3db35738d56ee9a76e78a4e03d97628983"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/sebastianbergmann/phpunit-mock-objects.git"
-    revision: "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/sebastianbergmann/phpunit-mock-objects.git"
-    revision: "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
-    path: ""
-- id: "Composer:phpunit:phpunit:4.8.0"
-  purl: "pkg:composer/phpunit/phpunit@4.8.0"
+- id: "Composer:phpunit:phpunit:8.5.14"
+  purl: "pkg:composer/phpunit/phpunit@8.5.14"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -858,106 +502,106 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/283111a903eb9225aedb95e846bef876e006a688"
+    url: "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c25f79895d27b6ecd5abfa63de1606b786a461a3"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/phpunit.git"
-    revision: "283111a903eb9225aedb95e846bef876e006a688"
+    revision: "c25f79895d27b6ecd5abfa63de1606b786a461a3"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/phpunit.git"
-    revision: "283111a903eb9225aedb95e846bef876e006a688"
+    revision: "c25f79895d27b6ecd5abfa63de1606b786a461a3"
     path: ""
-- id: "Composer:psr:http-factory:1.0.1"
-  purl: "pkg:composer/psr/http-factory@1.0.1"
+- id: "Composer:psr:log:1.1.3"
+  purl: "pkg:composer/psr/log@1.1.3"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Common interfaces for PSR-7 HTTP message factories"
-  homepage_url: ""
+  description: "Common interface for logging libraries"
+  homepage_url: "https://github.com/php-fig/log"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/php-fig/http-factory/zipball/12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+    url: "https://api.github.com/repos/php-fig/log/zipball/0f73288fd15629204f9d42b7055f72dacbe811fc"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/php-fig/http-factory.git"
-    revision: "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+    url: "https://github.com/php-fig/log.git"
+    revision: "0f73288fd15629204f9d42b7055f72dacbe811fc"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/php-fig/http-factory.git"
-    revision: "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+    url: "https://github.com/php-fig/log.git"
+    revision: "0f73288fd15629204f9d42b7055f72dacbe811fc"
     path: ""
-- id: "Composer:psr:http-message:1.0.1"
-  purl: "pkg:composer/psr/http-message@1.0.1"
+- id: "Composer:sebastian:code-unit-reverse-lookup:1.0.2"
+  purl: "pkg:composer/sebastian/code-unit-reverse-lookup@1.0.2"
   declared_licenses:
-  - "MIT"
+  - "BSD-3-Clause"
   declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Common interface for HTTP messages"
-  homepage_url: "https://github.com/php-fig/http-message"
+    spdx_expression: "BSD-3-Clause"
+  description: "Looks up which function or method a line of code belongs to"
+  homepage_url: "https://github.com/sebastianbergmann/code-unit-reverse-lookup/"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363"
+    url: "https://api.github.com/repos/sebastianbergmann/code-unit-reverse-lookup/zipball/1de8cd5c010cb153fcd68b8d0f64606f523f7619"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/php-fig/http-message.git"
-    revision: "f6561bf28d520154e4b0ec72be95418abe6d9363"
+    url: "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git"
+    revision: "1de8cd5c010cb153fcd68b8d0f64606f523f7619"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/php-fig/http-message.git"
-    revision: "f6561bf28d520154e4b0ec72be95418abe6d9363"
+    url: "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git"
+    revision: "1de8cd5c010cb153fcd68b8d0f64606f523f7619"
     path: ""
-- id: "Composer:sebastian:comparator:1.2.4"
-  purl: "pkg:composer/sebastian/comparator@1.2.4"
+- id: "Composer:sebastian:comparator:3.0.3"
+  purl: "pkg:composer/sebastian/comparator@3.0.3"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
   description: "Provides the functionality to compare PHP values for equality"
-  homepage_url: "http://www.github.com/sebastianbergmann/comparator"
+  homepage_url: "https://github.com/sebastianbergmann/comparator"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
+    url: "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1071dfcef776a57013124ff35e1fc41ccd294758"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/comparator.git"
-    revision: "2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
+    revision: "1071dfcef776a57013124ff35e1fc41ccd294758"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/comparator.git"
-    revision: "2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
+    revision: "1071dfcef776a57013124ff35e1fc41ccd294758"
     path: ""
-- id: "Composer:sebastian:diff:1.4.3"
-  purl: "pkg:composer/sebastian/diff@1.4.3"
+- id: "Composer:sebastian:diff:3.0.3"
+  purl: "pkg:composer/sebastian/diff@3.0.3"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -970,22 +614,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/diff/zipball/7f066a26a962dbe58ddea9f72a4e82874a3975a4"
+    url: "https://api.github.com/repos/sebastianbergmann/diff/zipball/14f72dd46eaf2f2293cbe79c93cc0bc43161a211"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/diff.git"
-    revision: "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
+    revision: "14f72dd46eaf2f2293cbe79c93cc0bc43161a211"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/diff.git"
-    revision: "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
+    revision: "14f72dd46eaf2f2293cbe79c93cc0bc43161a211"
     path: ""
-- id: "Composer:sebastian:environment:1.3.8"
-  purl: "pkg:composer/sebastian/environment@1.3.8"
+- id: "Composer:sebastian:environment:4.2.4"
+  purl: "pkg:composer/sebastian/environment@4.2.4"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -998,22 +642,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/environment/zipball/be2c607e43ce4c89ecd60e75c6a85c126e754aea"
+    url: "https://api.github.com/repos/sebastianbergmann/environment/zipball/d47bbbad83711771f167c72d4e3f25f7fcc1f8b0"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/environment.git"
-    revision: "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
+    revision: "d47bbbad83711771f167c72d4e3f25f7fcc1f8b0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/environment.git"
-    revision: "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
+    revision: "d47bbbad83711771f167c72d4e3f25f7fcc1f8b0"
     path: ""
-- id: "Composer:sebastian:exporter:1.2.2"
-  purl: "pkg:composer/sebastian/exporter@1.2.2"
+- id: "Composer:sebastian:exporter:3.1.3"
+  purl: "pkg:composer/sebastian/exporter@3.1.3"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -1026,22 +670,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/exporter/zipball/42c4c2eec485ee3e159ec9884f95b431287edde4"
+    url: "https://api.github.com/repos/sebastianbergmann/exporter/zipball/6b853149eab67d4da22291d36f5b0631c0fd856e"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/exporter.git"
-    revision: "42c4c2eec485ee3e159ec9884f95b431287edde4"
+    revision: "6b853149eab67d4da22291d36f5b0631c0fd856e"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/exporter.git"
-    revision: "42c4c2eec485ee3e159ec9884f95b431287edde4"
+    revision: "6b853149eab67d4da22291d36f5b0631c0fd856e"
     path: ""
-- id: "Composer:sebastian:global-state:1.1.1"
-  purl: "pkg:composer/sebastian/global-state@1.1.1"
+- id: "Composer:sebastian:global-state:3.0.1"
+  purl: "pkg:composer/sebastian/global-state@3.0.1"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -1054,22 +698,80 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/global-state/zipball/bc37d50fea7d017d3d340f230811c9f1d7280af4"
+    url: "https://api.github.com/repos/sebastianbergmann/global-state/zipball/474fb9edb7ab891665d3bfc6317f42a0a150454b"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/global-state.git"
-    revision: "bc37d50fea7d017d3d340f230811c9f1d7280af4"
+    revision: "474fb9edb7ab891665d3bfc6317f42a0a150454b"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/global-state.git"
-    revision: "bc37d50fea7d017d3d340f230811c9f1d7280af4"
+    revision: "474fb9edb7ab891665d3bfc6317f42a0a150454b"
     path: ""
-- id: "Composer:sebastian:recursion-context:1.0.5"
-  purl: "pkg:composer/sebastian/recursion-context@1.0.5"
+- id: "Composer:sebastian:object-enumerator:3.0.4"
+  purl: "pkg:composer/sebastian/object-enumerator@3.0.4"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Traverses array structures and object graphs to enumerate all referenced\
+    \ objects"
+  homepage_url: "https://github.com/sebastianbergmann/object-enumerator/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/sebastianbergmann/object-enumerator/zipball/e67f6d32ebd0c749cf9d1dbd9f226c727043cdf2"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/object-enumerator.git"
+    revision: "e67f6d32ebd0c749cf9d1dbd9f226c727043cdf2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/object-enumerator.git"
+    revision: "e67f6d32ebd0c749cf9d1dbd9f226c727043cdf2"
+    path: ""
+- id: "Composer:sebastian:object-reflector:1.1.2"
+  purl: "pkg:composer/sebastian/object-reflector@1.1.2"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Allows reflection of object attributes, including inherited and non-public\
+    \ ones"
+  homepage_url: "https://github.com/sebastianbergmann/object-reflector/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/sebastianbergmann/object-reflector/zipball/9b8772b9cbd456ab45d4a598d2dd1a1bced6363d"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/object-reflector.git"
+    revision: "9b8772b9cbd456ab45d4a598d2dd1a1bced6363d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/object-reflector.git"
+    revision: "9b8772b9cbd456ab45d4a598d2dd1a1bced6363d"
+    path: ""
+- id: "Composer:sebastian:recursion-context:3.0.1"
+  purl: "pkg:composer/sebastian/recursion-context@3.0.1"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -1082,22 +784,79 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
+    url: "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/367dcba38d6e1977be014dc4b22f47a484dac7fb"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/recursion-context.git"
-    revision: "b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
+    revision: "367dcba38d6e1977be014dc4b22f47a484dac7fb"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/recursion-context.git"
-    revision: "b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
+    revision: "367dcba38d6e1977be014dc4b22f47a484dac7fb"
     path: ""
-- id: "Composer:sebastian:version:1.0.6"
-  purl: "pkg:composer/sebastian/version@1.0.6"
+- id: "Composer:sebastian:resource-operations:2.0.2"
+  purl: "pkg:composer/sebastian/resource-operations@2.0.2"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Provides a list of PHP built-in functions that operate on resources"
+  homepage_url: "https://www.github.com/sebastianbergmann/resource-operations"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/31d35ca87926450c44eae7e2611d45a7a65ea8b3"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/resource-operations.git"
+    revision: "31d35ca87926450c44eae7e2611d45a7a65ea8b3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/resource-operations.git"
+    revision: "31d35ca87926450c44eae7e2611d45a7a65ea8b3"
+    path: ""
+- id: "Composer:sebastian:type:1.1.4"
+  purl: "pkg:composer/sebastian/type@1.1.4"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "Collection of value objects that represent the types of the PHP type\
+    \ system"
+  homepage_url: "https://github.com/sebastianbergmann/type"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/sebastianbergmann/type/zipball/0150cfbc4495ed2df3872fb31b26781e4e077eb4"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/type.git"
+    revision: "0150cfbc4495ed2df3872fb31b26781e4e077eb4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sebastianbergmann/type.git"
+    revision: "0150cfbc4495ed2df3872fb31b26781e4e077eb4"
+    path: ""
+- id: "Composer:sebastian:version:2.0.1"
+  purl: "pkg:composer/sebastian/version@2.0.1"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -1111,50 +870,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/sebastianbergmann/version/zipball/58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
+    url: "https://api.github.com/repos/sebastianbergmann/version/zipball/99732be0ddb3361e16ad77b68ba41efc8e979019"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/sebastianbergmann/version.git"
-    revision: "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
+    revision: "99732be0ddb3361e16ad77b68ba41efc8e979019"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sebastianbergmann/version.git"
-    revision: "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
+    revision: "99732be0ddb3361e16ad77b68ba41efc8e979019"
     path: ""
-- id: "Composer:symfony:options-resolver:v5.0.7"
-  purl: "pkg:composer/symfony/options-resolver@v5.0.7"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Symfony OptionsResolver Component"
-  homepage_url: "https://symfony.com"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://api.github.com/repos/symfony/options-resolver/zipball/09dccfffd24b311df7f184aa80ee7b61ad61ed8d"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/symfony/options-resolver.git"
-    revision: "09dccfffd24b311df7f184aa80ee7b61ad61ed8d"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/symfony/options-resolver.git"
-    revision: "09dccfffd24b311df7f184aa80ee7b61ad61ed8d"
-    path: ""
-- id: "Composer:symfony:polyfill-ctype:v1.15.0"
-  purl: "pkg:composer/symfony/polyfill-ctype@v1.15.0"
+- id: "Composer:symfony:polyfill-ctype:v1.22.0"
+  purl: "pkg:composer/symfony/polyfill-ctype@v1.22.0"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1167,50 +898,51 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/symfony/polyfill-ctype/zipball/4719fa9c18b0464d399f1a63bf624b42b6fa8d14"
+    url: "https://api.github.com/repos/symfony/polyfill-ctype/zipball/c6c942b1ac76c82448322025e084cadc56048b4e"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/symfony/polyfill-ctype.git"
-    revision: "4719fa9c18b0464d399f1a63bf624b42b6fa8d14"
+    revision: "c6c942b1ac76c82448322025e084cadc56048b4e"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/symfony/polyfill-ctype.git"
-    revision: "4719fa9c18b0464d399f1a63bf624b42b6fa8d14"
+    revision: "c6c942b1ac76c82448322025e084cadc56048b4e"
     path: ""
-- id: "Composer:symfony:yaml:v3.4.39"
-  purl: "pkg:composer/symfony/yaml@v3.4.39"
+- id: "Composer:theseer:tokenizer:1.2.0"
+  purl: "pkg:composer/theseer/tokenizer@1.2.0"
   declared_licenses:
-  - "MIT"
+  - "BSD-3-Clause"
   declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Symfony Yaml Component"
-  homepage_url: "https://symfony.com"
+    spdx_expression: "BSD-3-Clause"
+  description: "A small library for converting tokenized PHP source code into XML\
+    \ and potentially other formats"
+  homepage_url: ""
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/symfony/yaml/zipball/e701b47e11749970f63803879c4febb520f07b6c"
+    url: "https://api.github.com/repos/theseer/tokenizer/zipball/75a63c33a8577608444246075ea0af0d052e452a"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/symfony/yaml.git"
-    revision: "e701b47e11749970f63803879c4febb520f07b6c"
+    url: "https://github.com/theseer/tokenizer.git"
+    revision: "75a63c33a8577608444246075ea0af0d052e452a"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/symfony/yaml.git"
-    revision: "e701b47e11749970f63803879c4febb520f07b6c"
+    url: "https://github.com/theseer/tokenizer.git"
+    revision: "75a63c33a8577608444246075ea0af0d052e452a"
     path: ""
-- id: "Composer:webmozart:assert:1.7.0"
-  purl: "pkg:composer/webmozart/assert@1.7.0"
+- id: "Composer:webmozart:assert:1.9.1"
+  purl: "pkg:composer/webmozart/assert@1.9.1"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1223,17 +955,17 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://api.github.com/repos/webmozart/assert/zipball/aed98a490f9a8f78468232db345ab9cf606cf598"
+    url: "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389"
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/webmozart/assert.git"
-    revision: "aed98a490f9a8f78468232db345ab9cf606cf598"
+    revision: "bafc69caeb4d49c39fd0779086c03a3738cbb389"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/webmozart/assert.git"
-    revision: "aed98a490f9a8f78468232db345ab9cf606cf598"
+    revision: "bafc69caeb4d49c39fd0779086c03a3738cbb389"
     path: ""
