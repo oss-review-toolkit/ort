@@ -104,7 +104,7 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "http://github.com/flavorjones/mini_portile.git"
+    url: "https://github.com/flavorjones/mini_portile.git"
     revision: ""
     path: ""
   vcs_processed:

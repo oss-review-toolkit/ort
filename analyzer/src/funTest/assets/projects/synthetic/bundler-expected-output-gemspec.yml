@@ -504,12 +504,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/google/signet.git"
+    url: "https://github.com/googleapis/signet.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/google/signet.git"
+    url: "https://github.com/googleapis/signet.git"
     revision: ""
     path: ""
 - id: "Gem::test-project:1.0.0"
