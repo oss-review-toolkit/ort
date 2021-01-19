@@ -210,7 +210,6 @@ scanner:
     storage_readers: null
     storage_writers: null
     ignore_patterns:
-    - "**/HERE_NOTICE"
     - "**/META-INF/DEPENDENCIES"
   results:
     scan_results:

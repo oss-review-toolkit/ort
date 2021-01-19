@@ -65,7 +65,6 @@ data class ScannerConfiguration(
      * A list of glob expressions that match file paths which are to be excluded from scan results.
      */
     val ignorePatterns: List<String> = listOf(
-        "**/HERE_NOTICE",
         "**/META-INF/DEPENDENCIES"
     )
 )
