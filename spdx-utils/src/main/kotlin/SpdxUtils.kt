@@ -35,8 +35,8 @@ import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
  * A list of globs that match file names which are not license files but typically trigger false-positives.
  */
 val NON_LICENSE_FILENAMES = listOf(
-    "HERE_NOTICE",
-    "META-INF/DEPENDENCIES"
+    "**/HERE_NOTICE",
+    "**/META-INF/DEPENDENCIES"
 )
 
 /**

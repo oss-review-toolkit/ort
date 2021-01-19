@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -92,7 +91,7 @@ class ScanCode(
             "--info",
             "--strip-root",
             "--timeout", TIMEOUT.toString()
-        ) + NON_LICENSE_FILENAMES.flatMap { listOf("--ignore", it) }
+        )
 
         /**
          * Configuration options that are not relevant for [getConfiguration] because they do not change the result

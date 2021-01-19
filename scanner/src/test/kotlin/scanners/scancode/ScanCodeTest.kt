@@ -33,7 +33,7 @@ class ScanCodeTest : WordSpec({
         "return the default values if the scanner configuration is empty" {
             scanner.configuration shouldBe
                     "--copyright --license --ignore *$ORT_REPO_CONFIG_FILENAME --info --strip-root --timeout 300 " +
-                    "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp --license-diag"
+                    "--json-pp --license-diag"
         }
 
         "return the non-config values from the scanner configuration" {
@@ -58,8 +58,7 @@ class ScanCodeTest : WordSpec({
         "contain the default values if the scanner configuration is empty" {
             scanner.commandLineOptions.joinToString(" ") shouldMatch
                     "--copyright --license --ignore \\*$ORT_REPO_CONFIG_FILENAME --info --strip-root --timeout 300 " +
-                        "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --processes \\d+ --license-diag " +
-                        "--verbose"
+                        "--processes \\d+ --license-diag --verbose"
         }
 
         "contain the values from the scanner configuration" {
