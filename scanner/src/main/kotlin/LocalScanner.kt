@@ -270,7 +270,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 }
 
                 // Due to a temporary bug that has been fixed by now the scan results for packages were not properly
-                // filtered. Filter them again to fix the problem also scan storage entries which exhibit that problem.
+                // filtered by VCS path. Filter them again to fix the problem.
                 // TODO: This filtering can be removed after a while.
                 storedResults.map { it.filterByVcsPath() }
             } else {
