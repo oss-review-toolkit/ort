@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.utils.FileMatcher
 
 /**
  * The result of a single scan of a single package.
@@ -85,4 +86,19 @@ data class ScanResult(
      */
     fun filterByVcsPath(): ScanResult =
         filterByPath(provenance.vcsInfo?.takeUnless { it.type == VcsType.GIT_REPO }?.path.orEmpty())
+
+    /**
+     * Return a [ScanResult] whose [summary] contains only findings whose location / path is not matched by any glob
+     * expression in [ignorePatterns].
+     */
+    fun filterByIgnorePatterns(ignorePatterns: Collection<String>): ScanResult {
+        val matcher = FileMatcher(ignorePatterns.toList())
+
+        val summary = summary.copy(
+            licenseFindings = summary.licenseFindings.filterTo(sortedSetOf()) { !matcher.matches(it.location.path) },
+            copyrightFindings = summary.copyrightFindings.filterTo(sortedSetOf()) { !matcher.matches(it.location.path) }
+        )
+
+        return copy(summary = summary)
+    }
 }
