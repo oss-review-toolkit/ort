@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.FileStorage
 
@@ -65,5 +64,8 @@ data class ScannerConfiguration(
     /**
      * A list of glob expressions that match file paths which are to be excluded from scan results.
      */
-    val ignorePatterns: List<String> = NON_LICENSE_FILENAMES
+    val ignorePatterns: List<String> = listOf(
+        "**/HERE_NOTICE",
+        "**/META-INF/DEPENDENCIES"
+    )
 )
