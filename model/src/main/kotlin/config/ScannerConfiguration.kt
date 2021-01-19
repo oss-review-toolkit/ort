@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.FileStorage
 
@@ -59,5 +60,10 @@ data class ScannerConfiguration(
      * A list with the IDs of scan storages that are called to persist scan results. The strings in this list
      * must match keys in the storages map.
      */
-    val storageWriters: List<String>? = null
+    val storageWriters: List<String>? = null,
+
+    /**
+     * A list of glob expressions that match file paths which are to be excluded from scan results.
+     */
+    val ignorePatterns: List<String> = NON_LICENSE_FILENAMES
 )

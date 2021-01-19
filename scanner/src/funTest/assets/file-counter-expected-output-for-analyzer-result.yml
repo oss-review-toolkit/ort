@@ -209,6 +209,9 @@ scanner:
     storages: null
     storage_readers: null
     storage_writers: null
+    ignore_patterns:
+    - "**/HERE_NOTICE"
+    - "**/META-INF/DEPENDENCIES"
   results:
     scan_results:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
