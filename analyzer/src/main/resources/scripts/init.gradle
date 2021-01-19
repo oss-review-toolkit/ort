@@ -298,7 +298,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
         }
 
-        private String collectCauses(Throwable throwable) {
+        private static String collectCauses(Throwable throwable) {
             def result = "${throwable.getClass().simpleName}: ${throwable.message}"
             def cause = throwable.cause
             while (cause != null) {
