@@ -113,41 +113,35 @@ class OrtConfigurationTest : WordSpec({
         }
 
         "correctly prioritize the sources" {
-            val configFile = createTestConfig(
-                """
-                ort {
-                  scanner {
-                    storages {
-                      postgresStorage {
-                        url = "postgresql://your-postgresql-server:5444/your-database"
-                        schema = schema
-                        username = username
-                        password = password
-                      }
-                    }
-                  }
-                }
-                """.trimIndent()
-            )
-
-            val env = mapOf("ort.scanner.storages.postgresStorage.password" to "envPassword")
+            val configFile = File("src/test/assets/reference.conf")
+            val env = mapOf("ort.scanner.storages.postgres.password" to "envPassword")
 
             withEnvironment(env) {
                 val config = OrtConfiguration.load(
                     args = mapOf(
-                        "ort.scanner.storages.postgresStorage.schema" to "argsSchema",
-                        "ort.scanner.storages.postgresStorage.password" to "argsPassword",
-                        "other.property" to "someValue"
+                        "ort.scanner.storages.postgres.schema" to "argsSchema",
+                        "ort.scanner.storages.postgres.password" to "argsPassword",
+                        "other.property" to "someValue",
+                        "ort.scanner.options.ScanCode.compatibility.maxVersion" to "4.0",
+                        "ort.scanner.options.ScanCode.properties.debugCommandLine" to "--consolidate"
                     ),
                     configFile = configFile
                 )
 
                 config.scanner?.storages shouldNotBeNull {
-                    val postgresStorage = this["postgresStorage"]
+                    val postgresStorage = this["postgres"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe "username"
                     postgresStorage.schema shouldBe "argsSchema"
                     postgresStorage.password shouldBe "envPassword"
+                }
+
+                val scanCodeOptions = config.scanner?.options?.get("ScanCode")
+                scanCodeOptions shouldNotBeNull {
+                    compatibility?.minVersion shouldBe "3.1.0"
+                    compatibility?.maxVersion shouldBe "4.0"
+                    properties?.get("commandLine") shouldBe "--copyright --license --info --timeout 300"
+                    properties?.get("debugCommandLine") shouldBe "--consolidate"
                 }
             }
         }
