@@ -4,7 +4,6 @@ jobs:
     vmImage: ubuntu-18.04
   variables:
     FLUTTER_HOME: /opt/flutter
-    PHP_VERSION: 7.2
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
@@ -15,12 +14,6 @@ jobs:
 
   # Install required tools.
   - bash: |
-      sudo update-alternatives --set php /usr/bin/php$(PHP_VERSION)
-      sudo update-alternatives --set phar /usr/bin/phar$(PHP_VERSION)
-      sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(PHP_VERSION)
-      sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(PHP_VERSION)
-      sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(PHP_VERSION)
-
       # Install apt packages.
       sudo apt-get -qq install cvs
 
