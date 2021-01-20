@@ -114,7 +114,7 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
             tools.forEach { tool ->
                 // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
                 val message = buildString {
-                    val (prefix, suffix) = if (tool.isInPath()) {
+                    val (prefix, suffix) = if (tool.isInPath() || File(tool.command()).isFile) {
                         runCatching {
                             val actualVersion = tool.getVersion()
                             runCatching {
@@ -137,8 +137,8 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                             Pair("\t+ ", "Could not determine the version.")
                         }
                     } else {
-                        // Tolerate scanners to be missing as they can be bootstrapped.
-                        if (category != "Scanner") {
+                        // Tolerate scanners and Pub to be missing as they can be bootstrapped.
+                        if (category != "Scanner" && tool.javaClass.simpleName != "Pub") {
                             statusCode = statusCode or 4
                         }
 

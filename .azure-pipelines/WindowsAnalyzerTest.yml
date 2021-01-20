@@ -2,8 +2,6 @@ jobs:
 - job: WindowsAnalyzerTest
   pool:
     vmImage: windows-2019
-  variables:
-    FLUTTER_HOME: C:\flutter
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
@@ -33,14 +31,6 @@ jobs:
 
       # Install Ruby packages.
       gem install bundler -v $env:BUNDLER_VERSION
-
-      # Install Flutter.
-      Invoke-WebRequest -Uri "https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_$env:FLUTTER_VERSION.zip" -OutFile "C:\flutter_windows_$env:FLUTTER_VERSION.zip"
-      7z x C:\flutter_windows_$env:FLUTTER_VERSION.zip -oC:\
-      Remove-Item "C:\flutter_windows_$env:FLUTTER_VERSION.zip"
-      $env:PATH += ";$env:FLUTTER_HOME\bin;$env:FLUTTER_HOME\bin\cache\dart-sdk\bin"
-      flutter config --no-analytics
-      flutter doctor
 
       # Stop adb because it otherwise locks the working directory which fails the checkout step.
       Stop-Process -Name "adb"

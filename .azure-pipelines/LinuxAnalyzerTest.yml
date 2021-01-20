@@ -2,8 +2,6 @@ jobs:
 - job: LinuxAnalyzerTest
   pool:
     vmImage: ubuntu-18.04
-  variables:
-    FLUTTER_HOME: /opt/flutter
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
@@ -36,14 +34,6 @@ jobs:
 
       # Downgrade Rust, because the CargoSubcrateTest fails with the pre-installed version.
       rustup default $RUST_VERSION
-
-      # Install Flutter.
-      curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz
-      tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME)
-      rm flutter_linux_$FLUTTER_VERSION.tar.xz
-      export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
-      flutter config --no-analytics
-      flutter doctor
 
       # Install git-repo.
       curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.local/bin/repo
