@@ -91,10 +91,10 @@ Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
 
 This happens because `mime-types` does not have `package-lock.json` file. Without this file the versions of (transitive)
 dependencies that are defined with version ranges could change at any time, leading to different results of the
-analyzer. To override this check, use the `-P ort.analyzer.allowDynamicVersions=true` option:
+analyzer. To override this check, use the global `-P ort.analyzer.allowDynamicVersions=true` option:
 
 ```bash
-$ cli/build/install/ort/bin/ort analyze -i [mime-types-dir] -o [analyzer-output-dir] -P ort.analyzer.allowDynamicVersions=true
+$ cli/build/install/ort/bin/ort -P ort.analyzer.allowDynamicVersions=true analyze -i [mime-types-dir] -o [analyzer-output-dir]
 The following package managers are activated:
         Bundler, Composer, GoDep, Gradle, Maven, NPM, PIP, SBT, Stack, Yarn
 Analyzing project path:
