@@ -38,6 +38,17 @@ val ortConfigDirectory by lazy {
 }
 
 /**
+ * The directory to store ORT (read-write) tools in.
+ */
+val ortToolsDirectory by lazy {
+    Os.env[ORT_TOOLS_DIR_ENV_NAME]?.takeUnless {
+        it.isEmpty()
+    }?.let {
+        File(it)
+    } ?: ortDataDirectory.resolve("tools")
+}
+
+/**
  * The directory to store ORT (read-write) data in, like caches and archives.
  */
 val ortDataDirectory by lazy {

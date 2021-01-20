@@ -26,7 +26,17 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
+import java.net.HttpURLConnection
+import java.nio.file.Files.createDirectories
 import java.util.SortedSet
+
+import kotlin.io.path.Path
+import kotlin.io.path.createTempFile
+
+import okhttp3.Request
+
+import okio.buffer
+import okio.sink
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -48,20 +58,42 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.ortToolsDirectory
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.unpack
 
 private const val GRADLE_VERSION = "5.6.4"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 
+private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
+private val pubCommand = if (Os.isWindows) "pub.bat" else "pub"
+
+private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "v1.12.13+hotfix.9-stable"
+private val flutterInstallDir = "$ortToolsDirectory/flutter-$flutterVersion"
+
+private val flutterHome by lazy {
+    getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
+        ?: File(Os.env["FLUTTER_HOME"] ?: "$flutterInstallDir/flutter")
+}
+
+private val flutterAbsolutePath = flutterHome.resolve("bin")
+private val pubAbsolutePath = flutterAbsolutePath.resolve("cache/dart-sdk/bin")
+
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
+ *
+ * This implementation is using the Pub version that is distributed with Flutter. If Flutter is not installed on the
+ * system it is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
+ * automatically installed can be configured by setting the `FLUTTER_VERSION` environment variable.
  */
 class Pub(
     name: String,
@@ -95,12 +127,7 @@ class Pub(
         }
 
         private val flutterPubCacheRoot by lazy {
-            findFlutterHome()?.resolve(".pub-cache")?.takeIf { it.isDirectory }
-        }
-
-        private fun findFlutterHome(): File? {
-            val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
-            return getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
+            flutterHome.resolve(".pub-cache").takeIf { it.isDirectory }
         }
 
         fun findFile(packageInfo: JsonNode, filename: String): File? {
@@ -168,6 +195,59 @@ class Pub(
     override fun transformVersion(output: String) = output.removePrefix("Pub ")
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.2,)")
+
+    // Bootstrap flutter if it's not yet installed
+    override fun beforeResolution(definitionFiles: List<File>) {
+        if (flutterAbsolutePath.resolve(flutterCommand).isFile) {
+            log.info { "Skipping to bootstrap flutter as it was found in $flutterAbsolutePath." }
+            return
+        }
+
+        log.info { "Bootstrapping flutter as it was not found." }
+
+        val archive = when {
+            Os.isWindows -> "windows/flutter_windows_$flutterVersion.zip"
+            Os.isLinux -> "linux/flutter_linux_$flutterVersion.tar.xz"
+            else -> throw IllegalArgumentException("Unsupported operating system.")
+        }
+
+        val url = "https://storage.googleapis.com/flutter_infra/releases/stable/$archive"
+
+        log.info { "Downloading flutter-$flutterVersion from $url... " }
+
+        val request = Request.Builder().get().url(url).build()
+
+        OkHttpClientHelper.execute(request).use { response ->
+            val body = response.body
+
+            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
+                throw IOException("Failed to download flutter from $url.")
+            }
+
+            if (response.cacheResponse != null) {
+                log.info { "Retrieved flutter from local cache." }
+            }
+
+            val flutterArchive = createTempFile(
+                ORT_NAME,
+                "flutter-$flutterVersion-${url.substringAfterLast("/")}"
+            ).toFile()
+
+            flutterArchive.sink().buffer().use { it.writeAll(body.source()) }
+
+            val unpackDir = createDirectories(Path(flutterInstallDir)).toFile()
+
+            log.info { "Unpacking '$flutterArchive' to '$unpackDir'... " }
+            flutterArchive.unpack(unpackDir)
+
+            if (!flutterArchive.delete()) {
+                log.warn { "Unable to delete temporary file '$flutterArchive'." }
+            }
+        }
+
+        ProcessCapture("$flutterAbsolutePath${File.separator}$flutterCommand", "config", "--no-analytics")
+            .requireSuccess()
+    }
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -497,9 +577,12 @@ class Pub(
         return yamlMapper.readTree(definitionFile)
     }
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "pub.bat" else "pub"
+    override fun command(workingDir: File?): String =
+        if (pubAbsolutePath.isDirectory) "$pubAbsolutePath${File.separator}$pubCommand" else pubCommand
 
-    private fun commandFlutter() = if (Os.isWindows) "flutter.bat packages" else "flutter packages"
+    private fun commandFlutter(): String =
+        if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$flutterCommand packages"
+        else "$flutterCommand packages"
 
     override fun run(workingDir: File?, vararg args: String): ProcessCapture {
         var result = ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args)
