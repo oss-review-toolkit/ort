@@ -19,7 +19,6 @@ variables:
   BUNDLER_VERSION: 2.1.4
   COMPOSER_VERSION: 5.1.0 # The version refers to the installer, not to Composer.
   CONAN_VERSION: 1.18.0
-  FLUTTER_VERSION: v1.12.13+hotfix.9-stable
   GO_DEP_VERSION: 0.5.4
   PYTHON_PIPENV_VERSION: 2018.11.26
   RUST_VERSION: 1.35.0

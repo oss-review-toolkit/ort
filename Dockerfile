@@ -50,7 +50,6 @@ ENV \
     CARGO_VERSION=0.47.0-1~exp1ubuntu1~18.04.1 \
     COMPOSER_VERSION=1.6.3-1 \
     CONAN_VERSION=1.18.0 \
-    FLUTTER_VERSION=v1.12.13+hotfix.9-stable \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.13.4 \
     HASKELL_STACK_VERSION=2.1.3 \
@@ -65,11 +64,10 @@ ENV \
     SCANCODE_VERSION=3.2.1rc2 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
-    FLUTTER_HOME=/opt/flutter \
     GOPATH=$HOME/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH="$PATH:$HOME/.local/bin:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:$GOPATH/bin:/opt/go/bin"
+    PATH="$PATH:$HOME/.local/bin:$GOPATH/bin:/opt/go/bin"
 
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
@@ -134,12 +132,6 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION && \
     pip install wheel && \
     pip install conan==$CONAN_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
-    curl -ksSO https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz && \
-    tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME) && \
-    rm flutter_linux_$FLUTTER_VERSION.tar.xz && \
-    chmod -R a+rw $FLUTTER_HOME && \
-    flutter config --no-analytics && \
-    flutter doctor && \
     # Install golang in order to have `go mod` as package manager.
     curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
