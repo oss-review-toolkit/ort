@@ -298,7 +298,7 @@ pipeline {
                         fi
 
                         rm -fr out/results
-                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION analyze -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
+                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
                     '''
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
