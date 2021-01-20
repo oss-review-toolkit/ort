@@ -126,7 +126,7 @@ class ScanCode(
 
     override val resultFileExt = "json"
 
-    private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
+    private val scanCodeConfiguration = config.options?.get("ScanCode")?.properties.orEmpty()
 
     private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
         ?: DEFAULT_CONFIGURATION_OPTIONS

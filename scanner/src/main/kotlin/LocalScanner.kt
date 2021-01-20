@@ -60,6 +60,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
@@ -83,21 +84,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
          * The number of threads to use for the storage dispatcher.
          */
         const val NUM_STORAGE_THREADS = 5
-
-        /**
-         * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
-         */
-        const val PROP_CRITERIA_NAME = "regScannerName"
-
-        /**
-         * The name of the property defining the minimum version of the scanner as part of [ScannerCriteria].
-         */
-        const val PROP_CRITERIA_MIN_VERSION = "minVersion"
-
-        /**
-         * The name of the property defining the maximum version of the scanner as part of [ScannerCriteria].
-         */
-        const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
     }
 
     private val archiver by lazy {
@@ -186,16 +172,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * Return a [ScannerCriteria] object to be used when looking up existing scan results from a [ScanResultsStorage].
      * Per default, the properties of this object are initialized to match this scanner implementation. It is,
      * however, possible to override these defaults from the configuration, in the [ScannerConfiguration.options]
-     * property: Use properties of the form _scannerName.criteria.property_, where _scannerName_ is the name of
-     * the scanner the configuration applies to, and _property_ is the name of a property of the [ScannerCriteria]
-     * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
-     * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
+     * property: Use properties of the form _ort.scanner.options.scannerName.compatibility.property_, where
+     * _scannerName_ is the name of the scanner the configuration applies to, and _property_ is the name of a property
+     * of the [ScannerOptions] class. For instance, to specify that a specific minimum version of ScanCode is allowed,
+     * set this property: `ort.scanner.options.ScanCode.compatibility.minVersion=3.0.2`.
      */
     open fun getScannerCriteria(): ScannerCriteria {
-        val options = config.options?.get(scannerName).orEmpty()
-        val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(expectedVersion))
-        val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
-        val name = options[PROP_CRITERIA_NAME] ?: scannerName
+        val options = config.options?.get(scannerName) ?: ScannerOptions()
+        val minVersion = parseVersion(options.compatibility?.minVersion) ?: Semver(normalizeVersion(expectedVersion))
+        val maxVersion = parseVersion(options.compatibility?.maxVersion) ?: minVersion.nextMinor()
+        val name = options.compatibility?.namePattern ?: scannerName
         return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(configuration))
     }
 

@@ -37,10 +37,10 @@ data class ScannerConfiguration(
 
     /**
      * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
-     * for the ScanCode wrapper. See the documentation of the scanner for available options.
+     * for the ScanCode wrapper.
      */
     @JsonAlias("scanner")
-    val options: Map<String, Map<String, String>>? = null,
+    val options: Map<String, ScannerOptions>? = null,
 
     /**
      * A map with the configurations of the scan result storages available. Based on this information the actual
@@ -68,4 +68,24 @@ data class ScannerConfiguration(
         "**/*.ort.yml",
         "**/META-INF/DEPENDENCIES"
     )
+)
+
+/**
+ * A class defining scanner-specific option.
+ *
+ * In the global [ScannerConfiguration], the _options_ map allows assigning an instance of this class to each
+ * scanner. That way, this scanner can be configured in a special way. The options consist of a part that is common to
+ * all scanners, and a generic map of properties to be evaluated by specific scanner implementations.
+ */
+data class ScannerOptions(
+    /**
+     * The configuration of the criteria when a scan result loaded from a results storage is considered compatible with
+     * the current scanner version.
+     */
+    val compatibility: ScannerCompatibilityConfiguration? = null,
+
+    /**
+     * Scanner specific configuration options. See the documentation of the scanner for available options.
+     */
+    val properties: Map<String, String>? = null
 )

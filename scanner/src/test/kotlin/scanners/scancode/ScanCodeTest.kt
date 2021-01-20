@@ -24,6 +24,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 
 class ScanCodeTest : WordSpec({
     val scanner = ScanCode("ScanCode", ScannerConfiguration())
@@ -37,11 +38,13 @@ class ScanCodeTest : WordSpec({
             val scannerWithConfig = ScanCode(
                 "ScanCode", ScannerConfiguration(
                     options = mapOf(
-                        "ScanCode" to mapOf(
-                            "commandLine" to "--command --line",
-                            "commandLineNonConfig" to "--commandLineNonConfig",
-                            "debugCommandLine" to "--debug --commandLine",
-                            "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                        "ScanCode" to ScannerOptions(
+                            properties = mapOf(
+                                "commandLine" to "--command --line",
+                                "commandLineNonConfig" to "--commandLineNonConfig",
+                                "debugCommandLine" to "--debug --commandLine",
+                                "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                            )
                         )
                     )
                 )
@@ -61,11 +64,13 @@ class ScanCodeTest : WordSpec({
             val scannerWithConfig = ScanCode(
                 "ScanCode", ScannerConfiguration(
                     options = mapOf(
-                        "ScanCode" to mapOf(
-                            "commandLine" to "--command --line",
-                            "commandLineNonConfig" to "--commandLineNonConfig",
-                            "debugCommandLine" to "--debug --commandLine",
-                            "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                        "ScanCode" to ScannerOptions(
+                            properties = mapOf(
+                                "commandLine" to "--command --line",
+                                "commandLineNonConfig" to "--commandLineNonConfig",
+                                "debugCommandLine" to "--debug --commandLine",
+                                "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                            )
                         )
                     )
                 )
