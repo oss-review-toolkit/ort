@@ -20,9 +20,12 @@
 package org.ossreviewtoolkit.spdx
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 
@@ -83,6 +86,19 @@ class SpdxDocumentModelTest : WordSpec({
             val serializedJson = SpdxModelMapper.toJson(document)
 
             serializedJson shouldBe formatJson(json)
+        }
+    }
+
+    "Parsing an SPDX document" should {
+        "fail if no relationship of type DESCRIBES or documentDescribes is contained" {
+            val yaml = readResourceAsText(
+                "/spdx-spec-examples/SPDXYAMLExample-2.2-no-relationship-describes-or-document-describes.spdx.yaml"
+            )
+
+            val exception = shouldThrow<ValueInstantiationException> { SpdxModelMapper.fromYaml<SpdxDocument>(yaml) }
+
+            exception.message shouldContain "The document must either have at least one relationship of type " +
+                    "'DESCRIBES' or contain the 'documentDescribes' field."
         }
     }
 })
