@@ -131,7 +131,16 @@ abstract class PackageManager(
                             // That is, at the example of a PIP project, if a directory contains all three files
                             // "requirements-py2.txt", "requirements-py3.txt" and "setup.py", only consider the
                             // former two as they match the glob with the highest priority, but ignore "setup.py".
-                            result.getOrPut(manager) { mutableListOf() } += matchesPerGlob.first()
+                            val priorityMatches = matchesPerGlob.first()
+
+                            // Skip pathologic cases of empty files.
+                            val nonEmptyFiles = priorityMatches.filter { it.length() > 0 }
+                            if (nonEmptyFiles != priorityMatches) {
+                                val emptyFiles = priorityMatches - nonEmptyFiles
+                                PackageManager.log.info { "Skipping the following empty files: $emptyFiles" }
+                            }
+
+                            result.getOrPut(manager) { mutableListOf() } += nonEmptyFiles
                         }
                     }
 
