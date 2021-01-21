@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 @JsonSubTypes(
-    JsonSubTypes.Type(NexusIqConfiguration::class)
+    JsonSubTypes.Type(NexusIqConfiguration::class),
+    JsonSubTypes.Type(VulnerableCodeConfiguration::class)
 )
 sealed class AdvisorConfiguration
 
@@ -56,4 +57,16 @@ data class NexusIqConfiguration(
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String?
+) : AdvisorConfiguration()
+
+/**
+ * The configuration for VulnerableCode as security vulnerability provider.
+ *
+ * TODO: Define options for authentication.
+ */
+data class VulnerableCodeConfiguration(
+    /**
+     * The base URL of the VulnerableCode REST API.
+     */
+    val serverUrl: String
 ) : AdvisorConfiguration()
