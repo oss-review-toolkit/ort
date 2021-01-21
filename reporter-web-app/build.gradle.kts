@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
+
 // The Yarn plugin is only applied programmatically for Kotlin projects that target JavaScript. As we do not target
 // JavaScript from Kotlin (yet), manually apply the plugin to make its setup tasks available.
 YarnPlugin.apply(project).version = "1.22.4"

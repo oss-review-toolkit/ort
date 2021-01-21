@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 Sonatype
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.nexusiq
+package org.ossreviewtoolkit.clients.ossindex
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
-import java.net.URL
-import java.util.UUID
 
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
@@ -36,13 +32,13 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 /**
- * Interface for the NexusIQ REST API, based on the documentation from
- * https://help.sonatype.com/iqserver/automating/rest-apis.
+ * Interface for the OssIndex REST API, based on the documentation from
+ * https://ossindex.sonatype.org/rest.
  */
-interface NexusIqService {
+interface OssIndexService {
     companion object {
         /**
-         * Create a NexusIQ service instance for communicating with a server running at the given [url],
+         * Create a OSS Index service instance for communicating with a server running at the given [url],
          * optionally using a pre-built OkHttp [client].
          */
         fun create(
@@ -50,15 +46,12 @@ interface NexusIqService {
             user: String? = null,
             password: String? = null,
             client: OkHttpClient? = null
-        ): NexusIqService {
-            val nexusIqClient = (client ?: OkHttpClient()).newBuilder().apply {
+        ): OssIndexService {
+            val ossIndexClient = (client ?: OkHttpClient()).newBuilder().apply {
                 addInterceptor { chain ->
                     val request = chain.request()
-                    val token = UUID.randomUUID().toString()
                     val requestBuilder = request.newBuilder()
-                        .header("X-CSRF-TOKEN", token)
-                        .header("Cookie", "CLM-CSRF-TOKEN=$token")
-                        .header("User-Agent", "ort-nexus-iq")
+                        .header("User-Agent", "ort-oss-index")
 
                     if (user != null && password != null) {
                         requestBuilder.header("Authorization", Credentials.basic(user, password))
@@ -69,49 +62,42 @@ interface NexusIqService {
             }.build()
 
             val retrofit = Retrofit.Builder()
-                .client(nexusIqClient)
+                .client(ossIndexClient)
                 .baseUrl(url)
                 .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
                 .build()
 
-            return retrofit.create(NexusIqService::class.java)
+            return retrofit.create(OssIndexService::class.java)
         }
     }
 
-    data class ComponentDetailsWrapper(
-        val componentDetails: List<ComponentDetails>
-    )
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    data class ComponentDetails(
-        val component: Component,
-        val securityData: SecurityData
-    )
-
-    data class SecurityData(
-        val securityIssues: List<SecurityIssue>
-    )
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    data class SecurityIssue(
-        val reference: String,
-        val severity: Float,
-        val url: URL?
-    )
-
-    data class ComponentsWrapper(
-        val components: List<Component>
-    )
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
     data class Component(
-        val packageUrl: String
+        val coordinates: String,
+        val description: String,
+        val reference: String,
+        val vulnerabilities: List<Vulnerability>
+    )
+
+    data class Vulnerability(
+        val id: String,
+        val displayName: String,
+        val title: String,
+        val description: String,
+        val cvssScore: Float,
+        val cvssVector: String,
+        val cve: String?,
+        val cwe: String?,
+        val reference: String
+    )
+
+    data class ComponentsRequest(
+        val coordinates: List<String>
     )
 
     /**
      * Retrieve the details for multiple [components].
-     * See https://help.sonatype.com/iqserver/automating/rest-apis/component-details-rest-api---v2.
+     * See https://ossindex.sonatype.org/rest.
      */
-    @POST("api/v2/components/details")
-    fun getComponentDetails(@Body components: ComponentsWrapper): Call<ComponentDetailsWrapper>
+    @POST("api/v3/component-report")
+    fun getComponentReport(@Body components: ComponentsRequest): Call<Array<Component>>
 }

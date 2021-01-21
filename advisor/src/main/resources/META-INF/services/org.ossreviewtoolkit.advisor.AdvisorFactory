@@ -1,1 +1,2 @@
 org.ossreviewtoolkit.advisor.advisors.NexusIq$Factory
+org.ossreviewtoolkit.advisor.advisors.OssIndex$Factory

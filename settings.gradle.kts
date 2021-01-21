@@ -2,6 +2,7 @@
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 Sonatype
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +42,11 @@ pluginManagement {
             }
         }
     }
+    repositories {
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
+        mavenCentral()
+        maven("https://plugins.gradle.org/m2/")
+    }
 }
 
 rootProject.name = "oss-review-toolkit"
@@ -51,6 +57,7 @@ include(":cli")
 include(":clients:clearly-defined")
 include(":clients:fossid-webapp")
 include(":clients:nexus-iq")
+include(":clients:oss-index")
 include(":clients:oss-attribution-builder")
 include(":detekt-rules")
 include(":downloader")
