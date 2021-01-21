@@ -66,6 +66,7 @@ class OrtPackageNaming : Rule() {
             "oss-attribution-builder" -> ".clients.amazon"
             "spdx-utils" -> ".spdx"
             "test-utils" -> ".utils.test"
+            "vulnerable-code" -> ".clients.vulnerablecode"
             else -> ".$projectDir"
         }
 
