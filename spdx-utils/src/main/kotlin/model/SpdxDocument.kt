@@ -160,5 +160,11 @@ data class SpdxDocument(
         require(duplicateSnippets.isEmpty()) {
             "The document must not contain duplicate snippets but has $duplicateSnippets."
         }
+
+        val hasDescribesRelationship = relationships.any { it.relationshipType == SpdxRelationship.Type.DESCRIBES }
+        require(hasDescribesRelationship || documentDescribes.isNotEmpty()) {
+            "The document must either have at least one relationship of type 'DESCRIBES' or contain the " +
+                    "'documentDescribes' field."
+        }
     }
 }
