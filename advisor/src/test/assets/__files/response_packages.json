@@ -1,0 +1,30 @@
+{
+  "pkg:maven/org.apache.commons/commons-lang3@3.5": {
+    "resolved_vulnerabilities": [],
+    "unresolved_vulnerabilities": [
+      {
+        "url": "http://localhost:8000/api/vulnerabilities/v1/",
+        "vulnerability_id": "CVE-2014-8242"
+      }
+    ]
+  },
+  "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1": {
+    "resolved_vulnerabilities": [
+      {
+        "url": "http://localhost:8000/api/vulnerabilities/17437/",
+        "vulnerability_id": "CVE-2009-2459"
+      }
+    ],
+    "unresolved_vulnerabilities": [
+      {
+        "url": "http://localhost:8000/api/vulnerabilities/v2/",
+        "vulnerability_id": "CVE-2009-1382"
+      },
+      {
+        "url": "http://localhost:8000/api/vulnerabilities/v3/",
+        "vulnerability_id": "CVE-2019-CoV19"
+      }
+    ]
+  },
+  "pkg:maven/org.hamcrest/hamcrest-core@1.3": {}
+}
