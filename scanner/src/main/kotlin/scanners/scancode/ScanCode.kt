@@ -100,11 +100,6 @@ class ScanCode(
         )
 
         /**
-         * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
-         */
-        private val DEFAULT_DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
-
-        /**
          * Debug configuration options that are not relevant for [getConfiguration] because they do not change the
          * result file.
          */
@@ -138,7 +133,7 @@ class ScanCode(
     private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(" ")
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
     private val debugConfigurationOptions = scanCodeConfiguration["debugCommandLine"]?.split(" ")
-        ?: DEFAULT_DEBUG_CONFIGURATION_OPTIONS
+        ?: emptyList()
     private val debugNonConfigurationOptions = scanCodeConfiguration["debugCommandLineNonConfig"]?.split(" ")
         ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
 
