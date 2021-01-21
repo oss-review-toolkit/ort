@@ -210,6 +210,7 @@ scanner:
     storage_readers: null
     storage_writers: null
     ignore_patterns:
+    - "**/*.ort.yml"
     - "**/META-INF/DEPENDENCIES"
   results:
     scan_results:

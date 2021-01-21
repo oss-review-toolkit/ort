@@ -24,7 +24,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 class ScanCodeTest : WordSpec({
     val scanner = ScanCode("ScanCode", ScannerConfiguration())
@@ -32,7 +31,7 @@ class ScanCodeTest : WordSpec({
     "getConfiguration()" should {
         "return the default values if the scanner configuration is empty" {
             scanner.configuration shouldBe
-                    "--copyright --license --ignore *$ORT_REPO_CONFIG_FILENAME --info --strip-root --timeout 300 " +
+                    "--copyright --license --info --strip-root --timeout 300 " +
                     "--json-pp --license-diag"
         }
 
@@ -57,7 +56,7 @@ class ScanCodeTest : WordSpec({
     "commandLineOptions" should {
         "contain the default values if the scanner configuration is empty" {
             scanner.commandLineOptions.joinToString(" ") shouldMatch
-                    "--copyright --license --ignore \\*$ORT_REPO_CONFIG_FILENAME --info --strip-root --timeout 300 " +
+                    "--copyright --license --info --strip-root --timeout 300 " +
                         "--processes \\d+ --license-diag --verbose"
         }
 
