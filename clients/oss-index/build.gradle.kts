@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
  * Copyright (C) 2021 Sonatype, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-val kotlinxCoroutinesVersion: String by project
-val wiremockVersion: String by project
+val jacksonVersion: String by project
+val retrofitVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -27,12 +26,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":clients:nexus-iq"))
-    api(project(":clients:oss-index"))
-    api(project(":clients:vulnerable-code"))
-    api(project(":model"))
+    api("com.squareup.retrofit2:retrofit:$retrofitVersion")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-
-    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
 }
