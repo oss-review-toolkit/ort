@@ -30,9 +30,7 @@ class ScanCodeTest : WordSpec({
 
     "getConfiguration()" should {
         "return the default values if the scanner configuration is empty" {
-            scanner.configuration shouldBe
-                    "--copyright --license --info --strip-root --timeout 300 " +
-                    "--json-pp --license-diag"
+            scanner.configuration shouldBe "--copyright --license --info --strip-root --timeout 300 --json-pp"
         }
 
         "return the non-config values from the scanner configuration" {
@@ -56,8 +54,7 @@ class ScanCodeTest : WordSpec({
     "commandLineOptions" should {
         "contain the default values if the scanner configuration is empty" {
             scanner.commandLineOptions.joinToString(" ") shouldMatch
-                    "--copyright --license --info --strip-root --timeout 300 " +
-                        "--processes \\d+ --license-diag --verbose"
+                    "--copyright --license --info --strip-root --timeout 300 --processes \\d+ --verbose"
         }
 
         "contain the values from the scanner configuration" {
