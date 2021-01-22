@@ -486,7 +486,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }
         }
 
-        log.warn { "Unable to find '$artifact' in any of ${remoteRepositories.map { it.url }}." }
+        val level = if (artifact.classifier == "sources") Level.DEBUG else Level.WARN
+        log.log(level) { "Unable to find '$artifact' in any of ${remoteRepositories.map { it.url }}." }
 
         return RemoteArtifact.EMPTY.also {
             log.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
