@@ -312,7 +312,7 @@ object Downloader {
                 // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
                 // http/BridgeInterceptor.java#L79
                 .header("Accept-Encoding", "identity")
-                .header("User-Agent", "$ORT_NAME/${Environment.ORT_VERSION}")
+                .header("User-Agent", Environment.ORT_USER_AGENT)
                 .get()
                 .url(pkg.sourceArtifact.url)
                 .build()

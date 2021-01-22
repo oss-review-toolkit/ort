@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model
 
 import java.lang.Runtime
 
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.Os
 
 /**
@@ -69,6 +70,11 @@ data class Environment(
          * The version of the OSS Review Toolkit as a string.
          */
         val ORT_VERSION by lazy { this::class.java.`package`.implementationVersion ?: "IDE-SNAPSHOT" }
+
+        /**
+         * A string that is supposed to be used as the User Agent when using ORT as an HTTP client.
+         */
+        val ORT_USER_AGENT = "$ORT_NAME/$ORT_VERSION"
 
         private val RELEVANT_VARIABLES = listOf(
             // Windows variables.
