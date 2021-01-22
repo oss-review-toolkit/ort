@@ -231,7 +231,7 @@ class FreemarkerTemplateProcessor(
 }
 
 private fun List<ResolvedLicense>.merge(): ResolvedLicense {
-    require(isNotEmpty()) { "Cannot not merge an empty list." }
+    require(isNotEmpty()) { "Cannot merge an empty list." }
     return ResolvedLicense(
         license = first().license,
         sources = flatMapTo(mutableSetOf()) { it.sources },
