@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class MavenFunTest : StringSpec() {
@@ -133,6 +134,20 @@ class MavenFunTest : StringSpec() {
             val result = createMaven().resolveSingleProject(pomFile)
 
             result.toYaml() shouldBe expectedResult
+        }
+
+        "Maven Wagon extensions can be loaded" {
+            val projectDir = File("src/funTest/assets/projects/synthetic/maven-wagon").absoluteFile
+            val pomFile = projectDir.resolve("pom.xml")
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("maven-wagon-expected-output.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+
+            val result = createMaven().resolveSingleProject(pomFile)
+
+            patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 
