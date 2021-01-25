@@ -313,6 +313,45 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
     inline fun <reified T> containerLookup(hint: String = "default"): T =
         container.lookup(T::class.java, hint)
 
+    /**
+     * Build the Maven projects defined in the provided [pomFiles] without resolving dependencies. The result can later
+     * be used to determine if a dependency points to another local project or to an external artifact.
+     */
+    fun prepareMavenProjects(pomFiles: List<File>): Map<String, ProjectBuildingResult> {
+        val projectBuilder = containerLookup<ProjectBuilder>()
+        val projectBuildingRequest = createProjectBuildingRequest(false)
+        val projectBuildingResults = try {
+            projectBuilder.build(pomFiles, false, projectBuildingRequest)
+        } catch (e: ProjectBuildingException) {
+            e.showStackTrace()
+
+            log.warn {
+                "There have been issues building the Maven project models, this could lead to errors during " +
+                        "dependency analysis: ${e.collectMessagesAsString()}"
+            }
+
+            e.results
+        }
+
+        val result = mutableMapOf<String, ProjectBuildingResult>()
+
+        projectBuildingResults.forEach { projectBuildingResult ->
+            if (projectBuildingResult.project == null) {
+                log.warn {
+                    "Project for POM file '${projectBuildingResult.pomFile.absolutePath}' could not be built:\n" +
+                            projectBuildingResult.problems.joinToString("\n")
+                }
+            } else {
+                val project = projectBuildingResult.project
+                val identifier = "${project.groupId}:${project.artifactId}:${project.version}"
+
+                result[identifier] = projectBuildingResult
+            }
+        }
+
+        return result
+    }
+
     fun buildMavenProject(pomFile: File): ProjectBuildingResult {
         val projectBuilder = containerLookup<ProjectBuilder>()
         val projectBuildingRequest = createProjectBuildingRequest(true)
