@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
 
-import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingResult
 
@@ -97,34 +96,7 @@ class Maven(
     fun enableSbtMode() = also { sbtMode = true }
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        val projectBuilder = mvn.containerLookup<ProjectBuilder>()
-        val projectBuildingRequest = mvn.createProjectBuildingRequest(false)
-        val projectBuildingResults = try {
-            projectBuilder.build(definitionFiles, false, projectBuildingRequest)
-        } catch (e: ProjectBuildingException) {
-            e.showStackTrace()
-
-            log.warn {
-                "There have been issues building the Maven project models, this could lead to errors during " +
-                        "dependency analysis: ${e.collectMessagesAsString()}"
-            }
-
-            e.results
-        }
-
-        projectBuildingResults.forEach { projectBuildingResult ->
-            if (projectBuildingResult.project == null) {
-                log.warn {
-                    "Project for POM file '${projectBuildingResult.pomFile.absolutePath}' could not be built:\n" +
-                            projectBuildingResult.problems.joinToString("\n")
-                }
-            } else {
-                val project = projectBuildingResult.project
-                val identifier = "${project.groupId}:${project.artifactId}:${project.version}"
-
-                localProjectBuildingResults[identifier] = projectBuildingResult
-            }
-        }
+        localProjectBuildingResults += mvn.prepareMavenProjects(definitionFiles)
     }
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
