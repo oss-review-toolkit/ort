@@ -29,21 +29,13 @@ project:
         message: "Could not get package information for dependency 'com.example:ftp-artifact:1.0.0':\
           \ ProjectBuildingException: Error resolving project artifact: Could not\
           \ transfer artifact com.example:ftp-artifact:pom:1.0.0 from/to ftp-repository\
-          \ (ftp://localhost:40123): Cannot access ftp://localhost:40123 with type\
-          \ default using the available connector factories: BasicRepositoryConnectorFactory\
+          \ (ftp://localhost:40123): Password not specified for repository ftp-repository\
           \ for project com.example:ftp-artifact:pom:1.0.0\nCaused by: ArtifactResolutionException:\
           \ Could not transfer artifact com.example:ftp-artifact:pom:1.0.0 from/to\
-          \ ftp-repository (ftp://localhost:40123): Cannot access ftp://localhost:40123\
-          \ with type default using the available connector factories: BasicRepositoryConnectorFactory\n\
-          Caused by: ArtifactTransferException: Could not transfer artifact com.example:ftp-artifact:pom:1.0.0\
-          \ from/to ftp-repository (ftp://localhost:40123): Cannot access ftp://localhost:40123\
-          \ with type default using the available connector factories: BasicRepositoryConnectorFactory\n\
-          Caused by: NoRepositoryConnectorException: Cannot access ftp://localhost:40123\
-          \ with type default using the available connector factories: BasicRepositoryConnectorFactory\n\
-          Caused by: NoRepositoryConnectorException: Cannot access ftp://localhost:40123\
-          \ using the registered transporter factories: HttpTransporterFactory, FileTransporterFactory,\
-          \ WagonTransporterFactory\nCaused by: NoTransporterException: Cannot access\
-          \ ftp://localhost:40123 using the registered transporter factories: HttpTransporterFactory,\
-          \ FileTransporterFactory, WagonTransporterFactory"
+          \ ftp-repository (ftp://localhost:40123): Password not specified for repository\
+          \ ftp-repository\nCaused by: ArtifactTransferException: Could not transfer\
+          \ artifact com.example:ftp-artifact:pom:1.0.0 from/to ftp-repository (ftp://localhost:40123):\
+          \ Password not specified for repository ftp-repository\nCaused by: AuthenticationException:\
+          \ Password not specified for repository ftp-repository"
         severity: "ERROR"
 packages: []
