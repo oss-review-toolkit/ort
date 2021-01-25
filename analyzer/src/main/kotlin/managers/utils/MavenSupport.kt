@@ -93,7 +93,7 @@ import org.ossreviewtoolkit.utils.showStackTrace
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
-class MavenSupport(workspaceReader: WorkspaceReader) {
+class MavenSupport(private val workspaceReader: WorkspaceReader) {
     companion object {
         private const val MAX_DISK_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
         private const val MAX_DISK_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
@@ -316,10 +316,20 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
     /**
      * Build the Maven projects defined in the provided [pomFiles] without resolving dependencies. The result can later
      * be used to determine if a dependency points to another local project or to an external artifact.
+     *
+     * Note that build extensions are resolved by this function. This is required because extensions can provide
+     * additional repository layouts or transports which are required to resolve dependencies. For details see the Maven
+     * Wagon documentation [1].
+     *
+     * [1]: https://maven.apache.org/wagon/
      */
     fun prepareMavenProjects(pomFiles: List<File>): Map<String, ProjectBuildingResult> {
         val projectBuilder = containerLookup<ProjectBuilder>()
-        val projectBuildingRequest = createProjectBuildingRequest(false)
+        val projectBuildingRequest = createProjectBuildingRequest(false).apply {
+            repositorySession = DefaultRepositorySystemSession(repositorySession).apply {
+                workspaceReader = this@MavenSupport.workspaceReader
+            }
+        }
         val projectBuildingResults = try {
             projectBuilder.build(pomFiles, false, projectBuildingRequest)
         } catch (e: ProjectBuildingException) {
