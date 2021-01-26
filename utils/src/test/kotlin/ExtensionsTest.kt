@@ -363,14 +363,4 @@ class ExtensionsTest : WordSpec({
             "https://github.com/oss-review-toolkit/ort, ".isValidUri() shouldBe false
         }
     }
-
-    "String.isValidUrl" should {
-        "return true for a valid URL" {
-            "https://github.com/oss-review-toolkit/ort".isValidUrl() shouldBe true
-        }
-
-        "return false for an invalid URL" {
-            "illegal://github.com/oss-review-toolkit/ort".isValidUrl() shouldBe false
-        }
-    }
 })
