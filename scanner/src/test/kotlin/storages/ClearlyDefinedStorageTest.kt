@@ -45,7 +45,9 @@ import java.net.ServerSocket
 import java.time.Duration
 import java.time.Instant
 
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.Provider
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -73,8 +75,8 @@ private const val RESULT_FILE = "clearlydefined_scancode.json"
 /** A delta for comparing timestamps against the current time. */
 private val MAX_TIME_DELTA = Duration.ofSeconds(30)
 
-/** The ClearlyDefined URL referencing the test package. */
-private const val PACKAGE_URL = "maven/mavencentral/$NAMESPACE/$NAME/$VERSION"
+/** The ClearlyDefined coordinates referencing the test package. */
+private val COORDINATES = Coordinates(ComponentType.MAVEN, Provider.MAVEN_CENTRAL, NAMESPACE, NAME, VERSION)
 
 /** Path to a file contained in the test ClearlyDefined result. */
 private const val TEST_PATH =
@@ -115,18 +117,18 @@ private fun storageConfiguration(server: WireMockServer): ClearlyDefinedStorageC
 }
 
 /**
- * Generate the URL used by ClearlyDefined to reference the results for a package with the given [prefix]
+ * Generate the URL used by ClearlyDefined to reference the results for a package with the given [coordinates]
  * produced by the tool with the [toolName] and [toolVersion].
  */
-private fun toolUrl(prefix: String, toolName: String, toolVersion: String): String =
-    "$prefix/$toolName/$toolVersion"
+private fun toolUrl(coordinates: Coordinates, toolName: String, toolVersion: String): String =
+    "$coordinates/$toolName/$toolVersion"
 
 /**
- * Stub a request for the available harvest tools on the [wiremock] server for the package with
- * given [packageUrl] to return the specified [tools].
+ * Stub a request for the available harvest tools on the [wiremock] server for the package with the given [coordinates]
+ * to return the specified [tools].
  */
-private fun stubHarvestTools(wiremock: WireMockServer, packageUrl: String, tools: List<String>) {
-    val urlPath = "/harvest/$packageUrl"
+private fun stubHarvestTools(wiremock: WireMockServer, coordinates: Coordinates, tools: List<String>) {
+    val urlPath = "/harvest/$coordinates"
     val response = tools.joinToString(separator = ",", prefix = "[", postfix = "]") { "\"$it\"" }
     wiremock.stubFor(
         get(urlPathEqualTo(urlPath))
@@ -139,10 +141,10 @@ private fun stubHarvestTools(wiremock: WireMockServer, packageUrl: String, tools
 }
 
 /**
- * Stub a request for the harvested data from ScanCode for the given [packageUrl] on the [wiremock] server.
+ * Stub a request for the harvested data from ScanCode for the given [coordinates] on the [wiremock] server.
  */
-private fun stubHarvestToolResponse(wiremock: WireMockServer, packageUrl: String) {
-    val urlPath = "/harvest/${toolUrl(packageUrl, "scancode", SCANCODE_VERSION)}"
+private fun stubHarvestToolResponse(wiremock: WireMockServer, coordinates: Coordinates) {
+    val urlPath = "/harvest/${toolUrl(coordinates, "scancode", SCANCODE_VERSION)}"
     wiremock.stubFor(
         get(urlPathEqualTo(urlPath))
             .withQueryParam("form", equalTo("streamed"))
@@ -218,10 +220,10 @@ class ClearlyDefinedStorageTest : WordSpec({
     "ClearlyDefinedStorage" should {
         "load existing scan results for a package from ClearlyDefined" {
             stubHarvestTools(
-                wiremock, PACKAGE_URL,
-                listOf(toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION))
+                wiremock, COORDINATES,
+                listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
             )
-            stubHarvestToolResponse(wiremock, PACKAGE_URL)
+            stubHarvestToolResponse(wiremock, COORDINATES)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
@@ -230,10 +232,10 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "load existing scan results for an identifier from ClearlyDefined" {
             stubHarvestTools(
-                wiremock, PACKAGE_URL,
-                listOf(toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION))
+                wiremock, COORDINATES,
+                listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
             )
-            stubHarvestToolResponse(wiremock, PACKAGE_URL)
+            stubHarvestToolResponse(wiremock, COORDINATES)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
@@ -242,12 +244,12 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "choose the correct tool URL if there are multiple" {
             val tools = listOf(
-                toolUrl(PACKAGE_URL, "someOtherTool", "08-15"),
+                toolUrl(COORDINATES, "someOtherTool", "08-15"),
                 "a-completely-different-tool",
-                toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION)
+                toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             )
-            stubHarvestTools(wiremock, PACKAGE_URL, tools)
-            stubHarvestToolResponse(wiremock, PACKAGE_URL)
+            stubHarvestTools(wiremock, COORDINATES, tools)
+            stubHarvestToolResponse(wiremock, COORDINATES)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
@@ -256,10 +258,10 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "set correct metadata in the package scan result" {
             stubHarvestTools(
-                wiremock, PACKAGE_URL,
-                listOf(toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION))
+                wiremock, COORDINATES,
+                listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
             )
-            stubHarvestToolResponse(wiremock, PACKAGE_URL)
+            stubHarvestToolResponse(wiremock, COORDINATES)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
@@ -285,8 +287,8 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "handle the case that no results for  the scancode tool are available" {
-            val tools = listOf(toolUrl(PACKAGE_URL, "unknownTool", "unknownVersion"), "differentTool")
-            stubHarvestTools(wiremock, PACKAGE_URL, tools)
+            val tools = listOf(toolUrl(COORDINATES, "unknownTool", "unknownVersion"), "differentTool")
+            stubHarvestTools(wiremock, COORDINATES, tools)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
@@ -294,8 +296,8 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "handle the case that no result for the tool file is returned" {
-            val scanCodeUrl = toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION)
-            stubHarvestTools(wiremock, PACKAGE_URL, listOf(scanCodeUrl))
+            val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
+            stubHarvestTools(wiremock, COORDINATES, listOf(scanCodeUrl))
             stubFor(
                 get(urlPathEqualTo("/harvest/$scanCodeUrl"))
                     .willReturn(aResponse().withStatus(200))
@@ -307,7 +309,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "use GitHub VCS info if available" {
-            val gitUrl = "git/github/$NAMESPACE/$NAME/$COMMIT"
+            val gitUrl = Coordinates(ComponentType.GIT, Provider.GITHUB, NAMESPACE, NAME, COMMIT)
             val vcsGit = VcsInfo(
                 VcsType.GIT,
                 "https://github.com/$NAMESPACE/$NAME.git",
@@ -327,9 +329,9 @@ class ClearlyDefinedStorageTest : WordSpec({
         "only use VCS info pointing to GitHub" {
             val vcs = VcsInfo(VcsType.GIT, "https://gitlab.com/foo/bar.git", VERSION, COMMIT)
             val pkg = TEST_PACKAGE.copy(vcs = vcs)
-            val tools = listOf(toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION))
-            stubHarvestTools(wiremock, PACKAGE_URL, tools)
-            stubHarvestToolResponse(wiremock, PACKAGE_URL)
+            val tools = listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
+            stubHarvestTools(wiremock, COORDINATES, tools)
+            stubHarvestToolResponse(wiremock, COORDINATES)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
@@ -338,7 +340,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "use information from a source artifact if available" {
             val sourceArtifact = RemoteArtifact("https://source-artifact.org/test", Hash.NONE)
-            val expUrl = PACKAGE_URL.replace("maven/", ComponentType.SOURCE_ARCHIVE.value + "/")
+            val expUrl = COORDINATES.copy(type = ComponentType.SOURCE_ARCHIVE)
             val pkg = TEST_PACKAGE.copy(sourceArtifact = sourceArtifact)
             val tools = listOf(toolUrl(expUrl, "scancode", SCANCODE_VERSION))
             stubHarvestTools(wiremock, expUrl, tools)
@@ -375,8 +377,8 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "handle an unexpected result for the harvest tool file request" {
-            val scanCodeUrl = toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION)
-            stubHarvestTools(wiremock, PACKAGE_URL, listOf(scanCodeUrl))
+            val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
+            stubHarvestTools(wiremock, COORDINATES, listOf(scanCodeUrl))
             stubFor(
                 get(urlPathEqualTo("/harvest/$scanCodeUrl"))
                     .willReturn(
