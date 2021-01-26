@@ -80,11 +80,11 @@ private fun packageCoordinates(
 }
 
 /**
- * Search in the given list of [tools] for the entry for ScanCode that has processed the
- * [packageUrl]. If such an entry is found, the version of ScanCode is returned; otherwise, result is null.
+ * Given a list of [tools], return the version of ScanCode that was used to scan the package with the given
+ * [coordinates], or return null if no such tool entry is found.
  */
-private fun findScanCodeVersion(tools: List<String>, packageUrl: String): String? {
-    val toolUrl = "$packageUrl/$TOOL_SCAN_CODE/"
+private fun findScanCodeVersion(tools: List<String>, coordinates: ClearlyDefinedService.Coordinates): String? {
+    val toolUrl = "$coordinates/$TOOL_SCAN_CODE/"
     return tools.find { it.startsWith(toolUrl) }?.substring(toolUrl.length)
 }
 
@@ -158,8 +158,8 @@ class ClearlyDefinedStorage(
                     coordinates.revision.orEmpty()
                 )
             )
-            val scanCodeVersion = findScanCodeVersion(tools, coordinates.toString())
-            scanCodeVersion?.let { version ->
+
+            findScanCodeVersion(tools, coordinates)?.let { version ->
                 loadScanCodeResults(id, coordinates, version, startTime)
             } ?: emptyResult(id)
         } catch (e: IOException) {
