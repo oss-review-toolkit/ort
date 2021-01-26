@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.reporter.utils.containsUnresolved
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.isValidUrl
+import org.ossreviewtoolkit.utils.isValidUri
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 @Suppress("LargeClass")
@@ -186,7 +186,7 @@ class StaticHtmlReporter : Reporter {
     private fun TBODY.labelRow(key: String, value: String) {
         tr {
             td { +key }
-            td { if (value.isValidUrl()) a(value) { +value } else +value }
+            td { if (value.isValidUri()) a(value) { +value } else +value }
         }
     }
 
