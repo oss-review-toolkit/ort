@@ -50,7 +50,7 @@ class ScanCodeResultParserTest : WordSpec({
             val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             summary.fileCount shouldBe 10
-            summary.packageVerificationCode shouldBe "9e3fdffc51568b300a457228055f8dc8a99fc64b"
+            summary.packageVerificationCode shouldBe "875d4d6eabe5bf8cda99be52e28b04cc194de6ea"
         }
     }
 
@@ -65,7 +65,7 @@ class ScanCodeResultParserTest : WordSpec({
             val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             summary.fileCount shouldBe 10
-            summary.packageVerificationCode shouldBe "8ec22f05b1a7006ae667901ae0853beff197c576"
+            summary.packageVerificationCode shouldBe "285b79745a96a1c561fef5591586a97176f19457"
         }
     }
 
@@ -623,7 +623,6 @@ class ScanCodeResultParserTest : WordSpec({
             details.version shouldBe "2.9.7"
             details.configuration shouldContain "--copyright true"
             details.configuration shouldContain "--ignore *.ort.yml"
-            details.configuration shouldContain "--ignore HERE_NOTICE"
             details.configuration shouldContain "--ignore META-INF/DEPENDENCIES"
             details.configuration shouldContain "--info true"
         }

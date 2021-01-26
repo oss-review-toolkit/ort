@@ -222,7 +222,7 @@ scanner:
               name: "ScanCode"
               version: "3.2.1-rc2"
               configuration: "--copyright --license --ignore *.ort.yml --info --strip-root\
-            \ --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+            \ --timeout 300 --ignore META-INF/DEPENDENCIES --json-pp"
             summary:
               start_time: "2020-09-30T09:27:12.023451Z"
               end_time: "2020-09-30T09:28:20.525647Z"
@@ -274,7 +274,7 @@ scanner:
               name: "ScanCode"
               version: "3.2.1-rc2"
               configuration: "--copyright --license --ignore *.ort.yml --info --strip-root\
-            \ --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+            \ --timeout 300 --ignore META-INF/DEPENDENCIES --json-pp"
             summary:
               start_time: "2020-09-30T09:28:32.817956Z"
               end_time: "2020-09-30T09:29:02.889213Z"
