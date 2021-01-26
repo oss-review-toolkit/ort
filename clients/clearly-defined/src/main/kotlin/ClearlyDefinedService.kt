@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
-import java.net.URL
+import java.net.URI
 
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -157,8 +157,8 @@ interface ClearlyDefinedService {
         val facets: Facets? = null,
         val sourceLocation: SourceLocation? = null,
         val urls: URLs? = null,
-        val projectWebsite: URL? = null,
-        val issueTracker: URL? = null,
+        val projectWebsite: URI? = null,
+        val issueTracker: URI? = null,
         val releaseDate: String? = null,
         val hashes: Hashes? = null,
         val files: Int? = null,
@@ -236,9 +236,9 @@ interface ClearlyDefinedService {
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class URLs(
-        val registry: URL? = null,
-        val version: URL? = null,
-        val download: URL? = null
+        val registry: URI? = null,
+        val version: URI? = null,
+        val download: URI? = null
     )
 
     /**
