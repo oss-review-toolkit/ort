@@ -31,7 +31,7 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
-import java.net.URL
+import java.net.URI
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
@@ -190,7 +190,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
     val licenseExpression = data.concludedLicense?.toString() ?: data.declaredLicenses?.joinToString(" AND ")
 
     val described = Described(
-        projectWebsite = data.homepageUrl?.let { URL(it) },
+        projectWebsite = data.homepageUrl?.let { URI(it) },
         sourceLocation = id.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
     )
 
