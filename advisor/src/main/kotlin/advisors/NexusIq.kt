@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.advisor.advisors
 
 import java.io.IOException
-import java.net.URL
+import java.net.URI
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -154,7 +154,7 @@ class NexusIq(
 
     private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability {
         val browseUrl = if (url == null && reference.startsWith("sonatype-")) {
-            URL("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
+            URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
         } else {
             url
         }
