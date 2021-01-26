@@ -8,7 +8,6 @@
         "--copyright": true,
         "--ignore": [
           "*.ort.yml",
-          "HERE_NOTICE",
           "META-INF/DEPENDENCIES"
         ],
         "--info": true,
