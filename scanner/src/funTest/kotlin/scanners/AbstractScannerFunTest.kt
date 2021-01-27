@@ -26,7 +26,6 @@ import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.file.shouldNotStartWithPath
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -38,6 +37,7 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
     protected val config = ScannerConfiguration()
@@ -82,11 +82,12 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
             val result = scanner.scanPath(inputDir.resolve("LICENSE"), outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
-            summary.shouldNotBeNull()
-            summary.fileCount shouldBe 1
-            summary.licenses shouldBe expectedFileLicenses
-            summary.licenseFindings.forAll {
-                File(it.location.path) shouldNotStartWithPath inputDir
+            summary shouldNotBeNull {
+                fileCount shouldBe 1
+                licenses shouldBe expectedFileLicenses
+                licenseFindings.forAll {
+                    File(it.location.path) shouldNotStartWithPath inputDir
+                }
             }
         }
 
@@ -94,11 +95,12 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
             val result = scanner.scanPath(inputDir, outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
-            summary.shouldNotBeNull()
-            summary.fileCount shouldBe commonlyDetectedFiles.size
-            summary.licenses shouldBe expectedDirectoryLicenses
-            summary.licenseFindings.forAll {
-                File(it.location.path) shouldNotStartWithPath inputDir
+            summary shouldNotBeNull {
+                fileCount shouldBe commonlyDetectedFiles.size
+                licenses shouldBe expectedDirectoryLicenses
+                licenseFindings.forAll {
+                    File(it.location.path) shouldNotStartWithPath inputDir
+                }
             }
         }
     }

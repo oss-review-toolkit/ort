@@ -24,8 +24,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -93,13 +92,14 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
     init {
         "Source code was downloaded successfully".config(tags = setOf(ExpensiveTag)) {
-            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
-            workingTree.shouldNotBeNull()
-            workingTree.isValid() shouldBe true
-            workingTree.vcsType shouldBe pkg.vcs.type
-            downloadResult.sourceArtifact.shouldBeNull()
-            downloadResult.vcsInfo shouldNotBeNull {
-                type shouldBe workingTree.vcsType
+            VersionControlSystem.forDirectory(downloadResult.downloadDirectory) shouldNotBeNull {
+                isValid() shouldBe true
+                vcsType shouldBe pkg.vcs.type
+
+                downloadResult.sourceArtifact should beNull()
+                downloadResult.vcsInfo shouldNotBeNull {
+                    type shouldBe vcsType
+                }
             }
         }
 
@@ -115,10 +115,10 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                 val expectedManagedFilesByName = expectedManagedFiles.mapKeys { (manager, _) ->
                     manager.managerName
                 }
-                val expectedFiles = expectedManagedFilesByName[manager.managerName]
 
-                expectedFiles.shouldNotBeNull()
-                files.sorted().joinToString("\n") shouldBe expectedFiles.sorted().joinToString("\n")
+                expectedManagedFilesByName[manager.managerName] shouldNotBeNull {
+                    files.sorted().joinToString("\n") shouldBe sorted().joinToString("\n")
+                }
             }
         }
 

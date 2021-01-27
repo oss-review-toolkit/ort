@@ -24,10 +24,10 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 import java.io.File
@@ -61,7 +61,7 @@ class OrtConfigurationTest : WordSpec({
 
             ortConfig.scanner shouldNotBeNull {
                 archive shouldNotBeNull {
-                    storage.httpFileStorage.shouldBeNull()
+                    storage.httpFileStorage should beNull()
                     storage.localFileStorage shouldNotBeNull {
                         directory shouldBe File("~/.ort/scanner/archive")
                     }
@@ -98,7 +98,7 @@ class OrtConfigurationTest : WordSpec({
                     cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
                 }
 
-                options.shouldNotBeNull()
+                options shouldNot beNull()
                 storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
                 storageWriters shouldContainExactly listOf("postgres")
 
@@ -185,7 +185,7 @@ class OrtConfigurationTest : WordSpec({
 
             val config = OrtConfiguration.load(configFile = file, args = args)
 
-            config.scanner.shouldBeNull()
+            config.scanner should beNull()
         }
 
         "support references to environment variables" {

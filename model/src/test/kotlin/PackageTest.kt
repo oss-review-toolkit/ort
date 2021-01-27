@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class PackageTest : StringSpec({
@@ -70,7 +71,7 @@ class PackageTest : StringSpec({
         val diff = pkg.diff(other)
 
         diff.binaryArtifact shouldBe pkg.binaryArtifact
-        diff.comment.shouldBeNull()
+        diff.comment should beNull()
         diff.declaredLicenses shouldBe pkg.declaredLicenses
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
@@ -96,12 +97,12 @@ class PackageTest : StringSpec({
 
         val diff = pkg.diff(pkg)
 
-        diff.binaryArtifact.shouldBeNull()
-        diff.comment.shouldBeNull()
-        diff.declaredLicenses.shouldBeNull()
-        diff.homepageUrl.shouldBeNull()
-        diff.sourceArtifact.shouldBeNull()
-        diff.vcs.shouldBeNull()
-        diff.isMetaDataOnly.shouldBeNull()
+        diff.binaryArtifact should beNull()
+        diff.comment should beNull()
+        diff.declaredLicenses should beNull()
+        diff.homepageUrl should beNull()
+        diff.sourceArtifact should beNull()
+        diff.vcs should beNull()
+        diff.isMetaDataOnly should beNull()
     }
 })

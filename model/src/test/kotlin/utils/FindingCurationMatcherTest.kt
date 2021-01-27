@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -201,7 +201,7 @@ class FindingCurationMatcherTest : WordSpec() {
                     concludedLicense = "NONE"
                 )
 
-                matcher.apply(finding, curation).shouldBeNull()
+                matcher.apply(finding, curation) should beNull()
             }
         }
 

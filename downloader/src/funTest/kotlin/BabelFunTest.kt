@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.downloader
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -83,7 +83,7 @@ class BabelFunTest : StringSpec() {
 
             val downloadResult = Downloader.download(pkg, outputDir)
 
-            downloadResult.sourceArtifact.shouldBeNull()
+            downloadResult.sourceArtifact should beNull()
             downloadResult.vcsInfo shouldNotBeNull {
                 type shouldBe pkg.vcsProcessed.type
                 url shouldBe pkg.vcsProcessed.url
@@ -94,9 +94,10 @@ class BabelFunTest : StringSpec() {
 
             val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
 
-            workingTree.shouldNotBeNull()
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+            workingTree shouldNotBeNull {
+                isValid() shouldBe true
+                getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+            }
 
             val babelCliDir = downloadResult.downloadDirectory.resolve("packages/babel-cli")
             babelCliDir.isDirectory shouldBe true

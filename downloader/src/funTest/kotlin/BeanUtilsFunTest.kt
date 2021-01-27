@@ -22,7 +22,8 @@ package org.ossreviewtoolkit.downloader
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -75,7 +76,7 @@ class BeanUtilsFunTest : StringSpec() {
             val downloadResult = Downloader.download(pkg, outputDir)
 
             downloadResult.downloadDirectory.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
-            downloadResult.sourceArtifact.shouldBeNull()
+            downloadResult.sourceArtifact should beNull()
 
             downloadResult.vcsInfo shouldNotBeNull {
                 type shouldBe VcsType.SUBVERSION

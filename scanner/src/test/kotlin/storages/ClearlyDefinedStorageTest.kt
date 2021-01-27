@@ -36,9 +36,10 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.ints.shouldBeLessThan
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
 import java.net.ServerSocket
@@ -163,10 +164,12 @@ private fun assertValidResult(result: Result<ScanResultContainer>): ScanResult =
         is Success -> {
             result.result.id shouldBe TEST_IDENTIFIER
             result.result.results shouldHaveSize 1
-            val scanResult = result.result.results[0]
+
+            val scanResult = result.result.results.first()
             scanResult.summary.licenseFindings.find {
                 it.location.path == TEST_PATH && it.license.licenses().contains("Apache-2.0")
-            }.shouldNotBeNull()
+            } shouldNot beNull()
+
             scanResult
         }
 
