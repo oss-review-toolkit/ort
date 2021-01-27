@@ -26,7 +26,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -168,7 +169,7 @@ class OrtMainFunTest : StringSpec() {
             val stdout = runMain("requirements")
             val errorLogs = stdout.find { it.contains(" ERROR ") }
 
-            errorLogs.shouldBeNull()
+            errorLogs should beNull()
         }
     }
 

@@ -23,7 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -71,7 +71,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
 
         "not contain plain SPDX license ids" {
             SpdxDeclaredLicenseMapping.mapping.keys.forAll { declaredLicense ->
-                SpdxLicense.forId(declaredLicense).shouldBeNull()
+                SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
 

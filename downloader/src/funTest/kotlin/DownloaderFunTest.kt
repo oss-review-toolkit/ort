@@ -23,7 +23,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -73,7 +74,7 @@ class DownloaderFunTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
+            downloadResult.vcsInfo should beNull()
             downloadResult.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash
@@ -141,7 +142,7 @@ class DownloaderFunTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
+            downloadResult.vcsInfo should beNull()
             downloadResult.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash
@@ -175,7 +176,7 @@ class DownloaderFunTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
+            downloadResult.vcsInfo should beNull()
             downloadResult.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash
@@ -208,7 +209,7 @@ class DownloaderFunTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
+            downloadResult.vcsInfo should beNull()
             downloadResult.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash

@@ -26,7 +26,6 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.shouldContainExactly
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -41,6 +40,7 @@ import org.ossreviewtoolkit.spdx.SpdxSimpleLicenseMapping
 import org.ossreviewtoolkit.spdx.toExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DeclaredLicenseProcessorTest : StringSpec() {
     /**
@@ -76,9 +76,10 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             declaredLicenses.forAll { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
-                processedLicense.shouldNotBeNull()
-                shouldNotThrow<SpdxException> {
-                    processedLicense.validate(SpdxExpression.Strictness.ALLOW_CURRENT)
+                processedLicense shouldNotBeNull {
+                    shouldNotThrow<SpdxException> {
+                        validate(SpdxExpression.Strictness.ALLOW_CURRENT)
+                    }
                 }
             }
         }

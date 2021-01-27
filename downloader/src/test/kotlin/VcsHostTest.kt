@@ -20,7 +20,8 @@
 package org.ossreviewtoolkit.downloader
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.net.URI
@@ -360,7 +361,7 @@ class VcsHostTest : WordSpec({
         }
 
         "handle an unknown URI" {
-            VcsHost.toVcsHost(URI("https://host.tld/path/to/repo")).shouldBeNull()
+            VcsHost.toVcsHost(URI("https://host.tld/path/to/repo")) should beNull()
         }
     }
 })

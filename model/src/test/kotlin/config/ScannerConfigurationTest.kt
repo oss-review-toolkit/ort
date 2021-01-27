@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.model.config
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -45,7 +46,7 @@ class ScannerConfigurationTest : WordSpec({
             // Relative paths have been normalized, passwords do not get serialized, etc.
             loadedConfig.storageReaders shouldBe ortConfig.scanner?.storageReaders
             loadedConfig.storageWriters shouldBe ortConfig.scanner?.storageWriters
-            loadedConfig.archive?.storage?.httpFileStorage.shouldBeNull()
+            loadedConfig.archive?.storage?.httpFileStorage should beNull()
 
             val loadedStorages = loadedConfig.storages.orEmpty()
             val orgStorages = ortConfig.scanner?.storages.orEmpty()
