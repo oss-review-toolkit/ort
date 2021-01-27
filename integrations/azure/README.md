@@ -66,7 +66,7 @@ Note that you probably don't want to use this pipeline for your production setup
 - The pipeline currently runs on hosted agents.
   This limits pipeline runs to 1 hour (private) and 6 hours (public) repository.
 - In addition, public pipelines don't allow easy Docker image caching between runs, so the Docker image is built within the run.
-- Scan results are stored locally on the agents. 
+- Scan results are stored locally on the agents.
   They will not be reused between runs.
 - The pipeline writes credentials to the agent.
   This can be a major security concern if you do not control the agent and will be fixed in some future version.
