@@ -66,8 +66,8 @@ class OrtImportOrder : Rule() {
 
         if (importPaths != expectedImportOrder) {
             val path = importList.containingKtFile.absolutePath()
-            val message = "Imports in file '$path' are not sorted alphabetically or single blank lines" +
-                          "are missing between different top-level packages"
+            val message = "Imports in file '$path' are not sorted alphabetically or single blank lines are missing " +
+                    "between different top-level packages"
             val finding = CodeSmell(
                 issue,
                 // Use the message as the name to also see it in CLI output and not only in the report files.
