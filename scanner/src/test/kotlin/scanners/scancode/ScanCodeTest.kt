@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 class ScanCodeTest : WordSpec({
     val scanner = ScanCode("ScanCode", ScannerConfiguration())
 
-    "getConfiguration()" should {
+    "configuration()" should {
         "return the default values if the scanner configuration is empty" {
             scanner.configuration shouldBe "--copyright --license --info --strip-root --timeout 300 --json-pp"
         }
@@ -39,22 +39,20 @@ class ScanCodeTest : WordSpec({
                     options = mapOf(
                         "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
-                            "commandLineNonConfig" to "--commandLineNonConfig",
-                            "debugCommandLine" to "--debug --commandLine",
-                            "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                            "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
                 )
             )
 
-            scannerWithConfig.configuration shouldBe "--command --line --json-pp --debug --commandLine"
+            scannerWithConfig.configuration shouldBe "--command --line --json-pp"
         }
     }
 
     "commandLineOptions" should {
         "contain the default values if the scanner configuration is empty" {
             scanner.commandLineOptions.joinToString(" ") shouldMatch
-                    "--copyright --license --info --strip-root --timeout 300 --processes \\d+ --verbose"
+                    "--copyright --license --info --strip-root --timeout 300 --processes \\d+"
         }
 
         "contain the values from the scanner configuration" {
@@ -63,16 +61,14 @@ class ScanCodeTest : WordSpec({
                     options = mapOf(
                         "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
-                            "commandLineNonConfig" to "--commandLineNonConfig",
-                            "debugCommandLine" to "--debug --commandLine",
-                            "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                            "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
                 )
             )
 
             scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
-                    "--command --line --commandLineNonConfig --debug --commandLine --debugCommandLineNonConfig"
+                    "--command --line --commandLineNonConfig"
         }
     }
 })
