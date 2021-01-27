@@ -55,7 +55,7 @@ steps:
       else
         echo '##vso[task.setvariable variable=logLevel]--${{parameters.logLevel}}'
       fi
-    displayName: "Convert variables used in pipeline to CLI flags"
+    displayName: "Convert pipeline variables to CLI options"
   - bash: |
       mkdir $(System.DefaultWorkingDirectory)/project && \
       mkdir $(System.DefaultWorkingDirectory)/output && \
@@ -67,7 +67,7 @@ steps:
       useCredentials: ${{parameters.ortUseCredentials}}
   - template: ../docker/docker-ort-run.yml
     parameters:
-      displayName: "Download ORT Configuration"
+      displayName: "Download ORT configuration"
       command: download --project-url ${{parameters.ortProjectVcsUrl}} --vcs-revision ${{parameters.ortProjectVcsRevision}} -o /root/.ort/config
       condition: and(succeeded(), ne('${{parameters.ortProjectVcsUrl}}', 'none'))
   - template: ${{parameters.projectCredentialTemplate}}
@@ -83,7 +83,7 @@ steps:
       command: analyze -i /project -o /output/results/analyzer $(allowdynamic)
   - template: ../docker/docker-ort-run.yml
     parameters:
-      displayName: "Scan dependencies"
+      displayName: "Scan project and dependencies"
       command: scan -i /output/results/analyzer/analyzer-result.yml -o /output/results/scanner
   - template: ../docker/docker-ort-run.yml
     parameters:
@@ -91,7 +91,7 @@ steps:
       command: evaluate -i /output/results/scanner/scan-result.yml -o /output/results/evaluator
   - template: ../docker/docker-ort-run.yml
     parameters:
-      displayName: "Create report"
+      displayName: "Create reports"
       command: report -f CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp -O NoticeTemplate=template.id=default,summary -i /output/results/evaluator/evaluation-result.yml -o /output/results/report
   - task: PublishPipelineArtifact@1
     inputs:

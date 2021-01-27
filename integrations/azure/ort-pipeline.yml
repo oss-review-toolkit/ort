@@ -24,27 +24,27 @@ parameters:
     displayName: "Project name (for display purposes only)"
     type: string
   - name: project_vcs_url
-    displayName: "Project Version Control URL (e.g. github .git address)"
+    displayName: "Project version control URL (e.g. a GitHub clone URL)"
     type: string
   - name: project_vcs_revision
-    displayName: "Project Revision (prefix Git tags with 'refs/tags/'), master for last commit"
+    displayName: "Project revision (prefix a Git tag with 'refs/tags/', or use a branch name)"
     type: string
     default: master
   - name: use_credentials
-    displayName: "Use repository credentials as defined in variable group ort_repo_credentials"
+    displayName: "Use credentials as defined in variable group 'ort_repo_credentials'"
     type: boolean
     default: false
 
   - name: ort_project_vcs_url
-    displayName: "Config Version Control URL (e.g. github .git address, use 'none' if the config is already provided)"
+    displayName: "Configuration version control URL (e.g. a GitHub clone URL, use 'none' if the config is already provided)"
     type: string
     default: 'none'
   - name: ort_project_vcs_revision
-    displayName: "Config Revision (prefix Git tags with 'refs/tags/'), master for last commit"
+    displayName: "Configuration revision (prefix a Git tag with 'refs/tags/', or use a branch name)"
     type: string
     default: master
   - name: ort_use_credentials
-    displayName: "Use credentials for ORT as defined in variable group ort_config_credentials (only necessary when different repository is used)"
+    displayName: "Use credentials as defined in variable group 'ort_config_credentials' (only necessary if a different from above)"
     type: boolean
     default: false
 
@@ -54,7 +54,7 @@ parameters:
     default: "default"
     values: [ "default", "info", "debug" ]
   - name: stacktrace
-    displayName: "Stacktrace"
+    displayName: "Show stacktrace"
     type: boolean
     default: false
 
@@ -81,10 +81,10 @@ variables:
 
 stages:
   - stage: run_ort_pipeline
-    displayName: "Run ORT Starter Pipeline"
+    displayName: "Run ORT pipeline"
     jobs:
       - job: run_all_steps
-        displayName: "Build and Run ORT"
+        displayName: "Build and run ORT"
         timeoutInMinutes: 0
         steps:
           - template: docker/docker-build-image.yml
@@ -102,4 +102,3 @@ stages:
               stacktrace: ${{parameters.stacktrace}}
               allowDynamicVersions: ${{parameters.allow_dynamic_versions}}
               useClearlyDefined: ${{parameters.use_clearly_defined}}
-
