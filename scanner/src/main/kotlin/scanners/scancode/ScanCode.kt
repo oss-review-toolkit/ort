@@ -33,8 +33,6 @@ import okhttp3.Request
 import okio.buffer
 import okio.sink
 
-import org.apache.logging.log4j.Level
-
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -59,12 +57,7 @@ import org.ossreviewtoolkit.utils.unpack
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
  *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
- *   considered in [getConfiguration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
- * * **"debugCommandLine":** Debug command line options that modify the result. Only used if the [log] level is set to
- *   [Level.DEBUG]. Defaults to [DEFAULT_DEBUG_CONFIGURATION_OPTIONS].
- * * **"debugCommandLineNonConfig":** Debug command line options that do not modify the result and should therefore not
- *   be considered in [getConfiguration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
- *   [DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS].
+ *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  */
 class ScanCode(
     name: String,
@@ -81,7 +74,7 @@ class ScanCode(
         internal const val TIMEOUT = 300
 
         /**
-         * Configuration options that are relevant for [getConfiguration] because they change the result file.
+         * Configuration options that are relevant for [configuration] because they change the result file.
          */
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
             "--copyright",
@@ -92,18 +85,12 @@ class ScanCode(
         )
 
         /**
-         * Configuration options that are not relevant for [getConfiguration] because they do not change the result
+         * Configuration options that are not relevant for [configuration] because they do not change the result
          * file.
          */
         private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
             "--processes", max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
         )
-
-        /**
-         * Debug configuration options that are not relevant for [getConfiguration] because they do not change the
-         * result file.
-         */
-        private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
 
         private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
             "--$OUTPUT_FORMAT"
@@ -118,9 +105,6 @@ class ScanCode(
         mutableListOf<String>().apply {
             addAll(configurationOptions)
             add(OUTPUT_FORMAT_OPTION)
-            if (log.delegate.isDebugEnabled) {
-                addAll(debugConfigurationOptions)
-            }
         }.joinToString(" ")
     }
 
@@ -132,20 +116,11 @@ class ScanCode(
         ?: DEFAULT_CONFIGURATION_OPTIONS
     private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(" ")
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
-    private val debugConfigurationOptions = scanCodeConfiguration["debugCommandLine"]?.split(" ")
-        ?: emptyList()
-    private val debugNonConfigurationOptions = scanCodeConfiguration["debugCommandLineNonConfig"]?.split(" ")
-        ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {
         mutableListOf<String>().apply {
             addAll(configurationOptions)
             addAll(nonConfigurationOptions)
-
-            if (log.delegate.isDebugEnabled) {
-                addAll(debugConfigurationOptions)
-                addAll(debugNonConfigurationOptions)
-            }
         }.toList()
     }
 
