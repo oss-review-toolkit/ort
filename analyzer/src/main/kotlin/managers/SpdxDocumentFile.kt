@@ -97,7 +97,7 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
-    var packagesFromExternalDocumentReferences = mutableSetOf<SpdxPackage>()
+    var packagesFromExternalDocumentReferences = mutableMapOf<String, SpdxPackage>()
 
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
@@ -208,8 +208,12 @@ class SpdxDocumentFile(
             ?: throw IllegalArgumentException("No single package or externalDocumentRef with " +
                     "source ID '$source' found.")
 
-        val externalDocumentReferenceToSpdxPackage = externalDocumentReferenceToSpdxPackage(externalDocumentReference)
-        packagesFromExternalDocumentReferences.add(externalDocumentReferenceToSpdxPackage)
+        val externalDocumentReferenceToSpdxPackage =
+            packagesFromExternalDocumentReferences[externalDocumentReference.externalDocumentId]
+                ?: externalDocumentReferenceToSpdxPackage(externalDocumentReference)
+
+        packagesFromExternalDocumentReferences[externalDocumentReference.externalDocumentId] =
+            externalDocumentReferenceToSpdxPackage
         return externalDocumentReferenceToSpdxPackage
     }
 
@@ -354,9 +358,9 @@ class SpdxDocumentFile(
         }
 
         val nonProjectPackages = if (projectPackage != null) {
-            spdxDocument.packages - projectPackage + packagesFromExternalDocumentReferences
+            spdxDocument.packages - projectPackage + packagesFromExternalDocumentReferences.values
         } else {
-            spdxDocument.packages + packagesFromExternalDocumentReferences
+            spdxDocument.packages + packagesFromExternalDocumentReferences.values
         }
 
         val packages = nonProjectPackages.mapTo(sortedSetOf()) { pkg ->
