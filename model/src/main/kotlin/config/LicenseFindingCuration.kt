@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
  * A curation for license findings.
  */
 data class LicenseFindingCuration(
-
     /**
      * A glob to match the file path of a license finding.
      */
@@ -80,6 +79,7 @@ data class LicenseFindingCuration(
         require(startLines.all { it >= 0 }) {
             "All values for start lines must not be negative."
         }
+
         require(lineCount == null || lineCount >= 0) {
             "The value for line count must not be negative."
         }
