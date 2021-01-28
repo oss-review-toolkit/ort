@@ -392,6 +392,24 @@ class ScanCodeResultParserTest : WordSpec({
             )
         }
 
+        "properly parse license expressions for ScanCode 3.2.1" {
+            val resultFile = File("src/test/assets/h2database-1.4.200_scancode-3.2.1.json")
+            val result = parseResultsFile(resultFile)
+
+            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+
+            summary.licenseFindings should containExactlyInAnyOrder(
+                LicenseFinding(
+                    license = "(MPL-2.0 OR EPL-1.0) AND LicenseRef-scancode-proprietary-license",
+                    location = TextLocation("h2/src/main/org/h2/table/Column.java", 2, 3)
+                ),
+                LicenseFinding(
+                    license = "LicenseRef-scancode-public-domain",
+                    location = TextLocation("h2/src/main/org/h2/table/Column.java", 317)
+                )
+            )
+        }
+
         "properly summarize the copyright findings for ScanCode 2.2.1" {
             // TODO: minimize this test case
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
