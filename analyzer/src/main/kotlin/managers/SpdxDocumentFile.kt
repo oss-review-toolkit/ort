@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,21 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
+import java.io.FileNotFoundException
+import java.net.URI
+import java.net.URISyntaxException
 import java.util.SortedSet
+
+import kotlin.io.path.createTempFile
+
+import okhttp3.Request
+
+import okio.buffer
+import okio.sink
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -42,9 +53,37 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.isValidUri
+
+/**
+ * Determines if an [SpdxDocument] is a project.spdx or
+ * a package.spdx document. If there is only one package
+ * in the packages list or there is no package that does
+ * not have a [SpdxPackage.packageFilename]the document
+ * is regarded as a package.spdx document.
+ */
+private fun SpdxDocument.isProject(): Boolean {
+    return if (projectPackage() != null) {
+        val spdxPackage = packages.singleOrNull()
+        spdxPackage == null
+    } else {
+        false
+    }
+}
+
+/**
+ * Returns a single package that has no [SpdxPackage.packageFilename]
+ * if there is only one, marking it as the project.spdx document.
+ */
+private fun SpdxDocument.projectPackage(): SpdxPackage? {
+    return packages.singleOrNull { it.packageFilename.isEmpty() }
+}
 
 private const val DEFAULT_SCOPE_NAME = "default"
 
@@ -58,6 +97,8 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
+    var packagesFromExternalDocumentReferences = mutableSetOf<SpdxPackage>()
+
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
@@ -88,8 +129,7 @@ class SpdxDocumentFile(
      */
     private fun getDependencies(pkg: SpdxPackage, doc: SpdxDocument): SortedSet<PackageReference> =
         getDependencies(pkg, doc, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
-            val dependency = doc.packages.singleOrNull { it.spdxId == target }
-                ?: throw IllegalArgumentException("No single package with target ID '$target' found.")
+            val dependency = getSpdxPackageFromId(doc, target)
             PackageReference(
                 id = dependency.toIdentifier(),
                 dependencies = getDependencies(dependency, doc)
@@ -119,8 +159,7 @@ class SpdxDocumentFile(
                         )
                     }
 
-                    val dependency = doc.packages.singleOrNull { it.spdxId == source }
-                        ?: throw IllegalArgumentException("No single package with source ID '$source' found.")
+                    val dependency = getSpdxPackageFromId(doc, source)
                     PackageReference(
                         id = dependency.toIdentifier(),
                         dependencies = getDependencies(
@@ -151,6 +190,117 @@ class SpdxDocumentFile(
         }
 
     /**
+     * Maps a given identifier on an spdx package or external document reference
+     * @param doc spdx document containing all packages or external document references the id could refer to
+     * @param source the identifier to be found in the spdx document
+     */
+    private fun getSpdxPackageFromId(
+        doc: SpdxDocument,
+        source: String
+    ): SpdxPackage {
+        val fromPackage = doc.packages.singleOrNull { it.spdxId == source }
+        if (fromPackage != null) {
+            return fromPackage
+        }
+        val externalDocumentReference = doc.externalDocumentRefs.singleOrNull {
+            it.externalDocumentId == source.split(":").first()
+        }
+            ?: throw IllegalArgumentException("No single package or externalDocumentRef with " +
+                    "source ID '$source' found.")
+
+        val externalDocumentReferenceToSpdxPackage = externalDocumentReferenceToSpdxPackage(externalDocumentReference)
+        packagesFromExternalDocumentReferences.add(externalDocumentReferenceToSpdxPackage)
+        return externalDocumentReferenceToSpdxPackage
+    }
+
+    /**
+     * Maps [SpdxExternalDocumentReference.spdxDocument] to a package
+     * @param externalDocumentReference external document reference containing a spdx document with a uri to a spdx
+     * document that can be mapped to a [SpdxPackage]
+     * @throws IllegalArgumentException
+     * @returns spdx package the spdx document uri of the externalDocumentReference was referring to
+     */
+    private fun externalDocumentReferenceToSpdxPackage(externalDocumentReference: SpdxExternalDocumentReference):
+            SpdxPackage {
+        val externalSpdxDocument = getFileFromExternalDocumentReference(externalDocumentReference)
+
+        if (listOf("json", "yaml", "yml").contains(externalSpdxDocument.extension)) {
+            val spdxDocument = SpdxModelMapper.read(externalSpdxDocument, SpdxDocument::class.java)
+            if (!spdxDocument.isProject()) {
+                return spdxDocument.packages.single()
+            } else {
+                throw IllegalArgumentException("${externalDocumentReference.externalDocumentId} refers to a file " +
+                        "that contains more than a single package. This is currently not supported yet.")
+            }
+        } else {
+            throw IllegalArgumentException("${externalDocumentReference.externalDocumentId} refers to a file that " +
+                    "does not have a supported file extension ")
+        }
+    }
+
+    /**
+     * Returns [File] referred to by [SpdxExternalDocumentReference.spdxDocument]. Can be either locally or remotely
+     * fetched.
+     */
+    private fun getFileFromExternalDocumentReference(externalDocumentReference: SpdxExternalDocumentReference): File {
+        val spdxDocument = externalDocumentReference.spdxDocument
+        if (spdxDocument.isValidUri()) {
+            try {
+                val uri = URI(spdxDocument)
+                if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
+                    return getFileOrFail(uri.path)
+                }
+                return requestSpdxDocument(uri)
+            } catch (e: URISyntaxException) {
+                return getFileOrFail(spdxDocument)
+            }
+        } else {
+            throw IllegalArgumentException("Uri $spdxDocument supplied by " +
+                    "${externalDocumentReference.externalDocumentId} is not valid. }")
+        }
+    }
+
+    /**
+     * Returns [File] from path
+     */
+    private fun getFileOrFail(path: String): File {
+        val file = File(path)
+        return if (file.exists()) {
+            file
+        } else {
+            throw FileNotFoundException("The file $path does not exist. ")
+        }
+    }
+
+    /**
+     * Returns [File] from a given [URI] if it can be found.
+     * @throws DownloadException when file can not be downloaded.
+     */
+    private fun requestSpdxDocument(uri: URI): File {
+        val request = Request.Builder()
+            .get()
+            .url(uri.toURL())
+            .build()
+
+        OkHttpClientHelper.execute(request).use { response ->
+            val body = response.body
+
+            if (!response.isSuccessful || body == null) {
+                throw DownloadException(
+                    "Failed to download spdx document $uri: $response"
+                )
+            }
+
+            val fileName = response.request.url.pathSegments.last()
+
+            return createTempFile(ORT_NAME, fileName).toFile().also { tempFile ->
+                tempFile.sink().buffer().use { it.writeAll(body.source()) }
+                tempFile.deleteOnExit()
+            }
+        }
+    }
+
+    /**
      * Return a [Scope] created from the given type of [relation] for [projectPackage] in [spdxDocument], or `null` if
      * there are no such relations.
      */
@@ -172,7 +322,7 @@ class SpdxDocumentFile(
 
         // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies, or a
         // package-style SPDX document that describes a single (dependency-)package.
-        val projectPackage = spdxDocument.packages.singleOrNull { it.packageFilename.isEmpty() }
+        val projectPackage = spdxDocument.projectPackage()
 
         val project = if (projectPackage != null) {
             val scopes = listOfNotNull(
@@ -204,9 +354,9 @@ class SpdxDocumentFile(
         }
 
         val nonProjectPackages = if (projectPackage != null) {
-            spdxDocument.packages - projectPackage
+            spdxDocument.packages - projectPackage + packagesFromExternalDocumentReferences
         } else {
-            spdxDocument.packages
+            spdxDocument.packages + packagesFromExternalDocumentReferences
         }
 
         val packages = nonProjectPackages.mapTo(sortedSetOf()) { pkg ->

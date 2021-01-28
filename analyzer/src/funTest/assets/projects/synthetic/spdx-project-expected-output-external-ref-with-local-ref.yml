@@ -1,0 +1,87 @@
+---
+project:
+  id: "SpdxDocumentFile::xyz:0.1.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/project-with-external-ref-with-local-ref.spdx.yml"
+  declared_licenses:
+  - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project"
+  homepage_url: "https://example.com/products/xyz"
+  scopes:
+  - name: "default"
+    dependencies:
+    - id: "SpdxDocumentFile::curl:7.70.0"
+    - id: "SpdxDocumentFile::openssl:1.1.1g"
+packages:
+- id: "SpdxDocumentFile::curl:7.70.0"
+  purl: "pkg:spdxdocumentfile/curl@7.70.0"
+  declared_licenses:
+  - "curl"
+  declared_licenses_processed:
+    spdx_expression: "curl"
+  description: "A command line tool and library for transferring data with URL syntax,\
+    \ supporting HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT,\
+    \ LDAP, LDAPS, MQTT, FILE, IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad\
+    \ of powerful features."
+  homepage_url: "https://curl.haxx.se/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project"
+- id: "SpdxDocumentFile::openssl:1.1.1g"
+  purl: "pkg:spdxdocumentfile/openssl@1.1.1g"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit\
+    \ for the Transport Layer Security (TLS) protocol formerly known as the Secure\
+    \ Sockets Layer (SSL) protocol. The protocol implementation is based on a full-strength\
+    \ general purpose cryptographic library, which can also be used stand-alone."
+  homepage_url: "https://www.openssl.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"

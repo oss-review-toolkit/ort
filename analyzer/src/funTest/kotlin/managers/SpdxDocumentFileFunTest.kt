@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,34 @@ class SpdxDocumentFileFunTest : StringSpec() {
             )
 
             val definitionFile = projectDir.resolve("project/project.spdx.yml")
+            val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
+
+            actualResult shouldBe expectedResult
+        }
+
+        "Project dependencies are detected correctly for external document references with remote reference" {
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("spdx-project-expected-output-external-ref-with-remote-ref.yml"),
+                url = vcsUrl,
+                urlProcessed = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+
+            val definitionFile = projectDir.resolve("project/project-with-external-ref-with-remote-ref.spdx.yml")
+            val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
+
+            actualResult shouldBe expectedResult
+        }
+
+        "Project dependencies are detected correctly for external document references with local file reference" {
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("spdx-project-expected-output-external-ref-with-local-ref.yml"),
+                url = vcsUrl,
+                urlProcessed = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+
+            val definitionFile = projectDir.resolve("project/project-with-external-ref-with-local-ref.spdx.yml")
             val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
 
             actualResult shouldBe expectedResult
