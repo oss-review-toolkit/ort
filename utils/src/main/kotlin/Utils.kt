@@ -51,6 +51,11 @@ val ortDataDirectory by lazy {
 }
 
 /**
+ * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
+ */
+var printStackTrace = false
+
+/**
  * Return whether [T] (usually an instance of a data class) has any non-null property.
  */
 inline fun <reified T : Any> T.hasNonNullProperty() =

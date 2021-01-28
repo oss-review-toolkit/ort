@@ -25,11 +25,6 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
- */
-var printStackTrace = false
-
-/**
  * An interface to implement by classes that are backed by a command line tool.
  */
 interface CommandLineTool {
