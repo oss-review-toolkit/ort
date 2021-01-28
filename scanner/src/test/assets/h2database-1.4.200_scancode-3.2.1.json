@@ -1,0 +1,212 @@
+{
+  "headers": [
+    {
+      "tool_name": "scancode-toolkit",
+      "tool_version": "3.2.1rc2",
+      "options": {
+        "input": [
+          "/home/ubuntu/Desktop/example-projects/h2database/scanner-output/downloads/Maven/com.h2database/h2/1.4.200"
+        ],
+        "--copyright": true,
+        "--info": true,
+        "--json-pp": "/home/ubuntu/Desktop/example-projects/h2database/scanner-output/native-scan-results/Maven/com.h2database/h2/1.4.200/scan-results_ScanCode.json",
+        "--license": true,
+        "--processes": "3",
+        "--strip-root": true,
+        "--timeout": "300.0"
+      },
+      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+      "start_timestamp": "2021-01-28T132916.946903",
+      "end_timestamp": "2021-01-28T133435.622217",
+      "duration": 318.67532992362976,
+      "message": null,
+      "errors": [],
+      "extra_data": {
+        "files_count": 1
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "h2/src/main/org/h2/table/Column.java",
+      "type": "file",
+      "name": "Column.java",
+      "base_name": "Column",
+      "extension": ".java",
+      "size": 26116,
+      "date": "2021-01-28",
+      "sha1": "5c56fc4aa6ec4fc7cb512c22224131c10b339c71",
+      "md5": "2f61a2c0575460ee5ff454d8c2676df3",
+      "sha256": "6f2166746796e1ff1ab1a622f14a2381fe9220a664f5e29f772c6d5762374b98",
+      "mime_type": "text/x-java",
+      "file_type": "Java source, ASCII text",
+      "programming_language": "Java",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "licenses": [
+        {
+          "key": "mpl-2.0",
+          "score": 20.37,
+          "name": "Mozilla Public License 2.0",
+          "short_name": "MPL 2.0",
+          "category": "Copyleft Limited",
+          "is_exception": false,
+          "owner": "Mozilla",
+          "homepage_url": "http://mpl.mozilla.org/2012/01/03/announcing-mpl-2-0/",
+          "text_url": "http://www.mozilla.com/MPL/2.0/",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mpl-2.0",
+          "spdx_license_key": "MPL-2.0",
+          "spdx_url": "https://spdx.org/licenses/MPL-2.0",
+          "start_line": 2,
+          "end_line": 3,
+          "matched_rule": {
+            "identifier": "mpl-2.0_or_epl-1.0_and_proprietary-license_2.RULE",
+            "license_expression": "(mpl-2.0 OR epl-1.0) AND proprietary-license",
+            "licenses": [
+              "mpl-2.0",
+              "epl-1.0",
+              "proprietary-license"
+            ],
+            "is_license_text": false,
+            "is_license_notice": true,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "matcher": "3-seq",
+            "rule_length": 54,
+            "matched_length": 11,
+            "match_coverage": 20.37,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "epl-1.0",
+          "score": 20.37,
+          "name": "Eclipse Public License 1.0",
+          "short_name": "EPL 1.0",
+          "category": "Copyleft Limited",
+          "is_exception": false,
+          "owner": "Eclipse Foundation",
+          "homepage_url": "http://www.eclipse.org/legal/epl-v10.html",
+          "text_url": "http://www.eclipse.org/legal/epl-v10.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:epl-1.0",
+          "spdx_license_key": "EPL-1.0",
+          "spdx_url": "https://spdx.org/licenses/EPL-1.0",
+          "start_line": 2,
+          "end_line": 3,
+          "matched_rule": {
+            "identifier": "mpl-2.0_or_epl-1.0_and_proprietary-license_2.RULE",
+            "license_expression": "(mpl-2.0 OR epl-1.0) AND proprietary-license",
+            "licenses": [
+              "mpl-2.0",
+              "epl-1.0",
+              "proprietary-license"
+            ],
+            "is_license_text": false,
+            "is_license_notice": true,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "matcher": "3-seq",
+            "rule_length": 54,
+            "matched_length": 11,
+            "match_coverage": 20.37,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "proprietary-license",
+          "score": 20.37,
+          "name": "Proprietary License",
+          "short_name": "Proprietary License",
+          "category": "Commercial",
+          "is_exception": false,
+          "owner": "Unspecified",
+          "homepage_url": null,
+          "text_url": "",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:proprietary-license",
+          "spdx_license_key": null,
+          "spdx_url": "",
+          "start_line": 2,
+          "end_line": 3,
+          "matched_rule": {
+            "identifier": "mpl-2.0_or_epl-1.0_and_proprietary-license_2.RULE",
+            "license_expression": "(mpl-2.0 OR epl-1.0) AND proprietary-license",
+            "licenses": [
+              "mpl-2.0",
+              "epl-1.0",
+              "proprietary-license"
+            ],
+            "is_license_text": false,
+            "is_license_notice": true,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "matcher": "3-seq",
+            "rule_length": 54,
+            "matched_length": 11,
+            "match_coverage": 20.37,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "public-domain",
+          "score": 70.0,
+          "name": "Public Domain",
+          "short_name": "Public Domain",
+          "category": "Public Domain",
+          "is_exception": false,
+          "owner": "Unspecified",
+          "homepage_url": "http://www.linfo.org/publicdomain.html",
+          "text_url": "",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:public-domain",
+          "spdx_license_key": null,
+          "spdx_url": "",
+          "start_line": 317,
+          "end_line": 317,
+          "matched_rule": {
+            "identifier": "public-domain_bare_words.RULE",
+            "license_expression": "public-domain",
+            "licenses": [
+              "public-domain"
+            ],
+            "is_license_text": false,
+            "is_license_notice": false,
+            "is_license_reference": true,
+            "is_license_tag": false,
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 70.0
+          }
+        }
+      ],
+      "license_expressions": [
+        "(mpl-2.0 OR epl-1.0) AND proprietary-license",
+        "public-domain"
+      ],
+      "percentage_of_license_text": 0.56,
+      "copyrights": [
+        {
+          "value": "Copyright 2004-2019 H2 Group. Multiple-Licensed",
+          "start_line": 2,
+          "end_line": 4
+        }
+      ],
+      "holders": [
+        {
+          "value": "H2 Group. Multiple-Licensed",
+          "start_line": 2,
+          "end_line": 4
+        }
+      ],
+      "authors": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": []
+    }
+  ]
+}

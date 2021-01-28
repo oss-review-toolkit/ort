@@ -41,6 +41,17 @@ import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
+private data class LicenseExpression(
+    val expression: String,
+    val startLine: Int,
+    val endLine: Int
+)
+
+private data class LicenseKeyReplacement(
+    val scanCodeLicenseKey: String,
+    val spdxExpression: String
+)
+
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
 private val UNKNOWN_ERROR_REGEX = Pattern.compile(
     "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
@@ -126,14 +137,31 @@ private fun getLicenseFindings(result: JsonNode): List<LicenseFinding> {
     val files = result["files"]?.asSequence().orEmpty()
     files.flatMapTo(licenseFindings) { file ->
         val licenses = file["licenses"]?.asSequence().orEmpty()
-        licenses.map {
+
+        licenses.groupBy(
+            keySelector = {
+                LicenseExpression(
+                    // Older ScanCode versions do not produce the `license_expression` field.
+                    // Just use the `key` field in this case.
+                    it["matched_rule"]?.get("license_expression")?.textValue() ?: it["key"].textValue(),
+                    it["start_line"].intValue(),
+                    it["end_line"].intValue()
+                )
+            },
+            valueTransform = {
+                LicenseKeyReplacement(it["key"].textValue(), getLicenseId(it))
+            }
+        ).map { (licenseExpression, replacements) ->
+            val spdxLicenseExpression = replacements.fold(licenseExpression.expression) { expression, replacement ->
+                expression.replace(replacement.scanCodeLicenseKey, replacement.spdxExpression)
+            }
+
             LicenseFinding(
-                license = getLicenseId(it),
+                license = spdxLicenseExpression,
                 location = TextLocation(
-                    // The path is already relative as we run ScanCode with "--strip-root".
                     path = file["path"].textValue(),
-                    startLine = it["start_line"].intValue(),
-                    endLine = it["end_line"].intValue()
+                    startLine = licenseExpression.startLine,
+                    endLine = licenseExpression.endLine
                 )
             )
         }
