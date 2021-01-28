@@ -27,7 +27,8 @@ import com.fasterxml.jackson.databind.util.StdConverter
 import org.ossreviewtoolkit.spdx.SpdxExpression
 
 /**
- * A curation for license findings.
+ * A curation for a license finding. Use it to correct a license finding or to add a license that was not previously
+ * detected.
  */
 data class LicenseFindingCuration(
     /**
