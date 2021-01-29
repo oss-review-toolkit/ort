@@ -20,7 +20,6 @@
  */
 
 val apachePoiVersion: String by project
-val apachePoiSchemasVersion: String by project
 val asciidoctorjVersion: String by project
 val asciidoctorjPdfVersion: String by project
 val commonsCompressVersion: String by project
@@ -81,7 +80,6 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.vladsch.flexmark:flexmark:$flexmarkVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
-    implementation("org.apache.poi:ooxml-schemas:$apachePoiSchemasVersion")
     implementation("org.apache.poi:poi-ooxml:$apachePoiVersion")
     implementation("org.asciidoctor:asciidoctorj:$asciidoctorjVersion")
     implementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion")
