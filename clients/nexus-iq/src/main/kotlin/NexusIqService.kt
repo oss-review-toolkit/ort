@@ -29,7 +29,6 @@ import java.util.UUID
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
@@ -112,5 +111,5 @@ interface NexusIqService {
      * See https://help.sonatype.com/iqserver/automating/rest-apis/component-details-rest-api---v2.
      */
     @POST("api/v2/components/details")
-    fun getComponentDetails(@Body components: ComponentsWrapper): Call<ComponentDetailsWrapper>
+    suspend fun getComponentDetails(@Body components: ComponentsWrapper): ComponentDetailsWrapper
 }
