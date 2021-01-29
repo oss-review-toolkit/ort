@@ -7,9 +7,9 @@
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
 | [![Linux code coverage][7]][8] |                                 |                                 |
 
-| License status           | Code quality      | TODOs              | Interact with us!              |
-| :----------------------- | :---------------- | :----------------- | :----------------------------- |
-| [![REUSE status][9]][10] | [![LGTM][11]][12] | [![TODOs][13]][14] | [![ort-talk][15]][16]          |
+| License status           | Best practices   | Code quality     | TODOs              | Interact with us!              |
+| :----------------------- | :----------------| :----------------| :----------------- | :----------------------------- |
+| [![REUSE status][9]][10] | [![CII][17]][18] | [![LGTM][11]][12]| [![TODOs][13]][14] | [![ort-talk][15]][16]          |
 
 [1]: https://travis-ci.com/oss-review-toolkit/ort.svg?branch=master
 [2]: https://travis-ci.com/oss-review-toolkit/ort
@@ -27,6 +27,8 @@
 [14]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
 [15]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
 [16]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
+[17]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
+[18]: https://bestpractices.coreinfrastructure.org/projects/4618
 
 # Introduction
 
