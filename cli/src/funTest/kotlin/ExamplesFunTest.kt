@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExamplesFunTest : StringSpec() {
     private val examplesDir = File("../examples")
-    private val exampleFiles = examplesDir.walk().filterTo(mutableListOf()) { it.isFile }
+    private val exampleFiles = examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.extension != "md" }
 
     private fun takeExampleFile(name: String) = exampleFiles.single { it.name == name }.also { exampleFiles.remove(it) }
 
