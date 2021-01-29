@@ -24,12 +24,19 @@ import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 
 import java.io.File
+import java.util.SortedSet
 
 import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
@@ -54,6 +61,7 @@ class FreemarkerTemplateProcessor(
     companion object {
         const val OPTION_TEMPLATE_ID = "template.id"
         const val OPTION_TEMPLATE_PATH = "template.path"
+        const val OPTION_PROJECT_TYPES_AS_PACKAGES = "project-types-as-packages"
     }
 
     /**
@@ -61,6 +69,35 @@ class FreemarkerTemplateProcessor(
      * generated files.
      */
     fun processTemplates(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+        val projectTypesAsPackages = options[OPTION_PROJECT_TYPES_AS_PACKAGES]?.split(",").orEmpty().toSet()
+        val projectsAsPackages = input.ortResult.getProjects().map { it.id }.filterTo(mutableSetOf()) {
+            it.type in projectTypesAsPackages
+        }
+
+        if (projectTypesAsPackages.isNotEmpty()) {
+            log.info {
+                "Handling ${projectTypesAsPackages.size} projects of types $projectTypesAsPackages as packages."
+            }
+        }
+
+        return processTemplatesInternal(
+            input = input.deduplicateProjectScanResults(projectsAsPackages),
+            outputDir = outputDir,
+            options = options,
+            projectsAsPackages = projectsAsPackages
+        )
+    }
+
+    /**
+     * Process all Freemarker templates referenced in "template.id" and "template.path" options and returns the
+     * generated files.
+     */
+    private fun processTemplatesInternal(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>,
+        projectsAsPackages: Set<Identifier>
+    ): List<File> {
         val projects = input.ortResult.getProjects().map { project ->
             PackageModel(project.id, input)
         }
@@ -74,7 +111,8 @@ class FreemarkerTemplateProcessor(
             "packages" to packages,
             "ortResult" to input.ortResult,
             "licenseTextProvider" to input.licenseTextProvider,
-            "helper" to TemplateHelper(input.ortResult, input.licenseClassifications)
+            "helper" to TemplateHelper(input.ortResult, input.licenseClassifications),
+            "projectsAsPackages" to projectsAsPackages
         )
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
@@ -239,3 +277,107 @@ private fun List<ResolvedLicense>.merge(): ResolvedLicense {
         locations = flatMapTo(mutableSetOf()) { it.locations }
     )
 }
+
+/**
+ * Return an [OrtResult] with all license and copyright findings associated with [targetProjects] removed from all other
+ * projects not in [targetProjects]. This affects non-target projects which have a target project in a subdirectory.
+ */
+internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identifier>): OrtResult {
+    val excludePaths = mutableSetOf<String>()
+
+    targetProjects.forEach { id ->
+        val repositoryPath = getRepositoryPath(getProject(id)!!.vcsProcessed)
+
+        getScanResultsForId(id).forEach { scanResult ->
+            val vcsPath = scanResult.provenance.vcsInfo?.path.orEmpty()
+            val isGitRepo = scanResult.provenance.vcsInfo?.type == VcsType.GIT_REPO
+
+            val findingPaths = with(scanResult.summary) {
+                copyrightFindings.mapTo(mutableSetOf()) { it.location.path } + licenseFindings.map { it.location.path }
+            }
+
+            excludePaths += findingPaths.filter { it.startsWith(vcsPath) || isGitRepo }.map { "$repositoryPath$it" }
+        }
+    }
+
+    val projectsToFilter = getProjects().mapTo(mutableSetOf()) { it.id } - targetProjects
+
+    val containers = scanner?.results?.scanResults?.mapTo(sortedSetOf()) { container ->
+        if (container.id !in projectsToFilter) {
+            container
+        } else {
+            val scanResults = container.results.map { scanResult ->
+                val summary = scanResult.summary
+                val repositoryPath = getRepositoryPath(scanResult.provenance.vcsInfo!!)
+                fun TextLocation.isExcluded() = "$repositoryPath$path" !in excludePaths
+
+                val copyrightFindings = summary.copyrightFindings.filterTo(sortedSetOf()) { it.location.isExcluded() }
+                val licenseFindings = summary.licenseFindings.filterTo(sortedSetOf()) { it.location.isExcluded() }
+
+                scanResult.copy(
+                    summary = summary.copy(
+                        copyrightFindings = copyrightFindings,
+                        licenseFindings = licenseFindings
+                    )
+                )
+            }
+
+            container.copy(results = scanResults)
+        }
+    } ?: sortedSetOf()
+
+    return replaceScanResults(containers)
+}
+
+/**
+ * Return the path where the repository given by [vcsInfo] is linked into the source tree.
+ */
+private fun OrtResult.getRepositoryPath(vcsInfo: VcsInfo): String {
+    repository.nestedRepositories.forEach { (path, provenance) ->
+        if (vcsInfo.type == provenance.type
+            && vcsInfo.url == provenance.url
+            && vcsInfo.revision == vcsInfo.resolvedRevision) {
+            return "/$path/"
+        }
+    }
+
+    return "/"
+}
+
+/**
+ * Return a copy of this [OrtResult] with the scan results replaced by the given [scanResults].
+ */
+private fun OrtResult.replaceScanResults(scanResults: SortedSet<ScanResultContainer>): OrtResult =
+    copy(
+        scanner = scanner?.copy(
+            results = scanner!!.results.copy(
+                scanResults = scanResults
+            )
+        )
+    )
+
+/**
+ * Return an [ReporterInput] with all license and copyright findings associated with [projectIds] removed from all
+ * other projects not in [projectIds].
+ */
+private fun ReporterInput.deduplicateProjectScanResults(projectIds: Set<Identifier>): ReporterInput =
+    if (projectIds.isEmpty()) {
+        this
+    } else {
+        val ortResult = ortResult.deduplicateProjectScanResults(projectIds)
+        replaceOrtResult(ortResult)
+    }
+
+/**
+ * Return a copy of this [ReporterInput] with the OrtResult replaced by the given [ortResult].
+ */
+private fun ReporterInput.replaceOrtResult(ortResult: OrtResult): ReporterInput =
+    copy(
+        ortResult = ortResult,
+        licenseInfoResolver = LicenseInfoResolver(
+            provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
+            copyrightGarbage = copyrightGarbage,
+            archiver = licenseInfoResolver.archiver,
+            licenseFilenamePatterns = licenseInfoResolver.licenseFilenamePatterns
+        )
+    )
