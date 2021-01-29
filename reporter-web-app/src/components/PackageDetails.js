@@ -60,7 +60,7 @@ const PackageDetails = (props) => {
                 {id}
             </Item>
             {
-                purl.length !== 0
+                !!purl
                 && (
                     <Item
                         label="Package URL"
@@ -104,7 +104,7 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                vcs.url.length !== 0
+                !!vcs.url
                 && (
                     <Item
                         label="Repository Declared"
@@ -115,7 +115,7 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                vcsProcessed.url.length !== 0
+                !!vcsProcessed.url
                 && (
                     <Item
                         label="Repository Processed"
@@ -126,7 +126,7 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                sourceArtifact.url.length !== 0
+                !!sourceArtifact.url
                 && (
                     <Item
                         label="Source Artifact"
@@ -137,7 +137,7 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                binaryArtifact.url.length !== 0
+                !!binaryArtifact.url
                 && (
                     <Item
                         label="Binary Artifact"
