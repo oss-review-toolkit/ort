@@ -115,25 +115,25 @@ class NexusIq(
             e.showStackTrace()
 
             val now = Instant.now()
-            packages.associateWith {
-                listOf(
-                    AdvisorResult(
-                        vulnerabilities = emptyList(),
-                        advisor = AdvisorDetails(advisorName),
-                        summary = AdvisorSummary(
-                            startTime = now,
-                            endTime = now,
-                            issues = listOf(
-                                createAndLogIssue(
-                                    source = advisorName,
-                                    message = "Failed to retrieve security vulnerabilities from $advisorName: " +
-                                            e.collectMessagesAsString()
-                                )
+            val failedResults = listOf(
+                AdvisorResult(
+                    vulnerabilities = emptyList(),
+                    advisor = AdvisorDetails(advisorName),
+                    summary = AdvisorSummary(
+                        startTime = now,
+                        endTime = now,
+                        issues = listOf(
+                            createAndLogIssue(
+                                source = advisorName,
+                                message = "Failed to retrieve security vulnerabilities from $advisorName: " +
+                                        e.collectMessagesAsString()
                             )
                         )
                     )
                 )
-            }
+            )
+
+            packages.associateWith { failedResults }
         }
     }
 
