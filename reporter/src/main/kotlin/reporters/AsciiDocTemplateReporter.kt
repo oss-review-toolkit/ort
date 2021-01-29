@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  *              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
  * - *pdf.theme.file*: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
  * - *pdf.fonts.dir*: A path to a directory containing custom fonts. Only used with the "pdf" backend.
+ * - *project-types-as-packages: A comma-separated list of project types to be handled as packages.
  *
  * [1]: https://freemarker.apache.org
  * [2]: https://asciidoc.org/
