@@ -39,8 +39,8 @@ class NexusIqConfigurationTest : WordSpec({
                 deleteOnExit()
             }.readValue<OrtConfiguration>()
 
-            val expectedNexusIqConfig = referenceOrtConfig.advisor?.get("nexusiq")
-            val actualNexusIqConfiguration = rereadOrtConfig.advisor?.get("nexusiq")
+            val expectedNexusIqConfig = referenceOrtConfig.advisor["nexusiq"]
+            val actualNexusIqConfiguration = rereadOrtConfig.advisor["nexusiq"]
 
             expectedNexusIqConfig.shouldBeInstanceOf<NexusIqConfiguration>()
             actualNexusIqConfiguration.shouldBeInstanceOf<NexusIqConfiguration>()

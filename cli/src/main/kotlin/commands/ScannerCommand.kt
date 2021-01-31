@@ -120,9 +120,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
-    private fun configureScanner(scannerConfiguration: ScannerConfiguration?): Scanner {
-        val config = scannerConfiguration ?: ScannerConfiguration()
-
+    private fun configureScanner(config: ScannerConfiguration): Scanner {
         ScanResultsStorage.configure(config)
 
         val scanner = scannerFactory.create(config)
