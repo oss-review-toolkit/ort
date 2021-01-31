@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
@@ -65,7 +64,7 @@ internal class ListStoredScanResultsCommand : CliktCommand(
 
     override fun run() {
         val config = OrtConfiguration.load(configArguments, configFile)
-        ScanResultsStorage.configure(config.scanner ?: ScannerConfiguration())
+        ScanResultsStorage.configure(config.scanner)
 
         println("Searching for scan results of '${packageId.toCoordinates()}' in ${ScanResultsStorage.storage.name}.")
 

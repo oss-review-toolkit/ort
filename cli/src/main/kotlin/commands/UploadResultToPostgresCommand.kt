@@ -80,7 +80,7 @@ class UploadResultToPostgresCommand : CliktCommand(
             "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
-        val postgresConfig = globalOptionsForSubcommands.config.scanner?.storages?.values
+        val postgresConfig = globalOptionsForSubcommands.config.scanner.storages?.values
             ?.filterIsInstance<PostgresStorageConfiguration>()?.singleOrNull()
 
         requireNotNull(postgresConfig) {

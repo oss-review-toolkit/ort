@@ -39,22 +39,22 @@ data class OrtConfiguration(
     /**
      * The configuration of the analyzer.
      */
-    val analyzer: AnalyzerConfiguration? = null,
+    val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),
 
     /**
      * The configuration of the scanner.
      */
-    val scanner: ScannerConfiguration? = null,
+    val scanner: ScannerConfiguration = ScannerConfiguration(),
 
     /**
      * The license file patterns.
      */
-    val licenseFilePatterns: LicenseFilenamePatterns? = null,
+    val licenseFilePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT,
 
     /**
      * The configuration of the advisors, using the advisor's name as the key.
      */
-    val advisor: Map<String, AdvisorConfiguration>? = null
+    val advisor: Map<String, AdvisorConfiguration> = emptyMap()
 ) {
     companion object {
         /**

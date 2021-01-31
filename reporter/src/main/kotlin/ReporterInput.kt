@@ -23,7 +23,6 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
@@ -75,8 +74,8 @@ data class ReporterInput(
     val licenseInfoResolver: LicenseInfoResolver = LicenseInfoResolver(
         provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
         copyrightGarbage = copyrightGarbage,
-        archiver = ortConfig.scanner?.archive.createFileArchiver(),
-        licenseFilenamePatterns = ortConfig.licenseFilePatterns ?: LicenseFilenamePatterns.DEFAULT
+        archiver = ortConfig.scanner.archive.createFileArchiver(),
+        licenseFilenamePatterns = ortConfig.licenseFilePatterns
     ),
 
     /**

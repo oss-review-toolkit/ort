@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
@@ -151,12 +150,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         println("Analyzing project path:\n\t$inputDir")
 
         val config = globalOptionsForSubcommands.config
-        val analyzer = Analyzer(config.analyzer ?: AnalyzerConfiguration())
+        val analyzer = Analyzer(config.analyzer)
 
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
                 packageCurationsFile.takeIf { it.isFile }?.let { FilePackageCurationProvider(it) },
-                config.analyzer?.sw360Configuration?.let {
+                config.analyzer.sw360Configuration?.let {
                     Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
                 },
                 ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
