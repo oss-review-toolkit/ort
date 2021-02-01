@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-# ORT starter pipeline: Customize to your need
+# Note: Customize the below pipeline parameters to your needs.
 
 trigger: none
 
