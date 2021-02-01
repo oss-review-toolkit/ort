@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils
 
 import java.io.IOException
 import java.time.Duration
+import java.util.concurrent.ConcurrentHashMap
 
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -45,7 +46,7 @@ object OkHttpClientHelper {
     private const val MAX_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
 
     private val client = buildClient()
-    private val clients = mutableMapOf<BuilderConfiguration, OkHttpClient>()
+    private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
 
     /**
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
