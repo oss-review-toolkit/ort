@@ -1,6 +1,6 @@
-# Azure ORT Starter Pipeline
+# Azure Pipeline
 
-The starter pipeline allows you to easily run an ORT scan on [Azure DevOps](https://azure.microsoft.com/services/devops/).
+This pipeline allows you to easily run an ORT scan on [Azure DevOps](https://azure.microsoft.com/services/devops/).
 
 To run the pipeline, simply:
 
@@ -10,6 +10,7 @@ To run the pipeline, simply:
 ## Directory description
 
 This subdirectory has the following structure:
+
 ```bash
 azure
 ├── credentials
@@ -23,16 +24,20 @@ azure
 └── steps
     └── complete-ort-run.yml
 ```
-The folder `credentials` contains templates to write `.netrc` files (see the [specification](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html):
+
+The folder `credentials` contains templates to write `.netrc` files (see the [specification](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html)):
+
 - `write-config-netrc.yml` converts the parameter group  `ort_config_credentials` to `.netrc` used when downloading the configuration
 - `write-downloader-netrc.yml` converts the parameter group `ort_repo_credentials` to `.netrc` used to download the project
+
 Exchange those templates with custom templates for different credential handling
 
 The folder `docker` contains files to run ORT in a docker container:
+
 - `docker-build-image.yml` is a template to build the ORT image based on the [Dockerfile](../../Dockerfile)
 - `docker-ort-run.yml` contains steps to download a configuration repository, download the project and then analyze, scan and evaluate the project, finally creating reports
 
-`ort-pipeline-yml` contains the starter pipeline, consisting of one stage running on a default Ubuntu agent, as well as providing parameters for custom runs.
+`ort-pipeline.yml` contains the pipeline definition, consisting of one stage running on a default Ubuntu agent, as well as providing parameters for custom runs.
 
 ## Setting up credentials
 
