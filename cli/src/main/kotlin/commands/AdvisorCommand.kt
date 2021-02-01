@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.NexusIqConfiguration
+import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
@@ -94,6 +95,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Run vulnerability d
     private fun configureAdvisor(advisorConfiguration: AdvisorConfiguration?): Advisor {
         val config = when (advisorConfiguration) {
             is NexusIqConfiguration -> advisorConfiguration
+            is VulnerableCodeConfiguration -> advisorConfiguration
             null -> throw IllegalArgumentException(
                 "No advisor configuration found in ${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}"
             )
