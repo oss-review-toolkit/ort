@@ -123,6 +123,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
+    implementation("io.github.config4k:config4k:$config4kVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
     implementation("org.eclipse.sw360:client:$sw360ClientVersion")

@@ -138,6 +138,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         subcommands(
             AdvisorCommand(),
             AnalyzerCommand(),
+            ConfigCommand(),
             DownloaderCommand(),
             EvaluatorCommand(),
             ReporterCommand(),
