@@ -248,6 +248,12 @@ data class OrtResult(
             ?: sortedSetOf()
 
     /**
+     * Return the detected licenses for the given package [id]. If [id] is not found an empty set is returned.
+     */
+    fun getDetectedLicensesForId(id: Identifier): SortedSet<SpdxExpression> =
+        getScanResultsForId(id).flatMapTo(sortedSetOf((compareBy { it.toString() }))) { it.summary.licenses }
+
+    /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
      * [omitExcluded] is set to true, excluded projects / packages are omitted from the result. Projects are converted
      * to packages in the result. If no analyzer result is present an empty set is returned.

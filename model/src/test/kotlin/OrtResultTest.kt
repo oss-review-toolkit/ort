@@ -29,8 +29,12 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
 import java.lang.IllegalArgumentException
+import java.time.Instant
+import java.util.Collections.emptySortedSet
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({
@@ -139,6 +143,54 @@ class OrtResultTest : WordSpec({
             }
 
             e.message shouldMatch "The .* of project .* cannot be found in .*"
+        }
+    }
+
+    "getDetectedLicensesForId" should {
+        "return the detected license" {
+            val packageId = Identifier("Maven:org.ossreviewtoolkit:example-project:1.0")
+
+            val ortResult = OrtResult(
+                Repository.EMPTY,
+                scanner = ScannerRun(
+                    Instant.now(),
+                    Instant.now(),
+                    Environment(),
+                    ScannerConfiguration(),
+                    ScanRecord(
+                        sortedSetOf(
+                            ScanResultContainer(
+                                id = packageId,
+                                results = listOf(
+                                    ScanResult(
+                                        provenance = Provenance(),
+                                        scanner = ScannerDetails.EMPTY,
+                                        summary = ScanSummary(
+                                            startTime = Instant.EPOCH,
+                                            endTime = Instant.EPOCH,
+                                            fileCount = 1,
+                                            packageVerificationCode = "",
+                                            licenseFindings = sortedSetOf(
+                                                LicenseFinding(
+                                                    "GPL-3.0-only".toSpdx(),
+                                                    TextLocation("some/path", 1)
+                                                )
+                                            ),
+                                            copyrightFindings = emptySortedSet()
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        AccessStatistics()
+                    )
+                )
+            )
+
+            val detectedLicenses = ortResult.getDetectedLicensesForId(packageId)
+
+            detectedLicenses should haveSize(1)
+            detectedLicenses.first() shouldBe "GPL-3.0-only".toSpdx()
         }
     }
 })
