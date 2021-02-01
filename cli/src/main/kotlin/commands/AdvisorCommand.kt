@@ -36,7 +36,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.advisor.Advisor
-import org.ossreviewtoolkit.advisor.advisors.NexusIq
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.NexusIqConfiguration
@@ -85,7 +84,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Run vulnerability d
     ).convert { advisorName ->
         Advisor.ALL.find { it.advisorName.equals(advisorName, ignoreCase = true) }
             ?: throw BadParameterValue("Advisor '$advisorName' is not one of ${Advisor.ALL}")
-    }.default(NexusIq.Factory())
+    }.required()
 
     private val skipExcluded by option(
         "--skip-excluded",
