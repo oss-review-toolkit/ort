@@ -36,7 +36,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-private typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
+typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
@@ -59,7 +59,7 @@ object OkHttpClientHelper {
      * Build a preconfigured client that uses a cache directory inside the [ORT data directory][ortDataDirectory].
      * Proxy environment variables are by default respected, but the client can further be configured via the [block].
      */
-    fun buildClient(block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
+    fun buildClient(block: BuilderConfiguration = {}): OkHttpClient =
         clients.getOrPut(block) {
             val cacheDirectory = ortDataDirectory.resolve("cache/http")
             val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
@@ -83,14 +83,14 @@ object OkHttpClientHelper {
     /**
      * Execute a [request] using the client for the specified [builder configuration][block].
      */
-    fun execute(request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+    fun execute(request: Request, block: BuilderConfiguration = {}): Response =
         buildClient(block).newCall(request).execute()
 
     /**
      * Asynchronously enqueue a [request] using the client for the specified [builder configuration][block] and await
      * its response.
      */
-    suspend fun await(request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+    suspend fun await(request: Request, block: BuilderConfiguration = {}): Response =
         buildClient(block).newCall(request).await()
 }
 
