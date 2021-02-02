@@ -38,7 +38,7 @@ class PackageRuleTest : WordSpec() {
         LicenseRule(
             name = "test",
             resolvedLicense = resolvedLicenseInfo[license]
-                ?: ResolvedLicense(license, emptySet(), emptySet(), emptySet()),
+                ?: ResolvedLicense(license, emptySet(), emptySet(), emptyMap(), emptySet()),
             licenseSource = licenseSource
         )
 

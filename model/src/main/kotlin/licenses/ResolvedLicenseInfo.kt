@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
@@ -124,6 +125,11 @@ data class ResolvedLicense(
      * empty list, if this [license] was not modified during processing.
      */
     val originalDeclaredLicenses: Set<String>,
+
+    /**
+     * The original SPDX expressions of this license grouped by [license source][LicenseSource].
+     */
+    val originalExpressions: Map<LicenseSource, Set<SpdxExpression>>,
 
     /**
      * All text locations where this license was found.

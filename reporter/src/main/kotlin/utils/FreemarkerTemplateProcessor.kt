@@ -29,6 +29,7 @@ import java.util.SortedSet
 import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.TextLocation
@@ -44,6 +45,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 
@@ -270,10 +272,21 @@ class FreemarkerTemplateProcessor(
 
 private fun List<ResolvedLicense>.merge(): ResolvedLicense {
     require(isNotEmpty()) { "Cannot merge an empty list." }
+
+    val mergedOriginalExpressions = mutableMapOf<LicenseSource, Set<SpdxExpression>>()
+    forEach { resolvedLicense ->
+        val expressions = resolvedLicense.originalExpressions
+
+        expressions.forEach { (source, originalExpressions) ->
+            mergedOriginalExpressions.merge(source, originalExpressions) { left, right -> left + right }
+        }
+    }
+
     return ResolvedLicense(
         license = first().license,
         sources = flatMapTo(mutableSetOf()) { it.sources },
         originalDeclaredLicenses = flatMapTo(mutableSetOf()) { it.originalDeclaredLicenses },
+        originalExpressions = mergedOriginalExpressions,
         locations = flatMapTo(mutableSetOf()) { it.locations }
     )
 }

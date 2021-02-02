@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
@@ -47,6 +48,10 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
+import org.ossreviewtoolkit.model.licenses.ResolvedLicense
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
@@ -180,6 +185,37 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
 
                 licenseFindings.map { it.location.path } shouldContainExactlyInAnyOrder listOf(
                     "src/main.js"
+                )
+            }
+        }
+    }
+
+    "mergeResolvedLicenses" should {
+        "merge the original expressions by license sources" {
+            val resolvedLicenses = listOf(
+                ResolvedLicense(
+                    license = "MIT".toSpdx() as SpdxSingleLicenseExpression,
+                    sources = emptySet(),
+                    originalDeclaredLicenses = emptySet(),
+                    originalExpressions = mapOf(LicenseSource.DECLARED to setOf("MIT".toSpdx())),
+                    locations = emptySet()
+                ),
+                ResolvedLicense(
+                    license = "MIT".toSpdx() as SpdxSingleLicenseExpression,
+                    sources = emptySet(),
+                    originalDeclaredLicenses = emptySet(),
+                    originalExpressions = mapOf(LicenseSource.DECLARED to setOf("GPL-2.0-only OR MIT".toSpdx())),
+                    locations = emptySet()
+                )
+            )
+
+            val result = FreemarkerTemplateProcessor.TemplateHelper(OrtResult.EMPTY, LicenseClassifications())
+                .mergeResolvedLicenses(resolvedLicenses)
+
+            with(result[0]) {
+                originalExpressions[LicenseSource.DECLARED] shouldBe setOf(
+                    "MIT".toSpdx(),
+                    "GPL-2.0-only OR MIT".toSpdx()
                 )
             }
         }
