@@ -442,25 +442,59 @@ class LicenseInfoResolverTest : WordSpec() {
                 val mitLicense = "MIT"
                 val apacheLicense = "Apache-2.0 WITH LLVM-exception"
                 val gplLicense = "GPL-2.0-only"
+                val bsdLicense = "0BSD"
 
                 val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         declaredLicenses = setOf("$apacheLicense or $gplLicense", mitLicense),
+                        detectedLicenses = listOf(
+                            Findings(
+                                provenance = provenance,
+                                licenses = mapOf(
+                                    "$gplLicense OR $bsdLicense" to listOf(
+                                        TextLocation("LICENSE", 1),
+                                        TextLocation("LICENSE", 21)
+                                    ),
+                                    bsdLicense to listOf(
+                                        TextLocation("LICENSE", 31),
+                                        TextLocation("LICENSE", 41)
+                                    )
+                                ).toFindingsSet(),
+                                copyrights = setOf(
+                                    CopyrightFinding(
+                                        "Copyright GPL 2.0 OR BSD Zero Clause",
+                                        TextLocation("LICENSE", 1)
+                                    ),
+                                    CopyrightFinding("Copyright BSD Zero Clause", TextLocation("LICENSE", 31))
+                                ),
+                                licenseFindingCurations = emptyList(),
+                                pathExcludes = emptyList(),
+                                relativeFindingsPath = ""
+                            )
+                        )
                     )
                 )
                 val resolver = createResolver(licenseInfos)
 
                 val expectedDeclaredSpdxExpression =
                     DeclaredLicenseProcessor.process(setOf("$apacheLicense or $gplLicense", mitLicense)).spdxExpression
+                val expectedDetectedSpdxExpressions =
+                    arrayOf("$gplLicense OR $bsdLicense".toSpdx(), bsdLicense.toSpdx())
 
                 val result: ResolvedLicenseInfo = resolver.resolveLicenseInfo(pkgId)
-                result should containOnlyLicenseSources(LicenseSource.DECLARED)
+                result should containOnlyLicenseSources(LicenseSource.DECLARED, LicenseSource.DETECTED)
                 result should containLicenseExpressionsExactlyBySource(
                     LicenseSource.DECLARED,
                     expectedDeclaredSpdxExpression
                 )
-                result should containLicensesExactly(apacheLicense, gplLicense, mitLicense)
+                result should containLicenseExpressionsExactlyBySource(
+                    LicenseSource.DETECTED,
+                    *expectedDetectedSpdxExpressions
+                )
+                result should containLicensesExactly(apacheLicense, gplLicense, mitLicense, bsdLicense)
+                result should containNumberOfLocationsForLicense(gplLicense, 2)
+                result should containNumberOfLocationsForLicense(bsdLicense, 4)
             }
         }
 

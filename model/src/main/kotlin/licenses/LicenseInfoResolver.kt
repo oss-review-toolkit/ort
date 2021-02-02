@@ -107,6 +107,10 @@ class LicenseInfoResolver(
             license.builder().apply {
                 sources += LicenseSource.DETECTED
                 resolvedLocations[license]?.let { locations.addAll(it) }
+
+                licenseInfo.detectedLicenseInfo.findings.forEach { findings ->
+                    originalExpressions[LicenseSource.DETECTED] = findings.licenses.mapTo(mutableSetOf()) { it.license }
+                }
             }
         }
 
