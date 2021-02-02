@@ -85,6 +85,15 @@ private fun SpdxDocument.projectPackage(): SpdxPackage? {
     return packages.singleOrNull { it.packageFilename.isEmpty() }
 }
 
+/**
+ * Returns true if the [SpdxDocument] packages contain a package with
+ * the given spdxId
+ */
+private fun SpdxDocument.containsPackage(spdxPackageId: String): Boolean {
+    val spdxPackage = packages.singleOrNull { it.spdxId == spdxPackageId }
+    return spdxPackage != null
+}
+
 private const val DEFAULT_SCOPE_NAME = "default"
 
 /**
@@ -210,7 +219,7 @@ class SpdxDocumentFile(
 
         val externalDocumentReferenceToSpdxPackage =
             packagesFromExternalDocumentReferences[externalDocumentReference.externalDocumentId]
-                ?: externalDocumentReferenceToSpdxPackage(externalDocumentReference)
+                ?: externalDocumentReferenceToSpdxPackage(externalDocumentReference, source.split(":")[1])
 
         packagesFromExternalDocumentReferences[externalDocumentReference.externalDocumentId] =
             externalDocumentReferenceToSpdxPackage
@@ -224,17 +233,24 @@ class SpdxDocumentFile(
      * @throws IllegalArgumentException
      * @returns spdx package the spdx document uri of the externalDocumentReference was referring to
      */
-    private fun externalDocumentReferenceToSpdxPackage(externalDocumentReference: SpdxExternalDocumentReference):
-            SpdxPackage {
+    private fun externalDocumentReferenceToSpdxPackage(
+        externalDocumentReference: SpdxExternalDocumentReference,
+        spdxPackageId: String
+    ): SpdxPackage {
         val externalSpdxDocument = getFileFromExternalDocumentReference(externalDocumentReference)
 
         if (listOf("json", "yaml", "yml").contains(externalSpdxDocument.extension)) {
             val spdxDocument = SpdxModelMapper.read(externalSpdxDocument, SpdxDocument::class.java)
-            if (!spdxDocument.isProject()) {
-                return spdxDocument.packages.single()
+            return if (!spdxDocument.isProject()) {
+                spdxDocument.packages.single()
+            } else if (spdxDocument.containsPackage(spdxPackageId)) {
+                spdxDocument.packages.singleOrNull { it.spdxId == spdxPackageId }
+                    ?: throw IllegalArgumentException(
+                        "${externalDocumentReference.externalDocumentId} refers to a file " +
+                                "that does not contain the referenced package $spdxPackageId or an individual package.")
             } else {
                 throw IllegalArgumentException("${externalDocumentReference.externalDocumentId} refers to a file " +
-                        "that contains more than a single package. This is currently not supported yet.")
+                        "that does not contain the referenced package $spdxPackageId or an individual package.")
             }
         } else {
             throw IllegalArgumentException("${externalDocumentReference.externalDocumentId} refers to a file that " +

@@ -41,7 +41,7 @@ packages:
   versionInfo: "1.1.1g"
 relationships:
 - spdxElementId: "SPDXRef-Package-xyz"
-  relatedSpdxElement: "DocumentRef-curl-7.70.0:SPDXRef-ToolsElement"
+  relatedSpdxElement: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
   relationshipType: "DEPENDS_ON"
 - spdxElementId: "SPDXRef-Package-xyz"
   relatedSpdxElement: "SPDXRef-Package-openssl"

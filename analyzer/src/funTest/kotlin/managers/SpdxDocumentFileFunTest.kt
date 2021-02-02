@@ -66,7 +66,8 @@ class SpdxDocumentFileFunTest : StringSpec() {
             actualResult shouldBe expectedResult
         }
 
-        "Project dependencies are detected correctly for external document references with local file reference" {
+        "Project dependencies are detected correctly for external document references " +
+                "with local file reference and multiple packages" {
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("spdx-project-expected-output-external-ref-with-local-ref.yml"),
                 url = vcsUrl,

@@ -15,8 +15,8 @@ externalDocumentRefs:
 - externalDocumentId: "DocumentRef-curl-7.70.0"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "a2ab98f8e10bad892313ccc573b3820369551dcb"
-  spdxDocument: "./src/funTest/assets/projects/synthetic/spdx/package/libs/curl/package.spdx.yml"
+    checksumValue: "492487f36bd87cd002ec53d37a56a5c1fdc7b8cf"
+  spdxDocument: "./src/funTest/assets/projects/synthetic/spdx/project/project.spdx.yml"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
   description: "Awesome product created by Example Inc."
@@ -44,7 +44,7 @@ relationships:
   relatedSpdxElement: "SPDXRef-Package-xyz"
   relationshipType: "DESCRIBES"
 - spdxElementId: "SPDXRef-Package-xyz"
-  relatedSpdxElement: "DocumentRef-curl-7.70.0:SPDXRef-ToolsElement"
+  relatedSpdxElement: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
   relationshipType: "DEPENDS_ON"
 - spdxElementId: "SPDXRef-Package-xyz"
   relatedSpdxElement: "SPDXRef-Package-openssl"
