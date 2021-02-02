@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependPath
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.ORT_NAME
 
@@ -83,6 +84,10 @@ class LicenseInfoResolver(
         declaredLicenses.forEach { license ->
             license.builder().apply {
                 sources += LicenseSource.DECLARED
+
+                licenseInfo.declaredLicenseInfo.processed.spdxExpression?.let {
+                    originalExpressions[LicenseSource.DECLARED] = setOf(it)
+                }
 
                 originalDeclaredLicenses.addAll(
                     licenseInfo.declaredLicenseInfo.processed.mapped.filterValues { it == license }.keys
@@ -234,7 +239,8 @@ class LicenseInfoResolver(
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
     val sources = mutableSetOf<LicenseSource>()
     var originalDeclaredLicenses = mutableSetOf<String>()
+    var originalExpressions = mutableMapOf<LicenseSource, Set<SpdxExpression>>()
     var locations = mutableSetOf<ResolvedLicenseLocation>()
 
-    fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, locations)
+    fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, originalExpressions, locations)
 }

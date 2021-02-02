@@ -437,6 +437,31 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
             }
+
+            "contain a list of the original license expressions" {
+                val mitLicense = "MIT"
+                val apacheLicense = "Apache-2.0 WITH LLVM-exception"
+                val gplLicense = "GPL-2.0-only"
+
+                val licenseInfos = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        declaredLicenses = setOf("$apacheLicense or $gplLicense", mitLicense),
+                    )
+                )
+                val resolver = createResolver(licenseInfos)
+
+                val expectedDeclaredSpdxExpression =
+                    DeclaredLicenseProcessor.process(setOf("$apacheLicense or $gplLicense", mitLicense)).spdxExpression
+
+                val result: ResolvedLicenseInfo = resolver.resolveLicenseInfo(pkgId)
+                result should containOnlyLicenseSources(LicenseSource.DECLARED)
+                result should containLicenseExpressionsExactlyBySource(
+                    LicenseSource.DECLARED,
+                    expectedDeclaredSpdxExpression
+                )
+                result should containLicensesExactly(apacheLicense, gplLicense, mitLicense)
+            }
         }
 
         "resolveLicenseFiles()" should {
@@ -647,6 +672,26 @@ fun containOnlyLicenseSources(vararg licenseSources: LicenseSource): Matcher<Res
             "ResolvedLicenseInfo should contain only license sources ${expected.show().value}, but has " +
                     actual.show().value,
             "ResolvedLicenseInfo should not only contain license source ${expected.show().value}"
+        )
+    }
+
+fun containLicenseExpressionsExactlyBySource(
+    source: LicenseSource,
+    vararg expressions: SpdxExpression?
+): Matcher<ResolvedLicenseInfo?> =
+    neverNullMatcher { resolvedLicenseInfo ->
+        val actualExpressions = resolvedLicenseInfo.licenses
+            .mapNotNull { it.originalExpressions[source] }
+            .flatten()
+            .toSet()
+        val expectedExpressions = expressions.toSet()
+
+        MatcherResult(
+            expectedExpressions == actualExpressions,
+            "ResolvedLicenseInfo for original ${source.show().value} license expressions should " +
+                    "contain exactly ${expectedExpressions.show().value}, but has ${actualExpressions.show().value}",
+            "ResolvedLicenseInfo for original ${source.show().value} license expressions " +
+                    "should not contain exactly ${expectedExpressions.show().value}"
         )
     }
 
