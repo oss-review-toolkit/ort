@@ -2,33 +2,35 @@
 
 &nbsp;
 
-| Linux (OpenJDK 11)             | Windows (Oracle JDK 11)         | JitPack (OpenJDK 11)            |
-| :----------------------------- | :------------------------------ | :------------------------------ |
-| [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
-| [![Linux code coverage][7]][8] |                                 |                                 |
+[![Slack][1]][2]
 
-| License status           | Best practices   | Code quality     | TODOs              | Interact with us!              |
-| :----------------------- | :----------------| :----------------| :----------------- | :----------------------------- |
-| [![REUSE status][9]][10] | [![CII][17]][18] | [![LGTM][11]][12]| [![TODOs][13]][14] | [![ort-talk][15]][16]          |
+[![Linux build status][4]][3] [![Windows build status][5]][3] [![Docker build status][6]][3] [![JitPack build status][10]][11]
 
-[1]: https://travis-ci.com/oss-review-toolkit/ort.svg?branch=master
-[2]: https://travis-ci.com/oss-review-toolkit/ort
-[3]: https://ci.appveyor.com/api/projects/status/8oh5ld40c8h19jr5/branch/master?svg=true
-[4]: https://ci.appveyor.com/project/oss-review-toolkit/ort/branch/master
-[5]: https://jitpack.io/v/oss-review-toolkit/ort.svg
-[6]: https://jitpack.io/#oss-review-toolkit/ort
-[7]: https://codecov.io/gh/oss-review-toolkit/ort/branch/master/graph/badge.svg
-[8]: https://codecov.io/gh/oss-review-toolkit/ort/
-[9]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
-[10]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
-[11]: https://img.shields.io/lgtm/alerts/g/oss-review-toolkit/ort.svg?logo=lgtm&logoWidth=18
-[12]: https://lgtm.com/projects/g/oss-review-toolkit/ort/alerts/
-[13]: https://badgen.net/https/api.tickgit.com/badgen/github.com/oss-review-toolkit/ort
-[14]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
-[15]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
-[16]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
-[17]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
-[18]: https://bestpractices.coreinfrastructure.org/projects/4618
+[![Linux analyzer tests][7]][3] [![Windows analyzer tests][8]][3] [![Code coverage][12]][13]
+
+[![TODOs][14]][15] [![Static Analysis][9]][3] [![LGTM][16]][17] [![REUSE status][18]][19] [![CII][20]][21]
+
+[1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
+[2]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
+[3]: https://dev.azure.com/oss-review-toolkit/ort/_build/latest?definitionId=2&branchName=master
+[4]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=LinuxTest&label=Linux%20Build
+[5]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=WindowsTest&label=Windows%20Build
+[6]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=DockerBuild&label=Docker%20Build
+[7]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=LinuxAnalyzerTest&label=Linux%20Analyzer%20Tests
+[8]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=WindowsAnalyzerTest&label=Windows%20Analyzer%20Tests
+[9]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=StaticAnalysis&label=Static%20Analysis
+[10]: https://jitpack.io/v/oss-review-toolkit/ort.svg
+[11]: https://jitpack.io/#oss-review-toolkit/ort
+[12]: https://codecov.io/gh/oss-review-toolkit/ort/branch/master/graph/badge.svg
+[13]: https://codecov.io/gh/oss-review-toolkit/ort/
+[14]: https://badgen.net/https/api.tickgit.com/badgen/github.com/oss-review-toolkit/ort
+[15]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
+[16]: https://img.shields.io/lgtm/alerts/g/oss-review-toolkit/ort.svg?logo=lgtm&logoWidth=18
+[17]: https://lgtm.com/projects/g/oss-review-toolkit/ort/alerts/
+[18]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
+[19]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
+[20]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
+[21]: https://bestpractices.coreinfrastructure.org/projects/4618
 
 # Introduction
 
