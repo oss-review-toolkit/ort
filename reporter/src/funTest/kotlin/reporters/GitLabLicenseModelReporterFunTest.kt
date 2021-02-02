@@ -149,7 +149,7 @@ private fun createOrtResult(): OrtResult {
                     ),
                     curatedPackage(
                         id = Identifier("PIP::unreferenced-package:0.0.3"),
-                        declaredLicenses = listOf("LicenseRef-scancode-public-domain")
+                        declaredLicenses = listOf("LicenseRef-scancode-public-domain-disclaimer")
                     ),
                     curatedPackage(
                         id = Identifier("Maven:some-group:excluded-package:0.0.4"),
