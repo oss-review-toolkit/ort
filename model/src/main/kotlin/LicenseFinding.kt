@@ -40,7 +40,7 @@ data class LicenseFinding(
     val location: TextLocation
 ) : Comparable<LicenseFinding> {
     companion object {
-        private val COMPARATOR = compareBy<LicenseFinding> { it.license.toString() }.thenBy(LicenseFinding::location)
+        private val COMPARATOR = compareBy(LicenseFinding::license).thenBy(LicenseFinding::location)
     }
 
     constructor(license: String, location: TextLocation) : this(license.toSpdx(), location)

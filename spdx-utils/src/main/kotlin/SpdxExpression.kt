@@ -33,7 +33,7 @@ import org.antlr.v4.runtime.CommonTokenStream
  * [1]: https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60
  */
 @JsonSerialize(using = ToStringSerializer::class)
-sealed class SpdxExpression {
+sealed class SpdxExpression : Comparable<SpdxExpression> {
     /**
      * The level of strictness to apply when validating an [SpdxExpression].
      */
@@ -179,6 +179,11 @@ sealed class SpdxExpression {
      * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.OR].
      */
     infix fun or(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.OR, other)
+
+    /**
+     * Compare string representations of [SpdxExpression]s.
+     */
+    override fun compareTo(other: SpdxExpression) = toString().compareTo(other.toString())
 }
 
 /**
