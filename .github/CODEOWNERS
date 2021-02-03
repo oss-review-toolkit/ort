@@ -1,4 +1,5 @@
 * @sschuberth @mnonnenmacher @fviernau
 *.md @sschuberth @mnonnenmacher @fviernau @tsteenbe
+/advisor/ @MarcelBochtler @oheger-bosch
 /reporter-web-app/ @tsteenbe
 /spdx-utils/src/main/ @sschuberth @mnonnenmacher @fviernau @tsteenbe
