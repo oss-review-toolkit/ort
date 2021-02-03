@@ -110,6 +110,16 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             processedLicenses.unmapped should containExactly("invalid")
         }
 
+        "Processing a compound SPDX expression should result in the same expression" {
+            val declaredLicenses = listOf("Apache-2.0 AND LicenseRef-Proprietary")
+
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
+
+            processedLicenses.spdxExpression shouldBe SpdxExpression.parse("Apache-2.0 AND LicenseRef-Proprietary")
+            processedLicenses.mapped should beEmptyMap()
+            processedLicenses.unmapped should beEmpty()
+        }
+
         "The declared license mapping is applied" {
             val declaredLicenses = listOf("Apache-2.0", "https://domain/path/license.html")
             val declaredLicenseMapping = mapOf("https://domain/path/license.html" to "MIT".toSpdx())
