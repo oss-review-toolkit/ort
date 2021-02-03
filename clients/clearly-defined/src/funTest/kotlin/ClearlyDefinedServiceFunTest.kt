@@ -25,8 +25,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldStartWith
 
-import java.net.HttpURLConnection
-
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
@@ -42,19 +40,15 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         "return curation data".config(tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
-            val getCall = service.getCuration(
+            val curation = service.getCuration(
                 ComponentType.MAVEN,
                 Provider.MAVEN_CENTRAL,
                 "javax.servlet",
                 "javax.servlet-api",
                 "3.1.0"
             )
-            val response = getCall.execute()
-            val responseCode = response.code()
-            val curation = response.body()
 
-            responseCode shouldBe HttpURLConnection.HTTP_OK
-            curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+            curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
     }
 

@@ -430,13 +430,13 @@ interface ClearlyDefinedService {
      * https://api.clearlydefined.io/api-docs/#/curations/get_curations__type___provider___namespace___name___revision_.
      */
     @GET("curations/{type}/{provider}/{namespace}/{name}/{revision}")
-    fun getCuration(
+    suspend fun getCuration(
         @Path("type") type: ComponentType,
         @Path("provider") provider: Provider,
         @Path("namespace") namespace: String,
         @Path("name") name: String,
         @Path("revision") revision: String
-    ): Call<Curation>
+    ): Curation
 
     /**
      * Upload curation [patch] data, see https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
