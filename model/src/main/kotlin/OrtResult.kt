@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.zipWithDefault
@@ -231,21 +230,6 @@ data class OrtResult(
 
         return projectsAndPackages
     }
-
-    /**
-     * Return the concluded license for the given package [id], or null if there is no concluded license.
-     */
-    fun getConcludedLicensesForId(id: Identifier): SpdxExpression? =
-        getPackage(id)?.pkg?.concludedLicense
-
-    /**
-     * Return the processed declared licenses for the given [id] which may either refer to a project or to a package. If
-     * [id] is not found an empty set is returned.
-     */
-    fun getDeclaredLicensesForId(id: Identifier): SortedSet<String> =
-        getProject(id)?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
-            ?: getPackage(id)?.pkg?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
-            ?: sortedSetOf()
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
