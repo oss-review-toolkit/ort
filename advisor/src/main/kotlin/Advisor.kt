@@ -25,15 +25,20 @@ import java.util.ServiceLoader
 
 import kotlinx.coroutines.runBlocking
 
+import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorResultContainer
 import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.showStackTrace
 
 /**
  * The class to retrieve security advisories.
@@ -82,4 +87,34 @@ abstract class Advisor(val advisorName: String, protected val config: AdvisorCon
     protected abstract suspend fun retrievePackageVulnerabilities(
         packages: List<Package>
     ): Map<Package, List<AdvisorResult>>
+
+    protected fun createFailedResults(
+        startTime: Instant,
+        packages: List<Package>,
+        t: Throwable
+    ): Map<Package, List<AdvisorResult>> {
+        val endTime = Instant.now()
+
+        t.showStackTrace()
+
+        val failedResults = listOf(
+            AdvisorResult(
+                vulnerabilities = emptyList(),
+                advisor = AdvisorDetails(advisorName),
+                summary = AdvisorSummary(
+                    startTime = startTime,
+                    endTime = endTime,
+                    issues = listOf(
+                        createAndLogIssue(
+                            source = advisorName,
+                            message = "Failed to retrieve security vulnerabilities from $advisorName: " +
+                                    t.collectMessagesAsString()
+                        )
+                    )
+                )
+            )
+        )
+
+        return packages.associateWith { failedResults }
+    }
 }
