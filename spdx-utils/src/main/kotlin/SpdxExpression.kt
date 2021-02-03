@@ -27,6 +27,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 
+import org.ossreviewtoolkit.spdx.SpdxConstants.DOCUMENT_REF_PREFIX
+import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
+
 /**
  * An SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1].
  *
@@ -529,8 +532,8 @@ data class SpdxLicenseReferenceExpression(
     override fun normalize(mapDeprecated: Boolean) = this
 
     override fun validate(strictness: Strictness) {
-        val isLicenseRef = id.startsWith("LicenseRef-")
-        val isDocumentRefToLicenseRef = id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")
+        val isLicenseRef = id.startsWith(LICENSE_REF_PREFIX)
+        val isDocumentRefToLicenseRef = id.startsWith(DOCUMENT_REF_PREFIX) && id.contains(":$LICENSE_REF_PREFIX")
         if (!isLicenseRef && !isDocumentRefToLicenseRef) throw SpdxException("'$id' is not an SPDX license reference.")
     }
 

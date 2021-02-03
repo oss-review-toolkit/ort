@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
@@ -162,7 +163,7 @@ private fun getLicenseId(license: JsonNode): String {
     // [2] https://github.com/nexB/scancode-toolkit/issues/1217
     // [3] https://github.com/nexB/scancode-toolkit/issues/1336
     // [4] https://github.com/nexB/scancode-toolkit/pull/2247
-    if (name.isEmpty() || name.startsWith("LicenseRef-")) {
+    if (name.isEmpty() || name.startsWith(LICENSE_REF_PREFIX)) {
         val key = license["key"].textValue().replace('_', '-')
         name = if (key in UNKNOWN_LICENSE_KEYS) {
             SpdxConstants.NOASSERTION

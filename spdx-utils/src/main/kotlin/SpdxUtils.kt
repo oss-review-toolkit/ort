@@ -29,6 +29,7 @@ import java.net.URL
 import java.security.MessageDigest
 import java.util.EnumSet
 
+import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 
 /**
@@ -152,7 +153,7 @@ fun getLicenseTextReader(
     handleExceptions: Boolean = false,
     customLicenseTextsDir: File? = null
 ): (() -> String)? =
-    if (id.startsWith("LicenseRef-")) {
+    if (id.startsWith(LICENSE_REF_PREFIX)) {
         getLicenseTextResource(id)?.let { { it.readText() } }
             ?: customLicenseTextsDir?.let { getLicenseTextFile(id, it)?.let { file -> { file.readText() } } }
     } else {
