@@ -33,6 +33,8 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.IOException
 import java.net.URI
 
+import kotlinx.coroutines.runBlocking
+
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
@@ -44,7 +46,6 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ContributionType
 import org.ossreviewtoolkit.clients.clearlydefined.ErrorResponse
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
-import org.ossreviewtoolkit.clients.clearlydefined.string
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
@@ -56,7 +57,7 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.hasNonNullProperty
 import org.ossreviewtoolkit.utils.log
 
-import retrofit2.Call
+import retrofit2.HttpException
 
 class UploadCurationsCommand : CliktCommand(
     name = "upload-curations",
@@ -78,44 +79,30 @@ class UploadCurationsCommand : CliktCommand(
 
     private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
 
-    private fun <T> executeApiCall(call: Call<T>): Result<T> {
-        log.debug {
-            val request = call.request()
-            "Going to execute API call at ${request.url} with body:\n${request.body?.string()}"
+    private fun <T> executeApiCall(call: suspend ClearlyDefinedService.() -> T): Result<T> =
+        try {
+            runBlocking { Result.success(call(service)) }
+        } catch (e: HttpException) {
+            val errorMessage = e.response()?.errorBody()?.let {
+                val errorResponse = jsonMapper.readValue<ErrorResponse>(it.string())
+                val innerError = errorResponse.error.innererror
+
+                log.debug { innerError.stack }
+                "The REST API call failed with: ${innerError.message}"
+            } ?: "The REST API call failed with code ${e.response()?.code()}."
+
+            throw IOException(errorMessage, e)
         }
-
-        val response = call.execute()
-
-        return when {
-            response.isSuccessful -> when (val body = response.body()) {
-                null -> Result.failure(IOException("The REST API call succeeded but no response body was returned."))
-                else -> Result.success(body)
-            }
-
-            else -> when (val errorBody = response.errorBody()) {
-                null -> Result.failure(IOException("The REST API call failed with code ${response.code()}."))
-
-                else -> {
-                    val errorResponse = jsonMapper.readValue<ErrorResponse>(errorBody.string())
-                    val innerError = errorResponse.error.innererror
-
-                    log.debug { innerError.stack }
-
-                    Result.failure(IOException("The REST API call failed with: ${innerError.message}"))
-                }
-            }
-        }
-    }
 
     private fun getDefinitions(coordinates: Collection<String>): Map<String, ClearlyDefinedService.Defined> =
-        executeApiCall(service.getDefinitions(coordinates)).getOrElse {
+        executeApiCall { getDefinitions(coordinates) }.getOrElse {
             log.error { it.collectMessagesAsString() }
             emptyMap()
         }
 
     private fun putCuration(curation: PackageCuration): ClearlyDefinedService.ContributionSummary? =
         curation.toContributionPatch()?.let { patch ->
-            executeApiCall(service.putCuration(patch)).getOrElse {
+            executeApiCall { putCuration(patch) }.getOrElse {
                 log.error { it.collectMessagesAsString() }
                 null
             }
