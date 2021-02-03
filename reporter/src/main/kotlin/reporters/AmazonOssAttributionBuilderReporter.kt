@@ -24,6 +24,8 @@ import java.io.IOException
 import java.net.ConnectException
 import java.time.Instant
 
+import kotlinx.coroutines.runBlocking
+
 import okhttp3.Credentials
 
 import org.ossreviewtoolkit.clients.amazon.OssAttributionBuilderService
@@ -35,7 +37,7 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 
-import retrofit2.Response
+import retrofit2.HttpException
 
 /**
  * A [Reporter] that creates an attribution document in .txt format using a running instance of the Amazon Attribution
@@ -84,8 +86,11 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 metadata
             )
 
-            val newProjectResponse = service.createNewProject(newProject, credentials).execute()
-            val newProjectBody = getBodyOrHandleError(newProjectResponse, "Unable to create a new project")
+            val newProjectBody =
+                callService(
+                    { createNewProject(newProject, credentials) },
+                    { "Unable to create a new project" }
+                )
 
             log.info { "Successfully created project with id '${newProjectBody.projectId}'." }
 
@@ -127,30 +132,21 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                     usage
                 )
 
-                val attachPackageResponse = service.attachPackage(
-                    newProjectBody.projectId,
-                    attachPackage,
-                    credentials
-                ).execute()
-
-                val attachPackageBody = getBodyOrHandleError(
-                    attachPackageResponse,
-                    "Unable to attach package '${pkg.id.toCoordinates()}' to project with id " +
-                            "'${newProjectBody.projectId}'"
+                val attachPackageBody = callService(
+                    { attachPackage(newProjectBody.projectId, attachPackage, credentials) },
+                    {
+                        "Unable to attach package '${pkg.id.toCoordinates()}' to project with id " +
+                                "'${newProjectBody.projectId}'"
+                    }
                 )
 
                 log.info { "Successfully created package with id '${attachPackageBody.packageId}'." }
             }
 
             // Generate an attribution document for this project.
-            val generateAttributionDocResponse = service.generateAttributionDoc(
-                newProjectBody.projectId,
-                credentials
-            ).execute()
-
-            val generateAttributionDocBody = getBodyOrHandleError(
-                generateAttributionDocResponse,
-                "Unable to generate an attribution document for project with id '${newProjectBody.projectId}'"
+            val generateAttributionDocBody = callService(
+                { generateAttributionDoc(newProjectBody.projectId, credentials) },
+                { "Unable to generate an attribution document for project with id '${newProjectBody.projectId}'" }
             )
 
             log.info {
@@ -158,15 +154,15 @@ class AmazonOssAttributionBuilderReporter : Reporter {
             }
 
             // Fetch the newly generated attribution document.
-            val fetchAttributionDocResponse = service.fetchAttributionDoc(
-                newProjectBody.projectId,
-                generateAttributionDocBody.documentId.toString(),
-                credentials
-            ).execute()
-
-            val fetchAttributionDocBody = getBodyOrHandleError(
-                fetchAttributionDocResponse,
-                "Unable to fetch the attribution document with id '${generateAttributionDocBody.documentId}'"
+            val fetchAttributionDocBody = callService(
+                {
+                    fetchAttributionDoc(
+                        newProjectBody.projectId,
+                        generateAttributionDocBody.documentId.toString(),
+                        credentials
+                    )
+                },
+                { "Unable to fetch the attribution document with id '${generateAttributionDocBody.documentId}'" }
             )
 
             log.info {
@@ -189,20 +185,25 @@ class AmazonOssAttributionBuilderReporter : Reporter {
             )
         }
     }
-}
 
-private fun <T> getBodyOrHandleError(response: Response<T>, errorTitle: String): T {
-    val body = response.body()
-    if (response.isSuccessful && body != null) return body
+    /**
+     * Invoke the [OssAttributionBuilderService] using the provided [caller] function and handle errors. If the service
+     * invocation fails, throw an [IOException] with a generated error message that also contains the given
+     * [errorTitle].
+     */
+    private fun <T> callService(caller: suspend OssAttributionBuilderService.() -> T, errorTitle: () -> String): T =
+        try {
+            runBlocking { caller(service) }
+        } catch (e: HttpException) {
+            val errorMessage = e.response()?.errorBody()?.let { errorBody ->
+                val errorResponse = jsonMapper.readValue(
+                    errorBody.string(),
+                    OssAttributionBuilderService.ErrorResponse::class.java
+                )
 
-    val errorMessage = response.errorBody()?.let { errorBody ->
-        val errorResponse = jsonMapper.readValue(
-            errorBody.string(),
-            OssAttributionBuilderService.ErrorResponse::class.java
-        )
+                errorResponse.error
+            } ?: e.message()
 
-        errorResponse.error
-    } ?: "Error code ${response.code()}"
-
-    throw IOException("$errorTitle: $errorMessage")
+            throw IOException("${errorTitle()}: $errorMessage")
+        }
 }

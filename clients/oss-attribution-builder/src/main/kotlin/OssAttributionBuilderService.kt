@@ -27,7 +27,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import okhttp3.OkHttpClient
 
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
@@ -171,37 +170,37 @@ interface OssAttributionBuilderService {
      * Create a new project in a running instance of the OSS Attribution builder.
      */
     @POST("projects/new")
-    fun createNewProject(
+    suspend fun createNewProject(
         @Body newProject: NewProject,
         @Header("Authorization") credentials: String
-    ): Call<NewProjectResponse>
+    ): NewProjectResponse
 
     /**
      * Attach a new package to an existing project.
      */
     @POST("projects/{projectId}/attach")
-    fun attachPackage(
+    suspend fun attachPackage(
         @Path("projectId") projectId: String,
         @Body newPackage: AttachPackage,
         @Header("Authorization") credentials: String
-    ): Call<AttachPackageResponse>
+    ): AttachPackageResponse
 
     /**
      * Generate an attribution document and store it on the server.
      */
     @POST("projects/{projectId}/build")
-    fun generateAttributionDoc(
+    suspend fun generateAttributionDoc(
         @Path("projectId") projectId: String,
         @Header("Authorization") credentials: String
-    ): Call<DocumentBuildResponse>
+    ): DocumentBuildResponse
 
     /**
      * Fetch a previously generated attribution document.
      */
     @GET("projects/{projectId}/docs/{documentId}")
-    fun fetchAttributionDoc(
+    suspend fun fetchAttributionDoc(
         @Path("projectId") projectId: String,
         @Path("documentId") documentId: String,
         @Header("Authorization") credentials: String
-    ): Call<AttributionDocument>
+    ): AttributionDocument
 }

@@ -28,6 +28,7 @@ val flexmarkVersion: String by project
 val freemarkerVersion: String by project
 val hamcrestCoreVersion: String by project
 val jacksonVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 val kotlinxHtmlVersion: String by project
 val retrofitVersion: String by project
 val simpleExcelVersion: String by project
@@ -85,6 +86,7 @@ dependencies {
     implementation("org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion")
     implementation("org.cyclonedx:cyclonedx-core-java:$cyclonedxCoreJavaVersion")
     implementation("org.freemarker:freemarker:$freemarkerVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlVersion")
 
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise the formatting of
