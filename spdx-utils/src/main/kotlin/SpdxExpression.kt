@@ -529,11 +529,9 @@ data class SpdxLicenseReferenceExpression(
     override fun normalize(mapDeprecated: Boolean) = this
 
     override fun validate(strictness: Strictness) {
-        if (!(id.startsWith("LicenseRef-") ||
-                    (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")))
-        ) {
-            throw SpdxException("'$id' is not an SPDX license reference.")
-        }
+        val isLicenseRef = id.startsWith("LicenseRef-")
+        val isDocumentRefToLicenseRef = id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")
+        if (!isLicenseRef && !isDocumentRefToLicenseRef) throw SpdxException("'$id' is not an SPDX license reference.")
     }
 
     override fun equals(other: Any?) =
