@@ -63,11 +63,14 @@ class Sbt(
         // https://www.scala-sbt.org/1.x/docs/Command-Line-Reference.html#Command+Line+Options.
         private val CI_MODE = "-Dsbt.ci=true".addQuotesOnWindows()
 
+        // Disable console colors explicitly as in some cases CI_MODE is not enough.
+        private val NO_COLOR = "-Dsbt.color=false".addQuotesOnWindows()
+
         // Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
         // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
         private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
 
-        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, DISABLE_JLINE)
+        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE)
 
         private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
     }
