@@ -33,14 +33,11 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.NexusIqConfiguration
-import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
 
 import retrofit2.HttpException
 
@@ -112,28 +109,7 @@ class NexusIq(
                 }
             }.toMap()
         } catch (e: IOException) {
-            e.showStackTrace()
-
-            val now = Instant.now()
-            val failedResults = listOf(
-                AdvisorResult(
-                    vulnerabilities = emptyList(),
-                    advisor = AdvisorDetails(advisorName),
-                    summary = AdvisorSummary(
-                        startTime = now,
-                        endTime = now,
-                        issues = listOf(
-                            createAndLogIssue(
-                                source = advisorName,
-                                message = "Failed to retrieve security vulnerabilities from $advisorName: " +
-                                        e.collectMessagesAsString()
-                            )
-                        )
-                    )
-                )
-            )
-
-            packages.associateWith { failedResults }
+            createFailedResults(startTime, packages, e)
         }
     }
 

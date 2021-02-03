@@ -37,10 +37,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
-import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.showStackTrace
 
 /**
  * An [Advisor] implementation that obtains security vulnerability information from a
@@ -107,28 +104,7 @@ class VulnerableCode(name: String, config: AdvisorConfiguration) : Advisor(name,
                 }
             }.toMap()
         } catch (e: Exception) {
-            e.showStackTrace()
-
-            val now = Instant.now()
-            val failedResults = listOf(
-                AdvisorResult(
-                    vulnerabilities = emptyList(),
-                    advisor = AdvisorDetails(advisorName),
-                    summary = AdvisorSummary(
-                        startTime = startTime,
-                        endTime = now,
-                        issues = listOf(
-                            createAndLogIssue(
-                                source = advisorName,
-                                message = "Failed to retrieve security vulnerabilities from $advisorName: " +
-                                        e.collectMessagesAsString()
-                            )
-                        )
-                    )
-                )
-            )
-
-            packages.associateWith { failedResults }
+            createFailedResults(startTime, packages, e)
         }
     }
 
