@@ -56,6 +56,16 @@ object SpdxConstants {
     const val REF_PREFIX = "SPDXRef-"
 
     /**
+     * The prefix to be used for references to other SPDX documents.
+     */
+    const val DOCUMENT_REF_PREFIX = "DocumentRef-"
+
+    /**
+     * The prefix to be used for references to licenses that are not part of the SPDX license list.
+     */
+    const val LICENSE_REF_PREFIX = "LicenseRef-"
+
+    /**
      * The URL that points to list of SPDX licenses.
      */
     const val LICENSE_LIST_URL = "https://spdx.org/licenses/"
