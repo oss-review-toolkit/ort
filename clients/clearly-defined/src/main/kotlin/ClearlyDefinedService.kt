@@ -52,6 +52,11 @@ const val HARVEST_CREATED = "Created"
 interface ClearlyDefinedService {
     companion object {
         /**
+         * The mapper for JSON serialization used by this service.
+         */
+        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+
+        /**
          * Create a ClearlyDefined service instance for communicating with the given [server], optionally using a
          * pre-built OkHttp [client].
          */
@@ -67,7 +72,7 @@ interface ClearlyDefinedService {
                 .apply { if (client != null) client(client) }
                 .baseUrl(url)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
+                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
             return retrofit.create(ClearlyDefinedService::class.java)
@@ -408,7 +413,7 @@ interface ClearlyDefinedService {
      * https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
      */
     @POST("definitions")
-    fun getDefinitions(@Body coordinates: Collection<String>): Call<Map<String, Defined>>
+    suspend fun getDefinitions(@Body coordinates: Collection<String>): Map<String, Defined>
 
     /**
      * Search for existing definitions based on the [pattern] string provided, see
@@ -437,7 +442,7 @@ interface ClearlyDefinedService {
      * Upload curation [patch] data, see https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
      */
     @PATCH("curations")
-    fun putCuration(@Body patch: ContributionPatch): Call<ContributionSummary>
+    suspend fun putCuration(@Body patch: ContributionPatch): ContributionSummary
 
     /**
      * [Request][request] the given components to be harvested, see

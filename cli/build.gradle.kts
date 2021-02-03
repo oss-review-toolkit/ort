@@ -24,6 +24,7 @@ val cliktVersion: String by project
 val config4kVersion: String by project
 val jacksonVersion: String by project
 val kotestVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 val log4jCoreVersion: String by project
 val postgresVersion: String by project
 val reflectionsVersion: String by project
@@ -126,6 +127,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
     implementation("org.eclipse.sw360.antenna:sw360-client:$antennaVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("org.reflections:reflections:$reflectionsVersion")
 

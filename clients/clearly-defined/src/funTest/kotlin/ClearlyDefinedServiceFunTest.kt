@@ -23,8 +23,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
-import io.kotest.matchers.string.beEmpty
-import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
 
 import java.net.HttpURLConnection
@@ -85,14 +83,11 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         "only serialize non-null values".config(tags = setOf(ExpensiveTag)) {
-            val service = ClearlyDefinedService.create(Server.LOCALHOST)
+            val contributionPatch = ContributionPatch(info, listOf(patch))
 
-            val patchCall = service.putCuration(ContributionPatch(info, listOf(patch)))
-            val requestBody = patchCall.request().body
-            val requestBodyAsString = requestBody?.string().orEmpty()
+            val patchJson = ClearlyDefinedService.JSON_MAPPER.writeValueAsString(contributionPatch)
 
-            requestBodyAsString shouldNot beEmpty()
-            requestBodyAsString shouldNotContain "null"
+            patchJson shouldNot io.kotest.matchers.string.include("null")
         }
 
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
@@ -100,12 +95,8 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         "return a summary of the created pull-request".config(enabled = false, tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.DEVELOPMENT)
 
-            val patchCall = service.putCuration(ContributionPatch(info, listOf(patch)))
-            val response = patchCall.execute()
-            val responseCode = response.code()
-            val summary = response.body()
+            val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
 
-            responseCode shouldBe HttpURLConnection.HTTP_OK
             summary shouldNotBeNull {
                 prNumber shouldBeGreaterThan 0
                 url shouldStartWith "https://github.com/clearlydefined/curated-data-dev/pull/"
