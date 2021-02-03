@@ -100,7 +100,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             processableLicenses should beEmpty()
         }
 
-        "SPDX expression only contains valid licenses" {
+        "The SPDX expression only contains valid licenses" {
             val declaredLicenses = listOf("Apache-2.0", "invalid")
 
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
