@@ -388,6 +388,11 @@ data class OrtResult(
         }
 
     /**
+     * Return the list of [AdvisorResult]s for the given [id].
+     */
+    fun getAdvisorResultsForId(id: Identifier): List<AdvisorResult> = advisorResultsById[id].orEmpty()
+
+    /**
      * Return all [RuleViolation]s contained in this [OrtResult].
      */
     @JsonIgnore
