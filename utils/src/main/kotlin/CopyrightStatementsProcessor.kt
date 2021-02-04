@@ -264,7 +264,7 @@ class CopyrightStatementsProcessor {
         val unprocessedStatements = sortedSetOf<String>()
         val processableStatements = mutableListOf<Parts>()
 
-        copyrightStatements.forEach {
+        copyrightStatements.distinct().forEach {
             val parts = determineParts(it)
             if (parts != null) {
                 processableStatements += parts
