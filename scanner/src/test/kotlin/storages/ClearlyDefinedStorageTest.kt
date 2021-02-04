@@ -285,7 +285,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             when (val result = storage.read(TEST_IDENTIFIER)) {
                 is Success -> fail("Expected failure, but got $result")
-                is Failure -> result.error shouldContain "IOException"
+                is Failure -> result.error shouldContain "HttpException"
             }
         }
 
