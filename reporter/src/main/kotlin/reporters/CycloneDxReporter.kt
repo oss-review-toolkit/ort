@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.isFalse
 
@@ -225,8 +226,9 @@ class CycloneDxReporter : Reporter {
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
             //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
-            copyright = resolvedLicenseInfo.flatMap { it.getCopyrights(process = true) }.joinToString()
-                .takeUnless { it.isEmpty() }
+            copyright = resolvedLicenseInfo.flatMapTo(mutableSetOf()) { it.getCopyrights() }.let {
+                CopyrightStatementsProcessor().process(it).getAllStatements()
+            }.joinToString().takeUnless { it.isEmpty() }
 
             purl = pkg.purl + purlQualifier
             isModified = pkg.isModified
