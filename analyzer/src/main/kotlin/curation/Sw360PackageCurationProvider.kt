@@ -22,14 +22,14 @@ package org.ossreviewtoolkit.analyzer.curation
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 
-import org.eclipse.sw360.antenna.http.HttpClientFactoryImpl
-import org.eclipse.sw360.antenna.http.config.HttpClientConfig
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360Connection
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360ConnectionFactory
-import org.eclipse.sw360.antenna.sw360.client.config.SW360ClientConfig
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.attachments.SW360AttachmentType
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.releases.SW360ClearingState
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.releases.SW360Release
+import org.eclipse.sw360.clients.adapter.SW360Connection
+import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
+import org.eclipse.sw360.clients.config.SW360ClientConfig
+import org.eclipse.sw360.clients.rest.resource.attachments.SW360AttachmentType
+import org.eclipse.sw360.clients.rest.resource.releases.SW360ClearingState
+import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
+import org.eclipse.sw360.http.HttpClientFactoryImpl
+import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.model.Hash
@@ -105,6 +105,7 @@ class Sw360PackageCurationProvider(sw360Configuration: Sw360StorageConfiguration
             config.password,
             config.clientId,
             config.clientPassword,
+            config.token,
             httpClient,
             jsonMapper
         )
