@@ -135,8 +135,8 @@ data class ResolvedLicense(
 
     /**
      * Return all copyright statements associated to this license. Copyright findings that are excluded by
-     * [PathExclude]s are [omitted][omitExcluded] by default. The licenses can optionally be [processed][process] using
-     * the [CopyrightStatementsProcessor].
+     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights can optionally be [processed][process]
+     * using the [CopyrightStatementsProcessor].
      */
     @JvmOverloads
     fun getCopyrights(process: Boolean = false, omitExcluded: Boolean = true): Set<String> {
