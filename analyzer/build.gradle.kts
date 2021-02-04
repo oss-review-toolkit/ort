@@ -19,7 +19,6 @@
  * License-Filename: LICENSE
  */
 
-val antennaVersion: String by project
 val digraphVersion: String by project
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
@@ -27,6 +26,7 @@ val mavenVersion: String by project
 val mavenResolverVersion: String by project
 val mockkVersion: String by project
 val semverVersion: String by project
+val sw360ClientVersion: String by project
 val toml4jVersion: String by project
 
 plugins {
@@ -47,11 +47,11 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://download.eclipse.org/antenna/releases/")
+            maven("https://repo.eclipse.org/content/groups/sw360/")
         }
 
         filter {
-            includeGroup("org.eclipse.sw360.antenna")
+            includeGroup("org.eclipse.sw360")
         }
     }
 }
@@ -70,7 +70,7 @@ dependencies {
     implementation("com.vdurmont:semver4j:$semverVersion")
     implementation("org.apache.maven:maven-core:$mavenVersion")
     implementation("org.apache.maven:maven-compat:$mavenVersion")
-    implementation("org.eclipse.sw360.antenna:sw360-client:$antennaVersion")
+    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.

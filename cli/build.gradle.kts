@@ -19,7 +19,6 @@
  * License-Filename: LICENSE
  */
 
-val antennaVersion: String by project
 val cliktVersion: String by project
 val config4kVersion: String by project
 val jacksonVersion: String by project
@@ -28,6 +27,7 @@ val kotlinxCoroutinesVersion: String by project
 val log4jCoreVersion: String by project
 val postgresVersion: String by project
 val reflectionsVersion: String by project
+val sw360ClientVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -91,11 +91,11 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://download.eclipse.org/antenna/releases/")
+            maven("https://repo.eclipse.org/content/groups/sw360/")
         }
 
         filter {
-            includeGroup("org.eclipse.sw360.antenna")
+            includeGroup("org.eclipse.sw360")
         }
     }
 
@@ -125,7 +125,7 @@ dependencies {
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
-    implementation("org.eclipse.sw360.antenna:sw360-client:$antennaVersion")
+    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")

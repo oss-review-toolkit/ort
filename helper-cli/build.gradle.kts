@@ -55,11 +55,11 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://download.eclipse.org/antenna/releases/")
+            maven("https://repo.eclipse.org/content/groups/sw360/")
         }
 
         filter {
-            includeGroup("org.eclipse.sw360.antenna")
+            includeGroup("org.eclipse.sw360")
         }
     }
 }

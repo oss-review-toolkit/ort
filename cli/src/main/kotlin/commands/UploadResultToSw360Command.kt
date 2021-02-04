@@ -31,17 +31,17 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import kotlin.time.measureTimedValue
 
-import org.eclipse.sw360.antenna.http.HttpClientFactoryImpl
-import org.eclipse.sw360.antenna.http.config.HttpClientConfig
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360Connection
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360ConnectionFactory
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360ProjectClientAdapter
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360ReleaseClientAdapter
-import org.eclipse.sw360.antenna.sw360.client.config.SW360ClientConfig
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.SW360Visibility
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.projects.SW360Project
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.releases.SW360Release
-import org.eclipse.sw360.antenna.sw360.client.utils.SW360ClientException
+import org.eclipse.sw360.clients.adapter.SW360Connection
+import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
+import org.eclipse.sw360.clients.adapter.SW360ProjectClientAdapter
+import org.eclipse.sw360.clients.adapter.SW360ReleaseClientAdapter
+import org.eclipse.sw360.clients.config.SW360ClientConfig
+import org.eclipse.sw360.clients.rest.resource.SW360Visibility
+import org.eclipse.sw360.clients.rest.resource.projects.SW360Project
+import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
+import org.eclipse.sw360.clients.utils.SW360ClientException
+import org.eclipse.sw360.http.HttpClientFactoryImpl
+import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
@@ -162,6 +162,7 @@ class UploadResultToSw360Command : CliktCommand(
             config.password,
             config.clientId,
             config.clientPassword,
+            config.token,
             httpClient,
             jsonMapper
         )

@@ -151,5 +151,12 @@ data class Sw360StorageConfiguration(
      * The password of the client ID.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val clientPassword: String = ""
+    val clientPassword: String = "",
+
+    /**
+     * Optional access token that can be used instead of the [authUrl], [username], [password], [clientId] and
+     * [clientPassword] if the token is already known.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val token: String = ""
 ) : ScanStorageConfiguration()

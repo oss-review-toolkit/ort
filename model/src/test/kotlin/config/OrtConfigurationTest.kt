@@ -56,6 +56,7 @@ class OrtConfigurationTest : WordSpec({
                     password shouldBe "password"
                     clientId shouldBe "clientId"
                     clientPassword shouldBe "clientPassword"
+                    token shouldBe "token"
                 }
             }
 
