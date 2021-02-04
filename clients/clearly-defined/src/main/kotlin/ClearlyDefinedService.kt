@@ -32,7 +32,6 @@ import java.net.URI
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -423,7 +422,7 @@ interface ClearlyDefinedService {
      * Result is a list with the ClearlyDefined URIs to all the definitions that are matched by the pattern.
      */
     @GET("definitions")
-    fun searchDefinitions(@Query("pattern") pattern: String): Call<List<String>>
+    suspend fun searchDefinitions(@Query("pattern") pattern: String): List<String>
 
     /**
      * Get the curation for the component described by [type], [provider], [namespace], [name] and [revision], see
@@ -449,7 +448,7 @@ interface ClearlyDefinedService {
      * https://api.clearlydefined.io/api-docs/#/harvest/post_harvest.
      */
     @POST("harvest")
-    fun harvest(@Body request: Collection<HarvestRequest>): Call<String>
+    suspend fun harvest(@Body request: Collection<HarvestRequest>): String
 
     /**
      * Get information about the harvest tools that have produced data for the component described by [type],
@@ -458,13 +457,13 @@ interface ClearlyDefinedService {
      * This can be used to quickly find out whether results of a specific tool are already available.
      */
     @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}?form=list")
-    fun harvestTools(
+    suspend fun harvestTools(
         @Path("type") type: ComponentType,
         @Path("provider") provider: Provider,
         @Path("namespace") namespace: String,
         @Path("name") name: String,
         @Path("revision") revision: String
-    ): Call<List<String>>
+    ): List<String>
 
     /**
      * Get the harvested data for the component described by [type], [provider], [namespace], [name], and [revision]
@@ -472,7 +471,7 @@ interface ClearlyDefinedService {
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision___tool___toolVersion_
      */
     @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}/{tool}/{toolVersion}?form=streamed")
-    fun harvestToolData(
+    suspend fun harvestToolData(
         @Path("type") type: ComponentType,
         @Path("provider") provider: Provider,
         @Path("namespace") namespace: String,
@@ -480,5 +479,5 @@ interface ClearlyDefinedService {
         @Path("revision") revision: String,
         @Path("tool") tool: String,
         @Path("toolVersion") toolVersion: String
-    ): Call<ResponseBody>
+    ): ResponseBody
 }
