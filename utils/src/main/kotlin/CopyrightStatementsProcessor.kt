@@ -32,6 +32,53 @@ private data class Parts(
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
 private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_OWNER_START_CHARS
 
+private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
+
+private val KNOWN_PREFIX_REGEX = listOf(
+    "^(\\(c\\))",
+    "^(\\(c\\) [C|c]opyright)",
+    "^(\\(c\\) [C|c]opyrighted)",
+    "^([C|c]opyright)",
+    "^([C|c]opyright \\(c\\))",
+    "^([C|c]opyright [O|o]wnership)",
+    "^([C|c]opyright')",
+    "^([C|c]opyright' \\(c\\))",
+    "^(COPYRIGHT)",
+    "^([C|c]opyrighted)",
+    "^([C|c]opyrighted \\(c\\))",
+    "^([P|p]ortions [C|c]opyright)",
+    "^([P|p]ortions \\(c\\))",
+    "^([P|p]ortions [C|c]opyright \\(c\\))"
+).map { it.toRegex() }
+
+private val PARTS_COMPARATOR = compareBy<Parts>(
+    { it.owner },
+    { prettyPrintYears(it.years) },
+    { it.prefix }
+)
+
+private fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
+    fun divideAndConquer(years: IntArray, start: Int = 0, end: Int = years.size - 1): List<Pair<Int, Int>> {
+        if (end < start) return emptyList()
+
+        for (i in start + 1..end) {
+            if (years[i - 1] + 1 != years[i]) {
+                return listOf(Pair(years[start], years[i - 1])) + divideAndConquer(years, i, end)
+            }
+        }
+
+        return listOf(Pair(years[start], years[end]))
+    }
+
+    val sortedYears = years.toSortedSet().toIntArray()
+    return divideAndConquer(sortedYears, 0, sortedYears.size - 1)
+}
+
+private fun prettyPrintYears(years: Collection<Int>) =
+    getYearRanges(years).joinToString { (fromYear, toYear) ->
+        if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
+    }
+
 private fun String.removeDuplicateWhitespaces() = replace(Regex("\\s+"), " ")
 
 private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.toUpperCase()
@@ -65,55 +112,6 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
  *   -URLs could be treated similar to years, e.g. entries which differ only in terms of URLs and year can be merged.
  */
 class CopyrightStatementsProcessor {
-    companion object {
-        private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
-
-        private val KNOWN_PREFIX_REGEX = listOf(
-            "^(\\(c\\))",
-            "^(\\(c\\) [C|c]opyright)",
-            "^(\\(c\\) [C|c]opyrighted)",
-            "^([C|c]opyright)",
-            "^([C|c]opyright \\(c\\))",
-            "^([C|c]opyright [O|o]wnership)",
-            "^([C|c]opyright')",
-            "^([C|c]opyright' \\(c\\))",
-            "^(COPYRIGHT)",
-            "^([C|c]opyrighted)",
-            "^([C|c]opyrighted \\(c\\))",
-            "^([P|p]ortions [C|c]opyright)",
-            "^([P|p]ortions \\(c\\))",
-            "^([P|p]ortions [C|c]opyright \\(c\\))"
-        ).map { it.toRegex() }
-
-        private val PARTS_COMPARATOR = compareBy<Parts>(
-            { it.owner },
-            { prettyPrintYears(it.years) },
-            { it.prefix }
-        )
-
-        private fun prettyPrintYears(years: Collection<Int>) =
-            getYearRanges(years).joinToString { (fromYear, toYear) ->
-                if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
-            }
-
-        private fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
-            fun divideAndConquer(years: IntArray, start: Int = 0, end: Int = years.size - 1): List<Pair<Int, Int>> {
-                if (end < start) return emptyList()
-
-                for (i in start + 1..end) {
-                    if (years[i - 1] + 1 != years[i]) {
-                        return listOf(Pair(years[start], years[i - 1])) + divideAndConquer(years, i, end)
-                    }
-                }
-
-                return listOf(Pair(years[start], years[end]))
-            }
-
-            val sortedYears = years.toSortedSet().toIntArray()
-            return divideAndConquer(sortedYears, 0, sortedYears.size - 1)
-        }
-    }
-
     data class Result(
         /**
          * The copyright statements that were processed by the [CopyrightStatementsProcessor], mapped to the original
