@@ -41,20 +41,20 @@ private val COMMA_SEPARATED_YEARS_REGEX = "(?=.*)\\b(\\d{4})\\b([ ]*[,][ ]*)\\b(
 private val DUPLICATE_WHITESPACES_REGEX = "\\s+".toRegex()
 
 private val KNOWN_PREFIX_REGEX = listOf(
-    "^(\\(c\\))",
-    "^(\\(c\\) [C|c]opyright)",
-    "^(\\(c\\) [C|c]opyrighted)",
-    "^([C|c]opyright)",
-    "^([C|c]opyright \\(c\\))",
-    "^([C|c]opyright [O|o]wnership)",
-    "^([C|c]opyright')",
-    "^([C|c]opyright' \\(c\\))",
-    "^(COPYRIGHT)",
-    "^([C|c]opyrighted)",
-    "^([C|c]opyrighted \\(c\\))",
-    "^([P|p]ortions [C|c]opyright)",
-    "^([P|p]ortions \\(c\\))",
-    "^([P|p]ortions [C|c]opyright \\(c\\))"
+    "^(?:\\(c\\))",
+    "^(?:\\(c\\) [C|c]opyright)",
+    "^(?:\\(c\\) [C|c]opyrighted)",
+    "^(?:[C|c]opyright)",
+    "^(?:[C|c]opyright \\(c\\))",
+    "^(?:[C|c]opyright [O|o]wnership)",
+    "^(?:[C|c]opyright')",
+    "^(?:[C|c]opyright' \\(c\\))",
+    "^(?:COPYRIGHT)",
+    "^(?:[C|c]opyrighted)",
+    "^(?:[C|c]opyrighted \\(c\\))",
+    "^(?:[P|p]ortions [C|c]opyright)",
+    "^(?:[P|p]ortions \\(c\\))",
+    "^(?:[P|p]ortions [C|c]opyright \\(c\\))"
 ).map { it.toRegex() }
 
 private val SINGLE_YEARS_REGEX = "(?=.*)\\b([\\d]{4})\\b".toRegex()
