@@ -61,6 +61,10 @@ private const val REPORT_EXTENSION = "xml"
  * [1]: https://cyclonedx.org
  */
 class CycloneDxReporter : Reporter {
+    companion object {
+        const val OPTION_SINGLE_BOM = "single.bom"
+    }
+
     override val reporterName = "CycloneDx"
 
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
@@ -102,7 +106,7 @@ class CycloneDxReporter : Reporter {
     ): List<File> {
         val outputFiles = mutableListOf<File>()
         val projects = input.ortResult.getProjects(omitExcluded = true)
-        val createSingleBom = !options["single.bom"].isFalse()
+        val createSingleBom = !options[OPTION_SINGLE_BOM].isFalse()
 
         if (createSingleBom && projects.size > 1) {
             val reportFilename = "$REPORT_BASE_FILENAME.$REPORT_EXTENSION"
