@@ -36,6 +36,10 @@ private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') 
 
 private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
 
+private val COMMA_SEPARATED_YEARS_REGEX = "(?=.*)\\b(\\d{4})\\b([ ]*[,][ ]*)\\b(\\d{4})\\b".toRegex()
+
+private val DUPLICATE_WHITESPACES_REGEX = "\\s+".toRegex()
+
 private val KNOWN_PREFIX_REGEX = listOf(
     "^(\\(c\\))",
     "^(\\(c\\) [C|c]opyright)",
@@ -52,6 +56,12 @@ private val KNOWN_PREFIX_REGEX = listOf(
     "^([P|p]ortions \\(c\\))",
     "^([P|p]ortions [C|c]opyright \\(c\\))"
 ).map { it.toRegex() }
+
+private val SINGLE_YEARS_REGEX = "(?=.*)\\b([\\d]{4})\\b".toRegex()
+
+private val U_QUOTE_REGEX = "(.*\\b)u'(\\d{4}\\b)".toRegex()
+
+private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})([ ]*[-][ ]*)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
 
 private val PARTS_COMPARATOR = compareBy<Parts>(
     { it.owner },
@@ -123,33 +133,31 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
     val resultYears = mutableSetOf<Int>()
 
     // Fix up strings containing e.g.: 'copyright u'2013'
-    var currentStatement = copyrightStatement.replace("(.*\\b)u'(\\d{4}\\b)".toRegex(), "$1$2")
+    var currentStatement = copyrightStatement.replace(U_QUOTE_REGEX, "$1$2")
 
     val replaceRangeResult = replaceAllYearRanges(currentStatement)
     currentStatement = replaceRangeResult.first
     resultYears += replaceRangeResult.second
 
     // Replace comma separated years.
-    val commaSeparatedYearsRegex = "(?=.*)\\b(\\d{4})\\b([ ]*[,][ ]*)\\b(\\d{4})\\b".toRegex()
-    var matchResult = commaSeparatedYearsRegex.find(currentStatement)
+    var matchResult = COMMA_SEPARATED_YEARS_REGEX.find(currentStatement)
 
     while (matchResult != null) {
         currentStatement = currentStatement.removeRange(matchResult.groups[2]!!.range)
         currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, "$YEAR_PLACEHOLDER ")
         resultYears += matchResult.groups[1]!!.value.toInt()
 
-        matchResult = commaSeparatedYearsRegex.find(currentStatement)
+        matchResult = COMMA_SEPARATED_YEARS_REGEX.find(currentStatement)
     }
 
     // Replace single years.
-    val singleYearsRegex = "(?=.*)\\b([\\d]{4})\\b".toRegex()
-    matchResult = singleYearsRegex.find(currentStatement)
+    matchResult = SINGLE_YEARS_REGEX.find(currentStatement)
 
     while (matchResult != null) {
         currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, YEAR_PLACEHOLDER)
         resultYears += matchResult.groups[1]!!.value.toInt()
 
-        matchResult = singleYearsRegex.find(currentStatement)
+        matchResult = SINGLE_YEARS_REGEX.find(currentStatement)
     }
 
     currentStatement = currentStatement.replace("$YEAR_PLACEHOLDER $YEAR_PLACEHOLDER", YEAR_PLACEHOLDER)
@@ -171,9 +179,7 @@ private fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<I
 }
 
 private fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
-    val yearRangeRegex = "(?=.*)\\b([\\d]{4})([ ]*[-][ ]*)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
-
-    yearRangeRegex.findAll(copyrightStatement).forEach { matchResult ->
+    YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
         val fromGroup = matchResult.groups[1]!!
         val separatorGroup = matchResult.groups[2]!!
         val toGroup = matchResult.groups[3]!!
@@ -205,7 +211,7 @@ private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
         it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
     }
 
-private fun String.removeDuplicateWhitespaces() = replace(Regex("\\s+"), " ")
+private fun String.removeDuplicateWhitespaces() = replace(DUPLICATE_WHITESPACES_REGEX, " ")
 
 private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.toUpperCase()
 
