@@ -30,9 +30,8 @@ private const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
 
 /**
- * This function verifies that a request to FossID server was successful
- * @param operation the label of the operation, for logging
- * @param withDataCheck if true, the payload will be checked for existence
+ * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.
+ * If [withDataCheck] is true, also the payload data is checked, otherwise that check is skipped.
  */
 fun EntityPostResponseBody<*>.checkResponse(operation: String, withDataCheck: Boolean = true) {
     require(error == null) {
@@ -60,10 +59,9 @@ fun <T : Any> EntityPostResponseBody<Any>.toList(cls: KClass<T>): List<T> =
     }
 
 /**
- * Get a FossID project
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param projectCode the code of the project
+ * Get the project for the given [projectCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCode: String) =
     getProject(
@@ -71,10 +69,9 @@ suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCo
     )
 
 /**
- * List the scans of a FossID project
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param projectCode the code of the project
+ * List the scans for the given [projectCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectCode: String) =
     listScansForProject(
@@ -82,12 +79,9 @@ suspend fun FossIdRestService.listScansForProject(user: String, apiKey: String, 
     )
 
 /**
- * Create a new FossID project
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param projectCode the code of the project
- * @param projectName the name of the project
- * @param comment the comment of the project
+ * Create a new project with the given [projectCode], [projectName] and optional [comment].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.createProject(
     user: String,
@@ -109,12 +103,9 @@ suspend fun FossIdRestService.createProject(
     )
 
 /**
- * Create a new scan for a FossID project
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param projectCode the code of the project
- * @param gitRepoUrl the URL of the GIT repository
- * @param gitBranch the branch of the GIT repository
+ * Create a new scan of [gitRepoUrl]/[gitBranch] for the given [projectCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.createScan(
     user: String,
@@ -141,10 +132,9 @@ suspend fun FossIdRestService.createScan(
 }
 
 /**
- * Trigger a scan
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * Trigger a scan with the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: String) =
     runScan(
@@ -160,10 +150,9 @@ suspend fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: St
     )
 
 /**
- * Trigger the download of the source code for a given scan
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * Trigger download of the source code for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scanCode: String) =
     downloadFromGit(
@@ -177,10 +166,9 @@ suspend fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scan
     )
 
 /**
- * Get the status of a scan
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * Get the scan status for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scanCode: String) =
     checkScanStatus(
@@ -188,10 +176,9 @@ suspend fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scan
     )
 
 /**
- * Get the download status of the source code for a given scan
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * Get source code download status for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, scanCode: String) =
     checkDownloadStatus(
@@ -201,10 +188,9 @@ suspend fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, 
     )
 
 /**
- * List the results of a scan
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * List the results for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.listScanResults(user: String, apiKey: String, scanCode: String) =
     listScanResults(
@@ -212,10 +198,9 @@ suspend fun FossIdRestService.listScanResults(user: String, apiKey: String, scan
     )
 
 /**
- * List the files of a scan that have been manually marked as identified
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * List the files that have been manually marked as identified for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
     listMarkedAsIdentifiedFiles(
@@ -229,10 +214,9 @@ suspend fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: 
     )
 
 /**
- * List the files of a scan that have been identified
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * List the files that have been identified for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
     listIdentifiedFiles(
@@ -242,10 +226,9 @@ suspend fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, 
     )
 
 /**
- * List the files of a scan that have been ignored
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * List the files that have been ignored for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, scanCode: String) =
     listIgnoredFiles(
@@ -255,10 +238,9 @@ suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, sca
     )
 
 /**
- * List the files of a scan that are in "pending identification" state
- * @param user the user querying the API
- * @param apiKey the key to query the API
- * @param scanCode the code of the scan
+ * List the files that are in "pending identification" for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.listPendingFiles(user: String, apiKey: String, scanCode: String) =
     listPendingFiles(
