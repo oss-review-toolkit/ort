@@ -242,7 +242,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 } else {
                     val vcs = VersionControlSystem.forUrl(projectUrl)
                     val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
-                    val vcsRevision = vcsRevisionOption ?: vcs?.defaultBranchName.orEmpty()
+                    val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()
 
                     val vcsInfo = VcsInfo(
                         type = vcsType,

@@ -39,12 +39,13 @@ class Cvs : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
 
     override val type = VcsType.CVS
-    override val defaultBranchName = ""
     override val latestRevisionNames = emptyList<String>()
 
     override fun command(workingDir: File?) = "cvs"
 
     override fun getVersion() = getVersion(null)
+
+    override fun getDefaultBranchName(url: String) = null
 
     override fun transformVersion(output: String) =
         versionRegex.matcher(output.lineSequence().first()).let {
