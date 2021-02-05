@@ -35,6 +35,7 @@ import java.util.regex.Pattern
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
+import org.eclipse.jgit.lib.SymbolicRef
 import org.eclipse.jgit.transport.JschConfigSessionFactory
 import org.eclipse.jgit.transport.OpenSshConfig
 import org.eclipse.jgit.transport.SshSessionFactory
@@ -97,12 +98,16 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     override val type = VcsType.GIT
     override val priority = 100
-    override val defaultBranchName = "master"
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun command(workingDir: File?) = "git"
 
     override fun getVersion() = getVersion(null)
+
+    override fun getDefaultBranchName(url: String): String {
+        val refs = Git.lsRemoteRepository().setRemote(url).callAsMap()
+        return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
+    }
 
     override fun transformVersion(output: String) =
         versionRegex.matcher(output.lineSequence().first()).let {

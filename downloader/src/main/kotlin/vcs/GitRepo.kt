@@ -24,6 +24,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.IOException
 
+import org.eclipse.jgit.lib.SymbolicRef
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
@@ -65,12 +67,16 @@ private data class Include(
 class GitRepo : VersionControlSystem(), CommandLineTool {
     override val type = VcsType.GIT_REPO
     override val priority = 50
-    override val defaultBranchName = "master"
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun command(workingDir: File?) = "repo"
 
     override fun getVersion() = getVersion(null)
+
+    override fun getDefaultBranchName(url: String): String {
+        val refs = org.eclipse.jgit.api.Git.lsRemoteRepository().setRemote(url).callAsMap()
+        return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
+    }
 
     override fun transformVersion(output: String): String {
         val launcherVersion = output.lineSequence().mapNotNull { line ->
