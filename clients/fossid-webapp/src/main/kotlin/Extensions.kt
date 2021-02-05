@@ -26,8 +26,6 @@ import java.time.format.DateTimeFormatter
 
 import kotlin.reflect.KClass
 
-import retrofit2.Call
-
 private const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
 
@@ -67,7 +65,7 @@ fun <T : Any> EntityPostResponseBody<Any>.toList(cls: KClass<T>): List<T> =
  * @param apiKey the key to query the API
  * @param projectCode the code of the project
  */
-fun FossIdRestService.getProject(user: String, apiKey: String, projectCode: String) =
+suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCode: String) =
     getProject(
         PostRequestBody("get_information", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
     )
@@ -78,7 +76,7 @@ fun FossIdRestService.getProject(user: String, apiKey: String, projectCode: Stri
  * @param apiKey the key to query the API
  * @param projectCode the code of the project
  */
-fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectCode: String) =
+suspend fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectCode: String) =
     listScansForProject(
         PostRequestBody("get_all_scans", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
     )
@@ -91,7 +89,7 @@ fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectC
  * @param projectName the name of the project
  * @param comment the comment of the project
  */
-fun FossIdRestService.createProject(
+suspend fun FossIdRestService.createProject(
     user: String,
     apiKey: String,
     projectCode: String,
@@ -118,13 +116,13 @@ fun FossIdRestService.createProject(
  * @param gitRepoUrl the URL of the GIT repository
  * @param gitBranch the branch of the GIT repository
  */
-fun FossIdRestService.createScan(
+suspend fun FossIdRestService.createScan(
     user: String,
     apiKey: String,
     projectCode: String,
     gitRepoUrl: String,
     gitBranch: String
-): Call<MapResponseBody<String>> {
+): MapResponseBody<String> {
     val formatter = DateTimeFormatter.ofPattern("'$projectCode'_yyyyMMdd_HHmmss")
     val scanCode = formatter.format(LocalDateTime.now())
     return createScan(
@@ -148,7 +146,7 @@ fun FossIdRestService.createScan(
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: String) =
     runScan(
         PostRequestBody(
             "run",
@@ -167,7 +165,7 @@ fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: String) =
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scanCode: String) =
     downloadFromGit(
         PostRequestBody(
             "download_content_from_git",
@@ -184,7 +182,7 @@ fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scanCode: St
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scanCode: String) =
     checkScanStatus(
         PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
     )
@@ -195,7 +193,7 @@ fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scanCode: St
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, scanCode: String) =
     checkDownloadStatus(
         PostRequestBody(
             "check_status_download_content_from_git", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
@@ -208,7 +206,7 @@ fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, scanCode
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.listScanResults(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.listScanResults(user: String, apiKey: String, scanCode: String) =
     listScanResults(
         PostRequestBody("get_results", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
     )
@@ -219,7 +217,7 @@ fun FossIdRestService.listScanResults(user: String, apiKey: String, scanCode: St
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
     listMarkedAsIdentifiedFiles(
         PostRequestBody(
             "get_marked_as_identified_files",
@@ -236,7 +234,7 @@ fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: String, 
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
     listIdentifiedFiles(
         PostRequestBody(
             "get_identified_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
@@ -249,7 +247,7 @@ fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, scanCode
  * @param apiKey the key to query the API
  * @param scanCode the code of the scan
  */
-fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, scanCode: String) =
     listIgnoredFiles(
         PostRequestBody(
             "get_ignored_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
