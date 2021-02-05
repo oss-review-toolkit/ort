@@ -80,20 +80,20 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Version can be extracted from index" {
-        service.getLoginPage().execute().body() shouldNotBeNull {
+        service.getLoginPage() shouldNotBeNull {
             string() shouldContain "cli.  3.1.16 (build 5634934d, RELEASE)"
         }
     }
 
     "Projects can be listed when there is none" {
-        service.getProject("", "", PROJECT_CODE).execute().body() shouldNotBeNull {
+        service.getProject("", "", PROJECT_CODE) shouldNotBeNull {
             status shouldBe 0
             data should beNull()
         }
     }
 
     "Project can be created" {
-        service.createProject("", "", PROJECT_CODE, PROJECT_CODE).execute().body() shouldNotBeNull {
+        service.createProject("", "", PROJECT_CODE, PROJECT_CODE) shouldNotBeNull {
             checkResponse("create project")
             data shouldNotBeNull {
                 shouldContain("project_id", "405")
@@ -102,7 +102,7 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Scans for project can be listed when there is no scan" {
-        service.listScansForProject("", "", PROJECT_CODE).execute().body() shouldNotBeNull {
+        service.listScansForProject("", "", PROJECT_CODE) shouldNotBeNull {
             checkResponse("list scans")
             toList(Scan::class) should beEmpty()
         }
@@ -114,7 +114,7 @@ class FossIdClientNewProjectTest : StringSpec({
             PROJECT_CODE,
             "https://github.com/gundy/semver4j.git",
             "671aa533f7e33c773bf620b9f466650c3b9ab26e"
-        ).execute().body() shouldNotBeNull {
+        ) shouldNotBeNull {
             data shouldNotBeNull {
                 shouldContain("scan_id", "4920")
             }
@@ -122,26 +122,26 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Download from Git can be triggered" {
-        service.downloadFromGit("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.downloadFromGit("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("download data from Git", false)
         }
     }
 
     "Download status can be queried" {
-        service.checkDownloadStatus("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.checkDownloadStatus("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("check download status")
             data shouldBe DownloadStatus.FINISHED
         }
     }
 
     "A scan can be run" {
-        service.runScan("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.runScan("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("trigger scan", false)
         }
     }
 
     "Scan status can be queried" {
-        service.checkScanStatus("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.checkScanStatus("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("get scan status", false)
 
             data shouldNotBeNull {
@@ -151,7 +151,7 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Scan results can be listed" {
-        service.listScanResults("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.listScanResults("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list scan results")
 
             data shouldNotBeNull {
@@ -162,7 +162,7 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Identified files can be listed" {
-        service.listIdentifiedFiles("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.listIdentifiedFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list identified files")
 
             data shouldNotBeNull {
@@ -183,14 +183,14 @@ class FossIdClientNewProjectTest : StringSpec({
     }
 
     "Marked files can be listed when there are none" {
-        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list marked as identified files")
             toList(MarkedAsIdentifiedFile::class) should beEmpty()
         }
     }
 
     "Ignored files can be listed" {
-        service.listIgnoredFiles("", "", SCAN_CODE).execute().body() shouldNotBeNull {
+        service.listIgnoredFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list ignored files")
 
             val files = toList(IgnoredFile::class)

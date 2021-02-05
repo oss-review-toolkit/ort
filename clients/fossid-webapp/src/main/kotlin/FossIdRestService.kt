@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
@@ -63,41 +62,41 @@ interface FossIdRestService {
     }
 
     @POST("api.php")
-    fun getProject(@Body body: PostRequestBody): Call<EntityPostResponseBody<Project>>
+    suspend fun getProject(@Body body: PostRequestBody): EntityPostResponseBody<Project>
 
     @POST("api.php")
-    fun listScansForProject(@Body body: PostRequestBody): Call<EntityPostResponseBody<Any>>
+    suspend fun listScansForProject(@Body body: PostRequestBody): EntityPostResponseBody<Any>
 
     @POST("api.php")
-    fun createProject(@Body body: PostRequestBody): Call<MapResponseBody<String>>
+    suspend fun createProject(@Body body: PostRequestBody): MapResponseBody<String>
 
     @POST("api.php")
-    fun createScan(@Body body: PostRequestBody): Call<MapResponseBody<String>>
+    suspend fun createScan(@Body body: PostRequestBody): MapResponseBody<String>
 
     @POST("api.php")
-    fun runScan(@Body body: PostRequestBody): Call<EntityPostResponseBody<Nothing>>
+    suspend fun runScan(@Body body: PostRequestBody): EntityPostResponseBody<Nothing>
 
     @POST("api.php")
-    fun downloadFromGit(@Body body: PostRequestBody): Call<EntityPostResponseBody<Nothing>>
+    suspend fun downloadFromGit(@Body body: PostRequestBody): EntityPostResponseBody<Nothing>
 
     @POST("api.php")
-    fun checkDownloadStatus(@Body body: PostRequestBody): Call<EntityPostResponseBody<DownloadStatus>>
+    suspend fun checkDownloadStatus(@Body body: PostRequestBody): EntityPostResponseBody<DownloadStatus>
 
     @POST("api.php")
-    fun checkScanStatus(@Body body: PostRequestBody): Call<EntityPostResponseBody<ScanStatus>>
+    suspend fun checkScanStatus(@Body body: PostRequestBody): EntityPostResponseBody<ScanStatus>
 
     @POST("api.php")
-    fun listScanResults(@Body body: PostRequestBody): Call<MapResponseBody<FossIdScanResult>>
+    suspend fun listScanResults(@Body body: PostRequestBody): MapResponseBody<FossIdScanResult>
 
     @POST("api.php")
-    fun listIdentifiedFiles(@Body body: PostRequestBody): Call<MapResponseBody<IdentifiedFile>>
+    suspend fun listIdentifiedFiles(@Body body: PostRequestBody): MapResponseBody<IdentifiedFile>
 
     @POST("api.php")
-    fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody): Call<EntityPostResponseBody<Any>>
+    suspend fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody): EntityPostResponseBody<Any>
 
     @POST("api.php")
-    fun listIgnoredFiles(@Body body: PostRequestBody): Call<EntityPostResponseBody<Any>>
+    suspend fun listIgnoredFiles(@Body body: PostRequestBody): EntityPostResponseBody<Any>
 
     @GET("index.php?form=login")
-    fun getLoginPage(): Call<ResponseBody>
+    suspend fun getLoginPage(): ResponseBody
 }
