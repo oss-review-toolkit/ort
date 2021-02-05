@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.Scan
@@ -199,6 +200,16 @@ class FossIdClientNewProjectTest : StringSpec({
                 it.path shouldBe ".git/hooks/fsmonitor-watchman.sample"
                 it.reason shouldBe "Directory rule (.git)"
             }
+        }
+    }
+
+    "Pending files can be listed" {
+        service.listPendingFiles("", "", SCAN_CODE) shouldNotBeNull {
+            checkResponse("list pending files")
+
+            val files = toList(String::class)
+            files.size shouldBe 2
+            files.first() shouldBe "src/extra_file.txt"
         }
     }
 })

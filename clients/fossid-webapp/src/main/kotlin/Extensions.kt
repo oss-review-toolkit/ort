@@ -253,3 +253,16 @@ suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, sca
             "get_ignored_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
         )
     )
+
+/**
+ * List the files of a scan that are in "pending identification" state
+ * @param user the user querying the API
+ * @param apiKey the key to query the API
+ * @param scanCode the code of the scan
+ */
+suspend fun FossIdRestService.listPendingFiles(user: String, apiKey: String, scanCode: String) =
+    listPendingFiles(
+        PostRequestBody(
+            "get_pending_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+        )
+    )

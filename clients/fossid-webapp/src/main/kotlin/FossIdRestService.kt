@@ -97,6 +97,9 @@ interface FossIdRestService {
     @POST("api.php")
     suspend fun listIgnoredFiles(@Body body: PostRequestBody): EntityPostResponseBody<Any>
 
+    @POST("api.php")
+    suspend fun listPendingFiles(@Body body: PostRequestBody): EntityPostResponseBody<Any>
+
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
 }
