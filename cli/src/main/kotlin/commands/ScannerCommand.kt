@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
-class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyright / license scanners.") {
+class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",

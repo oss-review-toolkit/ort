@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.log
 
 import org.reflections.Reflections
 
-class RequirementsCommand : CliktCommand(help = "List the required command line tools.") {
+class RequirementsCommand : CliktCommand(help = "Check for the command line tools required by ORT.") {
     override fun run() {
         val reflections = Reflections("org.ossreviewtoolkit")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
