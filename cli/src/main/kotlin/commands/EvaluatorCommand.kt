@@ -70,7 +70,7 @@ import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 
-class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules on ORT result files.") {
+class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT result files against policy rules.") {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

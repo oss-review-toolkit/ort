@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
-class AdvisorCommand : CliktCommand(name = "advise", help = "Run vulnerability detector") {
+class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
     private val input by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
