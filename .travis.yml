@@ -92,8 +92,3 @@ script:
       echo "Some tests seemingly have been aborted.";
       exit 1;
     fi
-
-after_success:
-  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*';
-    fi
