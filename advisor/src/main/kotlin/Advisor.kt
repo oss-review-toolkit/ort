@@ -70,17 +70,17 @@ abstract class Advisor(val advisorName: String, protected val config: AdvisorCon
         }
 
         val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
-
         val results = runBlocking { retrievePackageVulnerabilities(packages) }
+
         val resultContainers = results.map { (pkg, results) ->
             AdvisorResultContainer(pkg.id, results)
         }.toSortedSet()
+
         val advisorRecord = AdvisorRecord(resultContainers)
 
         val endTime = Instant.now()
 
         val advisorRun = AdvisorRun(startTime, endTime, Environment(), config, advisorRecord)
-
         return ortResult.copy(advisor = advisorRun)
     }
 
