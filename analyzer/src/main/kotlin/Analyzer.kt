@@ -21,13 +21,10 @@ package org.ossreviewtoolkit.analyzer
 
 import java.io.File
 import java.time.Instant
-import java.util.concurrent.Executors
 
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -40,7 +37,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.NamedThreadFactory
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.log
 
@@ -110,7 +106,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         // Resolve dependencies per package manager.
-        val analyzerResult = runBlocking { analyzeInParallel(managedFiles, curationProvider) }
+        val analyzerResult = analyzeInParallel(managedFiles, curationProvider)
 
         val workingTree = VersionControlSystem.forDirectory(absoluteProjectPath)
         val vcs = workingTree?.getInfo() ?: VcsInfo.EMPTY
@@ -127,36 +123,29 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         return OrtResult(repository, run)
     }
 
-    private suspend fun analyzeInParallel(
+    private fun analyzeInParallel(
         managedFiles: Map<PackageManager, List<File>>,
         curationProvider: PackageCurationProvider
     ): AnalyzerResult {
-        val threadFactory = NamedThreadFactory(javaClass.simpleName)
-        val analysisDispatcher = Executors.newFixedThreadPool(5, threadFactory).asCoroutineDispatcher()
         val analyzerResultBuilder = AnalyzerResultBuilder(curationProvider)
 
-        analysisDispatcher.use { dispatcher ->
-            coroutineScope {
-                managedFiles.map { (manager, files) ->
-                    async {
-                        withContext(dispatcher) {
-                            val results = manager.resolveDependencies(files)
+        runBlocking(Dispatchers.IO) {
+            managedFiles.map { (manager, files) ->
+                async {
+                    val results = manager.resolveDependencies(files)
 
-                            // By convention, project ids must be of the type of the respective package manager.
-                            results.onEach { (_, result) ->
-                                val invalidProjects = result.filter { it.project.id.type != manager.managerName }
-                                require(invalidProjects.isEmpty()) {
-                                    val projectString =
-                                        invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }
-                                    "Projects $projectString must be of type '${manager.managerName}'."
-                                }
-                            }
+                    // By convention, project ids must be of the type of the respective package manager.
+                    results.onEach { (_, result) ->
+                        val invalidProjects = result.filter { it.project.id.type != manager.managerName }
+                        require(invalidProjects.isEmpty()) {
+                            val projectString = invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }
+                            "Projects $projectString must be of type '${manager.managerName}'."
                         }
                     }
-                }.forEach { resolutionResult ->
-                    resolutionResult.await().forEach { (_, analyzerResults) ->
-                        analyzerResults.forEach { analyzerResultBuilder.addResult(it) }
-                    }
+                }
+            }.forEach { resolutionResult ->
+                resolutionResult.await().forEach { (_, analyzerResults) ->
+                    analyzerResults.forEach { analyzerResultBuilder.addResult(it) }
                 }
             }
         }
