@@ -52,7 +52,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.hasNonNullProperty
 import org.ossreviewtoolkit.utils.log
@@ -79,39 +78,26 @@ class UploadCurationsCommand : CliktCommand(
 
     private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
 
-    private fun <T> executeApiCall(call: suspend ClearlyDefinedService.() -> T): Result<T> =
+    private fun <S, T> S.call(block: suspend S.() -> T): T =
         try {
-            runBlocking { Result.success(call(service)) }
+            runBlocking { block() }
         } catch (e: HttpException) {
             val errorMessage = e.response()?.errorBody()?.let {
                 val errorResponse = jsonMapper.readValue<ErrorResponse>(it.string())
                 val innerError = errorResponse.error.innererror
 
                 log.debug { innerError.stack }
-                "The REST API call failed with: ${innerError.message}"
-            } ?: "The REST API call failed with code ${e.response()?.code()}."
+
+                "The HTTP service call failed with: ${innerError.message}"
+            } ?: "The HTTP service call failed with code ${e.code()}: ${e.message()}"
 
             throw IOException(errorMessage, e)
-        }
-
-    private fun getDefinitions(coordinates: Collection<String>): Map<String, ClearlyDefinedService.Defined> =
-        executeApiCall { getDefinitions(coordinates) }.getOrElse {
-            log.error { it.collectMessagesAsString() }
-            emptyMap()
-        }
-
-    private fun putCuration(curation: PackageCuration): ClearlyDefinedService.ContributionSummary? =
-        curation.toContributionPatch()?.let { patch ->
-            executeApiCall { putCuration(patch) }.getOrElse {
-                log.error { it.collectMessagesAsString() }
-                null
-            }
         }
 
     override fun run() {
         val curations = inputFile.readValue<List<PackageCuration>>()
         val curationsToCoordinates = curations.associateWith { it.id.toClearlyDefinedCoordinates().toString() }
-        val definitions = getDefinitions(curationsToCoordinates.values)
+        val definitions = service.call { getDefinitions(curationsToCoordinates.values) }
 
         val curationsByHarvestStatus = curations.groupBy { curation ->
             definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: log.warn {
@@ -139,7 +125,7 @@ class UploadCurationsCommand : CliktCommand(
         uploadableCurations.forEachIndexed { index, curation ->
             print("Curation ${index + 1} of ${uploadableCurations.size} for package '${curation.id.toCoordinates()}' ")
 
-            when (val summary = putCuration(curation)) {
+            when (val summary = curation.toContributionPatch()?.let { service.call { putCuration(it) } }) {
                 null -> println("failed to be uploaded.")
                 else -> {
                     println("was uploaded successfully:\n${summary.url}")
