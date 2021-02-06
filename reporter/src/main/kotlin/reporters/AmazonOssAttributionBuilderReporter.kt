@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import java.io.File
 import java.io.IOException
 import java.net.ConnectException
@@ -86,11 +88,10 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 metadata
             )
 
-            val newProjectBody =
-                callService(
-                    { createNewProject(newProject, credentials) },
-                    { "Unable to create a new project" }
-                )
+            val newProjectBody = service.call(
+                { createNewProject(newProject, credentials) },
+                { "Unable to create a new project" }
+            )
 
             log.info { "Successfully created project with id '${newProjectBody.projectId}'." }
 
@@ -132,7 +133,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                     usage
                 )
 
-                val attachPackageBody = callService(
+                val attachPackageBody = service.call(
                     { attachPackage(newProjectBody.projectId, attachPackage, credentials) },
                     {
                         "Unable to attach package '${pkg.id.toCoordinates()}' to project with id " +
@@ -144,7 +145,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
             }
 
             // Generate an attribution document for this project.
-            val generateAttributionDocBody = callService(
+            val generateAttributionDocBody = service.call(
                 { generateAttributionDoc(newProjectBody.projectId, credentials) },
                 { "Unable to generate an attribution document for project with id '${newProjectBody.projectId}'" }
             )
@@ -154,7 +155,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
             }
 
             // Fetch the newly generated attribution document.
-            val fetchAttributionDocBody = callService(
+            val fetchAttributionDocBody = service.call(
                 {
                     fetchAttributionDoc(
                         newProjectBody.projectId,
@@ -187,23 +188,18 @@ class AmazonOssAttributionBuilderReporter : Reporter {
     }
 
     /**
-     * Invoke the [OssAttributionBuilderService] using the provided [caller] function and handle errors. If the service
-     * invocation fails, throw an [IOException] with a generated error message that also contains the given
-     * [errorTitle].
+     * Call service [S] with the function [block]. If the service invocation fails, throw an [IOException] with a
+     * generated error message with the given [errorTitle].
      */
-    private fun <T> callService(caller: suspend OssAttributionBuilderService.() -> T, errorTitle: () -> String): T =
+    private fun <S, T> S.call(block: suspend S.() -> T, errorTitle: () -> String): T =
         try {
-            runBlocking { caller(service) }
+            runBlocking { block() }
         } catch (e: HttpException) {
-            val errorMessage = e.response()?.errorBody()?.let { errorBody ->
-                val errorResponse = jsonMapper.readValue(
-                    errorBody.string(),
-                    OssAttributionBuilderService.ErrorResponse::class.java
-                )
-
+            val errorMessage = e.response()?.errorBody()?.let {
+                val errorResponse = jsonMapper.readValue<OssAttributionBuilderService.ErrorResponse>(it.string())
                 errorResponse.error
-            } ?: e.message()
+            } ?: "The HTTP service call failed with code ${e.code()}: ${e.message()}"
 
-            throw IOException("${errorTitle()}: $errorMessage")
+            throw IOException("${errorTitle()}: $errorMessage", e)
         }
 }
