@@ -73,8 +73,9 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         // Associate files by the package manager factory that manages them.
         val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
-            // If only one package manager is activated, treat the given path as definition file for that package
-            // manager despite its name.
+            // If only one package manager is activated and the project path is in fact a file, assume that the file is
+            // a definition file for that package manager. This is useful to limit analysis to a single project e.g. for
+            // debugging purposes.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
         } else {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
