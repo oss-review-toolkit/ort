@@ -62,9 +62,10 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     private val inputDir by option(
         "--input-dir", "-i",
-        help = "The project directory to analyze."
+        help = "The project directory to analyze. As a special case, if only one package manager is activated, this " +
+                "may point to a definition file for that package manager to only analyze that single project."
     ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
         .inputGroup()
