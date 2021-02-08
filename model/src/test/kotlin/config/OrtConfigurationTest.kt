@@ -95,10 +95,22 @@ class OrtConfigurationTest : WordSpec({
                     postgresStorage.sslcert shouldBe "/defaultdir/postgresql.crt"
                     postgresStorage.sslkey shouldBe "/defaultdir/postgresql.pk8"
                     postgresStorage.sslrootcert shouldBe "/defaultdir/root.crt"
+                    val scanCodeCompatibilityPostgres = ToolCompatibilityConfiguration(
+                        namePattern = "ScanCode",
+                        semanticVersionSpec = ">=3.2.0 <3.3.0"
+                    )
+                    postgresStorage.scannerCompatibilities shouldContainExactly listOf(
+                        scanCodeCompatibilityPostgres
+                    )
 
                     val cdStorage = this["clearlyDefined"]
                     cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
                     cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
+                    val scanCodeCompatibilityCd = ToolCompatibilityConfiguration(
+                        namePattern = "ScanCode",
+                        calendarVersionSpec = "P3M"
+                    )
+                    cdStorage.scannerCompatibilities shouldContainExactly (listOf(scanCodeCompatibilityCd))
 
                     val sw360Storage = this["sw360Configuration"]
                     sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
@@ -109,6 +121,11 @@ class OrtConfigurationTest : WordSpec({
                     sw360Storage.clientId shouldBe "clientId"
                     sw360Storage.clientPassword shouldBe "clientPassword"
                     sw360Storage.token shouldBe "token"
+                    val scanCodeCompatibilitySw360 = ToolCompatibilityConfiguration(
+                        namePattern = "ExperimentalScanner",
+                        versionPattern = ".*final"
+                    )
+                    sw360Storage.scannerCompatibilities shouldContainExactly listOf(scanCodeCompatibilitySw360)
                 }
 
                 options shouldNot beNull()

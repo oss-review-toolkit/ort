@@ -32,6 +32,10 @@ import org.ossreviewtoolkit.utils.storage.FileStorage
  *
  * Based on this hierarchy, it is possible to have multiple different scan storages enabled and to configure them
  * dynamically.
+ *
+ * The base class already supports a configuration property for defining the compatibility of scanner versions.
+ * This is used to determine whether a result contained in the storage is considered compatible with the current
+ * scanner.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 @JsonSubTypes(
@@ -40,7 +44,14 @@ import org.ossreviewtoolkit.utils.storage.FileStorage
     Type(PostgresStorageConfiguration::class),
     Type(Sw360StorageConfiguration::class)
 )
-sealed class ScanStorageConfiguration
+sealed class ScanStorageConfiguration {
+    /**
+     * A list of [ToolCompatibilityConfiguration] objects defining acceptance criteria for the results of specific
+     * scanners. Using this mechanism, compatibility checks on scan results can be configured for each storage
+     * independently.
+     */
+    abstract val scannerCompatibilities: List<ToolCompatibilityConfiguration>
+}
 
 /**
  * The configuration model of a storage based on ClearlyDefined.
@@ -49,7 +60,9 @@ data class ClearlyDefinedStorageConfiguration(
     /**
      * The URL of the ClearlyDefined server.
      */
-    val serverUrl: String
+    val serverUrl: String,
+
+    override val scannerCompatibilities: List<ToolCompatibilityConfiguration> = emptyList()
 ) : ScanStorageConfiguration()
 
 /**
@@ -59,7 +72,9 @@ data class FileBasedStorageConfiguration(
     /**
      * The configuration of the [FileStorage] used to store the files.
      */
-    val backend: FileStorageConfiguration
+    val backend: FileStorageConfiguration,
+
+    override val scannerCompatibilities: List<ToolCompatibilityConfiguration> = emptyList()
 ) : ScanStorageConfiguration()
 
 /**
@@ -109,8 +124,9 @@ data class PostgresStorageConfiguration(
      * The full path of the root certificate file.
      * See: https://jdbc.postgresql.org/documentation/head/connect.html
      */
-    val sslrootcert: String? = null
+    val sslrootcert: String? = null,
 
+    override val scannerCompatibilities: List<ToolCompatibilityConfiguration> = emptyList()
     /**
      * TODO: Make additional parameters configurable, see:
      *       https://jdbc.postgresql.org/documentation/head/connect.html
@@ -158,5 +174,7 @@ data class Sw360StorageConfiguration(
      * [clientPassword] if the token is already known.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val token: String = ""
+    val token: String = "",
+
+    override val scannerCompatibilities: List<ToolCompatibilityConfiguration> = emptyList()
 ) : ScanStorageConfiguration()
