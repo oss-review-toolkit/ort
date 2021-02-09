@@ -29,28 +29,29 @@ import io.mockk.verify
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.kotlin.KotlinLogger
 
+private class DummyClass
+private class OtherClass
+
+private const val LOG_ONCE_MESSAGE = "This message should be logged only once."
+
 class LoggerTest : WordSpec({
     "A logger instance" should {
         "be shared between different instances of the same class" {
-            val a = String().log
-            val b = String().log
+            val a = DummyClass().log
+            val b = DummyClass().log
 
             a shouldBeSameInstanceAs b
         }
 
         "not be shared between instances of different classes" {
-            val a = String().log
-            val b = this.log
+            val a = DummyClass().log
+            val b = OtherClass().log
 
             a shouldNotBeSameInstanceAs b
         }
     }
 
     "Asking to log a statement only once" should {
-        class DummyClass
-
-        val message = "This message should be logged only once."
-
         "log the statement only once for the same instance and level" {
             val dummyInstance = DummyClass()
 
@@ -58,8 +59,8 @@ class LoggerTest : WordSpec({
             loggerOfClass[DummyClass::class.java] = mockedLogger
 
             // Log the same message at the same level for the same instance twice.
-            dummyInstance.logOnce(Level.WARN) { message }
-            dummyInstance.logOnce(Level.WARN) { message }
+            dummyInstance.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
+            dummyInstance.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
 
             dummyInstance.log shouldBeSameInstanceAs mockedLogger
             verify(exactly = 1) { mockedLogger.log(any(), any<String>()) }
@@ -72,8 +73,8 @@ class LoggerTest : WordSpec({
             loggerOfClass[DummyClass::class.java] = mockedLogger
 
             // Log the same message at the different levels for the same instance.
-            dummyInstance.logOnce(Level.WARN) { message }
-            dummyInstance.logOnce(Level.ERROR) { message }
+            dummyInstance.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
+            dummyInstance.logOnce(Level.ERROR) { LOG_ONCE_MESSAGE }
 
             dummyInstance.log shouldBeSameInstanceAs mockedLogger
             verify(exactly = 2) { mockedLogger.log(any(), any<String>()) }
@@ -87,8 +88,8 @@ class LoggerTest : WordSpec({
             loggerOfClass[DummyClass::class.java] = mockedLogger
 
             // Log the same message at the same level for different instances.
-            dummyInstance1.logOnce(Level.WARN) { message }
-            dummyInstance2.logOnce(Level.WARN) { message }
+            dummyInstance1.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
+            dummyInstance2.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
 
             dummyInstance1.log shouldBeSameInstanceAs mockedLogger
             dummyInstance2.log shouldBeSameInstanceAs mockedLogger
