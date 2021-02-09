@@ -191,7 +191,7 @@ data class ResolvedLicenseLocation(
     val matchingPathExcludes: List<PathExclude>,
 
     /**
-     * All copyright findings associated to this license location.
+     * All copyright findings associated to this license location, excluding copyright garbage.
      */
     val copyrights: Set<ResolvedCopyright>
 )
