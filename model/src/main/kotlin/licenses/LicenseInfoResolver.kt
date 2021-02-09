@@ -186,17 +186,14 @@ class LicenseInfoResolver(
         copyrightFindings: Set<CopyrightFinding>,
         pathExcludes: List<PathExclude>,
         relativeFindingsPath: String
-    ): Set<ResolvedCopyright> {
-        val resolvedCopyrightFindings = copyrightFindings.map { finding ->
+    ): Set<ResolvedCopyrightFinding> =
+        copyrightFindings.mapTo(mutableSetOf()) { finding ->
             val matchingPathExcludes = pathExcludes.filter {
                 it.matches(finding.location.prependPath(relativeFindingsPath))
             }
 
             ResolvedCopyrightFinding(finding.statement, finding.location, matchingPathExcludes)
         }
-
-        return resolvedCopyrightFindings.toResolvedCopyrights(process = true)
-    }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
         if (archiver == null) {
@@ -244,7 +241,7 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
     fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, locations)
 }
 
-internal fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: Boolean): Set<ResolvedCopyright> {
+internal fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: Boolean): List<ResolvedCopyright> {
     val allStatements = map { it.statement }
     val processedStatements = if (process) {
         CopyrightStatementsProcessor().process(allStatements).toMap()
@@ -254,7 +251,7 @@ internal fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: 
 
     return processedStatements.mapValues { (_, originalStatements) ->
         filter { it.statement in originalStatements }
-    }.filterValues { it.isNotEmpty() }.entries.mapTo(mutableSetOf()) { (statement, findings) ->
+    }.filterValues { it.isNotEmpty() }.entries.map() { (statement, findings) ->
         ResolvedCopyright(statement, findings.toSet())
     }
 }
