@@ -62,7 +62,8 @@ buildscript {
 
 if (version == Project.DEFAULT_VERSION) {
     version = org.eclipse.jgit.api.Git.open(rootDir).use { git ->
-        // Make the output to exactly match "git describe --abbrev=7 --always --tags --dirty".
+        // Make the output exactly match "git describe --abbrev=7 --always --tags --dirty", which is what is used in
+        // "scripts/docker_build.sh".
         val description = git.describe().setAlways(true).setTags(true).call()
         val isDirty = git.status().call().hasUncommittedChanges()
 
