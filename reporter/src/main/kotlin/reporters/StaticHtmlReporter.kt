@@ -534,13 +534,13 @@ class StaticHtmlReporter : Reporter {
                     dl {
                         dd {
                             row.detectedLicenses.forEach { license ->
-                                val firstFinding =
-                                    license.locations.firstOrNull { it.matchingPathExcludes.isEmpty() }
-                                        ?: license.locations.firstOrNull()
+                                val firstFinding = license.locations.firstOrNull { it.matchingPathExcludes.isEmpty() }
+                                    ?: license.locations.firstOrNull()
 
                                 val permalink = firstFinding?.permalink(row.id)
-                                val pathExcludes =
-                                    license.locations.flatMapTo(mutableSetOf()) { it.matchingPathExcludes }
+                                val pathExcludes = license.locations.flatMapTo(mutableSetOf()) {
+                                    it.matchingPathExcludes
+                                }
 
                                 if (!license.isDetectedExcluded) {
                                     div {
