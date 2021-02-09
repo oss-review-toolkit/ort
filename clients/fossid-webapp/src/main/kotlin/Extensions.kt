@@ -30,15 +30,21 @@ private const val PROJECT_GROUP = "projects"
  * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.
  * If [withDataCheck] is true, also the payload data is checked, otherwise that check is skipped.
  */
-fun EntityPostResponseBody<*>.checkResponse(operation: String, withDataCheck: Boolean = true) {
+fun <B : EntityPostResponseBody<T>, T> B?.checkResponse(operation: String, withDataCheck: Boolean = true): B {
+    // The null check is here to avoid the caller to wrap the call of this function in a null check.
+    requireNotNull(this)
+
     require(error == null) {
         "Could not '$operation'. Additional information : $error"
     }
+
     if (withDataCheck) {
         requireNotNull(data) {
             "No Payload received for '$operation'. Additional information: $error"
         }
     }
+
+    return this
 }
 
 /**
