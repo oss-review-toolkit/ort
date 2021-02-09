@@ -627,7 +627,7 @@ fun containCopyrightStatementsForLicenseExactly(
 ): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val expected = copyrights.toSet()
-        val actual = value[SpdxSingleLicenseExpression.parse(license)]?.getCopyrights().orEmpty()
+        val actual = value[SpdxSingleLicenseExpression.parse(license)]?.getCopyrights(process = false).orEmpty()
 
         MatcherResult(
             expected == actual,
