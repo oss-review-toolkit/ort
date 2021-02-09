@@ -195,7 +195,7 @@ class LicenseInfoResolver(
             ResolvedCopyrightFinding(finding.statement, finding.location, matchingPathExcludes)
         }
 
-        return processCopyrights(resolvedCopyrightFindings)
+        return resolvedCopyrightFindings.toResolvedCopyrights(process = true)
     }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
@@ -244,14 +244,16 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
     fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, locations)
 }
 
-internal fun processCopyrights(
-    resolvedCopyrightFindings: Collection<ResolvedCopyrightFinding>
-): Set<ResolvedCopyright> {
-    val allStatements = resolvedCopyrightFindings.map { it.statement }
-    val processedStatements = CopyrightStatementsProcessor().process(allStatements).toMap()
+internal fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: Boolean): Set<ResolvedCopyright> {
+    val allStatements = map { it.statement }
+    val processedStatements = if (process) {
+        CopyrightStatementsProcessor().process(allStatements).toMap()
+    } else {
+        allStatements.associateBy({ it }, { mutableSetOf(it) })
+    }
 
     return processedStatements.mapValues { (_, originalStatements) ->
-        resolvedCopyrightFindings.filter { it.statement in originalStatements }
+        filter { it.statement in originalStatements }
     }.filterValues { it.isNotEmpty() }.entries.mapTo(mutableSetOf()) { (statement, findings) ->
         ResolvedCopyright(statement, findings.toSet())
     }
