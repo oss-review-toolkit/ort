@@ -65,6 +65,21 @@ data class ResolvedLicenseInfo(
     operator fun get(license: SpdxSingleLicenseExpression): ResolvedLicense? = find { it.license == license }
 
     /**
+     * Return all copyright statements associated to this license info. Copyright findings that are excluded by
+     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights can optionally be [processed][process]
+     * using the [CopyrightStatementsProcessor].
+     */
+    @JvmOverloads
+    fun getCopyrights(process: Boolean = false, omitExcluded: Boolean = true): Set<String> {
+        val copyrightStatements = licenses.flatMapTo(mutableSetOf()) { license ->
+            license.getCopyrights(process = false, omitExcluded = omitExcluded)
+        }
+
+        return copyrightStatements.takeIf { !process }
+            ?: CopyrightStatementsProcessor().process(copyrightStatements).getAllStatements()
+    }
+
+    /**
      * Call [LicenseView.filter] on this [ResolvedLicenseInfo].
      */
     @JvmOverloads
