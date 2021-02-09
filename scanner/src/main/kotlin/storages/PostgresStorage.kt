@@ -98,16 +98,18 @@ class PostgresStorage(
                 if (resultSet.next()) {
                     val clientEncoding = resultSet.getString(1)
                     if (clientEncoding != "UTF8") {
-                        log.warn { "The database's client_encoding is '$clientEncoding' but should be 'UTF8'." }
+                        PostgresStorage.log.warn {
+                            "The database's client_encoding is '$clientEncoding' but should be 'UTF8'."
+                        }
                     }
                 }
 
                 if (!tableExists()) {
-                    log.info { "Trying to create table '$table'." }
+                    PostgresStorage.log.info { "Trying to create table '$table'." }
                     if (!createTable()) {
                         throw IOException("Failed to create table '$table'.")
                     }
-                    log.info { "Successfully created table '$table'." }
+                    PostgresStorage.log.info { "Successfully created table '$table'." }
                 }
             }
         }
@@ -180,7 +182,7 @@ class PostgresStorage(
                 val (resultSet, queryDuration) = measureTimedValue { executeQuery() }
 
                 resultSet.use {
-                    log.perf {
+                    PostgresStorage.log.perf {
                         "Fetched scan results for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
                                 "${queryDuration.inMilliseconds}ms."
                     }
@@ -194,7 +196,7 @@ class PostgresStorage(
                         }
                     }
 
-                    log.perf {
+                    PostgresStorage.log.perf {
                         "Deserialized ${scanResults.size} scan results for '${id.toCoordinates()}' in " +
                                 "${deserializationDuration.inMilliseconds}ms."
                     }
@@ -239,7 +241,7 @@ class PostgresStorage(
                 val (resultSet, queryDuration) = measureTimedValue { executeQuery() }
 
                 resultSet.use {
-                    log.perf {
+                    PostgresStorage.log.perf {
                         "Fetched scan results for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
                                 "${queryDuration.inMilliseconds}ms."
                     }
@@ -253,7 +255,7 @@ class PostgresStorage(
                         }
                     }
 
-                    log.perf {
+                    PostgresStorage.log.perf {
                         "Deserialized ${scanResults.size} scan results for '${pkg.id.toCoordinates()}' in " +
                                 "${deserializationDuration.inMilliseconds}ms."
                     }
@@ -305,7 +307,7 @@ class PostgresStorage(
 
                 val insertDuration = measureTime { execute() }
 
-                log.perf {
+                PostgresStorage.log.perf {
                     "Inserted scan result for '${id.toCoordinates()}' into ${javaClass.simpleName} in " +
                             "${insertDuration.inMilliseconds}ms."
                 }
