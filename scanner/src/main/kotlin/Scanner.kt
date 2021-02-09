@@ -73,6 +73,12 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
     ): Map<Package, List<ScanResult>>
 
     /**
+     * Filter the options specific to this scanner that will be included into the result, e.g. to perform obfuscation of
+     * credentials.
+     */
+    protected open fun filterOptionsForResult(options: Map<String, String>) = options
+
+    /**
      * Return the scanner-specific SPDX idstring for the given [license].
      */
     fun getSpdxLicenseIdString(license: String) =
@@ -136,7 +142,15 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
         val endTime = Instant.now()
 
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
+        val filteredScannerOptions = config.options?.let { options ->
+            options[scannerName]?.let { scannerOptions ->
+                val filteredScannerOptions = filterOptionsForResult(scannerOptions)
+                options.toMutableMap().apply { put(scannerName, filteredScannerOptions) }
+            }
+        } ?: config.options
+
+        val configWithFilteredOptions = config.copy(options = filteredScannerOptions)
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
 
         // Note: This overwrites any existing ScannerRun from the input file.
         return ortResult.copy(scanner = scannerRun)
