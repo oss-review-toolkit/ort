@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
@@ -48,6 +49,12 @@ class LoggerTest : WordSpec({
             val b = OtherClass().log
 
             a shouldNotBeSameInstanceAs b
+        }
+
+        "refuse to be used on a non-ORT class" {
+            shouldThrow<IllegalArgumentException> {
+                String().log.info { "Hello from a String." }
+            }
         }
     }
 
