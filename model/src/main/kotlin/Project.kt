@@ -111,6 +111,13 @@ data class Project(
         )
     }
 
+    init {
+        require(scopeDependencies == null || dependencyGraph == null) {
+            "Not both 'scopeDependencies' and 'dependencyGraph' may be set, as otherwise it is ambiguous which one " +
+                    "to use."
+        }
+    }
+
     /**
      * The dependency scopes defined by this project. This property provides access to scope-related information, no
      * matter whether this information has been initialized directly or has been encoded in a [DependencyGraph].
