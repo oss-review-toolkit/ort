@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 
@@ -240,21 +239,3 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
 
     fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, locations)
 }
-
-internal fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: Boolean): List<ResolvedCopyright> {
-    val allStatements = map { it.statement }
-    val processedStatements = if (process) {
-        CopyrightStatementsProcessor().process(allStatements).toMap()
-    } else {
-        allStatements.associateBy({ it }, { mutableSetOf(it) })
-    }
-
-    return processedStatements.mapValues { (_, originalStatements) ->
-        filter { it.statement in originalStatements }
-    }.filterValues { it.isNotEmpty() }.entries.map() { (statement, findings) ->
-        ResolvedCopyright(statement, findings.toSet())
-    }
-}
-
-private fun CopyrightStatementsProcessor.Result.toMap(): Map<String, Set<String>> =
-    processedStatements + unprocessedStatements.associateWith { setOf(it) }
