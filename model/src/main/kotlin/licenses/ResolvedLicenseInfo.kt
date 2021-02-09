@@ -162,7 +162,7 @@ data class ResolvedLicense(
     fun filterExcludedCopyrights(): ResolvedLicense =
         copy(locations = locations.mapTo(mutableSetOf()) { location ->
             val findings = location.copyrights.flatMap { it.findings }.filter { it.matchingPathExcludes.isEmpty() }
-            location.copy(copyrights = processCopyrights(findings))
+            location.copy(copyrights = findings.toResolvedCopyrights(process = true))
         })
 }
 
