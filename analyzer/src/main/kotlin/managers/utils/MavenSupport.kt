@@ -467,11 +467,11 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             artifactDownload.isExistenceCheck = true
             artifactDownload.listener = object : AbstractTransferListener() {
                 override fun transferFailed(event: TransferEvent?) {
-                    log.debug { "Transfer failed: $event" }
+                    MavenSupport.log.debug { "Transfer failed: $event" }
                 }
 
                 override fun transferSucceeded(event: TransferEvent?) {
-                    log.debug { "Transfer succeeded: $event" }
+                    MavenSupport.log.debug { "Transfer succeeded: $event" }
                 }
             }
 
