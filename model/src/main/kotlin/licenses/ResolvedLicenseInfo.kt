@@ -66,11 +66,11 @@ data class ResolvedLicenseInfo(
 
     /**
      * Return all copyright statements associated to this license info. Copyright findings that are excluded by
-     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights can optionally be [processed][process]
+     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights are [processed][process] by default
      * using the [CopyrightStatementsProcessor].
      */
     @JvmOverloads
-    fun getCopyrights(process: Boolean = false, omitExcluded: Boolean = true): Set<String> {
+    fun getCopyrights(process: Boolean = true, omitExcluded: Boolean = true): Set<String> {
         val copyrightStatements = licenses.flatMapTo(mutableSetOf()) { license ->
             license.getCopyrights(process = false, omitExcluded = omitExcluded)
         }
@@ -139,10 +139,10 @@ data class ResolvedLicense(
 
     /**
      * Return all resolved copyrights for this license. Copyright findings that are excluded by [PathExclude]s are
-     * [omitted][omitExcluded] by default. The copyrights can optionally be [processed][process]
-     * using the [CopyrightStatementsProcessor].
+     * [omitted][omitExcluded] by default. The copyrights are [processed][process] by default using the
+     * [CopyrightStatementsProcessor].
      */
-    fun getResolvedCopyrights(process: Boolean = false, omitExcluded: Boolean = true): List<ResolvedCopyright> {
+    fun getResolvedCopyrights(process: Boolean = true, omitExcluded: Boolean = true): List<ResolvedCopyright> {
         val resolvedCopyrightFindings = locations.flatMap { location ->
             location.copyrights.filter { copyright ->
                 !omitExcluded || copyright.matchingPathExcludes.isEmpty()
@@ -154,11 +154,11 @@ data class ResolvedLicense(
 
     /**
      * Return all copyright statements associated to this license. Copyright findings that are excluded by
-     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights can optionally be [processed][process]
+     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights are [processed][process] by default
      * using the [CopyrightStatementsProcessor].
      */
     @JvmOverloads
-    fun getCopyrights(process: Boolean = false, omitExcluded: Boolean = true): Set<String> =
+    fun getCopyrights(process: Boolean = true, omitExcluded: Boolean = true): Set<String> =
         getResolvedCopyrights(process, omitExcluded).mapTo(mutableSetOf()) { it.statement }
 
     /**
