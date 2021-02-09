@@ -192,11 +192,7 @@ class LicenseInfoResolver(
                 it.matches(finding.location.prependPath(relativeFindingsPath))
             }
 
-            ResolvedCopyrightFinding(
-                finding.statement,
-                finding.location,
-                matchingPathExcludes = matchingPathExcludes
-            )
+            ResolvedCopyrightFinding(finding.statement, finding.location, matchingPathExcludes)
         }
 
         return processCopyrights(resolvedCopyrightFindings)
