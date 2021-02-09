@@ -21,9 +21,6 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 import kotlin.reflect.KClass
 
 private const val SCAN_GROUP = "scans"
@@ -111,12 +108,11 @@ suspend fun FossIdRestService.createScan(
     user: String,
     apiKey: String,
     projectCode: String,
+    scanCode: String,
     gitRepoUrl: String,
     gitBranch: String
-): MapResponseBody<String> {
-    val formatter = DateTimeFormatter.ofPattern("'$projectCode'_yyyyMMdd_HHmmss")
-    val scanCode = formatter.format(LocalDateTime.now())
-    return createScan(
+): MapResponseBody<String> =
+    createScan(
         PostRequestBody(
             "create",
             SCAN_GROUP,
@@ -129,7 +125,6 @@ suspend fun FossIdRestService.createScan(
             "git_branch" to gitBranch
         )
     )
-}
 
 /**
  * Trigger a scan with the given [scanCode].

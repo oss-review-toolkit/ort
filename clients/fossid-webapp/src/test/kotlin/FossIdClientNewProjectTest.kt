@@ -113,6 +113,7 @@ class FossIdClientNewProjectTest : StringSpec({
         service.createScan(
             "", "",
             PROJECT_CODE,
+            SCAN_CODE,
             "https://github.com/gundy/semver4j.git",
             "671aa533f7e33c773bf620b9f466650c3b9ab26e"
         ) shouldNotBeNull {
