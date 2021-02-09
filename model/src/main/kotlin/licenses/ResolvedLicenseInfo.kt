@@ -65,21 +65,6 @@ data class ResolvedLicenseInfo(
     operator fun get(license: SpdxSingleLicenseExpression): ResolvedLicense? = find { it.license == license }
 
     /**
-     * Return all copyright statements associated to this license info. Copyright findings that are excluded by
-     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights are [processed][process] by default
-     * using the [CopyrightStatementsProcessor].
-     */
-    @JvmOverloads
-    fun getCopyrights(process: Boolean = true, omitExcluded: Boolean = true): Set<String> {
-        val copyrightStatements = licenses.flatMapTo(mutableSetOf()) { license ->
-            license.getCopyrights(process = false, omitExcluded = omitExcluded)
-        }
-
-        return copyrightStatements.takeIf { !process }
-            ?: CopyrightStatementsProcessor().process(copyrightStatements).getAllStatements()
-    }
-
-    /**
      * Call [LicenseView.filter] on this [ResolvedLicenseInfo].
      */
     @JvmOverloads
@@ -139,40 +124,46 @@ data class ResolvedLicense(
 
     /**
      * Return all resolved copyrights for this license. Copyright findings that are excluded by [PathExclude]s are
-     * [omitted][omitExcluded] by default. The copyrights are [processed][process] by default using the
-     * [CopyrightStatementsProcessor].
+     * [omitted][omitExcluded] by default.
      */
-    fun getResolvedCopyrights(process: Boolean = true, omitExcluded: Boolean = true): List<ResolvedCopyright> {
-        val resolvedCopyrightFindings = locations.flatMap { location ->
+    fun getResolvedCopyrights(omitExcluded: Boolean = true): List<ResolvedCopyright> =
+        locations.flatMap { location ->
             location.copyrights.filter { copyright ->
-                !omitExcluded || copyright.matchingPathExcludes.isEmpty()
+                !omitExcluded || copyright.findings.any { it.matchingPathExcludes.isEmpty() }
             }
         }
 
-        return resolvedCopyrightFindings.toResolvedCopyrights(process)
-    }
-
     /**
      * Return all copyright statements associated to this license. Copyright findings that are excluded by
-     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights are [processed][process] by default
+     * [PathExclude]s are [omitted][omitExcluded] by default. The copyrights can optionally be [processed][process]
      * using the [CopyrightStatementsProcessor].
      */
     @JvmOverloads
-    fun getCopyrights(process: Boolean = true, omitExcluded: Boolean = true): Set<String> =
-        getResolvedCopyrights(process, omitExcluded).mapTo(mutableSetOf()) { it.statement }
+    fun getCopyrights(process: Boolean = false, omitExcluded: Boolean = true): Set<String> {
+        val resolvedCopyrights = getResolvedCopyrights(omitExcluded)
+
+        return if (process) {
+            val unprocessedStatements = resolvedCopyrights.flatMap { resolvedCopyright ->
+                resolvedCopyright.findings
+                    .filter { !omitExcluded || it.matchingPathExcludes.isEmpty() }
+                    .map { it.statement }
+            }
+
+            CopyrightStatementsProcessor().process(unprocessedStatements).getAllStatements().toSortedSet()
+        } else {
+            resolvedCopyrights.mapTo(sortedSetOf()) { it.statement }
+        }
+    }
 
     /**
-     * Filter all excluded copyrights. Copyrights which have
-     * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes] are removed.
+     * Filter all excluded copyrights. Copyrights are removed if all [findings][ResolvedCopyright.findings] have
+     * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes].
      */
     fun filterExcludedCopyrights(): ResolvedLicense =
-        copy(
-            locations = locations.mapTo(mutableSetOf()) { location ->
-                location.copy(
-                    copyrights = location.copyrights.filterTo(mutableSetOf()) { it.matchingPathExcludes.isEmpty() }
-                )
-            }
-        )
+        copy(locations = locations.mapTo(mutableSetOf()) { location ->
+            val findings = location.copyrights.flatMap { it.findings }.filter { it.matchingPathExcludes.isEmpty() }
+            location.copy(copyrights = processCopyrights(findings))
+        })
 }
 
 /**
@@ -200,9 +191,9 @@ data class ResolvedLicenseLocation(
     val matchingPathExcludes: List<PathExclude>,
 
     /**
-     * All copyright findings associated to this license location, excluding copyright garbage.
+     * All copyright findings associated to this license location.
      */
-    val copyrights: Set<ResolvedCopyrightFinding>
+    val copyrights: Set<ResolvedCopyright>
 )
 
 /**
@@ -253,21 +244,3 @@ fun List<ResolvedLicense>.filterExcluded() =
         resolvedLicense.sources != setOf(LicenseSource.DETECTED) ||
                 resolvedLicense.locations.any { it.matchingPathExcludes.isEmpty() }
     }.map { it.filterExcludedCopyrights() }
-
-private fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: Boolean): List<ResolvedCopyright> {
-    val allStatements = map { it.statement }
-    val processedStatements = if (process) {
-        CopyrightStatementsProcessor().process(allStatements).toMap()
-    } else {
-        allStatements.associateBy({ it }, { mutableSetOf(it) })
-    }
-
-    return processedStatements.mapValues { (_, originalStatements) ->
-        filter { it.statement in originalStatements }
-    }.filterValues { it.isNotEmpty() }.entries.map() { (statement, findings) ->
-        ResolvedCopyright(statement, findings.toSet())
-    }
-}
-
-private fun CopyrightStatementsProcessor.Result.toMap(): Map<String, Set<String>> =
-    processedStatements + unprocessedStatements.associateWith { setOf(it) }

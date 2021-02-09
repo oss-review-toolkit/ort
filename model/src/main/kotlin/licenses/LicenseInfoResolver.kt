@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 
@@ -185,14 +186,21 @@ class LicenseInfoResolver(
         copyrightFindings: Set<CopyrightFinding>,
         pathExcludes: List<PathExclude>,
         relativeFindingsPath: String
-    ): Set<ResolvedCopyrightFinding> =
-        copyrightFindings.mapTo(mutableSetOf()) { finding ->
+    ): Set<ResolvedCopyright> {
+        val resolvedCopyrightFindings = copyrightFindings.map { finding ->
             val matchingPathExcludes = pathExcludes.filter {
                 it.matches(finding.location.prependPath(relativeFindingsPath))
             }
 
-            ResolvedCopyrightFinding(finding.statement, finding.location, matchingPathExcludes)
+            ResolvedCopyrightFinding(
+                finding.statement,
+                finding.location,
+                matchingPathExcludes = matchingPathExcludes
+            )
         }
+
+        return processCopyrights(resolvedCopyrightFindings)
+    }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
         if (archiver == null) {
@@ -239,3 +247,19 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
 
     fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, locations)
 }
+
+internal fun processCopyrights(
+    resolvedCopyrightFindings: Collection<ResolvedCopyrightFinding>
+): Set<ResolvedCopyright> {
+    val allStatements = resolvedCopyrightFindings.map { it.statement }
+    val processedStatements = CopyrightStatementsProcessor().process(allStatements).toMap()
+
+    return processedStatements.mapValues { (_, originalStatements) ->
+        resolvedCopyrightFindings.filter { it.statement in originalStatements }
+    }.filterValues { it.isNotEmpty() }.entries.mapTo(mutableSetOf()) { (statement, findings) ->
+        ResolvedCopyright(statement, findings.toSet())
+    }
+}
+
+private fun CopyrightStatementsProcessor.Result.toMap(): Map<String, Set<String>> =
+    processedStatements + unprocessedStatements.associateWith { setOf(it) }

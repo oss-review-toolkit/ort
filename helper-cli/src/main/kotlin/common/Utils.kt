@@ -254,10 +254,7 @@ internal fun OrtResult.processAllCopyrightStatements(
         licenseInfoResolver.resolveLicenseInfo(id).forEach innerForEach@{ resolvedLicense ->
             if (omitExcluded && resolvedLicense.isDetectedExcluded) return@innerForEach
 
-            val copyrights = resolvedLicense.getResolvedCopyrights(
-                process = false,
-                omitExcluded = omitExcluded
-            ).flatMap { resolvedCopyright ->
+            val copyrights = resolvedLicense.getResolvedCopyrights(omitExcluded).flatMap { resolvedCopyright ->
                 resolvedCopyright.findings.map { it.statement }
             }
 
