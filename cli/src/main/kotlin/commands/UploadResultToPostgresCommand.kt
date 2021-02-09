@@ -98,7 +98,7 @@ class UploadResultToPostgresCommand : CliktCommand(
         createConnection(postgresConfig).use { connection ->
             val query = "INSERT INTO ${postgresConfig.schema}.$tableName ($columnName) VALUES (to_json(?::json)::jsonb)"
 
-            val json = jsonMapper.writeValueAsString(ortResult).escapeNull()
+            val json = jsonMapper.writeValueAsString(ortResult.withResolvedScopes()).escapeNull()
 
             try {
                 val statement = connection.prepareStatement(query)
