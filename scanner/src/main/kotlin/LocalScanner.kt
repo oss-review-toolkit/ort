@@ -255,7 +255,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         return try {
             val storedResults = withContext(storageDispatcher) {
-                log.info {
+                LocalScanner.log.info {
                     "Looking for stored scan results for ${pkg.id.toCoordinates()} and " +
                             "$scannerCriteria $packageIndex."
                 }
@@ -275,7 +275,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 storedResults.map { it.filterByVcsPath().filterByIgnorePatterns(config.ignorePatterns) }
             } else {
                 withContext(scanDispatcher) {
-                    log.info {
+                    LocalScanner.log.info {
                         "No stored result found for ${pkg.id.toCoordinates()} and $scannerCriteria, " +
                                 "scanning package in thread '${Thread.currentThread().name}' " +
                                 "$packageIndex."
@@ -283,7 +283,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                     listOf(
                         scanPackage(details, pkg, outputDirectory, downloadDirectory).also {
-                            log.info {
+                            LocalScanner.log.info {
                                 "Finished scanning ${pkg.id.toCoordinates()} in thread " +
                                         "'${Thread.currentThread().name}' $packageIndex."
                             }
