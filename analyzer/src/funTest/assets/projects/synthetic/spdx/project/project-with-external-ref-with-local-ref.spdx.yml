@@ -26,6 +26,7 @@ packages:
   homepage: "https://example.com/products/xyz"
   licenseConcluded:  "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  packageFileName: "."
   name: "xyz"
   versionInfo: "0.1.0"
 - SPDXID: "SPDXRef-Package-openssl"

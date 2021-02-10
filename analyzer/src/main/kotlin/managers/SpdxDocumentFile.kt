@@ -82,7 +82,10 @@ private fun SpdxDocument.isProject(): Boolean {
  * if there is only one, marking it as the project.spdx document.
  */
 private fun SpdxDocument.projectPackage(): SpdxPackage? {
-    return packages.singleOrNull { it.packageFilename.isEmpty() }
+    return packages.singleOrNull {
+        it.packageFilename.isEmpty() ||
+                it.packageFilename == "."
+    }
 }
 
 /**
