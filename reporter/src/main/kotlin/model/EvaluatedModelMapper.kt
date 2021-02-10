@@ -256,7 +256,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             it.type == EvaluatedFindingType.LICENSE && it.pathExcludes.isEmpty()
         }.mapNotNullTo(mutableSetOf()) { it.license }
 
-        detectedExcludedLicenses.addAll(detectedLicenses - includedDetectedLicenses)
+        detectedExcludedLicenses += detectedLicenses - includedDetectedLicenses
     }
 
     private fun addPackage(curatedPkg: CuratedPackage) {
@@ -315,7 +315,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             it.type == EvaluatedFindingType.LICENSE && it.pathExcludes.isEmpty()
         }.mapNotNullTo(mutableSetOf()) { it.license }
 
-        detectedExcludedLicenses.addAll(detectedLicenses - includedDetectedLicenses)
+        detectedExcludedLicenses += detectedLicenses - includedDetectedLicenses
     }
 
     private fun addAnalyzerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedOrtIssue> {
