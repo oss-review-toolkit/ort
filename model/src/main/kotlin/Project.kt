@@ -121,6 +121,16 @@ data class Project(
     }
 
     /**
+     * Return a [Project] instance that has its scope information directly available. A project can be constructed
+     * either with a set of [Scope] objects or with a [DependencyGraph]. In the latter case, the graph has to be
+     * converted first into the scope representation. This function ensures that this step was done: If the project
+     * has a [DependencyGraph], it returns a new instance with the converted scope information (and the dependency
+     * graph removed to save memory); otherwise, it returns this same object.
+     */
+    fun withResolvedScopes(): Project =
+        takeUnless { dependencyGraph != null } ?: copy(scopeDependencies = scopes, dependencyGraph = null)
+
+    /**
      * Return the set of package [Identifier]s of all transitive dependencies of this [Project], up to and including a
      * depth of [maxDepth] where counting starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A
      * value below 0 means to not limit the depth. If the given [filterPredicate] is false for a specific

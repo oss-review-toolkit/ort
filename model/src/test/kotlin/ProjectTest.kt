@@ -25,8 +25,10 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beTheSameInstanceAs
 
 import java.io.File
 import java.time.Instant
@@ -57,7 +59,7 @@ private fun projectWithDependencyGraph(): Project =
         declaredLicenses = sortedSetOf(),
         vcs = VcsInfo.EMPTY,
         homepageUrl = "https//www.test-project.org",
-        scopeDependencies = sortedSetOf(),
+        scopeDependencies = null,
         dependencyGraph = createDependencyGraph()
     )
 
@@ -200,6 +202,25 @@ class ProjectTest : WordSpec({
             )
 
             project.scopes.shouldBeEmpty()
+        }
+    }
+
+    "withResolvedScopes" should {
+        "return the same instance if no dependency graph is available" {
+            val project = readAnalyzerResult("maven-expected-output-app.yml")
+
+            val resolvedProject = project.withResolvedScopes()
+
+            resolvedProject should beTheSameInstanceAs(project)
+        }
+
+        "return an instance with scope information extracted from the dependency graph" {
+            val project = projectWithDependencyGraph()
+
+            val resolvedProject = project.withResolvedScopes()
+
+            resolvedProject.dependencyGraph.shouldBeNull()
+            resolvedProject.scopes shouldBe project.scopes
         }
     }
 
