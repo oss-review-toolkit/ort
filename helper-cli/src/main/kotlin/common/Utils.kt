@@ -402,7 +402,7 @@ fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
     scanner?.results?.scanResults?.forEach { container ->
         if (!omitExcluded || !isExcluded(container.id)) {
             container.results.forEach { scanResult ->
-                result.addAll(scanResult.summary.issues)
+                result += scanResult.summary.issues
             }
         }
     }

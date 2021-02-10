@@ -101,7 +101,7 @@ class LicenseInfoResolver(
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
                 sources += LicenseSource.DETECTED
-                resolvedLocations[license]?.let { locations.addAll(it) }
+                resolvedLocations[license]?.let { locations += it }
             }
         }
 

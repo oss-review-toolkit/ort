@@ -114,14 +114,14 @@ class Bower(
             val result = mutableMapOf<String, Package>()
 
             val stack = Stack<JsonNode>()
-            stack.addAll(getDependencyNodes(node))
+            stack += getDependencyNodes(node)
 
             while (!stack.empty()) {
                 val currentNode = stack.pop()
                 val pkg = extractPackage(currentNode)
                 result["${pkg.id.name}:${pkg.id.version}"] = pkg
 
-                stack.addAll(getDependencyNodes(currentNode))
+                stack += getDependencyNodes(currentNode)
             }
 
             return result
@@ -158,7 +158,7 @@ class Bower(
                     }
                 }
 
-                stack.addAll(getDependencyNodes(currentNode))
+                stack += getDependencyNodes(currentNode)
             }
 
             return result

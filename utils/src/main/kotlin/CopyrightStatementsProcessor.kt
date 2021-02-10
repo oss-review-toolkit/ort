@@ -173,7 +173,7 @@ private fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<I
         if (replaceResult.second.isEmpty()) {
             return Pair(currentStatement, years)
         }
-        years.addAll(replaceResult.second)
+        years += replaceResult.second
         currentStatement = replaceResult.first
     }
 }

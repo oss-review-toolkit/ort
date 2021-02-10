@@ -137,7 +137,7 @@ private fun OrtResult.getLicenseFindingsForAllProjects(): Set<LicenseFinding> {
     scanner?.results?.scanResults?.forEach { container ->
         if (container.id in projectIds) {
             container.results.forEach { scanResult ->
-                result.addAll(scanResult.summary.licenseFindings)
+                result += scanResult.summary.licenseFindings
             }
         }
     }

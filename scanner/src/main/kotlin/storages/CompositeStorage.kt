@@ -96,7 +96,7 @@ class CompositeStorage(
         readers.forEach { reader ->
             when (val result = reader.readFunc()) {
                 is Success -> if (result.result.results.isNotEmpty()) return result
-                is Failure -> failures.add(result.error)
+                is Failure -> failures += result.error
             }
         }
 

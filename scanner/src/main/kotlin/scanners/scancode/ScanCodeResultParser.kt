@@ -241,12 +241,12 @@ private fun generateScannerDetailsFromNode(result: JsonNode, optionsNode: String
 private fun generateScannerOptions(options: JsonNode?): String {
     fun addValues(list: MutableList<String>, node: JsonNode, key: String) {
         if (node.isEmpty) {
-            list.add(key)
-            list.add(node.asText())
+            list += key
+            list += node.asText()
         } else {
             node.forEach {
-                list.add(key)
-                list.add(it.asText())
+                list += key
+                list += it.asText()
             }
         }
     }
