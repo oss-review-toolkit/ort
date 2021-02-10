@@ -86,7 +86,7 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
 
         val curation = try {
             // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
-            // classes could deal with coroutines more easily.
+            //       classes could deal with coroutines more easily.
             runBlocking { service.getCuration(type, provider, namespace, pkgId.name, pkgId.version) }
         } catch (e: HttpException) {
             e.showStackTrace()
