@@ -436,4 +436,16 @@ data class OrtResult(
      * Return true if and only if the given [id] denotes a [Project] contained in this [OrtResult].
      */
     fun isProject(id: Identifier): Boolean = getProject(id) != null
+
+    /**
+     * Resolves the scopes of all [Project]s in this [OrtResult] with [Project.withResolvedScopes].
+     */
+    fun withResolvedScopes(): OrtResult =
+        copy(
+            analyzer = analyzer?.copy(
+                result = analyzer.result.copy(
+                    projects = analyzer.result.projects.mapTo(sortedSetOf()) { it.withResolvedScopes() }
+                )
+            )
+        )
 }
