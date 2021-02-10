@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.isTrue
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpack
 
@@ -200,7 +201,8 @@ class ScanCode(
         }
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, path, result)
+        val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
+        val summary = generateSummary(startTime, endTime, path, result, parseLicenseExpressions)
 
         val issues = summary.issues.toMutableList()
 
