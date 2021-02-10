@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
@@ -87,7 +88,7 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
         val curation = try {
             // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
             //       classes could deal with coroutines more easily.
-            runBlocking { service.getCuration(type, provider, namespace, pkgId.name, pkgId.version) }
+            runBlocking(Dispatchers.IO) { service.getCuration(type, provider, namespace, pkgId.name, pkgId.version) }
         } catch (e: HttpException) {
             e.showStackTrace()
 

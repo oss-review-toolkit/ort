@@ -23,6 +23,7 @@ import java.io.File
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -70,7 +71,7 @@ abstract class Advisor(val advisorName: String, protected val config: AdvisorCon
         }
 
         val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
-        val results = runBlocking { retrievePackageVulnerabilities(packages) }
+        val results = runBlocking(Dispatchers.IO) { retrievePackageVulnerabilities(packages) }
 
         val resultContainers = results.map { (pkg, results) ->
             AdvisorResultContainer(pkg.id, results)

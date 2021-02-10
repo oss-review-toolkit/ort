@@ -23,6 +23,7 @@ import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.time.Instant
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
@@ -129,7 +130,7 @@ class ClearlyDefinedStorage(
         sourceArtifact: RemoteArtifact?
     ): Result<ScanResultContainer> =
         try {
-            runBlocking { readFromClearlyDefined(id, packageCoordinates(id, vcs, sourceArtifact)) }
+            runBlocking(Dispatchers.IO) { readFromClearlyDefined(id, packageCoordinates(id, vcs, sourceArtifact)) }
         } catch (e: IllegalArgumentException) {
             e.showStackTrace()
 
