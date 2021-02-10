@@ -79,7 +79,36 @@ Install the following basic prerequisites:
 * Docker 18.09 or later (and ensure its daemon is running).
 * Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) for Docker.
 
-Change into the directory with ORT's source code and run `docker build -t ort .`.
+Change into the directory with ORT's source code and run: 
+```
+docker build -t ort .
+```
+
+Tool versions can be changed passing as args like **--build-arg TOOL_ENV=VERSION**
+This is the list of tools variables you can change:
+
+| Tool Env Var | To obtain versions list |
+| ------------ | ------------------------ |
+ANDROID_SDK_VERSION |
+BOWER_VERSION |
+CONAN_VERSION |
+GO_DEP_VERSION |
+GO_VERSION |
+HASKELL_STACK_VERSION |
+NODEJS_VERSION | Any of **nvm ls-remote**
+NPM_VERSION |
+PIP_VERSION |
+PYTHON_VERSION | Any of **pyenv install --list**
+RUBY_VERSION | Any of **rbenv install --list-all**
+SBT_VERSION |
+SCANCODE_VERSION |
+VIRTUALENV_VERSION |
+YARN_VERSION |
+
+Example:
+```
+--build-arg PYTHON_VERSION="3.9.1"
+```
 
 ### Build natively
 
