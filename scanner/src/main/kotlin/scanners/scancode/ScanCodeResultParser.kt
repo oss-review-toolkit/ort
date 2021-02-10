@@ -81,27 +81,42 @@ internal fun parseResultsFile(resultsFile: File): JsonNode =
 
 /**
  * Generate a summary from the given raw ScanCode [result], using [startTime] and [endTime] metadata.
- * From the [scanPath] the package verification code is generated.
+ * From the [scanPath] the package verification code is generated. If [parseExpressions] is true, license findings are
+ * preferably parsed as license expressions.
  */
-internal fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode) =
+internal fun generateSummary(
+    startTime: Instant,
+    endTime: Instant,
+    scanPath: File,
+    result: JsonNode,
+    parseExpressions: Boolean = true
+) =
     generateSummary(
         startTime,
         endTime,
         calculatePackageVerificationCode(scanPath),
-        result
+        result,
+        parseExpressions
     )
 
 /**
  * Generate a summary from the given raw ScanCode [result], using [startTime], [endTime], and [verificationCode]
- * metadata. This variant can be used if the result is not read from a local file.
+ * metadata. This variant can be used if the result is not read from a local file. If [parseExpressions] is true,
+ * license findings are preferably parsed as license expressions.
  */
-internal fun generateSummary(startTime: Instant, endTime: Instant, verificationCode: String, result: JsonNode) =
+internal fun generateSummary(
+    startTime: Instant,
+    endTime: Instant,
+    verificationCode: String,
+    result: JsonNode,
+    parseExpressions: Boolean = true
+) =
     ScanSummary(
         startTime = startTime,
         endTime = endTime,
         fileCount = getFileCount(result),
         packageVerificationCode = verificationCode,
-        licenseFindings = getLicenseFindings(result).toSortedSet(),
+        licenseFindings = getLicenseFindings(result, parseExpressions).toSortedSet(),
         copyrightFindings = getCopyrightFindings(result).toSortedSet(),
         issues = getIssues(result)
     )
@@ -128,9 +143,11 @@ private fun getFileCount(result: JsonNode): Int {
 }
 
 /**
- * Get the license findings from the given [result].
+ * Get the license findings from the given [result]. If [parseExpressions] is true and license expressions are contained
+ * in the result, these are preferred over separate license findings. Otherwise only separate license findings are
+ * parsed.
  */
-private fun getLicenseFindings(result: JsonNode): List<LicenseFinding> {
+private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): List<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
     val files = result["files"]?.asSequence().orEmpty()
@@ -142,7 +159,8 @@ private fun getLicenseFindings(result: JsonNode): List<LicenseFinding> {
                 LicenseExpression(
                     // Older ScanCode versions do not produce the `license_expression` field.
                     // Just use the `key` field in this case.
-                    it["matched_rule"]?.get("license_expression")?.textValue() ?: it["key"].textValue(),
+                    it["matched_rule"]?.get("license_expression")?.textValue().takeIf { parseExpressions }
+                        ?: it["key"].textValue(),
                     it["start_line"].intValue(),
                     it["end_line"].intValue()
                 )
