@@ -30,7 +30,6 @@ import java.security.MessageDigest
 import java.util.EnumSet
 
 import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
-import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 
 /**
  * A list of directories used by version control systems to store metadata.
@@ -52,11 +51,6 @@ internal val PATH_STRING_COMPARATOR = compareBy<String>({ path -> path.count { i
  * A mapper to read license mapping from YAML resource files.
  */
 internal val yamlMapper = YAMLMapper().registerKotlinModule()
-
-/**
- * Return a string of hexadecimal digits representing the bytes in the array.
- */
-private fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
  * Calculate the [SPDX package verification code][1] for a list of [known SHA1s][sha1sums] of files and [excludes].
@@ -160,19 +154,6 @@ fun getLicenseTextReader(
         SpdxLicense.forId(id)?.let { { it.text } }
             ?: SpdxLicenseException.forId(id)?.takeIf { handleExceptions }?.let { { it.text } }
     }
-
-/**
- * Return true if and only if this String can be successfully parsed to a [SpdxExpression].
- */
-internal fun String.isSpdxExpression(): Boolean =
-    runCatching { SpdxExpression.parse(this, Strictness.ALLOW_DEPRECATED) }.isSuccess
-
-/**
- * Return true if and only if this String can be successfully parsed to an [SpdxExpression] or if it equals
- * [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION].
- */
-internal fun String.isSpdxExpressionOrNotPresent(): Boolean =
-    SpdxConstants.isNotPresent(this) || isSpdxExpression()
 
 private fun getLicenseTextResource(id: String): URL? =
     object {}.javaClass.getResource("/licenserefs/$id")
