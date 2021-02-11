@@ -28,6 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import kotlinx.coroutines.CoroutineExceptionHandler
 
 import java.io.File
 import java.io.IOException
@@ -72,6 +73,7 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.logOnce
 import org.ossreviewtoolkit.utils.searchUpwardsForFile
+import java.util.concurrent.ConcurrentHashMap
 
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
@@ -115,7 +117,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         .filter { it.type == REGISTRATIONS_BASE_URL_TYPE }
         .map { it.id.removeSuffix("/") }
 
-    private val packageMap = mutableMapOf<Identifier, Pair<NuGetAllPackageData, Package>>()
+    private val packageMap = ConcurrentHashMap<Identifier, Pair<NuGetAllPackageData, Package>>()
 
     private suspend fun download(url: String): ResponseBody? {
         val request = Request.Builder()
@@ -136,7 +138,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         return response.body?.takeIf { response.isSuccessful }
     }
 
-    private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
+    private fun getAllPackageData(id: Identifier): NuGetAllPackageData? {
         // Note: The package name in the URL is case-sensitive and must be lower-case!
         val lowerId = id.name.toLowerCase()
 
@@ -146,7 +148,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             }.awaitAll().mapNotNull { body ->
                 body?.let { JSON_MAPPER.readValue<PackageData>(it.string()) }
             }.firstOrNull()
-        } ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
+        } ?: return null
 
         val nupkgUrl = data.packageContent
         val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
@@ -200,67 +202,68 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             )
         }
     }
-
+    val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        println("Handle $exception in CoroutineExceptionHandler")
+    }
     fun buildDependencyTree(
         references: Collection<Identifier>,
         dependencies: MutableCollection<PackageReference>,
         packages: MutableCollection<Package>,
         issues: MutableCollection<OrtIssue>
     ) {
-        runBlocking(Dispatchers.IO) {
+        runBlocking(Dispatchers.IO /*+ coroutineExceptionHandler*/) {
             references.map { id ->
                 async {
-                    packageMap.computeIfAbsent(id) {
-                        val all = getAllPackageData(id)
-                        all to getPackage(all)
+                    if (!packageMap.containsKey(id)) {
+                        getAllPackageData(id)?.let { all ->
+                            packageMap.put(id, all to getPackage(all))
+                        } ?: run {
+                            issues += NuGetSupport.createAndLogIssue(
+                                source = "NuGet",
+                                message = "Failed to get package data for '${id.toCoordinates()}'."
+                            )
+                        }
                     }
                 }
             }.awaitAll()
         }
 
         references.forEach { id ->
-            try {
-                val (all, pkg) = packageMap.getValue(id)
+            val (all, pkg) = packageMap[id] ?: return@forEach
 
-                val pkgRef = pkg.toReference()
-                dependencies += pkgRef
+            val pkgRef = pkg.toReference()
+            dependencies += pkgRef
 
-                // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
-                // grow really huge.
-                if (packages.add(pkg)) {
-                    // TODO: Consider mapping dependency groups to scopes.
-                    val referredDependencies =
-                        all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
+            // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
+            // grow really huge.
+            if (packages.add(pkg)) {
+                // TODO: Consider mapping dependency groups to scopes.
+                val referredDependencies =
+                    all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
 
-                    buildDependencyTree(
-                        referredDependencies.map { dependency ->
-                            // TODO: Add support for lock files, see
-                            //       https://devblogs.microsoft.com/nuget/enable-repeatable-package-restores-using-a-lock-file/.
+                buildDependencyTree(
+                    referredDependencies.map { dependency ->
+                        // TODO: Add support for lock files, see
+                        //       https://devblogs.microsoft.com/nuget/enable-repeatable-package-restores-using-a-lock-file/.
 
-                            // Resolve to the lowest applicable version, see
-                            // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
-                            val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
-                                .split(",").first().trim()
+                        // Resolve to the lowest applicable version, see
+                        // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
+                        val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
+                            .split(",").first().trim()
 
-                            // TODO: Add support resolving to the highest version for floating versions, see
-                            //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
+                        // TODO: Add support resolving to the highest version for floating versions, see
+                        //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
 
-                            getIdentifier(dependency.id, version)
-                        },
-                        pkgRef.dependencies,
-                        packages,
-                        issues
-                    )
-                } else {
-                    logOnce(Level.DEBUG) {
-                        "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
-                    }
-                }
-            } catch (e: IOException) {
-                issues += createAndLogIssue(
-                    source = "NuGet",
-                    message = "Failed to get package data for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                        getIdentifier(dependency.id, version)
+                    },
+                    pkgRef.dependencies,
+                    packages,
+                    issues
                 )
+            } else {
+                logOnce(Level.DEBUG) {
+                    "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
+                }
             }
         }
     }
