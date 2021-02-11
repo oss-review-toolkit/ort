@@ -54,7 +54,7 @@ data class OrtConfiguration(
     /**
      * The configuration of the advisors, using the advisor's name as the key.
      */
-    val advisor: Map<String, AdvisorConfiguration> = emptyMap()
+    val advisor: AdvisorConfiguration = AdvisorConfiguration()
 ) {
     companion object {
         /**

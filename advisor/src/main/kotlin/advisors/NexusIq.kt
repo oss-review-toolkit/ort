@@ -32,12 +32,13 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.NexusIqConfiguration
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 
 import retrofit2.HttpException
 
@@ -57,7 +58,10 @@ class NexusIq(
         override fun create(config: AdvisorConfiguration) = NexusIq(advisorName, config)
     }
 
-    private val nexusIqConfig = config as NexusIqConfiguration
+    private val nexusIqConfig = config.nexusIq
+        ?: throw IllegalArgumentException(
+            "No $advisorName advisor configuration found in ${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}"
+        )
 
     private val service by lazy {
         NexusIqService.create(

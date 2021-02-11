@@ -46,6 +46,7 @@ import java.net.URI
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -251,9 +252,9 @@ private fun expectErrorResult(wiremock: WireMockServer) {
 /**
  * Create a configuration for the [VulnerableCode] advisor that points to the local [wireMockServer].
  */
-private fun createConfig(wireMockServer: WireMockServer): VulnerableCodeConfiguration {
+private fun createConfig(wireMockServer: WireMockServer): AdvisorConfiguration {
     val url = "http://localhost:${wireMockServer.port()}"
-    return VulnerableCodeConfiguration(url)
+    return AdvisorConfiguration(vulnerableCode = VulnerableCodeConfiguration(url))
 }
 
 /**
