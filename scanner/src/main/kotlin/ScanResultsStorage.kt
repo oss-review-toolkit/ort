@@ -171,7 +171,7 @@ abstract class ScanResultsStorage {
                 addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
             }
 
-            return PostgresStorage(HikariDataSource(dataSourceConfig), config.schema).also { it.setupDatabase() }
+            return PostgresStorage(HikariDataSource(dataSourceConfig), config.schema)
         }
 
         /**
