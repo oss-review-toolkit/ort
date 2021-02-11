@@ -207,12 +207,20 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         packages: MutableCollection<Package>,
         issues: MutableCollection<OrtIssue>
     ) {
+        runBlocking(Dispatchers.IO) {
+            references.map { id ->
+                async {
+                    packageMap.computeIfAbsent(id) {
+                        val all = getAllPackageData(id)
+                        all to getPackage(all)
+                    }
+                }
+            }.awaitAll()
+        }
+
         references.forEach { id ->
             try {
-                val (all, pkg) = packageMap.getOrPut(id) {
-                    val all = getAllPackageData(id)
-                    all to getPackage(all)
-                }
+                val (all, pkg) = packageMap.getValue(id)
 
                 val pkgRef = pkg.toReference()
                 dependencies += pkgRef
