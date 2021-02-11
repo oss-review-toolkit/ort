@@ -59,6 +59,12 @@ data class Package(
     val declaredLicenses: SortedSet<String>,
 
     /**
+     * The list of authors declared for this package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val declaredAuthors: SortedSet<String> = sortedSetOf(),
+
+    /**
      * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
      * concatenated with [SpdxOperator.AND].
      */
@@ -126,6 +132,7 @@ data class Package(
             id = Identifier.EMPTY,
             purl = "",
             declaredLicenses = sortedSetOf(),
+            declaredAuthors = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             concludedLicense = null,
             description = "",
@@ -154,6 +161,7 @@ data class Package(
 
         return PackageCurationData(
             declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },
+            declaredAuthors = declaredAuthors.takeIf { it != other.declaredAuthors },
             description = description.takeIf { it != other.description },
             homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },

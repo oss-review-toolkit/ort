@@ -40,6 +40,12 @@ data class PackageCurationData(
     val declaredLicenses: SortedSet<String>? = null,
 
     /**
+     * The list of authors of this package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val declaredAuthors: SortedSet<String>? = null,
+
+    /**
      * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
      * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
      */
@@ -119,12 +125,14 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
     } ?: base.vcs
 
     val declaredLicenses = curation.declaredLicenses ?: base.declaredLicenses
+    val declaredAuthors = curation.declaredAuthors ?: base.declaredAuthors
     val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + curation.declaredLicenseMapping
     val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
 
     val pkg = Package(
         id = base.id,
         declaredLicenses = declaredLicenses,
+        declaredAuthors = declaredAuthors,
         declaredLicensesProcessed = declaredLicensesProcessed,
         concludedLicense = curation.concludedLicense ?: base.concludedLicense,
         description = curation.description ?: base.description,

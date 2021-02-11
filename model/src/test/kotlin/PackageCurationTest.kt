@@ -40,6 +40,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 declaredLicenses = sortedSetOf(),
+                declaredAuthors = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -53,6 +54,7 @@ class PackageCurationTest : WordSpec({
                 id = pkg.id,
                 data = PackageCurationData(
                     declaredLicenses = sortedSetOf("license a", "license b"),
+                    declaredAuthors = sortedSetOf("author 1", "author 2"),
                     declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx()),
                     concludedLicense = "license1 OR license2".toSpdx(),
                     description = "description",
@@ -82,6 +84,7 @@ class PackageCurationTest : WordSpec({
             with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 declaredLicenses shouldBe curation.data.declaredLicenses
+                declaredAuthors shouldBe curation.data.declaredAuthors
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
                 declaredLicensesProcessed.unmapped should containExactlyInAnyOrder("license b")
                 concludedLicense shouldBe curation.data.concludedLicense
@@ -108,6 +111,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 declaredLicenses = sortedSetOf("license a", "license b"),
+                declaredAuthors = sortedSetOf("author 1", "author 2"),
                 description = "description",
                 homepageUrl = "homepageUrl",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -138,6 +142,7 @@ class PackageCurationTest : WordSpec({
             with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 declaredLicenses shouldBe pkg.declaredLicenses
+                declaredAuthors shouldBe pkg.declaredAuthors
                 concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description
                 homepageUrl shouldBe curation.data.homepageUrl
@@ -168,6 +173,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 declaredLicenses = sortedSetOf("license a", "license b"),
+                declaredAuthors = sortedSetOf("author 1", "author 2"),
                 description = "description",
                 homepageUrl = "homepageUrl",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -207,6 +213,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 declaredLicenses = sortedSetOf(),
+                declaredAuthors = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -240,6 +247,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 declaredLicenses = sortedSetOf(),
+                declaredAuthors = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -269,6 +277,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 declaredLicenses = sortedSetOf(),
+                declaredAuthors = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -363,6 +372,7 @@ class PackageCurationTest : WordSpec({
             val pkg = Package(
                 id = Identifier("type", "namespace", "name", "version"),
                 declaredLicenses = sortedSetOf("license a", "license b", "license c"),
+                declaredAuthors = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,

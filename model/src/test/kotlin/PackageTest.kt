@@ -44,6 +44,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             declaredLicenses = sortedSetOf("declared license"),
+            declaredAuthors = sortedSetOf("declared author"),
             description = "description",
             homepageUrl = "homepageUrl",
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
@@ -60,6 +61,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             declaredLicenses = sortedSetOf("other declared license"),
+            declaredAuthors = sortedSetOf("other declared author"),
             description = "other description",
             homepageUrl = "other homepageUrl",
             binaryArtifact = RemoteArtifact("other url", Hash.create("other hash")),
@@ -73,6 +75,7 @@ class PackageTest : StringSpec({
         diff.binaryArtifact shouldBe pkg.binaryArtifact
         diff.comment should beNull()
         diff.declaredLicenses shouldBe pkg.declaredLicenses
+        diff.declaredAuthors shouldBe pkg.declaredAuthors
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
         diff.vcs shouldBe pkg.vcs.toCuration()
@@ -88,6 +91,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             declaredLicenses = sortedSetOf("declared license"),
+            declaredAuthors = sortedSetOf("declared author"),
             description = "description",
             homepageUrl = "homepageUrl",
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
@@ -100,6 +104,7 @@ class PackageTest : StringSpec({
         diff.binaryArtifact should beNull()
         diff.comment should beNull()
         diff.declaredLicenses should beNull()
+        diff.declaredAuthors should beNull()
         diff.homepageUrl should beNull()
         diff.sourceArtifact should beNull()
         diff.vcs should beNull()

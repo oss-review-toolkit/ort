@@ -57,6 +57,12 @@ data class Project(
     val declaredLicenses: SortedSet<String>,
 
     /**
+     * The list of authors declared for this package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val declaredAuthors: SortedSet<String> = sortedSetOf(),
+
+    /**
      * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
      * concatenated with [SpdxOperator.AND].
      */
@@ -103,6 +109,7 @@ data class Project(
             id = Identifier.EMPTY,
             definitionFilePath = "",
             declaredLicenses = sortedSetOf(),
+            declaredAuthors = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
@@ -199,6 +206,7 @@ data class Project(
         Package(
             id = id,
             declaredLicenses = declaredLicenses,
+            declaredAuthors = declaredAuthors,
             description = "",
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
