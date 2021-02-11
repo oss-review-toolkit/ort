@@ -472,7 +472,8 @@ class LicenseInfoResolverTest : WordSpec() {
                                 pathExcludes = emptyList(),
                                 relativeFindingsPath = ""
                             )
-                        )
+                        ),
+                        concludedLicense = "$apacheLicense OR $gplLicense".toSpdx()
                     )
                 )
                 val resolver = createResolver(licenseInfos)
@@ -481,9 +482,14 @@ class LicenseInfoResolverTest : WordSpec() {
                     DeclaredLicenseProcessor.process(setOf("$apacheLicense or $gplLicense", mitLicense)).spdxExpression
                 val expectedDetectedSpdxExpressions =
                     arrayOf("$gplLicense OR $bsdLicense".toSpdx(), bsdLicense.toSpdx())
+                val expectedConcludedSpdxExpression = "$apacheLicense OR $gplLicense".toSpdx()
 
                 val result: ResolvedLicenseInfo = resolver.resolveLicenseInfo(pkgId)
-                result should containOnlyLicenseSources(LicenseSource.DECLARED, LicenseSource.DETECTED)
+                result should containOnlyLicenseSources(
+                    LicenseSource.DECLARED,
+                    LicenseSource.DETECTED,
+                    LicenseSource.CONCLUDED
+                )
                 result should containLicenseExpressionsExactlyBySource(
                     LicenseSource.DECLARED,
                     expectedDeclaredSpdxExpression
@@ -491,6 +497,10 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containLicenseExpressionsExactlyBySource(
                     LicenseSource.DETECTED,
                     *expectedDetectedSpdxExpressions
+                )
+                result should containLicenseExpressionsExactlyBySource(
+                    LicenseSource.CONCLUDED,
+                    expectedConcludedSpdxExpression
                 )
                 result should containLicensesExactly(apacheLicense, gplLicense, mitLicense, bsdLicense)
                 result should containNumberOfLocationsForLicense(gplLicense, 2)

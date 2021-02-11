@@ -77,7 +77,13 @@ class LicenseInfoResolver(
 
         // Handle concluded licenses.
         concludedLicenses.forEach { license ->
-            license.builder().sources += LicenseSource.CONCLUDED
+            license.builder().apply {
+                sources += LicenseSource.CONCLUDED
+
+                licenseInfo.concludedLicenseInfo.concludedLicense?.let {
+                    originalExpressions[LicenseSource.CONCLUDED] = setOf(it)
+                }
+            }
         }
 
         // Handle declared licenses.
