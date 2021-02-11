@@ -36,9 +36,10 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 
 /**
  * An [Advisor] implementation that obtains security vulnerability information from a
@@ -72,7 +73,10 @@ class VulnerableCode(name: String, config: AdvisorConfiguration) : Advisor(name,
     }
 
     private val service by lazy {
-        val vulnerableCodeConfiguration = config as VulnerableCodeConfiguration
+        val vulnerableCodeConfiguration = config.vulnerableCode
+            ?: throw IllegalArgumentException(
+                "No $advisorName advisor configuration found in ${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}"
+            )
         VulnerableCodeService.create(vulnerableCodeConfiguration.serverUrl, OkHttpClientHelper.buildClient())
     }
 

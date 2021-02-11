@@ -37,14 +37,9 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.NexusIqConfiguration
-import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
@@ -92,21 +87,6 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         help = "Do not check excluded projects or packages."
     ).flag()
 
-    private fun configureAdvisor(advisorConfiguration: AdvisorConfiguration?): Advisor {
-        val config = when (advisorConfiguration) {
-            is NexusIqConfiguration -> advisorConfiguration
-            is VulnerableCodeConfiguration -> advisorConfiguration
-            null -> throw IllegalArgumentException(
-                "No advisor configuration found in ${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}"
-            )
-        }
-
-        val advisor = advisorFactory.create(config)
-        println("Using advisor '${advisor.advisorName}'.")
-
-        return advisor
-    }
-
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("advisor-result.${format.fileExtension}")
@@ -119,9 +99,9 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
             }
         }
 
-        val config = globalOptionsForSubcommands.config
-        val advisorConfig = config.advisor[advisorFactory.advisorName.toLowerCase()]
-        val advisor = configureAdvisor(advisorConfig)
+        val advisor = advisorFactory.create(globalOptionsForSubcommands.config.advisor)
+
+        println("Using advisor '${advisor.advisorName}'.")
 
         val ortResult = advisor.retrieveVulnerabilityInformation(input, skipExcluded).mergeLabels(labels)
 

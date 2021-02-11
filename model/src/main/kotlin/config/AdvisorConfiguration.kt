@@ -20,18 +20,14 @@
 package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 /**
  * The base configuration model of the advisor.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
-@JsonSubTypes(
-    JsonSubTypes.Type(NexusIqConfiguration::class),
-    JsonSubTypes.Type(VulnerableCodeConfiguration::class)
+data class AdvisorConfiguration(
+    val nexusIq: NexusIqConfiguration? = null,
+    val vulnerableCode: VulnerableCodeConfiguration? = null
 )
-sealed class AdvisorConfiguration
 
 /**
  * The configuration for Nexus IQ as a security vulnerability provider.
@@ -57,7 +53,7 @@ data class NexusIqConfiguration(
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String?
-) : AdvisorConfiguration()
+)
 
 /**
  * The configuration for VulnerableCode as security vulnerability provider.
@@ -69,4 +65,4 @@ data class VulnerableCodeConfiguration(
      * The base URL of the VulnerableCode REST API.
      */
     val serverUrl: String
-) : AdvisorConfiguration()
+)
