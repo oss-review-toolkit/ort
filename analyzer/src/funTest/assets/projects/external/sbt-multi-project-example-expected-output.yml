@@ -28,7 +28,7 @@ analyzer:
   result:
     projects:
     - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
-      definition_file_path: "common/target/scala-2.12/common_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "common/target-scala-2.12-common_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -79,7 +79,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
-      definition_file_path: "multi1/target/scala-2.12/multi1_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -138,7 +138,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
-      definition_file_path: "multi2/target/scala-2.12/multi2_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -198,7 +198,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
-      definition_file_path: "target/scala-2.12/sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "target-scala-2.12-sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -216,22 +216,6 @@ analyzer:
       - name: "compile"
         dependencies:
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
-    - id: "Unmanaged::sbt-multi-project-example:31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-      definition_file_path: ""
-      declared_licenses: []
-      declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-        path: ""
-      homepage_url: ""
-      scopes: []
     packages:
     - package:
         id: "Maven:ch.qos.logback:logback-classic:1.2.3"

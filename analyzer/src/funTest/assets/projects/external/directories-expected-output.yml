@@ -28,7 +28,7 @@ analyzer:
   result:
     projects:
     - id: "SBT:io.github.soc:directories:10"
-      definition_file_path: "target/directories-10.pom"
+      definition_file_path: "target-directories-10.pom"
       declared_licenses:
       - "Mozilla Public License 2.0"
       declared_licenses_processed:
@@ -55,22 +55,6 @@ analyzer:
         - id: "Maven:junit:junit:4.12"
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-    - id: "Unmanaged::directories-jvm:d302b1e93963c81ed511e072a52e95251b5d078b"
-      definition_file_path: ""
-      declared_licenses: []
-      declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/soc/directories-jvm"
-        revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
-        path: ""
-      homepage_url: ""
-      scopes: []
     packages:
     - package:
         id: "Maven:com.novocode:junit-interface:0.11"
