@@ -364,6 +364,8 @@ class Pub(
                 version = pubspec["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = sortedSetOf(),
             vcs = vcs,
@@ -433,6 +435,8 @@ class Pub(
 
                 packages[id] = Package(
                     id,
+                    // TODO: Find a way to track authors.
+                    authors = sortedSetOf(),
                     // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
                     declaredLicenses = sortedSetOf(),
                     description = description,

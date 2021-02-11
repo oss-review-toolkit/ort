@@ -190,6 +190,8 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         return with(all.details) {
             Package(
                 id = getIdentifier(id, version),
+                // TODO: Find a way to track authors.
+                authors = sortedSetOf(),
                 declaredLicenses = setOfNotNull(license).toSortedSet(),
                 description = description.orEmpty(),
                 homepageUrl = projectUrl.orEmpty(),
@@ -291,6 +293,8 @@ fun PackageManager.resolveNuGetDependencies(
             version = ""
         ),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+        // TODO: Find a way to track authors.
+        authors = sortedSetOf(),
         declaredLicenses = sortedSetOf(),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),

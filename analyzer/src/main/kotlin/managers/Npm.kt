@@ -295,6 +295,8 @@ open class Npm(
                     name = name,
                     version = version
                 ),
+                // TODO: Find a way to track authors.
+                authors = sortedSetOf(),
                 declaredLicenses = declaredLicenses,
                 description = description,
                 homepageUrl = homepageUrl,
@@ -525,6 +527,8 @@ open class Npm(
                 version = version
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),

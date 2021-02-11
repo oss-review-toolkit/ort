@@ -99,6 +99,8 @@ class Bower(
         private fun extractPackage(node: JsonNode) =
             Package(
                 id = extractPackageId(node),
+                // TODO: Find a way to track authors.
+                authors = sortedSetOf(),
                 declaredLicenses = extractDeclaredLicenses(node),
                 description = node["pkgMeta"]["description"].textValueOrEmpty(),
                 homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
@@ -233,6 +235,8 @@ class Bower(
             val project = Project(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                // TODO: Find a way to track authors.
+                authors = sortedSetOf(),
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),

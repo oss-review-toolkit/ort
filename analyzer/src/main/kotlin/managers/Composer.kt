@@ -232,6 +232,8 @@ class Composer(
                 version = json["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = parseDeclaredLicenses(json),
             vcs = vcs,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
@@ -263,6 +265,8 @@ class Composer(
                         name = rawName.substringAfter('/'),
                         version = version
                     ),
+                    // TODO: Find a way to track authors.
+                    authors = sortedSetOf(),
                     declaredLicenses = parseDeclaredLicenses(pkgInfo),
                     description = pkgInfo["description"].textValueOrEmpty(),
                     homepageUrl = homepageUrl,
