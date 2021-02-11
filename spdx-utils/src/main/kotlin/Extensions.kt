@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.spdx
 
 import java.io.File
@@ -27,6 +29,11 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+
+/**
+ * Return a string of hexadecimal digits representing the bytes in the array.
+ */
+fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
  * Return an [EnumSet] that contains the elements of [this] and [other].
@@ -94,6 +101,19 @@ fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
 
     return SpdxLicenseIdExpression(expressionId, orLaterVersion)
 }
+
+/**
+ * Return true if and only if this String can be successfully parsed to a [SpdxExpression].
+ */
+fun String.isSpdxExpression(): Boolean =
+    runCatching { SpdxExpression.parse(this, Strictness.ALLOW_DEPRECATED) }.isSuccess
+
+/**
+ * Return true if and only if this String can be successfully parsed to an [SpdxExpression] or if it equals
+ * [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION].
+ */
+fun String.isSpdxExpressionOrNotPresent(): Boolean =
+    SpdxConstants.isNotPresent(this) || isSpdxExpression()
 
 /**
  * Parses the string as an [SpdxExpression] and returns the result.
