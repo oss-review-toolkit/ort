@@ -26,7 +26,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.getDuplicates
+import org.ossreviewtoolkit.spdx.getDuplicates
 
 /**
  * Classifications for licenses which allow to assign meta data to licenses. This allows defining rather generic

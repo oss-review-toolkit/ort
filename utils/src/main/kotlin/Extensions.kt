@@ -47,12 +47,6 @@ import java.security.MessageDigest
 fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
- * Return the duplicates as identified by [keySelector] of a collection.
- */
-fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Set<K> =
-    if (this is Set) emptySet() else groupBy(keySelector).filter { it.value.size > 1 }.keys
-
-/**
  * Format this [Double] as a string with the provided number of [decimalPlaces].
  */
 fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(this)
