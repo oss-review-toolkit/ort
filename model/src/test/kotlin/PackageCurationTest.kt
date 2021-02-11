@@ -39,6 +39,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
+                authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -52,6 +53,7 @@ class PackageCurationTest : WordSpec({
             val curation = PackageCuration(
                 id = pkg.id,
                 data = PackageCurationData(
+                    authors = sortedSetOf("author 1", "author 2"),
                     declaredLicenses = sortedSetOf("license a", "license b"),
                     declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx()),
                     concludedLicense = "license1 OR license2".toSpdx(),
@@ -81,6 +83,7 @@ class PackageCurationTest : WordSpec({
 
             with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
+                authors shouldBe curation.data.authors
                 declaredLicenses shouldBe curation.data.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
                 declaredLicensesProcessed.unmapped should containExactlyInAnyOrder("license b")
@@ -107,6 +110,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
+                authors = sortedSetOf("author 1", "author 2"),
                 declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
@@ -137,6 +141,7 @@ class PackageCurationTest : WordSpec({
 
             with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
+                authors shouldBe pkg.authors
                 declaredLicenses shouldBe pkg.declaredLicenses
                 concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description
@@ -167,6 +172,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
+                authors = sortedSetOf("author 1", "author 2"),
                 declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
@@ -206,6 +212,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
+                authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -239,6 +246,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
+                authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -268,6 +276,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
+                authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -362,6 +371,7 @@ class PackageCurationTest : WordSpec({
         "accumulate the map entries and override the entries with same key" {
             val pkg = Package(
                 id = Identifier("type", "namespace", "name", "version"),
+                authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf("license a", "license b", "license c"),
                 description = "",
                 homepageUrl = "",

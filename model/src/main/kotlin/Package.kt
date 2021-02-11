@@ -53,6 +53,15 @@ data class Package(
     val purl: String = id.toPurl(),
 
     /**
+     * The list of authors declared for this package.
+     *
+     * TODO: The annotation can be removed after all package manager implementations have filled the field [authors]
+     *       accordingly.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val authors: SortedSet<String> = sortedSetOf(),
+
+    /**
      * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
      * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
      */
@@ -125,6 +134,7 @@ data class Package(
         val EMPTY = Package(
             id = Identifier.EMPTY,
             purl = "",
+            authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             concludedLicense = null,
@@ -153,6 +163,7 @@ data class Package(
         }
 
         return PackageCurationData(
+            authors = authors.takeIf { it != other.authors },
             declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },
             description = description.takeIf { it != other.description },
             homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },

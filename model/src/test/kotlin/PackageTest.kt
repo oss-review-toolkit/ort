@@ -43,6 +43,7 @@ class PackageTest : StringSpec({
                 name = "name",
                 version = "version"
             ),
+            authors = sortedSetOf("author"),
             declaredLicenses = sortedSetOf("declared license"),
             description = "description",
             homepageUrl = "homepageUrl",
@@ -59,6 +60,7 @@ class PackageTest : StringSpec({
                 name = "name",
                 version = "version"
             ),
+            authors = sortedSetOf("other author"),
             declaredLicenses = sortedSetOf("other declared license"),
             description = "other description",
             homepageUrl = "other homepageUrl",
@@ -72,6 +74,7 @@ class PackageTest : StringSpec({
 
         diff.binaryArtifact shouldBe pkg.binaryArtifact
         diff.comment should beNull()
+        diff.authors shouldBe pkg.authors
         diff.declaredLicenses shouldBe pkg.declaredLicenses
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
@@ -87,6 +90,7 @@ class PackageTest : StringSpec({
                 name = "name",
                 version = "version"
             ),
+            authors = sortedSetOf("author"),
             declaredLicenses = sortedSetOf("declared license"),
             description = "description",
             homepageUrl = "homepageUrl",
@@ -99,6 +103,7 @@ class PackageTest : StringSpec({
 
         diff.binaryArtifact should beNull()
         diff.comment should beNull()
+        diff.authors should beNull()
         diff.declaredLicenses should beNull()
         diff.homepageUrl should beNull()
         diff.sourceArtifact should beNull()

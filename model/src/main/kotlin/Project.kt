@@ -51,6 +51,15 @@ data class Project(
     val definitionFilePath: String,
 
     /**
+     * The list of authors declared for this package.
+     *
+     * TODO: The annotation can be removed after all package manager implementations have filled the field [authors]
+     *       accordingly.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val authors: SortedSet<String> = sortedSetOf(),
+
+    /**
      * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
      * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
      */
@@ -102,6 +111,7 @@ data class Project(
         val EMPTY = Project(
             id = Identifier.EMPTY,
             definitionFilePath = "",
+            authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
@@ -198,6 +208,7 @@ data class Project(
     fun toPackage() =
         Package(
             id = id,
+            authors = authors,
             declaredLicenses = declaredLicenses,
             description = "",
             homepageUrl = homepageUrl,
