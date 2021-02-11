@@ -18,6 +18,7 @@
  * License-Filename: LICENSE
  */
 
+val exposedVersion: String by project
 val hikariVersion: String by project
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
@@ -54,6 +55,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.eclipse.sw360:client:$sw360ClientVersion")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
 
