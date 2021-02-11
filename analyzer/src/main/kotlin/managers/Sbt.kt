@@ -24,6 +24,8 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.Properties
 
 import kotlin.io.path.createTempDirectory
@@ -38,6 +40,7 @@ import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.getCommonFileParent
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.suppressInput
 
 /**
@@ -161,7 +164,7 @@ class Sbt(
             log.warn { "No generated POM files found inside the '$workingDir' directory." }
         }
 
-        return pomFiles.distinct()
+        return pomFiles.distinct().map { moveGeneratedPom(it) }
     }
 
     override fun beforeResolution(definitionFiles: List<File>) {
@@ -212,4 +215,17 @@ class Sbt(
     override fun resolveDependencies(definitionFile: File) =
         // This is not implemented in favor over overriding [resolveDependencies].
         throw NotImplementedError()
+}
+
+private fun moveGeneratedPom(pomFile: File): File {
+    val targetDirParent = pomFile.absoluteFile.parentFile.searchUpwardsForSubdirectory("target") ?: return pomFile
+    val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
+    val targetFile = targetDirParent.resolve(targetFilename)
+
+    if (runCatching { Files.move(pomFile.toPath(), targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
+        Sbt.log.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
+        return pomFile
+    }
+
+    return targetFile
 }
