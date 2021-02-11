@@ -192,6 +192,8 @@ class SpdxDocumentFile(
                 id = projectPackage.toIdentifier(),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, projectPackage.homepage),
                 homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
@@ -216,6 +218,8 @@ class SpdxDocumentFile(
             Package(
                 id = pkg.toIdentifier(),
                 declaredLicenses = sortedSetOf(pkg.licenseDeclared),
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 concludedLicense = getConcludedLicense(pkg),
                 description = packageDescription,
                 homepageUrl = pkg.homepage.mapNotPresentToEmpty(),

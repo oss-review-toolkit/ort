@@ -132,6 +132,8 @@ class GoDep(
             val pkg = Package(
                 id = Identifier(managerName, "", name, version),
                 declaredLicenses = sortedSetOf(),
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -173,6 +175,8 @@ class GoDep(
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     declaredLicenses = sortedSetOf(),
+                    // TODO: Find a way to track authors
+                    declaredAuthors = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = projectVcs,
                     homepageUrl = "",

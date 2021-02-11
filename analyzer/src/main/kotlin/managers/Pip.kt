@@ -377,6 +377,8 @@ class Pip(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = declaredLicenses,
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
             homepageUrl = setupHomepage,
@@ -558,6 +560,7 @@ class Pip(
                     version = dependency["installed_version"].textValue()
                 ),
                 declaredLicenses = sortedSetOf(),
+                declaredAuthors = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -620,6 +623,8 @@ class Pip(
                     homepageUrl = homepageUrl,
                     description = pkgInfo["summary"]?.textValue().orEmpty(),
                     declaredLicenses = getDeclaredLicenses(pkgInfo),
+                    // TODO: Find a way to track authors
+                    declaredAuthors = sortedSetOf(),
                     binaryArtifact = getBinaryArtifact(pkgRelease),
                     sourceArtifact = getSourceArtifact(pkgRelease),
                     vcs = VcsInfo.EMPTY,
@@ -710,6 +715,8 @@ class Pip(
             description = map["Summary"]?.single().orEmpty(),
             homepageUrl = map["Home-page"]?.single().orEmpty(),
             declaredLicenses = declaredLicenses,
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo.EMPTY
@@ -724,6 +731,7 @@ private fun Package.enrichWith(other: Package?): Package =
             homepageUrl = homepageUrl.takeUnless { it.isBlank() } ?: other.homepageUrl,
             description = description.takeUnless { it.isBlank() } ?: other.description,
             declaredLicenses = declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
+            declaredAuthors = declaredAuthors.takeUnless { it.isEmpty() } ?: other.declaredAuthors,
             binaryArtifact = binaryArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.binaryArtifact,
             sourceArtifact = sourceArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.sourceArtifact,
             vcs = vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,

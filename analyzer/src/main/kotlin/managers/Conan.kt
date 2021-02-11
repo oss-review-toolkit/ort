@@ -125,6 +125,8 @@ class Conan(
                         id = projectPackage.id,
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = projectPackage.declaredLicenses,
+                        // TODO: Find a way to track authors
+                        declaredAuthors = sortedSetOf(),
                         vcs = projectPackage.vcs,
                         vcsProcessed = processProjectVcs(
                             workingDir,
@@ -218,6 +220,8 @@ class Conan(
         Package(
             id = extractPackageId(node, workingDir),
             declaredLicenses = extractDeclaredLicenses(node),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             description = extractPackageField(node, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
@@ -310,6 +314,8 @@ class Conan(
                 version = runInspectRawField(definitionFile.name, workingDir, "version")
             ),
             declaredLicenses = extractDeclaredLicenses(node),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             description = runInspectRawField(definitionFile.name, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
@@ -329,6 +335,8 @@ class Conan(
                 version = ""
             ),
             declaredLicenses = extractDeclaredLicenses(node),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             description = "",
             homepageUrl = node["homepage"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!

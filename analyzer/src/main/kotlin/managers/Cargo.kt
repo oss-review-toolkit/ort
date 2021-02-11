@@ -118,6 +118,8 @@ class Cargo(
         Package(
             id = extractPackageId(node),
             declaredLicenses = extractDeclaredLicenses(node),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             description = node["description"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = extractSourceArtifact(node, hashes) ?: RemoteArtifact.EMPTY,
@@ -285,6 +287,8 @@ class Cargo(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = projectPkg.declaredLicenses,
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
             homepageUrl = homepageUrl,

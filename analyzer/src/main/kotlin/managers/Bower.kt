@@ -100,6 +100,8 @@ class Bower(
             Package(
                 id = extractPackageId(node),
                 declaredLicenses = extractDeclaredLicenses(node),
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 description = node["pkgMeta"]["description"].textValueOrEmpty(),
                 homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -234,6 +236,8 @@ class Bower(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = projectPackage.declaredLicenses,
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
                 homepageUrl = projectPackage.homepageUrl,

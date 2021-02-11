@@ -138,6 +138,8 @@ class Maven(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = MavenSupport.parseLicenses(mavenProject),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),

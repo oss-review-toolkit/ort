@@ -133,6 +133,8 @@ class GoMod(
                         ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
+                        // TODO: Find a way to track authors
+                        declaredAuthors = sortedSetOf(),
                         vcs = projectVcs,
                         vcsProcessed = projectVcs,
                         homepageUrl = "",
@@ -197,6 +199,8 @@ class GoMod(
         return Package(
             id = Identifier(managerName, "", id.name, id.version),
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,

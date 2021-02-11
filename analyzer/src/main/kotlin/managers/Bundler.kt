@@ -113,6 +113,8 @@ class Bundler(
                 id = projectId,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = declaredLicenses.toSortedSet(),
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
                 homepageUrl = homepageUrl,
@@ -163,6 +165,8 @@ class Bundler(
                 packages += Package(
                     id = gemId,
                     declaredLicenses = gemSpec.declaredLicenses,
+                    // TODO: Find a way to track authors
+                    declaredAuthors = sortedSetOf(),
                     description = gemSpec.description,
                     homepageUrl = gemSpec.homepageUrl,
                     binaryArtifact = RemoteArtifact.EMPTY,

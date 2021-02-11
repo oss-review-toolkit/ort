@@ -241,6 +241,8 @@ class Gradle(
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     declaredLicenses = sortedSetOf(),
+                    // TODO: Find a way to track authors
+                    declaredAuthors = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",

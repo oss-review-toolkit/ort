@@ -296,6 +296,8 @@ open class Npm(
                     version = version
                 ),
                 declaredLicenses = declaredLicenses,
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 description = description,
                 homepageUrl = homepageUrl,
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -526,6 +528,8 @@ open class Npm(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
             declaredLicenses = declaredLicenses,
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
             homepageUrl = homepageUrl,

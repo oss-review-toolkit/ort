@@ -366,6 +366,8 @@ class Pub(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = sortedSetOf(),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             vcs = vcs,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
             homepageUrl = homepageUrl,
@@ -435,6 +437,8 @@ class Pub(
                     id,
                     // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
                     declaredLicenses = sortedSetOf(),
+                    // TODO: Find a way to track authors
+                    declaredAuthors = sortedSetOf(),
                     description = description,
                     homepageUrl = homepageUrl,
                     // Pub does not create binary artifacts, therefore use any empty artifact.

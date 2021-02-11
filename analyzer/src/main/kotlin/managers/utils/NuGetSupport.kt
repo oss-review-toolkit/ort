@@ -191,6 +191,8 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             Package(
                 id = getIdentifier(id, version),
                 declaredLicenses = setOfNotNull(license).toSortedSet(),
+                // TODO: Find a way to track authors
+                declaredAuthors = sortedSetOf(),
                 description = description.orEmpty(),
                 homepageUrl = projectUrl.orEmpty(),
                 binaryArtifact = RemoteArtifact(
@@ -292,6 +294,8 @@ fun PackageManager.resolveNuGetDependencies(
         ),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
         declaredLicenses = sortedSetOf(),
+        // TODO: Find a way to track authors
+        declaredAuthors = sortedSetOf(),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),
         homepageUrl = "",

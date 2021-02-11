@@ -108,6 +108,8 @@ class Unmanaged(
             id = id,
             definitionFilePath = "",
             declaredLicenses = sortedSetOf(),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             vcs = VcsInfo.EMPTY,
             vcsProcessed = vcsInfo,
             homepageUrl = "",

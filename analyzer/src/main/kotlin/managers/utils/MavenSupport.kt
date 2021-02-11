@@ -645,6 +645,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 version = mavenProject.version
             ),
             declaredLicenses = parseLicenses(mavenProject),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             description = mavenProject.description.orEmpty(),
             homepageUrl = homepageUrl.orEmpty(),
             binaryArtifact = binaryRemoteArtifact,

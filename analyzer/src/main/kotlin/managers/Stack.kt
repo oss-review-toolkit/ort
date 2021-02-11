@@ -164,6 +164,8 @@ class Stack(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = projectPackage.declaredLicenses,
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             vcs = projectPackage.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
             homepageUrl = projectPackage.homepageUrl,
@@ -346,6 +348,8 @@ class Stack(
         return Package(
             id = id,
             declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
+            // TODO: Find a way to track authors
+            declaredAuthors = sortedSetOf(),
             description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
