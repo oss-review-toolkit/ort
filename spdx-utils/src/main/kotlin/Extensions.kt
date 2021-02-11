@@ -36,6 +36,12 @@ import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
+ * Return the duplicates as identified by [keySelector] of a collection.
+ */
+fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Set<K> =
+    if (this is Set) emptySet() else groupBy(keySelector).filter { it.value.size > 1 }.keys
+
+/**
  * Return an [EnumSet] that contains the elements of [this] and [other].
  */
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
