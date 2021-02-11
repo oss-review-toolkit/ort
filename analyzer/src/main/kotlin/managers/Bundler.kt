@@ -112,6 +112,8 @@ class Bundler(
             val project = Project(
                 id = projectId,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                // TODO: Find a way to track authors.
+                authors = sortedSetOf(),
                 declaredLicenses = declaredLicenses.toSortedSet(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
@@ -162,6 +164,8 @@ class Bundler(
 
                 packages += Package(
                     id = gemId,
+                    // TODO: Find a way to track authors.
+                    authors = sortedSetOf(),
                     declaredLicenses = gemSpec.declaredLicenses,
                     description = gemSpec.description,
                     homepageUrl = gemSpec.homepageUrl,

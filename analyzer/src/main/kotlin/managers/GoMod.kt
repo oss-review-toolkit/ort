@@ -132,6 +132,8 @@ class GoMod(
                             version = projectVcs.revision
                         ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                        // TODO: Find a way to track authors.
+                        authors = sortedSetOf(),
                         declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
                         vcs = projectVcs,
                         vcsProcessed = projectVcs,
@@ -196,6 +198,8 @@ class GoMod(
 
         return Package(
             id = Identifier(managerName, "", id.name, id.version),
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",

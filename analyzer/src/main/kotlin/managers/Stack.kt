@@ -163,6 +163,8 @@ class Stack(
         val project = Project(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = projectPackage.declaredLicenses,
             vcs = projectPackage.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
@@ -345,6 +347,8 @@ class Stack(
 
         return Package(
             id = id,
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
             description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,

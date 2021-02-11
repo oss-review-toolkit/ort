@@ -107,6 +107,8 @@ class Unmanaged(
         val project = Project(
             id = id,
             definitionFilePath = "",
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             vcs = VcsInfo.EMPTY,
             vcsProcessed = vcsInfo,

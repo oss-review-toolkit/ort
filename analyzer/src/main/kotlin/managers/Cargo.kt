@@ -117,6 +117,8 @@ class Cargo(
     private fun extractPackage(node: JsonNode, hashes: Map<String, String>) =
         Package(
             id = extractPackageId(node),
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = extractDeclaredLicenses(node),
             description = node["description"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY,
@@ -284,6 +286,8 @@ class Cargo(
         val project = Project(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
             declaredLicenses = projectPkg.declaredLicenses,
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
