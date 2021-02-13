@@ -24,6 +24,7 @@ val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
 val log4jApiKotlinVersion: String by project
 val mockkVersion: String by project
+val nuprocessVersion: String by project
 val okhttpVersion: String by project
 val semverVersion: String by project
 val springCoreVersion: String by project
@@ -43,6 +44,7 @@ dependencies {
     implementation(project(":spdx-utils"))
 
     implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
+    implementation("com.zaxxer:nuprocess:$nuprocessVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")

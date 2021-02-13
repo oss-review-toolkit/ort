@@ -20,9 +20,18 @@
 package org.ossreviewtoolkit.utils
 
 import com.vdurmont.semver4j.Requirement
+import com.zaxxer.nuprocess.NuProcess
+import com.zaxxer.nuprocess.NuProcessBuilder
+import com.zaxxer.nuprocess.codec.NuAbstractCharsetHandler
 
 import java.io.File
 import java.io.IOException
+import java.lang.IllegalArgumentException
+import java.lang.StringBuilder
+import java.nio.CharBuffer
+import java.nio.charset.Charset
+import java.nio.charset.CoderResult
+import java.util.concurrent.TimeUnit
 
 /**
  * An interface to implement by classes that are backed by a command line tool.
@@ -104,6 +113,70 @@ interface CommandLineTool {
             } else {
                 throw IOException(message)
             }
+        }
+    }
+}
+
+private const val TIMEOUT_INFINITE = 0L
+
+class CommandLineTool2(
+    private val name: String,
+    private val versionArguments: Array<String> = arrayOf("--version"),
+    private val versionTransformation: (String) -> String = { it.substringAfterLast(" ", "") }
+) {
+    class ProcessResult(val exitCode: Int, stdout: StringBuilder, stderr: StringBuilder) {
+        val stdout by lazy { stdout.toString().trim() }
+        val stderr by lazy { stderr.toString().trim() }
+
+        fun transformOutput(transformation: (String) -> String): String {
+            return sequenceOf({ stdout }, { stderr }).map { transformation(it()) }.find { it.isNotBlank() }.orEmpty()
+        }
+    }
+
+    operator fun invoke(
+        vararg args: String,
+        path: File? = null,
+        env: Map<String, String>? = null
+    ): Result<ProcessResult> {
+        val commandPath = path?.resolve(name)?.let { resolvedPath ->
+            (resolveWindowsExecutable(resolvedPath)?.takeIf { Os.isWindows } ?: resolvedPath).path
+        } ?: name
+
+        val process = NuProcessBuilder(handler, commandPath, *args).apply {
+            env?.let { environment().putAll(it) }
+        }.start()
+
+        val exitCode = process.waitFor(TIMEOUT_INFINITE, TimeUnit.SECONDS)
+
+        return if (exitCode == Integer.MIN_VALUE) {
+            Result.failure(IllegalArgumentException("Unable to start process for '$commandPath'."))
+        } else {
+            Result.success(ProcessResult(exitCode, stdout, stderr))
+        }
+    }
+
+    fun version(path: File? = null, env: Map<String, String>? = null): String {
+        val result = invoke(*versionArguments, path = path, env = env).getOrThrow()
+        return result.transformOutput(versionTransformation)
+    }
+
+    private val stdout = StringBuilder()
+    private val stderr = StringBuilder()
+
+    private val handler = object : NuAbstractCharsetHandler(Charset.defaultCharset()) {
+        override fun onStart(nuProcess: NuProcess) {
+            stdout.clear()
+            stderr.clear()
+        }
+
+        override fun onStdoutChars(buffer: CharBuffer, closed: Boolean, coderResult: CoderResult) {
+            if (closed) return
+            stdout.append(buffer)
+        }
+
+        override fun onStderrChars(buffer: CharBuffer, closed: Boolean, coderResult: CoderResult) {
+            if (closed) return
+            stderr.append(buffer)
         }
     }
 }
