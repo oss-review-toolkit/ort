@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.CommandLineTool2
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
@@ -164,7 +165,7 @@ class Pip(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
         override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 
@@ -200,9 +201,7 @@ class Pip(
             }
     }
 
-    override fun command(workingDir: File?) = "pip"
-
-    override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(' ')
+    private val pip = CommandLineTool2("pip") { it.removePrefix("pip ").substringBefore(" ") }
 
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
         runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
@@ -654,6 +653,7 @@ class Pip(
      * Return the [Identifier]s of all installed packages, determined via the command 'pip list'.
      */
     private fun listAllInstalledPackages(virtualEnvDir: File, workingDir: File): Set<Identifier> {
+        pip("list", "--format", "json", path = virtualEnvDir)
         val json = runInVirtualEnv(virtualEnvDir, workingDir, "pip", "list", "--format", "json")
             .requireSuccess()
             .stdout
