@@ -165,33 +165,13 @@ fun getCommonFileParent(files: Collection<File>): File? =
 fun getPathFromEnvironment(executable: String): File? {
     val paths = Os.env["PATH"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
 
-    val executables = if (Os.isWindows) {
-        // Get the list of executable file extensions without the leading dot each.
-        val pathExt = Os.env["PATHEXT"]?.let {
-            it.split(File.pathSeparatorChar).map { ext -> ext.toLowerCase().removePrefix(".") }
-        }.orEmpty()
-
-        if (executable.substringAfterLast(".").toLowerCase() !in pathExt) {
-            // Specifying an executable's file extension is optional on Windows, so try all of them in order, but still
-            // also try the unmodified executable name as a fall-back.
-            pathExt.map { "$executable.$it" } + executable
-        } else {
-            listOf(executable)
-        }
+    return if (Os.isWindows) {
+        paths.mapNotNull { path ->
+            resolveWindowsExecutable(File(path, executable))
+        }.firstOrNull()
     } else {
-        listOf(executable)
+        paths.map { path -> File(path, executable) }.find { it.isFile }
     }
-
-    paths.forEach { path ->
-        executables.forEach {
-            val pathToExecutable = File(path, it)
-            if (pathToExecutable.isFile) {
-                return pathToExecutable
-            }
-        }
-    }
-
-    return null
 }
 
 /**
@@ -286,6 +266,14 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     }
 
     return url
+}
+
+/**
+ * Resolve the Windows [executable] to its full name including the optional extension.
+ */
+fun resolveWindowsExecutable(executable: File): File? {
+    val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
+    return extensions.map { File(executable.path + it) }.find { it.isFile } ?: executable.takeIf { it.isFile }
 }
 
 /**
