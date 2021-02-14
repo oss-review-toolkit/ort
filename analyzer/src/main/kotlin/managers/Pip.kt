@@ -60,6 +60,7 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.resolveWindowsExecutable
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.textValueOrEmpty
@@ -206,23 +207,19 @@ class Pip(
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
         runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 
-    private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
-            ProcessCapture {
+    private fun runInVirtualEnv(
+        virtualEnvDir: File,
+        workingDir: File,
+        commandName: String,
+        vararg commandArgs: String
+    ): ProcessCapture {
         val binDir = if (Os.isWindows) "Scripts" else "bin"
-        var command = virtualEnvDir.resolve(binDir + File.separator + commandName)
-
-        if (Os.isWindows && command.extension.isEmpty()) {
-            // On Windows specifying the extension is optional, so try them in order.
-            val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
-            val commandWin = extensions.map { File(command.path + it.toLowerCase()) }.find { it.isFile }
-            if (commandWin != null) {
-                command = commandWin
-            }
-        }
+        val command = virtualEnvDir.resolve(binDir).resolve(commandName)
+        val resolvedCommand = resolveWindowsExecutable(command)?.takeIf { Os.isWindows } ?: command
 
         // TODO: Maybe work around long shebang paths in generated scripts within a virtualenv by calling the Python
         //       executable in the virtualenv directly, see https://github.com/pypa/virtualenv/issues/997.
-        val process = ProcessCapture(workingDir, command.path, *commandArgs)
+        val process = ProcessCapture(workingDir, resolvedCommand.path, *commandArgs)
         log.debug { process.stdout }
         return process
     }
