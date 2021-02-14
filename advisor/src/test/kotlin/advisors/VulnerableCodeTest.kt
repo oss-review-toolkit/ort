@@ -76,7 +76,7 @@ class VulnerableCodeTest : WordSpec({
     "VulnerabilityCode" should {
         "return vulnerability information" {
             stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search/"))
+                post(urlPathEqualTo("/api/packages/bulk_search"))
                     .withRequestBody(equalToJson(packagesRequestJson, false, false))
                     .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
                     .willReturn(
@@ -124,7 +124,7 @@ class VulnerableCodeTest : WordSpec({
 
         "handle missing details of a vulnerability" {
             stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search/"))
+                post(urlPathEqualTo("/api/packages/bulk_search"))
                     .withRequestBody(equalToJson(packagesRequestJson, false, false))
                     .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
                     .willReturn(
