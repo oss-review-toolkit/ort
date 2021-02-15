@@ -66,7 +66,7 @@ inline fun <reified T : Any> T.logOnce(level: Level, supplier: () -> String) {
  * A log [Level] for logging performance information. The int value of the level is between [Level.INFO] and
  * [Level.DEBUG].
  */
-val PERFORMANCE = Level.forName("PERFORMANCE", 450)
+val PERFORMANCE: Level = Level.forName("PERFORMANCE", 450)
 
 fun KotlinLogger.perf(marker: Marker, msg: Message) {
     delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, null)
