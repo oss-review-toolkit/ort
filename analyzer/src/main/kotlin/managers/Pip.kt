@@ -650,7 +650,7 @@ class Pip(
             *allPackages.map { it.name }.toTypedArray()
         ).requireSuccess().stdout
 
-        return output.normalizeLineBreaks().split("---\n").mapNotNull { parsePipShowOutput(it) }
+        return output.normalizeLineBreaks().split("---\n").map { parsePipShowOutput(it) }
     }
 
     /**
@@ -671,7 +671,7 @@ class Pip(
     /**
      * Parse the output of 'pip show <package-name> --verbose' to a package.
      */
-    private fun parsePipShowOutput(output: String): Package? {
+    private fun parsePipShowOutput(output: String): Package {
         val map = mutableMapOf<String, MutableList<String>>()
 
         var previousKey: String? = null
