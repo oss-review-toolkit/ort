@@ -99,7 +99,7 @@ class OrtImportOrder : Rule() {
     private fun createImportListWithBlankLines(importPaths: List<String>): List<String> {
         val pathsWithBlankLines = mutableListOf<String>()
 
-        importPaths.groupBy { getTopLevelPackage(it) }.forEach() {
+        importPaths.groupBy { getTopLevelPackage(it) }.forEach {
             pathsWithBlankLines += it.value
             pathsWithBlankLines += ""
         }
