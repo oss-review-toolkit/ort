@@ -458,7 +458,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
     /**
      * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
-     * scanner's native file format. The results file name is derived from [inputPath] and [getDetails].
+     * scanner's native file format. The results file name is derived from [inputPath] and [details].
      *
      * No scan results storage is used by this function.
      *
