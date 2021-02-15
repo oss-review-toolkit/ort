@@ -264,7 +264,7 @@ private fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: B
 
     return processedStatements.mapValues { (_, originalStatements) ->
         filter { it.statement in originalStatements }
-    }.filterValues { it.isNotEmpty() }.entries.map() { (statement, findings) ->
+    }.filterValues { it.isNotEmpty() }.entries.map { (statement, findings) ->
         ResolvedCopyright(statement, findings.toSet())
     }
 }
