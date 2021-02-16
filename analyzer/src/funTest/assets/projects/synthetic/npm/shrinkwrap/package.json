@@ -7,6 +7,11 @@
     "url": "https://github.com/oss-review-toolkit/ort.git"
   },
   "license": "Apache-2.0",
+  "author": {
+    "name": "The Author",
+    "email": "the.author@copy-right.com",
+    "url": "https://www.the.author.org/index.html"
+  },
   "private": true,
   "dependencies": {
     "long": "^3.2.0",

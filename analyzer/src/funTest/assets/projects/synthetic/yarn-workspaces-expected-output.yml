@@ -33,6 +33,8 @@ packages:
   purl: "pkg:npm/node-fetch@2.6.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "David Frank"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "A light-weight module that brings window.fetch to node.js"
@@ -89,6 +91,8 @@ packages:
   purl: "pkg:npm/%40here/harp-fetch@0.11.0"
   declared_licenses:
   - "Apache-2.0"
+  declared_authors:
+  - "HERE Europe B.V."
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "This module adds a subset of the fetch API for Node.js"
@@ -117,6 +121,8 @@ packages:
   purl: "pkg:npm/%40here/harp-fetch@0.3.6"
   declared_licenses:
   - "Apache-2.0"
+  declared_authors:
+  - "HERE Europe B.V."
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
   description: "This module adds a subset of the fetch API for Node.js"

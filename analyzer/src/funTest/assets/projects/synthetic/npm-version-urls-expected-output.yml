@@ -640,6 +640,8 @@ packages:
   purl: "pkg:npm/ansi-green@0.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "The color green, in ansi."
@@ -668,6 +670,8 @@ packages:
   purl: "pkg:npm/ansi-wrap@0.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Create ansi colors by passing the open and close codes."
@@ -725,6 +729,8 @@ packages:
   purl: "pkg:npm/arr-union@3.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Combines a list of arrays, returning a single array with unique values,\
@@ -754,6 +760,8 @@ packages:
   purl: "pkg:npm/array-each@1.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Loop over each item in an array and call the given function on every\
@@ -783,6 +791,8 @@ packages:
   purl: "pkg:npm/array-slice@0.2.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Array-slice method. Slices `array` from the `start` index up to, but\
@@ -812,6 +822,8 @@ packages:
   purl: "pkg:npm/assign-symbols@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Assign the enumerable es6 Symbol properties from an object (or objects)\
@@ -843,6 +855,8 @@ packages:
   purl: "pkg:npm/atob@2.1.2"
   declared_licenses:
   - "(MIT OR Apache-2.0)"
+  declared_authors:
+  - "AJ ONeal"
   declared_licenses_processed:
     spdx_expression: "MIT OR Apache-2.0"
   description: "atob for Node.JS and Linux / Mac / Windows CLI (it's a one-liner)"
@@ -871,6 +885,8 @@ packages:
   purl: "pkg:npm/autolinker@0.28.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Gregory Jacobs"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Utility to automatically link the URLs, email addresses, and Twitter\
@@ -900,6 +916,8 @@ packages:
   purl: "pkg:npm/balanced-match@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Julian Gruber"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Match balanced character pairs, like \"{\" and \"}\""
@@ -928,6 +946,8 @@ packages:
   purl: "pkg:npm/base@0.11.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "base is the foundation for creating modular, unit testable and highly\
@@ -958,6 +978,8 @@ packages:
   purl: "pkg:npm/brace-expansion@1.1.11"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Julian Gruber"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Brace expansion as known from sh/bash"
@@ -986,6 +1008,8 @@ packages:
   purl: "pkg:npm/browser-stdout@1.3.1"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "kumavis"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "`process.stdout` in your browser."
@@ -1014,6 +1038,8 @@ packages:
   purl: "pkg:npm/cache-base@1.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Basic object cache with `get`, `set`, `del`, and `has` methods for\
@@ -1043,6 +1069,8 @@ packages:
   purl: "pkg:npm/class-utils@0.3.6"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Utils for working with JavaScript classes and prototype methods."
@@ -1071,6 +1099,8 @@ packages:
   purl: "pkg:npm/clone-buffer@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Gulp Team"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Easier Buffer cloning in node."
@@ -1099,6 +1129,8 @@ packages:
   purl: "pkg:npm/clone-stats@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Hugh Kennedy"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Safely clone node's fs.Stats instances without losing their class\
@@ -1128,6 +1160,8 @@ packages:
   purl: "pkg:npm/clone@2.1.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Paul Vorbach"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "deep cloning of objects and arrays"
@@ -1156,6 +1190,8 @@ packages:
   purl: "pkg:npm/cloneable-readable@1.1.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Matteo Collina"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Clone a Readable stream, safely"
@@ -1184,6 +1220,8 @@ packages:
   purl: "pkg:npm/collection-visit@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Visit a method over the items in an object, or map visit over the\
@@ -1213,6 +1251,8 @@ packages:
   purl: "pkg:npm/commander@2.15.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "TJ Holowaychuk"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "the complete solution for node.js command-line programs"
@@ -1269,6 +1309,8 @@ packages:
   purl: "pkg:npm/concat-map@0.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "James Halliday"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "concatenative mapdashery"
@@ -1297,6 +1339,8 @@ packages:
   purl: "pkg:npm/concat-with-sourcemaps@1.1.0"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "Florian Reiterer"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "Concatenate file contents with a custom separator and generate a source\
@@ -1326,6 +1370,8 @@ packages:
   purl: "pkg:npm/copy-descriptor@0.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Copy a descriptor from object A to object B"
@@ -1354,6 +1400,8 @@ packages:
   purl: "pkg:npm/core-util-is@1.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Isaac Z. Schlueter"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "The `util.is*` functions introduced in Node v0.12."
@@ -1382,6 +1430,8 @@ packages:
   purl: "pkg:npm/debug@2.6.9"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "TJ Holowaychuk"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "small debugging utility"
@@ -1410,6 +1460,8 @@ packages:
   purl: "pkg:npm/debug@3.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "TJ Holowaychuk"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "small debugging utility"
@@ -1438,6 +1490,8 @@ packages:
   purl: "pkg:npm/decode-uri-component@0.2.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Sam Verschueren"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "A better decodeURIComponent"
@@ -1466,6 +1520,8 @@ packages:
   purl: "pkg:npm/define-property@0.2.5"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Define a non-enumerable property on an object."
@@ -1494,6 +1550,8 @@ packages:
   purl: "pkg:npm/define-property@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Define a non-enumerable property on an object."
@@ -1522,6 +1580,8 @@ packages:
   purl: "pkg:npm/define-property@2.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Define a non-enumerable property on an object. Uses Reflect.defineProperty\
@@ -1579,6 +1639,8 @@ packages:
   purl: "pkg:npm/escape-string-regexp@1.0.5"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Sindre Sorhus"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Escape RegExp special characters"
@@ -1607,6 +1669,8 @@ packages:
   purl: "pkg:npm/expand-range@1.8.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Fast, bash-like range expansion. Expand a range of numbers or letters,\
@@ -1636,6 +1700,8 @@ packages:
   purl: "pkg:npm/expand-reflinks@0.2.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Expand variables in reflinks."
@@ -1664,6 +1730,8 @@ packages:
   purl: "pkg:npm/extend-shallow@2.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Extend an object with the properties of additional objects. node.js/javascript\
@@ -1693,6 +1761,8 @@ packages:
   purl: "pkg:npm/extend-shallow@3.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Extend an object with the properties of additional objects. node.js/javascript\
@@ -1722,6 +1792,8 @@ packages:
   purl: "pkg:npm/fill-range@2.2.4"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Fill in a range of numbers or letters, optionally passing an increment\
@@ -1751,6 +1823,8 @@ packages:
   purl: "pkg:npm/for-in@1.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Iterate over the own and inherited enumerable properties of an object,\
@@ -1781,6 +1855,8 @@ packages:
   purl: "pkg:npm/fs-exists-sync@0.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Drop-in replacement for `fs.existsSync` with zero dependencies. Other\
@@ -1811,6 +1887,8 @@ packages:
   purl: "pkg:npm/fs.realpath@1.0.0"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "Isaac Z. Schlueter"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "Use node's fs.realpath, but fall back to the JS implementation if\
@@ -1840,6 +1918,8 @@ packages:
   purl: "pkg:npm/get-value@2.0.6"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Use property paths (`a.b.c`) to get a nested value from an object."
@@ -1868,6 +1948,8 @@ packages:
   purl: "pkg:npm/gfm-code-block-regex@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "RegExp for gfm (GitHub Flavored Markdown) fenced code blocks."
@@ -1896,6 +1978,8 @@ packages:
   purl: "pkg:npm/gfm-code-blocks@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Extract gfm (GitHub Flavored Markdown) fenced code blocks from a string."
@@ -1924,6 +2008,8 @@ packages:
   purl: "pkg:npm/glob@7.1.2"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "Isaac Z. Schlueter"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "a little globber"
@@ -1952,6 +2038,8 @@ packages:
   purl: "pkg:npm/growl@1.10.5"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "TJ Holowaychuk"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Growl unobtrusive notifications"
@@ -1980,6 +2068,8 @@ packages:
   purl: "pkg:npm/gulp-format-md@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Gulp plugin for beautifying markdown using pretty-remarkable."
@@ -2008,6 +2098,8 @@ packages:
   purl: "pkg:npm/gulp-header@1.8.12"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Michael J. Ryan"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Gulp extension to add header to file(s) in the pipeline."
@@ -2036,6 +2128,8 @@ packages:
   purl: "pkg:npm/has-flag@3.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Sindre Sorhus"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Check if argv has a specific flag"
@@ -2064,6 +2158,8 @@ packages:
   purl: "pkg:npm/has-value@0.3.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value exists, false if empty. Works with deeply\
@@ -2093,6 +2189,8 @@ packages:
   purl: "pkg:npm/has-value@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value exists, false if empty. Works with deeply\
@@ -2122,6 +2220,8 @@ packages:
   purl: "pkg:npm/has-values@0.1.4"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if any values exist, false if empty. Works for booleans,\
@@ -2151,6 +2251,8 @@ packages:
   purl: "pkg:npm/has-values@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if any values exist, false if empty. Works for booleans,\
@@ -2180,6 +2282,8 @@ packages:
   purl: "pkg:npm/he@1.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Mathias Bynens"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "A robust HTML entities encoder/decoder with full Unicode support."
@@ -2208,6 +2312,8 @@ packages:
   purl: "pkg:npm/inflight@1.0.6"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "Isaac Z. Schlueter"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "Add callbacks to requests in flight to avoid async duplication"
@@ -2265,6 +2371,8 @@ packages:
   purl: "pkg:npm/is-accessor-descriptor@0.1.6"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
@@ -2294,6 +2402,8 @@ packages:
   purl: "pkg:npm/is-accessor-descriptor@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
@@ -2323,6 +2433,8 @@ packages:
   purl: "pkg:npm/is-buffer@1.1.6"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Feross Aboukhadijeh"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Determine if an object is a Buffer"
@@ -2351,6 +2463,8 @@ packages:
   purl: "pkg:npm/is-data-descriptor@0.1.4"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
@@ -2380,6 +2494,8 @@ packages:
   purl: "pkg:npm/is-data-descriptor@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
@@ -2409,6 +2525,8 @@ packages:
   purl: "pkg:npm/is-descriptor@0.1.6"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
@@ -2438,6 +2556,8 @@ packages:
   purl: "pkg:npm/is-descriptor@1.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value has the characteristics of a valid JavaScript\
@@ -2467,6 +2587,8 @@ packages:
   purl: "pkg:npm/is-extendable@0.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value is any of the object types: array, regexp,\
@@ -2497,6 +2619,8 @@ packages:
   purl: "pkg:npm/is-extendable@1.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if a value is a plain object, array or function."
@@ -2525,6 +2649,8 @@ packages:
   purl: "pkg:npm/is-number@2.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if the value is a number. comprehensive tests."
@@ -2553,6 +2679,8 @@ packages:
   purl: "pkg:npm/is-number@3.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if the value is a number. comprehensive tests."
@@ -2581,6 +2709,8 @@ packages:
   purl: "pkg:npm/is-number@4.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if the value is a number. comprehensive tests."
@@ -2609,6 +2739,8 @@ packages:
   purl: "pkg:npm/is-plain-object@2.0.4"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if an object was created by the `Object` constructor."
@@ -2637,6 +2769,8 @@ packages:
   purl: "pkg:npm/is-win@1.0.8"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Ionică Bizău"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Check if the machine is running Windows or not."
@@ -2665,6 +2799,8 @@ packages:
   purl: "pkg:npm/is-windows@1.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if the platform is windows. UMD module, works with node.js,\
@@ -2694,6 +2830,8 @@ packages:
   purl: "pkg:npm/isarray@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Julian Gruber"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Array#isArray for older browsers"
@@ -2722,6 +2860,8 @@ packages:
   purl: "pkg:npm/isobject@2.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if the value is an object and not an array or null."
@@ -2750,6 +2890,8 @@ packages:
   purl: "pkg:npm/isobject@3.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Returns true if the value is an object and not an array or null."
@@ -2778,6 +2920,8 @@ packages:
   purl: "pkg:npm/kind-of@3.2.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Get the native type of a value."
@@ -2806,6 +2950,8 @@ packages:
   purl: "pkg:npm/kind-of@4.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Get the native type of a value."
@@ -2834,6 +2980,8 @@ packages:
   purl: "pkg:npm/kind-of@5.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Get the native type of a value."
@@ -2862,6 +3010,8 @@ packages:
   purl: "pkg:npm/kind-of@6.0.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Get the native type of a value."
@@ -2890,6 +3040,8 @@ packages:
   purl: "pkg:npm/lazy-cache@2.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Cache requires to be lazy-loaded when needed."
@@ -2918,6 +3070,8 @@ packages:
   purl: "pkg:npm/list-item@1.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Generate a single formatted list item, allowing you to easily generate\
@@ -2947,6 +3101,8 @@ packages:
   purl: "pkg:npm/lodash._reinterpolate@3.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "John-David Dalton"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "The modern build of lodash’s internal `reInterpolate` as a module."
@@ -2975,6 +3131,8 @@ packages:
   purl: "pkg:npm/lodash.template@4.5.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "John-David Dalton"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "The Lodash method `_.template` exported as a module."
@@ -3003,6 +3161,8 @@ packages:
   purl: "pkg:npm/lodash.templatesettings@4.2.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "John-David Dalton"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "The Lodash method `_.templateSettings` exported as a module."
@@ -3031,6 +3191,8 @@ packages:
   purl: "pkg:npm/log-ok@0.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "just `console.log` prefixed with a green check"
@@ -3059,6 +3221,8 @@ packages:
   purl: "pkg:npm/map-cache@0.2.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Basic cache object for storing key-value pairs."
@@ -3087,6 +3251,8 @@ packages:
   purl: "pkg:npm/map-visit@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Map `visit` over an array of objects."
@@ -3115,6 +3281,8 @@ packages:
   purl: "pkg:npm/markdown-utils@0.7.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Micro-utils for creating markdown snippets."
@@ -3143,6 +3311,8 @@ packages:
   purl: "pkg:npm/math-random@1.0.4"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Michael Rhodes"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "math-random is an drop-in replacement for Math.random that uses cryptographically\
@@ -3173,6 +3343,8 @@ packages:
   purl: "pkg:npm/minimatch@3.0.4"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "Isaac Z. Schlueter"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "a glob matcher in javascript"
@@ -3201,6 +3373,8 @@ packages:
   purl: "pkg:npm/minimist@0.0.8"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "James Halliday"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "parse argument options"
@@ -3229,6 +3403,8 @@ packages:
   purl: "pkg:npm/minimist@1.2.5"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "James Halliday"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "parse argument options"
@@ -3257,6 +3433,8 @@ packages:
   purl: "pkg:npm/mixin-deep@1.3.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Deeply mix the properties of objects into the first object. Like merge-deep,\
@@ -3286,6 +3464,8 @@ packages:
   purl: "pkg:npm/mkdirp@0.5.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "James Halliday"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Recursively mkdir, like `mkdir -p`"
@@ -3314,6 +3494,8 @@ packages:
   purl: "pkg:npm/mocha@5.2.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "TJ Holowaychuk"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "simple, flexible, fun test framework"
@@ -3370,6 +3552,8 @@ packages:
   purl: "pkg:npm/object-copy@0.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Copy static properties, prototype properties, and descriptors from\
@@ -3399,6 +3583,8 @@ packages:
   purl: "pkg:npm/object-visit@1.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Call a specified method on each value in the given object."
@@ -3427,6 +3613,8 @@ packages:
   purl: "pkg:npm/once@1.4.0"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "Isaac Z. Schlueter"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "Run a function exactly one time"
@@ -3455,6 +3643,8 @@ packages:
   purl: "pkg:npm/pascalcase@0.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Convert a string to pascal-case."
@@ -3483,6 +3673,8 @@ packages:
   purl: "pkg:npm/path-is-absolute@1.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Sindre Sorhus"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Node.js 0.12 path.isAbsolute() ponyfill"
@@ -3511,6 +3703,8 @@ packages:
   purl: "pkg:npm/pretty-remarkable@0.4.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Plugin for prettifying markdown with Remarkable using custom renderer\
@@ -3568,6 +3762,8 @@ packages:
   purl: "pkg:npm/randomatic@3.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Generate randomized strings of a specified length using simple character\
@@ -3625,6 +3821,8 @@ packages:
   purl: "pkg:npm/regex-not@1.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Create a javascript regular expression for matching everything except\
@@ -3683,6 +3881,8 @@ packages:
   purl: "pkg:npm/remove-trailing-separator@1.1.0"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "darsain"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "Removes separators from the end of the string."
@@ -3711,6 +3911,8 @@ packages:
   purl: "pkg:npm/repeat-element@1.1.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Create an array by repeating the given value n times."
@@ -3739,6 +3941,8 @@ packages:
   purl: "pkg:npm/repeat-string@1.6.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Repeat the given string n times. Fastest implementation for repeating\
@@ -3768,6 +3972,8 @@ packages:
   purl: "pkg:npm/replace-ext@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Gulp Team"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Replaces a file extension with another one"
@@ -3796,6 +4002,8 @@ packages:
   purl: "pkg:npm/resolve-url@0.2.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Simon Lydell"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Like Node.js’ `path.resolve`/`url.resolve` for the browser."
@@ -3824,6 +4032,8 @@ packages:
   purl: "pkg:npm/ret@0.1.15"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Roly Fentanes"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Tokenizes a string that represents a regular expression."
@@ -3852,6 +4062,8 @@ packages:
   purl: "pkg:npm/safe-buffer@5.1.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Feross Aboukhadijeh"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Safer Node.js Buffer API"
@@ -3880,6 +4092,8 @@ packages:
   purl: "pkg:npm/safe-regex@1.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "James Halliday"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "detect possibly catastrophic, exponential-time regular expressions"
@@ -3908,6 +4122,8 @@ packages:
   purl: "pkg:npm/sections@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Manipulate sections in a markdown string. A 'section' is a block of\
@@ -3937,6 +4153,8 @@ packages:
   purl: "pkg:npm/set-getter@0.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Brian Woodward"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Create nested getter properties and any intermediary dot notation\
@@ -3966,6 +4184,8 @@ packages:
   purl: "pkg:npm/set-value@2.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Create nested values and any intermediaries using dot notation (`'a.b.c'`)\
@@ -3995,6 +4215,8 @@ packages:
   purl: "pkg:npm/snapdragon-node@1.0.6"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Snapdragon utility for creating a new AST node in custom code, such\
@@ -4024,6 +4246,8 @@ packages:
   purl: "pkg:npm/snapdragon-util@1.0.6"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Utilities for the snapdragon parser/compiler."
@@ -4052,6 +4276,8 @@ packages:
   purl: "pkg:npm/snapdragon-util@2.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Utilities for the snapdragon parser/compiler."
@@ -4080,6 +4306,8 @@ packages:
   purl: "pkg:npm/snapdragon@0.11.5"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Easy-to-use plugin system for creating powerful, fast and versatile\
@@ -4109,6 +4337,8 @@ packages:
   purl: "pkg:npm/snapdragon@0.8.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Fast, pluggable and easy-to-use parser-renderer factory."
@@ -4137,6 +4367,8 @@ packages:
   purl: "pkg:npm/sort-by-value@0.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Re-order the objects in an array so that values of a specified property\
@@ -4166,6 +4398,8 @@ packages:
   purl: "pkg:npm/source-map-resolve@0.5.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Simon Lydell"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Resolve the source map and/or sources for a generated file."
@@ -4194,6 +4428,8 @@ packages:
   purl: "pkg:npm/source-map-url@0.4.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Simon Lydell"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Tools for working with sourceMappingURL comments."
@@ -4222,6 +4458,8 @@ packages:
   purl: "pkg:npm/source-map@0.5.7"
   declared_licenses:
   - "BSD-3-Clause"
+  declared_authors:
+  - "Nick Fitzgerald"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
   description: "Generates and consumes source maps"
@@ -4250,6 +4488,8 @@ packages:
   purl: "pkg:npm/source-map@0.6.1"
   declared_licenses:
   - "BSD-3-Clause"
+  declared_authors:
+  - "Nick Fitzgerald"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
   description: "Generates and consumes source maps"
@@ -4278,6 +4518,8 @@ packages:
   purl: "pkg:npm/split-string@3.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Split a string on a character except when the character is escaped."
@@ -4306,6 +4548,8 @@ packages:
   purl: "pkg:npm/sprintf-js@1.0.3"
   declared_licenses:
   - "BSD-3-Clause"
+  declared_authors:
+  - "Alexandru Marasteanu"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
   description: "JavaScript sprintf implementation"
@@ -4334,6 +4578,8 @@ packages:
   purl: "pkg:npm/static-extend@0.1.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Adds a static `extend` method to a class, to simplify inheritance.\
@@ -4392,6 +4638,8 @@ packages:
   purl: "pkg:npm/success-symbol@0.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Cross-platform success symbol."
@@ -4420,6 +4668,8 @@ packages:
   purl: "pkg:npm/supports-color@5.4.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Sindre Sorhus"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Detect whether a terminal supports color"
@@ -4448,6 +4698,8 @@ packages:
   purl: "pkg:npm/through2@2.0.5"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Rod Vagg"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "A tiny wrapper around Node streams2 Transform to avoid explicit subclassing\
@@ -4477,6 +4729,8 @@ packages:
   purl: "pkg:npm/to-gfm-code-block@0.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Generate a github-flavored-markdown fenced-code-block snippet."
@@ -4505,6 +4759,8 @@ packages:
   purl: "pkg:npm/to-object-path@0.3.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Create an object path from a list or array of strings."
@@ -4533,6 +4789,8 @@ packages:
   purl: "pkg:npm/to-regex@3.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Generate a regex from a string or array of strings."
@@ -4561,6 +4819,8 @@ packages:
   purl: "pkg:npm/tokenize-comment@1.0.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Uses snapdragon to tokenize a single JavaScript block comment into\
@@ -4591,6 +4851,8 @@ packages:
   purl: "pkg:npm/union-value@1.0.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Set an array of unique values as the property of an object. Supports\
@@ -4620,6 +4882,8 @@ packages:
   purl: "pkg:npm/unset-value@1.0.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Delete nested properties from an object using dot notation."
@@ -4648,6 +4912,8 @@ packages:
   purl: "pkg:npm/urix@0.1.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Simon Lydell"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Makes Windows-style paths more unix and URI friendly."
@@ -4676,6 +4942,8 @@ packages:
   purl: "pkg:npm/use@3.1.1"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Easily add plugin support to your node.js application."
@@ -4704,6 +4972,8 @@ packages:
   purl: "pkg:npm/util-deprecate@1.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Nathan Rajlich"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "The Node.js `util.deprecate()` function with browser support"
@@ -4732,6 +5002,8 @@ packages:
   purl: "pkg:npm/vinyl@2.2.0"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Gulp Team"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Virtual file format."
@@ -4760,6 +5032,8 @@ packages:
   purl: "pkg:npm/wrappy@1.0.2"
   declared_licenses:
   - "ISC"
+  declared_authors:
+  - "Isaac Z. Schlueter"
   declared_licenses_processed:
     spdx_expression: "ISC"
   description: "Callback wrapping utility"
@@ -4788,6 +5062,8 @@ packages:
   purl: "pkg:npm/write@0.3.3"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Jon Schlinkert"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Write files to disk, creating intermediate directories if they don't\
@@ -4817,6 +5093,8 @@ packages:
   purl: "pkg:npm/xtend@4.0.2"
   declared_licenses:
   - "MIT"
+  declared_authors:
+  - "Raynos"
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "extend like a boss"

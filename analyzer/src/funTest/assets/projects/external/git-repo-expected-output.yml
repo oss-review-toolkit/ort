@@ -218,6 +218,8 @@ analyzer:
       definition_file_path: "package.json"
       declared_licenses:
       - "MIT"
+      declared_authors:
+      - "Julian Gruber"
       declared_licenses_processed:
         spdx_expression: "MIT"
       vcs:
@@ -2601,6 +2603,8 @@ analyzer:
         purl: "pkg:npm/boolbase@1.0.0"
         declared_licenses:
         - "ISC"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "ISC"
         description: "two functions: One that returns true, one that returns false"
@@ -2631,6 +2635,8 @@ analyzer:
         purl: "pkg:npm/cheerio@1.0.0-rc.1"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Matt Mueller"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Tiny, fast, and elegant implementation of core jQuery designed\
@@ -2662,6 +2668,8 @@ analyzer:
         purl: "pkg:npm/coffee-script@1.12.7"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Jeremy Ashkenas"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Unfancy JavaScript"
@@ -2692,6 +2700,8 @@ analyzer:
         purl: "pkg:npm/cson-parser@1.3.5"
         declared_licenses:
         - "BSD-3-Clause"
+        declared_authors:
+        - "Groupon"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
         description: "Safe parsing of CSON files"
@@ -2722,6 +2732,8 @@ analyzer:
         purl: "pkg:npm/cson@4.1.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2012+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "CoffeeScript-Object-Notation Parser. Same as JSON but for CoffeeScript\
@@ -2753,6 +2765,8 @@ analyzer:
         purl: "pkg:npm/css-select@1.2.0"
         declared_licenses:
         - "BSD-like"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
           mapped:
@@ -2785,6 +2799,8 @@ analyzer:
         purl: "pkg:npm/css-what@2.1.3"
         declared_licenses:
         - "BSD-2-Clause"
+        declared_authors:
+        - "Felix Böhm"
         declared_licenses_processed:
           spdx_expression: "BSD-2-Clause"
         description: "a CSS selector parser"
@@ -2815,6 +2831,8 @@ analyzer:
         purl: "pkg:npm/deep-equal@0.2.2"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "James Halliday"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "node's assert.deepEqual algorithm"
@@ -2845,6 +2863,8 @@ analyzer:
         purl: "pkg:npm/defined@0.0.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "James Halliday"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "return the first argument that is `!== undefined`"
@@ -2875,6 +2895,8 @@ analyzer:
         purl: "pkg:npm/dom-serializer@0.1.1"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "render dom nodes to string"
@@ -2905,6 +2927,8 @@ analyzer:
         purl: "pkg:npm/domelementtype@1.3.1"
         declared_licenses:
         - "BSD-2-Clause"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "BSD-2-Clause"
         description: "all the types of nodes in htmlparser2's dom"
@@ -2935,6 +2959,8 @@ analyzer:
         purl: "pkg:npm/domhandler@2.4.2"
         declared_licenses:
         - "BSD-2-Clause"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "BSD-2-Clause"
         description: "handler for htmlparser2 that turns pages into a dom"
@@ -2964,6 +2990,8 @@ analyzer:
         id: "NPM::domutils:1.5.1"
         purl: "pkg:npm/domutils@1.5.1"
         declared_licenses: []
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed: {}
         description: "utilities for working with htmlparser2's dom"
         homepage_url: "https://github.com/FB55/domutils"
@@ -2993,6 +3021,8 @@ analyzer:
         purl: "pkg:npm/eachr@3.2.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2011+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Give eachr an item to iterate (array, object or map) and an\
@@ -3025,6 +3055,8 @@ analyzer:
         purl: "pkg:npm/editions@1.3.4"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2016+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Publish multiple editions for your JavaScript packages consistently\
@@ -3056,6 +3088,8 @@ analyzer:
         purl: "pkg:npm/editions@2.1.3"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2016+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Publish multiple editions for your JavaScript packages consistently\
@@ -3087,6 +3121,8 @@ analyzer:
         purl: "pkg:npm/entities@1.1.2"
         declared_licenses:
         - "BSD-2-Clause"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "BSD-2-Clause"
         description: "Encode & decode XML/HTML entities with ease"
@@ -3117,6 +3153,8 @@ analyzer:
         purl: "pkg:npm/errlop@1.1.1"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2018+ Benjamin Lupton"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "An extended Error class that envelops a parent error, such that\
@@ -3148,6 +3186,8 @@ analyzer:
         purl: "pkg:npm/extract-opts@3.3.1"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Extract the options and callback from a function's arguments\
@@ -3179,6 +3219,8 @@ analyzer:
         purl: "pkg:npm/glob@3.2.11"
         declared_licenses:
         - "BSD"
+        declared_authors:
+        - "Isaac Z. Schlueter"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
           mapped:
@@ -3241,6 +3283,8 @@ analyzer:
         purl: "pkg:npm/htmlparser2@3.10.1"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Fast & forgiving HTML/XML/RSS parser"
@@ -3302,6 +3346,8 @@ analyzer:
         purl: "pkg:npm/lodash@4.17.11"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "John-David Dalton"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Lodash modular utilities."
@@ -3332,6 +3378,8 @@ analyzer:
         purl: "pkg:npm/lru-cache@2.7.3"
         declared_licenses:
         - "ISC"
+        declared_authors:
+        - "Isaac Z. Schlueter"
         declared_licenses_processed:
           spdx_expression: "ISC"
         description: "A cache object that deletes the least-recently-used items."
@@ -3362,6 +3410,8 @@ analyzer:
         purl: "pkg:npm/minimatch@0.3.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Isaac Z. Schlueter"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "a glob matcher in javascript"
@@ -3392,6 +3442,8 @@ analyzer:
         purl: "pkg:npm/nth-check@1.0.2"
         declared_licenses:
         - "BSD-2-Clause"
+        declared_authors:
+        - "Felix Boehm"
         declared_licenses_processed:
           spdx_expression: "BSD-2-Clause"
         description: "performant nth-check parser & compiler"
@@ -3422,6 +3474,8 @@ analyzer:
         purl: "pkg:npm/object-inspect@0.4.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "James Halliday"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "string representations of objects in node and the browser"
@@ -3452,6 +3506,8 @@ analyzer:
         purl: "pkg:npm/parse5@3.0.3"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Ivan Nikulin"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "HTML parsing/serialization toolset for Node.js. WHATWG HTML\
@@ -3513,6 +3569,8 @@ analyzer:
         purl: "pkg:npm/requirefresh@2.2.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Require a file without adding it into the require cache"
@@ -3543,6 +3601,8 @@ analyzer:
         purl: "pkg:npm/resumer@0.0.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "James Halliday"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "a through stream that starts paused and resumes on the next\
@@ -3574,6 +3634,8 @@ analyzer:
         purl: "pkg:npm/safe-buffer@5.1.2"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Feross Aboukhadijeh"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Safer Node.js Buffer API"
@@ -3604,6 +3666,8 @@ analyzer:
         purl: "pkg:npm/safefs@4.1.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Stop getting EMFILE errors! Open only as many files as the operating\
@@ -3665,6 +3729,8 @@ analyzer:
         purl: "pkg:npm/sigmund@1.0.1"
         declared_licenses:
         - "ISC"
+        declared_authors:
+        - "Isaac Z. Schlueter"
         declared_licenses_processed:
           spdx_expression: "ISC"
         description: "Quick and dirty signatures for Objects."
@@ -3725,6 +3791,8 @@ analyzer:
         purl: "pkg:npm/tape@2.13.4"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "James Halliday"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "tap-producing test harness for node and browsers"
@@ -3755,6 +3823,8 @@ analyzer:
         purl: "pkg:npm/through@2.3.8"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Dominic Tarr"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "simplified stream construction"
@@ -3785,6 +3855,8 @@ analyzer:
         purl: "pkg:npm/typechecker@4.7.0"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "Utilities to get and check variable types (isString, isPlainObject,\
@@ -3816,6 +3888,8 @@ analyzer:
         purl: "pkg:npm/util-deprecate@1.0.2"
         declared_licenses:
         - "MIT"
+        declared_authors:
+        - "Nathan Rajlich"
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "The Node.js `util.deprecate()` function with browser support"

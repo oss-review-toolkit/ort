@@ -31,6 +31,8 @@ import java.net.HttpURLConnection
 import java.net.URLEncoder
 import java.util.SortedSet
 
+import kotlin.math.min
+
 import okhttp3.Request
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -183,6 +185,31 @@ open class Npm(
         }
     }
 
+    /**
+     * Parse information about the author. According to
+     * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
+     * specify the author of a package: An object with multiple properties or a single string.
+     */
+    private fun parseAuthor(json: JsonNode): SortedSet<String> =
+        sortedSetOf<String>().apply {
+            json["author"]?.let { authorNode ->
+                when {
+                    authorNode.isObject -> authorNode["name"]?.textValue()
+                    authorNode.isTextual -> parseAuthorString(authorNode.textValue())
+                    else -> null
+                }
+            }?.let { add(it) }
+        }
+
+    /**
+     * Parse the author if it is defined as a single string in the format "Name <mail> (url)". Try to extract the name
+     * part from the string or return the full string if no mail or url components are found.
+     */
+    private fun parseAuthorString(authorStr: String?): String? = authorStr?.let { str ->
+        val posSeparator = min(str.findSeparator('<'), str.findSeparator('('))
+        str.substring(0, posSeparator).trim().ifBlank { null }
+    }
+
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = rootDirectory.resolve("node_modules")
@@ -202,6 +229,7 @@ open class Npm(
             val version = json["version"].textValue()
 
             val declaredLicenses = parseLicenses(json)
+            val declaredAuthors = parseAuthor(json)
 
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
@@ -296,8 +324,7 @@ open class Npm(
                     version = version
                 ),
                 declaredLicenses = declaredLicenses,
-                // TODO: Find a way to track authors
-                declaredAuthors = sortedSetOf(),
+                declaredAuthors = declaredAuthors,
                 description = description,
                 homepageUrl = homepageUrl,
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -515,6 +542,7 @@ open class Npm(
         }
 
         val declaredLicenses = parseLicenses(json)
+        val authors = parseAuthor(json)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val projectDir = packageJson.parentFile
         val vcsFromPackage = parseVcsInfo(json)
@@ -528,8 +556,7 @@ open class Npm(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
             declaredLicenses = declaredLicenses,
-            // TODO: Find a way to track authors
-            declaredAuthors = sortedSetOf(),
+            declaredAuthors = authors,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
             homepageUrl = homepageUrl,
@@ -561,4 +588,14 @@ open class Npm(
         val namespace = rawName.removeSuffix(name).removeSuffix("/")
         return Pair(namespace, name)
     }
+}
+
+/**
+ * Search for the [separator] character in this string. Return the first position of this character or the string
+ * length if it cannot be found. This is useful to split the string at a separator or use the full string if no
+ * separator is contained.
+ */
+private fun String.findSeparator(separator: Char): Int {
+    val pos = indexOf(separator)
+    return if (pos < 0) length else pos
 }
