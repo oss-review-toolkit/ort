@@ -49,15 +49,15 @@ packages:
       value: ""
       algorithm: ""
   vcs:
-    type: "Git"
-    url: "<REPLACE_URL>"
-    revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl"
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
   vcs_processed:
-    type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl"
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
 - id: "SpdxDocumentFile::zlib:1.2.11"
   purl: "pkg:spdxdocumentfile/zlib@1.2.11"
   declared_licenses:
@@ -80,12 +80,12 @@ packages:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/zlib"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/zlib"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
 - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
   purl: "pkg:spdxdocumentfile/OpenSSL%20Development%20Team/openssl@1.1.1g"
   declared_licenses:
