@@ -16,7 +16,12 @@ externalDocumentRefs:
   checksum:
     algorithm: "SHA1"
     checksumValue: "a2ab98f8e10bad892313ccc573b3820369551dcb"
-  spdxDocument: "../package/libs/curl/package.spdx.yml"
+  spdxDocument: "https://raw.githubusercontent.com/oss-review-toolkit/ort/master/analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl/package.spdx.yml"
+- externalDocumentId: "DocumentRef-zlib-1.2.11"
+  checksum:
+    algorithm: "SHA1"
+    checksumValue: "16b1c4c5c0f2a0655643d04f20ecee385ca8cf29"
+  spdxDocument: "../package/libs/zlib/package.spdx.yml"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
   description: "Awesome product created by Example Inc."
@@ -56,18 +61,6 @@ packages:
   name: "Saxon"
   packageFileName: "saxonB-8.8.zip"
   versionInfo: "8.8"
-- SPDXID: "SPDXRef-Package-zlib"
-  description: "zlib 1.2.11 is a general purpose data compression library."
-  copyrightText: "(C) 1995-2017 Jean-loup Gailly and Mark Adler"
-  downloadLocation: "http://zlib.net/zlib-1.2.11.tar.gz"
-  filesAnalyzed: true
-  homepage: "http://zlib.net"
-  licenseConcluded: "NOASSERTION"
-  licenseDeclared: "Zlib"
-  packageFileName: "./libs/zlib"
-  name: "zlib"
-  versionInfo: "1.2.11"
-  originator: "Person: Mark Adler, Jean-loup Gailly"
 relationships:
 - spdxElementId: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
   relatedSpdxElement: "SPDXRef-Package-xyz"
@@ -79,5 +72,5 @@ relationships:
   relatedSpdxElement: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
   relationshipType: "DYNAMIC_LINK"
 - spdxElementId: "SPDXRef-Package-xyz"
-  relatedSpdxElement: "SPDXRef-Package-zlib"
+  relatedSpdxElement: "DocumentRef-zlib-1.2.11:SPDXRef-Package-zlib"
   relationshipType: "STATIC_LINK"

@@ -21,6 +21,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import java.io.File
 import java.net.URI
 import java.util.SortedSet
@@ -51,6 +53,7 @@ import org.ossreviewtoolkit.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.withoutPrefix
 
 private const val DEFAULT_SCOPE_NAME = "default"
@@ -115,17 +118,16 @@ private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.i
  */
 internal fun SpdxExternalDocumentReference.getSpdxPackage(packageId: String, workingDir: File): SpdxPackage {
     val externalSpdxDocument = resolveExternalDocumentReference(this, workingDir)
-    val spdxDocument = SpdxModelMapper.read<SpdxDocument>(externalSpdxDocument)
 
-    if (spdxDocument.isProject()) {
+    if (externalSpdxDocument.isProject()) {
         throw IllegalArgumentException("$externalDocumentId refers to a file that contains more than a single " +
                 "package. This is currently not supported yet.")
     }
 
-    val spdxPackage = spdxDocument.packages.find { it.spdxId == packageId }
+    val spdxPackage = externalSpdxDocument.packages.find { it.spdxId == packageId }
         ?: throw IllegalArgumentException("$packageId can not be found in external document $externalDocumentId.")
 
-    return spdxPackage.copy(packageFilename = externalSpdxDocument.parentFile.absolutePath)
+    return spdxPackage.copy(packageFilename = workingDir.resolve(URI(spdxDocument).path).parentFile.absolutePath)
 }
 
 /**
@@ -134,7 +136,7 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(packageId: String, wor
 private fun resolveExternalDocumentReference(
     externalDocumentReference: SpdxExternalDocumentReference,
     workingDir: File
-): File {
+): SpdxDocument {
     val uri = runCatching { URI(externalDocumentReference.spdxDocument) }.getOrElse {
         throw IllegalArgumentException("'${externalDocumentReference.spdxDocument}' identified by " +
                 "${externalDocumentReference.externalDocumentId} is not a valid URI. }")
@@ -142,12 +144,21 @@ private fun resolveExternalDocumentReference(
 
     if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
         val referencedFile = workingDir.resolve(uri.path)
-        return referencedFile.takeIf { it.isFile }
-            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file. ")
+        val spdxFile = (referencedFile.takeIf { it.isFile }
+            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file."))
+        return SpdxModelMapper.read(spdxFile)
     }
 
-    throw IllegalArgumentException("Only URIs to local files are supported for now, but '$uri' is none.")
+    return requestSpdxDocument(uri)
 }
+
+/**
+ * Returns [SpdxDocument] downloaded from a given [URI], if it can be found.
+ */
+private fun requestSpdxDocument(uri: URI): SpdxDocument =
+    OkHttpClientHelper.downloadText(uri.toString()).map {
+        SpdxModelMapper.FileFormat.forFile(File(uri.path)).mapper.readValue<SpdxDocument>(it)
+    }.getOrThrow()
 
 /**
  * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
