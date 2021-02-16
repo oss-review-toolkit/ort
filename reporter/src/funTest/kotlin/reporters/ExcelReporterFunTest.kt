@@ -87,7 +87,6 @@ class ExcelReporterFunTest : WordSpec({
 
                     actualCell.cellType shouldBe expectedCell.cellType
                     actualCell.stringCellValue shouldBe expectedCell.stringCellValue
-                    actualCell.cellStyle.fontIndex shouldBe expectedCell.cellStyle.fontIndex
                     actualCell.cellStyle.fillBackgroundColor shouldBe expectedCell.cellStyle.fillBackgroundColor
                 }
             }
