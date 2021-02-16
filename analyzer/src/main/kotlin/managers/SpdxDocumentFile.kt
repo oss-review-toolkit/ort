@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,12 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
+import java.net.URI
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -44,6 +47,7 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.spdx.toSpdx
@@ -73,6 +77,11 @@ private val SPDX_VCS_PREFIXES = mapOf(
 )
 
 /**
+ * Return true if the [SpdxDocument] describes a project. Otherwise, if it describes a package, return false.
+ */
+private fun SpdxDocument.isProject(): Boolean = projectPackage() != null
+
+/**
  * Return the [SpdxPackage] in the [SpdxDocument] that denotes a project, or null if no project but only packages are
  * defined.
  */
@@ -92,6 +101,47 @@ private fun String.extractOrganization(): String? =
  * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.
  */
 private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
+
+/**
+ * Get the [SpdxPackage] for the given [externalDocumentReference], where [workingDir] is used to resolve local
+ * relative URIs to files.
+ */
+private fun getSpdxPackageForDocumentRef(
+    externalDocumentReference: SpdxExternalDocumentReference,
+    workingDir: File
+): SpdxPackage {
+    val externalSpdxDocument = resolveExternalDocumentReference(externalDocumentReference, workingDir)
+    val spdxDocument = SpdxModelMapper.read<SpdxDocument>(externalSpdxDocument)
+
+    if (spdxDocument.isProject()) {
+        throw IllegalArgumentException("${externalDocumentReference.externalDocumentId} refers to a file that " +
+                "contains more than a single package. This is currently not supported yet.")
+    }
+
+    val spdxPackage = spdxDocument.packages.single()
+    return spdxPackage.copy(packageFilename = externalSpdxDocument.parentFile.absolutePath)
+}
+
+/**
+ * Return [File] referred to by [SpdxExternalDocumentReference.spdxDocument].
+ */
+private fun resolveExternalDocumentReference(
+    externalDocumentReference: SpdxExternalDocumentReference,
+    workingDir: File
+): File {
+    val uri = runCatching { URI(externalDocumentReference.spdxDocument) }.getOrElse {
+        throw IllegalArgumentException("'${externalDocumentReference.spdxDocument}' identified by " +
+                "${externalDocumentReference.externalDocumentId} is not a valid URI. }")
+    }
+
+    if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
+        val referencedFile = workingDir.resolve(uri.path)
+        return referencedFile.takeIf { it.isFile }
+            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file. ")
+    }
+
+    throw IllegalArgumentException("Only URIs to local files are supported for now, but '$uri' is none.")
+}
 
 /**
  * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
@@ -199,6 +249,8 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
+    private val externalDocumentReferenceIdsToPackages = mutableMapOf<String, SpdxPackage>()
+
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
@@ -245,6 +297,25 @@ class SpdxDocumentFile(
             sourceArtifact = getSourceArtifact(this) ?: RemoteArtifact.EMPTY,
             vcs = vcs
         )
+    }
+
+    /**
+     * Get the [SpdxPackage] for the given [identifier] by resolving against packages an external document references
+     * contained in [doc].
+     */
+    private fun getSpdxPackageForId(doc: SpdxDocument, identifier: String, workingDir: File): SpdxPackage {
+        doc.packages.singleOrNull { it.spdxId == identifier }?.let { return it }
+
+        val documentRef = identifier.substringBefore(":")
+        val externalDocumentReference = doc.externalDocumentRefs.singleOrNull {
+            it.externalDocumentId == documentRef
+        } ?: throw IllegalArgumentException(
+            "No single package or externalDocumentRef with ID '$identifier' found."
+        )
+
+        return externalDocumentReferenceIdsToPackages.getOrPut(externalDocumentReference.externalDocumentId) {
+            getSpdxPackageForDocumentRef(externalDocumentReference, workingDir)
+        }
     }
 
     /**
@@ -297,11 +368,9 @@ class SpdxDocumentFile(
                         )
                     }
 
-                    val dependency = doc.packages.singleOrNull { it.spdxId == source }
-                        ?: throw IllegalArgumentException("No single package with source ID '$source' found.")
+                    val dependency = getSpdxPackageForId(doc, source, workingDir)
 
                     packages += dependency.toPackage(workingDir)
-
                     PackageReference(
                         id = dependency.toIdentifier(),
                         dependencies = getDependencies(
