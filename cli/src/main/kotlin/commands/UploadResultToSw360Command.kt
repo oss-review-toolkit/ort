@@ -172,6 +172,7 @@ class UploadResultToSw360Command : CliktCommand(
 
     private fun getProjectWithPackages(ortResult: OrtResult): Map<Project, List<Package>> =
         ortResult.getProjects(omitExcluded = true).associateWith { project ->
+            // Upload the uncurated packages because SW360 also is a package curation provider.
             project.collectDependencies().mapNotNull { ortResult.getUncuratedPackageById(it) }
         }
 }
