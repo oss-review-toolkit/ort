@@ -216,6 +216,8 @@ analyzer:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
     - id: "NPM::isarray:2.0.5"
       definition_file_path: "package.json"
+      authors:
+      - "Julian Gruber"
       declared_licenses:
       - "MIT"
       declared_licenses_processed:
@@ -2599,6 +2601,8 @@ analyzer:
     - package:
         id: "NPM::boolbase:1.0.0"
         purl: "pkg:npm/boolbase@1.0.0"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -2629,6 +2633,8 @@ analyzer:
     - package:
         id: "NPM::cheerio:1.0.0-rc.1"
         purl: "pkg:npm/cheerio@1.0.0-rc.1"
+        authors:
+        - "Matt Mueller"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -2660,6 +2666,8 @@ analyzer:
     - package:
         id: "NPM::coffee-script:1.12.7"
         purl: "pkg:npm/coffee-script@1.12.7"
+        authors:
+        - "Jeremy Ashkenas"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -2690,6 +2698,8 @@ analyzer:
     - package:
         id: "NPM::cson-parser:1.3.5"
         purl: "pkg:npm/cson-parser@1.3.5"
+        authors:
+        - "Groupon"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -2720,6 +2730,8 @@ analyzer:
     - package:
         id: "NPM::cson:4.1.0"
         purl: "pkg:npm/cson@4.1.0"
+        authors:
+        - "2012+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -2751,6 +2763,8 @@ analyzer:
     - package:
         id: "NPM::css-select:1.2.0"
         purl: "pkg:npm/css-select@1.2.0"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "BSD-like"
         declared_licenses_processed:
@@ -2783,6 +2797,8 @@ analyzer:
     - package:
         id: "NPM::css-what:2.1.3"
         purl: "pkg:npm/css-what@2.1.3"
+        authors:
+        - "Felix Böhm"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -2813,6 +2829,8 @@ analyzer:
     - package:
         id: "NPM::deep-equal:0.2.2"
         purl: "pkg:npm/deep-equal@0.2.2"
+        authors:
+        - "James Halliday"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -2843,6 +2861,8 @@ analyzer:
     - package:
         id: "NPM::defined:0.0.0"
         purl: "pkg:npm/defined@0.0.0"
+        authors:
+        - "James Halliday"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -2873,6 +2893,8 @@ analyzer:
     - package:
         id: "NPM::dom-serializer:0.1.1"
         purl: "pkg:npm/dom-serializer@0.1.1"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -2903,6 +2925,8 @@ analyzer:
     - package:
         id: "NPM::domelementtype:1.3.1"
         purl: "pkg:npm/domelementtype@1.3.1"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -2933,6 +2957,8 @@ analyzer:
     - package:
         id: "NPM::domhandler:2.4.2"
         purl: "pkg:npm/domhandler@2.4.2"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -2963,6 +2989,8 @@ analyzer:
     - package:
         id: "NPM::domutils:1.5.1"
         purl: "pkg:npm/domutils@1.5.1"
+        authors:
+        - "Felix Boehm"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "utilities for working with htmlparser2's dom"
@@ -2991,6 +3019,8 @@ analyzer:
     - package:
         id: "NPM::eachr:3.2.0"
         purl: "pkg:npm/eachr@3.2.0"
+        authors:
+        - "2011+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3023,6 +3053,8 @@ analyzer:
     - package:
         id: "NPM::editions:1.3.4"
         purl: "pkg:npm/editions@1.3.4"
+        authors:
+        - "2016+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3054,6 +3086,8 @@ analyzer:
     - package:
         id: "NPM::editions:2.1.3"
         purl: "pkg:npm/editions@2.1.3"
+        authors:
+        - "2016+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3085,6 +3119,8 @@ analyzer:
     - package:
         id: "NPM::entities:1.1.2"
         purl: "pkg:npm/entities@1.1.2"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -3115,6 +3151,8 @@ analyzer:
     - package:
         id: "NPM::errlop:1.1.1"
         purl: "pkg:npm/errlop@1.1.1"
+        authors:
+        - "2018+ Benjamin Lupton"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3146,6 +3184,8 @@ analyzer:
     - package:
         id: "NPM::extract-opts:3.3.1"
         purl: "pkg:npm/extract-opts@3.3.1"
+        authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3177,6 +3217,8 @@ analyzer:
     - package:
         id: "NPM::glob:3.2.11"
         purl: "pkg:npm/glob@3.2.11"
+        authors:
+        - "Isaac Z. Schlueter"
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
@@ -3239,6 +3281,8 @@ analyzer:
     - package:
         id: "NPM::htmlparser2:3.10.1"
         purl: "pkg:npm/htmlparser2@3.10.1"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3300,6 +3344,8 @@ analyzer:
     - package:
         id: "NPM::lodash:4.17.11"
         purl: "pkg:npm/lodash@4.17.11"
+        authors:
+        - "John-David Dalton"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3330,6 +3376,8 @@ analyzer:
     - package:
         id: "NPM::lru-cache:2.7.3"
         purl: "pkg:npm/lru-cache@2.7.3"
+        authors:
+        - "Isaac Z. Schlueter"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -3360,6 +3408,8 @@ analyzer:
     - package:
         id: "NPM::minimatch:0.3.0"
         purl: "pkg:npm/minimatch@0.3.0"
+        authors:
+        - "Isaac Z. Schlueter"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3390,6 +3440,8 @@ analyzer:
     - package:
         id: "NPM::nth-check:1.0.2"
         purl: "pkg:npm/nth-check@1.0.2"
+        authors:
+        - "Felix Boehm"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -3420,6 +3472,8 @@ analyzer:
     - package:
         id: "NPM::object-inspect:0.4.0"
         purl: "pkg:npm/object-inspect@0.4.0"
+        authors:
+        - "James Halliday"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3450,6 +3504,8 @@ analyzer:
     - package:
         id: "NPM::parse5:3.0.3"
         purl: "pkg:npm/parse5@3.0.3"
+        authors:
+        - "Ivan Nikulin"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3511,6 +3567,8 @@ analyzer:
     - package:
         id: "NPM::requirefresh:2.2.0"
         purl: "pkg:npm/requirefresh@2.2.0"
+        authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3541,6 +3599,8 @@ analyzer:
     - package:
         id: "NPM::resumer:0.0.0"
         purl: "pkg:npm/resumer@0.0.0"
+        authors:
+        - "James Halliday"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3572,6 +3632,8 @@ analyzer:
     - package:
         id: "NPM::safe-buffer:5.1.2"
         purl: "pkg:npm/safe-buffer@5.1.2"
+        authors:
+        - "Feross Aboukhadijeh"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3602,6 +3664,8 @@ analyzer:
     - package:
         id: "NPM::safefs:4.1.0"
         purl: "pkg:npm/safefs@4.1.0"
+        authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3663,6 +3727,8 @@ analyzer:
     - package:
         id: "NPM::sigmund:1.0.1"
         purl: "pkg:npm/sigmund@1.0.1"
+        authors:
+        - "Isaac Z. Schlueter"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -3723,6 +3789,8 @@ analyzer:
     - package:
         id: "NPM::tape:2.13.4"
         purl: "pkg:npm/tape@2.13.4"
+        authors:
+        - "James Halliday"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3753,6 +3821,8 @@ analyzer:
     - package:
         id: "NPM::through:2.3.8"
         purl: "pkg:npm/through@2.3.8"
+        authors:
+        - "Dominic Tarr"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3783,6 +3853,8 @@ analyzer:
     - package:
         id: "NPM::typechecker:4.7.0"
         purl: "pkg:npm/typechecker@4.7.0"
+        authors:
+        - "2013+ Bevry Pty Ltd"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3814,6 +3886,8 @@ analyzer:
     - package:
         id: "NPM::util-deprecate:1.0.2"
         purl: "pkg:npm/util-deprecate@1.0.2"
+        authors:
+        - "Nathan Rajlich"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:

@@ -2,6 +2,8 @@
 project:
   id: "NPM::npm-project:1.0.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "The Author"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -138,6 +140,8 @@ packages:
     path: ""
 - id: "NPM::boolbase:1.0.0"
   purl: "pkg:npm/boolbase@1.0.0"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -166,6 +170,8 @@ packages:
     path: ""
 - id: "NPM::cheerio:1.0.0-rc.1"
   purl: "pkg:npm/cheerio@1.0.0-rc.1"
+  authors:
+  - "Matt Mueller"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -195,6 +201,8 @@ packages:
     path: ""
 - id: "NPM::coffee-script:1.12.7"
   purl: "pkg:npm/coffee-script@1.12.7"
+  authors:
+  - "Jeremy Ashkenas"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -223,6 +231,8 @@ packages:
     path: ""
 - id: "NPM::cson-parser:1.3.5"
   purl: "pkg:npm/cson-parser@1.3.5"
+  authors:
+  - "Groupon"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -251,6 +261,8 @@ packages:
     path: ""
 - id: "NPM::cson:4.1.0"
   purl: "pkg:npm/cson@4.1.0"
+  authors:
+  - "2012+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -280,6 +292,8 @@ packages:
     path: ""
 - id: "NPM::css-select:1.2.0"
   purl: "pkg:npm/css-select@1.2.0"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "BSD-like"
   declared_licenses_processed:
@@ -310,6 +324,8 @@ packages:
     path: ""
 - id: "NPM::css-what:2.1.3"
   purl: "pkg:npm/css-what@2.1.3"
+  authors:
+  - "Felix Böhm"
   declared_licenses:
   - "BSD-2-Clause"
   declared_licenses_processed:
@@ -338,6 +354,8 @@ packages:
     path: ""
 - id: "NPM::dom-serializer:0.1.1"
   purl: "pkg:npm/dom-serializer@0.1.1"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -366,6 +384,8 @@ packages:
     path: ""
 - id: "NPM::domelementtype:1.3.1"
   purl: "pkg:npm/domelementtype@1.3.1"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "BSD-2-Clause"
   declared_licenses_processed:
@@ -394,6 +414,8 @@ packages:
     path: ""
 - id: "NPM::domhandler:2.4.2"
   purl: "pkg:npm/domhandler@2.4.2"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "BSD-2-Clause"
   declared_licenses_processed:
@@ -422,6 +444,8 @@ packages:
     path: ""
 - id: "NPM::domutils:1.5.1"
   purl: "pkg:npm/domutils@1.5.1"
+  authors:
+  - "Felix Boehm"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "utilities for working with htmlparser2's dom"
@@ -448,6 +472,8 @@ packages:
     path: ""
 - id: "NPM::eachr:3.2.0"
   purl: "pkg:npm/eachr@3.2.0"
+  authors:
+  - "2011+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -478,6 +504,8 @@ packages:
     path: ""
 - id: "NPM::editions:1.3.4"
   purl: "pkg:npm/editions@1.3.4"
+  authors:
+  - "2016+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -507,6 +535,8 @@ packages:
     path: ""
 - id: "NPM::editions:2.1.3"
   purl: "pkg:npm/editions@2.1.3"
+  authors:
+  - "2016+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -536,6 +566,8 @@ packages:
     path: ""
 - id: "NPM::entities:1.1.2"
   purl: "pkg:npm/entities@1.1.2"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "BSD-2-Clause"
   declared_licenses_processed:
@@ -564,6 +596,8 @@ packages:
     path: ""
 - id: "NPM::errlop:1.1.1"
   purl: "pkg:npm/errlop@1.1.1"
+  authors:
+  - "2018+ Benjamin Lupton"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -593,6 +627,8 @@ packages:
     path: ""
 - id: "NPM::extract-opts:3.3.1"
   purl: "pkg:npm/extract-opts@3.3.1"
+  authors:
+  - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -649,6 +685,8 @@ packages:
     path: ""
 - id: "NPM::htmlparser2:3.10.1"
   purl: "pkg:npm/htmlparser2@3.10.1"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -706,6 +744,8 @@ packages:
     path: ""
 - id: "NPM::lodash:4.17.15"
   purl: "pkg:npm/lodash@4.17.15"
+  authors:
+  - "John-David Dalton"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -734,6 +774,8 @@ packages:
     path: ""
 - id: "NPM::long:3.2.0"
   purl: "pkg:npm/long@3.2.0"
+  authors:
+  - "Daniel Wirtz"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -762,6 +804,8 @@ packages:
     path: ""
 - id: "NPM::nth-check:1.0.2"
   purl: "pkg:npm/nth-check@1.0.2"
+  authors:
+  - "Felix Boehm"
   declared_licenses:
   - "BSD-2-Clause"
   declared_licenses_processed:
@@ -790,6 +834,8 @@ packages:
     path: ""
 - id: "NPM::parse5:3.0.3"
   purl: "pkg:npm/parse5@3.0.3"
+  authors:
+  - "Ivan Nikulin"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -819,6 +865,8 @@ packages:
     path: ""
 - id: "NPM::promise:7.3.1"
   purl: "pkg:npm/promise@7.3.1"
+  authors:
+  - "ForbesLindesay"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -875,6 +923,8 @@ packages:
     path: ""
 - id: "NPM::requirefresh:2.2.0"
   purl: "pkg:npm/requirefresh@2.2.0"
+  authors:
+  - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -903,6 +953,8 @@ packages:
     path: ""
 - id: "NPM::safe-buffer:5.1.2"
   purl: "pkg:npm/safe-buffer@5.1.2"
+  authors:
+  - "Feross Aboukhadijeh"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -931,6 +983,8 @@ packages:
     path: ""
 - id: "NPM::safefs:4.1.0"
   purl: "pkg:npm/safefs@4.1.0"
+  authors:
+  - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1016,6 +1070,8 @@ packages:
     path: ""
 - id: "NPM::typechecker:4.7.0"
   purl: "pkg:npm/typechecker@4.7.0"
+  authors:
+  - "2013+ Bevry Pty Ltd"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1045,6 +1101,8 @@ packages:
     path: ""
 - id: "NPM::util-deprecate:1.0.2"
   purl: "pkg:npm/util-deprecate@1.0.2"
+  authors:
+  - "Nathan Rajlich"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
