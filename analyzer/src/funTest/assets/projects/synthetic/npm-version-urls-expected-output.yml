@@ -638,6 +638,8 @@ project:
 packages:
 - id: "NPM::ansi-green:0.1.1"
   purl: "pkg:npm/ansi-green@0.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -666,6 +668,8 @@ packages:
     path: ""
 - id: "NPM::ansi-wrap:0.1.0"
   purl: "pkg:npm/ansi-wrap@0.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -723,6 +727,8 @@ packages:
     path: ""
 - id: "NPM::arr-union:3.1.0"
   purl: "pkg:npm/arr-union@3.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -752,6 +758,8 @@ packages:
     path: ""
 - id: "NPM::array-each:1.0.1"
   purl: "pkg:npm/array-each@1.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -781,6 +789,8 @@ packages:
     path: ""
 - id: "NPM::array-slice:0.2.3"
   purl: "pkg:npm/array-slice@0.2.3"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -810,6 +820,8 @@ packages:
     path: ""
 - id: "NPM::assign-symbols:1.0.0"
   purl: "pkg:npm/assign-symbols@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -841,6 +853,8 @@ packages:
     path: ""
 - id: "NPM::atob:2.1.2"
   purl: "pkg:npm/atob@2.1.2"
+  authors:
+  - "AJ ONeal"
   declared_licenses:
   - "(MIT OR Apache-2.0)"
   declared_licenses_processed:
@@ -869,6 +883,8 @@ packages:
     path: ""
 - id: "NPM::autolinker:0.28.1"
   purl: "pkg:npm/autolinker@0.28.1"
+  authors:
+  - "Gregory Jacobs"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -898,6 +914,8 @@ packages:
     path: ""
 - id: "NPM::balanced-match:1.0.0"
   purl: "pkg:npm/balanced-match@1.0.0"
+  authors:
+  - "Julian Gruber"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -926,6 +944,8 @@ packages:
     path: ""
 - id: "NPM::base:0.11.2"
   purl: "pkg:npm/base@0.11.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -956,6 +976,8 @@ packages:
     path: ""
 - id: "NPM::brace-expansion:1.1.11"
   purl: "pkg:npm/brace-expansion@1.1.11"
+  authors:
+  - "Julian Gruber"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -984,6 +1006,8 @@ packages:
     path: ""
 - id: "NPM::browser-stdout:1.3.1"
   purl: "pkg:npm/browser-stdout@1.3.1"
+  authors:
+  - "kumavis"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -1012,6 +1036,8 @@ packages:
     path: ""
 - id: "NPM::cache-base:1.0.1"
   purl: "pkg:npm/cache-base@1.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1041,6 +1067,8 @@ packages:
     path: ""
 - id: "NPM::class-utils:0.3.6"
   purl: "pkg:npm/class-utils@0.3.6"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1069,6 +1097,8 @@ packages:
     path: ""
 - id: "NPM::clone-buffer:1.0.0"
   purl: "pkg:npm/clone-buffer@1.0.0"
+  authors:
+  - "Gulp Team"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1097,6 +1127,8 @@ packages:
     path: ""
 - id: "NPM::clone-stats:1.0.0"
   purl: "pkg:npm/clone-stats@1.0.0"
+  authors:
+  - "Hugh Kennedy"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1126,6 +1158,8 @@ packages:
     path: ""
 - id: "NPM::clone:2.1.2"
   purl: "pkg:npm/clone@2.1.2"
+  authors:
+  - "Paul Vorbach"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1154,6 +1188,8 @@ packages:
     path: ""
 - id: "NPM::cloneable-readable:1.1.3"
   purl: "pkg:npm/cloneable-readable@1.1.3"
+  authors:
+  - "Matteo Collina"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1182,6 +1218,8 @@ packages:
     path: ""
 - id: "NPM::collection-visit:1.0.0"
   purl: "pkg:npm/collection-visit@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1211,6 +1249,8 @@ packages:
     path: ""
 - id: "NPM::commander:2.15.1"
   purl: "pkg:npm/commander@2.15.1"
+  authors:
+  - "TJ Holowaychuk"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1267,6 +1307,8 @@ packages:
     path: ""
 - id: "NPM::concat-map:0.0.1"
   purl: "pkg:npm/concat-map@0.0.1"
+  authors:
+  - "James Halliday"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1295,6 +1337,8 @@ packages:
     path: ""
 - id: "NPM::concat-with-sourcemaps:1.1.0"
   purl: "pkg:npm/concat-with-sourcemaps@1.1.0"
+  authors:
+  - "Florian Reiterer"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -1324,6 +1368,8 @@ packages:
     path: ""
 - id: "NPM::copy-descriptor:0.1.1"
   purl: "pkg:npm/copy-descriptor@0.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1352,6 +1398,8 @@ packages:
     path: ""
 - id: "NPM::core-util-is:1.0.2"
   purl: "pkg:npm/core-util-is@1.0.2"
+  authors:
+  - "Isaac Z. Schlueter"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1380,6 +1428,8 @@ packages:
     path: ""
 - id: "NPM::debug:2.6.9"
   purl: "pkg:npm/debug@2.6.9"
+  authors:
+  - "TJ Holowaychuk"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1408,6 +1458,8 @@ packages:
     path: ""
 - id: "NPM::debug:3.1.0"
   purl: "pkg:npm/debug@3.1.0"
+  authors:
+  - "TJ Holowaychuk"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1436,6 +1488,8 @@ packages:
     path: ""
 - id: "NPM::decode-uri-component:0.2.0"
   purl: "pkg:npm/decode-uri-component@0.2.0"
+  authors:
+  - "Sam Verschueren"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1464,6 +1518,8 @@ packages:
     path: ""
 - id: "NPM::define-property:0.2.5"
   purl: "pkg:npm/define-property@0.2.5"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1492,6 +1548,8 @@ packages:
     path: ""
 - id: "NPM::define-property:1.0.0"
   purl: "pkg:npm/define-property@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1520,6 +1578,8 @@ packages:
     path: ""
 - id: "NPM::define-property:2.0.2"
   purl: "pkg:npm/define-property@2.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1577,6 +1637,8 @@ packages:
     path: ""
 - id: "NPM::escape-string-regexp:1.0.5"
   purl: "pkg:npm/escape-string-regexp@1.0.5"
+  authors:
+  - "Sindre Sorhus"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1605,6 +1667,8 @@ packages:
     path: ""
 - id: "NPM::expand-range:1.8.2"
   purl: "pkg:npm/expand-range@1.8.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1634,6 +1698,8 @@ packages:
     path: ""
 - id: "NPM::expand-reflinks:0.2.1"
   purl: "pkg:npm/expand-reflinks@0.2.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1662,6 +1728,8 @@ packages:
     path: ""
 - id: "NPM::extend-shallow:2.0.1"
   purl: "pkg:npm/extend-shallow@2.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1691,6 +1759,8 @@ packages:
     path: ""
 - id: "NPM::extend-shallow:3.0.2"
   purl: "pkg:npm/extend-shallow@3.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1720,6 +1790,8 @@ packages:
     path: ""
 - id: "NPM::fill-range:2.2.4"
   purl: "pkg:npm/fill-range@2.2.4"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1749,6 +1821,8 @@ packages:
     path: ""
 - id: "NPM::for-in:1.0.2"
   purl: "pkg:npm/for-in@1.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1779,6 +1853,8 @@ packages:
     path: ""
 - id: "NPM::fs-exists-sync:0.1.0"
   purl: "pkg:npm/fs-exists-sync@0.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1809,6 +1885,8 @@ packages:
     path: ""
 - id: "NPM::fs.realpath:1.0.0"
   purl: "pkg:npm/fs.realpath@1.0.0"
+  authors:
+  - "Isaac Z. Schlueter"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -1838,6 +1916,8 @@ packages:
     path: ""
 - id: "NPM::get-value:2.0.6"
   purl: "pkg:npm/get-value@2.0.6"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1866,6 +1946,8 @@ packages:
     path: ""
 - id: "NPM::gfm-code-block-regex:1.0.0"
   purl: "pkg:npm/gfm-code-block-regex@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1894,6 +1976,8 @@ packages:
     path: ""
 - id: "NPM::gfm-code-blocks:1.0.0"
   purl: "pkg:npm/gfm-code-blocks@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1922,6 +2006,8 @@ packages:
     path: ""
 - id: "NPM::glob:7.1.2"
   purl: "pkg:npm/glob@7.1.2"
+  authors:
+  - "Isaac Z. Schlueter"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -1950,6 +2036,8 @@ packages:
     path: ""
 - id: "NPM::growl:1.10.5"
   purl: "pkg:npm/growl@1.10.5"
+  authors:
+  - "TJ Holowaychuk"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1978,6 +2066,8 @@ packages:
     path: ""
 - id: "NPM::gulp-format-md:1.0.0"
   purl: "pkg:npm/gulp-format-md@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2006,6 +2096,8 @@ packages:
     path: ""
 - id: "NPM::gulp-header:1.8.12"
   purl: "pkg:npm/gulp-header@1.8.12"
+  authors:
+  - "Michael J. Ryan"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2034,6 +2126,8 @@ packages:
     path: ""
 - id: "NPM::has-flag:3.0.0"
   purl: "pkg:npm/has-flag@3.0.0"
+  authors:
+  - "Sindre Sorhus"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2062,6 +2156,8 @@ packages:
     path: ""
 - id: "NPM::has-value:0.3.1"
   purl: "pkg:npm/has-value@0.3.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2091,6 +2187,8 @@ packages:
     path: ""
 - id: "NPM::has-value:1.0.0"
   purl: "pkg:npm/has-value@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2120,6 +2218,8 @@ packages:
     path: ""
 - id: "NPM::has-values:0.1.4"
   purl: "pkg:npm/has-values@0.1.4"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2149,6 +2249,8 @@ packages:
     path: ""
 - id: "NPM::has-values:1.0.0"
   purl: "pkg:npm/has-values@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2178,6 +2280,8 @@ packages:
     path: ""
 - id: "NPM::he:1.1.1"
   purl: "pkg:npm/he@1.1.1"
+  authors:
+  - "Mathias Bynens"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2206,6 +2310,8 @@ packages:
     path: ""
 - id: "NPM::inflight:1.0.6"
   purl: "pkg:npm/inflight@1.0.6"
+  authors:
+  - "Isaac Z. Schlueter"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -2263,6 +2369,8 @@ packages:
     path: ""
 - id: "NPM::is-accessor-descriptor:0.1.6"
   purl: "pkg:npm/is-accessor-descriptor@0.1.6"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2292,6 +2400,8 @@ packages:
     path: ""
 - id: "NPM::is-accessor-descriptor:1.0.0"
   purl: "pkg:npm/is-accessor-descriptor@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2321,6 +2431,8 @@ packages:
     path: ""
 - id: "NPM::is-buffer:1.1.6"
   purl: "pkg:npm/is-buffer@1.1.6"
+  authors:
+  - "Feross Aboukhadijeh"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2349,6 +2461,8 @@ packages:
     path: ""
 - id: "NPM::is-data-descriptor:0.1.4"
   purl: "pkg:npm/is-data-descriptor@0.1.4"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2378,6 +2492,8 @@ packages:
     path: ""
 - id: "NPM::is-data-descriptor:1.0.0"
   purl: "pkg:npm/is-data-descriptor@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2407,6 +2523,8 @@ packages:
     path: ""
 - id: "NPM::is-descriptor:0.1.6"
   purl: "pkg:npm/is-descriptor@0.1.6"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2436,6 +2554,8 @@ packages:
     path: ""
 - id: "NPM::is-descriptor:1.0.2"
   purl: "pkg:npm/is-descriptor@1.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2465,6 +2585,8 @@ packages:
     path: ""
 - id: "NPM::is-extendable:0.1.1"
   purl: "pkg:npm/is-extendable@0.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2495,6 +2617,8 @@ packages:
     path: ""
 - id: "NPM::is-extendable:1.0.1"
   purl: "pkg:npm/is-extendable@1.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2523,6 +2647,8 @@ packages:
     path: ""
 - id: "NPM::is-number:2.1.0"
   purl: "pkg:npm/is-number@2.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2551,6 +2677,8 @@ packages:
     path: ""
 - id: "NPM::is-number:3.0.0"
   purl: "pkg:npm/is-number@3.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2579,6 +2707,8 @@ packages:
     path: ""
 - id: "NPM::is-number:4.0.0"
   purl: "pkg:npm/is-number@4.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2607,6 +2737,8 @@ packages:
     path: ""
 - id: "NPM::is-plain-object:2.0.4"
   purl: "pkg:npm/is-plain-object@2.0.4"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2635,6 +2767,8 @@ packages:
     path: ""
 - id: "NPM::is-win:1.0.8"
   purl: "pkg:npm/is-win@1.0.8"
+  authors:
+  - "Ionică Bizău"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2663,6 +2797,8 @@ packages:
     path: ""
 - id: "NPM::is-windows:1.0.2"
   purl: "pkg:npm/is-windows@1.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2692,6 +2828,8 @@ packages:
     path: ""
 - id: "NPM::isarray:1.0.0"
   purl: "pkg:npm/isarray@1.0.0"
+  authors:
+  - "Julian Gruber"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2720,6 +2858,8 @@ packages:
     path: ""
 - id: "NPM::isobject:2.1.0"
   purl: "pkg:npm/isobject@2.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2748,6 +2888,8 @@ packages:
     path: ""
 - id: "NPM::isobject:3.0.1"
   purl: "pkg:npm/isobject@3.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2776,6 +2918,8 @@ packages:
     path: ""
 - id: "NPM::kind-of:3.2.2"
   purl: "pkg:npm/kind-of@3.2.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2804,6 +2948,8 @@ packages:
     path: ""
 - id: "NPM::kind-of:4.0.0"
   purl: "pkg:npm/kind-of@4.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2832,6 +2978,8 @@ packages:
     path: ""
 - id: "NPM::kind-of:5.1.0"
   purl: "pkg:npm/kind-of@5.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2860,6 +3008,8 @@ packages:
     path: ""
 - id: "NPM::kind-of:6.0.3"
   purl: "pkg:npm/kind-of@6.0.3"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2888,6 +3038,8 @@ packages:
     path: ""
 - id: "NPM::lazy-cache:2.0.2"
   purl: "pkg:npm/lazy-cache@2.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2916,6 +3068,8 @@ packages:
     path: ""
 - id: "NPM::list-item:1.1.1"
   purl: "pkg:npm/list-item@1.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2945,6 +3099,8 @@ packages:
     path: ""
 - id: "NPM::lodash._reinterpolate:3.0.0"
   purl: "pkg:npm/lodash._reinterpolate@3.0.0"
+  authors:
+  - "John-David Dalton"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2973,6 +3129,8 @@ packages:
     path: ""
 - id: "NPM::lodash.template:4.5.0"
   purl: "pkg:npm/lodash.template@4.5.0"
+  authors:
+  - "John-David Dalton"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3001,6 +3159,8 @@ packages:
     path: ""
 - id: "NPM::lodash.templatesettings:4.2.0"
   purl: "pkg:npm/lodash.templatesettings@4.2.0"
+  authors:
+  - "John-David Dalton"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3029,6 +3189,8 @@ packages:
     path: ""
 - id: "NPM::log-ok:0.1.1"
   purl: "pkg:npm/log-ok@0.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3057,6 +3219,8 @@ packages:
     path: ""
 - id: "NPM::map-cache:0.2.2"
   purl: "pkg:npm/map-cache@0.2.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3085,6 +3249,8 @@ packages:
     path: ""
 - id: "NPM::map-visit:1.0.0"
   purl: "pkg:npm/map-visit@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3113,6 +3279,8 @@ packages:
     path: ""
 - id: "NPM::markdown-utils:0.7.3"
   purl: "pkg:npm/markdown-utils@0.7.3"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3141,6 +3309,8 @@ packages:
     path: ""
 - id: "NPM::math-random:1.0.4"
   purl: "pkg:npm/math-random@1.0.4"
+  authors:
+  - "Michael Rhodes"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3171,6 +3341,8 @@ packages:
     path: ""
 - id: "NPM::minimatch:3.0.4"
   purl: "pkg:npm/minimatch@3.0.4"
+  authors:
+  - "Isaac Z. Schlueter"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -3199,6 +3371,8 @@ packages:
     path: ""
 - id: "NPM::minimist:0.0.8"
   purl: "pkg:npm/minimist@0.0.8"
+  authors:
+  - "James Halliday"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3227,6 +3401,8 @@ packages:
     path: ""
 - id: "NPM::minimist:1.2.5"
   purl: "pkg:npm/minimist@1.2.5"
+  authors:
+  - "James Halliday"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3255,6 +3431,8 @@ packages:
     path: ""
 - id: "NPM::mixin-deep:1.3.2"
   purl: "pkg:npm/mixin-deep@1.3.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3284,6 +3462,8 @@ packages:
     path: ""
 - id: "NPM::mkdirp:0.5.1"
   purl: "pkg:npm/mkdirp@0.5.1"
+  authors:
+  - "James Halliday"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3312,6 +3492,8 @@ packages:
     path: ""
 - id: "NPM::mocha:5.2.0"
   purl: "pkg:npm/mocha@5.2.0"
+  authors:
+  - "TJ Holowaychuk"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3368,6 +3550,8 @@ packages:
     path: ""
 - id: "NPM::object-copy:0.1.0"
   purl: "pkg:npm/object-copy@0.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3397,6 +3581,8 @@ packages:
     path: ""
 - id: "NPM::object-visit:1.0.1"
   purl: "pkg:npm/object-visit@1.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3425,6 +3611,8 @@ packages:
     path: ""
 - id: "NPM::once:1.4.0"
   purl: "pkg:npm/once@1.4.0"
+  authors:
+  - "Isaac Z. Schlueter"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -3453,6 +3641,8 @@ packages:
     path: ""
 - id: "NPM::pascalcase:0.1.1"
   purl: "pkg:npm/pascalcase@0.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3481,6 +3671,8 @@ packages:
     path: ""
 - id: "NPM::path-is-absolute:1.0.1"
   purl: "pkg:npm/path-is-absolute@1.0.1"
+  authors:
+  - "Sindre Sorhus"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3509,6 +3701,8 @@ packages:
     path: ""
 - id: "NPM::pretty-remarkable:0.4.1"
   purl: "pkg:npm/pretty-remarkable@0.4.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3566,6 +3760,8 @@ packages:
     path: ""
 - id: "NPM::randomatic:3.1.1"
   purl: "pkg:npm/randomatic@3.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3623,6 +3819,8 @@ packages:
     path: ""
 - id: "NPM::regex-not:1.0.2"
   purl: "pkg:npm/regex-not@1.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3681,6 +3879,8 @@ packages:
     path: ""
 - id: "NPM::remove-trailing-separator:1.1.0"
   purl: "pkg:npm/remove-trailing-separator@1.1.0"
+  authors:
+  - "darsain"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -3709,6 +3909,8 @@ packages:
     path: ""
 - id: "NPM::repeat-element:1.1.3"
   purl: "pkg:npm/repeat-element@1.1.3"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3737,6 +3939,8 @@ packages:
     path: ""
 - id: "NPM::repeat-string:1.6.1"
   purl: "pkg:npm/repeat-string@1.6.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3766,6 +3970,8 @@ packages:
     path: ""
 - id: "NPM::replace-ext:1.0.0"
   purl: "pkg:npm/replace-ext@1.0.0"
+  authors:
+  - "Gulp Team"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3794,6 +4000,8 @@ packages:
     path: ""
 - id: "NPM::resolve-url:0.2.1"
   purl: "pkg:npm/resolve-url@0.2.1"
+  authors:
+  - "Simon Lydell"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3822,6 +4030,8 @@ packages:
     path: ""
 - id: "NPM::ret:0.1.15"
   purl: "pkg:npm/ret@0.1.15"
+  authors:
+  - "Roly Fentanes"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3850,6 +4060,8 @@ packages:
     path: ""
 - id: "NPM::safe-buffer:5.1.2"
   purl: "pkg:npm/safe-buffer@5.1.2"
+  authors:
+  - "Feross Aboukhadijeh"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3878,6 +4090,8 @@ packages:
     path: ""
 - id: "NPM::safe-regex:1.1.0"
   purl: "pkg:npm/safe-regex@1.1.0"
+  authors:
+  - "James Halliday"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3906,6 +4120,8 @@ packages:
     path: ""
 - id: "NPM::sections:1.0.0"
   purl: "pkg:npm/sections@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3935,6 +4151,8 @@ packages:
     path: ""
 - id: "NPM::set-getter:0.1.0"
   purl: "pkg:npm/set-getter@0.1.0"
+  authors:
+  - "Brian Woodward"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3964,6 +4182,8 @@ packages:
     path: ""
 - id: "NPM::set-value:2.0.1"
   purl: "pkg:npm/set-value@2.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3993,6 +4213,8 @@ packages:
     path: ""
 - id: "NPM::snapdragon-node:1.0.6"
   purl: "pkg:npm/snapdragon-node@1.0.6"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4022,6 +4244,8 @@ packages:
     path: ""
 - id: "NPM::snapdragon-util:1.0.6"
   purl: "pkg:npm/snapdragon-util@1.0.6"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4050,6 +4274,8 @@ packages:
     path: ""
 - id: "NPM::snapdragon-util:2.1.1"
   purl: "pkg:npm/snapdragon-util@2.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4078,6 +4304,8 @@ packages:
     path: ""
 - id: "NPM::snapdragon:0.11.5"
   purl: "pkg:npm/snapdragon@0.11.5"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4107,6 +4335,8 @@ packages:
     path: ""
 - id: "NPM::snapdragon:0.8.2"
   purl: "pkg:npm/snapdragon@0.8.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4135,6 +4365,8 @@ packages:
     path: ""
 - id: "NPM::sort-by-value:0.1.0"
   purl: "pkg:npm/sort-by-value@0.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4164,6 +4396,8 @@ packages:
     path: ""
 - id: "NPM::source-map-resolve:0.5.3"
   purl: "pkg:npm/source-map-resolve@0.5.3"
+  authors:
+  - "Simon Lydell"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4192,6 +4426,8 @@ packages:
     path: ""
 - id: "NPM::source-map-url:0.4.0"
   purl: "pkg:npm/source-map-url@0.4.0"
+  authors:
+  - "Simon Lydell"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4220,6 +4456,8 @@ packages:
     path: ""
 - id: "NPM::source-map:0.5.7"
   purl: "pkg:npm/source-map@0.5.7"
+  authors:
+  - "Nick Fitzgerald"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -4248,6 +4486,8 @@ packages:
     path: ""
 - id: "NPM::source-map:0.6.1"
   purl: "pkg:npm/source-map@0.6.1"
+  authors:
+  - "Nick Fitzgerald"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -4276,6 +4516,8 @@ packages:
     path: ""
 - id: "NPM::split-string:3.1.0"
   purl: "pkg:npm/split-string@3.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4304,6 +4546,8 @@ packages:
     path: ""
 - id: "NPM::sprintf-js:1.0.3"
   purl: "pkg:npm/sprintf-js@1.0.3"
+  authors:
+  - "Alexandru Marasteanu"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -4332,6 +4576,8 @@ packages:
     path: ""
 - id: "NPM::static-extend:0.1.2"
   purl: "pkg:npm/static-extend@0.1.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4390,6 +4636,8 @@ packages:
     path: ""
 - id: "NPM::success-symbol:0.1.0"
   purl: "pkg:npm/success-symbol@0.1.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4418,6 +4666,8 @@ packages:
     path: ""
 - id: "NPM::supports-color:5.4.0"
   purl: "pkg:npm/supports-color@5.4.0"
+  authors:
+  - "Sindre Sorhus"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4446,6 +4696,8 @@ packages:
     path: ""
 - id: "NPM::through2:2.0.5"
   purl: "pkg:npm/through2@2.0.5"
+  authors:
+  - "Rod Vagg"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4475,6 +4727,8 @@ packages:
     path: ""
 - id: "NPM::to-gfm-code-block:0.1.1"
   purl: "pkg:npm/to-gfm-code-block@0.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4503,6 +4757,8 @@ packages:
     path: ""
 - id: "NPM::to-object-path:0.3.0"
   purl: "pkg:npm/to-object-path@0.3.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4531,6 +4787,8 @@ packages:
     path: ""
 - id: "NPM::to-regex:3.0.2"
   purl: "pkg:npm/to-regex@3.0.2"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4559,6 +4817,8 @@ packages:
     path: ""
 - id: "NPM::tokenize-comment:1.0.3"
   purl: "pkg:npm/tokenize-comment@1.0.3"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4589,6 +4849,8 @@ packages:
     path: ""
 - id: "NPM::union-value:1.0.1"
   purl: "pkg:npm/union-value@1.0.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4618,6 +4880,8 @@ packages:
     path: ""
 - id: "NPM::unset-value:1.0.0"
   purl: "pkg:npm/unset-value@1.0.0"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4646,6 +4910,8 @@ packages:
     path: ""
 - id: "NPM::urix:0.1.0"
   purl: "pkg:npm/urix@0.1.0"
+  authors:
+  - "Simon Lydell"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4674,6 +4940,8 @@ packages:
     path: ""
 - id: "NPM::use:3.1.1"
   purl: "pkg:npm/use@3.1.1"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4702,6 +4970,8 @@ packages:
     path: ""
 - id: "NPM::util-deprecate:1.0.2"
   purl: "pkg:npm/util-deprecate@1.0.2"
+  authors:
+  - "Nathan Rajlich"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4730,6 +5000,8 @@ packages:
     path: ""
 - id: "NPM::vinyl:2.2.0"
   purl: "pkg:npm/vinyl@2.2.0"
+  authors:
+  - "Gulp Team"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4758,6 +5030,8 @@ packages:
     path: ""
 - id: "NPM::wrappy:1.0.2"
   purl: "pkg:npm/wrappy@1.0.2"
+  authors:
+  - "Isaac Z. Schlueter"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -4786,6 +5060,8 @@ packages:
     path: ""
 - id: "NPM::write:0.3.3"
   purl: "pkg:npm/write@0.3.3"
+  authors:
+  - "Jon Schlinkert"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -4815,6 +5091,8 @@ packages:
     path: ""
 - id: "NPM::xtend:4.0.2"
   purl: "pkg:npm/xtend@4.0.2"
+  authors:
+  - "Raynos"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:

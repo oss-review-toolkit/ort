@@ -183,6 +183,31 @@ open class Npm(
         }
     }
 
+    /**
+     * Parse information about the author. According to
+     * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
+     * specify the author of a package: An object with multiple properties or a single string.
+     */
+    private fun parseAuthors(json: JsonNode): SortedSet<String> =
+        sortedSetOf<String>().apply {
+            json["author"]?.let { authorNode ->
+                when {
+                    authorNode.isObject -> authorNode["name"]?.textValue()
+                    authorNode.isTextual -> parseAuthorString(authorNode.textValue())
+                    else -> null
+                }
+            }?.let { add(it) }
+        }
+
+    /**
+     * Parse the author if it is defined as a single string in the format "Name <mail> (url)". Try to extract the name
+     * part from the string or return the full string if no mail or url components are found.
+     */
+    private fun parseAuthorString(authorStr: String?): String? =
+        authorStr?.let { str ->
+            str.substringBefore('<').substringBefore('(').trim().ifBlank { null }
+        }
+
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = rootDirectory.resolve("node_modules")
@@ -202,6 +227,7 @@ open class Npm(
             val version = json["version"].textValue()
 
             val declaredLicenses = parseLicenses(json)
+            val authors = parseAuthors(json)
 
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
@@ -295,8 +321,7 @@ open class Npm(
                     name = name,
                     version = version
                 ),
-                // TODO: Find a way to track authors.
-                authors = sortedSetOf(),
+                authors = authors,
                 declaredLicenses = declaredLicenses,
                 description = description,
                 homepageUrl = homepageUrl,
@@ -515,6 +540,7 @@ open class Npm(
         }
 
         val declaredLicenses = parseLicenses(json)
+        val authors = parseAuthors(json)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val projectDir = packageJson.parentFile
         val vcsFromPackage = parseVcsInfo(json)
@@ -527,8 +553,7 @@ open class Npm(
                 version = version
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = authors,
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
