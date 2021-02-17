@@ -237,7 +237,7 @@ scanner:
               \ DownloadException: Download failed for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\n\
               Suppressed: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\
               \ Please make sure the published POM file includes the SCM connection,\
-              \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file\n\
+              \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom\n\
               Suppressed: DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'."
             severity: "ERROR"
     - id: "Maven:junit:junit:4.12"
