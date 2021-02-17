@@ -29,26 +29,24 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
-class StackFunTest : StringSpec() {
-    private val projectsDir = File("src/funTest/assets/projects").absoluteFile
+class StackFunTest : StringSpec({
+    "Dependencies should be resolved correctly for quickcheck-state-machine" {
+        val definitionFile = projectsDir.resolve("external/quickcheck-state-machine/stack.yaml")
 
-    init {
-        "Dependencies should be resolved correctly for quickcheck-state-machine" {
-            val definitionFile = projectsDir.resolve("external/quickcheck-state-machine/stack.yaml")
-
-            val result = createStack().resolveSingleProject(definitionFile)
-            val expectedOutput = if (Os.isWindows) {
-                "external/quickcheck-state-machine-expected-output-win32.yml"
-            } else {
-                "external/quickcheck-state-machine-expected-output.yml"
-            }
-            val expectedResult = projectsDir.resolve(expectedOutput).readText()
-            val actualResult = result.toYaml()
-
-            actualResult shouldBe expectedResult
+        val result = createStack().resolveSingleProject(definitionFile)
+        val expectedOutput = if (Os.isWindows) {
+            "external/quickcheck-state-machine-expected-output-win32.yml"
+        } else {
+            "external/quickcheck-state-machine-expected-output.yml"
         }
-    }
+        val expectedResult = projectsDir.resolve(expectedOutput).readText()
+        val actualResult = result.toYaml()
 
-    private fun createStack() =
-        Stack("Stack", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-}
+        actualResult shouldBe expectedResult
+    }
+})
+
+private val projectsDir = File("src/funTest/assets/projects").absoluteFile
+
+private fun createStack() =
+    Stack("Stack", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
