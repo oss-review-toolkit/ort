@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2021 Bosch.IO GmbH
  * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +41,13 @@ data class Resolutions(
      */
     @JsonAlias("evaluator_errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val ruleViolations: List<RuleViolationResolution> = emptyList()
+    val ruleViolations: List<RuleViolationResolution> = emptyList(),
+
+    /**
+     * Resolutions for vulnerabilities provided by the advisor.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val vulnerabilities: List<VulnerabilityResolution> = emptyList()
 ) {
     /**
      * Merge this [Resolutions] with [other] [Resolutions]. Duplicates are removed.
@@ -48,6 +55,7 @@ data class Resolutions(
     fun merge(other: Resolutions) =
         Resolutions(
             issues = (issues + other.issues).distinct(),
-            ruleViolations = (ruleViolations + other.ruleViolations).distinct()
+            ruleViolations = (ruleViolations + other.ruleViolations).distinct(),
+            vulnerabilities = (vulnerabilities + other.vulnerabilities).distinct()
         )
 }
