@@ -27,6 +27,8 @@ packages:
   declared_licenses:
   - "BSD"
   - "BSD License"
+  declared_authors:
+  - "Django Software Foundation"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -60,6 +62,8 @@ packages:
   declared_licenses:
   - "MIT"
   - "MIT License"
+  declared_authors:
+  - "Stuart Bishop"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:

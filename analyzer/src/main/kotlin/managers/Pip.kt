@@ -264,6 +264,7 @@ class Pip(
         pip.requireSuccess()
 
         var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
+        var declaredAuthors: SortedSet<String> = sortedSetOf()
 
         // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
@@ -284,6 +285,7 @@ class Pip(
             // So the best we can do is to map it to the project's homepage URL.
             jsonMapper.readTree(pydep.stdout).let {
                 declaredLicenses = getDeclaredLicenses(it)
+                declaredAuthors = getDeclaredAuthors(it)
                 listOf(
                     it["project_name"].textValue(), it["version"].textValueOrEmpty(),
                     it["repo_url"].textValueOrEmpty()
@@ -377,8 +379,7 @@ class Pip(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = declaredLicenses,
-            // TODO: Find a way to track authors
-            declaredAuthors = sortedSetOf(),
+            declaredAuthors = declaredAuthors,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
             homepageUrl = setupHomepage,
@@ -433,6 +434,9 @@ class Pip(
 
         return declaredLicenses
     }
+
+    private fun getDeclaredAuthors(pkgInfo: JsonNode): SortedSet<String> =
+        pkgInfo["author"]?.textValue()?.let { sortedSetOf(it) } ?: sortedSetOf()
 
     private fun getLicenseFromLicenseField(value: String?): String? =
         value?.let {
@@ -705,6 +709,9 @@ class Pip(
         getLicenseFromLicenseField(map["License"]?.single())?.let { declaredLicenses += it }
         map["Classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it) }
 
+        val declaredAuthors = sortedSetOf<String>()
+        map["Author"]?.singleOrNull()?.let { declaredAuthors += it }
+
         return Package(
             id = Identifier(
                 type = "PyPI",
@@ -715,8 +722,7 @@ class Pip(
             description = map["Summary"]?.single().orEmpty(),
             homepageUrl = map["Home-page"]?.single().orEmpty(),
             declaredLicenses = declaredLicenses,
-            // TODO: Find a way to track authors
-            declaredAuthors = sortedSetOf(),
+            declaredAuthors = declaredAuthors,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo.EMPTY

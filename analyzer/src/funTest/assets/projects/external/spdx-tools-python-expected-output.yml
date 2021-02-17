@@ -5,6 +5,8 @@ project:
   declared_licenses:
   - "Apache Software License"
   - "Apache-2.0"
+  declared_authors:
+  - "Ahmed H. Ismail"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped:
@@ -38,6 +40,8 @@ packages:
   declared_licenses:
   - "BSD"
   - "BSD License"
+  declared_authors:
+  - "Gerhard Weis"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -69,6 +73,8 @@ packages:
   purl: "pkg:pypi/ply@3.11"
   declared_licenses:
   - "BSD"
+  declared_authors:
+  - "David Beazley"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -99,6 +105,8 @@ packages:
   purl: "pkg:pypi/pyparsing@2.4.7"
   declared_licenses:
   - "MIT License"
+  declared_authors:
+  - "Paul McGuire"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
@@ -130,6 +138,8 @@ packages:
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"
+  declared_authors:
+  - "Daniel 'eikeon' Krech"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -162,6 +172,8 @@ packages:
   declared_licenses:
   - "MIT"
   - "MIT License"
+  declared_authors:
+  - "Benjamin Peterson"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:

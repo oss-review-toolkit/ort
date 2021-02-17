@@ -32,6 +32,8 @@ packages:
   declared_licenses:
   - "BSD"
   - "BSD License"
+  declared_authors:
+  - "Armin Ronacher"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -64,6 +66,8 @@ packages:
   declared_licenses:
   - "BSD"
   - "BSD License"
+  declared_authors:
+  - "Armin Ronacher"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -97,6 +101,8 @@ packages:
   declared_licenses:
   - "BSD"
   - "BSD License"
+  declared_authors:
+  - "Armin Ronacher"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -129,6 +135,8 @@ packages:
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"
+  declared_authors:
+  - "Armin Ronacher"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -159,6 +167,8 @@ packages:
   purl: "pkg:pypi/click@6.7"
   declared_licenses:
   - "BSD License"
+  declared_authors:
+  - "Armin Ronacher"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
@@ -189,6 +199,8 @@ packages:
   purl: "pkg:pypi/itsdangerous@0.24"
   declared_licenses:
   - "BSD License"
+  declared_authors:
+  - "Armin Ronacher"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
