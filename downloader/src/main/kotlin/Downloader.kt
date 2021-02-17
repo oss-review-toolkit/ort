@@ -199,7 +199,7 @@ object Downloader {
             val hint = when (pkg.id.type) {
                 "Bundler", "Gem" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, " +
                         "see: https://guides.rubygems.org/specification-reference/#metadata"
-                "Gradle" -> " Please make sure the release POM file includes the SCM connection, see: " +
+                "Gradle" -> " Please make sure the published POM file includes the SCM connection, see: " +
                         "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
                         "example_customizing_the_pom_file"
                 "Maven" -> " Please define the \"connection\" tag within the \"scm\" tag in the POM file, " +
@@ -209,7 +209,7 @@ object Downloader {
                 "PIP", "PyPI" -> " Please make sure the setup.py defines the 'Source' attribute in " +
                         "'project_urls', see: https://packaging.python.org/guides/" +
                         "distributing-packages-using-setuptools/#project-urls"
-                "SBT" -> " Please make sure the released POM file includes the SCM connection, see: " +
+                "SBT" -> " Please make sure the published POM file includes the SCM connection, see: " +
                         "http://maven.apache.org/pom.html#SCM"
                 else -> ""
             }

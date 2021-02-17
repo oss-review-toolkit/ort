@@ -74,7 +74,7 @@
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "SCANNER",
     "source" : "FileCounter",
-    "message" : "DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\nCaused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file",
+    "message" : "DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\nCaused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'. Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file",
     "severity" : "ERROR",
     "pkg" : 0,
     "scan_result" : 0,
