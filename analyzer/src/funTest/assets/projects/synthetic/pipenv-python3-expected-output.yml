@@ -24,6 +24,8 @@ project:
 packages:
 - id: "PyPI::Django:2.1.11"
   purl: "pkg:pypi/Django@2.1.11"
+  authors:
+  - "Django Software Foundation"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -57,6 +59,8 @@ packages:
     path: ""
 - id: "PyPI::pytz:2019.3"
   purl: "pkg:pypi/pytz@2019.3"
+  authors:
+  - "Stuart Bishop"
   declared_licenses:
   - "MIT"
   - "MIT License"

@@ -260,6 +260,7 @@ class Pip(
         }
         pip.requireSuccess()
 
+        var authors: SortedSet<String> = sortedSetOf()
         var declaredLicenses: SortedSet<String> = sortedSetOf()
 
         // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
@@ -280,6 +281,7 @@ class Pip(
             // - "download_url", denoting the "location where the package may be downloaded".
             // So the best we can do is to map it to the project's homepage URL.
             jsonMapper.readTree(pydep.stdout).let {
+                authors = parseAuthors(it)
                 declaredLicenses = getDeclaredLicenses(it)
                 listOf(
                     it["project_name"].textValue(), it["version"].textValueOrEmpty(),
@@ -373,8 +375,7 @@ class Pip(
                 version = projectVersion
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = authors,
             declaredLicenses = declaredLicenses,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
@@ -420,6 +421,19 @@ class Pip(
 
         return RemoteArtifact(url, Hash.create(hash))
     }
+
+    private fun parseAuthors(pkgInfo: JsonNode): SortedSet<String> =
+        parseAuthorString(pkgInfo["author"]?.textValue())
+
+    private fun parseAuthorString(author: String?): SortedSet<String> =
+        author?.takeIf(::isValidAuthor)?.let { sortedSetOf(it) } ?: sortedSetOf()
+
+    /**
+     * Check if the given [author] string represents a valid author name. There are some non-null strings that
+     * indicate that no author information is available. For instance, setup.py files can contain empty strings;
+     * the "pip show" command prints the string "None" in this case.
+     */
+    private fun isValidAuthor(author: String): Boolean = author.isNotBlank() && author != "None"
 
     private fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
         val declaredLicenses = sortedSetOf<String>()
@@ -619,8 +633,7 @@ class Pip(
                     id = id,
                     homepageUrl = homepageUrl,
                     description = pkgInfo["summary"]?.textValue().orEmpty(),
-                    // TODO: Find a way to track authors.
-                    authors = sortedSetOf(),
+                    authors = parseAuthors(pkgInfo),
                     declaredLicenses = getDeclaredLicenses(pkgInfo),
                     binaryArtifact = getBinaryArtifact(pkgRelease),
                     sourceArtifact = getSourceArtifact(pkgRelease),
@@ -702,6 +715,8 @@ class Pip(
         getLicenseFromLicenseField(map["License"]?.single())?.let { declaredLicenses += it }
         map["Classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it) }
 
+        val authors = parseAuthorString(map["Author"]?.singleOrNull())
+
         return Package(
             id = Identifier(
                 type = "PyPI",
@@ -711,8 +726,7 @@ class Pip(
             ),
             description = map["Summary"]?.single().orEmpty(),
             homepageUrl = map["Home-page"]?.single().orEmpty(),
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = authors,
             declaredLicenses = declaredLicenses,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,

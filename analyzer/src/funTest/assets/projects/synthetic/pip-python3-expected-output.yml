@@ -25,6 +25,8 @@ project:
 packages:
 - id: "PyPI::Django:2.2.13"
   purl: "pkg:pypi/Django@2.2.13"
+  authors:
+  - "Django Software Foundation"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -58,6 +60,8 @@ packages:
     path: ""
 - id: "PyPI::pytz:2021.1"
   purl: "pkg:pypi/pytz@2021.1"
+  authors:
+  - "Stuart Bishop"
   declared_licenses:
   - "MIT"
   - "MIT License"
@@ -89,6 +93,8 @@ packages:
     path: ""
 - id: "PyPI::sqlparse:0.4.1"
   purl: "pkg:pypi/sqlparse@0.4.1"
+  authors:
+  - "Andi Albrecht"
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"

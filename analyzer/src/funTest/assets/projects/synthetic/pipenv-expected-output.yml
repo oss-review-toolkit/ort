@@ -29,6 +29,8 @@ project:
 packages:
 - id: "PyPI::Flask:1.0"
   purl: "pkg:pypi/Flask@1.0"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -61,6 +63,8 @@ packages:
     path: ""
 - id: "PyPI::Jinja2:2.10.1"
   purl: "pkg:pypi/Jinja2@2.10.1"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -94,6 +98,8 @@ packages:
     path: ""
 - id: "PyPI::MarkupSafe:1.0"
   purl: "pkg:pypi/MarkupSafe@1.0"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -126,6 +132,8 @@ packages:
     path: ""
 - id: "PyPI::Werkzeug:0.15.3"
   purl: "pkg:pypi/Werkzeug@0.15.3"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"
@@ -157,6 +165,8 @@ packages:
     path: ""
 - id: "PyPI::click:6.7"
   purl: "pkg:pypi/click@6.7"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
@@ -187,6 +197,8 @@ packages:
     path: ""
 - id: "PyPI::itsdangerous:0.24"
   purl: "pkg:pypi/itsdangerous@0.24"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
