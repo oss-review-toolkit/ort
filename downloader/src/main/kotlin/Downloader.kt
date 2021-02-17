@@ -201,11 +201,11 @@ object Downloader {
                         "see: https://guides.rubygems.org/specification-reference/#metadata"
                 "Gradle" -> " Please make sure the published POM file includes the SCM connection, see: " +
                         "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
-                        "example_customizing_the_pom_file"
+                        "sec:modifying_the_generated_pom"
                 "Maven" -> " Please define the \"connection\" tag within the \"scm\" tag in the POM file, " +
                         "see: http://maven.apache.org/pom.html#SCM"
                 "NPM" -> " Please define the \"repository\" in the package.json file, see: " +
-                        "https://docs.npmjs.com/files/package.json#repository"
+                        "https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository"
                 "PIP", "PyPI" -> " Please make sure the setup.py defines the 'Source' attribute in " +
                         "'project_urls', see: https://packaging.python.org/guides/" +
                         "distributing-packages-using-setuptools/#project-urls"

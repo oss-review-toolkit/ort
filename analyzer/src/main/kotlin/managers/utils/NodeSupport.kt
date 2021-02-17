@@ -94,10 +94,10 @@ fun expandNpmShortcutURL(url: String): String {
     if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
 
     return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
-        // See https://docs.npmjs.com/files/package.json#github-urls.
+        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#github-urls.
         val revision = if (uri.hasRevisionFragment()) "#${uri.fragment}" else ""
 
-        // See https://docs.npmjs.com/files/package.json#repository.
+        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository.
         when (uri.scheme) {
             null, "github" -> "https://github.com/$path.git$revision"
             "gist" -> "https://gist.github.com/$path$revision"
