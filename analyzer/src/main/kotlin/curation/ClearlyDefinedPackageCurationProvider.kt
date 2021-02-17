@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
+import java.net.HttpURLConnection
+
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
@@ -89,9 +91,15 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
             //       classes could deal with coroutines more easily.
             runBlocking { service.getCuration(type, provider, namespace, pkgId.name, pkgId.version) }
         } catch (e: HttpException) {
-            e.showStackTrace()
+            // A "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a failure.
+            if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
+                e.showStackTrace()
 
-            log.warn { "Getting curations for '${pkgId.toCoordinates()}' failed with: ${e.collectMessagesAsString()}" }
+                log.warn {
+                    val message = e.response()?.errorBody()?.string() ?: e.collectMessagesAsString()
+                    "Getting curations for '${pkgId.toCoordinates()}' failed with code ${e.code()}: $message"
+                }
+            }
 
             return emptyList()
         }
