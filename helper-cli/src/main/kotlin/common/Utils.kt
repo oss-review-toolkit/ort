@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
@@ -738,6 +739,20 @@ internal fun Collection<RuleViolationResolution>.mergeRuleViolationResolutions(
 }
 
 /**
+ * Merge the given [VulnerabilityResolution]s replacing entries with equal [VulnerabilityResolution.id].
+ */
+internal fun Collection<VulnerabilityResolution>.mergeVulnerabilityResolutions(
+    other: Collection<VulnerabilityResolution>
+): List<VulnerabilityResolution> {
+    val result = mutableMapOf<String, VulnerabilityResolution>()
+
+    associateByTo(result) { it.id }
+    other.associateByTo(result) { it.id }
+
+    return result.values.toList()
+}
+
+/**
  * Merge the given [RepositoryConfiguration] replacing entries with equal matchers.
  */
 internal fun RepositoryConfiguration.merge(
@@ -753,7 +768,10 @@ internal fun RepositoryConfiguration.merge(
         ),
         resolutions = Resolutions(
             issues = resolutions.issues.mergeIssueResolutions(other.resolutions.issues),
-            ruleViolations = resolutions.ruleViolations.mergeRuleViolationResolutions(other.resolutions.ruleViolations)
+            ruleViolations = resolutions.ruleViolations.mergeRuleViolationResolutions(other.resolutions.ruleViolations),
+            vulnerabilities = resolutions.vulnerabilities.mergeVulnerabilityResolutions(
+                other.resolutions.vulnerabilities
+            )
         )
     )
 
