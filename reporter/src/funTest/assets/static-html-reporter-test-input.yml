@@ -301,7 +301,7 @@ scanner:
             source: "FileCounter"
             message: "DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\n\
               Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\
-              \ Please make sure the release POM file includes the SCM connection,\
+              \ Please make sure the published POM file includes the SCM connection,\
               \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file"
             severity: "ERROR"
     - id: "Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0"
