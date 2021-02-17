@@ -63,6 +63,10 @@ class RepositoryConfigurationTest : WordSpec({
                   - message: "rule message"
                     reason: "PATENT_GRANT_EXCEPTION"
                     comment: "rule comment"
+                  vulnerabilities:
+                  - id: "vulnerability id"
+                    reason: "INEFFECTIVE_VULNERABILITY"
+                    comment: "vulnerability comment"
                 """.trimIndent()
 
             val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
@@ -97,6 +101,14 @@ class RepositoryConfigurationTest : WordSpec({
                 message shouldBe "rule message"
                 reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
                 comment shouldBe "rule comment"
+            }
+
+            val vulnerabilities = repositoryConfiguration.resolutions.vulnerabilities
+            vulnerabilities should haveSize(1)
+            with(vulnerabilities.first()) {
+                id shouldBe "vulnerability id"
+                reason shouldBe VulnerabilityResolutionReason.INEFFECTIVE_VULNERABILITY
+                comment shouldBe "vulnerability comment"
             }
         }
     }
