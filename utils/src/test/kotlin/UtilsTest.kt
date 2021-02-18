@@ -180,6 +180,8 @@ class UtilsTest : WordSpec({
 
             filterVersionNames("6.9.0", names, "babel-plugin-transform-simplify-comparison-operators")
                 .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
+            filterVersionNames("6.9.0", names, "Babel-plugin-transform-simplify-comparison-operators")
+                .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
         }
 
         "find names when others with trailing digits are present" {
