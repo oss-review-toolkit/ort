@@ -51,9 +51,9 @@ packages:
   versionInfo: "1.1.1g"
   originator: "Organization: OpenSSL Development Team"
 relationships:
-- spdxElementId: "SPDXRef-Package-xyz"
-  relatedSpdxElement: "SPDXRef-Package-curl"
-  relationshipType: "DEPENDS_ON"
+- spdxElementId: "SPDXRef-Package-curl"
+  relatedSpdxElement: "SPDXRef-Package-xyz"
+  relationshipType: "TEST_DEPENDENCY_OF"
 - spdxElementId: "SPDXRef-Package-xyz"
   relatedSpdxElement: "SPDXRef-Package-openssl"
   relationshipType: "DEPENDS_ON"
