@@ -50,8 +50,8 @@ interface NexusIqService {
             password: String? = null,
             client: OkHttpClient? = null
         ): NexusIqService {
-            val nexusIqClient = (client ?: OkHttpClient()).newBuilder().apply {
-                addInterceptor { chain ->
+            val nexusIqClient = (client ?: OkHttpClient()).newBuilder()
+                .addInterceptor { chain ->
                     val request = chain.request()
                     val token = UUID.randomUUID().toString()
                     val requestBuilder = request.newBuilder()
@@ -64,7 +64,7 @@ interface NexusIqService {
 
                     chain.proceed(requestBuilder.build())
                 }
-            }.build()
+                .build()
 
             val retrofit = Retrofit.Builder()
                 .client(nexusIqClient)
