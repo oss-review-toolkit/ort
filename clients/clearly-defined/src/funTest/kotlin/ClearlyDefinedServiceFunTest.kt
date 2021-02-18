@@ -32,10 +32,13 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curatio
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.utils.OrtProxySelector
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ClearlyDefinedServiceFunTest : WordSpec({
+    OrtProxySelector.install()
+
     "Downloading a contribution patch" should {
         "return curation data".config(tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
