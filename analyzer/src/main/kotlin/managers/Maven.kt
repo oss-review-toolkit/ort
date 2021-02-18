@@ -137,8 +137,7 @@ class Maven(
                 version = mavenProject.version
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = MavenSupport.parseAuthors(mavenProject),
             declaredLicenses = MavenSupport.parseLicenses(mavenProject),
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),

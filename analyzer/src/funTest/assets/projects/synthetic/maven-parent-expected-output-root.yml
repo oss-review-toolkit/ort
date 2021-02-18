@@ -2,6 +2,9 @@
 project:
   id: "Maven:org.ossreviewtoolkit.maven:maven-parent-project:1.0-SNAPSHOT"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven-parent/pom.xml"
+  authors:
+  - "Pivotal Software, Inc."
+  - "The organization"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
