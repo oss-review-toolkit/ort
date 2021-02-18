@@ -3,6 +3,9 @@ project:
   id: "Pub:any-version:any-version:0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/any-version/pubspec.yaml"
   declared_licenses: []
+  declared_authors:
+  - "Another Author"
+  - "Marlon Hille"
   declared_licenses_processed: {}
   vcs:
     type: "Git"
@@ -97,6 +100,8 @@ packages:
 - id: "Pub:analyzer:analyzer:0.36.4"
   purl: "pkg:pub/analyzer/analyzer@0.36.4"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Static analyzer for Dart."
   homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/analyzer"
@@ -123,6 +128,8 @@ packages:
 - id: "Pub:args:args:1.5.2"
   purl: "pkg:pub/args/args@1.5.2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Library for defining parsers for parsing raw command-line arguments\
     \ into a set of options and values using GNU and POSIX style options."
@@ -150,6 +157,8 @@ packages:
 - id: "Pub:async:async:2.2.0"
   purl: "pkg:pub/async/async@2.2.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Utility functions and classes related to the 'dart:async' library."
   homepage_url: "https://www.github.com/dart-lang/async"
@@ -176,6 +185,8 @@ packages:
 - id: "Pub:boolean_selector:boolean_selector:1.0.5"
   purl: "pkg:pub/boolean_selector/boolean_selector@1.0.5"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A flexible syntax for boolean expressions, based on a simplified version\
     \ of Dart's expression syntax."
@@ -203,6 +214,8 @@ packages:
 - id: "Pub:charcode:charcode:1.1.2"
   purl: "pkg:pub/charcode/charcode@1.1.2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Constants for ASCII and common non-ASCII character codes. When working\
     \ with characters in Dart, there is no simple way to represent the code point\
@@ -232,6 +245,8 @@ packages:
 - id: "Pub:collection:collection:1.14.11"
   purl: "pkg:pub/collection/collection@1.14.11"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Collections and utilities functions and classes related to collections."
   homepage_url: "https://www.github.com/dart-lang/collection"
@@ -258,6 +273,8 @@ packages:
 - id: "Pub:convert:convert:2.1.1"
   purl: "pkg:pub/convert/convert@2.1.1"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Utilities for converting between data representations."
   homepage_url: "https://github.com/dart-lang/convert"
@@ -284,6 +301,8 @@ packages:
 - id: "Pub:crypto:crypto:2.0.6"
   purl: "pkg:pub/crypto/crypto@2.0.6"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Library of cryptographic functions."
   homepage_url: "https://www.github.com/dart-lang/crypto"
@@ -310,6 +329,8 @@ packages:
 - id: "Pub:csslib:csslib:0.16.0"
   purl: "pkg:pub/csslib/csslib@0.16.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A library for parsing CSS."
   homepage_url: "https://github.com/dart-lang/csslib"
@@ -336,6 +357,8 @@ packages:
 - id: "Pub:fixnum:fixnum:0.10.9"
   purl: "pkg:pub/fixnum/fixnum@0.10.9"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Library for 32- and 64-bit signed fixed-width integers."
   homepage_url: "https://github.com/dart-lang/fixnum"
@@ -362,6 +385,8 @@ packages:
 - id: "Pub:front_end:front_end:0.1.19"
   purl: "pkg:pub/front_end/front_end@0.1.19"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Front end for compilation of Dart code."
   homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/front_end"
@@ -388,6 +413,8 @@ packages:
 - id: "Pub:glob:glob:1.1.7"
   purl: "pkg:pub/glob/glob@1.1.7"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Bash-style filename globbing."
   homepage_url: "https://github.com/dart-lang/glob"
@@ -414,6 +441,8 @@ packages:
 - id: "Pub:html:html:0.14.0+2"
   purl: "pkg:pub/html/html@0.14.0%2B2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "APIs for parsing and manipulating HTML content outside the browser."
   homepage_url: "https://github.com/dart-lang/html"
@@ -440,6 +469,8 @@ packages:
 - id: "Pub:http:http:0.12.0+2"
   purl: "pkg:pub/http/http@0.12.0%2B2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A composable, cross-platform, Future-based API for making HTTP requests."
   homepage_url: "https://github.com/dart-lang/http"
@@ -466,6 +497,8 @@ packages:
 - id: "Pub:http_multi_server:http_multi_server:2.1.0"
   purl: "pkg:pub/http_multi_server/http_multi_server@2.1.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A dart:io HttpServer wrapper that handles requests from multiple servers."
   homepage_url: "https://github.com/dart-lang/http_multi_server"
@@ -492,6 +525,8 @@ packages:
 - id: "Pub:http_parser:http_parser:3.1.3"
   purl: "pkg:pub/http_parser/http_parser@3.1.3"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A platform-independent package for parsing and serializing HTTP formats.\n"
   homepage_url: "https://github.com/dart-lang/http_parser"
@@ -518,6 +553,8 @@ packages:
 - id: "Pub:io:io:0.3.3"
   purl: "pkg:pub/io/io@0.3.3"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Utilities for the Dart VM Runtime.\n"
   homepage_url: "https://github.com/dart-lang/io"
@@ -544,6 +581,8 @@ packages:
 - id: "Pub:js:js:0.6.1+1"
   purl: "pkg:pub/js/js@0.6.1%2B1"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Access JavaScript from Dart."
   homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/js"
@@ -570,6 +609,8 @@ packages:
 - id: "Pub:json_rpc_2:json_rpc_2:2.1.0"
   purl: "pkg:pub/json_rpc_2/json_rpc_2@2.1.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Utilities to write a client or server using the JSON-RPC 2.0 spec."
   homepage_url: "https://github.com/dart-lang/json_rpc_2"
@@ -596,6 +637,8 @@ packages:
 - id: "Pub:kernel:kernel:0.3.19"
   purl: "pkg:pub/kernel/kernel@0.3.19"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Dart IR (Intermediate Representation)"
   homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/kernel"
@@ -622,6 +665,8 @@ packages:
 - id: "Pub:matcher:matcher:0.12.5"
   purl: "pkg:pub/matcher/matcher@0.12.5"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Support for specifying test expectations via an extensible Matcher\
     \ class. Also includes a number of built-in Matcher implementations for common\
@@ -650,6 +695,8 @@ packages:
 - id: "Pub:meta:meta:1.1.7"
   purl: "pkg:pub/meta/meta@1.1.7"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "This library contains the definitions of annotations that provide\
     \ additional semantic information about the program being annotated. These annotations\
@@ -678,6 +725,8 @@ packages:
 - id: "Pub:mime:mime:0.9.6+3"
   purl: "pkg:pub/mime/mime@0.9.6%2B3"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Utilities for handling media (MIME) types, including determining a\
     \ type from a file extension and file contents."
@@ -705,6 +754,8 @@ packages:
 - id: "Pub:multi_server_socket:multi_server_socket:1.0.2"
   purl: "pkg:pub/multi_server_socket/multi_server_socket@1.0.2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A dart:io ServerSocket wrapper that listens on multiple ports."
   homepage_url: "http://github.com/dart-lang/multi_server_socket"
@@ -731,6 +782,8 @@ packages:
 - id: "Pub:node_preamble:node_preamble:1.4.4"
   purl: "pkg:pub/node_preamble/node_preamble@1.4.4"
   declared_licenses: []
+  declared_authors:
+  - "Michael Bullington"
   declared_licenses_processed: {}
   description: "Better node.js preamble for dart2js, use it in your build system."
   homepage_url: "https://github.com/mbullington/node_preamble.dart"
@@ -757,6 +810,8 @@ packages:
 - id: "Pub:package_config:package_config:1.0.5"
   purl: "pkg:pub/package_config/package_config@1.0.5"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Support for working with Package Resolution config files."
   homepage_url: "https://github.com/dart-lang/package_config"
@@ -783,6 +838,8 @@ packages:
 - id: "Pub:package_resolver:package_resolver:1.0.10"
   purl: "pkg:pub/package_resolver/package_resolver@1.0.10"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "First-class package resolution strategy classes."
   homepage_url: "https://github.com/dart-lang/package_resolver"
@@ -809,6 +866,8 @@ packages:
 - id: "Pub:path:path:1.6.2"
   purl: "pkg:pub/path/path@1.6.2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A string-based path manipulation library. All of the path operations\
     \ you know and love, with solid support on both Windows and POSIX (Linux and Mac\
@@ -837,6 +896,8 @@ packages:
 - id: "Pub:pedantic:pedantic:1.7.0"
   purl: "pkg:pub/pedantic/pedantic@1.7.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "How to get the most value from Dart static analysis."
   homepage_url: "https://github.com/dart-lang/pedantic"
@@ -863,6 +924,8 @@ packages:
 - id: "Pub:pool:pool:1.4.0"
   purl: "pkg:pub/pool/pool@1.4.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Manage a finite pool of resources. Useful for controlling concurrent\
     \ file system or network requests."
@@ -890,6 +953,8 @@ packages:
 - id: "Pub:protobuf:protobuf:0.13.12"
   purl: "pkg:pub/protobuf/protobuf@0.13.12"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Runtime library for protocol buffers support. Use https://pub.dartlang.org/packages/protoc_plugin\
     \ to generate dart code for your '.proto' files.\n"
@@ -917,6 +982,8 @@ packages:
 - id: "Pub:pub_semver:pub_semver:1.4.2"
   purl: "pkg:pub/pub_semver/pub_semver@1.4.2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Versions and version constraints implementing pub's versioning policy.\
     \ This is very similar to vanilla semver, with a few corner cases.\n"
@@ -944,6 +1011,8 @@ packages:
 - id: "Pub:shelf:shelf:0.7.5"
   purl: "pkg:pub/shelf/shelf@0.7.5"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A model for web server middleware that encourages composition and\
     \ easy reuse"
@@ -971,6 +1040,8 @@ packages:
 - id: "Pub:shelf_packages_handler:shelf_packages_handler:1.0.4"
   purl: "pkg:pub/shelf_packages_handler/shelf_packages_handler@1.0.4"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A shelf handler for serving a `packages/` directory."
   homepage_url: "https://github.com/dart-lang/shelf_packages_handler"
@@ -997,6 +1068,8 @@ packages:
 - id: "Pub:shelf_static:shelf_static:0.2.8"
   purl: "pkg:pub/shelf_static/shelf_static@0.2.8"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Static file server support for Shelf"
   homepage_url: "https://github.com/dart-lang/shelf_static"
@@ -1023,6 +1096,8 @@ packages:
 - id: "Pub:shelf_web_socket:shelf_web_socket:0.2.3"
   purl: "pkg:pub/shelf_web_socket/shelf_web_socket@0.2.3"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A shelf handler that wires up a listener for every connection."
   homepage_url: "https://github.com/dart-lang/shelf_web_socket"
@@ -1049,6 +1124,8 @@ packages:
 - id: "Pub:source_map_stack_trace:source_map_stack_trace:1.1.5"
   purl: "pkg:pub/source_map_stack_trace/source_map_stack_trace@1.1.5"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A package for applying source maps to stack traces."
   homepage_url: "https://github.com/dart-lang/source_map_stack_trace"
@@ -1075,6 +1152,8 @@ packages:
 - id: "Pub:source_maps:source_maps:0.10.8"
   purl: "pkg:pub/source_maps/source_maps@0.10.8"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Library to programmatically manipulate source map files."
   homepage_url: "http://github.com/dart-lang/source_maps"
@@ -1101,6 +1180,8 @@ packages:
 - id: "Pub:source_span:source_span:1.5.5"
   purl: "pkg:pub/source_span/source_span@1.5.5"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A library for identifying source spans and locations."
   homepage_url: "https://github.com/dart-lang/source_span"
@@ -1127,6 +1208,8 @@ packages:
 - id: "Pub:stack_trace:stack_trace:1.9.3"
   purl: "pkg:pub/stack_trace/stack_trace@1.9.3"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A package for manipulating stack traces and printing them readably."
   homepage_url: "https://github.com/dart-lang/stack_trace"
@@ -1153,6 +1236,8 @@ packages:
 - id: "Pub:stream_channel:stream_channel:2.0.0"
   purl: "pkg:pub/stream_channel/stream_channel@2.0.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "An abstraction for two-way communication channels."
   homepage_url: "https://github.com/dart-lang/stream_channel"
@@ -1179,6 +1264,8 @@ packages:
 - id: "Pub:string_scanner:string_scanner:1.0.4"
   purl: "pkg:pub/string_scanner/string_scanner@1.0.4"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A class for parsing strings using a sequence of patterns."
   homepage_url: "https://github.com/dart-lang/string_scanner"
@@ -1205,6 +1292,8 @@ packages:
 - id: "Pub:term_glyph:term_glyph:1.1.0"
   purl: "pkg:pub/term_glyph/term_glyph@1.1.0"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Useful Unicode glyphs and ASCII substitutes."
   homepage_url: "https://github.com/dart-lang/term_glyph"
@@ -1231,6 +1320,8 @@ packages:
 - id: "Pub:test:test:1.6.4"
   purl: "pkg:pub/test/test@1.6.4"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A full featured library for writing and running Dart tests."
   homepage_url: "https://github.com/dart-lang/test/blob/master/pkgs/test"
@@ -1257,6 +1348,8 @@ packages:
 - id: "Pub:test_api:test_api:0.2.6"
   purl: "pkg:pub/test_api/test_api@0.2.6"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A library for writing Dart tests."
   homepage_url: "https://github.com/dart-lang/test/blob/master/pkgs/test_api"
@@ -1283,6 +1376,8 @@ packages:
 - id: "Pub:test_core:test_core:0.2.6"
   purl: "pkg:pub/test_core/test_core@0.2.6"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A basic library for writing tests and running them on the VM."
   homepage_url: "https://github.com/dart-lang/test/blob/master/pkgs/test_core"
@@ -1309,6 +1404,8 @@ packages:
 - id: "Pub:typed_data:typed_data:1.1.6"
   purl: "pkg:pub/typed_data/typed_data@1.1.6"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "Utility functions and classes related to the 'dart:typed_data' library."
   homepage_url: "https://github.com/dart-lang/typed_data"
@@ -1335,6 +1432,8 @@ packages:
 - id: "Pub:vm_service_client:vm_service_client:0.2.6+2"
   purl: "pkg:pub/vm_service_client/vm_service_client@0.2.6%2B2"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A client for the Dart VM service."
   homepage_url: "https://github.com/dart-lang/vm_service_client"
@@ -1361,6 +1460,8 @@ packages:
 - id: "Pub:watcher:watcher:0.9.7+10"
   purl: "pkg:pub/watcher/watcher@0.9.7%2B10"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A file system watcher. It monitors changes to contents of directories\
     \ and sends notifications when files have been added, removed, or modified.\n"
@@ -1388,6 +1489,8 @@ packages:
 - id: "Pub:web_socket_channel:web_socket_channel:1.0.13"
   purl: "pkg:pub/web_socket_channel/web_socket_channel@1.0.13"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "StreamChannel wrappers for WebSockets. Provides a cross-platform WebSocketChannel\
     \ API, a cross-platform implementation of that API that communicates over an underlying\
@@ -1416,6 +1519,8 @@ packages:
 - id: "Pub:yaml:yaml:2.1.16"
   purl: "pkg:pub/yaml/yaml@2.1.16"
   declared_licenses: []
+  declared_authors:
+  - "Dart Team"
   declared_licenses_processed: {}
   description: "A parser for YAML, a human-friendly data serialization standard"
   homepage_url: "https://github.com/dart-lang/yaml"

@@ -353,6 +353,7 @@ class Pub(
         val rawName = pubspec["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
+        val authors = fetchAuthors(pubspec)
 
         val vcs = VcsHost.toVcsInfo(repositoryUrl)
 
@@ -366,8 +367,7 @@ class Pub(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = sortedSetOf(),
-            // TODO: Find a way to track authors
-            declaredAuthors = sortedSetOf(),
+            declaredAuthors = authors,
             vcs = vcs,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
             homepageUrl = homepageUrl,
@@ -391,6 +391,7 @@ class Pub(
                 var rawName = ""
                 var homepageUrl = ""
                 var vcs = VcsInfo.EMPTY
+                var authors: SortedSet<String> = sortedSetOf<String>()
 
                 // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                 when {
@@ -400,6 +401,7 @@ class Pub(
                         rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
                         description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
                         homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                        authors = fetchAuthors(pkgInfoFromYamlFile)
 
                         val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
                         vcs = VcsHost.toVcsInfo(repositoryUrl)
@@ -437,8 +439,7 @@ class Pub(
                     id,
                     // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
                     declaredLicenses = sortedSetOf(),
-                    // TODO: Find a way to track authors
-                    declaredAuthors = sortedSetOf(),
+                    declaredAuthors = authors,
                     description = description,
                     homepageUrl = homepageUrl,
                     // Pub does not create binary artifacts, therefore use any empty artifact.
@@ -508,4 +509,27 @@ class Pub(
         // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.
         run(workingDir, "get")
     }
+}
+
+/**
+ * Extract information about package authors from the given [pubspec].
+ */
+private fun fetchAuthors(pubspec: JsonNode): SortedSet<String> {
+    val authors = sortedSetOf<String>()
+    extractAuthorName(pubspec["author"].textValueOrEmpty())?.let { authors += it }
+
+    pubspec["authors"]?.forEach { authorNode ->
+        extractAuthorName(authorNode.textValueOrEmpty())?.let { authors += it }
+    }
+
+    return authors
+}
+
+/**
+ * Extract the author name from an author string of the form "name <email>".
+ */
+private fun extractAuthorName(authorStr: String): String? {
+    val posMail = authorStr.indexOf('<')
+    val authorName = if (posMail < 0) authorStr else authorStr.substring(0, posMail)
+    return authorName.trim().ifEmpty { null }
 }
