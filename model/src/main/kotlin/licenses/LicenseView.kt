@@ -130,7 +130,13 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
 
         return resolvedLicenses.filter { it.license in remainingLicenses }.let { result ->
             if (filterSources) {
-                result.map { it.copy(sources = remainingSources.getValue(it.license)) }
+                result.map { resolvedLicense ->
+                    val remainingOriginalExpressions = resolvedLicense.originalExpressions.filterKeys {
+                        it in remainingSources.getValue(resolvedLicense.license)
+                    }
+
+                    resolvedLicense.copy(originalExpressions = remainingOriginalExpressions)
+                }
             } else {
                 result
             }

@@ -195,14 +195,12 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val resolvedLicenses = listOf(
                 ResolvedLicense(
                     license = "MIT".toSpdx() as SpdxSingleLicenseExpression,
-                    sources = emptySet(),
                     originalDeclaredLicenses = emptySet(),
                     originalExpressions = mapOf(LicenseSource.DECLARED to setOf("MIT".toSpdx())),
                     locations = emptySet()
                 ),
                 ResolvedLicense(
                     license = "MIT".toSpdx() as SpdxSingleLicenseExpression,
-                    sources = emptySet(),
                     originalDeclaredLicenses = emptySet(),
                     originalExpressions = mapOf(LicenseSource.DECLARED to setOf("GPL-2.0-only OR MIT".toSpdx())),
                     locations = emptySet()

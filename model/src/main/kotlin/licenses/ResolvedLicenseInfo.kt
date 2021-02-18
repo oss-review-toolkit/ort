@@ -116,11 +116,6 @@ data class ResolvedLicense(
     val license: SpdxSingleLicenseExpression,
 
     /**
-     * The sources where this license was found.
-     */
-    val sources: Set<LicenseSource>,
-
-    /**
      * The list of original declared license that were [processed][DeclaredLicenseProcessor] to this [license], or an
      * empty list, if this [license] was not modified during processing.
      */
@@ -136,6 +131,11 @@ data class ResolvedLicense(
      */
     val locations: Set<ResolvedLicenseLocation>
 ) {
+    /**
+     * The sources where this license was found.
+     */
+    val sources = originalExpressions.keys
+
     /**
      * True, if this license was [detected][LicenseSource.DETECTED] and all [locations] have matching path excludes.
      */

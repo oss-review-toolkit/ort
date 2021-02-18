@@ -78,8 +78,6 @@ class LicenseInfoResolver(
         // Handle concluded licenses.
         concludedLicenses.forEach { license ->
             license.builder().apply {
-                sources += LicenseSource.CONCLUDED
-
                 licenseInfo.concludedLicenseInfo.concludedLicense?.let {
                     originalExpressions[LicenseSource.CONCLUDED] = setOf(it)
                 }
@@ -89,8 +87,6 @@ class LicenseInfoResolver(
         // Handle declared licenses.
         declaredLicenses.forEach { license ->
             license.builder().apply {
-                sources += LicenseSource.DECLARED
-
                 licenseInfo.declaredLicenseInfo.processed.spdxExpression?.let {
                     originalExpressions[LicenseSource.DECLARED] = setOf(it)
                 }
@@ -111,7 +107,6 @@ class LicenseInfoResolver(
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
-                sources += LicenseSource.DETECTED
                 resolvedLocations[license]?.let { locations.addAll(it) }
 
                 licenseInfo.detectedLicenseInfo.findings.forEach { findings ->
@@ -247,10 +242,9 @@ class LicenseInfoResolver(
 }
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
-    val sources = mutableSetOf<LicenseSource>()
     var originalDeclaredLicenses = mutableSetOf<String>()
     var originalExpressions = mutableMapOf<LicenseSource, Set<SpdxExpression>>()
     var locations = mutableSetOf<ResolvedLicenseLocation>()
 
-    fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, originalExpressions, locations)
+    fun build() = ResolvedLicense(license, originalDeclaredLicenses, originalExpressions, locations)
 }
