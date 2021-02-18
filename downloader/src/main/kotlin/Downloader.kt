@@ -41,7 +41,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ArchiveType
-import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -312,7 +311,6 @@ object Downloader {
                 // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
                 // http/BridgeInterceptor.java#L79
                 .header("Accept-Encoding", "identity")
-                .header("User-Agent", Environment.ORT_USER_AGENT)
                 .get()
                 .url(pkg.sourceArtifact.url)
                 .build()
