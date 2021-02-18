@@ -99,6 +99,10 @@ packages:
     path: ""
 - id: "Maven:com.fasterxml:classmate:1.3.0"
   purl: "pkg:maven/com.fasterxml/classmate@1.3.0"
+  authors:
+  - "Brian Langel"
+  - "Tatu Saloranta"
+  - "fasterxml.com"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -130,6 +134,9 @@ packages:
     path: ""
 - id: "Maven:com.github.virtuald:curvesapi:1.03"
   purl: "pkg:maven/com.github.virtuald/curvesapi@1.03"
+  authors:
+  - "Dustin Spicuzza"
+  - "stormdollar"
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
@@ -163,6 +170,8 @@ packages:
     path: ""
 - id: "Maven:com.h2database:h2:1.4.194"
   purl: "pkg:maven/com.h2database/h2@1.4.194"
+  authors:
+  - "Thomas Mueller"
   declared_licenses:
   - "MPL 2.0 or EPL 1.0"
   declared_licenses_processed:
@@ -193,6 +202,8 @@ packages:
     path: ""
 - id: "Maven:com.mchange:c3p0:0.9.5.2"
   purl: "pkg:maven/com.mchange/c3p0@0.9.5.2"
+  authors:
+  - "Steve Waldman"
   declared_licenses:
   - "Eclipse Public License, Version 1.0"
   - "GNU Lesser General Public License, Version 2.1"
@@ -225,6 +236,9 @@ packages:
     path: ""
 - id: "Maven:com.mchange:mchange-commons-java:0.2.11"
   purl: "pkg:maven/com.mchange/mchange-commons-java@0.2.11"
+  authors:
+  - "Steve Waldman"
+  - "com.mchange"
   declared_licenses:
   - "Eclipse Public License, Version 1.0"
   - "GNU Lesser General Public License, Version 2.1"
@@ -257,6 +271,9 @@ packages:
     path: ""
 - id: "Maven:com.thoughtworks.xstream:xstream-hibernate:1.4.9"
   purl: "pkg:maven/com.thoughtworks.xstream/xstream-hibernate@1.4.9"
+  authors:
+  - "XStream"
+  - "XStream Committers"
   declared_licenses:
   - "BSD style"
   declared_licenses_processed:
@@ -287,6 +304,9 @@ packages:
     path: ""
 - id: "Maven:com.thoughtworks.xstream:xstream:1.4.9"
   purl: "pkg:maven/com.thoughtworks.xstream/xstream@1.4.9"
+  authors:
+  - "XStream"
+  - "XStream Committers"
   declared_licenses:
   - "BSD style"
   declared_licenses_processed:
@@ -317,6 +337,18 @@ packages:
     path: ""
 - id: "Maven:commons-codec:commons-codec:1.10"
   purl: "pkg:maven/commons-codec/commons-codec@1.10"
+  authors:
+  - "Daniel Rall"
+  - "David Graham"
+  - "Gary Gregory"
+  - "Henri Yandell"
+  - "Jon S. Stevens"
+  - "Julius Davies"
+  - "Rodney Waldhoff"
+  - "Scott Sanders"
+  - "The Apache Software Foundation"
+  - "Thomas Neidhart"
+  - "Tim OBrien"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -350,6 +382,23 @@ packages:
     path: ""
 - id: "Maven:dom4j:dom4j:1.6.1"
   purl: "pkg:maven/dom4j/dom4j@1.6.1"
+  authors:
+  - "Bob McWhirter"
+  - "Cronos"
+  - "Curt Arnold"
+  - "David Lucas"
+  - "David White"
+  - "Jakob Jenkov"
+  - "Laramie Crocker"
+  - "MetaStuff Ltd."
+  - "Michael Skells"
+  - "Nick Sanderson"
+  - "OuYang Chen"
+  - "SpiritSoft, Inc."
+  - "Steen Lehmann"
+  - "Tobias Rademacher"
+  - "Todd Wolff"
+  - "Yuxin Ruan"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "dom4j: the flexible XML framework for Java"
@@ -376,6 +425,8 @@ packages:
     path: ""
 - id: "Maven:io.netty:netty-buffer:4.1.9.Final"
   purl: "pkg:maven/io.netty/netty-buffer@4.1.9.Final"
+  authors:
+  - "The Netty Project"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -408,6 +459,8 @@ packages:
     path: ""
 - id: "Maven:io.netty:netty-codec:4.1.9.Final"
   purl: "pkg:maven/io.netty/netty-codec@4.1.9.Final"
+  authors:
+  - "The Netty Project"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -440,6 +493,8 @@ packages:
     path: ""
 - id: "Maven:io.netty:netty-common:4.1.9.Final"
   purl: "pkg:maven/io.netty/netty-common@4.1.9.Final"
+  authors:
+  - "The Netty Project"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -472,6 +527,8 @@ packages:
     path: ""
 - id: "Maven:io.netty:netty-resolver:4.1.9.Final"
   purl: "pkg:maven/io.netty/netty-resolver@4.1.9.Final"
+  authors:
+  - "The Netty Project"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -504,6 +561,8 @@ packages:
     path: ""
 - id: "Maven:io.netty:netty-transport:4.1.9.Final"
   purl: "pkg:maven/io.netty/netty-transport@4.1.9.Final"
+  authors:
+  - "The Netty Project"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -536,6 +595,12 @@ packages:
     path: ""
 - id: "Maven:junit:junit:4.12"
   purl: "pkg:maven/junit/junit@4.12"
+  authors:
+  - "David Saff"
+  - "JUnit"
+  - "Kevin Cooney"
+  - "Marc Philipp"
+  - "Stefan Birkner"
   declared_licenses:
   - "Eclipse Public License 1.0"
   declared_licenses_processed:
@@ -567,6 +632,8 @@ packages:
     path: ""
 - id: "Maven:log4j:log4j:1.2.17"
   purl: "pkg:maven/log4j/log4j@1.2.17"
+  authors:
+  - "Apache Software Foundation"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -597,6 +664,8 @@ packages:
     path: ""
 - id: "Maven:net.sf.kxml:kxml2:2.3.0"
   purl: "pkg:maven/net.sf.kxml/kxml2@2.3.0"
+  authors:
+  - "Stefan Haustein, Oberhausen, Rhld., Germany"
   declared_licenses:
   - "BSD style"
   - "Public Domain"
@@ -631,6 +700,23 @@ packages:
     path: ""
 - id: "Maven:org.apache.commons:commons-lang3:3.3.2"
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.3.2"
+  authors:
+  - "Benedikt Ritter"
+  - "Carman Consulting, Inc."
+  - "CollabNet, Inc."
+  - "Duncan Jones"
+  - "Fredrik Westermarck"
+  - "Gary D. Gregory"
+  - "Henri Yandell"
+  - "Joerg Schaible"
+  - "Matt Benson"
+  - "Niall Pemberton"
+  - "Oliver Heger"
+  - "Paul Benedict"
+  - "Robert Burrell Donkin"
+  - "SITA ATS Ltd"
+  - "Steven Caswell"
+  - "The Apache Software Foundation"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -663,6 +749,8 @@ packages:
     path: ""
 - id: "Maven:org.apache.poi:poi-ooxml-schemas:3.14"
   purl: "pkg:maven/org.apache.poi/poi-ooxml-schemas@3.14"
+  authors:
+  - "Apache Software Foundation"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -693,6 +781,8 @@ packages:
     path: ""
 - id: "Maven:org.apache.poi:poi-ooxml:3.14"
   purl: "pkg:maven/org.apache.poi/poi-ooxml@3.14"
+  authors:
+  - "Apache Software Foundation"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -723,6 +813,8 @@ packages:
     path: ""
 - id: "Maven:org.apache.poi:poi:3.14"
   purl: "pkg:maven/org.apache.poi/poi@3.14"
+  authors:
+  - "Apache Software Foundation"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -753,6 +845,12 @@ packages:
     path: ""
 - id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
   purl: "pkg:maven/org.apache.xmlbeans/xmlbeans@2.6.0"
+  authors:
+  - "Cezar Andrei"
+  - "Jacob Danner"
+  - "Radu Preotiuc"
+  - "Wing Yew Poon"
+  - "XmlBeans"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -783,6 +881,12 @@ packages:
     path: ""
 - id: "Maven:org.hamcrest:hamcrest-all:1.3"
   purl: "pkg:maven/org.hamcrest/hamcrest-all@1.3"
+  authors:
+  - "Joe Walnes"
+  - "Nat Pryce"
+  - "Neil Dunn"
+  - "Steve Freeman"
+  - "Tom Denley"
   declared_licenses:
   - "New BSD License"
   declared_licenses_processed:
@@ -814,6 +918,8 @@ packages:
     path: ""
 - id: "Maven:org.hibernate.common:hibernate-commons-annotations:5.0.1.Final"
   purl: "pkg:maven/org.hibernate.common/hibernate-commons-annotations@5.0.1.Final"
+  authors:
+  - "Hibernate.org"
   declared_licenses:
   - "GNU Lesser General Public License"
   declared_licenses_processed:
@@ -844,6 +950,8 @@ packages:
     path: ""
 - id: "Maven:org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"
   purl: "pkg:maven/org.hibernate.javax.persistence/hibernate-jpa-2.1-api@1.0.0.Final"
+  authors:
+  - "Red Hat, Inc."
   declared_licenses:
   - "Eclipse Distribution License (EDL), Version 1.0"
   - "Eclipse Public License (EPL), Version 1.0"
@@ -877,6 +985,8 @@ packages:
     path: ""
 - id: "Maven:org.hibernate:hibernate-c3p0:5.2.10.Final"
   purl: "pkg:maven/org.hibernate/hibernate-c3p0@5.2.10.Final"
+  authors:
+  - "Hibernate.org"
   declared_licenses:
   - "GNU Lesser General Public License"
   declared_licenses_processed:
@@ -907,6 +1017,8 @@ packages:
     path: ""
 - id: "Maven:org.hibernate:hibernate-core:5.2.10.Final"
   purl: "pkg:maven/org.hibernate/hibernate-core@5.2.10.Final"
+  authors:
+  - "Hibernate.org"
   declared_licenses:
   - "GNU Lesser General Public License"
   declared_licenses_processed:
@@ -937,6 +1049,9 @@ packages:
     path: ""
 - id: "Maven:org.hsqldb:hsqldb:2.4.0"
   purl: "pkg:maven/org.hsqldb/hsqldb@2.4.0"
+  authors:
+  - "Blaine Simpson"
+  - "The HSQL Development Group"
   declared_licenses:
   - "HSQLDB License, a BSD open source license"
   declared_licenses_processed:
@@ -967,6 +1082,10 @@ packages:
     path: ""
 - id: "Maven:org.javassist:javassist:3.20.0-GA"
   purl: "pkg:maven/org.javassist/javassist@3.20.0-GA"
+  authors:
+  - "JBoss"
+  - "Shigeru Chiba, www.javassist.org"
+  - "The Javassist Project"
   declared_licenses:
   - "Apache License 2.0"
   - "LGPL 2.1"
@@ -1002,6 +1121,9 @@ packages:
     path: ""
 - id: "Maven:org.jboss.logging:jboss-logging:3.3.0.Final"
   purl: "pkg:maven/org.jboss.logging/jboss-logging@3.3.0.Final"
+  authors:
+  - "JBoss by Red Hat"
+  - "JBoss.org"
   declared_licenses:
   - "Apache License, version 2.0"
   declared_licenses_processed:
@@ -1032,6 +1154,9 @@ packages:
     path: ""
 - id: "Maven:org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.1.Final"
   purl: "pkg:maven/org.jboss.spec.javax.transaction/jboss-transaction-api_1.2_spec@1.0.1.Final"
+  authors:
+  - "JBoss by Red Hat"
+  - "JBoss.org"
   declared_licenses:
   - "Common Development and Distribution License"
   - "GNU General Public License, Version 2 with the Classpath Exception"
@@ -1065,6 +1190,9 @@ packages:
     path: ""
 - id: "Maven:org.jboss:jandex:2.0.3.Final"
   purl: "pkg:maven/org.jboss/jandex@2.0.3.Final"
+  authors:
+  - "JBoss by Red Hat"
+  - "JBoss.org"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -1095,6 +1223,9 @@ packages:
     path: ""
 - id: "Maven:org.slf4j:slf4j-api:1.7.21"
   purl: "pkg:maven/org.slf4j/slf4j-api@1.7.21"
+  authors:
+  - "Ceki Gulcu"
+  - "QOS.ch"
   declared_licenses:
   - "MIT License"
   declared_licenses_processed:
@@ -1125,6 +1256,9 @@ packages:
     path: ""
 - id: "Maven:org.slf4j:slf4j-log4j12:1.7.21"
   purl: "pkg:maven/org.slf4j/slf4j-log4j12@1.7.21"
+  authors:
+  - "Ceki Gulcu"
+  - "QOS.ch"
   declared_licenses:
   - "MIT License"
   declared_licenses_processed:

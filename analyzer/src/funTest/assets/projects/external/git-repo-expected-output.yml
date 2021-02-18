@@ -82,6 +82,13 @@ analyzer:
         dependencies: []
     - id: "Maven:org.apache.commons:commons-text:1.6"
       definition_file_path: "pom.xml"
+      authors:
+      - "Benedikt Ritter"
+      - "Bruno P. Kinoshita"
+      - "Duncan Jones"
+      - "Gary Gregory"
+      - "Rob Tompkins"
+      - "The Apache Software Foundation"
       declared_licenses:
       - "Apache License, Version 2.0"
       declared_licenses_processed:
@@ -118,6 +125,9 @@ analyzer:
         - id: "Maven:org.junit.platform:junit-platform-launcher:1.3.1"
     - id: "Maven:org.spdx:spdx-tools:2.1.15-SNAPSHOT"
       definition_file_path: "pom.xml"
+      authors:
+      - "Linux Foundation"
+      - "SPDX"
       declared_licenses:
       - "The Apache Software License, Version 2.0"
       declared_licenses_processed:
@@ -428,6 +438,11 @@ analyzer:
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.9.0"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-annotations@2.9.0"
+        authors:
+        - "Christopher Currie"
+        - "FasterXML"
+        - "Paul Brown"
+        - "Tatu Saloranta"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -461,6 +476,11 @@ analyzer:
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-core:2.9.6"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.9.6"
+        authors:
+        - "Christopher Currie"
+        - "FasterXML"
+        - "Paul Brown"
+        - "Tatu Saloranta"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -494,6 +514,11 @@ analyzer:
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.9.6"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.9.6"
+        authors:
+        - "Christopher Currie"
+        - "FasterXML"
+        - "Paul Brown"
+        - "Tatu Saloranta"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -527,6 +552,8 @@ analyzer:
     - package:
         id: "Maven:com.github.andrewoma.dexx:collection:0.7"
         purl: "pkg:maven/com.github.andrewoma.dexx/collection@0.7"
+        authors:
+        - "Andrew O'Malley"
         declared_licenses:
         - "MIT License"
         declared_licenses_processed:
@@ -559,6 +586,9 @@ analyzer:
     - package:
         id: "Maven:com.github.cliftonlabs:json-simple:2.3.1"
         purl: "pkg:maven/com.github.cliftonlabs/json-simple@2.3.1"
+        authors:
+        - "Clifton Labs"
+        - "Yidong Fang"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -592,6 +622,9 @@ analyzer:
     - package:
         id: "Maven:com.github.jsonld-java:jsonld-java:0.12.1"
         purl: "pkg:maven/com.github.jsonld-java/jsonld-java@0.12.1"
+        authors:
+        - "Peter Ansell"
+        - "Tristan King"
         declared_licenses:
         - "Revised BSD License"
         declared_licenses_processed:
@@ -624,6 +657,8 @@ analyzer:
     - package:
         id: "Maven:com.github.spullara.mustache.java:compiler:0.7.9"
         purl: "pkg:maven/com.github.spullara.mustache.java/compiler@0.7.9"
+        authors:
+        - "Sam Pullara"
         declared_licenses:
         - "Apache License 2.0"
         declared_licenses_processed:
@@ -656,6 +691,9 @@ analyzer:
     - package:
         id: "Maven:com.github.virtuald:curvesapi:1.04"
         purl: "pkg:maven/com.github.virtuald/curvesapi@1.04"
+        authors:
+        - "Dustin Spicuzza"
+        - "stormdollar"
         declared_licenses:
         - "BSD License"
         declared_licenses_processed:
@@ -723,6 +761,8 @@ analyzer:
     - package:
         id: "Maven:com.google.guava:guava:16.0.1"
         purl: "pkg:maven/com.google.guava/guava@16.0.1"
+        authors:
+        - "Google"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -758,6 +798,14 @@ analyzer:
     - package:
         id: "Maven:commons-cli:commons-cli:1.4"
         purl: "pkg:maven/commons-cli/commons-cli@1.4"
+        authors:
+        - "Ariane Software"
+        - "Indigo Stone"
+        - "SpiritSoft, Inc."
+        - "The Apache Software Foundation"
+        - "Thomas Neidhart"
+        - "Werken"
+        - "integral Source"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -791,6 +839,18 @@ analyzer:
     - package:
         id: "Maven:commons-codec:commons-codec:1.10"
         purl: "pkg:maven/commons-codec/commons-codec@1.10"
+        authors:
+        - "Daniel Rall"
+        - "David Graham"
+        - "Gary Gregory"
+        - "Henri Yandell"
+        - "Jon S. Stevens"
+        - "Julius Davies"
+        - "Rodney Waldhoff"
+        - "Scott Sanders"
+        - "The Apache Software Foundation"
+        - "Thomas Neidhart"
+        - "Tim OBrien"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -826,6 +886,22 @@ analyzer:
     - package:
         id: "Maven:commons-io:commons-io:2.6"
         purl: "pkg:maven/commons-io/commons-io@2.6"
+        authors:
+        - "Gary Gregory"
+        - "Henri Yandell"
+        - "Jeremias Maerki"
+        - "Jochen Wiedmann"
+        - "Jukka Zitting"
+        - "Kristian Rosenvold"
+        - "Martin Cooper"
+        - "Matthew Hawthorne"
+        - "Niall Pemberton"
+        - "Nicola Ken Barozzi"
+        - "Rob Oxspring"
+        - "Scott Sanders"
+        - "Stephen Colebourne"
+        - "The Apache Software Foundation"
+        - "dIon Gillard"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -860,6 +936,12 @@ analyzer:
     - package:
         id: "Maven:junit:junit:4.12"
         purl: "pkg:maven/junit/junit@4.12"
+        authors:
+        - "David Saff"
+        - "JUnit"
+        - "Kevin Cooney"
+        - "Marc Philipp"
+        - "Stefan Birkner"
         declared_licenses:
         - "Eclipse Public License 1.0"
         declared_licenses_processed:
@@ -893,6 +975,10 @@ analyzer:
     - package:
         id: "Maven:net.sf.opencsv:opencsv:2.3"
         purl: "pkg:maven/net.sf.opencsv/opencsv@2.3"
+        authors:
+        - "Glen Smith"
+        - "Scott Conway"
+        - "Sean Sullivan"
         declared_licenses:
         - "Apache 2"
         declared_licenses_processed:
@@ -989,6 +1075,8 @@ analyzer:
     - package:
         id: "Maven:nu.validator.htmlparser:htmlparser:1.4"
         purl: "pkg:maven/nu.validator.htmlparser/htmlparser@1.4"
+        authors:
+        - "Henri Sivonen"
         declared_licenses:
         - "The (New) BSD License"
         - "The MIT License"
@@ -1027,6 +1115,9 @@ analyzer:
     - package:
         id: "Maven:org.antlr:ST4:4.0.4"
         purl: "pkg:maven/org.antlr/ST4@4.0.4"
+        authors:
+        - "Temporal Wave LLC"
+        - "USFCA"
         declared_licenses:
         - "BSD licence"
         declared_licenses_processed:
@@ -1069,6 +1160,9 @@ analyzer:
     - package:
         id: "Maven:org.antlr:antlr-runtime:3.4"
         purl: "pkg:maven/org.antlr/antlr-runtime@3.4"
+        authors:
+        - "Temporal Wave LLC"
+        - "USFCA"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "A framework for constructing recognizers, compilers, and translators\
@@ -1127,6 +1221,9 @@ analyzer:
     - package:
         id: "Maven:org.antlr:stringtemplate:3.2.1"
         purl: "pkg:maven/org.antlr/stringtemplate@3.2.1"
+        authors:
+        - "Temporal Wave LLC"
+        - "USFCA"
         declared_licenses:
         - "BSD licence"
         declared_licenses_processed:
@@ -1169,6 +1266,25 @@ analyzer:
     - package:
         id: "Maven:org.apache.commons:commons-collections4:4.1"
         purl: "pkg:maven/org.apache.commons/commons-collections4@4.1"
+        authors:
+        - "Adrian Nistor"
+        - "Arun M. Thomas"
+        - "Craig McClanahan"
+        - "Dipanjan Laha"
+        - "Gary D. Gregory"
+        - "Geir Magnusson"
+        - "Henri Yandell"
+        - "James Carman"
+        - "Luc Maisonobe"
+        - "Matt Benson"
+        - "Matthew Hawthorne"
+        - "Morgan Delagrange"
+        - "Phil Steitz"
+        - "Robert Burrell Donkin"
+        - "Rodney Waldhoff"
+        - "Stephen Colebourne"
+        - "The Apache Software Foundation"
+        - "Thomas Neidhart"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1202,6 +1318,17 @@ analyzer:
     - package:
         id: "Maven:org.apache.commons:commons-compress:1.17"
         purl: "pkg:maven/org.apache.commons/commons-compress@1.17"
+        authors:
+        - "Christian Grobmeier"
+        - "Damjan Jovanovic"
+        - "Emmanuel Bourg"
+        - "Gary Gregory"
+        - "Julius Davies"
+        - "Rob Tompkins"
+        - "Sebastian Bazley"
+        - "Stefan Bodewig"
+        - "The Apache Software Foundation"
+        - "Torsten Curdt"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1237,6 +1364,10 @@ analyzer:
     - package:
         id: "Maven:org.apache.commons:commons-csv:1.5"
         purl: "pkg:maven/org.apache.commons/commons-csv@1.5"
+        authors:
+        - "Apache"
+        - "Gary Gregory"
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1270,6 +1401,22 @@ analyzer:
     - package:
         id: "Maven:org.apache.commons:commons-lang3:3.1"
         purl: "pkg:maven/org.apache.commons/commons-lang3@3.1"
+        authors:
+        - "Carman Consulting, Inc."
+        - "CollabNet, Inc."
+        - "Fredrik Westermarck"
+        - "Gary D. Gregory"
+        - "Henri Yandell"
+        - "Joerg Schaible"
+        - "Matt Benson"
+        - "Niall Pemberton"
+        - "Oliver Heger"
+        - "Paul Benedict"
+        - "Phil Steitz"
+        - "Robert Burrell Donkin"
+        - "SITA ATS Ltd"
+        - "Steven Caswell"
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1304,6 +1451,25 @@ analyzer:
     - package:
         id: "Maven:org.apache.commons:commons-lang3:3.8.1"
         purl: "pkg:maven/org.apache.commons/commons-lang3@3.8.1"
+        authors:
+        - "Benedikt Ritter"
+        - "Carman Consulting, Inc."
+        - "CollabNet, Inc."
+        - "Duncan Jones"
+        - "Fredrik Westermarck"
+        - "Gary D. Gregory"
+        - "Henri Yandell"
+        - "Joerg Schaible"
+        - "Loic Guibert"
+        - "Matt Benson"
+        - "Niall Pemberton"
+        - "Oliver Heger"
+        - "Paul Benedict"
+        - "Rob Tompkins"
+        - "Robert Burrell Donkin"
+        - "SITA ATS Ltd"
+        - "Steven Caswell"
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1338,6 +1504,23 @@ analyzer:
     - package:
         id: "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
         purl: "pkg:maven/org.apache.httpcomponents/httpclient-cache@4.5.5"
+        authors:
+        - "Ant Elder"
+        - "Asankha C. Perera"
+        - "Erik Abele"
+        - "Francois-Xavier Bonnet"
+        - "Gary Gregory"
+        - "Jonathan Moore"
+        - "Karl Wright"
+        - "Oleg Kalnichevski"
+        - "Ortwin Glueck"
+        - "Paul Fremantle"
+        - "Roland Weber"
+        - "Sam Berlin"
+        - "Sean C. Sullivan"
+        - "Sebastian Bazley"
+        - "The Apache Software Foundation"
+        - "William Speirs"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1370,6 +1553,23 @@ analyzer:
     - package:
         id: "Maven:org.apache.httpcomponents:httpclient:4.5.5"
         purl: "pkg:maven/org.apache.httpcomponents/httpclient@4.5.5"
+        authors:
+        - "Ant Elder"
+        - "Asankha C. Perera"
+        - "Erik Abele"
+        - "Francois-Xavier Bonnet"
+        - "Gary Gregory"
+        - "Jonathan Moore"
+        - "Karl Wright"
+        - "Oleg Kalnichevski"
+        - "Ortwin Glueck"
+        - "Paul Fremantle"
+        - "Roland Weber"
+        - "Sam Berlin"
+        - "Sean C. Sullivan"
+        - "Sebastian Bazley"
+        - "The Apache Software Foundation"
+        - "William Speirs"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1402,6 +1602,23 @@ analyzer:
     - package:
         id: "Maven:org.apache.httpcomponents:httpcore:4.4.9"
         purl: "pkg:maven/org.apache.httpcomponents/httpcore@4.4.9"
+        authors:
+        - "Ant Elder"
+        - "Asankha C. Perera"
+        - "Erik Abele"
+        - "Francois-Xavier Bonnet"
+        - "Gary Gregory"
+        - "Jonathan Moore"
+        - "Karl Wright"
+        - "Oleg Kalnichevski"
+        - "Ortwin Glueck"
+        - "Paul Fremantle"
+        - "Roland Weber"
+        - "Sam Berlin"
+        - "Sean C. Sullivan"
+        - "Sebastian Bazley"
+        - "The Apache Software Foundation"
+        - "William Speirs"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1434,6 +1651,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:apache-jena-libs:3.9.0"
         purl: "pkg:maven/org.apache.jena/apache-jena-libs@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1468,6 +1687,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-arq:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-arq@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1500,6 +1721,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-base:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-base@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1533,6 +1756,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-core:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-core@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1567,6 +1792,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-dboe-base:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-base@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License 2.0"
         declared_licenses_processed:
@@ -1605,6 +1832,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-dboe-index:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-index@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License 2.0"
         declared_licenses_processed:
@@ -1643,6 +1872,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-dboe-trans-data:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-trans-data@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License 2.0"
         declared_licenses_processed:
@@ -1681,6 +1912,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-dboe-transaction:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-transaction@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License 2.0"
         declared_licenses_processed:
@@ -1719,6 +1952,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-iri:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-iri@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1754,6 +1989,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-rdfconnection:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-rdfconnection@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache 2.0 License"
         declared_licenses_processed:
@@ -1786,6 +2023,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-shaded-guava:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-shaded-guava@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1821,6 +2060,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-tdb2:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-tdb2@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License 2.0"
         declared_licenses_processed:
@@ -1859,6 +2100,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.jena:jena-tdb:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-tdb@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -1892,6 +2135,16 @@ analyzer:
     - package:
         id: "Maven:org.apache.logging.log4j:log4j-api:2.10.0"
         purl: "pkg:maven/org.apache.logging.log4j/log4j-api@2.10.0"
+        authors:
+        - "Bruce Brouwer"
+        - "Nextiva"
+        - "Nick Williams"
+        - "Remko Popma"
+        - "Rocket Software"
+        - "SPR Consulting"
+        - "Scott Deboy"
+        - "Spotify"
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1924,6 +2177,16 @@ analyzer:
     - package:
         id: "Maven:org.apache.logging.log4j:log4j-core:2.10.0"
         purl: "pkg:maven/org.apache.logging.log4j/log4j-core@2.10.0"
+        authors:
+        - "Bruce Brouwer"
+        - "Nextiva"
+        - "Nick Williams"
+        - "Remko Popma"
+        - "Rocket Software"
+        - "SPR Consulting"
+        - "Scott Deboy"
+        - "Spotify"
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1956,6 +2219,16 @@ analyzer:
     - package:
         id: "Maven:org.apache.logging.log4j:log4j-slf4j-impl:2.10.0"
         purl: "pkg:maven/org.apache.logging.log4j/log4j-slf4j-impl@2.10.0"
+        authors:
+        - "Bruce Brouwer"
+        - "Nextiva"
+        - "Nick Williams"
+        - "Remko Popma"
+        - "Rocket Software"
+        - "SPR Consulting"
+        - "Scott Deboy"
+        - "Spotify"
+        - "The Apache Software Foundation"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -1988,6 +2261,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.poi:poi-ooxml-schemas:3.15"
         purl: "pkg:maven/org.apache.poi/poi-ooxml-schemas@3.15"
+        authors:
+        - "Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -2020,6 +2295,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.poi:poi-ooxml:3.15"
         purl: "pkg:maven/org.apache.poi/poi-ooxml@3.15"
+        authors:
+        - "Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -2052,6 +2329,8 @@ analyzer:
     - package:
         id: "Maven:org.apache.poi:poi:3.15"
         purl: "pkg:maven/org.apache.poi/poi@3.15"
+        authors:
+        - "Apache Software Foundation"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -2084,6 +2363,25 @@ analyzer:
     - package:
         id: "Maven:org.apache.thrift:libthrift:0.10.0"
         purl: "pkg:maven/org.apache.thrift/libthrift@0.10.0"
+        authors:
+        - "Aditya Agarwal"
+        - "Andrew McGeachie"
+        - "Anthony Molinaro"
+        - "Ben Maurer"
+        - "Bryan Duxbury"
+        - "Carl Yeksigian"
+        - "Chris Piro"
+        - "David Reiss"
+        - "Esteve Fernandez"
+        - "Jake Farrell"
+        - "Jake Luciani"
+        - "James Wang"
+        - "Jens Geyer"
+        - "Kevin Clark"
+        - "Marc Kwiatkowski"
+        - "Mark Slee"
+        - "Roger Meier"
+        - "Todd Lipcon"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -2118,6 +2416,12 @@ analyzer:
     - package:
         id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
         purl: "pkg:maven/org.apache.xmlbeans/xmlbeans@2.6.0"
+        authors:
+        - "Cezar Andrei"
+        - "Jacob Danner"
+        - "Radu Preotiuc"
+        - "Wing Yew Poon"
+        - "XmlBeans"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -2150,6 +2454,8 @@ analyzer:
     - package:
         id: "Maven:org.apiguardian:apiguardian-api:1.0.0"
         purl: "pkg:maven/org.apiguardian/apiguardian-api@1.0.0"
+        authors:
+        - "@API Guardian Team"
         declared_licenses:
         - "The Apache License, Version 2.0"
         declared_licenses_processed:
@@ -2182,6 +2488,9 @@ analyzer:
     - package:
         id: "Maven:org.assertj:assertj-core:3.11.1"
         purl: "pkg:maven/org.assertj/assertj-core@3.11.1"
+        authors:
+        - "AssertJ"
+        - "Joel Costigliola"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -2214,6 +2523,12 @@ analyzer:
     - package:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
         purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
+        authors:
+        - "Joe Walnes"
+        - "Nat Pryce"
+        - "Neil Dunn"
+        - "Steve Freeman"
+        - "Tom Denley"
         declared_licenses:
         - "New BSD License"
         declared_licenses_processed:
@@ -2248,6 +2563,8 @@ analyzer:
     - package:
         id: "Maven:org.jsoup:jsoup:1.7.2"
         purl: "pkg:maven/org.jsoup/jsoup@1.7.2"
+        authors:
+        - "Jonathan Hedley"
         declared_licenses:
         - "The MIT License"
         declared_licenses_processed:
@@ -2280,6 +2597,13 @@ analyzer:
     - package:
         id: "Maven:org.junit.jupiter:junit-jupiter-api:5.3.1"
         purl: "pkg:maven/org.junit.jupiter/junit-jupiter-api@5.3.1"
+        authors:
+        - "Christian Stein"
+        - "Johannes Link"
+        - "Marc Philipp"
+        - "Matthias Merdes"
+        - "Sam Brannen"
+        - "Stefan Bechtold"
         declared_licenses:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
@@ -2312,6 +2636,13 @@ analyzer:
     - package:
         id: "Maven:org.junit.jupiter:junit-jupiter-engine:5.3.1"
         purl: "pkg:maven/org.junit.jupiter/junit-jupiter-engine@5.3.1"
+        authors:
+        - "Christian Stein"
+        - "Johannes Link"
+        - "Marc Philipp"
+        - "Matthias Merdes"
+        - "Sam Brannen"
+        - "Stefan Bechtold"
         declared_licenses:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
@@ -2344,6 +2675,13 @@ analyzer:
     - package:
         id: "Maven:org.junit.jupiter:junit-jupiter-params:5.3.1"
         purl: "pkg:maven/org.junit.jupiter/junit-jupiter-params@5.3.1"
+        authors:
+        - "Christian Stein"
+        - "Johannes Link"
+        - "Marc Philipp"
+        - "Matthias Merdes"
+        - "Sam Brannen"
+        - "Stefan Bechtold"
         declared_licenses:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
@@ -2376,6 +2714,13 @@ analyzer:
     - package:
         id: "Maven:org.junit.platform:junit-platform-commons:1.3.1"
         purl: "pkg:maven/org.junit.platform/junit-platform-commons@1.3.1"
+        authors:
+        - "Christian Stein"
+        - "Johannes Link"
+        - "Marc Philipp"
+        - "Matthias Merdes"
+        - "Sam Brannen"
+        - "Stefan Bechtold"
         declared_licenses:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
@@ -2408,6 +2753,13 @@ analyzer:
     - package:
         id: "Maven:org.junit.platform:junit-platform-engine:1.3.1"
         purl: "pkg:maven/org.junit.platform/junit-platform-engine@1.3.1"
+        authors:
+        - "Christian Stein"
+        - "Johannes Link"
+        - "Marc Philipp"
+        - "Matthias Merdes"
+        - "Sam Brannen"
+        - "Stefan Bechtold"
         declared_licenses:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
@@ -2440,6 +2792,13 @@ analyzer:
     - package:
         id: "Maven:org.junit.platform:junit-platform-launcher:1.3.1"
         purl: "pkg:maven/org.junit.platform/junit-platform-launcher@1.3.1"
+        authors:
+        - "Christian Stein"
+        - "Johannes Link"
+        - "Marc Philipp"
+        - "Matthias Merdes"
+        - "Sam Brannen"
+        - "Stefan Bechtold"
         declared_licenses:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
@@ -2472,6 +2831,12 @@ analyzer:
     - package:
         id: "Maven:org.opentest4j:opentest4j:1.1.1"
         purl: "pkg:maven/org.opentest4j/opentest4j@1.1.1"
+        authors:
+        - "Johannes Link"
+        - "Marc Philipp"
+        - "Matthias Merdes"
+        - "Sam Brannen"
+        - "Stefan Bechtold"
         declared_licenses:
         - "The Apache License, Version 2.0"
         declared_licenses_processed:
@@ -2504,6 +2869,9 @@ analyzer:
     - package:
         id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
         purl: "pkg:maven/org.slf4j/jcl-over-slf4j@1.7.25"
+        authors:
+        - "Ceki Gulcu"
+        - "QOS.ch"
         declared_licenses:
         - "MIT License"
         declared_licenses_processed:
@@ -2536,6 +2904,9 @@ analyzer:
     - package:
         id: "Maven:org.slf4j:slf4j-api:1.7.25"
         purl: "pkg:maven/org.slf4j/slf4j-api@1.7.25"
+        authors:
+        - "Ceki Gulcu"
+        - "QOS.ch"
         declared_licenses:
         - "MIT License"
         declared_licenses_processed:
@@ -2568,6 +2939,9 @@ analyzer:
     - package:
         id: "Maven:stax:stax-api:1.0.1"
         purl: "pkg:maven/stax/stax-api@1.0.1"
+        authors:
+        - "Chris Fry"
+        - "Indiana University"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:

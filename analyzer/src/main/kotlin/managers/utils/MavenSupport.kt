@@ -122,6 +122,16 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             }
         }
 
+        fun parseAuthors(mavenProject: MavenProject) =
+            sortedSetOf<String>().apply {
+                mavenProject.organization?.let {
+                    if (!it.name.isNullOrEmpty()) {
+                        add(it.name)
+                    }
+                }
+                addAll(mavenProject.developers.mapNotNull { it.organization?.takeUnless { it.isEmpty() } ?: it.name })
+            }
+
         fun parseLicenses(mavenProject: MavenProject) =
             mavenProject.licenses.mapNotNull {
                 if (it.comments?.startsWith("SPDX-License-Identifier:") == true) {
@@ -644,8 +654,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 name = mavenProject.artifactId,
                 version = mavenProject.version
             ),
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = parseAuthors(mavenProject),
             declaredLicenses = parseLicenses(mavenProject),
             description = mavenProject.description.orEmpty(),
             homepageUrl = homepageUrl.orEmpty(),

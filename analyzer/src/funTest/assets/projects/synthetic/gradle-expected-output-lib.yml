@@ -69,6 +69,12 @@ project:
 packages:
 - id: "Maven:junit:junit:4.12"
   purl: "pkg:maven/junit/junit@4.12"
+  authors:
+  - "David Saff"
+  - "JUnit"
+  - "Kevin Cooney"
+  - "Marc Philipp"
+  - "Stefan Birkner"
   declared_licenses:
   - "Eclipse Public License 1.0"
   declared_licenses_processed:
@@ -100,6 +106,25 @@ packages:
     path: ""
 - id: "Maven:org.apache.commons:commons-lang3:3.5"
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
+  authors:
+  - "Benedikt Ritter"
+  - "Carman Consulting, Inc."
+  - "CollabNet, Inc."
+  - "Duncan Jones"
+  - "Fredrik Westermarck"
+  - "Gary D. Gregory"
+  - "Henri Yandell"
+  - "Joerg Schaible"
+  - "Loic Guibert"
+  - "Matt Benson"
+  - "Niall Pemberton"
+  - "Oliver Heger"
+  - "Paul Benedict"
+  - "Rob Tompkins"
+  - "Robert Burrell Donkin"
+  - "SITA ATS Ltd"
+  - "Steven Caswell"
+  - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -132,6 +157,12 @@ packages:
     path: ""
 - id: "Maven:org.apache.commons:commons-text:1.1"
   purl: "pkg:maven/org.apache.commons/commons-text@1.1"
+  authors:
+  - "Benedikt Ritter"
+  - "Bruno P. Kinoshita"
+  - "Gary Gregory"
+  - "Rob Tompkins"
+  - "The Apache Software Foundation"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -163,6 +194,40 @@ packages:
     path: ""
 - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   purl: "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1"
+  authors:
+  - "Aleksandr Mashchenko"
+  - "Alexandru Popescu"
+  - "Apache Software Foundation"
+  - "Bob Lee"
+  - "Bruce A. Phillips"
+  - "Cedric Dumoulin"
+  - "Christian Grobmeier"
+  - "Christoph Nenning"
+  - "Dave Newton"
+  - "David H. DeWolf"
+  - "Don Brown"
+  - "Greg Huber"
+  - "James Holmes"
+  - "James Mitchell"
+  - "Jeromy Evans"
+  - "Johannes Geppert"
+  - "John Lindal"
+  - "Laurie Harper"
+  - "Lukasz Lenart"
+  - "Martin Cooper"
+  - "Mathias Bogaert"
+  - "Matt Raible"
+  - "Maurizio Cucchiara"
+  - "Michael Jouravlev"
+  - "Niall Pemberton"
+  - "Nils-Helge Garli Hegvik"
+  - "Paul Benedict"
+  - "Rainer Hermanns"
+  - "Rene Gielen"
+  - "Ted Husted"
+  - "Toby Jee"
+  - "Wendy Smoak"
+  - "Wes Wannemacher"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:
@@ -194,6 +259,12 @@ packages:
   is_meta_data_only: true
 - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
+  authors:
+  - "Joe Walnes"
+  - "Nat Pryce"
+  - "Neil Dunn"
+  - "Steve Freeman"
+  - "Tom Denley"
   declared_licenses:
   - "New BSD License"
   declared_licenses_processed:

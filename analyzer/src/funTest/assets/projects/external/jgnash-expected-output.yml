@@ -23,6 +23,12 @@ project:
 packages:
 - id: "Maven:junit:junit:4.12"
   purl: "pkg:maven/junit/junit@4.12"
+  authors:
+  - "David Saff"
+  - "JUnit"
+  - "Kevin Cooney"
+  - "Marc Philipp"
+  - "Stefan Birkner"
   declared_licenses:
   - "Eclipse Public License 1.0"
   declared_licenses_processed:
@@ -54,6 +60,12 @@ packages:
     path: ""
 - id: "Maven:org.hamcrest:hamcrest-all:1.3"
   purl: "pkg:maven/org.hamcrest/hamcrest-all@1.3"
+  authors:
+  - "Joe Walnes"
+  - "Nat Pryce"
+  - "Neil Dunn"
+  - "Steve Freeman"
+  - "Tom Denley"
   declared_licenses:
   - "New BSD License"
   declared_licenses_processed:
