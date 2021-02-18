@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.dataformat.yaml.JacksonYAMLParseException
 
 import com.vdurmont.semver4j.Requirement
 
@@ -384,68 +385,80 @@ class Pub(
 
         listOf("packages"/*, "packages-dev"*/).forEach {
             lockFile[it]?.forEach { pkgInfoFromLockFile ->
-                val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
-                var description = ""
-                var rawName = ""
-                var homepageUrl = ""
-                var vcs = VcsInfo.EMPTY
+                try {
+                    val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                    var description = ""
+                    var rawName = ""
+                    var homepageUrl = ""
+                    var vcs = VcsInfo.EMPTY
 
-                // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
-                when {
-                    pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
-                        val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                    // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
+                    when {
+                        pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
+                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
 
-                        rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
-                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
-                        homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                            rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
+                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
+                            homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
 
-                        val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
-                        vcs = VcsHost.toVcsInfo(repositoryUrl)
+                            val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
+                            vcs = VcsHost.toVcsInfo(repositoryUrl)
+                        }
+
+                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
+                            // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
+                            containsFlutter = true
+                            // Set hardcoded package details.
+                            rawName = "flutter"
+                            homepageUrl = "https://github.com/flutter/flutter"
+                            description = "Flutter SDK"
+                        }
+
+                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
+                            // Set hardcoded package details.
+                            rawName = "flutter_test"
+                            homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
+                            description = "Flutter Test SDK"
+                        }
                     }
 
-                    pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
-                        // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
-                        containsFlutter = true
-                        // Set hardcoded package details.
-                        rawName = "flutter"
-                        homepageUrl = "https://github.com/flutter/flutter"
-                        description = "Flutter SDK"
+                    if (version.isEmpty()) {
+                        log.warn { "No version information found for package $rawName." }
                     }
 
-                    pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
-                        // Set hardcoded package details.
-                        rawName = "flutter_test"
-                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
-                        description = "Flutter Test SDK"
-                    }
+                    val id = Identifier(
+                        type = managerName,
+                        namespace = rawName.substringBefore('/'),
+                        name = rawName.substringAfter('/'),
+                        version = version
+                    )
+
+                    packages[id] = Package(
+                        id,
+                        // TODO: Find a way to track authors.
+                        authors = sortedSetOf(),
+                        // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
+                        declaredLicenses = sortedSetOf(),
+                        description = description,
+                        homepageUrl = homepageUrl,
+                        // Pub does not create binary artifacts, therefore use any empty artifact.
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        // Pub does not create source artifacts, therefore use any empty artifact.
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = vcs,
+                        vcsProcessed = processPackageVcs(vcs, homepageUrl)
+                    )
+                } catch (e: JacksonYAMLParseException) {
+                    e.showStackTrace()
+
+                    val packageName = pkgInfoFromLockFile["name"].textValueOrEmpty()
+                    val packageVersion = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                    issues += createAndLogIssue(
+                        source = managerName,
+                        message = "Failed to parse pubspec.yaml for package $packageName:$packageVersion: " +
+                                e.collectMessagesAsString()
+                    )
                 }
-
-                if (version.isEmpty()) {
-                    log.warn { "No version information found for package $rawName." }
-                }
-
-                val id = Identifier(
-                    type = managerName,
-                    namespace = rawName.substringBefore('/'),
-                    name = rawName.substringAfter('/'),
-                    version = version
-                )
-
-                packages[id] = Package(
-                    id,
-                    // TODO: Find a way to track authors.
-                    authors = sortedSetOf(),
-                    // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
-                    declaredLicenses = sortedSetOf(),
-                    description = description,
-                    homepageUrl = homepageUrl,
-                    // Pub does not create binary artifacts, therefore use any empty artifact.
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    // Pub does not create source artifacts, therefore use any empty artifact.
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcs,
-                    vcsProcessed = processPackageVcs(vcs, homepageUrl)
-                )
             }
         }
 
