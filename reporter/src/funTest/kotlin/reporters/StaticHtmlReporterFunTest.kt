@@ -28,11 +28,11 @@ import javax.xml.transform.TransformerFactory
 
 import kotlin.io.path.createTempDirectory
 
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult

@@ -25,7 +25,6 @@ import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
@@ -51,6 +50,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.Environment
 
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = sortedSetOf("Apache-2.0", "MIT")

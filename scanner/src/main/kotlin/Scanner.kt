@@ -29,7 +29,6 @@ import kotlin.time.measureTimedValue
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -40,6 +39,7 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf

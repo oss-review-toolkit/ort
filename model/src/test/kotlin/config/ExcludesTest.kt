@@ -31,7 +31,6 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -39,6 +38,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.utils.Environment
 
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")

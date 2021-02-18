@@ -26,7 +26,6 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.CuratedPackage
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -53,6 +52,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
 // TODO: Create a way to reduce the code required to prepare an OrtResult for testing.

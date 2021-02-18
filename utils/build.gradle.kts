@@ -51,3 +51,12 @@ dependencies {
 
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
+
+tasks.withType<Jar>().configureEach {
+    manifest {
+        val versionCandidates = listOf(project.version, rootProject.version)
+        attributes["Implementation-Version"] = versionCandidates.find {
+            it != Project.DEFAULT_VERSION
+        } ?: "GRADLE-SNAPSHOT"
+    }
+}

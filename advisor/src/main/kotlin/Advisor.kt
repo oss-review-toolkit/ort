@@ -31,12 +31,12 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorResultContainer
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AdvisorSummary
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.showStackTrace
 
