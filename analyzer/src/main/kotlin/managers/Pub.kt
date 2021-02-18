@@ -200,7 +200,7 @@ class Pub(
 
         log.info { "Reading ${definitionFile.name} file in $workingDir." }
 
-        val project = parseProject(definitionFile, scopes)
+        val project = parseProject(definitionFile, manifest, scopes)
 
         return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues))
     }
@@ -346,10 +346,8 @@ class Pub(
         return ProjectAnalyzerResult(Project.EMPTY, sortedSetOf(), listOf(issue))
     }
 
-    private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
+    private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: SortedSet<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
-        val pubspec = yamlMapper.readTree(definitionFile)
-
         val rawName = pubspec["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
