@@ -20,8 +20,10 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "SpdxDocumentFile::curl:7.70.0"
     - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
+  - name: "test"
+    dependencies:
+    - id: "SpdxDocumentFile::curl:7.70.0"
 packages:
 - id: "SpdxDocumentFile::curl:7.70.0"
   purl: "pkg:spdxdocumentfile/curl@7.70.0"
