@@ -19,11 +19,17 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldStartWith
+
+import java.io.File
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
@@ -38,6 +44,20 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ClearlyDefinedServiceFunTest : WordSpec({
     OrtProxySelector.install()
+
+    "A contribution patch" should {
+        "be correctly deserialized even when using invalid facet arrays" {
+            // See https://github.com/clearlydefined/curated-data/blob/0b2db78/curations/maven/mavencentral/com.google.code.gson/gson.yaml#L10-L11.
+            val curationWithInvalidFacetArrays = File("src/funTest/assets/gson.json")
+
+            val curation = ClearlyDefinedService.JSON_MAPPER.readValue<Curation>(curationWithInvalidFacetArrays)
+
+            curation.described?.facets.shouldNotBeNull {
+                dev should beNull()
+                tests should beNull()
+            }
+        }
+    }
 
     "Downloading a contribution patch" should {
         "return curation data".config(tags = setOf(ExpensiveTag)) {
