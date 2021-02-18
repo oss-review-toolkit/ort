@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.utils.Environment
 
 /**
  * The summary of a single run of the advisor.

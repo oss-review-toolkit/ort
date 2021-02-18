@@ -18,8 +18,6 @@
  * License-Filename: LICENSE
  */
 
-import org.ossreviewtoolkit.gradle.*
-
 val hopliteVersion: String by project
 val jacksonVersion: String by project
 val semverVersion: String by project
@@ -44,13 +42,4 @@ dependencies {
     implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
     implementation("com.vdurmont:semver4j:$semverVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-}
-
-tasks.withType<Jar>().configureEach {
-    manifest {
-        val versionCandidates = listOf(project.version, rootProject.version)
-        attributes["Implementation-Version"] = versionCandidates.find {
-            it != Project.DEFAULT_VERSION
-        } ?: "GRADLE-SNAPSHOT"
-    }
 }

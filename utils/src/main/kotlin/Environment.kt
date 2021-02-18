@@ -17,12 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model
+package org.ossreviewtoolkit.utils
 
 import java.lang.Runtime
-
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.Os
 
 /**
  * A description of the environment that ORT was executed in.
