@@ -284,7 +284,6 @@ private fun List<ResolvedLicense>.merge(): ResolvedLicense {
 
     return ResolvedLicense(
         license = first().license,
-        sources = flatMapTo(mutableSetOf()) { it.sources },
         originalDeclaredLicenses = flatMapTo(mutableSetOf()) { it.originalDeclaredLicenses },
         originalExpressions = mergedOriginalExpressions,
         locations = flatMapTo(mutableSetOf()) { it.locations }
