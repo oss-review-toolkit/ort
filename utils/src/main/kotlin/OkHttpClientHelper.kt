@@ -70,6 +70,13 @@ object OkHttpClientHelper {
         // OkHttp emulates preemptive authentication by sending a fake "OkHttp-Preemptive" response to the reactive
         // proxy authenticator.
         return OkHttpClient.Builder()
+            .addNetworkInterceptor { chain ->
+                chain.proceed(
+                    chain.request().newBuilder()
+                        .header("User-Agent", Environment.ORT_USER_AGENT)
+                        .build()
+                )
+            }
             .cache(cache)
             .connectionSpecs(specs)
             .readTimeout(Duration.ofSeconds(READ_TIMEOUT_IN_SECONDS))
