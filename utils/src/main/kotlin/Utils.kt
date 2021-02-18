@@ -62,9 +62,10 @@ inline fun <reified T : Any> T.hasNonNullProperty() =
     T::class.memberProperties.asSequence().map { it.get(this) }.any { it != null }
 
 /**
- * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
+ * Filter a list of [names] to include only those that likely belong to the given [version] of an optional
+ * [packageName].
  */
-fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
+fun filterVersionNames(version: String, names: List<String>, packageName: String? = null): List<String> {
     if (version.isBlank() || names.isEmpty()) return emptyList()
 
     // If there are full matches, return them right away.
@@ -123,7 +124,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 
     return filteredNames.filter {
         // startsWith("") returns "true" for any string, so we get an unfiltered list if "project" is "null".
-        it.startsWith(project.orEmpty())
+        it.startsWith(packageName.orEmpty())
     }.let {
         // Fall back to the original list if filtering by project results in an empty list.
         if (it.isEmpty()) filteredNames else it
