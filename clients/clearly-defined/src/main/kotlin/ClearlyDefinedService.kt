@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -53,7 +54,8 @@ interface ClearlyDefinedService {
         /**
          * The mapper for JSON serialization used by this service.
          */
-        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+        val JSON_MAPPER = JsonMapper().enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
+            .registerKotlinModule()
 
         /**
          * Create a ClearlyDefined service instance for communicating with the given [server], optionally using a
