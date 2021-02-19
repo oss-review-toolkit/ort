@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.storage.FileStorage
 
 /**

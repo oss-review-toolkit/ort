@@ -25,7 +25,7 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
-import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 fun Proxy.toGenericString() =
