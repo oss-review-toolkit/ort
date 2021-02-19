@@ -270,14 +270,13 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 }
 
                 if (config.createMissingArchives) {
-                    val packagePath = pkg.id.toPath()
-
                     val missingArchives = storedResults.mapNotNullTo(mutableSetOf()) { result ->
-                        result.provenance.takeUnless { archiver.hasArchive("$packagePath/${it.hash()}") }
+                        val storagePath = "${pkg.id.toPath()}/${result.provenance.hash()}"
+                        result.provenance.takeUnless { archiver.hasArchive(storagePath) }
                     }
 
                     if (missingArchives.isNotEmpty()) {
-                        val downloadResult = Downloader.download(pkg, downloadDirectory.resolve(packagePath))
+                        val downloadResult = Downloader.download(pkg, downloadDirectory.resolve(pkg.id.toPath()))
 
                         missingArchives.forEach {
                             archiveFiles(downloadResult.downloadDirectory, pkg.id, it)
