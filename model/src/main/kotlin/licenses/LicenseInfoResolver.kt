@@ -206,9 +206,9 @@ class LicenseInfoResolver(
             resolvedLicense.locations.map { it.provenance }
         }.forEach { provenance ->
             val archiveDir = createTempDirectory("$ORT_NAME-archive").toFile().apply { deleteOnExit() }
-            val path = "${id.toPath()}/${provenance.hash()}"
+            val storagePath = "${id.toPath()}/${provenance.hash()}"
 
-            if (!archiver.unarchive(archiveDir, path)) return@forEach
+            if (!archiver.unarchive(archiveDir, storagePath)) return@forEach
 
             val directory = provenance.vcsInfo?.path.orEmpty()
             val rootLicenseFiles = rootLicenseMatcher.getApplicableLicenseFilesForDirectories(
