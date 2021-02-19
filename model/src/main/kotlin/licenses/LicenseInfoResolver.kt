@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.model.utils.FileArchiver.Companion.getStoragePath
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
@@ -206,7 +207,7 @@ class LicenseInfoResolver(
             resolvedLicense.locations.map { it.provenance }
         }.forEach { provenance ->
             val archiveDir = createTempDirectory("$ORT_NAME-archive").toFile().apply { deleteOnExit() }
-            val storagePath = "${id.toPath()}/${provenance.hash()}"
+            val storagePath = getStoragePath(id, provenance)
 
             if (!archiver.unarchive(archiveDir, storagePath)) return@forEach
 
