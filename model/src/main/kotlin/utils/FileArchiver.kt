@@ -52,7 +52,7 @@ class FileArchiver(
     /**
      * The [FileStorage] to use for archiving files.
      */
-    val storage: FileStorage
+    private val storage: FileStorage
 ) {
     companion object {
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
