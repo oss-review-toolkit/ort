@@ -271,9 +271,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                 if (config.createMissingArchives) {
                     val packagePath = pkg.id.toPath()
-                    val missingArchives = HashSet<Provenance>()
 
-                    storedResults.mapNotNullTo(mutableSetOf()) { result ->
+                    val missingArchives = storedResults.mapNotNullTo(mutableSetOf()) { result ->
                         result.provenance.takeUnless { archiver.hasArchive("$packagePath/${it.hash()}") }
                     }
 
