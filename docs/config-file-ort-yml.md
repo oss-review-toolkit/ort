@@ -19,8 +19,8 @@ building, documenting or testing the code.
 
 Exclusions apply to paths (files/directories) or scopes. Examples of currently supported exclusions:
 
-* all dependencies defined in ./test/pom.xml in Maven-based projects.
-* dependencies in scopes ‘test’ or ‘provided’.
+* all dependencies defined in `./test/pom.xml` in Maven-based projects.
+* dependencies in scopes `test` or `provided`.
 
 ### Excludes Basics
 
