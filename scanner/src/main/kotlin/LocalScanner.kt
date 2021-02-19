@@ -61,7 +61,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.utils.FileArchiver.Companion.getStoragePath
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Environment
@@ -272,8 +271,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                 if (config.createMissingArchives) {
                     val missingArchives = storedResults.mapNotNullTo(mutableSetOf()) { result ->
-                        val storagePath = getStoragePath(pkg.id, result.provenance)
-                        result.provenance.takeUnless { archiver.hasArchive(storagePath) }
+                        result.provenance.takeUnless { archiver.hasArchive(pkg.id, result.provenance) }
                     }
 
                     if (missingArchives.isNotEmpty()) {
@@ -439,9 +437,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
         log.info { "Archiving files for ${id.toCoordinates()}." }
 
-        val storagePath = getStoragePath(id, provenance)
-
-        val duration = measureTime { archiver.archive(directory, storagePath) }
+        val duration = measureTime { archiver.archive(directory, id, provenance) }
 
         log.perf { "Archived files for '${id.toCoordinates()}' in ${duration.inMilliseconds}ms." }
     }
