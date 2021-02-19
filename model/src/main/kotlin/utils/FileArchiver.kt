@@ -26,6 +26,8 @@ import kotlin.io.path.createTempFile
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -55,6 +57,12 @@ class FileArchiver(
     companion object {
         private const val ARCHIVE_FILE_NAME = "archive.zip"
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
+
+        /**
+         * Return the storage path for the given [id] and [provenance].
+         */
+        fun getStoragePath(id: Identifier, provenance: Provenance): String =
+            "${id.toPath()}/${provenance.hash()}"
     }
 
     private val matcher = FileMatcher(
