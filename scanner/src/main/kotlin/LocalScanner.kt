@@ -439,9 +439,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
         log.info { "Archiving files for ${id.toCoordinates()}." }
 
-        val path = "${id.toPath()}/${provenance.hash()}"
+        val storagePath = "${id.toPath()}/${provenance.hash()}"
 
-        val duration = measureTime { archiver.archive(directory, path) }
+        val duration = measureTime { archiver.archive(directory, storagePath) }
 
         log.perf { "Archived files for '${id.toCoordinates()}' in ${duration.inMilliseconds}ms." }
     }
