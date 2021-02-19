@@ -278,6 +278,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                     if (missingArchives.isNotEmpty()) {
                         val downloadResult = Downloader.download(pkg, downloadDirectory.resolve(packagePath))
+
                         missingArchives.forEach {
                             archiveFiles(downloadResult.downloadDirectory, pkg.id, it)
                         }
