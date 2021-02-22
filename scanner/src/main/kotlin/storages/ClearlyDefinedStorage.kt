@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -107,7 +108,7 @@ class ClearlyDefinedStorage(
     val configuration: ClearlyDefinedStorageConfiguration
 ) : ScanResultsStorage() {
     /** The service for interacting with ClearlyDefined. */
-    private val clearlyDefinedService = ClearlyDefinedService.create(configuration.serverUrl)
+    private val service = ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())
 
     override fun readFromStorage(id: Identifier): Result<ScanResultContainer> =
         readPackageFromClearlyDefined(id, null, null)
@@ -151,7 +152,7 @@ class ClearlyDefinedStorage(
         log.info { "Looking up results for '${id.toCoordinates()}'." }
 
         return try {
-            val tools = clearlyDefinedService.harvestTools(
+            val tools = service.harvestTools(
                 coordinates.type,
                 coordinates.provider,
                 coordinates.namespace.orEmpty(),
@@ -195,7 +196,7 @@ class ClearlyDefinedStorage(
         version: String,
         startTime: Instant
     ): Result<ScanResultContainer> {
-        val toolResponse = clearlyDefinedService.harvestToolData(
+        val toolResponse = service.harvestToolData(
             coordinates.type, coordinates.provider, coordinates.namespace.orEmpty(), coordinates.name,
             coordinates.revision.orEmpty(), TOOL_SCAN_CODE, version
         )
