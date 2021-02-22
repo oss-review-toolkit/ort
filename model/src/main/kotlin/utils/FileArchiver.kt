@@ -133,7 +133,7 @@ class FileArchiver(
             false
         }
     }
-
-    private fun getArchivePath(id: Identifier, provenance: Provenance): String =
-        "${id.toPath()}/${provenance.hash()}/archive.zip"
 }
+
+private fun getArchivePath(id: Identifier, provenance: Provenance): String =
+    "${id.toPath()}/${provenance.hash()}/archive.zip"
