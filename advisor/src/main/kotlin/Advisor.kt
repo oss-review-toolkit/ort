@@ -48,7 +48,7 @@ abstract class Advisor(val advisorName: String, protected val config: AdvisorCon
         private val LOADER = ServiceLoader.load(AdvisorFactory::class.java)!!
 
         /**
-         * The list of all available advisors in the classpath
+         * The list of all available advisors in the classpath.
          */
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
     }
