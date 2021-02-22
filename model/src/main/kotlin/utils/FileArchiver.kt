@@ -57,12 +57,6 @@ class FileArchiver(
     companion object {
         private const val ARCHIVE_FILE_NAME = "archive.zip"
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
-
-        /**
-         * Return the storage path for the given [id] and [provenance].
-         */
-        private fun getStoragePath(id: Identifier, provenance: Provenance): String =
-            "${id.toPath()}/${provenance.hash()}"
     }
 
     private val matcher = FileMatcher(
@@ -74,8 +68,7 @@ class FileArchiver(
      * Return whether an archive corresponding to [id] and [provenance] exists.
      */
     fun hasArchive(id: Identifier, provenance: Provenance): Boolean {
-        val storagePath = getStoragePath(id, provenance)
-        val archivePath = getArchivePath(storagePath)
+        val archivePath = getArchivePath(id, provenance)
 
         return storage.exists(archivePath)
     }
@@ -102,8 +95,7 @@ class FileArchiver(
 
         log.perf { "Archived directory '${directory.invariantSeparatorsPath}' in ${zipDuration.inMilliseconds}ms." }
 
-        val storagePath = getStoragePath(id, provenance)
-        val writeDuration = measureTime { storage.write(getArchivePath(storagePath), zipFile.inputStream()) }
+        val writeDuration = measureTime { storage.write(getArchivePath(id, provenance), zipFile.inputStream()) }
 
         log.perf {
             "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in " +
@@ -117,10 +109,10 @@ class FileArchiver(
      * Unarchive the archive corresponding to [id] and [provenance].
      */
     fun unarchive(directory: File, id: Identifier, provenance: Provenance): Boolean {
-        val storagePath = getStoragePath(id, provenance)
+        val archivePath = getArchivePath(id, provenance)
 
         return try {
-            val (input, readDuration) = measureTimedValue { storage.read(getArchivePath(storagePath)) }
+            val (input, readDuration) = measureTimedValue { storage.read(archivePath) }
 
             log.perf {
                 "Read archive of directory '${directory.invariantSeparatorsPath}' from storage in " +
@@ -137,11 +129,12 @@ class FileArchiver(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.error { "Could not unarchive from $storagePath: ${e.collectMessagesAsString()}" }
+            log.error { "Could not unarchive from $archivePath: ${e.collectMessagesAsString()}" }
 
             false
         }
     }
 
-    private fun getArchivePath(storagePath: String) = "${storagePath.removeSuffix("/")}/$ARCHIVE_FILE_NAME"
+    private fun getArchivePath(id: Identifier, provenance: Provenance): String =
+        "${id.toPath()}/${provenance.hash()}/$ARCHIVE_FILE_NAME"
 }
