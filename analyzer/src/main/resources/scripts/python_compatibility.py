@@ -26,16 +26,17 @@ import logging
 from argparse import ArgumentParser
 
 parser = ArgumentParser()
-parser.add_argument("-d", "--directory", dest = "directory",
-                    help = "A Python project directory.", metavar = "DIR")
+parser.add_argument("-d", "--directory", dest="directory", help="A Python project directory.", metavar="DIR")
 
 args = parser.parse_args()
+
 
 def compatible_python3(file_path):
     try:
         return ast.parse(file_path)
     except SyntaxError as e:
         return False
+
 
 def project_compatibility(path):
     for root, dirs, files in os.walk(path):
@@ -51,7 +52,8 @@ def project_compatibility(path):
     logging.debug("The project in '" + path + "' seems to be compatible with Python 3.")
     return 3
 
+
 if __name__ == "__main__":
     dir_path = args.directory
     logging.debug("Trying to determine the required Python version for the project in '" + dir_path + "'.")
-    print(project_compatibility(dir_path), end = "")
+    print(project_compatibility(dir_path), end="")
