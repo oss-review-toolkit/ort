@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import java.io.File
 import java.io.IOException
+import java.security.MessageDigest
 
 import kotlin.io.path.createTempFile
 import kotlin.time.measureTime
@@ -36,6 +37,7 @@ import org.ossreviewtoolkit.utils.packZip
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileStorage
+import org.ossreviewtoolkit.utils.toHexString
 import org.ossreviewtoolkit.utils.unpackZip
 
 /**
@@ -138,3 +140,10 @@ class FileArchiver(
 
 private fun getArchivePath(provenance: Provenance): String =
     "${provenance.hash()}/archive.zip"
+
+private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
+
+/**
+ * Calculate the SHA-1 hash of the string representation of this [Provenance] instance.
+ */
+private fun Provenance.hash(): String = SHA1_DIGEST.digest(toString().toByteArray()).toHexString()

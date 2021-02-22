@@ -22,10 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import java.security.MessageDigest
 import java.time.Instant
-
-import org.ossreviewtoolkit.utils.toHexString
 
 /**
  * Provenance information about the scanned source code. Either [sourceArtifact] or [vcsInfo] can be set to a non-null
@@ -64,20 +61,11 @@ data class Provenance(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val originalVcsInfo: VcsInfo? = null
 ) {
-    companion object {
-        private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
-    }
-
     init {
         require(sourceArtifact == null || vcsInfo == null) {
             "Not both 'sourceArtifact' and 'vcsInfo' may be set, as otherwise it is ambiguous which one to use."
         }
     }
-
-    /**
-     * Calculate the SHA-1 hash of the string representation of this [Provenance] instance.
-     */
-    fun hash(): String = SHA1_DIGEST.digest(toString().toByteArray()).toHexString()
 
     /**
      * True if this [Provenance] refers to the same source code as [pkg], assuming that it belongs to the package id.
