@@ -144,6 +144,14 @@ private fun getArchivePath(provenance: Provenance): String =
 private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
 
 /**
- * Calculate the SHA-1 hash of the string representation of this [Provenance] instance.
+ * Calculate the SHA-1 hash of the storage key of this [Provenance] instance.
  */
-private fun Provenance.hash(): String = SHA1_DIGEST.digest(toString().toByteArray()).toHexString()
+private fun Provenance.hash(): String {
+    val key = vcsInfo?.let {
+        "${it.type}${it.url}${it.resolvedRevision}"
+    } ?: sourceArtifact!!.let {
+        "${it.url}${it.hash.value}"
+    }
+
+    return SHA1_DIGEST.digest(key.toByteArray()).toHexString()
+}
