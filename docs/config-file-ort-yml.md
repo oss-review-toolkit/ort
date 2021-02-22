@@ -166,7 +166,7 @@ applied to each scan.
 
 ### Resolution Basics
 
-Resolutions allow you to *resolve* issues or policy rule violations by marking them as acceptable. A resolution is
+Resolutions allow you to *resolve* issues, policy rule violations or vulnerabilities by marking them as acceptable. A resolution is
 applied to specific issues or violations via the regular expression specified in the `message` of a resolution.
 
 To be able to show why a resolution is acceptable, each resolution must include an explanation. The explanation consists
@@ -234,4 +234,29 @@ resolutions:
   - message: ".*LicenseRef-scancode-qt-commercial-1.1 found in 'third-party/qt/LICENSE'.*"
     reason: "LICENSE_ACQUIRED_EXCEPTION"
     comment: "Commercial Qt license for the project was purchased, for details see https://jira.example.com/issues/SOURCING-5678"
+```
+
+### Resolving Vulnerabilities
+
+The code below shows the structure of a vulnerability resolution in the `.ort.yml` file:
+
+```yaml
+resolutions:
+  vulnerabilities:
+  - id: "A regular expression matching the vulnerability id."
+    reason: "One of VulnerabilityResolutionReason e.g. CANT_FIX_VULNERABILITY, INEFFECTIVE_VULNERABILITY."
+    comment: "A comment further explaining why the reason above is applicable."
+```
+
+Where the list of available options for `reason` is defined in
+[VulnerabilityResolutionReason.kt](../model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
+
+For example, to ignore a vulnerability that is ineffective, because it is not invoked in your project, your `.ort.yml` could include:
+
+```yaml
+resolutions:
+  vulnerabilities:
+  - id: "CVE-9999-9999"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: "CVE-9999-9999 is a false positive"
 ```
