@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
 
 /**
  * An [Advisor] implementation that obtains security vulnerability information from a
@@ -73,7 +74,10 @@ class VulnerableCode(name: String, config: AdvisorConfiguration) : Advisor(name,
     private val vulnerableCodeConfiguration = config as VulnerableCodeConfiguration
 
     override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
-        val service = VulnerableCodeService.create(vulnerableCodeConfiguration.serverUrl)
+        val service = VulnerableCodeService.create(
+            vulnerableCodeConfiguration.serverUrl,
+            OkHttpClientHelper.buildClient()
+        )
 
         val startTime = Instant.now()
 
