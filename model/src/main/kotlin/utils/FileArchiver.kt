@@ -26,7 +26,6 @@ import kotlin.io.path.createTempFile
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -64,10 +63,10 @@ class FileArchiver(
     )
 
     /**
-     * Return whether an archive corresponding to [id] and [provenance] exists.
+     * Return whether an archive corresponding to [provenance] exists.
      */
-    fun hasArchive(id: Identifier, provenance: Provenance): Boolean {
-        val archivePath = getArchivePath(id, provenance)
+    fun hasArchive(provenance: Provenance): Boolean {
+        val archivePath = getArchivePath(provenance)
 
         return storage.exists(archivePath)
     }
@@ -75,7 +74,7 @@ class FileArchiver(
     /**
      * Archive all files in [directory] matching any of the configured [patterns] in the [storage].
      */
-    fun archive(directory: File, id: Identifier, provenance: Provenance) {
+    fun archive(directory: File, provenance: Provenance) {
         val zipFile = createTempFile(ORT_NAME, ".zip").toFile()
 
         val zipDuration = measureTime {
@@ -96,7 +95,7 @@ class FileArchiver(
 
         log.perf { "Archived directory '${directory.invariantSeparatorsPath}' in ${zipDuration.inMilliseconds}ms." }
 
-        val writeDuration = measureTime { storage.write(getArchivePath(id, provenance), zipFile.inputStream()) }
+        val writeDuration = measureTime { storage.write(getArchivePath(provenance), zipFile.inputStream()) }
 
         log.perf {
             "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in " +
@@ -107,10 +106,10 @@ class FileArchiver(
     }
 
     /**
-     * Unarchive the archive corresponding to [id] and [provenance].
+     * Unarchive the archive corresponding to [provenance].
      */
-    fun unarchive(directory: File, id: Identifier, provenance: Provenance): Boolean {
-        val archivePath = getArchivePath(id, provenance)
+    fun unarchive(directory: File, provenance: Provenance): Boolean {
+        val archivePath = getArchivePath(provenance)
 
         return try {
             val (input, readDuration) = measureTimedValue { storage.read(archivePath) }
@@ -137,5 +136,5 @@ class FileArchiver(
     }
 }
 
-private fun getArchivePath(id: Identifier, provenance: Provenance): String =
-    "${id.toPath()}/${provenance.hash()}/archive.zip"
+private fun getArchivePath(provenance: Provenance): String =
+    "${provenance.hash()}/archive.zip"

@@ -28,7 +28,6 @@ import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -37,7 +36,6 @@ import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
 
-private val ID = Identifier("a:b:c:1.0.0")
 private val PROVENANCE = Provenance(vcsInfo = VcsInfo.EMPTY)
 
 class FileArchiverTest : StringSpec() {
@@ -80,8 +78,8 @@ class FileArchiverTest : StringSpec() {
 
             val archiver = FileArchiver(listOf("a", "**/a"), storage)
 
-            archiver.archive(workingDir, ID, PROVENANCE)
-            archiver.unarchive(targetDir, ID, PROVENANCE)
+            archiver.archive(workingDir, PROVENANCE)
+            archiver.unarchive(targetDir, PROVENANCE)
 
             targetDir.assertFileContent("a")
             targetDir.assertFileContent("d/a")
@@ -102,9 +100,9 @@ class FileArchiverTest : StringSpec() {
             createFile("c/b")
 
             val archiver = FileArchiver(listOf("**"), storage)
-            archiver.archive(workingDir, ID, PROVENANCE)
+            archiver.archive(workingDir, PROVENANCE)
 
-            val result = archiver.unarchive(targetDir, ID, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
 
             result shouldBe true
             with(targetDir) {
@@ -120,8 +118,8 @@ class FileArchiverTest : StringSpec() {
             createFile("path/LICENSE")
 
             val archiver = FileArchiver.createDefault()
-            archiver.archive(workingDir, ID, PROVENANCE)
-            archiver.unarchive(targetDir, ID, PROVENANCE)
+            archiver.archive(workingDir, PROVENANCE)
+            archiver.unarchive(targetDir, PROVENANCE)
 
             with(targetDir) {
                 assertFileContent("LICENSE")
@@ -136,8 +134,8 @@ class FileArchiverTest : StringSpec() {
             createFile("d/LiCeNsE")
 
             val archiver = FileArchiver.createDefault()
-            archiver.archive(workingDir, ID, PROVENANCE)
-            archiver.unarchive(targetDir, ID, PROVENANCE)
+            archiver.archive(workingDir, PROVENANCE)
+            archiver.unarchive(targetDir, PROVENANCE)
 
             with(targetDir) {
                 assertFileContent("a/LICENSE")
