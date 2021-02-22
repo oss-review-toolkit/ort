@@ -29,3 +29,15 @@ rule_violations:
 - message: "^$"
   reason: "CANT_FIX_EXCEPTION"
   comment: "A rule violation resolution which resolves only rule violations with an empty message."
+
+# Structure of vulnerability resolution:
+#
+# vulnerabilities:
+# - id: "A regular expression matching the vulnerability id."
+#   reason: "One of: CANT_FIX_VULNERABILITY|INEFFECTIVE_VULNERABILITY|INVALID_MATCH_VULNERABILITY|MITIGATED_VULNERABILITY
+#                    |WILL_NOT_FIX_VULNERABILITY|WORKAROUND_FOR_VULNERABILITY"
+#   comment: "A comment further explaining why the reason above is applicable."
+vulnerabilities:
+- id: "^$"
+  reason: "INVALID_MATCH_VULNERABILITY"
+  comment: "A vulnerability resolution which resolves only vulnerabilities with an empty id."
