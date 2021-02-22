@@ -83,10 +83,12 @@ class FileArchiver(
                 val relativePath = file.relativeTo(directory).invariantSeparatorsPath
 
                 matcher.matches(relativePath).also { result ->
-                    if (result) {
-                        log.debug { "Adding '$relativePath' to archive." }
-                    } else {
-                        log.debug { "Not adding '$relativePath' to archive." }
+                    log.debug {
+                        if (result) {
+                            "Adding '$relativePath' to archive."
+                        } else {
+                            "Not adding '$relativePath' to archive."
+                        }
                     }
                 }
             }
