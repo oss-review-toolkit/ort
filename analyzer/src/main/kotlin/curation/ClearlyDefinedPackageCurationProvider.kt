@@ -80,7 +80,7 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
  * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient())
+    private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
 
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider() ?: return emptyList()

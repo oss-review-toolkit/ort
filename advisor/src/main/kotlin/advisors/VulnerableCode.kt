@@ -71,14 +71,12 @@ class VulnerableCode(name: String, config: AdvisorConfiguration) : Advisor(name,
                 ?: throw IOException("Unexpected URL of a vulnerability: $url.")
     }
 
-    private val vulnerableCodeConfiguration = config as VulnerableCodeConfiguration
+    private val service by lazy {
+        val vulnerableCodeConfiguration = config as VulnerableCodeConfiguration
+        VulnerableCodeService.create(vulnerableCodeConfiguration.serverUrl, OkHttpClientHelper.buildClient())
+    }
 
     override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
-        val service = VulnerableCodeService.create(
-            vulnerableCodeConfiguration.serverUrl,
-            OkHttpClientHelper.buildClient()
-        )
-
         val startTime = Instant.now()
 
         val components = packages.map { it.purl }
