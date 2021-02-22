@@ -271,7 +271,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                 if (config.createMissingArchives) {
                     val missingArchives = storedResults.mapNotNullTo(mutableSetOf()) { result ->
-                        result.provenance.takeUnless { archiver.hasArchive(pkg.id, result.provenance) }
+                        result.provenance.takeUnless { archiver.hasArchive(result.provenance) }
                     }
 
                     if (missingArchives.isNotEmpty()) {
@@ -437,7 +437,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
         log.info { "Archiving files for ${id.toCoordinates()}." }
 
-        val duration = measureTime { archiver.archive(directory, id, provenance) }
+        val duration = measureTime { archiver.archive(directory, provenance) }
 
         log.perf { "Archived files for '${id.toCoordinates()}' in ${duration.inMilliseconds}ms." }
     }
