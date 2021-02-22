@@ -55,7 +55,6 @@ class FileArchiver(
     val storage: FileStorage
 ) {
     companion object {
-        private const val ARCHIVE_FILE_NAME = "archive.zip"
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
     }
 
@@ -136,5 +135,5 @@ class FileArchiver(
     }
 
     private fun getArchivePath(id: Identifier, provenance: Provenance): String =
-        "${id.toPath()}/${provenance.hash()}/$ARCHIVE_FILE_NAME"
+        "${id.toPath()}/${provenance.hash()}/archive.zip"
 }
