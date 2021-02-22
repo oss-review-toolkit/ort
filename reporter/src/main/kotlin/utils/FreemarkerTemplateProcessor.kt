@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -292,6 +293,13 @@ class FreemarkerTemplateProcessor(
             ortResult.evaluator?.violations?.any { violation ->
                 resolutionProvider.getRuleViolationResolutionsFor(violation).isEmpty()
             } ?: false
+
+        /**
+         * Return a list of [Vulnerability]s for which there is no [VulnerabilityResolution] is provided.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
+                vulnerabilities.filter { resolutionProvider.getVulnerabilityResolutionsFor(it).isEmpty() }
     }
 }
 
