@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2021 Bosch.IO GmbH
  * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +23,7 @@ package org.ossreviewtoolkit.model.utils
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.Resolutions
 
 /**
@@ -39,6 +41,9 @@ class DefaultResolutionProvider : ResolutionProvider {
 
     override fun getRuleViolationResolutionsFor(violation: RuleViolation) =
         resolutions.ruleViolations.filter { it.matches(violation) }
+
+    override fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability) =
+        resolutions.vulnerabilities.filter { it.matches(vulnerability) }
 
     override fun getResolutionsFor(ortResult: OrtResult): Resolutions {
         val issueResolutions = ortResult.collectIssues().values.flatten().let { issues ->
