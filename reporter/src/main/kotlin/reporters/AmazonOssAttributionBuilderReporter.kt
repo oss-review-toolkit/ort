@@ -50,10 +50,12 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
     private val reportFilename = "OssAttribution.txt"
 
-    private val service = OssAttributionBuilderService.create(
-        OssAttributionBuilderService.Server.DEFAULT,
-        OkHttpClientHelper.buildClient()
-    )
+    private val service by lazy {
+        OssAttributionBuilderService.create(
+            OssAttributionBuilderService.Server.DEFAULT,
+            OkHttpClientHelper.buildClient()
+        )
+    }
 
     override fun generateReport(
         input: ReporterInput,

@@ -59,14 +59,16 @@ class NexusIq(
 
     private val nexusIqConfig = config as NexusIqConfiguration
 
-    override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
-        val service = NexusIqService.create(
+    private val service by lazy {
+        NexusIqService.create(
             nexusIqConfig.serverUrl,
             nexusIqConfig.username,
             nexusIqConfig.password,
             OkHttpClientHelper.buildClient()
         )
+    }
 
+    override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
         val components = packages.map { pkg ->

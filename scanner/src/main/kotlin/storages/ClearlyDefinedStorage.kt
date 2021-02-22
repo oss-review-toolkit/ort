@@ -108,7 +108,9 @@ class ClearlyDefinedStorage(
     val configuration: ClearlyDefinedStorageConfiguration
 ) : ScanResultsStorage() {
     /** The service for interacting with ClearlyDefined. */
-    private val service = ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())
+    private val service by lazy {
+        ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())
+    }
 
     override fun readFromStorage(id: Identifier): Result<ScanResultContainer> =
         readPackageFromClearlyDefined(id, null, null)

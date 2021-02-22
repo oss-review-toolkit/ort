@@ -47,17 +47,17 @@ object OkHttpClientHelper {
     private const val MAX_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
     private const val READ_TIMEOUT_IN_SECONDS = 30L
 
-    private val client = buildClient()
+    private val client by lazy {
+        installAuthenticatorAndProxySelector()
+        buildClient()
+    }
+
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
 
     /**
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
      */
     const val HTTP_TOO_MANY_REQUESTS = 429
-
-    init {
-        installAuthenticatorAndProxySelector()
-    }
 
     private fun buildClient(): OkHttpClient {
         val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
