@@ -14,12 +14,12 @@ are in sync.
 
 ## package-lock
 
-Contains an [official NPM lockfile](https://docs.npmjs.com/files/package-lock.json).
+Contains an [official NPM lockfile](https://docs.npmjs.com/cli/v7/configuring-npm/package-lock-json).
 
 ## shrinkwrap
 
-Contains a [Shrinkwrap lockfile](https://docs.npmjs.com/files/shrinkwrap.json).
+Contains a [Shrinkwrap lockfile](https://docs.npmjs.com/cli/v6/configuring-npm/shrinkwrap-json).
 
 ## yarn
 
-Contains a [Yarn lockfile](https://yarnpkg.com/lang/en/docs/yarn-lock/).
+Contains a [Yarn lockfile](https://classic.yarnpkg.com/en/docs/yarn-lock/).
