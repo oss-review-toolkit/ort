@@ -2,6 +2,9 @@
 project:
   id: "SpdxDocumentFile::xyz:0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/project.spdx.yml"
+  authors:
+  - "Copyright (C) 2020 Example Inc."
+  - "Copyright (C) 2021 Second Example Inc."
   declared_licenses:
   - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   declared_licenses_processed:
@@ -25,6 +28,9 @@ project:
 packages:
 - id: "SpdxDocumentFile::curl:7.70.0"
   purl: "pkg:spdxdocumentfile/curl@7.70.0"
+  authors:
+  - "Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many contributors,\
+    \ see the THANKS file."
   declared_licenses:
   - "curl"
   declared_licenses_processed:
@@ -56,6 +62,8 @@ packages:
     path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/curl"
 - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
   purl: "pkg:spdxdocumentfile/OpenSSL%20Development%20Team/openssl@1.1.1g"
+  authors:
+  - "copyright 2004-2020 The OpenSSL Project Authors. All Rights Reserved."
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:

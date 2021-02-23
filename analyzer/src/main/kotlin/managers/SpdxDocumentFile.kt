@@ -50,6 +50,19 @@ import org.ossreviewtoolkit.utils.withoutPrefix
 private const val DEFAULT_SCOPE_NAME = "default"
 
 /**
+ *
+ */
+private val COPYRIGHT_REGEX = Regex("(?=copyright)", RegexOption.IGNORE_CASE)
+
+/**
+ * Gets a set of copyright statements from the [SpdxPackage.copyrightText] field.
+ * The statements
+ */
+fun SpdxPackage.getAuthorsFromCopyrightText(): SortedSet<String> =
+    COPYRIGHT_REGEX.split(copyrightText).filter { it.isNotEmpty() }
+        .map { it.trimEnd() }.toSortedSet()
+
+/**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
  */
@@ -192,8 +205,7 @@ class SpdxDocumentFile(
             Project(
                 id = projectPackage.toIdentifier(),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                // TODO: Find a way to track authors.
-                authors = sortedSetOf(),
+                authors = projectPackage.getAuthorsFromCopyrightText(),
                 declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, projectPackage.homepage),
@@ -218,8 +230,7 @@ class SpdxDocumentFile(
 
             Package(
                 id = pkg.toIdentifier(),
-                // TODO: Find a way to track authors.
-                authors = sortedSetOf(),
+                authors = pkg.getAuthorsFromCopyrightText(),
                 declaredLicenses = sortedSetOf(pkg.licenseDeclared),
                 concludedLicense = getConcludedLicense(pkg),
                 description = packageDescription,
