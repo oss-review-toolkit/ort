@@ -21,7 +21,7 @@ project:
   - name: "default"
     dependencies:
     - id: "SpdxDocumentFile::curl:7.70.0"
-    - id: "SpdxDocumentFile::openssl:1.1.1g"
+    - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
 packages:
 - id: "SpdxDocumentFile::curl:7.70.0"
   purl: "pkg:spdxdocumentfile/curl@7.70.0"
@@ -54,8 +54,8 @@ packages:
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/curl"
-- id: "SpdxDocumentFile::openssl:1.1.1g"
-  purl: "pkg:spdxdocumentfile/openssl@1.1.1g"
+- id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
+  purl: "pkg:spdxdocumentfile/OpenSSL%20Development%20Team/openssl@1.1.1g"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
