@@ -352,6 +352,7 @@ class Pub(
         val rawName = pubspec["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
+        val authors = parseAuthors(pubspec)
 
         val vcs = VcsHost.toVcsInfo(repositoryUrl)
 
@@ -363,8 +364,7 @@ class Pub(
                 version = pubspec["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = authors,
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = sortedSetOf(),
             vcs = vcs,
@@ -391,6 +391,7 @@ class Pub(
                     var rawName = ""
                     var homepageUrl = ""
                     var vcs = VcsInfo.EMPTY
+                    var authors: SortedSet<String> = sortedSetOf<String>()
 
                     // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                     when {
@@ -400,6 +401,7 @@ class Pub(
                             rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
                             description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
                             homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                            authors = parseAuthors(pkgInfoFromYamlFile)
 
                             val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
                             vcs = VcsHost.toVcsInfo(repositoryUrl)
@@ -435,8 +437,7 @@ class Pub(
 
                     packages[id] = Package(
                         id,
-                        // TODO: Find a way to track authors.
-                        authors = sortedSetOf(),
+                        authors = authors,
                         // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
                         declaredLicenses = sortedSetOf(),
                         description = description,
@@ -520,3 +521,17 @@ class Pub(
         run(workingDir, "get")
     }
 }
+
+/**
+ * Extract information about package authors from the given [pubspec].
+ */
+private fun parseAuthors(pubspec: JsonNode): SortedSet<String> =
+    (listOfNotNull(pubspec["author"]) + pubspec["authors"]?.toList().orEmpty()).mapNotNullTo(sortedSetOf()) {
+        extractAuthorName(it.textValue())
+    }
+
+/**
+ * Extract the author name from an author string of the form "name <email>".
+ */
+private fun extractAuthorName(authorStr: String?): String? =
+    authorStr?.substringBefore('<')?.trim()?.ifEmpty { null }
