@@ -58,12 +58,7 @@ class PostgresStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    private val dataSource: DataSource,
-
-    /**
-     * The name of the database to use.
-     */
-    private val schema: String
+    private val dataSource: DataSource
 ) : ScanResultsStorage() {
     companion object {
         /** Expression to reference the scanner version as an array. */
@@ -114,10 +109,10 @@ class PostgresStorage(
         }
 
     private fun Transaction.tableExists(): Boolean =
-        exec("SELECT to_regclass('$schema.$table')") { resultSet ->
+        exec("SELECT to_regclass('$table')") { resultSet ->
             resultSet.next() && resultSet.getString(1).let { result ->
                 // At least PostgreSQL 9.6 reports the result including the schema prefix.
-                result == table || result == "$schema.$table"
+                result == table || result == "$table"
             }
         } ?: false
 
@@ -125,7 +120,7 @@ class PostgresStorage(
         exec(
             """
             CREATE INDEX identifier_and_scanner_version
-                ON $schema.$table USING btree
+                ON $table USING btree
                 (
                     identifier,
                     (scan_result->'scanner'->>'name'),

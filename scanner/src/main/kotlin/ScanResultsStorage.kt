@@ -156,6 +156,7 @@ abstract class ScanResultsStorage {
                 jdbcUrl = config.url
                 username = config.username
                 password = config.password
+                schema = config.schema
 
                 // Use a value slightly higher than the number of threads accessing the storage.
                 maximumPoolSize = LocalScanner.NUM_STORAGE_THREADS + 3
@@ -171,7 +172,7 @@ abstract class ScanResultsStorage {
                 addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
             }
 
-            return PostgresStorage(HikariDataSource(dataSourceConfig), config.schema)
+            return PostgresStorage(HikariDataSource(dataSourceConfig))
         }
 
         /**
