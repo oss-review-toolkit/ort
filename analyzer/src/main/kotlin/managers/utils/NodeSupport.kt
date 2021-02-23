@@ -135,6 +135,21 @@ fun readProxySettingsFromNpmRc(npmRc: String): ProtocolProxyMap {
     return map
 }
 
+/**
+ * Return the npm registry defined in the provided [NPM configuration][npmRc] or null.
+ */
+fun readRegistryFromNpmRc(npmRc: String): String? {
+    npmRc.lines().forEach { line ->
+        val keyAndValue = line.split('=', limit = 2).map { it.trim() }
+        if (keyAndValue.size != 2) return@forEach
+
+        val (key, value) = keyAndValue
+        if (key == "registry") return value
+    }
+
+    return null
+}
+
 private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
 private val YARN_LOCK_FILES = listOf("yarn.lock")
 
