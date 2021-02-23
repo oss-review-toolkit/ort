@@ -273,7 +273,8 @@ fun normalizeVcsUrl(vcsUrl: String): String {
  */
 fun resolveWindowsExecutable(executable: File): File? {
     val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
-    return extensions.map { File(executable.path + it) }.find { it.isFile } ?: executable.takeIf { it.isFile }
+    return extensions.map { File(executable.path + it.toLowerCase()) }.find { it.isFile }
+        ?: executable.takeIf { it.isFile }
 }
 
 /**
