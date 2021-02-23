@@ -258,6 +258,22 @@ class NodeSupportTest : WordSpec() {
                 ) should beEmptyMap()
             }
         }
+
+        "readRegistryFromNpmRc" should {
+            "properly read registry configuration" {
+                readRegistryFromNpmRc("""
+                    registry=http://my.artifactory.com/artifactory/api/npm/npm-virtual
+                    """.trimIndent()
+                ) shouldBe "http://my.artifactory.com/artifactory/api/npm/npm-virtual"
+            }
+
+            "return null when no registry is defined" {
+                readRegistryFromNpmRc("""
+                    
+                    """.trimIndent()
+                ) shouldBe null
+            }
+        }
     }
 
     private lateinit var tempDir: File
