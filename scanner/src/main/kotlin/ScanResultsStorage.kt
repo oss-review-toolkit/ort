@@ -141,7 +141,7 @@ abstract class ScanResultsStorage {
             }
 
             require(config.schema.isNotBlank()) {
-                "Database for PostgreSQL storage is missing."
+                "Schema for PostgreSQL storage is missing."
             }
 
             require(config.username.isNotBlank()) {
