@@ -112,13 +112,13 @@ class ClearlyDefinedStorage(
         ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())
     }
 
-    override fun readFromStorage(id: Identifier): Result<ScanResultContainer> =
+    override fun readInternal(id: Identifier): Result<ScanResultContainer> =
         readPackageFromClearlyDefined(id, null, null)
 
-    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> =
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> =
         readPackageFromClearlyDefined(pkg.id, pkg.vcs, pkg.sourceArtifact.takeIf { it.url.isNotEmpty() })
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> =
+    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =
         Failure("Adding scan results directly to ClearlyDefined is not supported.")
 
     /**

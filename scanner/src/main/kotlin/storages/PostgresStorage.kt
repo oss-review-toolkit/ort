@@ -130,7 +130,7 @@ class PostgresStorage(
             """.trimIndent()
         )
 
-    override fun readFromStorage(id: Identifier): Result<ScanResultContainer> {
+    override fun readInternal(id: Identifier): Result<ScanResultContainer> {
         @Suppress("TooGenericExceptionCaught")
         return try {
             transaction {
@@ -155,7 +155,7 @@ class PostgresStorage(
         }
     }
 
-    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
         val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
 
@@ -193,7 +193,7 @@ class PostgresStorage(
         }
     }
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> {
+    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         log.info { "Storing scan result for ${id.toCoordinates()} in storage." }
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
