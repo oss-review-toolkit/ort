@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutURL
 import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
 import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingsFromNpmRc
+import org.ossreviewtoolkit.analyzer.managers.utils.readRegistryFromNpmRc
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -67,6 +68,8 @@ import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
+const val PUBLIC_NPM_REGISTRY = "https://registry.npmjs.org"
+
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  */
@@ -88,6 +91,19 @@ open class Npm(
 
     private val ortProxySelector = installAuthenticatorAndProxySelector()
 
+    private val npmRegistry: String
+
+    init {
+        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
+        npmRegistry = if (npmRcFile.isFile) {
+            val npmRcContent = npmRcFile.readText()
+            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcContent))
+            readRegistryFromNpmRc(npmRcContent) ?: PUBLIC_NPM_REGISTRY
+        } else {
+            PUBLIC_NPM_REGISTRY
+        }
+    }
+
     /**
      * Array of parameters passed to the install command when installing dependencies.
      */
@@ -105,11 +121,6 @@ open class Npm(
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
         checkVersion(analyzerConfig.ignoreToolVersions)
-
-        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
-        if (npmRcFile.isFile) {
-            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcFile.readText()))
-        }
     }
 
     override fun afterResolution(definitionFiles: List<File>) {
@@ -237,7 +248,7 @@ open class Npm(
 
                 val pkgRequest = Request.Builder()
                     .get()
-                    .url("https://registry.npmjs.org/$encodedName")
+                    .url("$npmRegistry/$encodedName")
                     .build()
 
                 OkHttpClientHelper.execute(pkgRequest).use { response ->
@@ -277,7 +288,7 @@ open class Npm(
                     } else {
                         log.info {
                             "Could not retrieve package information for '$encodedName' " +
-                                    "from public NPM registry: ${response.message} (code ${response.code})."
+                                    "from NPM registry $npmRegistry: ${response.message} (code ${response.code})."
                         }
                     }
                 }
