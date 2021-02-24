@@ -34,11 +34,14 @@ import okio.buffer
 import okio.sink
 
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ArchiveType
@@ -73,7 +76,7 @@ object Downloader {
     fun download(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): Provenance {
         verifyOutputDirectory(outputDirectory)
 
-        if (pkg.isMetaDataOnly) return Provenance(Instant.now())
+        if (pkg.isMetaDataOnly) return UnknownProvenance
 
         val exception = DownloadException("Download failed for '${pkg.id.toCoordinates()}'.")
 
@@ -87,9 +90,10 @@ object Downloader {
 
             if (!isCargoPackageWithSourceArtifact) {
                 val result = downloadFromVcs(pkg, outputDirectory, allowMovingRevisions)
+                val vcsInfo = (result as RepositoryProvenance).vcsInfo
 
                 log.perf {
-                    "Downloaded source code for '${pkg.id.toCoordinates()}' from ${result.vcsInfo} in " +
+                    "Downloaded source code for '${pkg.id.toCoordinates()}' from $vcsInfo in " +
                             "${vcsMark.elapsedNow().inMilliseconds}ms."
                 }
 
@@ -244,7 +248,7 @@ object Downloader {
             path = pkg.vcsProcessed.path
         )
 
-        return Provenance(startTime, vcsInfo = vcsInfo, originalVcsInfo = pkg.vcsProcessed.takeIf { it != vcsInfo })
+        return RepositoryProvenance(startTime, vcsInfo, pkg.vcsProcessed.takeIf { it != vcsInfo })
     }
 
     /**
@@ -365,7 +369,7 @@ object Downloader {
                     "'${outputDirectory.absolutePath}'..."
         }
 
-        return Provenance(startTime, sourceArtifact = pkg.sourceArtifact)
+        return ArtifactProvenance(startTime, pkg.sourceArtifact)
     }
 }
 

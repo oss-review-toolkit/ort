@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordin
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -196,7 +197,7 @@ fun List<ScanResult>.filterByProject(project: Project): List<ScanResult> {
     val parentPath = File(project.definitionFilePath).parent ?: return this
 
     return map { result ->
-        if (result.provenance.vcsInfo == null) {
+        if (result.provenance is ArtifactProvenance) {
             result
         } else {
             result.filterByPath(parentPath)

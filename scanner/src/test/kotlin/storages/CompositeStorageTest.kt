@@ -33,11 +33,11 @@ import io.mockk.verify
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -86,7 +86,7 @@ private fun createScanResult(resultCount: Int): ScanResult {
         packageVerificationCode = "test$resultCount", licenseFindings = licenseFindings.toSortedSet(),
         copyrightFindings = sortedSetOf()
     )
-    val provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY)
+    val provenance = ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY)
     val scanner = ScannerDetails("scanner$resultCount", "v$resultCount", "testConfig")
     return ScanResult(provenance, scanner, summary)
 }

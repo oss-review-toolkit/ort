@@ -30,6 +30,7 @@ import kotlin.io.path.createTempDirectory
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Hash
@@ -39,9 +40,9 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -286,7 +287,7 @@ private fun createOrtResult(): OrtResult {
                 scanResults = sortedMapOf(
                     Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
                         ScanResult(
-                            provenance = Provenance(
+                            provenance = ArtifactProvenance(
                                 sourceArtifact = RemoteArtifact(
                                     url = "https://some-host/first-package-sources.jar",
                                     hash = Hash.NONE
@@ -317,7 +318,7 @@ private fun createOrtResult(): OrtResult {
                             )
                         ),
                         ScanResult(
-                            provenance = Provenance(
+                            provenance = RepositoryProvenance(
                                 vcsInfo = VcsInfo(
                                     type = VcsType.GIT,
                                     revision = "master",

@@ -216,8 +216,7 @@ scanner:
   results:
     scan_results:
       Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0:
-      - provenance:
-          download_time: "1970-01-01T00:00:00Z"
+      - provenance: {}
         scanner:
           name: "FileCounter"
           version: "1.0"

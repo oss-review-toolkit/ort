@@ -24,6 +24,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Hash
@@ -34,7 +35,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -216,7 +217,7 @@ val ORT_RESULT = OrtResult(
             scanResults = sortedMapOf(
                 Identifier("NPM:@ort:project-with-findings:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY),
+                        provenance = UnknownProvenance,
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
@@ -240,7 +241,7 @@ val ORT_RESULT = OrtResult(
                 ),
                 Identifier("NPM:@ort:project-without-findings:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY),
+                        provenance = UnknownProvenance,
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
@@ -254,7 +255,7 @@ val ORT_RESULT = OrtResult(
                 ),
                 Identifier("NPM:@ort:no-license-file:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY),
+                        provenance = UnknownProvenance,
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
@@ -278,7 +279,7 @@ val ORT_RESULT = OrtResult(
                 ),
                 Identifier("NPM:@ort:license-file:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(
+                        provenance = ArtifactProvenance(
                             sourceArtifact = RemoteArtifact(
                                 url = "https://example.com/license-file-1.0.tgz",
                                 hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
@@ -315,7 +316,7 @@ val ORT_RESULT = OrtResult(
                 ),
                 Identifier("NPM:@ort:license-file-and-additional-licenses:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(
+                        provenance = ArtifactProvenance(
                             sourceArtifact = RemoteArtifact(
                                 url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
                                 hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
@@ -360,7 +361,7 @@ val ORT_RESULT = OrtResult(
                 ),
                 Identifier("NPM:@ort:concluded-license:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(
+                        provenance = ArtifactProvenance(
                             sourceArtifact = RemoteArtifact(
                                 url = "https://example.com/concluded-license-1.0.tgz",
                                 hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
@@ -397,7 +398,7 @@ val ORT_RESULT = OrtResult(
                 ),
                 Identifier("NPM:@ort:declared-license:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(
+                        provenance = ArtifactProvenance(
                             sourceArtifact = RemoteArtifact(
                                 url = "https://example.com/declared-license-1.0.tgz",
                                 hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)

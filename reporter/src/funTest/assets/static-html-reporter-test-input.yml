@@ -300,7 +300,7 @@ scanner:
       results:
       - provenance:
           download_time: "1970-01-01T00:00:00Z"
-          vcsInfo:
+          vcs_info:
             type: "Git"
             url: "https://github.com/oss-review-toolkit/ort.git"
             revision: "master"
@@ -354,7 +354,7 @@ scanner:
       results:
       - provenance:
           download_time: "1970-01-01T00:00:00Z"
-          vcsInfo:
+          vcs_info:
             type: "Git"
             url: "https://example.com/git"
             revision: "master"

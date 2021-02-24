@@ -40,8 +40,8 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -74,7 +74,7 @@ private fun scanResults(
 
     return listOf(
         ScanResult(
-            provenance = Provenance(vcsInfo = vcsInfo),
+            provenance = RepositoryProvenance(vcsInfo = vcsInfo),
             scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
             summary = ScanSummary(
                 startTime = Instant.EPOCH,

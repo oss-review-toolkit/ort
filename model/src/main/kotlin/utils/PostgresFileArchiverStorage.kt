@@ -37,7 +37,9 @@ import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
@@ -68,17 +70,12 @@ class PostgresFileArchiverStorage(
         }
     }
 
-    override fun hasArchive(provenance: Provenance): Boolean {
-        checkIsUniqueStorageKey(provenance)
-
-        return transaction {
+    override fun hasArchive(provenance: KnownProvenance): Boolean =
+        transaction {
             queryFileArchive(provenance)
         } != null
-    }
 
-    override fun addArchive(provenance: Provenance, zipFile: File) {
-        checkIsUniqueStorageKey(provenance)
-
+    override fun addArchive(provenance: KnownProvenance, zipFile: File) =
         transaction {
             if (queryFileArchive(provenance) == null) {
                 try {
@@ -94,11 +91,8 @@ class PostgresFileArchiverStorage(
                 }
             }
         }
-    }
 
-    override fun getArchive(provenance: Provenance): File? {
-        checkIsUniqueStorageKey(provenance)
-
+    override fun getArchive(provenance: KnownProvenance): File? {
         val fileArchive = transaction {
             queryFileArchive(provenance)
         } ?: return null
@@ -128,16 +122,17 @@ internal class FileArchive(id: EntityID<Int>) : IntEntity(id) {
     var zipData: ByteArray by FileArchiveTable.zipData
 }
 
-private fun Provenance.storageKey(): String =
-    vcsInfo?.let { vcs ->
-        // The content on the archives does not depend on the VCS path in general, thus that path must not be part
-        // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes the
-        // Git-Repo manifest location rather than the path to be (sparse) checked out.
-        val path = vcs.path.takeIf { vcs.type == VcsType.GIT_REPO }.orEmpty()
-        "vcs|${vcs.type}|${vcs.url}|${vcs.resolvedRevision}|$path"
-    } ?: sourceArtifact!!.let {
-        "source-artifact|${it.url}|${it.hash}"
+private fun KnownProvenance.storageKey(): String =
+    when (this) {
+        is ArtifactProvenance -> "source-artifact|${sourceArtifact.url}|${sourceArtifact.hash}"
+        is RepositoryProvenance -> {
+            // The content on the archives does not depend on the VCS path in general, thus that path must not be part
+            // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes
+            // the Git-Repo manifest location rather than the path to be (sparse) checked out.
+            val path = vcsInfo.path.takeIf { vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
+            "vcs|${vcsInfo.type}|${vcsInfo.url}|${vcsInfo.resolvedRevision}|$path"
+        }
     }
 
-private fun queryFileArchive(provenance: Provenance): FileArchive? =
+private fun queryFileArchive(provenance: KnownProvenance): FileArchive? =
     FileArchive.find { FileArchiveTable.provenance eq provenance.storageKey() }.singleOrNull()

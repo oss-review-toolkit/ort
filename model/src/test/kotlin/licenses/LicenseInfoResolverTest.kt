@@ -34,6 +34,7 @@ import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -42,6 +43,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -65,7 +67,7 @@ class LicenseInfoResolverTest : WordSpec() {
     init {
         val pkgId = Identifier("Gradle:org.ossreviewtoolkit:ort:1.0.0")
         val vcsInfo = VcsInfo(VcsType.GIT, "https://github.com/oss-review-toolkit/ort.git", "master", "master")
-        val provenance = Provenance(vcsInfo = vcsInfo)
+        val provenance = RepositoryProvenance(vcsInfo = vcsInfo)
 
         "resolveLicenseInfo()" should {
             "resolve declared licenses" {
@@ -307,7 +309,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     url = "http://example.com",
                     hash = Hash("", HashAlgorithm.NONE)
                 )
-                val sourceArtifactProvenance = Provenance(
+                val sourceArtifactProvenance = ArtifactProvenance(
                     sourceArtifact = sourceArtifact
                 )
                 val sourceArtifactPathExclude = PathExclude(

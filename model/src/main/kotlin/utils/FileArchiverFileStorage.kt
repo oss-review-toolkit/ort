@@ -23,7 +23,9 @@ import java.io.File
 import java.io.IOException
 import java.security.MessageDigest
 
-import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -40,23 +42,17 @@ class FileArchiverFileStorage(
      */
     private val storage: FileStorage
 ) : FileArchiverStorage {
-    override fun hasArchive(provenance: Provenance): Boolean {
-        checkIsUniqueStorageKey(provenance)
-
+    override fun hasArchive(provenance: KnownProvenance): Boolean {
         val archivePath = getArchivePath(provenance)
 
         return storage.exists(archivePath)
     }
 
-    override fun addArchive(provenance: Provenance, zipFile: File) {
-        checkIsUniqueStorageKey(provenance)
-
+    override fun addArchive(provenance: KnownProvenance, zipFile: File) {
         storage.write(getArchivePath(provenance), zipFile.inputStream())
     }
 
-    override fun getArchive(provenance: Provenance): File? {
-        checkIsUniqueStorageKey(provenance)
-
+    override fun getArchive(provenance: KnownProvenance): File? {
         val archivePath = getArchivePath(provenance)
 
         val zipFile = kotlin.io.path.createTempFile(ORT_NAME, ".zip").toFile()
@@ -80,21 +76,21 @@ class FileArchiverFileStorage(
 private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
 
 /**
- * Calculate the SHA-1 hash of the storage key of this [Provenance] instance.
+ * Calculate the SHA-1 hash of the storage key of this [KnownProvenance] instance.
  */
-private fun Provenance.hash(): String {
-    val key = vcsInfo?.let { vcs ->
-        // The content on the archives does not depend on the VCS path in general, thus that path must not be part
-        // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes the
-        // Git-Repo manifest location rather than the path to be (sparse) checked out.
-        val path = vcs.path.takeIf { vcs.type == VcsType.GIT_REPO }.orEmpty()
-        "${vcs.type}${vcs.url}${vcs.resolvedRevision}$path"
-    } ?: sourceArtifact!!.let {
-        "${it.url}${it.hash.value}"
+private fun KnownProvenance.hash(): String {
+    val key = when (this) {
+        is ArtifactProvenance -> "${sourceArtifact.url}${sourceArtifact.hash.value}"
+        is RepositoryProvenance -> {
+            // The content on the archives does not depend on the VCS path in general, thus that path must not be part
+            // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes
+            // the Git-Repo manifest location rather than the path to be (sparse) checked out.
+            val path = vcsInfo.path.takeIf { vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
+            "${vcsInfo.type}${vcsInfo.url}${vcsInfo.resolvedRevision}$path"
+        }
     }
 
     return SHA1_DIGEST.digest(key.toByteArray()).toHexString()
 }
 
-private fun getArchivePath(provenance: Provenance): String =
-    "${provenance.hash()}/archive.zip"
+private fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/archive.zip"

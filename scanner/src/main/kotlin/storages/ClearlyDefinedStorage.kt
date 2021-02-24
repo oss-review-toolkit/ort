@@ -31,11 +31,11 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
@@ -209,7 +209,7 @@ class ClearlyDefinedStorage(
             jsonMapper.readTree(it.byteStream())["content"]?.let { result ->
                 val summary = generateSummary(startTime, Instant.now(), "", result)
                 val details = generateScannerDetails(result)
-                Success(listOf(ScanResult(Provenance(), details, summary)))
+                Success(listOf(ScanResult(UnknownProvenance, details, summary)))
             } ?: EMPTY_RESULT
         }
     }

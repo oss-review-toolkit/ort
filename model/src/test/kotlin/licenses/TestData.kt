@@ -30,8 +30,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
@@ -40,6 +38,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -141,7 +140,7 @@ val project = Project.EMPTY.copy(
     scopeDependencies = sortedSetOf(scope)
 )
 
-val provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY)
+val provenance = UnknownProvenance
 
 val scanResults = listOf(
     packageWithDetectedLicense,

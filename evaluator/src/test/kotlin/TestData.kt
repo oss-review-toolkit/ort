@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
@@ -40,6 +39,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -196,7 +196,7 @@ val ortResult = OrtResult(
             scanResults = sortedMapOf(
                 Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0") to listOf(
                     ScanResult(
-                        provenance = Provenance(),
+                        provenance = UnknownProvenance,
                         scanner = ScannerDetails.EMPTY,
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,

@@ -46,9 +46,9 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.clients.fossid.toList
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
@@ -352,6 +352,6 @@ class FossId(name: String, config: ScannerConfiguration) : RemoteScanner(name, c
             issues = emptyList()
         )
 
-        return ScanResult(Provenance(), details, summary)
+        return ScanResult(UnknownProvenance, details, summary)
     }
 }

@@ -36,6 +36,7 @@ import okio.sink
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -194,7 +195,7 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
     val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
 
     val pkg = getPackageOrProject(id)!!.let {
-        if (getProvenance(id)!!.sourceArtifact != null) {
+        if (getProvenance(id) is ArtifactProvenance) {
             it.copy(vcs = VcsInfo.EMPTY, vcsProcessed = VcsInfo.EMPTY)
         } else {
             it.copy(sourceArtifact = RemoteArtifact.EMPTY)
