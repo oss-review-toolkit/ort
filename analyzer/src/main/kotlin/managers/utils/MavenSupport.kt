@@ -125,11 +125,11 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         fun parseAuthors(mavenProject: MavenProject) =
             sortedSetOf<String>().apply {
                 mavenProject.organization?.let {
-                    if (!it.name.isNullOrEmpty()) {
-                        add(it.name)
-                    }
+                    if (!it.name.isNullOrEmpty()) add(it.name)
                 }
-                addAll(mavenProject.developers.mapNotNull { it.organization?.takeUnless { it.isEmpty() } ?: it.name })
+
+                val developers = mavenProject.developers.mapNotNull { it.organization.orEmpty().ifEmpty { it.name } }
+                addAll(developers)
             }
 
         fun parseLicenses(mavenProject: MavenProject) =
