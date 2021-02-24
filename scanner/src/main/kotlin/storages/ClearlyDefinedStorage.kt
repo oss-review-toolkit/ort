@@ -183,9 +183,12 @@ class ClearlyDefinedStorage(
     private fun handleException(id: Identifier, e: Exception): Result<ScanResultContainer> {
         e.showStackTrace()
 
-        log.error { "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined." }
+        val message = "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined: " +
+                e.collectMessagesAsString()
 
-        return Failure(e.collectMessagesAsString())
+        log.error { message }
+
+        return Failure(message)
     }
 
     /**
