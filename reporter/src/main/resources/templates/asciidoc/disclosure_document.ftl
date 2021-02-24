@@ -31,7 +31,14 @@ Excluded projects and packages are ignored.
 :sectnums:
 :toc: preamble
 
-= Disclosure Document
+[#assign errorTitle = "DISCLAIMER! THERE ARE UNRESOLVED ISSUES.
+    THIS DOCUMENT SHOULD NOT BE DISTRIBUTED UNTIL THESE ISSUES ARE RESOLVED."?replace("\n", " ")]
+
+[#--
+The alert role needs to be defined in the pdf-theme file, where the color can be customized.
+If not present, the text is displayed normally.
+--]
+= [#if helper.hasUnresolvedIssues()][.alert]#${errorTitle}#[#else] Disclosure Document[/#if]
 :author-name: OSS Review Toolkit
 [#assign now = .now]
 :revdate: ${now?date?iso_local}
