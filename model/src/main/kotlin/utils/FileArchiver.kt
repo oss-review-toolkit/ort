@@ -68,8 +68,9 @@ class FileArchiver(
      * Return whether an archive corresponding to [provenance] exists.
      */
     fun hasArchive(provenance: Provenance): Boolean {
-        val archivePath = getArchivePath(provenance)
+        if (provenance.sourceArtifact == null && provenance.vcsInfo == null) return false
 
+        val archivePath = getArchivePath(provenance)
         return storage.exists(archivePath)
     }
 
@@ -77,6 +78,10 @@ class FileArchiver(
      * Archive all files in [directory] matching any of the configured [patterns] in the [storage].
      */
     fun archive(directory: File, provenance: Provenance) {
+        require(provenance.sourceArtifact != null || provenance.vcsInfo != null) {
+            "Unable to create an archive for unknown provenance."
+        }
+
         val zipFile = createTempFile(ORT_NAME, ".zip").toFile()
 
         val zipDuration = measureTime {
@@ -111,6 +116,8 @@ class FileArchiver(
      * Unarchive the archive corresponding to [provenance].
      */
     fun unarchive(directory: File, provenance: Provenance): Boolean {
+        if (provenance.sourceArtifact == null && provenance.vcsInfo == null) return false
+
         val archivePath = getArchivePath(provenance)
 
         return try {
