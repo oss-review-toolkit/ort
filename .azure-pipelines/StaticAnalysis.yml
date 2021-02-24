@@ -9,17 +9,17 @@ jobs:
 
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | detekt | gradle-caches | gradle.properties, settings.gradle.kts, **/build.gradle.kts'
+      key: '$(Agent.OS) | detekt | gradle-caches | gradle.properties, settings.gradle.kts, **/build.gradle.kts'
       restoreKeys: |
-        "$(Agent.OS)" | detekt | gradle-caches
+        $(Agent.OS) | detekt | gradle-caches
       path: $(GRADLE_USER_HOME)/caches
     displayName: Cache Gradle Caches
 
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | gradle-wrapper | gradle/wrapper/gradle-wrapper.properties'
+      key: '$(Agent.OS) | gradle-wrapper | gradle/wrapper/gradle-wrapper.properties'
       restoreKeys: |
-        "$(Agent.OS)" | gradle-wrapper
+        $(Agent.OS) | gradle-wrapper
       path: $(GRADLE_USER_HOME)/wrapper/dists
     displayName: Cache Gradle Wrapper
 

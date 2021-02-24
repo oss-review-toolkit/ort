@@ -63,17 +63,17 @@ jobs:
   # Gradle build cache, see: https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | analyzer-test | gradle-caches | gradle.properties, settings.gradle.kts, **/build.gradle.kts'
+      key: '$(Agent.OS) | analyzer-test | gradle-caches | gradle.properties, settings.gradle.kts, **/build.gradle.kts'
       restoreKeys: |
-        "$(Agent.OS)" | analyzer-test | gradle-caches
+        $(Agent.OS) | analyzer-test | gradle-caches
       path: $(GRADLE_USER_HOME)/caches
     displayName: Cache Gradle Caches
 
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | gradle-wrapper | gradle/wrapper/gradle-wrapper.properties'
+      key: '$(Agent.OS) | gradle-wrapper | gradle/wrapper/gradle-wrapper.properties'
       restoreKeys: |
-        "$(Agent.OS)" | gradle-wrapper
+        $(Agent.OS) | gradle-wrapper
       path: $(GRADLE_USER_HOME)/wrapper/dists
     displayName: Cache Gradle Wrapper
 
@@ -90,9 +90,9 @@ jobs:
   # instead to make sure the cache is updated once a day.
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | analyzer-test | ort-data | "$(DAY_OF_YEAR)"'
+      key: '$(Agent.OS) | analyzer-test | ort-data | $(DAY_OF_YEAR)'
       restoreKeys: |
-        "$(Agent.OS)" | analyzer-test | ort-data
+        $(Agent.OS) | analyzer-test | ort-data
       path: $(ORT_DATA_DIR)
     displayName: Cache ORT Data Dir
 
