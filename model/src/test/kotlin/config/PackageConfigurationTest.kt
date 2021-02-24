@@ -22,9 +22,10 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -51,7 +52,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                Provenance(
+                RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
@@ -67,7 +68,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 Identifier.EMPTY.copy(name = "some-other-name"),
-                Provenance(
+                RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
@@ -83,7 +84,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                Provenance(
+                RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://host/repo.git",
@@ -99,7 +100,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                Provenance(
+                RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
@@ -115,7 +116,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                Provenance(
+                ArtifactProvenance(
                     sourceArtifact = RemoteArtifact.EMPTY.copy(
                         url = "https://host/path/file.zip"
                     )
@@ -128,7 +129,7 @@ class PackageConfigurationTest : WordSpec({
 
             config.matches(
                 config.id,
-                Provenance(
+                ArtifactProvenance(
                     sourceArtifact = RemoteArtifact.EMPTY.copy(
                         url = "https://host/path/some-other-file.zip"
                     )

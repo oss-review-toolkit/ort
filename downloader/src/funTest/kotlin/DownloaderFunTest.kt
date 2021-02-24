@@ -23,14 +23,14 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DownloaderFunTest : StringSpec() {
     private lateinit var outputDir: File
@@ -76,10 +75,9 @@ class DownloaderFunTest : StringSpec() {
             val provenance = Downloader.download(pkg, outputDir)
             val licenseFile = outputDir.resolve("LICENSE-junit.txt")
 
-            provenance.vcsInfo should beNull()
-            provenance.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
             licenseFile.isFile shouldBe true
@@ -145,10 +143,9 @@ class DownloaderFunTest : StringSpec() {
             val provenance = Downloader.download(pkg, outputDir)
             val licenseFile = outputDir.resolve("LICENSE-junit.txt")
 
-            provenance.vcsInfo should beNull()
-            provenance.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
             licenseFile.isFile shouldBe true
@@ -180,10 +177,9 @@ class DownloaderFunTest : StringSpec() {
             val provenance = Downloader.download(pkg, outputDir)
             val tyrexDir = outputDir.resolve("tyrex-1.0.1")
 
-            provenance.vcsInfo should beNull()
-            provenance.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
             tyrexDir.isDirectory shouldBe true
@@ -213,10 +209,9 @@ class DownloaderFunTest : StringSpec() {
             val provenance = Downloader.download(pkg, outputDir)
             val tslibDir = outputDir.resolve("tslib-1.10.0")
 
-            provenance.vcsInfo should beNull()
-            provenance.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
             tslibDir.isDirectory shouldBe true

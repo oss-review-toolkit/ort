@@ -22,9 +22,8 @@ package org.ossreviewtoolkit.downloader
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 
@@ -34,6 +33,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -85,13 +85,12 @@ class BabelFunTest : StringSpec() {
             val workingTree = VersionControlSystem.forDirectory(outputDir)
             val babelCliDir = outputDir.resolve("packages/babel-cli")
 
-            provenance.sourceArtifact should beNull()
-            provenance.vcsInfo shouldNotBeNull {
-                type shouldBe pkg.vcsProcessed.type
-                url shouldBe pkg.vcsProcessed.url
-                revision shouldBe "master"
-                resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
-                path shouldBe pkg.vcsProcessed.path
+            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+                vcsInfo.type shouldBe pkg.vcsProcessed.type
+                vcsInfo.url shouldBe pkg.vcsProcessed.url
+                vcsInfo.revision shouldBe "master"
+                vcsInfo.resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+                vcsInfo.path shouldBe pkg.vcsProcessed.path
             }
 
             workingTree shouldNotBeNull {

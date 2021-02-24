@@ -33,19 +33,21 @@ import io.kotest.matchers.types.beOfType
 import java.time.Duration
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -84,32 +86,31 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
     private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
     private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)
-    private val downloadTime3 = Instant.EPOCH + Duration.ofDays(3)
 
-    private val provenanceWithSourceArtifact1 = Provenance(
+    private val provenanceWithSourceArtifact1 = ArtifactProvenance(
         downloadTime = downloadTime1,
         sourceArtifact = sourceArtifact1
     )
-    private val provenanceWithVcsInfo1 = Provenance(
+    private val provenanceWithVcsInfo1 = RepositoryProvenance(
         downloadTime = downloadTime2,
         vcsInfo = vcs1
     )
 
-    private val provenanceWithSourceArtifact2 = Provenance(
+    private val provenanceWithSourceArtifact2 = ArtifactProvenance(
         downloadTime = downloadTime1,
         sourceArtifact = sourceArtifact2
     )
-    private val provenanceWithVcsInfo2 = Provenance(
+    private val provenanceWithVcsInfo2 = RepositoryProvenance(
         downloadTime = downloadTime2,
         vcsInfo = vcs2
     )
 
-    private val provenanceWithOriginalVcsInfo = Provenance(
+    private val provenanceWithOriginalVcsInfo = RepositoryProvenance(
         downloadTime = downloadTime2,
         vcsInfo = vcs1,
         originalVcsInfo = pkgWithoutRevision.vcsProcessed
     )
-    private val provenanceEmpty = Provenance(downloadTime3)
+    private val provenanceEmpty = UnknownProvenance
 
     private val scannerDetails1 = ScannerDetails("name 1", "1.0.0", "config 1")
     private val scannerDetails2 = ScannerDetails("name 2", "2.0.0", "config 2")

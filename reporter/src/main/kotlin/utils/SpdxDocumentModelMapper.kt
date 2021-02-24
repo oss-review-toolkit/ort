@@ -22,8 +22,10 @@ package org.ossreviewtoolkit.reporter.utils
 import java.time.Instant
 import java.util.UUID
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -105,7 +107,7 @@ object SpdxDocumentModelMapper {
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
                 val vcsScanResult =
-                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance.vcsInfo != null }
+                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is RepositoryProvenance }
 
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = binaryPackage.copy(
@@ -129,7 +131,7 @@ object SpdxDocumentModelMapper {
 
             if (pkg.sourceArtifact.url.isNotBlank()) {
                 val sourceArtifactScanResult =
-                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance.sourceArtifact != null }
+                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is ArtifactProvenance }
 
                 // TODO: The copyright text contains copyrights from all scan results.
                 val sourceArtifactPackage = binaryPackage.copy(

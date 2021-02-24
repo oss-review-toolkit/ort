@@ -28,7 +28,7 @@ import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
-import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
 
-private val PROVENANCE = Provenance(
+private val PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "url",

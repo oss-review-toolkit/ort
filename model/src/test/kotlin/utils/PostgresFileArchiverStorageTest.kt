@@ -29,17 +29,18 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.time.Duration
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private val PG_STARTUP_WAIT = Duration.ofSeconds(20)
 
-private val SOURCE_ARTIFACT_PROVENANCE = Provenance(sourceArtifact = RemoteArtifact("url", Hash.create("hash")))
-private val VCS_PROVENANCE = Provenance(
+private val SOURCE_ARTIFACT_PROVENANCE = ArtifactProvenance(sourceArtifact = RemoteArtifact("url", Hash.create("hash")))
+private val VCS_PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "url",

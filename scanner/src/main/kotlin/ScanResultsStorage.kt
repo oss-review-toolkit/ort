@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
@@ -265,7 +266,7 @@ abstract class ScanResultsStorage {
 
         // Do not store scan results without provenance information, because they cannot be assigned to the revision of
         // the package source code later.
-        if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
+        if (scanResult.provenance is UnknownProvenance) {
             val message =
                 "Not storing scan result for '${id.toCoordinates()}' because no provenance information is available."
             log.info { message }

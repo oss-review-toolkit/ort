@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
@@ -343,8 +344,9 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
         val repositoryPath = getRepositoryPath(getProject(id)!!.vcsProcessed)
 
         getScanResultsForId(id).forEach { scanResult ->
-            val vcsPath = scanResult.provenance.vcsInfo?.path.orEmpty()
-            val isGitRepo = scanResult.provenance.vcsInfo?.type == VcsType.GIT_REPO
+            val vcsInfo = (scanResult.provenance as? RepositoryProvenance)?.vcsInfo
+            val vcsPath = vcsInfo?.path.orEmpty()
+            val isGitRepo = vcsInfo?.type == VcsType.GIT_REPO
 
             val findingPaths = with(scanResult.summary) {
                 copyrightFindings.mapTo(mutableSetOf()) { it.location.path } + licenseFindings.map { it.location.path }
@@ -362,7 +364,7 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
         } else {
             results.map { scanResult ->
                 val summary = scanResult.summary
-                val repositoryPath = getRepositoryPath(scanResult.provenance.vcsInfo!!)
+                val repositoryPath = getRepositoryPath((scanResult.provenance as RepositoryProvenance).vcsInfo)
                 fun TextLocation.isExcluded() = "$repositoryPath$path" !in excludePaths
 
                 val copyrightFindings = summary.copyrightFindings.filterTo(sortedSetOf()) { it.location.isExcluded() }

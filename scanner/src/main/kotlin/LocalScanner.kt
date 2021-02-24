@@ -36,12 +36,13 @@ import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -49,7 +50,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
-import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
@@ -273,7 +274,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         val now = Instant.now()
         return ScanResult(
-            provenance = Provenance(),
+            provenance = UnknownProvenance,
             scanner = details,
             summary = ScanSummary(
                 startTime = now,
@@ -290,7 +291,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     private fun createMissingArchives(scanResults: Map<Package, List<ScanResult>>, downloadDirectory: File) {
         scanResults.forEach { (pkg, results) ->
             val missingArchives = results.mapNotNullTo(mutableSetOf()) { result ->
-                result.provenance.takeUnless { archiver.hasArchive(result.provenance) }
+                result.provenance.takeUnless { it is KnownProvenance && archiver.hasArchive(it) }
             }
 
             if (missingArchives.isNotEmpty()) {
@@ -298,7 +299,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 Downloader.download(pkg, pkgDownloadDirectory)
 
                 missingArchives.forEach { provenance ->
-                    archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
+                    if (provenance is KnownProvenance) {
+                        archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
+                    }
                 }
             }
         }
@@ -337,7 +340,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
             val now = Instant.now()
             return ScanResult(
-                Provenance(),
+                UnknownProvenance,
                 scannerDetails,
                 ScanSummary(
                     startTime = now,
@@ -360,10 +363,14 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'."
         }
 
-        archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
+        if (provenance is KnownProvenance) {
+            archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
+        }
 
         val (scanSummary, scanDuration) = measureTimedValue {
-            val vcsPath = provenance.vcsInfo?.takeUnless { it.type == VcsType.GIT_REPO }?.path.orEmpty()
+            val vcsPath = (provenance as? RepositoryProvenance)?.vcsInfo?.takeUnless {
+                it.type == VcsType.GIT_REPO
+            }?.path.orEmpty()
             scanPathInternal(pkgDownloadDirectory, resultsFile).filterByPath(vcsPath)
         }
 
@@ -391,7 +398,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         }
     }
 
-    private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
+    private fun archiveFiles(directory: File, id: Identifier, provenance: KnownProvenance) {
         log.info { "Archiving files for ${id.toCoordinates()}." }
 
         val duration = measureTime { archiver.archive(directory, provenance) }
@@ -464,7 +471,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             inputPath.name.fileSystemEncode(), ""
         )
 
-        val scanResult = ScanResult(Provenance(), details, summary)
+        val scanResult = ScanResult(UnknownProvenance, details, summary)
         val scanRecord = ScanRecord(sortedMapOf(id to listOf(scanResult)), ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
@@ -512,12 +519,11 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         // Use vcsInfo and sourceArtifact instead of provenance in order to ignore the download time and original VCS
         // info.
         data class Key(
-            val vcsInfo: VcsInfo?,
-            val sourceArtifact: RemoteArtifact?,
+            val provenance: Provenance?,
             val scannerDetails: ScannerDetails
         )
 
-        fun ScanResult.key() = Key(provenance.vcsInfo, provenance.sourceArtifact, scanner)
+        fun ScanResult.key() = Key(provenance, scanner)
 
         val deduplicatedResults = distinctBy { it.key() }
 

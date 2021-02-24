@@ -33,10 +33,12 @@ import kotlinx.html.*
 import kotlinx.html.dom.*
 
 import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -634,13 +636,13 @@ class StaticHtmlReporter : Reporter {
 }
 
 private fun EM.provenanceLink(provenance: Provenance?) {
-    provenance?.sourceArtifact?.let { artifact ->
+    if (provenance is ArtifactProvenance) {
         +" (from "
-        a(href = artifact.url) { +"artifact" }
+        a(href = provenance.sourceArtifact.url) { +"artifact" }
         +")"
-    } ?: provenance?.vcsInfo?.let { vcs ->
+    } else if (provenance is RepositoryProvenance) {
         +" (from "
-        a(href = vcs.url) { +"VCS" }
+        a(href = provenance.vcsInfo.url) { +"VCS" }
         +")"
     }
 }
@@ -658,26 +660,28 @@ private fun DIV.permalink(permalink: String, count: Int) {
 }
 
 private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
-    val vcsInfo = provenance.vcsInfo
-    if (vcsInfo != null && vcsInfo != VcsInfo.EMPTY) {
-        return VcsHost.toPermalink(
-            vcsInfo.copy(path = location.path),
-            location.startLine, location.endLine
-        )
+    (provenance as? RepositoryProvenance)?.let {
+        if (it.vcsInfo != VcsInfo.EMPTY) {
+            return VcsHost.toPermalink(
+                it.vcsInfo.copy(path = location.path),
+                location.startLine, location.endLine
+            )
+        }
     }
 
-    val sourceArtifact = provenance.sourceArtifact
-    if (sourceArtifact != null && sourceArtifact != RemoteArtifact.EMPTY) {
-        val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
-        if (sourceArtifact.url.matches(mavenCentralPattern)) {
-            // At least for source artifacts on Maven Central, use the "proxy" from Sonatype which has the
-            // Archive Browser plugin installed to link to the files with findings.
-            return with(id) {
-                val group = namespace.replace('.', '/')
-                "https://repository.sonatype.org/" +
-                        "service/local/repositories/central-proxy/" +
-                        "archive/$group/$name/$version/$name-$version-sources.jar/" +
-                        "!/${location.path}"
+    (provenance as? ArtifactProvenance)?.let {
+        if (it.sourceArtifact != RemoteArtifact.EMPTY) {
+            val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
+            if (it.sourceArtifact.url.matches(mavenCentralPattern)) {
+                // At least for source artifacts on Maven Central, use the "proxy" from Sonatype which has the
+                // Archive Browser plugin installed to link to the files with findings.
+                return with(id) {
+                    val group = namespace.replace('.', '/')
+                    "https://repository.sonatype.org/" +
+                            "service/local/repositories/central-proxy/" +
+                            "archive/$group/$name/$version/$name-$version-sources.jar/" +
+                            "!/${location.path}"
+                }
             }
         }
     }

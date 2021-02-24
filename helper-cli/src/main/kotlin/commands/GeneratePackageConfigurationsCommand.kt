@@ -29,8 +29,10 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
@@ -78,9 +80,9 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
         val scanResults = (scanResultsStorage.read(packageId) as? Success)?.result ?: emptyList()
 
-        scanResults.find { it.provenance.vcsInfo != null }?.provenance
+        scanResults.find { it.provenance is RepositoryProvenance }?.provenance
             ?.writePackageConfigurationFile("vcs.yml")
-        scanResults.find { it.provenance.sourceArtifact != null }?.provenance
+        scanResults.find { it.provenance is ArtifactProvenance }?.provenance
             ?.writePackageConfigurationFile("source-artifact.yml")
     }
 
@@ -104,17 +106,25 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
 }
 
 private fun createPackageConfiguration(id: Identifier, provenance: Provenance): PackageConfiguration =
-    provenance.vcsInfo?.let { vcsInfo ->
-        PackageConfiguration(
-            id = id,
-            vcs = VcsMatcher(
-                type = vcsInfo.type,
-                url = vcsInfo.url,
-                revision = vcsInfo.resolvedRevision!!,
-                path = vcsInfo.path.takeIf { vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
+    when (provenance) {
+        is ArtifactProvenance -> {
+            PackageConfiguration(
+                id = id,
+                sourceArtifactUrl = provenance.sourceArtifact.url
             )
-        )
-    } ?: PackageConfiguration(
-        id = id,
-        sourceArtifactUrl = provenance.sourceArtifact!!.url
-    )
+        }
+
+        is RepositoryProvenance -> {
+            PackageConfiguration(
+                id = id,
+                vcs = VcsMatcher(
+                    type = provenance.vcsInfo.type,
+                    url = provenance.vcsInfo.url,
+                    revision = provenance.vcsInfo.resolvedRevision!!,
+                    path = provenance.vcsInfo.path.takeIf { provenance.vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
+                )
+            )
+        }
+
+        else -> throw IllegalArgumentException("Unsupported provenance $provenance.")
+    }

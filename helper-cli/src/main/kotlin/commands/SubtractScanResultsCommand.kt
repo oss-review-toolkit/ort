@@ -25,8 +25,10 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.mapper
@@ -102,18 +104,25 @@ private operator fun ScanSummary.minus(other: ScanSummary?): ScanSummary {
 }
 
 private data class Key(
-    val vcsType: VcsType?,
-    val vcsUrl: String?,
-    val vcsRevision: String?,
-    val vcsPath: String?,
-    val sourceArtifactUrl: String?
+    val vcsType: VcsType? = null,
+    val vcsUrl: String? = null,
+    val vcsRevision: String? = null,
+    val vcsPath: String? = null,
+    val sourceArtifactUrl: String? = null
 )
 
 private fun Provenance.key(): Key =
-    Key(
-        vcsType = vcsInfo?.type,
-        vcsUrl = vcsInfo?.url,
-        vcsRevision = vcsInfo?.resolvedRevision,
-        vcsPath = vcsInfo?.path,
-        sourceArtifactUrl = sourceArtifact?.url
-    )
+    when (this) {
+        is ArtifactProvenance -> Key(sourceArtifactUrl = sourceArtifact.url)
+
+        is RepositoryProvenance -> {
+            Key(
+                vcsType = vcsInfo.type,
+                vcsUrl = vcsInfo.url,
+                vcsRevision = vcsInfo.revision,
+                vcsPath = vcsInfo.path
+            )
+        }
+
+        else -> Key()
+    }

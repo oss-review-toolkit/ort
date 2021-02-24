@@ -83,8 +83,7 @@ class DefaultLicenseInfoProvider(
         val findings = mutableListOf<Findings>()
 
         ortResult.getScanResultsForId(id).forEach { (provenance, _, summary) ->
-            val (licenseFindingCurations, pathExcludes, relativeFindingsPath) =
-                getConfiguration(id, provenance)
+            val (licenseFindingCurations, pathExcludes, relativeFindingsPath) = getConfiguration(id, provenance)
 
             findings += Findings(
                 provenance = provenance,

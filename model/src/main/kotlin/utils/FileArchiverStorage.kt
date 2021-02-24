@@ -20,7 +20,7 @@ package org.ossreviewtoolkit.model.utils
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.KnownProvenance
 
 /**
  * A storage for file archives.
@@ -29,29 +29,17 @@ interface FileArchiverStorage {
     /**
      * Return whether an archive corresponding to [provenance] exists.
      */
-    fun hasArchive(provenance: Provenance): Boolean
+    fun hasArchive(provenance: KnownProvenance): Boolean
 
     /**
      * Add the [archive][zipFile] corresponding to [provenance]. Overwrites any existing archive corresponding to
      * [provenance].
      */
-    fun addArchive(provenance: Provenance, zipFile: File)
+    fun addArchive(provenance: KnownProvenance, zipFile: File)
 
     /**
      * Return the archive corresponding to [provenance] or null if no such archive exists. The returned file is a
      * temporary file.
      */
-    fun getArchive(provenance: Provenance): File?
-}
-
-/**
- * Checks whether the given [provenance] either has a source artifact or a VCS info with a resolved revision, but not
- * both. Throws a runtime exception if that check fails.
- */
-internal fun checkIsUniqueStorageKey(provenance: Provenance) {
-    val hasSourceArtifact = provenance.sourceArtifact != null
-    val hasVcsInfo = provenance.vcsInfo?.let { !it.resolvedRevision.isNullOrBlank() } ?: false
-    require(hasSourceArtifact xor hasVcsInfo) {
-        "The given provenance must either have a source artifact or a VCS info with a resolved revision, but not both."
-    }
+    fun getArchive(provenance: KnownProvenance): File?
 }
