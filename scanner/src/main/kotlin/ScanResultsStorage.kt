@@ -209,7 +209,7 @@ abstract class ScanResultsStorage {
 
     /**
      * Read all [ScanResult]s for a package with [id] from the storage. Return a [ScanResultContainer] wrapped in a
-     * [Result], which is a [Failure] if no [ScanResult] was found and a [Success] otherwise.
+     * [Result], which is a [Failure] if an unexpected error occurred and a [Success] otherwise.
      */
     fun read(id: Identifier): Result<ScanResultContainer> {
         val (result, duration) = measureTimedValue { readFromStorage(id) }
@@ -236,7 +236,7 @@ abstract class ScanResultsStorage {
      * [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches the expected source code
      * location. That check is important to find the correct results when different revisions of a package using the
      * same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during development). Return a
-     * [ScanResultContainer] wrapped in a [Result], which is a [Failure] if no [ScanResult] was found and a [Success]
+     * [ScanResultContainer] wrapped in a [Result], which is a [Failure] if an unexpected error occurred and a [Success]
      * otherwise.
      */
     fun read(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
