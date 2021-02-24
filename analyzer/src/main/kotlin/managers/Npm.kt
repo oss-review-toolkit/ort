@@ -205,7 +205,7 @@ open class Npm(
      */
     private fun parseAuthorString(authorStr: String?): String? =
         authorStr?.let { str ->
-            str.substringBefore('<').substringBefore('(').trim().ifBlank { null }
+            str.substringBefore('<').substringBefore('(').trim().ifEmpty { null }
         }
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
