@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -113,7 +114,7 @@ class FreemarkerTemplateProcessor(
             "packages" to packages,
             "ortResult" to input.ortResult,
             "licenseTextProvider" to input.licenseTextProvider,
-            "helper" to TemplateHelper(input.ortResult, input.licenseClassifications),
+            "helper" to TemplateHelper(input.ortResult, input.licenseClassifications, input.resolutionProvider),
             "projectsAsPackages" to projectsAsPackages
         )
 
@@ -210,7 +211,11 @@ class FreemarkerTemplateProcessor(
     /**
      * A collection of helper functions for the Freemarker templates.
      */
-    class TemplateHelper(private val ortResult: OrtResult, private val licenseClassifications: LicenseClassifications) {
+    class TemplateHelper(
+        private val ortResult: OrtResult,
+        private val licenseClassifications: LicenseClassifications,
+        private val resolutionProvider: ResolutionProvider
+    ) {
         /**
          * Return [packages] that are a dependency of at least one of the provided [projects][projectIds].
          */
@@ -267,6 +272,15 @@ class FreemarkerTemplateProcessor(
             licenses.groupBy { it.license }
                 .map { (_, licenses) -> licenses.merge() }
                 .sortedBy { it.license.toString() }
+
+        /**
+         * Return `true` if there are any unresolved issues, or `false` otherwise.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun hasUnresolvedIssues() =
+            ortResult.collectIssues().values.flatten().any { issue ->
+                resolutionProvider.getIssueResolutionsFor(issue).isEmpty()
+            }
     }
 }
 

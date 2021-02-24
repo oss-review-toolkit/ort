@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.Environment
@@ -207,8 +208,11 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 )
             )
 
-            val result = FreemarkerTemplateProcessor.TemplateHelper(OrtResult.EMPTY, LicenseClassifications())
-                .mergeResolvedLicenses(resolvedLicenses)
+            val result = FreemarkerTemplateProcessor.TemplateHelper(
+                OrtResult.EMPTY,
+                LicenseClassifications(),
+                DefaultResolutionProvider()
+            ).mergeResolvedLicenses(resolvedLicenses)
 
             with(result[0]) {
                 originalExpressions[LicenseSource.DECLARED] shouldBe setOf(
