@@ -51,7 +51,7 @@ class FileBasedStorage(
 ) : ScanResultsStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
-    override fun readFromStorage(id: Identifier): Result<ScanResultContainer> {
+    override fun readInternal(id: Identifier): Result<ScanResultContainer> {
         val path = storagePath(id)
 
         @Suppress("TooGenericExceptionCaught")
@@ -76,7 +76,7 @@ class FileBasedStorage(
         }
     }
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> {
+    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val existingScanResults = when (val readResult = read(id)) {
             is Success -> readResult.result.results
             is Failure -> emptyList()

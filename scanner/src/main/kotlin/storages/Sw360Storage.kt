@@ -65,7 +65,7 @@ class Sw360Storage(
     )
     private val releaseClient = sw360ConnectionFactory.releaseAdapter
 
-    override fun readFromStorage(id: Identifier): Result<ScanResultContainer> {
+    override fun readInternal(id: Identifier): Result<ScanResultContainer> {
         val tempScanResultFile = createTempFileForUpload(id)
 
         return try {
@@ -86,7 +86,7 @@ class Sw360Storage(
         }
     }
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> {
+    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val tempScanResultFile = createTempFileForUpload(id)
 
         return try {

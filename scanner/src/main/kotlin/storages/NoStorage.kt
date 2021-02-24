@@ -35,10 +35,10 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
  * errors.
  */
 class NoStorage : ScanResultsStorage() {
-    override fun readFromStorage(id: Identifier) = Success(ScanResultContainer(id, emptyList()))
+    override fun readInternal(id: Identifier) = Success(ScanResultContainer(id, emptyList()))
 
-    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria) =
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria) =
         Success(ScanResultContainer(pkg.id, emptyList()))
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult) = Success(Unit)
+    override fun addInternal(id: Identifier, scanResult: ScanResult) = Success(Unit)
 }

@@ -212,7 +212,7 @@ abstract class ScanResultsStorage {
      * [Result], which is a [Failure] if an unexpected error occurred and a [Success] otherwise.
      */
     fun read(id: Identifier): Result<ScanResultContainer> {
-        val (result, duration) = measureTimedValue { readFromStorage(id) }
+        val (result, duration) = measureTimedValue { readInternal(id) }
 
         stats.numReads.incrementAndGet()
 
@@ -240,7 +240,7 @@ abstract class ScanResultsStorage {
      * otherwise.
      */
     fun read(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
-        val (result, duration) = measureTimedValue { readFromStorage(pkg, scannerCriteria) }
+        val (result, duration) = measureTimedValue { readInternal(pkg, scannerCriteria) }
 
         stats.numReads.incrementAndGet()
 
@@ -284,7 +284,7 @@ abstract class ScanResultsStorage {
             return Failure(message)
         }
 
-        val (result, duration) = measureTimedValue { addToStorage(id, scanResult) }
+        val (result, duration) = measureTimedValue { addInternal(id, scanResult) }
 
         log.perf {
             "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in ${duration.inMilliseconds}ms."
@@ -296,14 +296,14 @@ abstract class ScanResultsStorage {
     /**
      * Internal version of [read] that does not update the [access statistics][stats].
      */
-    protected abstract fun readFromStorage(id: Identifier): Result<ScanResultContainer>
+    protected abstract fun readInternal(id: Identifier): Result<ScanResultContainer>
 
     /**
      * Internal version of [read] that does not update the [access statistics][stats]. Implementations may want to
      * override this function if they can filter for the wanted [scannerCriteria] in a more efficient way.
      */
-    protected open fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
-        val scanResults = when (val readResult = readFromStorage(pkg.id)) {
+    protected open fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
+        val scanResults = when (val readResult = readInternal(pkg.id)) {
             is Success -> readResult.result.results.toMutableList()
             is Failure -> return readResult
         }
@@ -336,5 +336,5 @@ abstract class ScanResultsStorage {
     /**
      * Internal version of [add] that skips common sanity checks.
      */
-    protected abstract fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit>
+    protected abstract fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
 }
