@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,11 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 
 import kotlin.time.measureTimedValue
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Failure
@@ -259,6 +264,32 @@ abstract class ScanResultsStorage {
     }
 
     /**
+     * Read those [ScanResult]s for the given [packages] from the storage that are
+     * [compatible][ScannerCriteria.matches] with the provided [scannerCriteria]. Also, [Package.sourceArtifact],
+     * [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches the expected source code
+     * location. That check is important to find the correct results when different revisions of a package using the
+     * same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during development). Return the list
+     * of [ScanResult]s mapped to the [Identifier]s of the [packages], wrapped in a [Result], which is a [Failure] if
+     * an unexpected error occurred and a [Success] otherwise.
+     */
+    fun read(packages: List<Package>, scannerCriteria: ScannerCriteria): Result<Map<Identifier, List<ScanResult>>> {
+        val (result, duration) = measureTimedValue { readInternal(packages, scannerCriteria) }
+
+        stats.numReads.addAndGet(packages.size)
+
+        if (result is Success) {
+            stats.numHits.addAndGet(result.result.count { (_, results) -> results.isNotEmpty() })
+
+            log.perf {
+                "Read ${result.result.values.sumBy { it.size }} scan results from ${javaClass.simpleName} in " +
+                        "${duration.inMilliseconds}ms."
+            }
+        }
+
+        return result
+    }
+
+    /**
      * Add the given [scanResult] to the [ScanResultContainer] for the scanned [Package] with the provided [id].
      * Depending on the storage implementation this might first read any existing [ScanResultContainer] and write the
      * new [ScanResultContainer] to the storage again, implicitly deleting the original storage entry by overwriting it.
@@ -331,6 +362,30 @@ abstract class ScanResultsStorage {
         }
 
         return Success(ScanResultContainer(pkg.id, scanResults))
+    }
+
+    /**
+     * Internal version of [read] that does not update the [access statistics][stats]. The default implementation uses
+     * [Dispatchers.IO] to run requests for individual packages in parallel. Implementations may want to override this
+     * function if they can filter for the wanted [scannerCriteria] or fetch results for multiple packages in a more
+     * efficient way.
+     */
+    protected open fun readInternal(
+        packages: List<Package>,
+        scannerCriteria: ScannerCriteria
+    ): Result<Map<Identifier, List<ScanResult>>> {
+        val results = runBlocking(Dispatchers.IO) {
+            packages.map { async { readInternal(it, scannerCriteria) } }.awaitAll()
+        }
+
+        return if (results.all { it is Failure }) {
+            Failure("Could not read any scan results from ${javaClass.simpleName}.")
+        } else {
+            Success(
+                results.filterIsInstance<Success<ScanResultContainer>>()
+                    .associate { Pair(it.result.id, it.result.results) }
+            )
+        }
     }
 
     /**
