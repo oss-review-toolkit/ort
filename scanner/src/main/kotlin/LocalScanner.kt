@@ -275,10 +275,11 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     }
 
                     if (missingArchives.isNotEmpty()) {
-                        val downloadResult = Downloader.download(pkg, downloadDirectory.resolve(pkg.id.toPath()))
+                        val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
+                        Downloader.download(pkg, pkgDownloadDirectory)
 
                         missingArchives.forEach { provenance ->
-                            archiveFiles(downloadResult.downloadDirectory, pkg.id, provenance)
+                            archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
                         }
                     }
                 }
@@ -367,9 +368,10 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         downloadDirectory: File
     ): ScanResult {
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
+        val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
         val downloadResult = try {
-            Downloader.download(pkg, downloadDirectory.resolve(pkg.id.toPath()))
+            Downloader.download(pkg, pkgDownloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
 
@@ -395,7 +397,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         }
 
         log.info {
-            "Running $scannerDetails on directory '${downloadResult.downloadDirectory.absolutePath}'."
+            "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'."
         }
 
         val provenance = Provenance(
@@ -403,10 +405,10 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             downloadResult.originalVcsInfo
         )
 
-        archiveFiles(downloadResult.downloadDirectory, pkg.id, provenance)
+        archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
 
         val (scanResult, scanDuration) = measureTimedValue {
-            scanPathInternal(downloadResult.downloadDirectory, resultsFile)
+            scanPathInternal(pkgDownloadDirectory, resultsFile)
                 .copy(provenance = provenance)
                 .filterByVcsPath()
         }

@@ -72,7 +72,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     /**
      * The temporary parent directory for downloads.
      */
-    private lateinit var outputDir: File
+    protected lateinit var outputDir: File
 
     /**
      * The directory where the source code of [pkg] was downloaded to.
@@ -92,7 +92,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
     init {
         "Source code was downloaded successfully".config(tags = setOf(ExpensiveTag)) {
-            VersionControlSystem.forDirectory(downloadResult.downloadDirectory) shouldNotBeNull {
+            VersionControlSystem.forDirectory(outputDir) shouldNotBeNull {
                 isValid() shouldBe true
                 vcsType shouldBe pkg.vcs.type
 
@@ -104,7 +104,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         }
 
         "All package manager definition files are found".config(tags = setOf(ExpensiveTag)) {
-            val managedFiles = PackageManager.findManagedFiles(downloadResult.downloadDirectory)
+            val managedFiles = PackageManager.findManagedFiles(outputDir)
 
             managedFiles.size shouldBe expectedManagedFiles.size
             managedFiles.entries.forAll { (manager, files) ->

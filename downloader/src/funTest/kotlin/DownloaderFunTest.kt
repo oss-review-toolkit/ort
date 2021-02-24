@@ -80,11 +80,11 @@ class DownloaderFunTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = downloadResult.downloadDirectory.resolve("LICENSE-junit.txt")
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadResult.downloadDirectory.walk().count() shouldBe 234
+            outputDir.walk().count() shouldBe 234
         }
 
         "Download of JAR source package fails when hash is incorrect".config(tags = setOf(ExpensiveTag)) {
@@ -148,11 +148,11 @@ class DownloaderFunTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = downloadResult.downloadDirectory.resolve("LICENSE-junit.txt")
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadResult.downloadDirectory.walk().count() shouldBe 234
+            outputDir.walk().count() shouldBe 234
         }
 
         "Can download a TGZ source artifact from SourceForge".config(tags = setOf(ExpensiveTag)) {
@@ -182,7 +182,7 @@ class DownloaderFunTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val tyrexDir = downloadResult.downloadDirectory.resolve("tyrex-1.0.1")
+            val tyrexDir = outputDir.resolve("tyrex-1.0.1")
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walk().count() shouldBe 409
@@ -215,7 +215,7 @@ class DownloaderFunTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val tslibDir = downloadResult.downloadDirectory.resolve("tslib-1.10.0")
+            val tslibDir = outputDir.resolve("tslib-1.10.0")
 
             tslibDir.isDirectory shouldBe true
             tslibDir.walk().count() shouldBe 16
