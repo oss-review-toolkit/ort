@@ -260,7 +260,7 @@ class Pip(
         }
         pip.requireSuccess()
 
-        var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
+        var declaredLicenses: SortedSet<String> = sortedSetOf()
 
         // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
