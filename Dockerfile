@@ -105,8 +105,10 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         cargo=$CARGO_VERSION \
         composer=$COMPOSER_VERSION \
         nodejs \
+        python-dev \
         python-pip \
         python-setuptools \
+        python3-dev \
         python3-pip \
         python3-setuptools \
         sbt=$SBT_VERSION \
