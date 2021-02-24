@@ -275,7 +275,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             assertCurrentTime(result.summary.endTime)
         }
 
-        "handle failed responses from ClearlyDefined" {
+        "return a failure if a ClearlyDefined request fails" {
             stubFor(
                 get(anyUrl())
                     .willReturn(aResponse().withStatus(500))
@@ -289,7 +289,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             }
         }
 
-        "handle the case that no results for  the scancode tool are available" {
+        "return an empty result if no results for the scancode tool are available" {
             val tools = listOf(toolUrl(COORDINATES, "unknownTool", "unknownVersion"), "differentTool")
             stubHarvestTools(wiremock, COORDINATES, tools)
 
@@ -298,7 +298,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             assertEmptyResult(storage.read(TEST_IDENTIFIER))
         }
 
-        "handle the case that no result for the tool file is returned" {
+        "return an empty result if no result for the tool file is returned" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             stubHarvestTools(wiremock, COORDINATES, listOf(scanCodeUrl))
             stubFor(
@@ -354,7 +354,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             assertValidResult(storage.read(pkg, SCANNER_CRITERIA))
         }
 
-        "deal with package coordinates not supported by ClearlyDefined" {
+        "return an empty result if the coordinates are not supported by ClearlyDefined" {
             val id = TEST_IDENTIFIER.copy(type = "unknown")
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
@@ -362,7 +362,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             assertEmptyResult(storage.read(id), expId = id)
         }
 
-        "handle an unexpected result for the harvest tool request" {
+        "return a failure if a harvest tool request returns an unexpected result" {
             stubFor(
                 get(anyUrl())
                     .willReturn(
@@ -379,7 +379,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             }
         }
 
-        "handle an unexpected result for the harvest tool file request" {
+        "return an empty result if a harvest tool file request returns an unexpected result" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             stubHarvestTools(wiremock, COORDINATES, listOf(scanCodeUrl))
             stubFor(
@@ -395,7 +395,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             assertEmptyResult(storage.read(TEST_IDENTIFIER))
         }
 
-        "handle a failure to connect to the server" {
+        "return a failure if the connection to the server fails" {
             // find a port on which no service is running
             val port = ServerSocket(0).use { it.localPort }
             val serverUrl = "http://localhost:$port"
