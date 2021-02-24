@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,17 @@ import java.sql.SQLException
 
 import javax.sql.DataSource
 
+import kotlin.math.max
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.Failure
@@ -79,7 +85,9 @@ class PostgresStorage(
      * Setup the database.
      */
     private fun setupDatabase() {
-        Database.connect(dataSource)
+        Database.connect(dataSource).apply {
+            defaultFetchSize(1000)
+        }
 
         transaction {
             withDataBaseLock {
@@ -184,6 +192,61 @@ class PostgresStorage(
 
                     val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
                             "$scannerCriteria from database: ${e.collectMessagesAsString()}"
+
+                    log.info { message }
+                    Failure(message)
+                }
+                else -> throw e
+            }
+        }
+    }
+
+    override fun readInternal(
+        packages: List<Package>,
+        scannerCriteria: ScannerCriteria
+    ): Result<Map<Identifier, List<ScanResult>>> {
+        if (packages.isEmpty()) return Success(emptyMap())
+
+        val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
+        val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
+
+        @Suppress("TooGenericExceptionCaught")
+        return try {
+            val scanResults = runBlocking(Dispatchers.IO) {
+                packages.chunked(max(packages.size / 50, 1)).map { chunk ->
+                    suspendedTransactionAsync {
+                        @Suppress("MaxLineLength")
+                        ScanResultDao.find {
+                            (ScanResults.identifier inList chunk.map { it.id.toCoordinates() }) and
+                                    (rawParam("scan_result->'scanner'->>'name'") tilde scannerCriteria.regScannerName) and
+                                    (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(minVersionArray)) and
+                                    (rawParam(VERSION_EXPRESSION) less arrayParam(maxVersionArray))
+                        }.map { it.identifier to it.scanResult }
+                    }
+                }.flatMap { it.await() }
+                    .groupBy { it.first }
+                    .mapValues { (_, results) -> results.map { it.second } }
+                    .mapValues { (id, results) ->
+                        val pkg = packages.single { it.id == id }
+
+                        results
+                            // TODO: Currently the query only accounts for the scanner criteria. Ideally also the
+                            //       provenance should be checked in the query to reduce the downloaded data.
+                            .filter { it.provenance.matches(pkg) }
+                            // The scanner compatibility is already checked in the query, but filter here again to be on
+                            // the safe side.
+                            .filter { scannerCriteria.matches(it.scanner) }
+                    }
+            }
+
+            Success(scanResults)
+        } catch (e: Exception) {
+            when (e) {
+                is JsonProcessingException, is SQLException -> {
+                    e.showStackTrace()
+
+                    val message = "Could not read scan results with $scannerCriteria from database: " +
+                            e.collectMessagesAsString()
 
                     log.info { message }
                     Failure(message)
