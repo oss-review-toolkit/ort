@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +67,35 @@ class CompositeStorage(
      */
     override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> =
         fetchReadResult(pkg.id) { read(pkg, scannerCriteria) }
+
+    override fun readInternal(
+        packages: List<Package>,
+        scannerCriteria: ScannerCriteria
+    ): Result<Map<Identifier, List<ScanResult>>> {
+        if (readers.isEmpty()) return Success(emptyMap())
+
+        val remainingPackages = packages.toMutableList()
+        val result = mutableMapOf<Identifier, List<ScanResult>>()
+        val failures = mutableListOf<String>()
+
+        readers.forEach { reader ->
+            if (remainingPackages.isEmpty()) return@forEach
+
+            when (val readerResult = reader.read(remainingPackages, scannerCriteria)) {
+                is Success -> {
+                    remainingPackages.filter { it.id !in readerResult.result.keys }
+                    result += readerResult.result
+                }
+                is Failure -> failures += readerResult.error
+            }
+        }
+
+        return if (failures.size < readers.size) {
+            Success(result)
+        } else {
+            Failure(failures.joinToString())
+        }
+    }
 
     /**
      * Trigger all configured writer storages to add the [scanResult] for the given [id]. Return a success result
