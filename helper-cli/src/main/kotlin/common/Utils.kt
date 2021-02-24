@@ -199,7 +199,9 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
         }
     }
 
-    return Downloader.download(pkg, tempDir).downloadDirectory
+    Downloader.download(pkg, tempDir)
+
+    return tempDir
 }
 
 /**

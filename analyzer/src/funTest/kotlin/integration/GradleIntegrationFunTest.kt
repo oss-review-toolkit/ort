@@ -53,7 +53,7 @@ class GradleIntegrationFunTest : AbstractIntegrationSpec() {
         // check that all of them are found, and that they are assigned to the correct package manager.
         val gradleFilenames = listOf("build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts")
 
-        val gradleFiles = downloadResult.downloadDirectory.walk().filterTo(mutableListOf()) {
+        val gradleFiles = outputDir.walk().filterTo(mutableListOf()) {
             it.name in gradleFilenames
         }
 
@@ -63,7 +63,7 @@ class GradleIntegrationFunTest : AbstractIntegrationSpec() {
             preferentialGradleFilenames.any { file.resolveSibling(it) in gradleFiles }
         }
 
-        val pomFiles = downloadResult.downloadDirectory.walk().filterTo(mutableListOf()) {
+        val pomFiles = outputDir.walk().filterTo(mutableListOf()) {
             it.name == "pom.xml"
         }
 
@@ -75,8 +75,7 @@ class GradleIntegrationFunTest : AbstractIntegrationSpec() {
 
     override val managedFilesForTest by lazy {
         mapOf(
-            Gradle.Factory() as PackageManagerFactory to
-                    listOf(downloadResult.downloadDirectory.resolve("buildSrc/build.gradle"))
+            Gradle.Factory() as PackageManagerFactory to listOf(outputDir.resolve("buildSrc/build.gradle"))
         )
     }
 }

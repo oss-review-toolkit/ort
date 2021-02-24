@@ -65,11 +65,6 @@ object Downloader {
         val dateTime: Instant,
 
         /**
-         * The directory to which files were downloaded.
-         */
-        val downloadDirectory: File,
-
-        /**
          * The source artifact that was downloaded, or null if either the download was performed from a [VCS][vcsInfo]
          * or there was no download performed at all because [Package.isMetaDataOnly] is true.
          */
@@ -110,7 +105,7 @@ object Downloader {
     fun download(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
         verifyOutputDirectory(outputDirectory)
 
-        if (pkg.isMetaDataOnly) return DownloadResult(dateTime = Instant.now(), downloadDirectory = outputDirectory)
+        if (pkg.isMetaDataOnly) return DownloadResult(Instant.now())
 
         val exception = DownloadException("Download failed for '${pkg.id.toCoordinates()}'.")
 
@@ -280,7 +275,7 @@ object Downloader {
             resolvedRevision = revision,
             path = pkg.vcsProcessed.path
         )
-        return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo,
+        return DownloadResult(startTime, vcsInfo = vcsInfo,
             originalVcsInfo = pkg.vcsProcessed.takeIf { it != vcsInfo })
     }
 
@@ -401,7 +396,7 @@ object Downloader {
                     "'${outputDirectory.absolutePath}'..."
         }
 
-        return DownloadResult(startTime, outputDirectory, sourceArtifact = pkg.sourceArtifact)
+        return DownloadResult(startTime, sourceArtifact = pkg.sourceArtifact)
     }
 }
 

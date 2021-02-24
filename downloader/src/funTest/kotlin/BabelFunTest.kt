@@ -92,14 +92,14 @@ class BabelFunTest : StringSpec() {
                 path shouldBe pkg.vcsProcessed.path
             }
 
-            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
+            val workingTree = VersionControlSystem.forDirectory(outputDir)
 
             workingTree shouldNotBeNull {
                 isValid() shouldBe true
                 getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
             }
 
-            val babelCliDir = downloadResult.downloadDirectory.resolve("packages/babel-cli")
+            val babelCliDir = outputDir.resolve("packages/babel-cli")
             babelCliDir.isDirectory shouldBe true
             babelCliDir.walk().count() shouldBe 242
         }
