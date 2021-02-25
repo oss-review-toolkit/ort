@@ -30,6 +30,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -527,11 +528,5 @@ class Pub(
  */
 private fun parseAuthors(pubspec: JsonNode): SortedSet<String> =
     (listOfNotNull(pubspec["author"]) + pubspec["authors"]?.toList().orEmpty()).mapNotNullTo(sortedSetOf()) {
-        extractAuthorName(it.textValue())
+        parseAuthorString(it.textValue())
     }
-
-/**
- * Extract the author name from an author string of the form "name <email>".
- */
-private fun extractAuthorName(authorStr: String?): String? =
-    authorStr?.substringBefore('<')?.trim()?.ifEmpty { null }
