@@ -73,14 +73,15 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo should beNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
+            val provenance = Downloader.download(pkg, outputDir)
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+
+            provenance.vcsInfo should beNull()
+            provenance.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
@@ -141,14 +142,15 @@ class DownloaderFunTest : StringSpec() {
                 )
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo should beNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
+            val provenance = Downloader.download(pkg, outputDir)
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+
+            provenance.vcsInfo should beNull()
+            provenance.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
@@ -175,14 +177,14 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo should beNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
+            val provenance = Downloader.download(pkg, outputDir)
+            val tyrexDir = outputDir.resolve("tyrex-1.0.1")
+
+            provenance.vcsInfo should beNull()
+            provenance.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash
             }
-
-            val tyrexDir = outputDir.resolve("tyrex-1.0.1")
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walk().count() shouldBe 409
@@ -208,14 +210,14 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo should beNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
+            val provenance = Downloader.download(pkg, outputDir)
+            val tslibDir = outputDir.resolve("tslib-1.10.0")
+
+            provenance.vcsInfo should beNull()
+            provenance.sourceArtifact shouldNotBeNull {
                 url shouldBe pkg.sourceArtifact.url
                 hash shouldBe pkg.sourceArtifact.hash
             }
-
-            val tslibDir = outputDir.resolve("tslib-1.10.0")
 
             tslibDir.isDirectory shouldBe true
             tslibDir.walk().count() shouldBe 16

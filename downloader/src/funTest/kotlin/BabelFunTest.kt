@@ -81,10 +81,12 @@ class BabelFunTest : StringSpec() {
                 vcsProcessed = vcsMerged
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
+            val provenance = Downloader.download(pkg, outputDir)
+            val workingTree = VersionControlSystem.forDirectory(outputDir)
+            val babelCliDir = outputDir.resolve("packages/babel-cli")
 
-            downloadResult.sourceArtifact should beNull()
-            downloadResult.vcsInfo shouldNotBeNull {
+            provenance.sourceArtifact should beNull()
+            provenance.vcsInfo shouldNotBeNull {
                 type shouldBe pkg.vcsProcessed.type
                 url shouldBe pkg.vcsProcessed.url
                 revision shouldBe "master"
@@ -92,14 +94,11 @@ class BabelFunTest : StringSpec() {
                 path shouldBe pkg.vcsProcessed.path
             }
 
-            val workingTree = VersionControlSystem.forDirectory(outputDir)
-
             workingTree shouldNotBeNull {
                 isValid() shouldBe true
                 getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
             }
 
-            val babelCliDir = outputDir.resolve("packages/babel-cli")
             babelCliDir.isDirectory shouldBe true
             babelCliDir.walk().count() shouldBe 242
         }
