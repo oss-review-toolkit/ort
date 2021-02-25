@@ -370,7 +370,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
         val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
-        val downloadResult = try {
+        val provenance = try {
             Downloader.download(pkg, pkgDownloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
@@ -399,11 +399,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         log.info {
             "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'."
         }
-
-        val provenance = Provenance(
-            downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
-            downloadResult.originalVcsInfo
-        )
 
         archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
 

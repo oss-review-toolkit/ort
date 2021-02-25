@@ -73,12 +73,12 @@ class BeanUtilsFunTest : StringSpec() {
                 vcs = vcsFromCuration
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
+            val provenance = Downloader.download(pkg, outputDir)
 
             outputDir.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
-            downloadResult.sourceArtifact should beNull()
+            provenance.sourceArtifact should beNull()
 
-            downloadResult.vcsInfo shouldNotBeNull {
+            provenance.vcsInfo shouldNotBeNull {
                 type shouldBe VcsType.SUBVERSION
                 url shouldBe vcsFromCuration.url
                 revision shouldBe "928490"
