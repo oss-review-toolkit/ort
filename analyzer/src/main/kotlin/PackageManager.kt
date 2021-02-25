@@ -282,3 +282,13 @@ abstract class PackageManager(
         }
     }
 }
+
+/**
+ * Parse a string with metadata about an [author] to extract the author name. Many package managers support
+ * such author information in string form that contain additional properties like an email address or a
+ * homepage. These additional properties are typically separated from the author name by specific [delimiters],
+ * e.g. the email address is often surrounded by angle brackets. This function assumes that the author name is the
+ * first portion in the given [author] string before one of the given [delimiters] is found.
+ */
+fun parseAuthorString(author: String?, vararg delimiters: Char = charArrayOf('<')): String? =
+    author?.split(*delimiters, limit = 2)?.firstOrNull()?.trim()?.ifEmpty { null }
