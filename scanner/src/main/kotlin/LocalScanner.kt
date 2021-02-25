@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -402,10 +403,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
 
-        val (scanResult, scanDuration) = measureTimedValue {
-            scanPathInternal(pkgDownloadDirectory, resultsFile)
-                .copy(provenance = provenance)
-                .filterByVcsPath()
+        val (scanSummary, scanDuration) = measureTimedValue {
+            val vcsPath = provenance.vcsInfo?.takeUnless { it.type == VcsType.GIT_REPO }?.path.orEmpty()
+            scanPathInternal(pkgDownloadDirectory, resultsFile).filterByPath(vcsPath)
         }
 
         log.perf {
@@ -413,6 +413,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     "${scanDuration.inMilliseconds}ms."
         }
 
+        val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
         val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
         val filteredResult = scanResult.filterByIgnorePatterns(config.ignorePatterns)
 
@@ -424,8 +425,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     message = storageResult.error,
                     severity = Severity.WARNING
                 )
-                val issues = scanResult.summary.issues + issue
-                val summary = scanResult.summary.copy(issues = issues)
+                val issues = scanSummary.issues + issue
+                val summary = scanSummary.copy(issues = issues)
                 filteredResult.copy(summary = summary)
             }
         }
@@ -445,9 +446,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      *
      * No scan results storage is used by this function.
      *
-     * The return value is a [ScanResult]. If the path could not be scanned, a [ScanException] is thrown.
+     * The return value is a [ScanSummary]. If the path could not be scanned, a [ScanException] is thrown.
      */
-    protected abstract fun scanPathInternal(path: File, resultsFile: File): ScanResult
+    protected abstract fun scanPathInternal(path: File, resultsFile: File): ScanSummary
 
     /**
      * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
@@ -468,21 +469,21 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         log.info { "Scanning path '$absoluteInputPath' with $details..." }
 
-        val result = try {
+        val summary = try {
             val resultsFile = File(
                 outputDirectory.apply { safeMkdirs() },
                 "${inputPath.nameWithoutExtension}_${details.name}.$resultFileExt"
             )
             scanPathInternal(inputPath, resultsFile).also {
                 log.info {
-                    "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
+                    "Detected licenses for path '$absoluteInputPath': ${it.licenses.joinToString()}"
                 }
             }.filterByIgnorePatterns(config.ignorePatterns)
         } catch (e: ScanException) {
             e.showStackTrace()
 
             val now = Instant.now()
-            val summary = ScanSummary(
+            ScanSummary(
                 startTime = now,
                 endTime = now,
                 fileCount = 0,
@@ -496,8 +497,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     )
                 )
             )
-
-            ScanResult(Provenance(), details, summary)
         }
 
         // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
@@ -506,7 +505,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             inputPath.name.fileSystemEncode(), ""
         )
 
-        val scanResultContainer = ScanResultContainer(id, listOf(result))
+        val scanResult = ScanResult(Provenance(), details, summary)
+        val scanResultContainer = ScanResultContainer(id, listOf(scanResult))
         val scanRecord = ScanRecord(sortedSetOf(scanResultContainer), ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()

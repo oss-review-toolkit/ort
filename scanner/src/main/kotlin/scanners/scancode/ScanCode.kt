@@ -33,8 +33,7 @@ import okhttp3.Request
 import okio.buffer
 import okio.sink
 
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
@@ -183,7 +182,7 @@ class ScanCode(
         }
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -211,7 +210,7 @@ class ScanCode(
 
         with(process) {
             if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(Provenance(), details, summary.copy(issues = issues))
+                return summary.copy(issues = issues)
             } else {
                 throw ScanException(errorMessage)
             }

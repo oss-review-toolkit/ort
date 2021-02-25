@@ -25,8 +25,6 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
@@ -53,7 +51,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
     override fun command(workingDir: File?) = ""
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
         val startTime = Instant.now()
 
         val fileCountResult = FileCountResult(path.walk().count())
@@ -63,8 +61,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
         val endTime = Instant.now()
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, path, result)
-        return ScanResult(Provenance(), details, summary)
+        return generateSummary(startTime, endTime, path, result)
     }
 
     override fun getRawResult(resultsFile: File) =
