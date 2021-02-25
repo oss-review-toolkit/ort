@@ -203,25 +203,38 @@ class SpdxDocumentFile(
     }
 
     /**
-     * Return the dependencies of [pkg] defined in [doc] of the [SpdxRelationship.Type.DEPENDENCY_OF] type.
+     * Return the dependencies of [pkg] defined in [doc] of the [SpdxRelationship.Type.DEPENDENCY_OF] type. Identified
+     * dependencies are mapped to ORT [Package]s by taking [workingDir] into account for the [VcsInfo], and then added
+     * to [packages].
      */
-    private fun getDependencies(pkg: SpdxPackage, doc: SpdxDocument): SortedSet<PackageReference> =
-        getDependencies(pkg, doc, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
+    private fun getDependencies(
+        pkg: SpdxPackage,
+        doc: SpdxDocument,
+        workingDir: File,
+        packages: MutableSet<Package>
+    ): SortedSet<PackageReference> =
+        getDependencies(pkg, doc, workingDir, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
             val dependency = doc.packages.singleOrNull { it.spdxId == target }
                 ?: throw IllegalArgumentException("No single package with target ID '$target' found.")
+
+            packages += dependency.toPackage(workingDir)
+
             PackageReference(
                 id = dependency.toIdentifier(),
-                dependencies = getDependencies(dependency, doc)
+                dependencies = getDependencies(dependency, doc, workingDir, packages)
             )
         }
 
     /**
      * Return the dependencies of [pkg] defined in [doc] of the given [dependencyOfRelation] type. Optionally, the
-     * [SpdxRelationship.Type.DEPENDS_ON] type is handled by [dependsOnCase].
+     * [SpdxRelationship.Type.DEPENDS_ON] type is handled by [dependsOnCase]. Identified dependencies are mapped to
+     * ORT [Package]s by taking [workingDir] into account for the [VcsInfo], and then added to [packages].
      */
     private fun getDependencies(
         pkg: SpdxPackage,
         doc: SpdxDocument,
+        workingDir: File,
+        packages: MutableSet<Package>,
         dependencyOfRelation: SpdxRelationship.Type,
         dependsOnCase: (String) -> PackageReference? = { null }
     ): SortedSet<PackageReference> =
@@ -240,11 +253,16 @@ class SpdxDocumentFile(
 
                     val dependency = doc.packages.singleOrNull { it.spdxId == source }
                         ?: throw IllegalArgumentException("No single package with source ID '$source' found.")
+
+                    packages += dependency.toPackage(workingDir)
+
                     PackageReference(
                         id = dependency.toIdentifier(),
                         dependencies = getDependencies(
                             dependency,
                             doc,
+                            workingDir,
+                            packages,
                             SpdxRelationship.Type.DEPENDENCY_OF,
                             dependsOnCase
                         ),
@@ -271,17 +289,20 @@ class SpdxDocumentFile(
 
     /**
      * Return a [Scope] created from the given type of [relation] for [projectPackage] in [spdxDocument], or `null` if
-     * there are no such relations.
+     * there are no such relations. Identified dependencies are mapped to ORT [Package]s by taking [workingDir] into
+     * account for the [VcsInfo], and then added to [packages].
      */
     private fun createScope(
         spdxDocument: SpdxDocument,
         projectPackage: SpdxPackage,
-        relation: SpdxRelationship.Type
+        relation: SpdxRelationship.Type,
+        workingDir: File,
+        packages: MutableSet<Package>
     ): Scope? =
-        getDependencies(projectPackage, spdxDocument, relation).takeUnless { it.isEmpty() }?.let { dependencies ->
+        getDependencies(projectPackage, spdxDocument, workingDir, packages, relation).takeUnless { it.isEmpty() }?.let {
             Scope(
                 name = relation.name.removeSuffix("_DEPENDENCY_OF").toLowerCase(),
-                dependencies = dependencies
+                dependencies = it
             )
         }
 
@@ -293,14 +314,16 @@ class SpdxDocumentFile(
         // package-style SPDX document that describes a single (dependency-)package.
         val projectPackage = spdxDocument.packages.singleOrNull { it.packageFilename.isEmpty() }
 
+        val packages = mutableSetOf<Package>()
+
         val project = if (projectPackage != null) {
             val scopes = SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
-                createScope(spdxDocument, projectPackage, type)
+                createScope(spdxDocument, projectPackage, type, workingDir, packages)
             }
 
             scopes += Scope(
                 name = DEFAULT_SCOPE_NAME,
-                dependencies = getDependencies(projectPackage, spdxDocument)
+                dependencies = getDependencies(projectPackage, spdxDocument, workingDir, packages)
             )
 
             Project(
@@ -320,14 +343,6 @@ class SpdxDocumentFile(
             Project.EMPTY.copy(id = Identifier.EMPTY.copy(type = managerName))
         }
 
-        val nonProjectPackages = if (projectPackage != null) {
-            spdxDocument.packages - projectPackage
-        } else {
-            spdxDocument.packages
-        }
-
-        val packages = nonProjectPackages.mapTo(sortedSetOf()) { it.toPackage(workingDir) }
-
-        return listOf(ProjectAnalyzerResult(project, packages))
+        return listOf(ProjectAnalyzerResult(project, packages.toSortedSet()))
     }
 }
