@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
 import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingsFromNpmRc
 import org.ossreviewtoolkit.analyzer.managers.utils.readRegistryFromNpmRc
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -204,19 +205,10 @@ open class Npm(
             json["author"]?.let { authorNode ->
                 when {
                     authorNode.isObject -> authorNode["name"]?.textValue()
-                    authorNode.isTextual -> parseAuthorString(authorNode.textValue())
+                    authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
                     else -> null
                 }
             }?.let { add(it) }
-        }
-
-    /**
-     * Parse the author if it is defined as a single string in the format "Name <mail> (url)". Try to extract the name
-     * part from the string or return the full string if no mail or url components are found.
-     */
-    private fun parseAuthorString(authorStr: String?): String? =
-        authorStr?.let { str ->
-            str.substringBefore('<').substringBefore('(').trim().ifEmpty { null }
         }
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
