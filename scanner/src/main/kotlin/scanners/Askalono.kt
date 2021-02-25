@@ -32,8 +32,6 @@ import okhttp3.Request
 
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -102,7 +100,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -120,8 +118,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             if (isSuccess) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getRawResult(resultsFile)
-                val summary = generateSummary(startTime, endTime, path, result)
-                return ScanResult(Provenance(), details, summary)
+                return generateSummary(startTime, endTime, path, result)
             } else {
                 throw ScanException(errorMessage)
             }
