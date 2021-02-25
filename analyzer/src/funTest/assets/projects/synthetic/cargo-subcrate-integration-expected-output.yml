@@ -2,6 +2,8 @@
 project:
   id: "Cargo::integration:0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "anon"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
@@ -23,6 +25,9 @@ project:
 packages:
 - id: "Crate::spin:0.4.10"
   purl: "pkg:cargo/spin@0.4.10"
+  authors:
+  - "John Ericson"
+  - "Mathijs van de Nes"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:

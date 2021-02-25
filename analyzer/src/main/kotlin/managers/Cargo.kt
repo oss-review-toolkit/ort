@@ -28,6 +28,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -117,8 +118,7 @@ class Cargo(
     private fun extractPackage(node: JsonNode, hashes: Map<String, String>) =
         Package(
             id = extractPackageId(node),
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = parseAuthors(node["authors"]),
             declaredLicenses = extractDeclaredLicenses(node),
             description = node["description"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY,
@@ -231,6 +231,12 @@ class Cargo(
         return null
     }
 
+    /**
+     * Extract information about authors from the given [node] with package metadata.
+     */
+    private fun parseAuthors(node: JsonNode?): SortedSet<String> =
+        node?.mapNotNullTo(sortedSetOf()) { parseAuthorString(it.textValue()) } ?: sortedSetOf()
+
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         // Get the project name and version. If one of them is missing return null, because this is a workspace
         // definition file that does not contain a project.
@@ -283,11 +289,13 @@ class Cargo(
         }.let { it.copy(id = it.id.copy(type = managerName)) }
 
         val homepageUrl = pkgDefinition.getString("package.homepage").orEmpty()
+        val authors = pkgDefinition.getList("package.authors", emptyList<String>())
+            .mapNotNullTo(sortedSetOf(), ::parseAuthorString)
+
         val project = Project(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = authors,
             declaredLicenses = projectPkg.declaredLicenses,
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
