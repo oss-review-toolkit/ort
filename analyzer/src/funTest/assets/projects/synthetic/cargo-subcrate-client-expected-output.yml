@@ -2,6 +2,8 @@
 project:
   id: "Cargo::client:0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "anon"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
@@ -26,6 +28,8 @@ project:
 packages:
 - id: "Crate::cfg-if:0.1.9"
   purl: "pkg:cargo/cfg-if@0.1.9"
+  authors:
+  - "Alex Crichton"
   declared_licenses:
   - "MIT OR Apache-2.0"
   declared_licenses_processed:

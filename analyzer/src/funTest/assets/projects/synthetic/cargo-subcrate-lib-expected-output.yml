@@ -34,6 +34,8 @@ project:
 packages:
 - id: "Crate::cfg-if:0.1.9"
   purl: "pkg:cargo/cfg-if@0.1.9"
+  authors:
+  - "Alex Crichton"
   declared_licenses:
   - "MIT OR Apache-2.0"
   declared_licenses_processed:
@@ -64,6 +66,9 @@ packages:
     path: ""
 - id: "Crate::spin:0.4.10"
   purl: "pkg:cargo/spin@0.4.10"
+  authors:
+  - "John Ericson"
+  - "Mathijs van de Nes"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -93,6 +98,9 @@ packages:
     path: ""
 - id: "Crate::spin:0.5.0"
   purl: "pkg:cargo/spin@0.5.0"
+  authors:
+  - "John Ericson"
+  - "Mathijs van de Nes"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
