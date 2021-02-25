@@ -26,11 +26,11 @@ import org.springframework.util.AntPathMatcher
  */
 class FileMatcher(
     /**
-     * The list of [glob patterns][1] to consider for matching.
+     * The collection of [glob patterns][1] to consider for matching.
      *
      * [1]: https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
      */
-    val patterns: List<String>,
+    val patterns: Collection<String>,
 
     /**
      * Toggle the case-sensitivity of the matching.

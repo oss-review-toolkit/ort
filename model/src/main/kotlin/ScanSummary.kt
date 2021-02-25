@@ -114,7 +114,7 @@ data class ScanSummary(
      * in [ignorePatterns].
      */
     fun filterByIgnorePatterns(ignorePatterns: Collection<String>): ScanSummary {
-        val matcher = FileMatcher(ignorePatterns.toList())
+        val matcher = FileMatcher(ignorePatterns)
 
         return copy(
             licenseFindings = licenseFindings.filterTo(sortedSetOf()) { !matcher.matches(it.location.path) },
