@@ -52,6 +52,8 @@ private data class LicenseKeyReplacement(
     val spdxExpression: String
 )
 
+private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.toLowerCase()}-"
+
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
 private val UNKNOWN_ERROR_REGEX = Pattern.compile(
     "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
@@ -167,7 +169,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
                 )
             },
             valueTransform = {
-                LicenseKeyReplacement(it["key"].textValue(), getLicenseId(it))
+                LicenseKeyReplacement(it["key"].textValue(), getSpdxLicenseId(it))
             }
         ).map { (licenseExpression, replacements) ->
             val spdxLicenseExpression = replacements.fold(licenseExpression.expression) { expression, replacement ->
@@ -191,36 +193,26 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
 /**
  * Get the SPDX license id (or a fallback) for a license finding.
  */
-private fun getLicenseId(license: JsonNode): String {
-    // The fact that ScanCode 3.0.2 uses an empty string here for licenses unknown to SPDX seems to have been a bug
-    // in ScanCode, and it should have always been using null instead.
-    var name = license["spdx_license_key"].textValueOrEmpty()
+private fun getSpdxLicenseId(license: JsonNode): String {
+    // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
+    val id = license["spdx_license_key"].textValueOrEmpty()
 
-    // There is only one license [1] in the latest ScanCode 3.2.x which has a "LicenseRef-*" identifier set as value for
-    // the 'spdx_license_key'. Use the 'key' property to derive the license identifier for now to avoid renaming the
-    // license from 'LicenseRef-scancode-here-proprietary' to 'LicenseRef-Proprietary-HERE'.
-    //
-    // ScanCode is planning to do 'LicenseRef-' license ids later on [2][3]. This seems to be a better time to start
-    // using these 'LicenseRef-' IDs defined by ScanCode, if at all.
-    //
-    // See also [4].
-    //
-    // [1] https://github.com/nexB/scancode-toolkit/commit/aec1535d5c3ba8e40d622accbaeea6c430dcafb3
-    // [2] https://github.com/nexB/scancode-toolkit/issues/1217
-    // [3] https://github.com/nexB/scancode-toolkit/issues/1336
-    // [4] https://github.com/nexB/scancode-toolkit/pull/2247
-    if (name.isEmpty() || name.startsWith(LICENSE_REF_PREFIX)) {
-        val key = license["key"].textValue().replace('_', '-')
-        name = if (key in UNKNOWN_LICENSE_KEYS) {
-            SpdxConstants.NOASSERTION
-        } else {
-            // Starting with version 2.9.8, ScanCode uses "scancode" as a LicenseRef namespace, but only for SPDX
-            // output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.
-            "LicenseRef-${ScanCode.SCANNER_NAME.toLowerCase()}-$key"
-        }
+    // For regular SPDX IDs, return early here.
+    if (id.isNotEmpty() && !id.startsWith(LICENSE_REF_PREFIX)) return id
+
+    // Before version 2.9.8, ScanCode used SPDX LicenseRefs that did not include the "scancode" namespace, like
+    // "LicenseRef-Proprietary-HERE" instead of now "LicenseRef-scancode-here-proprietary", see
+    // https://github.com/nexB/scancode-toolkit/blob/f94f716/src/licensedcode/data/licenses/here-proprietary.yml#L6-L8
+    // But if the "scancode" namespace is present, return early here.
+    if (id.startsWith(LICENSE_REF_PREFIX_SCAN_CODE)) return id
+
+    // At this point the ID is either empty or a non-"scancode" SPDX LicenseRef that needs to be fixed up.
+    val key = license["key"].textValue().replace('_', '-')
+    return if (key in UNKNOWN_LICENSE_KEYS) {
+        SpdxConstants.NOASSERTION
+    } else {
+        "$LICENSE_REF_PREFIX_SCAN_CODE$key"
     }
-
-    return name
 }
 
 private fun getIssues(result: JsonNode): List<OrtIssue> =
