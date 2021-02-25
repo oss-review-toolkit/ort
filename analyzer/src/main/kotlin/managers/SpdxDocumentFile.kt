@@ -49,6 +49,15 @@ import org.ossreviewtoolkit.utils.withoutPrefix
 
 private const val DEFAULT_SCOPE_NAME = "default"
 
+private val SPDX_SCOPE_RELATIONSHIPS = listOf(
+    SpdxRelationship.Type.BUILD_DEPENDENCY_OF,
+    SpdxRelationship.Type.DEV_DEPENDENCY_OF,
+    SpdxRelationship.Type.OPTIONAL_DEPENDENCY_OF,
+    SpdxRelationship.Type.PROVIDED_DEPENDENCY_OF,
+    SpdxRelationship.Type.RUNTIME_DEPENDENCY_OF,
+    SpdxRelationship.Type.TEST_DEPENDENCY_OF
+)
+
 /**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
@@ -176,18 +185,14 @@ class SpdxDocumentFile(
         val projectPackage = spdxDocument.packages.singleOrNull { it.packageFilename.isEmpty() }
 
         val project = if (projectPackage != null) {
-            val scopes = listOfNotNull(
-                Scope(
-                    name = DEFAULT_SCOPE_NAME,
-                    dependencies = getDependencies(projectPackage, spdxDocument)
-                ),
-                createScope(spdxDocument, projectPackage, SpdxRelationship.Type.BUILD_DEPENDENCY_OF),
-                createScope(spdxDocument, projectPackage, SpdxRelationship.Type.DEV_DEPENDENCY_OF),
-                createScope(spdxDocument, projectPackage, SpdxRelationship.Type.OPTIONAL_DEPENDENCY_OF),
-                createScope(spdxDocument, projectPackage, SpdxRelationship.Type.PROVIDED_DEPENDENCY_OF),
-                createScope(spdxDocument, projectPackage, SpdxRelationship.Type.RUNTIME_DEPENDENCY_OF),
-                createScope(spdxDocument, projectPackage, SpdxRelationship.Type.TEST_DEPENDENCY_OF)
-            ).toSortedSet()
+            val scopes = SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
+                createScope(spdxDocument, projectPackage, type)
+            }
+
+            scopes += Scope(
+                name = DEFAULT_SCOPE_NAME,
+                dependencies = getDependencies(projectPackage, spdxDocument)
+            )
 
             Project(
                 id = projectPackage.toIdentifier(),
