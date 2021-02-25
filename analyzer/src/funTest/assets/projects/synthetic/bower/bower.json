@@ -1,6 +1,7 @@
 {
   "name": "a-test-project",
   "authors": [
+    "author-abc",
     "author-xyz"
   ],
   "description": "This string describes the test project.",
