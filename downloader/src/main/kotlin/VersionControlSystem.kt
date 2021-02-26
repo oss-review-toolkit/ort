@@ -242,14 +242,18 @@ abstract class VersionControlSystem {
             workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also {
                 if (revisionCandidates.add(it)) {
                     log.info {
-                        "Adding $type revision '$it' (guessed from version '${pkg.id.version}') as a candidate."
+                        "Adding $type revision '$it' (guessed from package '${pkg.id.name}' and version " +
+                                "'${pkg.id.version}') as a candidate."
                     }
                 }
             }
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.info { "No $type revision for version '${pkg.id.version}' found: ${e.collectMessagesAsString()}" }
+            log.info {
+                "No $type revision for package '${pkg.id.name}' and version '${pkg.id.version}' found: " +
+                    e.collectMessagesAsString()
+            }
         }
 
         if (revisionCandidates.isEmpty()) {
