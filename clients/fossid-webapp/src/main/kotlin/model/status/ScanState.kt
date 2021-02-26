@@ -28,5 +28,6 @@ enum class ScanState {
     SCANNING,
     @JsonProperty("AUTO-ID")
     AUTO_ID,
+    QUEUED,
     FINISHED
 }
