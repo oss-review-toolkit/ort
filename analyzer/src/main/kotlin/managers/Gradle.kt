@@ -240,7 +240,6 @@ class Gradle(
                         version = dependencyTreeModel.version
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    // TODO: Find a way to track authors.
                     authors = sortedSetOf(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
