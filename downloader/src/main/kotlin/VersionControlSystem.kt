@@ -261,7 +261,11 @@ abstract class VersionControlSystem {
                 false
             }
 
-        addGuessedRevision(pkg.id.name, pkg.id.version)
+        if (!addGuessedRevision(pkg.id.name, pkg.id.version) && pkg.id.type == "NPM" && pkg.id.namespace.isNotEmpty()) {
+            // Fallback for Lerna workspaces when scoped packages combined with independent versioning are used, e.g.
+            // support Git tag of the format "@organisation/my-component@x.x.x".
+            addGuessedRevision("${pkg.id.namespace}/${pkg.id.name}", pkg.id.version)
+        }
 
         if (revisionCandidates.isEmpty()) {
             throw DownloadException("Unable to determine a revision to checkout.")
