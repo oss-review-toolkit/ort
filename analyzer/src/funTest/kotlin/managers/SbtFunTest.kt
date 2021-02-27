@@ -27,17 +27,13 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
-import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SbtFunTest : StringSpec({
-    "Dependencies of the external 'directories' single project should be detected correctly".config(
-        // Disabled on Azure Windows because it fails for unknown reasons.
-        enabled = !Ci.isAzureWindows
-    ) {
+    "Dependencies of the external 'directories' single project should be detected correctly" {
         val projectName = "directories"
         val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
         val expectedOutputFile = projectDir.resolveSibling("$projectName-expected-output.yml")
@@ -53,10 +49,7 @@ class SbtFunTest : StringSpec({
         patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
     }
 
-    "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly".config(
-        // Disabled on Azure Windows because it fails for unknown reasons.
-        enabled = !Ci.isAzureWindows
-    ) {
+    "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
         val projectName = "sbt-multi-project-example"
         val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
         val expectedOutputFile = projectDir.parentFile.resolve("$projectName-expected-output.yml")
