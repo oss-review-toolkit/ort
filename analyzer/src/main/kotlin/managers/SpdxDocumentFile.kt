@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.withoutPrefix
 
 private const val DEFAULT_SCOPE_NAME = "default"
 
@@ -78,7 +79,7 @@ class SpdxDocumentFile(
 
     private fun String.extractOrganization() =
         lineSequence().mapNotNull { line ->
-            line.removePrefix(SpdxConstants.ORGANIZATION).takeIf { it != line }
+            line.withoutPrefix(SpdxConstants.ORGANIZATION)
         }.firstOrNull()
 
     private fun String.mapNotPresentToEmpty() = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()

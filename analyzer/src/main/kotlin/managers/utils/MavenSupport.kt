@@ -90,6 +90,7 @@ import org.ossreviewtoolkit.utils.logOnce
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.withoutPrefix
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
@@ -133,11 +134,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             }
 
         fun parseLicenses(mavenProject: MavenProject) =
-            mavenProject.licenses.mapNotNull {
-                if (it.comments?.startsWith("SPDX-License-Identifier:") == true) {
-                    it.comments.removePrefix("SPDX-License-Identifier:")
-                } else {
-                    it.name ?: it.url ?: it.comments
+            mavenProject.licenses.mapNotNull { license ->
+                license.comments.withoutPrefix("SPDX-License-Identifier:") {
+                    license.name ?: license.url ?: license.comments
                 }?.trim()
             }.toSortedSet()
 

@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 import org.ossreviewtoolkit.utils.unpack
+import org.ossreviewtoolkit.utils.withoutPrefix
 
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
@@ -301,7 +302,7 @@ object Downloader {
                     // So first look for a dedicated header in the response, but then also try both redirected and
                     // original URLs to find a name which has a recognized archive type extension.
                     response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
-                        value.removePrefix("attachment; filename=").takeIf { it != value }
+                        value.withoutPrefix("attachment; filename=")
                     }
 
                     listOf(response.request.url, request.url).mapTo(candidateNames) {
