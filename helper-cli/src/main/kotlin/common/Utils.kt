@@ -75,6 +75,7 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
+import org.ossreviewtoolkit.utils.withoutPrefix
 
 const val ORTH_NAME = "orth"
 
@@ -347,10 +348,8 @@ internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicense
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
         curations.forEach { curation ->
-            if (curation.path.startsWith("$path/")) {
-                pathExcludesForRepository += curation.copy(
-                    path = curation.path.substring(path.length).removePrefix("/")
-                )
+            curation.path.withoutPrefix("$path/")?.let {
+                pathExcludesForRepository += curation.copy(path = it)
             }
         }
     }
@@ -427,11 +426,9 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
 
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
-        pathExcludes.forEach { pathExclude ->
-            if (pathExclude.pattern.startsWith("$path/") && !isDefinitionsFile(pathExclude)) {
-                pathExcludesForRepository += pathExclude.copy(
-                    pattern = pathExclude.pattern.substring(path.length).removePrefix("/")
-                )
+        pathExcludes.filterNot { isDefinitionsFile(it) }.forEach { pathExclude ->
+            pathExclude.pattern.withoutPrefix("$path/")?.let {
+                pathExcludesForRepository += pathExclude.copy(pattern = it)
             }
         }
     }

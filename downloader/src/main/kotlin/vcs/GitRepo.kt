@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.withoutPrefix
 
 /**
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
@@ -80,7 +81,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     override fun transformVersion(output: String): String {
         val launcherVersion = output.lineSequence().mapNotNull { line ->
-            line.removePrefix("repo launcher version ").takeIf { it != line }
+            line.withoutPrefix("repo launcher version ")
         }.singleOrNull()
             ?: throw IOException("The 'repo' version can only be determined from an initialized working tree.")
 
