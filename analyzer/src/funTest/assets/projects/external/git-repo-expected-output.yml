@@ -1081,7 +1081,7 @@ analyzer:
         - "The (New) BSD License"
         - "The MIT License"
         declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause AND MIT"
+          spdx_expression: "BSD-3-Clause OR MIT"
           mapped:
             The (New) BSD License: "BSD-3-Clause"
             The MIT License: "MIT"

@@ -115,6 +115,9 @@ class Maven(
             scope.dependencies += parseDependency(node, packagesById)
         }
 
+        val declaredLicenses = MavenSupport.parseLicenses(mavenProject)
+        val declaredLicensesProcessed = MavenSupport.processDeclaredLicenses(declaredLicenses)
+
         val vcsFromPackage = MavenSupport.parseVcsInfo(mavenProject)
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
@@ -138,7 +141,8 @@ class Maven(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = MavenSupport.parseAuthors(mavenProject),
-            declaredLicenses = MavenSupport.parseLicenses(mavenProject),
+            declaredLicenses = declaredLicenses,
+            declaredLicensesProcessed = declaredLicensesProcessed,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),
