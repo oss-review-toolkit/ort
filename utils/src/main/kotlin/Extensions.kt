@@ -274,11 +274,6 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
 fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)
 
 /**
- * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
- */
-fun String.encodeOrUnknown(): String = encodeOr("unknown")
-
-/**
  * Return the string encoded for safe use as a file name or [emptyValue] encoded for safe use as a file name, if this
  * string is empty. Throws an exception if [emptyValue] is empty.
  */
@@ -287,6 +282,11 @@ fun String.encodeOr(emptyValue: String): String {
 
     return ifEmpty { emptyValue }.fileSystemEncode()
 }
+
+/**
+ * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
+ */
+fun String.encodeOrUnknown(): String = encodeOr("unknown")
 
 /**
  * If the SHELL environment variable is set, return the string with a leading "~" expanded to the current user's home
@@ -317,29 +317,15 @@ fun String.fileSystemEncode() =
 fun String?.isFalse() = this?.toBoolean()?.not() ?: false
 
 /**
- * Return true if the string represents a true value, otherwise return false.
- */
-fun String?.isTrue() = this?.toBoolean() ?: false
-
-/**
- * Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string.
- */
-fun String.percentEncode(): String =
-    java.net.URLEncoder.encode(this, "UTF-8")
-        // As "encode" above actually performs encoding for forms, not for query strings, spaces are encoded as
-        // "+" instead of "%20", so apply the proper mapping here afterwards ("+" in the original string is
-        // encoded as "%2B").
-        .replace("+", "%20")
-        // "*" is a reserved character in RFC 3986.
-        .replace("*", "%2A")
-        // "~" is an unreserved character in RFC 3986.
-        .replace("%7E", "~")
-
-/**
  * True if the string is a valid semantic version of the given [type], false otherwise.
  */
 fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
     runCatching { Semver(this, type) }.isSuccess
+
+/**
+ * Return true if the string represents a true value, otherwise return false.
+ */
+fun String?.isTrue() = this?.toBoolean() ?: false
 
 /**
  * True if the string is a valid [URI], false otherwise.
@@ -355,6 +341,20 @@ val NON_LINUX_LINE_BREAKS = Regex("\\r\\n?")
  * Replace "\r\n" and "\r" line breaks with "\n".
  */
 fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
+
+/**
+ * Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string.
+ */
+fun String.percentEncode(): String =
+    java.net.URLEncoder.encode(this, "UTF-8")
+        // As "encode" above actually performs encoding for forms, not for query strings, spaces are encoded as
+        // "+" instead of "%20", so apply the proper mapping here afterwards ("+" in the original string is
+        // encoded as "%2B").
+        .replace("+", "%20")
+        // "*" is a reserved character in RFC 3986.
+        .replace("*", "%2A")
+        // "~" is an unreserved character in RFC 3986.
+        .replace("%7E", "~")
 
 /**
  * Strip any user name / password off the URL represented by this [String]. Return the unmodified [String] if it does
