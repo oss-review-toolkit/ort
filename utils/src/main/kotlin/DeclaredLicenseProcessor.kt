@@ -93,13 +93,13 @@ object DeclaredLicenseProcessor {
      * could be mapped), and the mapped and unmapped licenses respectively.
      */
     fun process(
-        declaredLicenses: Collection<String>,
+        declaredLicenses: Set<String>,
         declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
     ): ProcessedDeclaredLicense {
         val processedLicenses = mutableMapOf<String, SpdxExpression>()
         val unmapped = mutableListOf<String>()
 
-        declaredLicenses.toSet().forEach { declaredLicense ->
+        declaredLicenses.forEach { declaredLicense ->
             process(declaredLicense, declaredLicenseMapping)?.let {
                 processedLicenses[declaredLicense] = it
             } ?: run { unmapped += declaredLicense }
