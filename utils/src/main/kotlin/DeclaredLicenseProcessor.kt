@@ -22,10 +22,12 @@ package org.ossreviewtoolkit.utils
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.spdx.toSpdx
 
 object DeclaredLicenseProcessor {
@@ -88,13 +90,15 @@ object DeclaredLicenseProcessor {
     /**
      * Try to map all [declaredLicenses] to a (compound) [SpdxExpression] by taking both hard-coded mappings and
      * [declaredLicenseMapping] into account. As a special case, a license may be mapped to [SpdxConstants.NONE] to mark
-     * it as something that is not a license, like a copyright that was accidentally entered as a license. Return a
+     * it as something that is not a license, like a copyright that was accidentally entered as a license. Multiple
+     * declared licenses are reduced to a [SpdxCompoundExpression] using the specified [operator]. Return a
      * [ProcessedDeclaredLicense] which contains the final [SpdxExpression] (or null if none of the declared licenses
      * could be mapped), and the mapped and unmapped licenses respectively.
      */
     fun process(
         declaredLicenses: Set<String>,
-        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
+        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap(),
+        operator: SpdxOperator = SpdxOperator.AND
     ): ProcessedDeclaredLicense {
         val processedLicenses = mutableMapOf<String, SpdxExpression>()
         val unmapped = mutableListOf<String>()
@@ -107,7 +111,7 @@ object DeclaredLicenseProcessor {
 
         val spdxExpression = processedLicenses.values.toSet().filter {
             it.toString() != SpdxConstants.NONE
-        }.reduceOrNull { left, right -> left and right }
+        }.reduceOrNull { left, right -> SpdxCompoundExpression(left, operator, right) }
 
         val mapped = processedLicenses.filterNot { (key, value) ->
             key.removeSurrounding("(", ")") == value.toString()
