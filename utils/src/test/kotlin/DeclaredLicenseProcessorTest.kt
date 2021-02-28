@@ -60,7 +60,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "Mapped licenses are de-duplicated" {
-            val declaredLicenses = listOf("Apache2", "Apache-2")
+            val declaredLicenses = setOf("Apache2", "Apache-2")
 
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
 
@@ -101,7 +101,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "The SPDX expression only contains valid licenses" {
-            val declaredLicenses = listOf("Apache-2.0", "invalid")
+            val declaredLicenses = setOf("Apache-2.0", "invalid")
 
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
 
@@ -111,7 +111,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "Processing a compound SPDX expression should result in the same expression" {
-            val declaredLicenses = listOf("Apache-2.0 AND LicenseRef-Proprietary")
+            val declaredLicenses = setOf("Apache-2.0 AND LicenseRef-Proprietary")
 
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
 
@@ -121,7 +121,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "The declared license mapping is applied" {
-            val declaredLicenses = listOf("Apache-2.0", "https://domain/path/license.html")
+            val declaredLicenses = setOf("Apache-2.0", "https://domain/path/license.html")
             val declaredLicenseMapping = mapOf("https://domain/path/license.html" to "MIT".toSpdx())
 
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
@@ -132,7 +132,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "The declared license mapping discards licenses which are mapped to 'NONE' when applied " {
-            val declaredLicenses = listOf("Copyright (c) the authors.", "Apache-2.0", "MIT")
+            val declaredLicenses = setOf("Copyright (c) the authors.", "Apache-2.0", "MIT")
             val declaredLicenseMapping = mapOf("Copyright (c) the authors." to SpdxConstants.NONE.toSpdx())
 
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
