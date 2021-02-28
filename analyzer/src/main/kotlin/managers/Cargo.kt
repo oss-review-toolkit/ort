@@ -96,6 +96,10 @@ class Cargo(
             .map { it.trim() }
             .filter { it.isNotEmpty() }
 
+        // While the previously used "/" was not explicit about the intended license operator, the community consensus
+        // seems to be that an existing "/" should be interpreted as "OR", see e.g. the discussions at
+        // https://github.com/rust-lang/cargo/issues/2039
+        // https://github.com/rust-lang/cargo/pull/4920
         return if (licenses.isEmpty()) sortedSetOf() else sortedSetOf(licenses.joinToString(" OR "))
     }
 
