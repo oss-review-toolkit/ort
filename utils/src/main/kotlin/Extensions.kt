@@ -371,6 +371,12 @@ fun String.stripCredentialsFromUrl() =
     }
 
 /**
+ * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
+ */
+fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
+    this?.removePrefix(prefix)?.takeIf { it != this } ?: missingPrefixValue()
+
+/**
  * Recursively collect the messages of this [Throwable] and all its causes.
  */
 fun Throwable.collectMessages(): List<String> {
