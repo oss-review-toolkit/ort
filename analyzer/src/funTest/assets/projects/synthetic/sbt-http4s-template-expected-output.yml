@@ -120,7 +120,7 @@ analyzer:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
         declared_licenses_processed:
-          spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
+          spdx_expression: "EPL-1.0 OR LGPL-2.1-only"
           mapped:
             Eclipse Public License - v 1.0: "EPL-1.0"
             GNU Lesser General Public License: "LGPL-2.1-only"
@@ -158,7 +158,7 @@ analyzer:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
         declared_licenses_processed:
-          spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
+          spdx_expression: "EPL-1.0 OR LGPL-2.1-only"
           mapped:
             Eclipse Public License - v 1.0: "EPL-1.0"
             GNU Lesser General Public License: "LGPL-2.1-only"
@@ -599,7 +599,7 @@ analyzer:
         - "Apache Software License - Version 2.0"
         - "Eclipse Public License - Version 1.0"
         declared_licenses_processed:
-          spdx_expression: "Apache-2.0 AND EPL-1.0"
+          spdx_expression: "Apache-2.0 OR EPL-1.0"
           mapped:
             Apache Software License - Version 2.0: "Apache-2.0"
             Eclipse Public License - Version 1.0: "EPL-1.0"

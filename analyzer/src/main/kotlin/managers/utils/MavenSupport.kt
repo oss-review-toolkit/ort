@@ -81,8 +81,11 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.DiskCache
 import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.log
@@ -139,6 +142,11 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     license.name ?: license.url ?: license.comments
                 }?.trim()
             }.toSortedSet()
+
+        fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
+            // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project which says: "If multiple licenses
+            // are listed, it is assumed that the user can select any of them, not that they must accept all."
+            DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
 
         /**
          * When asking Maven for the SCM URL of a POM that does not itself define an SCM URL, Maven returns the SCM
@@ -611,6 +619,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             }
         }
 
+        val declaredLicenses = parseLicenses(mavenProject)
+        val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
+
         val binaryRemoteArtifact = localProject?.let {
             RemoteArtifact.EMPTY
         } ?: requestRemoteArtifact(artifact, repositories)
@@ -654,7 +665,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 version = mavenProject.version
             ),
             authors = parseAuthors(mavenProject),
-            declaredLicenses = parseLicenses(mavenProject),
+            declaredLicenses = declaredLicenses,
+            declaredLicensesProcessed = declaredLicensesProcessed,
             description = mavenProject.description.orEmpty(),
             homepageUrl = homepageUrl.orEmpty(),
             binaryArtifact = binaryRemoteArtifact,
