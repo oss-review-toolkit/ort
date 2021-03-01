@@ -197,12 +197,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
                 val scanResult2 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
 
-                val addResult1 = storage.add(id, scanResult1)
-                val addResult2 = storage.add(id, scanResult2)
+                storage.add(id, scanResult1) should beSuccess()
+                storage.add(id, scanResult2) should beSuccess()
                 val readResult = storage.read(id)
 
-                addResult1 should beSuccess()
-                addResult2 should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
@@ -216,14 +214,11 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResult2 = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles)
                 val scanResult3 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
 
-                val addResult1 = storage.add(id, scanResult1)
-                val addResult2 = storage.add(id, scanResult2)
-                val addResult3 = storage.add(id, scanResult3)
+                storage.add(id, scanResult1) should beSuccess()
+                storage.add(id, scanResult2) should beSuccess()
+                storage.add(id, scanResult3) should beSuccess()
                 val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-                addResult1 should beSuccess()
-                addResult2 should beSuccess()
-                addResult3 should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
@@ -242,14 +237,11 @@ abstract class AbstractStorageFunTest : WordSpec() {
                     ScanResult(provenanceWithSourceArtifact, detailsIncompatibleOtherScanner, scanSummaryWithFiles)
                 val criteria = criteriaForDetails(scannerDetails1).copy(regScannerName = "name.+")
 
-                val addResult1 = storage.add(id, scanResult1)
-                val addResult2 = storage.add(id, scanResult2)
-                val addResult3 = storage.add(id, scanResult3)
+                storage.add(id, scanResult1) should beSuccess()
+                storage.add(id, scanResult2) should beSuccess()
+                storage.add(id, scanResult3) should beSuccess()
                 val readResult = storage.read(pkg, criteria)
 
-                addResult1 should beSuccess()
-                addResult2 should beSuccess()
-                addResult3 should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
@@ -267,16 +259,12 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultIncompatible =
                     ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
 
-                val addResult = storage.add(id, scanResult)
-                val addResultCompatible1 = storage.add(id, scanResultCompatible1)
-                val addResultCompatible2 = storage.add(id, scanResultCompatible2)
-                val addResultIncompatible = storage.add(id, scanResultIncompatible)
+                storage.add(id, scanResult) should beSuccess()
+                storage.add(id, scanResultCompatible1) should beSuccess()
+                storage.add(id, scanResultCompatible2) should beSuccess()
+                storage.add(id, scanResultIncompatible) should beSuccess()
                 val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-                addResult should beSuccess()
-                addResultCompatible1 should beSuccess()
-                addResultCompatible2 should beSuccess()
-                addResultIncompatible should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
@@ -299,16 +287,12 @@ abstract class AbstractStorageFunTest : WordSpec() {
                     ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
                 val criteria = criteriaForDetails(scannerDetails1).copy(maxVersion = Semver("1.5.0"))
 
-                val addResult = storage.add(id, scanResult)
-                val addResultCompatible1 = storage.add(id, scanResultCompatible1)
-                val addResultCompatible2 = storage.add(id, scanResultCompatible2)
-                val addResultIncompatible = storage.add(id, scanResultIncompatible)
+                storage.add(id, scanResult) should beSuccess()
+                storage.add(id, scanResultCompatible1) should beSuccess()
+                storage.add(id, scanResultCompatible2) should beSuccess()
+                storage.add(id, scanResultIncompatible) should beSuccess()
                 val readResult = storage.read(pkg, criteria)
 
-                addResult should beSuccess()
-                addResultCompatible1 should beSuccess()
-                addResultCompatible2 should beSuccess()
-                addResultIncompatible should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
@@ -337,16 +321,12 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultVcsNonMatching =
                     ScanResult(provenanceVcsNonMatching, scannerDetails1, scanSummaryWithFiles)
 
-                val addResult1 = storage.add(id, scanResultSourceArtifactMatching)
-                val addResult2 = storage.add(id, scanResultVcsMatching)
-                val addResult3 = storage.add(id, scanResultSourceArtifactNonMatching)
-                val addResult4 = storage.add(id, scanResultVcsNonMatching)
+                storage.add(id, scanResultSourceArtifactMatching) should beSuccess()
+                storage.add(id, scanResultVcsMatching) should beSuccess()
+                storage.add(id, scanResultSourceArtifactNonMatching) should beSuccess()
+                storage.add(id, scanResultVcsNonMatching) should beSuccess()
                 val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-                addResult1 should beSuccess()
-                addResult2 should beSuccess()
-                addResult3 should beSuccess()
-                addResult4 should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
@@ -361,10 +341,9 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val storage = createStorage()
                 val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
 
-                val addResult = storage.add(id, scanResult)
+                storage.add(id, scanResult) should beSuccess()
                 val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
 
-                addResult should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
