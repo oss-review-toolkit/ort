@@ -12,6 +12,7 @@ class PocoConan(ConanFile):
     exports_sources = "CMakeLists.txt", "PocoMacros.cmake"  # REMOVE POCOMACROS IN NEXT VERSION!
     generators = "cmake", "txt"
     settings = "os", "arch", "compiler", "build_type"
+    author = "The Author <author@example.org>"
     license = "The Boost Software License 1.0"
     description = "Modern, powerful open source C++ class libraries for building network- and internet-based " \
                   "applications that run on desktop, server, mobile and embedded systems."
