@@ -190,8 +190,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         return with(all.details) {
             Package(
                 id = getIdentifier(id, version),
-                // TODO: Find a way to track authors.
-                authors = sortedSetOf(),
+                authors = parseAuthors(all.spec),
                 declaredLicenses = setOfNotNull(license).toSortedSet(),
                 description = description.orEmpty(),
                 homepageUrl = projectUrl.orEmpty(),
@@ -261,6 +260,11 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         }
     }
 }
+
+/**
+ * Parse information about the authors of a package from the given [spec].
+ */
+private fun parseAuthors(spec: PackageSpec) = sortedSetOf(spec.metadata.authors)
 
 private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
