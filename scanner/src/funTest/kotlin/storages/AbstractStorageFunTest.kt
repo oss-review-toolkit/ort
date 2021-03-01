@@ -148,8 +148,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult = storage.add(id, scanResult)
                 val readResult = storage.read(id)
 
-                addResult should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactly(scanResult)
@@ -163,10 +163,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult = storage.add(id, scanResult)
                 val readResult = storage.read(id)
 
-                addResult should beOfType(Failure::class)
+                addResult should beFailure()
                 (addResult as Failure).error shouldBe
                         "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
-                readResult should beOfType(Success::class)
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should beEmpty()
@@ -180,10 +180,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult = storage.add(id, scanResult)
                 val readResult = storage.read(id)
 
-                addResult should beOfType(Failure::class)
+                addResult should beFailure()
                 (addResult as Failure).error shouldBe "Not storing scan result for 'type:namespace:name:version' " +
                         "because no provenance information is available."
-                readResult should beOfType(Success::class)
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should beEmpty()
@@ -201,9 +201,9 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult2 = storage.add(id, scanResult2)
                 val readResult = storage.read(id)
 
-                addResult1 should beOfType(Success::class)
-                addResult2 should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult1 should beSuccess()
+                addResult2 should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
@@ -221,10 +221,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult3 = storage.add(id, scanResult3)
                 val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-                addResult1 should beOfType(Success::class)
-                addResult2 should beOfType(Success::class)
-                addResult3 should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult1 should beSuccess()
+                addResult2 should beSuccess()
+                addResult3 should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
@@ -247,10 +247,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult3 = storage.add(id, scanResult3)
                 val readResult = storage.read(pkg, criteria)
 
-                addResult1 should beOfType(Success::class)
-                addResult2 should beOfType(Success::class)
-                addResult3 should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult1 should beSuccess()
+                addResult2 should beSuccess()
+                addResult3 should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
@@ -273,11 +273,11 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResultIncompatible = storage.add(id, scanResultIncompatible)
                 val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-                addResult should beOfType(Success::class)
-                addResultCompatible1 should beOfType(Success::class)
-                addResultCompatible2 should beOfType(Success::class)
-                addResultIncompatible should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult should beSuccess()
+                addResultCompatible1 should beSuccess()
+                addResultCompatible2 should beSuccess()
+                addResultIncompatible should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactlyInAnyOrder(
@@ -305,11 +305,11 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResultIncompatible = storage.add(id, scanResultIncompatible)
                 val readResult = storage.read(pkg, criteria)
 
-                addResult should beOfType(Success::class)
-                addResultCompatible1 should beOfType(Success::class)
-                addResultCompatible2 should beOfType(Success::class)
-                addResultIncompatible should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult should beSuccess()
+                addResultCompatible1 should beSuccess()
+                addResultCompatible2 should beSuccess()
+                addResultIncompatible should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactlyInAnyOrder(
@@ -343,11 +343,11 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult4 = storage.add(id, scanResultVcsNonMatching)
                 val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-                addResult1 should beOfType(Success::class)
-                addResult2 should beOfType(Success::class)
-                addResult3 should beOfType(Success::class)
-                addResult4 should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult1 should beSuccess()
+                addResult2 should beSuccess()
+                addResult3 should beSuccess()
+                addResult4 should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactlyInAnyOrder(
@@ -364,8 +364,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult = storage.add(id, scanResult)
                 val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
 
-                addResult should beOfType(Success::class)
-                readResult should beOfType(Success::class)
+                addResult should beSuccess()
+                readResult should beSuccess()
                 (readResult as Success).result.let { result ->
                     result.id shouldBe id
                     result.results should containExactly(scanResult)
@@ -374,3 +374,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
         }
     }
 }
+
+private fun beSuccess() = beOfType(Success::class)
+private fun beFailure() = beOfType(Failure::class)
