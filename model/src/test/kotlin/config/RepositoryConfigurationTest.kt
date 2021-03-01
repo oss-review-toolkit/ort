@@ -26,7 +26,9 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.spdx.toSpdx
 
 class RepositoryConfigurationTest : WordSpec({
     "RepositoryConfiguration" should {
@@ -67,6 +69,13 @@ class RepositoryConfigurationTest : WordSpec({
                   - id: "vulnerability id"
                     reason: "INEFFECTIVE_VULNERABILITY"
                     comment: "vulnerability comment"
+                license_choices:
+                  package_license_choices:
+                  - package_id: "Maven:com.example:lib:0.0.1"
+                    license_choices:
+                    - given: MPL-2.0 or EPL-1.0
+                      choice: MPL-2.0
+                    - choice: MPL-2.0 AND MIT
                 """.trimIndent()
 
             val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
@@ -109,6 +118,21 @@ class RepositoryConfigurationTest : WordSpec({
                 id shouldBe "vulnerability id"
                 reason shouldBe VulnerabilityResolutionReason.INEFFECTIVE_VULNERABILITY
                 comment shouldBe "vulnerability comment"
+            }
+
+            val packageLicenseChoices = repositoryConfiguration.licenseChoices.packageLicenseChoices
+            packageLicenseChoices should haveSize(1)
+            with(packageLicenseChoices.first()) {
+                packageId shouldBe Identifier("Maven:com.example:lib:0.0.1")
+                with(licenseChoices.first()) {
+                    given shouldBe "MPL-2.0 or EPL-1.0".toSpdx()
+                    choice shouldBe "MPL-2.0".toSpdx()
+                }
+
+                with(licenseChoices[1]) {
+                    given shouldBe null
+                    choice shouldBe "MPL-2.0 AND MIT".toSpdx()
+                }
             }
         }
     }
