@@ -6,9 +6,10 @@ project:
   - "Another Author"
   - "anon"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   vcs:
     type: ""
     url: ""
@@ -131,7 +132,8 @@ packages:
   authors:
   - "Josh Stone"
   declared_licenses:
-  - "Apache-2.0 OR MIT"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Automatic cfg for Rust compiler features"
@@ -161,9 +163,10 @@ packages:
   authors:
   - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to generate structures which behave like bitflags.\n"
   homepage_url: ""
   binary_artifact:
@@ -191,9 +194,10 @@ packages:
   authors:
   - "Alex Crichton"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to ergonomically define an item depending on a large number\
     \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
     \ branch is the\nitem that gets emitted.\n"
@@ -314,9 +318,10 @@ packages:
   - "The Rand Project Developers"
   - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Random number generators and other randomness functionality.\n"
   homepage_url: ""
   binary_artifact:
@@ -345,9 +350,10 @@ packages:
   - "The Rand Project Developers"
   - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "ChaCha random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -376,9 +382,10 @@ packages:
   - "The Rand Project Developers"
   - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
   homepage_url: ""
   binary_artifact:
@@ -407,9 +414,10 @@ packages:
   - "The Rand Project Developers"
   - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
   homepage_url: ""
   binary_artifact:
@@ -437,9 +445,10 @@ packages:
   authors:
   - "The Rand Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "HC128 random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -468,9 +477,10 @@ packages:
   - "The Rand Project Developers"
   - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "ISAAC random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -528,9 +538,10 @@ packages:
   authors:
   - "The Rand Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "OS backed Random Number Generator"
   homepage_url: ""
   binary_artifact:
@@ -558,9 +569,10 @@ packages:
   authors:
   - "The Rand Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Selected PCG random number generators\n"
   homepage_url: ""
   binary_artifact:
@@ -589,9 +601,10 @@ packages:
   - "The Rand Project Developers"
   - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Xorshift random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -682,9 +695,10 @@ packages:
   authors:
   - "Peter Atashian"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Import libraries for the i686-pc-windows-gnu target. Please don't\
     \ use this crate directly, depend on winapi instead."
   homepage_url: ""
@@ -713,9 +727,10 @@ packages:
   authors:
   - "Peter Atashian"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Import libraries for the x86_64-pc-windows-gnu target. Please don't\
     \ use this crate directly, depend on winapi instead."
   homepage_url: ""
@@ -744,9 +759,10 @@ packages:
   authors:
   - "Peter Atashian"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Raw FFI bindings for all of Windows API."
   homepage_url: ""
   binary_artifact:

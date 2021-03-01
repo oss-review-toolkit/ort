@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
@@ -43,7 +45,10 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
@@ -207,6 +212,7 @@ class Cargo(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = authors,
             declaredLicenses = projectPkg.declaredLicenses,
+            declaredLicensesProcessed = processDeclaredLicenses(projectPkg.declaredLicenses),
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
             homepageUrl = homepageUrl,
@@ -230,29 +236,34 @@ private fun checksumKeyOf(metadata: JsonNode): String {
 
 private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
 
-private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
-    val licenses = node["license"].textValueOrEmpty().split('/')
+private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
+    node["license"].textValueOrEmpty().split('/')
         .map { it.trim() }
-        .filter { it.isNotEmpty() }
+        .filterTo(sortedSetOf()) { it.isNotEmpty() }
 
+private fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
     // While the previously used "/" was not explicit about the intended license operator, the community consensus
     // seems to be that an existing "/" should be interpreted as "OR", see e.g. the discussions at
     // https://github.com/rust-lang/cargo/issues/2039
     // https://github.com/rust-lang/cargo/pull/4920
-    return if (licenses.isEmpty()) sortedSetOf() else sortedSetOf(licenses.joinToString(" OR "))
-}
+    DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
 
-private fun extractPackage(node: JsonNode, hashes: Map<String, String>) =
-    Package(
+private fun extractPackage(node: JsonNode, hashes: Map<String, String>): Package {
+    val declaredLicenses = extractDeclaredLicenses(node)
+    val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
+
+    return Package(
         id = extractPackageId(node),
         authors = parseAuthors(node["authors"]),
-        declaredLicenses = extractDeclaredLicenses(node),
+        declaredLicenses = declaredLicenses,
+        declaredLicensesProcessed = declaredLicensesProcessed,
         description = node["description"].textValueOrEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = extractSourceArtifact(node, hashes) ?: RemoteArtifact.EMPTY,
         homepageUrl = "",
         vcs = extractVcsInfo(node)
     )
+}
 
 private fun extractPackageId(node: JsonNode) =
     Identifier(

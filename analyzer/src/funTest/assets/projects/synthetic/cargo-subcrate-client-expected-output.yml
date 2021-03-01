@@ -31,9 +31,10 @@ packages:
   authors:
   - "Alex Crichton"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to ergonomically define an item depending on a large number\
     \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
     \ branch is the\nitem that gets emitted.\n"
