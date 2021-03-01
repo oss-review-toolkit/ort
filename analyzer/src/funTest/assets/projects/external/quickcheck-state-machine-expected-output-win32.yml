@@ -2,6 +2,8 @@
 project:
   id: "Stack:Testing:quickcheck-state-machine:0.6.0"
   definition_file_path: "stack.yaml"
+  authors:
+  - "Stevan Andjelkovic"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1058,6 +1060,8 @@ project:
 packages:
 - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
   purl: "pkg:hackage/Algebra%2C%20Data%2C%20Data%20Structures%2C%20Math/semigroups@0.18.5"
+  authors:
+  - "Edward A. Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1092,6 +1096,10 @@ packages:
     path: ""
 - id: "Hackage:Compatibility:base-compat:0.10.5"
   purl: "pkg:hackage/Compatibility/base-compat@0.10.5"
+  authors:
+  - "João Cristóvão"
+  - "Ryan Scott"
+  - "Simon Hengel"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1135,6 +1143,10 @@ packages:
     path: ""
 - id: "Hackage:Compatibility:base-orphans:0.8"
   purl: "pkg:hackage/Compatibility/base-orphans@0.8"
+  authors:
+  - "João Cristóvão"
+  - "Ryan Scott"
+  - "Simon Hengel"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1169,6 +1181,8 @@ packages:
     path: ""
 - id: "Hackage:Compatibility:transformers-compat:0.6.2"
   purl: "pkg:hackage/Compatibility/transformers-compat@0.6.2"
+  authors:
+  - "Edward A. Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1204,6 +1218,8 @@ packages:
     path: ""
 - id: "Hackage:Concurrency:async:2.2.1"
   purl: "pkg:hackage/Concurrency/async@2.2.1"
+  authors:
+  - "Simon Marlow"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1277,6 +1293,8 @@ packages:
     path: ""
 - id: "Hackage:Control, Data:contravariant:1.5"
   purl: "pkg:hackage/Control%2C%20Data/contravariant@1.5"
+  authors:
+  - "Edward A. Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1307,6 +1325,8 @@ packages:
     path: ""
 - id: "Hackage:Control, Exceptions, Monad:exceptions:0.10.0"
   purl: "pkg:hackage/Control%2C%20Exceptions%2C%20Monad/exceptions@0.10.0"
+  authors:
+  - "Edward A. Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1376,6 +1396,8 @@ packages:
     path: ""
 - id: "Hackage:Control:loop:0.3.0"
   purl: "pkg:hackage/Control/loop@0.3.0"
+  authors:
+  - "Niklas Hambüchen"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1406,6 +1428,8 @@ packages:
     path: ""
 - id: "Hackage:Control:mtl:2.2.2"
   purl: "pkg:hackage/Control/mtl@2.2.2"
+  authors:
+  - "Andy Gill"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1439,6 +1463,11 @@ packages:
     path: ""
 - id: "Hackage:Control:newtype-generics:0.5.3"
   purl: "pkg:hackage/Control/newtype-generics@0.5.3"
+  authors:
+  - "Conor McBride"
+  - "Darius Jahandarie"
+  - "João Cristóvão"
+  - "Simon Jakobi"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1473,6 +1502,9 @@ packages:
     path: ""
 - id: "Hackage:Control:transformers:0.5.5.0"
   purl: "pkg:hackage/Control/transformers@0.5.5.0"
+  authors:
+  - "Andy Gill"
+  - "Ross Paterson"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1513,6 +1545,9 @@ packages:
     path: ""
 - id: "Hackage:Control:unliftio-core:0.1.2.0"
   purl: "pkg:hackage/Control/unliftio-core@0.1.2.0"
+  authors:
+  - "Francesco Mazzoli"
+  - "Michael Snoyman"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1541,6 +1576,9 @@ packages:
     path: "unliftio-core"
 - id: "Hackage:Control:unliftio:0.2.10"
   purl: "pkg:hackage/Control/unliftio@0.2.10"
+  authors:
+  - "Francesco Mazzoli"
+  - "Michael Snoyman"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -1569,6 +1607,9 @@ packages:
     path: "unliftio"
 - id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
   purl: "pkg:hackage/Data%20Structures%2C%20Graphs/fgl@5.7.0.1"
+  authors:
+  - "Ivan Lazar Miljenovic"
+  - "Martin Erwig"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1668,6 +1709,8 @@ packages:
     path: ""
 - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
   purl: "pkg:hackage/Data%2C%20Data%20Structures/vector@0.12.0.2"
+  authors:
+  - "Roman Leshchinskiy"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1706,6 +1749,8 @@ packages:
     path: ""
 - id: "Hackage:Data, Parsing:binary:0.8.6.0"
   purl: "pkg:hackage/Data%2C%20Parsing/binary@0.8.6.0"
+  authors:
+  - "Lennart Kolmodin"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1741,6 +1786,8 @@ packages:
     path: ""
 - id: "Hackage:Data, Phantom Types:tagged:0.8.6"
   purl: "pkg:hackage/Data%2C%20Phantom%20Types/tagged@0.8.6"
+  authors:
+  - "Edward A. Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1771,6 +1818,8 @@ packages:
     path: ""
 - id: "Hackage:Data, Testing:tree-diff:0.0.2.1"
   purl: "pkg:hackage/Data%2C%20Testing/tree-diff@0.0.2.1"
+  authors:
+  - "Oleg Grenrus"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1810,6 +1859,8 @@ packages:
     path: ""
 - id: "Hackage:Data, Text:text:1.2.3.1"
   purl: "pkg:hackage/Data%2C%20Text/text@1.2.3.1"
+  authors:
+  - "Bryan O'Sullivan"
   declared_licenses:
   - "BSD2"
   declared_licenses_processed:
@@ -1855,6 +1906,8 @@ packages:
     path: ""
 - id: "Hackage:Data:MemoTrie:0.6.9"
   purl: "pkg:hackage/Data/MemoTrie@0.6.9"
+  authors:
+  - "Conal Elliott"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1888,6 +1941,8 @@ packages:
     path: ""
 - id: "Hackage:Data:StateVar:1.1.1.1"
   purl: "pkg:hackage/Data/StateVar@1.1.1.1"
+  authors:
+  - "Sven Panne and Edward Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1919,6 +1974,9 @@ packages:
     path: ""
 - id: "Hackage:Data:bytestring:0.10.8.2"
   purl: "pkg:hackage/Data/bytestring@0.10.8.2"
+  authors:
+  - "Don Stewart"
+  - "Duncan Coutts"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -1970,6 +2028,8 @@ packages:
     path: ""
 - id: "Hackage:Data:charset:0.3.7.1"
   purl: "pkg:hackage/Data/charset@0.3.7.1"
+  authors:
+  - "Edward Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2000,6 +2060,8 @@ packages:
     path: ""
 - id: "Hackage:Data:dlist:0.8.0.5"
   purl: "pkg:hackage/Data/dlist@0.8.0.5"
+  authors:
+  - "Don Stewart"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2032,6 +2094,8 @@ packages:
     path: ""
 - id: "Hackage:Data:hashable:1.2.7.0"
   purl: "pkg:hackage/Data/hashable@1.2.7.0"
+  authors:
+  - "Milan Straka"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2065,6 +2129,8 @@ packages:
     path: ""
 - id: "Hackage:Data:primitive:0.6.4.0"
   purl: "pkg:hackage/Data/primitive@0.6.4.0"
+  authors:
+  - "Roman Leshchinskiy"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2095,6 +2161,8 @@ packages:
     path: ""
 - id: "Hackage:Data:scientific:0.3.6.2"
   purl: "pkg:hackage/Data/scientific@0.3.6.2"
+  authors:
+  - "Bas van Dijk"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2142,6 +2210,9 @@ packages:
     path: ""
 - id: "Hackage:Data:sop-core:0.4.0.0"
   purl: "pkg:hackage/Data/sop-core@0.4.0.0"
+  authors:
+  - "Andres Löh"
+  - "Edsko de Vries"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2177,6 +2248,8 @@ packages:
     path: ""
 - id: "Hackage:Data:unordered-containers:0.2.9.0"
   purl: "pkg:hackage/Data/unordered-containers@0.2.9.0"
+  authors:
+  - "Johan Tibell"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2210,6 +2283,8 @@ packages:
     path: ""
 - id: "Hackage:Data:uuid-types:1.0.3"
   purl: "pkg:hackage/Data/uuid-types@1.0.3"
+  authors:
+  - "Antoine Latter"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2242,6 +2317,8 @@ packages:
     path: ""
 - id: "Hackage:Development:happy:1.19.9"
   purl: "pkg:hackage/Development/happy@1.19.9"
+  authors:
+  - "Andy Gill and Simon Marlow"
   declared_licenses:
   - "BSD2"
   declared_licenses_processed:
@@ -2274,6 +2351,8 @@ packages:
     path: ""
 - id: "Hackage:Development:th-abstraction:0.2.10.0"
   purl: "pkg:hackage/Development/th-abstraction@0.2.10.0"
+  authors:
+  - "Eric Mertens"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -2305,6 +2384,8 @@ packages:
     path: ""
 - id: "Hackage:Distribution:Cabal:2.4.1.0"
   purl: "pkg:hackage/Distribution/Cabal@2.4.1.0"
+  authors:
+  - "Cabal Development Team"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2368,6 +2449,9 @@ packages:
     path: ""
 - id: "Hackage:Generics:generics-sop:0.4.0.1"
   purl: "pkg:hackage/Generics/generics-sop@0.4.0.1"
+  authors:
+  - "Andres Löh"
+  - "Edsko de Vries"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2413,6 +2497,9 @@ packages:
     path: ""
 - id: "Hackage:Graphs, Graphics:graphviz:2999.20.0.3"
   purl: "pkg:hackage/Graphs%2C%20Graphics/graphviz@2999.20.0.3"
+  authors:
+  - "Ivan Lazar Miljenovic"
+  - "Matthew Sackman"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2455,6 +2542,8 @@ packages:
     path: ""
 - id: "Hackage:Language:haskell-lexer:1.0.2"
   purl: "pkg:hackage/Language/haskell-lexer@1.0.2"
+  authors:
+  - "Thomas Hallgren"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2485,6 +2574,8 @@ packages:
     path: ""
 - id: "Hackage:List:split:0.2.3.3"
   purl: "pkg:hackage/List/split@0.2.3.3"
+  authors:
+  - "Brent Yorgey"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2526,6 +2617,8 @@ packages:
     path: ""
 - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
   purl: "pkg:hackage/Math%2C%20Algorithms%2C%20Number%20Theory/integer-logarithms@1.0.2.2"
+  authors:
+  - "Daniel Fischer"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2557,6 +2650,8 @@ packages:
     path: ""
 - id: "Hackage:Math:matrix:0.3.6.1"
   purl: "pkg:hackage/Math/matrix@0.3.6.1"
+  authors:
+  - "Daniel Díaz"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2592,6 +2687,8 @@ packages:
     path: ""
 - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
   purl: "pkg:hackage/Numeric%2C%20Algebra/integer-gmp@1.0.2.0"
+  authors:
+  - "Herbert Valerio Riedel"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2626,6 +2723,8 @@ packages:
     path: ""
 - id: "Hackage:Other:generic-data:0.3.0.0"
   purl: "pkg:hackage/Other/generic-data@0.3.0.0"
+  authors:
+  - "Li-yao Xia"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -2654,6 +2753,10 @@ packages:
     path: ""
 - id: "Hackage:Parsing:parsec:3.1.13.0"
   purl: "pkg:hackage/Parsing/parsec@3.1.13.0"
+  authors:
+  - "Antoine Latter"
+  - "Daan Leijen"
+  - "Paolo Martini"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2721,6 +2824,10 @@ packages:
     path: ""
 - id: "Hackage:System, Graphics:Win32:2.6.1.0"
   purl: "pkg:hackage/System%2C%20Graphics/Win32@2.6.1.0"
+  authors:
+  - "Alastair Reid"
+  - "Tamar Christina"
+  - "shelarcy"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2812,6 +2919,8 @@ packages:
     path: ""
 - id: "Hackage:System:filepath:1.4.2.1"
   purl: "pkg:hackage/System/filepath@1.4.2.1"
+  authors:
+  - "Neil Mitchell"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2850,6 +2959,8 @@ packages:
     path: ""
 - id: "Hackage:System:mintty:0.1.2"
   purl: "pkg:hackage/System/mintty@0.1.2"
+  authors:
+  - "Ryan Scott"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -2999,6 +3110,8 @@ packages:
     path: ""
 - id: "Hackage:System:time-locale-compat:0.1.1.5"
   purl: "pkg:hackage/System/time-locale-compat@0.1.1.5"
+  authors:
+  - "Kei Hibino"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3062,6 +3175,8 @@ packages:
     path: ""
 - id: "Hackage:Testing:QuickCheck:2.13.1"
   purl: "pkg:hackage/Testing/QuickCheck@2.13.1"
+  authors:
+  - "Koen Claessen"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3106,6 +3221,8 @@ packages:
     path: ""
 - id: "Hackage:Testing:markov-chain-usage-model:0.0.0"
   purl: "pkg:hackage/Testing/markov-chain-usage-model@0.0.0"
+  authors:
+  - "Stevan Andjelkovic"
   declared_licenses:
   - "BSD2"
   declared_licenses_processed:
@@ -3136,6 +3253,8 @@ packages:
     path: ""
 - id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
   purl: "pkg:hackage/Text%2C%20Parsing/attoparsec@0.13.2.2"
+  authors:
+  - "Bryan O'Sullivan"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3167,6 +3286,8 @@ packages:
     path: ""
 - id: "Hackage:Text, Parsing:parsers:0.12.9"
   purl: "pkg:hackage/Text%2C%20Parsing/parsers@0.12.9"
+  authors:
+  - "Edward A. Kmett"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3201,6 +3322,8 @@ packages:
     path: ""
 - id: "Hackage:Text, Parsing:polyparse:1.12.1"
   purl: "pkg:hackage/Text%2C%20Parsing/polyparse@1.12.1"
+  authors:
+  - "Malcolm Wallace"
   declared_licenses:
   - "LGPL"
   declared_licenses_processed:
@@ -3236,6 +3359,8 @@ packages:
     path: ""
 - id: "Hackage:Text, Web, JSON:aeson:1.4.2.0"
   purl: "pkg:hackage/Text%2C%20Web%2C%20JSON/aeson@1.4.2.0"
+  authors:
+  - "Bryan O'Sullivan"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3269,6 +3394,8 @@ packages:
     path: ""
 - id: "Hackage:Text:pretty-show:1.9.5"
   purl: "pkg:hackage/Text/pretty-show@1.9.5"
+  authors:
+  - "Iavor S. Diatchki"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3336,6 +3463,8 @@ packages:
     path: ""
 - id: "Hackage:Text:show-combinators:0.1.0.0"
   purl: "pkg:hackage/Text/show-combinators@0.1.0.0"
+  authors:
+  - "Li-yao Xia"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3364,6 +3493,8 @@ packages:
     path: ""
 - id: "Hackage:Text:wl-pprint-text:1.2.0.0"
   purl: "pkg:hackage/Text/wl-pprint-text@1.2.0.0"
+  authors:
+  - "Ivan Lazar Miljenovic"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3394,6 +3525,8 @@ packages:
     path: ""
 - id: "Hackage:Time:time:1.8.0.2"
   purl: "pkg:hackage/Time/time@1.8.0.2"
+  authors:
+  - "Ashley Yakeley"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3424,6 +3557,9 @@ packages:
     path: ""
 - id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
   purl: "pkg:hackage/User%20Interfaces%2C%20Text/ansi-wl-pprint@0.6.8.2"
+  authors:
+  - "Daan Leijen"
+  - "Max Bolingbroke"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3457,6 +3593,8 @@ packages:
     path: ""
 - id: "Hackage:User Interfaces:ansi-terminal:0.8.2"
   purl: "pkg:hackage/User%20Interfaces/ansi-terminal@0.8.2"
+  authors:
+  - "Max Bolingbroke"
   declared_licenses:
   - "BSD3"
   declared_licenses_processed:
@@ -3489,6 +3627,8 @@ packages:
     path: ""
 - id: "Hackage:data, graphics:colour:2.3.4"
   purl: "pkg:hackage/data%2C%20graphics/colour@2.3.4"
+  authors:
+  - "Russell O'Connor"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
