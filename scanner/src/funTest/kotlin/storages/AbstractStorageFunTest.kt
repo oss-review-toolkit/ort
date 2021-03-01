@@ -331,16 +331,16 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 )
                 val scanResultSourceArtifactNonMatching =
                     ScanResult(provenanceSourceArtifactNonMatching, scannerDetails1, scanSummaryWithFiles)
-                val provenanceVcsInfoNonMatching = provenanceWithVcsInfo.copy(
+                val provenanceVcsNonMatching = provenanceWithVcsInfo.copy(
                     vcsInfo = vcs.copy(revision = "revision2", resolvedRevision = "resolvedRevision2")
                 )
-                val scanResultVcsInfoNonMatching =
-                    ScanResult(provenanceVcsInfoNonMatching, scannerDetails1, scanSummaryWithFiles)
+                val scanResultVcsNonMatching =
+                    ScanResult(provenanceVcsNonMatching, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult1 = storage.add(id, scanResultSourceArtifactMatching)
                 val addResult2 = storage.add(id, scanResultVcsMatching)
                 val addResult3 = storage.add(id, scanResultSourceArtifactNonMatching)
-                val addResult4 = storage.add(id, scanResultVcsInfoNonMatching)
+                val addResult4 = storage.add(id, scanResultVcsNonMatching)
                 val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
                 addResult1 should beOfType(Success::class)
