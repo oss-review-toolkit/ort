@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.vdurmont.semver4j.Semver
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
-abstract class AbstractStorageFunTest : StringSpec() {
+abstract class AbstractStorageFunTest : WordSpec() {
     private companion object {
         val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
     }
@@ -140,232 +140,236 @@ abstract class AbstractStorageFunTest : StringSpec() {
         )
 
     init {
-        "Scan result can be added to the storage" {
-            val storage = createStorage()
-            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+        "Adding a scan result" should {
+            "succeed for a valid scan result" {
+                val storage = createStorage()
+                val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
 
-            val addResult = storage.add(id, scanResult)
-            val readResult = storage.read(id)
+                val addResult = storage.add(id, scanResult)
+                val readResult = storage.read(id)
 
-            addResult should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactly(scanResult)
+                addResult should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactly(scanResult)
+                }
+            }
+
+            "fail if the fileCount is 0" {
+                val storage = createStorage()
+                val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles)
+
+                val addResult = storage.add(id, scanResult)
+                val readResult = storage.read(id)
+
+                addResult should beOfType(Failure::class)
+                (addResult as Failure).error shouldBe
+                        "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should beEmpty()
+                }
+            }
+
+            "fail if provenance information is missing" {
+                val storage = createStorage()
+                val scanResult = ScanResult(provenanceEmpty, scannerDetails1, scanSummaryWithFiles)
+
+                val addResult = storage.add(id, scanResult)
+                val readResult = storage.read(id)
+
+                addResult should beOfType(Failure::class)
+                (addResult as Failure).error shouldBe "Not storing scan result for 'type:namespace:name:version' " +
+                        "because no provenance information is available."
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should beEmpty()
+                }
             }
         }
 
-        "Does not add scan result with fileCount 0 to storage" {
-            val storage = createStorage()
-            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles)
+        "Reading a scan result" should {
+            "find all scan results for an id" {
+                val storage = createStorage()
+                val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+                val scanResult2 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
 
-            val addResult = storage.add(id, scanResult)
-            val readResult = storage.read(id)
+                val addResult1 = storage.add(id, scanResult1)
+                val addResult2 = storage.add(id, scanResult2)
+                val readResult = storage.read(id)
 
-            addResult should beOfType(Failure::class)
-            (addResult as Failure).error shouldBe
-                    "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should beEmpty()
+                addResult1 should beOfType(Success::class)
+                addResult2 should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
+                }
             }
-        }
 
-        "Does not add scan result without provenance information to storage" {
-            val storage = createStorage()
-            val scanResult = ScanResult(provenanceEmpty, scannerDetails1, scanSummaryWithFiles)
+            "find all scan results for a specific scanner" {
+                val storage = createStorage()
+                val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+                val scanResult2 = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles)
+                val scanResult3 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
 
-            val addResult = storage.add(id, scanResult)
-            val readResult = storage.read(id)
+                val addResult1 = storage.add(id, scanResult1)
+                val addResult2 = storage.add(id, scanResult2)
+                val addResult3 = storage.add(id, scanResult3)
+                val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-            addResult should beOfType(Failure::class)
-            (addResult as Failure).error shouldBe "Not storing scan result for 'type:namespace:name:version' because " +
-                    "no provenance information is available."
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should beEmpty()
+                addResult1 should beOfType(Success::class)
+                addResult2 should beOfType(Success::class)
+                addResult3 should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
+                }
             }
-        }
 
-        "Can retrieve all scan results from storage" {
-            val storage = createStorage()
-            val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
-            val scanResult2 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
+            "find all scan results for scanners with names matching a pattern" {
+                val storage = createStorage()
+                val detailsCompatibleOtherScanner = scannerDetails1.copy(name = "name 2")
+                val detailsIncompatibleOtherScanner = scannerDetails1.copy(name = "other Scanner name")
+                val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+                val scanResult2 =
+                    ScanResult(provenanceWithSourceArtifact, detailsCompatibleOtherScanner, scanSummaryWithFiles)
+                val scanResult3 =
+                    ScanResult(provenanceWithSourceArtifact, detailsIncompatibleOtherScanner, scanSummaryWithFiles)
+                val criteria = criteriaForDetails(scannerDetails1).copy(regScannerName = "name.+")
 
-            val addResult1 = storage.add(id, scanResult1)
-            val addResult2 = storage.add(id, scanResult2)
-            val readResult = storage.read(id)
+                val addResult1 = storage.add(id, scanResult1)
+                val addResult2 = storage.add(id, scanResult2)
+                val addResult3 = storage.add(id, scanResult3)
+                val readResult = storage.read(pkg, criteria)
 
-            addResult1 should beOfType(Success::class)
-            addResult2 should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
+                addResult1 should beOfType(Success::class)
+                addResult2 should beOfType(Success::class)
+                addResult3 should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
+                }
             }
-        }
 
-        "Can retrieve all scan results for specific scanner from storage" {
-            val storage = createStorage()
-            val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
-            val scanResult2 = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles)
-            val scanResult3 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles)
+            "find all scan results for compatible scanners" {
+                val storage = createStorage()
+                val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+                val scanResultCompatible1 =
+                    ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
+                val scanResultCompatible2 =
+                    ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
+                val scanResultIncompatible =
+                    ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
 
-            val addResult1 = storage.add(id, scanResult1)
-            val addResult2 = storage.add(id, scanResult2)
-            val addResult3 = storage.add(id, scanResult3)
-            val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
+                val addResult = storage.add(id, scanResult)
+                val addResultCompatible1 = storage.add(id, scanResultCompatible1)
+                val addResultCompatible2 = storage.add(id, scanResultCompatible2)
+                val addResultIncompatible = storage.add(id, scanResultIncompatible)
+                val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
-            addResult1 should beOfType(Success::class)
-            addResult2 should beOfType(Success::class)
-            addResult3 should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
+                addResult should beOfType(Success::class)
+                addResultCompatible1 should beOfType(Success::class)
+                addResultCompatible2 should beOfType(Success::class)
+                addResultIncompatible should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactlyInAnyOrder(
+                        scanResult,
+                        scanResultCompatible1,
+                        scanResultCompatible2
+                    )
+                }
             }
-        }
 
-        "Can retrieve all scan results for scanners with names matching a pattern" {
-            val storage = createStorage()
-            val detailsCompatibleOtherScanner = scannerDetails1.copy(name = "name 2")
-            val detailsIncompatibleOtherScanner = scannerDetails1.copy(name = "other Scanner name")
-            val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
-            val scanResult2 =
-                ScanResult(provenanceWithSourceArtifact, detailsCompatibleOtherScanner, scanSummaryWithFiles)
-            val scanResult3 =
-                ScanResult(provenanceWithSourceArtifact, detailsIncompatibleOtherScanner, scanSummaryWithFiles)
-            val criteria = criteriaForDetails(scannerDetails1).copy(regScannerName = "name.+")
+            "find all scan results for a scanner in a version range" {
+                val storage = createStorage()
+                val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+                val scanResultCompatible1 =
+                    ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
+                val scanResultCompatible2 =
+                    ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
+                val scanResultIncompatible =
+                    ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
+                val criteria = criteriaForDetails(scannerDetails1).copy(maxVersion = Semver("1.5.0"))
 
-            val addResult1 = storage.add(id, scanResult1)
-            val addResult2 = storage.add(id, scanResult2)
-            val addResult3 = storage.add(id, scanResult3)
-            val readResult = storage.read(pkg, criteria)
+                val addResult = storage.add(id, scanResult)
+                val addResultCompatible1 = storage.add(id, scanResultCompatible1)
+                val addResultCompatible2 = storage.add(id, scanResultCompatible2)
+                val addResultIncompatible = storage.add(id, scanResultIncompatible)
+                val readResult = storage.read(pkg, criteria)
 
-            addResult1 should beOfType(Success::class)
-            addResult2 should beOfType(Success::class)
-            addResult3 should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
+                addResult should beOfType(Success::class)
+                addResultCompatible1 should beOfType(Success::class)
+                addResultCompatible2 should beOfType(Success::class)
+                addResultIncompatible should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactlyInAnyOrder(
+                        scanResult,
+                        scanResultCompatible1,
+                        scanResultCompatible2,
+                        scanResultIncompatible
+                    )
+                }
             }
-        }
 
-        "Can retrieve all scan results for compatible scanners from storage" {
-            val storage = createStorage()
-            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
-            val scanResultCompatible1 =
-                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
-            val scanResultCompatible2 =
-                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
-            val scanResultIncompatible =
-                ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
-
-            val addResult = storage.add(id, scanResult)
-            val addResultCompatible1 = storage.add(id, scanResultCompatible1)
-            val addResultCompatible2 = storage.add(id, scanResultCompatible2)
-            val addResultIncompatible = storage.add(id, scanResultIncompatible)
-            val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
-
-            addResult should beOfType(Success::class)
-            addResultCompatible1 should beOfType(Success::class)
-            addResultCompatible2 should beOfType(Success::class)
-            addResultIncompatible should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactlyInAnyOrder(
-                    scanResult,
-                    scanResultCompatible1,
-                    scanResultCompatible2
+            "find only packages with matching provenance" {
+                val storage = createStorage()
+                val scanResultSourceArtifactMatching =
+                    ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
+                val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles)
+                val provenanceSourceArtifactNonMatching = provenanceWithSourceArtifact.copy(
+                    sourceArtifact = sourceArtifact.copy(hash = Hash.create("0123456789012345678901234567890123456789"))
                 )
-            }
-        }
-
-        "Can retrieve all scan results for a scanner in a version range" {
-            val storage = createStorage()
-            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
-            val scanResultCompatible1 =
-                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
-            val scanResultCompatible2 =
-                ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
-            val scanResultIncompatible =
-                ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
-            val criteria = criteriaForDetails(scannerDetails1).copy(maxVersion = Semver("1.5.0"))
-
-            val addResult = storage.add(id, scanResult)
-            val addResultCompatible1 = storage.add(id, scanResultCompatible1)
-            val addResultCompatible2 = storage.add(id, scanResultCompatible2)
-            val addResultIncompatible = storage.add(id, scanResultIncompatible)
-            val readResult = storage.read(pkg, criteria)
-
-            addResult should beOfType(Success::class)
-            addResultCompatible1 should beOfType(Success::class)
-            addResultCompatible2 should beOfType(Success::class)
-            addResultIncompatible should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactlyInAnyOrder(
-                    scanResult,
-                    scanResultCompatible1,
-                    scanResultCompatible2,
-                    scanResultIncompatible
+                val scanResultSourceArtifactNonMatching =
+                    ScanResult(provenanceSourceArtifactNonMatching, scannerDetails1, scanSummaryWithFiles)
+                val provenanceVcsInfoNonMatching = provenanceWithVcsInfo.copy(
+                    vcsInfo = vcs.copy(revision = "revision2", resolvedRevision = "resolvedRevision2")
                 )
+                val scanResultVcsInfoNonMatching =
+                    ScanResult(provenanceVcsInfoNonMatching, scannerDetails1, scanSummaryWithFiles)
+
+                val addResult1 = storage.add(id, scanResultSourceArtifactMatching)
+                val addResult2 = storage.add(id, scanResultVcsMatching)
+                val addResult3 = storage.add(id, scanResultSourceArtifactNonMatching)
+                val addResult4 = storage.add(id, scanResultVcsInfoNonMatching)
+                val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
+
+                addResult1 should beOfType(Success::class)
+                addResult2 should beOfType(Success::class)
+                addResult3 should beOfType(Success::class)
+                addResult4 should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactlyInAnyOrder(
+                        scanResultSourceArtifactMatching,
+                        scanResultVcsMatching
+                    )
+                }
             }
-        }
 
-        "Returns only packages with matching provenance" {
-            val storage = createStorage()
-            val scanResultSourceArtifactMatching =
-                ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles)
-            val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles)
-            val provenanceSourceArtifactNonMatching = provenanceWithSourceArtifact.copy(
-                sourceArtifact = sourceArtifact.copy(hash = Hash.create("0123456789012345678901234567890123456789"))
-            )
-            val scanResultSourceArtifactNonMatching =
-                ScanResult(provenanceSourceArtifactNonMatching, scannerDetails1, scanSummaryWithFiles)
-            val provenanceVcsInfoNonMatching = provenanceWithVcsInfo.copy(
-                vcsInfo = vcs.copy(revision = "revision2", resolvedRevision = "resolvedRevision2")
-            )
-            val scanResultVcsInfoNonMatching =
-                ScanResult(provenanceVcsInfoNonMatching, scannerDetails1, scanSummaryWithFiles)
+            "find a scan result if the revision was detected from a version" {
+                val storage = createStorage()
+                val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
 
-            val addResult1 = storage.add(id, scanResultSourceArtifactMatching)
-            val addResult2 = storage.add(id, scanResultVcsMatching)
-            val addResult3 = storage.add(id, scanResultSourceArtifactNonMatching)
-            val addResult4 = storage.add(id, scanResultVcsInfoNonMatching)
-            val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
+                val addResult = storage.add(id, scanResult)
+                val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
 
-            addResult1 should beOfType(Success::class)
-            addResult2 should beOfType(Success::class)
-            addResult3 should beOfType(Success::class)
-            addResult4 should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactlyInAnyOrder(
-                    scanResultSourceArtifactMatching,
-                    scanResultVcsMatching
-                )
-            }
-        }
-
-        "Stored result is found if revision was detected from version" {
-            val storage = createStorage()
-            val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
-
-            val addResult = storage.add(id, scanResult)
-            val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
-
-            addResult should beOfType(Success::class)
-            readResult should beOfType(Success::class)
-            (readResult as Success).result.let { result ->
-                result.id shouldBe id
-                result.results should containExactly(scanResult)
+                addResult should beOfType(Success::class)
+                readResult should beOfType(Success::class)
+                (readResult as Success).result.let { result ->
+                    result.id shouldBe id
+                    result.results should containExactly(scanResult)
+                }
             }
         }
     }
