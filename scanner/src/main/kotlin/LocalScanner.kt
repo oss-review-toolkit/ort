@@ -500,19 +500,15 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     }
 
     /**
-     * Work around to prevent that duplicate [ScanResult]s from the [ScanResultsStorage] do get duplicated in the
+     * Workaround to prevent that duplicate [ScanResult]s from the [ScanResultsStorage] do get duplicated in the
      * [OrtResult] produced by this scanner.
      *
-     * The time interval between a failing look-up of the cache entry and the resulting scan with the following store
-     * operation can be relatively large. Thus this [LocalScanner] is prone to adding duplicate scan results if scans
-     * are run in parallel. In particular the [PostgresStorage] allows adding duplicate tuples
-     * (identifier, provenance, scanner details) which probably should be made unique.
+     * The time interval between a failing read from storage and the resulting scan with the following store operation
+     * can be relatively large. Thus this [LocalScanner] is prone to adding duplicate scan results if multiple instances
+     * of the scanner run in parallel. In particular the [PostgresStorage] allows adding duplicate tuples
+     * (identifier, provenance, scanner details) which should be made unique.
      *
-     * TODO:
-     *
-     * 1. Minimize the time between the failing look-up and the corresponding store operation mentioned.
-     * 2. Make the tuples (identifier, provenance, scanner details) unique (dis-regarding provenance.downloadTime), at
-     * least in [PostgresStorage].
+     * TODO: Implement a solution that prevents duplicate scan results in the storages.
      */
     private fun List<ScanResult>.deduplicateScanResults(): List<ScanResult> {
         // Use vcsInfo and sourceArtifact instead of provenance in order to ignore the download time and original VCS
