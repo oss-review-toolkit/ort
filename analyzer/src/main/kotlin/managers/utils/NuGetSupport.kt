@@ -31,14 +31,17 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 import java.io.IOException
+import java.io.StringReader
 import java.util.SortedMap
 import java.util.concurrent.TimeUnit
 
 import javax.xml.bind.annotation.XmlRootElement
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 import okhttp3.CacheControl
 import okhttp3.Request
@@ -125,24 +128,29 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
 
     private val packageMap = mutableMapOf<Identifier, Pair<NuGetAllPackageData, Package>>()
 
-    private suspend inline fun <reified T> mapFromUrl(mapper: ObjectMapper, url: String): T {
-        val request = Request.Builder()
-            .get()
-            .url(url)
-            .build()
+    private suspend inline fun <reified T> mapFromUrl(mapper: ObjectMapper, url: String): T =
+        withContext(Dispatchers.IO) {
+            val request = Request.Builder()
+                .url(url)
+                .build()
 
-        val response = client.newCall(request).await()
-        if (response.cacheResponse != null) {
-            log.debug { "Retrieved '$url' response from local cache." }
-        } else {
-            log.debug { "Retrieved '$url' response from remote server." }
+            client.newCall(request).await().use { response ->
+                if (response.cacheResponse != null) {
+                    NuGetSupport.log.debug { "Retrieved '$url' response from local cache." }
+                } else {
+                    NuGetSupport.log.debug {
+                        "Retrieved '$url' response from remote server with status ${response.code}."
+                    }
+                }
+
+                if (!response.isSuccessful) {
+                    throw IOException("Got non-success response status ${response.code} for '$url'.")
+                }
+
+                val bodyReader = response.body?.charStream() ?: StringReader("")
+                mapper.readValue(bodyReader)
+            }
         }
-
-        val body = response.body?.string()?.takeIf { response.isSuccessful }
-            ?: throw IOException("Failed to get a response body from '$url'.")
-
-        return mapper.readValue(body)
-    }
 
     private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
         // Note: The package name in the URL is case-sensitive and must be lower-case!
