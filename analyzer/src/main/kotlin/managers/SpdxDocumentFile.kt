@@ -59,6 +59,40 @@ private val SPDX_SCOPE_RELATIONSHIPS = listOf(
 )
 
 /**
+ * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
+ * specified.
+ */
+private fun String.extractOrganization(): String? =
+    lineSequence().mapNotNull { line ->
+        line.withoutPrefix(SpdxConstants.ORGANIZATION)
+    }.firstOrNull()
+
+/**
+ * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.
+ */
+private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
+
+/**
+ * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
+ * of NONE or NOASSERTION.
+ */
+private fun getConcludedLicense(pkg: SpdxPackage): SpdxExpression? =
+    pkg.licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
+
+/**
+ * Return a [RemoteArtifact] created from the downloadLocation of the given package [SpdxPackage] if it is a local
+ * file, or return an [RemoteArtifact.EMPTY].
+ *
+ * TODO: Consider also taking "sourceInfo" or "externalRefs" into account.
+ */
+private fun getSourceArtifact(pkg: SpdxPackage): RemoteArtifact =
+    if (pkg.downloadLocation.startsWith("file:/")) {
+        RemoteArtifact(pkg.downloadLocation, Hash.NONE)
+    } else {
+        RemoteArtifact.EMPTY
+    }
+
+/**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
  */
@@ -85,13 +119,6 @@ class SpdxDocumentFile(
             name = name,
             version = versionInfo
         )
-
-    private fun String.extractOrganization() =
-        lineSequence().mapNotNull { line ->
-            line.withoutPrefix(SpdxConstants.ORGANIZATION)
-        }.firstOrNull()
-
-    private fun String.mapNotPresentToEmpty() = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
 
     /**
      * Return the dependencies of [pkg] defined in [doc] of the [SpdxRelationship.Type.DEPENDENCY_OF] type.
@@ -236,26 +263,5 @@ class SpdxDocumentFile(
         }
 
         return listOf(ProjectAnalyzerResult(project, packages))
-    }
-
-    /**
-     * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
-     * of NONE or NOASSERTION.
-     */
-    private fun getConcludedLicense(pkg: SpdxPackage): SpdxExpression? =
-        pkg.licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
-
-    /**
-     * Return a [RemoteArtifact] created from the downloadLocation of the given package [SpdxPackage] if it is a local
-     * file, or return an [RemoteArtifact.EMPTY].
-     *
-     * TODO: Consider also taking "sourceInfo" or "externalRefs" into account.
-     */
-    private fun getSourceArtifact(pkg: SpdxPackage): RemoteArtifact {
-        return if (pkg.downloadLocation.startsWith("file:/")) {
-            RemoteArtifact(pkg.downloadLocation, Hash.NONE)
-        } else {
-            RemoteArtifact.EMPTY
-        }
     }
 }
