@@ -232,22 +232,29 @@ class SpdxCompoundExpression(
         val leftDnf = left.disjunctiveNormalForm()
         val rightDnf = right.disjunctiveNormalForm()
 
+        // Both AND and OR operators are commutative, so it is fine to sort operands alphabetically.
+        val (firstDnf, secondDnf) = if (rightDnf.toString() < leftDnf.toString()) {
+            rightDnf to leftDnf
+        } else {
+            leftDnf to rightDnf
+        }
+
         return when (operator) {
-            SpdxOperator.OR -> SpdxCompoundExpression(leftDnf, SpdxOperator.OR, rightDnf)
+            SpdxOperator.OR -> SpdxCompoundExpression(firstDnf, SpdxOperator.OR, secondDnf)
 
             SpdxOperator.AND -> when {
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR &&
-                        rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
-                    ((leftDnf.left and rightDnf.left) or (leftDnf.left and rightDnf.right)) or
-                            ((leftDnf.right and rightDnf.left) or (leftDnf.right and rightDnf.right))
+                firstDnf is SpdxCompoundExpression && firstDnf.operator == SpdxOperator.OR &&
+                        secondDnf is SpdxCompoundExpression && secondDnf.operator == SpdxOperator.OR ->
+                    ((firstDnf.left and secondDnf.left) or (firstDnf.left and secondDnf.right)) or
+                            ((firstDnf.right and secondDnf.left) or (firstDnf.right and secondDnf.right))
 
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR ->
-                    (leftDnf.left and rightDnf) or (leftDnf.right and rightDnf)
+                firstDnf is SpdxCompoundExpression && firstDnf.operator == SpdxOperator.OR ->
+                    (firstDnf.left and secondDnf) or (firstDnf.right and secondDnf)
 
-                rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
-                    (leftDnf and rightDnf.left) or (leftDnf and rightDnf.right)
+                secondDnf is SpdxCompoundExpression && secondDnf.operator == SpdxOperator.OR ->
+                    (firstDnf and secondDnf.left) or (firstDnf and secondDnf.right)
 
-                else -> SpdxCompoundExpression(leftDnf, operator, rightDnf)
+                else -> SpdxCompoundExpression(firstDnf, operator, secondDnf)
             }
         }
     }
