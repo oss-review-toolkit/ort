@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -56,6 +57,13 @@ private val SPDX_SCOPE_RELATIONSHIPS = listOf(
     SpdxRelationship.Type.PROVIDED_DEPENDENCY_OF,
     SpdxRelationship.Type.RUNTIME_DEPENDENCY_OF,
     SpdxRelationship.Type.TEST_DEPENDENCY_OF
+)
+
+private val SPDX_VCS_PREFIXES = mapOf(
+    "git+" to VcsType.GIT,
+    "hg+" to VcsType.MERCURIAL,
+    "bzr+" to VcsType.UNKNOWN,
+    "svn+" to VcsType.SUBVERSION
 )
 
 /**
@@ -80,17 +88,61 @@ private fun getConcludedLicense(pkg: SpdxPackage): SpdxExpression? =
     pkg.licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
 
 /**
- * Return a [RemoteArtifact] created from the downloadLocation of the given package [SpdxPackage] if it is a local
- * file, or return an [RemoteArtifact.EMPTY].
- *
- * TODO: Consider also taking "sourceInfo" or "externalRefs" into account.
+ * Return a [RemoteArtifact] for the binary artifact that the [pkg]'s [downloadLocation][SpdxPackage.downloadLocation]
+ * points to. If the download location is a "not present" value, or if it points to a source artifact or a VCS location
+ * instead, return null.
  */
-private fun getSourceArtifact(pkg: SpdxPackage): RemoteArtifact =
-    if (pkg.downloadLocation.startsWith("file:/")) {
-        RemoteArtifact(pkg.downloadLocation, Hash.NONE)
-    } else {
-        RemoteArtifact.EMPTY
+internal fun getBinaryArtifact(pkg: SpdxPackage): RemoteArtifact? =
+    getRemoteArtifact(pkg).takeUnless {
+        // Note: The "FilesAnalyzed" field "Indicates whether the file content of this package has been available for or
+        // subjected to analysis when creating the SPDX document". It does not indicate whether files were actually
+        // analyzed.
+        // If files were available, do *not* consider this do be a *binary* artifact.
+        pkg.filesAnalyzed
     }
+
+/**
+ * Return a [RemoteArtifact] for the source artifact that the [pkg]'s [downloadLocation][SpdxPackage.downloadLocation]
+ * points to. If the download location is a "not present" value, or if it points to a binary artifact or a VCS location
+ * instead, return null.
+ */
+internal fun getSourceArtifact(pkg: SpdxPackage): RemoteArtifact? =
+    getRemoteArtifact(pkg).takeIf {
+        // Note: The "FilesAnalyzed" field "Indicates whether the file content of this package has been available for or
+        // subjected to analysis when creating the SPDX document". It does not indicate whether files were actually
+        // analyzed.
+        // If files were available, *do* consider this do be a *source* artifact.
+        pkg.filesAnalyzed
+    }
+
+private fun getRemoteArtifact(pkg: SpdxPackage): RemoteArtifact? =
+    when {
+        SpdxConstants.isNotPresent(pkg.downloadLocation) -> null
+        SPDX_VCS_PREFIXES.any { (prefix, _) -> pkg.downloadLocation.startsWith(prefix) } -> null
+        else -> RemoteArtifact(pkg.downloadLocation, Hash.NONE)
+    }
+
+/**
+ * Return the [VcsInfo] contained in [pkg]'s [downloadLocation][SpdxPackage.downloadLocation], or null if the download
+ * location is a "not present" value / does not point to a VCS location.
+ */
+internal fun getVcsInfo(pkg: SpdxPackage): VcsInfo? {
+    if (SpdxConstants.isNotPresent(pkg.downloadLocation)) return null
+
+    return SPDX_VCS_PREFIXES.mapNotNull { (prefix, vcsType) ->
+        pkg.downloadLocation.withoutPrefix(prefix)?.let { url ->
+            var vcsUrl = url
+
+            val vcsPath = vcsUrl.substringAfterLast('#', "")
+            vcsUrl = vcsUrl.removeSuffix("#$vcsPath")
+
+            val vcsRevision = vcsUrl.substringAfterLast('@', "")
+            vcsUrl = vcsUrl.removeSuffix("@$vcsRevision")
+
+            VcsInfo(vcsType, vcsUrl, vcsRevision, path = vcsPath)
+        }
+    }.firstOrNull()
+}
 
 /**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
@@ -246,7 +298,13 @@ class SpdxDocumentFile(
 
         val packages = nonProjectPackages.mapTo(sortedSetOf()) { pkg ->
             val packageDescription = pkg.description.takeUnless { it.isEmpty() } ?: pkg.summary
-            val packageDir = workingDir.resolve(pkg.packageFilename)
+
+            // If the VCS information cannot be determined from the download location, fall back to try getting it from
+            // the VCS working tree itself.
+            val vcs = getVcsInfo(pkg) ?: run {
+                val packageDir = workingDir.resolve(pkg.packageFilename)
+                VersionControlSystem.forDirectory(packageDir)?.getInfo()
+            } ?: VcsInfo.EMPTY
 
             Package(
                 id = pkg.toIdentifier(),
@@ -256,9 +314,9 @@ class SpdxDocumentFile(
                 concludedLicense = getConcludedLicense(pkg),
                 description = packageDescription,
                 homepageUrl = pkg.homepage.mapNotPresentToEmpty(),
-                binaryArtifact = RemoteArtifact.EMPTY, // TODO: Use "downloadLocation" or "externalRefs"?
-                sourceArtifact = getSourceArtifact(pkg),
-                vcs = VersionControlSystem.forDirectory(packageDir)?.getInfo() ?: VcsInfo.EMPTY
+                binaryArtifact = getBinaryArtifact(pkg) ?: RemoteArtifact.EMPTY,
+                sourceArtifact = getSourceArtifact(pkg) ?: RemoteArtifact.EMPTY,
+                vcs = vcs
             )
         }
 

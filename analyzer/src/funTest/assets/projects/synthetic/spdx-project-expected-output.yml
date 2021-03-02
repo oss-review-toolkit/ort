@@ -37,7 +37,7 @@ packages:
     \ of powerful features."
   homepage_url: "https://curl.haxx.se/"
   binary_artifact:
-    url: ""
+    url: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
     hash:
       value: ""
       algorithm: ""
@@ -79,11 +79,11 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "<REPLACE_URL>"
-    revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"
+    url: "ssh://github.com/openssl/openssl.git"
+    revision: "e2e09d9fba1187f8d6aafaa34d4172f56f1ffb72"
+    path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"
+    url: "ssh://git@github.com/openssl/openssl.git"
+    revision: "e2e09d9fba1187f8d6aafaa34d4172f56f1ffb72"
+    path: ""
