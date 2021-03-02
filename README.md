@@ -1,7 +1,5 @@
 ![OSS Review Toolkit Logo](./logos/ort.png)
 
-
-
 &nbsp;
 
 [![Slack][1]][2]
