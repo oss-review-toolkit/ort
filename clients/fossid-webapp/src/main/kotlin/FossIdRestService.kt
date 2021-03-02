@@ -21,6 +21,7 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
+import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -44,6 +45,9 @@ interface FossIdRestService {
     companion object {
         val JSON_MAPPER = JsonMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+            // FossID has a bug in get_results/scan.
+            // Sometimes the match_type is "ignored", sometimes it is "Ignored".
+            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
             .registerKotlinModule()
 
         /**
