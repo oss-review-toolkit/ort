@@ -27,7 +27,7 @@ jobs:
     displayName: Detekt
     inputs:
       gradleWrapperFile: gradlew
-      options: --no-daemon --stacktrace
+      options: --no-daemon --stacktrace --scan
       tasks: detekt
       javaHomeOption: JDKVersion
       jdkVersionOption: 1.11
