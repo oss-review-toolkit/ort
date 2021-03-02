@@ -117,20 +117,12 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
 allprojects {
     buildscript {
         repositories {
-            // Explicitly add Maven Central as some plugins continue to have problems with JCenter, see
-            // https://github.com/detekt/detekt/issues/3062.
             mavenCentral()
-
-            jcenter()
         }
     }
 
     repositories {
-        // Work-around for JCenter not correctly proxying "maven-metadata.xml", see
-        // https://github.com/ben-manes/gradle-versions-plugin/issues/424#issuecomment-691628498.
         mavenCentral()
-
-        jcenter()
     }
 
     apply(plugin = "io.gitlab.arturbosch.detekt")

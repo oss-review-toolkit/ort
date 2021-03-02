@@ -33,8 +33,6 @@ plugins {
 }
 
 repositories {
-    jcenter()
-
     exclusiveContent {
         forRepository {
             maven("https://plugins.gradle.org/m2/")
