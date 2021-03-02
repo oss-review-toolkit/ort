@@ -173,7 +173,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
             }
         ).map { (licenseExpression, replacements) ->
             val spdxLicenseExpression = replacements.fold(licenseExpression.expression) { expression, replacement ->
-                expression.replace(replacement.scanCodeLicenseKey, replacement.spdxExpression)
+                expression.replace("\\b${replacement.scanCodeLicenseKey}\\b".toRegex(), replacement.spdxExpression)
             }
 
             LicenseFinding(
