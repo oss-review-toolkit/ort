@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +35,6 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsInfoCurationData
@@ -93,10 +93,9 @@ private fun findScanCodeVersion(tools: List<String>, coordinates: ClearlyDefined
 }
 
 /**
- * Return an empty success result for the given [id].
+ * A [Success] result with an empty list of [ScanResult]s.
  */
-private fun emptyResult(id: Identifier): Result<ScanResultContainer> =
-    Success(ScanResultContainer(id, listOf()))
+private val EMPTY_RESULT = Success<List<ScanResult>>(emptyList())
 
 /**
  * A storage implementation that tries to download ScanCode results from ClearlyDefined.
@@ -113,10 +112,10 @@ class ClearlyDefinedStorage(
         ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())
     }
 
-    override fun readInternal(id: Identifier): Result<ScanResultContainer> =
+    override fun readInternal(id: Identifier): Result<List<ScanResult>> =
         readPackageFromClearlyDefined(id, null, null)
 
-    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> =
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
         readPackageFromClearlyDefined(pkg.id, pkg.vcs, pkg.sourceArtifact.takeIf { it.url.isNotEmpty() })
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =
@@ -131,7 +130,7 @@ class ClearlyDefinedStorage(
         id: Identifier,
         vcs: VcsInfo?,
         sourceArtifact: RemoteArtifact?
-    ): Result<ScanResultContainer> =
+    ): Result<List<ScanResult>> =
         try {
             runBlocking(Dispatchers.IO) { readFromClearlyDefined(id, packageCoordinates(id, vcs, sourceArtifact)) }
         } catch (e: IllegalArgumentException) {
@@ -139,7 +138,7 @@ class ClearlyDefinedStorage(
 
             log.warn { "Could not obtain ClearlyDefined coordinates for package '${id.toCoordinates()}'." }
 
-            emptyResult(id)
+            EMPTY_RESULT
         }
 
     /**
@@ -150,7 +149,7 @@ class ClearlyDefinedStorage(
     private suspend fun readFromClearlyDefined(
         id: Identifier,
         coordinates: ClearlyDefinedService.Coordinates
-    ): Result<ScanResultContainer> {
+    ): Result<List<ScanResult>> {
         val startTime = Instant.now()
         log.info { "Looking up results for '${id.toCoordinates()}'." }
 
@@ -164,8 +163,8 @@ class ClearlyDefinedStorage(
             )
 
             findScanCodeVersion(tools, coordinates)?.let { version ->
-                loadScanCodeResults(id, coordinates, version, startTime)
-            } ?: emptyResult(id)
+                loadScanCodeResults(coordinates, version, startTime)
+            } ?: EMPTY_RESULT
         } catch (e: HttpException) {
             e.response()?.errorBody()?.string()?.let {
                 log.error { "Error response from ClearlyDefined is: $it" }
@@ -181,7 +180,7 @@ class ClearlyDefinedStorage(
     /**
      * Log the exception that occurred during a request to ClearlyDefined and construct an error result from it.
      */
-    private fun handleException(id: Identifier, e: Exception): Result<ScanResultContainer> {
+    private fun handleException(id: Identifier, e: Exception): Result<List<ScanResult>> {
         e.showStackTrace()
 
         val message = "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined: " +
@@ -193,15 +192,14 @@ class ClearlyDefinedStorage(
     }
 
     /**
-     * Load the ScanCode results file for the package with the given [id] and [coordinates] from ClearlyDefined.
+     * Load the ScanCode results file for the package with the given [coordinates] from ClearlyDefined.
      * The results have been produced by ScanCode in the given [version]; use the [startTime] for metadata.
      */
     private suspend fun loadScanCodeResults(
-        id: Identifier,
         coordinates: ClearlyDefinedService.Coordinates,
         version: String,
         startTime: Instant
-    ): Result<ScanResultContainer> {
+    ): Result<List<ScanResult>> {
         val toolResponse = service.harvestToolData(
             coordinates.type, coordinates.provider, coordinates.namespace.orEmpty(), coordinates.name,
             coordinates.revision.orEmpty(), TOOL_SCAN_CODE, version
@@ -211,8 +209,8 @@ class ClearlyDefinedStorage(
             jsonMapper.readTree(it.byteStream())["content"]?.let { result ->
                 val summary = generateSummary(startTime, Instant.now(), "", result)
                 val details = generateScannerDetails(result)
-                Success(ScanResultContainer(id, listOf(ScanResult(Provenance(), details, summary))))
-            } ?: emptyResult(id)
+                Success(listOf(ScanResult(Provenance(), details, summary)))
+            } ?: EMPTY_RESULT
         }
     }
 }

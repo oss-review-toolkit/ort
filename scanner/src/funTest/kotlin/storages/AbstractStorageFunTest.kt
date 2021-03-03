@@ -171,10 +171,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
                 addResult should beSuccess()
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactly(scanResult)
-                }
+                (readResult as Success).result should containExactly(scanResult)
             }
 
             "fail if the fileCount is 0" {
@@ -188,10 +185,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 (addResult as Failure).error shouldBe
                         "Not storing scan result for '${id1.toCoordinates()}' because no files were scanned."
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should beEmpty()
-                }
+                (readResult as Success).result should beEmpty()
             }
 
             "fail if provenance information is missing" {
@@ -205,10 +199,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 (addResult as Failure).error shouldBe "Not storing scan result for '${id1.toCoordinates()}' because " +
                         "no provenance information is available."
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should beEmpty()
-                }
+                (readResult as Success).result should beEmpty()
             }
         }
 
@@ -223,10 +214,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val readResult = storage.read(id1)
 
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
-                }
+                (readResult as Success).result should containExactlyInAnyOrder(scanResult1, scanResult2)
             }
 
             "find all scan results for a specific scanner" {
@@ -241,10 +229,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val readResult = storage.read(pkg1, criteriaForDetails(scannerDetails1))
 
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
-                }
+                (readResult as Success).result should containExactlyInAnyOrder(scanResult1, scanResult2)
             }
 
             "find all scan results for scanners with names matching a pattern" {
@@ -264,10 +249,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val readResult = storage.read(pkg1, criteria)
 
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
-                }
+                (readResult as Success).result should containExactlyInAnyOrder(scanResult1, scanResult2)
             }
 
             "find all scan results for compatible scanners" {
@@ -287,14 +269,11 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val readResult = storage.read(pkg1, criteriaForDetails(scannerDetails1))
 
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactlyInAnyOrder(
-                        scanResult,
-                        scanResultCompatible1,
-                        scanResultCompatible2
-                    )
-                }
+                (readResult as Success).result should containExactlyInAnyOrder(
+                    scanResult,
+                    scanResultCompatible1,
+                    scanResultCompatible2
+                )
             }
 
             "find all scan results for a scanner in a version range" {
@@ -315,15 +294,12 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val readResult = storage.read(pkg1, criteria)
 
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactlyInAnyOrder(
-                        scanResult,
-                        scanResultCompatible1,
-                        scanResultCompatible2,
-                        scanResultIncompatible
-                    )
-                }
+                (readResult as Success).result should containExactlyInAnyOrder(
+                    scanResult,
+                    scanResultCompatible1,
+                    scanResultCompatible2,
+                    scanResultIncompatible
+                )
             }
 
             "find only packages with matching provenance" {
@@ -351,13 +327,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val readResult = storage.read(pkg1, criteriaForDetails(scannerDetails1))
 
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactlyInAnyOrder(
-                        scanResultSourceArtifactMatching,
-                        scanResultVcsMatching
-                    )
-                }
+                (readResult as Success).result should containExactlyInAnyOrder(
+                    scanResultSourceArtifactMatching,
+                    scanResultVcsMatching
+                )
             }
 
             "find a scan result if the revision was detected from a version" {
@@ -368,10 +341,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
 
                 readResult should beSuccess()
-                (readResult as Success).result.let { result ->
-                    result.id shouldBe id1
-                    result.results should containExactly(scanResult)
-                }
+                (readResult as Success).result should containExactly(scanResult)
             }
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,19 +51,19 @@ class FileBasedStorage(
 ) : ScanResultsStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
-    override fun readInternal(id: Identifier): Result<ScanResultContainer> {
+    override fun readInternal(id: Identifier): Result<List<ScanResult>> {
         val path = storagePath(id)
 
         @Suppress("TooGenericExceptionCaught")
         return try {
             backend.read(path).use { input ->
-                Success(yamlMapper.readValue(input))
+                Success(yamlMapper.readValue<ScanResultContainer>(input).results)
             }
         } catch (e: Exception) {
             when (e) {
                 is FileNotFoundException -> {
                     // If the file cannot be found it means no scan results have been stored, yet.
-                    Success(ScanResultContainer(id, emptyList()))
+                    Success(emptyList())
                 }
                 else -> {
                     val message = "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
@@ -78,14 +78,14 @@ class FileBasedStorage(
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val existingScanResults = when (val readResult = read(id)) {
-            is Success -> readResult.result.results
+            is Success -> readResult.result
             is Failure -> emptyList()
         }
 
-        val scanResults = ScanResultContainer(id, existingScanResults + scanResult)
+        val scanResults = existingScanResults + scanResult
 
         val path = storagePath(id)
-        val yamlBytes = yamlMapper.writeValueAsBytes(scanResults)
+        val yamlBytes = yamlMapper.writeValueAsBytes(ScanResultContainer(id, scanResults))
         val input = ByteArrayInputStream(yamlBytes)
 
         @Suppress("TooGenericExceptionCaught")
