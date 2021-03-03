@@ -27,11 +27,8 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.utils.OrtProxySelector
 
 class ClearlyDefinedPackageCurationProviderTest : WordSpec({
-    OrtProxySelector.install()
-
     "The production server" should {
         "return an existing curation for the javax.servlet-api Maven package" {
             val provider = ClearlyDefinedPackageCurationProvider()

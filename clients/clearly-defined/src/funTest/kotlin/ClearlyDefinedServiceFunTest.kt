@@ -38,13 +38,10 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curatio
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.utils.OrtProxySelector
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ClearlyDefinedServiceFunTest : WordSpec({
-    OrtProxySelector.install()
-
     "A contribution patch" should {
         "be correctly deserialized even when using invalid facet arrays" {
             // See https://github.com/clearlydefined/curated-data/blob/0b2db78/curations/maven/mavencentral/com.google.code.gson/gson.yaml#L10-L11.
