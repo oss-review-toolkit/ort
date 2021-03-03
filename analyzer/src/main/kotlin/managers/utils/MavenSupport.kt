@@ -148,6 +148,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             // are listed, it is assumed that the user can select any of them, not that they must accept all."
             DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
 
+        fun parseVcsInfo(mavenProject: MavenProject) = parseScm(getOriginalScm(mavenProject))
+
         /**
          * When asking Maven for the SCM URL of a POM that does not itself define an SCM URL, Maven returns the SCM
          * URL of the first parent POM (if any) that defines one and appends the artifactIds of all child POMs to it,
@@ -251,8 +253,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 }
             }
         }
-
-        fun parseVcsInfo(mavenProject: MavenProject) = parseScm(getOriginalScm(mavenProject))
     }
 
     val container = createContainer()
