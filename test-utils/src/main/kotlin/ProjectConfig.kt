@@ -23,8 +23,14 @@ import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.spec.SpecExecutionOrder
 import io.kotest.extensions.junitxml.JunitXmlReporter
 
+import org.ossreviewtoolkit.utils.OrtProxySelector
+
 class ProjectConfig : AbstractProjectConfig() {
     override val specExecutionOrder = SpecExecutionOrder.Annotated
+
+    init {
+        OrtProxySelector.install()
+    }
 
     override fun listeners() =
         listOf(
