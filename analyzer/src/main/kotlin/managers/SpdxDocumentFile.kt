@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -49,6 +50,11 @@ import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.withoutPrefix
 
 private const val DEFAULT_SCOPE_NAME = "default"
+
+private val SPDX_LINKAGE_RELATIONSHIPS = mapOf(
+    SpdxRelationship.Type.DYNAMIC_LINK to PackageLinkage.DYNAMIC,
+    SpdxRelationship.Type.STATIC_LINK to PackageLinkage.STATIC
+)
 
 private val SPDX_SCOPE_RELATIONSHIPS = listOf(
     SpdxRelationship.Type.BUILD_DEPENDENCY_OF,
@@ -145,6 +151,21 @@ internal fun getVcsInfo(pkg: SpdxPackage): VcsInfo? {
 }
 
 /**
+ * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
+ * relationship is found, return [PackageLinkage.DYNAMIC].
+ */
+private fun getLinkageForDependency(
+    dependency: SpdxPackage,
+    dependant: String,
+    relationships: List<SpdxRelationship>
+): PackageLinkage =
+    relationships.mapNotNull { relation ->
+        SPDX_LINKAGE_RELATIONSHIPS[relation.relationshipType]?.takeIf {
+            relation.relatedSpdxElement == dependency.spdxId && relation.spdxElementId == dependant
+        }
+    }.singleOrNull() ?: PackageLinkage.DYNAMIC
+
+/**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
  */
@@ -221,7 +242,8 @@ class SpdxDocumentFile(
 
             PackageReference(
                 id = dependency.toIdentifier(),
-                dependencies = getDependencies(dependency, doc, workingDir, packages)
+                dependencies = getDependencies(dependency, doc, workingDir, packages),
+                linkage = getLinkageForDependency(dependency, pkg.spdxId, doc.relationships)
             )
         }
 
@@ -266,7 +288,8 @@ class SpdxDocumentFile(
                             SpdxRelationship.Type.DEPENDENCY_OF,
                             dependsOnCase
                         ),
-                        issues = issues
+                        issues = issues,
+                        linkage = getLinkageForDependency(dependency, target, doc.relationships)
                     )
                 }
 
