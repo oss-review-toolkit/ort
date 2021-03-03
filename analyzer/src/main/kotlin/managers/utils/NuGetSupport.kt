@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageD
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageSpec
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.ServiceIndex
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -62,7 +63,9 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -116,7 +119,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
     private val serviceIndices = runBlocking {
         serviceIndexUrls.map {
             async { mapFromUrl<ServiceIndex>(JSON_MAPPER, it) }
-        }.awaitAll()
+        }.awaitAll().filterIsInstance<Success<ServiceIndex>>().map { it.result }
     }
 
     // Note: Remove a trailing slash as one is always added later to separate from the path, and a double-slash would
@@ -128,52 +131,66 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
 
     private val packageMap = mutableMapOf<Identifier, Pair<NuGetAllPackageData, Package>>()
 
-    private suspend inline fun <reified T> mapFromUrl(mapper: ObjectMapper, url: String): T =
+    /**
+     * Send an HTTP GET request to the given [url] and use the provided [mapper] to deserialize the response to the
+     * desired target type [T]. As exceptions in coroutines are difficult to deal with, return a [Result] that
+     * wraps an error message in case an error was encountered.
+     * NOTE: It would be easier to use the standard Kotlin _Result_ class here, which offers advanced functionality
+     * to process results. There is, however, currently a bug in Kotlin, which prevents that this function can
+     * return such a _Result_. Details (including links to bug tickets) can be found here:
+     * https://medium.com/@amatkivskiy/classcastexception-type-cannot-be-cast-to-kotlin-result-507e7a824a81.
+     * TODO: Change return type to kotlin.Result when the bug mentioned above is fixed; then also the extension
+     * functions defined on [Result] are obsolete.
+     */
+    private suspend inline fun <reified T> mapFromUrl(mapper: ObjectMapper, url: String): Result<T> =
         withContext(Dispatchers.IO) {
             val request = Request.Builder()
                 .url(url)
                 .build()
 
-            client.newCall(request).await().use { response ->
-                if (response.cacheResponse != null) {
-                    NuGetSupport.log.debug { "Retrieved '$url' response from local cache." }
-                } else {
-                    NuGetSupport.log.debug {
-                        "Retrieved '$url' response from remote server with status ${response.code}."
+            try {
+                client.newCall(request).await().use { response ->
+                    if (response.cacheResponse != null) {
+                        NuGetSupport.log.debug { "Retrieved '$url' response from local cache." }
+                    } else {
+                        NuGetSupport.log.debug {
+                            "Retrieved '$url' response from remote server with status ${response.code}."
+                        }
                     }
-                }
 
-                if (!response.isSuccessful) {
-                    throw IOException("Got non-success response status ${response.code} for '$url'.")
-                }
+                    if (!response.isSuccessful) {
+                        throw IOException("Got non-success response status ${response.code} for '$url'.")
+                    }
 
-                val bodyReader = response.body?.charStream() ?: StringReader("")
-                mapper.readValue(bodyReader)
+                    val bodyReader = response.body?.charStream() ?: StringReader("")
+                    Success(mapper.readValue(bodyReader))
+                }
+            } catch (e: IOException) {
+                Failure(e.collectMessagesAsString())
             }
         }
 
-    private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
+    private suspend fun getAllPackageData(id: Identifier): Result<NuGetAllPackageData> {
         // Note: The package name in the URL is case-sensitive and must be lower-case!
         val lowerId = id.name.toLowerCase()
 
-        val data = registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
-            try {
-                val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
-                runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
-            } catch (e: IOException) {
-                log.debug { "Failed to retrieve package from $baseUrl." }
-                null
-            }
-        }.firstOrNull()
-            ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
+        return registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
+            val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
+            runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
+        }.filterIsInstance<Success<PackageData>>().firstOrNull()?.let { enrichPackageData(id, it.result) }
+            ?: Failure(
+                "Failed to get package data for '${id.toCoordinates()}': " +
+                        "Could not retrieve package data for '$lowerId' from any of $registrationsBaseUrls."
+            )
+    }
 
+    private suspend fun enrichPackageData(id: Identifier, data: PackageData): Result<NuGetAllPackageData> {
         val nupkgUrl = data.packageContent
         val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
 
-        return runBlocking {
-            val packageDetails = mapFromUrl<PackageDetails>(JSON_MAPPER, data.catalogEntry)
-            val packageSpec = mapFromUrl<PackageSpec>(XML_MAPPER, nuspecUrl)
-            NuGetAllPackageData(data, packageDetails, packageSpec)
+        return mapFromUrl<PackageDetails>(JSON_MAPPER, data.catalogEntry).flatMap { packageDetails ->
+            mapFromUrl<PackageSpec>(XML_MAPPER, nuspecUrl).map { packageSpec ->
+                NuGetAllPackageData(data, packageDetails, packageSpec) }
         }
     }
 
@@ -213,58 +230,76 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         }
     }
 
-    fun buildDependencyTree(
+    /**
+     * Load package information for the given [references]. Fetch the data for the packages that have not been loaded
+     * yet in parallel.
+     */
+    private suspend fun loadPackages(references: Collection<Identifier>, issues: MutableCollection<OrtIssue>):
+            List<Pair<NuGetAllPackageData, Package>> = withContext(Dispatchers.IO) {
+        val (idsAvailable, idsToLoad) = references.partition { packageMap.containsKey(it) }
+
+        val loadResults = idsToLoad.associateWith { async { getAllPackageData(it) } }
+            .mapValues { entry ->
+                entry.value.await().map { it to getPackage(it) }
+            }
+
+        val loadedPackages = loadResults.mapNotNull { entry ->
+            entry.value.getOrNull()?.let { entry.key to it }
+        }.toMap()
+
+        packageMap += loadedPackages
+        loadResults.mapNotNull { it.value.exceptionOrNull() }.forEach { msg ->
+            issues += NuGetSupport.createAndLogIssue(
+                source = "NuGet",
+                message = msg
+            )
+        }
+
+        idsAvailable.mapNotNull { packageMap[it] } + loadedPackages.values
+    }
+
+    suspend fun buildDependencyTree(
         references: Collection<Identifier>,
         dependencies: MutableCollection<PackageReference>,
         packages: MutableCollection<Package>,
         issues: MutableCollection<OrtIssue>
     ) {
-        references.forEach { id ->
-            try {
-                val (all, pkg) = packageMap.getOrPut(id) {
-                    val all = getAllPackageData(id)
-                    all to getPackage(all)
-                }
+        val pkgData = loadPackages(references, issues)
 
-                val pkgRef = pkg.toReference()
-                dependencies += pkgRef
+        pkgData.forEach { (all, pkg) ->
+            val pkgRef = pkg.toReference()
+            dependencies += pkgRef
 
-                // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
-                // grow really huge.
-                if (packages.add(pkg)) {
-                    // TODO: Consider mapping dependency groups to scopes.
-                    val referredDependencies =
-                        all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
+            // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
+            // grow really huge.
+            if (packages.add(pkg)) {
+                // TODO: Consider mapping dependency groups to scopes.
+                val referredDependencies =
+                    all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
 
-                    buildDependencyTree(
-                        referredDependencies.map { dependency ->
-                            // TODO: Add support for lock files, see
-                            //       https://devblogs.microsoft.com/nuget/enable-repeatable-package-restores-using-a-lock-file/.
+                buildDependencyTree(
+                    referredDependencies.map { dependency ->
+                        // TODO: Add support for lock files, see
+                        //       https://devblogs.microsoft.com/nuget/enable-repeatable-package-restores-using-a-lock-file/.
 
-                            // Resolve to the lowest applicable version, see
-                            // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
-                            val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
-                                .split(",").first().trim()
+                        // Resolve to the lowest applicable version, see
+                        // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
+                        val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
+                            .split(",").first().trim()
 
-                            // TODO: Add support resolving to the highest version for floating versions, see
-                            //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
+                        // TODO: Add support resolving to the highest version for floating versions, see
+                        //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
 
-                            getIdentifier(dependency.id, version)
-                        },
-                        pkgRef.dependencies,
-                        packages,
-                        issues
-                    )
-                } else {
-                    logOnce(Level.DEBUG) {
-                        "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
-                    }
-                }
-            } catch (e: IOException) {
-                issues += createAndLogIssue(
-                    source = "NuGet",
-                    message = "Failed to get package data for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                        getIdentifier(dependency.id, version)
+                    },
+                    pkgRef.dependencies,
+                    packages,
+                    issues
                 )
+            } else {
+                logOnce(Level.DEBUG) {
+                    "Truncating dependencies for '${pkg.id.toCoordinates()}' which were already determined."
+                }
             }
         }
     }
@@ -291,7 +326,7 @@ fun PackageManager.resolveNuGetDependencies(
     val issues = mutableListOf<OrtIssue>()
 
     val references = reader.getPackageReferences(definitionFile)
-    support.buildDependencyTree(references, dependencies, packages, issues)
+    runBlocking { support.buildDependencyTree(references, dependencies, packages, issues) }
 
     val project = Project(
         id = Identifier(
@@ -339,3 +374,41 @@ class NuGetConfigFileReader {
         return remotes
     }
 }
+
+/**
+ * Execute a transformation function [f] (which may fail) on this [Result] object if it is a [Success] or return
+ * this object unchanged if it is a [Failure].
+ */
+private inline fun <T, U> Result<T>.flatMap(f: (T) -> Result<U>): Result<U> =
+    when (this) {
+        is Success -> f(this.result)
+        is Failure -> Failure(this.error)
+    }
+
+/**
+ * Execute a transformation function [f] on this [Result] object if it is a [Success] or return this object unchanged
+ * if it is a [Failure].
+ */
+private inline fun <T, U> Result<T>.map(f: (T) -> U): Result<U> =
+    when (this) {
+        is Success -> Success(f(this.result))
+        is Failure -> Failure(this.error)
+    }
+
+/**
+ * Return the value stored in this [Result] if it is a [Success] or *null* if it is a [Failure].
+ */
+private fun <T> Result<T>.getOrNull(): T? =
+    when (this) {
+        is Success -> result
+        else -> null
+    }
+
+/**
+ * Return the error message stored in this [Result] if it is a [Failure] or *null* if it is a [Success].
+ */
+private fun <T> Result<T>.exceptionOrNull(): String? =
+    when (this) {
+        is Failure -> error
+        else -> null
+    }
