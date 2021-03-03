@@ -302,7 +302,8 @@ object Downloader {
                     // So first look for a dedicated header in the response, but then also try both redirected and
                     // original URLs to find a name which has a recognized archive type extension.
                     response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
-                        value.withoutPrefix("attachment; filename=")
+                        val filenames = value.split(';').mapNotNull { it.trim().withoutPrefix("filename=") }
+                        filenames.firstOrNull()?.removeSurrounding("\"")
                     }
 
                     listOf(response.request.url, request.url).mapTo(candidateNames) {
