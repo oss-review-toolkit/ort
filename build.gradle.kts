@@ -28,6 +28,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 import org.jetbrains.gradle.ext.Gradle
+import org.jetbrains.gradle.ext.JUnit
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -85,10 +86,14 @@ idea {
     project {
         settings {
             runConfigurations {
+                // Disable "condensed" multi-line diffs when running tests from the IDE (for both Gradle and JUnit test
+                // runners) to more easily accept actual results as expected results.
                 defaults<Gradle> {
-                    // Disable "condensed" multi-line diffs when running tests from the IDE to more easily accept actual
-                    // results as expected results.
                     jvmArgs = "-Dkotest.assertions.multi-line-diff=simple"
+                }
+
+                defaults<JUnit> {
+                    vmParameters = "-Dkotest.assertions.multi-line-diff=simple"
                 }
             }
         }
