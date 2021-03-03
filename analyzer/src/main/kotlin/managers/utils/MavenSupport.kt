@@ -715,7 +715,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
  * [GitHub Security Lab issue](https://github.com/github/security-lab/issues/21)
  * [Medium article](https://medium.com/p/d069d253fe23)
  */
-class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
+private class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
     companion object {
         private val DISABLED_HTTP_REPOSITORY_URLS = listOf(
             "http://jcenter.bintray.com",
