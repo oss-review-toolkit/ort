@@ -18,12 +18,12 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Django:2.1.11"
+    - id: "PyPI::django:2.1.11"
       dependencies:
       - id: "PyPI::pytz:2019.3"
 packages:
-- id: "PyPI::Django:2.1.11"
-  purl: "pkg:pypi/Django@2.1.11"
+- id: "PyPI::django:2.1.11"
+  purl: "pkg:pypi/django@2.1.11"
   authors:
   - "Django Software Foundation"
   declared_licenses:

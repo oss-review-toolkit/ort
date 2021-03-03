@@ -18,18 +18,49 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Flask:0.12"
+    - id: "PyPI::flask:0.12"
       dependencies:
-      - id: "PyPI::Jinja2:2.8.1"
-        dependencies:
-        - id: "PyPI::MarkupSafe:1.1.1"
-      - id: "PyPI::Werkzeug:1.0.1"
       - id: "PyPI::click:7.1.2"
       - id: "PyPI::itsdangerous:1.1.0"
+      - id: "PyPI::jinja2:2.8.1"
+        dependencies:
+        - id: "PyPI::markupsafe:1.1.1"
+      - id: "PyPI::werkzeug:1.0.1"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
-- id: "PyPI::Flask:0.12"
-  purl: "pkg:pypi/Flask@0.12"
+- id: "PyPI::click:7.1.2"
+  purl: "pkg:pypi/click@7.1.2"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "Composable command line interface toolkit"
+  homepage_url: "https://palletsprojects.com/p/click/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/d2/3d/fa76db83bf75c4f8d338c2fd15c8d33fdd7ad23a9b5e57eb6c5de26b430e/click-7.1.2-py2.py3-none-any.whl"
+    hash:
+      value: "b4233221cacc473acd422a1d54ff4c41"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/27/6f/be940c8b1f1d69daceeb0032fee6c34d7bd70e3e649ccac0951500b4720e/click-7.1.2.tar.gz"
+    hash:
+      value: "53692f62cb99a1a10c59248f1776d9c0"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::flask:0.12"
+  purl: "pkg:pypi/flask@0.12"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -60,138 +91,6 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/pallets/flask.git"
-    revision: ""
-    path: ""
-- id: "PyPI::Jinja2:2.8.1"
-  purl: "pkg:pypi/Jinja2@2.8.1"
-  authors:
-  - "Armin Ronacher"
-  declared_licenses:
-  - "BSD"
-  - "BSD License"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
-  description: "A small but fast and easy to use stand-alone template engine written\
-    \ in pure python."
-  homepage_url: "http://jinja.pocoo.org/"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/67/ea/92b1d9d8f2dc43302df7f5271b9500bbfc237386782343561a5f62beb306/Jinja2-2.8.1-py2.py3-none-any.whl"
-    hash:
-      value: "7472b9df828747c2d44eb539558bbf7a"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/Jinja2-2.8.1.tar.gz"
-    hash:
-      value: "150a8f1c180272753cf46dd3cdd6decf"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "PyPI::MarkupSafe:1.1.1"
-  purl: "pkg:pypi/MarkupSafe@1.1.1"
-  authors:
-  - "Armin Ronacher"
-  declared_licenses:
-  - "BSD License"
-  - "BSD-3-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
-  description: "Safely add untrusted strings to HTML/XML markup."
-  homepage_url: "https://palletsprojects.com/p/markupsafe/"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/6d/d2/0ccd2c0e2cd93b35e765d9b3205cd6602e6b202b522fc7997531353715b3/MarkupSafe-1.1.1-cp27-cp27m-macosx_10_6_intel.whl"
-    hash:
-      value: "c937b3654640ee5864f2917bf24a7ad2"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/MarkupSafe-1.1.1.tar.gz"
-    hash:
-      value: "43fd756864fe42063068e092e220c57b"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "PyPI::Werkzeug:1.0.1"
-  purl: "pkg:pypi/Werkzeug@1.0.1"
-  authors:
-  - "Armin Ronacher"
-  declared_licenses:
-  - "BSD License"
-  - "BSD-3-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
-  description: "The comprehensive WSGI web application library."
-  homepage_url: "https://palletsprojects.com/p/werkzeug/"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/cc/94/5f7079a0e00bd6863ef8f1da638721e9da21e5bacee597595b318f71d62e/Werkzeug-1.0.1-py2.py3-none-any.whl"
-    hash:
-      value: "ceaf2433ef66e2d7a3fbe43a4e44e4ca"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04/Werkzeug-1.0.1.tar.gz"
-    hash:
-      value: "5d499cfdd30de5d9c946994783772efd"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "PyPI::click:7.1.2"
-  purl: "pkg:pypi/click@7.1.2"
-  declared_licenses:
-  - "BSD License"
-  - "BSD-3-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
-  description: "Composable command line interface toolkit"
-  homepage_url: "https://palletsprojects.com/p/click/"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/d2/3d/fa76db83bf75c4f8d338c2fd15c8d33fdd7ad23a9b5e57eb6c5de26b430e/click-7.1.2-py2.py3-none-any.whl"
-    hash:
-      value: "b4233221cacc473acd422a1d54ff4c41"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/27/6f/be940c8b1f1d69daceeb0032fee6c34d7bd70e3e649ccac0951500b4720e/click-7.1.2.tar.gz"
-    hash:
-      value: "53692f62cb99a1a10c59248f1776d9c0"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
     revision: ""
     path: ""
 - id: "PyPI::gunicorn:19.6.0"
@@ -250,6 +149,107 @@ packages:
     url: "https://files.pythonhosted.org/packages/68/1a/f27de07a8a304ad5fa817bbe383d1238ac4396da447fa11ed937039fa04b/itsdangerous-1.1.0.tar.gz"
     hash:
       value: "9b7f5afa7f1e3acfb7786eeca3d99307"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::jinja2:2.8.1"
+  purl: "pkg:pypi/jinja2@2.8.1"
+  authors:
+  - "Armin Ronacher"
+  declared_licenses:
+  - "BSD"
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+      BSD License: "BSD-3-Clause"
+  description: "A small but fast and easy to use stand-alone template engine written\
+    \ in pure python."
+  homepage_url: "http://jinja.pocoo.org/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/67/ea/92b1d9d8f2dc43302df7f5271b9500bbfc237386782343561a5f62beb306/Jinja2-2.8.1-py2.py3-none-any.whl"
+    hash:
+      value: "7472b9df828747c2d44eb539558bbf7a"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/Jinja2-2.8.1.tar.gz"
+    hash:
+      value: "150a8f1c180272753cf46dd3cdd6decf"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::markupsafe:1.1.1"
+  purl: "pkg:pypi/markupsafe@1.1.1"
+  authors:
+  - "Armin Ronacher"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "Safely add untrusted strings to HTML/XML markup."
+  homepage_url: "https://palletsprojects.com/p/markupsafe/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/6d/d2/0ccd2c0e2cd93b35e765d9b3205cd6602e6b202b522fc7997531353715b3/MarkupSafe-1.1.1-cp27-cp27m-macosx_10_6_intel.whl"
+    hash:
+      value: "c937b3654640ee5864f2917bf24a7ad2"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/MarkupSafe-1.1.1.tar.gz"
+    hash:
+      value: "43fd756864fe42063068e092e220c57b"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::werkzeug:1.0.1"
+  purl: "pkg:pypi/werkzeug@1.0.1"
+  authors:
+  - "Armin Ronacher"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "The comprehensive WSGI web application library."
+  homepage_url: "https://palletsprojects.com/p/werkzeug/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/cc/94/5f7079a0e00bd6863ef8f1da638721e9da21e5bacee597595b318f71d62e/Werkzeug-1.0.1-py2.py3-none-any.whl"
+    hash:
+      value: "ceaf2433ef66e2d7a3fbe43a4e44e4ca"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04/Werkzeug-1.0.1.tar.gz"
+    hash:
+      value: "5d499cfdd30de5d9c946994783772efd"
       algorithm: "MD5"
   vcs:
     type: ""

@@ -18,13 +18,13 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Django:2.2.13"
+    - id: "PyPI::django:2.2.13"
       dependencies:
       - id: "PyPI::pytz:2021.1"
       - id: "PyPI::sqlparse:0.4.1"
 packages:
-- id: "PyPI::Django:2.2.13"
-  purl: "pkg:pypi/Django@2.2.13"
+- id: "PyPI::django:2.2.13"
+  purl: "pkg:pypi/django@2.2.13"
   authors:
   - "Django Software Foundation"
   declared_licenses:
