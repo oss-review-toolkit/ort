@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
@@ -35,10 +34,9 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
  * errors.
  */
 class NoStorage : ScanResultsStorage() {
-    override fun readInternal(id: Identifier) = Success(ScanResultContainer(id, emptyList()))
+    override fun readInternal(id: Identifier) = Success<List<ScanResult>>(emptyList())
 
-    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria) =
-        Success(ScanResultContainer(pkg.id, emptyList()))
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria) = Success<List<ScanResult>>(emptyList())
 
     override fun addInternal(id: Identifier, scanResult: ScanResult) = Success(Unit)
 }

@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
@@ -138,14 +137,14 @@ class PostgresStorage(
             """.trimIndent()
         )
 
-    override fun readInternal(id: Identifier): Result<ScanResultContainer> {
+    override fun readInternal(id: Identifier): Result<List<ScanResult>> {
         @Suppress("TooGenericExceptionCaught")
         return try {
             transaction {
                 val scanResults =
                     ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
 
-                Success(ScanResultContainer(id, scanResults))
+                Success(scanResults)
             }
         } catch (e: Exception) {
             when (e) {
@@ -163,7 +162,7 @@ class PostgresStorage(
         }
     }
 
-    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
         val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
 
@@ -183,7 +182,7 @@ class PostgresStorage(
                     // safe side.
                     .filter { scannerCriteria.matches(it.scanner) }
 
-                Success(ScanResultContainer(pkg.id, scanResults))
+                Success(scanResults)
             }
         } catch (e: Exception) {
             when (e) {

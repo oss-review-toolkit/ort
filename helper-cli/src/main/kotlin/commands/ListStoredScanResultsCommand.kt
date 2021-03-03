@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,9 +77,9 @@ internal class ListStoredScanResultsCommand : CliktCommand(
             }
         }
 
-        println("Found ${scanResults.results.size} scan results:")
+        println("Found ${scanResults.size} scan results:")
 
-        scanResults.results.forEach { result ->
+        scanResults.forEach { result ->
             println("\n${yamlMapper.writeValueAsString(result.provenance)}")
         }
     }
