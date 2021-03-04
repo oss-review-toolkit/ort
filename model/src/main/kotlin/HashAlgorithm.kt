@@ -22,6 +22,11 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
+import java.io.File
+import java.security.MessageDigest
+
+import org.ossreviewtoolkit.utils.toHexString
+
 /**
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
  * alias is the definite name.
@@ -100,4 +105,23 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
      */
     @JsonValue
     override fun toString(): String = aliases.first()
+
+    /**
+     * Return the hexadecimal digest of this hash for the given [file].
+     */
+    fun calculate(file: File): String =
+        file.inputStream().use { inputStream ->
+            // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
+            // lot of memory at the same time, also considering that this function could potentially be run on multiple
+            // threads in parallel.
+            val buffer = ByteArray(4 * 1024 * 1024)
+            val digest = MessageDigest.getInstance(toString())
+
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                digest.update(buffer, 0, length)
+            }
+
+            digest.digest().toHexString()
+        }
 }
