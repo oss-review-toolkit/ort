@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,6 @@ import kotlinx.coroutines.runBlocking
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
-import org.ossreviewtoolkit.model.AdvisorResultContainer
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.OrtResult
@@ -71,12 +71,9 @@ abstract class Advisor(val advisorName: String, protected val config: AdvisorCon
 
         val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
         val results = runBlocking { retrievePackageVulnerabilities(packages) }
+            .mapKeysTo(sortedMapOf()) { (pkg, _) -> pkg.id }
 
-        val resultContainers = results.map { (pkg, results) ->
-            AdvisorResultContainer(pkg.id, results)
-        }.toSortedSet()
-
-        val advisorRecord = AdvisorRecord(resultContainers)
+        val advisorRecord = AdvisorRecord(results)
 
         val endTime = Instant.now()
 

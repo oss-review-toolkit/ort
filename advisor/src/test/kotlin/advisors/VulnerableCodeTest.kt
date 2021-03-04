@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,12 +41,8 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.lang.IllegalArgumentException
 import java.net.URI
-import java.util.SortedSet
 
-import org.ossreviewtoolkit.model.AdvisorResult
-import org.ossreviewtoolkit.model.AdvisorResultContainer
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
@@ -93,9 +90,9 @@ class VulnerableCodeTest : WordSpec({
             val result = advisor.retrieveVulnerabilityInformation(resultFile()).advisor?.results?.advisorResults
 
             result.shouldNotBeNull()
-            result.map { it.id } should containExactlyInAnyOrder(idLang, idStruts)
+            result.keys should containExactlyInAnyOrder(idLang, idStruts)
 
-            val langResults = advisorResultsFor(result, idLang)
+            val langResults = result.getValue(idLang)
             langResults.shouldHaveSize(1)
             langResults[0].advisor.name shouldBe ADVISOR_NAME
             val expLangVulnerability = Vulnerability(
@@ -105,7 +102,7 @@ class VulnerableCodeTest : WordSpec({
             )
             langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
 
-            val strutsResults = advisorResultsFor(result, idStruts)
+            val strutsResults = result.getValue(idStruts)
             strutsResults.shouldHaveSize(1)
             val expStrutsVulnerabilities = listOf(
                 Vulnerability(
@@ -145,7 +142,7 @@ class VulnerableCodeTest : WordSpec({
 
             val advisor = createAdvisor(wiremock)
             advisor.retrieveVulnerabilityInformation(resultFile()).advisor?.results?.advisorResults shouldNotBeNull {
-                val strutsResults = advisorResultsFor(this, idStruts)
+                val strutsResults = getValue(idStruts)
                 val expStrutsVulnerabilities = listOf(
                     Vulnerability(
                         id = "CVE-2009-1382",
@@ -237,10 +234,10 @@ private fun expectErrorResult(wiremock: WireMockServer) {
     val result = advisor.retrieveVulnerabilityInformation(resultFile()).advisor?.results?.advisorResults
 
     result shouldNotBeNull {
-        map { it.id } should containExactlyInAnyOrder(packageIdentifiers)
+        keys should containExactly(packageIdentifiers)
 
         packageIdentifiers.forEach { pkg ->
-            val pkgResults = advisorResultsFor(this, pkg)
+            val pkgResults = getValue(pkg)
             pkgResults shouldHaveSize 1
             val pkgResult = pkgResults[0]
             pkgResult.vulnerabilities should beEmpty()
@@ -298,9 +295,3 @@ private fun stubVulnerability(id: String, cveId: String, score: Float, statusCod
             )
     )
 }
-
-/**
- * Extract the advisor results for the package with the given [id] from the set of [results].
- */
-private fun advisorResultsFor(results: SortedSet<AdvisorResultContainer>, id: Identifier): List<AdvisorResult> =
-    results.find { it.id == id }?.results ?: throw IllegalArgumentException("No result found for package $id.")

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -169,7 +169,7 @@ data class OrtResult(
     }
 
     private val advisorResultsById: Map<Identifier, List<AdvisorResult>> by lazy {
-        advisor?.results?.advisorResults?.associateBy({ it.id }, { it.results }).orEmpty()
+        advisor?.results?.advisorResults.orEmpty()
     }
 
     /**
@@ -378,13 +378,13 @@ data class OrtResult(
         }
 
     /**
-     * Return all [AdvisorResultContainer]s contained in this [OrtResult] or only the non-excluded ones if
-     * [omitExcluded] is true.
+     * Return all [AdvisorResult]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is
+     * true.
      */
     @JsonIgnore
-    fun getAdvisorResultContainers(omitExcluded: Boolean = false): Set<AdvisorResultContainer> =
-        advisor?.results?.advisorResults.orEmpty().filterTo(mutableSetOf()) { result ->
-            !omitExcluded || !isExcluded(result.id)
+    fun getAdvisorResults(omitExcluded: Boolean = false): Map<Identifier, List<AdvisorResult>> =
+        advisorResultsById.filter { (id, _) ->
+            !omitExcluded || !isExcluded(id)
         }
 
     /**
