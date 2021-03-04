@@ -1,5 +1,6 @@
 * @sschuberth @mnonnenmacher @fviernau
 *.md @sschuberth @mnonnenmacher @fviernau @tsteenbe
+/**/*Sw360* @oheger-bosch @bs-ondem
 /advisor/ @MarcelBochtler @oheger-bosch
 /reporter-web-app/ @tsteenbe
 /spdx-utils/src/main/ @sschuberth @mnonnenmacher @fviernau @tsteenbe
