@@ -91,7 +91,7 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
          */
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
-        fun fromString(alias: String) =
+        fun fromString(alias: String): HashAlgorithm =
             enumValues<HashAlgorithm>().find {
                 alias.toUpperCase() in it.aliases
             } ?: UNKNOWN
