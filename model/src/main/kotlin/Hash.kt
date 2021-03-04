@@ -53,7 +53,8 @@ data class Hash(
         val NONE = Hash(HashAlgorithm.NONE.toString(), HashAlgorithm.NONE)
 
         /**
-         * Create a hash from it a [value].
+         * Create a [Hash] instance from a known hash [value]. If the [HashAlgorithm] cannot be determined,
+         * [HashAlgorithm.UNKNOWN] along with the original [value] is returned.
          */
         fun create(value: String): Hash {
             val splitValue = value.split('-')
@@ -70,10 +71,10 @@ data class Hash(
         }
 
         /**
-         * Create a hash from the given [value] and [algorithm]. This is mostly used for deserialization to verify the
-         * algorithm matches the one determined by the value.
+         * Create a [Hash] instance from a known hash [value] and [algorithm]. This is mostly used for deserialization
+         * to verify the algorithm matches the one determined by the value.
          */
-        fun create(value: String, algorithm: String) =
+        fun create(value: String, algorithm: String): Hash =
             create(value).also { hash ->
                 require(hash.algorithm == HashAlgorithm.fromString(algorithm)) {
                     "'$value' is not a $algorithm hash."
