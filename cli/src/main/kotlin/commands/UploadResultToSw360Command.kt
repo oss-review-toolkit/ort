@@ -98,11 +98,11 @@ class UploadResultToSw360Command : CliktCommand(
                 val name = listOfNotNull(pkg.id.namespace, pkg.id.name).joinToString("/")
                 sw360ReleaseClient.getSparseReleaseByNameAndVersion(name, pkg.id.version)
                     .flatMap { sw360ReleaseClient.enrichSparseRelease(it) }
-                    .orElse(createSw360Release(pkg, sw360ReleaseClient))
+                    .orElseGet { createSw360Release(pkg, sw360ReleaseClient) }
             }
 
             val sw360Project = sw360ProjectClient.getProjectByNameAndVersion(project.id.name, project.id.version)
-                .orElse(createSw360Project(project, sw360ProjectClient))
+                .orElseGet { createSw360Project(project, sw360ProjectClient) }
 
             sw360Project?.let {
                 sw360ProjectClient.addSW360ReleasesToSW360Project(it.id, linkedReleases)
