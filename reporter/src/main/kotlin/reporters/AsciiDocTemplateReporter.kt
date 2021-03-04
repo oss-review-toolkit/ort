@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,7 +119,7 @@ class AsciiDocTemplateReporter : Reporter {
             templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, buildString {
                 append(DISCLOSURE_TEMPLATE_ID)
 
-                if (input.ortResult.getAdvisorResultContainers().isNotEmpty()) {
+                if (input.ortResult.getAdvisorResults().isNotEmpty()) {
                     append(",$VULNERABILITY_TEMPLATE_ID")
                 }
             })
