@@ -66,6 +66,7 @@ private val EXCLUDED_PACKAGES = setOf(
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
  */
+@Suppress("TooManyFunctions")
 class Composer(
     name: String,
     analysisRoot: File,
@@ -232,8 +233,7 @@ class Composer(
                 version = json["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = parseAuthors(json),
             declaredLicenses = parseDeclaredLicenses(json),
             vcs = vcs,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
@@ -265,8 +265,7 @@ class Composer(
                         name = rawName.substringAfter('/'),
                         version = version
                     ),
-                    // TODO: Find a way to track authors.
-                    authors = sortedSetOf(),
+                    authors = parseAuthors(pkgInfo),
                     declaredLicenses = parseDeclaredLicenses(pkgInfo),
                     description = pkgInfo["description"].textValueOrEmpty(),
                     homepageUrl = homepageUrl,
@@ -311,6 +310,11 @@ class Composer(
         listOf("replace", "provide").flatMap {
             packageInfo[it]?.fieldNames()?.asSequence()?.toSet().orEmpty()
         }.toSet()
+
+    private fun parseAuthors(packageInfo: JsonNode) =
+        sortedSetOf<String>().also { authors ->
+            packageInfo["authors"]?.mapNotNullTo(authors) { it["name"]?.textValue() }
+        }
 
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
         sortedSetOf<String>().also { set ->
