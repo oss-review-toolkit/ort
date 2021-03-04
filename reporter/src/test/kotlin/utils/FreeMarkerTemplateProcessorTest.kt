@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
@@ -56,28 +55,24 @@ import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
-private fun scanResultContainer(
-    id: String,
+private fun scanResults(
     vcsInfo: VcsInfo,
     findingsPaths: Collection<String>
-): ScanResultContainer {
+): List<ScanResult> {
     val licenseFindings = findingsPaths.mapTo(sortedSetOf()) { LicenseFinding("MIT", TextLocation(it, 1)) }
     val copyrightFindings = findingsPaths.mapTo(sortedSetOf()) { CopyrightFinding("(c)", TextLocation(it, 1)) }
 
-    return ScanResultContainer(
-        id = Identifier(id),
-        results = listOf(
-            ScanResult(
-                provenance = Provenance(vcsInfo = vcsInfo),
-                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                summary = ScanSummary(
-                    startTime = Instant.EPOCH,
-                    endTime = Instant.EPOCH,
-                    fileCount = 0,
-                    packageVerificationCode = "",
-                    licenseFindings = licenseFindings,
-                    copyrightFindings = copyrightFindings,
-                )
+    return listOf(
+        ScanResult(
+            provenance = Provenance(vcsInfo = vcsInfo),
+            scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+            summary = ScanSummary(
+                startTime = Instant.EPOCH,
+                endTime = Instant.EPOCH,
+                fileCount = 0,
+                packageVerificationCode = "",
+                licenseFindings = licenseFindings,
+                copyrightFindings = copyrightFindings,
             )
         )
     )
@@ -131,9 +126,8 @@ private val ORT_RESULT = OrtResult(
         environment = Environment(),
         config = ScannerConfiguration(),
         results = ScanRecord(
-            scanResults = sortedSetOf(
-                scanResultContainer(
-                    id = "NPM:@ort:project-in-root-dir:1.0",
+            scanResults = sortedMapOf(
+                Identifier("NPM:@ort:project-in-root-dir:1.0") to scanResults(
                     vcsInfo = PROJECT_VCS_INFO,
                     findingsPaths = listOf(
                         "src/main.js",
@@ -141,15 +135,13 @@ private val ORT_RESULT = OrtResult(
                         "nested-vcs-dir/src/main.cpp"
                     )
                 ),
-                scanResultContainer(
-                    id = "SpdxDocumentFile:@ort:project-in-sub-dir:1.0",
+                Identifier("SpdxDocumentFile:@ort:project-in-sub-dir:1.0") to scanResults(
                     vcsInfo = PROJECT_VCS_INFO,
                     findingsPaths = listOf(
                         "sub-dir/src/main.cpp"
                     )
                 ),
-                scanResultContainer(
-                    id = "SpdxDocumentFile:@ort:project-in-nested-vcs:1.0",
+                Identifier("SpdxDocumentFile:@ort:project-in-nested-vcs:1.0") to scanResults(
                     vcsInfo = NESTED_VCS_INFO,
                     findingsPaths = listOf(
                         "src/main.cpp"

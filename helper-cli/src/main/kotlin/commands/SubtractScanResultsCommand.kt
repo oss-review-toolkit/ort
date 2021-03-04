@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,25 +65,24 @@ internal class SubtractScanResultsCommand : CliktCommand(
         val lhsOrtResult = lhsOrtResultFile.readValue<OrtResult>()
         val rhsOrtResult = rhsOrtResultFile.readValue<OrtResult>()
 
-        val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.results }.associateBy(
+        val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.value }.associateBy(
             keySelector = { it.provenance.key() },
             valueTransform = { it.summary }
         )
 
-        val scanResultContainers = lhsOrtResult.scanner!!.results.scanResults.mapTo(sortedSetOf()) { container ->
-            val results = container.results.map { lhsScanResult ->
+        val scanResults = lhsOrtResult.scanner!!.results.scanResults.mapValuesTo(sortedMapOf()) { (_, results) ->
+            results.map { lhsScanResult ->
                 val lhsSummary = lhsScanResult.summary
                 val rhsSummary = rhsScanSummaries[lhsScanResult.provenance.key()]
 
                 lhsScanResult.copy(summary = lhsSummary - rhsSummary)
             }
-            container.copy(results = results)
-       }
+        }
 
        val result = lhsOrtResult.copy(
            scanner = lhsOrtResult.scanner!!.copy(
                results = lhsOrtResult.scanner!!.results.copy(
-                    scanResults = scanResultContainers
+                    scanResults = scanResults
                )
            )
        )

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import java.io.File
-
 /**
  * A container for [ScanResult]s for the package identified by [id].
  */
@@ -39,22 +37,4 @@ data class ScanResultContainer(
      * A comparison function to sort scan result containers by their identifier.
      */
     override fun compareTo(other: ScanResultContainer) = id.compareTo(other.id)
-
-    /**
-     * Return a [ScanResultContainer] whose [results] contains only findings from the same directory as the [project]'s
-     * definition file.
-     */
-    fun filterByProject(project: Project): ScanResultContainer {
-        val parentPath = File(project.definitionFilePath).parent ?: return this
-
-        val filteredResults = results.map { result ->
-            if (result.provenance.vcsInfo == null) {
-                result
-            } else {
-                result.filterByPath(parentPath)
-            }
-        }
-
-        return ScanResultContainer(project.id, filteredResults)
-    }
 }

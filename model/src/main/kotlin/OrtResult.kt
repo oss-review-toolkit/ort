@@ -164,9 +164,7 @@ data class OrtResult(
         result
     }
 
-    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy {
-        scanner?.results?.scanResults?.associateBy({ it.id }, { it.results }).orEmpty()
-    }
+    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy { scanner?.results?.scanResults.orEmpty() }
 
     private val advisorResultsById: Map<Identifier, List<AdvisorResult>> by lazy {
         advisor?.results?.advisorResults.orEmpty()
