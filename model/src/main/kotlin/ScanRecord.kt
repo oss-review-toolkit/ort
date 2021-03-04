@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,14 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.JsonToken
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 
-import java.util.SortedSet
+import java.util.SortedMap
 
 /**
  * A record of a single run of the scanner tool, containing the input and the scan results for all scanned packages.
@@ -35,7 +41,8 @@ data class ScanRecord(
     /**
      * The [ScanResult]s for all [Package]s.
      */
-    val scanResults: SortedSet<ScanResultContainer>,
+    @JsonDeserialize(using = ScanResultsDeserializer::class)
+    val scanResults: SortedMap<Identifier, List<ScanResult>>,
 
     /**
      * The [AccessStatistics] for the scan results storage.
@@ -49,9 +56,9 @@ data class ScanRecord(
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
-        scanResults.forEach { container ->
-            container.results.forEach { result ->
-                collectedIssues.getOrPut(container.id) { mutableSetOf() } += result.summary.issues
+        scanResults.forEach { (id, results) ->
+            results.forEach { result ->
+                collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues
             }
         }
 
@@ -63,8 +70,24 @@ data class ScanRecord(
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasIssues by lazy {
-        scanResults.any { scanResultContainer ->
-            scanResultContainer.results.any { it.summary.issues.isNotEmpty() }
+        scanResults.any { (_, results) ->
+            results.any { it.summary.issues.isNotEmpty() }
         }
     }
+}
+
+/**
+ * A custom deserializer to support deserialization of old [ScanRecord]s where [ScanRecord.scanResults] was a
+ * `List<ScanResultContainer>`.
+ */
+private class ScanResultsDeserializer : StdDeserializer<SortedMap<Identifier, List<ScanResult>>>(
+    SortedMap::class.java
+) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): SortedMap<Identifier, List<ScanResult>> =
+        if (p.currentToken == JsonToken.START_ARRAY) {
+            val containers = jsonMapper.readValue(p, jacksonTypeRef<List<ScanResultContainer>>())
+            containers.associateTo(sortedMapOf()) { it.id to it.results }
+        } else {
+            jsonMapper.readValue(p, jacksonTypeRef<SortedMap<Identifier, List<ScanResult>>>())
+        }
 }

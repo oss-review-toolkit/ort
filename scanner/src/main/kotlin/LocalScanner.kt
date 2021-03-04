@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
@@ -466,8 +465,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         )
 
         val scanResult = ScanResult(Provenance(), details, summary)
-        val scanResultContainer = ScanResultContainer(id, listOf(scanResult))
-        val scanRecord = ScanRecord(sortedSetOf(scanResultContainer), ScanResultsStorage.storage.stats)
+        val scanRecord = ScanRecord(sortedMapOf(id to listOf(scanResult)), ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
         val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)

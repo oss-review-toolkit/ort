@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ class ReportTableModelMapper(
 
             val projectIssues = project.collectIssues()
             val tableRows = allIds.map { id ->
-                val scanResult = scanRecord?.scanResults?.find { it.id == id }
+                val scanResult = scanRecord?.scanResults?.get(id)
 
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
 
@@ -145,7 +145,7 @@ class ReportTableModelMapper(
                 val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty() +
                         analyzerIssuesForPackages[id].orEmpty()
 
-                val scanIssues = scanResult?.results?.flatMapTo(mutableSetOf()) {
+                val scanIssues = scanResult?.flatMapTo(mutableSetOf()) {
                     it.summary.issues
                 }.orEmpty()
 

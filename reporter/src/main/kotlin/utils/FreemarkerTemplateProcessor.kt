@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 
 import java.io.File
-import java.util.SortedSet
+import java.util.SortedMap
 
 import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -328,11 +328,11 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
 
     val projectsToFilter = getProjects().mapTo(mutableSetOf()) { it.id } - targetProjects
 
-    val containers = scanner?.results?.scanResults?.mapTo(sortedSetOf()) { container ->
-        if (container.id !in projectsToFilter) {
-            container
+    val scanResults = scanner?.results?.scanResults?.mapValuesTo(sortedMapOf()) { (id, results) ->
+        if (id !in projectsToFilter) {
+            results
         } else {
-            val scanResults = container.results.map { scanResult ->
+            results.map { scanResult ->
                 val summary = scanResult.summary
                 val repositoryPath = getRepositoryPath(scanResult.provenance.vcsInfo!!)
                 fun TextLocation.isExcluded() = "$repositoryPath$path" !in excludePaths
@@ -347,12 +347,10 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
                     )
                 )
             }
-
-            container.copy(results = scanResults)
         }
-    } ?: sortedSetOf()
+    } ?: sortedMapOf()
 
-    return replaceScanResults(containers)
+    return replaceScanResults(scanResults)
 }
 
 /**
@@ -373,7 +371,7 @@ private fun OrtResult.getRepositoryPath(vcsInfo: VcsInfo): String {
 /**
  * Return a copy of this [OrtResult] with the scan results replaced by the given [scanResults].
  */
-private fun OrtResult.replaceScanResults(scanResults: SortedSet<ScanResultContainer>): OrtResult =
+private fun OrtResult.replaceScanResults(scanResults: SortedMap<Identifier, List<ScanResult>>): OrtResult =
     copy(
         scanner = scanner?.copy(
             results = scanner!!.results.copy(
