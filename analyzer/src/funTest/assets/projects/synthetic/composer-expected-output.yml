@@ -90,6 +90,8 @@ project:
 packages:
 - id: "Composer:doctrine:instantiator:1.4.0"
   purl: "pkg:composer/doctrine/instantiator@1.4.0"
+  authors:
+  - "Marco Pivetta"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -119,6 +121,8 @@ packages:
     path: ""
 - id: "Composer:monolog:monolog:2.2.0"
   purl: "pkg:composer/monolog/monolog@2.2.0"
+  authors:
+  - "Jordi Boggiano"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -176,6 +180,10 @@ packages:
     path: ""
 - id: "Composer:phar-io:manifest:2.0.1"
   purl: "pkg:composer/phar-io/manifest@2.0.1"
+  authors:
+  - "Arne Blankerts"
+  - "Sebastian Bergmann"
+  - "Sebastian Heuer"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -205,6 +213,10 @@ packages:
     path: ""
 - id: "Composer:phar-io:version:3.0.4"
   purl: "pkg:composer/phar-io/version@3.0.4"
+  authors:
+  - "Arne Blankerts"
+  - "Sebastian Bergmann"
+  - "Sebastian Heuer"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -233,6 +245,8 @@ packages:
     path: ""
 - id: "Composer:phpdocumentor:reflection-common:2.2.0"
   purl: "pkg:composer/phpdocumentor/reflection-common@2.2.0"
+  authors:
+  - "Jaap van Otterdijk"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -262,6 +276,9 @@ packages:
     path: ""
 - id: "Composer:phpdocumentor:reflection-docblock:5.2.2"
   purl: "pkg:composer/phpdocumentor/reflection-docblock@5.2.2"
+  authors:
+  - "Jaap van Otterdijk"
+  - "Mike van Riel"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -291,6 +308,8 @@ packages:
     path: ""
 - id: "Composer:phpdocumentor:type-resolver:1.4.0"
   purl: "pkg:composer/phpdocumentor/type-resolver@1.4.0"
+  authors:
+  - "Mike van Riel"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -320,6 +339,9 @@ packages:
     path: ""
 - id: "Composer:phpspec:prophecy:1.12.2"
   purl: "pkg:composer/phpspec/prophecy@1.12.2"
+  authors:
+  - "Konstantin Kudryashov"
+  - "Marcello Duarte"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -348,6 +370,8 @@ packages:
     path: ""
 - id: "Composer:phpunit:php-code-coverage:7.0.14"
   purl: "pkg:composer/phpunit/php-code-coverage@7.0.14"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -377,6 +401,8 @@ packages:
     path: ""
 - id: "Composer:phpunit:php-file-iterator:2.0.3"
   purl: "pkg:composer/phpunit/php-file-iterator@2.0.3"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -406,6 +432,8 @@ packages:
     path: ""
 - id: "Composer:phpunit:php-text-template:1.2.1"
   purl: "pkg:composer/phpunit/php-text-template@1.2.1"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -434,6 +462,8 @@ packages:
     path: ""
 - id: "Composer:phpunit:php-timer:2.1.3"
   purl: "pkg:composer/phpunit/php-timer@2.1.3"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -462,6 +492,8 @@ packages:
     path: ""
 - id: "Composer:phpunit:php-token-stream:3.1.2"
   purl: "pkg:composer/phpunit/php-token-stream@3.1.2"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -490,6 +522,8 @@ packages:
     path: ""
 - id: "Composer:phpunit:phpunit:8.5.14"
   purl: "pkg:composer/phpunit/phpunit@8.5.14"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -518,6 +552,8 @@ packages:
     path: ""
 - id: "Composer:psr:log:1.1.3"
   purl: "pkg:composer/psr/log@1.1.3"
+  authors:
+  - "PHP-FIG"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -546,6 +582,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:code-unit-reverse-lookup:1.0.2"
   purl: "pkg:composer/sebastian/code-unit-reverse-lookup@1.0.2"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -574,6 +612,11 @@ packages:
     path: ""
 - id: "Composer:sebastian:comparator:3.0.3"
   purl: "pkg:composer/sebastian/comparator@3.0.3"
+  authors:
+  - "Bernhard Schussek"
+  - "Jeff Welch"
+  - "Sebastian Bergmann"
+  - "Volker Dusch"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -602,6 +645,9 @@ packages:
     path: ""
 - id: "Composer:sebastian:diff:3.0.3"
   purl: "pkg:composer/sebastian/diff@3.0.3"
+  authors:
+  - "Kore Nordmann"
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -630,6 +676,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:environment:4.2.4"
   purl: "pkg:composer/sebastian/environment@4.2.4"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -658,6 +706,12 @@ packages:
     path: ""
 - id: "Composer:sebastian:exporter:3.1.3"
   purl: "pkg:composer/sebastian/exporter@3.1.3"
+  authors:
+  - "Adam Harvey"
+  - "Bernhard Schussek"
+  - "Jeff Welch"
+  - "Sebastian Bergmann"
+  - "Volker Dusch"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -686,6 +740,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:global-state:3.0.1"
   purl: "pkg:composer/sebastian/global-state@3.0.1"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -714,6 +770,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:object-enumerator:3.0.4"
   purl: "pkg:composer/sebastian/object-enumerator@3.0.4"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -743,6 +801,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:object-reflector:1.1.2"
   purl: "pkg:composer/sebastian/object-reflector@1.1.2"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -772,6 +832,10 @@ packages:
     path: ""
 - id: "Composer:sebastian:recursion-context:3.0.1"
   purl: "pkg:composer/sebastian/recursion-context@3.0.1"
+  authors:
+  - "Adam Harvey"
+  - "Jeff Welch"
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -800,6 +864,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:resource-operations:2.0.2"
   purl: "pkg:composer/sebastian/resource-operations@2.0.2"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -828,6 +894,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:type:1.1.4"
   purl: "pkg:composer/sebastian/type@1.1.4"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -857,6 +925,8 @@ packages:
     path: ""
 - id: "Composer:sebastian:version:2.0.1"
   purl: "pkg:composer/sebastian/version@2.0.1"
+  authors:
+  - "Sebastian Bergmann"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -886,6 +956,9 @@ packages:
     path: ""
 - id: "Composer:symfony:polyfill-ctype:v1.22.0"
   purl: "pkg:composer/symfony/polyfill-ctype@v1.22.0"
+  authors:
+  - "Gert de Pagter"
+  - "Symfony Community"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -914,6 +987,8 @@ packages:
     path: ""
 - id: "Composer:theseer:tokenizer:1.2.0"
   purl: "pkg:composer/theseer/tokenizer@1.2.0"
+  authors:
+  - "Arne Blankerts"
   declared_licenses:
   - "BSD-3-Clause"
   declared_licenses_processed:
@@ -943,6 +1018,8 @@ packages:
     path: ""
 - id: "Composer:webmozart:assert:1.9.1"
   purl: "pkg:composer/webmozart/assert@1.9.1"
+  authors:
+  - "Bernhard Schussek"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
