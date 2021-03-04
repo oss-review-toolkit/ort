@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import java.io.File
 import java.util.Base64
 
-import org.ossreviewtoolkit.utils.hash
 import org.ossreviewtoolkit.utils.toHexString
 
 /**
@@ -90,7 +89,7 @@ data class Hash(
             "Cannot verify algorithm '$algorithm'. Supported algorithms are ${HashAlgorithm.VERIFIABLE}."
         }
 
-        return file.hash(algorithm.toString()) == value
+        return algorithm.calculate(file) == value
     }
 }
 

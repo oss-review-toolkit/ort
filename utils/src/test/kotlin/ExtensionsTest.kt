@@ -53,17 +53,6 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.hash" should {
-        "calculate the correct SHA1" {
-            val file = createTempFile(ORT_NAME, javaClass.simpleName).toFile().apply {
-                writeText("test")
-                deleteOnExit()
-            }
-
-            file.hash() shouldBe "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
-        }
-    }
-
     "File.isSymbolicLink" should {
         val tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
         val file = tempDir.resolve("file").apply { createNewFile() }

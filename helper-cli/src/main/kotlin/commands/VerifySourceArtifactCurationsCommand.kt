@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.hash
 
 internal class VerifySourceArtifactCurationsCommand : CliktCommand(
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
@@ -55,7 +54,7 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
 
                 try {
                     val file = download(sourceArtifact.url)
-                    val hash = file.hash(sourceArtifact.hash.algorithm.toString())
+                    val hash = sourceArtifact.hash.algorithm.calculate(file)
 
                     println("Expected hash: ${sourceArtifact.hash.algorithm} ${sourceArtifact.hash.value}")
                     println("Actual hash  : ${sourceArtifact.hash.algorithm} $hash")
