@@ -1,3 +1,6 @@
+# Always use Unix line endings for the license file so it has the same hash on all platforms.
+/LICENSE					text eol=lf
+
 # Always use Unix line endings for Unix shell scripts.
 gradlew						text eol=lf
 *.sh						text eol=lf
