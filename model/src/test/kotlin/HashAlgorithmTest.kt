@@ -26,11 +26,16 @@ import java.io.File
 
 class HashAlgorithmTest : StringSpec({
     // Use a file that is always checked out with Unix line endings in the working tree to get the same file contents on
-    // all platforms.
+    // all platforms and in the Git object store.
     val file = File("../LICENSE")
 
     "Calculating the SHA1 on a file should yield the correct result" {
         // The expected hash was calculated with "sha1sum".
         HashAlgorithm.SHA1.calculate(file) shouldBe "92170cdc034b2ff819323ff670d3b7266c8bffcd"
+    }
+
+    "Calculating the SHA1-GIT on a file should yield the correct result" {
+        // The expected hash was calculated with "git ls-tree HEAD".
+        HashAlgorithm.SHA1_GIT.calculate(file) shouldBe "8dada3edaf50dbc082c9a125058f25def75e625a"
     }
 })
