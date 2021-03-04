@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2019 Bosch Software Innovations GmbH
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -244,9 +244,9 @@ class CycloneDxReporter : Reporter {
     }
 
     private fun writeBomToFile(bom: Bom, outputFile: File) {
-        val bomGenerator = BomGeneratorFactory.createXml(CycloneDxSchema.Version.VERSION_11, bom).apply { generate() }
+        val bomGenerator = BomGeneratorFactory.createXml(CycloneDxSchema.Version.VERSION_11, bom)
         outputFile.bufferedWriter().use {
-            it.write(bomGenerator.toXmlString())
+            it.write(bomGenerator.toString())
         }
     }
 }
