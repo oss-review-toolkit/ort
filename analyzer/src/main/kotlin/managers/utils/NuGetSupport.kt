@@ -32,6 +32,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
 import java.io.IOException
 import java.util.SortedMap
+import java.util.SortedSet
 import java.util.concurrent.TimeUnit
 
 import javax.xml.bind.annotation.XmlRootElement
@@ -180,18 +181,11 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             )
         } ?: VcsInfo.EMPTY
 
-        val license = with(all.spec.metadata) {
-            // Note: "licenseUrl" has been deprecated in favor of "license", see
-            // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
-            val licenseValue = license?.value?.takeUnless { license.type == "file" }
-            licenseValue ?: licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" }
-        }
-
         return with(all.details) {
             Package(
                 id = getIdentifier(id, version),
                 authors = parseAuthors(all.spec),
-                declaredLicenses = setOfNotNull(license).toSortedSet(),
+                declaredLicenses = parseLicenses(all.spec),
                 description = description.orEmpty(),
                 homepageUrl = projectUrl.orEmpty(),
                 binaryArtifact = RemoteArtifact(
@@ -259,6 +253,20 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             }
         }
     }
+}
+
+/**
+ * Parse information about the licenses of a package from the given [spec].
+ */
+private fun parseLicenses(spec: PackageSpec?): SortedSet<String> {
+    val license = spec?.metadata?.run {
+        // Note: "licenseUrl" has been deprecated in favor of "license", see
+        // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
+        val licenseValue = license?.value?.takeUnless { license.type == "file" }
+        licenseValue ?: licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" }
+    }
+
+    return setOfNotNull(license).toSortedSet()
 }
 
 /**
