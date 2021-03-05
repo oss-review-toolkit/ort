@@ -272,7 +272,17 @@ private fun parseLicenses(spec: PackageSpec?): SortedSet<String> {
 /**
  * Parse information about the authors of a package from the given [spec].
  */
-private fun parseAuthors(spec: PackageSpec) = sortedSetOf(spec.metadata.authors)
+private fun parseAuthors(spec: PackageSpec?): SortedSet<String> =
+    spec?.metadata?.authors?.split(',', ';').orEmpty()
+        .map(String::trim)
+        .filterNot(String::isEmpty)
+        .toSortedSet()
+
+/**
+ * Try to find a .nuspec file for the given [definitionFile]. The file is looked up in the same directory.
+ */
+private fun resolveLocalSpec(definitionFile: File): File? =
+    definitionFile.parentFile?.resolve(".nuspec")?.takeIf { it.isFile }
 
 private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
@@ -297,7 +307,19 @@ fun PackageManager.resolveNuGetDependencies(
     val references = reader.getPackageReferences(definitionFile)
     support.buildDependencyTree(references, dependencies, packages, issues)
 
-    val project = Project(
+    val project = getProject(definitionFile, workingDir, scope)
+
+    return ProjectAnalyzerResult(project, packages, issues)
+}
+
+private fun PackageManager.getProject(
+    definitionFile: File,
+    workingDir: File,
+    scope: Scope
+): Project {
+    val spec = resolveLocalSpec(definitionFile)?.let { NuGetSupport.XML_MAPPER.readValue<PackageSpec>(it) }
+
+    return Project(
         id = Identifier(
             type = managerName,
             namespace = "",
@@ -305,16 +327,13 @@ fun PackageManager.resolveNuGetDependencies(
             version = ""
         ),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        // TODO: Find a way to track authors.
-        authors = sortedSetOf(),
-        declaredLicenses = sortedSetOf(),
+        authors = parseAuthors(spec),
+        declaredLicenses = parseLicenses(spec),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),
         homepageUrl = "",
         scopeDependencies = sortedSetOf(scope)
     )
-
-    return ProjectAnalyzerResult(project, packages, issues)
 }
 
 /**

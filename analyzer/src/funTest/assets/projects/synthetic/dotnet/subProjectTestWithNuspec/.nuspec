@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>MyPackage</id>
+        <version>0.8.15</version>
+        <description>This is a test package.</description>
+        <authors>Author1, Author2; Author3</authors>
+        <licenseUrl>https://test.license.example.org/index.html</licenseUrl>
+        <license type="expression">BSD-2-Clause OR MIT</license>
+    </metadata>
+</package>

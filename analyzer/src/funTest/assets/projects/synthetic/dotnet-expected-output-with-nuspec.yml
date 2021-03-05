@@ -1,9 +1,15 @@
 ---
 project:
-  id: "DotNet::src/funTest/assets/projects/synthetic/dotnet/subProjectTest/test.csproj:"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/dotnet/subProjectTest/test.csproj"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  id: "DotNet::src/funTest/assets/projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj"
+  authors:
+  - "Author1"
+  - "Author2"
+  - "Author3"
+  declared_licenses:
+  - "BSD-2-Clause OR MIT"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause OR MIT"
   vcs:
     type: ""
     url: ""
