@@ -43,7 +43,7 @@ class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
         "be deserializable from HOCON" {
             val refConfig = File("src/test/assets/reference.conf")
-            val ortConfig = OrtConfiguration.load(configFile = refConfig)
+            val ortConfig = OrtConfiguration.load(file = refConfig)
 
             ortConfig.analyzer shouldNotBeNull {
                 ignoreToolVersions shouldBe true
@@ -152,7 +152,7 @@ class OrtConfigurationTest : WordSpec({
                         "ort.scanner.storages.postgresStorage.password" to "argsPassword",
                         "other.property" to "someValue"
                     ),
-                    configFile = configFile
+                    file = configFile
                 )
 
                 config.scanner?.storages shouldNotBeNull {
@@ -179,7 +179,7 @@ class OrtConfigurationTest : WordSpec({
             )
 
             shouldThrow<IllegalArgumentException> {
-                OrtConfiguration.load(configFile = configFile)
+                OrtConfiguration.load(file = configFile)
             }
         }
 
@@ -188,7 +188,7 @@ class OrtConfigurationTest : WordSpec({
             val args = mapOf("ort.scanner.storages.new" to "test")
 
             shouldThrow<IllegalArgumentException> {
-                OrtConfiguration.load(configFile = file, args = args)
+                OrtConfiguration.load(file = file, args = args)
             }
         }
 
@@ -196,7 +196,7 @@ class OrtConfigurationTest : WordSpec({
             val args = mapOf("foo" to "bar")
             val file = File("nonExistingConfig.conf")
 
-            val config = OrtConfiguration.load(configFile = file, args = args)
+            val config = OrtConfiguration.load(file = file, args = args)
 
             config.scanner should beNull()
         }
@@ -223,7 +223,7 @@ class OrtConfigurationTest : WordSpec({
             val env = mapOf("POSTGRES_USERNAME" to user, "POSTGRES_PASSWORD" to password)
 
             withEnvironment(env) {
-                val config = OrtConfiguration.load(configFile = configFile)
+                val config = OrtConfiguration.load(file = configFile)
 
                 config.scanner?.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
@@ -247,7 +247,7 @@ class OrtConfigurationTest : WordSpec({
             )
 
             withEnvironment(env) {
-                val config = OrtConfiguration.load(configFile = File("dummyPath"))
+                val config = OrtConfiguration.load(file = File("dummyPath"))
 
                 config.scanner?.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]

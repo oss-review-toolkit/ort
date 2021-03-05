@@ -36,7 +36,7 @@ class ScannerConfigurationTest : WordSpec({
     "ScannerConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
             val refConfig = File("src/test/assets/reference.conf")
-            val ortConfig = OrtConfiguration.load(configFile = refConfig)
+            val ortConfig = OrtConfiguration.load(file = refConfig)
             val file = createTempFile(suffix = ".yml").toFile().apply { deleteOnExit() }
 
             file.mapper().writeValue(file, ortConfig.scanner)
