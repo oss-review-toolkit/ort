@@ -324,7 +324,7 @@ Currently, the following package managers are supported:
 * [dep](https://golang.github.io/dep/) (Go)
 * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some
   [limitations](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))
-* [Glide](https://glide.sh/) (Go)
+* [Glide](https://github.com/Masterminds/glide) (Go)
 * [Godep](https://github.com/tools/godep) (Go)
 * [GoMod](https://github.com/golang/go/wiki/Modules) (Go, *experimental* as only proxy-based source artifacts but no VCS
   locations are supported)
