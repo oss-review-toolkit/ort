@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -94,6 +95,22 @@ class LicenseInfoResolver(
                 originalDeclaredLicenses.addAll(
                     licenseInfo.declaredLicenseInfo.processed.mapped.filterValues { it == license }.keys
                 )
+
+                licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() }?.let {
+                    locations.add(ResolvedLicenseLocation(
+                        provenance = Provenance(),
+                        location = UNDEFINED_TEXT_LOCATION,
+                        appliedCuration = null,
+                        matchingPathExcludes = emptyList(),
+                        copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) {
+                            ResolvedCopyrightFinding(
+                                statement = "$COPYRIGHT_PREFIX $it",
+                                location = UNDEFINED_TEXT_LOCATION,
+                                matchingPathExcludes = emptyList()
+                            )
+                        }
+                    ))
+                }
             }
         }
 
@@ -248,3 +265,6 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
 
     fun build() = ResolvedLicense(license, originalDeclaredLicenses, originalExpressions, locations)
 }
+
+private val UNDEFINED_TEXT_LOCATION = TextLocation(".", TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
+private const val COPYRIGHT_PREFIX = "Copyright (C)"
