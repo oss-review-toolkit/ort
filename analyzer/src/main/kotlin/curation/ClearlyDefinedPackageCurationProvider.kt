@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
+import com.fasterxml.jackson.databind.JsonMappingException
+
 import java.net.HttpURLConnection
 
 import kotlinx.coroutines.runBlocking
@@ -100,6 +102,12 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
                     "Getting curations for '${pkgId.toCoordinates()}' failed with code ${e.code()}: $message"
                 }
             }
+
+            return emptyList()
+        } catch (e: JsonMappingException) {
+            e.showStackTrace()
+
+            log.warn { "Deserializing the ClearlyDefined curation for '${pkgId.toCoordinates()}' failed." }
 
             return emptyList()
         }
