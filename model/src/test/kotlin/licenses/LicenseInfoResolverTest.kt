@@ -32,6 +32,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.lang.IllegalArgumentException
+import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
@@ -506,6 +507,27 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containNumberOfLocationsForLicense(gplLicense, 2)
                 result should containNumberOfLocationsForLicense(bsdLicense, 4)
             }
+
+            "resolve copyrights from authors" {
+                val licenseInfos = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        authors = authors,
+                        declaredLicenses = declaredLicenses
+                    )
+                )
+                val resolver = createResolver(licenseInfos)
+
+                val result = resolver.resolveLicenseInfo(pkgId)
+                result should containCopyrightStatementsForLicenseExactly(
+                    "LicenseRef-a",
+                    "Copyright (C) The Author", "Copyright (C) The Other Author"
+                )
+                result should containCopyrightStatementsForLicenseExactly(
+                    "LicenseRef-b",
+                    "Copyright (C) The Author", "Copyright (C) The Other Author"
+                )
+            }
         }
 
         "resolveLicenseFiles()" should {
@@ -580,6 +602,7 @@ class LicenseInfoResolverTest : WordSpec() {
 
     private fun createLicenseInfo(
         id: Identifier,
+        authors: SortedSet<String> = sortedSetOf(),
         declaredLicenses: Set<String> = emptySet(),
         detectedLicenses: List<Findings> = emptyList(),
         concludedLicense: SpdxExpression? = null
@@ -587,7 +610,7 @@ class LicenseInfoResolverTest : WordSpec() {
         LicenseInfo(
             id = id,
             declaredLicenseInfo = DeclaredLicenseInfo(
-                authors = sortedSetOf(),
+                authors = authors,
                 licenses = declaredLicenses,
                 processed = DeclaredLicenseProcessor.process(declaredLicenses),
                 appliedCurations = emptyList()
