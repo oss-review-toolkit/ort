@@ -187,7 +187,7 @@ operational.
 
 | Format | Scope | Default location | Default value |
 | ------ | ----- | ---------------- | ------------- |
-| HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty ([built-in](./model/src/main/resources/default.conf)) |
+| HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty |
 
 The [reference configuration file](./model/src/test/assets/reference.conf) gives a good impression about the content
 of the main ORT configuration file. It consists of sections related to different sub components of ORT. The meaning

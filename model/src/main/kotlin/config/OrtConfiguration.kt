@@ -62,7 +62,6 @@ data class OrtConfiguration(
          *
          * 1. [Command line arguments][args]
          * 2. [Configuration file][file]
-         * 3. default.conf from resources
          *
          * The configuration file is optional and does not have to exist. However, if it exists, but does not
          * contain a valid configuration, an [IllegalArgumentException] is thrown.
@@ -75,7 +74,6 @@ data class OrtConfiguration(
             val result = ConfigLoader.Builder()
                 .addSource(argumentsSource(args))
                 .addSource(PropertySource.file(file, optional = true))
-                .addSource(PropertySource.resource("/default.conf"))
                 .build()
                 .loadConfig<OrtConfigurationWrapper>()
 
