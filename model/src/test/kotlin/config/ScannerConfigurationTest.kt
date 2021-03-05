@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.readValue
 class ScannerConfigurationTest : WordSpec({
     "ScannerConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
-            val refConfig = File("src/test/assets/reference.conf")
+            val refConfig = File("src/main/resources/reference.conf")
             val ortConfig = OrtConfiguration.load(file = refConfig)
             val file = createTempFile(suffix = ".yml").toFile().apply { deleteOnExit() }
 
