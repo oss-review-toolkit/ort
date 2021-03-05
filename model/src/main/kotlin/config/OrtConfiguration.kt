@@ -66,32 +66,32 @@ data class OrtConfiguration(
          * The configuration file is optional and does not have to exist. However, if it exists, but does not
          * contain a valid configuration, an [IllegalArgumentException] is thrown.
          */
-        fun load(args: Map<String, String> = emptyMap(), file: File): OrtConfiguration {
-            if (file.isFile) {
-                log.info { "Using ORT configuration file at '$file'." }
-            }
+        fun load(args: Map<String, String>? = null, file: File? = null): OrtConfiguration {
+            val sources = listOfNotNull(
+                args?.filterKeys { it.startsWith("ort.") }?.takeUnless { it.isEmpty() }?.let {
+                    log.info {
+                        val argsList = it.map { (k, v) -> "\t$k=$v" }
+                        "Using ORT configuration arguments:\n" + argsList.joinToString("\n")
+                    }
 
-            val result = ConfigLoader.Builder()
-                .addSource(argumentsSource(args))
-                .addSource(PropertySource.file(file, optional = true))
-                .build()
-                .loadConfig<OrtConfigurationWrapper>()
+                    argumentsSource(it)
+                },
+                file?.takeIf { it.isFile }?.let {
+                    log.info { "Using ORT configuration file '$it'." }
+                    PropertySource.file(it)
+                }
+            )
 
-            return result.map { it.ort }.getOrElse { failure ->
-                if (file.isFile) {
-                    throw IllegalArgumentException(
-                        "Failed to load configuration from ${file.absolutePath}: ${failure.description()}"
-                    )
+            val loader = ConfigLoader.Builder().addSources(sources).build()
+            val config = loader.loadConfig<OrtConfigurationWrapper>()
+
+            return config.getOrElse { failure ->
+                if (sources.isNotEmpty()) {
+                    throw IllegalArgumentException("Failed to load ORT configuration: ${failure.description()}")
                 }
 
-                if (args.keys.any { it.startsWith("ort.") }) {
-                    throw java.lang.IllegalArgumentException(
-                        "Failed to load configuration from arguments $args: ${failure.description()}"
-                    )
-                }
-
-                OrtConfiguration()
-            }
+                OrtConfigurationWrapper(OrtConfiguration())
+            }.ort
         }
 
         /**
