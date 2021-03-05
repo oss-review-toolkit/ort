@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -75,6 +77,11 @@ data class ConcludedLicenseInfo(
  * Information about the declared license of a package or project.
  */
 data class DeclaredLicenseInfo(
+    /**
+     * The set of authors.
+     */
+    val authors: SortedSet<String>,
+
     /**
      * The unmodified set of declared licenses.
      */

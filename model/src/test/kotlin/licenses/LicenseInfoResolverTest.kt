@@ -587,6 +587,7 @@ class LicenseInfoResolverTest : WordSpec() {
         LicenseInfo(
             id = id,
             declaredLicenseInfo = DeclaredLicenseInfo(
+                authors = sortedSetOf(),
                 licenses = declaredLicenses,
                 processed = DeclaredLicenseProcessor.process(declaredLicenses),
                 appliedCurations = emptyList()
