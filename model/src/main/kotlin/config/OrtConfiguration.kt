@@ -61,28 +61,28 @@ data class OrtConfiguration(
          * Load the [OrtConfiguration]. The different sources are used with this priority:
          *
          * 1. [Command line arguments][args]
-         * 2. [Configuration file][configFile]
+         * 2. [Configuration file][file]
          * 3. default.conf from resources
          *
          * The configuration file is optional and does not have to exist. However, if it exists, but does not
          * contain a valid configuration, an [IllegalArgumentException] is thrown.
          */
-        fun load(args: Map<String, String> = emptyMap(), configFile: File): OrtConfiguration {
-            if (configFile.isFile) {
-                log.info { "Using ORT configuration file at '$configFile'." }
+        fun load(args: Map<String, String> = emptyMap(), file: File): OrtConfiguration {
+            if (file.isFile) {
+                log.info { "Using ORT configuration file at '$file'." }
             }
 
             val result = ConfigLoader.Builder()
                 .addSource(argumentsSource(args))
-                .addSource(PropertySource.file(configFile, optional = true))
+                .addSource(PropertySource.file(file, optional = true))
                 .addSource(PropertySource.resource("/default.conf"))
                 .build()
                 .loadConfig<OrtConfigurationWrapper>()
 
             return result.map { it.ort }.getOrElse { failure ->
-                if (configFile.isFile) {
+                if (file.isFile) {
                     throw IllegalArgumentException(
-                        "Failed to load configuration from ${configFile.absolutePath}: ${failure.description()}"
+                        "Failed to load configuration from ${file.absolutePath}: ${failure.description()}"
                     )
                 }
 
