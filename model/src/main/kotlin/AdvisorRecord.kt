@@ -63,6 +63,10 @@ data class AdvisorRecord(
     }
 }
 
+/**
+ * A custom deserializer to support deserialization of old [AdvisorRecord]s where [AdvisorRecord.advisorResults] was a
+ * `List<AdvisorResultContainer>`.
+ */
 private class AdvisorResultsDeserializer : StdDeserializer<SortedMap<Identifier, List<AdvisorResult>>>(
     SortedMap::class.java
 ) {
