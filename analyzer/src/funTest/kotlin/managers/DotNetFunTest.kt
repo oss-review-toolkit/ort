@@ -70,6 +70,23 @@ class DotNetFunTest : StringSpec() {
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
+
+        "Project metadata is correctly extracted from a .nuspec file" {
+            val vcsPath = vcsDir.getPathToRoot(projectDir)
+            val expectedResult = patchExpectedResult(
+                File(
+                    projectDir.parentFile,
+                    "dotnet-expected-output-with-nuspec.yml"
+                ),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = "$vcsPath/subProjectTestWithNuspec"
+            )
+            val result = createDotNet()
+                .resolveSingleProject(projectDir.resolve("subProjectTestWithNuspec/test.csproj"))
+
+            patchActualResult(result.toYaml()) shouldBe expectedResult
+        }
     }
 
     private fun createDotNet() =

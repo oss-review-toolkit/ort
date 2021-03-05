@@ -121,7 +121,8 @@ packages:
 - id: "NuGet::jQuery:3.3.1"
   purl: "pkg:nuget/jQuery@3.3.1"
   authors:
-  - "jQuery Foundation, Inc."
+  - "Inc."
+  - "jQuery Foundation"
   declared_licenses:
   - "http://jquery.org/license"
   declared_licenses_processed:
