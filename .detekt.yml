@@ -57,7 +57,6 @@ style:
       org.ossreviewtoolkit.analyzer.managers.*,
       org.ossreviewtoolkit.commands.*,
       org.ossreviewtoolkit.downloader.vcs.*,
-      org.ossreviewtoolkit.gradle.*,
       org.ossreviewtoolkit.helper.commands.*,
       org.ossreviewtoolkit.reporter.reporters.*,
       org.ossreviewtoolkit.scanner.scanners.*,
