@@ -117,8 +117,15 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
 
 COPY --from=build /usr/local/src/ort/scripts/*.sh /opt/ort/bin/
 
+# This can be set to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
+ARG CRT_FILES=""
+COPY "$CRT_FILES" /tmp/certificates/
+
 # Custom install commands.
 RUN /opt/ort/bin/import_proxy_certs.sh && \
+    if [ -n "$CRT_FILES" ]; then \
+      /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
+    fi && \
     # Install VCS tools (no specific versions required here).
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
