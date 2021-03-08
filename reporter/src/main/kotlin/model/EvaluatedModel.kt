@@ -21,24 +21,18 @@ package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIdentityReference
-import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.introspect.ObjectIdInfo
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.Writer
 
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.PROPERTY_NAMING_STRATEGY
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -47,6 +41,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.mapperConfig
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
@@ -134,23 +129,14 @@ data class EvaluatedModel(
             ScopeExclude::class.java
         )
 
-        private val MAPPER_CONFIG: ObjectMapper.() -> Unit = {
-            registerKotlinModule()
-
-            registerModule(JavaTimeModule())
-            registerModule(IntIdModule(INT_ID_TYPES))
-
-            disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-
-            propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
-        }
-
         private val JSON_MAPPER by lazy {
-            val factory = JsonFactory().disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
-            JsonMapper(factory).apply(MAPPER_CONFIG)
+            JsonMapper().apply(mapperConfig).registerModule(IntIdModule(INT_ID_TYPES))
+                .disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
         }
 
-        private val YAML_MAPPER by lazy { YAMLMapper().apply(MAPPER_CONFIG) }
+        private val YAML_MAPPER by lazy {
+            YAMLMapper().apply(mapperConfig).registerModule(IntIdModule(INT_ID_TYPES))
+        }
 
         fun create(input: ReporterInput): EvaluatedModel = EvaluatedModelMapper(input).build()
     }

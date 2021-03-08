@@ -35,7 +35,7 @@ val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategies.SNAKE_CASE as PropertyNa
 /**
  * A lambda expression that can be [applied][apply] to all [ObjectMapper]s to configure them the same way.
  */
-private val mapperConfig: ObjectMapper.() -> Unit = {
+val mapperConfig: ObjectMapper.() -> Unit = {
     registerKotlinModule()
 
     registerModule(JavaTimeModule())
