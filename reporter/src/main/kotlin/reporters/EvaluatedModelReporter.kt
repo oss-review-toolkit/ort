@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.model.EvaluatedModel
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 
 /**
  * Creates a JSON file containing the evaluated model.
@@ -63,7 +64,7 @@ abstract class EvaluatedModelReporter(
     ): List<File> {
         val evaluatedModel = measureTimedValue { EvaluatedModel.create(input) }
 
-        log.debug { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
+        log.perf { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
 
         val outputFile = outputDir.resolve(reportFilename)
 
