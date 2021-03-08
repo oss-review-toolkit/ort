@@ -1,8 +1,7 @@
 org.ossreviewtoolkit.reporter.reporters.AmazonOssAttributionBuilderReporter
 org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
-org.ossreviewtoolkit.reporter.reporters.EvaluatedModelJsonReporter
-org.ossreviewtoolkit.reporter.reporters.EvaluatedModelYamlReporter
+org.ossreviewtoolkit.reporter.reporters.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.GitLabLicenseModelReporter
 org.ossreviewtoolkit.reporter.reporters.NoticeTemplateReporter

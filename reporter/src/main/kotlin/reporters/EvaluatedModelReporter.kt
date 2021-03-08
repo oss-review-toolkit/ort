@@ -20,10 +20,10 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
-import java.io.Writer
 
 import kotlin.time.measureTimedValue
 
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.model.EvaluatedModel
@@ -31,32 +31,18 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 
 /**
- * Creates a JSON file containing the evaluated model.
+ * A [Reporter] that generates an [EvaluatedModel].
+ *
+ * This reporter supports the following options:
+ * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.JSON].
  */
-class EvaluatedModelJsonReporter : EvaluatedModelReporter(
-    reporterName = "EvaluatedModelJson",
-    reportFilename = "evaluated-model.json",
-    serialize = EvaluatedModel::toJson
-)
+class EvaluatedModelReporter : Reporter {
+    companion object {
+        const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
+    }
 
-/**
- * Creates a YAML file containing the evaluated model.
- */
-class EvaluatedModelYamlReporter : EvaluatedModelReporter(
-    reporterName = "EvaluatedModelYaml",
-    reportFilename = "evaluated-model.yml",
-    serialize = EvaluatedModel::toYaml
-)
+    override val reporterName = "EvaluatedModel"
 
-/**
- * An abstract [Reporter] that generates an [EvaluatedModel]. The model is serialized using the provided [serialize]
- * function.
- */
-abstract class EvaluatedModelReporter(
-    override val reporterName: String,
-    private val reportFilename: String,
-    private val serialize: EvaluatedModel.(Writer) -> Unit
-) : Reporter {
     override fun generateReport(
         input: ReporterInput,
         outputDir: File,
@@ -66,12 +52,26 @@ abstract class EvaluatedModelReporter(
 
         log.perf { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
 
-        val outputFile = outputDir.resolve(reportFilename)
+        val outputFiles = mutableListOf<File>()
+        val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
+            ?.split(",")
+            ?.mapTo(mutableSetOf()) { FileFormat.forExtension(it) }
+            ?: setOf(FileFormat.JSON)
 
-        outputFile.bufferedWriter().use {
-            evaluatedModel.value.serialize(it)
+        outputFileFormats.forEach { fileFormat ->
+            val outputFile = outputDir.resolve("evaluated-model.${fileFormat.fileExtension}")
+
+            outputFile.bufferedWriter().use {
+                when (fileFormat) {
+                    FileFormat.JSON -> evaluatedModel.value.toJson(it)
+                    FileFormat.YAML -> evaluatedModel.value.toYaml(it)
+                    else -> throw IllegalArgumentException("Unsupported Evaluated Model file format '$fileFormat'.")
+                }
+            }
+
+            outputFiles += outputFile
         }
 
-        return listOf(outputFile)
+        return outputFiles
     }
 }
