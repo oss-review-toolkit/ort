@@ -67,11 +67,19 @@ object SpdxModelMapper {
 
     fun <T : Any> write(file: File, clazz: Class<T>) = FileFormat.forFile(file).mapper.writeValue(file, clazz)
 
+    /*
+     * JSON mapping functions.
+     */
+
     internal val jsonMapper: ObjectMapper = JsonMapper().apply(mapperConfig)
 
     fun <T : Any> fromJson(json: String, clazz: Class<T>): T = jsonMapper.readValue(json, clazz)
 
     fun toJson(obj: Any): String = jsonMapper.writeValueAsString(obj)
+
+    /*
+     * YAML mapping functions.
+     */
 
     internal val yamlMapper: ObjectMapper = YAMLMapper().apply(mapperConfig)
 
