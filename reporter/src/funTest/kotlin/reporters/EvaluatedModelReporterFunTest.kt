@@ -26,6 +26,7 @@ import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -41,7 +42,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
             ).readText()
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
-            generateReport(EvaluatedModelJsonReporter(), ortResult).normalizeLineBreaks() shouldBe expectedResult
+            generateReport(ortResult).normalizeLineBreaks() shouldBe expectedResult
         }
 
         "create the expected YAML output" {
@@ -50,12 +51,13 @@ class EvaluatedModelReporterFunTest : WordSpec({
             ).readText()
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
-            generateReport(EvaluatedModelYamlReporter(), ortResult) shouldBe expectedResult
+            val options = mapOf(EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension)
+            generateReport(ortResult, options) shouldBe expectedResult
         }
     }
 })
 
-private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResult): String {
+private fun generateReport(ortResult: OrtResult, options: Map<String, String> = emptyMap()): String {
     val input = ReporterInput(
         ortResult = ortResult,
         resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions()),
@@ -66,5 +68,5 @@ private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResul
         deleteOnExit()
     }
 
-    return reporter.generateReport(input, outputDir).single().readText()
+    return EvaluatedModelReporter().generateReport(input, outputDir, options).single().readText()
 }
