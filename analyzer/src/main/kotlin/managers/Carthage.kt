@@ -80,7 +80,6 @@ class Carthage(
                         version = projectInfo.revision.orEmpty()
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    // TODO: Find a way to track authors.
                     authors = sortedSetOf(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
@@ -189,7 +188,6 @@ class Carthage(
                 name = vcsHost?.getProject(projectUrl).orEmpty(),
                 version = revision
             ),
-            // TODO: Find a way to track authors.
             authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             description = "",
@@ -214,7 +212,6 @@ class Carthage(
                 name = fileUrl.substringAfterLast("/"),
                 version = revision
             ),
-            // TODO: Find a way to track authors.
             authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             description = "",
@@ -233,7 +230,6 @@ class Carthage(
                 name = id.substringAfterLast("/").removeSuffix(".json"),
                 version = revision
             ),
-            // TODO: Find a way to track authors.
             authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             description = "",
