@@ -35,6 +35,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -116,12 +117,7 @@ class PostgresStorage(
         }
 
     private fun Transaction.tableExists(): Boolean =
-        exec("SELECT to_regclass('$table')") { resultSet ->
-            resultSet.next() && resultSet.getString(1).let { result ->
-                // At least PostgreSQL 9.6 reports the result including the schema prefix.
-                result == table || result == "$table"
-            }
-        } ?: false
+        table in TransactionManager.current().db.dialect.allTablesNames().map { it.substringAfterLast(".") }
 
     private fun Transaction.createIdentifierAndScannerVersionIndex() =
         exec(
