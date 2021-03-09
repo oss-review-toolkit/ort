@@ -46,14 +46,21 @@ enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, varar
 
     companion object {
         /**
+         * Return the [FileFormat] for the given [extension], or `null` if there is none.
+         */
+        fun forExtension(extension: String): FileFormat =
+            extension.toLowerCase().let { lowerCaseExtension ->
+                enumValues<FileFormat>().find {
+                    lowerCaseExtension in it.fileExtensions
+                } ?: throw IllegalArgumentException(
+                    "Unknown file format for file extension '$extension'."
+                )
+            }
+
+        /**
          * Return the [FileFormat] for the given [file], or `null` if there is none.
          */
-        fun forFile(file: File): FileFormat =
-            enumValues<FileFormat>().find {
-                file.extension in it.fileExtensions
-            } ?: throw IllegalArgumentException(
-                "Unsupported file format '${file.extension}' of file '${file.absolutePath}'."
-            )
+        fun forFile(file: File): FileFormat = forExtension(file.extension)
     }
 
     /**
