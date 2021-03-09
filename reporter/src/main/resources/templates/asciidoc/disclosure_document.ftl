@@ -31,14 +31,14 @@ Excluded projects and packages are ignored.
 :sectnums:
 :toc: preamble
 
-[#assign errorTitle = "DISCLAIMER! THERE ARE UNRESOLVED ISSUES.
-    THIS DOCUMENT SHOULD NOT BE DISTRIBUTED UNTIL THESE ISSUES ARE RESOLVED."?replace("\n", " ")]
+[#assign errorTitle = "DISCLAIMER! THERE ARE UNRESOLVED ISSUES OR UNRESOLVED RULE VIOLATIONS.
+    THIS DOCUMENT SHOULD NOT BE DISTRIBUTED UNTIL THESE PROBLEMS ARE RESOLVED."?replace("\n", " ")]
 
 [#--
 The alert role needs to be defined in the pdf-theme file, where the color can be customized.
 If not present, the text is displayed normally.
 --]
-= [#if helper.hasUnresolvedIssues()][.alert]#${errorTitle}#[#else] Disclosure Document[/#if]
+= [#if helper.hasUnresolvedIssues() || helper.hasUnresolvedRuleViolations()][.alert]#${errorTitle}#[#else] Disclosure Document[/#if]
 :author-name: OSS Review Toolkit
 [#assign now = .now]
 :revdate: ${now?date?iso_local}
