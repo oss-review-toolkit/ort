@@ -2,6 +2,8 @@
 project:
   id: "Bundler::test-project:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/bundler/gemspec/Gemfile"
+  authors:
+  - "Bob Example"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
@@ -49,6 +51,8 @@ project:
 packages:
 - id: "Gem::addressable:2.7.0"
   purl: "pkg:gem/addressable@2.7.0"
+  authors:
+  - "Bob Aman"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -79,6 +83,8 @@ packages:
     path: ""
 - id: "Gem::diff-lcs:1.3"
   purl: "pkg:gem/diff-lcs@1.3"
+  authors:
+  - "Austin Ziegler"
   declared_licenses:
   - "Artistic-2.0"
   - "GPL-2.0+"
@@ -117,6 +123,10 @@ packages:
     path: ""
 - id: "Gem::faraday:0.17.3"
   purl: "pkg:gem/faraday@0.17.3"
+  authors:
+  - "@iMacTia"
+  - "@olleolleolle"
+  - "@technoweenie"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -145,6 +155,8 @@ packages:
     path: ""
 - id: "Gem::jwt:2.2.1"
   purl: "pkg:gem/jwt@2.2.1"
+  authors:
+  - "Tim Rudat"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -174,6 +186,11 @@ packages:
     path: ""
 - id: "Gem::multi_json:1.14.1"
   purl: "pkg:gem/multi_json@1.14.1"
+  authors:
+  - "Erik Michaels-Ober"
+  - "Josh Kalderimis"
+  - "Michael Bleigh"
+  - "Pavel Pravosud"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -204,6 +221,9 @@ packages:
     path: ""
 - id: "Gem::multipart-post:2.1.1"
   purl: "pkg:gem/multipart-post@2.1.1"
+  authors:
+  - "Nick Sieger"
+  - "Samuel Williams"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -234,6 +254,8 @@ packages:
     path: ""
 - id: "Gem::public_suffix:4.0.5"
   purl: "pkg:gem/public_suffix@4.0.5"
+  authors:
+  - "Simone Carletti"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -263,6 +285,8 @@ packages:
     path: ""
 - id: "Gem::rack:2.2.3"
   purl: "pkg:gem/rack@2.2.3"
+  authors:
+  - "Leah Neukirchen"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -294,6 +318,11 @@ packages:
     path: ""
 - id: "Gem::rspec-core:3.7.1"
   purl: "pkg:gem/rspec-core@3.7.1"
+  authors:
+  - "Chad Humphries"
+  - "David Chelimsky"
+  - "Myron Marston"
+  - "Steven Baker"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -322,6 +351,10 @@ packages:
     path: ""
 - id: "Gem::rspec-expectations:3.7.0"
   purl: "pkg:gem/rspec-expectations@3.7.0"
+  authors:
+  - "David Chelimsky"
+  - "Myron Marston"
+  - "Steven Baker"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -351,6 +384,10 @@ packages:
     path: ""
 - id: "Gem::rspec-mocks:3.7.0"
   purl: "pkg:gem/rspec-mocks@3.7.0"
+  authors:
+  - "David Chelimsky"
+  - "Myron Marston"
+  - "Steven Baker"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -379,6 +416,13 @@ packages:
     path: ""
 - id: "Gem::rspec-support:3.7.1"
   purl: "pkg:gem/rspec-support@3.7.1"
+  authors:
+  - "Bradley Schaefer"
+  - "David Chelimsky"
+  - "Jon Rowe"
+  - "Myron Marson"
+  - "Sam Phippen"
+  - "Xaviery Shay"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -407,6 +451,10 @@ packages:
     path: ""
 - id: "Gem::rspec:3.7.0"
   purl: "pkg:gem/rspec@3.7.0"
+  authors:
+  - "David Chelimsky"
+  - "Myron Marston"
+  - "Steven Baker"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -435,6 +483,9 @@ packages:
     path: ""
 - id: "Gem::signet:0.8.1"
   purl: "pkg:gem/signet@0.8.1"
+  authors:
+  - "Bob Aman"
+  - "Steven Bazyl"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -463,6 +514,8 @@ packages:
     path: ""
 - id: "Gem::test-project:1.0.0"
   purl: "pkg:gem/test-project@1.0.0"
+  authors:
+  - "Bob Example"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
