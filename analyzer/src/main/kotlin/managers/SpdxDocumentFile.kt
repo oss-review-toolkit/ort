@@ -176,6 +176,33 @@ class SpdxDocumentFile(
         )
 
     /**
+     * Create a [Package] out of this [SpdxPackage].
+     */
+    private fun SpdxPackage.toPackage(workingDir: File): Package {
+        val packageDescription = description.takeUnless { it.isEmpty() } ?: summary
+
+        // If the VCS information cannot be determined from the download location, fall back to try getting it from the
+        // VCS working tree itself.
+        val vcs = getVcsInfo(this) ?: run {
+            val packageDir = workingDir.resolve(packageFilename)
+            VersionControlSystem.forDirectory(packageDir)?.getInfo()
+        } ?: VcsInfo.EMPTY
+
+        return Package(
+            id = toIdentifier(),
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
+            declaredLicenses = sortedSetOf(licenseDeclared),
+            concludedLicense = getConcludedLicense(this),
+            description = packageDescription,
+            homepageUrl = homepage.mapNotPresentToEmpty(),
+            binaryArtifact = getBinaryArtifact(this) ?: RemoteArtifact.EMPTY,
+            sourceArtifact = getSourceArtifact(this) ?: RemoteArtifact.EMPTY,
+            vcs = vcs
+        )
+    }
+
+    /**
      * Return the dependencies of [pkg] defined in [doc] of the [SpdxRelationship.Type.DEPENDENCY_OF] type.
      */
     private fun getDependencies(pkg: SpdxPackage, doc: SpdxDocument): SortedSet<PackageReference> =
@@ -299,29 +326,7 @@ class SpdxDocumentFile(
             spdxDocument.packages
         }
 
-        val packages = nonProjectPackages.mapTo(sortedSetOf()) { pkg ->
-            val packageDescription = pkg.description.takeUnless { it.isEmpty() } ?: pkg.summary
-
-            // If the VCS information cannot be determined from the download location, fall back to try getting it from
-            // the VCS working tree itself.
-            val vcs = getVcsInfo(pkg) ?: run {
-                val packageDir = workingDir.resolve(pkg.packageFilename)
-                VersionControlSystem.forDirectory(packageDir)?.getInfo()
-            } ?: VcsInfo.EMPTY
-
-            Package(
-                id = pkg.toIdentifier(),
-                // TODO: Find a way to track authors.
-                authors = sortedSetOf(),
-                declaredLicenses = sortedSetOf(pkg.licenseDeclared),
-                concludedLicense = getConcludedLicense(pkg),
-                description = packageDescription,
-                homepageUrl = pkg.homepage.mapNotPresentToEmpty(),
-                binaryArtifact = getBinaryArtifact(pkg) ?: RemoteArtifact.EMPTY,
-                sourceArtifact = getSourceArtifact(pkg) ?: RemoteArtifact.EMPTY,
-                vcs = vcs
-            )
-        }
+        val packages = nonProjectPackages.mapTo(sortedSetOf()) { it.toPackage(workingDir) }
 
         return listOf(ProjectAnalyzerResult(project, packages))
     }
