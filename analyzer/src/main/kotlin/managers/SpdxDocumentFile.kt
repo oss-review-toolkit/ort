@@ -353,7 +353,8 @@ class SpdxDocumentFile(
 
         // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies, or a
         // package-style SPDX document that describes a single (dependency-)package.
-        val projectPackage = spdxDocument.packages.singleOrNull { it.packageFilename.isEmpty() }
+        val projectPackage = spdxDocument.packages.takeIf { it.size > 1 }
+            ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
 
         val packages = mutableSetOf<Package>()
 
