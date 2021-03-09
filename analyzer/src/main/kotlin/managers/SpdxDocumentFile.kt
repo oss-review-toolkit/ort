@@ -73,6 +73,13 @@ private val SPDX_VCS_PREFIXES = mapOf(
 )
 
 /**
+ * Return the [SpdxPackage] in the [SpdxDocument] that denotes a project, or null if no project but only packages are
+ * defined.
+ */
+private fun SpdxDocument.projectPackage(): SpdxPackage? =
+    packages.takeIf { it.size > 1 }?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
+
+/**
  * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
  * specified.
  */
@@ -353,8 +360,7 @@ class SpdxDocumentFile(
 
         // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies, or a
         // package-style SPDX document that describes a single (dependency-)package.
-        val projectPackage = spdxDocument.packages.takeIf { it.size > 1 }
-            ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
+        val projectPackage = spdxDocument.projectPackage()
 
         val packages = mutableSetOf<Package>()
 
