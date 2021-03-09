@@ -30,6 +30,7 @@ import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
@@ -274,7 +275,7 @@ class FreemarkerTemplateProcessor(
                 .sortedBy { it.license.toString() }
 
         /**
-         * Return `true` if there are any unresolved issues, or `false` otherwise.
+         * Return `true` if there are any unresolved [OrtIssue]s, or `false` otherwise.
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedIssues() =
