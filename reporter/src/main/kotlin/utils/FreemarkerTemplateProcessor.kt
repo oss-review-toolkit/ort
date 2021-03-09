@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
@@ -282,6 +283,15 @@ class FreemarkerTemplateProcessor(
             ortResult.collectIssues().values.flatten().any { issue ->
                 resolutionProvider.getIssueResolutionsFor(issue).isEmpty()
             }
+
+        /**
+         * Return `true` if there are any unresolved [RuleViolation]s, or `false` otherwise.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun hasUnresolvedRuleViolations() =
+            ortResult.evaluator?.violations?.any { violation ->
+                resolutionProvider.getRuleViolationResolutionsFor(violation).isEmpty()
+            } ?: false
     }
 }
 
