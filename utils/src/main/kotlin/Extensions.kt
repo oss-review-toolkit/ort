@@ -37,11 +37,12 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
+import java.util.Locale
 
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
-fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
+fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
 
 /**
  * Format this [Double] as a string with the provided number of [decimalPlaces].

@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.io.IOException
+import java.util.Locale
 
 import kotlin.io.path.createTempDirectory
 import kotlin.io.path.createTempFile
@@ -213,7 +214,7 @@ class ExtensionsTest : WordSpec({
 
             assertSoftly {
                 reserved.forEach {
-                    val hexString = String.format("%%%02X", it.toInt())
+                    val hexString = String.format(Locale.ROOT, "%%%02X", it.toInt())
                     it.toString().percentEncode() shouldBe hexString
                 }
 
