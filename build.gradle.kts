@@ -21,6 +21,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 import java.net.URL
 
@@ -96,6 +97,10 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     }
 }
 
+val mergeDetektReports by tasks.registering(ReportMergeTask::class) {
+    output.set(rootProject.buildDir.resolve("reports/detekt/merged.sarif"))
+}
+
 allprojects {
     buildscript {
         repositories {
@@ -135,10 +140,25 @@ allprojects {
 
         input = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
             "src/funTest/kotlin")
+
+        basePath = rootProject.projectDir.path
+
+        reports {
+            html.enabled = false
+            sarif.enabled = true
+            txt.enabled = false
+            xml.enabled = false
+        }
     }
 
-    tasks.withType<Detekt>().configureEach {
+    tasks.withType<Detekt> detekt@{
         dependsOn(":detekt-rules:assemble")
+
+        finalizedBy(mergeDetektReports)
+
+        mergeDetektReports {
+            input.from(this@detekt.sarifReportFile)
+        }
     }
 }
 
