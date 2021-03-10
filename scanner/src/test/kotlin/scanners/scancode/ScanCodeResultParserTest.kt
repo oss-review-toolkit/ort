@@ -805,5 +805,18 @@ class ScanCodeResultParserTest : WordSpec({
             // TODO: This illustrates a bug which should be fixed.
             result shouldBe "LicenseRef-scancode-agpl-3.0-LicenseRef-scancode-openssl"
         }
+
+        "Properly handle braces" {
+            val expression = "((public-domain AND openssl) OR mit)"
+            val replacements = listOf(
+                LicenseKeyReplacement("public-domain", "LicenseRef-scancode-public-domain"),
+                LicenseKeyReplacement("openssl", "LicenseRef-scancode-openssl"),
+                LicenseKeyReplacement("mit", "MIT")
+            )
+
+            val result = replaceLicenseKeys(expression, replacements)
+
+            result shouldBe "((LicenseRef-scancode-public-domain AND LicenseRef-scancode-openssl) OR MIT)"
+        }
     }
 })
