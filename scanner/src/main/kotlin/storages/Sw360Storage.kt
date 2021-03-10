@@ -78,7 +78,7 @@ class Sw360Storage(
                 }
             Success(scanResults)
         } catch (e: SW360ClientException) {
-            val message = "Could not read scan results for ${id.toCoordinates()} in SW360."
+            val message = "Could not read scan results for ${id.toCoordinates()} in SW360: ${e.message}"
             log.info { message }
             Failure(message)
         } finally {

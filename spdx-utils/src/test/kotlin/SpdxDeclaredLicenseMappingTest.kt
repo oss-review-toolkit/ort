@@ -54,6 +54,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
             }
 
             licenseIdMapping.keys.forAll { declaredLicense ->
+                @Suppress("SwallowedException")
                 try {
                     val tokens = getTokensByTypeForExpression(declaredLicense)
 

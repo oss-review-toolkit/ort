@@ -55,7 +55,7 @@ class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
                             val spdxOperator = try {
                                 SpdxOperator.valueOf(uppercaseOperator)
                             } catch (e: IllegalArgumentException) {
-                                throw SpdxException("Illegal operator '$operator' in expression '${ctx.text}'.")
+                                throw SpdxException("Illegal operator '$operator' in expression '${ctx.text}'.", e)
                             }
 
                             SpdxCompoundExpression(left, spdxOperator, right)

@@ -29,12 +29,10 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.net.URISyntaxException
 import java.nio.file.CopyOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.LinkOption
-import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.StandardCopyOption
@@ -60,15 +58,13 @@ fun File.expandTilde(): File = File(path.expandTilde()).absoluteFile
  * Return true if and only if this file is a symbolic link.
  */
 fun File.isSymbolicLink(): Boolean =
-    try {
+    runCatching {
         // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
         // NoSuchFileException to be thrown as it returns "false" e.g. for dangling Windows junctions.
         Files.readAttributes(toPath(), BasicFileAttributes::class.java, LinkOption.NOFOLLOW_LINKS).let {
             it.isSymbolicLink || (Os.isWindows && it.isOther)
         }
-    } catch (e: NoSuchFileException) {
-        false
-    }
+    }.getOrDefault(false)
 
 /**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
@@ -341,14 +337,12 @@ fun String.percentEncode(): String =
  * not represent a URL or if it does not include a user name.
  */
 fun String.stripCredentialsFromUrl() =
-    try {
+    runCatching {
         // Use an URI instead of an URL as the former allows to specify the userInfo separately.
         URI(this).let {
             URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString()
         }
-    } catch (e: URISyntaxException) {
-        this
-    }
+    }.getOrDefault(this)
 
 /**
  * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].

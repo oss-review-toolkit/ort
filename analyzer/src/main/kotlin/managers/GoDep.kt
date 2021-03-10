@@ -148,17 +148,14 @@ class GoDep(
 
         val scope = Scope("default", packageRefs.toSortedSet())
 
-        @Suppress("TooGenericExceptionCaught")
-        val projectName = try {
+        val projectName = runCatching {
             val uri = URI(projectVcs.url)
             val vcsPath = VersionControlSystem.getPathInfo(definitionFile.parentFile).path
             listOf(uri.host, uri.path.removePrefix("/").removeSuffix(".git"), vcsPath)
                 .filterNot { it.isEmpty() }
                 .joinToString(separator = "/")
                 .toLowerCase()
-        } catch (e: Exception) {
-            projectDir.name
-        }
+        }.getOrDefault(projectDir.name)
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively(force = true)
@@ -186,13 +183,10 @@ class GoDep(
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-        @Suppress("TooGenericExceptionCaught")
-        try {
+        runCatching {
             val uri = URI(vcs.url)
             Paths.get(gopath.path, "src", uri.host, uri.path)
-        } catch (e: Exception) {
-            Paths.get(gopath.path, "src", projectDir.name)
-        }.toFile()
+        }.getOrDefault(Paths.get(gopath.path, "src", projectDir.name)).toFile()
 
     private fun resolveProjectRoot(definitionFile: File) =
         when (definitionFile.name) {
