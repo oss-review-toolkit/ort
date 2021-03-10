@@ -91,6 +91,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
     }
 }
 
+@Suppress("UnusedPrivateMember")
 private operator fun ScanSummary.minus(other: ScanSummary?): ScanSummary {
     if (other == null) return this
 

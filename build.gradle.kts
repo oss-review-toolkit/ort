@@ -315,12 +315,12 @@ subprojects {
         dependsOn(funTest)
     }
 
-    val sourcesJar by tasks.registering(Jar::class) {
+    tasks.register<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
 
-    val dokkaHtmlJar by tasks.registering(Jar::class) {
+    tasks.register<Jar>("dokkaHtmlJar") {
         dependsOn(tasks.dokkaHtml)
 
         description = "Assembles a jar archive containing the minimalistic HTML documentation."
@@ -330,7 +330,7 @@ subprojects {
         from(tasks.dokkaHtml)
     }
 
-    val dokkaJavadocJar by tasks.registering(Jar::class) {
+    tasks.register<Jar>("dokkaJavadocJar") {
         dependsOn(tasks.dokkaJavadoc)
 
         description = "Assembles a jar archive containing the Javadoc documentation."
@@ -346,8 +346,8 @@ subprojects {
                 groupId = "org.ossreviewtoolkit"
 
                 from(components["java"])
-                artifact(sourcesJar.get())
-                artifact(dokkaJavadocJar.get())
+                artifact(tasks["sourcesJar"])
+                artifact(tasks["dokkaJavadocJar"])
 
                 pom {
                     licenses {
