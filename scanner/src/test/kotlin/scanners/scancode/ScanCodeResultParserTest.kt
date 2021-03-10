@@ -778,4 +778,19 @@ class ScanCodeResultParserTest : WordSpec({
             mapUnknownIssues(summary.issues.toMutableList()) shouldBe false
         }
     }
+
+    "replaceLicenseKeys()" should {
+        "Properly handle redundant replacements" {
+            val expression = "public-domain"
+            val replacements = listOf(
+                LicenseKeyReplacement("public-domain", "LicenseRef-scancode-public-domain"),
+                LicenseKeyReplacement("public-domain", "LicenseRef-scancode-public-domain")
+            )
+
+            val result = replaceLicenseKeys(expression, replacements)
+
+            // TODO: This illustrates a bug which should be fixed.
+            result shouldBe "LicenseRef-scancode-LicenseRef-scancode-public-domain"
+        }
+    }
 })
