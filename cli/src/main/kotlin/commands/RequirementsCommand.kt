@@ -22,10 +22,7 @@ package org.ossreviewtoolkit.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 
-import com.vdurmont.semver4j.SemverException
-
 import java.io.File
-import java.io.IOException
 import java.lang.reflect.Modifier
 
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -114,9 +111,9 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                 // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
                 val message = buildString {
                     val (prefix, suffix) = if (tool.isInPath()) {
-                        try {
+                        runCatching {
                             val actualVersion = tool.getVersion()
-                            try {
+                            runCatching {
                                 val isRequiredVersion = tool.getVersionRequirement().let {
                                     it == CommandLineTool.ANY_VERSION || it.isSatisfiedBy(actualVersion)
                                 }
@@ -127,11 +124,11 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                                     statusCode = statusCode or 2
                                     Pair("\t+ ", "Found version $actualVersion.")
                                 }
-                            } catch (e: SemverException) {
+                            }.getOrElse {
                                 statusCode = statusCode or 2
                                 Pair("\t+ ", "Found version '$actualVersion'.")
                             }
-                        } catch (e: IOException) {
+                        }.getOrElse {
                             statusCode = statusCode or 2
                             Pair("\t+ ", "Could not determine the version.")
                         }

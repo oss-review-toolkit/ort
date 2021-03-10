@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import java.io.File
 import java.net.URI
-import java.net.URISyntaxException
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
@@ -80,10 +79,10 @@ fun expandNpmShortcutURL(url: String): String {
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
     //     [user-info@]host[:port]
-    val uri = try {
+    val uri = runCatching {
         // At this point we do not know whether the URL is actually valid, so use the more general URI.
         URI(url)
-    } catch (e: URISyntaxException) {
+    }.getOrElse {
         // Fall back to returning the original URL.
         return url
     }

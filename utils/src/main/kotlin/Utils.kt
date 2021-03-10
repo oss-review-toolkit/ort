@@ -23,7 +23,6 @@ package org.ossreviewtoolkit.utils
 
 import java.io.File
 import java.net.URI
-import java.net.URISyntaxException
 import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
@@ -230,16 +229,13 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
     //     [user-info@]host[:port]
-    val uri = try {
+    val uri = runCatching {
         // At this point we do not know whether the URL is actually valid, so use the more general URI.
         URI(url)
-    } catch (e: URISyntaxException) {
-        // Fall back to a file if the URL is a Windows path.
-        return File(url).toSafeURI().toString()
-    }
+    }.getOrNull()
 
-    if (uri.scheme == null && uri.path.isNotEmpty()) {
-        // Fall back to a file if the URL is a Linux path.
+    if (uri == null || (uri.scheme == null && uri.path.isNotEmpty())) {
+        // Fall back to a file if the URL is a Windows or Linux path.
         return File(url).toSafeURI().toString()
     }
 
@@ -320,6 +316,7 @@ fun trapSystemExitCall(block: () -> Unit): Int? {
         }
     })
 
+    @Suppress("SwallowedException")
     try {
         block()
     } catch (e: ExitTrappedException) {

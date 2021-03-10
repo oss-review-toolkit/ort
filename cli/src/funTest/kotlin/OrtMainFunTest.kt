@@ -175,6 +175,7 @@ class OrtMainFunTest : StringSpec() {
 
     private fun runMain(vararg args: String) =
         redirectStdout {
+            @Suppress("SwallowedException")
             try {
                 OrtMain().parse(args.asList())
             } catch (e: ProgramResult) {

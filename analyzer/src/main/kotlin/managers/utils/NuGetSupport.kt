@@ -150,13 +150,10 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         val lowerId = id.name.toLowerCase()
 
         val data = registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
-            try {
+            runCatching {
                 val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
                 runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
-            } catch (e: IOException) {
-                log.debug { "Failed to retrieve package from $baseUrl." }
-                null
-            }
+            }.getOrNull()
         }.firstOrNull()
             ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
 

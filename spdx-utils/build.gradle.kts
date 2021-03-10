@@ -307,6 +307,7 @@ fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMe
             if (i.hasNext()) {
                 val candidate = i.next()
 
+                @Suppress("SwallowedException")
                 try {
                     val licenseFile = file(candidate)
                     val lines = licenseFile.readLines().map { it.trimEnd() }.asReversed().dropWhile { it.isEmpty() }
