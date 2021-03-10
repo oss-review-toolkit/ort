@@ -29,6 +29,7 @@ import org.antlr.v4.runtime.CommonTokenStream
 
 import org.ossreviewtoolkit.spdx.SpdxConstants.DOCUMENT_REF_PREFIX
 import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
+import org.ossreviewtoolkit.spdx.model.LicenseChoice
 
 /**
  * An SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1].
@@ -156,6 +157,11 @@ sealed class SpdxExpression {
     fun isValidChoice(choice: SpdxExpression): Boolean = !choice.offersChoice() && choice in validChoices()
 
     /**
+     * Return true if [subExpression] is a valid sub-expression of [this][SpdxExpression].
+     */
+    open fun isSubExpression(subExpression: SpdxExpression?): Boolean = false
+
+    /**
      * Return true if this expression offers a license choice. This can only be true if this expression contains the
      * [OR operator][SpdxOperator.OR].
      */
@@ -175,6 +181,25 @@ sealed class SpdxExpression {
         }
 
         return this
+    }
+
+    /**
+     * Apply [licenseChoices] in the given order to [this][SpdxExpression].
+     */
+    fun applyChoices(licenseChoices: List<LicenseChoice>): SpdxExpression {
+        if (validChoices().size == 1) return this
+
+        var currentExpression = this
+
+        licenseChoices.forEach {
+            if (it.given == null && currentExpression.isValidChoice(it.choice)) {
+                currentExpression = currentExpression.applyChoice(it.choice)
+            } else if (currentExpression.isSubExpression(it.given)) {
+                currentExpression = currentExpression.applyChoice(it.choice, it.given!!)
+            }
+        }
+
+        return currentExpression
     }
 
     /**
@@ -267,7 +292,7 @@ class SpdxCompoundExpression(
             )
         }
 
-        if (!isValidSubExpression(subExpression)) {
+        if (!isSubExpression(subExpression)) {
             throw InvalidSubExpressionException("$subExpression is not not a valid subExpression of $this")
         }
 
@@ -293,7 +318,9 @@ class SpdxCompoundExpression(
         }
     }
 
-    private fun isValidSubExpression(subExpression: SpdxExpression): Boolean {
+    override fun isSubExpression(subExpression: SpdxExpression?): Boolean {
+        if (subExpression == null) return false
+
         val expressionString = toString()
         val subExpressionString = subExpression.toString()
 
