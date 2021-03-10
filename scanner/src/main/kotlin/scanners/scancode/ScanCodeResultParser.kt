@@ -47,7 +47,7 @@ private data class LicenseExpression(
     val endLine: Int
 )
 
-private data class LicenseKeyReplacement(
+data class LicenseKeyReplacement(
     val scanCodeLicenseKey: String,
     val spdxExpression: String
 )
@@ -172,9 +172,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
                 LicenseKeyReplacement(it["key"].textValue(), getSpdxLicenseId(it))
             }
         ).map { (licenseExpression, replacements) ->
-            val spdxLicenseExpression = replacements.fold(licenseExpression.expression) { expression, replacement ->
-                expression.replace(replacement.scanCodeLicenseKey, replacement.spdxExpression)
-            }
+            val spdxLicenseExpression = replaceLicenseKeys(licenseExpression.expression, replacements)
 
             LicenseFinding(
                 license = spdxLicenseExpression,
@@ -189,6 +187,15 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
 
     return licenseFindings
 }
+
+/**
+ * Return the given [licenseExpression] with all ScanCode license keys replaced with SPDX license IDs as specified by
+ * [replacements].
+ */
+internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collection<LicenseKeyReplacement>): String =
+    replacements.fold(licenseExpression) { expression, replacement ->
+        expression.replace(replacement.scanCodeLicenseKey, replacement.spdxExpression)
+    }
 
 /**
  * Get the SPDX license id (or a fallback) for a license finding.
