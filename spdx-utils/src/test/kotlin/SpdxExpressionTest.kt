@@ -321,6 +321,24 @@ class SpdxExpressionTest : WordSpec() {
                     "b AND c AND e".toSpdx()
                 )
             }
+
+            "not contain a duplicate valid choice for a simple expression" {
+                "a AND a".toSpdx().validChoices() should containExactlyInAnyOrder("a".toSpdx())
+            }
+
+            "not contain duplicate valid choice for a complex expression" {
+                "(a OR b) AND (a OR b)".toSpdx().validChoices() should containExactlyInAnyOrder(
+                    "a".toSpdx(),
+                    "b".toSpdx(),
+                    "a AND b".toSpdx()
+                )
+            }
+
+            "not contain duplicate valid choice different left and right expressions" {
+                "a AND a AND b".toSpdx().validChoices() should containExactlyInAnyOrder(
+                    "a AND b".toSpdx()
+                )
+            }
         }
 
         "offersChoice()" should {

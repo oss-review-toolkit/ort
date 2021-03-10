@@ -233,7 +233,7 @@ class SpdxCompoundExpression(
 
     override fun validChoicesForDnf(): Set<SpdxExpression> =
         when (operator) {
-            SpdxOperator.AND -> setOf(this)
+            SpdxOperator.AND -> setOf(decompose().reduce(SpdxExpression::and))
 
             SpdxOperator.OR -> {
                 val validChoicesLeft = when (left) {
