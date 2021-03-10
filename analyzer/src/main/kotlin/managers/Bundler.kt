@@ -348,11 +348,20 @@ data class GemSpec(
                 RemoteArtifact.EMPTY
             }
 
+            val authors = json["authors"]
+                .textValueOrEmpty()
+                .split(',')
+                .mapNotNullTo(sortedSetOf()) { author ->
+                    author.trim().takeIf {
+                        it.isNotEmpty()
+                    }
+                }
+
             return GemSpec(
                 json["name"].textValue(),
                 json["version"].textValue(),
                 json["homepage_uri"].textValueOrEmpty(),
-                json["authors"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
+                authors,
                 json["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 json["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
