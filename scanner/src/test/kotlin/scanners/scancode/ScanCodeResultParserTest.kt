@@ -789,8 +789,7 @@ class ScanCodeResultParserTest : WordSpec({
 
             val result = replaceLicenseKeys(expression, replacements)
 
-            // TODO: This illustrates a bug which should be fixed.
-            result shouldBe "LicenseRef-scancode-LicenseRef-scancode-public-domain"
+            result shouldBe "LicenseRef-scancode-public-domain"
         }
 
         "Properly handle replacements with a license key being a suffix of another" {
@@ -802,8 +801,7 @@ class ScanCodeResultParserTest : WordSpec({
 
             val result = replaceLicenseKeys(expression, replacements)
 
-            // TODO: This illustrates a bug which should be fixed.
-            result shouldBe "LicenseRef-scancode-agpl-3.0-LicenseRef-scancode-openssl"
+            result shouldBe "LicenseRef-scancode-agpl-3.0-openssl"
         }
 
         "Properly handle braces" {
