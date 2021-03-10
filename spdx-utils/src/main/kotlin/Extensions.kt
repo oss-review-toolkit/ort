@@ -26,13 +26,14 @@ import java.nio.file.Files
 import java.nio.file.LinkOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
+import java.util.Locale
 
 import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
-fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
+fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
 
 /**
  * Return the duplicates as identified by [keySelector] of a collection.
