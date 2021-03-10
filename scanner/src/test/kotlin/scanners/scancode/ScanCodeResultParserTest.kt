@@ -792,5 +792,18 @@ class ScanCodeResultParserTest : WordSpec({
             // TODO: This illustrates a bug which should be fixed.
             result shouldBe "LicenseRef-scancode-LicenseRef-scancode-public-domain"
         }
+
+        "Properly handle replacements with a license key being a suffix of another" {
+            val expression = "agpl-3.0-openssl"
+            val replacements = listOf(
+                LicenseKeyReplacement("agpl-3.0-openssl", "LicenseRef-scancode-agpl-3.0-openssl"),
+                LicenseKeyReplacement("openssl", "LicenseRef-scancode-openssl")
+            )
+
+            val result = replaceLicenseKeys(expression, replacements)
+
+            // TODO: This illustrates a bug which should be fixed.
+            result shouldBe "LicenseRef-scancode-agpl-3.0-LicenseRef-scancode-openssl"
+        }
     }
 })
