@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileStorage
 
 const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
@@ -96,7 +97,7 @@ class FileBasedStorage(
         } catch (e: Exception) {
             when (e) {
                 is IllegalArgumentException, is IOException -> {
-                    e.printStackTrace()
+                    e.showStackTrace()
 
                     val message = "Could not store scan result for '${id.toCoordinates()}' at path '$path': " +
                             e.collectMessagesAsString()
