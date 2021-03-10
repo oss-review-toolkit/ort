@@ -4,8 +4,9 @@ on: pull_request
 
 jobs:
   validation:
-    name: Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: gradle/wrapper-validation-action@master
+    - name: Checkout Repository
+      uses: actions/checkout@master
+    - name: Validate Wrapper
+      uses: gradle/wrapper-validation-action@master
