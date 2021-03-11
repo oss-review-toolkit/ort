@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.zipWithDefault
@@ -384,6 +385,12 @@ data class OrtResult(
         advisorResultsById.filter { (id, _) ->
             !omitExcluded || !isExcluded(id)
         }
+
+    /**
+     * Return all [LicenseChoice]s for the [Package] with [id].
+     */
+    fun getLicenseChoices(id: Identifier): List<LicenseChoice> =
+        repository.config.licenseChoices.packageLicenseChoices.find { it.packageId == id }?.licenseChoices.orEmpty()
 
     /**
      * Return the list of [AdvisorResult]s for the given [id].

@@ -135,7 +135,8 @@ open class PackageRule(
      * A DSL function to configure a [LicenseRule] and add it to this rule.
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
-        resolvedLicenseInfo.filter(licenseView, filterSources = true).forEach { resolvedLicense ->
+        resolvedLicenseInfo.filter(licenseView, filterSources = true)
+            .applyChoices(ruleSet.ortResult.getLicenseChoices(pkg.id)).forEach { resolvedLicense ->
             resolvedLicense.sources.forEach { licenseSource ->
                 licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)
             }
