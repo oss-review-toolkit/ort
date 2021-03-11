@@ -232,7 +232,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 
     if (uri == null || (uri.scheme == null && uri.path.isNotEmpty())) {
         // Fall back to a file if the URL is a Windows or Linux path.
-        return File(url).toSafeURI().toString()
+        return File(url).toSafeUri().toString()
     }
 
     // Handle host-specific normalizations.
