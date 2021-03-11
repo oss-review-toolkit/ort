@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.model.utils
 
 import java.io.File
 import java.io.IOException
-import java.security.MessageDigest
 
 import kotlin.io.path.createTempFile
 import kotlin.time.measureTime
@@ -37,7 +36,6 @@ import org.ossreviewtoolkit.utils.packZip
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileStorage
-import org.ossreviewtoolkit.utils.toHexString
 import org.ossreviewtoolkit.utils.unpackZip
 
 /**
@@ -51,10 +49,23 @@ class FileArchiver(
     patterns: Collection<String>,
 
     /**
-     * The [FileStorage] to use for archiving files.
+     * The [FileArchiverFileStorage] to use for archiving files.
      */
-    private val storage: FileStorage
+    private val storage: FileArchiverFileStorage
 ) {
+    constructor(
+        /**
+         * A collection of globs to match the paths of files that shall be archived. For details about the glob pattern
+         * see [java.nio.file.FileSystem.getPathMatcher].
+         */
+        patterns: Collection<String>,
+
+        /**
+         * The [FileStorage] to use for archiving files.
+         */
+        storage: FileStorage
+    ) : this(patterns, FileArchiverFileStorage(storage))
+
     companion object {
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
     }
@@ -70,8 +81,7 @@ class FileArchiver(
     fun hasArchive(provenance: Provenance): Boolean {
         if (provenance.sourceArtifact == null && provenance.vcsInfo == null) return false
 
-        val archivePath = getArchivePath(provenance)
-        return storage.exists(archivePath)
+        return storage.hasArchive(provenance)
     }
 
     /**
@@ -102,7 +112,7 @@ class FileArchiver(
 
         log.perf { "Archived directory '${directory.invariantSeparatorsPath}' in ${zipDuration.inMilliseconds}ms." }
 
-        val writeDuration = measureTime { storage.write(getArchivePath(provenance), zipFile.inputStream()) }
+        val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
 
         log.perf {
             "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in " +
@@ -118,17 +128,17 @@ class FileArchiver(
     fun unarchive(directory: File, provenance: Provenance): Boolean {
         if (provenance.sourceArtifact == null && provenance.vcsInfo == null) return false
 
-        val archivePath = getArchivePath(provenance)
+        val (zipFile, readDuration) = measureTimedValue { storage.getArchive(provenance) }
+
+        log.perf {
+            "Read archive of directory '${directory.invariantSeparatorsPath}' from storage in " +
+                    "${readDuration.inMilliseconds}ms."
+        }
+
+        if (zipFile == null) return false
 
         return try {
-            val (input, readDuration) = measureTimedValue { storage.read(archivePath) }
-
-            log.perf {
-                "Read archive of directory '${directory.invariantSeparatorsPath}' from storage in " +
-                        "${readDuration.inMilliseconds}ms."
-            }
-
-            val unzipDuration = measureTime { input.use { it.unpackZip(directory) } }
+            val unzipDuration = measureTime { zipFile.inputStream().use { it.unpackZip(directory) } }
 
             log.perf {
                 "Unarchived directory '${directory.invariantSeparatorsPath}' in ${unzipDuration.inMilliseconds}ms."
@@ -138,27 +148,11 @@ class FileArchiver(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.error { "Could not unarchive from $archivePath: ${e.collectMessagesAsString()}" }
+            log.error { "Could not extract ${zipFile.absolutePath}: ${e.collectMessagesAsString()}" }
 
             false
+        } finally {
+            zipFile.delete()
         }
     }
-}
-
-private fun getArchivePath(provenance: Provenance): String =
-    "${provenance.hash()}/archive.zip"
-
-private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
-
-/**
- * Calculate the SHA-1 hash of the storage key of this [Provenance] instance.
- */
-private fun Provenance.hash(): String {
-    val key = vcsInfo?.let {
-        "${it.type}${it.url}${it.resolvedRevision}"
-    } ?: sourceArtifact!!.let {
-        "${it.url}${it.hash.value}"
-    }
-
-    return SHA1_DIGEST.digest(key.toByteArray()).toHexString()
 }
