@@ -38,11 +38,8 @@ class FileArchiverFileStorage(
      * The [FileStorage] to use for storing the files.
      */
     private val storage: FileStorage
-) {
-    /**
-     * Return whether an archive corresponding to [provenance] exists.
-     */
-    fun hasArchive(provenance: Provenance): Boolean {
+) : FileArchiverStorage {
+    override fun hasArchive(provenance: Provenance): Boolean {
         checkNotEmpty(provenance)
 
         val archivePath = getArchivePath(provenance)
@@ -50,21 +47,13 @@ class FileArchiverFileStorage(
         return storage.exists(archivePath)
     }
 
-    /**
-     * Add the [archive][zipFile] corresponding to [provenance]. Overwrites any existing archive corresponding to
-     * [provenance].
-     */
-    fun addArchive(provenance: Provenance, zipFile: File) {
+    override fun addArchive(provenance: Provenance, zipFile: File) {
         checkNotEmpty(provenance)
 
         storage.write(getArchivePath(provenance), zipFile.inputStream())
     }
 
-    /**
-     * Return the archive corresponding to [provenance] or null if no such archive exists. The returned file is a
-     * temporary file.
-     */
-    fun getArchive(provenance: Provenance): File? {
+    override fun getArchive(provenance: Provenance): File? {
         checkNotEmpty(provenance)
 
         val archivePath = getArchivePath(provenance)
