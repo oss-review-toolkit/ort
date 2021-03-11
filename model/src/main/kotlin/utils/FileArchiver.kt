@@ -49,9 +49,9 @@ class FileArchiver(
     patterns: Collection<String>,
 
     /**
-     * The [FileArchiverFileStorage] to use for archiving files.
+     * The [FileArchiverStorage] to use for archiving files.
      */
-    private val storage: FileArchiverFileStorage
+    private val storage: FileArchiverStorage
 ) {
     constructor(
         /**
