@@ -338,12 +338,18 @@ fun String.percentEncode(): String =
  * not represent a URL or if it does not include a user name.
  */
 fun String.stripCredentialsFromUrl() =
-    runCatching {
-        // Use an URI instead of an URL as the former allows to specify the userInfo separately.
-        URI(this).let {
-            URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString()
-        }
-    }.getOrDefault(this)
+    toUri { URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString() }.getOrDefault(this)
+
+/**
+ * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful.
+ */
+fun String.toUri() = runCatching { URI(this) }
+
+/**
+ * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful, and [transform]
+ * the [URI] if so.
+ */
+fun <R> String.toUri(transform: (URI) -> R) = runCatching { URI(this) }.mapCatching(transform)
 
 /**
  * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
