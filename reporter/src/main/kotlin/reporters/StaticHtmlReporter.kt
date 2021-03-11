@@ -573,6 +573,11 @@ class StaticHtmlReporter : Reporter {
                         }
                     }
                 }
+
+                if (row.effectiveLicense != null) {
+                    em { +"Effective License:" }
+                    dl { dd { +"${row.effectiveLicense}" } }
+                }
             }
 
             td { issueList(row.analyzerIssues) }

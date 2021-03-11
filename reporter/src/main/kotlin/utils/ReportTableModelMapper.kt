@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
@@ -159,6 +160,10 @@ class ReportTableModelMapper(
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,
                     detectedLicenses = detectedLicenses,
+                    effectiveLicense = resolvedLicenseInfo.effectiveLicense(
+                        LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+                        ortResult.getLicenseChoices(id)
+                    ),
                     analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
                     scanIssues = scanIssues.map { it.toResolvableIssue() }
                 ).also { row ->
