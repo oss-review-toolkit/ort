@@ -204,7 +204,7 @@ val File.formatSizeInMib: String get() = "${length().bytesToMib().format()} MiB"
 /**
  * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
  */
-fun File.toSafeURI(): URI {
+fun File.toSafeUri(): URI {
     val fileUri = toURI()
     return URI("file", "", fileUri.path, fileUri.query, fileUri.fragment)
 }
