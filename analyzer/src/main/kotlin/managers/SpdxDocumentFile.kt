@@ -164,6 +164,9 @@ class SpdxDocumentFile(
         ) = SpdxDocumentFile(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    /**
+     * Create an [Identifier] out of this [SpdxPackage].
+     */
     private fun SpdxPackage.toIdentifier() =
         Identifier(
             type = managerName,
