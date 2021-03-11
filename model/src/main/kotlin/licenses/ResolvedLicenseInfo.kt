@@ -115,6 +115,15 @@ data class ResolvedLicenseInfo(
         }
 
     /**
+     * Apply [licenseChoices] on the effective license of [LicenseView.ALL].
+     */
+    fun applyChoices(licenseChoices: List<LicenseChoice>): ResolvedLicenseInfo {
+        val licenses = effectiveLicense(LicenseView.ALL, licenseChoices)?.decompose().orEmpty()
+
+        return this.copy(licenses = this.licenses.filter { it.license in licenses })
+    }
+
+    /**
      * Filter all excluded licenses and copyrights. Licenses are removed if they are only
      * [detected][LicenseSource.DETECTED] and all [locations][ResolvedLicense.locations] have
      * [matching path excludes][ResolvedLicenseLocation.matchingPathExcludes]. Copyrights are removed if all

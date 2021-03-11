@@ -20,12 +20,14 @@
 package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import io.mockk.mockk
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.spdx.toSpdx
@@ -105,6 +107,22 @@ class ResolvedLicenseInfoTest : WordSpec() {
                 )
 
                 effectiveLicense shouldBe mit.toSpdx()
+            }
+        }
+
+        "applyChoices(licenseChoices)" should {
+            "apply license choices on all licenses" {
+                val resolvedLicenseInfo = createResolvedLicenseInfo()
+
+                val choices = listOf(
+                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    LicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
+                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                )
+
+                val filteredResolvedLicenseInfo = resolvedLicenseInfo.applyChoices(choices)
+
+                filteredResolvedLicenseInfo.licenses should containLicensesExactly(mit, bsd)
             }
         }
     }
