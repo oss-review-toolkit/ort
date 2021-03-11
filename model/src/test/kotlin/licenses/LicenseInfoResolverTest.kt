@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
@@ -760,19 +761,6 @@ fun containLicenseExpressionsExactlyBySource(
                     "contain exactly ${expectedExpressions.show().value}, but has ${actualExpressions.show().value}",
             "ResolvedLicenseInfo for original ${source.show().value} license expressions " +
                     "should not contain exactly ${expectedExpressions.show().value}"
-        )
-    }
-
-fun containLicensesExactly(vararg licenses: String): Matcher<Iterable<ResolvedLicense>?> =
-    neverNullMatcher { value ->
-        val expected = licenses.map { SpdxExpression.parse(it) as SpdxSingleLicenseExpression }.toSet()
-        val actual = value.map { it.license }.toSet()
-
-        MatcherResult(
-            expected == actual,
-            "ResolvedLicenseInfo should contain exactly licenses ${expected.show().value}, but has " +
-                    actual.show().value,
-            "ResolvedLicenseInfo should not contain exactly ${expected.show().value}"
         )
     }
 
