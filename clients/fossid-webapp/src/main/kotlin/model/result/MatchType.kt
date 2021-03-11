@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.fossid.model.result
 
 enum class MatchType {
     NONE,
+    FAILED,
     IGNORED,
     INTAKE,
     PARTIAL,
