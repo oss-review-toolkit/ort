@@ -55,9 +55,15 @@
     "id" : "EPL-1.0"
   }, {
     "_id" : 11,
-    "id" : "Apache License, Version 2.0"
+    "id" : "MPL 2.0 or EPL 1.0"
   }, {
     "_id" : 12,
+    "id" : "MPL-2.0"
+  }, {
+    "_id" : 13,
+    "id" : "Apache License, Version 2.0"
+  }, {
+    "_id" : 14,
     "id" : "New BSD License"
   } ],
   "scopes" : [ {
@@ -149,6 +155,27 @@
     "provenance" : {
       "download_time" : "1970-01-01T00:00:00Z",
       "source_artifact" : {
+        "url" : "https://repo.maven.apache.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200-sources.jar",
+        "hash" : {
+          "value" : "3b5883b7a5a05b932c699760f0854ca565785a84",
+          "algorithm" : "SHA-1"
+        }
+      }
+    },
+    "scanner" : {
+      "name" : "FileCounter",
+      "version" : "1.0",
+      "configuration" : ""
+    },
+    "start_time" : "1970-01-01T00:00:00Z",
+    "end_time" : "1970-01-01T00:00:00Z",
+    "file_count" : 42,
+    "package_verification_code" : "0000000000000000000000000000000000000000"
+  }, {
+    "_id" : 4,
+    "provenance" : {
+      "download_time" : "1970-01-01T00:00:00Z",
+      "source_artifact" : {
         "url" : "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar",
         "hash" : {
           "value" : "f7d878153e86a1cdddf6b37850e00a9f8bff726f",
@@ -166,7 +193,7 @@
     "file_count" : 168,
     "package_verification_code" : "0000000000000000000000000000000000000000"
   }, {
-    "_id" : 4,
+    "_id" : 5,
     "provenance" : {
       "download_time" : "1970-01-01T00:00:00Z",
       "source_artifact" : {
@@ -187,7 +214,7 @@
     "file_count" : 80,
     "package_verification_code" : "0000000000000000000000000000000000000000"
   }, {
-    "_id" : 5,
+    "_id" : 6,
     "provenance" : {
       "download_time" : "1970-01-01T00:00:00Z",
       "source_artifact" : {
@@ -440,11 +467,64 @@
     "scope_excludes" : [ 0 ]
   }, {
     "_id" : 3,
+    "id" : "Maven:com.h2database:h2:1.4.200",
+    "is_project" : false,
+    "definition_file_path" : "",
+    "purl" : "pkg:maven/com.h2database/h2@1.4.200",
+    "declared_licenses" : [ 11 ],
+    "declared_licenses_processed" : {
+      "spdx_expression" : "MPL-2.0 OR EPL-1.0",
+      "mapped_licenses" : [ 12, 10 ]
+    },
+    "concluded_license" : "MPL-2.0 OR EPL-1.0",
+    "description" : "H2 Database Engine",
+    "homepage_url" : "https://h2database.com",
+    "binary_artifact" : {
+      "url" : "https://repo.maven.apache.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200.jar",
+      "hash" : {
+        "value" : "f7533fe7cb8e99c87a43d325a77b4b678ad9031a",
+        "algorithm" : "SHA-1"
+      }
+    },
+    "source_artifact" : {
+      "url" : "https://repo.maven.apache.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200-sources.jar",
+      "hash" : {
+        "value" : "3b5883b7a5a05b932c699760f0854ca565785a84",
+        "algorithm" : "SHA-1"
+      }
+    },
+    "vcs" : {
+      "type" : "Git",
+      "url" : "https://github.com/h2database/h2database",
+      "revision" : "",
+      "path" : ""
+    },
+    "vcs_processed" : {
+      "type" : "Git",
+      "url" : "https://github.com/h2database/h2database.git",
+      "revision" : "",
+      "path" : ""
+    },
+    "curations" : [ {
+      "base" : { },
+      "curation" : {
+        "concluded_license" : "MPL-2.0 OR EPL-1.0",
+        "comment" : "H2 database offers a license choice"
+      }
+    } ],
+    "paths" : [ 1 ],
+    "levels" : [ 1 ],
+    "scopes" : [ 1 ],
+    "scan_results" : [ 3 ],
+    "is_excluded" : true,
+    "scope_excludes" : [ 0 ]
+  }, {
+    "_id" : 4,
     "id" : "Maven:org.apache.commons:commons-lang3:3.5",
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/org.apache.commons/commons-lang3@3.5",
-    "declared_licenses" : [ 11 ],
+    "declared_licenses" : [ 13 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "Apache-2.0",
       "mapped_licenses" : [ 8 ]
@@ -477,18 +557,18 @@
       "revision" : "",
       "path" : ""
     },
-    "paths" : [ 1, 2 ],
+    "paths" : [ 2, 3 ],
     "levels" : [ 1 ],
     "scopes" : [ 0, 1 ],
-    "scan_results" : [ 3 ],
+    "scan_results" : [ 4 ],
     "is_excluded" : false
   }, {
-    "_id" : 4,
+    "_id" : 5,
     "id" : "Maven:org.apache.commons:commons-text:1.1",
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/org.apache.commons/commons-text@1.1",
-    "declared_licenses" : [ 11 ],
+    "declared_licenses" : [ 13 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "Apache-2.0",
       "mapped_licenses" : [ 8 ]
@@ -521,18 +601,18 @@
       "revision" : "",
       "path" : ""
     },
-    "paths" : [ 3, 4 ],
+    "paths" : [ 4, 5 ],
     "levels" : [ 0 ],
     "scopes" : [ 0, 1 ],
-    "scan_results" : [ 4 ],
+    "scan_results" : [ 5 ],
     "is_excluded" : false
   }, {
-    "_id" : 5,
+    "_id" : 6,
     "id" : "Maven:org.hamcrest:hamcrest-core:1.3",
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/org.hamcrest/hamcrest-core@1.3",
-    "declared_licenses" : [ 12 ],
+    "declared_licenses" : [ 14 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "BSD-3-Clause",
       "mapped_licenses" : [ 1 ]
@@ -565,10 +645,10 @@
       "revision" : "",
       "path" : ""
     },
-    "paths" : [ 5 ],
+    "paths" : [ 6 ],
     "levels" : [ 1 ],
     "scopes" : [ 1 ],
-    "scan_results" : [ 5 ],
+    "scan_results" : [ 6 ],
     "is_excluded" : true,
     "scope_excludes" : [ 0 ]
   } ],
@@ -582,29 +662,35 @@
     "_id" : 1,
     "pkg" : 3,
     "project" : 0,
-    "scope" : 0,
-    "path" : [ 4 ]
+    "scope" : 1,
+    "path" : [ 2 ]
   }, {
     "_id" : 2,
-    "pkg" : 3,
+    "pkg" : 4,
     "project" : 0,
-    "scope" : 1,
-    "path" : [ 4 ]
+    "scope" : 0,
+    "path" : [ 5 ]
   }, {
     "_id" : 3,
     "pkg" : 4,
     "project" : 0,
-    "scope" : 0,
-    "path" : [ ]
+    "scope" : 1,
+    "path" : [ 5 ]
   }, {
     "_id" : 4,
-    "pkg" : 4,
+    "pkg" : 5,
     "project" : 0,
-    "scope" : 1,
+    "scope" : 0,
     "path" : [ ]
   }, {
     "_id" : 5,
     "pkg" : 5,
+    "project" : 0,
+    "scope" : 1,
+    "path" : [ ]
+  }, {
+    "_id" : 6,
+    "pkg" : 6,
     "project" : 0,
     "scope" : 1,
     "path" : [ 2 ]
@@ -618,11 +704,11 @@
       "children" : [ {
         "key" : 2,
         "linkage" : "DYNAMIC",
-        "pkg" : 4,
+        "pkg" : 5,
         "children" : [ {
           "key" : 3,
           "linkage" : "DYNAMIC",
-          "pkg" : 3
+          "pkg" : 4
         } ]
       } ]
     }, {
@@ -636,21 +722,25 @@
         "children" : [ {
           "key" : 6,
           "linkage" : "DYNAMIC",
-          "pkg" : 5
+          "pkg" : 3
+        }, {
+          "key" : 7,
+          "linkage" : "DYNAMIC",
+          "pkg" : 6
         } ]
       }, {
-        "key" : 7,
+        "key" : 8,
         "linkage" : "DYNAMIC",
-        "pkg" : 4,
+        "pkg" : 5,
         "children" : [ {
-          "key" : 8,
+          "key" : 9,
           "linkage" : "DYNAMIC",
-          "pkg" : 3
+          "pkg" : 4
         } ]
       } ]
     } ]
   }, {
-    "key" : 9,
+    "key" : 10,
     "pkg" : 1,
     "path_excludes" : [ 0 ]
   } ],
@@ -672,7 +762,7 @@
   }, {
     "_id" : 1,
     "rule" : "rule 2",
-    "pkg" : 4,
+    "pkg" : 5,
     "license" : 8,
     "license_source" : "DECLARED",
     "severity" : "HINT",
@@ -682,7 +772,7 @@
   }, {
     "_id" : 2,
     "rule" : "rule 3",
-    "pkg" : 5,
+    "pkg" : 6,
     "license" : 1,
     "license_source" : "CONCLUDED",
     "severity" : "WARNING",
@@ -704,7 +794,7 @@
       "included_projects" : 1,
       "excluded_projects" : 1,
       "included_packages" : 2,
-      "excludes_packages" : 2,
+      "excludes_packages" : 3,
       "total_tree_depth" : 2,
       "included_tree_depth" : 2,
       "included_scopes" : [ "compile" ],
@@ -715,8 +805,9 @@
         "Apache-2.0" : 2,
         "BSD-3-Clause" : 1,
         "CC-BY-NC-3.0" : 1,
-        "EPL-1.0" : 1,
-        "GPL-3.0-only WITH GCC-exception-3.1" : 1
+        "EPL-1.0" : 2,
+        "GPL-3.0-only WITH GCC-exception-3.1" : 1,
+        "MPL-2.0" : 1
       },
       "detected" : {
         "Apache-2.0" : 1,
@@ -756,10 +847,19 @@
       },
       "resolutions" : {
         "rule_violations" : [ 0 ]
+      },
+      "license_choices" : {
+        "package_license_choices" : [ {
+          "package_id" : "Maven:com.h2database:h2:1.4.200",
+          "license_choices" : [ {
+            "given" : "MPL-2.0 OR EPL-1.0",
+            "choice" : "MPL-2.0"
+          } ]
+        } ]
       }
     }
   },
-  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\n",
+  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\nlicense_choices:\n  package_license_choices:\n  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n    - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n",
   "labels" : {
     "job_parameters.JOB_PARAM_1" : "label job param 1",
     "job_parameters.JOB_PARAM_2" : "label job param 2",

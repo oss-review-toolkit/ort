@@ -135,6 +135,12 @@ data class ReportTableModel(
         val detectedLicenses: List<ResolvedLicense>,
 
         /**
+         * The effective license of the package derived from the licenses of the license sources chosen by a
+         * LicenseView, with optional choices applied.
+         */
+        val effectiveLicense: SpdxExpression?,
+
+        /**
          * All analyzer issues related to this package.
          */
         val analyzerIssues: List<ResolvableIssue>,
