@@ -22,7 +22,6 @@
 package org.ossreviewtoolkit.utils
 
 import java.io.File
-import java.net.URI
 import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
@@ -229,10 +228,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
     //     [user-info@]host[:port]
-    val uri = runCatching {
-        // At this point we do not know whether the URL is actually valid, so use the more general URI.
-        URI(url)
-    }.getOrNull()
+    val uri = url.toUri().getOrNull()
 
     if (uri == null || (uri.scheme == null && uri.path.isNotEmpty())) {
         // Fall back to a file if the URL is a Windows or Linux path.

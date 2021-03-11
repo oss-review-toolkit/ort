@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.safeCopyRecursively
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.toUri
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
@@ -183,8 +184,7 @@ class GoDep(
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-        runCatching {
-            val uri = URI(vcs.url)
+        vcs.url.toUri { uri ->
             Paths.get(gopath.path, "src", uri.host, uri.path)
         }.getOrDefault(Paths.get(gopath.path, "src", projectDir.name)).toFile()
 
