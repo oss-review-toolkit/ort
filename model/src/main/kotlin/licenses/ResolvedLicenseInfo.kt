@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
@@ -64,6 +65,23 @@ data class ResolvedLicenseInfo(
     val unmatchedCopyrights: Map<Provenance, Set<CopyrightFinding>>
 ) : Iterable<ResolvedLicense> by licenses {
     operator fun get(license: SpdxSingleLicenseExpression): ResolvedLicense? = find { it.license == license }
+
+    /**
+     * Return the effective [SpdxExpression] of this [ResolvedLicenseInfo] based on their [licenses] filtered by the
+     * [licenseView] and the applied [licenseChoices]. Effective, in this context, refers to an [SpdxExpression] that
+     * can be used as a final license of this [ResolvedLicenseInfo].
+     */
+    fun effectiveLicense(licenseView: LicenseView, licenseChoices: List<LicenseChoice> = emptyList()): SpdxExpression? {
+        val resolvedLicenseInfo = filter(licenseView, filterSources = true)
+
+        return resolvedLicenseInfo.licenses.flatMap { it.originalExpressions.values }
+            .flatten()
+            .toSet()
+            .reduceOrNull(SpdxExpression::and)
+            ?.applyChoices(licenseChoices)
+            ?.validChoices()
+            ?.reduceOrNull(SpdxExpression::or)
+    }
 
     /**
      * Return all copyright statements associated to this license info. Copyright findings that are excluded by
