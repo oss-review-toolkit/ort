@@ -27,7 +27,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
-import org.ossreviewtoolkit.advisor.AbstractAdvisorFactory
+import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.ortConfigDirectory
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
  */
 class VulnerableCode(name: String, config: AdvisorConfiguration) : Advisor(name, config) {
-    class Factory : AbstractAdvisorFactory<VulnerableCode>("VulnerableCode") {
+    class Factory : AbstractVulnerabilityProviderFactory<VulnerableCode>("VulnerableCode") {
         override fun create(config: AdvisorConfiguration) = VulnerableCode(advisorName, config)
     }
 
