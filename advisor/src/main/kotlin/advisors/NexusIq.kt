@@ -24,7 +24,7 @@ import java.net.URI
 import java.time.Instant
 
 import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
-import org.ossreviewtoolkit.advisor.Advisor
+import org.ossreviewtoolkit.advisor.VulnerabilityProvider
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -32,13 +32,12 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.NexusIqConfiguration
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.ortConfigDirectory
 
 import retrofit2.HttpException
 
@@ -50,18 +49,11 @@ private const val REQUEST_CHUNK_SIZE = 100
 /**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
-class NexusIq(
-    name: String,
-    config: AdvisorConfiguration
-) : Advisor(name, config) {
+class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : VulnerabilityProvider(name) {
     class Factory : AbstractVulnerabilityProviderFactory<NexusIq>("NexusIQ") {
-        override fun create(config: AdvisorConfiguration) = NexusIq(advisorName, config)
+        override fun create(config: AdvisorConfiguration) =
+            NexusIq(providerName, getProviderConfiguration(config) { it.nexusIq })
     }
-
-    private val nexusIqConfig = config.nexusIq
-        ?: throw IllegalArgumentException(
-            "No $advisorName advisor configuration found in ${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}"
-        )
 
     private val service by lazy {
         NexusIqService.create(
@@ -108,7 +100,7 @@ class NexusIq(
                     pkg to listOf(
                         AdvisorResult(
                             details.securityData.securityIssues.map { it.toVulnerability() },
-                            AdvisorDetails(advisorName),
+                            AdvisorDetails(providerName),
                             AdvisorSummary(startTime, endTime)
                         )
                     )

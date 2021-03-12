@@ -36,18 +36,21 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.maps.shouldNotBeEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.net.URI
 
+import kotlinx.coroutines.runBlocking
+
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -71,7 +74,7 @@ class VulnerableCodeTest : WordSpec({
         wiremock.resetAll()
     }
 
-    "VulnerabilityCode" should {
+    "VulnerableCode" should {
         "return vulnerability information" {
             stubFor(
                 post(urlPathEqualTo("/api/packages/bulk_search"))
@@ -87,10 +90,12 @@ class VulnerableCodeTest : WordSpec({
             stubVulnerability("v2", "CVE-2009-1382", 11.0f)
             stubVulnerability("v3", "CVE-2019-CoV19", 77.0f)
 
-            val advisor = createAdvisor(wiremock)
-            val result = advisor.retrieveVulnerabilityInformation(resultFile()).advisor?.results?.advisorResults
+            val vulnerableCode = createVulnerableCode(wiremock)
+            val packagesToAdvise = resultFile().readValue<OrtResult>().getPackages(false).map { it.pkg }
 
-            result.shouldNotBeNull()
+            val result = vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
+
+            result.shouldNotBeEmpty()
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
 
             val langResults = result.getValue(idLang)
@@ -141,8 +146,10 @@ class VulnerableCodeTest : WordSpec({
                     )
             )
 
-            val advisor = createAdvisor(wiremock)
-            advisor.retrieveVulnerabilityInformation(resultFile()).advisor?.results?.advisorResults shouldNotBeNull {
+            val vulnerableCode = createVulnerableCode(wiremock)
+            val packagesToAdvise = resultFile().readValue<OrtResult>().getPackages(false).map { it.pkg }
+
+            vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id } shouldNotBeNull {
                 val strutsResults = getValue(idStruts)
                 val expStrutsVulnerabilities = listOf(
                     Vulnerability(
@@ -211,7 +218,7 @@ private val idHamcrest = Identifier("Maven:org.hamcrest:hamcrest-core:1.3")
 private val packageIdentifiers = listOf(idJUnit, idLang, idText, idStruts, idHamcrest)
 
 /**
- * The list of packages referenced by the test result. These packages should be requested by the advisor.
+ * The list of packages referenced by the test result. These packages should be requested by the vulnerability provider.
  */
 private val packages = packageIdentifiers.map { it.toPurl() }
 
@@ -227,12 +234,16 @@ private val packagesRequestJson = generateListRequest(packages, "packages")
 private val vulnerabilityDetailsTemplate = File(TEST_FILES_ROOT).resolve(VULNERABILITY_TEMPLATE).readText()
 
 /**
- * Run a test with the VulnerabilityCode advisor against the given [test server][wiremock] and expect the
+ * Run a test with the VulnerabilityCode provider against the given [test server][wiremock] and expect the
  * operation to fail. In this case, for all packages a result with an error issue should have been created.
  */
 private fun expectErrorResult(wiremock: WireMockServer) {
-    val advisor = createAdvisor(wiremock)
-    val result = advisor.retrieveVulnerabilityInformation(resultFile()).advisor?.results?.advisorResults
+    val vulnerableCode = createVulnerableCode(wiremock)
+    val packagesToAdvise = resultFile().readValue<OrtResult>().getPackages(false).map { it.pkg }
+
+    val result = runBlocking {
+        vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
+    }
 
     result shouldNotBeNull {
         keys should containExactly(packageIdentifiers)
@@ -250,17 +261,17 @@ private fun expectErrorResult(wiremock: WireMockServer) {
 }
 
 /**
- * Create a configuration for the [VulnerableCode] advisor that points to the local [wireMockServer].
+ * Create a configuration for the [VulnerableCode] vulnerability provider that points to the local [wireMockServer].
  */
-private fun createConfig(wireMockServer: WireMockServer): AdvisorConfiguration {
+private fun createConfig(wireMockServer: WireMockServer): VulnerableCodeConfiguration {
     val url = "http://localhost:${wireMockServer.port()}"
-    return AdvisorConfiguration(vulnerableCode = VulnerableCodeConfiguration(url))
+    return VulnerableCodeConfiguration(url)
 }
 
 /**
- * Create a test advisor instance that communicates with the local [wireMockServer].
+ * Create a test instance of [VulnerableCode] that communicates with the local [wireMockServer].
  */
-private fun createAdvisor(wireMockServer: WireMockServer): VulnerableCode =
+private fun createVulnerableCode(wireMockServer: WireMockServer): VulnerableCode =
     VulnerableCode(ADVISOR_NAME, createConfig(wireMockServer))
 
 /**
