@@ -85,7 +85,7 @@
         "postcss-normalize": "^9.0.0",
         "postcss-preset-env": "6.7.0",
         "postcss-safe-parser": "5.0.2",
-        "react-dev-utils": "^11.0.1",
+        "react-dev-utils": "^11.0.4",
         "resolve-url-loader": "^3.1.2",
         "sass-loader": "10.1.1",
         "style-loader": "2.0.0",
