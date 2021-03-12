@@ -44,12 +44,14 @@ data class NexusIqConfiguration(
     val browseUrl: String = serverUrl,
 
     /**
-     * Username of the provider. Used without authentication if no password or username is given.
+     * The username to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
      */
     val username: String?,
 
     /**
-     * Password of the provider. Used without authentication if no password or username is given.
+     * The password to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String?
