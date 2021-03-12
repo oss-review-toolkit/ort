@@ -43,6 +43,9 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
+    private val allAdvisorsByName = Advisor.ALL.associateBy { it.advisorName }
+        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
+
     private val input by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
@@ -76,10 +79,10 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val advisorFactory by option(
         "--advisor", "-a",
-        help = "The advisor to use, one of ${Advisor.ALL}"
+        help = "The advisor to use, one of ${allAdvisorsByName.keys}"
     ).convert { advisorName ->
-        Advisor.ALL.find { it.advisorName.equals(advisorName, ignoreCase = true) }
-            ?: throw BadParameterValue("Advisor '$advisorName' is not one of ${Advisor.ALL}")
+        allAdvisorsByName[advisorName]
+            ?: throw BadParameterValue("Advisor '$advisorName' is not one of ${allAdvisorsByName.keys}")
     }.required()
 
     private val skipExcluded by option(
