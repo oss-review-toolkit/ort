@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.utils.showStackTrace
  */
 abstract class Advisor(val advisorName: String, protected val config: AdvisorConfiguration) {
     companion object {
-        private val LOADER = ServiceLoader.load(AdvisorFactory::class.java)!!
+        private val LOADER = ServiceLoader.load(VulnerabilityProviderFactory::class.java)!!
 
         /**
          * The list of all available advisors in the classpath.

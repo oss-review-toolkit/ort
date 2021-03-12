@@ -23,7 +23,7 @@ import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.advisor.AbstractAdvisorFactory
+import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -54,7 +54,7 @@ class NexusIq(
     name: String,
     config: AdvisorConfiguration
 ) : Advisor(name, config) {
-    class Factory : AbstractAdvisorFactory<NexusIq>("NexusIQ") {
+    class Factory : AbstractVulnerabilityProviderFactory<NexusIq>("NexusIQ") {
         override fun create(config: AdvisorConfiguration) = NexusIq(advisorName, config)
     }
 
