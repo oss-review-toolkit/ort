@@ -20,5 +20,7 @@
 package org.ossreviewtoolkit.clients.fossid.model.status
 
 enum class ScanStatusType {
-    SCAN, REPORT_IMPORT, DEPENDENCY_ANALYSIS
+    DEPENDENCY_ANALYSIS,
+    REPORT_IMPORT,
+    SCAN
 }

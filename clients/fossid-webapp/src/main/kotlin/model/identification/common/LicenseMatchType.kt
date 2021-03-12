@@ -20,5 +20,6 @@
 package org.ossreviewtoolkit.clients.fossid.model.identification.common
 
 enum class LicenseMatchType {
-    SNIPPET, FILE
+    FILE,
+    SNIPPET
 }

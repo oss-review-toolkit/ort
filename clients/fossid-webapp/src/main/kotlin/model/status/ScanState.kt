@@ -22,12 +22,12 @@ package org.ossreviewtoolkit.clients.fossid.model.status
 import com.fasterxml.jackson.annotation.JsonProperty
 
 enum class ScanState {
-    @JsonProperty("NOT STARTED")
-    NOT_STARTED,
-    STARTED,
-    SCANNING,
     @JsonProperty("AUTO-ID")
     AUTO_ID,
+    FINISHED,
+    @JsonProperty("NOT STARTED")
+    NOT_STARTED,
     QUEUED,
-    FINISHED
+    SCANNING,
+    STARTED
 }
