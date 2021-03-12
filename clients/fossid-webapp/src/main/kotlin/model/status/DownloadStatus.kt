@@ -22,9 +22,9 @@ package org.ossreviewtoolkit.clients.fossid.model.status
 import com.fasterxml.jackson.annotation.JsonProperty
 
 enum class DownloadStatus {
-    @JsonProperty("NOT STARTED")
-    NOT_STARTED,
+    FINISHED,
     @JsonProperty("NOT FINISHED")
     NOT_FINISHED,
-    FINISHED
+    @JsonProperty("NOT STARTED")
+    NOT_STARTED
 }
