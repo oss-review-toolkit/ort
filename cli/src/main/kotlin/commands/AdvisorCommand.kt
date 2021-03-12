@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
-    private val allAdvisorsByName = Advisor.ALL.associateBy { it.advisorName }
+    private val allVulnerabilityProvidersByName = Advisor.ALL.associateBy { it.providerName }
         .toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     private val input by option(
@@ -77,12 +77,14 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
-    private val advisorFactory by option(
+    private val providerFactory by option(
         "--advisor", "-a",
-        help = "The advisor to use, one of ${allAdvisorsByName.keys}"
-    ).convert { advisorName ->
-        allAdvisorsByName[advisorName]
-            ?: throw BadParameterValue("Advisor '$advisorName' is not one of ${allAdvisorsByName.keys}")
+        help = "The advisor to use, one of ${allVulnerabilityProvidersByName.keys}"
+    ).convert { name ->
+        allVulnerabilityProvidersByName[name]
+            ?: throw BadParameterValue(
+                "Advisor '$name' is not one of ${allVulnerabilityProvidersByName.keys}"
+            )
     }.required()
 
     private val skipExcluded by option(
@@ -102,9 +104,9 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
             }
         }
 
-        val advisor = advisorFactory.create(globalOptionsForSubcommands.config.advisor)
+        val advisor = Advisor(providerFactory, globalOptionsForSubcommands.config.advisor)
 
-        println("Using advisor '${advisor.advisorName}'.")
+        println("Using advisor '${providerFactory.providerName}'.")
 
         val ortResult = advisor.retrieveVulnerabilityInformation(input, skipExcluded).mergeLabels(labels)
 
