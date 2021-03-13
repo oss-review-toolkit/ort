@@ -12,13 +12,13 @@
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
-[3]: https://dev.azure.com/oss-review-toolkit/ort/_build/latest?definitionId=2&branchName=master
+[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
 [4]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=LinuxTest&label=Linux%20Build
 [5]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=WindowsTest&label=Windows%20Build
 [6]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=DockerBuild&label=Docker%20Build
 [7]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=LinuxAnalyzerTest&label=Linux%20Analyzer%20Tests
 [8]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=WindowsAnalyzerTest&label=Windows%20Analyzer%20Tests
-[9]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=StaticAnalysis&label=Static%20Analysis
+[9]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg?branch=master
 [10]: https://jitpack.io/v/oss-review-toolkit/ort.svg
 [11]: https://jitpack.io/#oss-review-toolkit/ort
 [12]: https://codecov.io/gh/oss-review-toolkit/ort/branch/master/graph/badge.svg
