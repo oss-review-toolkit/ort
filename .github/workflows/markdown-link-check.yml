@@ -8,8 +8,6 @@ jobs:
     steps:
     - name: Checkout Action
       uses: actions/checkout@master
-      with:
-        fetch-depth: 0
     - name: Markdown Check Action
       uses: gaurav-nelson/github-action-markdown-link-check@master
       with:
