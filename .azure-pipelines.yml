@@ -31,7 +31,6 @@ stages:
   displayName: Run
   jobs:
   - template: .azure-pipelines/DockerBuild.yml
-  - template: .azure-pipelines/StaticAnalysis.yml
   - template: .azure-pipelines/LinuxTest.yml
   - template: .azure-pipelines/LinuxAnalyzerTest.yml
   - template: .azure-pipelines/WindowsTest.yml
