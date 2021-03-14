@@ -23,3 +23,14 @@ jobs:
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.6
+    - name: Check REUSE Compliance
+      run: |
+        pip install --user reuse
+        ~/.local/bin/reuse lint
