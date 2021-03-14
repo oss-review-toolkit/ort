@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@master
+      uses: actions/checkout@v2
     - name: Check Links
-      uses: gaurav-nelson/github-action-markdown-link-check@master
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
         check-modified-files-only: yes
         max-depth: 2
