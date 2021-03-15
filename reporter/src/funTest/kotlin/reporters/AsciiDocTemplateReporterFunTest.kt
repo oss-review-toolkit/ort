@@ -38,7 +38,7 @@ class AsciiDocTemplateReporterFunTest : StringSpec({
     "PDF output is created successfully from an existing result and default template" {
         val report = generateReport(ORT_RESULT)
 
-        report.single().length() should beInRange(80000L..85000L)
+        report.single().length() should beInRange(82000L..87000L)
     }
 
     "Report generation is aborted when path to non-existing pdf-them file is given" {
