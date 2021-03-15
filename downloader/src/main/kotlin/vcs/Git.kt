@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.withoutPrefix
 
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
@@ -166,12 +167,16 @@ class Git : VersionControlSystem(), CommandLineTool {
     private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Boolean {
         try {
             log.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
-            run(workingTree.workingDir, "fetch", "--depth", GIT_HISTORY_DEPTH.toString(), "origin", revision)
+            val fetch = run(workingTree.workingDir, "fetch", "--depth", "$GIT_HISTORY_DEPTH", "origin", revision)
 
             // The documentation for git-fetch states that "By default, any tag that points into the histories being
             // fetched is also fetched", but that is not true for shallow fetches of a tag; then the tag itself is
             // not fetched. So create it manually afterwards.
-            if (revision in workingTree.listRemoteTags()) {
+            val tag = fetch.stderr.lineSequence().mapNotNull {
+                it.withoutPrefix(" * tag ")?.substringBefore("->")?.trim()
+            }.firstOrNull()
+
+            if (revision == tag) {
                 run(workingTree.workingDir, "tag", revision, "FETCH_HEAD")
             }
 
