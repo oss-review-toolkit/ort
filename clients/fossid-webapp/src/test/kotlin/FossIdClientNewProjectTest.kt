@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.checkScanStatus
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
+import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
 import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
@@ -139,6 +140,15 @@ class FossIdClientNewProjectTest : StringSpec({
     "A scan can be run" {
         service.runScan("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("trigger scan", false)
+        }
+    }
+
+    "A scan can be deleted" {
+        service.deleteScan("", "", SCAN_CODE) shouldNotBeNull {
+            checkResponse("delete scan", true)
+
+            data shouldBe 2976
+            message shouldContain "has been deleted"
         }
     }
 
