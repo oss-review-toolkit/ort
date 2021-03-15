@@ -81,6 +81,9 @@ interface FossIdRestService {
     suspend fun runScan(@Body body: PostRequestBody): EntityPostResponseBody<Nothing>
 
     @POST("api.php")
+    suspend fun deleteScan(@Body body: PostRequestBody): EntityPostResponseBody<Int>
+
+    @POST("api.php")
     suspend fun downloadFromGit(@Body body: PostRequestBody): EntityPostResponseBody<Nothing>
 
     @POST("api.php")

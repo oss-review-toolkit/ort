@@ -150,6 +150,23 @@ suspend fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: St
     )
 
 /**
+ * Delete a scan with the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.deleteScan(user: String, apiKey: String, scanCode: String) =
+    deleteScan(
+        PostRequestBody(
+            "delete",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            "scan_code" to scanCode,
+            "delete_identifications" to "1"
+        )
+    )
+
+/**
  * Trigger download of the source code for the given [scanCode].
  *
  * The HTTP request is sent with [user] and [apiKey] as credentials.
