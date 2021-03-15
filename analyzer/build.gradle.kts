@@ -47,7 +47,7 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://repo.eclipse.org/content/groups/sw360/")
+            maven("https://repo.eclipse.org/content/repositories/sw360-releases/")
         }
 
         filter {
