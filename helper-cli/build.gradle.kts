@@ -53,6 +53,17 @@ repositories {
         }
     }
 
+    // TODO: Remove this again once this JGit release is properly mirrored to Maven Central.
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.eclipse.org/content/repositories/jgit-releases/")
+        }
+
+        filter {
+            includeGroup("org.eclipse.jgit")
+        }
+    }
+
     exclusiveContent {
         forRepository {
             maven("https://repo.eclipse.org/content/repositories/sw360-releases/")
