@@ -54,7 +54,7 @@ class EvaluatedModelReporter : Reporter {
 
         val outputFiles = mutableListOf<File>()
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
-            ?.split(",")
+            ?.split(',')
             ?.mapTo(mutableSetOf()) { FileFormat.forExtension(it) }
             ?: setOf(FileFormat.JSON)
 

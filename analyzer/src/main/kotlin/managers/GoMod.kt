@@ -228,7 +228,7 @@ class GoMod(
 
     private fun getGoProxy(): String {
         val firstProxy = Os.env["GOPROXY"].orEmpty()
-            .split(",")
+            .split(',')
             .filterNot { it == "direct" || it == "off" }
             .firstOrNull()
             .orEmpty()

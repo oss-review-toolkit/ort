@@ -95,7 +95,7 @@ class Composer(
         }
 
     override fun run(workingDir: File?, vararg args: String) =
-        ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args).requireSuccess()
+        ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args).requireSuccess()
 
     override fun getVersionArguments() = "--no-ansi --version"
 
@@ -103,7 +103,7 @@ class Composer(
         // The version string can be something like:
         // Composer version 1.5.1 2017-08-09 16:07:22
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
-        output.split(" ").dropLast(2).last().removeSurrounding("(", ")")
+        output.split(' ').dropLast(2).last().removeSurrounding("(", ")")
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.5,)")
 

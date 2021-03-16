@@ -191,7 +191,7 @@ class Pip(
          * Return a version string with leading zeros of components stripped.
          */
         private fun stripLeadingZerosFromVersion(version: String) =
-            version.split(".").joinToString(".") {
+            version.split('.').joinToString(".") {
                 try {
                     it.toInt().toString()
                 } catch (e: NumberFormatException) {

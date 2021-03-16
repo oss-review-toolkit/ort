@@ -123,7 +123,7 @@ class Carthage(
     }
 
     private fun parseDependencyLine(line: String, workingDir: String): Package {
-        val split = line.split(" ")
+        val split = line.split(' ')
 
         require(split.size == 3) {
             "A dependency line must consist of exactly 3 space separated elements."
@@ -136,7 +136,7 @@ class Carthage(
         return when (type) {
             DependencyType.GITHUB -> {
                 // ID consists of github username/project or a github enterprise URL.
-                val projectUrl = if (id.split("/").size == 2) {
+                val projectUrl = if (id.split('/').size == 2) {
                     val (username, project) = id.split("/", limit = 2)
                     "https://github.com/$username/$project"
                 } else {

@@ -502,11 +502,11 @@ class Pub(
     private fun commandFlutter() = if (Os.isWindows) "flutter.bat packages" else "flutter packages"
 
     override fun run(workingDir: File?, vararg args: String): ProcessCapture {
-        var result = ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args)
+        var result = ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args)
         if (result.isError) {
             // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
             if (result.errorMessage.contains("Flutter users should run `flutter")) {
-                result = ProcessCapture(workingDir, *commandFlutter().split(" ").toTypedArray(), *args).requireSuccess()
+                result = ProcessCapture(workingDir, *commandFlutter().split(' ').toTypedArray(), *args).requireSuccess()
             } else {
                 throw IOException(result.errorMessage)
             }

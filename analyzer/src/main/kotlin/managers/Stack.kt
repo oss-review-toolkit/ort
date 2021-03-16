@@ -348,7 +348,7 @@ class Stack(
         return Package(
             id = id,
             authors = map["author"].orEmpty()
-                .split(",")
+                .split(',')
                 .map(String::trim)
                 .filter(String::isNotEmpty)
                 .mapTo(sortedSetOf(), ::parseAuthorString),
