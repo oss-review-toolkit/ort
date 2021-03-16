@@ -79,7 +79,8 @@ class ReporterCommand : CliktCommand(
     name = "report",
     help = "Present Analyzer, Scanner and Evaluator results in various formats."
 ) {
-    private val allReportersByName = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
+    private val allReportersByName = Reporter.ALL.associateBy { it.reporterName }
+        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     private val ortFile by option(
         "--ort-file", "-i",
@@ -101,9 +102,9 @@ class ReporterCommand : CliktCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "The list of report formats that is generated, any of ${Reporter.ALL.map { it.reporterName }}."
+        help = "The comma-separated reports to generate, any of ${allReportersByName.keys}."
     ).convert { name ->
-        allReportersByName[name.toUpperCase()]
+        allReportersByName[name]
             ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
     }.split(",").required().outputGroup()
 
@@ -189,13 +190,11 @@ class ReporterCommand : CliktCommand(
                 "format, and the value is an arbitrary key-value pair. For example: " +
                 "-O NoticeTemplate=template.id=summary"
     ).splitPair().convert { (format, option) ->
-        val upperCaseFormat = format.toUpperCase()
-
-        require(upperCaseFormat in allReportersByName.keys) {
+        require(format in allReportersByName.keys) {
             "Report formats must be one or more of ${allReportersByName.keys}."
         }
 
-        upperCaseFormat to Pair(option.substringBefore("="), option.substringAfter("=", ""))
+        format to Pair(option.substringBefore("="), option.substringAfter("=", ""))
     }.multiple()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
@@ -247,7 +246,7 @@ class ReporterCommand : CliktCommand(
             howToFixTextProvider
         )
 
-        val reportOptionsMap = mutableMapOf<String, MutableMap<String, String>>()
+        val reportOptionsMap = sortedMapOf<String, MutableMap<String, String>>(String.CASE_INSENSITIVE_ORDER)
 
         reportOptions.forEach { (format, option) ->
             val reportSpecificOptionsMap = reportOptionsMap.getOrPut(format) { mutableMapOf() }
@@ -262,7 +261,7 @@ class ReporterCommand : CliktCommand(
                         println("Generating the '${reporter.reporterName}' report in thread '$threadName'...")
 
                         reporter to measureTimedValue {
-                            val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
+                            val options = reportOptionsMap[reporter.reporterName].orEmpty()
                             runCatching { reporter.generateReport(input, outputDir, options) }
                         }
                     }
