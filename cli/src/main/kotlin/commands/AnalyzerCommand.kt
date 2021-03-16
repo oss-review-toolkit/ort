@@ -57,7 +57,8 @@ import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
-    private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
+    private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName }
+        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     private val inputDir by option(
         "--input-dir", "-i",
@@ -118,9 +119,9 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     private val packageManagers by option(
         "--package-managers", "-m",
-        help = "The list of package managers to activate."
+        help = "The comma-separated package managers to activate, any of ${allPackageManagersByName.keys}."
     ).convert { name ->
-        allPackageManagersByName[name.toUpperCase()]
+        allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
     }.split(",").default(PackageManager.ALL)
 
