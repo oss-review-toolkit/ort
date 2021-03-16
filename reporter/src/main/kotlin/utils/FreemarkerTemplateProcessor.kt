@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
@@ -250,18 +251,21 @@ class FreemarkerTemplateProcessor(
 
         /**
          * Merge the [ResolvedLicense]s of multiple [models] and filter them using [licenseView]. [Omits][omitExcluded]
-         * excluded packages, licenses, and copyrights by default. The returned list is sorted by license identifier.
+         * excluded packages, licenses, and copyrights by default. [Undefined][omitNotPresent] licenses can be filtered
+         * out optionally. The returned list is sorted by license identifier.
          */
         @JvmOverloads
         fun mergeLicenses(
             models: Collection<PackageModel>,
             licenseView: LicenseView = LicenseView.ALL,
+            omitNotPresent: Boolean = false,
             omitExcluded: Boolean = true
         ): List<ResolvedLicense> =
             mergeResolvedLicenses(
-                models.filter { !omitExcluded || !it.excluded }.flatMap {
-                    val licenses = it.license.filter(licenseView).licenses
-                    if (omitExcluded) licenses.filterExcluded() else licenses
+                models.filter { !omitExcluded || !it.excluded }.flatMap { model ->
+                    val licenses = model.license.filter(licenseView).licenses
+                    val filteredLicenses = if (omitExcluded) licenses.filterExcluded() else licenses
+                    if (omitNotPresent) filteredLicenses.filter(::isLicensePresent) else filteredLicenses
                 }
             )
 
@@ -273,6 +277,12 @@ class FreemarkerTemplateProcessor(
             licenses.groupBy { it.license }
                 .map { (_, licenses) -> licenses.merge() }
                 .sortedBy { it.license.toString() }
+
+        /**
+         * Return true if and only if the given [license] is not one of the special cases _NONE_ or _NOASSERTION_.
+         */
+        @Suppress("WEAKER_ACCESS") // This function is used in the templates.
+        fun isLicensePresent(license: ResolvedLicense): Boolean = SpdxConstants.isPresent(license.license.toString())
 
         /**
          * Return `true` if there are any unresolved [OrtIssue]s, or `false` otherwise.
