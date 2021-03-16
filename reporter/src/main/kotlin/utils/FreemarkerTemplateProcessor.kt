@@ -253,7 +253,6 @@ class FreemarkerTemplateProcessor(
          * excluded packages, licenses, and copyrights by default. The returned list is sorted by license identifier.
          */
         @JvmOverloads
-        @Suppress("UNUSED") // This function is used in the templates.
         fun mergeLicenses(
             models: Collection<PackageModel>,
             licenseView: LicenseView = LicenseView.ALL,
@@ -270,7 +269,7 @@ class FreemarkerTemplateProcessor(
          * Return a list of [ResolvedLicense]s where all duplicate entries for a single license in [licenses] are
          * merged. The returned list is sorted by license identifier.
          */
-        fun mergeResolvedLicenses(licenses: List<ResolvedLicense>): List<ResolvedLicense> =
+        private fun mergeResolvedLicenses(licenses: List<ResolvedLicense>): List<ResolvedLicense> =
             licenses.groupBy { it.license }
                 .map { (_, licenses) -> licenses.merge() }
                 .sortedBy { it.license.toString() }
