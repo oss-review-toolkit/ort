@@ -77,15 +77,15 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
-    private val providerFactory by option(
-        "--advisor", "-a",
-        help = "The advisor to use, one of ${allVulnerabilityProvidersByName.keys}."
+    private val providerFactories by option(
+        "--advisors", "-a",
+        help = "The comma-separated advisors to use, any of ${allVulnerabilityProvidersByName.keys}."
     ).convert { name ->
         allVulnerabilityProvidersByName[name]
             ?: throw BadParameterValue(
                 "Advisor '$name' is not one of ${allVulnerabilityProvidersByName.keys}."
             )
-    }.required()
+    }.split(",").required()
 
     private val skipExcluded by option(
         "--skip-excluded",
@@ -104,9 +104,11 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
             }
         }
 
-        val advisor = Advisor(providerFactory, globalOptionsForSubcommands.config.advisor)
+        val distinctProviders = providerFactories.distinct()
+        println("The following advisors are activated:")
+        println("\t" + distinctProviders.joinToString())
 
-        println("Using advisor '${providerFactory.providerName}'.")
+        val advisor = Advisor(distinctProviders, globalOptionsForSubcommands.config.advisor)
 
         val ortResult = advisor.retrieveVulnerabilityInformation(input, skipExcluded).mergeLabels(labels)
 

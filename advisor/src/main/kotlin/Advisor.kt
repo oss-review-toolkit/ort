@@ -24,10 +24,13 @@ import java.io.File
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.model.AdvisorRecord
+import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.readValue
@@ -36,7 +39,10 @@ import org.ossreviewtoolkit.utils.Environment
 /**
  * The class to manage [VulnerabilityProvider]s that retrieve security advisories.
  */
-class Advisor(private val providerFactory: VulnerabilityProviderFactory, private val config: AdvisorConfiguration) {
+class Advisor(
+    private val providerFactories: List<VulnerabilityProviderFactory>,
+    private val config: AdvisorConfiguration
+) {
     companion object {
         private val LOADER = ServiceLoader.load(VulnerabilityProviderFactory::class.java)!!
 
@@ -62,11 +68,25 @@ class Advisor(private val providerFactory: VulnerabilityProviderFactory, private
             "The provided ORT result file '${ortResultFile.canonicalPath}' does not contain an analyzer result."
         }
 
-        val provider = providerFactory.create(config)
+        val providers = providerFactories.map { it.create(config) }
+
+        val results = sortedMapOf<Identifier, List<AdvisorResult>>()
 
         val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
-        val results = runBlocking { provider.retrievePackageVulnerabilities(packages) }
-            .mapKeysTo(sortedMapOf()) { (pkg, _) -> pkg.id }
+
+        runBlocking {
+            providers.map { provider ->
+                async {
+                    provider.retrievePackageVulnerabilities(packages)
+                }
+            }.forEach { providerResults ->
+                providerResults.await().forEach { (pkg, advisorResults) ->
+                    results.merge(pkg.id, advisorResults) { oldResults, newResults ->
+                        oldResults + newResults
+                    }
+                }
+            }
+        }
 
         val advisorRecord = AdvisorRecord(results)
 
