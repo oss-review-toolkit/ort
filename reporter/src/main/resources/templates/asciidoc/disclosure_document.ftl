@@ -182,10 +182,9 @@ ${exceptionText}
 [#list copyrights as copyright]
 ${copyright}
 [/#list]
+[/#if]
 
 ${licenseFile.readFile()}
-
-[/#if]
 ++++
 <<<
 [/#list]
