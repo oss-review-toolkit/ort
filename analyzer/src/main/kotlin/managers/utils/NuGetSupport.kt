@@ -226,7 +226,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                             // Resolve to the lowest applicable version, see
                             // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
                             val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
-                                .split(",").first().trim()
+                                .split(',').first().trim()
 
                             // TODO: Add support resolving to the highest version for floating versions, see
                             //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.

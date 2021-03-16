@@ -100,7 +100,7 @@ class ExcelReporter : Reporter {
         options: Map<String, String>
     ): List<File> {
         val extraColumns = options[OPTION_EXTRA_COLUMNS].orEmpty()
-            .split(",")
+            .split(',')
             .map { it.trim() }
             .filter { it.isNotEmpty() }
 

@@ -75,7 +75,7 @@ class FreemarkerTemplateProcessor(
      * generated files.
      */
     fun processTemplates(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val projectTypesAsPackages = options[OPTION_PROJECT_TYPES_AS_PACKAGES]?.split(",").orEmpty().toSet()
+        val projectTypesAsPackages = options[OPTION_PROJECT_TYPES_AS_PACKAGES]?.split(',').orEmpty().toSet()
         val projectsAsPackages = input.ortResult.getProjects().map { it.id }.filterTo(mutableSetOf()) {
             it.type in projectTypesAsPackages
         }
@@ -134,8 +134,8 @@ class FreemarkerTemplateProcessor(
             wrapUncheckedExceptions = true
         }
 
-        val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(",").orEmpty()
-        val templateIds = options[OPTION_TEMPLATE_ID]?.split(",").orEmpty()
+        val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
+        val templateIds = options[OPTION_TEMPLATE_ID]?.split(',').orEmpty()
 
         val templateFiles = templatePaths.map { path ->
             File(path).expandTilde().also {

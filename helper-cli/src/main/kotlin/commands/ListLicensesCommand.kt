@@ -149,7 +149,7 @@ internal class ListLicensesCommand : CliktCommand(
         "--file-allow-list",
         help = "Output only license findings for files whose paths matches any of the given glob expressions."
     ).convert { csv ->
-        csv.split(",").map { pattern -> FileSystems.getDefault().getPathMatcher("glob:$pattern") }
+        csv.split(',').map { pattern -> FileSystems.getDefault().getPathMatcher("glob:$pattern") }
     }.default(emptyList())
 
     override fun run() {

@@ -112,9 +112,9 @@ class ScanCode(
 
     private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
 
-    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
+    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(' ')
         ?: DEFAULT_CONFIGURATION_OPTIONS
-    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(" ")
+    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(' ')
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {

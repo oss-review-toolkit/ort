@@ -169,7 +169,7 @@ class Gradle(
         // Set the value to empirically determined 8 GiB if no value is set in "~/.gradle/gradle.properties".
         val jvmArgs = gradleProperties.find { (key, _) ->
             key == "org.gradle.jvmargs"
-        }?.second?.split(" ").orEmpty().toMutableList()
+        }?.second?.split(' ').orEmpty().toMutableList()
 
         if (jvmArgs.none { it.contains("-xmx", ignoreCase = true) }) {
             jvmArgs += "-Xmx8g"
