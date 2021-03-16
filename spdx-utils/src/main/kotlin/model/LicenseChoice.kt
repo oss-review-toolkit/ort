@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.spdx.model
 
+import org.ossreviewtoolkit.spdx.InvalidLicenseChoiceException
 import org.ossreviewtoolkit.spdx.SpdxExpression
 
 /**
@@ -53,4 +54,12 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 data class LicenseChoice(
     val given: SpdxExpression?,
     val choice: SpdxExpression,
-)
+) {
+    init {
+        if (given?.isValidChoice(choice) == false) {
+            throw InvalidLicenseChoiceException(
+                "$choice is not a valid choice for $given. Valid choices are: ${given.validChoices()}."
+            )
+        }
+    }
+}
