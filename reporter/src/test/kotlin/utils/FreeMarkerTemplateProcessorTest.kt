@@ -296,5 +296,36 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             result should haveSize(1)
             result.first().license.toString() shouldBe "MIT"
         }
+
+        "filter NO_ASSERTION licenses" {
+            val projects = testProjects()
+            val resolver = mockk<LicenseInfoResolver>()
+
+            expectResolveLicenseInfo(
+                resolver,
+                projects[0].id,
+                "MIT",
+                mapOf(LicenseSource.DECLARED to setOf("MIT".toSpdx()))
+            )
+            expectResolveLicenseInfo(
+                resolver,
+                projects[1].id,
+                SpdxConstants.NOASSERTION,
+                mapOf(LicenseSource.DECLARED to setOf(SpdxConstants.NOASSERTION.toSpdx()))
+            )
+
+            val input = ReporterInput(ORT_RESULT, licenseInfoResolver = resolver)
+            val pkg1 = FreemarkerTemplateProcessor.PackageModel(projects[0].id, input)
+            val pkg2 = FreemarkerTemplateProcessor.PackageModel(projects[1].id, input)
+
+            val result = FreemarkerTemplateProcessor.TemplateHelper(
+                OrtResult.EMPTY,
+                LicenseClassifications(),
+                DefaultResolutionProvider()
+            ).mergeLicenses(listOf(pkg1, pkg2), omitNotPresent = true)
+
+            result should haveSize(1)
+            result.first().license.toString() shouldBe "MIT"
+        }
     }
 })
