@@ -57,6 +57,8 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 
+private const val TABLE_NAME = "scan_results"
+
 /**
  * The Postgres storage back-end.
  */
@@ -74,8 +76,6 @@ class PostgresStorage(
         /** Expression to convert the scanner version to a numeric array for comparisons. */
         private const val VERSION_EXPRESSION = "$VERSION_ARRAY::int[]"
     }
-
-    private val table = "scan_results" // TODO: make configurable
 
     init {
         setupDatabase()
@@ -117,13 +117,15 @@ class PostgresStorage(
         }
 
     private fun Transaction.tableExists(): Boolean =
-        table in TransactionManager.current().db.dialect.allTablesNames().map { it.substringAfterLast(".") }
+        TABLE_NAME in TransactionManager.current().db.dialect.allTablesNames().map {
+            it.substringAfterLast(".")
+        }
 
     private fun Transaction.createIdentifierAndScannerVersionIndex() =
         exec(
             """
             CREATE INDEX identifier_and_scanner_version
-                ON $table USING btree
+                ON $TABLE_NAME USING btree
                 (
                     identifier,
                     (scan_result->'scanner'->>'name'),
