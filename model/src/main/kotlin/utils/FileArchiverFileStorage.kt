@@ -93,9 +93,3 @@ private fun Provenance.hash(): String {
 
 private fun getArchivePath(provenance: Provenance): String =
     "${provenance.hash()}/archive.zip"
-
-private fun checkNotEmpty(provenance: Provenance) {
-    require(provenance.sourceArtifact != null || provenance.vcsInfo != null) {
-        "Given provenance must not be empty."
-    }
-}
