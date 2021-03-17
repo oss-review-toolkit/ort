@@ -94,7 +94,7 @@ class VulnerableCodeTest : WordSpec({
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
 
             val langResults = result.getValue(idLang)
-            langResults.shouldHaveSize(1)
+            langResults shouldHaveSize(1)
             langResults[0].advisor.name shouldBe ADVISOR_NAME
             val expLangVulnerability = Vulnerability(
                 id = "CVE-2014-8242",
@@ -104,7 +104,7 @@ class VulnerableCodeTest : WordSpec({
             langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
 
             val strutsResults = result.getValue(idStruts)
-            strutsResults.shouldHaveSize(1)
+            strutsResults shouldHaveSize(1)
             val expStrutsVulnerabilities = listOf(
                 Vulnerability(
                     id = "CVE-2009-1382",
