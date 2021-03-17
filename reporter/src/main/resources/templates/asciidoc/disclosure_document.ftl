@@ -123,7 +123,12 @@ The following licenses and copyrights were found in the source code of this pack
 
 [#list resolvedLicenses as resolvedLicense]
 
+[#-- In case of a NOASSERTION license, there is no license text; so do not add a link. --]
+[#if helper.isLicensePresent(resolvedLicense)]
 * License: <<${resolvedLicense.license}, ${resolvedLicense.license}>>
+[#else]
+* License: ${resolvedLicense.license}
+[/#if]
 
 [#assign copyrights = resolvedLicense.getCopyrights(true)]
 [#list copyrights as copyright]
@@ -142,7 +147,7 @@ Append the text of all licenses that have been listed in the above lists for lic
 [appendix]
 == License Texts
 
-[#assign mergedLicenses = helper.mergeLicenses(projects + packages, helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED"))]
+[#assign mergedLicenses = helper.mergeLicenses(projects + packages, helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED"), true)]
 [#list mergedLicenses as resolvedLicense]
 === ${resolvedLicense.license}
 
