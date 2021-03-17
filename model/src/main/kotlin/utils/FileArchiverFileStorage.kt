@@ -40,7 +40,7 @@ class FileArchiverFileStorage(
     private val storage: FileStorage
 ) : FileArchiverStorage {
     override fun hasArchive(provenance: Provenance): Boolean {
-        checkNotEmpty(provenance)
+        checkIsUniqueStorageKey(provenance)
 
         val archivePath = getArchivePath(provenance)
 
@@ -48,13 +48,13 @@ class FileArchiverFileStorage(
     }
 
     override fun addArchive(provenance: Provenance, zipFile: File) {
-        checkNotEmpty(provenance)
+        checkIsUniqueStorageKey(provenance)
 
         storage.write(getArchivePath(provenance), zipFile.inputStream())
     }
 
     override fun getArchive(provenance: Provenance): File? {
-        checkNotEmpty(provenance)
+        checkIsUniqueStorageKey(provenance)
 
         val archivePath = getArchivePath(provenance)
 
