@@ -27,19 +27,6 @@ plugins {
     `java-library`
 }
 
-// TODO: Remove this again once this JGit release is properly mirrored to Maven Central.
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.eclipse.org/content/repositories/jgit-releases/")
-        }
-
-        filter {
-            includeGroup("org.eclipse.jgit")
-        }
-    }
-}
-
 dependencies {
     api(project(":model"))
 
