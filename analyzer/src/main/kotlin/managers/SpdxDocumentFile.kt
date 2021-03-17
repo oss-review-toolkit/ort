@@ -308,7 +308,7 @@ class SpdxDocumentFile(
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val spdxDocument = SpdxModelMapper.read(definitionFile, SpdxDocument::class.java)
+        val spdxDocument = SpdxModelMapper.read<SpdxDocument>(definitionFile)
 
         // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies, or a
         // package-style SPDX document that describes a single (dependency-)package.

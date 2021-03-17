@@ -79,7 +79,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
             jsonSpdxDocument shouldBe patchExpectedResult(
                 "src/funTest/assets/spdx-document-reporter-expected-output.spdx.json",
-                fromJson(jsonSpdxDocument, SpdxDocument::class.java)
+                fromJson(jsonSpdxDocument)
             )
         }
 
@@ -90,7 +90,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
             yamlSpdxDocument shouldBe patchExpectedResult(
                 "src/funTest/assets/spdx-document-reporter-expected-output.spdx.yml",
-                fromYaml(yamlSpdxDocument, SpdxDocument::class.java)
+                fromYaml(yamlSpdxDocument)
             )
         }
     }
