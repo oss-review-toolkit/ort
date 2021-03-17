@@ -260,3 +260,57 @@ resolutions:
     reason: "INEFFECTIVE_VULNERABILITY"
     comment: "CVE-9999-9999 is a false positive"
 ```
+
+# License Choices
+
+### When to Use License Choices
+
+For multi-licensed dependencies a specific license can be selected.
+The license choice can be applied to a package.
+A choice is only valid for licenses combined with the SPDX operator `OR`.
+The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated
+by the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
+
+### License Choice by Package
+
+To select a license from a multi-licensed dependency, specified by its `packageId`, an SPDX expression for a `choice`
+must be provided.
+The `choice` is either applied to the whole effective SPDX expression of the package or to an optional `given` SPDX 
+expression that can represent only a sub-expression of the whole effective SPDX expression.
+
+e.g.
+```yaml
+license_choices:
+  package_license_choice:
+  - package_id: "Maven:com.example:first:0.0.1"
+    license_choices:
+    # The input of the calculated effective license would be: (A OR B) AND ((C OR D) AND E)
+    - given: A OR B
+      choice: A
+    # The result would be: A AND ((C OR D) AND E)
+    # The input of the current effective license would be: A AND ((C OR D) AND E)
+    - given: (C OR D) AND E
+      choice: C AND E
+    # The result would be: A AND C AND E
+  - package_id: "Maven:com.example:second:2.3.4"
+    license_choices:
+    # Without a 'given', the 'choice' is applied to the effective license expression if it is a valid choice.
+    # The input from the calculated effective license would be: (C OR D) AND E
+    - choice: C AND E
+    # The result would be: C AND E
+```
+
+---
+**NOTE**
+
+The choice will be applied to the WHOLE `given` license.
+If the choice does not provide a valid result, an exception will be thrown upon deserialization.
+
+e.g. invalid configuration:
+```yaml
+# This is invalid, as 'E' must be in the resulting license.
+- given: (C OR D) AND E
+  choice: C
+```
+
+---
