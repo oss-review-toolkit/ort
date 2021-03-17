@@ -43,3 +43,12 @@ interface FileArchiverStorage {
      */
     fun getArchive(provenance: Provenance): File?
 }
+
+/**
+ * Checks whether the given [provenance] is empty and throws a runtime exception if it is.
+ */
+internal fun checkNotEmpty(provenance: Provenance) {
+    require(provenance.sourceArtifact != null || provenance.vcsInfo != null) {
+        "Given provenance must not be empty."
+    }
+}
