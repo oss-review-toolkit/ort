@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }
 
-infix fun <T> T?.shouldNotBeNull(block: T.() -> Unit) {
+infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
     this.shouldNotBeNull()
     this.block()
 }
