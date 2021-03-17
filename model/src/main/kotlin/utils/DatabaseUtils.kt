@@ -23,6 +23,7 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
@@ -89,6 +90,12 @@ object DatabaseUtils {
                 }
             }
         }
+
+    /**
+     * Return true if and only if a table named [tableName] exists.
+     */
+    fun Transaction.tableExists(tableName: String): Boolean =
+        tableName in TransactionManager.current().db.dialect.allTablesNames().map { it.substringAfterLast(".") }
 
     /**
      * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this
