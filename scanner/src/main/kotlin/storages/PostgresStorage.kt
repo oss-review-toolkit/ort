@@ -31,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
@@ -94,9 +94,7 @@ class PostgresStorage(
                 if (!tableExists(TABLE_NAME)) {
                     checkDatabaseEncoding()
 
-                    SchemaUtils.createMissingTablesAndColumns(
-                        ScanResults
-                    )
+                    createMissingTablesAndColumns(ScanResults)
 
                     createIdentifierAndScannerVersionIndex()
                 }
