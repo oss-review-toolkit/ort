@@ -51,8 +51,7 @@ private const val REQUEST_CHUNK_SIZE = 100
  */
 class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : VulnerabilityProvider(name) {
     class Factory : AbstractVulnerabilityProviderFactory<NexusIq>("NexusIQ") {
-        override fun create(config: AdvisorConfiguration) =
-            NexusIq(providerName, getProviderConfiguration(config) { it.nexusIq })
+        override fun create(config: AdvisorConfiguration) = NexusIq(providerName, config.forProvider { nexusIq })
     }
 
     private val service by lazy {
