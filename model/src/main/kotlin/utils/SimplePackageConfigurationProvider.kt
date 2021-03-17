@@ -41,34 +41,6 @@ class SimplePackageConfigurationProvider(
          * A provider without any package configurations.
          */
         val EMPTY = SimplePackageConfigurationProvider(emptyList())
-
-        /**
-         * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found recursively
-         * in the given [directory]. All files with known extensions within the given [directory] must be package
-         * curation files, each only containing a single package configuration. Throws an exception if there is more
-         * than one configuration per [Identifier] and [Provenance].
-         */
-        fun forDirectory(directory: File): SimplePackageConfigurationProvider {
-            val entries = FileFormat.findFilesWithKnownExtensions(directory).mapTo(mutableListOf()) { file ->
-                try {
-                    file.readValue<PackageConfiguration>()
-                } catch (e: IOException) {
-                    throw IOException("Error reading package configuration from '${file.absoluteFile}'.", e)
-                }
-            }
-
-            return SimplePackageConfigurationProvider(entries)
-        }
-
-        /**
-         * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found in the given
-         * file. Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
-         */
-        fun forFile(file: File): SimplePackageConfigurationProvider {
-            val entries = file.readValue<List<PackageConfiguration>>()
-
-            return SimplePackageConfigurationProvider(entries)
-        }
     }
 
     private val configurationsById: Map<Identifier, List<PackageConfiguration>>

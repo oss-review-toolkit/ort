@@ -23,20 +23,24 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
-import org.ossreviewtoolkit.helper.common.createProvider
 import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
 import org.ossreviewtoolkit.helper.common.readOrtResult
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.utils.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 
 internal class ListCopyrightsCommand : CliktCommand(
     help = "Lists the copyright findings."
@@ -71,26 +75,30 @@ internal class ListCopyrightsCommand : CliktCommand(
         help = "Show the raw statements corresponding to each processed statement if these are any different."
     ).flag()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions(
-        option(
-            "--package-configuration-dir",
-            help = "The directory containing the package configuration files to read as input. It is searched " +
-                    "recursively."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.Dir(it) },
-        option(
-            "--package-configuration-file",
-            help = "The file containing the package configurations to read as input."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it) }
-    ).single()
+    private val packageConfigurationDir by option(
+        "--package-configuration-dir",
+        help = "The directory containing the package configuration files to read as input. It is searched " +
+                "recursively."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME))
+
+    private val packageConfigurationFile by option(
+        "--package-configuration-file",
+        help = "The file containing the package configurations to read as input."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     override fun run() {
         val ortResult = readOrtResult(ortFile)
         val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
+
+        val packageConfigurationFiles = FileFormat.findFilesWithKnownExtensions(packageConfigurationDir).toMutableList()
+        packageConfigurationFile?.let { packageConfigurationFiles += FileFormat.findFilesWithKnownExtensions(it) }
+        val packageConfigurations = packageConfigurationFiles.map { it.readValue<PackageConfiguration>() }
+        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations)
 
         val copyrightStatements = ortResult.processAllCopyrightStatements(
             copyrightGarbage = copyrightGarbage.items,
