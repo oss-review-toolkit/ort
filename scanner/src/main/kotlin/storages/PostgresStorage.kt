@@ -45,8 +45,8 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.arrayParam
-import org.ossreviewtoolkit.model.utils.execShow
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -103,18 +103,6 @@ class PostgresStorage(
             }
         }
     }
-
-    private fun Transaction.checkDatabaseEncoding() =
-        execShow("SHOW client_encoding") { resultSet ->
-            if (resultSet.next()) {
-                val clientEncoding = resultSet.getString(1)
-                if (clientEncoding != "UTF8") {
-                    PostgresStorage.log.warn {
-                        "The database's client_encoding is '$clientEncoding' but should be 'UTF8'."
-                    }
-                }
-            }
-        }
 
     private fun Transaction.tableExists(): Boolean =
         TABLE_NAME in TransactionManager.current().db.dialect.allTablesNames().map {

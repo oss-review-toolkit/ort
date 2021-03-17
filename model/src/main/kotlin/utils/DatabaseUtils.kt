@@ -22,8 +22,11 @@ package org.ossreviewtoolkit.model.utils
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 
+import org.jetbrains.exposed.sql.Transaction
+
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.log
 
 object DatabaseUtils {
     /**
@@ -71,6 +74,21 @@ object DatabaseUtils {
 
         return HikariDataSource(dataSourceConfig)
     }
+
+    /**
+     * Logs a warning in case the actual database encoding does not equal the [expectedEncoding].
+     */
+    fun Transaction.checkDatabaseEncoding(expectedEncoding: String = "UTF8") =
+        execShow("SHOW client_encoding") { resultSet ->
+            if (resultSet.next()) {
+                val clientEncoding = resultSet.getString(1)
+                if (clientEncoding != expectedEncoding) {
+                    DatabaseUtils.log.warn {
+                        "The database's client_encoding is '$clientEncoding' but should be '$expectedEncoding'."
+                    }
+                }
+            }
+        }
 
     /**
      * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this
