@@ -18,6 +18,7 @@
  * License-Filename: LICENSE
  */
 
+val exposedVersion: String by project
 val hopliteVersion: String by project
 val jacksonVersion: String by project
 val semverVersion: String by project
@@ -41,5 +42,9 @@ dependencies {
     implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
     implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
     implementation("com.vdurmont:semver4j:$semverVersion")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }

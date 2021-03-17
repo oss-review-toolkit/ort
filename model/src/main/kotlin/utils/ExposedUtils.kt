@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.storages.utils
+package org.ossreviewtoolkit.model.utils
 
 import java.sql.ResultSet
 
