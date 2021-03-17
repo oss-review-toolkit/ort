@@ -35,7 +35,6 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -46,6 +45,7 @@ import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.arrayParam
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
@@ -91,7 +91,7 @@ class PostgresStorage(
 
         transaction {
             withDataBaseLock {
-                if (!tableExists()) {
+                if (!tableExists(TABLE_NAME)) {
                     checkDatabaseEncoding()
 
                     SchemaUtils.createMissingTablesAndColumns(
@@ -103,11 +103,6 @@ class PostgresStorage(
             }
         }
     }
-
-    private fun Transaction.tableExists(): Boolean =
-        TABLE_NAME in TransactionManager.current().db.dialect.allTablesNames().map {
-            it.substringAfterLast(".")
-        }
 
     private fun Transaction.createIdentifierAndScannerVersionIndex() =
         exec(
