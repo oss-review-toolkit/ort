@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 
-private const val TABLE_NAME = "scan_results"
+private val TABLE_NAME = ScanResults.tableName
 
 /**
  * The Postgres storage back-end.
