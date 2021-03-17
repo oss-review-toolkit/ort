@@ -20,9 +20,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
-
 import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.Dispatchers
@@ -43,8 +40,8 @@ import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
+import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.scanner.storages.*
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.perf
@@ -140,43 +137,14 @@ abstract class ScanResultsStorage {
          * Create a [PostgresStorage] based on the [config] passed in.
          */
         private fun createPostgresStorage(config: PostgresStorageConfiguration): ScanResultsStorage {
-            require(config.url.isNotBlank()) {
-                "URL for PostgreSQL storage is missing."
-            }
-
-            require(config.schema.isNotBlank()) {
-                "Schema for PostgreSQL storage is missing."
-            }
-
-            require(config.username.isNotBlank()) {
-                "Username for PostgreSQL storage is missing."
-            }
-
-            require(config.password.isNotBlank()) {
-                "Password for PostgreSQL storage is missing."
-            }
-
-            val dataSourceConfig = HikariConfig().apply {
-                jdbcUrl = config.url
-                username = config.username
-                password = config.password
-                schema = config.schema
-
+            val dataSource = DatabaseUtils.createHikariDataSource(
+                config = config,
+                applicationNameSuffix = TOOL_NAME,
                 // Use a value slightly higher than the number of threads accessing the storage.
-                maximumPoolSize = LocalScanner.NUM_STORAGE_THREADS + 3
+                maxPoolSize = LocalScanner.NUM_STORAGE_THREADS + 3
+            )
 
-                addDataSourceProperty("ApplicationName", "$ORT_FULL_NAME - $TOOL_NAME")
-
-                // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
-                // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
-                // "sslmode", "ssl" is not required.
-                addDataSourceProperty("sslmode", config.sslmode)
-                addDataSourcePropertyIfDefined("sslcert", config.sslcert)
-                addDataSourcePropertyIfDefined("sslkey", config.sslkey)
-                addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
-            }
-
-            return PostgresStorage(HikariDataSource(dataSourceConfig))
+            return PostgresStorage(dataSource)
         }
 
         /**
@@ -184,15 +152,6 @@ abstract class ScanResultsStorage {
          */
         private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration): ScanResultsStorage =
             ClearlyDefinedStorage(config)
-
-        /**
-         * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this
-         * function has no effect. (It is not specified how the database driver deals with *null* values in its
-         * properties; so it is safer to avoid them.)
-         */
-        private fun HikariConfig.addDataSourcePropertyIfDefined(key: String, value: String?) {
-            value?.let { addDataSourceProperty(key, it) }
-        }
 
         /**
          * Configure a [Sw360Storage] as the current storage backend.
