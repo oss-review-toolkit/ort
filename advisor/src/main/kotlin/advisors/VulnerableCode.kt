@@ -50,7 +50,7 @@ class VulnerableCode(
 ) : VulnerabilityProvider(name) {
     class Factory : AbstractVulnerabilityProviderFactory<VulnerableCode>("VulnerableCode") {
         override fun create(config: AdvisorConfiguration) =
-            VulnerableCode(providerName, getProviderConfiguration(config) { it.vulnerableCode })
+            VulnerableCode(providerName, config.forProvider { vulnerableCode })
     }
 
     companion object {
