@@ -131,8 +131,18 @@ class UploadResultToSw360Command : CliktCommand(
     }
 
     private fun createSw360Release(pkg: Package, client: SW360ReleaseClientAdapter): SW360Release? {
+        // TODO: This omits operators and exceptions from licenses. We yet need to find a way to pass these to SW360.
+        val licenseShortNames = pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty().toSortedSet()
+
+        val unmappedLicenses = pkg.declaredLicensesProcessed.unmapped.toSortedSet()
+        if (unmappedLicenses.isNotEmpty()) {
+            log.warn {
+                "The following licenses could not be mapped in order to create a SW360 release: $unmappedLicenses"
+            }
+        }
+
         val sw360Release = SW360Release()
-            .setMainLicenseIds(pkg.declaredLicenses)
+            .setMainLicenseIds(licenseShortNames)
             .setName(pkg.id.name)
             .setVersion(pkg.id.version)
 
