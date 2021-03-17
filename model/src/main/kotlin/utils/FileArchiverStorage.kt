@@ -45,10 +45,13 @@ interface FileArchiverStorage {
 }
 
 /**
- * Checks whether the given [provenance] is empty and throws a runtime exception if it is.
+ * Checks whether the given [provenance] either has a source artifact or a VCS info with a resolved revision, but not
+ * both. Throws a runtime exception if that check fails.
  */
-internal fun checkNotEmpty(provenance: Provenance) {
-    require(provenance.sourceArtifact != null || provenance.vcsInfo != null) {
-        "Given provenance must not be empty."
+internal fun checkIsUniqueStorageKey(provenance: Provenance) {
+    val hasSourceArtifact = provenance.sourceArtifact != null
+    val hasVcsInfo = provenance.vcsInfo?.let { !it.resolvedRevision.isNullOrBlank() } ?: false
+    require(hasSourceArtifact xor hasVcsInfo) {
+        "The given provenance must either have a source artifact or a VCS info with a resolved revision, but not both."
     }
 }
