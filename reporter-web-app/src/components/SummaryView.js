@@ -24,7 +24,12 @@ import {
     Col, Row, Tabs, Timeline
 } from 'antd';
 import {
-    CheckCircleOutlined, ExclamationCircleOutlined
+    BugOutlined,
+    CodeOutlined,
+    CheckCircleOutlined,
+    ExclamationCircleOutlined,
+    ExceptionOutlined,
+    TagsOutlined
 } from '@ant-design/icons';
 import IssuesTable from './IssuesTable';
 import LicenseChart from './LicenseChart';
@@ -351,6 +356,7 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <ExceptionOutlined />
                                                         Violations (
                                                         {
                                                             ruleViolations.length !== unresolvedRuleViolations
@@ -379,6 +385,7 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <BugOutlined />
                                                         Issues (
                                                         {
                                                             issues.length !== unresolvedIssues
@@ -407,6 +414,7 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <TagsOutlined />
                                                         Declared Licenses (
                                                         {declaredLicensesProcessed.length}
                                                         )
@@ -439,6 +447,7 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <CodeOutlined />
                                                         Detected Licenses (
                                                         {detectedLicensesProcessed.length}
                                                         )
