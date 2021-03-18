@@ -22,6 +22,7 @@ val exposedVersion: String by project
 val hikariVersion: String by project
 val hopliteVersion: String by project
 val jacksonVersion: String by project
+val postgresEmbeddedVersion: String by project
 val postgresVersion: String by project
 val semverVersion: String by project
 
@@ -51,4 +52,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.postgresql:postgresql:$postgresVersion")
+
+    testImplementation("com.opentable.components:otj-pg-embedded:$postgresEmbeddedVersion")
 }
