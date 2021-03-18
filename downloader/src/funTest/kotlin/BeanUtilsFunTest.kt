@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
@@ -72,7 +73,7 @@ class BeanUtilsFunTest : StringSpec() {
                 vcs = vcsFromCuration
             )
 
-            val provenance = Downloader.download(pkg, outputDir)
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
 
             outputDir.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
 

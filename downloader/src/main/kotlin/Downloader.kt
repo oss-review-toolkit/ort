@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +42,11 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ArchiveType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -59,7 +62,7 @@ import org.ossreviewtoolkit.utils.withoutPrefix
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
  */
-object Downloader {
+class Downloader(private val config: DownloaderConfiguration) {
     private fun verifyOutputDirectory(outputDirectory: File) {
         require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
             "The output directory '$outputDirectory' must not contain any files yet."
@@ -80,7 +83,35 @@ object Downloader {
 
         val exception = DownloadException("Download failed for '${pkg.id.toCoordinates()}'.")
 
-        // Try downloading from VCS.
+        config.sourceCodeOrigins.forEach { origin ->
+            val provenance = handleDownload(origin, pkg, outputDirectory, allowMovingRevisions, exception)
+            if (provenance != null) return provenance
+        }
+
+        throw exception
+    }
+
+    private fun handleDownload(
+        origin: SourceCodeOrigin,
+        pkg: Package,
+        outputDirectory: File,
+        allowMovingRevisions: Boolean,
+        exception: DownloadException
+    ) = when (origin) {
+        SourceCodeOrigin.VCS -> handleVcsDownload(pkg, outputDirectory, allowMovingRevisions, exception)
+        SourceCodeOrigin.ARTIFACT -> handleSourceArtifactDownload(pkg, outputDirectory, exception)
+    }
+
+    /**
+     * Try to download the source code from VCS. Returns null if the download failed and sets the [exception] to the
+     * cause.
+     */
+    private fun handleVcsDownload(
+        pkg: Package,
+        outputDirectory: File,
+        allowMovingRevisions: Boolean,
+        exception: DownloadException
+    ): Provenance? {
         val vcsMark = TimeSource.Monotonic.markNow()
 
         try {
@@ -116,7 +147,18 @@ object Downloader {
             exception.addSuppressed(e)
         }
 
-        // Try downloading the source artifact.
+        return null
+    }
+
+    /**
+     * Try to download the source code from the sources artifact. Returns null if the download failed and sets the
+     * [exception] to the cause.
+     */
+    private fun handleSourceArtifactDownload(
+        pkg: Package,
+        outputDirectory: File,
+        exception: DownloadException
+    ): Provenance? {
         val sourceArtifactMark = TimeSource.Monotonic.markNow()
 
         try {
@@ -145,7 +187,7 @@ object Downloader {
             exception.addSuppressed(e)
         }
 
-        throw exception
+        return null
     }
 
     /**

@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.Curations
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -202,7 +203,7 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
         }
     }
 
-    Downloader.download(pkg, tempDir)
+    Downloader(DownloaderConfiguration()).download(pkg, tempDir)
 
     return tempDir
 }

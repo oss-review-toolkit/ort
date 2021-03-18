@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
@@ -81,7 +82,7 @@ class BabelFunTest : StringSpec() {
                 vcsProcessed = vcsMerged
             )
 
-            val provenance = Downloader.download(pkg, outputDir)
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             val workingTree = VersionControlSystem.forDirectory(outputDir)
             val babelCliDir = outputDir.resolve("packages/babel-cli")
 
