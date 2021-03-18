@@ -43,6 +43,11 @@ data class OrtConfiguration(
     val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),
 
     /**
+     * The configuration of the downloader.
+     */
+    val downloader: DownloaderConfiguration = DownloaderConfiguration(),
+
+    /**
      * The configuration of the scanner.
      */
     val scanner: ScannerConfiguration = ScannerConfiguration(),
