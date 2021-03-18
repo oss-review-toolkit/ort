@@ -159,7 +159,7 @@ class CycloneDxReporter : Reporter {
                 val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
                     .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
 
-                bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString(", "))
+                bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString())
 
                 bom.addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
 
