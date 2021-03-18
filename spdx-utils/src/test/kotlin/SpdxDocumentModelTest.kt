@@ -44,8 +44,8 @@ private fun readResourceAsText(resourceFile: String): String =
  * 1. https://github.com/spdx/spdx-spec/blob/development/v2.2.1/examples/SPDXYAMLExample-2.2.spdx.yaml
  * 2. https://github.com/spdx/spdx-spec/blob/development/v2.2.1/examples/SPDXJSONExample-v2.2.spdx.json
  *
- * The "*-no-ranges*" resource files have the 'ranges' property removed, which is actually broken in specification and
- * thus impossible to implement.
+ * The "*-no-ranges.spdx.*" resource files have the "ranges" property removed, which is actually broken in the
+ * specification and impossible to implement.
  */
 class SpdxDocumentModelTest : WordSpec({
     "The official YAML example from the SPDX specification version 2.2" should {
