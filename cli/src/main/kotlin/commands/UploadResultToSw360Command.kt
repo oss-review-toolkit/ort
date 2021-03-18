@@ -44,6 +44,7 @@ import org.eclipse.sw360.http.HttpClientFactoryImpl
 import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.GlobalOptions
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -95,7 +96,7 @@ class UploadResultToSw360Command : CliktCommand(
 
         getProjectWithPackages(ortResult).forEach { (project, pkgList) ->
             val linkedReleases = pkgList.mapNotNull { pkg ->
-                val name = listOfNotNull(pkg.id.namespace, pkg.id.name).joinToString("/")
+                val name = createReleaseName(pkg.id)
                 sw360ReleaseClient.getSparseReleaseByNameAndVersion(name, pkg.id.version)
                     .flatMap { sw360ReleaseClient.enrichSparseRelease(it) }
                     .orElseGet { createSw360Release(pkg, sw360ReleaseClient) }
@@ -143,7 +144,7 @@ class UploadResultToSw360Command : CliktCommand(
 
         val sw360Release = SW360Release()
             .setMainLicenseIds(licenseShortNames)
-            .setName(pkg.id.name)
+            .setName(createReleaseName(pkg.id))
             .setVersion(pkg.id.version)
 
         return try {
@@ -185,4 +186,7 @@ class UploadResultToSw360Command : CliktCommand(
             // Upload the uncurated packages because SW360 also is a package curation provider.
             project.collectDependencies().mapNotNull { ortResult.getUncuratedPackageById(it) }
         }
+
+    private fun createReleaseName(pkgId: Identifier) =
+        listOf(pkgId.namespace, pkgId.name).filter { it.isNotEmpty() }.joinToString("/")
 }
