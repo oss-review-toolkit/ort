@@ -146,7 +146,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val distinctPackageManagers = packageManagers.distinct()
         println("The following package managers are activated:")
-        println("\t" + distinctPackageManagers.joinToString(", "))
+        println("\t" + distinctPackageManagers.joinToString())
 
         println("Analyzing project path:\n\t$inputDir")
 
