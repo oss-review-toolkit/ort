@@ -35,8 +35,11 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
@@ -72,7 +75,7 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val provenance = Downloader.download(pkg, outputDir)
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             val licenseFile = outputDir.resolve("LICENSE-junit.txt")
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
@@ -106,7 +109,7 @@ class DownloaderFunTest : StringSpec() {
             )
 
             val exception = shouldThrow<DownloadException> {
-                Downloader.download(pkg, outputDir)
+                Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             }
 
             exception.suppressed.size shouldBe 2
@@ -118,6 +121,10 @@ class DownloaderFunTest : StringSpec() {
         }
 
         "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
+            val downloaderConfiguration = DownloaderConfiguration(
+                listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
+            )
+
             val pkg = Package(
                 id = Identifier(
                     type = "Maven",
@@ -140,7 +147,7 @@ class DownloaderFunTest : StringSpec() {
                 )
             )
 
-            val provenance = Downloader.download(pkg, outputDir)
+            val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
             val licenseFile = outputDir.resolve("LICENSE-junit.txt")
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
@@ -152,6 +159,47 @@ class DownloaderFunTest : StringSpec() {
             licenseFile.length() shouldBe 11376L
 
             outputDir.walk().count() shouldBe 234
+        }
+
+        "Falls back to downloading from VCS when source package download fails".config(tags = setOf(ExpensiveTag)) {
+            val downloaderConfiguration = DownloaderConfiguration(
+                listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
+            )
+
+            val pkg = Package(
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = "https://repo.example.com/invalid.jar",
+                    hash = Hash.create("a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa")
+                ),
+                vcs = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/junit-team/junit4.git",
+                    revision = "64155f8a9babcfcf4263cf4d08253a1556e75481"
+                )
+            )
+
+            val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+
+            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+                vcsInfo.url shouldBe pkg.vcs.url
+                vcsInfo.revision shouldBe pkg.vcs.revision
+            }
+
+            licenseFile.isFile shouldBe true
+            licenseFile.length() shouldBe 11376L
+
+            outputDir.walk().count() shouldBe 608
         }
 
         "Can download a TGZ source artifact from SourceForge".config(tags = setOf(ExpensiveTag)) {
@@ -174,7 +222,7 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val provenance = Downloader.download(pkg, outputDir)
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             val tyrexDir = outputDir.resolve("tyrex-1.0.1")
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
@@ -206,7 +254,7 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val provenance = Downloader.download(pkg, outputDir)
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             val tslibDir = outputDir.resolve("tslib-1.10.0")
 
             provenance.shouldBeTypeOf<ArtifactProvenance>().apply {

@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -299,7 +300,7 @@ abstract class LocalScanner(
 
             if (missingArchives.isNotEmpty()) {
                 val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
-                Downloader.download(pkg, pkgDownloadDirectory)
+                Downloader(DownloaderConfiguration()).download(pkg, pkgDownloadDirectory)
 
                 missingArchives.forEach { provenance ->
                     if (provenance is KnownProvenance) {
@@ -337,7 +338,7 @@ abstract class LocalScanner(
         val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
         val provenance = try {
-            Downloader.download(pkg, pkgDownloadDirectory)
+            Downloader(DownloaderConfiguration()).download(pkg, pkgDownloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
 

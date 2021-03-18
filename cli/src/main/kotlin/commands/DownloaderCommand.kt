@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
@@ -39,6 +40,7 @@ import java.io.File
 
 import kotlin.time.measureTimedValue
 
+import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -117,6 +119,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revisions " +
                 "are forbidden because they are not pointing to a fixed revision of the source code."
     ).flag()
+
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     /**
      * The mode to use for archiving downloaded source code.
@@ -203,7 +207,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                 packageDownloadDirs.forEach { (pkg, dir) ->
                     try {
-                        Downloader.download(pkg, dir, allowMovingRevisions)
+                        Downloader(globalOptionsForSubcommands.config.downloader).download(
+                            pkg,
+                            dir,
+                            allowMovingRevisions
+                        )
 
                         if (archiveMode == ArchiveMode.ENTITY && archive(pkg, dir)) {
                             dir.safeDeleteRecursively(baseDirectory = outputDir)
@@ -258,7 +266,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     // Always allow moving revisions when directly downloading a single project only. This is for
                     // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
                     // project needs to be downloaded.
-                    Downloader.download(dummyPackage, outputDir, allowMovingRevisions = true)
+                    Downloader(globalOptionsForSubcommands.config.downloader).download(
+                        dummyPackage,
+                        outputDir,
+                        allowMovingRevisions = true
+                    )
                 } catch (e: DownloadException) {
                     e.showStackTrace()
 

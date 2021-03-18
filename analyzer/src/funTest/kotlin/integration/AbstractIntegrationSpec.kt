@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -85,7 +86,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         // Do not use the usual simple class name as the suffix here to shorten the path which otherwise gets too long
         // on Windows for SimpleFormIntegrationTest.
         outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
-        provenance = Downloader.download(pkg, outputDir)
+        provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
     }
 
     override fun afterSpec(spec: Spec) {
