@@ -79,11 +79,11 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val providerFactory by option(
         "--advisor", "-a",
-        help = "The advisor to use, one of ${allVulnerabilityProvidersByName.keys}"
+        help = "The advisor to use, one of ${allVulnerabilityProvidersByName.keys}."
     ).convert { name ->
         allVulnerabilityProvidersByName[name]
             ?: throw BadParameterValue(
-                "Advisor '$name' is not one of ${allVulnerabilityProvidersByName.keys}"
+                "Advisor '$name' is not one of ${allVulnerabilityProvidersByName.keys}."
             )
     }.required()
 
