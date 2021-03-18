@@ -166,6 +166,23 @@ private fun getLinkageForDependency(
     }.singleOrNull() ?: PackageLinkage.DYNAMIC
 
 /**
+ * Return true if the [relation] as defined in [relationships] describes that the [source] depends on the [target].
+ */
+private fun hasDependsOnRelationship(
+    source: String, target: String, relation: SpdxRelationship.Type, relationships: List<SpdxRelationship>
+): Boolean {
+    if (relation == SpdxRelationship.Type.DEPENDS_ON) return true
+
+    val hasScopeRelationship = relationships.any {
+        it.relationshipType in SPDX_SCOPE_RELATIONSHIPS
+                // Scope relationships are defined in "reverse" as a "dependency of".
+                && it.relatedSpdxElement == source && it.spdxElementId == target
+    }
+
+    return relation in SPDX_LINKAGE_RELATIONSHIPS && !hasScopeRelationship
+}
+
+/**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
  * packages. See https://github.com/spdx/spdx-spec/issues/439 for details.
  */
@@ -294,7 +311,8 @@ class SpdxDocumentFile(
                 }
 
                 // ...or on the source.
-                pkg.spdxId.equals(source, ignoreCase = true) && relation == SpdxRelationship.Type.DEPENDS_ON -> {
+                pkg.spdxId.equals(source, ignoreCase = true)
+                        && hasDependsOnRelationship(source, target, relation, doc.relationships) -> {
                     if (pkg.spdxId != source) {
                         issues += createAndLogIssue(
                             source = managerName,
