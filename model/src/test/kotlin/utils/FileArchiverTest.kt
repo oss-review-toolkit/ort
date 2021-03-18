@@ -30,13 +30,21 @@ import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
 
-private val PROVENANCE = Provenance(vcsInfo = VcsInfo.EMPTY)
+private val PROVENANCE = Provenance(
+    vcsInfo = VcsInfo(
+        type = VcsType.GIT,
+        url = "url",
+        revision = "0000000000000000000000000000000000000000",
+        resolvedRevision = "0000000000000000000000000000000000000000"
+    )
+)
 
 class FileArchiverTest : StringSpec() {
     private lateinit var workingDir: File
