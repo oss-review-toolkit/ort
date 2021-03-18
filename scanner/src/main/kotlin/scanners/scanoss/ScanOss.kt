@@ -28,8 +28,7 @@ import com.scanoss.scanner.ScannerConf
 import java.io.File
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
@@ -46,10 +45,11 @@ class ScanOss(
 
     override val configuration = ""
 
+    override val resultFileExt = "json"
 
     // TODO Implement support for Scanning with SBOM
     // TODO Support API configuration other than OSS KB.
-    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
         val startTime = Instant.now()
 
         val scannerConf = ScannerConf.defaultConf()
@@ -61,11 +61,10 @@ class ScanOss(
         }
         val endTime = Instant.now()
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, path, result)
-        return ScanResult(Provenance(), getDetails(), summary)
+        return generateSummary(startTime, endTime, path, result)
     }
 
-    fun getRawResult(resultsFile: File): JsonNode =
+    private fun getRawResult(resultsFile: File): JsonNode =
         parseResult(resultsFile)
 
 
