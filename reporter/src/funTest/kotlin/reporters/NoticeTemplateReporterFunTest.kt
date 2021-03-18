@@ -59,7 +59,7 @@ class NoticeTemplateReporterFunTest : WordSpec({
             val config = OrtConfiguration(
                 scanner = ScannerConfiguration(
                     archive = FileArchiverConfiguration(
-                        storage = FileStorageConfiguration(
+                        fileStorage = FileStorageConfiguration(
                             localFileStorage = LocalFileStorageConfiguration(
                                 directory = archiveDir,
                                 compression = false
