@@ -23,6 +23,17 @@ jobs:
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
+  markdown:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Check Links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        check-modified-files-only: yes
+        max-depth: 2
+        use-quiet-mode: yes
   reuse:
     runs-on: ubuntu-latest
     steps:
