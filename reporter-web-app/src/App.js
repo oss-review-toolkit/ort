@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,12 @@ import {
     Row,
     Tabs
 } from 'antd';
-import { ControlOutlined } from '@ant-design/icons';
+import {
+    ControlOutlined,
+    PartitionOutlined,
+    PieChartOutlined,
+    TableOutlined
+} from '@ant-design/icons';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AboutModal from './components/AboutModal';
@@ -97,13 +102,37 @@ class ReporterApp extends Component {
                                 />
                             )}
                         >
-                            <TabPane tab="Summary" key="ort-tabs-summary">
+                            <TabPane
+                                tab={(
+                                    <span>
+                                        <PieChartOutlined />
+                                        Summary
+                                    </span>
+                                )}
+                                key="ort-tabs-summary"
+                            >
                                 <SummaryView />
                             </TabPane>
-                            <TabPane tab="Table" key="ort-tabs-table">
+                            <TabPane
+                                tab={(
+                                    <span>
+                                        <TableOutlined />
+                                        Table
+                                    </span>
+                                )}
+                                key="ort-tabs-table"
+                            >
                                 <TableView />
                             </TabPane>
-                            <TabPane tab="Tree" key="ort-tabs-tree">
+                            <TabPane
+                                tab={(
+                                    <span>
+                                        <PartitionOutlined />
+                                        Tree
+                                    </span>
+                                )}
+                                key="ort-tabs-tree"
+                            >
                                 <TreeView />
                             </TabPane>
                         </Tabs>
