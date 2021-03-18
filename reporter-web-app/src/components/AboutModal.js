@@ -31,8 +31,8 @@ import {
     TagsOutlined
 } from '@ant-design/icons';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import dark from 'react-syntax-highlighter/dist/esm/styles/hljs/dark';
-import markdown from 'react-syntax-highlighter/dist/esm/languages/hljs/markdown';
+import lioshi from 'react-syntax-highlighter/dist/esm/styles/hljs/lioshi';
+import yaml from 'react-syntax-highlighter/dist/esm/languages/hljs/yaml';
 import {
     getOrtResult
 } from '../reducers/selectors';
@@ -41,7 +41,7 @@ import store from '../store';
 const { Item } = Descriptions;
 const { TabPane } = Tabs;
 
-SyntaxHighlighter.registerLanguage('markdown', markdown);
+SyntaxHighlighter.registerLanguage('yaml', yaml);
 
 const AboutModal = (props) => {
     const { webAppOrtResult } = props;
@@ -74,9 +74,9 @@ const AboutModal = (props) => {
                             key="ort-tabs-excludes"
                         >
                             <SyntaxHighlighter
-                                language="markdown"
+                                language="yaml"
                                 showLineNumbers
-                                style={dark}
+                                style={lioshi}
                             >
                                 {repositoryConfiguration}
                             </SyntaxHighlighter>
