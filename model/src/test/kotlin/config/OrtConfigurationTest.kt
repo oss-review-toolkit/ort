@@ -35,6 +35,7 @@ import java.lang.IllegalArgumentException
 
 import kotlin.io.path.createTempFile
 
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -58,6 +59,10 @@ class OrtConfigurationTest : WordSpec({
                     clientPassword shouldBe "clientPassword"
                     token shouldBe "token"
                 }
+            }
+
+            ortConfig.downloader shouldNotBeNull {
+                sourceCodeOrigins shouldBe listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
             }
 
             with(ortConfig.scanner) {
