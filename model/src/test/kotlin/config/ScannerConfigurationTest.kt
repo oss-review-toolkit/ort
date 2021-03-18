@@ -46,7 +46,7 @@ class ScannerConfigurationTest : WordSpec({
             // Relative paths have been normalized, passwords do not get serialized, etc.
             loadedConfig.storageReaders shouldBe ortConfig.scanner.storageReaders
             loadedConfig.storageWriters shouldBe ortConfig.scanner.storageWriters
-            loadedConfig.archive?.storage?.httpFileStorage should beNull()
+            loadedConfig.archive?.fileStorage?.httpFileStorage should beNull()
 
             val loadedStorages = loadedConfig.storages.orEmpty()
             val orgStorages = ortConfig.scanner.storages.orEmpty()

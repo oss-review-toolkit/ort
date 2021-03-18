@@ -62,8 +62,8 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.scanner) {
                 archive shouldNotBeNull {
-                    storage.httpFileStorage should beNull()
-                    storage.localFileStorage shouldNotBeNull {
+                    fileStorage.httpFileStorage should beNull()
+                    fileStorage.localFileStorage shouldNotBeNull {
                         directory shouldBe File("~/.ort/scanner/archive")
                     }
                 }
