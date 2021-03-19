@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.filterByProject
@@ -50,7 +51,11 @@ const val TOOL_NAME = "scanner"
  * The class to run license / copyright scanners. The signatures of public functions in this class define the library
  * API.
  */
-abstract class Scanner(val scannerName: String, protected val scannerConfig: ScannerConfiguration) {
+abstract class Scanner(
+    val scannerName: String,
+    protected val scannerConfig: ScannerConfiguration,
+    protected val downloaderConfig: DownloaderConfiguration
+) {
     companion object {
         private val LOADER = ServiceLoader.load(ScannerFactory::class.java)!!
 

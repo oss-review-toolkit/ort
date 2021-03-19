@@ -73,8 +73,9 @@ import org.ossreviewtoolkit.utils.showStackTrace
  */
 abstract class LocalScanner(
     name: String,
-    scannerConfig: ScannerConfiguration
-) : Scanner(name, scannerConfig), CommandLineTool {
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : Scanner(name, scannerConfig, downloaderConfig), CommandLineTool {
     companion object {
         /**
          * The number of threads to use for the storage dispatcher.
@@ -300,7 +301,7 @@ abstract class LocalScanner(
 
             if (missingArchives.isNotEmpty()) {
                 val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
-                Downloader(DownloaderConfiguration()).download(pkg, pkgDownloadDirectory)
+                Downloader(downloaderConfig).download(pkg, pkgDownloadDirectory)
 
                 missingArchives.forEach { provenance ->
                     if (provenance is KnownProvenance) {
@@ -338,7 +339,7 @@ abstract class LocalScanner(
         val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
         val provenance = try {
-            Downloader(DownloaderConfiguration()).download(pkg, pkgDownloadDirectory)
+            Downloader(downloaderConfig).download(pkg, pkgDownloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
 

@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
@@ -47,9 +48,14 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpackZip
 
-class Askalono(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
+class Askalono(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
-        override fun create(scannerConfig: ScannerConfiguration) = Askalono(scannerName, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            Askalono(scannerName, scannerConfig, downloaderConfig)
     }
 
     override val expectedVersion = "0.4.3"

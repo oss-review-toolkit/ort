@@ -28,6 +28,7 @@ import java.lang.reflect.Modifier
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.Scanner
@@ -76,8 +77,11 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                     Scanner::class.java.isAssignableFrom(it) -> {
                         category = "Scanner"
                         log.debug { "$it is a $category." }
-                        it.getDeclaredConstructor(String::class.java, ScannerConfiguration::class.java)
-                            .newInstance("", ScannerConfiguration())
+                        it.getDeclaredConstructor(
+                            String::class.java,
+                            ScannerConfiguration::class.java,
+                            DownloaderConfiguration::class.java
+                        ).newInstance("", ScannerConfiguration(), DownloaderConfiguration())
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {

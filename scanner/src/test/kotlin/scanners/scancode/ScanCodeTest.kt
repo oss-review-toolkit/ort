@@ -23,10 +23,11 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class ScanCodeTest : WordSpec({
-    val scanner = ScanCode("ScanCode", ScannerConfiguration())
+    val scanner = ScanCode("ScanCode", ScannerConfiguration(), DownloaderConfiguration())
 
     "configuration()" should {
         "return the default values if the scanner configuration is empty" {
@@ -42,7 +43,8 @@ class ScanCodeTest : WordSpec({
                             "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
-                )
+                ),
+                DownloaderConfiguration()
             )
 
             scannerWithConfig.configuration shouldBe "--command --line --json-pp"
@@ -64,7 +66,8 @@ class ScanCodeTest : WordSpec({
                             "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
-                )
+                ),
+                DownloaderConfiguration()
             )
 
             scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe

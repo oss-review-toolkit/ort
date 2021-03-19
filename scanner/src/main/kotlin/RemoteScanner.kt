@@ -20,12 +20,17 @@
 package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
  * Abstraction for a [Scanner] that runs on a remote host.
  */
-abstract class RemoteScanner(name: String, scannerConfig: ScannerConfiguration) : Scanner(name, scannerConfig) {
+abstract class RemoteScanner(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : Scanner(name, scannerConfig, downloaderConfig) {
     /**
      * The version of the scanner, or an empty string if not applicable.
      */

@@ -27,6 +27,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
@@ -37,9 +38,14 @@ import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 
-class Licensee(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
+class Licensee(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {
-        override fun create(scannerConfig: ScannerConfiguration) = Licensee(scannerName, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            Licensee(scannerName, scannerConfig, downloaderConfig)
     }
 
     companion object {

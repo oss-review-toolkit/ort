@@ -32,6 +32,7 @@ import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -40,6 +41,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
+    protected val downloaderConfig = DownloaderConfiguration()
     protected val scannerConfig = ScannerConfiguration()
 
     // This is loosely based on the patterns from

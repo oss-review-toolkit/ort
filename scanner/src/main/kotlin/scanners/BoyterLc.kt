@@ -33,6 +33,7 @@ import okhttp3.Request
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
@@ -46,9 +47,14 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpackZip
 
-class BoyterLc(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
+class BoyterLc(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
-        override fun create(scannerConfig: ScannerConfiguration) = BoyterLc(scannerName, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            BoyterLc(scannerName, scannerConfig, downloaderConfig)
     }
 
     companion object {

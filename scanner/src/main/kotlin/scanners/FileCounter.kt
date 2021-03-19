@@ -25,6 +25,7 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readJsonFile
@@ -37,9 +38,14 @@ import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
  * scanners it is useful for testing the scanner tool, for example during development or when integrating it with other
  * tools.
  */
-class FileCounter(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
+class FileCounter(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<FileCounter>("FileCounter") {
-        override fun create(scannerConfig: ScannerConfiguration) = FileCounter(scannerName, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            FileCounter(scannerName, scannerConfig, downloaderConfig)
     }
 
     data class FileCountResult(val fileCount: Int)
