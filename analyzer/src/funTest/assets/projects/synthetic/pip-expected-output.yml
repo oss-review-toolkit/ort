@@ -26,7 +26,7 @@ project:
       dependencies:
       - id: "PyPI::click:6.7"
       - id: "PyPI::itsdangerous:0.24"
-      - id: "PyPI::jinja2:2.10.1"
+      - id: "PyPI::jinja2:2.11.3"
         dependencies:
         - id: "PyPI::markupsafe:1.0"
       - id: "PyPI::werkzeug:0.15.3"
@@ -130,30 +130,28 @@ packages:
     url: "https://github.com/mitsuhiko/itsdangerous.git"
     revision: ""
     path: ""
-- id: "PyPI::jinja2:2.10.1"
-  purl: "pkg:pypi/jinja2@2.10.1"
+- id: "PyPI::jinja2:2.11.3"
+  purl: "pkg:pypi/jinja2@2.11.3"
   authors:
   - "Armin Ronacher"
   declared_licenses:
-  - "BSD"
   - "BSD License"
+  - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
-      BSD: "BSD-3-Clause"
       BSD License: "BSD-3-Clause"
-  description: "A small but fast and easy to use stand-alone template engine written\
-    \ in pure python."
-  homepage_url: "http://jinja.pocoo.org/"
+  description: "A very fast and expressive template engine."
+  homepage_url: "https://palletsprojects.com/p/jinja/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/1d/e7/fd8b501e7a6dfe492a433deb7b9d833d39ca74916fa8bc63dd1a4947a671/Jinja2-2.10.1-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/7e/c2/1eece8c95ddbc9b1aeb64f5783a9e07a286de42191b7204d67b7496ddf35/Jinja2-2.11.3-py2.py3-none-any.whl"
     hash:
-      value: "93ca8152bf9ca03214158a49d542402f"
+      value: "8e733c6f4cdef7f6a336299e8e548dfa"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d/Jinja2-2.10.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69768ded990494809106f87da1d436418d5f1367ed3966fd7/Jinja2-2.11.3.tar.gz"
     hash:
-      value: "0ae535be40fd215a8114a090c8b68e5a"
+      value: "231dc00d34afb2672c497713fa9cdaaa"
       algorithm: "MD5"
   vcs:
     type: ""
