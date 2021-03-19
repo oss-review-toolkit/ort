@@ -21,6 +21,7 @@
 
 val cliktVersion: String by project
 val config4kVersion: String by project
+val exposedVersion: String by project
 val jacksonVersion: String by project
 val hikariVersion: String by project
 val kotestVersion: String by project
@@ -129,6 +130,10 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
     implementation("org.eclipse.sw360:client:$sw360ClientVersion")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")

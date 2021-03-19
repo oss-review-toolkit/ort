@@ -30,12 +30,18 @@ import java.sql.SQLException
 
 import kotlin.time.measureTimedValue
 
+import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
+
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.formatSizeInMib
@@ -97,24 +103,26 @@ class UploadResultToPostgresCommand : CliktCommand(
             applicationNameSuffix = "upload-result-command"
         )
 
-        dataSource.connection.use { connection ->
-            val query = "INSERT INTO ${postgresConfig.schema}.$tableName ($columnName) VALUES (to_json(?::json)::jsonb)"
+        Database.connect(dataSource)
 
-            val json = jsonMapper.writeValueAsString(ortResult.withResolvedScopes()).escapeNull()
+        val table = OrtResults(tableName, columnName)
 
-            try {
-                val statement = connection.prepareStatement(query)
-                statement.setString(1, json)
-                statement.execute()
-
-                println("Successfully stored ORT result.")
-            } catch (e: SQLException) {
-                e.showStackTrace()
-
-                println("Could not store ORT result: ${e.collectMessagesAsString()}")
+        try {
+            transaction {
+                table.insert {
+                    it[result] = ortResult
+                }
             }
+
+            println("Successfully stored ORT result.")
+        } catch (e: SQLException) {
+            e.showStackTrace()
+
+            println("Could not store ORT result: ${e.collectMessagesAsString()}")
         }
     }
+}
 
-    private fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
+private class OrtResults(tableName: String, columnName: String) : IntIdTable(tableName) {
+    val result: Column<OrtResult> = jsonb(columnName, OrtResult::class)
 }
