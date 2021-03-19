@@ -37,9 +37,9 @@ import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 
-class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class Licensee(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {
-        override fun create(config: ScannerConfiguration) = Licensee(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration) = Licensee(scannerName, scannerConfig)
     }
 
     companion object {

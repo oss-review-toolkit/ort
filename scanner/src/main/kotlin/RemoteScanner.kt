@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 /**
  * Abstraction for a [Scanner] that runs on a remote host.
  */
-abstract class RemoteScanner(name: String, config: ScannerConfiguration) : Scanner(name, config) {
+abstract class RemoteScanner(name: String, scannerConfig: ScannerConfiguration) : Scanner(name, scannerConfig) {
     /**
      * The version of the scanner, or an empty string if not applicable.
      */

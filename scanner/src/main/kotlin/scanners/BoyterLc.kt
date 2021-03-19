@@ -46,9 +46,9 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpackZip
 
-class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class BoyterLc(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
-        override fun create(config: ScannerConfiguration) = BoyterLc(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration) = BoyterLc(scannerName, scannerConfig)
     }
 
     companion object {

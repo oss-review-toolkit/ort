@@ -50,7 +50,7 @@ const val TOOL_NAME = "scanner"
  * The class to run license / copyright scanners. The signatures of public functions in this class define the library
  * API.
  */
-abstract class Scanner(val scannerName: String, protected val config: ScannerConfiguration) {
+abstract class Scanner(val scannerName: String, protected val scannerConfig: ScannerConfiguration) {
     companion object {
         private val LOADER = ServiceLoader.load(ScannerFactory::class.java)!!
 
@@ -142,14 +142,14 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
         val endTime = Instant.now()
 
-        val filteredScannerOptions = config.options?.let { options ->
+        val filteredScannerOptions = scannerConfig.options?.let { options ->
             options[scannerName]?.let { scannerOptions ->
                 val filteredScannerOptions = filterOptionsForResult(scannerOptions)
                 options.toMutableMap().apply { put(scannerName, filteredScannerOptions) }
             }
-        } ?: config.options
+        } ?: scannerConfig.options
 
-        val configWithFilteredOptions = config.copy(options = filteredScannerOptions)
+        val configWithFilteredOptions = scannerConfig.copy(options = filteredScannerOptions)
         val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
 
         // Note: This overwrites any existing ScannerRun from the input file.

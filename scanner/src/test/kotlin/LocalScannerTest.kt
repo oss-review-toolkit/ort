@@ -93,8 +93,8 @@ private fun createConfig(properties: Map<String, String>): ScannerConfiguration 
 /**
  * Create a test instance of [LocalScanner].
  */
-private fun createScanner(config: ScannerConfiguration): LocalScanner =
-    object : LocalScanner(SCANNER_NAME, config) {
+private fun createScanner(scannerConfig: ScannerConfiguration): LocalScanner =
+    object : LocalScanner(SCANNER_NAME, scannerConfig) {
         override val configuration = "someConfig"
 
         override val resultFileExt: String

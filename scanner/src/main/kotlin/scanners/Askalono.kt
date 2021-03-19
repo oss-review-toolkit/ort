@@ -47,9 +47,9 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpackZip
 
-class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class Askalono(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
-        override fun create(config: ScannerConfiguration) = Askalono(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration) = Askalono(scannerName, scannerConfig)
     }
 
     override val expectedVersion = "0.4.3"
