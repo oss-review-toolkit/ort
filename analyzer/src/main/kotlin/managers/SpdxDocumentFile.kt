@@ -217,6 +217,7 @@ class SpdxDocumentFile(
             val dependency = doc.packages.singleOrNull { it.spdxId == target }
                 ?: throw IllegalArgumentException("No single package with target ID '$target' found.")
 
+            
             packages += dependency.toPackage(workingDir)
 
             PackageReference(
