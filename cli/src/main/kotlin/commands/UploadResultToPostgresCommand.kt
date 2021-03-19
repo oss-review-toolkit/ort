@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
@@ -33,6 +34,8 @@ import kotlin.time.measureTimedValue
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -41,6 +44,8 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
@@ -74,6 +79,11 @@ class UploadResultToPostgresCommand : CliktCommand(
         help = "The name of the JSONB column to store the ORT result."
     ).required()
 
+    private val createTable by option(
+        "--create-table",
+        help = "Create the table if it does not exist."
+    ).flag()
+
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
@@ -106,6 +116,17 @@ class UploadResultToPostgresCommand : CliktCommand(
         Database.connect(dataSource)
 
         val table = OrtResults(tableName, columnName)
+
+        if (createTable) {
+            transaction {
+                withDataBaseLock {
+                    if (!tableExists(tableName)) {
+                        checkDatabaseEncoding()
+                        SchemaUtils.createMissingTablesAndColumns(table)
+                    }
+                }
+            }
+        }
 
         try {
             transaction {
