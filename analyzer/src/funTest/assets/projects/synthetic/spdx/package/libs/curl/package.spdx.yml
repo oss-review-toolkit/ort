@@ -19,7 +19,7 @@ packages:
   copyrightText: "Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
     contributors, see the THANKS file."
   downloadLocation: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
-  filesAnalyzed: false
+  filesAnalyzed: true
   homepage: "https://curl.haxx.se/"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "curl"
