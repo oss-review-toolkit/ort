@@ -24,6 +24,7 @@ import java.io.IOException
 import java.security.MessageDigest
 
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
@@ -82,8 +83,12 @@ private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
  * Calculate the SHA-1 hash of the storage key of this [Provenance] instance.
  */
 private fun Provenance.hash(): String {
-    val key = vcsInfo?.let {
-        "${it.type}${it.url}${it.resolvedRevision}"
+    val key = vcsInfo?.let { vcs ->
+        // The content on the archives does not depend on the VCS path in general, thus that path must not be part
+        // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes the
+        // Git-Repo manifest location rather than the path to be (sparse) checked out.
+        val path = vcs.path.takeIf { vcs.type == VcsType.GIT_REPO }.orEmpty()
+        "${vcs.type}${vcs.url}${vcs.resolvedRevision}$path"
     } ?: sourceArtifact!!.let {
         "${it.url}${it.hash.value}"
     }
