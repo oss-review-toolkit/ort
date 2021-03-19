@@ -26,10 +26,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.SQLException
-import java.util.Properties
 
 import kotlin.time.measureTimedValue
 
@@ -38,7 +35,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
+import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.formatSizeInMib
@@ -95,7 +92,12 @@ class UploadResultToPostgresCommand : CliktCommand(
             "The column name must not be blank."
         }
 
-        createConnection(postgresConfig).use { connection ->
+        val dataSource = DatabaseUtils.createHikariDataSource(
+            config = postgresConfig,
+            applicationNameSuffix = "upload-result-command"
+        )
+
+        dataSource.connection.use { connection ->
             val query = "INSERT INTO ${postgresConfig.schema}.$tableName ($columnName) VALUES (to_json(?::json)::jsonb)"
 
             val json = jsonMapper.writeValueAsString(ortResult.withResolvedScopes()).escapeNull()
@@ -112,39 +114,6 @@ class UploadResultToPostgresCommand : CliktCommand(
                 println("Could not store ORT result: ${e.collectMessagesAsString()}")
             }
         }
-    }
-
-    private fun createConnection(config: PostgresStorageConfiguration): Connection {
-        require(config.url.isNotBlank()) {
-            "URL for PostgreSQL storage is missing."
-        }
-
-        require(config.schema.isNotBlank()) {
-            "Database for PostgreSQL storage is missing."
-        }
-
-        require(config.username.isNotBlank()) {
-            "Username for PostgreSQL storage is missing."
-        }
-
-        require(config.password.isNotBlank()) {
-            "Password for PostgreSQL storage is missing."
-        }
-
-        val properties = Properties()
-        properties["user"] = config.username
-        properties["password"] = config.password
-        properties["ApplicationName"] = "$ORT_FULL_NAME - CLI - $commandName"
-
-        // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
-        // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
-        // "sslmode", "ssl" is not required.
-        properties["sslmode"] = config.sslmode
-        config.sslcert?.let { properties["sslcert"] = it }
-        config.sslkey?.let { properties["sslkey"] = it }
-        config.sslrootcert?.let { properties["sslrootcert"] = it }
-
-        return DriverManager.getConnection(config.url, properties)
     }
 
     private fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
