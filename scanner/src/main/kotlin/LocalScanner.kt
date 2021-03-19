@@ -70,7 +70,10 @@ import org.ossreviewtoolkit.utils.showStackTrace
 /**
  * Abstraction for a [Scanner] that operates locally. Scan results can be stored in a [ScanResultsStorage].
  */
-abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
+abstract class LocalScanner(
+    name: String,
+    scannerConfig: ScannerConfiguration
+) : Scanner(name, scannerConfig), CommandLineTool {
     companion object {
         /**
          * The number of threads to use for the storage dispatcher.
@@ -94,7 +97,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     }
 
     private val archiver by lazy {
-        config.archive.createFileArchiver()
+        scannerConfig.archive.createFileArchiver()
     }
 
     /**
@@ -185,7 +188,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
      */
     open fun getScannerCriteria(): ScannerCriteria {
-        val options = config.options?.get(scannerName).orEmpty()
+        val options = scannerConfig.options?.get(scannerName).orEmpty()
         val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(expectedVersion))
         val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
         val name = options[PROP_CRITERIA_NAME] ?: scannerName
@@ -211,7 +214,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         log.info { "Found stored scan results for ${resultsFromStorage.size} packages and $scannerCriteria." }
 
-        if (config.createMissingArchives) {
+        if (scannerConfig.createMissingArchives) {
             createMissingArchives(resultsFromStorage, downloadDirectory)
         }
 
@@ -235,7 +238,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 // Due to a bug that has been fixed in d839f6e the scan results for packages were not properly filtered
                 // by VCS path. Filter them again to fix the problem.
                 // TODO: Remove this workaround together with the next change that requires recreating the scan storage.
-                scanResults.map { it.filterByVcsPath().filterByIgnorePatterns(config.ignorePatterns) }
+                scanResults.map { it.filterByVcsPath().filterByIgnorePatterns(scannerConfig.ignorePatterns) }
             }
 
     private fun List<Package>.scan(outputDirectory: File, downloadDirectory: File): Map<Package, List<ScanResult>> {
@@ -381,7 +384,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
         val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
-        val filteredResult = scanResult.filterByIgnorePatterns(config.ignorePatterns)
+        val filteredResult = scanResult.filterByIgnorePatterns(scannerConfig.ignorePatterns)
 
         return when (storageResult) {
             is Success -> filteredResult
@@ -444,7 +447,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 log.info {
                     "Detected licenses for path '$absoluteInputPath': ${it.licenses.joinToString()}"
                 }
-            }.filterByIgnorePatterns(config.ignorePatterns)
+            }.filterByIgnorePatterns(scannerConfig.ignorePatterns)
         } catch (e: ScanException) {
             e.showStackTrace()
 
@@ -475,7 +478,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val scanRecord = ScanRecord(sortedMapOf(id to listOf(scanResult)), ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), scannerConfig, scanRecord)
 
         val repository = Repository(VersionControlSystem.getCloneInfo(inputPath))
         return OrtResult(repository, scanner = scannerRun)

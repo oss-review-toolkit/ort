@@ -69,9 +69,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * * **"user":** The user to connect to the FossID server.
  * * **"apiKey":** The API key of the user which connects to the FossID server.
  */
-class FossId(name: String, config: ScannerConfiguration) : RemoteScanner(name, config) {
+class FossId(name: String, scannerConfig: ScannerConfiguration) : RemoteScanner(name, scannerConfig) {
     class Factory : AbstractScannerFactory<FossId>("FossId") {
-        override fun create(config: ScannerConfiguration) = FossId(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration) = FossId(scannerName, scannerConfig)
     }
 
     companion object {
@@ -118,7 +118,7 @@ class FossId(name: String, config: ScannerConfiguration) : RemoteScanner(name, c
     override val configuration = ""
 
     init {
-        val fossIdScannerOptions = config.options?.get("FossId")
+        val fossIdScannerOptions = scannerConfig.options?.get("FossId")
 
         requireNotNull(fossIdScannerOptions) { "No FossId Scanner configuration found." }
 

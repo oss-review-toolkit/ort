@@ -33,9 +33,9 @@ interface ScannerFactory {
     val scannerName: String
 
     /**
-     * Create a [Scanner] using the specified [config].
+     * Create a [Scanner] using the specified [scannerConfig].
      */
-    fun create(config: ScannerConfiguration): Scanner
+    fun create(scannerConfig: ScannerConfiguration): Scanner
 }
 
 /**
@@ -44,7 +44,7 @@ interface ScannerFactory {
 abstract class AbstractScannerFactory<out T : Scanner>(
     override val scannerName: String
 ) : ScannerFactory {
-    abstract override fun create(config: ScannerConfiguration): T
+    abstract override fun create(scannerConfig: ScannerConfiguration): T
 
     /**
      * Return the scanner's name here to allow Clikt to display something meaningful when listing the scanners

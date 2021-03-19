@@ -37,9 +37,9 @@ import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
  * scanners it is useful for testing the scanner tool, for example during development or when integrating it with other
  * tools.
  */
-class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class FileCounter(name: String, scannerConfig: ScannerConfiguration) : LocalScanner(name, scannerConfig) {
     class Factory : AbstractScannerFactory<FileCounter>("FileCounter") {
-        override fun create(config: ScannerConfiguration) = FileCounter(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration) = FileCounter(scannerName, scannerConfig)
     }
 
     data class FileCountResult(val fileCount: Int)

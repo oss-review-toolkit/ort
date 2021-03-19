@@ -61,10 +61,10 @@ import org.ossreviewtoolkit.utils.unpack
  */
 class ScanCode(
     name: String,
-    config: ScannerConfiguration
-) : LocalScanner(name, config) {
+    scannerConfig: ScannerConfiguration
+) : LocalScanner(name, scannerConfig) {
     class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration) = ScanCode(scannerName, scannerConfig)
     }
 
     companion object {
@@ -110,7 +110,7 @@ class ScanCode(
 
     override val resultFileExt = "json"
 
-    private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
+    private val scanCodeConfiguration = scannerConfig.options?.get("ScanCode").orEmpty()
 
     private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(' ')
         ?: DEFAULT_CONFIGURATION_OPTIONS
