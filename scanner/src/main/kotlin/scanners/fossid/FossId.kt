@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
@@ -69,9 +70,14 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * * **"user":** The user to connect to the FossID server.
  * * **"apiKey":** The API key of the user which connects to the FossID server.
  */
-class FossId(name: String, scannerConfig: ScannerConfiguration) : RemoteScanner(name, scannerConfig) {
+class FossId(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : RemoteScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<FossId>("FossId") {
-        override fun create(scannerConfig: ScannerConfiguration) = FossId(scannerName, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            FossId(scannerName, scannerConfig, downloaderConfig)
     }
 
     companion object {

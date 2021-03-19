@@ -35,6 +35,7 @@ import okio.sink
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
@@ -61,10 +62,12 @@ import org.ossreviewtoolkit.utils.unpack
  */
 class ScanCode(
     name: String,
-    scannerConfig: ScannerConfiguration
-) : LocalScanner(name, scannerConfig) {
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(scannerConfig: ScannerConfiguration) = ScanCode(scannerName, scannerConfig)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            ScanCode(scannerName, scannerConfig, downloaderConfig)
     }
 
     companion object {

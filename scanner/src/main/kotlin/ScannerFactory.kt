@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner
 
 import java.util.ServiceLoader
 
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
@@ -33,9 +34,9 @@ interface ScannerFactory {
     val scannerName: String
 
     /**
-     * Create a [Scanner] using the specified [scannerConfig].
+     * Create a [Scanner] using the specified [scannerConfig] and [downloaderConfig].
      */
-    fun create(scannerConfig: ScannerConfiguration): Scanner
+    fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration): Scanner
 }
 
 /**
@@ -44,7 +45,7 @@ interface ScannerFactory {
 abstract class AbstractScannerFactory<out T : Scanner>(
     override val scannerName: String
 ) : ScannerFactory {
-    abstract override fun create(scannerConfig: ScannerConfiguration): T
+    abstract override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration): T
 
     /**
      * Return the scanner's name here to allow Clikt to display something meaningful when listing the scanners
