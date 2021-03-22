@@ -173,7 +173,7 @@ ${exceptionText}
 <<<
 [/#list]
 
-== License files for packages
+== License Files for Packages
 
 [#list packages as package]
 [#if !package.excluded]
