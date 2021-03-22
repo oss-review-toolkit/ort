@@ -24,16 +24,34 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 /**
  * The license choices configured for a repository.
  */
 data class LicenseChoices(
+    /**
+     * [LicenseChoice]s that are applied to all packages in the repository.
+     * Since the [LicenseChoice] is applied to each package that offers this license as a choice, [LicenseChoice.given]
+     * can not be null. This helps only applying the choice to a wanted [LicenseChoice.given] as opposed to all
+     * licenses with that choice, which could lead to unwanted applied choices.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val repositoryLicenseChoices: List<LicenseChoice> = emptyList(),
+
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageLicenseChoices: List<PackageLicenseChoice> = emptyList()
 ) {
     @JsonIgnore
-    fun isEmpty() = packageLicenseChoices.isEmpty()
+    fun isEmpty() = packageLicenseChoices.isEmpty() && repositoryLicenseChoices.isEmpty()
+
+    init {
+        val choicesWithoutGiven = repositoryLicenseChoices.filter { it.given == null }
+        require(choicesWithoutGiven.isEmpty()) {
+            "LicenseChoices ${choicesWithoutGiven.joinToString()} defined in $ORT_REPO_CONFIG_FILENAME are missing " +
+                    "the 'given' expression."
+        }
+    }
 }
 
 /**

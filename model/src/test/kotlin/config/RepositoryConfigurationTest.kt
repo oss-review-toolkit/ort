@@ -19,12 +19,16 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.yamlMapper
@@ -43,6 +47,23 @@ class RepositoryConfigurationTest : WordSpec({
 
             val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
             config.excludes.paths[0].matches("android/project1/build.gradle") shouldBe true
+        }
+
+        "throw ValueInstantiationException if no given is supplied for repository_license_choices" {
+            val configuration = """
+                license_choices:
+                  repository_license_choices:
+                  - given: Apache-2.0 or GPL-2.0-only
+                    choice: GPL-2.0-only
+                  - choice: MIT
+            """.trimIndent()
+
+            val exception = shouldThrow<ValueInstantiationException> {
+                yamlMapper.readValue<RepositoryConfiguration>(configuration)
+            }
+
+            exception.message shouldContain "problem: LicenseChoices LicenseChoice(given=null, choice=MIT)"
+            exception.message shouldNotContain "GPL-2.0-only"
         }
 
         "be deserializable" {
@@ -70,6 +91,9 @@ class RepositoryConfigurationTest : WordSpec({
                     reason: "INEFFECTIVE_VULNERABILITY"
                     comment: "vulnerability comment"
                 license_choices:
+                  repository_license_choices:
+                  - given: Apache-2.0 or GPL-2.0-only
+                    choice: GPL-2.0-only
                   package_license_choices:
                   - package_id: "Maven:com.example:lib:0.0.1"
                     license_choices:
@@ -118,6 +142,13 @@ class RepositoryConfigurationTest : WordSpec({
                 id shouldBe "vulnerability id"
                 reason shouldBe VulnerabilityResolutionReason.INEFFECTIVE_VULNERABILITY
                 comment shouldBe "vulnerability comment"
+            }
+
+            val repositoryLicenseChoices = repositoryConfiguration.licenseChoices.repositoryLicenseChoices
+            repositoryLicenseChoices should haveSize(1)
+            with(repositoryLicenseChoices.first()) {
+                given shouldBe "Apache-2.0 or GPL-2.0-only".toSpdx()
+                choice shouldBe "GPL-2.0-only".toSpdx()
             }
 
             val packageLicenseChoices = repositoryConfiguration.licenseChoices.packageLicenseChoices
