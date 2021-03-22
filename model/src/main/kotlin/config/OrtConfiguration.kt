@@ -24,6 +24,7 @@ import com.sksamuel.hoplite.ConfigLoader
 import com.sksamuel.hoplite.ConfigResult
 import com.sksamuel.hoplite.Node
 import com.sksamuel.hoplite.PropertySource
+import com.sksamuel.hoplite.PropertySourceContext
 import com.sksamuel.hoplite.fp.getOrElse
 import com.sksamuel.hoplite.fp.valid
 import com.sksamuel.hoplite.parsers.toNode
@@ -100,7 +101,7 @@ data class OrtConfiguration(
         private fun argumentsSource(args: Map<String, String>): PropertySource {
             val node = args.toProperties().toNode("arguments").valid()
             return object : PropertySource {
-                override fun node(): ConfigResult<Node> = node
+                override fun node(context: PropertySourceContext): ConfigResult<Node> = node
             }
         }
     }
