@@ -103,6 +103,11 @@ abstract class ScanResultsStorage {
             val readers = config.storageReaders.orEmpty().map { resolve(it) }
             val writers = config.storageWriters.orEmpty().map { resolve(it) }
 
+            log.info {
+                "Using composite storage with readers ${readers.joinToString { it.name }} and writers " +
+                        "${writers.joinToString { it.name }}."
+            }
+
             return CompositeStorage(readers, writers)
         }
 
@@ -144,6 +149,10 @@ abstract class ScanResultsStorage {
                 maxPoolSize = LocalScanner.NUM_STORAGE_THREADS + 3
             )
 
+            log.info {
+                "Using Postgres storage with URL '${config.url}' and schema '${config.schema}'."
+            }
+
             return PostgresStorage(dataSource)
         }
 
@@ -151,13 +160,17 @@ abstract class ScanResultsStorage {
          * Create a [ClearlyDefinedStorage] based on the [config] passed in.
          */
         private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration): ScanResultsStorage =
-            ClearlyDefinedStorage(config)
+            ClearlyDefinedStorage(config).also {
+                log.info { "Using ClearlyDefined storage with URL '${config.serverUrl}'." }
+            }
 
         /**
          * Configure a [Sw360Storage] as the current storage backend.
          */
         private fun configureSw360Storage(config: Sw360StorageConfiguration): ScanResultsStorage =
-            Sw360Storage(config)
+            Sw360Storage(config).also {
+                log.info { "Using SW360 storage with auth URL '${config.authUrl}' and REST URL '${config.restUrl}'." }
+            }
     }
 
     /**
