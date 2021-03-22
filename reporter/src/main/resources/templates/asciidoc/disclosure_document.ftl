@@ -74,7 +74,7 @@ The applicable license information is listed below:
 [#list copyrights as copyright]
 ** +${copyright}+
 [#else]
-** No copyright found
+** No copyright found.
 [/#list]
 
 [/#list]
@@ -103,7 +103,7 @@ License File: <<${packageName(package)} ${licenseFile.path}, ${licenseFile.path}
 [#list copyrights as copyright]
 ** +${copyright}+
 [#else]
-** No copyright found
+** No copyright found.
 [/#list]
 
 [/#list]
@@ -134,7 +134,7 @@ The following licenses and copyrights were found in the source code of this pack
 [#list copyrights as copyright]
 ** +${copyright}+
 [#else]
-** No copyright found
+** No copyright found.
 [/#list]
 
 [/#list]
