@@ -86,8 +86,8 @@ val packageWithOnlyDeclaredLicense = Package.EMPTY.copy(
 )
 
 val packageWithOnlyDetectedLicense = Package.EMPTY.copy(
-    id = Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0"),
-    concludedLicense = concludedLicense
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0")
+    // Detected license for this package is added in the ortResult.
 )
 
 val packageWithConcludedAndDeclaredLicense = Package.EMPTY.copy(
