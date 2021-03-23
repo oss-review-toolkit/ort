@@ -29,13 +29,11 @@ import java.time.Instant
 import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.model.CopyrightFinding
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
@@ -71,16 +69,6 @@ private val UNKNOWN_LICENSE_KEYS = listOf(
     "unknown",
     "unknown-license-reference"
 )
-
-/**
- * Parse a [resultsFile] from ScanCode to a JSON node, which can then be further processed.
- */
-internal fun parseResultsFile(resultsFile: File): JsonNode =
-    if (resultsFile.isFile && resultsFile.length() > 0L) {
-        jsonMapper.readTree(resultsFile)
-    } else {
-        EMPTY_JSON_NODE
-    }
 
 /**
  * Generate a summary from the given raw ScanCode [result], using [startTime] and [endTime] metadata. From the

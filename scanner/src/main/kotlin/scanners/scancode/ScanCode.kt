@@ -36,6 +36,7 @@ import okio.sink
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
@@ -229,5 +230,5 @@ class ScanCode(
             }
         }
 
-    override fun getRawResult(resultsFile: File) = parseResultsFile(resultsFile)
+    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 }
