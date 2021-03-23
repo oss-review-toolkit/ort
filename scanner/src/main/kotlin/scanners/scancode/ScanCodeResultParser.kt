@@ -124,15 +124,6 @@ internal fun generateSummary(
         issues = getIssues(result)
     )
 
-/**
- * Generates an object with details about the ScanCode scanner that produced the given [result]. The
- * corresponding metadata from the result is evaluated.
- */
-internal fun generateScannerDetails(result: JsonNode) =
-    result["headers"]?.let { headers ->
-        generateScannerDetailsFromNode(headers.first(), "options", "tool_version")
-    } ?: generateScannerDetailsFromNode(result, "scancode_options", "scancode_version")
-
 private fun getFileCount(result: JsonNode): Int {
     // ScanCode 2.9.8 and above nest the files count in an extra header.
     result["headers"]?.forEach { header ->
@@ -143,6 +134,52 @@ private fun getFileCount(result: JsonNode): Int {
 
     // ScanCode 2.9.7 and below contain the files count at the top level.
     return result["files_count"]?.intValue() ?: 0
+}
+
+/**
+ * Generates an object with details about the ScanCode scanner that produced the given [result]. The
+ * corresponding metadata from the result is evaluated.
+ */
+internal fun generateScannerDetails(result: JsonNode) =
+    result["headers"]?.let { headers ->
+        generateScannerDetailsFromNode(headers.first(), "options", "tool_version")
+    } ?: generateScannerDetailsFromNode(result, "scancode_options", "scancode_version")
+
+/**
+ * Generate a ScannerDetails object from the given [result] node, which structure depends on the current ScanCode
+ * version. The node names to check are specified via [optionsNode], and [versionNode].
+ */
+private fun generateScannerDetailsFromNode(result: JsonNode, optionsNode: String, versionNode: String):
+        ScannerDetails {
+    val config = generateScannerOptions(result[optionsNode])
+    val version = result[versionNode].textValueOrEmpty()
+    return ScannerDetails(ScanCode.SCANNER_NAME, version, config)
+}
+
+/**
+ * Convert the JSON node with ScanCode [options] to a string that corresponds to the options as they have been
+ * passed on the command line.
+ */
+private fun generateScannerOptions(options: JsonNode?): String {
+    fun addValues(list: MutableList<String>, node: JsonNode, key: String) {
+        if (node.isEmpty) {
+            list += key
+            list += node.asText()
+        } else {
+            node.forEach {
+                list += key
+                list += it.asText()
+            }
+        }
+    }
+
+    return options?.let {
+        val optionList = it.fieldNames().asSequence().fold(mutableListOf<String>()) { list, opt ->
+            addValues(list, it[opt], opt)
+            list
+        }
+        optionList.joinToString(separator = " ")
+    }.orEmpty()
 }
 
 /**
@@ -189,22 +226,6 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
 }
 
 /**
- * Return the given [licenseExpression] with all ScanCode license keys replaced with SPDX license IDs as specified by
- * [replacements].
- */
-internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collection<LicenseKeyReplacement>): String =
-    replacements.fold(licenseExpression) { expression, replacement ->
-        var result = expression
-        val regex = "(?:^| |\\()(${replacement.scanCodeLicenseKey})(?:$| |\\))".toRegex()
-
-        regex.findAll(expression).forEach {
-            result = expression.replaceRange(it.groups[1]!!.range, replacement.spdxExpression)
-        }
-
-        result
-    }
-
-/**
  * Get the SPDX license id (or a fallback) for a license finding.
  */
 private fun getSpdxLicenseId(license: JsonNode): String {
@@ -229,16 +250,21 @@ private fun getSpdxLicenseId(license: JsonNode): String {
     }
 }
 
-private fun getIssues(result: JsonNode): List<OrtIssue> =
-    result["files"]?.flatMap { file ->
-        val path = file["path"].textValue()
-        file["scan_errors"].map {
-            OrtIssue(
-                source = ScanCode.SCANNER_NAME,
-                message = "${it.textValue()} (File: $path)"
-            )
+/**
+ * Return the given [licenseExpression] with all ScanCode license keys replaced with SPDX license IDs as specified by
+ * [replacements].
+ */
+internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collection<LicenseKeyReplacement>): String =
+    replacements.fold(licenseExpression) { expression, replacement ->
+        var result = expression
+        val regex = "(?:^| |\\()(${replacement.scanCodeLicenseKey})(?:$| |\\))".toRegex()
+
+        regex.findAll(expression).forEach {
+            result = expression.replaceRange(it.groups[1]!!.range, replacement.spdxExpression)
         }
-    }.orEmpty()
+
+        result
+    }
 
 /**
  * Get the copyright findings from the given [result].
@@ -275,41 +301,46 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
     return copyrightFindings
 }
 
-/**
- * Generate a ScannerDetails object from the given [result] node, which structure depends on the current ScanCode
- * version. The node names to check are specified via [optionsNode], and [versionNode].
- */
-private fun generateScannerDetailsFromNode(result: JsonNode, optionsNode: String, versionNode: String):
-        ScannerDetails {
-    val config = generateScannerOptions(result[optionsNode])
-    val version = result[versionNode].textValueOrEmpty()
-    return ScannerDetails(ScanCode.SCANNER_NAME, version, config)
-}
+private fun getIssues(result: JsonNode): List<OrtIssue> =
+    result["files"]?.flatMap { file ->
+        val path = file["path"].textValue()
+        file["scan_errors"].map {
+            OrtIssue(
+                source = ScanCode.SCANNER_NAME,
+                message = "${it.textValue()} (File: $path)"
+            )
+        }
+    }.orEmpty()
 
 /**
- * Convert the JSON node with ScanCode [options] to a string that corresponds to the options as they have been
- * passed on the command line.
+ * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred,
+ * return false otherwise.
  */
-private fun generateScannerOptions(options: JsonNode?): String {
-    fun addValues(list: MutableList<String>, node: JsonNode, key: String) {
-        if (node.isEmpty) {
-            list += key
-            list += node.asText()
-        } else {
-            node.forEach {
-                list += key
-                list += it.asText()
+internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
+    if (issues.isEmpty()) {
+        return false
+    }
+
+    var onlyTimeoutErrors = true
+
+    val mappedIssues = issues.map { fullError ->
+        TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
+            if (matcher.matches() && matcher.group("timeout") == ScanCode.TIMEOUT.toString()) {
+                val file = matcher.group("file")
+                fullError.copy(
+                    message = "ERROR: Timeout after ${ScanCode.TIMEOUT} seconds while scanning file '$file'."
+                )
+            } else {
+                onlyTimeoutErrors = false
+                fullError
             }
         }
     }
 
-    return options?.let {
-        val optionList = it.fieldNames().asSequence().fold(mutableListOf<String>()) { list, opt ->
-            addValues(list, it[opt], opt)
-            list
-        }
-        optionList.joinToString(separator = " ")
-    }.orEmpty()
+    issues.clear()
+    issues += mappedIssues.distinctBy { it.message }
+
+    return onlyTimeoutErrors
 }
 
 /**
@@ -346,35 +377,4 @@ internal fun mapUnknownIssues(issues: MutableList<OrtIssue>): Boolean {
     issues += mappedIssues.distinctBy { it.message }
 
     return onlyMemoryErrors
-}
-
-/**
- * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred,
- * return false otherwise.
- */
-internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
-    if (issues.isEmpty()) {
-        return false
-    }
-
-    var onlyTimeoutErrors = true
-
-    val mappedIssues = issues.map { fullError ->
-        TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
-            if (matcher.matches() && matcher.group("timeout") == ScanCode.TIMEOUT.toString()) {
-                val file = matcher.group("file")
-                fullError.copy(
-                    message = "ERROR: Timeout after ${ScanCode.TIMEOUT} seconds while scanning file '$file'."
-                )
-            } else {
-                onlyTimeoutErrors = false
-                fullError
-            }
-        }
-    }
-
-    issues.clear()
-    issues += mappedIssues.distinctBy { it.message }
-
-    return onlyTimeoutErrors
 }
