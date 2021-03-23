@@ -120,7 +120,7 @@ abstract class ScanResultsStorage {
                 is FileBasedStorageConfiguration -> createFileBasedStorage(config)
                 is PostgresStorageConfiguration -> createPostgresStorage(config)
                 is ClearlyDefinedStorageConfiguration -> createClearlyDefinedStorage(config)
-                is Sw360StorageConfiguration -> configureSw360Storage(config)
+                is Sw360StorageConfiguration -> createSw360Storage(config)
             }
 
         /**
@@ -168,7 +168,7 @@ abstract class ScanResultsStorage {
         /**
          * Configure a [Sw360Storage] as the current storage backend.
          */
-        private fun configureSw360Storage(config: Sw360StorageConfiguration): ScanResultsStorage =
+        private fun createSw360Storage(config: Sw360StorageConfiguration): ScanResultsStorage =
             Sw360Storage(config).also {
                 log.info { "Using SW360 storage with auth URL '${config.authUrl}' and REST URL '${config.restUrl}'." }
             }
