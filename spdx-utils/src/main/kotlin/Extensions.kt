@@ -42,6 +42,11 @@ fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Set<K> =
     if (this is Set) emptySet() else groupBy(keySelector).filter { it.value.size > 1 }.keys
 
 /**
+ * Return the duplicates of a collection.
+ */
+fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }
+
+/**
  * Return an [EnumSet] that contains the elements of [this] and [other].
  */
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
