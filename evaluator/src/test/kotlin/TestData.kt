@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.Environment
 
-val concludedLicense = "LicenseRef-a OR LicenseRef-b".toSpdx()
+val concludedLicense = "LicenseRef-a OR LicenseRef-b OR LicenseRef-c or LicenseRef-d".toSpdx()
 val declaredLicenses = sortedSetOf("Apache-2.0", "MIT")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
 
@@ -167,6 +167,12 @@ val ortResult = OrtResult(
                 )
             ),
             licenseChoices = LicenseChoices(
+                repositoryLicenseChoices = listOf(
+                    // This license choice will not be applied to "only-concluded-license" since the package license
+                    // choice takes precedence.
+                    LicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-b".toSpdx()),
+                    LicenseChoice("LicenseRef-c OR LicenseRef-d".toSpdx(), "LicenseRef-d".toSpdx())
+                ),
                 packageLicenseChoices = listOf(
                     PackageLicenseChoice(
                         packageId = Identifier("Maven:org.ossreviewtoolkit:package-with-only-concluded-license:1.0"),

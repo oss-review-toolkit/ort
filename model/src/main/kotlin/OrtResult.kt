@@ -393,6 +393,13 @@ data class OrtResult(
         repository.config.licenseChoices.packageLicenseChoices.find { it.packageId == id }?.licenseChoices.orEmpty()
 
     /**
+     * Return all [LicenseChoice]s applicable for the scope of the whole [repository].
+     */
+    @JsonIgnore
+    fun getRepositoryLicenseChoices(): List<LicenseChoice> =
+        repository.config.licenseChoices.repositoryLicenseChoices
+
+    /**
      * Return the list of [AdvisorResult]s for the given [id].
      */
     fun getAdvisorResultsForId(id: Identifier): List<AdvisorResult> = advisorResultsById[id].orEmpty()
