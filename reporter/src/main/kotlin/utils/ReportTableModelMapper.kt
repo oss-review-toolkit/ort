@@ -162,7 +162,8 @@ class ReportTableModelMapper(
                     detectedLicenses = detectedLicenses,
                     effectiveLicense = resolvedLicenseInfo.effectiveLicense(
                         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
-                        ortResult.getLicenseChoices(id)
+                        ortResult.getLicenseChoices(id),
+                        ortResult.getRepositoryLicenseChoices()
                     ),
                     analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
                     scanIssues = scanIssues.map { it.toResolvableIssue() }

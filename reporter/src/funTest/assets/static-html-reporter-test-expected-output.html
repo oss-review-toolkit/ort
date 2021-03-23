@@ -657,7 +657,34 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
             </td>
           </tr>
           <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">3</a></td><td>Maven:com.h2database:h2:1.4.200</td><td>
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">3</a></td><td>Maven:com.foobar:foobar:1.0</td><td>
+              <ul>
+                <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                </li>
+              </ul>
+            </td><td><em>Concluded License:</em>
+              <dl>
+                <dd>GPL-2.0-only OR MIT</dd>
+              </dl>
+              <em>Declared Licenses:</em>
+              <dl>
+                <dd>
+                  <div>GPL-2.0-only</div>
+                  <div>MIT</div>
+                </dd>
+              </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>MIT</dd>
+              </dl>
+            </td><td>
+              <ul></ul>
+            </td><td>
+              <ul></ul>
+            </td>
+          </tr>
+          <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">4</a></td><td>Maven:com.h2database:h2:1.4.200</td><td>
               <ul>
                 <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
                 </li>
@@ -683,31 +710,8 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
               <ul></ul>
             </td>
           </tr>
-          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">4</a></td><td>Maven:org.apache.commons:commons-lang3:3.5</td><td>
-              <ul>
-                <li class="">compile</li>
-                <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
-                </li>
-              </ul>
-            </td><td><em>Declared Licenses:</em>
-              <dl>
-                <dd>
-                  <div>Apache-2.0</div>
-                </dd>
-              </dl>
-              <em>Effective License:</em>
-              <dl>
-                <dd>Apache-2.0</dd>
-              </dl>
-            </td><td>
-              <ul></ul>
-            </td><td>
-              <ul></ul>
-            </td>
-          </tr>
           <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">5</a></td><td>Maven:org.apache.commons:commons-text:1.1</td><td>
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">5</a></td><td>Maven:org.apache.commons:commons-lang3:3.5</td><td>
               <ul>
                 <li class="">compile</li>
                 <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
@@ -729,8 +733,31 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
               <ul></ul>
             </td>
           </tr>
-          <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">6</a></td><td>Maven:org.hamcrest:hamcrest-core:1.3</td><td>
+          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">6</a></td><td>Maven:org.apache.commons:commons-text:1.1</td><td>
+              <ul>
+                <li class="">compile</li>
+                <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                </li>
+              </ul>
+            </td><td><em>Declared Licenses:</em>
+              <dl>
+                <dd>
+                  <div>Apache-2.0</div>
+                </dd>
+              </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>Apache-2.0</dd>
+              </dl>
+            </td><td>
+              <ul></ul>
+            </td><td>
+              <ul></ul>
+            </td>
+          </tr>
+          <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">7</a></td><td>Maven:org.hamcrest:hamcrest-core:1.3</td><td>
               <ul>
                 <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
                 </li>
@@ -833,6 +860,9 @@ resolutions:
     reason: "CANT_FIX_EXCEPTION"
     comment: "Apache-2 is not an issue."
 license_choices:
+  repository_license_choices:
+  - given: "GPL-2.0-only OR MIT"
+    choice: "MIT"
   package_license_choices:
   - package_id: "Maven:com.h2database:h2:1.4.200"
     license_choices:
