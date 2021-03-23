@@ -145,17 +145,16 @@ private fun getFileCount(result: JsonNode): Int {
  */
 internal fun generateScannerDetails(result: JsonNode) =
     result["headers"]?.let { headers ->
-        generateScannerDetailsFromNode(headers.first(), "options", "tool_version")
-    } ?: generateScannerDetailsFromNode(result, "scancode_options", "scancode_version")
+        generateScannerDetails(headers.first(), "options", "tool_version")
+    } ?: generateScannerDetails(result, "scancode_options", "scancode_version")
 
 /**
  * Generate a ScannerDetails object from the given [result] node, which structure depends on the current ScanCode
  * version. The node names to check are specified via [optionsNode], and [versionNode].
  */
-private fun generateScannerDetailsFromNode(result: JsonNode, optionsNode: String, versionNode: String):
-        ScannerDetails {
-    val config = generateScannerOptions(result[optionsNode])
+private fun generateScannerDetails(result: JsonNode, optionsNode: String, versionNode: String): ScannerDetails {
     val version = result[versionNode].textValueOrEmpty()
+    val config = generateScannerOptions(result[optionsNode])
     return ScannerDetails(ScanCode.SCANNER_NAME, version, config)
 }
 
@@ -177,10 +176,12 @@ private fun generateScannerOptions(options: JsonNode?): String {
     }
 
     return options?.let {
-        val optionList = it.fieldNames().asSequence().fold(mutableListOf<String>()) { list, opt ->
-            addValues(list, it[opt], opt)
-            list
+        val optionList = mutableListOf<String>()
+
+        it.fieldNames().asSequence().forEach { option ->
+            addValues(optionList, it[option], option)
         }
+
         optionList.joinToString(separator = " ")
     }.orEmpty()
 }
@@ -323,9 +324,7 @@ private fun getIssues(result: JsonNode): List<OrtIssue> =
  * otherwise.
  */
 internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
-    if (issues.isEmpty()) {
-        return false
-    }
+    if (issues.isEmpty()) return false
 
     var onlyTimeoutErrors = true
 
@@ -354,9 +353,7 @@ internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
  * otherwise.
  */
 internal fun mapUnknownIssues(issues: MutableList<OrtIssue>): Boolean {
-    if (issues.isEmpty()) {
-        return false
-    }
+    if (issues.isEmpty()) return false
 
     var onlyMemoryErrors = true
 
