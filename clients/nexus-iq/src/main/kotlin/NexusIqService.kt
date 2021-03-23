@@ -41,6 +41,11 @@ import retrofit2.http.POST
 interface NexusIqService {
     companion object {
         /**
+         * The mapper for JSON (de-)serialization used by this service.
+         */
+        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+
+        /**
          * Create a NexusIQ service instance for communicating with a server running at the given [url],
          * optionally using a pre-built OkHttp [client].
          */
@@ -69,7 +74,7 @@ interface NexusIqService {
             val retrofit = Retrofit.Builder()
                 .client(nexusIqClient)
                 .baseUrl(url)
-                .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
+                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
             return retrofit.create(NexusIqService::class.java)

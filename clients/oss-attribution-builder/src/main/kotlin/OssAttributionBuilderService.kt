@@ -50,6 +50,11 @@ typealias ProjectAcl = Map<String, OssAttributionBuilderService.Role>
 interface OssAttributionBuilderService {
     companion object {
         /**
+         * The mapper for JSON (de-)serialization used by this service.
+         */
+        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+
+        /**
          * Create an OSS Attribution Builder service instance for communicating with the given [server], optionally
          * using a pre-built OkHttp [client].
          */
@@ -57,7 +62,7 @@ interface OssAttributionBuilderService {
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
                 .baseUrl(server.url)
-                .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
+                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
             return retrofit.create(OssAttributionBuilderService::class.java)

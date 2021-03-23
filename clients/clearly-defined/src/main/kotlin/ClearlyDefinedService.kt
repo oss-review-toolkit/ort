@@ -52,7 +52,7 @@ const val HARVEST_CREATED = "Created"
 interface ClearlyDefinedService {
     companion object {
         /**
-         * The mapper for JSON serialization used by this service.
+         * The mapper for JSON (de-)serialization used by this service.
          */
         val JSON_MAPPER = JsonMapper().enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
             .registerKotlinModule()
