@@ -3,3 +3,4 @@ org.ossreviewtoolkit.scanner.scanners.BoyterLc$Factory
 org.ossreviewtoolkit.scanner.scanners.Licensee$Factory
 org.ossreviewtoolkit.scanner.scanners.fossid.FossId$Factory
 org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode$Factory
+org.ossreviewtoolkit.scanner.scanners.scanoss.ScanOss$Factory

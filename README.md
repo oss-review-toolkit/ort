@@ -414,6 +414,7 @@ Additionally, the following reference implementations exist (in alphabetical ord
 * [Askalono](https://github.com/amzn/askalono)
 * [lc](https://github.com/boyter/lc)
 * [Licensee](https://github.com/benbalter/licensee)
+* [SCANOSS](https://www.scanoss.com/)
 
 For a comparison of some of these, see this
 [Bachelor Thesis](https://osr.cs.fau.de/2019/08/07/final-thesis-a-comparison-study-of-open-source-license-crawler/).
