@@ -44,7 +44,7 @@ val handledLicenses = listOf(
     copyleftLicenses,
     copyleftLimitedLicenses
 ).flatten().let {
-    it.getDuplicates { it }.let { duplicates ->
+    it.getDuplicates().let { duplicates ->
         require(duplicates.isEmpty()) {
             "The classifications for the following licenses overlap: $duplicates"
         }
