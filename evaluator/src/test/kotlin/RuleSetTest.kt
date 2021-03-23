@@ -124,7 +124,7 @@ class RuleSetTest : WordSpec() {
                 ruleSet.violations should haveSize(4)
             }
 
-            "add no license errors if license is removed by license choice" {
+            "add no license errors if license is removed by package license choice in the correct order" {
                 val ruleSet = ruleSet(ortResult) {
                     dependencyRule("test") {
                         licenseRule("test", LicenseView.ONLY_CONCLUDED) {
@@ -138,6 +138,22 @@ class RuleSetTest : WordSpec() {
                 }
 
                 ruleSet.violations should haveSize(1)
+            }
+
+            "add no license errors if license is removed by repository license choice" {
+                val ruleSet = ruleSet(ortResult) {
+                    dependencyRule("test") {
+                        licenseRule("test", LicenseView.ONLY_CONCLUDED) {
+                            require {
+                                +containsLicense("LicenseRef-c".toSpdx())
+                            }
+
+                            error(errorMessage, howToFix)
+                        }
+                    }
+                }
+
+                ruleSet.violations should haveSize(0)
             }
         }
     }
