@@ -25,6 +25,7 @@ val kotlinxCoroutinesVersion: String by project
 val mockkVersion: String by project
 val postgresVersion: String by project
 val retrofitVersion: String by project
+val scanossVersion: String by project
 val sw360ClientVersion: String by project
 val wiremockVersion: String by project
 
@@ -59,6 +60,7 @@ dependencies {
     implementation(project(":utils:core-utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.scanoss:scanner:$scanossVersion")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.eclipse.sw360:client:$sw360ClientVersion")
@@ -80,4 +82,5 @@ buildConfig {
     buildConfigField("String", "BOYTER_LC_VERSION", "\"$boyterLcVersion\"")
     buildConfigField("String", "LICENSEE_VERSION", "\"$licenseeVersion\"")
     buildConfigField("String", "SCANCODE_VERSION", "\"$scancodeVersion\"")
+    buildConfigField("String", "SCANOSS_VERSION", "\"$scanossVersion\"")
 }
