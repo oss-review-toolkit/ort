@@ -40,12 +40,16 @@ licenses:
 - _id: 10
   id: "EPL-1.0"
 - _id: 11
-  id: "MPL 2.0 or EPL 1.0"
+  id: "GPL-2.0-only OR MIT"
 - _id: 12
-  id: "MPL-2.0"
+  id: "GPL-2.0-only"
 - _id: 13
-  id: "Apache License, Version 2.0"
+  id: "MPL 2.0 or EPL 1.0"
 - _id: 14
+  id: "MPL-2.0"
+- _id: 15
+  id: "Apache License, Version 2.0"
+- _id: 16
   id: "New BSD License"
 scopes:
 - _id: 0
@@ -408,16 +412,63 @@ packages:
   scope_excludes:
   - 0
 - _id: 3
+  id: "Maven:com.foobar:foobar:1.0"
+  is_project: false
+  definition_file_path: ""
+  purl: "pkg:maven/com.foobar/foobar@1.0"
+  declared_licenses:
+  - 11
+  declared_licenses_processed:
+    spdx_expression: "GPL-2.0-only OR MIT"
+    mapped_licenses:
+    - 12
+    - 2
+  concluded_license: "GPL-2.0-only OR MIT"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  curations:
+  - base: {}
+    curation:
+      concluded_license: "GPL-2.0-only OR MIT"
+      comment: "Foobar is an imaginary dependency and offers a license choice"
+  paths:
+  - 1
+  levels:
+  - 1
+  scopes:
+  - 1
+  is_excluded: true
+  scope_excludes:
+  - 0
+- _id: 4
   id: "Maven:com.h2database:h2:1.4.200"
   is_project: false
   definition_file_path: ""
   purl: "pkg:maven/com.h2database/h2@1.4.200"
   declared_licenses:
-  - 11
+  - 13
   declared_licenses_processed:
     spdx_expression: "MPL-2.0 OR EPL-1.0"
     mapped_licenses:
-    - 12
+    - 14
     - 10
   concluded_license: "MPL-2.0 OR EPL-1.0"
   description: "H2 Database Engine"
@@ -448,7 +499,7 @@ packages:
       concluded_license: "MPL-2.0 OR EPL-1.0"
       comment: "H2 database offers a license choice"
   paths:
-  - 1
+  - 2
   levels:
   - 1
   scopes:
@@ -458,13 +509,13 @@ packages:
   is_excluded: true
   scope_excludes:
   - 0
-- _id: 4
+- _id: 5
   id: "Maven:org.apache.commons:commons-lang3:3.5"
   is_project: false
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
   declared_licenses:
-  - 13
+  - 15
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
@@ -494,8 +545,8 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 2
   - 3
+  - 4
   levels:
   - 1
   scopes:
@@ -504,13 +555,13 @@ packages:
   scan_results:
   - 4
   is_excluded: false
-- _id: 5
+- _id: 6
   id: "Maven:org.apache.commons:commons-text:1.1"
   is_project: false
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-text@1.1"
   declared_licenses:
-  - 13
+  - 15
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
@@ -539,8 +590,8 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 4
   - 5
+  - 6
   levels:
   - 0
   scopes:
@@ -549,13 +600,13 @@ packages:
   scan_results:
   - 5
   is_excluded: false
-- _id: 6
+- _id: 7
   id: "Maven:org.hamcrest:hamcrest-core:1.3"
   is_project: false
   definition_file_path: ""
   purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
   declared_licenses:
-  - 14
+  - 16
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped_licenses:
@@ -585,7 +636,7 @@ packages:
     revision: ""
     path: ""
   paths:
-  - 6
+  - 7
   levels:
   - 1
   scopes:
@@ -610,27 +661,33 @@ paths:
 - _id: 2
   pkg: 4
   project: 0
-  scope: 0
-  path:
-  - 5
-- _id: 3
-  pkg: 4
-  project: 0
   scope: 1
   path:
-  - 5
+  - 2
+- _id: 3
+  pkg: 5
+  project: 0
+  scope: 0
+  path:
+  - 6
 - _id: 4
   pkg: 5
   project: 0
-  scope: 0
-  path: []
-- _id: 5
-  pkg: 5
-  project: 0
   scope: 1
+  path:
+  - 6
+- _id: 5
+  pkg: 6
+  project: 0
+  scope: 0
   path: []
 - _id: 6
   pkg: 6
+  project: 0
+  scope: 1
+  path: []
+- _id: 7
+  pkg: 7
   project: 0
   scope: 1
   path:
@@ -644,11 +701,11 @@ dependency_trees:
     children:
     - key: 2
       linkage: "DYNAMIC"
-      pkg: 5
+      pkg: 6
       children:
       - key: 3
         linkage: "DYNAMIC"
-        pkg: 4
+        pkg: 5
   - key: 4
     scope: 1
     scope_excludes:
@@ -663,15 +720,18 @@ dependency_trees:
         pkg: 3
       - key: 7
         linkage: "DYNAMIC"
-        pkg: 6
-    - key: 8
-      linkage: "DYNAMIC"
-      pkg: 5
-      children:
-      - key: 9
-        linkage: "DYNAMIC"
         pkg: 4
-- key: 10
+      - key: 8
+        linkage: "DYNAMIC"
+        pkg: 7
+    - key: 9
+      linkage: "DYNAMIC"
+      pkg: 6
+      children:
+      - key: 10
+        linkage: "DYNAMIC"
+        pkg: 5
+- key: 11
   pkg: 1
   path_excludes:
   - 0
@@ -692,7 +752,7 @@ rule_violations:
     \ that overflow:scroll is working as expected.\n```"
 - _id: 1
   rule: "rule 2"
-  pkg: 5
+  pkg: 6
   license: 8
   license_source: "DECLARED"
   severity: "HINT"
@@ -703,7 +763,7 @@ rule_violations:
   - 0
 - _id: 2
   rule: "rule 3"
-  pkg: 6
+  pkg: 7
   license: 1
   license_source: "CONCLUDED"
   severity: "WARNING"
@@ -723,7 +783,7 @@ statistics:
     included_projects: 1
     excluded_projects: 1
     included_packages: 2
-    excludes_packages: 3
+    excludes_packages: 4
     total_tree_depth: 2
     included_tree_depth: 2
     included_scopes:
@@ -736,7 +796,9 @@ statistics:
       BSD-3-Clause: 1
       CC-BY-NC-3.0: 1
       EPL-1.0: 2
+      GPL-2.0-only: 1
       GPL-3.0-only WITH GCC-exception-3.1: 1
+      MIT: 1
       MPL-2.0: 1
     detected:
       Apache-2.0: 1
@@ -773,6 +835,9 @@ repository:
       rule_violations:
       - 0
     license_choices:
+      repository_license_choices:
+      - given: "GPL-2.0-only OR MIT"
+        choice: "MIT"
       package_license_choices:
       - package_id: "Maven:com.h2database:h2:1.4.200"
         license_choices:
@@ -784,7 +849,8 @@ repository_configuration: "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/p
   \n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n\
   \    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n\
   \  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment:\
-  \ \"Apache-2 is not an issue.\"\nlicense_choices:\n  package_license_choices:\n\
+  \ \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n\
+  \  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n\
   \  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n   \
   \ - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n"
 labels:
