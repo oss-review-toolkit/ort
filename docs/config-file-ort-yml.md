@@ -266,7 +266,7 @@ resolutions:
 ### When to Use License Choices
 
 For multi-licensed dependencies a specific license can be selected.
-The license choice can be applied to a package.
+The license choice can be applied to a package or globally to an SPDX expression in the project.
 A choice is only valid for licenses combined with the SPDX operator `OR`.
 The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated
 by the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
@@ -276,7 +276,7 @@ by the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
 To select a license from a multi-licensed dependency, specified by its `packageId`, an SPDX expression for a `choice`
 must be provided.
 The `choice` is either applied to the whole effective SPDX expression of the package or to an optional `given` SPDX 
-expression that can represent only a sub-expression of the whole effective SPDX expression.
+expression that can represent only a sub-expression of the whole effective SPDX expression. 
 
 e.g.
 ```yaml
@@ -298,6 +298,25 @@ license_choices:
     # The input from the calculated effective license would be: (C OR D) AND E
     - choice: C AND E
     # The result would be: C AND E
+```
+
+### License Choice for the Project
+
+To globally select a license from an SPDX expression, that offers a choice, an SPDX expression for a `given` and a
+`choice` must be provided.
+The `choice` is applied to the whole `given` SPDX expression.
+With a repository license choice, the license choice is applied to each package that offers this license as a choice. 
+Not allowing `given` to be null helps only applying the choice to a wanted `given` as opposed to all licenses with that
+choice, which could lead to unwanted choices.
+The license choices for a project can be overwritten by applying a 
+[license choice to a package](#license-choice-by-package).
+
+e.g.
+```yaml
+license_choices:
+  repository_license_choice:
+  - given: "A OR B"
+    choice: "B"
 ```
 
 ---
