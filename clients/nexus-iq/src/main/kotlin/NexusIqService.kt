@@ -34,6 +34,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * Interface for the NexusIQ REST API, based on the documentation from
@@ -129,6 +130,22 @@ interface NexusIqService {
         val color: String
     )
 
+    data class MemberMappings(
+        val memberMappings: List<MemberMapping>
+    )
+
+    data class MemberMapping(
+        val roleId: String,
+        val members: List<Member>
+    )
+
+    data class Member(
+        val ownerId: String,
+        val ownerType: String,
+        val type: String,
+        val userOrGroupName: String
+    )
+
     /**
      * Retrieve the details for multiple [components].
      * See https://help.sonatype.com/iqserver/automating/rest-apis/component-details-rest-api---v2.
@@ -142,4 +159,11 @@ interface NexusIqService {
      */
     @GET("api/v2/organizations")
     suspend fun getOrganizations(): Organizations
+
+    /**
+     * Get the users and groups by role for an organization.
+     * See https://help.sonatype.com/iqserver/automating/rest-apis/authorization-configuration-%28aka-role-membership%29-rest-api---v2#AuthorizationConfiguration(akaRoleMembership)RESTAPI-v2-Gettheusersandgroupsbyrole.
+     */
+    @GET("api/v2/roleMemberships/organization/{organizationId}")
+    suspend fun getRoleMembershipsForOrganization(@Path("organizationId") organizationId: String): MemberMappings
 }
