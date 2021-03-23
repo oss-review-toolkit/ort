@@ -127,19 +127,19 @@ interface VulnerableCodeService {
      * Return a map whose keys are the URLs of packages; so for each package the referenced vulnerabilities can be
      * retrieved.
      */
-    @POST("/api/packages/bulk_search")
+    @POST("api/packages/bulk_search")
     suspend fun getPackageVulnerabilities(@Body packageUrls: PackagesWrapper): Map<String, Vulnerabilities>
 
     /**
      * Retrieve detail information about the specified [vulnerabilities][vulnerabilityIds]. The resulting map
      * associates the IDs of vulnerabilities with their details.
      */
-    @POST("/api/vulnerabilities/bulk_search")
+    @POST("api/vulnerabilities/bulk_search")
     suspend fun getVulnerabilityDetails(@Body vulnerabilityIds: VulnerabilitiesWrapper): Map<String, Vulnerability>
 
     /**
      * Retrieve detail information for the vulnerability with the given [id].
      */
-    @GET("/api/vulnerabilities/{id}")
+    @GET("api/vulnerabilities/{id}")
     suspend fun getVulnerability(@Path("id") id: String): Vulnerability
 }
