@@ -69,16 +69,17 @@ data class ResolvedLicenseInfo(
     /**
      * Return the effective [SpdxExpression] of this [ResolvedLicenseInfo] based on their [licenses] filtered by the
      * [licenseView] and the applied [licenseChoices]. Effective, in this context, refers to an [SpdxExpression] that
-     * can be used as a final license of this [ResolvedLicenseInfo].
+     * can be used as a final license of this [ResolvedLicenseInfo]. [licenseChoices] will be applied in the order they
+     * are given to the function.
      */
-    fun effectiveLicense(licenseView: LicenseView, licenseChoices: List<LicenseChoice> = emptyList()): SpdxExpression? {
+    fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<LicenseChoice>): SpdxExpression? {
         val resolvedLicenseInfo = filter(licenseView, filterSources = true)
 
         return resolvedLicenseInfo.licenses.flatMap { it.originalExpressions.values }
             .flatten()
             .toSet()
             .reduceOrNull(SpdxExpression::and)
-            ?.applyChoices(licenseChoices)
+            ?.applyChoices(licenseChoices.asList().flatten())
             ?.validChoices()
             ?.reduceOrNull(SpdxExpression::or)
     }

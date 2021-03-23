@@ -108,6 +108,24 @@ class ResolvedLicenseInfoTest : WordSpec() {
 
                 effectiveLicense shouldBe mit.toSpdx()
             }
+
+            "apply package and repository license choice for LicenseView.ONLY_CONCLUDED in the correct order" {
+                val repositoryChoices = listOf(
+                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                )
+                val packageChoices = listOf(
+                    LicenseChoice("$apache OR $mit".toSpdx(), apache.toSpdx())
+                )
+
+                val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(
+                    LicenseView.ALL,
+                    packageChoices,
+                    repositoryChoices
+                )
+
+                effectiveLicense shouldBe "$apache and ($mit or $gpl) and $bsd".toSpdx()
+            }
         }
 
         "applyChoices(licenseChoices)" should {
