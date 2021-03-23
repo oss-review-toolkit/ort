@@ -32,6 +32,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 /**
@@ -111,10 +112,34 @@ interface NexusIqService {
         val packageUrl: String
     )
 
+    data class Organizations(
+        val organizations: List<Organization>
+    )
+
+    data class Organization(
+        val id: String,
+        val name: String,
+        val tags: List<Tag>
+    )
+
+    data class Tag(
+        val id: String,
+        val name: String,
+        val description: String,
+        val color: String
+    )
+
     /**
      * Retrieve the details for multiple [components].
      * See https://help.sonatype.com/iqserver/automating/rest-apis/component-details-rest-api---v2.
      */
     @POST("api/v2/components/details")
     suspend fun getComponentDetails(@Body components: ComponentsWrapper): ComponentDetailsWrapper
+
+    /**
+     * Produce a list of all organizations and associated information that are viewable for the current user.
+     * See https://help.sonatype.com/iqserver/automating/rest-apis/organization-rest-apis---v2#OrganizationRESTAPIs-v2-GetOrganizations.
+     */
+    @GET("api/v2/organizations")
+    suspend fun getOrganizations(): Organizations
 }
