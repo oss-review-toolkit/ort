@@ -83,9 +83,9 @@ internal fun parseResultsFile(resultsFile: File): JsonNode =
     }
 
 /**
- * Generate a summary from the given raw ScanCode [result], using [startTime] and [endTime] metadata.
- * From the [scanPath] the package verification code is generated. If [parseExpressions] is true, license findings are
- * preferably parsed as license expressions.
+ * Generate a summary from the given raw ScanCode [result], using [startTime] and [endTime] metadata. From the
+ * [scanPath] the package verification code is generated. If [parseExpressions] is true, license findings are preferably
+ * parsed as license expressions.
  */
 internal fun generateSummary(
     startTime: Instant,
@@ -124,6 +124,9 @@ internal fun generateSummary(
         issues = getIssues(result)
     )
 
+/**
+ * Get the number of files that have been scanned.
+ */
 private fun getFileCount(result: JsonNode): Int {
     // ScanCode 2.9.8 and above nest the files count in an extra header.
     result["headers"]?.forEach { header ->
@@ -137,8 +140,8 @@ private fun getFileCount(result: JsonNode): Int {
 }
 
 /**
- * Generates an object with details about the ScanCode scanner that produced the given [result]. The
- * corresponding metadata from the result is evaluated.
+ * Generate an object with details about the ScanCode scanner that produced the given [result]. The corresponding
+ * metadata from the result is evaluated.
  */
 internal fun generateScannerDetails(result: JsonNode) =
     result["headers"]?.let { headers ->
@@ -157,8 +160,8 @@ private fun generateScannerDetailsFromNode(result: JsonNode, optionsNode: String
 }
 
 /**
- * Convert the JSON node with ScanCode [options] to a string that corresponds to the options as they have been
- * passed on the command line.
+ * Convert the JSON node with ScanCode [options] to a string that corresponds to the options as they have been passed on
+ * the command line.
  */
 private fun generateScannerOptions(options: JsonNode?): String {
     fun addValues(list: MutableList<String>, node: JsonNode, key: String) {
@@ -301,6 +304,9 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
     return copyrightFindings
 }
 
+/**
+ * Get the list of [OrtIssue]s for scanned files.
+ */
 private fun getIssues(result: JsonNode): List<OrtIssue> =
     result["files"]?.flatMap { file ->
         val path = file["path"].textValue()
@@ -313,8 +319,8 @@ private fun getIssues(result: JsonNode): List<OrtIssue> =
     }.orEmpty()
 
 /**
- * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred,
- * return false otherwise.
+ * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return false
+ * otherwise.
  */
 internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
     if (issues.isEmpty()) {
@@ -344,8 +350,8 @@ internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
 }
 
 /**
- * Map messages about unknown issues to a more compact form. Return true if solely memory errors occurred,
- * return false otherwise.
+ * Map messages about unknown issues to a more compact form. Return true if solely memory errors occurred, return false
+ * otherwise.
  */
 internal fun mapUnknownIssues(issues: MutableList<OrtIssue>): Boolean {
     if (issues.isEmpty()) {
