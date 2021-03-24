@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
@@ -123,7 +123,7 @@ class Composer(
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("vendor")).use {
-            val manifest = jsonMapper.readTree(definitionFile)
+            val manifest = readJsonFile(definitionFile)
             val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
                 key.startsWith("require") && value.count() > 0
             }
@@ -132,7 +132,7 @@ class Composer(
                 installDependencies(workingDir)
 
                 log.info { "Reading $COMPOSER_LOCK_FILE file in $workingDir..." }
-                val lockFile = jsonMapper.readTree(workingDir.resolve(COMPOSER_LOCK_FILE))
+                val lockFile = readJsonFile(workingDir.resolve(COMPOSER_LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
 
                 // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as 
@@ -220,7 +220,7 @@ class Composer(
     }
 
     private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
-        val json = jsonMapper.readTree(definitionFile)
+        val json = readJsonFile(definitionFile)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
         val rawName = json["name"]?.textValue() ?: definitionFile.parentFile.name
