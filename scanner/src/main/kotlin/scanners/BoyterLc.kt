@@ -30,12 +30,11 @@ import kotlin.io.path.createTempDirectory
 
 import okhttp3.Request
 
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
@@ -133,12 +132,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
-    override fun getRawResult(resultsFile: File) =
-        if (resultsFile.isFile && resultsFile.length() > 0L) {
-            jsonMapper.readTree(resultsFile)
-        } else {
-            EMPTY_JSON_NODE
-        }
+    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
