@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.CommandLineTool
@@ -489,7 +490,7 @@ open class Npm(
 
     private fun getModuleInfo(moduleDir: File, scopes: Set<String>): ModuleInfo {
         val packageJsonFile = moduleDir.resolve("package.json")
-        val json = jsonMapper.readTree(packageJsonFile)
+        val json = readJsonFile(packageJsonFile)
 
         val name = json["name"].textValueOrEmpty()
         if (name.isBlank()) {
