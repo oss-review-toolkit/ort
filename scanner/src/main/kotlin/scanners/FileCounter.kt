@@ -24,10 +24,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import java.io.File
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
@@ -64,12 +64,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
         return generateSummary(startTime, endTime, path, result)
     }
 
-    override fun getRawResult(resultsFile: File) =
-        if (resultsFile.isFile && resultsFile.length() > 0L) {
-            jsonMapper.readTree(resultsFile)
-        } else {
-            EMPTY_JSON_NODE
-        }
+    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val fileCount = result["file_count"].intValue()
