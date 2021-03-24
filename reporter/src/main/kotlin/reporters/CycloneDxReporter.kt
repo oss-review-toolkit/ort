@@ -107,7 +107,7 @@ class CycloneDxReporter : Reporter {
         val projects = input.ortResult.getProjects(omitExcluded = true)
         val createSingleBom = !options[OPTION_SINGLE_BOM].isFalse()
 
-        if (createSingleBom && projects.size > 1) {
+        if (createSingleBom) {
             val reportFilename = "$REPORT_BASE_FILENAME.$REPORT_EXTENSION"
             val outputFile = outputDir.resolve(reportFilename)
 
