@@ -121,7 +121,10 @@ abstract class Scanner(
         val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
         val consolidatedReferencePackages = consolidatedProjects.keys.map { it.toCuratedPackage() }
 
-        val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages(skipExcluded)).map { it.pkg }
+        val referencePackageIdentifiers = consolidatedReferencePackages.map { it.pkg.id }
+        val packages = ortResult.getPackages(skipExcluded).filter { it.pkg.id !in referencePackageIdentifiers }
+
+        val packagesToScan = (consolidatedReferencePackages + packages).map { it.pkg }
         val scanResults = runBlocking {
             scanPackages(packagesToScan, outputDirectory, downloadDirectory).mapKeys { it.key.id }
         }.toSortedMap()
