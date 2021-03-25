@@ -244,7 +244,10 @@ abstract class ScanResultsStorage {
      * of [ScanResult]s mapped to the [Identifier]s of the [packages], wrapped in a [Result], which is a [Failure] if
      * an unexpected error occurred and a [Success] otherwise.
      */
-    fun read(packages: List<Package>, scannerCriteria: ScannerCriteria): Result<Map<Identifier, List<ScanResult>>> {
+    fun read(
+        packages: Collection<Package>,
+        scannerCriteria: ScannerCriteria
+    ): Result<Map<Identifier, List<ScanResult>>> {
         val (result, duration) = measureTimedValue { readInternal(packages, scannerCriteria) }
 
         stats.numReads.addAndGet(packages.size)
@@ -343,7 +346,7 @@ abstract class ScanResultsStorage {
      * efficient way.
      */
     protected open fun readInternal(
-        packages: List<Package>,
+        packages: Collection<Package>,
         scannerCriteria: ScannerCriteria
     ): Result<Map<Identifier, List<ScanResult>>> {
         val results = runBlocking(Dispatchers.IO) {

@@ -198,7 +198,7 @@ abstract class LocalScanner(
     }
 
     override suspend fun scanPackages(
-        packages: List<Package>,
+        packages: Collection<Package>,
         outputDirectory: File,
         downloadDirectory: File
     ): Map<Package, List<ScanResult>> {
@@ -229,7 +229,7 @@ abstract class LocalScanner(
         return resultsFromStorage + resultsFromScanner
     }
 
-    private fun readResultsFromStorage(packages: List<Package>, scannerCriteria: ScannerCriteria) =
+    private fun readResultsFromStorage(packages: Collection<Package>, scannerCriteria: ScannerCriteria) =
         when (val results = ScanResultsStorage.storage.read(packages, scannerCriteria)) {
             is Success -> results.result
             is Failure -> emptyMap()
@@ -243,7 +243,10 @@ abstract class LocalScanner(
                 scanResults.map { it.filterByVcsPath().filterByIgnorePatterns(scannerConfig.ignorePatterns) }
             }
 
-    private fun List<Package>.scan(outputDirectory: File, downloadDirectory: File): Map<Package, List<ScanResult>> {
+    private fun Collection<Package>.scan(
+        outputDirectory: File,
+        downloadDirectory: File
+    ): Map<Package, List<ScanResult>> {
         var index = 0
 
         return associateWith { pkg ->

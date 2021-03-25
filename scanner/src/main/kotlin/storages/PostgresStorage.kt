@@ -181,7 +181,7 @@ class PostgresStorage(
     }
 
     override fun readInternal(
-        packages: List<Package>,
+        packages: Collection<Package>,
         scannerCriteria: ScannerCriteria
     ): Result<Map<Identifier, List<ScanResult>>> {
         if (packages.isEmpty()) return Success(emptyMap())

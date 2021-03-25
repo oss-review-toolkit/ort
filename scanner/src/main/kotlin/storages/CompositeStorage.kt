@@ -68,7 +68,7 @@ class CompositeStorage(
         fetchReadResult { read(pkg, scannerCriteria) }
 
     override fun readInternal(
-        packages: List<Package>,
+        packages: Collection<Package>,
         scannerCriteria: ScannerCriteria
     ): Result<Map<Identifier, List<ScanResult>>> {
         if (readers.isEmpty()) return Success(emptyMap())
