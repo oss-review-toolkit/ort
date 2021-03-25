@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.arrayParam
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
+import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
@@ -191,7 +192,7 @@ class PostgresStorage(
         @Suppress("TooGenericExceptionCaught")
         return try {
             val scanResults = runBlocking(Dispatchers.IO) {
-                packages.chunked(max(packages.size / 50, 1)).map { chunk ->
+                packages.chunked(max(packages.size / LocalScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
                     suspendedTransactionAsync {
                         @Suppress("MaxLineLength")
                         ScanResultDao.find {
