@@ -212,7 +212,7 @@ private fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxC
 private fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode =
     SpdxPackageVerificationCode(
         packageVerificationCodeExcludedFiles = emptyList(),
-        packageVerificationCodeValue = summary.packageVerificationCode.toLowerCase()
+        packageVerificationCodeValue = summary.packageVerificationCode
     )
 
 private fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTextProvider): SpdxDocument {
