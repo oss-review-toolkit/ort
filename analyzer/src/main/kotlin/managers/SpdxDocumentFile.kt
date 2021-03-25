@@ -86,7 +86,7 @@ private fun SpdxDocument.isProject(): Boolean = projectPackage() != null
  * defined.
  */
 private fun SpdxDocument.projectPackage(): SpdxPackage? =
-    packages.takeIf { it.size > 1 }?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
+    packages.takeIf { it.size > 1 }?.find { it.packageFilename.isEmpty() || it.packageFilename == "." }
 
 /**
  * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
@@ -304,10 +304,10 @@ class SpdxDocumentFile(
      * contained in [doc].
      */
     private fun getSpdxPackageForId(doc: SpdxDocument, identifier: String, workingDir: File): SpdxPackage {
-        doc.packages.singleOrNull { it.spdxId == identifier }?.let { return it }
+        doc.packages.find { it.spdxId == identifier }?.let { return it }
 
         val documentRef = identifier.substringBefore(":")
-        val externalDocumentReference = doc.externalDocumentRefs.singleOrNull {
+        val externalDocumentReference = doc.externalDocumentRefs.find {
             it.externalDocumentId == documentRef
         } ?: throw IllegalArgumentException(
             "No single package or externalDocumentRef with ID '$identifier' found."
@@ -330,7 +330,7 @@ class SpdxDocumentFile(
         packages: MutableSet<Package>
     ): SortedSet<PackageReference> =
         getDependencies(pkg, doc, workingDir, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
-            val dependency = doc.packages.singleOrNull { it.spdxId == target }
+            val dependency = doc.packages.find { it.spdxId == target }
                 ?: throw IllegalArgumentException("No single package with target ID '$target' found.")
 
             packages += dependency.toPackage(workingDir)
