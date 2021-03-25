@@ -220,7 +220,7 @@ private fun getLinkageForDependency(
         SPDX_LINKAGE_RELATIONSHIPS[relation.relationshipType]?.takeIf {
             relation.relatedSpdxElement == dependency.spdxId && relation.spdxElementId == dependant
         }
-    }.singleOrNull() ?: PackageLinkage.DYNAMIC
+    }.takeUnless { it.isEmpty() }?.single() ?: PackageLinkage.DYNAMIC
 
 /**
  * Return true if the [relation] as defined in [relationships] describes that the [source] depends on the [target].
