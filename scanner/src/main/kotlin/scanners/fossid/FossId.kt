@@ -152,7 +152,7 @@ class FossId(
         }
 
     override suspend fun scanPackages(
-        packages: List<Package>,
+        packages: Collection<Package>,
         outputDirectory: File,
         downloadDirectory: File
     ): Map<Package, List<ScanResult>> {

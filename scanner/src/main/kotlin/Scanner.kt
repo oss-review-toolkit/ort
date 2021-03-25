@@ -66,13 +66,13 @@ abstract class Scanner(
     }
 
     /**
-     * Scan the list of [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to
-     * download the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may
-     * contain multiple results for the same [Package] if the storage contains more than one result for the
-     * specification of this scanner.
+     * Scan the [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to download
+     * the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may contain
+     * multiple results for the same [Package] if the storage contains more than one result for the specification of
+     * this scanner.
      */
     protected abstract suspend fun scanPackages(
-        packages: List<Package>,
+        packages: Collection<Package>,
         outputDirectory: File,
         downloadDirectory: File
     ): Map<Package, List<ScanResult>>
