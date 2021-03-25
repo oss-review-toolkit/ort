@@ -349,7 +349,7 @@ fun String.toUri() = runCatching { URI(this) }
  * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful, and [transform]
  * the [URI] if so.
  */
-fun <R> String.toUri(transform: (URI) -> R) = runCatching { URI(this) }.mapCatching(transform)
+fun <R> String.toUri(transform: (URI) -> R) = toUri().mapCatching(transform)
 
 /**
  * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
