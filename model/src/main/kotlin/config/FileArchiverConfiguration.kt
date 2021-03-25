@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import com.sksamuel.hoplite.ConfigAlias
@@ -40,6 +41,7 @@ data class FileArchiverConfiguration(
      * Configuration of the [FileStorage] used for archiving the files.
      */
     @ConfigAlias("storage")
+    @JsonAlias("storage")
     val fileStorage: FileStorageConfiguration? = null,
 
     /**
