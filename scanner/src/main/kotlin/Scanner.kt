@@ -119,7 +119,7 @@ abstract class Scanner(
 
         // Add the projects as packages to scan.
         val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
-        val projectPackages = consolidatedProjects.keys.toList()
+        val projectPackages = consolidatedProjects.keys
 
         val projectPackageIds = projectPackages.map { it.id }
         val packages = ortResult.getPackages(skipExcluded)
