@@ -923,9 +923,9 @@ packages:
   declared_licenses:
   - "GNU Lesser General Public License"
   declared_licenses_processed:
-    spdx_expression: "LGPL-2.1-only"
+    spdx_expression: "LGPL-2.1-or-later"
     mapped:
-      GNU Lesser General Public License: "LGPL-2.1-only"
+      GNU Lesser General Public License: "LGPL-2.1-or-later"
   description: "Common reflection code used in support of annotation processing"
   homepage_url: "http://hibernate.org"
   binary_artifact:
@@ -990,9 +990,9 @@ packages:
   declared_licenses:
   - "GNU Lesser General Public License"
   declared_licenses_processed:
-    spdx_expression: "LGPL-2.1-only"
+    spdx_expression: "LGPL-2.1-or-later"
     mapped:
-      GNU Lesser General Public License: "LGPL-2.1-only"
+      GNU Lesser General Public License: "LGPL-2.1-or-later"
   description: "Integration for c3p0 Connection pooling into Hibernate O/RM"
   homepage_url: "http://hibernate.org"
   binary_artifact:
@@ -1022,9 +1022,9 @@ packages:
   declared_licenses:
   - "GNU Lesser General Public License"
   declared_licenses_processed:
-    spdx_expression: "LGPL-2.1-only"
+    spdx_expression: "LGPL-2.1-or-later"
     mapped:
-      GNU Lesser General Public License: "LGPL-2.1-only"
+      GNU Lesser General Public License: "LGPL-2.1-or-later"
   description: "The core O/RM functionality as provided by Hibernate"
   homepage_url: "http://hibernate.org"
   binary_artifact:
