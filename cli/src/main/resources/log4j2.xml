@@ -9,6 +9,12 @@
     <Root level="warn">
       <AppenderRef ref="Console"/>
     </Root>
+    <Logger name="org.apache.http.headers" level="error">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="org.apache.http.wire" level="error">
+      <AppenderRef ref="Console"/>
+    </Logger>
     <Logger name="org.eclipse.jgit.internal.storage.file.FileSnapshot" level="error">
       <AppenderRef ref="Console"/>
     </Logger>
