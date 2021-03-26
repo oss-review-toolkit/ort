@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -398,8 +399,10 @@ open class Npm(
             source = managerName,
             message = "Package '$moduleName' was not installed, because the package file could not be found " +
                     "anywhere in '$rootModuleDir'. This might be fine if the module was not installed because it is " +
-                    "specific to a different platform."
+                    "specific to a different platform.",
+            severity = Severity.WARNING
         )
+
         val (namespace, name) = splitNamespaceAndName(moduleName)
 
         return PackageReference(
