@@ -238,13 +238,13 @@
 "GNU LGPL 2.1": LGPL-2.1-only
 "GNU LGPL 3.0": LGPL-3.0-only
 "GNU LGPL v2": LGPL-2.1-only
-"GNU LGPL v2+": LGPL-2.1-only
+"GNU LGPL v2+": LGPL-2.1-or-later
 "GNU LGPL v2.1": LGPL-2.1-or-later
 "GNU LGPL v3": LGPL-3.0-only
 "GNU LGPL v3+": LGPL-3.0-or-later
-"GNU LGPL": LGPL-2.1-only
-"GNU Lesser General Public Licence": LGPL-2.1-only
-"GNU Lesser General Public License (LGPL)": LGPL-2.1-only
+"GNU LGPL": LGPL-2.1-or-later
+"GNU Lesser General Public Licence": LGPL-2.1-or-later
+"GNU Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "GNU Lesser General Public License (LGPL), Version 2.1": LGPL-2.1-only
 "GNU Lesser General Public License (LGPL), Version 3": LGPL-3.0-only
 "GNU Lesser General Public License (LGPL), version 2.1 or later": LGPL-2.1-or-later
@@ -255,10 +255,10 @@
 "GNU Lesser General Public License v3 (LGPLv3)": LGPL-3.0-only
 "GNU Lesser General Public License v3 or later (LGPLv3+)": LGPL-3.0-or-later
 "GNU Lesser General Public License v3+": LGPL-3.0-or-later
-"GNU Lesser General Public License": LGPL-2.1-only
+"GNU Lesser General Public License": LGPL-2.1-or-later
 "GNU Lesser General Public License, Version 2.1": LGPL-2.1-only
-"GNU Lesser Public License": LGPL-2.1-only
-"GNU Library or Lesser General Public License (LGPL)": LGPL-2.1-only
+"GNU Lesser Public License": LGPL-2.1-or-later
+"GNU Library or Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "GNU Library or Lesser General Public License version 2.0 (LGPLv2)": LGPL-2.0-only
 "GNU Public": GPL-2.0-only
 "GPL (with dual licensing option)": GPL-2.0-only
@@ -295,13 +295,13 @@
 "LGPL v3": LGPL-3.0-only
 "LGPL v3+": LGPL-3.0-or-later
 "LGPL with exceptions or ZPL": LGPL-3.0-only OR ZPL-2.1
-"LGPL+BSD": LGPL-2.1-only AND BSD-2-Clause
+"LGPL+BSD": LGPL-2.1-or-later AND BSD-2-Clause
 "LGPL, version 2.1": LGPL-2.1-only
 "LGPL, version 3.0": LGPL-3.0-only
 "LGPL/MIT": LGPL-3.0-only OR MIT
 "LGPLv3 or later": LGPL-3.0-or-later
 "LPGL, see LICENSE file.": LGPL-3.0-only
-"Lesser General Public License (LGPL)": LGPL-2.1-only
+"Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "Lesser General Public License, version 3 or greater": LGPL-3.0-or-later
 "License Agreement For Open Source Computer Vision Library (3-clause BSD License)": BSD-3-Clause
 "MIT (http://mootools.net/license.txt)": MIT

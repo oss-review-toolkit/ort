@@ -120,10 +120,10 @@ analyzer:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
         declared_licenses_processed:
-          spdx_expression: "EPL-1.0 OR LGPL-2.1-only"
+          spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
           mapped:
             Eclipse Public License - v 1.0: "EPL-1.0"
-            GNU Lesser General Public License: "LGPL-2.1-only"
+            GNU Lesser General Public License: "LGPL-2.1-or-later"
         description: "logback-classic module"
         homepage_url: "http://logback.qos.ch/logback-classic"
         binary_artifact:
@@ -158,10 +158,10 @@ analyzer:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
         declared_licenses_processed:
-          spdx_expression: "EPL-1.0 OR LGPL-2.1-only"
+          spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
           mapped:
             Eclipse Public License - v 1.0: "EPL-1.0"
-            GNU Lesser General Public License: "LGPL-2.1-only"
+            GNU Lesser General Public License: "LGPL-2.1-or-later"
         description: "logback-core module"
         homepage_url: "http://logback.qos.ch/logback-core"
         binary_artifact:
