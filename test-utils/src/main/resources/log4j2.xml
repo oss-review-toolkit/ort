@@ -9,5 +9,8 @@
     <Root level="debug">
       <AppenderRef ref="Console"/>
     </Root>
+    <Logger name="org.eclipse.jgit.internal.storage.file.FileSnapshot" level="off">
+      <AppenderRef ref="Console"/>
+    </Logger>
   </Loggers>
 </Configuration>
