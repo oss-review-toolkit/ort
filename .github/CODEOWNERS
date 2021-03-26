@@ -1,3 +1,6 @@
+# Note that patterns are not cumulative. So order is important as only the
+# last matching pattern is used.
+
 * @sschuberth @mnonnenmacher @fviernau
 *.md @sschuberth @mnonnenmacher @fviernau @tsteenbe
 /**/*Sw360* @oheger-bosch @bs-ondem
