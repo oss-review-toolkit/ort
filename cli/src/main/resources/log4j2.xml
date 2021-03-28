@@ -9,7 +9,7 @@
     <Root level="warn">
       <AppenderRef ref="Console"/>
     </Root>
-    <Logger name="org.eclipse.jgit.internal.storage.file.FileSnapshot" level="off">
+    <Logger name="org.eclipse.jgit.internal.storage.file.FileSnapshot" level="error">
       <AppenderRef ref="Console"/>
     </Logger>
   </Loggers>
