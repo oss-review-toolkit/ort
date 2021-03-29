@@ -82,7 +82,7 @@ data class SpdxDocument(
     val hasExtractedLicensingInfos: List<SpdxExtractedLicenseInfo> = emptyList(),
 
     /**
-     * The [SpdxAnnotation]s for the [SpdxDocument]..
+     * The [SpdxAnnotation]s for the [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val annotations: List<SpdxAnnotation> = emptyList(),
@@ -92,7 +92,7 @@ data class SpdxDocument(
      * exceptions:
      *
      *  - The SPDX Document URI cannot contain a URI "part" (e.g. the # delimiter), since the # is used to uniquely
-     *    identify SPDX element identifiers. The URI must contain a scheme (e.g. https:).
+     *    identify SPDX element identifiers. The URI must contain a scheme (e.g. "https").
      *  - The URI must be unique for the SPDX document including the specific version of the SPDX document. If the SPDX
      *    document is updated, thereby creating a new version, a new URI for the updated document must be used. There
      *    can only be one URI for an SPDX document and only one SPDX document for a given URI.
