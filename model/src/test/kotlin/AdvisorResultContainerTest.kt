@@ -32,10 +32,22 @@ import java.time.Instant
 class AdvisorResultContainerTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
-    private val vulnerability11 = Vulnerability("CVE-11", 1.1F, URI("https://1.1.com"))
-    private val vulnerability12 = Vulnerability("CVE-12", 1.2F, URI("https://1.2.com"))
-    private val vulnerability21 = Vulnerability("CVE-21", 2.1F)
-    private val vulnerability22 = Vulnerability("CVE-22", 2.2F)
+    private val vulnerability11 = Vulnerability(
+        "CVE-11",
+        listOf(VulnerabilityReference(URI("https://src1.example.org"), "score1", "5"))
+    )
+    private val vulnerability12 = Vulnerability(
+        "CVE-12",
+        listOf(VulnerabilityReference(URI("https://src2.example.org"), "score1", "7"))
+    )
+    private val vulnerability21 = Vulnerability(
+        "CVE-21",
+        listOf(VulnerabilityReference(URI("https://src3.example.org"), "score2", "medium"))
+    )
+    private val vulnerability22 = Vulnerability(
+        "CVE-22",
+        listOf(VulnerabilityReference(URI("https://src1.example.org"), "score2", "low"))
+    )
 
     private val vulnerabilities1 = listOf(vulnerability11, vulnerability12)
     private val vulnerabilities2 = listOf(vulnerability21, vulnerability22)
@@ -54,15 +66,15 @@ class AdvisorResultContainerTest : WordSpec() {
     private val issue22 = OrtIssue(source = "source-22", message = "issue-22")
 
     private val advisorSummary1 = AdvisorSummary(
-            advisorStartTime1,
-            advisorEndTime1,
-            mutableListOf(issue11, issue12)
+        advisorStartTime1,
+        advisorEndTime1,
+        mutableListOf(issue11, issue12)
     )
 
     private val advisorSummary2 = AdvisorSummary(
-            advisorStartTime2,
-            advisorEndTime2,
-            mutableListOf(issue21, issue22)
+        advisorStartTime2,
+        advisorEndTime2,
+        mutableListOf(issue21, issue22)
     )
 
     private val advisorResult1 = AdvisorResult(vulnerabilities1, advisorDetails1, advisorSummary1)

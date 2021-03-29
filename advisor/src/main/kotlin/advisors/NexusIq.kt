@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.NexusIqConfiguration
 import org.ossreviewtoolkit.model.utils.PurlType
@@ -98,7 +99,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
                 }?.let { details ->
                     pkg to listOf(
                         AdvisorResult(
-                            details.securityData.securityIssues.map { it.toVulnerability() },
+                            details.securityData.securityIssues.mapNotNull { it.toVulnerability() },
                             AdvisorDetails(providerName),
                             AdvisorSummary(startTime, endTime)
                         )
@@ -110,14 +111,22 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
         }
     }
 
-    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability {
-        val browseUrl = if (url == null && reference.startsWith("sonatype-")) {
+    /**
+     * Construct a [Vulnerability] from the data stored in this issue. As a [VulnerabilityReference] requires a
+     * non-null URI, issues without an URI yield *null* results. (This is rather a paranoia check, as issues are
+     * expected to have a URI.)
+     */
+    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability? {
+        val browseUrl = if (url == null && reference.startsWith(NexusIqService.SONATYPE_PREFIX)) {
             URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
         } else {
             url
         }
 
-        return Vulnerability(reference, severity, browseUrl)
+        return browseUrl?.let { uri ->
+            val ref = VulnerabilityReference(uri, scoringSystem(), severity.toString())
+            Vulnerability(reference, listOf(ref))
+        }
     }
 
     /**

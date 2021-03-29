@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -144,7 +145,12 @@ class VulnerableCode(
             vulnerabilityUrls.map { extractVulnerabilityId(it) }
                 .map { async { service.getVulnerability(it) } }
                 .awaitAll()
-                .map { Vulnerability(it.cveId.orEmpty(), it.cvss ?: SEVERITY_UNDEFINED, URI(it.url)) }
-                .associateBy { "${it.url}" }
+                .map {
+                    Vulnerability(
+                        it.cveId.orEmpty(),
+                        listOf(VulnerabilityReference(URI(it.url), null, (it.cvss ?: SEVERITY_UNDEFINED).toString()))
+                    )
+                }
+                .associateBy { it.references.first().url.toString() }
         }
 }

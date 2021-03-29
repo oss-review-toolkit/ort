@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -103,8 +104,7 @@ class VulnerableCodeTest : WordSpec({
             langResults[0].advisor.name shouldBe ADVISOR_NAME
             val expLangVulnerability = Vulnerability(
                 id = "CVE-2014-8242",
-                severity = 42.0f,
-                url = URI("http://localhost:8000/api/vulnerabilities/v1/")
+                createReferences(URI("http://localhost:8000/api/vulnerabilities/v1/"), severity = 42.0f)
             )
             langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
 
@@ -113,13 +113,11 @@ class VulnerableCodeTest : WordSpec({
             val expStrutsVulnerabilities = listOf(
                 Vulnerability(
                     id = "CVE-2009-1382",
-                    url = URI("http://localhost:8000/api/vulnerabilities/v2/"),
-                    severity = 11.0f
+                    createReferences(URI("http://localhost:8000/api/vulnerabilities/v2/"), severity = 11.0f)
                 ),
                 Vulnerability(
                     id = "CVE-2019-CoV19",
-                    severity = 77.0f,
-                    url = URI("http://localhost:8000/api/vulnerabilities/v3/")
+                    createReferences(URI("http://localhost:8000/api/vulnerabilities/v3/"), severity = 77.0f)
                 )
             )
             strutsResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expStrutsVulnerabilities)
@@ -154,13 +152,11 @@ class VulnerableCodeTest : WordSpec({
                 val expStrutsVulnerabilities = listOf(
                     Vulnerability(
                         id = "CVE-2009-1382",
-                        url = URI("http://localhost:8000/api/vulnerabilities/v2/"),
-                        severity = 11.0f
+                        createReferences(URI("http://localhost:8000/api/vulnerabilities/v2/"), severity = 11.0f)
                     ),
                     Vulnerability(
                         id = "",
-                        severity = -1f,
-                        url = URI("http://localhost:8000/api/vulnerabilities/v3/")
+                        createReferences(URI("http://localhost:8000/api/vulnerabilities/v3/"), severity = -1f)
                     )
                 )
                 strutsResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expStrutsVulnerabilities)
@@ -307,3 +303,10 @@ private fun stubVulnerability(id: String, cveId: String, score: Float, statusCod
             )
     )
 }
+
+/**
+ * Create the references for a single vulnerability source with the given [url] that assigns the given [severity].
+ * So far, some properties are still dummy data; this will be extended when the bulk query API is available.
+ */
+private fun createReferences(url: URI, severity: Float): List<VulnerabilityReference> =
+    listOf(VulnerabilityReference(url, scoringSystem = null, severity = severity.toString()))
