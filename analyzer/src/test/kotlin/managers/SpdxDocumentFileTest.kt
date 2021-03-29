@@ -24,11 +24,15 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.spdx.SpdxModelMapper
+import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 
 /*
@@ -63,6 +67,24 @@ private val pkgForVcs = SpdxPackage(
     licenseDeclared = "NOASSERTION",
     name = "Dummy"
 )
+
+private fun createSpdxDocument(packages: List<SpdxPackage>?, hasExternalDocumentRefs: Boolean = true): SpdxDocument {
+    val spdxDocument = createSpdxDocument()
+
+    val spdxPackages = packages ?: spdxDocument.packages
+
+    return if (hasExternalDocumentRefs) {
+        spdxDocument.copy(packages = spdxPackages)
+    } else {
+        spdxDocument.copy(packages = spdxPackages, externalDocumentRefs = emptyList())
+    }
+}
+
+private fun createSpdxDocument(): SpdxDocument {
+    val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
+    val definitionFile = projectDir.resolve("project/project.spdx.yml")
+    return SpdxModelMapper.read<SpdxDocument>(definitionFile)
+}
 
 class SpdxDocumentFileTest : WordSpec({
     "getBinaryArtifact()" should {
@@ -112,6 +134,29 @@ class SpdxDocumentFileTest : WordSpec({
             getVcsInfo(pkgForVcs.copy(downloadLocation = SpdxConstants.NOASSERTION)) should beNull()
             getVcsInfo(pkgForBinaryArtifact) should beNull()
             getVcsInfo(pkgForSourceArtifact) should beNull()
+        }
+    }
+
+    "projectPackage()" should {
+        "return project package when list of packages is given" {
+            val spdxDocument = createSpdxDocument(null, false)
+            val projectPackage = spdxDocument.packages.find { it.spdxId == "SPDXRef-Package-xyz" }
+
+            spdxDocument.projectPackage() shouldBe projectPackage
+        }
+
+        "return project package when only one package in list, but external document references exist" {
+            val projectPackage = createSpdxDocument().packages.find { it.spdxId == "SPDXRef-Package-xyz" }
+            val spdxDocument = createSpdxDocument(listOf(projectPackage!!), true)
+
+            spdxDocument.projectPackage() shouldBe projectPackage
+        }
+
+        "return no project package when just one package in list" {
+            val projectPackage = createSpdxDocument().packages.find { it.spdxId == "SPDXRef-Package-xyz" }
+            val spdxDocument = createSpdxDocument(listOf(projectPackage!!), false)
+
+            spdxDocument.projectPackage() shouldBe null
         }
     }
 })

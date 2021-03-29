@@ -85,8 +85,9 @@ private fun SpdxDocument.isProject(): Boolean = projectPackage() != null
  * Return the [SpdxPackage] in the [SpdxDocument] that denotes a project, or null if no project but only packages are
  * defined.
  */
-private fun SpdxDocument.projectPackage(): SpdxPackage? =
-    packages.takeIf { it.size > 1 }?.find { it.packageFilename.isEmpty() || it.packageFilename == "." }
+internal fun SpdxDocument.projectPackage(): SpdxPackage? =
+    packages.takeIf { it.size > 1 || (it.size == 1 && externalDocumentRefs.isNotEmpty()) }
+        ?.find { it.packageFilename.isEmpty() || it.packageFilename == "." }
 
 /**
  * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
