@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.helper.commands.MergeRepositoryConfigurationsCommand
 import org.ossreviewtoolkit.helper.commands.RemoveConfigurationEntriesCommand
 import org.ossreviewtoolkit.helper.commands.SortRepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.SubtractScanResultsCommand
+import org.ossreviewtoolkit.helper.commands.TransformResultCommand
 import org.ossreviewtoolkit.helper.commands.VerifySourceArtifactCurationsCommand
 import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCommand
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
@@ -103,6 +104,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             RemoveConfigurationEntriesCommand(),
             SortRepositoryConfigurationCommand(),
             SubtractScanResultsCommand(),
+            TransformResultCommand(),
             VerifySourceArtifactCurationsCommand()
         )
     }

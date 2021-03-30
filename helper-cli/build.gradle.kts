@@ -19,6 +19,7 @@
  */
 
 val cliktVersion: String by project
+val jsltVersion: String by project
 val log4jCoreVersion: String by project
 
 plugins {
@@ -71,6 +72,7 @@ dependencies {
     implementation(project(":utils"))
 
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
+    implementation("com.schibsted.spt.data:jslt:$jsltVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
 }
