@@ -26,6 +26,7 @@ import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.string.shouldContain
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
@@ -43,6 +44,23 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
         "not contain any deprecated values" {
             SpdxDeclaredLicenseMapping.rawMapping.values.forAll {
                 it.isValid(SpdxExpression.Strictness.ALLOW_CURRENT) shouldBe true
+            }
+        }
+
+        "not associate licenses without a version to *-only" {
+            val keysWithImpliedVersion = listOf(
+                // See http://www.gwtproject.org/terms.html#licenses which explicitly mentions "GNU Lesser General
+                // Public License v. 2.1".
+                "GWT Terms",
+                "http://www.gwtproject.org/terms.html",
+                // This forwards to http://www.gnu.org/licenses/lgpl-3.0.html which has a version in the URL.
+                "http://www.gnu.org/copyleft/lesser.html"
+            )
+
+            SpdxDeclaredLicenseMapping.rawMapping.asSequence().forAll { (key, license) ->
+                if (key !in keysWithImpliedVersion && license.licenses().any { it.endsWith("-only") }) {
+                    key should containADigit()
+                }
             }
         }
     }
