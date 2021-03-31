@@ -60,17 +60,20 @@ class DefaultLicenseInfoProvider(
     private fun createDeclaredLicenseInfo(id: Identifier): DeclaredLicenseInfo =
         ortResult.getProject(id)?.let { project ->
             DeclaredLicenseInfo(
+                authors = project.authors,
                 licenses = project.declaredLicenses,
                 processed = project.declaredLicensesProcessed,
                 appliedCurations = emptyList()
             )
         } ?: ortResult.getPackage(id)?.let { (pkg, curations) ->
             DeclaredLicenseInfo(
+                authors = pkg.authors,
                 licenses = pkg.declaredLicenses,
                 processed = pkg.declaredLicensesProcessed,
                 appliedCurations = curations.filter { it.curation.declaredLicenses != null }
             )
         } ?: DeclaredLicenseInfo(
+            authors = sortedSetOf(),
             licenses = emptySet(),
             processed = ProcessedDeclaredLicense(null),
             appliedCurations = emptyList()
@@ -80,8 +83,7 @@ class DefaultLicenseInfoProvider(
         val findings = mutableListOf<Findings>()
 
         ortResult.getScanResultsForId(id).forEach { (provenance, _, summary) ->
-            val (licenseFindingCurations, pathExcludes, relativeFindingsPath) =
-                getConfiguration(id, provenance)
+            val (licenseFindingCurations, pathExcludes, relativeFindingsPath) = getConfiguration(id, provenance)
 
             findings += Findings(
                 provenance = provenance,

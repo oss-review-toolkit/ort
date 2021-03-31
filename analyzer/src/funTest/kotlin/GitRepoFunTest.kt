@@ -63,11 +63,8 @@ class GitRepoFunTest : StringSpec() {
     }
 
     init {
-        // Disabled on Travis because it causes an OutOfMemoryError for unknown reasons.
         // Disabled on Azure Windows because it fails for unknown reasons.
-        "Analyzer correctly reports VcsInfo for git-repo projects".config(
-            enabled = !Ci.isAzureWindows && !Ci.isTravis
-        ) {
+        "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isAzureWindows) {
             val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir)
             val actualResult = ortResult.toYaml()
             val expectedResult = patchExpectedResult(
@@ -79,7 +76,7 @@ class GitRepoFunTest : StringSpec() {
             patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
-        "GitRepo correctly lists submodules".config(enabled = !Ci.isTravis) {
+        "GitRepo correctly lists submodules" {
             val expectedSubmodules = listOf(
                 "spdx-tools",
                 "submodules",

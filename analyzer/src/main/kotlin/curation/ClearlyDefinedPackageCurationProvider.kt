@@ -19,13 +19,18 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
-import java.io.IOException
+import com.fasterxml.jackson.databind.JsonMappingException
+
+import java.net.HttpURLConnection
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
-import org.ossreviewtoolkit.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
+import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
@@ -40,6 +45,8 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
+
+import retrofit2.HttpException
 
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
@@ -76,24 +83,35 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
  * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient())
+    private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
 
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider() ?: return emptyList()
         val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
-        val curationCall = service.getCuration(type, provider, namespace, pkgId.name, pkgId.version)
 
-        val response = try {
-            curationCall.execute()
-        } catch (e: IOException) {
+        val curation = try {
+            // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
+            //       classes could deal with coroutines more easily.
+            runBlocking(Dispatchers.IO) { service.getCuration(type, provider, namespace, pkgId.name, pkgId.version) }
+        } catch (e: HttpException) {
+            // A "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a failure.
+            if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
+                e.showStackTrace()
+
+                log.warn {
+                    val message = e.response()?.errorBody()?.string() ?: e.collectMessagesAsString()
+                    "Getting curations for '${pkgId.toCoordinates()}' failed with code ${e.code()}: $message"
+                }
+            }
+
+            return emptyList()
+        } catch (e: JsonMappingException) {
             e.showStackTrace()
 
-            log.warn { "Getting curations for '${pkgId.toCoordinates()}' failed with: ${e.collectMessagesAsString()}" }
+            log.warn { "Deserializing the ClearlyDefined curation for '${pkgId.toCoordinates()}' failed." }
 
-            null
+            return emptyList()
         }
-
-        val curation = response?.body() ?: return emptyList()
 
         val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
             // Only take curations of good quality (i.e. those not using deprecated identifiers) and in particular none

@@ -17,23 +17,24 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.nexusiq
+package org.ossreviewtoolkit.clients.nexusiq
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import java.net.URL
+import java.net.URI
 import java.util.UUID
-import okhttp3.Credentials
 
+import okhttp3.Credentials
 import okhttp3.OkHttpClient
 
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * Interface for the NexusIQ REST API, based on the documentation from
@@ -41,6 +42,11 @@ import retrofit2.http.POST
  */
 interface NexusIqService {
     companion object {
+        /**
+         * The mapper for JSON (de-)serialization used by this service.
+         */
+        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+
         /**
          * Create a NexusIQ service instance for communicating with a server running at the given [url],
          * optionally using a pre-built OkHttp [client].
@@ -51,8 +57,8 @@ interface NexusIqService {
             password: String? = null,
             client: OkHttpClient? = null
         ): NexusIqService {
-            val nexusIqClient = (client ?: OkHttpClient()).newBuilder().apply {
-                addInterceptor { chain ->
+            val nexusIqClient = (client ?: OkHttpClient()).newBuilder()
+                .addInterceptor { chain ->
                     val request = chain.request()
                     val token = UUID.randomUUID().toString()
                     val requestBuilder = request.newBuilder()
@@ -65,12 +71,12 @@ interface NexusIqService {
 
                     chain.proceed(requestBuilder.build())
                 }
-            }.build()
+                .build()
 
             val retrofit = Retrofit.Builder()
                 .client(nexusIqClient)
                 .baseUrl(url)
-                .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
+                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
             return retrofit.create(NexusIqService::class.java)
@@ -95,7 +101,7 @@ interface NexusIqService {
     data class SecurityIssue(
         val reference: String,
         val severity: Float,
-        val url: URL?
+        val url: URI?
     )
 
     data class ComponentsWrapper(
@@ -107,10 +113,57 @@ interface NexusIqService {
         val packageUrl: String
     )
 
+    data class Organizations(
+        val organizations: List<Organization>
+    )
+
+    data class Organization(
+        val id: String,
+        val name: String,
+        val tags: List<Tag>
+    )
+
+    data class Tag(
+        val id: String,
+        val name: String,
+        val description: String,
+        val color: String
+    )
+
+    data class MemberMappings(
+        val memberMappings: List<MemberMapping>
+    )
+
+    data class MemberMapping(
+        val roleId: String,
+        val members: List<Member>
+    )
+
+    data class Member(
+        val ownerId: String,
+        val ownerType: String,
+        val type: String,
+        val userOrGroupName: String
+    )
+
     /**
      * Retrieve the details for multiple [components].
      * See https://help.sonatype.com/iqserver/automating/rest-apis/component-details-rest-api---v2.
      */
     @POST("api/v2/components/details")
-    fun getComponentDetails(@Body components: ComponentsWrapper): Call<ComponentDetailsWrapper>
+    suspend fun getComponentDetails(@Body components: ComponentsWrapper): ComponentDetailsWrapper
+
+    /**
+     * Produce a list of all organizations and associated information that are viewable for the current user.
+     * See https://help.sonatype.com/iqserver/automating/rest-apis/organization-rest-apis---v2#OrganizationRESTAPIs-v2-GetOrganizations.
+     */
+    @GET("api/v2/organizations")
+    suspend fun getOrganizations(): Organizations
+
+    /**
+     * Get the users and groups by role for an organization.
+     * See https://help.sonatype.com/iqserver/automating/rest-apis/authorization-configuration-%28aka-role-membership%29-rest-api---v2#AuthorizationConfiguration(akaRoleMembership)RESTAPI-v2-Gettheusersandgroupsbyrole.
+     */
+    @GET("api/v2/roleMemberships/organization/{organizationId}")
+    suspend fun getRoleMembershipsForOrganization(@Path("organizationId") organizationId: String): MemberMappings
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import org.asciidoctor.Asciidoctor
 import org.asciidoctor.AttributesBuilder
 import org.asciidoctor.OptionsBuilder
 import org.asciidoctor.SafeMode
+
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.FreemarkerTemplateProcessor
@@ -55,6 +57,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  *              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
  * - *pdf.theme.file*: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
  * - *pdf.fonts.dir*: A path to a directory containing custom fonts. Only used with the "pdf" backend.
+ * - *project-types-as-packages: A comma-separated list of project types to be handled as packages.
  *
  * [1]: https://freemarker.apache.org
  * [2]: https://asciidoc.org/
@@ -116,7 +119,7 @@ class AsciiDocTemplateReporter : Reporter {
             templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, buildString {
                 append(DISCLOSURE_TEMPLATE_ID)
 
-                if (input.ortResult.getAdvisorResultContainers().isNotEmpty()) {
+                if (input.ortResult.getAdvisorResults().isNotEmpty()) {
                     append(",$VULNERABILITY_TEMPLATE_ID")
                 }
             })

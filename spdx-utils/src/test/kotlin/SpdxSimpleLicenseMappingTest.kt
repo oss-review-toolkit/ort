@@ -24,9 +24,10 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveAtMostSize
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.containADigit
 
 class SpdxSimpleLicenseMappingTest : WordSpec({
     "The raw map" should {
@@ -43,6 +44,12 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
         "not contain any deprecated values" {
             SpdxSimpleLicenseMapping.customLicenseIdsMap.values.forAll {
                 it.deprecated shouldBe false
+            }
+        }
+
+        "not associate licenses without a version to *-only" {
+            SpdxSimpleLicenseMapping.customLicenseIdsMap.asSequence().forAll { (key, license) ->
+                if (license.id.endsWith("-only")) key should containADigit()
             }
         }
     }
@@ -63,7 +70,7 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
 
         "not contain plain SPDX license ids" {
             SpdxSimpleLicenseMapping.customLicenseIds.keys.forAll { declaredLicense ->
-                SpdxLicense.forId(declaredLicense).shouldBeNull()
+                SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
 

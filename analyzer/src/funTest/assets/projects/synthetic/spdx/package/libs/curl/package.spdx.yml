@@ -18,10 +18,11 @@ packages:
      IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad of powerful features."
   copyrightText: "Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
     contributors, see the THANKS file."
-  downloadLocation: "git+github.com:curl/curl.git@53cdc2c963e33bc0cc1a51ad2df79396202e07f8"
+  downloadLocation: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
   filesAnalyzed: false
   homepage: "https://curl.haxx.se/"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "curl"
   name: "curl"
   versionInfo: "7.70.0"
+  originator: "Person: Daniel Stenberg (daniel@haxx.se)"

@@ -99,10 +99,10 @@ data class SpdxPackage(
     val hasFiles: List<String> = emptyList(),
 
     /**
-     * The homepage URL. To represent a not present value [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION] must be
-     * used.
+     * The homepage URL.
      */
-    val homepage: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val homepage: String = "",
 
     /**
      * Any relevant background references or analysis that went in to arriving at the concluded License for the package.
@@ -196,8 +196,6 @@ data class SpdxPackage(
         require(downloadLocation.isNotBlank()) { "The download location must not be blank." }
 
         require(name.isNotBlank()) { "The name must not be blank." }
-
-        require(homepage.isNotBlank()) { "The homepage must not be blank." }
 
         val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION)
 

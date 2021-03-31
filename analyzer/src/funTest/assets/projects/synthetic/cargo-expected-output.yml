@@ -2,10 +2,14 @@
 project:
   id: "Cargo::lib:0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "Another Author"
+  - "anon"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   vcs:
     type: ""
     url: ""
@@ -125,8 +129,11 @@ project:
 packages:
 - id: "Crate::autocfg:0.1.6"
   purl: "pkg:cargo/autocfg@0.1.6"
+  authors:
+  - "Josh Stone"
   declared_licenses:
-  - "Apache-2.0 OR MIT"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 OR MIT"
   description: "Automatic cfg for Rust compiler features"
@@ -153,10 +160,13 @@ packages:
     path: ""
 - id: "Crate::bitflags:1.1.0"
   purl: "pkg:cargo/bitflags@1.1.0"
+  authors:
+  - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to generate structures which behave like bitflags.\n"
   homepage_url: ""
   binary_artifact:
@@ -181,10 +191,13 @@ packages:
     path: ""
 - id: "Crate::cfg-if:0.1.9"
   purl: "pkg:cargo/cfg-if@0.1.9"
+  authors:
+  - "Alex Crichton"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "A macro to ergonomically define an item depending on a large number\
     \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
     \ branch is the\nitem that gets emitted.\n"
@@ -211,6 +224,8 @@ packages:
     path: ""
 - id: "Crate::cloudabi:0.0.3"
   purl: "pkg:cargo/cloudabi@0.0.3"
+  authors:
+  - "Nuxi (https://nuxi.nl/) and contributors"
   declared_licenses:
   - "BSD-2-Clause"
   declared_licenses_processed:
@@ -240,6 +255,8 @@ packages:
     path: ""
 - id: "Crate::fuchsia-cprng:0.1.1"
   purl: "pkg:cargo/fuchsia-cprng@0.1.1"
+  authors:
+  - "Erick Tryzelaar"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Rust crate for the Fuchsia cryptographically secure pseudorandom number\
@@ -267,6 +284,8 @@ packages:
     path: ""
 - id: "Crate::libc:0.2.62"
   purl: "pkg:cargo/libc@0.2.62"
+  authors:
+  - "The Rust Project Developers"
   declared_licenses:
   - "MIT OR Apache-2.0"
   declared_licenses_processed:
@@ -295,10 +314,14 @@ packages:
     path: ""
 - id: "Crate::rand:0.6.5"
   purl: "pkg:cargo/rand@0.6.5"
+  authors:
+  - "The Rand Project Developers"
+  - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Random number generators and other randomness functionality.\n"
   homepage_url: ""
   binary_artifact:
@@ -323,10 +346,14 @@ packages:
     path: ""
 - id: "Crate::rand_chacha:0.1.1"
   purl: "pkg:cargo/rand_chacha@0.1.1"
+  authors:
+  - "The Rand Project Developers"
+  - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "ChaCha random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -351,10 +378,14 @@ packages:
     path: ""
 - id: "Crate::rand_core:0.3.1"
   purl: "pkg:cargo/rand_core@0.3.1"
+  authors:
+  - "The Rand Project Developers"
+  - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
   homepage_url: ""
   binary_artifact:
@@ -379,10 +410,14 @@ packages:
     path: ""
 - id: "Crate::rand_core:0.4.2"
   purl: "pkg:cargo/rand_core@0.4.2"
+  authors:
+  - "The Rand Project Developers"
+  - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Core random number generator traits and tools for implementation.\n"
   homepage_url: ""
   binary_artifact:
@@ -407,10 +442,13 @@ packages:
     path: ""
 - id: "Crate::rand_hc:0.1.0"
   purl: "pkg:cargo/rand_hc@0.1.0"
+  authors:
+  - "The Rand Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "HC128 random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -435,10 +473,14 @@ packages:
     path: ""
 - id: "Crate::rand_isaac:0.1.1"
   purl: "pkg:cargo/rand_isaac@0.1.1"
+  authors:
+  - "The Rand Project Developers"
+  - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "ISAAC random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -463,6 +505,8 @@ packages:
     path: ""
 - id: "Crate::rand_jitter:0.1.4"
   purl: "pkg:cargo/rand_jitter@0.1.4"
+  authors:
+  - "The Rand Project Developers"
   declared_licenses:
   - "MIT OR Apache-2.0"
   declared_licenses_processed:
@@ -491,10 +535,13 @@ packages:
     path: ""
 - id: "Crate::rand_os:0.1.3"
   purl: "pkg:cargo/rand_os@0.1.3"
+  authors:
+  - "The Rand Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "OS backed Random Number Generator"
   homepage_url: ""
   binary_artifact:
@@ -519,10 +566,13 @@ packages:
     path: ""
 - id: "Crate::rand_pcg:0.1.2"
   purl: "pkg:cargo/rand_pcg@0.1.2"
+  authors:
+  - "The Rand Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Selected PCG random number generators\n"
   homepage_url: ""
   binary_artifact:
@@ -547,10 +597,14 @@ packages:
     path: ""
 - id: "Crate::rand_xorshift:0.1.1"
   purl: "pkg:cargo/rand_xorshift@0.1.1"
+  authors:
+  - "The Rand Project Developers"
+  - "The Rust Project Developers"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Xorshift random number generator\n"
   homepage_url: ""
   binary_artifact:
@@ -575,6 +629,8 @@ packages:
     path: ""
 - id: "Crate::rdrand:0.4.0"
   purl: "pkg:cargo/rdrand@0.4.0"
+  authors:
+  - "Simonas Kazlauskas"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -604,6 +660,9 @@ packages:
     path: ""
 - id: "Crate::spin:0.5.0"
   purl: "pkg:cargo/spin@0.5.0"
+  authors:
+  - "John Ericson"
+  - "Mathijs van de Nes"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -633,10 +692,13 @@ packages:
     path: ""
 - id: "Crate::winapi-i686-pc-windows-gnu:0.4.0"
   purl: "pkg:cargo/winapi-i686-pc-windows-gnu@0.4.0"
+  authors:
+  - "Peter Atashian"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Import libraries for the i686-pc-windows-gnu target. Please don't\
     \ use this crate directly, depend on winapi instead."
   homepage_url: ""
@@ -662,10 +724,13 @@ packages:
     path: ""
 - id: "Crate::winapi-x86_64-pc-windows-gnu:0.4.0"
   purl: "pkg:cargo/winapi-x86_64-pc-windows-gnu@0.4.0"
+  authors:
+  - "Peter Atashian"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Import libraries for the x86_64-pc-windows-gnu target. Please don't\
     \ use this crate directly, depend on winapi instead."
   homepage_url: ""
@@ -691,10 +756,13 @@ packages:
     path: ""
 - id: "Crate::winapi:0.3.8"
   purl: "pkg:cargo/winapi@0.3.8"
+  authors:
+  - "Peter Atashian"
   declared_licenses:
-  - "MIT OR Apache-2.0"
+  - "Apache-2.0"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Raw FFI bindings for all of Windows API."
   homepage_url: ""
   binary_artifact:

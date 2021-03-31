@@ -38,7 +38,6 @@ class Pipenv(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-
     class Factory : AbstractPackageManagerFactory<Pipenv>("Pipenv") {
         override val globsForDefinitionFiles = listOf("Pipfile.lock")
 

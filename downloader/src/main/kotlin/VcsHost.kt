@@ -21,7 +21,6 @@
 package org.ossreviewtoolkit.downloader
 
 import java.net.URI
-import java.net.URISyntaxException
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -29,6 +28,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.hasRevisionFragment
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.toUri
 
 /**
  * An enum to handle VCS-host-specific information.
@@ -246,12 +246,7 @@ enum class VcsHost(
          * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
          */
         fun toVcsInfo(projectUrl: String): VcsInfo {
-            val vcs = try {
-                URI(projectUrl).let { toVcsHost(it)?.toVcsInfoInternal(it) }
-            } catch (e: URISyntaxException) {
-                null
-            }
-
+            val vcs = projectUrl.toUri { toVcsHost(it)?.toVcsInfoInternal(it) }.getOrNull()
             if (vcs != null) return vcs
 
             // Fall back to generic URL detection for unknown VCS hosts.
@@ -323,12 +318,7 @@ enum class VcsHost(
     /**
      * Return whether this host is applicable for the [url] string.
      */
-    fun isApplicable(url: String) =
-        try {
-            isApplicable(URI(url))
-        } catch (e: URISyntaxException) {
-            false
-        }
+    fun isApplicable(url: String) = url.toUri { isApplicable(it) }.getOrDefault(false)
 
     /**
      * Return whether this host is applicable for [vcsInfo].
@@ -339,12 +329,7 @@ enum class VcsHost(
      * Return the user or organization name the project belongs to.
      */
     fun getUserOrOrganization(projectUrl: String): String? =
-        try {
-            val url = URI(projectUrl)
-            if (isApplicable(url)) getUserOrOrgInternal(url) else null
-        } catch (e: URISyntaxException) {
-            null
-        }
+        projectUrl.toUri { if (isApplicable(it)) getUserOrOrgInternal(it) else null }.getOrNull()
 
     protected abstract fun getUserOrOrgInternal(projectUrl: URI): String?
 
@@ -352,12 +337,7 @@ enum class VcsHost(
      * Return the project's name.
      */
     fun getProject(projectUrl: String): String? =
-        try {
-            val url = URI(projectUrl)
-            if (isApplicable(url)) getProjectInternal(url) else null
-        } catch (e: URISyntaxException) {
-            null
-        }
+        projectUrl.toUri { if (isApplicable(it)) getProjectInternal(it) else null }.getOrNull()
 
     protected abstract fun getProjectInternal(projectUrl: URI): String?
 
@@ -365,12 +345,7 @@ enum class VcsHost(
      * Return all [VcsInfo] that can be extracted from the host-specific [projectUrl].
      */
     fun toVcsInfo(projectUrl: String): VcsInfo? =
-        try {
-            val url = URI(projectUrl)
-            if (isApplicable(url)) toVcsInfoInternal(url) else null
-        } catch (e: URISyntaxException) {
-            null
-        }
+        projectUrl.toUri { if (isApplicable(it)) toVcsInfoInternal(it) else null }.getOrNull()
 
     protected abstract fun toVcsInfoInternal(projectUrl: URI): VcsInfo
 

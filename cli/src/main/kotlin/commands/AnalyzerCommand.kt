@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +43,8 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
+import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
@@ -56,13 +57,15 @@ import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
-    private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
+    private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName }
+        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     private val inputDir by option(
         "--input-dir", "-i",
-        help = "The project directory to analyze."
+        help = "The project directory to analyze. As a special case, if only one package manager is activated, this " +
+                "may point to a definition file for that package manager to only analyze that single project."
     ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
         .inputGroup()
@@ -99,20 +102,14 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         .convert { it.absoluteFile.normalize() }
         .configurationGroup()
 
-    private val allowDynamicVersions by option(
-        "--allow-dynamic-versions",
-        help = "Allow dynamic versions of dependencies. This can result in unstable results when dependencies use " +
-                "version ranges. This option only affects package managers that support lock files, like NPM."
-    ).flag()
-
     private val useClearlyDefinedCurations by option(
         "--clearly-defined-curations",
         help = "Whether to fall back to package curation data from the ClearlyDefine service or not."
     ).flag()
 
-    private val ignoreToolVersions by option(
-        "--ignore-tool-versions",
-        help = "Ignore versions of required tools. NOTE: This may lead to erroneous results."
+    private val useSw360Curations by option(
+        "--sw360-curations",
+        help = "Whether to fall back to package curation data from the SW360 service or not."
     ).flag()
 
     private val labels by option(
@@ -122,9 +119,9 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     private val packageManagers by option(
         "--package-managers", "-m",
-        help = "The list of package managers to activate."
+        help = "The comma-separated package managers to activate, any of ${allPackageManagersByName.keys}."
     ).convert { name ->
-        allPackageManagersByName[name.toUpperCase()]
+        allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
     }.split(",").default(PackageManager.ALL)
 
@@ -149,16 +146,19 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val distinctPackageManagers = packageManagers.distinct()
         println("The following package managers are activated:")
-        println("\t" + distinctPackageManagers.joinToString(", "))
+        println("\t" + distinctPackageManagers.joinToString())
 
         println("Analyzing project path:\n\t$inputDir")
 
-        val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
-        val analyzer = Analyzer(analyzerConfig)
+        val config = globalOptionsForSubcommands.config
+        val analyzer = Analyzer(config.analyzer)
 
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
                 packageCurationsFile.takeIf { it.isFile }?.let { FilePackageCurationProvider(it) },
+                config.analyzer.sw360Configuration?.let {
+                    Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
+                },
                 ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
             )
         )

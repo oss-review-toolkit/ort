@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,44 +27,38 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.io.IOException
 import java.time.Instant
-import java.util.concurrent.Executors
 
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
-
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
-import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.UnknownProvenance
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.NamedThreadFactory
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.fileSystemEncode
@@ -77,7 +71,11 @@ import org.ossreviewtoolkit.utils.showStackTrace
 /**
  * Abstraction for a [Scanner] that operates locally. Scan results can be stored in a [ScanResultsStorage].
  */
-abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
+abstract class LocalScanner(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : Scanner(name, scannerConfig, downloaderConfig), CommandLineTool {
     companion object {
         /**
          * The number of threads to use for the storage dispatcher.
@@ -101,7 +99,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     }
 
     private val archiver by lazy {
-        config.archive.createFileArchiver()
+        scannerConfig.archive.createFileArchiver()
     }
 
     /**
@@ -192,7 +190,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
      */
     open fun getScannerCriteria(): ScannerCriteria {
-        val options = config.options?.get(scannerName).orEmpty()
+        val options = scannerConfig.options?.get(scannerName).orEmpty()
         val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(expectedVersion))
         val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
         val name = options[PROP_CRITERIA_NAME] ?: scannerName
@@ -204,118 +202,113 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         outputDirectory: File,
         downloadDirectory: File
     ): Map<Package, List<ScanResult>> {
-        val storageDispatcher = Executors.newFixedThreadPool(
-            NUM_STORAGE_THREADS,
-            NamedThreadFactory(ScanResultsStorage.storage.name)
-        ).asCoroutineDispatcher()
+        val scannerCriteria = getScannerCriteria()
 
-        val scanDispatcher = Executors.newSingleThreadExecutor(NamedThreadFactory(scannerName)).asCoroutineDispatcher()
+        log.info { "Searching scan results for ${packages.size} packages." }
 
-        return try {
-            coroutineScope {
-                packages.withIndex().map { (index, pkg) ->
-                    val packageIndex = "(${index + 1} of ${packages.size})"
-
-                    async {
-                        pkg to scanPackage(
-                            pkg,
-                            packageIndex,
-                            downloadDirectory,
-                            outputDirectory,
-                            storageDispatcher,
-                            scanDispatcher
-                        )
-                    }
-                }.associate { it.await() }
+        val remainingPackages = packages.filterTo(mutableListOf()) { pkg ->
+            !pkg.isMetaDataOnly.also {
+                if (it) LocalScanner.log.info { "Skipping '${pkg.id.toCoordinates()}' as it is meta data only." }
             }
-        } finally {
-            storageDispatcher.close()
-            scanDispatcher.close()
+        }
+
+        val resultsFromStorage = readResultsFromStorage(packages, scannerCriteria)
+
+        log.info { "Found stored scan results for ${resultsFromStorage.size} packages and $scannerCriteria." }
+
+        if (scannerConfig.createMissingArchives) {
+            createMissingArchives(resultsFromStorage, downloadDirectory)
+        }
+
+        remainingPackages.removeAll { it in resultsFromStorage.keys }
+
+        log.info { "Scanning ${remainingPackages.size} packages for which no stored scan results were found." }
+
+        val resultsFromScanner = remainingPackages.scan(outputDirectory, downloadDirectory)
+
+        return resultsFromStorage + resultsFromScanner
+    }
+
+    private fun readResultsFromStorage(packages: List<Package>, scannerCriteria: ScannerCriteria) =
+        when (val results = ScanResultsStorage.storage.read(packages, scannerCriteria)) {
+            is Success -> results.result
+            is Failure -> emptyMap()
+        }.filter { it.value.isNotEmpty() }
+            .mapKeys { (id, _) -> packages.single { it.id == id } }
+            .mapValues { it.value.deduplicateScanResults() }
+            .mapValues { (_, scanResults) ->
+                // Due to a bug that has been fixed in d839f6e the scan results for packages were not properly filtered
+                // by VCS path. Filter them again to fix the problem.
+                // TODO: Remove this workaround together with the next change that requires recreating the scan storage.
+                scanResults.map { it.filterByVcsPath().filterByIgnorePatterns(scannerConfig.ignorePatterns) }
+            }
+
+    private fun List<Package>.scan(outputDirectory: File, downloadDirectory: File): Map<Package, List<ScanResult>> {
+        var index = 0
+
+        return associateWith { pkg ->
+            index++
+
+            val packageIndex = "($index of $size)"
+
+            LocalScanner.log.info {
+                "Scanning ${pkg.id.toCoordinates()}' in thread '${Thread.currentThread().name}' $packageIndex"
+            }
+
+            val scanResult = try {
+                scanPackage(details, pkg, outputDirectory, downloadDirectory).also {
+                    LocalScanner.log.info {
+                        "Finished scanning ${pkg.id.toCoordinates()} in thread '${Thread.currentThread().name}' " +
+                                "$packageIndex."
+                    }
+                }
+            } catch (e: ScanException) {
+                e.showStackTrace()
+                e.createFailedScanResult(pkg, packageIndex)
+            }
+
+            listOf(scanResult)
         }
     }
 
-    /**
-     * Return the [ScanResult]s for a single package.
-     */
-    private suspend fun scanPackage(
-        pkg: Package,
-        packageIndex: String,
-        downloadDirectory: File,
-        outputDirectory: File,
-        storageDispatcher: CoroutineDispatcher,
-        scanDispatcher: CoroutineDispatcher
-    ): List<ScanResult> {
-        val scannerCriteria = getScannerCriteria()
+    private fun ScanException.createFailedScanResult(pkg: Package, packageIndex: String): ScanResult {
+        val issue = createAndLogIssue(
+            source = scannerName,
+            message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: ${collectMessagesAsString()}"
+        )
 
-        if (pkg.isMetaDataOnly) {
-            log.info { "Skipping '${pkg.id.toCoordinates()}' as it is meta data only." }
+        val now = Instant.now()
+        return ScanResult(
+            provenance = UnknownProvenance,
+            scanner = details,
+            summary = ScanSummary(
+                startTime = now,
+                endTime = now,
+                fileCount = 0,
+                packageVerificationCode = "",
+                licenseFindings = sortedSetOf(),
+                copyrightFindings = sortedSetOf(),
+                issues = listOf(issue)
+            )
+        )
+    }
 
-            return emptyList()
-        }
-
-        return try {
-            val storedResults = withContext(storageDispatcher) {
-                log.info {
-                    "Looking for stored scan results for ${pkg.id.toCoordinates()} and " +
-                            "$scannerCriteria $packageIndex."
-                }
-
-                readFromStorage(scannerCriteria, pkg)
+    private fun createMissingArchives(scanResults: Map<Package, List<ScanResult>>, downloadDirectory: File) {
+        scanResults.forEach { (pkg, results) ->
+            val missingArchives = results.mapNotNullTo(mutableSetOf()) { result ->
+                result.provenance.takeUnless { it is KnownProvenance && archiver.hasArchive(it) }
             }
 
-            if (storedResults.isNotEmpty()) {
-                log.info {
-                    "Found ${storedResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} " +
-                            "and $scannerCriteria, not scanning the package again $packageIndex."
-                }
+            if (missingArchives.isNotEmpty()) {
+                val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
+                Downloader(downloaderConfig).download(pkg, pkgDownloadDirectory)
 
-                // Due to a temporary bug that has been fixed by now the scan results for packages were not properly
-                // filtered. Filter them again to fix the problem also scan storage entries which exhibit that problem.
-                // TODO: This filtering can be removed after a while.
-                storedResults.map { it.filterByVcsPath() }
-            } else {
-                withContext(scanDispatcher) {
-                    log.info {
-                        "No stored result found for ${pkg.id.toCoordinates()} and $scannerCriteria, " +
-                                "scanning package in thread '${Thread.currentThread().name}' " +
-                                "$packageIndex."
+                missingArchives.forEach { provenance ->
+                    if (provenance is KnownProvenance) {
+                        archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
                     }
-
-                    listOf(
-                        scanPackage(details, pkg, outputDirectory, downloadDirectory).also {
-                            log.info {
-                                "Finished scanning ${pkg.id.toCoordinates()} in thread " +
-                                        "'${Thread.currentThread().name}' $packageIndex."
-                            }
-                        }
-                    )
                 }
             }
-        } catch (e: ScanException) {
-            e.showStackTrace()
-
-            val issue = createAndLogIssue(
-                source = scannerName,
-                message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
-                        e.collectMessagesAsString()
-            )
-
-            val now = Instant.now()
-            listOf(
-                ScanResult(
-                    provenance = Provenance(),
-                    scanner = details,
-                    summary = ScanSummary(
-                        startTime = now,
-                        endTime = now,
-                        fileCount = 0,
-                        packageVerificationCode = "",
-                        licenseFindings = sortedSetOf(),
-                        copyrightFindings = sortedSetOf(),
-                        issues = listOf(issue)
-                    )
-                )
-            )
         }
     }
 
@@ -327,16 +320,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val scanResultsForPackageDirectory = outputDirectory.resolve(pkg.id.toPath()).apply { safeMkdirs() }
         return scanResultsForPackageDirectory.resolve("scan-results_${scannerDetails.name}.$resultFileExt")
     }
-
-    /**
-     * Return matching [ScanResult]s for this [Package][pkg] from the [ScanResultsStorage]. If no results are found an
-     * empty list is returned.
-     */
-    private fun readFromStorage(scannerCriteria: ScannerCriteria, pkg: Package): List<ScanResult> =
-        when (val storageResult = ScanResultsStorage.storage.read(pkg, scannerCriteria)) {
-            is Success -> storageResult.result.deduplicateScanResults().results
-            is Failure -> emptyList()
-        }
 
     /**
      * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
@@ -353,15 +336,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         downloadDirectory: File
     ): ScanResult {
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
+        val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
-        val downloadResult = try {
-            Downloader.download(pkg, downloadDirectory.resolve(pkg.id.toPath()))
+        val provenance = try {
+            Downloader(downloaderConfig).download(pkg, pkgDownloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
 
             val now = Instant.now()
             return ScanResult(
-                Provenance(),
+                UnknownProvenance,
                 scannerDetails,
                 ScanSummary(
                     startTime = now,
@@ -381,20 +365,18 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         }
 
         log.info {
-            "Running $scannerDetails on directory '${downloadResult.downloadDirectory.absolutePath}'."
+            "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'."
         }
 
-        val provenance = Provenance(
-            downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
-            downloadResult.originalVcsInfo
-        )
+        if (provenance is KnownProvenance) {
+            archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
+        }
 
-        archiveFiles(downloadResult.downloadDirectory, pkg.id, provenance)
-
-        val (scanResult, scanDuration) = measureTimedValue {
-            scanPathInternal(downloadResult.downloadDirectory, resultsFile)
-                .copy(provenance = provenance)
-                .filterByVcsPath()
+        val (scanSummary, scanDuration) = measureTimedValue {
+            val vcsPath = (provenance as? RepositoryProvenance)?.vcsInfo?.takeUnless {
+                it.type == VcsType.GIT_REPO
+            }?.path.orEmpty()
+            scanPathInternal(pkgDownloadDirectory, resultsFile).filterByPath(vcsPath)
         }
 
         log.perf {
@@ -402,27 +384,29 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     "${scanDuration.inMilliseconds}ms."
         }
 
-        return when (val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)) {
-            is Success -> scanResult
+        val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
+        val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
+        val filteredResult = scanResult.filterByIgnorePatterns(scannerConfig.ignorePatterns)
+
+        return when (storageResult) {
+            is Success -> filteredResult
             is Failure -> {
                 val issue = OrtIssue(
                     source = ScanResultsStorage.storage.name,
                     message = storageResult.error,
                     severity = Severity.WARNING
                 )
-                val issues = scanResult.summary.issues + issue
-                val summary = scanResult.summary.copy(issues = issues)
-                scanResult.copy(summary = summary)
+                val issues = scanSummary.issues + issue
+                val summary = scanSummary.copy(issues = issues)
+                filteredResult.copy(summary = summary)
             }
         }
     }
 
-    private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
+    private fun archiveFiles(directory: File, id: Identifier, provenance: KnownProvenance) {
         log.info { "Archiving files for ${id.toCoordinates()}." }
 
-        val path = "${id.toPath()}/${provenance.hash()}"
-
-        val duration = measureTime { archiver.archive(directory, path) }
+        val duration = measureTime { archiver.archive(directory, provenance) }
 
         log.perf { "Archived files for '${id.toCoordinates()}' in ${duration.inMilliseconds}ms." }
     }
@@ -433,13 +417,13 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      *
      * No scan results storage is used by this function.
      *
-     * The return value is a [ScanResult]. If the path could not be scanned, a [ScanException] is thrown.
+     * The return value is a [ScanSummary]. If the path could not be scanned, a [ScanException] is thrown.
      */
-    protected abstract fun scanPathInternal(path: File, resultsFile: File): ScanResult
+    protected abstract fun scanPathInternal(path: File, resultsFile: File): ScanSummary
 
     /**
      * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
-     * scanner's native file format. The results file name is derived from [inputPath] and [getDetails].
+     * scanner's native file format. The results file name is derived from [inputPath] and [details].
      *
      * No scan results storage is used by this function.
      *
@@ -456,21 +440,21 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         log.info { "Scanning path '$absoluteInputPath' with $details..." }
 
-        val result = try {
+        val summary = try {
             val resultsFile = File(
                 outputDirectory.apply { safeMkdirs() },
                 "${inputPath.nameWithoutExtension}_${details.name}.$resultFileExt"
             )
             scanPathInternal(inputPath, resultsFile).also {
                 log.info {
-                    "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
+                    "Detected licenses for path '$absoluteInputPath': ${it.licenses.joinToString()}"
                 }
-            }
+            }.filterByIgnorePatterns(scannerConfig.ignorePatterns)
         } catch (e: ScanException) {
             e.showStackTrace()
 
             val now = Instant.now()
-            val summary = ScanSummary(
+            ScanSummary(
                 startTime = now,
                 endTime = now,
                 fileCount = 0,
@@ -484,8 +468,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     )
                 )
             )
-
-            ScanResult(Provenance(), details, summary)
         }
 
         // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
@@ -494,11 +476,11 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             inputPath.name.fileSystemEncode(), ""
         )
 
-        val scanResultContainer = ScanResultContainer(id, listOf(result))
-        val scanRecord = ScanRecord(sortedSetOf(scanResultContainer), ScanResultsStorage.storage.stats)
+        val scanResult = ScanResult(UnknownProvenance, details, summary)
+        val scanRecord = ScanRecord(sortedMapOf(id to listOf(scanResult)), ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), scannerConfig, scanRecord)
 
         val repository = Repository(VersionControlSystem.getCloneInfo(inputPath))
         return OrtResult(repository, scanner = scannerRun)
@@ -526,42 +508,37 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         return relativePathToScannedFile.invariantSeparatorsPath
     }
-}
 
-/**
- * Work around to prevent that duplicate [ScanResult]s from the [ScanResultsStorage] do get duplicated in the
- * [OrtResult] produced by this scanner.
- *
- * The time interval between a failing look-up of the cache entry and the resulting scan with the following store
- * operation can be relatively large. Thus this [LocalScanner] is prone to adding duplicate scan results if scans
- * are run in parallel. In particular the [PostgresStorage] allows adding duplicate tuples
- * (identifier, provenance, scanner details) which probably should be made unique.
- *
- * TODO:
- *
- * 1. Minimize the time between the failing look-up and the corresponding store operation mentioned.
- * 2. Make the tuples (identifier, provenance, scanner details) unique (dis-regarding provenance.downloadTime), at
- * least in [PostgresStorage].
- */
-private fun ScanResultContainer.deduplicateScanResults(): ScanResultContainer {
-    // Use vcsInfo and sourceArtifact instead of provenance in order to ignore the download time and original VCS info.
-    data class Key(
-        val id: Identifier,
-        val vcsInfo: VcsInfo?,
-        val sourceArtifact: RemoteArtifact?,
-        val scannerDetails: ScannerDetails
-    )
+    /**
+     * Workaround to prevent that duplicate [ScanResult]s from the [ScanResultsStorage] do get duplicated in the
+     * [OrtResult] produced by this scanner.
+     *
+     * The time interval between a failing read from storage and the resulting scan with the following store operation
+     * can be relatively large. Thus this [LocalScanner] is prone to adding duplicate scan results if multiple instances
+     * of the scanner run in parallel. In particular the [PostgresStorage] allows adding duplicate tuples
+     * (identifier, provenance, scanner details) which should be made unique.
+     *
+     * TODO: Implement a solution that prevents duplicate scan results in the storages.
+     */
+    private fun List<ScanResult>.deduplicateScanResults(): List<ScanResult> {
+        // Use vcsInfo and sourceArtifact instead of provenance in order to ignore the download time and original VCS
+        // info.
+        data class Key(
+            val provenance: Provenance?,
+            val scannerDetails: ScannerDetails
+        )
 
-    fun ScanResult.key() = Key(id, provenance.vcsInfo, provenance.sourceArtifact, scanner)
+        fun ScanResult.key() = Key(provenance, scanner)
 
-    val deduplicatedResults = results.distinctBy { it.key() }
+        val deduplicatedResults = distinctBy { it.key() }
 
-    val duplicatesCount = results.size - deduplicatedResults.size
-    if (duplicatesCount > 0) {
-        log.info { "Removed $duplicatesCount duplicates out of ${results.size} scan results." }
+        val duplicatesCount = size - deduplicatedResults.size
+        if (duplicatesCount > 0) {
+            LocalScanner.log.info { "Removed $duplicatesCount duplicates out of $size scan results." }
+        }
+
+        return deduplicatedResults
     }
-
-    return copy(results = deduplicatedResults)
 }
 
 /**

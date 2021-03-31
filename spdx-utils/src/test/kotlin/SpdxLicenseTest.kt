@@ -20,12 +20,12 @@
 package org.ossreviewtoolkit.spdx
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.endWith
-import io.kotest.matchers.string.include
-import io.kotest.matchers.string.startWith
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldEndWith
+import io.kotest.matchers.string.shouldStartWith
+
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class SpdxLicenseTest : WordSpec({
     "The license lookup" should {
@@ -41,33 +41,31 @@ class SpdxLicenseTest : WordSpec({
     "The license text" should {
         "be correct for 'or later' GPL ids" {
             val gpl10OrLater = SpdxLicense.forId("GPL-1.0+")
-            gpl10OrLater.shouldNotBeNull()
-            val gpl10OrLaterText = gpl10OrLater.text.replace("\n", " ").trimEnd()
-            gpl10OrLaterText should startWith(
-                "This program is free software; you can redistribute it and/or modify it " +
-                        "under the terms of the GNU General Public License"
-            )
-            gpl10OrLaterText should include("; either version 1, or (at your option) any later version.")
-            gpl10OrLaterText should endWith("That's all there is to it!")
+            gpl10OrLater shouldNotBeNull {
+                val gpl10OrLaterText = text.replace("\n", " ").trimEnd()
+                gpl10OrLaterText shouldStartWith "This program is free software; you can redistribute it and/or " +
+                        "modify it under the terms of the GNU General Public License"
+                gpl10OrLaterText shouldContain "; either version 1, or (at your option) any later version."
+                gpl10OrLaterText shouldEndWith "That's all there is to it!"
+            }
 
             val gpl20OrLater = SpdxLicense.forId("GPL-2.0-or-later")
-            gpl20OrLater.shouldNotBeNull()
-            val gpl20OrLaterText = gpl20OrLater.text.replace("\n", " ").trimEnd()
-            gpl20OrLaterText should startWith(
-                "This program is free software; you can redistribute it and/or modify it " +
-                        "under the terms of the GNU General Public License"
-            )
-            gpl20OrLaterText should include("; either version 2 of the License, or (at your option) any later version.")
-            gpl20OrLaterText should endWith(
-                "If this is what you want to do, use the GNU Lesser General Public License " +
-                        "instead of this License."
-            )
+            gpl20OrLater shouldNotBeNull {
+                val gpl20OrLaterText = text.replace("\n", " ").trimEnd()
+                gpl20OrLaterText shouldStartWith "This program is free software; you can redistribute it and/or " +
+                        "modify it under the terms of the GNU General Public License"
+                gpl20OrLaterText shouldContain "; either version 2 of the License, or (at your option) any later " +
+                        "version."
+                gpl20OrLaterText shouldEndWith "If this is what you want to do, use the GNU Lesser General Public " +
+                        "License instead of this License."
+            }
         }
 
         "be correct for 'or later' non-GPL ids" {
             val gfdl11OrLater = SpdxLicense.forId("GFDL-1.1-or-later")
-            gfdl11OrLater.shouldNotBeNull()
-            gfdl11OrLater.text shouldBe javaClass.getResource("/licenses/GFDL-1.1-or-later").readText()
+            gfdl11OrLater shouldNotBeNull {
+                text shouldBe javaClass.getResource("/licenses/GFDL-1.1-or-later").readText()
+            }
         }
     }
 })

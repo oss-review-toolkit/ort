@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.util.SortedSet
 
@@ -46,6 +49,15 @@ data class Project(
      * and [vcsProcessed].
      */
     val definitionFilePath: String,
+
+    /**
+     * The list of authors declared for this package.
+     *
+     * TODO: The annotation can be removed after all package manager implementations have filled the field [authors]
+     *       accordingly.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val authors: SortedSet<String> = sortedSetOf(),
 
     /**
      * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
@@ -75,9 +87,21 @@ data class Project(
     val homepageUrl: String,
 
     /**
-     * The dependency scopes defined by this project.
+     * Holds information about the scopes and their dependencies of this project if no [DependencyGraph] is available.
+     * NOTE: Do not use this property to access scope information. Use [scopes] instead, which is correctly initialized
+     * in all cases.
      */
-    val scopes: SortedSet<Scope>
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("scopes")
+    val scopeDependencies: SortedSet<Scope>? = null,
+
+    /**
+     * Contains dependency information as a [DependencyGraph]. This is an alternative format to store the dependencies
+     * referenced by the various scopes. Use the [scopes] property to access dependency information independent on
+     * the concrete representation.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val dependencyGraph: DependencyGraph? = null
 ) : Comparable<Project> {
     companion object {
         /**
@@ -87,14 +111,41 @@ data class Project(
         val EMPTY = Project(
             id = Identifier.EMPTY,
             definitionFilePath = "",
+            authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             homepageUrl = "",
-            scopes = sortedSetOf()
+            scopeDependencies = sortedSetOf()
         )
     }
+
+    init {
+        require(scopeDependencies == null || dependencyGraph == null) {
+            "Not both 'scopeDependencies' and 'dependencyGraph' may be set, as otherwise it is ambiguous which one " +
+                    "to use."
+        }
+    }
+
+    /**
+     * The dependency scopes defined by this project. This property provides access to scope-related information, no
+     * matter whether this information has been initialized directly or has been encoded in a [DependencyGraph].
+     */
+    @get:JsonIgnore
+    val scopes by lazy {
+        dependencyGraph?.createScopes() ?: scopeDependencies ?: sortedSetOf()
+    }
+
+    /**
+     * Return a [Project] instance that has its scope information directly available. A project can be constructed
+     * either with a set of [Scope] objects or with a [DependencyGraph]. In the latter case, the graph has to be
+     * converted first into the scope representation. This function ensures that this step was done: If the project
+     * has a [DependencyGraph], it returns a new instance with the converted scope information (and the dependency
+     * graph removed to save memory); otherwise, it returns this same object.
+     */
+    fun withResolvedScopes(): Project =
+        takeUnless { dependencyGraph != null } ?: copy(scopeDependencies = scopes, dependencyGraph = null)
 
     /**
      * Return the set of package [Identifier]s of all transitive dependencies of this [Project], up to and including a
@@ -164,6 +215,7 @@ data class Project(
     fun toPackage() =
         Package(
             id = id,
+            authors = authors,
             declaredLicenses = declaredLicenses,
             description = "",
             homepageUrl = homepageUrl,

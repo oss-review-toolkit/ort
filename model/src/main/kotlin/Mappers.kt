@@ -30,12 +30,14 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
+import java.io.File
+
 val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategies.SNAKE_CASE as PropertyNamingStrategies.NamingBase
 
 /**
  * A lambda expression that can be [applied][apply] to all [ObjectMapper]s to configure them the same way.
  */
-private val mapperConfig: ObjectMapper.() -> Unit = {
+val mapperConfig: ObjectMapper.() -> Unit = {
     registerKotlinModule()
 
     registerModule(JavaTimeModule())
@@ -49,3 +51,8 @@ val xmlMapper = XmlMapper().apply(mapperConfig)
 val yamlMapper = YAMLMapper().apply(mapperConfig)
 
 val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
+
+/**
+ * Read a JSON [file] to a JSON node, or return an empty JSON node on failure.
+ */
+fun readJsonFile(file: File): JsonNode = runCatching { jsonMapper.readTree(file) }.getOrDefault(EMPTY_JSON_NODE)

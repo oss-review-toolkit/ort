@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ import kotlin.io.path.createTempDirectory
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.CuratedPackage
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -40,12 +40,11 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
@@ -67,6 +66,7 @@ import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -80,7 +80,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
             jsonSpdxDocument shouldBe patchExpectedResult(
                 "src/funTest/assets/spdx-document-reporter-expected-output.spdx.json",
-                fromJson(jsonSpdxDocument, SpdxDocument::class.java)
+                fromJson(jsonSpdxDocument)
             )
         }
 
@@ -91,7 +91,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
             yamlSpdxDocument shouldBe patchExpectedResult(
                 "src/funTest/assets/spdx-document-reporter-expected-output.spdx.yml",
-                fromYaml(yamlSpdxDocument, SpdxDocument::class.java)
+                fromYaml(yamlSpdxDocument)
             )
         }
     }
@@ -165,7 +165,7 @@ private fun createOrtResult(): OrtResult {
                         declaredLicenses = sortedSetOf("MIT"),
                         definitionFilePath = "",
                         homepageUrl = "first project's homepage",
-                        scopes = sortedSetOf(
+                        scopeDependencies = sortedSetOf(
                             Scope(
                                 name = "compile",
                                 dependencies = sortedSetOf(
@@ -284,68 +284,65 @@ private fun createOrtResult(): OrtResult {
             environment = Environment(),
             config = ScannerConfiguration(),
             results = ScanRecord(
-                scanResults = sortedSetOf(
-                    ScanResultContainer(
-                        id = Identifier("Maven:first-package-group:first-package:0.0.1"),
-                        results = listOf(
-                            ScanResult(
-                                provenance = Provenance(
-                                    sourceArtifact = RemoteArtifact(
-                                        url = "https://some-host/first-package-sources.jar",
-                                        hash = Hash.NONE
-                                    )
-                                ),
-                                scanner = ScannerDetails.EMPTY,
-                                summary = ScanSummary(
-                                    startTime = Instant.MIN,
-                                    endTime = Instant.MIN,
-                                    fileCount = 10,
-                                    packageVerificationCode = "1111222233334444555566667777888899990000",
-                                    licenseFindings = sortedSetOf(
-                                        LicenseFinding(
-                                            license = "Apache-2.0",
-                                            location = TextLocation("LICENSE", 1)
-                                        )
-                                    ),
-                                    copyrightFindings = sortedSetOf(
-                                        CopyrightFinding(
-                                            statement = "Copyright 2020 Some copyright holder in source artifact",
-                                            location = TextLocation("some/file", 1)
-                                        ),
-                                        CopyrightFinding(
-                                            statement = "Copyright 2020 Some other copyright holder in source artifact",
-                                            location = TextLocation("some/file", 7)
-                                        )
-                                    )
+                scanResults = sortedMapOf(
+                    Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
+                        ScanResult(
+                            provenance = ArtifactProvenance(
+                                sourceArtifact = RemoteArtifact(
+                                    url = "https://some-host/first-package-sources.jar",
+                                    hash = Hash.NONE
                                 )
                             ),
-                            ScanResult(
-                                provenance = Provenance(
-                                    vcsInfo = VcsInfo(
-                                        type = VcsType.GIT,
-                                        revision = "master",
-                                        resolvedRevision = "deadbeef",
-                                        url = "ssh://git@github.com/path/first-package-repo.git",
-                                        path = "project-path"
+                            scanner = ScannerDetails.EMPTY,
+                            summary = ScanSummary(
+                                startTime = Instant.MIN,
+                                endTime = Instant.MIN,
+                                fileCount = 10,
+                                packageVerificationCode = "1111222233334444555566667777888899990000",
+                                licenseFindings = sortedSetOf(
+                                    LicenseFinding(
+                                        license = "Apache-2.0",
+                                        location = TextLocation("LICENSE", 1)
                                     )
                                 ),
-                                scanner = ScannerDetails.EMPTY,
-                                summary = ScanSummary(
-                                    startTime = Instant.MIN,
-                                    endTime = Instant.MIN,
-                                    fileCount = 10,
-                                    packageVerificationCode = "0000000000000000000011111111111111111111",
-                                    licenseFindings = sortedSetOf(
-                                        LicenseFinding(
-                                            license = "BSD-2-Clause",
-                                            location = TextLocation("LICENSE", 1)
-                                        )
+                                copyrightFindings = sortedSetOf(
+                                    CopyrightFinding(
+                                        statement = "Copyright 2020 Some copyright holder in source artifact",
+                                        location = TextLocation("some/file", 1)
                                     ),
-                                    copyrightFindings = sortedSetOf(
-                                        CopyrightFinding(
-                                            statement = "Copyright 2020 Some copyright holder in VCS",
-                                            location = TextLocation("some/file", 1)
-                                        )
+                                    CopyrightFinding(
+                                        statement = "Copyright 2020 Some other copyright holder in source artifact",
+                                        location = TextLocation("some/file", 7)
+                                    )
+                                )
+                            )
+                        ),
+                        ScanResult(
+                            provenance = RepositoryProvenance(
+                                vcsInfo = VcsInfo(
+                                    type = VcsType.GIT,
+                                    revision = "master",
+                                    resolvedRevision = "deadbeef",
+                                    url = "ssh://git@github.com/path/first-package-repo.git",
+                                    path = "project-path"
+                                )
+                            ),
+                            scanner = ScannerDetails.EMPTY,
+                            summary = ScanSummary(
+                                startTime = Instant.MIN,
+                                endTime = Instant.MIN,
+                                fileCount = 10,
+                                packageVerificationCode = "0000000000000000000011111111111111111111",
+                                licenseFindings = sortedSetOf(
+                                    LicenseFinding(
+                                        license = "BSD-2-Clause",
+                                        location = TextLocation("LICENSE", 1)
+                                    )
+                                ),
+                                copyrightFindings = sortedSetOf(
+                                    CopyrightFinding(
+                                        statement = "Copyright 2020 Some copyright holder in VCS",
+                                        location = TextLocation("some/file", 1)
                                     )
                                 )
                             )

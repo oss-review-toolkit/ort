@@ -24,10 +24,10 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 import java.io.File
@@ -35,6 +35,7 @@ import java.lang.IllegalArgumentException
 
 import kotlin.io.path.createTempFile
 
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -42,19 +43,49 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
         "be deserializable from HOCON" {
-            val refConfig = File("src/test/assets/reference.conf")
-            val ortConfig = OrtConfiguration.load(configFile = refConfig)
+            val refConfig = File("src/main/resources/reference.conf")
+            val ortConfig = OrtConfiguration.load(file = refConfig)
 
-            ortConfig.scanner shouldNotBeNull {
+            with(ortConfig.analyzer) {
+                ignoreToolVersions shouldBe true
+                allowDynamicVersions shouldBe true
+
+                sw360Configuration shouldNotBeNull {
+                    restUrl shouldBe "https://your-sw360-rest-url"
+                    authUrl shouldBe "https://your-authentication-url"
+                    username shouldBe "username"
+                    password shouldBe "password"
+                    clientId shouldBe "clientId"
+                    clientPassword shouldBe "clientPassword"
+                    token shouldBe "token"
+                }
+            }
+
+            ortConfig.downloader shouldNotBeNull {
+                sourceCodeOrigins shouldBe listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
+            }
+
+            with(ortConfig.scanner) {
                 archive shouldNotBeNull {
-                    storage.httpFileStorage.shouldBeNull()
-                    storage.localFileStorage shouldNotBeNull {
-                        directory shouldBe File("~/.ort/scanner/archive")
+                    fileStorage shouldNotBeNull {
+                        httpFileStorage should beNull()
+                        localFileStorage shouldNotBeNull {
+                            directory shouldBe File("~/.ort/scanner/archive")
+                        }
+                    }
+
+                    postgresStorage shouldNotBeNull {
+                        url shouldBe "url"
+                        schema shouldBe "schema"
+                        username shouldBe "user"
+                        password shouldBe "password"
                     }
                 }
 
                 storages shouldNotBeNull {
-                    keys shouldContainExactlyInAnyOrder setOf("local", "http", "clearlyDefined", "postgres")
+                    keys shouldContainExactlyInAnyOrder setOf(
+                        "local", "http", "clearlyDefined", "postgres", "sw360Configuration"
+                    )
                     val httpStorage = this["http"]
                     httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
                     httpStorage.backend.httpFileStorage shouldNotBeNull {
@@ -82,14 +113,26 @@ class OrtConfigurationTest : WordSpec({
                     val cdStorage = this["clearlyDefined"]
                     cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
                     cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
+
+                    val sw360Storage = this["sw360Configuration"]
+                    sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
+                    sw360Storage.restUrl shouldBe "https://your-sw360-rest-url"
+                    sw360Storage.authUrl shouldBe "https://your-authentication-url"
+                    sw360Storage.username shouldBe "username"
+                    sw360Storage.password shouldBe "password"
+                    sw360Storage.clientId shouldBe "clientId"
+                    sw360Storage.clientPassword shouldBe "clientPassword"
+                    sw360Storage.token shouldBe "token"
                 }
 
-                options.shouldNotBeNull()
+                options shouldNot beNull()
                 storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
                 storageWriters shouldContainExactly listOf("postgres")
+
+                ignorePatterns shouldContainExactly listOf("**/META-INF/DEPENDENCIES")
             }
 
-            ortConfig.licenseFilePatterns shouldNotBeNull {
+            with(ortConfig.licenseFilePatterns) {
                 licenseFilenames shouldContainExactly listOf("license*")
                 patentFilenames shouldContainExactly listOf("patents")
                 rootLicenseFilenames shouldContainExactly listOf("readme*")
@@ -123,10 +166,10 @@ class OrtConfigurationTest : WordSpec({
                         "ort.scanner.storages.postgresStorage.password" to "argsPassword",
                         "other.property" to "someValue"
                     ),
-                    configFile = configFile
+                    file = configFile
                 )
 
-                config.scanner?.storages shouldNotBeNull {
+                config.scanner.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe "username"
@@ -150,7 +193,7 @@ class OrtConfigurationTest : WordSpec({
             )
 
             shouldThrow<IllegalArgumentException> {
-                OrtConfiguration.load(configFile = configFile)
+                OrtConfiguration.load(file = configFile)
             }
         }
 
@@ -159,7 +202,7 @@ class OrtConfigurationTest : WordSpec({
             val args = mapOf("ort.scanner.storages.new" to "test")
 
             shouldThrow<IllegalArgumentException> {
-                OrtConfiguration.load(configFile = file, args = args)
+                OrtConfiguration.load(file = file, args = args)
             }
         }
 
@@ -167,9 +210,9 @@ class OrtConfigurationTest : WordSpec({
             val args = mapOf("foo" to "bar")
             val file = File("nonExistingConfig.conf")
 
-            val config = OrtConfiguration.load(configFile = file, args = args)
+            val config = OrtConfiguration.load(file = file, args = args)
 
-            config.scanner.shouldBeNull()
+            config.scanner shouldBe ScannerConfiguration()
         }
 
         "support references to environment variables" {
@@ -194,9 +237,9 @@ class OrtConfigurationTest : WordSpec({
             val env = mapOf("POSTGRES_USERNAME" to user, "POSTGRES_PASSWORD" to password)
 
             withEnvironment(env) {
-                val config = OrtConfiguration.load(configFile = configFile)
+                val config = OrtConfiguration.load(file = configFile)
 
-                config.scanner?.storages shouldNotBeNull {
+                config.scanner.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe user
@@ -218,9 +261,9 @@ class OrtConfigurationTest : WordSpec({
             )
 
             withEnvironment(env) {
-                val config = OrtConfiguration.load(configFile = File("dummyPath"))
+                val config = OrtConfiguration.load(file = File("dummyPath"))
 
-                config.scanner?.storages shouldNotBeNull {
+                config.scanner.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe user

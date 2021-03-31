@@ -111,8 +111,8 @@
 "CDDL or GPLv2 with exceptions": CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0
 "CDDL v1.0 / GPL v2 dual license": CDDL-1.0 OR GPL-2.0-only
 "CDDL v1.1 / GPL v2 dual license": CDDL-1.0 OR GPL-2.0-only
-"CDDL+GPL License": CDDL-1.0 AND GPL-2.0-only
-"CDDL+GPL": CDDL-1.0 AND GPL-2.0-only
+"CDDL+GPL License": CDDL-1.0 AND GPL-2.0-or-later
+"CDDL+GPL": CDDL-1.0 AND GPL-2.0-or-later
 "CDDL+GPLv2": CDDL-1.0 AND GPL-2.0-only
 "CDDL/GPLv2 dual license": CDDL-1.0 OR GPL-2.0-only
 "CDDL/GPLv2+CE": CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0
@@ -185,6 +185,7 @@
 "Eclipse Public License v2.0": EPL-2.0
 "Eclipse Public License": EPL-1.0
 "Eclipse Public License, Version 1.0": EPL-1.0
+"Eclipse Public License, Version 2.0": EPL-2.0
 "Eclipse Publish License, Version 1.0": EPL-1.0
 "Eiffel Forum License (EFL)": EFL-2.0
 "Eiffel Forum License (EFL-2.0)": EFL-2.0
@@ -208,16 +209,16 @@
 "GNU Affero General Public License v3": AGPL-3.0-only
 "GNU Affero General Public License, Version 3 with the Commons Clause": AGPL-3.0-only AND LicenseRef-scancode-public-domain-disclaimer
 "GNU Affero General Public License, Version 3": AGPL-3.0-only
-"GNU Free Documentation License (FDL)": GFDL-1.3-only
+"GNU Free Documentation License (FDL)": GFDL-1.3-or-later
 "GNU Free Documentation License (GFDL-1.3)": GFDL-1.3-only
 "GNU GENERAL PUBLIC LICENSE Version 2, June 1991": GPL-2.0-only
 "GNU GPL v2": GPL-2.0-only
 "GNU General Lesser Public License (LGPL) version 2.1": LGPL-2.1-only
 "GNU General Lesser Public License (LGPL) version 3.0": LGPL-3.0-only
-"GNU General Public Library": GPL-3.0-only
+"GNU General Public Library": GPL-3.0-or-later
 "GNU General Public License (GPL) v. 2": GPL-2.0-only
 "GNU General Public License (GPL) v. 3": GPL-3.0-only
-"GNU General Public License (GPL)": GPL-3.0-only
+"GNU General Public License (GPL)": GPL-3.0-or-later
 "GNU General Public License (GPL), version 2, with the Classpath exception": GPL-2.0-only WITH Classpath-exception-2.0
 "GNU General Public License 3": GPL-3.0-only
 "GNU General Public License Version 2": GPL-2.0-only
@@ -238,13 +239,13 @@
 "GNU LGPL 2.1": LGPL-2.1-only
 "GNU LGPL 3.0": LGPL-3.0-only
 "GNU LGPL v2": LGPL-2.1-only
-"GNU LGPL v2+": LGPL-2.1-only
+"GNU LGPL v2+": LGPL-2.1-or-later
 "GNU LGPL v2.1": LGPL-2.1-or-later
 "GNU LGPL v3": LGPL-3.0-only
 "GNU LGPL v3+": LGPL-3.0-or-later
-"GNU LGPL": LGPL-2.1-only
-"GNU Lesser General Public Licence": LGPL-2.1-only
-"GNU Lesser General Public License (LGPL)": LGPL-2.1-only
+"GNU LGPL": LGPL-2.1-or-later
+"GNU Lesser General Public Licence": LGPL-2.1-or-later
+"GNU Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "GNU Lesser General Public License (LGPL), Version 2.1": LGPL-2.1-only
 "GNU Lesser General Public License (LGPL), Version 3": LGPL-3.0-only
 "GNU Lesser General Public License (LGPL), version 2.1 or later": LGPL-2.1-or-later
@@ -255,13 +256,13 @@
 "GNU Lesser General Public License v3 (LGPLv3)": LGPL-3.0-only
 "GNU Lesser General Public License v3 or later (LGPLv3+)": LGPL-3.0-or-later
 "GNU Lesser General Public License v3+": LGPL-3.0-or-later
-"GNU Lesser General Public License": LGPL-2.1-only
+"GNU Lesser General Public License": LGPL-2.1-or-later
 "GNU Lesser General Public License, Version 2.1": LGPL-2.1-only
-"GNU Lesser Public License": LGPL-2.1-only
-"GNU Library or Lesser General Public License (LGPL)": LGPL-2.1-only
+"GNU Lesser Public License": LGPL-2.1-or-later
+"GNU Library or Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "GNU Library or Lesser General Public License version 2.0 (LGPLv2)": LGPL-2.0-only
-"GNU Public": GPL-2.0-only
-"GPL (with dual licensing option)": GPL-2.0-only
+"GNU Public": GPL-2.0-or-later
+"GPL (with dual licensing option)": GPL-2.0-or-later
 "GPL 2": GPL-2.0-only
 "GPL 3": GPL-3.0-only
 "GPL v2 with ClassPath Exception": GPL-2.0-only WITH Classpath-exception-2.0
@@ -272,7 +273,7 @@
 "GPL2 w/ CPE": GPL-2.0-only WITH Classpath-exception-2.0
 "GPLv2+CE": GPL-2.0-only WITH Classpath-exception-2.0
 "GWT Terms": Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-1.0 AND LGPL-2.1-only AND MPL-1.1
-"General Public License (GPL)": GPL-2.0-only
+"General Public License (GPL)": GPL-2.0-or-later
 "General Public License 2.0 (GPL)": GPL-2.0-only
 "Google Maps Platform Terms of Service": LicenseRef-ort-google-maps-tos
 "HERE Proprietary License": LicenseRef-scancode-here-proprietary
@@ -294,14 +295,14 @@
 "LGPL 3.0": LGPL-3.0-only
 "LGPL v3": LGPL-3.0-only
 "LGPL v3+": LGPL-3.0-or-later
-"LGPL with exceptions or ZPL": LGPL-3.0-only OR ZPL-2.1
-"LGPL+BSD": LGPL-2.1-only AND BSD-2-Clause
+"LGPL with exceptions or ZPL": LGPL-3.0-or-later OR ZPL-2.1
+"LGPL+BSD": LGPL-2.1-or-later AND BSD-2-Clause
 "LGPL, version 2.1": LGPL-2.1-only
-"LGPL, version 3.0": LGPL-2.1-only
-"LGPL/MIT": LGPL-3.0-only OR MIT
+"LGPL, version 3.0": LGPL-3.0-only
+"LGPL/MIT": LGPL-3.0-or-later OR MIT
 "LGPLv3 or later": LGPL-3.0-or-later
-"LPGL, see LICENSE file.": LGPL-3.0-only
-"Lesser General Public License (LGPL)": LGPL-2.1-only
+"LPGL, see LICENSE file.": LGPL-3.0-or-later
+"Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "Lesser General Public License, version 3 or greater": LGPL-3.0-or-later
 "License Agreement For Open Source Computer Vision Library (3-clause BSD License)": BSD-3-Clause
 "MIT (http://mootools.net/license.txt)": MIT
@@ -335,7 +336,7 @@
 "Mozilla Public License, Version 2.0": MPL-2.0
 "NCSA License": NCSA
 "NCSA Open Source License": NCSA
-"NetBeans CDDL/GPL": CDDL-1.0 OR GPL-2.0-only
+"NetBeans CDDL/GPL": CDDL-1.0 OR GPL-2.0-or-later
 "Netscape Public License (NPL)": NPL-1.0
 "Netscape Public License": NPL-1.0
 "New BSD License": BSD-3-Clause
@@ -456,7 +457,7 @@
 "european union public licence 1.1 (eupl 1.1)": EUPL-1.1
 "european union public licence 1.2 (eupl 1.2)": EUPL-1.2
 "gnu gpl v3": GPL-3.0-only
-"gnu gpl": GPL-2.0-only
+"gnu gpl": GPL-2.0-or-later
 "gpl (≥ 3)": GPL-3.0-or-later
 "http://ant-contrib.sourceforge.net/tasks/LICENSE.txt": Apache-1.1
 "http://asm.ow2.org/license.html": BSD-3-Clause

@@ -28,9 +28,13 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
+import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 
 class OrtImportOrder : Rule() {
+    private val commonTopLevelDomains = listOf("com", "org", "io")
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Style,
@@ -38,17 +42,32 @@ class OrtImportOrder : Rule() {
         Debt.FIVE_MINS
     )
 
-    @ExperimentalStdlibApi
     override fun visitImportList(importList: KtImportList) {
         super.visitImportList(importList)
 
-        val importPaths = importList.imports.mapTo(mutableListOf()) { it.importPath.toString() }
-        val sortedImportPaths = importPaths.sorted().toMutableList()
+        // Need to call importList.node.getChildren(null) instead of importList.getChildren(),
+        // since the latter returns the imports without blank lines.
+        val children = importList.node.getChildren(null)
 
-        // TODO: Also check for blank lines between imports from different top-level domains.
-        if (importPaths != sortedImportPaths) {
+        if (children.isEmpty()) return
+
+        val importPaths = children.mapNotNull {
+            when (val psi = it.psi) {
+                is KtImportDirective -> psi.importPath.toString()
+                // Between two imports there is a child PSI of type whitespace.
+                // For 'n' blank lines in between, the text of this child contains
+                // 'n + 1' line breaks. Thus a single blank line is represented by "\n\n".
+                is PsiWhiteSpace -> if (psi.text == "\n\n") "" else null
+                else -> null
+            }
+        }
+
+        val expectedImportOrder = createExpectedImportOrder(importPaths)
+
+        if (importPaths != expectedImportOrder) {
             val path = importList.containingKtFile.absolutePath()
-            val message = "Imports in file '$path' are not sorted alphabetically"
+            val message = "Imports in file '$path' are not sorted alphabetically or single blank lines are missing " +
+                    "between different top-level packages"
             val finding = CodeSmell(
                 issue,
                 // Use the message as the name to also see it in CLI output and not only in the report files.
@@ -57,5 +76,47 @@ class OrtImportOrder : Rule() {
             )
             report(finding)
         }
+    }
+
+    private fun createExpectedImportOrder(importPaths: List<String>): List<String> {
+        val expectedImportPaths = mutableListOf<String>()
+
+        val (importPathsWithDot, importPathsWithoutDot) = importPaths.filter(String::isNotEmpty)
+            .sorted()
+            .partition { it.contains('.') }
+
+        val sortedImportPathsWithDotAndBlankLines = createImportListWithBlankLines(importPathsWithDot)
+
+        if (importPathsWithoutDot.isNotEmpty()) {
+            expectedImportPaths += importPathsWithoutDot
+            expectedImportPaths += ""
+        }
+
+        expectedImportPaths += sortedImportPathsWithDotAndBlankLines
+        return expectedImportPaths
+    }
+
+    private fun createImportListWithBlankLines(importPaths: List<String>): List<String> {
+        val pathsWithBlankLines = mutableListOf<String>()
+
+        importPaths.groupBy { getTopLevelPackage(it) }.forEach {
+            pathsWithBlankLines += it.value
+            pathsWithBlankLines += ""
+        }
+        pathsWithBlankLines.removeLast()
+
+        return pathsWithBlankLines
+    }
+
+    private fun getTopLevelPackage(importPath: String): String {
+        val dotIndex = importPath.indexOf(".")
+        var topLevelName = importPath.substring(0, dotIndex)
+
+        if (topLevelName in commonTopLevelDomains) {
+            val secondDotIndex = importPath.indexOf(".", dotIndex + 1)
+            topLevelName = importPath.substring(0, secondDotIndex)
+        }
+
+        return topLevelName
     }
 }

@@ -25,13 +25,13 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
-import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }
 
-infix fun <T> T?.shouldNotBeNull(block: T.() -> Unit) {
+infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
     this.shouldNotBeNull()
     this.block()
 }

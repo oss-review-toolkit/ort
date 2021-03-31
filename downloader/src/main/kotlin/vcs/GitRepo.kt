@@ -24,6 +24,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.IOException
 
+import org.eclipse.jgit.lib.SymbolicRef
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
@@ -39,6 +41,7 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.withoutPrefix
 
 /**
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
@@ -65,16 +68,20 @@ private data class Include(
 class GitRepo : VersionControlSystem(), CommandLineTool {
     override val type = VcsType.GIT_REPO
     override val priority = 50
-    override val defaultBranchName = "master"
     override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun command(workingDir: File?) = "repo"
 
     override fun getVersion() = getVersion(null)
 
+    override fun getDefaultBranchName(url: String): String {
+        val refs = org.eclipse.jgit.api.Git.lsRemoteRepository().setRemote(url).callAsMap()
+        return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
+    }
+
     override fun transformVersion(output: String): String {
         val launcherVersion = output.lineSequence().mapNotNull { line ->
-            line.removePrefix("repo launcher version ").takeIf { it != line }
+            line.withoutPrefix("repo launcher version ")
         }.singleOrNull()
             ?: throw IOException("The 'repo' version can only be determined from an initialized working tree.")
 

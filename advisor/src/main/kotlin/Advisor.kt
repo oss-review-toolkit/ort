@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,27 +24,30 @@ import java.io.File
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
-import org.ossreviewtoolkit.model.AdvisorResultContainer
 import org.ossreviewtoolkit.model.AdvisorRun
-import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.Environment
 
 /**
- * The class to retrieve security advisories.
+ * The class to manage [VulnerabilityProvider]s that retrieve security advisories.
  */
-abstract class Advisor(val advisorName: String, protected val config: AdvisorConfiguration) {
+class Advisor(
+    private val providerFactories: List<VulnerabilityProviderFactory>,
+    private val config: AdvisorConfiguration
+) {
     companion object {
-        private val LOADER = ServiceLoader.load(AdvisorFactory::class.java)!!
+        private val LOADER = ServiceLoader.load(VulnerabilityProviderFactory::class.java)!!
 
         /**
-         * The list of all available advisors in the classpath
+         * The list of all available [VulnerabilityProvider]s in the classpath.
          */
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
     }
@@ -61,26 +65,34 @@ abstract class Advisor(val advisorName: String, protected val config: AdvisorCon
         val ortResult = ortResultFile.readValue<OrtResult>()
 
         requireNotNull(ortResult.analyzer) {
-            "The provided ORT result file '${ortResultFile.invariantSeparatorsPath}' does not contain an analyzer " +
-                    "result."
+            "The provided ORT result file '${ortResultFile.canonicalPath}' does not contain an analyzer result."
         }
+
+        val providers = providerFactories.map { it.create(config) }
+
+        val results = sortedMapOf<Identifier, List<AdvisorResult>>()
 
         val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
 
-        val results = runBlocking { retrievePackageVulnerabilities(packages) }
-        val resultContainers = results.map { (pkg, results) ->
-            AdvisorResultContainer(pkg.id, results)
-        }.toSortedSet()
-        val advisorRecord = AdvisorRecord(resultContainers)
+        runBlocking {
+            providers.map { provider ->
+                async {
+                    provider.retrievePackageVulnerabilities(packages)
+                }
+            }.forEach { providerResults ->
+                providerResults.await().forEach { (pkg, advisorResults) ->
+                    results.merge(pkg.id, advisorResults) { oldResults, newResults ->
+                        oldResults + newResults
+                    }
+                }
+            }
+        }
+
+        val advisorRecord = AdvisorRecord(results)
 
         val endTime = Instant.now()
 
         val advisorRun = AdvisorRun(startTime, endTime, Environment(), config, advisorRecord)
-
         return ortResult.copy(advisor = advisorRun)
     }
-
-    protected abstract suspend fun retrievePackageVulnerabilities(
-        packages: List<Package>
-    ): Map<Package, List<AdvisorResult>>
 }

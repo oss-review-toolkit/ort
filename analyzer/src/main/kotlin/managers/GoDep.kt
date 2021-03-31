@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.safeCopyRecursively
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.toUri
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
@@ -131,6 +132,7 @@ class GoDep(
 
             val pkg = Package(
                 id = Identifier(managerName, "", name, version),
+                authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -147,17 +149,14 @@ class GoDep(
 
         val scope = Scope("default", packageRefs.toSortedSet())
 
-        @Suppress("TooGenericExceptionCaught")
-        val projectName = try {
+        val projectName = runCatching {
             val uri = URI(projectVcs.url)
             val vcsPath = VersionControlSystem.getPathInfo(definitionFile.parentFile).path
             listOf(uri.host, uri.path.removePrefix("/").removeSuffix(".git"), vcsPath)
                 .filterNot { it.isEmpty() }
                 .joinToString(separator = "/")
                 .toLowerCase()
-        } catch (e: Exception) {
-            projectDir.name
-        }
+        }.getOrDefault(projectDir.name)
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively(force = true)
@@ -172,11 +171,12 @@ class GoDep(
                         version = projectVcs.revision
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                    authors = sortedSetOf(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = projectVcs,
                     homepageUrl = "",
-                    scopes = sortedSetOf(scope)
+                    scopeDependencies = sortedSetOf(scope)
                 ),
                 packages = packages
             )
@@ -184,13 +184,9 @@ class GoDep(
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-        @Suppress("TooGenericExceptionCaught")
-        try {
-            val uri = URI(vcs.url)
+        vcs.url.toUri { uri ->
             Paths.get(gopath.path, "src", uri.host, uri.path)
-        } catch (e: Exception) {
-            Paths.get(gopath.path, "src", projectDir.name)
-        }.toFile()
+        }.getOrDefault(Paths.get(gopath.path, "src", projectDir.name)).toFile()
 
     private fun resolveProjectRoot(definitionFile: File) =
         when (definitionFile.name) {

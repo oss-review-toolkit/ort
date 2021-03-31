@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,23 +25,20 @@ import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -51,6 +48,10 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.Environment
+
+val authors = sortedSetOf("The Author", "The Other Author")
+val projectAuthors = sortedSetOf("The Project Author")
 
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = sortedSetOf("LicenseRef-a", "LicenseRef-b")
@@ -59,6 +60,11 @@ val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicense
 val licenseFindings = sortedSetOf(
     LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
     LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
+)
+
+val packageWithAuthors = Package.EMPTY.copy(
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-authors:1.0"),
+    authors = authors
 )
 
 val packageWithoutLicense = Package.EMPTY.copy(
@@ -106,6 +112,7 @@ val packageWithConcludedAndDeclaredAndDetectedLicense = Package.EMPTY.copy(
 )
 
 val allPackages = listOf(
+    packageWithAuthors,
     packageWithoutLicense,
     packageWithConcludedLicense,
     packageWithDeclaredLicense,
@@ -129,31 +136,29 @@ val scope = Scope(
 val project = Project.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:project-included:1.0"),
     definitionFilePath = "included/pom.xml",
-    scopes = sortedSetOf(scope)
+    authors = projectAuthors,
+    scopeDependencies = sortedSetOf(scope)
 )
 
-val provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY)
+val provenance = UnknownProvenance
 
 val scanResults = listOf(
     packageWithDetectedLicense,
     packageWithConcludedAndDetectedLicense,
     packageWithDeclaredAndDetectedLicense,
     packageWithConcludedAndDeclaredAndDetectedLicense
-).mapTo(sortedSetOf()) {
-    ScanResultContainer(
-        id = it.id,
-        results = listOf(
-            ScanResult(
-                provenance = provenance,
-                scanner = ScannerDetails.EMPTY,
-                summary = ScanSummary(
-                    startTime = Instant.EPOCH,
-                    endTime = Instant.EPOCH,
-                    fileCount = 1,
-                    packageVerificationCode = "",
-                    licenseFindings = licenseFindings,
-                    copyrightFindings = sortedSetOf()
-                )
+).associateTo(sortedMapOf()) {
+    it.id to listOf(
+        ScanResult(
+            provenance = provenance,
+            scanner = ScannerDetails.EMPTY,
+            summary = ScanSummary(
+                startTime = Instant.EPOCH,
+                endTime = Instant.EPOCH,
+                fileCount = 1,
+                packageVerificationCode = "",
+                licenseFindings = licenseFindings,
+                copyrightFindings = sortedSetOf()
             )
         )
     )

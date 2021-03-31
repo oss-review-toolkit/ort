@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners
 import org.ossreviewtoolkit.spdx.toSpdx
 
 class BoyterLcScannerFunTest : AbstractScannerFunTest() {
-    override val scanner = BoyterLc("BoyterLc", config)
+    override val scanner = BoyterLc("BoyterLc", scannerConfig, downloaderConfig)
     override val expectedFileLicenses = setOf("Apache-2.0".toSpdx(), "ECL-2.0".toSpdx())
     override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx(), "ECL-2.0".toSpdx())
 }

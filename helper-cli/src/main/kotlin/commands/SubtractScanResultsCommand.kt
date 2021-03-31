@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,10 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.mapper
@@ -65,25 +67,24 @@ internal class SubtractScanResultsCommand : CliktCommand(
         val lhsOrtResult = lhsOrtResultFile.readValue<OrtResult>()
         val rhsOrtResult = rhsOrtResultFile.readValue<OrtResult>()
 
-        val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.results }.associateBy(
+        val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.value }.associateBy(
             keySelector = { it.provenance.key() },
             valueTransform = { it.summary }
         )
 
-        val scanResultContainers = lhsOrtResult.scanner!!.results.scanResults.mapTo(sortedSetOf()) { container ->
-            val results = container.results.map { lhsScanResult ->
+        val scanResults = lhsOrtResult.scanner!!.results.scanResults.mapValuesTo(sortedMapOf()) { (_, results) ->
+            results.map { lhsScanResult ->
                 val lhsSummary = lhsScanResult.summary
                 val rhsSummary = rhsScanSummaries[lhsScanResult.provenance.key()]
 
                 lhsScanResult.copy(summary = lhsSummary - rhsSummary)
             }
-            container.copy(results = results)
-       }
+        }
 
        val result = lhsOrtResult.copy(
            scanner = lhsOrtResult.scanner!!.copy(
                results = lhsOrtResult.scanner!!.results.copy(
-                    scanResults = scanResultContainers
+                    scanResults = scanResults
                )
            )
        )
@@ -92,6 +93,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
     }
 }
 
+@Suppress("UnusedPrivateMember")
 private operator fun ScanSummary.minus(other: ScanSummary?): ScanSummary {
     if (other == null) return this
 
@@ -102,18 +104,25 @@ private operator fun ScanSummary.minus(other: ScanSummary?): ScanSummary {
 }
 
 private data class Key(
-    val vcsType: VcsType?,
-    val vcsUrl: String?,
-    val vcsRevision: String?,
-    val vcsPath: String?,
-    val sourceArtifactUrl: String?
+    val vcsType: VcsType? = null,
+    val vcsUrl: String? = null,
+    val vcsRevision: String? = null,
+    val vcsPath: String? = null,
+    val sourceArtifactUrl: String? = null
 )
 
 private fun Provenance.key(): Key =
-    Key(
-        vcsType = vcsInfo?.type,
-        vcsUrl = vcsInfo?.url,
-        vcsRevision = vcsInfo?.resolvedRevision,
-        vcsPath = vcsInfo?.path,
-        sourceArtifactUrl = sourceArtifact?.url
-    )
+    when (this) {
+        is ArtifactProvenance -> Key(sourceArtifactUrl = sourceArtifact.url)
+
+        is RepositoryProvenance -> {
+            Key(
+                vcsType = vcsInfo.type,
+                vcsUrl = vcsInfo.url,
+                vcsRevision = vcsInfo.revision,
+                vcsPath = vcsInfo.path
+            )
+        }
+
+        else -> Key()
+    }

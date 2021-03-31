@@ -23,9 +23,7 @@ package org.ossreviewtoolkit.utils
  * Continuous-Integration-specific utility functions.
  */
 object Ci {
-    val isAppVeyor = listOf("APPVEYOR", "CI").all { Os.env[it].isTrue() }
     val isAzure = Os.env["TF_BUILD"].isTrue()
     val isAzureLinux = isAzure && Os.env["AGENT_OS"] == "Linux"
     val isAzureWindows = isAzure && Os.env["AGENT_OS"] == "Windows_NT"
-    val isTravis = listOf("TRAVIS", "CI").all { Os.env[it].isTrue() }
 }

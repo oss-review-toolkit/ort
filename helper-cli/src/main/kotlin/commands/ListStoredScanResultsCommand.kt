@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
@@ -65,7 +64,7 @@ internal class ListStoredScanResultsCommand : CliktCommand(
 
     override fun run() {
         val config = OrtConfiguration.load(configArguments, configFile)
-        ScanResultsStorage.configure(config.scanner ?: ScannerConfiguration())
+        ScanResultsStorage.configure(config.scanner)
 
         println("Searching for scan results of '${packageId.toCoordinates()}' in ${ScanResultsStorage.storage.name}.")
 
@@ -77,9 +76,9 @@ internal class ListStoredScanResultsCommand : CliktCommand(
             }
         }
 
-        println("Found ${scanResults.results.size} scan results:")
+        println("Found ${scanResults.size} scan results:")
 
-        scanResults.results.forEach { result ->
+        scanResults.forEach { result ->
             println("\n${yamlMapper.writeValueAsString(result.provenance)}")
         }
     }

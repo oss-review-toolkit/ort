@@ -25,7 +25,6 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
-import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 /**
  * Return a map of concluded licenses for each package [Identifier] that has a concluded license. Note that this

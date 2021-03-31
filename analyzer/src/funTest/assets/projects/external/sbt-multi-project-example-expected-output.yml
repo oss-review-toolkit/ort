@@ -28,7 +28,9 @@ analyzer:
   result:
     projects:
     - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
-      definition_file_path: "common/target/scala-2.12/common_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "common/target-scala-2.12-common_2.12-0.1-SNAPSHOT.pom"
+      authors:
+      - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -79,7 +81,9 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
-      definition_file_path: "multi1/target/scala-2.12/multi1_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1-SNAPSHOT.pom"
+      authors:
+      - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -138,7 +142,9 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
-      definition_file_path: "multi2/target/scala-2.12/multi2_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1-SNAPSHOT.pom"
+      authors:
+      - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -198,7 +204,9 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
-      definition_file_path: "target/scala-2.12/sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
+      definition_file_path: "target-scala-2.12-sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
+      authors:
+      - "com.pbassiner"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -216,34 +224,22 @@ analyzer:
       - name: "compile"
         dependencies:
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
-    - id: "Unmanaged::sbt-multi-project-example:31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-      definition_file_path: ""
-      declared_licenses: []
-      declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-        path: ""
-      homepage_url: ""
-      scopes: []
     packages:
     - package:
         id: "Maven:ch.qos.logback:logback-classic:1.2.3"
         purl: "pkg:maven/ch.qos.logback/logback-classic@1.2.3"
+        authors:
+        - "Ceki Gulcu"
+        - "Joern Huxhorn"
+        - "QOS.ch"
         declared_licenses:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
         declared_licenses_processed:
-          spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
+          spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
           mapped:
             Eclipse Public License - v 1.0: "EPL-1.0"
-            GNU Lesser General Public License: "LGPL-2.1-only"
+            GNU Lesser General Public License: "LGPL-2.1-or-later"
         description: "logback-classic module"
         homepage_url: "http://logback.qos.ch/logback-classic"
         binary_artifact:
@@ -270,14 +266,18 @@ analyzer:
     - package:
         id: "Maven:ch.qos.logback:logback-core:1.2.3"
         purl: "pkg:maven/ch.qos.logback/logback-core@1.2.3"
+        authors:
+        - "Ceki Gulcu"
+        - "Joern Huxhorn"
+        - "QOS.ch"
         declared_licenses:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
         declared_licenses_processed:
-          spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
+          spdx_expression: "EPL-1.0 OR LGPL-2.1-or-later"
           mapped:
             Eclipse Public License - v 1.0: "EPL-1.0"
-            GNU Lesser General Public License: "LGPL-2.1-only"
+            GNU Lesser General Public License: "LGPL-2.1-or-later"
         description: "logback-core module"
         homepage_url: "http://logback.qos.ch/logback-core"
         binary_artifact:
@@ -304,6 +304,9 @@ analyzer:
     - package:
         id: "Maven:com.chuusai:shapeless_2.12:2.3.2"
         purl: "pkg:maven/com.chuusai/shapeless_2.12@2.3.2"
+        authors:
+        - "Miles Sabin"
+        - "com.chuusai"
         declared_licenses:
         - "Apache 2"
         declared_licenses_processed:
@@ -336,6 +339,11 @@ analyzer:
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-annotations@2.8.0"
+        authors:
+        - "Christopher Currie"
+        - "FasterXML"
+        - "Paul Brown"
+        - "Tatu Saloranta"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -369,6 +377,11 @@ analyzer:
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.8.9"
+        authors:
+        - "Christopher Currie"
+        - "FasterXML"
+        - "Paul Brown"
+        - "Tatu Saloranta"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -401,6 +414,11 @@ analyzer:
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.8.9"
+        authors:
+        - "Christopher Currie"
+        - "FasterXML"
+        - "Paul Brown"
+        - "Tatu Saloranta"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -434,6 +452,12 @@ analyzer:
     - package:
         id: "Maven:com.github.julien-truffaut:monocle-core_2.12:1.4.0"
         purl: "pkg:maven/com.github.julien-truffaut/monocle-core_2.12@1.4.0"
+        authors:
+        - "Ilan Godik"
+        - "Julien Truffaut"
+        - "Kenji Yoshida"
+        - "Naoki Aoyama"
+        - "com.github.julien-truffaut"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -464,6 +488,12 @@ analyzer:
     - package:
         id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
         purl: "pkg:maven/com.github.julien-truffaut/monocle-macro_2.12@1.4.0"
+        authors:
+        - "Ilan Godik"
+        - "Julien Truffaut"
+        - "Kenji Yoshida"
+        - "Naoki Aoyama"
+        - "com.github.julien-truffaut"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -494,6 +524,9 @@ analyzer:
     - package:
         id: "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
         purl: "pkg:maven/com.github.pureconfig/pureconfig-macros_2.12@0.8.0"
+        authors:
+        - "Rui Gonçalves"
+        - "com.github.pureconfig"
         declared_licenses:
         - "Mozilla Public License, version 2.0"
         declared_licenses_processed:
@@ -526,6 +559,13 @@ analyzer:
     - package:
         id: "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
         purl: "pkg:maven/com.github.pureconfig/pureconfig_2.12@0.8.0"
+        authors:
+        - "Derek Morr"
+        - "Joao Azevedo"
+        - "Leif Wickland"
+        - "Mario Pastorelli"
+        - "Rui Gonçalves"
+        - "com.github.pureconfig"
         declared_licenses:
         - "Mozilla Public License, version 2.0"
         declared_licenses_processed:
@@ -558,6 +598,9 @@ analyzer:
     - package:
         id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
         purl: "pkg:maven/com.typesafe.akka/akka-actor_2.12@2.5.6"
+        authors:
+        - "Akka Contributors"
+        - "Lightbend Inc."
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -590,6 +633,9 @@ analyzer:
     - package:
         id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
         purl: "pkg:maven/com.typesafe.akka/akka-stream_2.12@2.5.6"
+        authors:
+        - "Akka Contributors"
+        - "Lightbend Inc."
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -622,6 +668,10 @@ analyzer:
     - package:
         id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
         purl: "pkg:maven/com.typesafe.scala-logging/scala-logging_2.12@3.7.2"
+        authors:
+        - "Heiko Seeberger"
+        - "Mathias Bogaert"
+        - "com.typesafe.scala-logging"
         declared_licenses:
         - "Apache 2.0 License"
         declared_licenses_processed:
@@ -654,6 +704,9 @@ analyzer:
     - package:
         id: "Maven:com.typesafe:config:1.3.1"
         purl: "pkg:maven/com.typesafe/config@1.3.1"
+        authors:
+        - "Havoc Pennington"
+        - "com.typesafe"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -686,6 +739,10 @@ analyzer:
     - package:
         id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
         purl: "pkg:maven/com.typesafe/ssl-config-core_2.12@0.2.2"
+        authors:
+        - "Konrad Malawski"
+        - "Will Sargent"
+        - "com.typesafe"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -718,11 +775,15 @@ analyzer:
     - package:
         id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
         purl: "pkg:maven/net.logstash.logback/logstash-logback-encoder@4.11"
+        authors:
+        - "John E. Vincent"
+        - "Nokia"
+        - "Phil Clay"
         declared_licenses:
         - "Apache License, Version 2.0"
         - "MIT License"
         declared_licenses_processed:
-          spdx_expression: "Apache-2.0 AND MIT"
+          spdx_expression: "Apache-2.0 OR MIT"
           mapped:
             Apache License, Version 2.0: "Apache-2.0"
             MIT License: "MIT"
@@ -753,6 +814,8 @@ analyzer:
     - package:
         id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
         purl: "pkg:maven/org.reactivestreams/reactive-streams@1.0.1"
+        authors:
+        - "Reactive Streams SIG"
         declared_licenses:
         - "CC0"
         declared_licenses_processed:
@@ -785,6 +848,10 @@ analyzer:
     - package:
         id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
         purl: "pkg:maven/org.scala-lang.modules/scala-java8-compat_2.12@0.8.0"
+        authors:
+        - "EPFL"
+        - "Typesafe, Inc."
+        - "org.scala-lang.modules"
         declared_licenses:
         - "BSD 3-clause"
         declared_licenses_processed:
@@ -817,6 +884,10 @@ analyzer:
     - package:
         id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
         purl: "pkg:maven/org.scala-lang.modules/scala-parser-combinators_2.12@1.0.4"
+        authors:
+        - "EPFL"
+        - "Typesafe, Inc."
+        - "org.scala-lang.modules"
         declared_licenses:
         - "BSD 3-clause"
         declared_licenses_processed:
@@ -849,6 +920,10 @@ analyzer:
     - package:
         id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
         purl: "pkg:maven/org.scala-lang.modules/scala-xml_2.12@1.0.5"
+        authors:
+        - "EPFL"
+        - "Typesafe, Inc."
+        - "org.scala-lang.modules"
         declared_licenses:
         - "BSD 3-clause"
         declared_licenses_processed:
@@ -881,6 +956,9 @@ analyzer:
     - package:
         id: "Maven:org.scala-lang:scala-compiler:2.12.3"
         purl: "pkg:maven/org.scala-lang/scala-compiler@2.12.3"
+        authors:
+        - "LAMP/EPFL"
+        - "Lightbend, Inc."
         declared_licenses:
         - "BSD 3-Clause"
         declared_licenses_processed:
@@ -913,6 +991,9 @@ analyzer:
     - package:
         id: "Maven:org.scala-lang:scala-library:2.12.3"
         purl: "pkg:maven/org.scala-lang/scala-library@2.12.3"
+        authors:
+        - "LAMP/EPFL"
+        - "Lightbend, Inc."
         declared_licenses:
         - "BSD 3-Clause"
         declared_licenses_processed:
@@ -945,6 +1026,9 @@ analyzer:
     - package:
         id: "Maven:org.scala-lang:scala-reflect:2.12.2"
         purl: "pkg:maven/org.scala-lang/scala-reflect@2.12.2"
+        authors:
+        - "LAMP/EPFL"
+        - "Lightbend, Inc."
         declared_licenses:
         - "BSD 3-Clause"
         declared_licenses_processed:
@@ -977,6 +1061,12 @@ analyzer:
     - package:
         id: "Maven:org.scala-sbt:test-interface:1.0"
         purl: "pkg:maven/org.scala-sbt/test-interface@1.0"
+        authors:
+        - "Bill Venners"
+        - "Chua Chee Seng"
+        - "Josh Cough"
+        - "Mark Harrah"
+        - "org.scala-sbt"
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
@@ -1010,6 +1100,9 @@ analyzer:
     - package:
         id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
         purl: "pkg:maven/org.scalacheck/scalacheck_2.12@1.13.5"
+        authors:
+        - "Rickard Nilsson"
+        - "org.scalacheck"
         declared_licenses:
         - "BSD-style"
         declared_licenses_processed:
@@ -1042,6 +1135,11 @@ analyzer:
     - package:
         id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
         purl: "pkg:maven/org.scalactic/scalactic_2.12@3.0.4"
+        authors:
+        - "Bill Venners"
+        - "Chua Chee Seng"
+        - "George Berger"
+        - "org.scalactic"
         declared_licenses:
         - "the Apache License, ASL Version 2.0"
         declared_licenses_processed:
@@ -1074,6 +1172,11 @@ analyzer:
     - package:
         id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
         purl: "pkg:maven/org.scalatest/scalatest_2.12@3.0.4"
+        authors:
+        - "Bill Venners"
+        - "Chua Chee Seng"
+        - "George Berger"
+        - "org.scalatest"
         declared_licenses:
         - "the Apache License, ASL Version 2.0"
         declared_licenses_processed:
@@ -1106,6 +1209,18 @@ analyzer:
     - package:
         id: "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
         purl: "pkg:maven/org.scalaz/scalaz-core_2.12@7.2.8"
+        authors:
+        - "Alexey Romanov"
+        - "Daniel Peebles"
+        - "Edward Kmett"
+        - "Jason Zaugg"
+        - "Kris Nuttycombe"
+        - "Lars Hupel"
+        - "Paul Chiusano"
+        - "Richard Wallace"
+        - "Runar Bjarnason"
+        - "Tony Morris"
+        - "org.scalaz"
         declared_licenses:
         - "BSD-style"
         declared_licenses_processed:
@@ -1138,6 +1253,9 @@ analyzer:
     - package:
         id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
         purl: "pkg:maven/org.slf4j/jcl-over-slf4j@1.7.25"
+        authors:
+        - "Ceki Gulcu"
+        - "QOS.ch"
         declared_licenses:
         - "MIT License"
         declared_licenses_processed:
@@ -1170,6 +1288,9 @@ analyzer:
     - package:
         id: "Maven:org.slf4j:slf4j-api:1.7.25"
         purl: "pkg:maven/org.slf4j/slf4j-api@1.7.25"
+        authors:
+        - "Ceki Gulcu"
+        - "QOS.ch"
         declared_licenses:
         - "MIT License"
         declared_licenses_processed:
@@ -1202,6 +1323,9 @@ analyzer:
     - package:
         id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
         purl: "pkg:maven/org.typelevel/macro-compat_2.12@1.1.1"
+        authors:
+        - "Miles Sabin"
+        - "org.typelevel"
         declared_licenses:
         - "Apache 2"
         declared_licenses_processed:

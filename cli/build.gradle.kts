@@ -19,14 +19,17 @@
  * License-Filename: LICENSE
  */
 
-val antennaVersion: String by project
 val cliktVersion: String by project
 val config4kVersion: String by project
+val exposedVersion: String by project
 val jacksonVersion: String by project
+val hikariVersion: String by project
 val kotestVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 val log4jCoreVersion: String by project
 val postgresVersion: String by project
 val reflectionsVersion: String by project
+val sw360ClientVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -90,11 +93,11 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://download.eclipse.org/antenna/releases/")
+            maven("https://repo.eclipse.org/content/repositories/sw360-releases/")
         }
 
         filter {
-            includeGroup("org.eclipse.sw360.antenna")
+            includeGroup("org.eclipse.sw360")
         }
     }
 
@@ -105,15 +108,6 @@ repositories {
 
         filter {
             includeGroup("com.github.ralfstuckert.pdfbox-layout")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
-            maven("https://repository.mulesoft.org/nexus/content/repositories/public/")
-        }
-
-        filter {
             includeGroup("com.github.everit-org.json-schema")
         }
     }
@@ -131,10 +125,17 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
+    implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation("io.github.config4k:config4k:$config4kVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
-    implementation("org.eclipse.sw360.antenna:sw360-client:$antennaVersion")
+    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("org.reflections:reflections:$reflectionsVersion")
 

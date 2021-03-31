@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.dataformat.yaml.JacksonYAMLParseException
 
 import com.vdurmont.semver4j.Requirement
 
@@ -29,6 +30,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -200,7 +202,7 @@ class Pub(
 
         log.info { "Reading ${definitionFile.name} file in $workingDir." }
 
-        val project = parseProject(definitionFile, scopes)
+        val project = parseProject(definitionFile, manifest, scopes)
 
         return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues))
     }
@@ -346,13 +348,12 @@ class Pub(
         return ProjectAnalyzerResult(Project.EMPTY, sortedSetOf(), listOf(issue))
     }
 
-    private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
+    private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: SortedSet<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
-        val pubspec = yamlMapper.readTree(definitionFile)
-
         val rawName = pubspec["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
+        val authors = parseAuthors(pubspec)
 
         val vcs = VcsHost.toVcsInfo(repositoryUrl)
 
@@ -364,12 +365,13 @@ class Pub(
                 version = pubspec["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = authors,
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = sortedSetOf(),
             vcs = vcs,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = scopes
+            scopeDependencies = scopes
         )
     }
 
@@ -384,66 +386,81 @@ class Pub(
 
         listOf("packages"/*, "packages-dev"*/).forEach {
             lockFile[it]?.forEach { pkgInfoFromLockFile ->
-                val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
-                var description = ""
-                var rawName = ""
-                var homepageUrl = ""
-                var vcs = VcsInfo.EMPTY
+                try {
+                    val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                    var description = ""
+                    var rawName = ""
+                    var homepageUrl = ""
+                    var vcs = VcsInfo.EMPTY
+                    var authors: SortedSet<String> = sortedSetOf<String>()
 
-                // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
-                when {
-                    pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
-                        val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                    // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
+                    when {
+                        pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
+                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
 
-                        rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
-                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
-                        homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                            rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
+                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
+                            homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                            authors = parseAuthors(pkgInfoFromYamlFile)
 
-                        val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
-                        vcs = VcsHost.toVcsInfo(repositoryUrl)
+                            val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
+                            vcs = VcsHost.toVcsInfo(repositoryUrl)
+                        }
+
+                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
+                            // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
+                            containsFlutter = true
+                            // Set hardcoded package details.
+                            rawName = "flutter"
+                            homepageUrl = "https://github.com/flutter/flutter"
+                            description = "Flutter SDK"
+                        }
+
+                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
+                            // Set hardcoded package details.
+                            rawName = "flutter_test"
+                            homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
+                            description = "Flutter Test SDK"
+                        }
                     }
 
-                    pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
-                        // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
-                        containsFlutter = true
-                        // Set hardcoded package details.
-                        rawName = "flutter"
-                        homepageUrl = "https://github.com/flutter/flutter"
-                        description = "Flutter SDK"
+                    if (version.isEmpty()) {
+                        log.warn { "No version information found for package $rawName." }
                     }
 
-                    pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
-                        // Set hardcoded package details.
-                        rawName = "flutter_test"
-                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
-                        description = "Flutter Test SDK"
-                    }
+                    val id = Identifier(
+                        type = managerName,
+                        namespace = rawName.substringBefore('/'),
+                        name = rawName.substringAfter('/'),
+                        version = version
+                    )
+
+                    packages[id] = Package(
+                        id,
+                        authors = authors,
+                        // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
+                        declaredLicenses = sortedSetOf(),
+                        description = description,
+                        homepageUrl = homepageUrl,
+                        // Pub does not create binary artifacts, therefore use any empty artifact.
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        // Pub does not create source artifacts, therefore use any empty artifact.
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = vcs,
+                        vcsProcessed = processPackageVcs(vcs, homepageUrl)
+                    )
+                } catch (e: JacksonYAMLParseException) {
+                    e.showStackTrace()
+
+                    val packageName = pkgInfoFromLockFile["name"].textValueOrEmpty()
+                    val packageVersion = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                    issues += createAndLogIssue(
+                        source = managerName,
+                        message = "Failed to parse pubspec.yaml for package $packageName:$packageVersion: " +
+                                e.collectMessagesAsString()
+                    )
                 }
-
-                if (version.isEmpty()) {
-                    log.warn { "No version information found for package $rawName." }
-                }
-
-                val id = Identifier(
-                    type = managerName,
-                    namespace = rawName.substringBefore('/'),
-                    name = rawName.substringAfter('/'),
-                    version = version
-                )
-
-                packages[id] = Package(
-                    id,
-                    // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
-                    declaredLicenses = sortedSetOf(),
-                    description = description,
-                    homepageUrl = homepageUrl,
-                    // Pub does not create binary artifacts, therefore use any empty artifact.
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    // Pub does not create source artifacts, therefore use any empty artifact.
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcs,
-                    vcsProcessed = processPackageVcs(vcs, homepageUrl)
-                )
             }
         }
 
@@ -485,11 +502,11 @@ class Pub(
     private fun commandFlutter() = if (Os.isWindows) "flutter.bat packages" else "flutter packages"
 
     override fun run(workingDir: File?, vararg args: String): ProcessCapture {
-        var result = ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args)
+        var result = ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args)
         if (result.isError) {
             // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
             if (result.errorMessage.contains("Flutter users should run `flutter")) {
-                result = ProcessCapture(workingDir, *commandFlutter().split(" ").toTypedArray(), *args).requireSuccess()
+                result = ProcessCapture(workingDir, *commandFlutter().split(' ').toTypedArray(), *args).requireSuccess()
             } else {
                 throw IOException(result.errorMessage)
             }
@@ -505,3 +522,11 @@ class Pub(
         run(workingDir, "get")
     }
 }
+
+/**
+ * Extract information about package authors from the given [pubspec].
+ */
+private fun parseAuthors(pubspec: JsonNode): SortedSet<String> =
+    (listOfNotNull(pubspec["author"]) + pubspec["authors"]?.toList().orEmpty()).mapNotNullTo(sortedSetOf()) {
+        parseAuthorString(it.textValue())
+    }

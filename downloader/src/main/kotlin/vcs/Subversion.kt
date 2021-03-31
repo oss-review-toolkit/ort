@@ -60,10 +60,11 @@ class Subversion : VersionControlSystem() {
 
     override val type = VcsType.SUBVERSION
     override val priority = 10
-    override val defaultBranchName = "trunk"
     override val latestRevisionNames = listOf("HEAD")
 
     override fun getVersion() = Version.getVersionString()
+
+    override fun getDefaultBranchName(url: String) = "trunk"
 
     override fun getWorkingTree(vcsDirectory: File) =
         object : WorkingTree(vcsDirectory, type) {
@@ -122,11 +123,7 @@ class Subversion : VersionControlSystem() {
             override fun listRemoteTags() = listRemoteRefs("tags")
 
             private fun doSvnInfo() =
-                try {
-                    clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING)
-                } catch (e: SVNException) {
-                    null
-                }
+                runCatching { clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING) }.getOrNull()
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =

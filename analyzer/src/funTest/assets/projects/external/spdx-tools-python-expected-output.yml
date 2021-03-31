@@ -2,6 +2,8 @@
 project:
   id: "PIP::spdx-tools:0.5.4"
   definition_file_path: "setup.py"
+  authors:
+  - "Ahmed H. Ismail"
   declared_licenses:
   - "Apache Software License"
   - "Apache-2.0"
@@ -35,6 +37,8 @@ project:
 packages:
 - id: "PyPI::isodate:0.6.0"
   purl: "pkg:pypi/isodate@0.6.0"
+  authors:
+  - "Gerhard Weis"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -67,6 +71,8 @@ packages:
     path: ""
 - id: "PyPI::ply:3.11"
   purl: "pkg:pypi/ply@3.11"
+  authors:
+  - "David Beazley"
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
@@ -97,6 +103,8 @@ packages:
     path: ""
 - id: "PyPI::pyparsing:2.4.7"
   purl: "pkg:pypi/pyparsing@2.4.7"
+  authors:
+  - "Paul McGuire"
   declared_licenses:
   - "MIT License"
   declared_licenses_processed:
@@ -127,6 +135,8 @@ packages:
     path: ""
 - id: "PyPI::rdflib:5.0.0"
   purl: "pkg:pypi/rdflib@5.0.0"
+  authors:
+  - "Daniel 'eikeon' Krech"
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"
@@ -159,6 +169,8 @@ packages:
     path: ""
 - id: "PyPI::six:1.15.0"
   purl: "pkg:pypi/six@1.15.0"
+  authors:
+  - "Benjamin Peterson"
   declared_licenses:
   - "MIT"
   - "MIT License"

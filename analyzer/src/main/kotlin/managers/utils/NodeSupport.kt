@@ -26,8 +26,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import java.io.File
-import java.net.URI
-import java.net.URISyntaxException
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
@@ -39,6 +37,7 @@ import org.ossreviewtoolkit.utils.determineProxyFromURL
 import org.ossreviewtoolkit.utils.hasRevisionFragment
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.toUri
 
 /**
  * Return whether the [directory] contains an NPM lock file.
@@ -80,10 +79,7 @@ fun expandNpmShortcutURL(url: String): String {
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
     //     [user-info@]host[:port]
-    val uri = try {
-        // At this point we do not know whether the URL is actually valid, so use the more general URI.
-        URI(url)
-    } catch (e: URISyntaxException) {
+    val uri = url.toUri().getOrElse {
         // Fall back to returning the original URL.
         return url
     }
@@ -94,10 +90,10 @@ fun expandNpmShortcutURL(url: String): String {
     if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
 
     return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
-        // See https://docs.npmjs.com/files/package.json#github-urls.
+        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#github-urls.
         val revision = if (uri.hasRevisionFragment()) "#${uri.fragment}" else ""
 
-        // See https://docs.npmjs.com/files/package.json#repository.
+        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository.
         when (uri.scheme) {
             null, "github" -> "https://github.com/$path.git$revision"
             "gist" -> "https://gist.github.com/$path$revision"
@@ -133,6 +129,21 @@ fun readProxySettingsFromNpmRc(npmRc: String): ProtocolProxyMap {
     }
 
     return map
+}
+
+/**
+ * Return the npm registry defined in the provided [NPM configuration][npmRc] or null.
+ */
+fun readRegistryFromNpmRc(npmRc: String): String? {
+    npmRc.lines().forEach { line ->
+        val keyAndValue = line.split('=', limit = 2).map { it.trim() }
+        if (keyAndValue.size != 2) return@forEach
+
+        val (key, value) = keyAndValue
+        if (key == "registry") return value
+    }
+
+    return null
 }
 
 private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")

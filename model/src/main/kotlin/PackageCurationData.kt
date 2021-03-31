@@ -34,6 +34,11 @@ import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class PackageCurationData(
     /**
+     * The list of authors of this package.
+     */
+    val authors: SortedSet<String>? = null,
+
+    /**
      * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
      * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
      */
@@ -118,12 +123,14 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
         )
     } ?: base.vcs
 
+    val authors = curation.authors ?: base.authors
     val declaredLicenses = curation.declaredLicenses ?: base.declaredLicenses
     val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + curation.declaredLicenseMapping
     val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
 
     val pkg = Package(
         id = base.id,
+        authors = authors,
         declaredLicenses = declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
         concludedLicense = curation.concludedLicense ?: base.concludedLicense,

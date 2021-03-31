@@ -18,13 +18,15 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Django:2.2.13"
+    - id: "PyPI::django:2.2.18"
       dependencies:
-      - id: "PyPI::pytz:2020.4"
+      - id: "PyPI::pytz:2021.1"
       - id: "PyPI::sqlparse:0.4.1"
 packages:
-- id: "PyPI::Django:2.2.13"
-  purl: "pkg:pypi/Django@2.2.13"
+- id: "PyPI::django:2.2.18"
+  purl: "pkg:pypi/django@2.2.18"
+  authors:
+  - "Django Software Foundation"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -37,14 +39,14 @@ packages:
     \ and clean, pragmatic design."
   homepage_url: "https://www.djangoproject.com/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/fb/e1/c5520a00ae75060b0c03eea0115b272d6dc5dbd2fd3b75d0c0fbc9d262bc/Django-2.2.13-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/6a/4c/4072f2f11c523898fb994874bbd1346d2e6c0b6968a2e1e87bee1c7a1729/Django-2.2.18-py3-none-any.whl"
     hash:
-      value: "d4a2170813154df2a6f976fb4ab027f5"
+      value: "3629a741684c0734df8c87964be5da0f"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/da/0c/5ef899626da946b00322b70c2b28ac9d04f95cbedf525187ab4dad5db22d/Django-2.2.13.tar.gz"
+    url: "https://files.pythonhosted.org/packages/f0/42/47a9ba406657df4e7244697fcd4c7916b1ee4e89f9bbc5d850d08751f0f3/Django-2.2.18.tar.gz"
     hash:
-      value: "30c688af9b63c4800ef9b044e0dd4145"
+      value: "c6cf78dae9c0be5833d37be73ab63962"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -56,8 +58,10 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::pytz:2020.4"
-  purl: "pkg:pypi/pytz@2020.4"
+- id: "PyPI::pytz:2021.1"
+  purl: "pkg:pypi/pytz@2021.1"
+  authors:
+  - "Stuart Bishop"
   declared_licenses:
   - "MIT"
   - "MIT License"
@@ -68,14 +72,14 @@ packages:
   description: "World timezone definitions, modern and historical"
   homepage_url: "http://pythonhosted.org/pytz"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/12/f8/ff09af6ff61a3efaad5f61ba5facdf17e7722c4393f7d8a66674d2dbd29f/pytz-2020.4-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/70/94/784178ca5dd892a98f113cdd923372024dc04b8d40abe77ca76b5fb90ca6/pytz-2021.1-py2.py3-none-any.whl"
     hash:
-      value: "e86b08f2c338e39d3f838976aab9415e"
+      value: "2e039ef05cc965ffe161b3a8af018431"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/09/07/448a8887c7195450604dfc0305d80d74324c36ee18ed997664051d4bffe3/pytz-2020.4.tar.gz"
+    url: "https://files.pythonhosted.org/packages/b0/61/eddc6eb2c682ea6fd97a7e1018a6294be80dba08fa28e7a3570148b4612d/pytz-2021.1.tar.gz"
     hash:
-      value: "1f8f29656c8219171ff9a3c5b72fb30a"
+      value: "8c849bdf95414fe708a84473e42d4406"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -89,6 +93,8 @@ packages:
     path: ""
 - id: "PyPI::sqlparse:0.4.1"
   purl: "pkg:pypi/sqlparse@0.4.1"
+  authors:
+  - "Andi Albrecht"
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"

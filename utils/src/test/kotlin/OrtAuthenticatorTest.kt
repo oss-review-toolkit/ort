@@ -20,9 +20,11 @@
 package org.ossreviewtoolkit.utils
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtAuthenticatorTest : WordSpec({
     "getNetrcAuthentication()" should {
@@ -31,9 +33,10 @@ class OrtAuthenticatorTest : WordSpec({
                 machine github.com login foo password bar
             """.trimIndent(), "github.com")
 
-            authentication.shouldNotBeNull()
-            authentication.userName shouldBe "foo"
-            authentication.password shouldBe "bar".toCharArray()
+            authentication shouldNotBeNull {
+                userName shouldBe "foo"
+                password shouldBe "bar".toCharArray()
+            }
         }
 
         "correctly parse multi-line contents" {
@@ -43,9 +46,10 @@ class OrtAuthenticatorTest : WordSpec({
                 password bar
             """.trimIndent(), "gitlab.com")
 
-            authentication.shouldNotBeNull()
-            authentication.userName shouldBe "foo"
-            authentication.password shouldBe "bar".toCharArray()
+            authentication shouldNotBeNull {
+                userName shouldBe "foo"
+                password shouldBe "bar".toCharArray()
+            }
         }
 
         "recognize the default machine" {
@@ -56,9 +60,10 @@ class OrtAuthenticatorTest : WordSpec({
                 default login foo password bar
             """.trimIndent(), "gitlab.com")
 
-            authentication.shouldNotBeNull()
-            authentication.userName shouldBe "foo"
-            authentication.password shouldBe "bar".toCharArray()
+            authentication shouldNotBeNull {
+                userName shouldBe "foo"
+                password shouldBe "bar".toCharArray()
+            }
         }
 
         "prefer machine-specific entries over the default" {
@@ -69,9 +74,10 @@ class OrtAuthenticatorTest : WordSpec({
                 password hub
             """.trimIndent(), "github.com")
 
-            authentication.shouldNotBeNull()
-            authentication.userName shouldBe "git"
-            authentication.password shouldBe "hub".toCharArray()
+            authentication shouldNotBeNull {
+                userName shouldBe "git"
+                password shouldBe "hub".toCharArray()
+            }
         }
 
         "ignore superfluous statements" {
@@ -86,9 +92,10 @@ class OrtAuthenticatorTest : WordSpec({
                 login foo
             """.trimIndent(), "bitbucket.com")
 
-            authentication.shouldNotBeNull()
-            authentication.userName shouldBe "foo"
-            authentication.password shouldBe "bar".toCharArray()
+            authentication shouldNotBeNull {
+                userName shouldBe "foo"
+                password shouldBe "bar".toCharArray()
+            }
         }
 
         "ignore superfluous whitespace" {
@@ -97,9 +104,10 @@ class OrtAuthenticatorTest : WordSpec({
                 "github.com"
             )
 
-            authentication.shouldNotBeNull()
-            authentication.userName shouldBe "foo"
-            authentication.password shouldBe "bar".toCharArray()
+            authentication shouldNotBeNull {
+                userName shouldBe "foo"
+                password shouldBe "bar".toCharArray()
+            }
         }
 
         "ignore irrelevant machines" {
@@ -107,7 +115,7 @@ class OrtAuthenticatorTest : WordSpec({
                 machine bitbucket.com login foo password bar
             """.trimIndent(), "github.com")
 
-            authentication.shouldBeNull()
+            authentication should beNull()
         }
     }
 })

@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 
 /**
@@ -51,38 +50,34 @@ data class ScanResult(
     fun filterByPath(path: String): ScanResult {
         if (path.isBlank()) return this
 
-        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilenamePatterns.getInstance())
-        val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
-            licenseFindings = summary.licenseFindings,
-            directories = listOf(path)
-        ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
+        val summary = summary.filterByPath(path)
 
-        fun TextLocation.matchesPath() = this.path.startsWith("$path/") || this.path in applicableLicenseFiles
+        return if (provenance is RepositoryProvenance) {
+            val vcsProvenance = provenance.copy(
+                vcsInfo = provenance.vcsInfo.copy(path = path),
+                originalVcsInfo = provenance.originalVcsInfo?.copy(path = path)
+            )
 
-        val newProvenance = provenance.copy(
-            vcsInfo = provenance.vcsInfo?.copy(path = path),
-            originalVcsInfo = provenance.originalVcsInfo?.copy(path = path)
-        )
-
-        val licenseFindings = summary.licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
-        val copyrightFindings = summary.copyrightFindings.filter { it.location.matchesPath() }.toSortedSet()
-        val fileCount = mutableSetOf<String>().also { set ->
-            licenseFindings.mapTo(set) { it.location.path }
-            copyrightFindings.mapTo(set) { it.location.path }
-        }.size
-
-        val summary = summary.copy(
-            fileCount = fileCount,
-            licenseFindings = licenseFindings,
-            copyrightFindings = copyrightFindings
-        )
-
-        return ScanResult(newProvenance, scanner, summary)
+            ScanResult(vcsProvenance, scanner, summary)
+        } else {
+            ScanResult(provenance, scanner, summary)
+        }
     }
 
     /**
      * Return a [ScanResult] whose [summary] contains only findings from the [provenance]'s [VcsInfo.path].
      */
     fun filterByVcsPath(): ScanResult =
-        filterByPath(provenance.vcsInfo?.takeUnless { it.type == VcsType.GIT_REPO }?.path.orEmpty())
+        if (provenance is RepositoryProvenance && provenance.vcsInfo.type != VcsType.GIT_REPO) {
+            filterByPath(provenance.vcsInfo.path)
+        } else {
+            this
+        }
+
+    /**
+     * Return a [ScanResult] whose [summary] contains only findings whose location / path is not matched by any glob
+     * expression in [ignorePatterns].
+     */
+    fun filterByIgnorePatterns(ignorePatterns: Collection<String>): ScanResult =
+        copy(summary = summary.filterByIgnorePatterns(ignorePatterns))
 }

@@ -22,30 +22,30 @@ package org.ossreviewtoolkit.scanner.scanners
 import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
-import java.io.IOException
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
 
-class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class Licensee(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {
-        override fun create(config: ScannerConfiguration) = Licensee(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            Licensee(scannerName, scannerConfig, downloaderConfig)
     }
 
     companion object {
@@ -71,23 +71,15 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             ProcessCapture(gem, "install", "rugged", "-v", "0.27.10.1").requireSuccess()
         }
 
-        // Work around Travis CI not being able to handle gem user installs, see
-        // https://github.com/travis-ci/travis-ci/issues/9412.
-        return if (Ci.isTravis) {
-            ProcessCapture(gem, "install", "licensee", "-v", expectedVersion).requireSuccess()
-            getPathFromEnvironment(command())?.parentFile
-                ?: throw IOException("Install directory for licensee not found.")
-        } else {
-            ProcessCapture(gem, "install", "--user-install", "licensee", "-v", expectedVersion).requireSuccess()
+        ProcessCapture(gem, "install", "--user-install", "licensee", "-v", expectedVersion).requireSuccess()
 
-            val ruby = ProcessCapture("ruby", "-r", "rubygems", "-e", "puts Gem.user_dir").requireSuccess()
-            val userDir = ruby.stdout.trimEnd()
+        val ruby = ProcessCapture("ruby", "-r", "rubygems", "-e", "puts Gem.user_dir").requireSuccess()
+        val userDir = ruby.stdout.trimEnd()
 
-            File(userDir, "bin")
-        }
+        return File(userDir, "bin")
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -107,20 +99,14 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             if (isSuccess) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getRawResult(resultsFile)
-                val summary = generateSummary(startTime, endTime, path, result)
-                return ScanResult(Provenance(), details, summary)
+                return generateSummary(startTime, endTime, path, result)
             } else {
                 throw ScanException(errorMessage)
             }
         }
     }
 
-    override fun getRawResult(resultsFile: File) =
-        if (resultsFile.isFile && resultsFile.length() > 0L) {
-            jsonMapper.readTree(resultsFile)
-        } else {
-            EMPTY_JSON_NODE
-        }
+    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val matchedFiles = result["matched_files"]

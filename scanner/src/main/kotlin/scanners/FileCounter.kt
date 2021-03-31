@@ -24,12 +24,11 @@ import com.fasterxml.jackson.databind.JsonNode
 import java.io.File
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
@@ -39,9 +38,14 @@ import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
  * scanners it is useful for testing the scanner tool, for example during development or when integrating it with other
  * tools.
  */
-class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class FileCounter(
+    name: String,
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<FileCounter>("FileCounter") {
-        override fun create(config: ScannerConfiguration) = FileCounter(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            FileCounter(scannerName, scannerConfig, downloaderConfig)
     }
 
     data class FileCountResult(val fileCount: Int)
@@ -53,7 +57,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
     override fun command(workingDir: File?) = ""
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
         val startTime = Instant.now()
 
         val fileCountResult = FileCountResult(path.walk().count())
@@ -63,16 +67,10 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
         val endTime = Instant.now()
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, path, result)
-        return ScanResult(Provenance(), details, summary)
+        return generateSummary(startTime, endTime, path, result)
     }
 
-    override fun getRawResult(resultsFile: File) =
-        if (resultsFile.isFile && resultsFile.length() > 0L) {
-            jsonMapper.readTree(resultsFile)
-        } else {
-            EMPTY_JSON_NODE
-        }
+    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val fileCount = result["file_count"].intValue()

@@ -22,17 +22,51 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Flask:1.0"
+    - id: "PyPI::flask:1.0"
       dependencies:
-      - id: "PyPI::Jinja2:2.10.1"
-        dependencies:
-        - id: "PyPI::MarkupSafe:1.0"
-      - id: "PyPI::Werkzeug:0.15.3"
       - id: "PyPI::click:6.7"
       - id: "PyPI::itsdangerous:0.24"
+      - id: "PyPI::jinja2:2.11.3"
+        dependencies:
+        - id: "PyPI::markupsafe:1.0"
+      - id: "PyPI::werkzeug:0.15.3"
 packages:
-- id: "PyPI::Flask:1.0"
-  purl: "pkg:pypi/Flask@1.0"
+- id: "PyPI::click:6.7"
+  purl: "pkg:pypi/click@6.7"
+  authors:
+  - "Armin Ronacher"
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "A simple wrapper around optparse for powerful command line utilities."
+  homepage_url: "http://github.com/mitsuhiko/click"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
+    hash:
+      value: "5e7a4e296b3212da2ff11017675d7a4d"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
+    hash:
+      value: "fc4cc00c4863833230d3af92af48abd4"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mitsuhiko/click.git"
+    revision: ""
+    path: ""
+- id: "PyPI::flask:1.0"
+  purl: "pkg:pypi/flask@1.0"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -63,28 +97,61 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::Jinja2:2.10.1"
-  purl: "pkg:pypi/Jinja2@2.10.1"
+- id: "PyPI::itsdangerous:0.24"
+  purl: "pkg:pypi/itsdangerous@0.24"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
-  - "BSD"
   - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
-      BSD: "BSD-3-Clause"
       BSD License: "BSD-3-Clause"
-  description: "A small but fast and easy to use stand-alone template engine written\
-    \ in pure python."
-  homepage_url: "http://jinja.pocoo.org/"
+  description: "Various helpers to pass trusted data to untrusted environments and\
+    \ back."
+  homepage_url: "http://github.com/mitsuhiko/itsdangerous"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/1d/e7/fd8b501e7a6dfe492a433deb7b9d833d39ca74916fa8bc63dd1a4947a671/Jinja2-2.10.1-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
     hash:
-      value: "93ca8152bf9ca03214158a49d542402f"
+      value: "a3d55aa79369aef5345c036a8a26307f"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d/Jinja2-2.10.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
     hash:
-      value: "0ae535be40fd215a8114a090c8b68e5a"
+      value: "a3d55aa79369aef5345c036a8a26307f"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mitsuhiko/itsdangerous.git"
+    revision: ""
+    path: ""
+- id: "PyPI::jinja2:2.11.3"
+  purl: "pkg:pypi/jinja2@2.11.3"
+  authors:
+  - "Armin Ronacher"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "A very fast and expressive template engine."
+  homepage_url: "https://palletsprojects.com/p/jinja/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/7e/c2/1eece8c95ddbc9b1aeb64f5783a9e07a286de42191b7204d67b7496ddf35/Jinja2-2.11.3-py2.py3-none-any.whl"
+    hash:
+      value: "8e733c6f4cdef7f6a336299e8e548dfa"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69768ded990494809106f87da1d436418d5f1367ed3966fd7/Jinja2-2.11.3.tar.gz"
+    hash:
+      value: "231dc00d34afb2672c497713fa9cdaaa"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -96,8 +163,10 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::MarkupSafe:1.0"
-  purl: "pkg:pypi/MarkupSafe@1.0"
+- id: "PyPI::markupsafe:1.0"
+  purl: "pkg:pypi/markupsafe@1.0"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -128,8 +197,10 @@ packages:
     url: "https://github.com/pallets/markupsafe.git"
     revision: ""
     path: ""
-- id: "PyPI::Werkzeug:0.15.3"
-  purl: "pkg:pypi/Werkzeug@0.15.3"
+- id: "PyPI::werkzeug:0.15.3"
+  purl: "pkg:pypi/werkzeug@0.15.3"
+  authors:
+  - "Armin Ronacher"
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"
@@ -157,66 +228,5 @@ packages:
   vcs_processed:
     type: ""
     url: ""
-    revision: ""
-    path: ""
-- id: "PyPI::click:6.7"
-  purl: "pkg:pypi/click@6.7"
-  declared_licenses:
-  - "BSD License"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
-  description: "A simple wrapper around optparse for powerful command line utilities."
-  homepage_url: "http://github.com/mitsuhiko/click"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
-    hash:
-      value: "5e7a4e296b3212da2ff11017675d7a4d"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
-    hash:
-      value: "fc4cc00c4863833230d3af92af48abd4"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/mitsuhiko/click.git"
-    revision: ""
-    path: ""
-- id: "PyPI::itsdangerous:0.24"
-  purl: "pkg:pypi/itsdangerous@0.24"
-  declared_licenses:
-  - "BSD License"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
-  description: "Various helpers to pass trusted data to untrusted environments and\
-    \ back."
-  homepage_url: "http://github.com/mitsuhiko/itsdangerous"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
-    hash:
-      value: "a3d55aa79369aef5345c036a8a26307f"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
-    hash:
-      value: "a3d55aa79369aef5345c036a8a26307f"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/mitsuhiko/itsdangerous.git"
     revision: ""
     path: ""

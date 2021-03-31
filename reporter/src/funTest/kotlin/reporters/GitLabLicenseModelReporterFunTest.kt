@@ -29,7 +29,6 @@ import kotlin.io.path.createTempDirectory
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -45,6 +44,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
@@ -100,7 +100,7 @@ private fun createOrtResult(): OrtResult {
                     Project.EMPTY.copy(
                         id = Identifier("Gradle:some-group:some-gradle-project:0.0.1"),
                         definitionFilePath = "some/path/build.gradle",
-                        scopes = sortedSetOf(
+                        scopeDependencies = sortedSetOf(
                             Scope(
                                 name = "compile",
                                 dependencies = sortedSetOf(
@@ -121,7 +121,7 @@ private fun createOrtResult(): OrtResult {
                     ),
                     Project.EMPTY.copy(
                         id = Identifier("PIP::some-pip-project:0.0.2"),
-                        scopes = sortedSetOf(
+                        scopeDependencies = sortedSetOf(
                             Scope(
                                 name = "install",
                                 dependencies = sortedSetOf(
@@ -149,7 +149,7 @@ private fun createOrtResult(): OrtResult {
                     ),
                     curatedPackage(
                         id = Identifier("PIP::unreferenced-package:0.0.3"),
-                        declaredLicenses = listOf("LicenseRef-scancode-public-domain")
+                        declaredLicenses = listOf("LicenseRef-scancode-public-domain-disclaimer")
                     ),
                     curatedPackage(
                         id = Identifier("Maven:some-group:excluded-package:0.0.4"),

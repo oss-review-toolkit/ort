@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,21 +26,23 @@ import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.file.shouldNotStartWithPath
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
-    protected val config = ScannerConfiguration()
+    protected val downloaderConfig = DownloaderConfiguration()
+    protected val scannerConfig = ScannerConfiguration()
 
     // This is loosely based on the patterns from
     // https://github.com/licensee/licensee/blob/6c0f803/lib/licensee/project_files/license_file.rb#L6-L43.
@@ -80,26 +82,30 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     init {
         "Scanning a single file succeeds".config(tags = testTags) {
             val result = scanner.scanPath(inputDir.resolve("LICENSE"), outputDir)
-            val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
+            val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
-            summary.shouldNotBeNull()
-            summary.fileCount shouldBe 1
-            summary.licenses shouldBe expectedFileLicenses
-            summary.licenseFindings.forAll {
-                File(it.location.path) shouldNotStartWithPath inputDir
+            summary shouldNotBeNull {
+                fileCount shouldBe 1
+                licenses shouldBe expectedFileLicenses
+                licenseFindings.forAll {
+                    File(it.location.path) shouldNotStartWithPath inputDir
+                }
             }
         }
 
         "Scanning a directory succeeds".config(tags = testTags) {
             val result = scanner.scanPath(inputDir, outputDir)
-            val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
+            val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
-            summary.shouldNotBeNull()
-            summary.fileCount shouldBe commonlyDetectedFiles.size
-            summary.licenses shouldBe expectedDirectoryLicenses
-            summary.licenseFindings.forAll {
-                File(it.location.path) shouldNotStartWithPath inputDir
+            summary shouldNotBeNull {
+                fileCount shouldBe commonlyDetectedFiles.size
+                licenses shouldBe expectedDirectoryLicenses
+                licenseFindings.forAll {
+                    File(it.location.path) shouldNotStartWithPath inputDir
+                }
             }
         }
     }
 }
+
+private fun <K, V> Map<K, V>.singleOrNull() = entries.singleOrNull()?.value

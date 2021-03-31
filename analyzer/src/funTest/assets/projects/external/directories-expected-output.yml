@@ -28,7 +28,10 @@ analyzer:
   result:
     projects:
     - id: "SBT:io.github.soc:directories:10"
-      definition_file_path: "target/directories-10.pom"
+      definition_file_path: "target-directories-10.pom"
+      authors:
+      - "Simon Ochsenreither"
+      - "io.github.soc"
       declared_licenses:
       - "Mozilla Public License 2.0"
       declared_licenses_processed:
@@ -55,26 +58,13 @@ analyzer:
         - id: "Maven:junit:junit:4.12"
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-    - id: "Unmanaged::directories-jvm:d302b1e93963c81ed511e072a52e95251b5d078b"
-      definition_file_path: ""
-      declared_licenses: []
-      declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/soc/directories-jvm"
-        revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
-        path: ""
-      homepage_url: ""
-      scopes: []
     packages:
     - package:
         id: "Maven:com.novocode:junit-interface:0.11"
         purl: "pkg:maven/com.novocode/junit-interface@0.11"
+        authors:
+        - "Stefan Zeiger"
+        - "com.novocode"
         declared_licenses:
         - "Two-clause BSD-style license"
         declared_licenses_processed:
@@ -107,6 +97,12 @@ analyzer:
     - package:
         id: "Maven:junit:junit:4.12"
         purl: "pkg:maven/junit/junit@4.12"
+        authors:
+        - "David Saff"
+        - "JUnit"
+        - "Kevin Cooney"
+        - "Marc Philipp"
+        - "Stefan Birkner"
         declared_licenses:
         - "Eclipse Public License 1.0"
         declared_licenses_processed:
@@ -140,6 +136,12 @@ analyzer:
     - package:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
         purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
+        authors:
+        - "Joe Walnes"
+        - "Nat Pryce"
+        - "Neil Dunn"
+        - "Steve Freeman"
+        - "Tom Denley"
         declared_licenses:
         - "New BSD License"
         declared_licenses_processed:
@@ -174,6 +176,12 @@ analyzer:
     - package:
         id: "Maven:org.scala-sbt:test-interface:1.0"
         purl: "pkg:maven/org.scala-sbt/test-interface@1.0"
+        authors:
+        - "Bill Venners"
+        - "Chua Chee Seng"
+        - "Josh Cough"
+        - "Mark Harrah"
+        - "org.scala-sbt"
         declared_licenses:
         - "BSD"
         declared_licenses_processed:

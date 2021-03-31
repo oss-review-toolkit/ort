@@ -32,6 +32,7 @@ import okhttp3.Request
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -163,11 +164,12 @@ class Stack(
         val project = Project(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = projectPackage.authors,
             declaredLicenses = projectPackage.declaredLicenses,
             vcs = projectPackage.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
             homepageUrl = projectPackage.homepageUrl,
-            scopes = scopes
+            scopeDependencies = scopes
         )
 
         return listOf(ProjectAnalyzerResult(project, allPackages.values.toSortedSet()))
@@ -345,6 +347,11 @@ class Stack(
 
         return Package(
             id = id,
+            authors = map["author"].orEmpty()
+                .split(',')
+                .map(String::trim)
+                .filter(String::isNotEmpty)
+                .mapTo(sortedSetOf(), ::parseAuthorString),
             declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
             description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,

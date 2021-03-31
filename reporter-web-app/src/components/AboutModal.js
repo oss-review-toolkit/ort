@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,14 @@ import {
     Modal,
     Tabs
 } from 'antd';
+import {
+    FileTextOutlined,
+    InfoCircleOutlined,
+    TagsOutlined
+} from '@ant-design/icons';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import dark from 'react-syntax-highlighter/dist/esm/styles/hljs/dark';
-import markdown from 'react-syntax-highlighter/dist/esm/languages/hljs/markdown';
+import lioshi from 'react-syntax-highlighter/dist/esm/styles/hljs/lioshi';
+import yaml from 'react-syntax-highlighter/dist/esm/languages/hljs/yaml';
 import {
     getOrtResult
 } from '../reducers/selectors';
@@ -36,7 +41,7 @@ import store from '../store';
 const { Item } = Descriptions;
 const { TabPane } = Tabs;
 
-SyntaxHighlighter.registerLanguage('markdown', markdown);
+SyntaxHighlighter.registerLanguage('yaml', yaml);
 
 const AboutModal = (props) => {
     const { webAppOrtResult } = props;
@@ -59,11 +64,19 @@ const AboutModal = (props) => {
                 {
                     webAppOrtResult.hasRepositoryConfiguration()
                     && (
-                        <TabPane tab="Excludes (.ort.yml)" key="ort-tabs-excludes">
+                        <TabPane
+                            tab={(
+                                <span>
+                                    <FileTextOutlined />
+                                    Excludes (.ort.yml)
+                                </span>
+                            )}
+                            key="ort-tabs-excludes"
+                        >
                             <SyntaxHighlighter
-                                language="markdown"
+                                language="yaml"
                                 showLineNumbers
-                                style={dark}
+                                style={lioshi}
                             >
                                 {repositoryConfiguration}
                             </SyntaxHighlighter>
@@ -73,7 +86,15 @@ const AboutModal = (props) => {
                 {
                     webAppOrtResult.hasLabels()
                     && (
-                        <TabPane tab="Labels" key="ort-tabs-labels">
+                        <TabPane
+                            tab={(
+                                <span>
+                                    <TagsOutlined />
+                                    Labels
+                                </span>
+                            )}
+                            key="ort-tabs-labels"
+                        >
                             <Descriptions
                                 bordered
                                 column={1}
@@ -113,7 +134,15 @@ const AboutModal = (props) => {
                         </TabPane>
                     )
                 }
-                <TabPane tab="About" key="ort-tabs-about">
+                <TabPane
+                    tab={(
+                        <span>
+                            <InfoCircleOutlined />
+                            About
+                        </span>
+                    )}
+                    key="ort-tabs-about"
+                >
                     <a
                         href="https://github.com/oss-review-toolkit/ort"
                         rel="noopener noreferrer"

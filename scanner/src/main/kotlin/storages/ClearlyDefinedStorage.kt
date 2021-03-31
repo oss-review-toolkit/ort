@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +24,18 @@ import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.time.Instant
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
@@ -43,11 +46,12 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 
-import retrofit2.Call
+import retrofit2.HttpException
 
 /** The name used by ClearlyDefined for the ScanCode tool. */
 private const val TOOL_SCAN_CODE = "scancode"
@@ -80,19 +84,18 @@ private fun packageCoordinates(
 }
 
 /**
- * Search in the given list of [tools] for the entry for ScanCode that has processed the
- * [packageUrl]. If such an entry is found, the version of ScanCode is returned; otherwise, result is null.
+ * Given a list of [tools], return the version of ScanCode that was used to scan the package with the given
+ * [coordinates], or return null if no such tool entry is found.
  */
-private fun findScanCodeVersion(tools: List<String>, packageUrl: String): String? {
-    val toolUrl = "$packageUrl/$TOOL_SCAN_CODE/"
+private fun findScanCodeVersion(tools: List<String>, coordinates: ClearlyDefinedService.Coordinates): String? {
+    val toolUrl = "$coordinates/$TOOL_SCAN_CODE/"
     return tools.find { it.startsWith(toolUrl) }?.substring(toolUrl.length)
 }
 
 /**
- * Return an empty success result for the given [id].
+ * A [Success] result with an empty list of [ScanResult]s.
  */
-private fun emptyResult(id: Identifier): Result<ScanResultContainer> =
-    Success(ScanResultContainer(id, listOf()))
+private val EMPTY_RESULT = Success<List<ScanResult>>(emptyList())
 
 /**
  * A storage implementation that tries to download ScanCode results from ClearlyDefined.
@@ -105,15 +108,17 @@ class ClearlyDefinedStorage(
     val configuration: ClearlyDefinedStorageConfiguration
 ) : ScanResultsStorage() {
     /** The service for interacting with ClearlyDefined. */
-    private val clearlyDefinedService = ClearlyDefinedService.create(configuration.serverUrl)
+    private val service by lazy {
+        ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())
+    }
 
-    override fun readFromStorage(id: Identifier): Result<ScanResultContainer> =
+    override fun readInternal(id: Identifier): Result<List<ScanResult>> =
         readPackageFromClearlyDefined(id, null, null)
 
-    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> =
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
         readPackageFromClearlyDefined(pkg.id, pkg.vcs, pkg.sourceArtifact.takeIf { it.url.isNotEmpty() })
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> =
+    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =
         Failure("Adding scan results directly to ClearlyDefined is not supported.")
 
     /**
@@ -125,15 +130,15 @@ class ClearlyDefinedStorage(
         id: Identifier,
         vcs: VcsInfo?,
         sourceArtifact: RemoteArtifact?
-    ): Result<ScanResultContainer> =
+    ): Result<List<ScanResult>> =
         try {
-            readFromClearlyDefined(id, packageCoordinates(id, vcs, sourceArtifact))
+            runBlocking(Dispatchers.IO) { readFromClearlyDefined(id, packageCoordinates(id, vcs, sourceArtifact)) }
         } catch (e: IllegalArgumentException) {
             e.showStackTrace()
 
             log.warn { "Could not obtain ClearlyDefined coordinates for package '${id.toCoordinates()}'." }
 
-            emptyResult(id)
+            EMPTY_RESULT
         }
 
     /**
@@ -141,80 +146,71 @@ class ClearlyDefinedStorage(
      * using the given [coordinates] for looking up the data. These may not necessarily be equivalent to the
      * identifier, as we try to lookup source code results if a GitHub repository is known.
      */
-    private fun readFromClearlyDefined(
+    private suspend fun readFromClearlyDefined(
         id: Identifier,
         coordinates: ClearlyDefinedService.Coordinates
-    ): Result<ScanResultContainer> {
+    ): Result<List<ScanResult>> {
         val startTime = Instant.now()
         log.info { "Looking up results for '${id.toCoordinates()}'." }
 
         return try {
-            val tools = execute(
-                clearlyDefinedService.harvestTools(
-                    coordinates.type,
-                    coordinates.provider,
-                    coordinates.namespace.orEmpty(),
-                    coordinates.name,
-                    coordinates.revision.orEmpty()
-                )
+            val tools = service.harvestTools(
+                coordinates.type,
+                coordinates.provider,
+                coordinates.namespace.orEmpty(),
+                coordinates.name,
+                coordinates.revision.orEmpty()
             )
-            val scanCodeVersion = findScanCodeVersion(tools, coordinates.toString())
-            scanCodeVersion?.let { version ->
-                loadScanCodeResults(id, coordinates, version, startTime)
-            } ?: emptyResult(id)
+
+            findScanCodeVersion(tools, coordinates)?.let { version ->
+                loadScanCodeResults(coordinates, version, startTime)
+            } ?: EMPTY_RESULT
+        } catch (e: HttpException) {
+            e.response()?.errorBody()?.string()?.let {
+                log.error { "Error response from ClearlyDefined is: $it" }
+            }
+
+            handleException(id, e)
         } catch (e: IOException) {
-            e.showStackTrace()
-
-            log.error { "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined." }
-
-            Failure(e.collectMessagesAsString())
+            // There are some other exceptions thrown by Retrofit to be handled as well, e.g. ConnectException.
+            handleException(id, e)
         }
     }
 
     /**
-     * Load the ScanCode results file for the package with the given [id] and [coordinates] from ClearlyDefined.
+     * Log the exception that occurred during a request to ClearlyDefined and construct an error result from it.
+     */
+    private fun handleException(id: Identifier, e: Exception): Result<List<ScanResult>> {
+        e.showStackTrace()
+
+        val message = "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined: " +
+                e.collectMessagesAsString()
+
+        log.error { message }
+
+        return Failure(message)
+    }
+
+    /**
+     * Load the ScanCode results file for the package with the given [coordinates] from ClearlyDefined.
      * The results have been produced by ScanCode in the given [version]; use the [startTime] for metadata.
      */
-    private fun loadScanCodeResults(
-        id: Identifier,
+    private suspend fun loadScanCodeResults(
         coordinates: ClearlyDefinedService.Coordinates,
         version: String,
         startTime: Instant
-    ): Result<ScanResultContainer> {
-        val toolResponse = execute(
-            clearlyDefinedService.harvestToolData(
-                coordinates.type, coordinates.provider, coordinates.namespace.orEmpty(), coordinates.name,
-                coordinates.revision.orEmpty(), TOOL_SCAN_CODE, version
-            )
+    ): Result<List<ScanResult>> {
+        val toolResponse = service.harvestToolData(
+            coordinates.type, coordinates.provider, coordinates.namespace.orEmpty(), coordinates.name,
+            coordinates.revision.orEmpty(), TOOL_SCAN_CODE, version
         )
 
         return toolResponse.use {
             jsonMapper.readTree(it.byteStream())["content"]?.let { result ->
                 val summary = generateSummary(startTime, Instant.now(), "", result)
                 val details = generateScannerDetails(result)
-                Success(ScanResultContainer(id, listOf(ScanResult(Provenance(), details, summary))))
-            } ?: emptyResult(id)
+                Success(listOf(ScanResult(UnknownProvenance, details, summary)))
+            } ?: EMPTY_RESULT
         }
-    }
-
-    /**
-     * Execute an HTTP request specified by the given [call]. The response status is checked. If everything went
-     * well, the marshalled body of the request is returned; otherwise, the function throws an exception.
-     */
-    private fun <T> execute(call: Call<T>): T {
-        val request = "${call.request().method} on ${call.request().url}"
-        log.debug { "Executing HTTP $request." }
-
-        val response = call.execute()
-        log.debug { "HTTP response is (status ${response.code()}): ${response.message()}" }
-
-        val body = response.body()
-        if (!response.isSuccessful || body == null) {
-            throw IOException(
-                "Failed HTTP $request with status ${response.code()} and error: ${response.errorBody()?.string()}."
-            )
-        }
-
-        return body
     }
 }

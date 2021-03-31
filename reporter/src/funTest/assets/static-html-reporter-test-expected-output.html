@@ -425,6 +425,8 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
     <div id="report-container">
       <div class="ort-report-label">Scan Report</div>
       <div>Created by <strong>ORT</strong>, the <a href="http://oss-review-toolkit.org/">OSS Review Toolkit</a>, version <REPLACE_ORT_VERSION> on <REPLACE_TIMESTAMP>.</div>
+      <h2>Project</h2>
+      <div>Scanned revision master of Git repository https://github.com/oss-review-toolkit/ort.git</div>
       <h2>Labels</h2>
       <table class="ort-report-labels">
         <tbody>
@@ -553,7 +555,7 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
             <td><a href="#issue-1">1</a></td><td>Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</td><td></td><td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</a>
               <ul>
                 <li>
-                  <p>Unknown time [ERROR]: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file</p>
+                  <p>Unknown time [ERROR]: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'. Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom</p>
                   <p></p>
                 </li>
                 <details>
@@ -608,7 +610,7 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
         </thead>
         <tbody>
           <tr class="ort-error " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-1">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-1">1</a></td><td>Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</td><td></td><td><em>Detected Licenses:</em>
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-1">1</a></td><td>Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</td><td></td><td><em>Detected Licenses (from <a href="https://github.com/oss-review-toolkit/ort.git">VCS</a>):</em>
               <dl>
                 <dd>
                   <div>BSD-3-Clause (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
@@ -618,12 +620,16 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
                   <div>MIT (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp#L1">link</a> to the location)</div>
                 </dd>
               </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>BSD-3-Clause AND GPL-2.0-only WITH Classpath-exception-2.0 AND LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line OR MIT AND LicenseRef-test-Apache-2.0-multi-line AND LicenseRef-test-Apache-2.0-single-line</dd>
+              </dl>
             </td><td>
               <ul></ul>
             </td><td>
               <ul>
                 <li>
-                  <p>Unknown time [ERROR]: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file</p>
+                  <p>Unknown time [ERROR]: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'. Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom</p>
                 </li>
               </ul>
             </td>
@@ -640,14 +646,72 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
                   <div>EPL-1.0</div>
                 </dd>
               </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>EPL-1.0</dd>
+              </dl>
             </td><td>
               <ul></ul>
             </td><td>
               <ul></ul>
             </td>
           </tr>
-          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">3</a></td><td>Maven:org.apache.commons:commons-lang3:3.5</td><td>
+          <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-3">3</a></td><td>Maven:com.foobar:foobar:1.0</td><td>
+              <ul>
+                <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                </li>
+              </ul>
+            </td><td><em>Concluded License:</em>
+              <dl>
+                <dd>GPL-2.0-only OR MIT</dd>
+              </dl>
+              <em>Declared Licenses:</em>
+              <dl>
+                <dd>
+                  <div>GPL-2.0-only</div>
+                  <div>MIT</div>
+                </dd>
+              </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>MIT</dd>
+              </dl>
+            </td><td>
+              <ul></ul>
+            </td><td>
+              <ul></ul>
+            </td>
+          </tr>
+          <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">4</a></td><td>Maven:com.h2database:h2:1.4.200</td><td>
+              <ul>
+                <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
+                </li>
+              </ul>
+            </td><td><em>Concluded License:</em>
+              <dl>
+                <dd>MPL-2.0 OR EPL-1.0</dd>
+              </dl>
+              <em>Declared Licenses:</em>
+              <dl>
+                <dd>
+                  <div>EPL-1.0</div>
+                  <div>MPL-2.0</div>
+                </dd>
+              </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>MPL-2.0</dd>
+              </dl>
+            </td><td>
+              <ul></ul>
+            </td><td>
+              <ul></ul>
+            </td>
+          </tr>
+          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">5</a></td><td>Maven:org.apache.commons:commons-lang3:3.5</td><td>
               <ul>
                 <li class="">compile</li>
                 <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
@@ -659,14 +723,18 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
                   <div>Apache-2.0</div>
                 </dd>
               </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>Apache-2.0</dd>
+              </dl>
             </td><td>
               <ul></ul>
             </td><td>
               <ul></ul>
             </td>
           </tr>
-          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-4">4</a></td><td>Maven:org.apache.commons:commons-text:1.1</td><td>
+          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-6">6</a></td><td>Maven:org.apache.commons:commons-text:1.1</td><td>
               <ul>
                 <li class="">compile</li>
                 <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
@@ -678,14 +746,18 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
                   <div>Apache-2.0</div>
                 </dd>
               </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>Apache-2.0</dd>
+              </dl>
             </td><td>
               <ul></ul>
             </td><td>
               <ul></ul>
             </td>
           </tr>
-          <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">
-            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-5">5</a></td><td>Maven:org.hamcrest:hamcrest-core:1.3</td><td>
+          <tr class="ort-success ort-excluded" id="Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">
+            <td><a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0-pkg-7">7</a></td><td>Maven:org.hamcrest:hamcrest-core:1.3</td><td>
               <ul>
                 <li class="ort-excluded">testCompile <div class="ort-reason">Excluded: TEST_DEPENDENCY_OF - The scope only contains test dependencies.</div>
                 </li>
@@ -695,6 +767,10 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
                 <dd>
                   <div>BSD-3-Clause</div>
                 </dd>
+              </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>BSD-3-Clause</dd>
               </dl>
             </td><td>
               <ul></ul>
@@ -743,12 +819,16 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
                   <div>GPL-3.0-only WITH GCC-exception-3.1</div>
                 </dd>
               </dl>
-              <em>Detected Licenses:</em>
+              <em>Detected Licenses (from <a href="https://example.com/git">VCS</a>):</em>
               <dl>
                 <dd>
                   <div>Apache-2.0</div>
                   <div class="ort-excluded">MIT (Excluded: EXAMPLE_OF - These are example files.)</div>
                 </dd>
+              </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>Apache-2.0 AND CC-BY-NC-3.0 AND GPL-3.0-only WITH GCC-exception-3.1 AND MIT</dd>
               </dl>
             </td><td>
               <ul></ul>
@@ -779,6 +859,15 @@ resolutions:
   - message: "Apache-2.0 hint"
     reason: "CANT_FIX_EXCEPTION"
     comment: "Apache-2 is not an issue."
+license_choices:
+  repository_license_choices:
+  - given: "GPL-2.0-only OR MIT"
+    choice: "MIT"
+  package_license_choices:
+  - package_id: "Maven:com.h2database:h2:1.4.200"
+    license_choices:
+    - given: "MPL-2.0 OR EPL-1.0"
+      choice: "MPL-2.0"
 </code>
       </pre>
     </div>

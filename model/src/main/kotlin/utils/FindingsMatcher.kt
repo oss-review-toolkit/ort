@@ -67,7 +67,7 @@ class FindingsMatcher(
 
         var expandedStartLine = copyrightLines.filter { it in range }.minOrNull() ?: return range
         val queue = PriorityQueue<Int>(copyrightLines.size, compareByDescending { it })
-        queue.addAll(copyrightLines.filter { it in 0 until expandedStartLine })
+        queue += copyrightLines.filter { it < expandedStartLine }
 
         while (queue.isNotEmpty()) {
             val line = queue.poll()

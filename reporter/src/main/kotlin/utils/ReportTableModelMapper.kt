@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
@@ -132,7 +133,7 @@ class ReportTableModelMapper(
 
             val projectIssues = project.collectIssues()
             val tableRows = allIds.map { id ->
-                val scanResult = scanRecord?.scanResults?.find { it.id == id }
+                val scanResult = scanRecord?.scanResults?.get(id)
 
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
 
@@ -145,7 +146,7 @@ class ReportTableModelMapper(
                 val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty() +
                         analyzerIssuesForPackages[id].orEmpty()
 
-                val scanIssues = scanResult?.results?.flatMapTo(mutableSetOf()) {
+                val scanIssues = scanResult?.flatMapTo(mutableSetOf()) {
                     it.summary.issues
                 }.orEmpty()
 
@@ -159,6 +160,11 @@ class ReportTableModelMapper(
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,
                     detectedLicenses = detectedLicenses,
+                    effectiveLicense = resolvedLicenseInfo.effectiveLicense(
+                        LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+                        ortResult.getLicenseChoices(id),
+                        ortResult.getRepositoryLicenseChoices()
+                    ),
                     analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
                     scanIssues = scanIssues.map { it.toResolvableIssue() }
                 ).also { row ->

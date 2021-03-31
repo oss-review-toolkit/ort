@@ -31,6 +31,7 @@ import io.kotest.matchers.string.shouldMatch
 import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({

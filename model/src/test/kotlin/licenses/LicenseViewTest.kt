@@ -31,11 +31,11 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.test.createDefault
 
 class LicenseViewTest : WordSpec() {
@@ -132,9 +132,9 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "CONCLUDED_OR_REST" should {
+        "CONCLUDED_OR_DECLARED_AND_DETECTED" should {
             "return the correct licenses" {
-                val view = LicenseView.CONCLUDED_OR_REST
+                val view = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
 
                 view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 

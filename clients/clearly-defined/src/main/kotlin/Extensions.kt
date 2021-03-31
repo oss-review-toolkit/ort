@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clearlydefined
+package org.ossreviewtoolkit.clients.clearlydefined
 
 import okhttp3.RequestBody
 

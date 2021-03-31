@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,35 +20,51 @@
 package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 /**
  * The base configuration model of the advisor.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
-@JsonSubTypes(
-    JsonSubTypes.Type(BasicAuthConfiguration::class)
+data class AdvisorConfiguration(
+    val nexusIq: NexusIqConfiguration? = null,
+    val vulnerableCode: VulnerableCodeConfiguration? = null
 )
-sealed class AdvisorConfiguration
 
 /**
- * The configuration for a security vulnerability provider using basic auth as authentication method.
+ * The configuration for Nexus IQ as a security vulnerability provider.
  */
-data class BasicAuthConfiguration(
+data class NexusIqConfiguration(
     /**
-     * The base URL of the provider.
+     * The URL to use for REST API requests against the server.
      */
     val serverUrl: String,
 
     /**
-     * Username of the provider. Used without authentication if no password or username is given.
+     * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
+     */
+    val browseUrl: String = serverUrl,
+
+    /**
+     * The username to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
      */
     val username: String?,
 
     /**
-     * Password of the provider. Used without authentication if no password or username is given.
+     * The password to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String?
-) : AdvisorConfiguration()
+)
+
+/**
+ * The configuration for VulnerableCode as security vulnerability provider.
+ *
+ * TODO: Define options for authentication.
+ */
+data class VulnerableCodeConfiguration(
+    /**
+     * The base URL of the VulnerableCode REST API.
+     */
+    val serverUrl: String
+)

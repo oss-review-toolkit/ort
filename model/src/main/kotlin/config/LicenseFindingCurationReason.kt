@@ -23,7 +23,6 @@ package org.ossreviewtoolkit.model.config
  * Possible reasons for a license finding curation.
  */
 enum class LicenseFindingCurationReason {
-
     /**
      * The findings occur in source code, for example the name of a variable.
      */

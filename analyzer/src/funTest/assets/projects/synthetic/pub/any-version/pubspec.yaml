@@ -1,7 +1,10 @@
 name: version_any
 description: A Sample project that is using dependencies without fixed versions
 version: 0.1.0
-author: Marlon Hille <marlon.hille@here.com>
+authors:
+- "Marlon Hille <marlon.hille@here.com>"
+- "Another Author"
+- "<mail.only@test.example>"
 homepage: http://oss-review-toolkit.org/
 repository: https://github.com/oss-review-toolkit/ort.git
 

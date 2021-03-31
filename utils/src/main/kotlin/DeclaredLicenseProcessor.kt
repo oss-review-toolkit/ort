@@ -22,10 +22,12 @@ package org.ossreviewtoolkit.utils
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.spdx.toSpdx
 
 object DeclaredLicenseProcessor {
@@ -46,6 +48,10 @@ object DeclaredLicenseProcessor {
         ".dbk", ".html", ".md", ".odt", ".php", ".rtf", ".tex", ".txt"
     )
 
+    /**
+     * Return a declared license that has known URL prefixes and file suffixes stripped, so that the remaining string
+     * can more generally be mapped in further processing steps.
+     */
     internal fun preprocess(declaredLicense: String): String {
         val licenseWithoutPrefix = urlPrefixesToRemove.fold(declaredLicense) { license, url ->
             license.removePrefix(url)
@@ -64,10 +70,10 @@ object DeclaredLicenseProcessor {
     }
 
     /**
-     * Return a non-null value if the given [declaredLicense] could be turned into an [SpdxExpression] utilizing
-     * internal mapping data as well as the given [declaredLicenseMapping]. The discarding of declared licenses is
-     * represented by a mapping of the respective license to [SpdxConstants.NONE]. Thus the given
-     * [declaredLicenseMapping] entry values as well as the return value may be [SpdxConstants.NONE].
+     * Try to map the [declaredLicense] to an [SpdxExpression] by taking both hard-coded mappings and
+     * [declaredLicenseMapping] into account. As a special case, a license may be mapped to [SpdxConstants.NONE] to mark
+     * it as something that is not a license, like a copyright that was accidentally entered as a license. Return the
+     * successfully mapped license expression, or null if the declared license could not be mapped.
      */
     internal fun process(
         declaredLicense: String,
@@ -82,20 +88,22 @@ object DeclaredLicenseProcessor {
     }
 
     /**
-     * Return [ProcessedDeclaredLicense] derived from the given [declaredLicenses]. The processing tries to map each
-     * given declared license to an [SpdxExpression] by first applying a removal step for known URL prefixes (and
-     * suffixes), and then applying a hard-coded mapping by utilizing [SpdxDeclaredLicenseMapping]. The discarding of
-     * declared licenses is represented by a mapping of the respective license to [SpdxConstants.NONE]. Thus the given
-     * [declaredLicenseMapping] entry values as well as the return value may be [SpdxConstants.NONE].
+     * Try to map all [declaredLicenses] to a (compound) [SpdxExpression] by taking both hard-coded mappings and
+     * [declaredLicenseMapping] into account. As a special case, a license may be mapped to [SpdxConstants.NONE] to mark
+     * it as something that is not a license, like a copyright that was accidentally entered as a license. Multiple
+     * declared licenses are reduced to a [SpdxCompoundExpression] using the specified [operator]. Return a
+     * [ProcessedDeclaredLicense] which contains the final [SpdxExpression] (or null if none of the declared licenses
+     * could be mapped), and the mapped and unmapped licenses respectively.
      */
     fun process(
-        declaredLicenses: Collection<String>,
-        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
+        declaredLicenses: Set<String>,
+        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap(),
+        operator: SpdxOperator = SpdxOperator.AND
     ): ProcessedDeclaredLicense {
         val processedLicenses = mutableMapOf<String, SpdxExpression>()
         val unmapped = mutableListOf<String>()
 
-        declaredLicenses.toSet().forEach { declaredLicense ->
+        declaredLicenses.forEach { declaredLicense ->
             process(declaredLicense, declaredLicenseMapping)?.let {
                 processedLicenses[declaredLicense] = it
             } ?: run { unmapped += declaredLicense }
@@ -103,7 +111,7 @@ object DeclaredLicenseProcessor {
 
         val spdxExpression = processedLicenses.values.toSet().filter {
             it.toString() != SpdxConstants.NONE
-        }.reduceOrNull { left, right -> left and right }
+        }.reduceOrNull { left, right -> SpdxCompoundExpression(left, operator, right) }
 
         val mapped = processedLicenses.filterNot { (key, value) ->
             key.removeSurrounding("(", ")") == value.toString()

@@ -23,18 +23,19 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.io.IOException
+import java.util.Locale
 
 import kotlin.io.path.createTempDirectory
 import kotlin.io.path.createTempFile
 
 import org.ossreviewtoolkit.utils.test.containExactly
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExtensionsTest : WordSpec({
     "ByteArray.toHexString" should {
@@ -50,17 +51,6 @@ class ExtensionsTest : WordSpec({
 
         "make the path absolute if the SHELL environment variable is unset".config(enabled = Os.env["SHELL"] == null) {
             File("~/Desktop").expandTilde() shouldBe File("~/Desktop").absoluteFile
-        }
-    }
-
-    "File.hash" should {
-        "calculate the correct SHA1" {
-            val file = createTempFile(ORT_NAME, javaClass.simpleName).toFile().apply {
-                writeText("test")
-                deleteOnExit()
-            }
-
-            file.hash() shouldBe "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
         }
     }
 
@@ -129,21 +119,23 @@ class ExtensionsTest : WordSpec({
         "find the README.md file case insensitive" {
             val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", true)
 
-            readmeFile.shouldNotBeNull()
-            readmeFile shouldBe File("..").absoluteFile.normalize().resolve("README.md")
+            readmeFile shouldNotBeNull {
+                this shouldBe File("..").absoluteFile.normalize().resolve("README.md")
+            }
         }
 
         "find the README.md file case sensitive" {
             val readmeFile = File(".").searchUpwardsForFile("README.md", false)
 
-            readmeFile.shouldNotBeNull()
-            readmeFile shouldBe File("..").absoluteFile.normalize().resolve("README.md")
+            readmeFile shouldNotBeNull {
+                this shouldBe File("..").absoluteFile.normalize().resolve("README.md")
+            }
         }
 
         "not find the README.md with wrong cases" {
             val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", false)
 
-            readmeFile.shouldBeNull()
+            readmeFile should beNull()
         }
     }
 
@@ -151,8 +143,9 @@ class ExtensionsTest : WordSpec({
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
 
-            gitRoot.shouldNotBeNull()
-            gitRoot shouldBe File("..").absoluteFile.normalize()
+            gitRoot shouldNotBeNull {
+                this shouldBe File("..").absoluteFile.normalize()
+            }
         }
     }
 
@@ -221,7 +214,7 @@ class ExtensionsTest : WordSpec({
 
             assertSoftly {
                 reserved.forEach {
-                    val hexString = String.format("%%%02X", it.toInt())
+                    val hexString = String.format(Locale.ROOT, "%%%02X", it.toInt())
                     it.toString().percentEncode() shouldBe hexString
                 }
 
@@ -361,16 +354,6 @@ class ExtensionsTest : WordSpec({
 
         "return false for an invalid URI" {
             "https://github.com/oss-review-toolkit/ort, ".isValidUri() shouldBe false
-        }
-    }
-
-    "String.isValidUrl" should {
-        "return true for a valid URL" {
-            "https://github.com/oss-review-toolkit/ort".isValidUrl() shouldBe true
-        }
-
-        "return false for an invalid URL" {
-            "illegal://github.com/oss-review-toolkit/ort".isValidUrl() shouldBe false
         }
     }
 })

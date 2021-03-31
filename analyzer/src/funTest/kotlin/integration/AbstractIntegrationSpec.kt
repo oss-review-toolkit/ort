@@ -24,11 +24,10 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 
@@ -40,6 +39,9 @@ import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -73,18 +75,18 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     /**
      * The temporary parent directory for downloads.
      */
-    private lateinit var outputDir: File
+    protected lateinit var outputDir: File
 
     /**
-     * The directory where the source code of [pkg] was downloaded to.
+     * The provenance of the downloaded source code of [pkg].
      */
-    protected lateinit var downloadResult: Downloader.DownloadResult
+    protected lateinit var provenance: Provenance
 
     override fun beforeSpec(spec: Spec) {
         // Do not use the usual simple class name as the suffix here to shorten the path which otherwise gets too long
         // on Windows for SimpleFormIntegrationTest.
         outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
-        downloadResult = Downloader.download(pkg, outputDir)
+        provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
     }
 
     override fun afterSpec(spec: Spec) {
@@ -93,18 +95,16 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
     init {
         "Source code was downloaded successfully".config(tags = setOf(ExpensiveTag)) {
-            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
-            workingTree.shouldNotBeNull()
-            workingTree.isValid() shouldBe true
-            workingTree.vcsType shouldBe pkg.vcs.type
-            downloadResult.sourceArtifact.shouldBeNull()
-            downloadResult.vcsInfo shouldNotBeNull {
-                type shouldBe workingTree.vcsType
+            VersionControlSystem.forDirectory(outputDir) shouldNotBeNull {
+                isValid() shouldBe true
+                vcsType shouldBe pkg.vcs.type
+
+                provenance.shouldBeTypeOf<RepositoryProvenance>().vcsInfo.type shouldBe vcsType
             }
         }
 
         "All package manager definition files are found".config(tags = setOf(ExpensiveTag)) {
-            val managedFiles = PackageManager.findManagedFiles(downloadResult.downloadDirectory)
+            val managedFiles = PackageManager.findManagedFiles(outputDir)
 
             managedFiles.size shouldBe expectedManagedFiles.size
             managedFiles.entries.forAll { (manager, files) ->
@@ -115,10 +115,10 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                 val expectedManagedFilesByName = expectedManagedFiles.mapKeys { (manager, _) ->
                     manager.managerName
                 }
-                val expectedFiles = expectedManagedFilesByName[manager.managerName]
 
-                expectedFiles.shouldNotBeNull()
-                files.sorted().joinToString("\n") shouldBe expectedFiles.sorted().joinToString("\n")
+                expectedManagedFilesByName[manager.managerName] shouldNotBeNull {
+                    files.sorted().joinToString("\n") shouldBe sorted().joinToString("\n")
+                }
             }
         }
 

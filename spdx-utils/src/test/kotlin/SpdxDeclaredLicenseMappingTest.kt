@@ -23,9 +23,10 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.string.shouldContain
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
@@ -45,6 +46,23 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
                 it.isValid(SpdxExpression.Strictness.ALLOW_CURRENT) shouldBe true
             }
         }
+
+        "not associate licenses without a version to *-only" {
+            val keysWithImpliedVersion = listOf(
+                // See http://www.gwtproject.org/terms.html#licenses which explicitly mentions "GNU Lesser General
+                // Public License v. 2.1".
+                "GWT Terms",
+                "http://www.gwtproject.org/terms.html",
+                // This forwards to http://www.gnu.org/licenses/lgpl-3.0.html which has a version in the URL.
+                "http://www.gnu.org/copyleft/lesser.html"
+            )
+
+            SpdxDeclaredLicenseMapping.rawMapping.asSequence().forAll { (key, license) ->
+                if (key !in keysWithImpliedVersion && license.licenses().any { it.endsWith("-only") }) {
+                    key should containADigit()
+                }
+            }
+        }
     }
 
     "The mapping" should {
@@ -54,6 +72,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
             }
 
             licenseIdMapping.keys.forAll { declaredLicense ->
+                @Suppress("SwallowedException")
                 try {
                     val tokens = getTokensByTypeForExpression(declaredLicense)
 
@@ -71,7 +90,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
 
         "not contain plain SPDX license ids" {
             SpdxDeclaredLicenseMapping.mapping.keys.forAll { declaredLicense ->
-                SpdxLicense.forId(declaredLicense).shouldBeNull()
+                SpdxLicense.forId(declaredLicense) should beNull()
             }
         }
 

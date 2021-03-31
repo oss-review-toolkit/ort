@@ -102,6 +102,42 @@
         </component>
 
         <!--
+         | GlassFish High Availability API (https://mvnrepository.com/artifact/org.glassfish.ha/ha-api/)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>hk2-jar</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+        <!--
+         | Jenkins Module (https://mvnrepository.com/artifact/org.jenkins-ci.modules/instance-identity/)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>jenkins-module</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+        <!--
          | Jenkins Plugin (https://jenkins.io/doc/book/managing/plugins/)
          |-->
         <component>

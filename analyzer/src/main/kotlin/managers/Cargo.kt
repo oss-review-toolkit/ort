@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
@@ -28,6 +30,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -42,7 +45,10 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
@@ -65,70 +71,11 @@ class Cargo(
         ) = Cargo(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    companion object {
-        private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
-    }
-
     override fun command(workingDir: File?) = "cargo"
 
     override fun transformVersion(output: String) = output.removePrefix("cargo ")
 
     private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
-
-    private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
-
-    private fun extractPackageId(node: JsonNode) =
-        Identifier(
-            type = "Crate",
-            namespace = "",
-            name = node["name"].textValueOrEmpty(),
-            version = node["version"].textValueOrEmpty()
-        )
-
-    private fun extractRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
-
-    private fun extractVcsInfo(node: JsonNode) =
-        VcsHost.toVcsInfo(extractRepositoryUrl(node))
-
-    private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
-        val licenses = node["license"].textValueOrEmpty().split('/')
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-
-        return if (licenses.isEmpty()) sortedSetOf() else sortedSetOf(licenses.joinToString(" OR "))
-    }
-
-    private fun extractSourceArtifact(
-        node: JsonNode,
-        hashes: Map<String, String>
-    ): RemoteArtifact? {
-        if (node["source"].textValueOrEmpty() != "registry+https://github.com/rust-lang/crates.io-index") {
-            return null
-        }
-
-        val name = node["name"]?.textValue() ?: return null
-        val version = node["version"]?.textValue() ?: return null
-        val url = "https://crates.io/api/v1/crates/$name/$version/download"
-        val checksum = checksumKeyOf(node)
-        val hash = Hash.create(hashes[checksum].orEmpty())
-        return RemoteArtifact(url, hash)
-    }
-
-    private fun extractPackage(node: JsonNode, hashes: Map<String, String>) =
-        Package(
-            id = extractPackageId(node),
-            declaredLicenses = extractDeclaredLicenses(node),
-            description = node["description"].textValueOrEmpty(),
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = extractSourceArtifact(node, hashes) ?: RemoteArtifact.EMPTY,
-            homepageUrl = "",
-            vcs = extractVcsInfo(node)
-        )
-
-    private fun checksumKeyOf(metadata: JsonNode): String {
-        val id = extractCargoId(metadata)
-        return "\"checksum $id\""
-    }
 
     /**
      * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
@@ -205,30 +152,6 @@ class Cargo(
         return pkg.toReference(linkage, dependencies)
     }
 
-    private fun getResolvedVersion(
-        parentName: String,
-        parentVersion: String,
-        dependencyName: String,
-        metadata: JsonNode
-    ): String? {
-        val node = metadata["resolve"]["nodes"].single {
-            it["id"].textValue().startsWith("$parentName $parentVersion")
-        }
-
-        // This is null if the dependency is optional and the feature was not enabled. In this case the version was not
-        // resolved and the dependency should not appear in the dependency tree. An example for a dependency string is
-        // "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)", for more details see
-        // https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
-        node["dependencies"].forEach {
-            val substrings = it.textValue().split(' ')
-            require(substrings.size > 1) { "Unexpected format while parsing dependency JSON node." }
-
-            if (substrings[0] == dependencyName) return substrings[1]
-        }
-
-        return null
-    }
-
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         // Get the project name and version. If one of them is missing return null, because this is a workspace
         // definition file that does not contain a project.
@@ -281,14 +204,19 @@ class Cargo(
         }.let { it.copy(id = it.id.copy(type = managerName)) }
 
         val homepageUrl = pkgDefinition.getString("package.homepage").orEmpty()
+        val authors = pkgDefinition.getList("package.authors", emptyList<String>())
+            .mapNotNullTo(sortedSetOf(), ::parseAuthorString)
+
         val project = Project(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = authors,
             declaredLicenses = projectPkg.declaredLicenses,
+            declaredLicensesProcessed = processDeclaredLicenses(projectPkg.declaredLicenses),
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = scopes.toSortedSet()
+            scopeDependencies = scopes.toSortedSet()
         )
 
         val nonProjectPackages = packages
@@ -298,3 +226,100 @@ class Cargo(
         return listOf(ProjectAnalyzerResult(project, nonProjectPackages))
     }
 }
+
+private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
+
+private fun checksumKeyOf(metadata: JsonNode): String {
+    val id = extractCargoId(metadata)
+    return "\"checksum $id\""
+}
+
+private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
+
+private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
+    node["license"].textValueOrEmpty().split('/')
+        .map { it.trim() }
+        .filterTo(sortedSetOf()) { it.isNotEmpty() }
+
+private fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
+    // While the previously used "/" was not explicit about the intended license operator, the community consensus
+    // seems to be that an existing "/" should be interpreted as "OR", see e.g. the discussions at
+    // https://github.com/rust-lang/cargo/issues/2039
+    // https://github.com/rust-lang/cargo/pull/4920
+    DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
+
+private fun extractPackage(node: JsonNode, hashes: Map<String, String>): Package {
+    val declaredLicenses = extractDeclaredLicenses(node)
+    val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
+
+    return Package(
+        id = extractPackageId(node),
+        authors = parseAuthors(node["authors"]),
+        declaredLicenses = declaredLicenses,
+        declaredLicensesProcessed = declaredLicensesProcessed,
+        description = node["description"].textValueOrEmpty(),
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = extractSourceArtifact(node, hashes) ?: RemoteArtifact.EMPTY,
+        homepageUrl = "",
+        vcs = extractVcsInfo(node)
+    )
+}
+
+private fun extractPackageId(node: JsonNode) =
+    Identifier(
+        type = "Crate",
+        namespace = "",
+        name = node["name"].textValueOrEmpty(),
+        version = node["version"].textValueOrEmpty()
+    )
+
+private fun extractRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
+
+private fun extractSourceArtifact(
+    node: JsonNode,
+    hashes: Map<String, String>
+): RemoteArtifact? {
+    if (node["source"].textValueOrEmpty() != "registry+https://github.com/rust-lang/crates.io-index") {
+        return null
+    }
+
+    val name = node["name"]?.textValue() ?: return null
+    val version = node["version"]?.textValue() ?: return null
+    val url = "https://crates.io/api/v1/crates/$name/$version/download"
+    val checksum = checksumKeyOf(node)
+    val hash = Hash.create(hashes[checksum].orEmpty())
+    return RemoteArtifact(url, hash)
+}
+
+private fun extractVcsInfo(node: JsonNode) =
+    VcsHost.toVcsInfo(extractRepositoryUrl(node))
+
+private fun getResolvedVersion(
+    parentName: String,
+    parentVersion: String,
+    dependencyName: String,
+    metadata: JsonNode
+): String? {
+    val node = metadata["resolve"]["nodes"].single {
+        it["id"].textValue().startsWith("$parentName $parentVersion")
+    }
+
+    // This is null if the dependency is optional and the feature was not enabled. In this case the version was not
+    // resolved and the dependency should not appear in the dependency tree. An example for a dependency string is
+    // "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)", for more details see
+    // https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
+    node["dependencies"].forEach {
+        val substrings = it.textValue().split(' ')
+        require(substrings.size > 1) { "Unexpected format while parsing dependency JSON node." }
+
+        if (substrings[0] == dependencyName) return substrings[1]
+    }
+
+    return null
+}
+
+/**
+ * Extract information about authors from the given [node] with package metadata.
+ */
+private fun parseAuthors(node: JsonNode?): SortedSet<String> =
+    node?.mapNotNullTo(sortedSetOf()) { parseAuthorString(it.textValue()) } ?: sortedSetOf()

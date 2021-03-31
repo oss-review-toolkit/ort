@@ -31,19 +31,20 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import kotlin.time.measureTimedValue
 
-import org.eclipse.sw360.antenna.http.HttpClientFactoryImpl
-import org.eclipse.sw360.antenna.http.config.HttpClientConfig
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360Connection
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360ConnectionFactory
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360ProjectClientAdapter
-import org.eclipse.sw360.antenna.sw360.client.adapter.SW360ReleaseClientAdapter
-import org.eclipse.sw360.antenna.sw360.client.config.SW360ClientConfig
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.SW360Visibility
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.projects.SW360Project
-import org.eclipse.sw360.antenna.sw360.client.rest.resource.releases.SW360Release
-import org.eclipse.sw360.antenna.sw360.client.utils.SW360ClientException
+import org.eclipse.sw360.clients.adapter.SW360Connection
+import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
+import org.eclipse.sw360.clients.adapter.SW360ProjectClientAdapter
+import org.eclipse.sw360.clients.adapter.SW360ReleaseClientAdapter
+import org.eclipse.sw360.clients.config.SW360ClientConfig
+import org.eclipse.sw360.clients.rest.resource.SW360Visibility
+import org.eclipse.sw360.clients.rest.resource.projects.SW360Project
+import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
+import org.eclipse.sw360.clients.utils.SW360ClientException
+import org.eclipse.sw360.http.HttpClientFactoryImpl
+import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.GlobalOptions
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -81,7 +82,7 @@ class UploadResultToSw360Command : CliktCommand(
             "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
-        val sw360Config = globalOptionsForSubcommands.config.scanner?.storages?.values
+        val sw360Config = globalOptionsForSubcommands.config.scanner.storages?.values
             ?.filterIsInstance<Sw360StorageConfiguration>()?.singleOrNull()
 
         requireNotNull(sw360Config) {
@@ -95,14 +96,14 @@ class UploadResultToSw360Command : CliktCommand(
 
         getProjectWithPackages(ortResult).forEach { (project, pkgList) ->
             val linkedReleases = pkgList.mapNotNull { pkg ->
-                val name = listOfNotNull(pkg.id.namespace, pkg.id.name).joinToString("/")
+                val name = createReleaseName(pkg.id)
                 sw360ReleaseClient.getSparseReleaseByNameAndVersion(name, pkg.id.version)
                     .flatMap { sw360ReleaseClient.enrichSparseRelease(it) }
-                    .orElse(createSw360Release(pkg, sw360ReleaseClient))
+                    .orElseGet { createSw360Release(pkg, sw360ReleaseClient) }
             }
 
             val sw360Project = sw360ProjectClient.getProjectByNameAndVersion(project.id.name, project.id.version)
-                .orElse(createSw360Project(project, sw360ProjectClient))
+                .orElseGet { createSw360Project(project, sw360ProjectClient) }
 
             sw360Project?.let {
                 sw360ProjectClient.addSW360ReleasesToSW360Project(it.id, linkedReleases)
@@ -131,9 +132,19 @@ class UploadResultToSw360Command : CliktCommand(
     }
 
     private fun createSw360Release(pkg: Package, client: SW360ReleaseClientAdapter): SW360Release? {
+        // TODO: This omits operators and exceptions from licenses. We yet need to find a way to pass these to SW360.
+        val licenseShortNames = pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty().toSortedSet()
+
+        val unmappedLicenses = pkg.declaredLicensesProcessed.unmapped.toSortedSet()
+        if (unmappedLicenses.isNotEmpty()) {
+            log.warn {
+                "The following licenses could not be mapped in order to create a SW360 release: $unmappedLicenses"
+            }
+        }
+
         val sw360Release = SW360Release()
-            .setMainLicenseIds(pkg.declaredLicenses)
-            .setName(pkg.id.name)
+            .setMainLicenseIds(licenseShortNames)
+            .setName(createReleaseName(pkg.id))
             .setVersion(pkg.id.version)
 
         return try {
@@ -162,6 +173,7 @@ class UploadResultToSw360Command : CliktCommand(
             config.password,
             config.clientId,
             config.clientPassword,
+            config.token,
             httpClient,
             jsonMapper
         )
@@ -171,6 +183,10 @@ class UploadResultToSw360Command : CliktCommand(
 
     private fun getProjectWithPackages(ortResult: OrtResult): Map<Project, List<Package>> =
         ortResult.getProjects(omitExcluded = true).associateWith { project ->
+            // Upload the uncurated packages because SW360 also is a package curation provider.
             project.collectDependencies().mapNotNull { ortResult.getUncuratedPackageById(it) }
         }
+
+    private fun createReleaseName(pkgId: Identifier) =
+        listOf(pkgId.namespace, pkgId.name).filter { it.isNotEmpty() }.joinToString("/")
 }

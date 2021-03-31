@@ -50,7 +50,7 @@ class PolymerIntegrationFunTest : AbstractIntegrationSpec() {
     )
 
     private fun findDownloadedFiles(vararg filenames: String) =
-        downloadResult.downloadDirectory.walk().filterTo(mutableListOf()) { it.name in filenames }
+        outputDir.walk().filterTo(mutableListOf()) { it.name in filenames }
 
     override val expectedManagedFiles by lazy {
         val bowerJsonFiles = findDownloadedFiles("bower.json")
@@ -65,10 +65,8 @@ class PolymerIntegrationFunTest : AbstractIntegrationSpec() {
 
     override val managedFilesForTest by lazy {
         mapOf(
-            Bower.Factory() as PackageManagerFactory to
-                    listOf(downloadResult.downloadDirectory.resolve("bower.json")),
-            Npm.Factory() as PackageManagerFactory to
-                    listOf(downloadResult.downloadDirectory.resolve("package.json"))
+            Bower.Factory() as PackageManagerFactory to listOf(outputDir.resolve("bower.json")),
+            Npm.Factory() as PackageManagerFactory to listOf(outputDir.resolve("package.json"))
         )
     }
 }

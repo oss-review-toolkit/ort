@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,8 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.toSpdx
 
 class RuleSetTest : WordSpec() {
     private val errorMessage = "error message"
@@ -120,6 +123,45 @@ class RuleSetTest : WordSpec() {
 
                 ruleSet.violations should haveSize(4)
             }
+
+            "add no license errors if license is removed by package license choice in the correct order" {
+                val ruleSet = ruleSet(ortResult) {
+                    dependencyRule("test") {
+                        licenseRule("test", LicenseView.ONLY_CONCLUDED) {
+                            require {
+                                +containsLicense("LicenseRef-b".toSpdx())
+                            }
+
+                            error(errorMessage, howToFix)
+                        }
+                    }
+                }
+
+                ruleSet.violations should haveSize(1)
+            }
+
+            "add no license errors if license is removed by repository license choice" {
+                val ruleSet = ruleSet(ortResult) {
+                    dependencyRule("test") {
+                        licenseRule("test", LicenseView.ONLY_CONCLUDED) {
+                            require {
+                                +containsLicense("LicenseRef-c".toSpdx())
+                            }
+
+                            error(errorMessage, howToFix)
+                        }
+                    }
+                }
+
+                ruleSet.violations should haveSize(0)
+            }
         }
     }
+
+    private fun PackageRule.LicenseRule.containsLicense(expression: SpdxExpression) =
+        object : RuleMatcher {
+            override val description = "containsLicense(license)"
+
+            override fun matches() = license == expression
+        }
 }

@@ -26,6 +26,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.spdx.getDuplicates
 
 /**
  * Classifications for licenses which allow to assign meta data to licenses. This allows defining rather generic
@@ -48,22 +49,49 @@ data class LicenseClassifications(
     @JsonAlias("licenses")
     val categorizations: List<LicenseCategorization> = emptyList()
 ) {
+    /** A property for fast look-ups of licenses for a given category. */
+    val licensesByCategory: Map<String, Set<SpdxSingleLicenseExpression>> by lazy {
+        val result = mutableMapOf<String, MutableSet<SpdxSingleLicenseExpression>>()
+
+        categorizations.forEach { license ->
+            license.categories.forEach { category ->
+                result.getOrPut(category) { mutableSetOf() } += license.id
+            }
+        }
+
+        result
+    }
+
+    /** A property for fast look-ups of categories for a given license. */
+    val categoriesByLicense: Map<SpdxSingleLicenseExpression, Set<String>> by lazy {
+        val result = mutableMapOf<SpdxSingleLicenseExpression, Set<String>>()
+
+        categorizations.forEach { license ->
+            result[license.id] = license.categories
+        }
+
+        result
+    }
+
+    /** A property allowing convenient access to the names of all categories defined. */
+    val categoryNames: SortedSet<String> by lazy {
+        categories.mapTo(sortedSetOf()) { it.name }
+    }
+
     init {
-        categories.groupBy { it.name }.values.filter { it.size > 1 }.let { groups ->
-            require(groups.isEmpty()) {
-                "Found multiple license category entries with the same name: " +
-                        groups.joinToString { it.first().name }
+        categories.getDuplicates { it.name }.let { duplicates ->
+            require(duplicates.isEmpty()) {
+                "Found multiple license category entries with the same name: $duplicates"
             }
         }
 
-        categorizations.groupBy { it.id }.values.filter { it.size > 1 }.let { groups ->
-            require(groups.isEmpty()) {
-                "Found multiple license entries with the same Id: ${groups.joinToString { it.first().id.toString() }}."
+        categorizations.getDuplicates { it.id }.let { duplicates ->
+            require(duplicates.isEmpty()) {
+                "Found multiple license entries with the same id: $duplicates"
             }
         }
 
-        val categoryNames = categories.map { it.name }.toSet()
-        categorizations.associateWith { lic -> lic.categories.filterNot(categoryNames::contains) }
+        categorizations.associateWith { it.categories.filterNot(categoryNames::contains) }
             .filterNot { it.value.isEmpty() }
             .let { invalidCategorizations ->
                 require(invalidCategorizations.isEmpty()) {
@@ -75,48 +103,17 @@ data class LicenseClassifications(
             }
     }
 
-    /** A property allowing convenient access to the names of all categories defined. */
-    val categoryNames: SortedSet<String> by lazy {
-        categories.mapTo(sortedSetOf()) { it.name }
-    }
-
     /**
-     * A property for fast look-ups of licenses for a given category.
+     * A convenience operator to return the categories for the given license [id], or null if the license is not
+     * categorized.
      */
-    private val licensesByCategoryName: Map<String, Set<LicenseCategorization>> by lazy {
-        val result = mutableMapOf<String, MutableSet<LicenseCategorization>>()
+    operator fun get(id: SpdxExpression) = categoriesByLicense[id]
 
-        categories.forEach { category ->
-            result[category.name] = mutableSetOf()
-        }
-
-        categorizations.forEach { license ->
-            license.categories.forEach { categoryId ->
-                result.getOrPut(categoryId) { mutableSetOf() } += license
-            }
-        }
-
-        result
-    }
-
-    /**
-     * Return a set with the licenses that are assigned to the category with the given [name][categoryName].
-     * If the there is no category with the name provided, throw an [IllegalStateException].
-     * This is intended to be mostly used via scripting.
-     */
-    fun getLicensesForCategory(categoryName: String): Set<LicenseCategorization> =
-        licensesByCategoryName[categoryName] ?: error("Unknown license category name: $categoryName.")
-
-    /** A property for fast-lookups of licenses by their ID. */
-    private val licensesById: Map<SpdxSingleLicenseExpression, LicenseCategorization> by lazy {
-        categorizations.associateBy { it.id }
-    }
-
-    /**
-     * A convenience operator to return the [LicenseCategorization] for the given [id] or *null* if no such
-     * categorization can be found.
-     */
-    operator fun get(id: SpdxExpression): LicenseCategorization? = licensesById[id]
+    /** A convenience function to check whether there is a categorization for the given license [id]. */
+    fun isCategorized(id: SpdxExpression) = id in categoriesByLicense
 }
 
+/**
+ * A convenience extension function to return empty LicenseClassifications for null.
+ */
 fun LicenseClassifications?.orEmpty(): LicenseClassifications = this ?: LicenseClassifications()

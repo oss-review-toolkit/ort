@@ -21,18 +21,16 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 import java.net.URL
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-import org.jetbrains.gradle.ext.Gradle
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-import org.ossreviewtoolkit.gradle.*
 
 val detektPluginVersion: String by project
 val kotlinPluginVersion: String by project
@@ -49,7 +47,6 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("org.barfuin.gradle.taskinfo")
     id("org.jetbrains.dokka")
-    id("org.jetbrains.gradle.plugin.idea-ext")
 }
 
 buildscript {
@@ -62,7 +59,8 @@ buildscript {
 
 if (version == Project.DEFAULT_VERSION) {
     version = org.eclipse.jgit.api.Git.open(rootDir).use { git ->
-        // Make the output to exactly match "git describe --abbrev=7 --always --tags --dirty".
+        // Make the output exactly match "git describe --abbrev=7 --always --tags --dirty", which is what is used in
+        // "scripts/docker_build.sh".
         val description = git.describe().setAlways(true).setTags(true).call()
         val isDirty = git.status().call().hasUncommittedChanges()
 
@@ -78,20 +76,6 @@ logger.quiet("Building ORT version $version.")
 val javaVersion = JavaVersion.current()
 if (!javaVersion.isCompatibleWith(JavaVersion.VERSION_11)) {
     throw GradleException("At least Java 11 is required, but Java $javaVersion is being used.")
-}
-
-idea {
-    project {
-        settings {
-            runConfigurations {
-                defaults<Gradle> {
-                    // Disable "condensed" multi-line diffs when running tests from the IDE to more easily accept actual
-                    // results as expected results.
-                    jvmArgs = "-Dkotest.assertions.multi-line-diff=simple"
-                }
-            }
-        }
-    }
 }
 
 extensions.findByName("buildScan")?.withGroovyBuilder {
@@ -111,6 +95,10 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     rejectVersionIf {
         candidate.version.matches(nonFinalQualifiersRegex)
     }
+}
+
+val mergeDetektReports by tasks.registering(ReportMergeTask::class) {
+    output.set(rootProject.buildDir.resolve("reports/detekt/merged.sarif"))
 }
 
 allprojects {
@@ -152,10 +140,25 @@ allprojects {
 
         input = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
             "src/funTest/kotlin")
+
+        basePath = rootProject.projectDir.path
+
+        reports {
+            html.enabled = false
+            sarif.enabled = true
+            txt.enabled = false
+            xml.enabled = false
+        }
     }
 
-    tasks.withType<Detekt>().configureEach {
+    tasks.withType<Detekt> detekt@{
         dependsOn(":detekt-rules:assemble")
+
+        finalizedBy(mergeDetektReports)
+
+        mergeDetektReports {
+            input.from(this@detekt.sarifReportFile)
+        }
     }
 }
 
@@ -228,6 +231,7 @@ subprojects {
             jvmTarget = "11"
             apiVersion = "1.4"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+            useIR = true
         }
     }
 
@@ -331,12 +335,12 @@ subprojects {
         dependsOn(funTest)
     }
 
-    val sourcesJar by tasks.registering(Jar::class) {
+    tasks.register<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
 
-    val dokkaHtmlJar by tasks.registering(Jar::class) {
+    tasks.register<Jar>("dokkaHtmlJar") {
         dependsOn(tasks.dokkaHtml)
 
         description = "Assembles a jar archive containing the minimalistic HTML documentation."
@@ -346,7 +350,7 @@ subprojects {
         from(tasks.dokkaHtml)
     }
 
-    val dokkaJavadocJar by tasks.registering(Jar::class) {
+    tasks.register<Jar>("dokkaJavadocJar") {
         dependsOn(tasks.dokkaJavadoc)
 
         description = "Assembles a jar archive containing the Javadoc documentation."
@@ -362,8 +366,8 @@ subprojects {
                 groupId = "org.ossreviewtoolkit"
 
                 from(components["java"])
-                artifact(sourcesJar.get())
-                artifact(dokkaJavadocJar.get())
+                artifact(tasks["sourcesJar"])
+                artifact(tasks["dokkaJavadocJar"])
 
                 pom {
                     licenses {

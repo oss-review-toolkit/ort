@@ -29,6 +29,7 @@ import java.util.Stack
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -52,6 +53,7 @@ import org.ossreviewtoolkit.utils.textValueOrEmpty
 /**
  * The [Bower](https://bower.io/) package manager for JavaScript.
  */
+@Suppress("TooManyFunctions")
 class Bower(
     name: String,
     analysisRoot: File,
@@ -96,9 +98,26 @@ class Bower(
                 }
             }
 
+        /**
+         * Parse information about the author. According to https://github.com/bower/spec/blob/master/json.md#authors,
+         * there are two formats to specify the authors of a package (similar to NPM). The difference is that the
+         * strings or objects are inside an array.
+         */
+        private fun parseAuthors(node: JsonNode): SortedSet<String> =
+            sortedSetOf<String>().apply {
+                node["pkgMeta"]["authors"]?.mapNotNull { authorNode ->
+                    when {
+                        authorNode.isObject -> authorNode["name"]?.textValue()
+                        authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
+                        else -> null
+                    }
+                }?.let { addAll(it) }
+            }
+
         private fun extractPackage(node: JsonNode) =
             Package(
                 id = extractPackageId(node),
+                authors = parseAuthors(node),
                 declaredLicenses = extractDeclaredLicenses(node),
                 description = node["pkgMeta"]["description"].textValueOrEmpty(),
                 homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
@@ -114,14 +133,14 @@ class Bower(
             val result = mutableMapOf<String, Package>()
 
             val stack = Stack<JsonNode>()
-            stack.addAll(getDependencyNodes(node))
+            stack += getDependencyNodes(node)
 
             while (!stack.empty()) {
                 val currentNode = stack.pop()
                 val pkg = extractPackage(currentNode)
                 result["${pkg.id.name}:${pkg.id.version}"] = pkg
 
-                stack.addAll(getDependencyNodes(currentNode))
+                stack += getDependencyNodes(currentNode)
             }
 
             return result
@@ -158,7 +177,7 @@ class Bower(
                     }
                 }
 
-                stack.addAll(getDependencyNodes(currentNode))
+                stack += getDependencyNodes(currentNode)
             }
 
             return result
@@ -233,11 +252,12 @@ class Bower(
             val project = Project(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                authors = projectPackage.authors,
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
                 homepageUrl = projectPackage.homepageUrl,
-                scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
+                scopeDependencies = sortedSetOf(dependenciesScope, devDependenciesScope)
             )
 
             return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))

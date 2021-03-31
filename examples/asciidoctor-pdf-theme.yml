@@ -28,3 +28,6 @@ footer:
 code:
   background-color: transparent
   border-color: transparent
+role:
+  alert:
+    font-color: #ff0000

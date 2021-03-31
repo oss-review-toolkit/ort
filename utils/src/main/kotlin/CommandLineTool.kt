@@ -25,31 +25,6 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
- */
-var printStackTrace = false
-
-/**
- * Ordinal for mandatory program parameters.
- */
-const val PARAMETER_ORDER_MANDATORY = 0
-
-/**
- * Ordinal for optional program parameters.
- */
-const val PARAMETER_ORDER_OPTIONAL = 1
-
-/**
- * Ordinal for logging related program parameters.
- */
-const val PARAMETER_ORDER_LOGGING = 2
-
-/**
- * Ordinal for the help program parameter.
- */
-const val PARAMETER_ORDER_HELP = 100
-
-/**
  * An interface to implement by classes that are backed by a command line tool.
  */
 interface CommandLineTool {

@@ -15,35 +15,37 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/external/multi-kotlin-project"
   homepage_url: ""
-  scopes:
-  - name: "archives"
-    dependencies:
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:cli:1.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
-        linkage: "PROJECT_DYNAMIC"
+  dependency_graph:
+    packages:
+    - "Gradle:org.gradle.kotlin.dsl.samples.multiproject:cli:1.0"
+    - "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+    - "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+    - "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+    - "Maven:org.jetbrains:annotations:13.0"
+    scope_roots:
+    - dependencies:
+      - pkg: 1
         dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+        - pkg: 2
           dependencies:
-          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-          - id: "Maven:org.jetbrains:annotations:13.0"
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+          - pkg: 3
+          - pkg: 4
+        linkage: "PROJECT_DYNAMIC"
+      - pkg: 2
         dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-    - id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+        - pkg: 3
+        - pkg: 4
       linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
-        dependencies:
-        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-        - id: "Maven:org.jetbrains:annotations:13.0"
-  - name: "default"
-    dependencies: []
+    scopes:
+      archives:
+      - root: 0
+      - root: 1
+      default: []
 packages:
 - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
   purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.3.11"
+  authors:
+  - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
   declared_licenses_processed:
@@ -74,6 +76,8 @@ packages:
     path: ""
 - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
   purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.3.11"
+  authors:
+  - "JetBrains"
   declared_licenses:
   - "The Apache License, Version 2.0"
   declared_licenses_processed:
@@ -104,6 +108,8 @@ packages:
     path: ""
 - id: "Maven:org.jetbrains:annotations:13.0"
   purl: "pkg:maven/org.jetbrains/annotations@13.0"
+  authors:
+  - "JetBrains"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   declared_licenses_processed:

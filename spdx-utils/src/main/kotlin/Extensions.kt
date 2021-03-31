@@ -17,16 +17,34 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.spdx
 
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.LinkOption
-import java.nio.file.NoSuchFileException
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
+import java.util.Locale
 
 import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+
+/**
+ * Return a string of hexadecimal digits representing the bytes in the array.
+ */
+fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
+
+/**
+ * Return the duplicates as identified by [keySelector] of a collection.
+ */
+fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Set<K> =
+    if (this is Set) emptySet() else groupBy(keySelector).filter { it.value.size > 1 }.keys
+
+/**
+ * Return the duplicates of a collection.
+ */
+fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }
 
 /**
  * Return an [EnumSet] that contains the elements of [this] and [other].
@@ -37,7 +55,7 @@ operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = Enum
  * Return true if and only if this file is a symbolic link.
  */
 fun File.isSymbolicLink(): Boolean =
-    try {
+    runCatching {
         val isWindows = System.getProperty("os.name")?.contains("Windows", ignoreCase = true) == true
 
         // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
@@ -45,9 +63,7 @@ fun File.isSymbolicLink(): Boolean =
         Files.readAttributes(toPath(), BasicFileAttributes::class.java, LinkOption.NOFOLLOW_LINKS).let {
             it.isSymbolicLink || (isWindows && it.isOther)
         }
-    } catch (e: NoSuchFileException) {
-        false
-    }
+    }.getOrDefault(false)
 
 /**
  * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
@@ -94,6 +110,19 @@ fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
 
     return SpdxLicenseIdExpression(expressionId, orLaterVersion)
 }
+
+/**
+ * Return true if and only if this String can be successfully parsed to a [SpdxExpression].
+ */
+fun String.isSpdxExpression(): Boolean =
+    runCatching { SpdxExpression.parse(this, Strictness.ALLOW_DEPRECATED) }.isSuccess
+
+/**
+ * Return true if and only if this String can be successfully parsed to an [SpdxExpression] or if it equals
+ * [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION].
+ */
+fun String.isSpdxExpressionOrNotPresent(): Boolean =
+    SpdxConstants.isNotPresent(this) || isSpdxExpression()
 
 /**
  * Parses the string as an [SpdxExpression] and returns the result.

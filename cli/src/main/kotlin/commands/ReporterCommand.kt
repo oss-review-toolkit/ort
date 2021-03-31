@@ -34,10 +34,12 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.splitPair
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
-import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
@@ -77,7 +79,8 @@ class ReporterCommand : CliktCommand(
     name = "report",
     help = "Present Analyzer, Scanner and Evaluator results in various formats."
 ) {
-    private val allReportersByName = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
+    private val allReportersByName = Reporter.ALL.associateBy { it.reporterName }
+        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     private val ortFile by option(
         "--ort-file", "-i",
@@ -99,9 +102,9 @@ class ReporterCommand : CliktCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "The list of report formats that is generated, any of ${Reporter.ALL.map { it.reporterName }}."
+        help = "The comma-separated reports to generate, any of ${allReportersByName.keys}."
     ).convert { name ->
-        allReportersByName[name.toUpperCase()]
+        allReportersByName[name]
             ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
     }.split(",").required().outputGroup()
 
@@ -187,13 +190,11 @@ class ReporterCommand : CliktCommand(
                 "format, and the value is an arbitrary key-value pair. For example: " +
                 "-O NoticeTemplate=template.id=summary"
     ).splitPair().convert { (format, option) ->
-        val upperCaseFormat = format.toUpperCase()
-
-        require(upperCaseFormat in allReportersByName.keys) {
+        require(format in allReportersByName.keys) {
             "Report formats must be one or more of ${allReportersByName.keys}."
         }
 
-        upperCaseFormat to Pair(option.substringBefore("="), option.substringAfter("=", ""))
+        format to Pair(option.substringBefore("="), option.substringAfter("=", ""))
     }.multiple()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
@@ -220,7 +221,7 @@ class ReporterCommand : CliktCommand(
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner?.archive.createFileArchiver(),
+            archiver = globalOptionsForSubcommands.config.scanner.archive.createFileArchiver(),
             licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )
 
@@ -245,50 +246,49 @@ class ReporterCommand : CliktCommand(
             howToFixTextProvider
         )
 
-        val reportOptionsMap = mutableMapOf<String, MutableMap<String, String>>()
+        val reportOptionsMap = sortedMapOf<String, MutableMap<String, String>>(String.CASE_INSENSITIVE_ORDER)
 
         reportOptions.forEach { (format, option) ->
             val reportSpecificOptionsMap = reportOptionsMap.getOrPut(format) { mutableMapOf() }
             reportSpecificOptionsMap[option.first] = option.second
         }
 
-        var failure = false
-        val reportDurationMap = mutableMapOf<Reporter, TimedValue<List<File>>>()
+        val reportDurationMap = measureTimedValue {
+            runBlocking(Dispatchers.Default) {
+                reportFormats.map { reporter ->
+                    async {
+                        val threadName = Thread.currentThread().name
+                        println("Generating the '${reporter.reporterName}' report in thread '$threadName'...")
 
-        reportFormats.forEach { reporter ->
-            val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
+                        reporter to measureTimedValue {
+                            val options = reportOptionsMap[reporter.reporterName].orEmpty()
+                            runCatching { reporter.generateReport(input, outputDir, options) }
+                        }
+                    }
+                }.awaitAll()
+            }
+        }
 
-            println("Creating the '${reporter.reporterName}' report...")
+        var failureCount = 0
 
-            @Suppress("TooGenericExceptionCaught")
-            try {
-                reportDurationMap[reporter] = measureTimedValue {
-                    reporter.generateReport(input, outputDir, options)
-                }
-            } catch (e: Exception) {
+        reportDurationMap.value.forEach { (reporter, timedValue) ->
+            val name = reporter.reporterName
+            val durationInSeconds = timedValue.duration.inSeconds
+
+            timedValue.value.onSuccess { files ->
+                println("Successfully created the '$name' report at $files in ${durationInSeconds}s.")
+            }.onFailure { e ->
                 e.showStackTrace()
 
-                log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
+                log.error { "Could not create '$name' report in ${durationInSeconds}s: ${e.collectMessagesAsString()}" }
 
-                failure = true
+                ++failureCount
             }
         }
 
-        reportDurationMap.forEach { (reporter, files) ->
-            val name = reporter.reporterName
-            println("Successfully created the '$name' report at ${files.value} in ${files.duration.inSeconds}s.")
-        }
+        val successCount = reportFormats.size - failureCount
+        println("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration.inSeconds}s.")
 
-        println("Created ${reportDurationMap.size} of ${reportFormats.size} report(s).")
-
-        if (failure) {
-            if (reportDurationMap.isEmpty()) {
-                println("Failed to create any report.")
-            } else {
-                println("At least one report was not created successfully.")
-            }
-
-            throw ProgramResult(2)
-        }
+        if (failureCount > 0) throw ProgramResult(2)
     }
 }

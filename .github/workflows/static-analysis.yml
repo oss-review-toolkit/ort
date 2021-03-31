@@ -1,0 +1,53 @@
+name: Static Analysis
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  detekt:
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Check for Detekt Issues
+      uses: burrunan/gradle-cache-action@v1
+      with:
+        arguments: --no-daemon --stacktrace detekt
+    - name: Upload SARIF File
+      uses: github/codeql-action/upload-sarif@v1
+      if: ${{ always() }} # Upload even if the previous step failed.
+      with:
+        sarif_file: build/reports/detekt/merged.sarif
+  markdown:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Check Links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        check-modified-files-only: yes
+        max-depth: 2
+        use-quiet-mode: yes
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.6
+    - name: Check REUSE Compliance
+      run: |
+        pip install --user reuse
+        ~/.local/bin/reuse lint

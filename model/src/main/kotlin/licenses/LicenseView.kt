@@ -38,7 +38,7 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
         /**
          * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
          */
-        val CONCLUDED_OR_REST = LicenseView(
+        val CONCLUDED_OR_DECLARED_AND_DETECTED = LicenseView(
             setOf(LicenseSource.CONCLUDED),
             setOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
         )
@@ -130,7 +130,13 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
 
         return resolvedLicenses.filter { it.license in remainingLicenses }.let { result ->
             if (filterSources) {
-                result.map { it.copy(sources = remainingSources.getValue(it.license)) }
+                result.map { resolvedLicense ->
+                    val remainingOriginalExpressions = resolvedLicense.originalExpressions.filterKeys {
+                        it in remainingSources.getValue(resolvedLicense.license)
+                    }
+
+                    resolvedLicense.copy(originalExpressions = remainingOriginalExpressions)
+                }
             } else {
                 result
             }

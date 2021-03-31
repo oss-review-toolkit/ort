@@ -32,6 +32,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
 import java.io.IOException
 import java.util.SortedMap
+import java.util.SortedSet
 import java.util.concurrent.TimeUnit
 
 import javax.xml.bind.annotation.XmlRootElement
@@ -149,13 +150,10 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         val lowerId = id.name.toLowerCase()
 
         val data = registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
-            try {
+            runCatching {
                 val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
                 runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
-            } catch (e: IOException) {
-                log.debug { "Failed to retrieve package from $baseUrl." }
-                null
-            }
+            }.getOrNull()
         }.firstOrNull()
             ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
 
@@ -180,17 +178,11 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             )
         } ?: VcsInfo.EMPTY
 
-        val license = with(all.spec.metadata) {
-            // Note: "licenseUrl" has been deprecated in favor of "license", see
-            // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
-            val licenseValue = license?.value?.takeUnless { license.type == "file" }
-            licenseValue ?: licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" }
-        }
-
         return with(all.details) {
             Package(
                 id = getIdentifier(id, version),
-                declaredLicenses = setOfNotNull(license).toSortedSet(),
+                authors = parseAuthors(all.spec),
+                declaredLicenses = parseLicenses(all.spec),
                 description = description.orEmpty(),
                 homepageUrl = projectUrl.orEmpty(),
                 binaryArtifact = RemoteArtifact(
@@ -234,7 +226,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                             // Resolve to the lowest applicable version, see
                             // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
                             val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
-                                .split(",").first().trim()
+                                .split(',').first().trim()
 
                             // TODO: Add support resolving to the highest version for floating versions, see
                             //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
@@ -260,6 +252,35 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
     }
 }
 
+/**
+ * Parse information about the licenses of a package from the given [spec].
+ */
+private fun parseLicenses(spec: PackageSpec?): SortedSet<String> {
+    val license = spec?.metadata?.run {
+        // Note: "licenseUrl" has been deprecated in favor of "license", see
+        // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
+        val licenseValue = license?.value?.takeUnless { license.type == "file" }
+        licenseValue ?: licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" }
+    }
+
+    return setOfNotNull(license).toSortedSet()
+}
+
+/**
+ * Parse information about the authors of a package from the given [spec].
+ */
+private fun parseAuthors(spec: PackageSpec?): SortedSet<String> =
+    spec?.metadata?.authors?.split(',', ';').orEmpty()
+        .map(String::trim)
+        .filterNot(String::isEmpty)
+        .toSortedSet()
+
+/**
+ * Try to find a .nuspec file for the given [definitionFile]. The file is looked up in the same directory.
+ */
+private fun resolveLocalSpec(definitionFile: File): File? =
+    definitionFile.parentFile?.resolve(".nuspec")?.takeIf { it.isFile }
+
 private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
 
@@ -283,7 +304,19 @@ fun PackageManager.resolveNuGetDependencies(
     val references = reader.getPackageReferences(definitionFile)
     support.buildDependencyTree(references, dependencies, packages, issues)
 
-    val project = Project(
+    val project = getProject(definitionFile, workingDir, scope)
+
+    return ProjectAnalyzerResult(project, packages, issues)
+}
+
+private fun PackageManager.getProject(
+    definitionFile: File,
+    workingDir: File,
+    scope: Scope
+): Project {
+    val spec = resolveLocalSpec(definitionFile)?.let { NuGetSupport.XML_MAPPER.readValue<PackageSpec>(it) }
+
+    return Project(
         id = Identifier(
             type = managerName,
             namespace = "",
@@ -291,14 +324,13 @@ fun PackageManager.resolveNuGetDependencies(
             version = ""
         ),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        declaredLicenses = sortedSetOf(),
+        authors = parseAuthors(spec),
+        declaredLicenses = parseLicenses(spec),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),
         homepageUrl = "",
-        scopes = sortedSetOf(scope)
+        scopeDependencies = sortedSetOf(scope)
     )
-
-    return ProjectAnalyzerResult(project, packages, issues)
 }
 
 /**

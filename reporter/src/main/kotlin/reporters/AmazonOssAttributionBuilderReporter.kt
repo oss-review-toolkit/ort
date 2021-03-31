@@ -19,23 +19,27 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import java.io.File
 import java.io.IOException
 import java.net.ConnectException
 import java.time.Instant
 
+import kotlinx.coroutines.runBlocking
+
 import okhttp3.Credentials
 
+import org.ossreviewtoolkit.clients.amazon.OssAttributionBuilderService
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.utils.AmazonOssAttributionBuilderService
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 
-import retrofit2.Response
+import retrofit2.HttpException
 
 /**
  * A [Reporter] that creates an attribution document in .txt format using a running instance of the Amazon Attribution
@@ -46,10 +50,12 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
     private val reportFilename = "OssAttribution.txt"
 
-    private val service = AmazonOssAttributionBuilderService.create(
-        AmazonOssAttributionBuilderService.Server.DEFAULT,
-        OkHttpClientHelper.buildClient()
-    )
+    private val service by lazy {
+        OssAttributionBuilderService.create(
+            OssAttributionBuilderService.Server.DEFAULT,
+            OkHttpClientHelper.buildClient()
+        )
+    }
 
     override fun generateReport(
         input: ReporterInput,
@@ -68,13 +74,13 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
         try {
             // Create a new project which gives all permissions to everyone for simplicity.
-            val acl = mapOf("everyone" to AmazonOssAttributionBuilderService.Role.OWNER)
+            val acl = mapOf("everyone" to OssAttributionBuilderService.Role.OWNER)
 
             // Projects have a list of contacts, but at the moment the UI only supports one contact, the legal contact.
-            val contacts = AmazonOssAttributionBuilderService.ProjectContacts(listOf("Insert legal contact here."))
+            val contacts = OssAttributionBuilderService.ProjectContacts(listOf("Insert legal contact here."))
 
             val metadata = jsonMapper.createObjectNode().put("open_sourcing", true)
-            val newProject = AmazonOssAttributionBuilderService.NewProject(
+            val newProject = OssAttributionBuilderService.NewProject(
                 rootProject.id.name,
                 rootProject.id.version,
                 "Imported from results of the OSS Review Toolkit.",
@@ -84,8 +90,10 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 metadata
             )
 
-            val newProjectResponse = service.createNewProject(newProject, credentials).execute()
-            val newProjectBody = getBodyOrHandleError(newProjectResponse, "Unable to create a new project")
+            val newProjectBody = service.call(
+                { createNewProject(newProject, credentials) },
+                { "Unable to create a new project" }
+            )
 
             log.info { "Successfully created project with id '${newProjectBody.projectId}'." }
 
@@ -99,7 +107,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 //       ORT model. Think about how to map that to the Attributon Builder.
                 //       If the package was modified is something that is not currently captured by ORT. Think about
                 //       whether this is something we should do.
-                val usage = AmazonOssAttributionBuilderService.Usage("No notes.", link = "dynamic", modified = false)
+                val usage = OssAttributionBuilderService.Usage("No notes.", link = "dynamic", modified = false)
 
                 // URL passed into the Amazon Oss Attribution Builder needs to be reachable!
                 val pkgUrl = pkg.homepageUrl.takeUnless { it.isEmpty() } ?: "https://github.com/404"
@@ -117,7 +125,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
                 val licenseText = license?.let { input.licenseTextProvider.getLicenseText(it) }
 
-                val attachPackage = AmazonOssAttributionBuilderService.AttachPackage(
+                val attachPackage = OssAttributionBuilderService.AttachPackage(
                     pkg.id.name,
                     pkg.id.version,
                     pkgUrl,
@@ -127,30 +135,21 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                     usage
                 )
 
-                val attachPackageResponse = service.attachPackage(
-                    newProjectBody.projectId,
-                    attachPackage,
-                    credentials
-                ).execute()
-
-                val attachPackageBody = getBodyOrHandleError(
-                    attachPackageResponse,
-                    "Unable to attach package '${pkg.id.toCoordinates()}' to project with id " +
-                            "'${newProjectBody.projectId}'"
+                val attachPackageBody = service.call(
+                    { attachPackage(newProjectBody.projectId, attachPackage, credentials) },
+                    {
+                        "Unable to attach package '${pkg.id.toCoordinates()}' to project with id " +
+                                "'${newProjectBody.projectId}'"
+                    }
                 )
 
                 log.info { "Successfully created package with id '${attachPackageBody.packageId}'." }
             }
 
             // Generate an attribution document for this project.
-            val generateAttributionDocResponse = service.generateAttributionDoc(
-                newProjectBody.projectId,
-                credentials
-            ).execute()
-
-            val generateAttributionDocBody = getBodyOrHandleError(
-                generateAttributionDocResponse,
-                "Unable to generate an attribution document for project with id '${newProjectBody.projectId}'"
+            val generateAttributionDocBody = service.call(
+                { generateAttributionDoc(newProjectBody.projectId, credentials) },
+                { "Unable to generate an attribution document for project with id '${newProjectBody.projectId}'" }
             )
 
             log.info {
@@ -158,15 +157,15 @@ class AmazonOssAttributionBuilderReporter : Reporter {
             }
 
             // Fetch the newly generated attribution document.
-            val fetchAttributionDocResponse = service.fetchAttributionDoc(
-                newProjectBody.projectId,
-                generateAttributionDocBody.documentId.toString(),
-                credentials
-            ).execute()
-
-            val fetchAttributionDocBody = getBodyOrHandleError(
-                fetchAttributionDocResponse,
-                "Unable to fetch the attribution document with id '${generateAttributionDocBody.documentId}'"
+            val fetchAttributionDocBody = service.call(
+                {
+                    fetchAttributionDoc(
+                        newProjectBody.projectId,
+                        generateAttributionDocBody.documentId.toString(),
+                        credentials
+                    )
+                },
+                { "Unable to fetch the attribution document with id '${generateAttributionDocBody.documentId}'" }
             )
 
             log.info {
@@ -189,20 +188,20 @@ class AmazonOssAttributionBuilderReporter : Reporter {
             )
         }
     }
-}
 
-private fun <T> getBodyOrHandleError(response: Response<T>, errorTitle: String): T {
-    val body = response.body()
-    if (response.isSuccessful && body != null) return body
+    /**
+     * Call service [S] with the function [block]. If the service invocation fails, throw an [IOException] with a
+     * generated error message with the given [errorTitle].
+     */
+    private fun <S, T> S.call(block: suspend S.() -> T, errorTitle: () -> String): T =
+        try {
+            runBlocking { block() }
+        } catch (e: HttpException) {
+            val errorMessage = e.response()?.errorBody()?.let {
+                val errorResponse = jsonMapper.readValue<OssAttributionBuilderService.ErrorResponse>(it.string())
+                errorResponse.error
+            } ?: "The HTTP service call failed with code ${e.code()}: ${e.message()}"
 
-    val errorMessage = response.errorBody()?.let { errorBody ->
-        val errorResponse = jsonMapper.readValue(
-            errorBody.string(),
-            AmazonOssAttributionBuilderService.ErrorResponse::class.java
-        )
-
-        errorResponse.error
-    } ?: "Error code ${response.code()}"
-
-    throw IOException("$errorTitle: $errorMessage")
+            throw IOException("${errorTitle()}: $errorMessage", e)
+        }
 }

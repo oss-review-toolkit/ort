@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import org.ossreviewtoolkit.spdx.SpdxConstants.REF_PREFIX
+import org.ossreviewtoolkit.spdx.getDuplicates
 
 private const val SPDX_ID = "${REF_PREFIX}DOCUMENT"
 private const val SPDX_VERSION_MAJOR_MINOR = "SPDX-2.2"
@@ -81,7 +82,7 @@ data class SpdxDocument(
     val hasExtractedLicensingInfos: List<SpdxExtractedLicenseInfo> = emptyList(),
 
     /**
-     * The [SpdxAnnotation]s for the [SpdxDocument]..
+     * The [SpdxAnnotation]s for the [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val annotations: List<SpdxAnnotation> = emptyList(),
@@ -91,7 +92,7 @@ data class SpdxDocument(
      * exceptions:
      *
      *  - The SPDX Document URI cannot contain a URI "part" (e.g. the # delimiter), since the # is used to uniquely
-     *    identify SPDX element identifiers. The URI must contain a scheme (e.g. https:).
+     *    identify SPDX element identifiers. The URI must contain a scheme (e.g. "https").
      *  - The URI must be unique for the SPDX document including the specific version of the SPDX document. If the SPDX
      *    document is updated, thereby creating a new version, a new URI for the updated document must be used. There
      *    can only be one URI for an SPDX document and only one SPDX document for a given URI.
@@ -137,6 +138,27 @@ data class SpdxDocument(
 
         require(dataLicense.isNotBlank()) { "The data license must not be blank." }
 
+        val duplicateExternalDocumentRefs = externalDocumentRefs.getDuplicates { it.externalDocumentId }
+        require(duplicateExternalDocumentRefs.isEmpty()) {
+            "The document must not contain duplicate external document references but has " +
+                    "$duplicateExternalDocumentRefs."
+        }
+
         require(documentNamespace.isNotBlank()) { "The document namespace must not be blank." }
+
+        val duplicatePackages = packages.getDuplicates { it.spdxId }
+        require(duplicatePackages.isEmpty()) {
+            "The document must not contain duplicate packages but has $duplicatePackages."
+        }
+
+        val duplicateFiles = files.getDuplicates { it.spdxId }
+        require(duplicateFiles.isEmpty()) {
+            "The document must not contain duplicate files but has $duplicateFiles."
+        }
+
+        val duplicateSnippets = snippets.getDuplicates { it.spdxId }
+        require(duplicateSnippets.isEmpty()) {
+            "The document must not contain duplicate snippets but has $duplicateSnippets."
+        }
     }
 }

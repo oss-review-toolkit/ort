@@ -16,4 +16,9 @@
         <version>1.5.3.RELEASE</version>
     </parent>
 
+    <developers>
+        <developer>
+            <organization>The organization</organization>
+        </developer>
+    </developers>
 </project>

@@ -7,6 +7,19 @@
     <version>1.0-SNAPSHOT</version>
     <name>maven-project</name>
     <url>http://maven.apache.org</url>
+    <organization>
+        <name>The Apache Software Foundation</name>
+    </organization>
+    <developers>
+        <developer>
+            <organization>The Apache Software Foundation</organization>
+            <name>Dev A</name>
+        </developer>
+        <developer>
+            <organization>Google</organization>
+            <name>Dev B</name>
+        </developer>
+    </developers>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>

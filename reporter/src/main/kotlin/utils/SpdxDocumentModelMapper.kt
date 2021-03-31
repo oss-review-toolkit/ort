@@ -22,9 +22,10 @@ package org.ossreviewtoolkit.reporter.utils
 import java.time.Instant
 import java.util.UUID
 
-import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -41,6 +42,7 @@ import org.ossreviewtoolkit.spdx.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
@@ -105,7 +107,7 @@ object SpdxDocumentModelMapper {
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
                 val vcsScanResult =
-                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance.vcsInfo != null }
+                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is RepositoryProvenance }
 
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = binaryPackage.copy(
@@ -129,7 +131,7 @@ object SpdxDocumentModelMapper {
 
             if (pkg.sourceArtifact.url.isNotBlank()) {
                 val sourceArtifactScanResult =
-                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance.sourceArtifact != null }
+                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is ArtifactProvenance }
 
                 // TODO: The copyright text contains copyrights from all scan results.
                 val sourceArtifactPackage = binaryPackage.copy(
@@ -210,7 +212,7 @@ private fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxC
 private fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode =
     SpdxPackageVerificationCode(
         packageVerificationCodeExcludedFiles = emptyList(),
-        packageVerificationCodeValue = summary.packageVerificationCode.toLowerCase()
+        packageVerificationCodeValue = summary.packageVerificationCode
     )
 
 private fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTextProvider): SpdxDocument {
@@ -248,7 +250,7 @@ private fun VcsInfo.toSpdxDownloadLocation(): String {
         VcsType.GIT_REPO -> "repo"
         VcsType.MERCURIAL -> "hg"
         VcsType.SUBVERSION -> "svn"
-        else -> type.aliases.first().toLowerCase()
+        else -> type.toString().toLowerCase()
     }
 
     return buildString {

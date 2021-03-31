@@ -23,23 +23,26 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DownloaderFunTest : StringSpec() {
     private lateinit var outputDir: File
@@ -72,18 +75,18 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = downloadResult.downloadDirectory.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadResult.downloadDirectory.walk().count() shouldBe 234
+            outputDir.walk().count() shouldBe 234
         }
 
         "Download of JAR source package fails when hash is incorrect".config(tags = setOf(ExpensiveTag)) {
@@ -106,7 +109,7 @@ class DownloaderFunTest : StringSpec() {
             )
 
             val exception = shouldThrow<DownloadException> {
-                Downloader.download(pkg, outputDir)
+                Downloader(DownloaderConfiguration()).download(pkg, outputDir)
             }
 
             exception.suppressed.size shouldBe 2
@@ -118,6 +121,10 @@ class DownloaderFunTest : StringSpec() {
         }
 
         "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
+            val downloaderConfiguration = DownloaderConfiguration(
+                listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
+            )
+
             val pkg = Package(
                 id = Identifier(
                     type = "Maven",
@@ -140,18 +147,59 @@ class DownloaderFunTest : StringSpec() {
                 )
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
+            val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = downloadResult.downloadDirectory.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadResult.downloadDirectory.walk().count() shouldBe 234
+            outputDir.walk().count() shouldBe 234
+        }
+
+        "Falls back to downloading from VCS when source package download fails".config(tags = setOf(ExpensiveTag)) {
+            val downloaderConfiguration = DownloaderConfiguration(
+                listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
+            )
+
+            val pkg = Package(
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = "https://repo.example.com/invalid.jar",
+                    hash = Hash.create("a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa")
+                ),
+                vcs = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/junit-team/junit4.git",
+                    revision = "64155f8a9babcfcf4263cf4d08253a1556e75481"
+                )
+            )
+
+            val provenance = Downloader(downloaderConfiguration).download(pkg, outputDir)
+            val licenseFile = outputDir.resolve("LICENSE-junit.txt")
+
+            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+                vcsInfo.url shouldBe pkg.vcs.url
+                vcsInfo.revision shouldBe pkg.vcs.revision
+            }
+
+            licenseFile.isFile shouldBe true
+            licenseFile.length() shouldBe 11376L
+
+            outputDir.walk().count() shouldBe 608
         }
 
         "Can download a TGZ source artifact from SourceForge".config(tags = setOf(ExpensiveTag)) {
@@ -174,14 +222,13 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
-            }
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+            val tyrexDir = outputDir.resolve("tyrex-1.0.1")
 
-            val tyrexDir = downloadResult.downloadDirectory.resolve("tyrex-1.0.1")
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
+            }
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walk().count() shouldBe 409
@@ -207,14 +254,13 @@ class DownloaderFunTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBeNull {
-                url shouldBe pkg.sourceArtifact.url
-                hash shouldBe pkg.sourceArtifact.hash
-            }
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+            val tslibDir = outputDir.resolve("tslib-1.10.0")
 
-            val tslibDir = downloadResult.downloadDirectory.resolve("tslib-1.10.0")
+            provenance.shouldBeTypeOf<ArtifactProvenance>().apply {
+                sourceArtifact.url shouldBe pkg.sourceArtifact.url
+                sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
+            }
 
             tslibDir.isDirectory shouldBe true
             tslibDir.walk().count() shouldBe 16

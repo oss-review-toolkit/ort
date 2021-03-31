@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
 
-import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingResult
 
@@ -42,6 +41,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -96,51 +96,27 @@ class Maven(
     fun enableSbtMode() = also { sbtMode = true }
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        val projectBuilder = mvn.containerLookup<ProjectBuilder>()
-        val projectBuildingRequest = mvn.createProjectBuildingRequest(false)
-        val projectBuildingResults = try {
-            projectBuilder.build(definitionFiles, false, projectBuildingRequest)
-        } catch (e: ProjectBuildingException) {
-            e.showStackTrace()
-
-            log.warn {
-                "There have been issues building the Maven project models, this could lead to errors during " +
-                        "dependency analysis: ${e.collectMessagesAsString()}"
-            }
-
-            e.results
-        }
-
-        projectBuildingResults.forEach { projectBuildingResult ->
-            if (projectBuildingResult.project == null) {
-                log.warn {
-                    "Project for POM file '${projectBuildingResult.pomFile.absolutePath}' could not be built:\n" +
-                            projectBuildingResult.problems.joinToString("\n")
-                }
-            } else {
-                val project = projectBuildingResult.project
-                val identifier = "${project.groupId}:${project.artifactId}:${project.version}"
-
-                localProjectBuildingResults[identifier] = projectBuildingResult
-            }
-        }
+        localProjectBuildingResults += mvn.prepareMavenProjects(definitionFiles)
     }
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val projectBuildingResult = mvn.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
-        val packages = mutableMapOf<String, Package>()
-        val scopes = mutableMapOf<String, Scope>()
+        val packagesById = mutableMapOf<String, Package>()
+        val scopesByName = mutableMapOf<String, Scope>()
 
         projectBuildingResult.dependencyResolutionResult.dependencyGraph.children.forEach { node ->
             val scopeName = node.dependency.scope
-            val scope = scopes.getOrPut(scopeName) {
+            val scope = scopesByName.getOrPut(scopeName) {
                 Scope(scopeName, sortedSetOf())
             }
 
-            scope.dependencies += parseDependency(node, packages)
+            scope.dependencies += parseDependency(node, packagesById)
         }
+
+        val declaredLicenses = MavenSupport.parseLicenses(mavenProject)
+        val declaredLicensesProcessed = MavenSupport.processDeclaredLicenses(declaredLicenses)
 
         val vcsFromPackage = MavenSupport.parseVcsInfo(mavenProject)
 
@@ -164,14 +140,29 @@ class Maven(
                 version = mavenProject.version
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            declaredLicenses = MavenSupport.parseLicenses(mavenProject),
+            authors = MavenSupport.parseAuthors(mavenProject),
+            declaredLicenses = declaredLicenses,
+            declaredLicensesProcessed = declaredLicensesProcessed,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),
-            scopes = scopes.values.toSortedSet()
+            scopeDependencies = scopesByName.values.toSortedSet()
         )
 
-        return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))
+        val packages = packagesById.values.toSortedSet()
+        val issues = packages.mapNotNull { pkg ->
+            if (pkg.description == "POM was created by Sonatype Nexus") {
+                createAndLogIssue(
+                    managerName,
+                    "Package '${pkg.id.toCoordinates()}' seem to use an auto-generated POM which might lack metadata.",
+                    Severity.HINT
+                )
+            } else {
+                null
+            }
+        }
+
+        return listOf(ProjectAnalyzerResult(project, packages, issues))
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {

@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
@@ -47,14 +49,21 @@ object SpdxModelMapper {
 
         companion object {
             /**
+             * Return the [FileFormat] for the given [extension], or `null` if there is none.
+             */
+            fun forExtension(extension: String): FileFormat =
+                extension.toLowerCase().let { lowerCaseExtension ->
+                    enumValues<FileFormat>().find {
+                        lowerCaseExtension in it.fileExtensions
+                    } ?: throw IllegalArgumentException(
+                        "Unknown file format for file extension '$extension'."
+                    )
+                }
+
+            /**
              * Return the [FileFormat] for the given [file], or `null` if there is none.
              */
-            fun forFile(file: File): FileFormat =
-                enumValues<FileFormat>().find {
-                    file.extension in it.fileExtensions
-                } ?: throw IllegalArgumentException(
-                    "Unsupported file format '${file.extension}' of file '${file.absolutePath}'."
-                )
+            fun forFile(file: File): FileFormat = forExtension(file.extension)
         }
 
         /**
@@ -63,19 +72,30 @@ object SpdxModelMapper {
         val fileExtensions = listOf(fileExtension, *aliases)
     }
 
-    fun <T : Any> read(file: File, clazz: Class<T>): T = FileFormat.forFile(file).mapper.readValue(file, clazz)
+    inline fun <reified T : Any> read(file: File): T = FileFormat.forFile(file).mapper.readValue(file)
 
-    fun <T : Any> write(file: File, clazz: Class<T>) = FileFormat.forFile(file).mapper.writeValue(file, clazz)
+    inline fun <reified T : Any> write(file: File) =
+        FileFormat.forFile(file).mapper.writeValue(file, jacksonTypeRef<T>())
 
+    /*
+     * JSON mapping functions.
+     */
+
+    @PublishedApi
     internal val jsonMapper: ObjectMapper = JsonMapper().apply(mapperConfig)
 
-    fun <T : Any> fromJson(json: String, clazz: Class<T>): T = jsonMapper.readValue(json, clazz)
+    inline fun <reified T : Any> fromJson(json: String): T = jsonMapper.readValue(json)
 
     fun toJson(obj: Any): String = jsonMapper.writeValueAsString(obj)
 
+    /*
+     * YAML mapping functions.
+     */
+
+    @PublishedApi
     internal val yamlMapper: ObjectMapper = YAMLMapper().apply(mapperConfig)
 
-    fun <T : Any> fromYaml(yaml: String, clazz: Class<T>): T = yamlMapper.readValue(yaml, clazz)
+    inline fun <reified T : Any> fromYaml(yaml: String): T = yamlMapper.readValue(yaml)
 
     fun toYaml(obj: Any): String = yamlMapper.writeValueAsString(obj)
 }

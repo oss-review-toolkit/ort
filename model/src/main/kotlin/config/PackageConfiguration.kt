@@ -21,8 +21,11 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
@@ -67,15 +70,15 @@ data class PackageConfiguration(
         }
     }
 
-    fun matches(id: Identifier, provenance: Provenance): Boolean =
-        when {
-            id != this.id -> false
-            vcs != null -> when (provenance.vcsInfo) {
-                null -> false
-                else -> vcs.matches(provenance.vcsInfo)
-            }
-            else -> sourceArtifactUrl == provenance.sourceArtifact?.url
+    fun matches(otherId: Identifier, provenance: Provenance): Boolean {
+        if (id != otherId) return false
+
+        return when (provenance) {
+            is UnknownProvenance -> false
+            is ArtifactProvenance -> sourceArtifactUrl != null && sourceArtifactUrl == provenance.sourceArtifact.url
+            is RepositoryProvenance -> vcs != null && vcs.matches(provenance.vcsInfo)
         }
+    }
 }
 
 /**

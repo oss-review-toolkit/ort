@@ -38,29 +38,25 @@ fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf
  * directory did not exist on initialization, it will also not exist on close.
  */
 private class DirectoryStash(directories: Set<File>) : Closeable {
-    private val stashedDirectories: Map<File, File?>
+    private val stashedDirectories: Map<File, File?> = directories.associateWith { originalDir ->
+        // We need to check this on each iteration instead of filtering beforehand to properly handle parent / child
+        // directories.
+        if (originalDir.isDirectory) {
+            // Create a temporary directory to move directories as-is into.
+            val stashDir = createTempDirectory(originalDir.parentFile.toPath(), "$ORT_NAME-stash").toFile()
 
-    init {
-        stashedDirectories = directories.associateWith { originalDir ->
-            // We need to check this on each iteration instead of filtering beforehand to properly handle parent / child
-            // directories.
-            if (originalDir.isDirectory) {
-                // Create a temporary directory to move directories as-is into.
-                val stashDir = createTempDirectory(originalDir.parentFile.toPath(), "$ORT_NAME-stash").toFile()
+            // Use a non-existing directory as the target to ensure the directory can be moved atomically.
+            val tempDir = stashDir.resolve(originalDir.name)
 
-                // Use a non-existing directory as the target to ensure the directory can be moved atomically.
-                val tempDir = stashDir.resolve(originalDir.name)
-
-                log.info {
-                    "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'."
-                }
-
-                Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-
-                tempDir
-            } else {
-                null
+            log.info {
+                "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'."
             }
+
+            Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+
+            tempDir
+        } else {
+            null
         }
     }
 

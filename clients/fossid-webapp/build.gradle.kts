@@ -17,7 +17,9 @@
  * License-Filename: LICENSE
  */
 
+val jacksonVersion: String by project
 val retrofitVersion: String by project
+val wiremockVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -25,9 +27,12 @@ plugins {
 }
 
 dependencies {
-    api(project(":model"))
-
     api("com.squareup.retrofit2:retrofit:$retrofitVersion")
 
     implementation(project(":utils"))
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+
+    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
 }

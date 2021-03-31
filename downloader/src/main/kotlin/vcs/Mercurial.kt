@@ -41,12 +41,13 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
     override val type = VcsType.MERCURIAL
     override val priority = 20
-    override val defaultBranchName = "default"
     override val latestRevisionNames = listOf("tip")
 
     override fun command(workingDir: File?) = "hg"
 
     override fun getVersion() = getVersion(null)
+
+    override fun getDefaultBranchName(url: String) = "default"
 
     override fun transformVersion(output: String) =
         versionRegex.matcher(output.lineSequence().first()).let {

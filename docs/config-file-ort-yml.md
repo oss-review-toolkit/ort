@@ -19,8 +19,8 @@ building, documenting or testing the code.
 
 Exclusions apply to paths (files/directories) or scopes. Examples of currently supported exclusions:
 
-* all dependencies defined in ./test/pom.xml in Maven-based projects.
-* dependencies in scopes ‘test’ or ‘provided’.
+* all dependencies defined in `./test/pom.xml` in Maven-based projects.
+* dependencies in scopes `test` or `provided`.
 
 ### Excludes Basics
 
@@ -166,7 +166,7 @@ applied to each scan.
 
 ### Resolution Basics
 
-Resolutions allow you to *resolve* issues or policy rule violations by marking them as acceptable. A resolution is
+Resolutions allow you to *resolve* issues, policy rule violations or vulnerabilities by marking them as acceptable. A resolution is
 applied to specific issues or violations via the regular expression specified in the `message` of a resolution.
 
 To be able to show why a resolution is acceptable, each resolution must include an explanation. The explanation consists
@@ -235,3 +235,101 @@ resolutions:
     reason: "LICENSE_ACQUIRED_EXCEPTION"
     comment: "Commercial Qt license for the project was purchased, for details see https://jira.example.com/issues/SOURCING-5678"
 ```
+
+### Resolving Vulnerabilities
+
+The code below shows the structure of a vulnerability resolution in the `.ort.yml` file:
+
+```yaml
+resolutions:
+  vulnerabilities:
+  - id: "A regular expression matching the vulnerability id."
+    reason: "One of VulnerabilityResolutionReason e.g. CANT_FIX_VULNERABILITY, INEFFECTIVE_VULNERABILITY."
+    comment: "A comment further explaining why the reason above is applicable."
+```
+
+Where the list of available options for `reason` is defined in
+[VulnerabilityResolutionReason.kt](../model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
+
+For example, to ignore a vulnerability that is ineffective, because it is not invoked in your project, your `.ort.yml` could include:
+
+```yaml
+resolutions:
+  vulnerabilities:
+  - id: "CVE-9999-9999"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: "CVE-9999-9999 is a false positive"
+```
+
+# License Choices
+
+### When to Use License Choices
+
+For multi-licensed dependencies a specific license can be selected.
+The license choice can be applied to a package or globally to an SPDX expression in the project.
+A choice is only valid for licenses combined with the SPDX operator `OR`.
+The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated
+by the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
+
+### License Choice by Package
+
+To select a license from a multi-licensed dependency, specified by its `packageId`, an SPDX expression for a `choice`
+must be provided.
+The `choice` is either applied to the whole effective SPDX expression of the package or to an optional `given` SPDX 
+expression that can represent only a sub-expression of the whole effective SPDX expression. 
+
+e.g.
+```yaml
+license_choices:
+  package_license_choice:
+  - package_id: "Maven:com.example:first:0.0.1"
+    license_choices:
+    # The input of the calculated effective license would be: (A OR B) AND ((C OR D) AND E)
+    - given: A OR B
+      choice: A
+    # The result would be: A AND ((C OR D) AND E)
+    # The input of the current effective license would be: A AND ((C OR D) AND E)
+    - given: (C OR D) AND E
+      choice: C AND E
+    # The result would be: A AND C AND E
+  - package_id: "Maven:com.example:second:2.3.4"
+    license_choices:
+    # Without a 'given', the 'choice' is applied to the effective license expression if it is a valid choice.
+    # The input from the calculated effective license would be: (C OR D) AND E
+    - choice: C AND E
+    # The result would be: C AND E
+```
+
+### License Choice for the Project
+
+To globally select a license from an SPDX expression, that offers a choice, an SPDX expression for a `given` and a
+`choice` must be provided.
+The `choice` is applied to the whole `given` SPDX expression.
+With a repository license choice, the license choice is applied to each package that offers this license as a choice. 
+Not allowing `given` to be null helps only applying the choice to a wanted `given` as opposed to all licenses with that
+choice, which could lead to unwanted choices.
+The license choices for a project can be overwritten by applying a 
+[license choice to a package](#license-choice-by-package).
+
+e.g.
+```yaml
+license_choices:
+  repository_license_choice:
+  - given: "A OR B"
+    choice: "B"
+```
+
+---
+**NOTE**
+
+The choice will be applied to the WHOLE `given` license.
+If the choice does not provide a valid result, an exception will be thrown upon deserialization.
+
+e.g. invalid configuration:
+```yaml
+# This is invalid, as 'E' must be in the resulting license.
+- given: (C OR D) AND E
+  choice: C
+```
+
+---

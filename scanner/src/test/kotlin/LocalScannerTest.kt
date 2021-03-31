@@ -26,12 +26,13 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class LocalScannerTest : WordSpec({
     "getScannerCriteria()" should {
         "obtain default values from the scanner" {
-            val scanner = createScanner(createConfig(emptyMap()))
+            val scanner = createScanner(createScannerConfig(emptyMap()), DownloaderConfiguration())
 
             val criteria = scanner.getScannerCriteria()
 
@@ -46,7 +47,7 @@ class LocalScannerTest : WordSpec({
                 LocalScanner.PROP_CRITERIA_MIN_VERSION to "1.2.3",
                 LocalScanner.PROP_CRITERIA_MAX_VERSION to "4.5.6"
             )
-            val scanner = createScanner(createConfig(config))
+            val scanner = createScanner(createScannerConfig(config), DownloaderConfiguration())
 
             val criteria = scanner.getScannerCriteria()
 
@@ -60,7 +61,7 @@ class LocalScannerTest : WordSpec({
                 LocalScanner.PROP_CRITERIA_MIN_VERSION to "1",
                 LocalScanner.PROP_CRITERIA_MAX_VERSION to "3.7"
             )
-            val scanner = createScanner(createConfig(config))
+            val scanner = createScanner(createScannerConfig(config), DownloaderConfiguration())
 
             val criteria = scanner.getScannerCriteria()
 
@@ -69,7 +70,7 @@ class LocalScannerTest : WordSpec({
         }
 
         "use an exact configuration matcher" {
-            val scanner = createScanner(createConfig(emptyMap()))
+            val scanner = createScanner(createScannerConfig(emptyMap()), DownloaderConfiguration())
 
             val criteria = scanner.getScannerCriteria()
 
@@ -85,7 +86,7 @@ private const val SCANNER_VERSION = "3.2.1.final"
 /**
  * Creates a [ScannerConfiguration] with the given properties for the test scanner.
  */
-private fun createConfig(properties: Map<String, String>): ScannerConfiguration {
+private fun createScannerConfig(properties: Map<String, String>): ScannerConfiguration {
     val options = mapOf(SCANNER_NAME to properties)
     return ScannerConfiguration(options = options)
 }
@@ -93,8 +94,11 @@ private fun createConfig(properties: Map<String, String>): ScannerConfiguration 
 /**
  * Create a test instance of [LocalScanner].
  */
-private fun createScanner(config: ScannerConfiguration): LocalScanner =
-    object : LocalScanner(SCANNER_NAME, config) {
+private fun createScanner(
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+): LocalScanner =
+    object : LocalScanner(SCANNER_NAME, scannerConfig, downloaderConfig) {
         override val configuration = "someConfig"
 
         override val resultFileExt: String

@@ -39,6 +39,8 @@ import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutURL
 import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
 import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingsFromNpmRc
+import org.ossreviewtoolkit.analyzer.managers.utils.readRegistryFromNpmRc
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -49,12 +51,14 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.CommandLineTool
@@ -66,6 +70,8 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
+
+const val PUBLIC_NPM_REGISTRY = "https://registry.npmjs.org"
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -88,6 +94,19 @@ open class Npm(
 
     private val ortProxySelector = installAuthenticatorAndProxySelector()
 
+    private val npmRegistry: String
+
+    init {
+        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
+        npmRegistry = if (npmRcFile.isFile) {
+            val npmRcContent = npmRcFile.readText()
+            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcContent))
+            readRegistryFromNpmRc(npmRcContent) ?: PUBLIC_NPM_REGISTRY
+        } else {
+            PUBLIC_NPM_REGISTRY
+        }
+    }
+
     /**
      * Array of parameters passed to the install command when installing dependencies.
      */
@@ -105,11 +124,6 @@ open class Npm(
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
         checkVersion(analyzerConfig.ignoreToolVersions)
-
-        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
-        if (npmRcFile.isFile) {
-            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcFile.readText()))
-        }
     }
 
     override fun afterResolution(definitionFiles: List<File>) {
@@ -183,6 +197,22 @@ open class Npm(
         }
     }
 
+    /**
+     * Parse information about the author. According to
+     * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
+     * specify the author of a package: An object with multiple properties or a single string.
+     */
+    private fun parseAuthors(json: JsonNode): SortedSet<String> =
+        sortedSetOf<String>().apply {
+            json["author"]?.let { authorNode ->
+                when {
+                    authorNode.isObject -> authorNode["name"]?.textValue()
+                    authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
+                    else -> null
+                }
+            }?.let { add(it) }
+        }
+
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = rootDirectory.resolve("node_modules")
@@ -202,6 +232,7 @@ open class Npm(
             val version = json["version"].textValue()
 
             val declaredLicenses = parseLicenses(json)
+            val authors = parseAuthors(json)
 
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
@@ -237,7 +268,7 @@ open class Npm(
 
                 val pkgRequest = Request.Builder()
                     .get()
-                    .url("https://registry.npmjs.org/$encodedName")
+                    .url("$npmRegistry/$encodedName")
                     .build()
 
                 OkHttpClientHelper.execute(pkgRequest).use { response ->
@@ -277,7 +308,7 @@ open class Npm(
                     } else {
                         log.info {
                             "Could not retrieve package information for '$encodedName' " +
-                                    "from public NPM registry: ${response.message} (code ${response.code})."
+                                    "from NPM registry $npmRegistry: ${response.message} (code ${response.code})."
                         }
                     }
                 }
@@ -295,6 +326,7 @@ open class Npm(
                     name = name,
                     version = version
                 ),
+                authors = authors,
                 declaredLicenses = declaredLicenses,
                 description = description,
                 homepageUrl = homepageUrl,
@@ -367,8 +399,10 @@ open class Npm(
             source = managerName,
             message = "Package '$moduleName' was not installed, because the package file could not be found " +
                     "anywhere in '$rootModuleDir'. This might be fine if the module was not installed because it is " +
-                    "specific to a different platform."
+                    "specific to a different platform.",
+            severity = Severity.WARNING
         )
+
         val (namespace, name) = splitNamespaceAndName(moduleName)
 
         return PackageReference(
@@ -459,7 +493,7 @@ open class Npm(
 
     private fun getModuleInfo(moduleDir: File, scopes: Set<String>): ModuleInfo {
         val packageJsonFile = moduleDir.resolve("package.json")
-        val json = jsonMapper.readTree(packageJsonFile)
+        val json = readJsonFile(packageJsonFile)
 
         val name = json["name"].textValueOrEmpty()
         if (name.isBlank()) {
@@ -513,6 +547,7 @@ open class Npm(
         }
 
         val declaredLicenses = parseLicenses(json)
+        val authors = parseAuthors(json)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val projectDir = packageJson.parentFile
         val vcsFromPackage = parseVcsInfo(json)
@@ -525,11 +560,12 @@ open class Npm(
                 version = version
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
+            authors = authors,
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = scopes
+            scopeDependencies = scopes
         )
 
         return ProjectAnalyzerResult(project, packages)

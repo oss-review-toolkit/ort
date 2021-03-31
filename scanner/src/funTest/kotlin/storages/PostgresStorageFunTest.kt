@@ -42,5 +42,5 @@ class PostgresStorageFunTest : AbstractStorageFunTest() {
     override fun isolationMode() = IsolationMode.InstancePerTest
 
     override fun createStorage() =
-        PostgresStorage(postgres.postgresDatabase, "public").also { it.setupDatabase() }
+        PostgresStorage(postgres.postgresDatabase)
 }

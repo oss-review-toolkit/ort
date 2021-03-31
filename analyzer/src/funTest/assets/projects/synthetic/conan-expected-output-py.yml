@@ -2,6 +2,8 @@
 project:
   id: "Conan::Poco:1.9.3"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/conan-py/conanfile.py"
+  authors:
+  - "The Author"
   declared_licenses:
   - "The Boost Software License 1.0"
   declared_licenses_processed:
@@ -30,6 +32,8 @@ project:
 packages:
 - id: "Conan::OpenSSL:1.0.2o"
   purl: "pkg:conan/OpenSSL@1.0.2o"
+  authors:
+  - "Conan Community"
   declared_licenses:
   - "OpenSSL"
   declared_licenses_processed:
@@ -59,6 +63,8 @@ packages:
     path: ""
 - id: "Conan::zlib:1.2.11"
   purl: "pkg:conan/zlib@1.2.11"
+  authors:
+  - "Conan Community"
   declared_licenses:
   - "Zlib"
   declared_licenses_processed:

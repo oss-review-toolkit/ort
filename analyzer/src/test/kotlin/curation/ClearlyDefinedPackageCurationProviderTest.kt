@@ -20,16 +20,17 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 
 class ClearlyDefinedPackageCurationProviderTest : WordSpec({
     "The production server" should {
-        "return a curation for a Maven package" {
+        "return an existing curation for the javax.servlet-api Maven package" {
             val provider = ClearlyDefinedPackageCurationProvider()
 
             val identifier = Identifier("Maven:javax.servlet:javax.servlet-api:3.1.0")
@@ -40,10 +41,19 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
                 "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
             )
         }
+
+        "return no curation for a non-existing dummy NPM package" {
+            val provider = ClearlyDefinedPackageCurationProvider()
+
+            val identifier = Identifier("NPM:@scope:name:1.2.3")
+            val curations = provider.getCurationsFor(identifier)
+
+            curations should beEmpty()
+        }
     }
 
     "The development server" should {
-        "return a curation for an NPM package" {
+        "return an existing curation for the platform-express NPM package" {
             val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
 
             val identifier = Identifier("NPM:@nestjs:platform-express:6.2.3")
@@ -51,6 +61,15 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
 
             curations should haveSize(1)
             curations.first().data.declaredLicenses shouldBe sortedSetOf("Apache-1.0")
+        }
+
+        "return no curation for a non-existing dummy Maven package" {
+            val provider = ClearlyDefinedPackageCurationProvider()
+
+            val identifier = Identifier("Maven:group:name:1.2.3")
+            val curations = provider.getCurationsFor(identifier)
+
+            curations should beEmpty()
         }
     }
 })

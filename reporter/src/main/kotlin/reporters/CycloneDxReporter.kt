@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.isTrue
+import org.ossreviewtoolkit.utils.isFalse
 
 private const val REPORT_BASE_FILENAME = "CycloneDX-BOM"
 private const val REPORT_EXTENSION = "xml"
@@ -54,11 +54,16 @@ private const val REPORT_EXTENSION = "xml"
  * contained in the ORT result a separate SBOM is created.
  *
  * This reporter supports the following options:
- * - *single.bom*: If set, a single SBOM for all projects is created instead of separate SBOMs for each project.
+ * - *single.bom*: If true (the default), a single SBOM for all projects is created; if set to false, separate SBOMs are
+ *                 created for each project.
  *
  * [1]: https://cyclonedx.org
  */
 class CycloneDxReporter : Reporter {
+    companion object {
+        const val OPTION_SINGLE_BOM = "single.bom"
+    }
+
     override val reporterName = "CycloneDx"
 
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
@@ -100,9 +105,9 @@ class CycloneDxReporter : Reporter {
     ): List<File> {
         val outputFiles = mutableListOf<File>()
         val projects = input.ortResult.getProjects(omitExcluded = true)
-        val createSingleBom = options["single.bom"].isTrue()
+        val createSingleBom = !options[OPTION_SINGLE_BOM].isFalse()
 
-        if (createSingleBom && projects.size > 1) {
+        if (createSingleBom) {
             val reportFilename = "$REPORT_BASE_FILENAME.$REPORT_EXTENSION"
             val outputFile = outputDir.resolve(reportFilename)
 
@@ -154,7 +159,7 @@ class CycloneDxReporter : Reporter {
                 val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id).filterExcluded()
                     .getLicenseNames(LicenseSource.DECLARED, LicenseSource.DETECTED)
 
-                bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString(", "))
+                bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString())
 
                 bom.addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
 
@@ -224,8 +229,7 @@ class CycloneDxReporter : Reporter {
 
             // TODO: Find a way to associate copyrights to the license they belong to, see
             //       https://github.com/CycloneDX/cyclonedx-core-java/issues/58
-            copyright = resolvedLicenseInfo.flatMap { it.getCopyrights(process = true) }.joinToString()
-                .takeUnless { it.isEmpty() }
+            copyright = resolvedLicenseInfo.getCopyrights().joinToString().takeUnless { it.isEmpty() }
 
             purl = pkg.purl + purlQualifier
             isModified = pkg.isModified

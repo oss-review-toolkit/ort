@@ -41,9 +41,9 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.commands.*
-import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
@@ -71,7 +71,7 @@ data class GlobalOptions(
     val forceOverwrite: Boolean
 )
 
-class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.") {
+class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -96,9 +96,16 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         help = "Overwrite any output files if they already exist."
     ).flag()
 
+    private val helpAll by option(
+        "--help-all",
+        help = "Display help for all subcommands."
+    ).flag()
+
     private val env = Environment()
 
     private inner class OrtHelpFormatter : CliktHelpFormatter(requiredOptionMarker = "*", showDefaultValues = true) {
+        var headerShownBefore = false
+
         override fun formatHelp(
             prolog: String,
             epilog: String,
@@ -106,10 +113,19 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
             programName: String
         ) =
             buildString {
-                // If help is invoked without a subcommand, the main run() is not invoked and no header is printed, so
-                // we need to do that manually here.
-                if (currentContext.invokedSubcommand == null) appendLine(getVersionHeader(env.ortVersion))
-                append(super.formatHelp(prolog, epilog, parameters, programName))
+                // The header only needs to be shown for the root command, as for subcommands the header was already
+                // shown by the root command's run(). However, only show it if it has not been shown before as part of
+                // "--help-all" (note that we cannot safely access the "helpAll" variable here as it might not have been
+                // initialized yet.)
+                val isRootCommand = currentContext.invokedSubcommand == null
+                if (isRootCommand && !headerShownBefore) {
+                    appendLine(getVersionHeader(env.ortVersion))
+                    headerShownBefore = true
+                }
+
+                appendLine(super.formatHelp(prolog, epilog, parameters, programName))
+                appendLine()
+                appendLine("* denotes required options.")
             }
     }
 
@@ -122,6 +138,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         subcommands(
             AdvisorCommand(),
             AnalyzerCommand(),
+            ConfigCommand(),
             DownloaderCommand(),
             EvaluatorCommand(),
             ReporterCommand(),
@@ -149,9 +166,15 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         // Make options available to subcommands and apply static configuration.
         val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
         currentContext.findOrSetObject { GlobalOptions(ortConfiguration, forceOverwrite) }
-        applyStaticConfiguration(ortConfiguration)
+        LicenseFilenamePatterns.configure(ortConfiguration.licenseFilePatterns)
 
-        println(getVersionHeader(env.ortVersion))
+        if (helpAll) {
+            registeredSubcommands().forEach {
+                println(it.getFormattedHelp())
+            }
+        } else {
+            println(getVersionHeader(env.ortVersion))
+        }
     }
 
     private fun getVersionHeader(version: String): String {
@@ -184,10 +207,6 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
         return header.joinToString("\n", postfix = "\n")
     }
-}
-
-private fun applyStaticConfiguration(ortConfiguration: OrtConfiguration) {
-    ortConfiguration.licenseFilePatterns?.let { LicenseFilenamePatterns.configure(it) }
 }
 
 /**

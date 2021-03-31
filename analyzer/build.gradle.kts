@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ val mavenVersion: String by project
 val mavenResolverVersion: String by project
 val mockkVersion: String by project
 val semverVersion: String by project
+val sw360ClientVersion: String by project
 val toml4jVersion: String by project
 
 plugins {
@@ -40,6 +42,16 @@ repositories {
 
         filter {
             includeGroup("org.gradle")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.eclipse.org/content/repositories/sw360-releases/")
+        }
+
+        filter {
+            includeGroup("org.eclipse.sw360")
         }
     }
 }
@@ -58,6 +70,7 @@ dependencies {
     implementation("com.vdurmont:semver4j:$semverVersion")
     implementation("org.apache.maven:maven-core:$mavenVersion")
     implementation("org.apache.maven:maven-compat:$mavenVersion")
+    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.

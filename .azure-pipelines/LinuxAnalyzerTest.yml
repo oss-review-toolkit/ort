@@ -4,7 +4,6 @@ jobs:
     vmImage: ubuntu-18.04
   variables:
     FLUTTER_HOME: /opt/flutter
-    PHP_VERSION: 7.2
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
@@ -15,12 +14,6 @@ jobs:
 
   # Install required tools.
   - bash: |
-      sudo update-alternatives --set php /usr/bin/php$(PHP_VERSION)
-      sudo update-alternatives --set phar /usr/bin/phar$(PHP_VERSION)
-      sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(PHP_VERSION)
-      sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(PHP_VERSION)
-      sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(PHP_VERSION)
-
       # Install apt packages.
       sudo apt-get -qq install cvs
 
@@ -153,3 +146,7 @@ jobs:
   # Ensure that any running Gradle daemon is stopped before caching starts.
   - bash: ./gradlew --stop
     displayName: Stop Gradle Daemon
+
+  - script: bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*';
+    displayName: Upload to codecov.io
+    condition: eq(variables['Build.Reason'], 'Schedule')

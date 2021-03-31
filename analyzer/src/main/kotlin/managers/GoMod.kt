@@ -132,11 +132,12 @@ class GoMod(
                             version = projectVcs.revision
                         ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                        authors = sortedSetOf(), // Go mod doesn't support author information.
                         declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
                         vcs = projectVcs,
                         vcsProcessed = projectVcs,
                         homepageUrl = "",
-                        scopes = scopes
+                        scopeDependencies = scopes
                     ),
                     packages = packages
                 )
@@ -196,6 +197,7 @@ class GoMod(
 
         return Package(
             id = Identifier(managerName, "", id.name, id.version),
+            authors = sortedSetOf(), // Go mod doesn't support author information.
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",
@@ -226,7 +228,7 @@ class GoMod(
 
     private fun getGoProxy(): String {
         val firstProxy = Os.env["GOPROXY"].orEmpty()
-            .split(",")
+            .split(',')
             .filterNot { it == "direct" || it == "off" }
             .firstOrNull()
             .orEmpty()

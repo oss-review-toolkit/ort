@@ -2,6 +2,12 @@
 # This file only lists the differences to the default configuration at
 # https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml.
 
+comments:
+  AbsentOrWrongFileLicense:
+    active: true
+    licenseTemplateFile: '.detekt.license.template'
+    licenseTemplateIsRegex: true
+
 complexity:
   ComplexMethod:
     threshold: 33
@@ -57,7 +63,6 @@ style:
       org.ossreviewtoolkit.analyzer.managers.*,
       org.ossreviewtoolkit.commands.*,
       org.ossreviewtoolkit.downloader.vcs.*,
-      org.ossreviewtoolkit.gradle.*,
       org.ossreviewtoolkit.helper.commands.*,
       org.ossreviewtoolkit.reporter.reporters.*,
       org.ossreviewtoolkit.scanner.scanners.*,

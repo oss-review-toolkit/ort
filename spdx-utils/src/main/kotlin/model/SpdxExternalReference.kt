@@ -54,7 +54,7 @@ data class SpdxExternalReference(
 ) {
     enum class Category(
         @JsonValue
-        private val serializedName: String
+        val serializedName: String
     ) {
         SECURITY("SECURITY"),
         PACKAGE_MANAGER("PACKAGE-MANAGER"),

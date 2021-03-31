@@ -26,7 +26,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.FileMatcher
 
 /**
  * A short summary of the scan results.
@@ -76,4 +79,46 @@ data class ScanSummary(
 ) {
     @get:JsonIgnore
     val licenses: Set<SpdxExpression> = licenseFindings.mapTo(mutableSetOf()) { it.license }
+
+    /**
+     * Filter all detected licenses and copyrights from the [summary] which are underneath [path]. Findings which
+     * [RootLicenseMatcher] assigns as root license files for [path] are also kept.
+     */
+    fun filterByPath(path: String): ScanSummary {
+        if (path.isBlank()) return this
+
+        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilenamePatterns.getInstance())
+        val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
+            licenseFindings = licenseFindings,
+            directories = listOf(path)
+        ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
+
+        fun TextLocation.matchesPath() = this.path.startsWith("$path/") || this.path in applicableLicenseFiles
+
+        val licenseFindings = licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
+        val copyrightFindings = copyrightFindings.filter { it.location.matchesPath() }.toSortedSet()
+        val fileCount = mutableSetOf<String>().also { set ->
+            licenseFindings.mapTo(set) { it.location.path }
+            copyrightFindings.mapTo(set) { it.location.path }
+        }.size
+
+        return copy(
+            fileCount = fileCount,
+            licenseFindings = licenseFindings,
+            copyrightFindings = copyrightFindings
+        )
+    }
+
+    /**
+     * Return a [ScanSummary] which contains only findings whose location / path is not matched by any glob expression
+     * in [ignorePatterns].
+     */
+    fun filterByIgnorePatterns(ignorePatterns: Collection<String>): ScanSummary {
+        val matcher = FileMatcher(ignorePatterns)
+
+        return copy(
+            licenseFindings = licenseFindings.filterTo(sortedSetOf()) { !matcher.matches(it.location.path) },
+            copyrightFindings = copyrightFindings.filterTo(sortedSetOf()) { !matcher.matches(it.location.path) }
+        )
+    }
 }

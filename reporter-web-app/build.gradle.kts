@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 YarnPlugin.apply(project).version = "1.22.4"
 
 // The Yarn plugin registers tasks always on the root project, see
-// https://github.com/JetBrains/kotlin/blob/2f90742/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L27-L31
+// https://github.com/JetBrains/kotlin/blob/1.4.0/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L53-L57
 val kotlinNodeJsSetup by rootProject.tasks.existing(NodeJsSetupTask::class)
 val kotlinYarnSetup by rootProject.tasks.existing(YarnSetupTask::class)
 
@@ -39,22 +39,6 @@ val nodeExecutable = if (Os.isFamily(Os.FAMILY_WINDOWS)) nodeBinDir.resolve("nod
 
 val yarnDir = kotlinYarnSetup.get().destination
 val yarnJs = yarnDir.resolve("bin/yarn.js")
-
-kotlinNodeJsSetup {
-    outputs.cacheIf { true }
-    logger.quiet("Will use the Node executable file from '$nodeExecutable'.")
-
-    // If the node binary is missing, force a re-download of the NodeJs distribution, see
-    // https://youtrack.jetbrains.com/issue/KT-34989.
-    if (!nodeExecutable.isFile && nodeDir.deleteRecursively()) {
-        logger.info("Successfully deleted the incomplete '$nodeDir' directory to trigger the NodeJs download.")
-    }
-}
-
-kotlinYarnSetup {
-    outputs.cacheIf { true }
-    logger.quiet("Will use the Yarn JavaScript file from '$yarnJs'.")
-}
 
 tasks.addRule("Pattern: yarn<Command>") {
     val taskName = this

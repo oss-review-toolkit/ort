@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
@@ -57,21 +57,50 @@ class CompositeStorage(
      * Try to find scan results for the provided [id]. This implementation iterates over all the reader storages
      * provided until it receives a non-empty success result.
      */
-    override fun readFromStorage(id: Identifier): Result<ScanResultContainer> =
-        fetchReadResult(id) { read(id) }
+    override fun readInternal(id: Identifier): Result<List<ScanResult>> =
+        fetchReadResult { read(id) }
 
     /**
      * Try to find scan results for the provided [pkg] and [scannerCriteria]. This implementation iterates over all
      * the reader storages provided until it receives a non-empty success result.
      */
-    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> =
-        fetchReadResult(pkg.id) { read(pkg, scannerCriteria) }
+    override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
+        fetchReadResult { read(pkg, scannerCriteria) }
+
+    override fun readInternal(
+        packages: List<Package>,
+        scannerCriteria: ScannerCriteria
+    ): Result<Map<Identifier, List<ScanResult>>> {
+        if (readers.isEmpty()) return Success(emptyMap())
+
+        val remainingPackages = packages.toMutableList()
+        val result = mutableMapOf<Identifier, List<ScanResult>>()
+        val failures = mutableListOf<String>()
+
+        readers.forEach { reader ->
+            if (remainingPackages.isEmpty()) return@forEach
+
+            when (val readerResult = reader.read(remainingPackages, scannerCriteria)) {
+                is Success -> {
+                    remainingPackages.filter { it.id !in readerResult.result.keys }
+                    result += readerResult.result
+                }
+                is Failure -> failures += readerResult.error
+            }
+        }
+
+        return if (failures.size < readers.size) {
+            Success(result)
+        } else {
+            Failure(failures.joinToString())
+        }
+    }
 
     /**
      * Trigger all configured writer storages to add the [scanResult] for the given [id]. Return a success result
      * if all of the writers are successful; otherwise return a failure result with an accumulated error message.
      */
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> {
+    override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val writeResults = writers.map { it.add(id, scanResult) }
         val errors = writeResults.filterIsInstance<Failure<Unit>>()
         return if (errors.isEmpty()) {
@@ -82,26 +111,23 @@ class CompositeStorage(
     }
 
     /**
-     * Iterate over the configured readers to find a scan result for the given [id] invoking the [readFunc] on each
-     * reader until a result is found. If none of the configured readers returns a defined result, but at least one
-     * returns a success result, return an empty success result. If all readers fail, return a failure result with
-     * an accumulated failure message.
+     * Iterate over the configured readers to find a scan result invoking the [readFunc] on each reader until a result
+     * is found. If none of the configured readers returns a defined result, but at least one returns a success result,
+     * return an empty success result. If all readers fail, return a failure result with an accumulated failure message.
      */
-    private fun fetchReadResult(
-        id: Identifier, readFunc: ScanResultsStorage.() -> Result<ScanResultContainer>
-    ): Result<ScanResultContainer> {
-        if (readers.isEmpty()) return emptyResult(id)
+    private fun fetchReadResult(readFunc: ScanResultsStorage.() -> Result<List<ScanResult>>): Result<List<ScanResult>> {
+        if (readers.isEmpty()) return EMPTY_RESULT
 
         val failures = mutableListOf<String>()
         readers.forEach { reader ->
             when (val result = reader.readFunc()) {
-                is Success -> if (result.result.results.isNotEmpty()) return result
-                is Failure -> failures.add(result.error)
+                is Success -> if (result.result.isNotEmpty()) return result
+                is Failure -> failures += result.error
             }
         }
 
         return if (failures.size < readers.size) {
-            emptyResult(id)
+            EMPTY_RESULT
         } else {
             Failure(failures.joinToString())
         }
@@ -109,7 +135,6 @@ class CompositeStorage(
 }
 
 /**
- * Return a success result with an empty [ScanResultContainer] for the given [id].
+ * A [Success] result with an empty list of [ScanResult]s.
  */
-private fun emptyResult(id: Identifier): Result<ScanResultContainer> =
-    Success(ScanResultContainer(id, emptyList()))
+private val EMPTY_RESULT = Success<List<ScanResult>>(emptyList())

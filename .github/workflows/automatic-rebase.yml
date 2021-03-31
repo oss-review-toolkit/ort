@@ -6,15 +6,14 @@ on:
 
 jobs:
   rebase:
-    name: Rebase
     if: github.event.issue.pull_request != null && github.event.comment.body == '/rebase'
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Action
-      uses: actions/checkout@master
+    - name: Checkout Repository
+      uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Rebase Action
+    - name: Rebase Branch
       uses: docker://cirrusactions/rebase:latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,41 @@
+---
+project:
+  id: "Maven:org.ossreviewtoolkit.maven:maven-project:1.0-SNAPSHOT"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven-wagon/pom.xml"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven-wagon"
+  homepage_url: "http://maven.apache.org"
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Maven:com.example:ftp-artifact:1.0.0"
+      issues:
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Maven"
+        message: "Could not get package information for dependency 'com.example:ftp-artifact:1.0.0':\
+          \ ProjectBuildingException: Error resolving project artifact: Could not\
+          \ transfer artifact com.example:ftp-artifact:pom:1.0.0 from/to ftp-repository\
+          \ (ftp://localhost:40123): Password not specified for repository ftp-repository\
+          \ for project com.example:ftp-artifact:pom:1.0.0\nCaused by: ArtifactResolutionException:\
+          \ Could not transfer artifact com.example:ftp-artifact:pom:1.0.0 from/to\
+          \ ftp-repository (ftp://localhost:40123): Password not specified for repository\
+          \ ftp-repository\nCaused by: ArtifactTransferException: Could not transfer\
+          \ artifact com.example:ftp-artifact:pom:1.0.0 from/to ftp-repository (ftp://localhost:40123):\
+          \ Password not specified for repository ftp-repository\nCaused by: AuthenticationException:\
+          \ Password not specified for repository ftp-repository"
+        severity: "ERROR"
+packages: []

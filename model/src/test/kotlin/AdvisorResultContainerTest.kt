@@ -25,15 +25,15 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.net.URL
+import java.net.URI
 import java.time.Duration
 import java.time.Instant
 
 class AdvisorResultContainerTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
-    private val vulnerability11 = Vulnerability("CVE-11", 1.1F, URL("https://1.1.com"))
-    private val vulnerability12 = Vulnerability("CVE-12", 1.2F, URL("https://1.2.com"))
+    private val vulnerability11 = Vulnerability("CVE-11", 1.1F, URI("https://1.1.com"))
+    private val vulnerability12 = Vulnerability("CVE-12", 1.2F, URI("https://1.2.com"))
     private val vulnerability21 = Vulnerability("CVE-21", 2.1F)
     private val vulnerability22 = Vulnerability("CVE-22", 2.2F)
 

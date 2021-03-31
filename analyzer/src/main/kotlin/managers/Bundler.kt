@@ -101,7 +101,7 @@ class Bundler(
 
             installDependencies(workingDir)
 
-            val (projectName, version, homepageUrl, declaredLicenses) = parseProject(workingDir)
+            val (projectName, version, homepageUrl, authors, declaredLicenses) = parseProject(workingDir)
             val projectId = Identifier(managerName, "", projectName, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
@@ -112,11 +112,12 @@ class Bundler(
             val project = Project(
                 id = projectId,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                authors = authors,
                 declaredLicenses = declaredLicenses.toSortedSet(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
                 homepageUrl = homepageUrl,
-                scopes = scopes.toSortedSet()
+                scopeDependencies = scopes.toSortedSet()
             )
 
             return listOf(ProjectAnalyzerResult(project, packages, issues))
@@ -162,6 +163,7 @@ class Bundler(
 
                 packages += Package(
                     id = gemId,
+                    authors = gemSpec.authors,
                     declaredLicenses = gemSpec.declaredLicenses,
                     description = gemSpec.description,
                     homepageUrl = gemSpec.homepageUrl,
@@ -211,7 +213,17 @@ class Bundler(
         getGemspecFile(workingDir)?.let { gemspecFile ->
             // Project is a Gem, i.e. a library.
             getGemspec(gemspecFile.nameWithoutExtension, workingDir)
-        } ?: GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY, RemoteArtifact.EMPTY)
+        } ?: GemSpec(
+            workingDir.name,
+            "",
+            "",
+            sortedSetOf(),
+            sortedSetOf(),
+            "",
+            emptySet(),
+            VcsInfo.EMPTY,
+            RemoteArtifact.EMPTY
+        )
 
     private fun getGemspec(gemName: String, workingDir: File): GemSpec {
         val spec = run(
@@ -287,6 +299,7 @@ data class GemSpec(
     val name: String,
     val version: String,
     val homepageUrl: String,
+    val authors: SortedSet<String>,
     val declaredLicenses: SortedSet<String>,
     val description: String,
     val runtimeDependencies: Set<String>,
@@ -306,6 +319,7 @@ data class GemSpec(
                 yaml["name"].textValue(),
                 yaml["version"]["version"].textValue(),
                 homepage,
+                yaml["authors"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
@@ -334,10 +348,20 @@ data class GemSpec(
                 RemoteArtifact.EMPTY
             }
 
+            val authors = json["authors"]
+                .textValueOrEmpty()
+                .split(',')
+                .mapNotNullTo(sortedSetOf()) { author ->
+                    author.trim().takeIf {
+                        it.isNotEmpty()
+                    }
+                }
+
             return GemSpec(
                 json["name"].textValue(),
                 json["version"].textValue(),
                 json["homepage_uri"].textValueOrEmpty(),
+                authors,
                 json["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 json["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
@@ -354,6 +378,7 @@ data class GemSpec(
 
         return GemSpec(name, version,
             homepageUrl.takeUnless { it.isEmpty() } ?: other.homepageUrl,
+            authors.takeUnless { it.isEmpty() } ?: other.authors,
             declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
             description.takeUnless { it.isEmpty() } ?: other.description,
             runtimeDependencies.takeUnless { it.isEmpty() } ?: other.runtimeDependencies,

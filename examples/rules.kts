@@ -29,16 +29,13 @@
  * Import the license classifications from license-classifications.yml.
  */
 
-fun getLicenseCategory(categoryId: String) =
-    licenseClassifications.getLicensesForCategory(categoryId).map { it.id }.toSet()
+val permissiveLicenses = licenseClassifications.licensesByCategory["permissive"].orEmpty()
 
-val permissiveLicenses = getLicenseCategory("permissive")
+val copyleftLicenses = licenseClassifications.licensesByCategory["copyleft"].orEmpty()
 
-val copyleftLicenses = getLicenseCategory("copyleft")
+val copyleftLimitedLicenses = licenseClassifications.licensesByCategory["copyleft-limited"].orEmpty()
 
-val copyleftLimitedLicenses = getLicenseCategory("copyleft-limited")
-
-val publicDomainLicenses = getLicenseCategory("public-domain")
+val publicDomainLicenses = licenseClassifications.licensesByCategory["public-domain"].orEmpty()
 
 // The complete set of licenses covered by policy rules.
 val handledLicenses = listOf(
@@ -47,11 +44,12 @@ val handledLicenses = listOf(
     copyleftLicenses,
     copyleftLimitedLicenses
 ).flatten().let {
-    it.groupBy { it }.filter { it.value.size > 1 }.let {
-        require(it.isEmpty()) {
-            "The classifications for the following licenses overlap: ${it.keys.joinToString()}"
+    it.getDuplicates().let { duplicates ->
+        require(duplicates.isEmpty()) {
+            "The classifications for the following licenses overlap: $duplicates"
         }
     }
+
     it.toSet()
 }
 
@@ -106,7 +104,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         }
 
         // Define a rule that is executed for each license of the package.
-        licenseRule("UNHANDLED_LICENSE", LicenseView.CONCLUDED_OR_REST) {
+        licenseRule("UNHANDLED_LICENSE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
             require {
                 -isExcluded()
                 -isHandled()
@@ -141,7 +139,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
             -isExcluded()
         }
 
-        licenseRule("COPYLEFT_IN_SOURCE", LicenseView.CONCLUDED_OR_REST) {
+        licenseRule("COPYLEFT_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
             require {
                 -isExcluded()
                 +isCopyleft()
@@ -151,8 +149,8 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
                 "The ScanCode copyleft categorized license $license was ${licenseSource.name.toLowerCase()} " +
                         "in package ${pkg.id.toCoordinates()}."
             } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} " +
-                        " ScanCode copyleft catalogized license $license."
+                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} ScanCode copyleft " +
+                        "catalogized license $license."
             }
 
             error(message, howToFixDefault())
@@ -173,8 +171,8 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
                             "in package ${pkg.id.toCoordinates()}."
                 }
             } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} " +
-                        " ScanCode copyleft-limited categorized license $license."
+                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} ScanCode " +
+                        "copyleft-limited categorized license $license."
             }
 
             error(message, howToFixDefault())

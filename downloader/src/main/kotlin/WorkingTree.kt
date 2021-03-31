@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.utils.filterVersionNames
  * root directory of the tree. The root directory can be determined by calling [getRootPath].
  */
 abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
-
     /**
      * Conveniently return all VCS information about how this working tree was created, so it could be easily
      * recreated from that information. However, note that the returned path just contains the relative path of

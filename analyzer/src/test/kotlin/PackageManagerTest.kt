@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.analyzer
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -40,7 +41,7 @@ class PackageManagerTest : WordSpec({
 
             // The test project contains at least one file per package manager, so the result should also contain an
             // entry for each package manager.
-            managedFiles.keys shouldBe PackageManager.ALL.toSet()
+            managedFiles.keys shouldContainExactlyInAnyOrder PackageManager.ALL
 
             // The keys in expected and actual maps of definition files are different instances of package manager
             // factories. So to compare values use the package manager names as keys instead.

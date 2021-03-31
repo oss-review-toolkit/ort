@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,10 +134,10 @@ private fun OrtResult.getLicenseFindingsForAllProjects(): Set<LicenseFinding> {
     val result = mutableSetOf<LicenseFinding>()
 
     val projectIds = getProjects().mapTo(mutableSetOf()) { it.id }
-    scanner?.results?.scanResults?.forEach { container ->
-        if (container.id in projectIds) {
-            container.results.forEach { scanResult ->
-                result.addAll(scanResult.summary.licenseFindings)
+    scanner?.results?.scanResults?.forEach { (id, results) ->
+        if (id in projectIds) {
+            results.forEach { scanResult ->
+                result += scanResult.summary.licenseFindings
             }
         }
     }

@@ -22,9 +22,8 @@ package org.ossreviewtoolkit.downloader
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 
@@ -34,8 +33,10 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
@@ -81,24 +82,23 @@ class BabelFunTest : StringSpec() {
                 vcsProcessed = vcsMerged
             )
 
-            val downloadResult = Downloader.download(pkg, outputDir)
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+            val workingTree = VersionControlSystem.forDirectory(outputDir)
+            val babelCliDir = outputDir.resolve("packages/babel-cli")
 
-            downloadResult.sourceArtifact.shouldBeNull()
-            downloadResult.vcsInfo shouldNotBeNull {
-                type shouldBe pkg.vcsProcessed.type
-                url shouldBe pkg.vcsProcessed.url
-                revision shouldBe "master"
-                resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
-                path shouldBe pkg.vcsProcessed.path
+            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+                vcsInfo.type shouldBe pkg.vcsProcessed.type
+                vcsInfo.url shouldBe pkg.vcsProcessed.url
+                vcsInfo.revision shouldBe "master"
+                vcsInfo.resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+                vcsInfo.path shouldBe pkg.vcsProcessed.path
             }
 
-            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
+            workingTree shouldNotBeNull {
+                isValid() shouldBe true
+                getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+            }
 
-            workingTree.shouldNotBeNull()
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
-
-            val babelCliDir = downloadResult.downloadDirectory.resolve("packages/babel-cli")
             babelCliDir.isDirectory shouldBe true
             babelCliDir.walk().count() shouldBe 242
         }

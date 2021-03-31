@@ -23,17 +23,15 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 class ScanCodeTest : WordSpec({
-    val scanner = ScanCode("ScanCode", ScannerConfiguration())
+    val scanner = ScanCode("ScanCode", ScannerConfiguration(), DownloaderConfiguration())
 
-    "getConfiguration()" should {
+    "configuration()" should {
         "return the default values if the scanner configuration is empty" {
-            scanner.configuration shouldBe
-                    "--copyright --license --ignore *$ORT_REPO_CONFIG_FILENAME --info --strip-root --timeout 300 " +
-                    "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp --license-diag"
+            scanner.configuration shouldBe "--copyright --license --info --strip-root --timeout 300 --json-pp"
         }
 
         "return the non-config values from the scanner configuration" {
@@ -42,24 +40,21 @@ class ScanCodeTest : WordSpec({
                     options = mapOf(
                         "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
-                            "commandLineNonConfig" to "--commandLineNonConfig",
-                            "debugCommandLine" to "--debug --commandLine",
-                            "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                            "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
-                )
+                ),
+                DownloaderConfiguration()
             )
 
-            scannerWithConfig.configuration shouldBe "--command --line --json-pp --debug --commandLine"
+            scannerWithConfig.configuration shouldBe "--command --line --json-pp"
         }
     }
 
     "commandLineOptions" should {
         "contain the default values if the scanner configuration is empty" {
             scanner.commandLineOptions.joinToString(" ") shouldMatch
-                    "--copyright --license --ignore \\*$ORT_REPO_CONFIG_FILENAME --info --strip-root --timeout 300 " +
-                        "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --processes \\d+ --license-diag " +
-                        "--verbose"
+                    "--copyright --license --info --strip-root --timeout 300 --processes \\d+"
         }
 
         "contain the values from the scanner configuration" {
@@ -68,16 +63,15 @@ class ScanCodeTest : WordSpec({
                     options = mapOf(
                         "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
-                            "commandLineNonConfig" to "--commandLineNonConfig",
-                            "debugCommandLine" to "--debug --commandLine",
-                            "debugCommandLineNonConfig" to "--debugCommandLineNonConfig"
+                            "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
-                )
+                ),
+                DownloaderConfiguration()
             )
 
             scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
-                    "--command --line --commandLineNonConfig --debug --commandLine --debugCommandLineNonConfig"
+                    "--command --line --commandLineNonConfig"
         }
     }
 })

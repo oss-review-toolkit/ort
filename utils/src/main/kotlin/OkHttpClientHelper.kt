@@ -21,9 +21,11 @@ package org.ossreviewtoolkit.utils
 
 import java.io.IOException
 import java.time.Duration
+import java.util.concurrent.ConcurrentHashMap
 
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 import okhttp3.Authenticator
@@ -35,61 +37,74 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-private typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
+typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
 object OkHttpClientHelper {
-    private val clients = mutableMapOf<BuilderConfiguration, OkHttpClient>()
-
+    private const val CACHE_DIRECTORY = "cache/http"
     private const val MAX_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
+    private const val READ_TIMEOUT_IN_SECONDS = 30L
+
+    private val client by lazy {
+        installAuthenticatorAndProxySelector()
+        buildClient()
+    }
+
+    private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
 
     /**
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
      */
     const val HTTP_TOO_MANY_REQUESTS = 429
 
-    init {
-        installAuthenticatorAndProxySelector()
+    private fun buildClient(): OkHttpClient {
+        val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
+        val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
+        val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
+
+        // OkHttp uses Java's global ProxySelector by default, but the Authenticator for a proxy needs to be set
+        // explicitly. Also note that the (non-proxy) authenticator is set here and is primarily intended for "reactive"
+        // authentication, but most often "preemptive" authentication via headers is required. For proxy authentication,
+        // OkHttp emulates preemptive authentication by sending a fake "OkHttp-Preemptive" response to the reactive
+        // proxy authenticator.
+        return OkHttpClient.Builder()
+            .addNetworkInterceptor { chain ->
+                chain.proceed(
+                    chain.request().newBuilder()
+                        .header("User-Agent", Environment.ORT_USER_AGENT)
+                        .build()
+                )
+            }
+            .cache(cache)
+            .connectionSpecs(specs)
+            .readTimeout(Duration.ofSeconds(READ_TIMEOUT_IN_SECONDS))
+            .authenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
+            .proxyAuthenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
+            .build()
     }
 
     /**
      * Build a preconfigured client that uses a cache directory inside the [ORT data directory][ortDataDirectory].
      * Proxy environment variables are by default respected, but the client can further be configured via the [block].
      */
-    fun buildClient(block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
-        clients.getOrPut(block) {
-            val cacheDirectory = ortDataDirectory.resolve("cache/http")
-            val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
-            val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
-
-            // OkHttp uses Java's global ProxySelector by default, but the Authenticator for a proxy needs to be set
-            // explicitly. Also note that the (non-proxy) authenticator is set here and is primarily intended for
-            // "reactive" authentication, but most often "preemptive" authentication via headers is required. For proxy
-            // authentication, OkHttp emulates preemptive authentication by sending a fake "OkHttp-Preemptive" response
-            // to the reactive proxy authenticator.
-            OkHttpClient.Builder()
-                .cache(cache)
-                .connectionSpecs(specs)
-                .readTimeout(Duration.ofSeconds(30))
-                .authenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
-                .proxyAuthenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
-                .apply(block)
-                .build()
-        }
+    fun buildClient(block: BuilderConfiguration? = null): OkHttpClient =
+        block?.let {
+            clients.getOrPut(it) { client.newBuilder().apply(block).build() }
+        } ?: client
 
     /**
      * Execute a [request] using the client for the specified [builder configuration][block].
      */
-    fun execute(request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+    fun execute(request: Request, block: BuilderConfiguration? = null): Response =
         buildClient(block).newCall(request).execute()
 
     /**
      * Asynchronously enqueue a [request] using the client for the specified [builder configuration][block] and await
      * its response.
      */
-    suspend fun await(request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+    suspend fun await(request: Request, block: BuilderConfiguration? = null): Response =
         buildClient(block).newCall(request).await()
 }
 

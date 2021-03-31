@@ -31,6 +31,7 @@ import java.util.Stack
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -124,6 +125,7 @@ class Conan(
                     project = Project(
                         id = projectPackage.id,
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                        authors = projectPackage.authors,
                         declaredLicenses = projectPackage.declaredLicenses,
                         vcs = projectPackage.vcs,
                         vcsProcessed = processProjectVcs(
@@ -132,7 +134,7 @@ class Conan(
                             projectPackage.homepageUrl
                         ),
                         homepageUrl = projectPackage.homepageUrl,
-                        scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
+                        scopeDependencies = sortedSetOf(dependenciesScope, devDependenciesScope)
                     ),
                     packages = packages.values.toSortedSet()
                 )
@@ -217,6 +219,7 @@ class Conan(
     private fun extractPackage(node: JsonNode, workingDir: File) =
         Package(
             id = extractPackageId(node, workingDir),
+            authors = parseAuthors(node),
             declaredLicenses = extractDeclaredLicenses(node),
             description = extractPackageField(node, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
@@ -309,6 +312,7 @@ class Conan(
                 name = runInspectRawField(definitionFile.name, workingDir, "name"),
                 version = runInspectRawField(definitionFile.name, workingDir, "version")
             ),
+            authors = parseAuthors(node),
             declaredLicenses = extractDeclaredLicenses(node),
             description = runInspectRawField(definitionFile.name, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
@@ -328,6 +332,7 @@ class Conan(
                 name = node["reference"].textValueOrEmpty(),
                 version = ""
             ),
+            authors = parseAuthors(node),
             declaredLicenses = extractDeclaredLicenses(node),
             description = "",
             homepageUrl = node["homepage"].textValueOrEmpty(),
@@ -345,4 +350,11 @@ class Conan(
     private fun installDependencies(workingDir: File) {
         ProcessCapture(workingDir, "conan", "install", ".")
     }
+
+    /**
+     * Parse information about the package author from the given JSON [node]. If present, return a set containing the
+     * author name; otherwise, return an empty set.
+     */
+    private fun parseAuthors(node: JsonNode): SortedSet<String> =
+        parseAuthorString(node["author"]?.textValue(), '<', '(')?.let { sortedSetOf(it) } ?: sortedSetOf()
 }

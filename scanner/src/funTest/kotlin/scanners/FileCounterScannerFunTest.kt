@@ -26,6 +26,7 @@ import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -48,7 +49,7 @@ class FileCounterScannerFunTest : StringSpec() {
                 assetsDir.resolve("file-counter-expected-output-for-analyzer-result.yml")
             )
 
-            val scanner = FileCounter("FileCounter", ScannerConfiguration())
+            val scanner = FileCounter("FileCounter", ScannerConfiguration(), DownloaderConfiguration())
             val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir, outputDir.resolve("downloads"))
             val result = yamlMapper.writeValueAsString(ortResult)
 

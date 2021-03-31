@@ -39,7 +39,15 @@ val loggerOfClass = ConcurrentHashMap<Any, KotlinLogger>()
  * An extension property for adding a log instance to any (unique) class.
  */
 val <reified T : Any> T.log: KotlinLogger
-    inline get() = loggerOfClass.getOrPut(T::class.java) { loggerOf(T::class.java) }
+    inline get() = loggerOfClass.getOrPut(T::class.java) {
+        T::class.qualifiedName?.let { name ->
+            require(name.startsWith("org.ossreviewtoolkit.")) {
+                "Logging is only allowed on ORT classes, but '$name' is used."
+            }
+        }
+
+        loggerOf(T::class.java)
+    }
 
 val KotlinLogger.statements by lazy { mutableSetOf<Triple<Any, Level, String>>() }
 
@@ -58,7 +66,7 @@ inline fun <reified T : Any> T.logOnce(level: Level, supplier: () -> String) {
  * A log [Level] for logging performance information. The int value of the level is between [Level.INFO] and
  * [Level.DEBUG].
  */
-val PERFORMANCE = Level.forName("PERFORMANCE", 450)
+val PERFORMANCE: Level = Level.forName("PERFORMANCE", 450)
 
 fun KotlinLogger.perf(marker: Marker, msg: Message) {
     delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, null)

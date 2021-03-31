@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +20,28 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 data class AnalyzerConfiguration(
     /**
      * If set to true, ignore the versions of used command line tools. Note that this might lead to erroneous
      * results if the tools have changed in usage or behavior. If set to false, check the versions to match the
-     * expected versions and fail the analysis on a mismatch.
+     * expected versions and fail the analysis on a mismatch. Defaults to false.
      */
-    val ignoreToolVersions: Boolean,
+    val ignoreToolVersions: Boolean = false,
 
     /**
      * Enable the analysis of projects that use version ranges to declare their dependencies. If set to true,
      * dependencies of exactly the same project might change with another scan done at a later time if any of the
      * (transitive) dependencies are declared using version ranges and a new version of such a dependency was
-     * published in the meantime. If set to false, analysis of projects that use version ranges will fail.
+     * published in the meantime. If set to false, analysis of projects that use version ranges will fail. Defaults to
+     * false.
      */
-    val allowDynamicVersions: Boolean
+    val allowDynamicVersions: Boolean = false,
+
+    /**
+     * Configuration of the SW360 package curation provider.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sw360Configuration: Sw360StorageConfiguration? = null
 )

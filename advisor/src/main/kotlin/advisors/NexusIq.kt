@@ -20,34 +20,26 @@
 package org.ossreviewtoolkit.advisor.advisors
 
 import java.io.IOException
+import java.net.URI
 import java.time.Instant
-import java.util.concurrent.Executors
 
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
-
-import org.ossreviewtoolkit.advisor.AbstractAdvisorFactory
-import org.ossreviewtoolkit.advisor.Advisor
+import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
+import org.ossreviewtoolkit.advisor.VulnerabilityProvider
+import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.BasicAuthConfiguration
-import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.config.NexusIqConfiguration
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.nexusiq.NexusIqService
-import org.ossreviewtoolkit.utils.NamedThreadFactory
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
 
-import retrofit2.Call
+import retrofit2.HttpException
 
 /**
  * The number of packages to request from Nexus IQ in one request.
@@ -57,127 +49,89 @@ private const val REQUEST_CHUNK_SIZE = 100
 /**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
-class NexusIq(
-    name: String,
-    config: AdvisorConfiguration
-) : Advisor(name, config) {
-    class Factory : AbstractAdvisorFactory<NexusIq>("NexusIQ") {
-        override fun create(config: AdvisorConfiguration) = NexusIq(advisorName, config)
+class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : VulnerabilityProvider(name) {
+    class Factory : AbstractVulnerabilityProviderFactory<NexusIq>("NexusIQ") {
+        override fun create(config: AdvisorConfiguration) = NexusIq(providerName, config.forProvider { nexusIq })
     }
 
-    private val nexusIqConfig = config as BasicAuthConfiguration
-
-    override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
-        val service = NexusIqService.create(
+    private val service by lazy {
+        NexusIqService.create(
             nexusIqConfig.serverUrl,
             nexusIqConfig.username,
             nexusIqConfig.password,
             OkHttpClientHelper.buildClient()
         )
+    }
 
-        val advisorDispatcher =
-            Executors.newSingleThreadExecutor(NamedThreadFactory(advisorName)).asCoroutineDispatcher()
+    override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
+        val startTime = Instant.now()
 
-        return coroutineScope {
-            val startTime = Instant.now()
+        val components = packages.map { pkg ->
+            val packageUrl = buildString {
+                append(pkg.purl)
 
-            val components = packages.map { pkg ->
-                val packageUrl = buildString {
-                    append(pkg.purl)
-
-                    when (pkg.id.getPurlType()) {
-                        PurlType.MAVEN.toString() -> append("?type=jar")
-                        PurlType.PYPI.toString() -> append("?extension=tar.gz")
-                    }
+                when (pkg.id.getPurlType()) {
+                    PurlType.MAVEN.toString() -> append("?type=jar")
+                    PurlType.PYPI.toString() -> append("?extension=tar.gz")
                 }
-
-                NexusIqService.Component(packageUrl)
             }
 
-            try {
-                val componentDetails = mutableMapOf<String, NexusIqService.ComponentDetails>()
+            NexusIqService.Component(packageUrl)
+        }
 
-                components.chunked(REQUEST_CHUNK_SIZE).forEach { component ->
-                    val serviceCall = withContext(advisorDispatcher) {
-                        service.getComponentDetails(NexusIqService.ComponentsWrapper(component))
-                    }
+        return try {
+            val componentDetails = mutableMapOf<String, NexusIqService.ComponentDetails>()
 
-                    val requestResults = execute(serviceCall).componentDetails.associateBy {
-                        it.component.packageUrl.substringBefore("?")
-                    }
-
-                    componentDetails += requestResults
+            components.chunked(REQUEST_CHUNK_SIZE).forEach { component ->
+                val requestResults = getComponentDetails(service, component).componentDetails.associateBy {
+                    it.component.packageUrl.substringBefore("?")
                 }
 
-                val endTime = Instant.now()
+                componentDetails += requestResults
+            }
 
-                packages.mapNotNullTo(mutableListOf()) { pkg ->
-                    componentDetails[pkg.id.toPurl()]?.takeUnless {
-                        it.securityData.securityIssues.isEmpty()
-                    }?.let { details ->
-                        pkg to listOf(
-                            AdvisorResult(
-                                details.securityData.securityIssues.mapToVulnerabilities(),
-                                AdvisorDetails(advisorName),
-                                AdvisorSummary(startTime, endTime)
-                            )
-                        )
-                    }
-                }.toMap()
-            } catch (e: IOException) {
-                e.showStackTrace()
+            val endTime = Instant.now()
 
-                val now = Instant.now()
-                packages.associateWith {
-                    listOf(
+            packages.mapNotNullTo(mutableListOf()) { pkg ->
+                componentDetails[pkg.id.toPurl()]?.takeUnless {
+                    it.securityData.securityIssues.isEmpty()
+                }?.let { details ->
+                    pkg to listOf(
                         AdvisorResult(
-                            vulnerabilities = emptyList(),
-                            advisor = AdvisorDetails(advisorName),
-                            summary = AdvisorSummary(
-                                startTime = now,
-                                endTime = now,
-                                issues = listOf(
-                                    createAndLogIssue(
-                                        source = advisorName,
-                                        message = "Failed to retrieve security vulnerabilities from $advisorName: " +
-                                                e.collectMessagesAsString()
-                                    )
-                                )
-                            )
+                            details.securityData.securityIssues.map { it.toVulnerability() },
+                            AdvisorDetails(providerName),
+                            AdvisorSummary(startTime, endTime)
                         )
                     )
                 }
-            }
+            }.toMap()
+        } catch (e: IOException) {
+            createFailedResults(startTime, packages, e)
         }
     }
 
-    private fun Collection<NexusIqService.SecurityIssue>.mapToVulnerabilities() =
-        map {
-            Vulnerability(
-                it.reference,
-                it.severity,
-                it.url
-            )
+    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability {
+        val browseUrl = if (url == null && reference.startsWith("sonatype-")) {
+            URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
+        } else {
+            url
         }
+
+        return Vulnerability(reference, severity, browseUrl)
+    }
 
     /**
-     * Execute an HTTP request specified by the given [call]. The response status is checked. If everything went
-     * well, the marshalled body of the request is returned; otherwise, the function throws an exception.
+     * Invoke the [NexusIQ service][service] to request detail information for the given [components]. Catch HTTP
+     * exceptions thrown by the service and re-throw them as [IOException].
      */
-    private fun <T> execute(call: Call<T>): T {
-        val request = "${call.request().method} on ${call.request().url}"
-        log.debug { "Executing HTTP $request." }
-
-        val response = call.execute()
-        log.debug { "HTTP response is (status ${response.code()}): ${response.message()}" }
-
-        val body = response.body()
-        if (!response.isSuccessful || body == null) {
-            throw IOException(
-                "Failed HTTP $request with status ${response.code()} and error: ${response.errorBody()?.string()}."
-            )
+    private suspend fun getComponentDetails(
+        service: NexusIqService,
+        components: List<NexusIqService.Component>
+    ): NexusIqService.ComponentDetailsWrapper =
+        try {
+            log.debug { "Querying component details from ${nexusIqConfig.serverUrl}." }
+            service.getComponentDetails(NexusIqService.ComponentsWrapper(components))
+        } catch (e: HttpException) {
+            throw IOException(e)
         }
-
-        return body
-    }
 }

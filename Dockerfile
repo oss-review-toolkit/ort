@@ -47,7 +47,7 @@ ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
     BUNDLER_VERSION=1.16.1-1 \
-    CARGO_VERSION=0.44.1-0ubuntu1~18.04.1 \
+    CARGO_VERSION=0.47.0-1~exp1ubuntu1~18.04.1 \
     COMPOSER_VERSION=1.6.3-1 \
     CONAN_VERSION=1.18.0 \
     FLUTTER_VERSION=v1.12.13+hotfix.9-stable \
@@ -74,11 +74,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
     apt-get update && \
-    apt-get install -y --no-install-recommends gnupg && \
+    apt-get install -y --no-install-recommends gnupg software-properties-common && \
     echo 'Acquire::https::dl.bintray.com::Verify-Peer "false";' | tee -a /etc/apt/apt.conf.d/00sbt && \
     echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list && \
     curl -ksS "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key adv --import - && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    add-apt-repository ppa:git-core/ppa && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         # Install general tools required by this Dockerfile.
@@ -105,8 +106,10 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         cargo=$CARGO_VERSION \
         composer=$COMPOSER_VERSION \
         nodejs \
+        python-dev \
         python-pip \
         python-setuptools \
+        python3-dev \
         python3-pip \
         python3-setuptools \
         sbt=$SBT_VERSION \
@@ -115,8 +118,15 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
 
 COPY --from=build /usr/local/src/ort/scripts/*.sh /opt/ort/bin/
 
+# This can be set to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
+ARG CRT_FILES=""
+COPY "$CRT_FILES" /tmp/certificates/
+
 # Custom install commands.
 RUN /opt/ort/bin/import_proxy_certs.sh && \
+    if [ -n "$CRT_FILES" ]; then \
+      /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
+    fi && \
     # Install VCS tools (no specific versions required here).
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \

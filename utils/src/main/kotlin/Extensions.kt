@@ -29,23 +29,20 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.net.URISyntaxException
-import java.net.URL
 import java.nio.file.CopyOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.LinkOption
-import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
-import java.security.MessageDigest
+import java.util.Locale
 
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
-fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
+fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
 
 /**
  * Format this [Double] as a string with the provided number of [decimalPlaces].
@@ -59,37 +56,16 @@ fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(this)
 fun File.expandTilde(): File = File(path.expandTilde()).absoluteFile
 
 /**
- * Return the hexadecimal digest of the given hash [algorithm] for this [File].
- */
-fun File.hash(algorithm: String = "SHA-1"): String =
-    inputStream().use { inputStream ->
-        // 4MB has been chosen rather arbitrary hoping that it provides a good enough performance while not consuming
-        // a lot of memory at the same time, also considering that this function could potentially be run on multiple
-        // threads in parallel.
-        val buffer = ByteArray(4 * 1024 * 1024)
-        val digest = MessageDigest.getInstance(algorithm)
-
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-            digest.update(buffer, 0, length)
-        }
-
-        digest.digest().toHexString()
-    }
-
-/**
  * Return true if and only if this file is a symbolic link.
  */
 fun File.isSymbolicLink(): Boolean =
-    try {
+    runCatching {
         // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
         // NoSuchFileException to be thrown as it returns "false" e.g. for dangling Windows junctions.
         Files.readAttributes(toPath(), BasicFileAttributes::class.java, LinkOption.NOFOLLOW_LINKS).let {
             it.isSymbolicLink || (Os.isWindows && it.isOther)
         }
-    } catch (e: NoSuchFileException) {
-        false
-    }
+    }.getOrDefault(false)
 
 /**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
@@ -228,7 +204,7 @@ val File.formatSizeInMib: String get() = "${length().bytesToMib().format()} MiB"
 /**
  * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
  */
-fun File.toSafeURI(): URI {
+fun File.toSafeUri(): URI {
     val fileUri = toURI()
     return URI("file", "", fileUri.path, fileUri.query, fileUri.fragment)
 }
@@ -275,11 +251,6 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
 fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)
 
 /**
- * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
- */
-fun String.encodeOrUnknown(): String = encodeOr("unknown")
-
-/**
  * Return the string encoded for safe use as a file name or [emptyValue] encoded for safe use as a file name, if this
  * string is empty. Throws an exception if [emptyValue] is empty.
  */
@@ -288,6 +259,11 @@ fun String.encodeOr(emptyValue: String): String {
 
     return ifEmpty { emptyValue }.fileSystemEncode()
 }
+
+/**
+ * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
+ */
+fun String.encodeOrUnknown(): String = encodeOr("unknown")
 
 /**
  * If the SHELL environment variable is set, return the string with a leading "~" expanded to the current user's home
@@ -313,9 +289,35 @@ fun String.fileSystemEncode() =
         .take(255)
 
 /**
+ * Return true if the string represents a false value, otherwise return false.
+ */
+fun String?.isFalse() = this?.toBoolean()?.not() ?: false
+
+/**
+ * True if the string is a valid semantic version of the given [type], false otherwise.
+ */
+fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
+    runCatching { Semver(this, type) }.isSuccess
+
+/**
  * Return true if the string represents a true value, otherwise return false.
  */
 fun String?.isTrue() = this?.toBoolean() ?: false
+
+/**
+ * True if the string is a valid [URI], false otherwise.
+ */
+fun String.isValidUri() = runCatching { URI(this) }.isSuccess
+
+/**
+ * A regular expression matching the non-linux line breaks "\r\n" and "\r".
+ */
+val NON_LINUX_LINE_BREAKS = Regex("\\r\\n?")
+
+/**
+ * Replace "\r\n" and "\r" line breaks with "\n".
+ */
+fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
 
 /**
  * Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string.
@@ -332,44 +334,28 @@ fun String.percentEncode(): String =
         .replace("%7E", "~")
 
 /**
- * True if the string is a valid semantic version of the given [type], false otherwise.
- */
-fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
-    runCatching { Semver(this, type) }.isSuccess
-
-/**
- * True if the string is a valid [URI], false otherwise.
- */
-fun String.isValidUri() = runCatching { URI(this) }.isSuccess
-
-/**
- * True if the string is a valid [URL], false otherwise.
- */
-fun String.isValidUrl() = runCatching { URL(this) }.isSuccess
-
-/**
- * A regular expression matching the non-linux line breaks "\r\n" and "\r".
- */
-val NON_LINUX_LINE_BREAKS = Regex("\\r\\n?")
-
-/**
- * Replace "\r\n" and "\r" line breaks with "\n".
- */
-fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
-
-/**
  * Strip any user name / password off the URL represented by this [String]. Return the unmodified [String] if it does
  * not represent a URL or if it does not include a user name.
  */
 fun String.stripCredentialsFromUrl() =
-    try {
-        // Use an URI instead of an URL as the former allows to specify the userInfo separately.
-        URI(this).let {
-            URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString()
-        }
-    } catch (e: URISyntaxException) {
-        this
-    }
+    toUri { URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString() }.getOrDefault(this)
+
+/**
+ * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful.
+ */
+fun String.toUri() = runCatching { URI(this) }
+
+/**
+ * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful, and [transform]
+ * the [URI] if so.
+ */
+fun <R> String.toUri(transform: (URI) -> R) = toUri().mapCatching(transform)
+
+/**
+ * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
+ */
+fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
+    this?.removePrefix(prefix)?.takeIf { it != this } ?: missingPrefixValue()
 
 /**
  * Recursively collect the messages of this [Throwable] and all its causes.

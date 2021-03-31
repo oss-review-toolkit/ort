@@ -17,46 +17,58 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clearlydefined
+package org.ossreviewtoolkit.clients.clearlydefined
+
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
-import io.kotest.matchers.string.beEmpty
-import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
 
-import java.net.HttpURLConnection
+import java.io.File
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionInfo
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curation
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ClearlyDefinedServiceFunTest : WordSpec({
+    "A contribution patch" should {
+        "be correctly deserialized even when using invalid facet arrays" {
+            // See https://github.com/clearlydefined/curated-data/blob/0b2db78/curations/maven/mavencentral/com.google.code.gson/gson.yaml#L10-L11.
+            val curationWithInvalidFacetArrays = File("src/funTest/assets/gson.json")
+
+            val curation = ClearlyDefinedService.JSON_MAPPER.readValue<Curation>(curationWithInvalidFacetArrays)
+
+            curation.described?.facets.shouldNotBeNull {
+                dev should beNull()
+                tests should beNull()
+            }
+        }
+    }
+
     "Downloading a contribution patch" should {
         "return curation data".config(tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
-            val getCall = service.getCuration(
+            val curation = service.getCuration(
                 ComponentType.MAVEN,
                 Provider.MAVEN_CENTRAL,
                 "javax.servlet",
                 "javax.servlet-api",
                 "3.1.0"
             )
-            val response = getCall.execute()
-            val responseCode = response.code()
-            val curation = response.body()
 
-            responseCode shouldBe HttpURLConnection.HTTP_OK
-            curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+            curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
     }
 
@@ -85,14 +97,11 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         "only serialize non-null values".config(tags = setOf(ExpensiveTag)) {
-            val service = ClearlyDefinedService.create(Server.LOCALHOST)
+            val contributionPatch = ContributionPatch(info, listOf(patch))
 
-            val patchCall = service.putCuration(ContributionPatch(info, listOf(patch)))
-            val requestBody = patchCall.request().body
-            val requestBodyAsString = requestBody?.string().orEmpty()
+            val patchJson = ClearlyDefinedService.JSON_MAPPER.writeValueAsString(contributionPatch)
 
-            requestBodyAsString shouldNot beEmpty()
-            requestBodyAsString shouldNotContain "null"
+            patchJson shouldNot io.kotest.matchers.string.include("null")
         }
 
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
@@ -100,15 +109,12 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         "return a summary of the created pull-request".config(enabled = false, tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.DEVELOPMENT)
 
-            val patchCall = service.putCuration(ContributionPatch(info, listOf(patch)))
-            val response = patchCall.execute()
-            val responseCode = response.code()
-            val summary = response.body()
+            val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
 
-            responseCode shouldBe HttpURLConnection.HTTP_OK
-            summary.shouldNotBeNull()
-            summary.prNumber shouldBeGreaterThan 0
-            summary.url shouldStartWith "https://github.com/clearlydefined/curated-data-dev/pull/"
+            summary shouldNotBeNull {
+                prNumber shouldBeGreaterThan 0
+                url shouldStartWith "https://github.com/clearlydefined/curated-data-dev/pull/"
+            }
         }
     }
 })

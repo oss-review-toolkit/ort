@@ -138,24 +138,16 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
     }
 
     private static class DependencyTreeModelBuilder implements ToolingModelBuilder {
-        static DependencyImpl dependencyFromDisplayName(String displayName, List<Dependency> dependencies,
-                                                        String error, String warning) {
-            if (displayName.startsWith('project :')) {
-                def coordinates = displayName.split(':', 2)
-                return new DependencyImpl(groupId: '<project>', artifactId: coordinates[1], dependencies: dependencies,
-                        error: error?.toString(), warning: warning?.toString())
-            }
-
-            def coordinates = displayName.split(':')
-
-            if (coordinates.length == 3) {
-                return new DependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
-                        dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
-            }
-
-            return new DependencyImpl(groupId: '<unknown>', artifactId: displayName.replace(':', '_'),
-                    dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
-        }
+        /**
+         * Stores the Dependency objects created by this builder, so that they can be reused when the same
+         * dependency is encountered again in the dependency graph. As dependencies can occur many times in large
+         * dependency graphs, de-duplicating these objects can save a significant amount of memory.
+         *
+         * Note, however, that packages can be referenced in the graph multiple times with a different set of
+         * dependencies. Therefore, for a package with a given identifier, there can be different Dependency
+         * objects; hence the values of the map are lists.
+         */
+        private final Map<String, List<Dependency>> dependencies = new HashMap<>()
 
         @Override
         boolean canBuild(String modelName) {
@@ -192,7 +184,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     }
 
                     List<Dependency> dependencies = result.getRoot().getDependencies().collect {
-                        parseDependency(it, project, resolvedArtifacts, [])
+                        fetchDependency(it, project, resolvedArtifacts, [] as Set<String>)
                     }
 
                     new ConfigurationImpl(configuration.name, dependencies)
@@ -225,14 +217,52 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     repositories, errors.unique(), warnings.unique())
         }
 
-        Dependency parseDependency(DependencyResult dependencyResult, Project project,
-                                   Set<ResolvedArtifact> resolvedArtifacts, List<String> parents) {
+        /**
+         * Returns a Dependency for the given DependencyResult. The function checks whether there is already a
+         * Dependency instance in the cache compatible with the result. If this is not the case, parseDependency()
+         * is called to generate a new instance.
+         *
+         * @param dependencyResult represents the package to be processed
+         * @param project the current project
+         * @param resolvedArtifacts the set of resolved artifacts
+         * @param visited a set with dependency nodes already visited to detect cycles in the graph
+         * @return the Dependency representing this result
+         */
+        private Dependency fetchDependency(DependencyResult dependencyResult, Project project,
+                                           Set<ResolvedArtifact> resolvedArtifacts, Set<String> visited) {
+            def dependencyId = identifierFor(dependencyResult, project)
+            dependencies.putIfAbsent(dependencyId, [])
+            def dependency = dependencies[dependencyId].find {
+                dependencyTreeEquals(it, dependencyResult, project, [] as Set<String>)
+            }
+
+            if (dependency != null) {
+                return dependency
+            }
+
+            dependency = parseDependency(dependencyResult, project, resolvedArtifacts, visited)
+            dependencies[dependencyId].add(dependency)
+            return dependency
+        }
+
+        /**
+         * Creates a new Dependency object to represent the given DependencyResult. The different types of
+         * dependencies are evaluated. The (transitive) dependencies of this dependency are processed recursively.
+         *
+         * @param dependencyResult represents the package to be processed
+         * @param project the current project
+         * @param resolvedArtifacts the set of resolved artifacts
+         * @param parents a set with dependency nodes already visited to detect cycles in the graph
+         * @return the newly created Dependency
+         */
+        private Dependency parseDependency(DependencyResult dependencyResult, Project project,
+                                           Set<ResolvedArtifact> resolvedArtifacts, Set<String> parents) {
             if (dependencyResult instanceof ResolvedDependencyResult) {
                 List<Dependency> dependencies = dependencyResult.selected.dependencies.findResults { dependency ->
                     // Do not follow circular dependencies, these can exist for project dependencies.
                     if (!(dependencyResult.requested.displayName in parents)) {
-                        parseDependency(dependency, project, resolvedArtifacts,
-                                [*parents, dependencyResult.requested.displayName])
+                        fetchDependency(dependency, project, resolvedArtifacts,
+                                parents + dependencyResult.requested.displayName)
                     } else {
                         null
                     }
@@ -298,7 +328,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
         }
 
-        private String collectCauses(Throwable throwable) {
+        private static String collectCauses(Throwable throwable) {
             def result = "${throwable.getClass().simpleName}: ${throwable.message}"
             def cause = throwable.cause
             while (cause != null) {
@@ -307,6 +337,140 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
             return result
         }
-    }
 
+        /**
+         * Checks whether the given dependency and the dependency result spawn the same dependency trees. This is
+         * used to test whether the dependency result can be represented by this dependency.
+         *
+         * @param dependency the dependency
+         * @param dependencyResult the dependency result
+         * @param project the current project
+         * @param visited stores the name of already visited dependencies to deal with cycles
+         * @return a flag whether the dependency trees are equal
+         */
+        private static boolean dependencyTreeEquals(Dependency dependency, DependencyResult dependencyResult,
+                                                    Project project, Set<String> visited) {
+            def displayName = dependencyResult.requested.displayName
+            if (displayName in visited) {
+                return true  // We visited this node already.
+            }
+
+            def resultDependencies = dependencyResult instanceof ResolvedDependencyResult ?
+                    dependencyResult.selected.dependencies : [] as Set<DependencyResult>
+            if (dependency.dependencies.size() != resultDependencies.size()) {
+                return false
+            }
+
+            def dependencyMap = dependency.dependencies.collectEntries { [identifierFor(it), it] }
+            def resultMap = resultDependencies.collectEntries { [identifierFor(it, project), it] }
+            def nextVisited = visited + displayName
+
+            return dependencyMap.every { entry ->
+                def matchingResult = resultMap[entry.key]
+                matchingResult != null && dependencyTreeEquals(entry.value as Dependency,
+                        matchingResult as DependencyResult, project, nextVisited)
+            }
+        }
+
+        /**
+         * Generates a unique string identifier for a DependencyResult. This is used to de-duplicate dependencies.
+         *
+         * @param dependencyResult the dependency result
+         * @param project the current project
+         * @return a unique identifier for this dependency
+         */
+        private static String identifierFor(DependencyResult dependencyResult, Project project) {
+            if (dependencyResult instanceof ResolvedDependencyResult) {
+                ComponentIdentifier id = dependencyResult.selected.id
+                if (id instanceof ModuleComponentIdentifier) {
+                    return toIdentifier(id.group, id.module, id.version)
+                } else if (id instanceof ProjectComponentIdentifier) {
+                    def dependencyProject = project.rootProject.findProject(id.projectPath)
+                    return toIdentifier(dependencyProject.group.toString(), dependencyProject.name,
+                            dependencyProject.version.toString())
+                } else {
+                    return identifierFromDisplayName(id.displayName)
+                }
+            }
+
+            if (dependencyResult instanceof UnresolvedDependencyResult) {
+                return identifierFromDisplayName(dependencyResult.attempted.displayName)
+            }
+
+            return identifierFromDisplayName(dependencyResult.requested.displayName)
+        }
+
+        /**
+         * Generates a unique identifier for the given Dependency.
+         *
+         * @param dependency the Dependency
+         * @return the identifier for this Dependency
+         */
+        private static String identifierFor(Dependency dependency) {
+            return toIdentifier(dependency.groupId, dependency.artifactId, dependency.version)
+        }
+
+        /**
+         * Creates an object to represent the dependency identified by the given display name. This function is
+         * called if no valid dependency identifier is available. It therefore tries to extract the coordinates of
+         * the dependency from the display name.
+         *
+         * @param displayName the display name
+         * @param dependencies the list of dependencies of the package affected
+         * @param error an optional error message
+         * @param warning an optional warning message
+         * @return the newly created dependency representation
+         */
+        private static DependencyImpl dependencyFromDisplayName(String displayName, List<Dependency> dependencies,
+                                                        String error, String warning) {
+            def coordinates = displayNameToCoordinates(displayName)
+            return new DependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
+                    dependencies: dependencies, error: error?.toString(), warning: warning?.toString())
+        }
+
+        /**
+         * Generates a unique string identifier from a display name. The display name is converted to coordinates,
+         * from which the identifier can be constructed.
+         *
+         * @param displayName the display name
+         * @return a unique identifier for this display name
+         */
+        private static String identifierFromDisplayName(String displayName) {
+            def coordinates = displayNameToCoordinates(displayName)
+            return toIdentifier(coordinates[0], coordinates[1], coordinates[2])
+        }
+
+        /**
+         * Splits a display name for a component to an array of groupId, artifactId, and version.
+         *
+         * @param displayName the name to split
+         * @return the array with the coordinates (always 3 components)
+         */
+        private static String[] displayNameToCoordinates(String displayName) {
+            if (displayName.startsWith('project :')) {
+                def coordinates = displayName.split(':', 2)
+                return ['<project>', coordinates[1], '']
+            }
+
+            def coordinates = displayName.split(':')
+
+            if (coordinates.length == 3) {
+                return coordinates
+            }
+
+            return ['<unknown>', displayName.replace(':', '_'), '']
+        }
+
+        /**
+         * Generate a unique identifier for the component with the given coordinates.
+         *
+         * @param group the group
+         * @param artifact the artifact
+         * @param version the version
+         * @return the identifier for these coordinates
+         */
+        private static String toIdentifier(String group, String artifact, String version) {
+            return "$group:$artifact:$version"
+        }
+    }
 }

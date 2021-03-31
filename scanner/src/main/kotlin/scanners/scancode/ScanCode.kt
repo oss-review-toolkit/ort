@@ -33,22 +33,20 @@ import okhttp3.Request
 import okio.buffer
 import okio.sink
 
-import org.apache.logging.log4j.Level
-
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.isTrue
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpack
 
@@ -61,19 +59,16 @@ import org.ossreviewtoolkit.utils.unpack
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
  *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
- *   considered in [getConfiguration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
- * * **"debugCommandLine":** Debug command line options that modify the result. Only used if the [log] level is set to
- *   [Level.DEBUG]. Defaults to [DEFAULT_DEBUG_CONFIGURATION_OPTIONS].
- * * **"debugCommandLineNonConfig":** Debug command line options that do not modify the result and should therefore not
- *   be considered in [getConfiguration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
- *   [DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS].
+ *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  */
 class ScanCode(
     name: String,
-    config: ScannerConfiguration
-) : LocalScanner(name, config) {
+    scannerConfig: ScannerConfiguration,
+    downloaderConfig: DownloaderConfiguration
+) : LocalScanner(name, scannerConfig, downloaderConfig) {
     class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            ScanCode(scannerName, scannerConfig, downloaderConfig)
     }
 
     companion object {
@@ -83,35 +78,23 @@ class ScanCode(
         internal const val TIMEOUT = 300
 
         /**
-         * Configuration options that are relevant for [getConfiguration] because they change the result file.
+         * Configuration options that are relevant for [configuration] because they change the result file.
          */
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
             "--copyright",
             "--license",
-            "--ignore", "*$ORT_REPO_CONFIG_FILENAME",
             "--info",
             "--strip-root",
             "--timeout", TIMEOUT.toString()
-        ) + NON_LICENSE_FILENAMES.flatMap { listOf("--ignore", it) }
+        )
 
         /**
-         * Configuration options that are not relevant for [getConfiguration] because they do not change the result
+         * Configuration options that are not relevant for [configuration] because they do not change the result
          * file.
          */
         private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
             "--processes", max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
         )
-
-        /**
-         * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
-         */
-        private val DEFAULT_DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
-
-        /**
-         * Debug configuration options that are not relevant for [getConfiguration] because they do not change the
-         * result file.
-         */
-        private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
 
         private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
             "--$OUTPUT_FORMAT"
@@ -126,34 +109,22 @@ class ScanCode(
         mutableListOf<String>().apply {
             addAll(configurationOptions)
             add(OUTPUT_FORMAT_OPTION)
-            if (log.delegate.isDebugEnabled) {
-                addAll(debugConfigurationOptions)
-            }
         }.joinToString(" ")
     }
 
     override val resultFileExt = "json"
 
-    private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
+    private val scanCodeConfiguration = scannerConfig.options?.get("ScanCode").orEmpty()
 
-    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
+    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(' ')
         ?: DEFAULT_CONFIGURATION_OPTIONS
-    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(" ")
+    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(' ')
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
-    private val debugConfigurationOptions = scanCodeConfiguration["debugCommandLine"]?.split(" ")
-        ?: DEFAULT_DEBUG_CONFIGURATION_OPTIONS
-    private val debugNonConfigurationOptions = scanCodeConfiguration["debugCommandLineNonConfig"]?.split(" ")
-        ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {
         mutableListOf<String>().apply {
             addAll(configurationOptions)
             addAll(nonConfigurationOptions)
-
-            if (log.delegate.isDebugEnabled) {
-                addAll(debugConfigurationOptions)
-                addAll(debugNonConfigurationOptions)
-            }
         }.toList()
     }
 
@@ -168,13 +139,13 @@ class ScanCode(
     }
 
     override fun bootstrap(): File {
-        val versionWithoutHypen = expectedVersion.replace("-", "")
+        val versionWithoutHyphen = expectedVersion.replace("-", "")
 
         val archive = when {
             // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
             // reason does not complete to unpack on Windows.
-            Os.isWindows -> "v$versionWithoutHypen.zip"
-            else -> "v$versionWithoutHypen.tar.gz"
+            Os.isWindows -> "v$versionWithoutHyphen.zip"
+            else -> "v$versionWithoutHyphen.tar.gz"
         }
 
         // Use the source code archive instead of the release artifact from S3 to enable OkHttp to cache the download
@@ -209,13 +180,13 @@ class ScanCode(
                 log.warn { "Unable to delete temporary file '$scannerArchive'." }
             }
 
-            val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHypen")
+            val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHyphen")
 
             scannerDir
         }
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -233,7 +204,8 @@ class ScanCode(
         }
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, path, result)
+        val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
+        val summary = generateSummary(startTime, endTime, path, result, parseLicenseExpressions)
 
         val issues = summary.issues.toMutableList()
 
@@ -242,7 +214,7 @@ class ScanCode(
 
         with(process) {
             if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(Provenance(), details, summary.copy(issues = issues))
+                return summary.copy(issues = issues)
             } else {
                 throw ScanException(errorMessage)
             }
@@ -261,5 +233,5 @@ class ScanCode(
             }
         }
 
-    override fun getRawResult(resultsFile: File) = parseResultsFile(resultsFile)
+    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 }

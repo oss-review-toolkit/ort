@@ -17,22 +17,22 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clearlydefined
+package org.ossreviewtoolkit.clients.clearlydefined
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
-import java.net.URL
+import java.net.URI
 
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -52,6 +52,12 @@ const val HARVEST_CREATED = "Created"
 interface ClearlyDefinedService {
     companion object {
         /**
+         * The mapper for JSON (de-)serialization used by this service.
+         */
+        val JSON_MAPPER = JsonMapper().enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
+            .registerKotlinModule()
+
+        /**
          * Create a ClearlyDefined service instance for communicating with the given [server], optionally using a
          * pre-built OkHttp [client].
          */
@@ -67,7 +73,7 @@ interface ClearlyDefinedService {
                 .apply { if (client != null) client(client) }
                 .baseUrl(url)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
+                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
             return retrofit.create(ClearlyDefinedService::class.java)
@@ -157,8 +163,8 @@ interface ClearlyDefinedService {
         val facets: Facets? = null,
         val sourceLocation: SourceLocation? = null,
         val urls: URLs? = null,
-        val projectWebsite: URL? = null,
-        val issueTracker: URL? = null,
+        val projectWebsite: URI? = null,
+        val issueTracker: URI? = null,
         val releaseDate: String? = null,
         val hashes: Hashes? = null,
         val files: Int? = null,
@@ -236,9 +242,9 @@ interface ClearlyDefinedService {
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class URLs(
-        val registry: URL? = null,
-        val version: URL? = null,
-        val download: URL? = null
+        val registry: URI? = null,
+        val version: URI? = null,
+        val download: URI? = null
     )
 
     /**
@@ -408,7 +414,7 @@ interface ClearlyDefinedService {
      * https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
      */
     @POST("definitions")
-    fun getDefinitions(@Body coordinates: Collection<String>): Call<Map<String, Defined>>
+    suspend fun getDefinitions(@Body coordinates: Collection<String>): Map<String, Defined>
 
     /**
      * Search for existing definitions based on the [pattern] string provided, see
@@ -418,33 +424,33 @@ interface ClearlyDefinedService {
      * Result is a list with the ClearlyDefined URIs to all the definitions that are matched by the pattern.
      */
     @GET("definitions")
-    fun searchDefinitions(@Query("pattern") pattern: String): Call<List<String>>
+    suspend fun searchDefinitions(@Query("pattern") pattern: String): List<String>
 
     /**
      * Get the curation for the component described by [type], [provider], [namespace], [name] and [revision], see
      * https://api.clearlydefined.io/api-docs/#/curations/get_curations__type___provider___namespace___name___revision_.
      */
     @GET("curations/{type}/{provider}/{namespace}/{name}/{revision}")
-    fun getCuration(
+    suspend fun getCuration(
         @Path("type") type: ComponentType,
         @Path("provider") provider: Provider,
         @Path("namespace") namespace: String,
         @Path("name") name: String,
         @Path("revision") revision: String
-    ): Call<Curation>
+    ): Curation
 
     /**
      * Upload curation [patch] data, see https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
      */
     @PATCH("curations")
-    fun putCuration(@Body patch: ContributionPatch): Call<ContributionSummary>
+    suspend fun putCuration(@Body patch: ContributionPatch): ContributionSummary
 
     /**
      * [Request][request] the given components to be harvested, see
      * https://api.clearlydefined.io/api-docs/#/harvest/post_harvest.
      */
     @POST("harvest")
-    fun harvest(@Body request: Collection<HarvestRequest>): Call<String>
+    suspend fun harvest(@Body request: Collection<HarvestRequest>): String
 
     /**
      * Get information about the harvest tools that have produced data for the component described by [type],
@@ -453,13 +459,13 @@ interface ClearlyDefinedService {
      * This can be used to quickly find out whether results of a specific tool are already available.
      */
     @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}?form=list")
-    fun harvestTools(
+    suspend fun harvestTools(
         @Path("type") type: ComponentType,
         @Path("provider") provider: Provider,
         @Path("namespace") namespace: String,
         @Path("name") name: String,
         @Path("revision") revision: String
-    ): Call<List<String>>
+    ): List<String>
 
     /**
      * Get the harvested data for the component described by [type], [provider], [namespace], [name], and [revision]
@@ -467,7 +473,7 @@ interface ClearlyDefinedService {
      * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision___tool___toolVersion_
      */
     @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}/{tool}/{toolVersion}?form=streamed")
-    fun harvestToolData(
+    suspend fun harvestToolData(
         @Path("type") type: ComponentType,
         @Path("provider") provider: Provider,
         @Path("namespace") namespace: String,
@@ -475,5 +481,5 @@ interface ClearlyDefinedService {
         @Path("revision") revision: String,
         @Path("tool") tool: String,
         @Path("toolVersion") toolVersion: String
-    ): Call<ResponseBody>
+    ): ResponseBody
 }

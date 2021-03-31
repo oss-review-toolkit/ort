@@ -44,15 +44,15 @@ private fun readResourceAsText(resourceFile: String): String =
  * 1. https://github.com/spdx/spdx-spec/blob/development/v2.2.1/examples/SPDXYAMLExample-2.2.spdx.yaml
  * 2. https://github.com/spdx/spdx-spec/blob/development/v2.2.1/examples/SPDXJSONExample-v2.2.spdx.json
  *
- * The "*-no-ranges*" resource files have the 'ranges' property removed, which is actually broken in specification and
- * thus impossible to implement.
+ * The "*-no-ranges.spdx.*" resource files have the "ranges" property removed, which is actually broken in the
+ * specification and impossible to implement.
  */
 class SpdxDocumentModelTest : WordSpec({
     "The official YAML example from the SPDX specification version 2.2" should {
         "be deserializable" {
             val yaml = readResourceAsText("/spdx-spec-examples/SPDXYAMLExample-2.2.spdx.yaml")
 
-            SpdxModelMapper.fromYaml(yaml, SpdxDocument::class.java)
+            SpdxModelMapper.fromYaml<SpdxDocument>(yaml)
         }
     }
 
@@ -60,7 +60,7 @@ class SpdxDocumentModelTest : WordSpec({
         "have idempotent (de)-serialization" {
             val yaml = readResourceAsText("/spdx-spec-examples/SPDXYAMLExample-2.2-no-ranges.spdx.yaml")
 
-            val document = SpdxModelMapper.fromYaml(yaml, SpdxDocument::class.java)
+            val document = SpdxModelMapper.fromYaml<SpdxDocument>(yaml)
             val serializedYaml = SpdxModelMapper.toYaml(document)
 
             serializedYaml shouldBe formatYaml(yaml)
@@ -71,7 +71,7 @@ class SpdxDocumentModelTest : WordSpec({
         "be deserializable" {
             val json = readResourceAsText("/spdx-spec-examples/SPDXJSONExample-v2.2.spdx.json")
 
-            SpdxModelMapper.fromJson(json, SpdxDocument::class.java)
+            SpdxModelMapper.fromJson<SpdxDocument>(json)
         }
     }
 
@@ -79,7 +79,7 @@ class SpdxDocumentModelTest : WordSpec({
         "have idempotent (de-)serialization" {
             val json = readResourceAsText("/spdx-spec-examples/SPDXJSONExample-v2.2-no-ranges.spdx.json")
 
-            val document = SpdxModelMapper.fromJson(json, SpdxDocument::class.java)
+            val document = SpdxModelMapper.fromJson<SpdxDocument>(json)
             val serializedJson = SpdxModelMapper.toJson(document)
 
             serializedJson shouldBe formatJson(json)

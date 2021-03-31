@@ -1,4 +1,9 @@
-* @sschuberth @mnonnenmacher @fviernau
-*.md @sschuberth @mnonnenmacher @fviernau @tsteenbe
+# Note that patterns are not cumulative. So order is important as only the
+# last matching pattern is used.
+
+* @oss-review-toolkit/kotlin-devs
+*.md @oss-review-toolkit/core-devs
+/**/*Sw360* @oss-review-toolkit/kotlin-devs @bs-ondem @oheger-bosch
+/advisor/ @oss-review-toolkit/kotlin-devs @MarcelBochtler @oheger-bosch
 /reporter-web-app/ @tsteenbe
-/spdx-utils/src/main/ @sschuberth @mnonnenmacher @fviernau @tsteenbe
+/spdx-utils/src/main/ @oss-review-toolkit/core-devs

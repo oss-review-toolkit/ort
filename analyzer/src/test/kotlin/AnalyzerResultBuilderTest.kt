@@ -55,11 +55,11 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
     private val project1 = Project.EMPTY.copy(
         id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
-        scopes = sortedSetOf(scope1)
+        scopeDependencies = sortedSetOf(scope1)
     )
     private val project2 = Project.EMPTY.copy(
         id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
-        scopes = sortedSetOf(scope1, scope2)
+        scopeDependencies = sortedSetOf(scope1, scope2)
     )
 
     private val analyzerResult1 = ProjectAnalyzerResult(

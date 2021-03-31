@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,12 @@ import {
     Col, Row, Tabs, Timeline
 } from 'antd';
 import {
-    CheckCircleOutlined, ExclamationCircleOutlined
+    BugOutlined,
+    CodeOutlined,
+    CheckCircleOutlined,
+    ExclamationCircleOutlined,
+    ExceptionOutlined,
+    TagsOutlined
 } from '@ant-design/icons';
 import IssuesTable from './IssuesTable';
 import LicenseChart from './LicenseChart';
@@ -351,7 +356,12 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <ExceptionOutlined />
                                                         Violations (
+                                                        {
+                                                            ruleViolations.length !== unresolvedRuleViolations
+                                                            && `${unresolvedRuleViolations}/`
+                                                        }
                                                         {ruleViolations.length}
                                                         )
                                                     </span>
@@ -375,7 +385,12 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <BugOutlined />
                                                         Issues (
+                                                        {
+                                                            issues.length !== unresolvedIssues
+                                                            && `${unresolvedIssues}/`
+                                                        }
                                                         {issues.length}
                                                         )
                                                     </span>
@@ -399,6 +414,7 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <TagsOutlined />
                                                         Declared Licenses (
                                                         {declaredLicensesProcessed.length}
                                                         )
@@ -431,6 +447,7 @@ class SummaryView extends React.Component {
                                             <TabPane
                                                 tab={(
                                                     <span>
+                                                        <CodeOutlined />
                                                         Detected Licenses (
                                                         {detectedLicensesProcessed.length}
                                                         )

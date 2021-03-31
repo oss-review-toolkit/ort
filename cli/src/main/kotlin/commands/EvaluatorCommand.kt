@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
@@ -70,7 +69,7 @@ import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 
-class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules on ORT result files.") {
+class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT result files against policy rules.") {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."
@@ -258,7 +257,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(finalOrtResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner?.archive.createFileArchiver(),
+            archiver = globalOptionsForSubcommands.config.scanner.archive.createFileArchiver(),
             licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )
 
@@ -275,8 +274,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
                 log.error(violation.toString())
             }
         }
-
-        printSummary(evaluatorRun.violations)
 
         outputDir?.let { absoluteOutputDir ->
             // Note: This overwrites any existing EvaluatorRun from the input file.
@@ -296,19 +293,17 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        if (evaluatorRun.violations.isNotEmpty()) {
-            println("Rule violations found.")
-            throw ProgramResult(2)
-        }
-    }
-
-    private fun printSummary(errors: List<RuleViolation>) {
-        val counts = errors.groupingBy { it.severity }.eachCount()
+        val counts = evaluatorRun.violations.groupingBy { it.severity }.eachCount()
 
         val errorCount = counts[Severity.ERROR] ?: 0
         val warningCount = counts[Severity.WARNING] ?: 0
         val hintCount = counts[Severity.HINT] ?: 0
 
-        println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
+        if (errorCount > 0 || warningCount > 0) {
+            println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
+            throw ProgramResult(2)
+        }
+
+        println("Found $hintCount hints only.")
     }
 }

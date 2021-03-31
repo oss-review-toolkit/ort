@@ -22,23 +22,31 @@ package org.ossreviewtoolkit.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.SQLException
-import java.util.Properties
 
 import kotlin.time.measureTimedValue
+
+import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
+import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
+import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.formatSizeInMib
@@ -71,6 +79,11 @@ class UploadResultToPostgresCommand : CliktCommand(
         help = "The name of the JSONB column to store the ORT result."
     ).required()
 
+    private val createTable by option(
+        "--create-table",
+        help = "Create the table if it does not exist."
+    ).flag()
+
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
@@ -80,7 +93,7 @@ class UploadResultToPostgresCommand : CliktCommand(
             "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
-        val postgresConfig = globalOptionsForSubcommands.config.scanner?.storages?.values
+        val postgresConfig = globalOptionsForSubcommands.config.scanner.storages?.values
             ?.filterIsInstance<PostgresStorageConfiguration>()?.singleOrNull()
 
         requireNotNull(postgresConfig) {
@@ -95,57 +108,42 @@ class UploadResultToPostgresCommand : CliktCommand(
             "The column name must not be blank."
         }
 
-        createConnection(postgresConfig).use { connection ->
-            val query = "INSERT INTO ${postgresConfig.schema}.$tableName ($columnName) VALUES (to_json(?::json)::jsonb)"
+        val dataSource = DatabaseUtils.createHikariDataSource(
+            config = postgresConfig,
+            applicationNameSuffix = "upload-result-command"
+        )
 
-            val json = jsonMapper.writeValueAsString(ortResult).escapeNull()
+        Database.connect(dataSource)
 
-            try {
-                val statement = connection.prepareStatement(query)
-                statement.setString(1, json)
-                statement.execute()
+        val table = OrtResults(tableName, columnName)
 
-                println("Successfully stored ORT result.")
-            } catch (e: SQLException) {
-                e.showStackTrace()
-
-                println("Could not store ORT result: ${e.collectMessagesAsString()}")
+        if (createTable) {
+            transaction {
+                withDataBaseLock {
+                    if (!tableExists(tableName)) {
+                        checkDatabaseEncoding()
+                        SchemaUtils.createMissingTablesAndColumns(table)
+                    }
+                }
             }
         }
+
+        try {
+            transaction {
+                table.insert {
+                    it[result] = ortResult
+                }
+            }
+
+            println("Successfully stored ORT result.")
+        } catch (e: SQLException) {
+            e.showStackTrace()
+
+            println("Could not store ORT result: ${e.collectMessagesAsString()}")
+        }
     }
+}
 
-    private fun createConnection(config: PostgresStorageConfiguration): Connection {
-        require(config.url.isNotBlank()) {
-            "URL for PostgreSQL storage is missing."
-        }
-
-        require(config.schema.isNotBlank()) {
-            "Database for PostgreSQL storage is missing."
-        }
-
-        require(config.username.isNotBlank()) {
-            "Username for PostgreSQL storage is missing."
-        }
-
-        require(config.password.isNotBlank()) {
-            "Password for PostgreSQL storage is missing."
-        }
-
-        val properties = Properties()
-        properties["user"] = config.username
-        properties["password"] = config.password
-        properties["ApplicationName"] = "$ORT_FULL_NAME - CLI - $commandName"
-
-        // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
-        // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
-        // "sslmode", "ssl" is not required.
-        properties["sslmode"] = config.sslmode
-        config.sslcert?.let { properties["sslcert"] = it }
-        config.sslkey?.let { properties["sslkey"] = it }
-        config.sslrootcert?.let { properties["sslrootcert"] = it }
-
-        return DriverManager.getConnection(config.url, properties)
-    }
-
-    private fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
+private class OrtResults(tableName: String, columnName: String) : IntIdTable(tableName) {
+    val result: Column<OrtResult> = jsonb(columnName, OrtResult::class)
 }

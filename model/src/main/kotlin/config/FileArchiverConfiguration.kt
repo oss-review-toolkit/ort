@@ -19,9 +19,16 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import org.ossreviewtoolkit.utils.storage.FileArchiver
+import com.sksamuel.hoplite.ConfigAlias
+
+import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
+import org.ossreviewtoolkit.model.utils.PostgresFileArchiverStorage
+import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.storage.FileStorage
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
@@ -33,14 +40,44 @@ data class FileArchiverConfiguration(
     /**
      * Configuration of the [FileStorage] used for archiving the files.
      */
-    val storage: FileStorageConfiguration
-)
+    @ConfigAlias("storage")
+    @JsonAlias("storage")
+    val fileStorage: FileStorageConfiguration? = null,
+
+    /**
+     * Configuration of the [PostgresFileArchiverStorage] used for archiving the files.
+     */
+    val postgresStorage: PostgresStorageConfiguration? = null
+) {
+    init {
+        if (fileStorage != null && postgresStorage != null) {
+            log.warn {
+                "'fileStorage' and 'postgresStorage' are both configured but only one storage can be used. Using " +
+                        "'fileStorage'."
+            }
+        }
+    }
+}
 
 /**
  * Create a [FileArchiver] based on this configuration.
  */
 fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver {
-    val storage = this?.storage?.createFileStorage() ?: LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR)
+    val storage = when {
+        this?.fileStorage != null -> FileArchiverFileStorage(fileStorage.createFileStorage())
+
+        this?.postgresStorage != null -> {
+            val dataSource = DatabaseUtils.createHikariDataSource(
+                config = postgresStorage,
+                applicationNameSuffix = "file-archiver"
+            )
+
+            PostgresFileArchiverStorage(dataSource)
+        }
+
+        else -> FileArchiverFileStorage(LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR))
+    }
+
     val patterns = LicenseFilenamePatterns.getInstance().allLicenseFilenames
 
     return FileArchiver(patterns, storage)

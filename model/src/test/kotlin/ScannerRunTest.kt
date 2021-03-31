@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class ScannerRunTest : StringSpec({
             config:
               scanner: null
             results:
-              scan_results: []
+              scan_results: {}
               storage_stats:
                 num_reads: 0
                 num_hits: 0
@@ -60,7 +60,7 @@ class ScannerRunTest : StringSpec({
             config:
               scanner: null
             results:
-              scan_results: []
+              scan_results: {}
               storage_stats:
                 num_reads: 0
                 num_hits: 0

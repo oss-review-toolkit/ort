@@ -44,9 +44,11 @@ import org.ossreviewtoolkit.helper.common.getLicenseFindingsById
 import org.ossreviewtoolkit.helper.common.getPackageOrProject
 import org.ossreviewtoolkit.helper.common.getViolatedRulesByLicense
 import org.ossreviewtoolkit.helper.common.replaceConfig
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readValue
@@ -149,7 +151,7 @@ internal class ListLicensesCommand : CliktCommand(
         "--file-allow-list",
         help = "Output only license findings for files whose paths matches any of the given glob expressions."
     ).convert { csv ->
-        csv.split(",").map { pattern -> FileSystems.getDefault().getPathMatcher("glob:$pattern") }
+        csv.split(',').map { pattern -> FileSystems.getDefault().getPathMatcher("glob:$pattern") }
     }.default(emptyList())
 
     override fun run() {
@@ -309,8 +311,10 @@ private fun TextLocation.resolve(baseDir: File): String? {
  * representation returned by [Provenance.toString()], does not have any nesting and omits some irrelevant fields.
  */
 private fun Provenance.writeValueAsString(): String =
-    sourceArtifact?.let {
-        "url=${it.url}, hash=${it.hash.value}"
-    } ?: vcsInfo?.let {
-        "type=${it.type}, url=${it.url}, path=${it.path}, revision=${it.resolvedRevision}"
-    } ?: throw IllegalArgumentException("Provenance must have either a non-null source artifact or VCS info.")
+    when (this) {
+        is ArtifactProvenance -> "url=${sourceArtifact.url}, hash=${sourceArtifact.hash.value}"
+        is RepositoryProvenance -> {
+            "type=${vcsInfo.type}, url=${vcsInfo.url}, path=${vcsInfo.path}, revision=${vcsInfo.resolvedRevision}"
+        }
+        else -> throw IllegalArgumentException("Provenance must have either a non-null source artifact or VCS info.")
+    }

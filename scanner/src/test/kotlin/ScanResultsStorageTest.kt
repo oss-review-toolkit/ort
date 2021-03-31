@@ -68,6 +68,7 @@ class ScanResultsStorageTest : WordSpec({
         "configure an HTTP file storage" {
             val httpStorageConfig = HttpFileStorageConfiguration(
                 "https://some.storage.org/data",
+                "?user=User",
                 mapOf("Authorization" to "Bearer 1234567890")
             )
             val backendConfig = FileStorageConfiguration(httpFileStorage = httpStorageConfig)

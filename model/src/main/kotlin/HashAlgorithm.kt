@@ -22,6 +22,11 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
+import java.io.File
+import java.security.MessageDigest
+
+import org.ossreviewtoolkit.utils.toHexString
+
 /**
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
  * alias is the definite name.
@@ -60,7 +65,20 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
     /**
      * The Secure Hash Algorithm 2 with 512 bits, see [SHA-512](https://en.wikipedia.org/wiki/SHA-512).
      */
-    SHA512("SHA-512", "SHA512");
+    SHA512("SHA-512", "SHA512"),
+
+    /**
+     * The Secure Hash Algorithm 1, but calculated on a Git "blob" object, see
+     * - https://git-scm.com/book/en/v2/Git-Internals-Git-Objects#_object_storage
+     * - https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html#git-compatibility
+     */
+    SHA1_GIT("SHA-1-GIT", "SHA1-GIT", "SHA1GIT") {
+        override fun getMessageDigest(file: File): MessageDigest =
+            MessageDigest.getInstance(SHA1.toString()).apply {
+                val header = "blob ${file.length()}\u0000"
+                update(header.toByteArray())
+            }
+    };
 
     companion object {
         /**
@@ -73,7 +91,7 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
          */
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
-        fun fromString(alias: String) =
+        fun fromString(alias: String): HashAlgorithm =
             enumValues<HashAlgorithm>().find {
                 alias.toUpperCase() in it.aliases
             } ?: UNKNOWN
@@ -100,4 +118,25 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
      */
     @JsonValue
     override fun toString(): String = aliases.first()
+
+    /**
+     * Return the hexadecimal digest of this hash for the given [file].
+     */
+    fun calculate(file: File): String =
+        file.inputStream().use { inputStream ->
+            // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
+            // lot of memory at the same time, also considering that this function could potentially be run on multiple
+            // threads in parallel.
+            val buffer = ByteArray(4 * 1024 * 1024)
+            val digest = getMessageDigest(file)
+
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                digest.update(buffer, 0, length)
+            }
+
+            digest.digest().toHexString()
+        }
+
+    protected open fun getMessageDigest(file: File): MessageDigest = MessageDigest.getInstance(toString())
 }

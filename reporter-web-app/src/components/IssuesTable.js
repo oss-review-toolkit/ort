@@ -262,20 +262,20 @@ const IssuesTable = (props) => {
                             {
                                 webAppOrtIssue.isResolved
                                 && (
-                                    <Panel header="Resolutions" key="0">
+                                    <Panel header="Resolutions" key="1">
                                         <ResolutionTable
                                             resolutions={webAppOrtIssue.resolutions}
                                         />
                                     </Panel>
                                 )
                             }
-                            <Panel header="Details" key="1">
+                            <Panel header="Details" key="2">
                                 <PackageDetails webAppPackage={webAppPackage} />
                             </Panel>
                             {
                                 webAppPackage.hasLicenses()
                                 && (
-                                    <Panel header="Licenses" key="2">
+                                    <Panel header="Licenses" key="3">
                                         <PackageLicenses webAppPackage={webAppPackage} />
                                     </Panel>
                                 )
@@ -283,7 +283,7 @@ const IssuesTable = (props) => {
                             {
                                 webAppPackage.hasPaths()
                                 && (
-                                    <Panel header="Paths" key="3">
+                                    <Panel header="Paths" key="4">
                                         <PackagePaths paths={webAppPackage.paths} />
                                     </Panel>
                                 )
@@ -291,7 +291,7 @@ const IssuesTable = (props) => {
                             {
                                 webAppPackage.hasFindings()
                                 && (
-                                    <Panel header="Scan Results" key="4">
+                                    <Panel header="Scan Results" key="5">
                                         <PackageFindingsTable
                                             webAppPackage={webAppPackage}
                                         />
@@ -301,7 +301,7 @@ const IssuesTable = (props) => {
                             {
                                 webAppPackage.hasPathExcludes()
                                 && (
-                                    <Panel header="Path Excludes" key="5">
+                                    <Panel header="Path Excludes" key="6">
                                         <PathExcludesTable
                                             excludes={webAppPackage.pathExcludes}
                                         />
@@ -311,7 +311,7 @@ const IssuesTable = (props) => {
                             {
                                 webAppPackage.hasScopeExcludes()
                                 && (
-                                    <Panel header="Scope Excludes" key="6">
+                                    <Panel header="Scope Excludes" key="7">
                                         <ScopeExcludesTable
                                             excludes={webAppPackage.scopeExcludes}
                                         />

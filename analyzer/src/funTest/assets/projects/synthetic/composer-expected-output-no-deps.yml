@@ -2,6 +2,9 @@
 project:
   id: "Composer:ort:composer-test-project:0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  authors:
+  - "The Author"
+  - "The Other Author"
   declared_licenses:
   - "Apache-2.0"
   - "MIT"

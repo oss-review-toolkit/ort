@@ -19,13 +19,20 @@
 
 package org.ossreviewtoolkit.model
 
+import io.kotest.assertions.fail
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beTheSameInstanceAs
 
 import java.io.File
 import java.time.Instant
+import java.util.SortedSet
 
 import org.ossreviewtoolkit.utils.test.containExactly
 
@@ -33,6 +40,71 @@ private fun readAnalyzerResult(analyzerResultFilename: String): Project =
     File("../analyzer/src/funTest/assets/projects/synthetic")
         .resolve(analyzerResultFilename)
         .readValue<ProjectAnalyzerResult>().project
+
+private const val MANAGER = "MyManager"
+
+private val exampleId = Identifier("$MANAGER:org.ossreviewtoolkit.gradle.example:lib:1.0.0")
+private val textId = Identifier("$MANAGER:org.apache.commons:commons-text:1.1")
+private val langId = Identifier("$MANAGER:org.apache.commons:commons-lang3:3.5")
+private val strutsId = Identifier("$MANAGER:org.apache.struts:struts2-assembly:2.5.14.1")
+private val csvId = Identifier("$MANAGER:org.apache.commons:commons-csv:1.4")
+
+/**
+ * Create a [Project] whose dependencies are represented as a [DependencyGraph].
+ */
+private fun projectWithDependencyGraph(): Project =
+    Project(
+        id = Identifier.EMPTY,
+        definitionFilePath = "/some/path",
+        declaredLicenses = sortedSetOf(),
+        vcs = VcsInfo.EMPTY,
+        homepageUrl = "https//www.test-project.org",
+        scopeDependencies = null,
+        dependencyGraph = createDependencyGraph()
+    )
+
+/**
+ * Create a [DependencyGraph] containing some test dependencies.
+ */
+private fun createDependencyGraph(): DependencyGraph {
+    val dependencies = listOf(
+        langId.toDependencyId(),
+        textId.toDependencyId(),
+        strutsId.toDependencyId(),
+        csvId.toDependencyId(),
+        exampleId.toDependencyId()
+    )
+    val langRef = DependencyReference(0)
+    val textRef = DependencyReference(1, dependencies = sortedSetOf(langRef))
+    val strutsRef = DependencyReference(2)
+    val csvRef = DependencyReference(3, dependencies = sortedSetOf(langRef))
+    val exampleRef = DependencyReference(4, dependencies = sortedSetOf(textRef, strutsRef))
+
+    val scopeMapping = mapOf(
+        "default" to listOf(RootDependencyIndex(4)),
+        "compile" to listOf(RootDependencyIndex(4)),
+        "test" to listOf(RootDependencyIndex(4), RootDependencyIndex(3)),
+        "partial" to listOf(RootDependencyIndex(1))
+    )
+
+    return DependencyGraph(dependencies, setOf(exampleRef, csvRef), scopeMapping)
+}
+
+/**
+ * Construct the short reference from this [Identifier] used internally by the dependency graph.
+ */
+private fun Identifier.toDependencyId() = "$MANAGER:$namespace:$name:$version"
+
+/**
+ * Lookup the scope with the given [name] in the set of [scopes].
+ */
+private fun findScope(scopes: SortedSet<Scope>, name: String): Scope =
+    scopes.find { it.name == name } ?: fail("Could not resolve scope $name.")
+
+/**
+ * Return a set with the identifiers of the (direct) dependencies of the given [scope].
+ */
+private fun scopeDependencies(scope: Scope): Set<Identifier> = scope.dependencies.map { it.id }.toSet()
 
 class ProjectTest : WordSpec({
     "collectDependencies" should {
@@ -95,6 +167,74 @@ class ProjectTest : WordSpec({
                     )
                 )
             )
+        }
+    }
+
+    "scopes" should {
+        "be initialized from scope dependencies" {
+            val project = readAnalyzerResult("maven-expected-output-app.yml")
+
+            project.scopes shouldBe project.scopeDependencies
+        }
+
+        "be initialized from a dependency graph" {
+            val project = projectWithDependencyGraph()
+            val scopes = project.scopes
+            scopes.map { it.name } shouldContainExactly listOf("compile", "default", "partial", "test")
+
+            val defaultScope = findScope(scopes, "default")
+            scopeDependencies(defaultScope) should io.kotest.matchers.collections.containExactly(exampleId)
+            val testScope = findScope(scopes, "test")
+            scopeDependencies(testScope) should containExactlyInAnyOrder(exampleId, csvId)
+            val partialScope = findScope(scopes, "partial")
+            scopeDependencies(partialScope) should io.kotest.matchers.collections.containExactly(textId)
+        }
+
+        "be initialized to an empty set if no information is available" {
+            val project = Project(
+                id = Identifier.EMPTY,
+                definitionFilePath = "/some/path",
+                declaredLicenses = sortedSetOf(),
+                vcs = VcsInfo.EMPTY,
+                homepageUrl = "https//www.test-project.org",
+                scopeDependencies = null,
+                dependencyGraph = null
+            )
+
+            project.scopes.shouldBeEmpty()
+        }
+    }
+
+    "withResolvedScopes" should {
+        "return the same instance if no dependency graph is available" {
+            val project = readAnalyzerResult("maven-expected-output-app.yml")
+
+            val resolvedProject = project.withResolvedScopes()
+
+            resolvedProject should beTheSameInstanceAs(project)
+        }
+
+        "return an instance with scope information extracted from the dependency graph" {
+            val project = projectWithDependencyGraph()
+
+            val resolvedProject = project.withResolvedScopes()
+
+            resolvedProject.dependencyGraph.shouldBeNull()
+            resolvedProject.scopes shouldBe project.scopes
+        }
+    }
+
+    "A Project" should {
+        "be serializable with a dependency graph" {
+            val outputFile = kotlin.io.path.createTempFile(prefix = "project", suffix = ".yml").toFile().apply {
+                deleteOnExit()
+            }
+
+            val project = projectWithDependencyGraph()
+            jsonMapper.writeValue(outputFile, project)
+
+            val projectCopy = jsonMapper.readValue(outputFile, Project::class.java)
+            projectCopy.scopes shouldBe project.scopes
         }
     }
 })

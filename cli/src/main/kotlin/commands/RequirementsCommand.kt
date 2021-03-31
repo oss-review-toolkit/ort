@@ -22,15 +22,13 @@ package org.ossreviewtoolkit.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 
-import com.vdurmont.semver4j.SemverException
-
 import java.io.File
-import java.io.IOException
 import java.lang.reflect.Modifier
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.Scanner
@@ -39,7 +37,7 @@ import org.ossreviewtoolkit.utils.log
 
 import org.reflections.Reflections
 
-class RequirementsCommand : CliktCommand(help = "List the required command line tools.") {
+class RequirementsCommand : CliktCommand(help = "Check for the command line tools required by ORT.") {
     override fun run() {
         val reflections = Reflections("org.ossreviewtoolkit")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
@@ -79,8 +77,11 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
                     Scanner::class.java.isAssignableFrom(it) -> {
                         category = "Scanner"
                         log.debug { "$it is a $category." }
-                        it.getDeclaredConstructor(String::class.java, ScannerConfiguration::class.java)
-                            .newInstance("", ScannerConfiguration())
+                        it.getDeclaredConstructor(
+                            String::class.java,
+                            ScannerConfiguration::class.java,
+                            DownloaderConfiguration::class.java
+                        ).newInstance("", ScannerConfiguration(), DownloaderConfiguration())
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
@@ -114,9 +115,9 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
                 // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
                 val message = buildString {
                     val (prefix, suffix) = if (tool.isInPath()) {
-                        try {
+                        runCatching {
                             val actualVersion = tool.getVersion()
-                            try {
+                            runCatching {
                                 val isRequiredVersion = tool.getVersionRequirement().let {
                                     it == CommandLineTool.ANY_VERSION || it.isSatisfiedBy(actualVersion)
                                 }
@@ -127,11 +128,11 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
                                     statusCode = statusCode or 2
                                     Pair("\t+ ", "Found version $actualVersion.")
                                 }
-                            } catch (e: SemverException) {
+                            }.getOrElse {
                                 statusCode = statusCode or 2
                                 Pair("\t+ ", "Found version '$actualVersion'.")
                             }
-                        } catch (e: IOException) {
+                        }.getOrElse {
                             statusCode = statusCode or 2
                             Pair("\t+ ", "Could not determine the version.")
                         }

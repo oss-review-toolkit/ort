@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import com.vladsch.flexmark.parser.Parser
 
 import java.io.File
 import java.time.Instant
+import java.util.SortedMap
 
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -31,10 +33,12 @@ import kotlinx.html.*
 import kotlinx.html.dom.*
 
 import org.ossreviewtoolkit.downloader.VcsHost
-import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -50,8 +54,9 @@ import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableIssue
 import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.reporter.utils.containsUnresolved
+import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.isValidUrl
+import org.ossreviewtoolkit.utils.isValidUri
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 @Suppress("LargeClass")
@@ -130,6 +135,15 @@ class StaticHtmlReporter : Reporter {
                         +", version ${Environment().ortVersion} on ${Instant.now()}."
                     }
 
+                    h2 { +"Project" }
+
+                    div {
+                        with(reportTableModel.vcsInfo) {
+                            val revision = resolvedRevision ?: revision
+                            +"Scanned revision $revision of $type repository $url"
+                        }
+                    }
+
                     if (reportTableModel.labels.isNotEmpty()) {
                         labelsTable(reportTableModel.labels)
                     }
@@ -156,6 +170,15 @@ class StaticHtmlReporter : Reporter {
         return document.serialize().normalizeLineBreaks()
     }
 
+    private fun getRuleViolationSummaryString(ruleViolations: List<ReportTableModel.ResolvableViolation>): String {
+        val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
+        val errorCount = violations[Severity.ERROR].orEmpty().size
+        val warningCount = violations[Severity.WARNING].orEmpty().size
+        val hintCount = violations[Severity.HINT].orEmpty().size
+
+        return "Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
+    }
+
     private fun DIV.labelsTable(labels: Map<String, String>) {
         h2 { +"Labels" }
         table("ort-report-labels") {
@@ -166,7 +189,7 @@ class StaticHtmlReporter : Reporter {
     private fun TBODY.labelRow(key: String, value: String) {
         tr {
             td { +key }
-            td { if (value.isValidUrl()) a(value) { +value } else +value }
+            td { if (value.isValidUri()) a(value) { +value } else +value }
         }
     }
 
@@ -175,15 +198,9 @@ class StaticHtmlReporter : Reporter {
 
         ul {
             reportTableModel.ruleViolations?.let { ruleViolations ->
-                val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
-                val errorCount = violations[Severity.ERROR].orEmpty().size
-                val warningCount = violations[Severity.WARNING].orEmpty().size
-                val hintCount = violations[Severity.HINT].orEmpty().size
-
                 li {
                     a("#rule-violation-summary") {
-                        +("Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to " +
-                                "resolve)")
+                        +getRuleViolationSummaryString(ruleViolations)
                     }
                 }
             }
@@ -222,14 +239,9 @@ class StaticHtmlReporter : Reporter {
     }
 
     private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
-        val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
-        val errorCount = issues[Severity.ERROR].orEmpty().size
-        val warningCount = issues[Severity.WARNING].orEmpty().size
-        val hintCount = issues[Severity.HINT].orEmpty().size
-
         h2 {
             id = "rule-violation-summary"
-            +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
+            +getRuleViolationSummaryString(ruleViolations)
         }
 
         if (ruleViolations.isEmpty()) {
@@ -329,6 +341,30 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
+    private fun TR.listIssues(issues: SortedMap<Identifier, List<ResolvableIssue>>) {
+        td {
+            issues.forEach { (id, issues) ->
+                a("#${id.toCoordinates()}") { +id.toCoordinates() }
+
+                ul {
+                    issues.forEach { issue ->
+                        li {
+                            issueDescription(issue)
+                            p { +issue.resolutionDescription }
+                        }
+
+                        if (!issue.isResolved && issue.howToFix.isNotBlank()) {
+                            details {
+                                unsafe { +"<summary>How to fix</summary>" }
+                                markdown(issue.howToFix)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun TBODY.issueRow(rowIndex: Int, row: ReportTableModel.IssueRow) {
         val rowId = "issue-$rowIndex"
 
@@ -350,57 +386,18 @@ class StaticHtmlReporter : Reporter {
 
         tr(cssClass) {
             id = rowId
+
             td {
                 a {
                     href = "#$rowId"
                     +rowIndex.toString()
                 }
             }
+
             td { +row.id.toCoordinates() }
 
-            td {
-                row.analyzerIssues.forEach { (id, issues) ->
-                    a("#${id.toCoordinates()}") { +id.toCoordinates() }
-
-                    ul {
-                        issues.forEach { issue ->
-                            li {
-                                issueDescription(issue)
-                                p { +issue.resolutionDescription }
-                            }
-
-                            if (!issue.isResolved && issue.howToFix.isNotBlank()) {
-                                details {
-                                    unsafe { +"<summary>How to fix</summary>" }
-                                    markdown(issue.howToFix)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            td {
-                row.scanIssues.forEach { (id, issues) ->
-                    a("#${id.toCoordinates()}") { +id.toCoordinates() }
-
-                    ul {
-                        issues.forEach { issue ->
-                            li {
-                                issueDescription(issue)
-                                p { +issue.resolutionDescription }
-                            }
-
-                            if (!issue.isResolved && issue.howToFix.isNotBlank()) {
-                                details {
-                                    unsafe { +"<summary>How to fix</summary>" }
-                                    markdown(issue.howToFix)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            listIssues(row.analyzerIssues)
+            listIssues(row.scanIssues)
         }
     }
 
@@ -536,17 +533,25 @@ class StaticHtmlReporter : Reporter {
                 }
 
                 if (row.detectedLicenses.isNotEmpty()) {
-                    em { +"Detected Licenses:" }
+                    // All license location from a package share the same provenance, so just picking the first is fine.
+                    val firstLicenseLocation = row.detectedLicenses.first().locations.firstOrNull()
+
+                    em {
+                        +"Detected Licenses"
+                        provenanceLink(firstLicenseLocation?.provenance)
+                        +":"
+                    }
+
                     dl {
                         dd {
                             row.detectedLicenses.forEach { license ->
-                                val firstFinding =
-                                    license.locations.firstOrNull { it.matchingPathExcludes.isEmpty() }
-                                        ?: license.locations.firstOrNull()
+                                val firstFinding = license.locations.firstOrNull { it.matchingPathExcludes.isEmpty() }
+                                    ?: license.locations.firstOrNull()
 
                                 val permalink = firstFinding?.permalink(row.id)
-                                val pathExcludes =
-                                    license.locations.flatMapTo(mutableSetOf()) { it.matchingPathExcludes }
+                                val pathExcludes = license.locations.flatMapTo(mutableSetOf()) {
+                                    it.matchingPathExcludes
+                                }
 
                                 if (!license.isDetectedExcluded) {
                                     div {
@@ -569,6 +574,11 @@ class StaticHtmlReporter : Reporter {
                             }
                         }
                     }
+                }
+
+                if (row.effectiveLicense != null) {
+                    em { +"Effective License:" }
+                    dl { dd { +"${row.effectiveLicense}" } }
                 }
             }
 
@@ -625,6 +635,18 @@ class StaticHtmlReporter : Reporter {
     }
 }
 
+private fun EM.provenanceLink(provenance: Provenance?) {
+    if (provenance is ArtifactProvenance) {
+        +" (from "
+        a(href = provenance.sourceArtifact.url) { +"artifact" }
+        +")"
+    } else if (provenance is RepositoryProvenance) {
+        +" (from "
+        a(href = provenance.vcsInfo.url) { +"VCS" }
+        +")"
+    }
+}
+
 private fun DIV.permalink(permalink: String, count: Int) {
     if (count > 1) {
         +" (exemplary "
@@ -638,26 +660,28 @@ private fun DIV.permalink(permalink: String, count: Int) {
 }
 
 private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
-    val vcsInfo = provenance.vcsInfo
-    if (vcsInfo != null && vcsInfo != VcsInfo.EMPTY) {
-        return VcsHost.toPermalink(
-            vcsInfo.copy(path = location.path),
-            location.startLine, location.endLine
-        )
+    (provenance as? RepositoryProvenance)?.let {
+        if (it.vcsInfo != VcsInfo.EMPTY) {
+            return VcsHost.toPermalink(
+                it.vcsInfo.copy(path = location.path),
+                location.startLine, location.endLine
+            )
+        }
     }
 
-    val sourceArtifact = provenance.sourceArtifact
-    if (sourceArtifact != null && sourceArtifact != RemoteArtifact.EMPTY) {
-        val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
-        if (sourceArtifact.url.matches(mavenCentralPattern)) {
-            // At least for source artifacts on Maven Central, use the "proxy" from Sonatype which has the
-            // Archive Browser plugin installed to link to the files with findings.
-            return with(id) {
-                val group = namespace.replace('.', '/')
-                "https://repository.sonatype.org/" +
-                        "service/local/repositories/central-proxy/" +
-                        "archive/$group/$name/$version/$name-$version-sources.jar/" +
-                        "!/${location.path}"
+    (provenance as? ArtifactProvenance)?.let {
+        if (it.sourceArtifact != RemoteArtifact.EMPTY) {
+            val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
+            if (it.sourceArtifact.url.matches(mavenCentralPattern)) {
+                // At least for source artifacts on Maven Central, use the "proxy" from Sonatype which has the
+                // Archive Browser plugin installed to link to the files with findings.
+                return with(id) {
+                    val group = namespace.replace('.', '/')
+                    "https://repository.sonatype.org/" +
+                            "service/local/repositories/central-proxy/" +
+                            "archive/$group/$name/$version/$name-$version-sources.jar/" +
+                            "!/${location.path}"
+                }
             }
         }
     }

@@ -49,29 +49,27 @@ class VueJsIntegrationFunTest : AbstractIntegrationSpec() {
     )
 
     override val expectedManagedFiles by lazy {
-        val downloadDir = downloadResult.downloadDirectory
         mapOf(
             Npm.Factory() as PackageManagerFactory to listOf(
-                downloadDir.resolve("package.json"),
-                downloadDir.resolve("packages/vue-server-renderer/package.json"),
-                downloadDir.resolve("packages/vue-template-compiler/package.json"),
-                downloadDir.resolve("packages/weex-template-compiler/package.json"),
-                downloadDir.resolve("packages/weex-vue-framework/package.json")
+                outputDir.resolve("package.json"),
+                outputDir.resolve("packages/vue-server-renderer/package.json"),
+                outputDir.resolve("packages/vue-template-compiler/package.json"),
+                outputDir.resolve("packages/weex-template-compiler/package.json"),
+                outputDir.resolve("packages/weex-vue-framework/package.json")
             ),
             Yarn.Factory() as PackageManagerFactory to listOf(
-                downloadDir.resolve("package.json"),
-                downloadDir.resolve("packages/vue-server-renderer/package.json"),
-                downloadDir.resolve("packages/vue-template-compiler/package.json"),
-                downloadDir.resolve("packages/weex-template-compiler/package.json"),
-                downloadDir.resolve("packages/weex-vue-framework/package.json")
+                outputDir.resolve("package.json"),
+                outputDir.resolve("packages/vue-server-renderer/package.json"),
+                outputDir.resolve("packages/vue-template-compiler/package.json"),
+                outputDir.resolve("packages/weex-template-compiler/package.json"),
+                outputDir.resolve("packages/weex-vue-framework/package.json")
             )
         )
     }
 
     override val managedFilesForTest by lazy {
         mapOf(
-            Npm.Factory() as PackageManagerFactory to
-                    listOf(downloadResult.downloadDirectory.resolve("package.json"))
+            Npm.Factory() as PackageManagerFactory to listOf(outputDir.resolve("package.json"))
         )
     }
 }

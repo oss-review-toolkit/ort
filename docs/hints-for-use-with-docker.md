@@ -14,6 +14,13 @@ docker run \
 
 **Note:** The single forward slash `/` between the environment variable `$PWD` and the `:` is required for PowerShell compatibility, as PowerShell otherwise interprets `:` as part of the environment variable. 
 
+### Setting custom certificates to Docker image keystore
+
+It is possible to install custom certificates when building the image so that they are installed into various keystores.
+To do this, specify `--build-arg CRT_FILES=<path>` when running `docker build`. 
+Note that this requires the directory or certificate file to be inside the Docker build context (usually the directory where the build is run, i.e. probably the directory the Dockerfile resides in). 
+Otherwise, the directories cannot be copied into the Docker image.
+
 ## Common Issues
 
 ### Docker build fails with an "SSL Handshake" error

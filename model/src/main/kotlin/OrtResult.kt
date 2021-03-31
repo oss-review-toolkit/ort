@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
-import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.zipWithDefault
@@ -165,12 +165,10 @@ data class OrtResult(
         result
     }
 
-    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy {
-        scanner?.results?.scanResults?.associateBy({ it.id }, { it.results }).orEmpty()
-    }
+    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy { scanner?.results?.scanResults.orEmpty() }
 
     private val advisorResultsById: Map<Identifier, List<AdvisorResult>> by lazy {
-        advisor?.results?.advisorResults?.associateBy({ it.id }, { it.results }).orEmpty()
+        advisor?.results?.advisorResults.orEmpty()
     }
 
     /**
@@ -231,21 +229,6 @@ data class OrtResult(
 
         return projectsAndPackages
     }
-
-    /**
-     * Return the concluded license for the given package [id], or null if there is no concluded license.
-     */
-    fun getConcludedLicensesForId(id: Identifier): SpdxExpression? =
-        getPackage(id)?.pkg?.concludedLicense
-
-    /**
-     * Return the processed declared licenses for the given [id] which may either refer to a project or to a package. If
-     * [id] is not found an empty set is returned.
-     */
-    fun getDeclaredLicensesForId(id: Identifier): SortedSet<String> =
-        getProject(id)?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
-            ?: getPackage(id)?.pkg?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
-            ?: sortedSetOf()
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
@@ -394,14 +377,32 @@ data class OrtResult(
         }
 
     /**
-     * Return all [AdvisorResultContainer]s contained in this [OrtResult] or only the non-excluded ones if
-     * [omitExcluded] is true.
+     * Return all [AdvisorResult]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is
+     * true.
      */
     @JsonIgnore
-    fun getAdvisorResultContainers(omitExcluded: Boolean = false): Set<AdvisorResultContainer> =
-        advisor?.results?.advisorResults.orEmpty().filterTo(mutableSetOf()) { result ->
-            !omitExcluded || !isExcluded(result.id)
+    fun getAdvisorResults(omitExcluded: Boolean = false): Map<Identifier, List<AdvisorResult>> =
+        advisorResultsById.filter { (id, _) ->
+            !omitExcluded || !isExcluded(id)
         }
+
+    /**
+     * Return all [LicenseChoice]s for the [Package] with [id].
+     */
+    fun getLicenseChoices(id: Identifier): List<LicenseChoice> =
+        repository.config.licenseChoices.packageLicenseChoices.find { it.packageId == id }?.licenseChoices.orEmpty()
+
+    /**
+     * Return all [LicenseChoice]s applicable for the scope of the whole [repository].
+     */
+    @JsonIgnore
+    fun getRepositoryLicenseChoices(): List<LicenseChoice> =
+        repository.config.licenseChoices.repositoryLicenseChoices
+
+    /**
+     * Return the list of [AdvisorResult]s for the given [id].
+     */
+    fun getAdvisorResultsForId(id: Identifier): List<AdvisorResult> = advisorResultsById[id].orEmpty()
 
     /**
      * Return all [RuleViolation]s contained in this [OrtResult].
@@ -447,4 +448,16 @@ data class OrtResult(
      * Return true if and only if the given [id] denotes a [Project] contained in this [OrtResult].
      */
     fun isProject(id: Identifier): Boolean = getProject(id) != null
+
+    /**
+     * Resolves the scopes of all [Project]s in this [OrtResult] with [Project.withResolvedScopes].
+     */
+    fun withResolvedScopes(): OrtResult =
+        copy(
+            analyzer = analyzer?.copy(
+                result = analyzer.result.copy(
+                    projects = analyzer.result.projects.mapTo(sortedSetOf()) { it.withResolvedScopes() }
+                )
+            )
+        )
 }
