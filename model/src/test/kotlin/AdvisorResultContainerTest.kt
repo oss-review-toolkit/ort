@@ -23,8 +23,11 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
+import java.io.File
 import java.net.URI
 import java.time.Duration
 import java.time.Instant
@@ -89,6 +92,22 @@ class AdvisorResultContainerTest : WordSpec() {
                 val deserializedAdvisorResults = jsonMapper.readValue<AdvisorResultContainer>(serializedAdvisorResults)
 
                 deserializedAdvisorResults shouldBe advisorResults
+            }
+
+            "be deserialized with vulnerabilities in the initial format" {
+                val resultsFile = File("src/test/assets/advisor-result-initial.yml")
+
+                val result = resultsFile.readValue<OrtResult>()
+
+                result.advisor shouldNot beNull()
+            }
+
+            "be deserialized with vulnerabilities in format with references" {
+                val resultsFile = File("src/test/assets/advisor-result-vulnerability-refs.yml")
+
+                val result = resultsFile.readValue<OrtResult>()
+
+                result.advisor shouldNot beNull()
             }
         }
     }
