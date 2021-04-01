@@ -43,8 +43,7 @@ class SpdxLicenseTest : WordSpec({
             val gpl10OrLater = SpdxLicense.forId("GPL-1.0+")
             gpl10OrLater shouldNotBeNull {
                 val gpl10OrLaterText = text.replace("\n", " ").trimEnd()
-                gpl10OrLaterText shouldStartWith "This program is free software; you can redistribute it and/or " +
-                        "modify it under the terms of the GNU General Public License"
+                gpl10OrLaterText shouldStartWith "GNU GENERAL PUBLIC LICENSE  Version 1, February 1989"
                 gpl10OrLaterText shouldContain "; either version 1, or (at your option) any later version."
                 gpl10OrLaterText shouldEndWith "That's all there is to it!"
             }
