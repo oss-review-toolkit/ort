@@ -9,32 +9,7 @@
     "type": "maven",
     "version": "3.5",
     "url": "http://testserver/api/packages/3467",
-    "unresolved_vulnerabilities": [
-      {
-        "references": [
-          {
-            "reference_id": "",
-            "scores": [],
-            "source": "",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8242"
-          },
-          {
-            "reference_id": "GHSA-2cxf-6567-7pp6",
-            "scores": [{"scoring_system": "cvssv3.1_qr", "value": "LOW"}],
-            "source": "",
-            "url": "https://github.com/apache/commons-lang/security/advisories/GHSA-2cxf-6567-7pp6"
-          },
-          {
-            "reference_id": "GHSA-2cxf-6567-7pp6",
-            "scores": [],
-            "source": "",
-            "url": "https://github.com/advisories/GHSA-2cxf-6567-7pp6"
-          }
-        ],
-        "url": "http://testserver/api/vulnerabilities/60",
-        "vulnerability_id": "CVE-2014-8242"
-      }
-    ]
+    "unresolved_vulnerabilities": []
   },
   {
     "name": "struts2-assembly",

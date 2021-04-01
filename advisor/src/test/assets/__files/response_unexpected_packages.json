@@ -37,6 +37,31 @@
     ]
   },
   {
+    "name": "unexpected",
+    "namespace": "org.unknown",
+    "purl": "pkg:maven/org.unknown/unexpected@4.2",
+    "qualifiers": {},
+    "resolved_vulnerabilities": [],
+    "subpath": "",
+    "type": "maven",
+    "version": "4.2",
+    "url": "http://testserver/api/packages/3333",
+    "unresolved_vulnerabilities": [
+      {
+        "references": [
+          {
+            "reference_id": "",
+            "scores": [{"scoring_system": "cvssv3.1", "value": "6.5"}],
+            "source": "",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-9876"
+          }
+        ],
+        "url": "http://testserver/api/vulnerabilities/42",
+        "vulnerability_id": "CVE-2021-9876"
+      }
+    ]
+  },
+  {
     "name": "struts2-assembly",
     "namespace": "org.apache.struts",
     "purl": "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1",

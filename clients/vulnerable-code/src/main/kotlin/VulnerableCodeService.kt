@@ -29,9 +29,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 /**
  * Interface for a REST service that allows interaction with the VulnerableCode API to query information about
@@ -61,59 +59,64 @@ interface VulnerableCodeService {
     }
 
     /**
-     * Data class to represent a reference to a vulnerability. When querying the vulnerabilities for packages, each
-     * package in the result has a list of this type. In order to retrieve further details about vulnerabilities,
-     * an additional request has to performed.
+     * Data class that represents a score assigned to a vulnerability. A source of vulnerability information can
+     * provide multiple score values using different scoring systems.
      */
-    data class HyperLinkedVulnerability(
-        /** A URL with information about the vulnerability. */
-        val url: String,
+    data class Score(
+        /** The name of the scoring system. */
+        val scoringSystem: String,
 
         /**
-         * The ID of this vulnerability, typically a CVE identifier. According to the VulnerableCode schema, this can
-         * be *null*.
+         * The value in this scoring system. This is a string to support scoring systems that do not use numeric
+         * scores, but literals like _LOW_, _MEDIUM_, etc.
          */
-        val vulnerabilityId: String?
+        val value: String
     )
 
     /**
-     * Data class representing a vulnerability. Objects of this type are in the result of a query for vulnerabilities.
+     * Data class representing a reference to detailed information about a vulnerability. Information about a single
+     * vulnerability can come from multiple sources; for each of these sources a reference is added to the data.
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class VulnerabilityReference(
+        /**
+         * The URL of this reference. From this URL, it is also possible to identify the source of information.
+         */
+        val url: String,
+
+        /**
+         * A (possibly empty) list with [Score] objects that determine the severity this source assigns to this
+         * vulnerability.
+         */
+        val scores: List<Score>
+    )
+
+    /**
+     * Data class representing a single vulnerability with its references to detailed information.
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class Vulnerability(
         /** A URL with information about the vulnerability. */
-        val url: String,
+        val vulnerabilityId: String,
 
-        /**
-         * The identifier for this vulnerability. According to the VulnerableCode schema, this can be *null*.
-         */
-        val cveId: String?,
-
-        /**
-         * The vulnerability score. According to the VulnerableCode schema, this can be *null*.
-         */
-        val cvss: Float?
+        /** A list with [VulnerabilityReference]s pointing to sources of information about this vulnerability. */
+        val references: List<VulnerabilityReference>
     )
 
     /**
-     * Data class describing a package in the result of a package query. An instance contains information about
-     * the vulnerabilities that have been found for this package.
+     * Data class describing a package in the result of a package query together with the vulnerabilities known for
+     * this package.
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class Vulnerabilities(
+    data class PackageVulnerabilities(
+        /** The PURL identifying this package. */
+        val purl: String,
+
         /** An optional list with vulnerabilities that have not yet been resolved. */
-        val unresolvedVulnerabilities: List<HyperLinkedVulnerability> = emptyList(),
+        val unresolvedVulnerabilities: List<Vulnerability> = emptyList(),
 
         /** An optional list with vulnerabilities that have already been resolved. */
-        val resolvedVulnerabilities: List<HyperLinkedVulnerability> = emptyList()
-    )
-
-    /**
-     * Data class to represent the bulk request for vulnerabilities by their IDs. The request body is a JSON object
-     * with a property containing a list of vulnerability IDs.
-     */
-    data class VulnerabilitiesWrapper(
-        val vulnerabilities: List<String>
+        val resolvedVulnerabilities: List<Vulnerability> = emptyList()
     )
 
     /**
@@ -122,27 +125,14 @@ interface VulnerableCodeService {
      * list of package identifiers.
      */
     data class PackagesWrapper(
-        val packages: List<String>
+        val purls: Collection<String>
     )
 
     /**
      * Retrieve information about the vulnerabilities assigned to the given [packages][packageUrls].
-     * Return a map whose keys are the URLs of packages; so for each package the referenced vulnerabilities can be
-     * retrieved.
+     * Return a list with information about packages including the resolved and unresolved vulnerabilities for these
+     * packages.
      */
     @POST("api/packages/bulk_search")
-    suspend fun getPackageVulnerabilities(@Body packageUrls: PackagesWrapper): Map<String, Vulnerabilities>
-
-    /**
-     * Retrieve detail information about the specified [vulnerabilities][vulnerabilityIds]. The resulting map
-     * associates the IDs of vulnerabilities with their details.
-     */
-    @POST("api/vulnerabilities/bulk_search")
-    suspend fun getVulnerabilityDetails(@Body vulnerabilityIds: VulnerabilitiesWrapper): Map<String, Vulnerability>
-
-    /**
-     * Retrieve detail information for the vulnerability with the given [id].
-     */
-    @GET("api/vulnerabilities/{id}")
-    suspend fun getVulnerability(@Path("id") id: String): Vulnerability
+    suspend fun getPackageVulnerabilities(@Body packageUrls: PackagesWrapper): List<PackageVulnerabilities>
 }

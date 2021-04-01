@@ -19,17 +19,13 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import java.io.IOException
 import java.net.URI
 import java.time.Instant
-
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 
 import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
 import org.ossreviewtoolkit.advisor.VulnerabilityProvider
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
+import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -38,7 +34,6 @@ import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
-import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 
 /**
@@ -60,21 +55,13 @@ class VulnerableCode(
          * randomly to keep the size of responses reasonably small.
          */
         private const val BULK_FETCH_SIZE = 100
-
-        /** A severity value used if no information is provided by VulnerableCode. */
-        private const val SEVERITY_UNDEFINED = -1f
-
-        /** A regular expression pattern to extract the ID of a vulnerability from its URI. */
-        private val vulnerabilityIdPattern = Regex(".*/api/vulnerabilities/([^/]+)/")
-
-        /**
-         * Try to extract the (internal VulnerableCode) ID from the given [url] of a vulnerability. Throw an
-         * exception if the URL has an unexpected form.
-         */
-        private fun extractVulnerabilityId(url: String): String =
-            vulnerabilityIdPattern.matchEntire(url)?.groups?.get(1)?.value
-                ?: throw IOException("Unexpected URL of a vulnerability: $url.")
     }
+
+    /**
+     * The details returned with each [AdvisorResult] produced by this instance. As this is constant, it can be
+     * created once beforehand.
+     */
+    private val details = AdvisorDetails(providerName)
 
     private val service by lazy {
         VulnerableCodeService.create(vulnerableCodeConfiguration.serverUrl, OkHttpClientHelper.buildClient())
@@ -83,74 +70,53 @@ class VulnerableCode(
     override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
-        val components = packages.map { it.purl }
-
         @Suppress("TooGenericExceptionCaught")
         return try {
-            val packagesToVulnerabilityRefs = mutableMapOf<String, VulnerableCodeService.Vulnerabilities>()
-
-            components.chunked(BULK_FETCH_SIZE).forEach { component ->
-                val requestResults = service.getPackageVulnerabilities(VulnerableCodeService.PackagesWrapper(component))
-                packagesToVulnerabilityRefs += requestResults
-            }
-
-            val packagesToVulnerabilities = fetchVulnerabilityDetails(packagesToVulnerabilityRefs, service)
-
-            val endTime = Instant.now()
-
-            packages.mapNotNull { pkg ->
-                packagesToVulnerabilities[pkg.id.toPurl()]?.let { vulnerabilities ->
-                    pkg to listOf(
-                        AdvisorResult(
-                            vulnerabilities,
-                            AdvisorDetails(providerName),
-                            AdvisorSummary(startTime, endTime)
-                        )
-                    )
+            mutableMapOf<Package, List<AdvisorResult>>().also {
+                packages.chunked(BULK_FETCH_SIZE).forEach { pkg ->
+                    it += loadVulnerabilities(pkg, startTime)
                 }
-            }.toMap()
+            }
         } catch (e: Exception) {
             createFailedResults(startTime, packages, e)
         }
     }
 
     /**
-     * Construct a map from package URLs to the vulnerabilities of this package based on a
-     * [map with vulnerability references][packagesToVulnerabilityRefs] using the specified [service]. This
-     * function looks up the details of the vulnerabilities the references point to.
+     * Load vulnerability information for the given [packages] and create a map with results per package using the
+     * [startTime].
      */
-    private suspend fun fetchVulnerabilityDetails(
-        packagesToVulnerabilityRefs: MutableMap<String, VulnerableCodeService.Vulnerabilities>,
-        service: VulnerableCodeService
-    ): Map<String, List<Vulnerability>> {
-        val vulnerabilityIds = packagesToVulnerabilityRefs.values.flatMap { it.unresolvedVulnerabilities }
-            .map { it.url }
-        val vulnerabilityDetails = resolveVulnerabilities(service, vulnerabilityIds)
-        return packagesToVulnerabilityRefs
-            .filterNot { it.value.unresolvedVulnerabilities.isEmpty() }
-            .mapValues { (_, refs) ->
-                refs.unresolvedVulnerabilities.mapNotNull { vulnerabilityDetails[it.url] }
+    private suspend fun loadVulnerabilities(
+        packages: List<Package>,
+        startTime: Instant
+    ): Map<Package, List<AdvisorResult>> {
+        val packageMap = packages.associateBy { it.purl }
+        val packageVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(packageMap.keys))
+
+        return packageVulnerabilities.filter { it.unresolvedVulnerabilities.isNotEmpty() }.mapNotNull { pv ->
+            packageMap[pv.purl]?.let { pkg ->
+                val vulnerabilities = pv.unresolvedVulnerabilities.map { it.toModel() }
+                val summary = AdvisorSummary(startTime, Instant.now())
+                pkg to listOf(AdvisorResult(vulnerabilities, details, summary))
             }
+        }.toMap()
     }
 
     /**
-     * Resolve the given [vulnerabilityUrls] by querying the corresponding vulnerability IDs from the VulnerableCode
-     * [service]. Return a map with the URLs keys and the resolved vulnerability details as values.
+     * Convert this vulnerability from the VulnerableCode data model to a [Vulnerability].
      */
-    private suspend fun resolveVulnerabilities(
-        service: VulnerableCodeService,
-        vulnerabilityUrls: List<String>
-    ): Map<String, Vulnerability> =
-        coroutineScope {
-            vulnerabilityUrls.map { extractVulnerabilityId(it) }
-                .map { async { service.getVulnerability(it) } }
-                .awaitAll()
-                .map {
-                    Vulnerability(
-                        it.cveId.orEmpty(),
-                        listOf(VulnerabilityReference(URI(it.url), null, (it.cvss ?: SEVERITY_UNDEFINED).toString()))
-                    )
-                }
-                .associateBy { it.references.first().url.toString() }
-        }
+    private fun VulnerableCodeService.Vulnerability.toModel(): Vulnerability =
+        Vulnerability(vulnerabilityId, references.flatMap { it.toModel() })
+
+    /**
+     * Convert this reference from the VulnerableCode data model to a list of [VulnerabilityReference] objects.
+     * In the VulnerableCode model, the reference can be assigned multiple scores in different scoring systems.
+     * For each of these scores, a single [VulnerabilityReference] is created. If no score is available, return a
+     * list with a single [VulnerabilityReference] with limited data.
+     */
+    private fun VulnerableCodeService.VulnerabilityReference.toModel(): List<VulnerabilityReference> {
+        val sourceUri = URI(url)
+        return scores.map { VulnerabilityReference(sourceUri, it.scoringSystem, it.value) }.takeUnless { it.isEmpty() }
+            ?: listOf(VulnerabilityReference(sourceUri, null, null))
+    }
 }
