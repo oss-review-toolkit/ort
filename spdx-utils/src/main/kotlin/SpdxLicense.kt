@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +66,7 @@ enum class SpdxLicense(
     AML("AML", "Apple MIT License"),
     AMPAS("AMPAS", "Academy of Motion Picture Arts and Sciences BSD"),
     ANTLR_PD("ANTLR-PD", "ANTLR Software Rights Notice"),
+    ANTLR_PD_FALLBACK("ANTLR-PD-fallback", "ANTLR Software Rights Notice with license fallback"),
     APACHE_1_0("Apache-1.0", "Apache License 1.0"),
     APACHE_1_1("Apache-1.1", "Apache License 1.1"),
     APACHE_2_0("Apache-2.0", "Apache License 2.0"),
@@ -97,15 +98,18 @@ enum class SpdxLicense(
     BSD_3_CLAUSE_ATTRIBUTION("BSD-3-Clause-Attribution", "BSD with attribution"),
     BSD_3_CLAUSE_CLEAR("BSD-3-Clause-Clear", "BSD 3-Clause Clear License"),
     BSD_3_CLAUSE_LBNL("BSD-3-Clause-LBNL", "Lawrence Berkeley National Labs BSD variant license"),
+    BSD_3_CLAUSE_MODIFICATION("BSD-3-Clause-Modification", "BSD 3-Clause Modification"),
     BSD_3_CLAUSE_NO_NUCLEAR_LICENSE("BSD-3-Clause-No-Nuclear-License", "BSD 3-Clause No Nuclear License"),
     BSD_3_CLAUSE_NO_NUCLEAR_LICENSE_2014("BSD-3-Clause-No-Nuclear-License-2014", "BSD 3-Clause No Nuclear License 2014"),
     BSD_3_CLAUSE_NO_NUCLEAR_WARRANTY("BSD-3-Clause-No-Nuclear-Warranty", "BSD 3-Clause No Nuclear Warranty"),
     BSD_3_CLAUSE_OPEN_MPI("BSD-3-Clause-Open-MPI", "BSD 3-Clause Open MPI variant"),
     BSD_4_CLAUSE("BSD-4-Clause", "BSD 4-Clause \"Original\" or \"Old\" License"),
+    BSD_4_CLAUSE_SHORTENED("BSD-4-Clause-Shortened", "BSD 4 Clause Shortened"),
     BSD_4_CLAUSE_UC("BSD-4-Clause-UC", "BSD-4-Clause (University of California-Specific)"),
     BSD_PROTECTION("BSD-Protection", "BSD Protection License"),
     BSD_SOURCE_CODE("BSD-Source-Code", "BSD Source Code Attribution"),
     BSL_1_0("BSL-1.0", "Boost Software License 1.0"),
+    BUSL_1_1("BUSL-1.1", "Business Source License 1.1"),
     BZIP2_1_0_5("bzip2-1.0.5", "bzip2 and libbzip2 License v1.0.5"),
     BZIP2_1_0_6("bzip2-1.0.6", "bzip2 and libbzip2 License v1.0.6"),
     CALDERA("Caldera", "Caldera License"),
@@ -118,6 +122,7 @@ enum class SpdxLicense(
     CC_BY_2_5("CC-BY-2.5", "Creative Commons Attribution 2.5 Generic"),
     CC_BY_3_0("CC-BY-3.0", "Creative Commons Attribution 3.0 Unported"),
     CC_BY_3_0_AT("CC-BY-3.0-AT", "Creative Commons Attribution 3.0 Austria"),
+    CC_BY_3_0_US("CC-BY-3.0-US", "Creative Commons Attribution 3.0 United States"),
     CC_BY_4_0("CC-BY-4.0", "Creative Commons Attribution 4.0 International"),
     CC_BY_NC_1_0("CC-BY-NC-1.0", "Creative Commons Attribution Non Commercial 1.0 Generic"),
     CC_BY_NC_2_0("CC-BY-NC-2.0", "Creative Commons Attribution Non Commercial 2.0 Generic"),
@@ -142,6 +147,8 @@ enum class SpdxLicense(
     CC_BY_ND_4_0("CC-BY-ND-4.0", "Creative Commons Attribution No Derivatives 4.0 International"),
     CC_BY_SA_1_0("CC-BY-SA-1.0", "Creative Commons Attribution Share Alike 1.0 Generic"),
     CC_BY_SA_2_0("CC-BY-SA-2.0", "Creative Commons Attribution Share Alike 2.0 Generic"),
+    CC_BY_SA_2_0_UK("CC-BY-SA-2.0-UK", "Creative Commons Attribution Share Alike 2.0 England and Wales"),
+    CC_BY_SA_2_1_JP("CC-BY-SA-2.1-JP", "Creative Commons Attribution Share Alike 2.1 Japan"),
     CC_BY_SA_2_5("CC-BY-SA-2.5", "Creative Commons Attribution Share Alike 2.5 Generic"),
     CC_BY_SA_3_0("CC-BY-SA-3.0", "Creative Commons Attribution Share Alike 3.0 Unported"),
     CC_BY_SA_3_0_AT("CC-BY-SA-3.0-AT", "Creative Commons Attribution-Share Alike 3.0 Austria"),
@@ -177,9 +184,11 @@ enum class SpdxLicense(
     CUA_OPL_1_0("CUA-OPL-1.0", "CUA Office Public License v1.0"),
     CUBE("Cube", "Cube License"),
     CURL("curl", "curl License"),
+    C_UDA_1_0("C-UDA-1.0", "Computational Use of Data Agreement v1.0"),
     DIFFMARK("diffmark", "diffmark license"),
     DOC("DOC", "DOC License"),
     DOTSEQN("Dotseqn", "Dotseqn License"),
+    DRL_1_0("DRL-1.0", "Detection Rule License 1.0"),
     DSDP("DSDP", "DSDP License"),
     DVIPDFM("dvipdfm", "dvipdfm License"),
     D_FSL_1_0("D-FSL-1.0", "Deutsche Freie Software Lizenz"),
@@ -202,11 +211,13 @@ enum class SpdxLicense(
     EUROSYM("Eurosym", "Eurosym License"),
     FAIR("Fair", "Fair License"),
     FRAMEWORX_1_0("Frameworx-1.0", "Frameworx Open License 1.0"),
+    FREEBSD_DOC("FreeBSD-DOC", "FreeBSD Documentation License"),
     FREEIMAGE("FreeImage", "FreeImage Public License v1.0"),
     FSFAP("FSFAP", "FSF All Permissive License"),
     FSFUL("FSFUL", "FSF Unlimited License"),
     FSFULLR("FSFULLR", "FSF Unlimited License (with License Retention)"),
     FTL("FTL", "Freetype Project License"),
+    GD("GD", "GD License"),
     GFDL_1_1("GFDL-1.1", "GNU Free Documentation License v1.1", true),
     GFDL_1_1_INVARIANTS_ONLY("GFDL-1.1-invariants-only", "GNU Free Documentation License v1.1 only - invariants"),
     GFDL_1_1_INVARIANTS_OR_LATER("GFDL-1.1-invariants-or-later", "GNU Free Documentation License v1.1 or later - invariants"),
@@ -258,6 +269,7 @@ enum class SpdxLicense(
     HIPPOCRATIC_2_1("Hippocratic-2.1", "Hippocratic License 2.1"),
     HPND("HPND", "Historical Permission Notice and Disclaimer"),
     HPND_SELL_VARIANT("HPND-sell-variant", "Historical Permission Notice and Disclaimer - sell variant"),
+    HTMLTIDY("HTMLTIDY", "HTML Tidy License"),
     IBM_PIBS("IBM-pibs", "IBM PowerPC Initialization and Boot Software"),
     ICU("ICU", "ICU License"),
     IJG("IJG", "Independent JPEG Group License"),
@@ -315,6 +327,8 @@ enum class SpdxLicense(
     MIT_CMU("MIT-CMU", "CMU License"),
     MIT_ENNA("MIT-enna", "enna License"),
     MIT_FEH("MIT-feh", "feh License"),
+    MIT_MODERN_VARIANT("MIT-Modern-Variant", "MIT License Modern Variant"),
+    MIT_OPEN_GROUP("MIT-open-group", "MIT Open Group variant"),
     MOTOSOTO("Motosoto", "Motosoto License"),
     MPICH2("mpich2", "mpich2 License"),
     MPL_1_0("MPL-1.0", "Mozilla Public License 1.0"),
@@ -328,6 +342,7 @@ enum class SpdxLicense(
     MULANPSL_2_0("MulanPSL-2.0", "Mulan Permissive Software License, Version 2"),
     MULTICS("Multics", "Multics License"),
     MUP("Mup", "Mup License"),
+    NAIST_2003("NAIST-2003", "Nara Institute of Science and Technology License (2003)"),
     NASA_1_3("NASA-1.3", "NASA Open Source Agreement 1.3"),
     NAUMEN("Naumen", "Naumen Public License"),
     NBPL_1_0("NBPL-1.0", "Net Boolean Public License v1"),
@@ -353,7 +368,7 @@ enum class SpdxLicense(
     NUNIT("Nunit", "Nunit License", true),
     OCCT_PL("OCCT-PL", "Open CASCADE Technology Public License"),
     OCLC_2_0("OCLC-2.0", "OCLC Research Public License 2.0"),
-    ODBL_1_0("ODbL-1.0", "ODC Open Database License v1.0"),
+    ODBL_1_0("ODbL-1.0", "Open Data Commons Open Database License v1.0"),
     ODC_BY_1_0("ODC-By-1.0", "Open Data Commons Attribution License v1.0"),
     OFL_1_0("OFL-1.0", "SIL Open Font License 1.0"),
     OFL_1_0_NO_RFN("OFL-1.0-no-RFN", "SIL Open Font License 1.0 with no Reserved Font Name"),
@@ -362,6 +377,7 @@ enum class SpdxLicense(
     OFL_1_1_NO_RFN("OFL-1.1-no-RFN", "SIL Open Font License 1.1 with no Reserved Font Name"),
     OFL_1_1_RFN("OFL-1.1-RFN", "SIL Open Font License 1.1 with Reserved Font Name"),
     OGC_1_0("OGC-1.0", "OGC Software License, Version 1.0"),
+    OGDL_TAIWAN_1_0("OGDL-Taiwan-1.0", "Taiwan Open Government Data License, version 1.0"),
     OGL_CANADA_2_0("OGL-Canada-2.0", "Open Government Licence - Canada"),
     OGL_UK_1_0("OGL-UK-1.0", "Open Government Licence v1.0"),
     OGL_UK_2_0("OGL-UK-2.0", "Open Government Licence v2.0"),
@@ -395,7 +411,7 @@ enum class SpdxLicense(
     O_UDA_1_0("O-UDA-1.0", "Open Use of Data Agreement v1.0"),
     PARITY_6_0_0("Parity-6.0.0", "The Parity Public License 6.0.0"),
     PARITY_7_0_0("Parity-7.0.0", "The Parity Public License 7.0.0"),
-    PDDL_1_0("PDDL-1.0", "ODC Public Domain Dedication & License 1.0"),
+    PDDL_1_0("PDDL-1.0", "Open Data Commons Public Domain Dedication & License 1.0"),
     PHP_3_0("PHP-3.0", "PHP License v3.0"),
     PHP_3_01("PHP-3.01", "PHP License v3.01"),
     PLEXUS("Plexus", "Plexus Classworlds License"),
@@ -491,7 +507,7 @@ enum class SpdxLicense(
         /**
          * The version of the license list.
          */
-        const val LICENSE_LIST_VERSION = "3.10-9-ge0f7167"
+        const val LICENSE_LIST_VERSION = "3.12"
 
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
@@ -505,28 +521,5 @@ enum class SpdxLicense(
     /**
      * The full license text as a string.
      */
-    val text by lazy {
-        val baseId = if (deprecated) {
-            id.removeSuffix("+")
-        } else {
-            id.removeSuffix("-or-later")
-        }
-
-        buildString {
-            if (baseId != id) {
-                append(SpdxLicense::class.java.getResource("/licenses/$baseId-or-later").readText())
-
-                val isGpl = listOf("AGPL-", "GPL-", "LGPL-").any { baseId.startsWith(it) }
-                if (isGpl) {
-                    appendLine()
-
-                    // For GPL the "or later version" text is just an amendment that reads better as a prefix as
-                    // then no text follows the license's final "That's all there is to it!" sentence.
-                    append(SpdxLicense::class.java.getResource("/licenses/$baseId").readText())
-                }
-            } else {
-                append(SpdxLicense::class.java.getResource("/licenses/$id").readText())
-            }
-        }
-    }
+    val text by lazy { javaClass.getResource("/licenses/$id").readText() }
 }

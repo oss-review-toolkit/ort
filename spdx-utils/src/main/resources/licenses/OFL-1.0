@@ -1,6 +1,6 @@
-SIL OPEN FONT LICENSE
-
-Version 1.0 - 22 November 2005
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.0 - 22 November 2005
+-----------------------------------------------------------
 
 PREAMBLE
 The goals of the Open Font License (OFL) are to stimulate worldwide
@@ -18,12 +18,12 @@ however, cannot be released under any other type of license.
 
 DEFINITIONS
 "Font Software" refers to any and all of the following:
+    - font files
+    - data files
+    - source code
+    - build scripts
+    - documentation
 
-font files
-data files
-source code
-build scripts
-documentation
 "Reserved Font Name" refers to the Font Software name as seen by
 users and any other names as specified after the copyright statement.
 
@@ -31,7 +31,7 @@ users and any other names as specified after the copyright statement.
 components as distributed by the Copyright Holder.
 
 "Modified Version" refers to any derivative font software made by
-adding to, deleting, or substituting — in part or in whole --
+adding to, deleting, or substituting -- in part or in whole --
 any of the components of the Standard Version, by changing formats
 or by porting the Font Software to a new environment.
 
