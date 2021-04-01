@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 import java.io.File
+import java.io.InputStream
 import java.security.MessageDigest
 
 import org.ossreviewtoolkit.utils.toHexString
@@ -73,9 +74,9 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
      * - https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html#git-compatibility
      */
     SHA1_GIT("SHA-1-GIT", "SHA1-GIT", "SHA1GIT") {
-        override fun getMessageDigest(file: File): MessageDigest =
+        override fun getMessageDigest(size: Long): MessageDigest =
             MessageDigest.getInstance(SHA1.toString()).apply {
-                val header = "blob ${file.length()}\u0000"
+                val header = "blob $size\u0000"
                 update(header.toByteArray())
             }
     };
@@ -122,21 +123,37 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
     /**
      * Return the hexadecimal digest of this hash for the given [file].
      */
-    fun calculate(file: File): String =
-        file.inputStream().use { inputStream ->
-            // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
-            // lot of memory at the same time, also considering that this function could potentially be run on multiple
-            // threads in parallel.
-            val buffer = ByteArray(4 * 1024 * 1024)
-            val digest = getMessageDigest(file)
+    fun calculate(file: File): String = file.inputStream().use { calculate(it, file.length()) }
 
-            var length: Int
-            while (inputStream.read(buffer).also { length = it } > 0) {
-                digest.update(buffer, 0, length)
-            }
+    /**
+     * Return the hexadecimal digest of this hash for the given [resourceName].
+     */
+    fun calculate(resourceName: String): String {
+        val resource = javaClass.getResource(resourceName)
+        val size = resource.openConnection().contentLengthLong
+        return resource.openStream().use { calculate(it, size) }
+    }
 
-            digest.digest().toHexString()
+    /**
+     * Return the hexadecimal digest of this hash for the given [inputStream] and [size]. The caller is responsible for
+     * closing the stream.
+     */
+    fun calculate(inputStream: InputStream, size: Long): String {
+        // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
+        // lot of memory at the same time, also considering that this function could potentially be run on multiple
+        // threads in parallel.
+        val buffer = ByteArray(4 * 1024 * 1024)
+        val digest = getMessageDigest(size)
+
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+            digest.update(buffer, 0, length)
         }
 
-    protected open fun getMessageDigest(file: File): MessageDigest = MessageDigest.getInstance(toString())
+        return digest.digest().toHexString()
+    }
+
+    protected open fun getMessageDigest(size: Long): MessageDigest =
+        // Disregard the size in the standard case.
+        MessageDigest.getInstance(toString())
 }

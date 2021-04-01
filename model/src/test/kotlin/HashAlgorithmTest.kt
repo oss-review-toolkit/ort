@@ -38,4 +38,10 @@ class HashAlgorithmTest : StringSpec({
         // The expected hash was calculated with "git ls-tree HEAD".
         HashAlgorithm.SHA1_GIT.calculate(file) shouldBe "8dada3edaf50dbc082c9a125058f25def75e625a"
     }
+
+    "Calculating the SHA1-GIT on a resource should yield the correct result" {
+        // The expected hash was calculated with "git ls-tree HEAD".
+        HashAlgorithm.SHA1_GIT.calculate("/licenses/Apache-2.0") shouldBe
+                "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    }
 })
