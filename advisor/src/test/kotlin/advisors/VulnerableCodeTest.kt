@@ -25,7 +25,6 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
-import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
@@ -47,6 +46,7 @@ import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
@@ -77,22 +77,9 @@ class VulnerableCodeTest : WordSpec({
 
     "VulnerableCode" should {
         "return vulnerability information" {
-            stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search"))
-                    .withRequestBody(equalToJson(packagesRequestJson, false, false))
-                    .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("response_packages.json")
-                    )
-            )
-
-            stubVulnerability("v1", "CVE-2014-8242", 42.0f)
-            stubVulnerability("v2", "CVE-2009-1382", 11.0f)
-            stubVulnerability("v3", "CVE-2019-CoV19", 77.0f)
-
+            wiremock.stubPackagesRequest("response_packages.json")
             val vulnerableCode = createVulnerableCode(wiremock)
-            val packagesToAdvise = resultFile().readValue<OrtResult>().getPackages(false).map { it.pkg }
+            val packagesToAdvise = inputPackages()
 
             val result = vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
 
@@ -104,8 +91,25 @@ class VulnerableCodeTest : WordSpec({
             langResults[0].advisor.name shouldBe ADVISOR_NAME
             val expLangVulnerability = Vulnerability(
                 id = "CVE-2014-8242",
-                createReferences(URI("http://localhost:8000/api/vulnerabilities/v1/"), severity = 42.0f)
+                listOf(
+                    VulnerabilityReference(
+                        URI("https://nvd.nist.gov/vuln/detail/CVE-2014-8242"),
+                        scoringSystem = null,
+                        severity = null
+                    ),
+                    VulnerabilityReference(
+                        URI("https://github.com/apache/commons-lang/security/advisories/GHSA-2cxf-6567-7pp6"),
+                        scoringSystem = "cvssv3.1_qr",
+                        severity = "LOW"
+                    ),
+                    VulnerabilityReference(
+                        URI("https://github.com/advisories/GHSA-2cxf-6567-7pp6"),
+                        scoringSystem = null,
+                        severity = null
+                    )
+                )
             )
+
             langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
 
             val strutsResults = result.getValue(idStruts)
@@ -113,86 +117,63 @@ class VulnerableCodeTest : WordSpec({
             val expStrutsVulnerabilities = listOf(
                 Vulnerability(
                     id = "CVE-2009-1382",
-                    createReferences(URI("http://localhost:8000/api/vulnerabilities/v2/"), severity = 11.0f)
+                    listOf(
+                        VulnerabilityReference(
+                            URI("https://nvd.nist.gov/vuln/detail/CVE-2009-1382"),
+                            scoringSystem = "cvssv2",
+                            severity = "7"
+                        )
+                    )
                 ),
                 Vulnerability(
                     id = "CVE-2019-CoV19",
-                    createReferences(URI("http://localhost:8000/api/vulnerabilities/v3/"), severity = 77.0f)
+                    listOf(
+                        VulnerabilityReference(
+                            URI("https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19"),
+                            scoringSystem = "cvssv3",
+                            severity = "10"
+                        ),
+                        VulnerabilityReference(
+                            URI("https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19"),
+                            scoringSystem = "cvssv3.1_qr",
+                            severity = "HIGH"
+                        )
+                    )
                 )
             )
+
             strutsResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expStrutsVulnerabilities)
         }
 
-        "handle missing details of a vulnerability" {
+        "handle a failure response from the server" {
             stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search"))
-                    .withRequestBody(equalToJson(packagesRequestJson, false, false))
-                    .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+                post(urlPathEqualTo("/api/packages/bulk_search/"))
                     .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("response_packages.json")
+                        aResponse().withStatus(500)
                     )
             )
 
-            stubVulnerability("v1", "CVE-2014-8242", 42.0f)
-            stubVulnerability("v2", "CVE-2009-1382", 11.0f)
-            stubFor(
-                get(urlPathEqualTo("/api/vulnerabilities/v3"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("response_vulnerability_incomplete.json")
-                    )
-            )
+            expectErrorResult(wiremock)
+        }
 
+        "filter out packages without vulnerabilities" {
+            wiremock.stubPackagesRequest("response_packages_no_vulnerabilities.json")
             val vulnerableCode = createVulnerableCode(wiremock)
-            val packagesToAdvise = resultFile().readValue<OrtResult>().getPackages(false).map { it.pkg }
+            val packagesToAdvise = inputPackages()
 
-            vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id } shouldNotBeNull {
-                val strutsResults = getValue(idStruts)
-                val expStrutsVulnerabilities = listOf(
-                    Vulnerability(
-                        id = "CVE-2009-1382",
-                        createReferences(URI("http://localhost:8000/api/vulnerabilities/v2/"), severity = 11.0f)
-                    ),
-                    Vulnerability(
-                        id = "",
-                        createReferences(URI("http://localhost:8000/api/vulnerabilities/v3/"), severity = -1f)
-                    )
-                )
-                strutsResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expStrutsVulnerabilities)
-            }
+            val result = vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
+
+            result.keys should containExactly(idStruts)
         }
 
-        "return failures if a vulnerability cannot be resolved" {
-            stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search/"))
-                    .withRequestBody(equalToJson(packagesRequestJson, false, false))
-                    .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("response_packages.json")
-                    )
-            )
+        "handle unexpected packages in the query result" {
+            wiremock.stubPackagesRequest("response_unexpected_packages.json")
+            val vulnerableCode = createVulnerableCode(wiremock)
+            val packagesToAdvise = inputPackages()
 
-            stubVulnerability("v1", "CVE-2014-8242", 42.0f)
-            stubVulnerability("v2", "CVE-2009-1382", 11.0f)
-            stubVulnerability("v3", "CVE-2019-CoV19", 77.0f, statusCode = 500)
+            val result = vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
 
-            expectErrorResult(wiremock)
-        }
-
-        "detect an invalid vulnerability URL" {
-            stubFor(
-                post(urlPathEqualTo("/api/packages/bulk_search/"))
-                    .withRequestBody(equalToJson(packagesRequestJson, false, false))
-                    .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("response_packages_invalid_vulnerability_url.json")
-                    )
-            )
-
-            expectErrorResult(wiremock)
+            result.keys should containExactlyInAnyOrder(idLang, idStruts)
         }
     }
 })
@@ -200,7 +181,6 @@ class VulnerableCodeTest : WordSpec({
 private const val ADVISOR_NAME = "VulnerableCodeTestAdvisor"
 private const val TEST_FILES_ROOT = "src/test/assets/"
 private const val TEST_RESULT_NAME = "ort-analyzer-result.yml"
-private const val VULNERABILITY_TEMPLATE = "response_vulnerability.json.template"
 
 private val idLang = Identifier("Maven:org.apache.commons:commons-lang3:3.5")
 private val idText = Identifier("Maven:org.apache.commons:commons-text:1.1")
@@ -221,13 +201,22 @@ private val packages = packageIdentifiers.map { it.toPurl() }
 /**
  * The JSON request to query the test packages found in the result.
  */
-private val packagesRequestJson = generateListRequest(packages, "packages")
+private val packagesRequestJson = generatePackagesRequest()
 
 /**
- * The text of the template to generate the details of a specific vulnerability. The template contains placeholders
- * for some IDs to be replaced dynamically.
+ * Prepare this server to expect a bulk request for the test packages and to answer it with the given [responseFile].
  */
-private val vulnerabilityDetailsTemplate = File(TEST_FILES_ROOT).resolve(VULNERABILITY_TEMPLATE).readText()
+private fun WireMockServer.stubPackagesRequest(responseFile: String) {
+    stubFor(
+        post(urlPathEqualTo("/api/packages/bulk_search"))
+            .withRequestBody(equalToJson(packagesRequestJson, false, false))
+            .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+            .willReturn(
+                aResponse().withStatus(200)
+                    .withBodyFile(responseFile)
+            )
+    )
+}
 
 /**
  * Run a test with the VulnerabilityCode provider against the given [test server][wiremock] and expect the
@@ -235,7 +224,7 @@ private val vulnerabilityDetailsTemplate = File(TEST_FILES_ROOT).resolve(VULNERA
  */
 private fun expectErrorResult(wiremock: WireMockServer) {
     val vulnerableCode = createVulnerableCode(wiremock)
-    val packagesToAdvise = resultFile().readValue<OrtResult>().getPackages(false).map { it.pkg }
+    val packagesToAdvise = inputPackages()
 
     val result = runBlocking {
         vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
@@ -276,37 +265,14 @@ private fun createVulnerableCode(wireMockServer: WireMockServer): VulnerableCode
 private fun resultFile(): File = File(TEST_FILES_ROOT).resolve(TEST_RESULT_NAME)
 
 /**
- * Generate the JSON body of the request for a list of [items] using the given [label]. This is used for both
- * the request for packages and vulnerabilities.
+ * Return a list with [Package]s from the analyzer result file that serve as input for the [VulnerableCode] advisor.
  */
-private fun generateListRequest(items: List<String>, label: String): String =
-    items.joinToString(prefix = "{ \"$label\": [", postfix = "] }") { "\"$it\"" }
+private fun inputPackages(): List<Package> =
+    resultFile().readValue<OrtResult>().getPackages(false).map { it.pkg }
 
 /**
- * Generate a JSON string with details about a vulnerability with the given [id], [cveId], and [score].
+ * Generate the JSON body of the request to query information about packages. It mainly consists of an array with the
+ * package URLs.
  */
-private fun vulnerabilityDetails(id: String, cveId: String, score: Float): String =
-    vulnerabilityDetailsTemplate.replace("<<id>>", id)
-        .replace("<<cve>>", cveId)
-        .replace("<<score>>", score.toString())
-
-/**
- * Stub a GET request for the details of the vulnerability with the given [id]. The request returns a JSON
- * containing the given [cveId] and [score] with the specified [statusCode].
- */
-private fun stubVulnerability(id: String, cveId: String, score: Float, statusCode: Int = 200) {
-    stubFor(
-        get(urlPathEqualTo("/api/vulnerabilities/$id"))
-            .willReturn(
-                aResponse().withStatus(statusCode)
-                    .withBody(vulnerabilityDetails(id, cveId, score))
-            )
-    )
-}
-
-/**
- * Create the references for a single vulnerability source with the given [url] that assigns the given [severity].
- * So far, some properties are still dummy data; this will be extended when the bulk query API is available.
- */
-private fun createReferences(url: URI, severity: Float): List<VulnerabilityReference> =
-    listOf(VulnerabilityReference(url, scoringSystem = null, severity = severity.toString()))
+private fun generatePackagesRequest(): String =
+    packages.joinToString(prefix = "{ \"purls\": [", postfix = "] }") { "\"$it\"" }
