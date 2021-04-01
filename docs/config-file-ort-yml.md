@@ -281,7 +281,7 @@ expression that can represent only a sub-expression of the whole effective SPDX 
 e.g.
 ```yaml
 license_choices:
-  package_license_choice:
+  package_license_choices:
   - package_id: "Maven:com.example:first:0.0.1"
     license_choices:
     # The input of the calculated effective license would be: (A OR B) AND ((C OR D) AND E)
@@ -314,7 +314,7 @@ The license choices for a project can be overwritten by applying a
 e.g.
 ```yaml
 license_choices:
-  repository_license_choice:
+  repository_license_choices:
   - given: "A OR B"
     choice: "B"
 ```
