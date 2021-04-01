@@ -44,7 +44,7 @@ val generateGrammarSource by tasks.existing(AntlrTask::class) {
     arguments = arguments + listOf("-visitor")
 }
 
-tasks.withType<KotlinCompile>().configureEach {
+tasks.withType<KotlinCompile> {
     dependsOn(generateGrammarSource)
 }
 
