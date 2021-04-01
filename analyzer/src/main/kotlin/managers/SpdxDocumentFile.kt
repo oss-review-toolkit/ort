@@ -331,8 +331,7 @@ class SpdxDocumentFile(
         packages: MutableSet<Package>
     ): SortedSet<PackageReference> =
         getDependencies(pkg, doc, workingDir, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
-            val dependency = doc.packages.find { it.spdxId == target }
-                ?: throw IllegalArgumentException("No single package with target ID '$target' found.")
+            val dependency = getSpdxPackageForId(doc, target, workingDir)
 
             packages += dependency.toPackage(workingDir)
 
