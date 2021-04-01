@@ -84,7 +84,6 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.DiskCache
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
@@ -509,22 +508,22 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             if (artifactDownload.exception == null) {
                 log.debug { "Found '$artifact' in '$repository'." }
 
-                // TODO: Could store multiple checksums in model instead of only the first.
                 val checksums = repositoryLayout.getChecksums(artifact, false, remoteLocation)
                 log.debug { "Checksums: $checksums" }
 
+                // TODO: Could store multiple checksums in model instead of only the first.
                 val checksum = checksums.first()
-                val tempFile = File.createTempFile(ORT_NAME, "checksum-${checksum.algorithm}")
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
 
                 @Suppress("TooGenericExceptionCaught")
                 val actualChecksum = try {
-                    transporter.get(GetTask(checksum.location).setDataFile(tempFile))
+                    val task = GetTask(checksum.location)
+                    transporter.get(task)
 
                     // Sometimes the checksum file contains a path after the actual checksum, so strip everything after
-                    // the first space.
-                    tempFile.useLines { it.first().substringBefore(' ') }
+                    // the first whitespace.
+                    task.dataString.trimStart().takeWhile { !it.isWhitespace() }
                 } catch (e: Exception) {
                     e.showStackTrace()
 
@@ -532,10 +531,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                     // Fall back to an empty checksum string.
                     ""
-                }
-
-                if (!tempFile.delete()) {
-                    log.warn { "Unable to delete temporary file '$tempFile'." }
                 }
 
                 val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
