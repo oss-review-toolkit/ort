@@ -71,10 +71,13 @@ object OkHttpClientHelper {
         // proxy authenticator.
         return OkHttpClient.Builder()
             .addNetworkInterceptor { chain ->
+                val request = chain.request()
                 chain.proceed(
-                    chain.request().newBuilder()
-                        .header("User-Agent", Environment.ORT_USER_AGENT)
-                        .build()
+                    if (request.header("User-Agent") == null) {
+                        request.newBuilder().header("User-Agent", Environment.ORT_USER_AGENT).build()
+                    } else {
+                        request
+                    }
                 )
             }
             .cache(cache)
