@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readJsonFile
+import org.ossreviewtoolkit.spdx.SpdxConstants
 
 @Suppress("LargeClass")
 class ScanCodeResultParserTest : WordSpec({
@@ -45,13 +46,9 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-2.9.7.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             summary.fileCount shouldBe 10
-            summary.packageVerificationCode shouldBe "875d4d6eabe5bf8cda99be52e28b04cc194de6ea"
         }
     }
 
@@ -60,13 +57,9 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-3.0.2.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             summary.fileCount shouldBe 10
-            summary.packageVerificationCode shouldBe "285b79745a96a1c561fef5591586a97176f19457"
         }
     }
 
@@ -76,10 +69,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             summary.licenseFindings should containExactlyInAnyOrder(
                 LicenseFinding(
@@ -397,7 +387,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/h2database-1.4.200_scancode-3.2.1.json")
             val result = readJsonFile(resultFile)
 
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             summary.licenseFindings should containExactlyInAnyOrder(
                 LicenseFinding(
@@ -416,10 +406,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             summary.copyrightFindings should containExactlyInAnyOrder(
                 CopyrightFinding(
@@ -579,11 +566,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json")
             val result = readJsonFile(resultFile)
 
-            val actualFindings =
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-                // verification code on an arbitrary file.
-                generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val actualFindings = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
                     .licenseFindings
 
             actualFindings.distinctBy { it.license } should haveSize(1)
@@ -606,11 +589,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json")
             val result = readJsonFile(resultFile)
 
-            val actualFindings =
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-                // verification code on an arbitrary file.
-                generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val actualFindings = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
                     .copyrightFindings
 
             actualFindings.mapTo(mutableSetOf()) { it.statement } should containExactlyInAnyOrder(
@@ -681,10 +660,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             val issues = summary.issues.toMutableList()
 
@@ -722,10 +698,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             mapTimeoutErrors(summary.issues.toMutableList()) shouldBe false
         }
@@ -736,10 +709,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             val issues = summary.issues.toMutableList()
 
@@ -753,10 +723,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             val issues = summary.issues.toMutableList()
 
@@ -771,10 +738,7 @@ class ScanCodeResultParserTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = readJsonFile(resultFile)
 
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
             mapUnknownIssues(summary.issues.toMutableList()) shouldBe false
         }
