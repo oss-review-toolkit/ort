@@ -619,7 +619,3 @@ enum class SpdxOperator(
      */
     OR(0)
 }
-
-class InvalidLicenseChoiceException(message: String) : SpdxException(message)
-
-class InvalidSubExpressionException(message: String) : SpdxException(message)
