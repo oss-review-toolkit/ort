@@ -24,3 +24,7 @@ open class SpdxException : RuntimeException {
     constructor(message: String?) : super(message)
     constructor(cause: Throwable?) : super(cause)
 }
+
+class InvalidLicenseChoiceException(message: String) : SpdxException(message)
+
+class InvalidSubExpressionException(message: String) : SpdxException(message)
