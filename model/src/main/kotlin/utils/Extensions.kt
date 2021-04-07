@@ -172,21 +172,25 @@ fun Identifier.getPurlType() =
  * [in the documentation](https://github.com/package-url/purl-spec/blob/master/README.rst#purl).
  * E.g. 'maven' for Gradle projects.
  */
-fun Identifier.toPurl() = "".takeIf { this == Identifier.EMPTY }
-    ?: buildString {
-        append("pkg:")
-        append(getPurlType())
+fun Identifier.toPurl() =
+    if (this == Identifier.EMPTY) {
+        ""
+    } else {
+        buildString {
+            append("pkg:")
+            append(getPurlType())
 
-        if (namespace.isNotEmpty()) {
+            if (namespace.isNotEmpty()) {
+                append('/')
+                append(namespace.percentEncode())
+            }
+
             append('/')
-            append(namespace.percentEncode())
+            append(name.percentEncode())
+
+            append('@')
+            append(version.percentEncode())
         }
-
-        append('/')
-        append(name.percentEncode())
-
-        append('@')
-        append(version.percentEncode())
     }
 
 /**
