@@ -99,15 +99,21 @@ private fun String.extractOrganization(): String? =
     }.firstOrNull()
 
 /**
+ * Return whether the string has the format of an [SpdxExternalDocumentReference], with or without an additional
+ * package id.
+ */
+private fun String.isExternalDocumentReferenceId(): Boolean = startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)
+
+/**
  * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.
  */
 private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
 
 /**
- * Get the [SpdxPackage] from the [SpdxExternalDocumentReference], where [workingDir] is used to resolve local
- * relative URIs to files.
+ * Get the [SpdxPackage] from the [SpdxExternalDocumentReference] that the [packageId] refers to, where [workingDir] is
+ * used to resolve local relative URIs to files.
  */
-private fun SpdxExternalDocumentReference.getSpdxPackage(workingDir: File): SpdxPackage {
+internal fun SpdxExternalDocumentReference.getSpdxPackage(packageId: String, workingDir: File): SpdxPackage {
     val externalSpdxDocument = resolveExternalDocumentReference(this, workingDir)
     val spdxDocument = SpdxModelMapper.read<SpdxDocument>(externalSpdxDocument)
 
@@ -116,7 +122,9 @@ private fun SpdxExternalDocumentReference.getSpdxPackage(workingDir: File): Spdx
                 "package. This is currently not supported yet.")
     }
 
-    val spdxPackage = spdxDocument.packages.single()
+    val spdxPackage = spdxDocument.packages.find { it.spdxId == packageId }
+        ?: throw IllegalArgumentException("$packageId can not be found in external document $externalDocumentId.")
+
     return spdxPackage.copy(packageFilename = externalSpdxDocument.parentFile.absolutePath)
 }
 
@@ -216,7 +224,13 @@ private fun getLinkageForDependency(
 ): PackageLinkage =
     relationships.mapNotNull { relation ->
         SPDX_LINKAGE_RELATIONSHIPS[relation.relationshipType]?.takeIf {
-            relation.relatedSpdxElement == dependency.spdxId && relation.spdxElementId == dependant
+            val relationId = if (relation.relatedSpdxElement.isExternalDocumentReferenceId()) {
+                relation.relatedSpdxElement.substringAfter(":")
+            } else {
+                relation.relatedSpdxElement
+            }
+
+            relationId == dependency.spdxId && relation.spdxElementId == dependant
         }
     }.takeUnless { it.isEmpty() }?.single() ?: PackageLinkage.DYNAMIC
 
@@ -313,7 +327,7 @@ class SpdxDocumentFile(
         )
 
         return packageForExternalDocumentId.getOrPut(externalDocumentReference.externalDocumentId) {
-            externalDocumentReference.getSpdxPackage(workingDir)
+            externalDocumentReference.getSpdxPackage(identifier.substringAfter(":"), workingDir)
         }
     }
 
