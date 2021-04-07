@@ -423,42 +423,46 @@ class SpdxDocumentFile(
             )
         }
 
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+        definitionFiles.filter { definitionFile ->
+            val spdxDocument = SpdxModelMapper.read<SpdxDocument>(definitionFile)
+
+            // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies,
+            // or a package-style SPDX document that describes a single (dependency-)package.
+            spdxDocument.isProject()
+        }
+
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val spdxDocument = SpdxModelMapper.read<SpdxDocument>(definitionFile)
 
-        // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies, or a
-        // package-style SPDX document that describes a single (dependency-)package.
-        val projectPackage = spdxDocument.projectPackage()
+        // Due to the check in mapDefinitionFiles() the SPDX document should always describe a project.
+        val projectPackage = requireNotNull(spdxDocument.projectPackage()) {
+            "The SPDX document file at '$definitionFile' does not describe a project."
+        }
 
         val packages = mutableSetOf<Package>()
 
-        val project = if (projectPackage != null) {
-            val scopes = SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
-                createScope(spdxDocument, projectPackage, type, workingDir, packages)
-            }
-
-            scopes += Scope(
-                name = DEFAULT_SCOPE_NAME,
-                dependencies = getDependencies(projectPackage, spdxDocument, workingDir, packages)
-            )
-
-            Project(
-                id = projectPackage.toIdentifier(),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                // TODO: Find a way to track authors.
-                authors = sortedSetOf(),
-                declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, projectPackage.homepage),
-                homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
-                scopeDependencies = scopes
-            )
-        } else {
-            // TODO: Add support for "package.spdx.yml" files. How to deal with relationships between SPDX packages if
-            //       we do not have a project to attach dependencies to?
-            Project.EMPTY.copy(id = Identifier.EMPTY.copy(type = managerName))
+        val scopes = SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
+            createScope(spdxDocument, projectPackage, type, workingDir, packages)
         }
+
+        scopes += Scope(
+            name = DEFAULT_SCOPE_NAME,
+            dependencies = getDependencies(projectPackage, spdxDocument, workingDir, packages)
+        )
+
+        val project = Project(
+            id = projectPackage.toIdentifier(),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            // TODO: Find a way to track authors.
+            authors = sortedSetOf(),
+            declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, projectPackage.homepage),
+            homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
+            scopeDependencies = scopes
+        )
 
         return listOf(ProjectAnalyzerResult(project, packages.toSortedSet()))
     }
