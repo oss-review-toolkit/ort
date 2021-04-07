@@ -47,8 +47,6 @@ data class SpdxExternalReference(
     /**
      * The references type as specified by
      * https://github.com/spdx/spdx-spec/blob/master/chapters/appendix-VI-external-repository-identifiers.md.
-     *
-     * TODO: Introduce an enum for the reference type values.
      */
     val referenceType: String
 ) {
