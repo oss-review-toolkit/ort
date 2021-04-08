@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class AnalyzerConfiguration(
     /**
      * If set to true, ignore the versions of used command line tools. Note that this might lead to erroneous
@@ -42,6 +43,5 @@ data class AnalyzerConfiguration(
     /**
      * Configuration of the SW360 package curation provider.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val sw360Configuration: Sw360StorageConfiguration? = null
 )
