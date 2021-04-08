@@ -196,7 +196,6 @@ class Pub(
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.2,)")
 
-    // Bootstrap flutter if it's not yet installed
     override fun beforeResolution(definitionFiles: List<File>) {
         if (flutterAbsolutePath.resolve(flutterCommand).isFile) {
             log.info { "Skipping to bootstrap flutter as it was found in $flutterAbsolutePath." }
