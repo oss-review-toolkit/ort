@@ -137,19 +137,26 @@ internal fun findFilesRecursive(directory: File): List<String> {
 internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
     require(directory.isDirectory)
 
-    val analyzer = Analyzer(AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true))
-    val ortResult = analyzer.analyze(
-        absoluteProjectPath = directory,
-        packageManagers = emptyList()
-    )
-
     val result = mutableMapOf<String, MutableSet<String>>()
 
-    ortResult.repository.nestedRepositories.forEach { (path, vcs) ->
+    findRepositories(directory).forEach { (path, vcs) ->
         result.getOrPut(vcs.url.stripCredentialsFromUrl()) { mutableSetOf() } += path
     }
 
     return result
+}
+
+/**
+ * Search the given [directory] for repositories and return a mapping from paths where each respective repository was
+ * found to the corresponding [VcsInfo].
+ */
+internal fun findRepositories(directory: File): Map<String, VcsInfo> {
+    require(directory.isDirectory)
+
+    val analyzer = Analyzer(AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true))
+    val ortResult = analyzer.analyze(absoluteProjectPath = directory, packageManagers = emptyList())
+
+    return ortResult.repository.nestedRepositories
 }
 
 /**
