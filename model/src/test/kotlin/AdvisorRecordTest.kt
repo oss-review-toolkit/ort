@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,6 +160,80 @@ class AdvisorRecordTest : WordSpec({
             issues.keys should containExactlyInAnyOrder(langId, queryId)
             issues[langId] should containExactly(issue3)
             issues[queryId] should containExactlyInAnyOrder(issue1, issue2)
+        }
+    }
+
+    "getVulnerabilities" should {
+        "return an empty list for an unknown package" {
+            val record = AdvisorRecord(sortedMapOf())
+
+            record.getVulnerabilities(langId) should beEmpty()
+        }
+
+        "return the vulnerabilities of a specific package" {
+            val vul1 = createVulnerability("CVE-2021-1")
+            val vul2 = createVulnerability("CVE-2021-2")
+
+            val record = AdvisorRecord(
+                sortedMapOf(queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2))))
+            )
+
+            record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
+        }
+
+        "combine the vulnerabilities of a specific package from multiple advisor results" {
+            val vul1 = createVulnerability("CVE-2021-1")
+            val vul2 = createVulnerability("CVE-2021-2")
+
+            val record = AdvisorRecord(
+                sortedMapOf(
+                    queryId to listOf(
+                        createResult(1, vulnerabilities = listOf(vul1)),
+                        createResult(2, vulnerabilities = listOf(vul2))
+                    )
+                )
+            )
+
+            record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
+        }
+
+        "merge the references of vulnerabilities" {
+            val otherSource = "https://vulnerabilities.example.org/"
+            val vul1 = createVulnerability("CVE-2021-1")
+            val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
+            val vul3 = createVulnerability("CVE-2021-2")
+            val mergedVulnerability = Vulnerability(vul1.id, vul1.references + vul2.references)
+
+            val record = AdvisorRecord(
+                sortedMapOf(
+                    queryId to listOf(
+                        createResult(1, vulnerabilities = listOf(vul1)),
+                        createResult(2, vulnerabilities = listOf(vul2, vul3))
+                    )
+                )
+            )
+
+            record.getVulnerabilities(queryId) should containExactly(mergedVulnerability, vul3)
+        }
+
+        "remove duplicate references when merging vulnerabilities" {
+            val otherSource = "https://vulnerabilities.example.org/"
+            val vul1 = createVulnerability("CVE-2021-1")
+            val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
+            val vul3 = createVulnerability("CVE-2021-1")
+            val vul4 = createVulnerability("CVE-2021-1", otherSource, "cvssv3", "5")
+            val mergedVulnerability = Vulnerability(vul1.id, vul1.references + vul2.references + vul4.references)
+
+            val record = AdvisorRecord(
+                sortedMapOf(
+                    queryId to listOf(
+                        createResult(1, vulnerabilities = listOf(vul1)),
+                        createResult(2, vulnerabilities = listOf(vul2, vul3, vul4))
+                    )
+                )
+            )
+
+            record.getVulnerabilities(queryId) should containExactly(mergedVulnerability)
         }
     }
 })
