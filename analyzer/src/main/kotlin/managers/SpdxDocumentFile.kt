@@ -251,7 +251,7 @@ class SpdxDocumentFile(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
     private val spdxDocumentForFile = mutableMapOf<File, SpdxDocument>()
-    private val externalDocumentReferenceIdsToPackages = mutableMapOf<String, SpdxPackage>()
+    private val packageForExternalDocumentId = mutableMapOf<String, SpdxPackage>()
 
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
@@ -315,7 +315,7 @@ class SpdxDocumentFile(
             "No single package or externalDocumentRef with ID '$identifier' found."
         )
 
-        return externalDocumentReferenceIdsToPackages.getOrPut(externalDocumentReference.externalDocumentId) {
+        return packageForExternalDocumentId.getOrPut(externalDocumentReference.externalDocumentId) {
             getSpdxPackageForDocumentRef(externalDocumentReference, workingDir)
         }
     }
