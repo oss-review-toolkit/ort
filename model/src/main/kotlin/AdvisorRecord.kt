@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,6 +61,31 @@ data class AdvisorRecord(
             results.any { it.summary.issues.isNotEmpty() }
         }
     }
+
+    /**
+     * Return a list with all [Vulnerability] objects that have been found for the given [package][pkgId]. Results
+     * from different advisors are merged if necessary.
+     */
+    fun getVulnerabilities(pkgId: Identifier): List<Vulnerability> =
+        advisorResults[pkgId].orEmpty().flatMap { it.vulnerabilities }.mergeVulnerabilities()
+}
+
+/**
+ * Merge this list of [Vulnerability] objects by combining vulnerabilities with the same ID and merging their
+ * references.
+ */
+private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability> {
+    val vulnerabilitiesById = groupByTo(sortedMapOf()) { it.id }
+    return vulnerabilitiesById.map { it.value.mergeReferences() }
+}
+
+/**
+ * Merge this (non-empty) list of [Vulnerability] objects (which are expected to have the same ID) by to a single
+ * [Vulnerability] that contains all the references from the source vulnerabilities (with duplicates removed).
+ */
+private fun Collection<Vulnerability>.mergeReferences(): Vulnerability {
+    val references = flatMapTo(mutableSetOf()) { it.references }
+    return Vulnerability(first().id, references.toList())
 }
 
 /**
