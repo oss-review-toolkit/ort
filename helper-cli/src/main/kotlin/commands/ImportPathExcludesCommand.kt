@@ -40,7 +40,7 @@ internal class ImportPathExcludesCommand : CliktCommand(
     help = "Import path excludes by repository from a file into the given repository configuration."
 ) {
     private val pathExcludesFile by option(
-        "--path-excludes-file",
+        "--path-excludes-file", "-i",
         help = "The input path excludes file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

@@ -40,7 +40,7 @@ internal class GenerateProjectExcludesCommand : CliktCommand(
             "the given repository configuration file."
 ) {
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The input ORT file from which the rule violations are read."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)

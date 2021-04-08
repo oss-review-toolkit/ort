@@ -35,7 +35,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
     help = "Lists the license categories."
 ) {
     private val licenseClassificationsFile by option(
-        "--license-classifications-file",
+        "--license-classifications-file", "-i",
         help = "The license classifications file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

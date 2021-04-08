@@ -38,7 +38,7 @@ class ListPackagesCommand : CliktCommand(
     help = "Lists the packages and projects contained in the given ORT result file."
 ) {
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

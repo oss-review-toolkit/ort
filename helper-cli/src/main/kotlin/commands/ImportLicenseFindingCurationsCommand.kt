@@ -52,7 +52,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         .required()
 
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The ORT file containing the findings the imported curations need to match against."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

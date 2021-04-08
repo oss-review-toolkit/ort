@@ -51,7 +51,7 @@ internal class ExportPathExcludesCommand : CliktCommand(
         .required()
 
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The input ORT file from which the path excludes are to be read."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

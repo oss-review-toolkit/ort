@@ -34,7 +34,7 @@ class ExtractRepositoryConfigurationCommand : CliktCommand(
     help = "Extract the repository configuration from the given ORT result file."
 ) {
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The input ORT file from which repository configuration shall be extracted."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)

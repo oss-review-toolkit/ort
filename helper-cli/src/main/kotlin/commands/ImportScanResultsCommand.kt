@@ -35,7 +35,7 @@ internal class ImportScanResultsCommand : CliktCommand(
     help = "Import all scan results from the given ORT result file to the file based scan results storage directory."
 ) {
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The input ORT file from which repository configuration shall be extracted."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
