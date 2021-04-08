@@ -407,9 +407,8 @@ analyzer:
         declared_licenses:
         - "BSD License"
         declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause"
-          mapped:
-            BSD License: "BSD-3-Clause"
+          unmapped:
+          - "BSD License"
         description: "A framework for constructing recognizers, compilers,\n    and\
           \ translators from grammatical descriptions containing\n    Java, C#, C++,\
           \ or Python actions."
@@ -697,9 +696,8 @@ analyzer:
         declared_licenses:
         - "BSD License"
         declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause"
-          mapped:
-            BSD License: "BSD-3-Clause"
+          unmapped:
+          - "BSD License"
         description: "Implementation of various mathematical curves that define themselves\
           \ over a set of control points. The API is written in Java. The curves supported\
           \ are: Bezier, B-Spline, Cardinal Spline, Catmull-Rom Spline, Lagrange,\

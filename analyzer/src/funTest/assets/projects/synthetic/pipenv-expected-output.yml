@@ -34,9 +34,8 @@ packages:
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "A simple wrapper around optparse for powerful command line utilities."
   homepage_url: "http://github.com/mitsuhiko/click"
   binary_artifact:
@@ -70,7 +69,8 @@ packages:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "A simple framework for building complex web applications."
   homepage_url: "https://www.palletsprojects.com/p/flask/"
   binary_artifact:
@@ -100,9 +100,8 @@ packages:
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "Various helpers to pass trusted data to untrusted environments and\
     \ back."
   homepage_url: "http://github.com/mitsuhiko/itsdangerous"
@@ -137,7 +136,8 @@ packages:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "A small but fast and easy to use stand-alone template engine written\
     \ in pure python."
   homepage_url: "http://jinja.pocoo.org/"
@@ -172,7 +172,8 @@ packages:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "Implements a XML/HTML/XHTML Markup safe string for Python"
   homepage_url: "http://github.com/pallets/markupsafe"
   binary_artifact:
@@ -204,8 +205,8 @@ packages:
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "The comprehensive WSGI web application library."
   homepage_url: "https://palletsprojects.com/p/werkzeug/"
   binary_artifact:

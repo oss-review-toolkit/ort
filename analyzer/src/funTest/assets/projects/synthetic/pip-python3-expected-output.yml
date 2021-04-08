@@ -34,7 +34,8 @@ packages:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "A high-level Python Web framework that encourages rapid development\
     \ and clean, pragmatic design."
   homepage_url: "https://www.djangoproject.com/"
@@ -100,8 +101,8 @@ packages:
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "A non-validating SQL parser."
   homepage_url: "https://github.com/andialbrecht/sqlparse"
   binary_artifact:
