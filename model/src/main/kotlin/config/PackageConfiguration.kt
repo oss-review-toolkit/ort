@@ -85,9 +85,24 @@ data class PackageConfiguration(
  * A matcher which matches its properties against [VcsInfo]s.
  */
 data class VcsMatcher(
+    /**
+     * The [type] to match for equality against [VcsInfo.type].
+     */
     val type: VcsType,
+
+    /**
+     * The [url] to match for equality against [VcsInfo.url].
+     */
     val url: String,
+
+    /**
+     * The [url] to match for equality against [VcsInfo.resolvedRevision].
+     */
     val revision: String,
+
+    /**
+     * The [path] to match for equality against [VcsInfo.path].
+     */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val path: String? = null
 ) {
