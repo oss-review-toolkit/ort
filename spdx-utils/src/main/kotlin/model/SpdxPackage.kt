@@ -135,16 +135,16 @@ data class SpdxPackage(
     val name: String,
 
     /**
-     * Identifies from where or whom the package originally came. The value must be a single line text in one of the
-     * following formats:
+     * Identifies from where or whom the package originally came. The value must be "NOASSERTION" or a single line text
+     * in one of the following formats:
      *
      * 1. "Person: person name" or "Person: person name (email)"
      * 2. "Organization: organization name" or "Organization: organization name (email)"
      *
      * TODO: Introduce a data type for above subjects.
      */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val originator: String = "",
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val originator: String? = null,
 
     /**
      * The actual file name of the package, or path of the directory being treated as a package.
@@ -172,13 +172,14 @@ data class SpdxPackage(
     val summary: String = "",
 
     /**
-     * The distribution source for the package. The value must be a single line of text in one of the following formats:
+     * The distribution source for the package. The value must be "NOASSERTION" or a single line of text in one of the
+     * following formats:
      *
      * 1. "Person: person name" or "Person: person name (email)"
      * 2. "Organization: organization name" or "Organization: organization name (email)"
      */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val supplier: String = "",
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val supplier: String? = null,
 
     /**
      * The version of the package.
@@ -199,12 +200,16 @@ data class SpdxPackage(
 
         val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION)
 
-        require(originator.isEmpty() || validPrefixes.any { originator.startsWith(it) }) {
-            "A non-empty originator has to start with any of $validPrefixes."
+        if (originator != null) {
+            require(originator == SpdxConstants.NOASSERTION || validPrefixes.any { originator.startsWith(it) }) {
+                "If specified, the originator has to start with any of $validPrefixes or be set to 'NOASSERTION'."
+            }
         }
 
-        require(supplier.isEmpty() || validPrefixes.any { supplier.startsWith(it) }) {
-            "A non-empty supplier has to start with any of $validPrefixes."
+        if (supplier != null) {
+            require(supplier == SpdxConstants.NOASSERTION || validPrefixes.any { supplier.startsWith(it) }) {
+                "If specified, the supplier has to start with any of $validPrefixes or be set to 'NOASSERTION'."
+            }
         }
 
         // TODO: The check for [licenseInfoFromFiles] can be made more strict, but the SPDX specification is not exact
