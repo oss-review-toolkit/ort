@@ -101,7 +101,8 @@ data class VcsMatcher(
     val revision: String,
 
     /**
-     * The [path] to match for equality against [VcsInfo.path].
+     * The [path] to match for equality against [VcsInfo.path]. Must only be specified in case [type] equals
+     * [VcsType.GIT_REPO].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val path: String? = null
@@ -112,6 +113,10 @@ data class VcsMatcher(
         if (type == VcsType.GIT_REPO) {
             require(!path.isNullOrBlank()) {
                 "Matching against Git-Repo VCS info requires a non-blank path."
+            }
+        } else {
+            require(path == null) {
+                "A path must only be specified for matching Git-Repo VCS info."
             }
         }
     }
