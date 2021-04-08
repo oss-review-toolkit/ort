@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -52,7 +54,16 @@ class SpdxDocumentFileFunTest : StringSpec() {
             actualResult shouldBe expectedResult
         }
 
-        // TODO: Add a test for "package.spdx.yml".
+        "mapDefinitionFiles() removes SPDX documents that do not describe a project" {
+            val projectFile = projectDir.resolve("project/project.spdx.yml")
+            val packageFile = projectDir.resolve("package/libs/curl/package.spdx.yml")
+
+            val definitionFiles = listOf(projectFile, packageFile)
+
+            val result = createSpdxDocumentFile().mapDefinitionFiles(definitionFiles)
+
+            result should containExactly(projectFile)
+        }
 
         // TODO: Test that we can read in files written by SpdxDocumentReporter.
     }
