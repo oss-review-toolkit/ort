@@ -429,10 +429,21 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
         }
     }
 
-    val result = mutableMapOf<String, MutableList<PathExclude>>()
     val pathExcludes = repository.config.excludes.paths.filterNot { isDefinitionsFile(it) }
 
-    repository.nestedRepositories.forEach { (path, vcs) ->
+    return getPathExcludesByRepository(pathExcludes, repository.nestedRepositories)
+}
+
+/**
+ * Return all path excludes from [pathExcludes] represented as [RepositoryPathExcludes].
+ */
+internal fun getPathExcludesByRepository(
+    pathExcludes: Collection<PathExclude>,
+    nestedRepositories: Map<String, VcsInfo>
+): RepositoryPathExcludes {
+    val result = mutableMapOf<String, MutableList<PathExclude>>()
+
+    nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
         pathExcludes.forEach { pathExclude ->
             pathExclude.pattern.withoutPrefix("$path/")?.let {
