@@ -250,6 +250,7 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
+    private val spdxDocumentForFile = mutableMapOf<File, SpdxDocument>()
     private val externalDocumentReferenceIdsToPackages = mutableMapOf<String, SpdxPackage>()
 
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>("SpdxDocumentFile") {
@@ -423,20 +424,22 @@ class SpdxDocumentFile(
             )
         }
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        definitionFiles.filter { definitionFile ->
-            val spdxDocument = SpdxModelMapper.read<SpdxDocument>(definitionFile)
-
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
+        definitionFiles.associateWith {
+            SpdxModelMapper.read<SpdxDocument>(it)
+        }.filterTo(spdxDocumentForFile) { (_, spdxDocument) ->
             // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies,
             // or a package-style SPDX document that describes a single (dependency-)package.
             spdxDocument.isProject()
-        }
+        }.keys.toList()
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val spdxDocument = SpdxModelMapper.read<SpdxDocument>(definitionFile)
 
-        // Due to the check in mapDefinitionFiles() the SPDX document should always describe a project.
+        // For direct callers of this function mapDefinitionFiles() did not populate the map before, so add a fallback.
+        val spdxDocument = spdxDocumentForFile.getOrPut(definitionFile) { SpdxModelMapper.read(definitionFile) }
+
+        // Guard against direct callers passing SPDX documents that do not describe a project.
         val projectPackage = requireNotNull(spdxDocument.projectPackage()) {
             "The SPDX document file at '$definitionFile' does not describe a project."
         }
