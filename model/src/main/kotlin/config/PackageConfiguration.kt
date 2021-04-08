@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 
 /**
  * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and
- * [LicenseFindingCuration]s, similar to how its done via the [RepositoryConfiguration] for projects.
+ * [LicenseFindingCuration]s, similar to how it is done via the [RepositoryConfiguration] for projects.
  */
 data class PackageConfiguration(
     /**
