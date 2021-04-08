@@ -191,7 +191,7 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Download the source code of the [package][pkg] to the [outputDirectory] using it's VCS information. The
+     * Download the source code of the [package][pkg] to the [outputDirectory] using its VCS information. The
      * [allowMovingRevisions] parameter indicates whether the download accepts symbolic names, like branches, instead of
      * only fixed revisions. A [Provenance] is returned on success or a [DownloadException] is thrown in case of
      * failure.
@@ -294,7 +294,7 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Download the source code of the [package][pkg] to the [outputDirectory] using it's source artifact. A
+     * Download the source code of the [package][pkg] to the [outputDirectory] using its source artifact. A
      * [Provenance] is returned on success or a [DownloadException] is thrown in case of failure.
      */
     fun downloadSourceArtifact(pkg: Package, outputDirectory: File): Provenance {
