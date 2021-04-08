@@ -445,6 +445,12 @@ data class OrtResult(
     fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
 
     /**
+     * Return true if and only if the given [id] denotes a [Package] contained in this [OrtResult].
+     */
+    @Suppress("UNUSED")
+    fun isPackage(id: Identifier): Boolean = getPackage(id) != null
+
+    /**
      * Return true if and only if the given [id] denotes a [Project] contained in this [OrtResult].
      */
     fun isProject(id: Identifier): Boolean = getProject(id) != null
