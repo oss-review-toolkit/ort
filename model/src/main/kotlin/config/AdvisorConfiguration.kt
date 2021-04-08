@@ -43,6 +43,7 @@ data class NexusIqConfiguration(
     /**
      * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val browseUrl: String = serverUrl,
 
     /**
