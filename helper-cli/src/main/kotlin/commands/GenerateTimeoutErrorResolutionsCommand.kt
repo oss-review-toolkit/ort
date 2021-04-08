@@ -41,7 +41,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     help = "Generates resolutions for scanner timeout errors. The result is written to the standard output."
 ) {
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The input ORT file containing the scan timeout errors."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

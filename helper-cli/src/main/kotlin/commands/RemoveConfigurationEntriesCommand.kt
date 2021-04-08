@@ -44,7 +44,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
             "written to the given repository configuration file."
 ) {
     private val ortResultFile by option(
-        "--ort-result-file",
+        "--ort-result-file", "-i",
         help = "The ORT result file to read as input which should contain an evaluator result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
