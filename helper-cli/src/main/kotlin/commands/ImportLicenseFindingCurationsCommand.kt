@@ -124,7 +124,7 @@ private fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
     val result = mutableMapOf<String, MutableSet<String>>()
 
     repository.nestedRepositories.mapValues { (path, vcsInfo) ->
-        result.getOrPut(vcsInfo.url, { mutableSetOf() }) += path
+        result.getOrPut(vcsInfo.url) { mutableSetOf() } += path
     }
 
     return result
