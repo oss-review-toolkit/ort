@@ -48,7 +48,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val licenseClassifications = licenseClassificationsFile.readValue<LicenseClassifications>()
+        val licenseClassifications = licenseClassificationsFile.readValue() ?: LicenseClassifications()
 
         println(licenseClassifications.summary())
 

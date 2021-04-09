@@ -41,8 +41,10 @@ internal class FormatRepositoryConfigurationCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
 
     override fun run() {
-        repositoryConfigurationFile
-            .readValue<RepositoryConfiguration>()
-            .write(repositoryConfigurationFile)
+        val repoConfig = requireNotNull(repositoryConfigurationFile.readValue<RepositoryConfiguration>()) {
+            "The provided ORT result file '${repositoryConfigurationFile.canonicalPath}' has no content."
+        }
+
+        repoConfig.write(repositoryConfigurationFile)
     }
 }

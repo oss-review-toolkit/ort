@@ -57,14 +57,12 @@ internal class GenerateProjectExcludesCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
-            repositoryConfigurationFile.readValue()
-        } else {
-            RepositoryConfiguration()
-        }
+        val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValue()
+            ?: RepositoryConfiguration()
 
-        val ortResult = ortFile.readValue<OrtResult>()
-            .replaceConfig(repositoryConfiguration)
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }.replaceConfig(repositoryConfiguration)
 
         val generatedPathExcludes = ortResult
             .getProjects()

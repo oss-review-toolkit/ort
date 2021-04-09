@@ -835,7 +835,7 @@ internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): Li
     println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumBy { it.size }} locations.")
 
     println("Loading $pathExcludesFile...")
-    val pathExcludes = pathExcludesFile.readValue<RepositoryPathExcludes>()
+    val pathExcludes = pathExcludesFile.readValue<RepositoryPathExcludes>().orEmpty()
     println("Found ${pathExcludes.values.sumBy { it.size }} excludes for ${pathExcludes.size} repositories.")
 
     val result = mutableListOf<PathExclude>()
@@ -862,7 +862,7 @@ internal fun importLicenseFindingCurations(
     println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumBy { it.size }} locations.")
 
     println("Loading $licenseFindingCurationsFile...")
-    val curations = licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>()
+    val curations = licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>().orEmpty()
     println("Found ${curations.values.sumBy { it.size }} curations for ${curations.size} repositories.")
 
     val result = mutableListOf<LicenseFindingCuration>()

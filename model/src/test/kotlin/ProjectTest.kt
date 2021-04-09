@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.test.containExactly
 private fun readAnalyzerResult(analyzerResultFilename: String): Project =
     File("../analyzer/src/funTest/assets/projects/synthetic")
         .resolve(analyzerResultFilename)
-        .readValue<ProjectAnalyzerResult>().project
+        .readValue<ProjectAnalyzerResult>()?.project ?: Project.EMPTY
 
 private const val MANAGER = "MyManager"
 

@@ -99,7 +99,7 @@ class AdvisorResultContainerTest : WordSpec() {
 
                 val result = resultsFile.readValue<OrtResult>()
 
-                result.advisor shouldNot beNull()
+                result?.advisor shouldNot beNull()
             }
 
             "be deserialized with vulnerabilities in format with references" {
@@ -107,7 +107,7 @@ class AdvisorResultContainerTest : WordSpec() {
 
                 val result = resultsFile.readValue<OrtResult>()
 
-                result.advisor shouldNot beNull()
+                result?.advisor shouldNot beNull()
             }
         }
     }

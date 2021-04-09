@@ -82,6 +82,10 @@ class UploadResultToSw360Command : CliktCommand(
             "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
+        requireNotNull(ortResult) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
         val sw360Config = globalOptionsForSubcommands.config.scanner.storages?.values
             ?.filterIsInstance<Sw360StorageConfiguration>()?.singleOrNull()
 

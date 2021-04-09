@@ -76,12 +76,12 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
     private val findingCurationMatcher = FindingCurationMatcher()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
-        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
-            repositoryConfigurationFile.readValue()
-        } else {
-            RepositoryConfiguration()
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
         }
+
+        val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValue()
+            ?: RepositoryConfiguration()
 
         val allLicenseFindings = ortResult.getLicenseFindingsForAllProjects()
 
@@ -102,12 +102,12 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
 
     private fun importLicenseFindingCurations(ortResult: OrtResult): Set<LicenseFindingCuration> {
         val repositoryPaths = ortResult.getRepositoryPaths()
-        val licenseFindingCurations = licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>()
+        val curations = licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>().orEmpty()
 
         val result = mutableSetOf<LicenseFindingCuration>()
 
         repositoryPaths.forEach { (vcsUrl, relativePaths) ->
-            licenseFindingCurations[vcsUrl]?.let { curationsForRepository ->
+            curations[vcsUrl]?.let { curationsForRepository ->
                 curationsForRepository.forEach { curation ->
                     relativePaths.forEach { path ->
                         result += curation.copy(path = path + '/' + curation.path)

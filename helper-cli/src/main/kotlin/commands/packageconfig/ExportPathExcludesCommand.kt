@@ -69,14 +69,10 @@ class ExportPathExcludesCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val globalPathExcludes = if (pathExcludesFile.isFile) {
-            pathExcludesFile.readValue<RepositoryPathExcludes>()
-        } else {
-            mapOf()
-        }
+        val globalPathExcludes = pathExcludesFile.takeIf { it.isFile }?.readValue<RepositoryPathExcludes>().orEmpty()
 
         val localPathExcludes = getPathExcludesByRepository(
-            pathExcludes = packageConfigurationFile.readValue<PackageConfiguration>().pathExcludes,
+            pathExcludes = packageConfigurationFile.readValue<PackageConfiguration>()?.pathExcludes.orEmpty(),
             nestedRepositories = findRepositories(sourceCodeDir)
         )
 

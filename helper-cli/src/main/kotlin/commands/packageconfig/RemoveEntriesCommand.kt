@@ -57,8 +57,14 @@ internal class RemoveEntriesCommand : CliktCommand(
     private val findingsMatcher = FindingCurationMatcher()
 
     override fun run() {
-        val packageConfiguration = packageConfigurationFile.readValue<PackageConfiguration>()
-        val ortResult = ortFile.readValue<OrtResult>()
+        val packageConfiguration = requireNotNull(packageConfigurationFile.readValue<PackageConfiguration>()) {
+            "The provided package configuration file '${packageConfigurationFile.canonicalPath}' has no content."
+        }
+
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
         val scanResult = ortResult.getScanResultFor(packageConfiguration)
 
         if (scanResult == null) {

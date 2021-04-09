@@ -70,7 +70,9 @@ class ImportPathExcludesCommand : CliktCommand(
     override fun run() {
         val allFiles = findFilesRecursive(sourceCodeDir)
 
-        val packageConfiguration = packageConfigurationFile.readValue<PackageConfiguration>()
+        val packageConfiguration = requireNotNull(packageConfigurationFile.readValue<PackageConfiguration>()) {
+            "The provided package configuration file '${packageConfigurationFile.canonicalPath}' has no content."
+        }
 
         val existingPathExcludes = packageConfiguration.pathExcludes
         val importedPathExcludes = importPathExcludes(sourceCodeDir, pathExcludesFile).filter { pathExclude ->

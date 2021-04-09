@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -200,14 +201,18 @@ class ReporterCommand : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        var (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
+        var (originalOrtResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
 
         log.perf {
             "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
-        repositoryConfigurationFile?.let {
-            ortResult = ortResult.replaceConfig(it.readValue())
+        repositoryConfigurationFile?.readValue<RepositoryConfiguration>()?.let {
+            originalOrtResult = originalOrtResult?.replaceConfig(it)
+        }
+
+        val ortResult = requireNotNull(originalOrtResult) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
         }
 
         val resolutionProvider = DefaultResolutionProvider()

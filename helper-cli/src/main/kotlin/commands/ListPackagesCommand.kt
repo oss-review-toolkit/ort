@@ -51,7 +51,9 @@ class ListPackagesCommand : CliktCommand(
     ).split(",").default(emptyList())
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
 
         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 

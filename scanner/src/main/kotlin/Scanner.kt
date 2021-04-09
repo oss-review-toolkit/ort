@@ -108,6 +108,10 @@ abstract class Scanner(
             "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
+        requireNotNull(ortResult) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
         if (ortResult.analyzer == null) {
             log.warn {
                 "Cannot run the scanner as the provided ORT result file '${ortFile.canonicalPath}' does not contain " +

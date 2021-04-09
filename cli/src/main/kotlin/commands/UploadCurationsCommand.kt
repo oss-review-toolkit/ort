@@ -95,7 +95,7 @@ class UploadCurationsCommand : CliktCommand(
         }
 
     override fun run() {
-        val curations = inputFile.readValue<List<PackageCuration>>()
+        val curations = inputFile.readValue<List<PackageCuration>>().orEmpty()
         val curationsToCoordinates = curations.mapNotNull { curation ->
             curation.id.toClearlyDefinedCoordinates()?.let { coordinates ->
                 curation to coordinates

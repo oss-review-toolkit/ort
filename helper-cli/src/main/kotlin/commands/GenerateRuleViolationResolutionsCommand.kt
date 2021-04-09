@@ -66,8 +66,11 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
     ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
 
     override fun run() {
-        val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
+        val repositoryConfiguration = repositoryConfigurationFile.readValue() ?: RepositoryConfiguration()
+
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }.replaceConfig(repositoryConfiguration)
 
         val generatedResolutions = ortResult
             .getUnresolvedRuleViolations()

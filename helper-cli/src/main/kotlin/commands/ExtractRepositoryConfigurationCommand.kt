@@ -50,9 +50,10 @@ class ExtractRepositoryConfigurationCommand : CliktCommand(
         .required()
 
     override fun run() {
-        ortFile
-            .readValue<OrtResult>()
-            .repository
-            .config.write(repositoryConfigurationFile)
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
+        ortResult.repository.config.write(repositoryConfigurationFile)
     }
 }

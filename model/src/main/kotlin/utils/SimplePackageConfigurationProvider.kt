@@ -48,7 +48,7 @@ class SimplePackageConfigurationProvider(
          * configuration per [Identifier] and [Provenance].
          */
         fun forDirectory(directory: File): SimplePackageConfigurationProvider {
-            val entries = findPackageConfigurationFiles(directory).mapTo(mutableListOf()) { file ->
+            val entries = findPackageConfigurationFiles(directory).mapNotNullTo(mutableListOf()) { file ->
                 try {
                     file.readValue<PackageConfiguration>()
                 } catch (e: IOException) {
@@ -67,7 +67,7 @@ class SimplePackageConfigurationProvider(
          * file. Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
          */
         fun forFile(file: File): SimplePackageConfigurationProvider {
-            val entries = file.readValue<List<PackageConfiguration>>()
+            val entries = file.readValue<List<PackageConfiguration>>().orEmpty()
 
             return SimplePackageConfigurationProvider(entries)
         }

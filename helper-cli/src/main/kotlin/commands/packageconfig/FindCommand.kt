@@ -52,7 +52,7 @@ internal class FindCommand : CliktCommand(
     override fun run() {
         // TODO: There could be multiple package configurations matching the given identifier which is not handled.
         findPackageConfigurationFiles(packageConfigurationDir).find {
-            it.readValue<PackageConfiguration>().id == packageId
+            it.readValue<PackageConfiguration>()?.id == packageId
         }?.let {
             println(it.absolutePath)
         }

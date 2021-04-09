@@ -78,8 +78,11 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
 
     override fun run() {
-        val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
+        val repositoryConfiguration = repositoryConfigurationFile.readValue() ?: RepositoryConfiguration()
+
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }.replaceConfig(repositoryConfiguration)
 
         val pathExcludes = findFilesRecursive(sourceCodeDir).let { allFiles ->
             ortResult.getExcludes().paths.filter { pathExclude ->

@@ -44,7 +44,7 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
 
     override fun run() {
-        val curations = packageCurationsFile.readValue<List<PackageCuration>>()
+        val curations = packageCurationsFile.readValue<List<PackageCuration>>().orEmpty()
 
         val failed = curations.filterNot { curation ->
             curation.data.sourceArtifact?.let { sourceArtifact ->

@@ -68,16 +68,15 @@ internal class ExportPathExcludesCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val localPathExcludes = ortFile
-            .readValue<OrtResult>()
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
+        val localPathExcludes = ortResult
             .replaceConfig(repositoryConfigurationFile)
             .getRepositoryPathExcludes()
 
-        val globalPathExcludes = if (pathExcludesFile.isFile) {
-            pathExcludesFile.readValue<RepositoryPathExcludes>()
-        } else {
-            mapOf()
-        }
+        val globalPathExcludes = pathExcludesFile.takeIf { it.isFile }?.readValue<RepositoryPathExcludes>().orEmpty()
 
         globalPathExcludes
             .mergePathExcludes(localPathExcludes, updateOnlyExisting = updateOnlyExisting)

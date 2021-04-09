@@ -40,7 +40,7 @@ class ScannerConfigurationTest : WordSpec({
             val file = createTempFile(suffix = ".yml").toFile().apply { deleteOnExit() }
 
             file.writeValue(ortConfig.scanner)
-            val loadedConfig = file.readValue<ScannerConfiguration>()
+            val loadedConfig = file.readValue() ?: ScannerConfiguration()
 
             // Note: loadedConfig cannot be directly compared to the original one, as there have been some changes:
             // Relative paths have been normalized, passwords do not get serialized, etc.

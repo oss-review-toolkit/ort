@@ -57,14 +57,17 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
         val scopeExcludes = ortResult.generateScopeExcludes()
 
-        repositoryConfigurationFile
-            .readValue<RepositoryConfiguration>()
-            .replaceScopeExcludes(scopeExcludes)
-            .sortScopeExcludes()
-            .write(repositoryConfigurationFile)
+        val repoConfig = requireNotNull(repositoryConfigurationFile.readValue<RepositoryConfiguration>()) {
+            "The provided ORT result file '${repositoryConfigurationFile.canonicalPath}' has no content."
+        }
+
+        repoConfig.replaceScopeExcludes(scopeExcludes).sortScopeExcludes().write(repositoryConfigurationFile)
     }
 }
 

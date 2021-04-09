@@ -155,7 +155,9 @@ internal class ListLicensesCommand : CliktCommand(
     }.default(emptyList())
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }.replaceConfig(repositoryConfigurationFile)
 
         if (ortResult.getPackageOrProject(packageId) == null) {
             throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")

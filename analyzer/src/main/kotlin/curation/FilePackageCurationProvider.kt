@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.readValue
  */
 class FilePackageCurationProvider(curationFile: File) : PackageCurationProvider {
     internal val packageCurations: List<PackageCuration> by lazy {
-        curationFile.readValue<List<PackageCuration>>()
+        curationFile.readValue<List<PackageCuration>>().orEmpty()
     }
 
     override fun getCurationsFor(pkgId: Identifier) = packageCurations.filter { it.isApplicable(pkgId) }

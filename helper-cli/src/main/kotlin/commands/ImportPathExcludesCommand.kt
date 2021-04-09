@@ -72,11 +72,8 @@ internal class ImportPathExcludesCommand : CliktCommand(
     override fun run() {
         val allFiles = findFilesRecursive(sourceCodeDir)
 
-        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
-            repositoryConfigurationFile.readValue()
-        } else {
-            RepositoryConfiguration()
-        }
+        val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValue()
+            ?: RepositoryConfiguration()
 
         val existingPathExcludes = repositoryConfiguration.excludes.paths
         val importedPathExcludes = importPathExcludes(sourceCodeDir, pathExcludesFile).filter { pathExclude ->

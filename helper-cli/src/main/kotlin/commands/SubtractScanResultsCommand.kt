@@ -64,15 +64,28 @@ internal class SubtractScanResultsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val lhsOrtResult = lhsOrtFile.readValue<OrtResult>()
-        val rhsOrtResult = rhsOrtFile.readValue<OrtResult>()
+        val lhsOrtResult = requireNotNull(lhsOrtFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${lhsOrtFile.canonicalPath}' has no content."
+        }
 
-        val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.value }.associateBy(
+        val lhsScannerRun = requireNotNull(lhsOrtResult.scanner) {
+            "The ORT result file '${lhsOrtFile.canonicalPath}' does not contain a scanner run."
+        }
+
+        val rhsOrtResult = requireNotNull(rhsOrtFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${rhsOrtFile.canonicalPath}' has no content."
+        }
+
+        val rhsScannerRun = requireNotNull(rhsOrtResult.scanner) {
+            "The ORT result file '${rhsOrtFile.canonicalPath}' does not contain a scanner run."
+        }
+
+        val rhsScanSummaries = rhsScannerRun.results.scanResults.flatMap { it.value }.associateBy(
             keySelector = { it.provenance.key() },
             valueTransform = { it.summary }
         )
 
-        val scanResults = lhsOrtResult.scanner!!.results.scanResults.mapValuesTo(sortedMapOf()) { (_, results) ->
+        val scanResults = lhsScannerRun.results.scanResults.mapValuesTo(sortedMapOf()) { (_, results) ->
             results.map { lhsScanResult ->
                 val lhsSummary = lhsScanResult.summary
                 val rhsSummary = rhsScanSummaries[lhsScanResult.provenance.key()]
@@ -82,8 +95,8 @@ internal class SubtractScanResultsCommand : CliktCommand(
         }
 
        val result = lhsOrtResult.copy(
-           scanner = lhsOrtResult.scanner!!.copy(
-               results = lhsOrtResult.scanner!!.results.copy(
+           scanner = lhsScannerRun.copy(
+               results = lhsScannerRun.results.copy(
                     scanResults = scanResults
                )
            )

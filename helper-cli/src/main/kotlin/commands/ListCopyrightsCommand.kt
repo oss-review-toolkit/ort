@@ -88,7 +88,10 @@ internal class ListCopyrightsCommand : CliktCommand(
     ).single()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
         val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 

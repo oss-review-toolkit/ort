@@ -93,8 +93,8 @@ class ExamplesFunTest : StringSpec() {
 
         "license-classifications.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                val classifications =
-                    takeExampleFile("license-classifications.yml").readValue<LicenseClassifications>()
+                val classifications = takeExampleFile("license-classifications.yml").readValue()
+                    ?: LicenseClassifications()
 
                 classifications.categories.filter { it.description.isNotEmpty() } shouldNot beEmpty()
                 classifications.categoryNames shouldContain "public-domain"
@@ -130,19 +130,21 @@ class ExamplesFunTest : StringSpec() {
             val resultFile = File("src/funTest/assets/semver4j-analyzer-result.yml")
             val licenseFile = File("../examples/license-classifications.yml")
             val ortResult = resultFile.readValue<OrtResult>()
-            val evaluator = Evaluator(
-                ortResult = ortResult,
-                licenseInfoResolver = ortResult.createLicenseInfoResolver(),
-                licenseClassifications = licenseFile.readValue()
-            )
 
-            val script = takeExampleFile("rules.kts").readText()
+            ortResult shouldNotBeNull {
+                val evaluator = Evaluator(
+                    ortResult = this,
+                    licenseInfoResolver = createLicenseInfoResolver(),
+                    licenseClassifications = licenseFile.readValue() ?: LicenseClassifications()
+                )
 
-            val result = evaluator.run(script)
+                val script = takeExampleFile("rules.kts").readText()
+                val result = evaluator.run(script)
 
-            result.violations shouldHaveSize 2
-            val failedRules = result.violations.map { it.rule }
-            failedRules shouldContainExactlyInAnyOrder listOf("UNHANDLED_LICENSE", "COPYLEFT_LIMITED_IN_SOURCE")
+                result.violations shouldHaveSize 2
+                val failedRules = result.violations.map { it.rule }
+                failedRules shouldContainExactlyInAnyOrder listOf("UNHANDLED_LICENSE", "COPYLEFT_LIMITED_IN_SOURCE")
+            }
         }
 
         "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {

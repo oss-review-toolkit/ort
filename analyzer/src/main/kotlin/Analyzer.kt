@@ -60,7 +60,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             log.info { "Using configuration file '${actualRepositoryConfigurationFile.absolutePath}'." }
 
-            actualRepositoryConfigurationFile.readValue()
+            actualRepositoryConfigurationFile.readValue() ?: RepositoryConfiguration()
         } else {
             RepositoryConfiguration()
         }

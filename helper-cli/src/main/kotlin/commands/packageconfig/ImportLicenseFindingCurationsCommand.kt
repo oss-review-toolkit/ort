@@ -82,8 +82,13 @@ class ImportLicenseFindingCurationsCommand : CliktCommand(
     private val findingCurationMatcher = FindingCurationMatcher()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
-        val packageConfiguration = packageConfigurationFile.readValue<PackageConfiguration>()
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
+        val packageConfiguration = requireNotNull(packageConfigurationFile.readValue<PackageConfiguration>()) {
+            "The provided package configuration file '${packageConfigurationFile.canonicalPath}' has no content."
+        }
 
         val allLicenseFindings = ortResult.getScanResultFor(packageConfiguration)?.summary?.licenseFindings.orEmpty()
 

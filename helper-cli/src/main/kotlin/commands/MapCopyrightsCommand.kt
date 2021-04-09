@@ -61,9 +61,11 @@ internal class MapCopyrightsCommand : CliktCommand(
     override fun run() {
         val processedCopyrightStatements = inputCopyrightGarbageFile.readLines().filterNot { it.isBlank() }
 
-        val unprocessedCopyrightStatements = ortFile
-            .readValue<OrtResult>()
-            .getUnprocessedCopyrightStatements(processedCopyrightStatements)
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
+        val unprocessedCopyrightStatements = ortResult.getUnprocessedCopyrightStatements(processedCopyrightStatements)
 
         outputCopyrightsFile.writeText(unprocessedCopyrightStatements.joinToString(separator = "\n"))
     }

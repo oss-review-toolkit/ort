@@ -187,6 +187,10 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                             "${duration.inMilliseconds}ms."
                 }
 
+                requireNotNull(ortResult) {
+                    "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+                }
+
                 val analyzerResult = ortResult.analyzer?.result
 
                 if (analyzerResult == null) {

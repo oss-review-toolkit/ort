@@ -59,11 +59,8 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
     override fun run() {
         val entriesToImport = inputCopyrightGarbageFile.readLines().filterNot { it.isBlank() }
 
-        val existingCopyrightGarbage = if (outputCopyrightGarbageFile.isFile) {
-            outputCopyrightGarbageFile.readValue<CopyrightGarbage>().items
-        } else {
-            emptySet<String>()
-        }
+        val existingCopyrightGarbage = outputCopyrightGarbageFile.takeIf { it.isFile }
+                ?.readValue<CopyrightGarbage>()?.items.orEmpty()
 
         val collator = Collator.getInstance(Locale("en", "US.utf-8", "POSIX"))
         CopyrightGarbage((entriesToImport + existingCopyrightGarbage).toSortedSet(collator)).let {

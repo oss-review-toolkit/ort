@@ -68,13 +68,15 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }.replaceConfig(repositoryConfigurationFile)
 
         val resolutionProvider = DefaultResolutionProvider().apply {
             var resolutions = Resolutions()
 
-            resolutionsFile?.let {
-                resolutions = resolutions.merge(it.readValue())
+            resolutionsFile?.readValue<Resolutions>()?.let {
+                resolutions = resolutions.merge(it)
             }
 
             resolutions = resolutions.merge(ortResult.getResolutions())

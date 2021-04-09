@@ -51,7 +51,10 @@ internal class ImportScanResultsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
+        val ortResult = requireNotNull(ortFile.readValue<OrtResult>()) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
         val ids = ortResult.getProjects().map { it.id } + ortResult.getPackages().map { it.pkg.id }
 

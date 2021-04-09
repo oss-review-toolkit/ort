@@ -93,6 +93,10 @@ class UploadResultToPostgresCommand : CliktCommand(
             "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
+        requireNotNull(ortResult) {
+            "The provided ORT result file '${ortFile.canonicalPath}' has no content."
+        }
+
         val postgresConfig = globalOptionsForSubcommands.config.scanner.storages?.values
             ?.filterIsInstance<PostgresStorageConfiguration>()?.singleOrNull()
 

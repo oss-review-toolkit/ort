@@ -42,9 +42,6 @@ internal class SortCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
 
     override fun run() {
-        packageConfigurationFile
-            .readValue<PackageConfiguration>()
-            .sortEntries()
-            .write(packageConfigurationFile)
+        packageConfigurationFile.readValue<PackageConfiguration>()?.sortEntries()?.write(packageConfigurationFile)
     }
 }
