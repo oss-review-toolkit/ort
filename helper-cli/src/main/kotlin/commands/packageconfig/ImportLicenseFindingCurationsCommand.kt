@@ -61,7 +61,7 @@ class ImportLicenseFindingCurationsCommand : CliktCommand(
         "--package-configuration-file",
         help = "The package configuration file where the imported curations are to be merged into."
     ).convert { it.expandTilde() }
-        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
 
