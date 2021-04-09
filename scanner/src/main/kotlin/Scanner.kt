@@ -100,10 +100,6 @@ abstract class Scanner(
         downloadDirectory: File,
         skipExcluded: Boolean = false
     ): OrtResult {
-        require(ortResultFile.isFile) {
-            "The provided ORT result file '${ortResultFile.canonicalPath}' does not exist."
-        }
-
         val startTime = Instant.now()
 
         val (ortResult, duration) = measureTimedValue { ortResultFile.readValue<OrtResult>() }
