@@ -33,7 +33,7 @@
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "https://some-host/first-package.jar",
     "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceCategory" : "PACKAGE_MANAGER",
       "referenceLocator" : "pkg:maven/first-package-group/first-package@0.0.1",
       "referenceType" : "purl"
     } ],
@@ -49,7 +49,7 @@
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "git+ssh://github.com/path/first-package-repo.git@deadbeef#project-path",
     "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceCategory" : "PACKAGE_MANAGER",
       "referenceLocator" : "pkg:maven/first-package-group/first-package@0.0.1",
       "referenceType" : "purl"
     } ],
@@ -68,7 +68,7 @@
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "https://some-host/first-package-sources.jar",
     "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceCategory" : "PACKAGE_MANAGER",
       "referenceLocator" : "pkg:maven/first-package-group/first-package@0.0.1",
       "referenceType" : "purl"
     } ],
@@ -87,7 +87,7 @@
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceCategory" : "PACKAGE_MANAGER",
       "referenceLocator" : "pkg:maven/fourth-package-group/fourth-package@0.0.1",
       "referenceType" : "purl"
     } ],
@@ -103,7 +103,7 @@
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceCategory" : "PACKAGE_MANAGER",
       "referenceLocator" : "pkg:maven/second-package-group/second-package@0.0.1",
       "referenceType" : "purl"
     } ],
@@ -119,7 +119,7 @@
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceCategory" : "PACKAGE_MANAGER",
       "referenceLocator" : "pkg:maven/sixth-package-group/sixth-package@0.0.1",
       "referenceType" : "purl"
     } ],
@@ -135,7 +135,7 @@
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
-      "referenceCategory" : "PACKAGE-MANAGER",
+      "referenceCategory" : "PACKAGE_MANAGER",
       "referenceLocator" : "pkg:maven/third-package-group/third-package@0.0.1",
       "referenceType" : "purl"
     } ],

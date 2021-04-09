@@ -44,7 +44,7 @@ packages:
     \ in source artifact"
   downloadLocation: "https://some-host/first-package.jar"
   externalRefs:
-  - referenceCategory: "PACKAGE-MANAGER"
+  - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
     referenceType: "purl"
   filesAnalyzed: false
@@ -62,7 +62,7 @@ packages:
     \ in source artifact"
   downloadLocation: "git+ssh://github.com/path/first-package-repo.git@deadbeef#project-path"
   externalRefs:
-  - referenceCategory: "PACKAGE-MANAGER"
+  - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
     referenceType: "purl"
   filesAnalyzed: true
@@ -82,7 +82,7 @@ packages:
     \ in source artifact"
   downloadLocation: "https://some-host/first-package-sources.jar"
   externalRefs:
-  - referenceCategory: "PACKAGE-MANAGER"
+  - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
     referenceType: "purl"
   filesAnalyzed: true
@@ -100,7 +100,7 @@ packages:
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE-MANAGER"
+  - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:maven/fourth-package-group/fourth-package@0.0.1"
     referenceType: "purl"
   filesAnalyzed: false
@@ -114,7 +114,7 @@ packages:
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE-MANAGER"
+  - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:maven/second-package-group/second-package@0.0.1"
     referenceType: "purl"
   filesAnalyzed: false
@@ -128,7 +128,7 @@ packages:
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE-MANAGER"
+  - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:maven/sixth-package-group/sixth-package@0.0.1"
     referenceType: "purl"
   filesAnalyzed: false
@@ -142,7 +142,7 @@ packages:
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
-  - referenceCategory: "PACKAGE-MANAGER"
+  - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:maven/third-package-group/third-package@0.0.1"
     referenceType: "purl"
   filesAnalyzed: false
