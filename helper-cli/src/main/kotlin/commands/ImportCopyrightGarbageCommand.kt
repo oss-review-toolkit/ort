@@ -57,10 +57,7 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val entriesToImport = inputCopyrightGarbageFile
-            .readText()
-            .lines()
-            .filterNot { it.isBlank() }
+        val entriesToImport = inputCopyrightGarbageFile.readLines().filterNot { it.isBlank() }
 
         val existingCopyrightGarbage = if (outputCopyrightGarbageFile.isFile) {
             outputCopyrightGarbageFile.readValue<CopyrightGarbage>().items
