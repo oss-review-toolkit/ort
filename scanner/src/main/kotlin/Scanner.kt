@@ -90,27 +90,26 @@ abstract class Scanner(
         SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
 
     /**
-     * Scan the [Project]s and [Package]s specified in [ortResultFile] and store the scan results in [outputDirectory].
+     * Scan the [Project]s and [Package]s specified in [ortFile] and store the scan results in [outputDirectory].
      * The [downloadDirectory] is used to download the source code to for scanning. Return scan results as an
      * [OrtResult].
      */
     fun scanOrtResult(
-        ortResultFile: File,
+        ortFile: File,
         outputDirectory: File,
         downloadDirectory: File,
         skipExcluded: Boolean = false
     ): OrtResult {
         val startTime = Instant.now()
 
-        val (ortResult, duration) = measureTimedValue { ortResultFile.readValue<OrtResult>() }
+        val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
 
         log.perf {
-            "Read ORT result from '${ortResultFile.name}' (${ortResultFile.formatSizeInMib}) in " +
-                    "${duration.inMilliseconds}ms."
+            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
         requireNotNull(ortResult.analyzer) {
-            "The provided ORT result file '${ortResultFile.canonicalPath}' does not contain an analyzer result."
+            "The provided ORT result file '${ortFile.canonicalPath}' does not contain an analyzer result."
         }
 
         // Add the projects as packages to scan.

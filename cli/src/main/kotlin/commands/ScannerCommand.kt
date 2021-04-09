@@ -174,7 +174,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         val ortResult = if (input.isFile) {
             scanner.scanOrtResult(
-                ortResultFile = input,
+                ortFile = input,
                 outputDirectory = nativeOutputDir,
                 downloadDirectory = downloadDir ?: outputDir.resolve("downloads"),
                 skipExcluded = skipExcluded
