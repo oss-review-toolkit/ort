@@ -545,16 +545,26 @@ ort {
 
 [![Advisor](./logos/advisor.png)](./advisor/src/main/kotlin)
 
-The _advisor_ retrieves security advisories from configured services. It requires the analyzer result as an input.
+The _advisor_ retrieves security advisories from configured services. It requires the analyzer result as an input. For
+all the packages identified by the analyzer, it queries the services configured for known security vulnerabilities. The
+vulnerabilities returned by these services are then stored in the output result file together with additional
+information like the source of the data and a severity (if available).
 
-### Configuration
+Multiple providers for security advisories are available. The providers require specific configuration in the
+[ORT configuration file](./model/src/main/resources/reference.conf), which needs to be placed in the _advisor_
+section. When executing the advisor the providers to enable are selected with the `--advisors` option (or its short
+alias `-a`); here a comma-separated list with provider IDs is expected. The following sections describe the providers
+supported by the advisor:
 
-The advisor needs to be configured in the ORT configuration file:
+## NexusIQ
+
+A security data provider that queries [Nexus IQ Server](https://help.sonatype.com/iqserver). In the configuration,
+the URL where Nexus IQ Server is running and the credentials to authenticate need to be provided:
 
 ```hocon
 ort {
   advisor {
-    nexusiq {
+    nexusIq {
       serverUrl = "https://nexusiq.ossreviewtoolkit.org"
       username = myUser
       password = myPassword
@@ -563,8 +573,25 @@ ort {
 }
 ```
 
-Currently [Nexus IQ Server](https://help.sonatype.com/iqserver) (`-a NexusIQ`) is the only supported security data
-provider.
+To enable this provider, pass `-a NexusIQ` on the command line.
+
+## VulnerableCode
+
+This provider obtains information about security vulnerabilities from a
+[VulnerableCode](https://github.com/nexB/vulnerablecode) instance. The configuration is limited to the server URL, as
+authentication is not required:
+
+```hocon
+ort {
+  advisor {
+    VulnerableCode {
+      serverUrl = "http://localhost:8000"
+    }
+  }
+}
+```
+
+To enable this provider, pass `-a VulnerableCode` on the command line.
 
 <a name="evaluator">&nbsp;</a>
 
