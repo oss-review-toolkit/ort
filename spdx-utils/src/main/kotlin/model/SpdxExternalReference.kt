@@ -55,8 +55,8 @@ data class SpdxExternalReference(
         val serializedName: String
     ) {
         SECURITY("SECURITY"),
-        PACKAGE_MANAGER("PACKAGE-MANAGER"),
-        PERSISTENT_ID("PERSISTENT-ID"),
+        PACKAGE_MANAGER("PACKAGE_MANAGER"),
+        PERSISTENT_ID("PERSISTENT_ID"),
         OTHER("OTHER");
     }
 
