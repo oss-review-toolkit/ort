@@ -60,13 +60,11 @@ internal class MapCopyrightsCommand : CliktCommand(
 
     override fun run() {
         val processedCopyrightStatements = inputCopyrightGarbageFile
-            .expandTilde()
             .readText()
             .lines()
             .filterNot { it.isBlank() }
 
         val unprocessedCopyrightStatements = ortFile
-            .expandTilde()
             .readValue<OrtResult>()
             .getUnprocessedCopyrightStatements(processedCopyrightStatements)
 

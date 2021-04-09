@@ -55,7 +55,7 @@ internal class MergeRepositoryConfigurationsCommand : CliktCommand(
         var result = RepositoryConfiguration()
 
         inputRepositoryConfigurationFiles.forEach { file ->
-            val repositoryConfiguration = file.expandTilde().readValue<RepositoryConfiguration>()
+            val repositoryConfiguration = file.readValue<RepositoryConfiguration>()
             result = result.merge(repositoryConfiguration)
         }
 

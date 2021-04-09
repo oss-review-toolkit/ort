@@ -88,8 +88,8 @@ internal class ListCopyrightsCommand : CliktCommand(
     ).single()
 
     override fun run() {
-        val ortResult = ortFile.expandTilde().readValue<OrtResult>()
-        val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
+        val ortResult = ortFile.readValue<OrtResult>()
+        val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val copyrightStatements = ortResult.processAllCopyrightStatements(
