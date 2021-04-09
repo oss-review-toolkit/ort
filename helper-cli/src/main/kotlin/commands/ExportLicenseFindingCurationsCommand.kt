@@ -50,8 +50,8 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The input ORT file from which the license finding curations are to be read."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -71,7 +71,7 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val localLicenseFindingCurations = ortResultFile
+        val localLicenseFindingCurations = ortFile
             .readValue<OrtResult>()
             .replaceConfig(repositoryConfigurationFile)
             .getRepositoryLicenseFindingCurations()

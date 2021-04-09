@@ -34,8 +34,8 @@ import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 internal class ImportScanResultsCommand : CliktCommand(
     help = "Import all scan results from the given ORT result file to the file based scan results storage directory."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The input ORT file from which repository configuration shall be extracted."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
@@ -51,7 +51,7 @@ internal class ImportScanResultsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = ortFile.readValue<OrtResult>()
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
         val ids = ortResult.getProjects().map { it.id } + ortResult.getPackages().map { it.pkg.id }
 

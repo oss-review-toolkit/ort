@@ -43,8 +43,8 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
     help = "Removes all non-matching path and scope excludes as well as rule violation resolutions. The output is " +
             "written to the given repository configuration file."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The ORT result file to read as input which should contain an evaluator result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -79,7 +79,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
 
     override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
+        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
         val pathExcludes = findFilesRecursive(sourceCodeDir).let { allFiles ->
             ortResult.getExcludes().paths.filter { pathExclude ->

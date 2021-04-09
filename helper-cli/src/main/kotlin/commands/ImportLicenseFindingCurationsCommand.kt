@@ -51,8 +51,8 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The ORT file containing the findings the imported curations need to match against."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -76,7 +76,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
     private val findingCurationMatcher = FindingCurationMatcher()
 
     override fun run() {
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = ortFile.readValue<OrtResult>()
         val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
             repositoryConfigurationFile.readValue()
         } else {

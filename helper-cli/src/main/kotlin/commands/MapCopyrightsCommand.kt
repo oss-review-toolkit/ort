@@ -50,8 +50,8 @@ internal class MapCopyrightsCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file",
         help = "The ORT file utilized for mapping the processed to unprocessed statements."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -65,7 +65,7 @@ internal class MapCopyrightsCommand : CliktCommand(
             .lines()
             .filterNot { it.isBlank() }
 
-        val unprocessedCopyrightStatements = ortResultFile
+        val unprocessedCopyrightStatements = ortFile
             .expandTilde()
             .readValue<OrtResult>()
             .getUnprocessedCopyrightStatements(processedCopyrightStatements)

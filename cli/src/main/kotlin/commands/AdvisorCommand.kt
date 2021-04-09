@@ -46,7 +46,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
     private val allVulnerabilityProvidersByName = Advisor.ALL.associateBy { it.providerName }
         .toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
-    private val input by option(
+    private val ortFile by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
     ).convert { it.expandTilde() }
@@ -110,7 +110,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
         val advisor = Advisor(distinctProviders, globalOptionsForSubcommands.config.advisor)
 
-        val ortResult = advisor.retrieveVulnerabilityInformation(input, skipExcluded).mergeLabels(labels)
+        val ortResult = advisor.retrieveVulnerabilityInformation(ortFile, skipExcluded).mergeLabels(labels)
 
         outputDir.safeMkdirs()
 

@@ -38,8 +38,8 @@ import org.ossreviewtoolkit.utils.expandTilde
 class TransformResultCommand : CliktCommand(
     name = "transform", help = "Implements a JSLT transformation on the given ORT result file."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -63,7 +63,7 @@ class TransformResultCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val node = yamlMapper.readTree(ortResultFile)
+        val node = yamlMapper.readTree(ortFile)
 
         val expression = Parser.compile(transformationFile)
 

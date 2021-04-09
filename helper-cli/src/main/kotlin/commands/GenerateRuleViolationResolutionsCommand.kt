@@ -43,8 +43,8 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
     help = "Generates resolutions for all unresolved rule violations. The output is written to the given repository " +
             "configuration file."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The input ORT file from which the rule violations are read."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
@@ -67,7 +67,7 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
 
     override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
+        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
         val generatedResolutions = ortResult
             .getUnresolvedRuleViolations()
