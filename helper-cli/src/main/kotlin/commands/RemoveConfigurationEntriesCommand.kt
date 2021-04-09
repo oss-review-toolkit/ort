@@ -99,9 +99,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
         }
 
         val resolutionProvider = DefaultResolutionProvider().apply {
-            resolutionsFile?.expandTilde()?.readValue<Resolutions>()?.let {
-                add(it)
-            }
+            resolutionsFile?.readValue<Resolutions>()?.let { add(it) }
         }
         val notGloballyResolvedIssues = ortResult.collectIssues().values.flatten().filter {
             resolutionProvider.getIssueResolutionsFor(it).isEmpty()

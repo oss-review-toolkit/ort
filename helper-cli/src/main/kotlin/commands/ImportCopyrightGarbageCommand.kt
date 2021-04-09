@@ -58,13 +58,12 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
 
     override fun run() {
         val entriesToImport = inputCopyrightGarbageFile
-            .expandTilde()
             .readText()
             .lines()
             .filterNot { it.isBlank() }
 
         val existingCopyrightGarbage = if (outputCopyrightGarbageFile.isFile) {
-            outputCopyrightGarbageFile.expandTilde().readValue<CopyrightGarbage>().items
+            outputCopyrightGarbageFile.readValue<CopyrightGarbage>().items
         } else {
             emptySet<String>()
         }
