@@ -58,8 +58,8 @@ import org.ossreviewtoolkit.utils.expandTilde
 internal class ListLicensesCommand : CliktCommand(
     help = "Lists the license findings for a given package as distinct text locations."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -155,7 +155,7 @@ internal class ListLicensesCommand : CliktCommand(
     }.default(emptyList())
 
     override fun run() {
-        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
 
         if (ortResult.getPackageOrProject(packageId) == null) {
             throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")

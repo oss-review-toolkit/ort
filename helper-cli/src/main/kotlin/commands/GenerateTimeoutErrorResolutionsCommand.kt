@@ -40,8 +40,8 @@ import org.ossreviewtoolkit.utils.expandTilde
 internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     help = "Generates resolutions for scanner timeout errors. The result is written to the standard output."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The input ORT file containing the scan timeout errors."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -68,7 +68,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
 
         val resolutionProvider = DefaultResolutionProvider().apply {
             var resolutions = Resolutions()

@@ -50,8 +50,8 @@ internal class ExportPathExcludesCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The input ORT file from which the path excludes are to be read."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -71,7 +71,7 @@ internal class ExportPathExcludesCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val localPathExcludes = ortResultFile
+        val localPathExcludes = ortFile
             .readValue<OrtResult>()
             .replaceConfig(repositoryConfigurationFile)
             .getRepositoryPathExcludes()

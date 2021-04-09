@@ -39,24 +39,24 @@ internal class SubtractScanResultsCommand : CliktCommand(
     help = "Subtracts the given right-hand side scan results from the given left-hand side scan results. The output " +
             "is written to the given output ORT file."
 ) {
-    private val lhsOrtResultFile by option(
-        "--lhs-ort-result-file",
+    private val lhsOrtFile by option(
+        "--lhs-ort-file",
         help = "The ORT result containing the left-hand-side scan result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val rhsOrtResultFile by option(
-        "--rhs-ort-result-file",
+    private val rhsOrtFile by option(
+        "--rhs-ort-file",
         help = "The ORT result containing the left-hand-side scan result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val outputOrtResultFile by option(
-        "--output-ort-result-file",
+    private val outputOrtFile by option(
+        "--output-ort-file",
         help = "The ORT result containing the left-hand-side scan result."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
@@ -64,8 +64,8 @@ internal class SubtractScanResultsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val lhsOrtResult = lhsOrtResultFile.readValue<OrtResult>()
-        val rhsOrtResult = rhsOrtResultFile.readValue<OrtResult>()
+        val lhsOrtResult = lhsOrtFile.readValue<OrtResult>()
+        val rhsOrtResult = rhsOrtFile.readValue<OrtResult>()
 
         val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.value }.associateBy(
             keySelector = { it.provenance.key() },
@@ -89,7 +89,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
            )
        )
 
-       outputOrtResultFile.mapper().writerWithDefaultPrettyPrinter().writeValue(outputOrtResultFile, result)
+       outputOrtFile.mapper().writerWithDefaultPrettyPrinter().writeValue(outputOrtFile, result)
     }
 }
 

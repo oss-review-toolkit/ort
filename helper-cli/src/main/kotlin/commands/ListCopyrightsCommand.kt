@@ -41,8 +41,8 @@ import org.ossreviewtoolkit.utils.expandTilde
 internal class ListCopyrightsCommand : CliktCommand(
     help = "Lists the copyright findings."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file", "-i",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -88,7 +88,7 @@ internal class ListCopyrightsCommand : CliktCommand(
     ).single()
 
     override fun run() {
-        val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
+        val ortResult = ortFile.expandTilde().readValue<OrtResult>()
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 

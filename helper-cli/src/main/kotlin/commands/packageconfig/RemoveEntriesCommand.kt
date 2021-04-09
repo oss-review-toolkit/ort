@@ -45,8 +45,8 @@ internal class RemoveEntriesCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file",
         help = "The ORT result file to read as input which should contain a scan result to which the given " +
                 "package configuration applies to."
     ).convert { it.expandTilde() }
@@ -58,7 +58,7 @@ internal class RemoveEntriesCommand : CliktCommand(
 
     override fun run() {
         val packageConfiguration = packageConfigurationFile.readValue<PackageConfiguration>()
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = ortFile.readValue<OrtResult>()
         val scanResult = ortResult.getScanResultFor(packageConfiguration)
 
         if (scanResult == null) {
