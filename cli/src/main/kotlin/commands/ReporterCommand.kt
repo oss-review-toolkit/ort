@@ -200,10 +200,10 @@ class ReporterCommand : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        var (ortResult, readDuration) = measureTimedValue { ortFile.readValue<OrtResult>() }
+        var (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
 
         log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${readDuration.inMilliseconds}ms."
+            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
         repositoryConfigurationFile?.let {
