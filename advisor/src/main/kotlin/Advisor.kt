@@ -24,6 +24,8 @@ import java.io.File
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlin.time.measureTimedValue
+
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
@@ -35,6 +37,9 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.Environment
+import org.ossreviewtoolkit.utils.formatSizeInMib
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 
 /**
  * The class to manage [VulnerabilityProvider]s that retrieve security advisories.
@@ -58,7 +63,12 @@ class Advisor(
     ): OrtResult {
         val startTime = Instant.now()
 
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val (ortResult, duration) = measureTimedValue { ortResultFile.readValue<OrtResult>() }
+
+        log.perf {
+            "Read ORT result from '${ortResultFile.name}' (${ortResultFile.formatSizeInMib}) in " +
+                    "${duration.inMilliseconds}ms."
+        }
 
         requireNotNull(ortResult.analyzer) {
             "The provided ORT result file '${ortResultFile.canonicalPath}' does not contain an analyzer result."
