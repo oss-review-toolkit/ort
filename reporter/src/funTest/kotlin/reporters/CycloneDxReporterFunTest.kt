@@ -54,10 +54,10 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "match the result from the official Gradle plugin" {
-            val ortResultFile = File("src/funTest/assets/gradle-all-dependencies-result.yml")
+            val ortFile = File("src/funTest/assets/gradle-all-dependencies-result.yml")
             val ortResult = yamlMapper.readValue<OrtResult>(
                 patchExpectedResult(
-                    ortResultFile,
+                    ortFile,
                     url = "https://github.com/oss-review-toolkit/ort.git",
                     urlProcessed = "https://github.com/oss-review-toolkit/ort.git",
                     revision = "9fded2ad79d07ab5cda44f2549301669ea10442a"

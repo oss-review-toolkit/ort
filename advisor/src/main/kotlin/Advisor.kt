@@ -57,21 +57,17 @@ class Advisor(
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
     }
 
-    fun retrieveVulnerabilityInformation(
-        ortResultFile: File,
-        skipExcluded: Boolean = false
-    ): OrtResult {
+    fun retrieveVulnerabilityInformation(ortFile: File, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
 
-        val (ortResult, duration) = measureTimedValue { ortResultFile.readValue<OrtResult>() }
+        val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
 
         log.perf {
-            "Read ORT result from '${ortResultFile.name}' (${ortResultFile.formatSizeInMib}) in " +
-                    "${duration.inMilliseconds}ms."
+            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
 
         requireNotNull(ortResult.analyzer) {
-            "The provided ORT result file '${ortResultFile.canonicalPath}' does not contain an analyzer result."
+            "The provided ORT result file '${ortFile.canonicalPath}' does not contain an analyzer result."
         }
 
         val providers = providerFactories.map { it.create(config) }
