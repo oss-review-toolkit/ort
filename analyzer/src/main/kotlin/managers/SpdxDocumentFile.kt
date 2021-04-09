@@ -104,19 +104,16 @@ private fun String.extractOrganization(): String? =
 private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
 
 /**
- * Get the [SpdxPackage] for the given [externalDocumentReference], where [workingDir] is used to resolve local
+ * Get the [SpdxPackage] from the [SpdxExternalDocumentReference], where [workingDir] is used to resolve local
  * relative URIs to files.
  */
-private fun getSpdxPackageForDocumentRef(
-    externalDocumentReference: SpdxExternalDocumentReference,
-    workingDir: File
-): SpdxPackage {
-    val externalSpdxDocument = resolveExternalDocumentReference(externalDocumentReference, workingDir)
+private fun SpdxExternalDocumentReference.getSpdxPackage(workingDir: File): SpdxPackage {
+    val externalSpdxDocument = resolveExternalDocumentReference(this, workingDir)
     val spdxDocument = SpdxModelMapper.read<SpdxDocument>(externalSpdxDocument)
 
     if (spdxDocument.isProject()) {
-        throw IllegalArgumentException("${externalDocumentReference.externalDocumentId} refers to a file that " +
-                "contains more than a single package. This is currently not supported yet.")
+        throw IllegalArgumentException("$externalDocumentId refers to a file that contains more than a single " +
+                "package. This is currently not supported yet.")
     }
 
     val spdxPackage = spdxDocument.packages.single()
@@ -316,7 +313,7 @@ class SpdxDocumentFile(
         )
 
         return packageForExternalDocumentId.getOrPut(externalDocumentReference.externalDocumentId) {
-            getSpdxPackageForDocumentRef(externalDocumentReference, workingDir)
+            externalDocumentReference.getSpdxPackage(workingDir)
         }
     }
 
