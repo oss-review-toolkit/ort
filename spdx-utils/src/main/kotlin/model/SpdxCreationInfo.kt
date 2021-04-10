@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ data class SpdxCreationInfo(
 
     /**
      * The date and time the [SpdxDocument] was created.
+     * Format: YYYY-MM-DDThh:mm:ssZ
      */
     val created: Instant,
 

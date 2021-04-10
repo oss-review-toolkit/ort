@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.reporter.utils
 
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -161,7 +162,7 @@ object SpdxDocumentModelMapper {
             comment = params.documentComment,
             creationInfo = SpdxCreationInfo(
                 comment = params.creationInfoComment,
-                created = Instant.now(),
+                created = Instant.now().truncatedTo(ChronoUnit.SECONDS),
                 creators = listOf("${SpdxConstants.TOOL}$ORT_FULL_NAME - ${Environment().ortVersion}"),
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
