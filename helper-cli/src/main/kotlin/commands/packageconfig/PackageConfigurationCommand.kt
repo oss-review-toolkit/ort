@@ -29,6 +29,7 @@ internal class PackageConfigurationCommand : CliktCommand(
         subcommands(
             FindCommand(),
             FormatCommand(),
+            ExportLicenseFindingCurationsCommand(),
             ExportPathExcludesCommand(),
             ImportLicenseFindingCurationsCommand(),
             ImportPathExcludesCommand(),
