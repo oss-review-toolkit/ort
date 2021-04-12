@@ -648,6 +648,20 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 }
 
 /**
+ * Serialize this [RepositoryPathExcludes] to the given [targetFile] as YAML.
+ */
+internal fun RepositoryPathExcludes.writeAsYaml(targetFile: File) {
+    targetFile.parentFile.apply { safeMkdirs() }
+
+    yamlMapper.writeValue(
+        targetFile,
+        mapValues { (_, pathExcludes) ->
+            pathExcludes.sortedBy { it.pattern }
+        }.toSortedMap()
+    )
+}
+
+/**
  * Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message].
  */
 internal fun Collection<IssueResolution>.mergeIssueResolutions(
