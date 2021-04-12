@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.analyzer.managers
 
 import Dependency
 
@@ -44,6 +44,8 @@ import java.util.SortedSet
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.repository.RemoteRepository
 
+import org.ossreviewtoolkit.analyzer.managers.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -52,21 +54,24 @@ import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 
-class GradleDependencyGraphBuilderTest : WordSpec({
-    "GradleDependencyGraphBuilder" should {
+/**
+ * A test class to test the integration of the [Gradle] package manager with [DependencyGraphBuilder]. This class
+ * not only tests the dependency handler implementation itself but also the logic of the
+ */
+class GradleDependencyHandlerTest : WordSpec({
+    "DependencyGraphBuilder" should {
         "collect the direct dependencies of scopes" {
             val scope1 = "compile"
             val scope2 = "test"
             val dep1 = createDependency("org.apache.commons", "commons-lang3", "3.11")
             val dep2 = createDependency("org.apache.commons", "commons-collections4", "4.4")
             val dep3 = createDependency("my-project", "my-module", "1.0", path = "subPath")
-            val maven = createMavenSupport()
-            val builder = GradleDependencyGraphBuilder(NAME, maven)
+            val builder = createGraphBuilder()
 
-            builder.addDependency(scope1, dep1, remoteRepositories)
-            builder.addDependency(scope1, dep3, remoteRepositories)
-            builder.addDependency(scope2, dep2, remoteRepositories)
-            builder.addDependency(scope2, dep1, remoteRepositories)
+            builder.addDependency(scope1, dep1)
+            builder.addDependency(scope1, dep3)
+            builder.addDependency(scope2, dep2)
+            builder.addDependency(scope2, dep1)
             val graph = builder.build()
 
             graph.scopeRoots shouldHaveSize 3
@@ -84,10 +89,9 @@ class GradleDependencyGraphBuilderTest : WordSpec({
         "collect a dependency of type Maven" {
             val scope = "TheScope"
             val dep = createDependency("org.apache.commons", "commons-lang3", "3.10")
-            val maven = createMavenSupport()
-            val builder = GradleDependencyGraphBuilder(NAME, maven)
+            val builder = createGraphBuilder()
 
-            builder.addDependency(scope, dep, remoteRepositories)
+            builder.addDependency(scope, dep)
             val graph = builder.build()
             val scopes = graph.createScopes()
 
@@ -98,10 +102,9 @@ class GradleDependencyGraphBuilderTest : WordSpec({
             val scope = "TheScope"
             val dep = createDependency("org.apache.commons", "commons-lang3", "3.10")
             every { dep.pomFile } returns null
-            val maven = createMavenSupport()
-            val builder = GradleDependencyGraphBuilder(NAME, maven)
+            val builder = createGraphBuilder()
 
-            builder.addDependency(scope, dep, remoteRepositories)
+            builder.addDependency(scope, dep)
             val graph = builder.build()
             val scopes = graph.createScopes()
 
@@ -111,10 +114,9 @@ class GradleDependencyGraphBuilderTest : WordSpec({
         "collect a project dependency" {
             val scope = "TheScope"
             val dep = createDependency("a-project", "a-module", "1.0", path = "p")
-            val maven = createMavenSupport()
-            val builder = GradleDependencyGraphBuilder(NAME, maven)
+            val builder = createGraphBuilder()
 
-            builder.addDependency(scope, dep, remoteRepositories)
+            builder.addDependency(scope, dep)
             val graph = builder.build()
             val scopes = graph.createScopes()
 
@@ -125,12 +127,11 @@ class GradleDependencyGraphBuilderTest : WordSpec({
             val dep1 = createDependency("org.apache.commons", "commons-lang3", "3.11")
             val dep2 = createDependency("org.apache.commons", "commons-collections4", "4.4")
             val dep3 = createDependency("my-project", "my-module", "1.0", path = "foo")
-            val maven = createMavenSupport()
-            val builder = GradleDependencyGraphBuilder(NAME, maven)
+            val builder = createGraphBuilder()
 
-            builder.addDependency("s1", dep1, remoteRepositories)
-            builder.addDependency("s2", dep2, remoteRepositories)
-            builder.addDependency("s3", dep3, remoteRepositories)
+            builder.addDependency("s1", dep1)
+            builder.addDependency("s2", dep2)
+            builder.addDependency("s3", dep3)
 
             val packageIds = builder.packages().map { it.id }
             packageIds shouldContainExactlyInAnyOrder setOf(dep1.toId(), dep2.toId())
@@ -149,15 +150,14 @@ class GradleDependencyGraphBuilderTest : WordSpec({
             )
             val dep4 = createDependency("org.apache.commons", "commons-csv", "1.5", dependencies = listOf(dep1))
             val dep5 = createDependency("com.acme", "dep", "0.7", dependencies = listOf(dep3))
-            val maven = createMavenSupport()
-            val builder = GradleDependencyGraphBuilder(NAME, maven)
+            val builder = createGraphBuilder()
 
-            builder.addDependency(scope1, dep1, remoteRepositories)
-            builder.addDependency(scope2, dep1, remoteRepositories)
-            builder.addDependency(scope2, dep2, remoteRepositories)
-            builder.addDependency(scope1, dep5, remoteRepositories)
-            builder.addDependency(scope1, dep3, remoteRepositories)
-            builder.addDependency(scope2, dep4, remoteRepositories)
+            builder.addDependency(scope1, dep1)
+            builder.addDependency(scope2, dep1)
+            builder.addDependency(scope2, dep2)
+            builder.addDependency(scope1, dep5)
+            builder.addDependency(scope1, dep3)
+            builder.addDependency(scope2, dep4)
             val graph = builder.build()
 
             graph.scopeRoots shouldHaveSize 2
@@ -198,10 +198,10 @@ class GradleDependencyGraphBuilderTest : WordSpec({
                 dependencies = listOf(depConfig2)
             )
             val depLib = createDependency("com.business", "lib", "1", dependencies = listOf(depConfig1, depAcmeExclude))
-            val builder = GradleDependencyGraphBuilder(NAME, createMavenSupport())
+            val builder = createGraphBuilder()
 
-            builder.addDependency(scope, depAcme, remoteRepositories)
-            builder.addDependency(scope, depLib, remoteRepositories)
+            builder.addDependency(scope, depAcme)
+            builder.addDependency(scope, depLib)
             val graph = builder.build()
             val scopeDependencies = scopeDependencies(graph.createScopes(), scope)
 
@@ -236,11 +236,11 @@ class GradleDependencyGraphBuilderTest : WordSpec({
                 "com.acme", "lib-exclude", "1.1",
                 dependencies = listOf(depConfig2)
             )
-            val builder = GradleDependencyGraphBuilder(NAME, createMavenSupport())
+            val builder = createGraphBuilder()
 
-            builder.addDependency(scope1, depLog, remoteRepositories)
-            builder.addDependency(scope1, depConfig1, remoteRepositories)
-            builder.addDependency(scope2, depAcmeExclude, remoteRepositories)
+            builder.addDependency(scope1, depLog)
+            builder.addDependency(scope1, depConfig1)
+            builder.addDependency(scope2, depAcmeExclude)
             val graph = builder.build()
             val scopes = graph.createScopes()
 
@@ -262,7 +262,7 @@ class GradleDependencyGraphBuilderTest : WordSpec({
 
         "support scopes without dependencies" {
             val scope = "EmptyScope"
-            val builder = GradleDependencyGraphBuilder(NAME, createMavenSupport())
+            val builder = createGraphBuilder()
 
             builder.addScope(scope)
             val graph = builder.build()
@@ -277,8 +277,8 @@ class GradleDependencyGraphBuilderTest : WordSpec({
         "not override a scope's dependencies when adding it again" {
             val scope = "compile"
             val dep = createDependency("org.apache.commons", "commons-lang3", "3.11")
-            val builder = GradleDependencyGraphBuilder(NAME, createMavenSupport())
-            builder.addDependency(scope, dep, remoteRepositories)
+            val builder = createGraphBuilder()
+            builder.addDependency(scope, dep)
 
             builder.addScope(scope)
             val graph = builder.build()
@@ -317,6 +317,15 @@ private fun createDependency(
     every { dependency.classifier } returns "jar"
     every { dependency.extension } returns ""
     return dependency
+}
+
+/**
+ * Create a [DependencyGraphBuilder] equipped with a [GradleDependencyHandler] that is used by the test cases in
+ * this class.
+ */
+private fun createGraphBuilder(): DependencyGraphBuilder<Dependency> {
+    val dependencyHandler = GradleDependencyHandler(NAME, createMavenSupport(), remoteRepositories)
+    return DependencyGraphBuilder(dependencyHandler)
 }
 
 /**
