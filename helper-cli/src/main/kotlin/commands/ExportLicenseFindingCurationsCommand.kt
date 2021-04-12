@@ -29,7 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.getRepositoryLicenseFindingCurations
+import org.ossreviewtoolkit.helper.common.getLicenseFindingCurationsByRepository
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.model.OrtResult
@@ -71,10 +71,12 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val localLicenseFindingCurations = ortFile
-            .readValue<OrtResult>()
-            .replaceConfig(repositoryConfigurationFile)
-            .getRepositoryLicenseFindingCurations()
+        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+
+        val localLicenseFindingCurations = getLicenseFindingCurationsByRepository(
+            curations = ortResult.repository.config.curations.licenseFindings,
+            nestedRepositories = ortResult.repository.nestedRepositories
+        )
 
         val globalLicenseFindingCurations = if (licenseFindingCurationsFile.isFile) {
             licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>()

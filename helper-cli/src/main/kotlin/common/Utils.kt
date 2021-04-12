@@ -347,13 +347,15 @@ internal fun OrtResult.getLicenseFindingsById(
 }
 
 /**
- * Return all license finding curations from this [OrtResult] represented as [RepositoryPathExcludes].
+ * Return all license finding curations from [curations] represented as [RepositoryLicenseFindingCurations].
  */
-internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicenseFindingCurations {
+internal fun getLicenseFindingCurationsByRepository(
+    curations: Collection<LicenseFindingCuration>,
+    nestedRepositories: Map<String, VcsInfo>
+): RepositoryLicenseFindingCurations {
     val result = mutableMapOf<String, MutableList<LicenseFindingCuration>>()
-    val curations = repository.config.curations.licenseFindings
 
-    repository.nestedRepositories.forEach { (path, vcs) ->
+    nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
         curations.forEach { curation ->
             curation.path.withoutPrefix("$path/")?.let {
