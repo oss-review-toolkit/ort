@@ -50,6 +50,8 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.LicenseChoices
+import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
@@ -61,6 +63,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -187,6 +190,29 @@ private fun expectResolveLicenseInfo(
 }
 
 /**
+ * Like [expectResolveLicenseInfo] with multiple licenses that have same originalExpression.
+ */
+private fun expectResolveLicenseInfo(
+    resolverMock: LicenseInfoResolver,
+    id: Identifier,
+    licenses: List<String>,
+    originalExpressions: Pair<LicenseSource, Set<SpdxExpression>>
+) {
+    val resolvedLicenses = licenses.map { license ->
+        ResolvedLicense(
+            license = license.toSpdx() as SpdxSingleLicenseExpression,
+            originalDeclaredLicenses = emptySet(),
+            originalExpressions = mapOf(originalExpressions),
+            locations = emptySet()
+        )
+    }
+
+    val info = ResolvedLicenseInfo(id, mockk(), resolvedLicenses, emptyMap(), emptyMap())
+
+    every { resolverMock.resolveLicenseInfo(id) } returns info
+}
+
+/**
  * Return a list with the projects contained in the test result. The set of projects from the result is converted to
  * a list, so that single projects can be accessed by index.
  */
@@ -283,6 +309,9 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val mockResult = mockk<OrtResult>()
             every { mockResult.isExcluded(any()) } returns false
             every { mockResult.isExcluded(projects[1].id) } returns true
+            every { mockResult.getPackageLicenseChoices(projects[0].id) } returns emptyList()
+            every { mockResult.getPackageLicenseChoices(projects[1].id) } returns emptyList()
+            every { mockResult.getRepositoryLicenseChoices() } returns emptyList()
             val input = ReporterInput(mockResult, licenseInfoResolver = resolver)
             val pkg1 = FreemarkerTemplateProcessor.PackageModel(projects[0].id, input)
             val pkg2 = FreemarkerTemplateProcessor.PackageModel(projects[1].id, input)
@@ -326,6 +355,51 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
 
             result should haveSize(1)
             result.first().license.toString() shouldBe "MIT"
+        }
+
+        "apply license choices" {
+            val projects = testProjects()
+            val resolver = mockk<LicenseInfoResolver>()
+
+            expectResolveLicenseInfo(
+                resolver,
+                projects[1].id,
+                listOf("MIT", "GPL-2.0-only", "Apache-2.0"),
+                LicenseSource.DECLARED to setOf("GPL-2.0-only OR MIT OR Apache-2.0".toSpdx())
+            )
+
+            val ortResult = ORT_RESULT.copy(
+                repository = ORT_RESULT.repository.copy(
+                    config = RepositoryConfiguration(
+                        licenseChoices = LicenseChoices(
+                            repositoryLicenseChoices = listOf(
+                                LicenseChoice("GPL-2.0-only OR MIT".toSpdx(), "MIT".toSpdx())
+                            ),
+                            packageLicenseChoices = listOf(
+                                PackageLicenseChoice(
+                                    projects[1].id,
+                                    listOf(LicenseChoice("MIT OR Apache-2.0".toSpdx(), "MIT".toSpdx()))
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+
+            val input = ReporterInput(ortResult, licenseInfoResolver = resolver)
+            val pkg = FreemarkerTemplateProcessor.PackageModel(projects[1].id, input)
+
+            val result = FreemarkerTemplateProcessor.TemplateHelper(
+                OrtResult.EMPTY,
+                LicenseClassifications(),
+                DefaultResolutionProvider()
+            ).mergeLicenses(listOf(pkg))
+
+            result should haveSize(1)
+            with(result[0]) {
+                license.toString() shouldBe "MIT"
+                originalExpressions[LicenseSource.DECLARED] shouldBe setOf("GPL-2.0-only OR MIT OR Apache-2.0".toSpdx())
+            }
         }
     }
 })

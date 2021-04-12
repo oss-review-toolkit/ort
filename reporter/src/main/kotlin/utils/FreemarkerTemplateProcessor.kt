@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 
@@ -197,6 +198,16 @@ class FreemarkerTemplateProcessor(
         }
 
         /**
+         * The license choices that apply to this package.
+         */
+        val licenseChoices: List<LicenseChoice> by lazy {
+            listOf(
+                input.ortResult.getPackageLicenseChoices(id),
+                input.ortResult.getRepositoryLicenseChoices()
+            ).flatten()
+        }
+
+        /**
          * The resolved license file information for the package.
          */
         val licenseFiles: ResolvedLicenseFileInfo by lazy { input.licenseInfoResolver.resolveLicenseFiles(id) }
@@ -251,20 +262,26 @@ class FreemarkerTemplateProcessor(
                 .get(LicenseView.Companion) as LicenseView
 
         /**
-         * Merge the [ResolvedLicense]s of multiple [models] and filter them using [licenseView]. [Omits][omitExcluded]
-         * excluded packages, licenses, and copyrights by default. [Undefined][omitNotPresent] licenses can be filtered
-         * out optionally. The returned list is sorted by license identifier.
+         * Merge the [ResolvedLicense]s of multiple [models] and filter them using [licenseView] and
+         * [PackageModel.licenseChoices]. [Omits][omitExcluded] excluded packages, licenses, and copyrights by default.
+         * [Undefined][omitNotPresent] licenses can be filtered out optionally. [LicenseChoices][skipLicenseChoices] are
+         * applied by default. The returned list is sorted by license identifier.
          */
         @JvmOverloads
         fun mergeLicenses(
             models: Collection<PackageModel>,
             licenseView: LicenseView = LicenseView.ALL,
             omitNotPresent: Boolean = false,
-            omitExcluded: Boolean = true
+            omitExcluded: Boolean = true,
+            skipLicenseChoices: Boolean = false
         ): List<ResolvedLicense> =
             mergeResolvedLicenses(
                 models.filter { !omitExcluded || !it.excluded }.flatMap { model ->
-                    val licenses = model.license.filter(licenseView).licenses
+                    val chosenResolvedLicenseInfo = if (skipLicenseChoices) model.license else licenseView.filter(
+                        model.license,
+                        model.licenseChoices
+                    )
+                    val licenses = chosenResolvedLicenseInfo.filter(licenseView).licenses
                     val filteredLicenses = if (omitExcluded) licenses.filterExcluded() else licenses
                     if (omitNotPresent) filteredLicenses.filter(::isLicensePresent) else filteredLicenses
                 }
