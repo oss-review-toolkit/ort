@@ -264,7 +264,7 @@ class Bower(
         }
     }
 
-    private fun installDependencies(workingDir: File) = run(workingDir, "install")
+    private fun installDependencies(workingDir: File) = run(workingDir, "--allow-root", "install")
 
-    private fun listDependencies(workingDir: File) = run(workingDir, "list", "--json").stdout
+    private fun listDependencies(workingDir: File) = run(workingDir, "--allow-root", "list", "--json").stdout
 }
