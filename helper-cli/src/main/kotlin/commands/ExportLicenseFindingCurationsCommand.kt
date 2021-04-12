@@ -26,17 +26,14 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.getLicenseFindingCurationsByRepository
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.replaceConfig
+import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.safeMkdirs
 
 internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     help = "Export the license finding curations to a file which maps repository URLs to the license finding " +
@@ -88,18 +85,4 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
             .mergeLicenseFindingCurations(localLicenseFindingCurations, updateOnlyExisting = updateOnlyExisting)
             .writeAsYaml(licenseFindingCurationsFile)
     }
-}
-
-/**
- * Serialize this [RepositoryLicenseFindingCurations] to the given [targetFile] as YAML.
- */
-private fun RepositoryLicenseFindingCurations.writeAsYaml(targetFile: File) {
-    targetFile.parentFile.apply { safeMkdirs() }
-
-    yamlMapper.writeValue(
-        targetFile,
-        mapValues { (_, curations) ->
-            curations.sortedBy { it.path.removePrefix("*").removePrefix("*") }
-        }.toSortedMap()
-    )
 }

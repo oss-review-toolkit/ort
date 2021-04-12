@@ -610,6 +610,21 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
 }
 
 /**
+ * Serialize this [RepositoryLicenseFindingCurations] to the given [targetFile] as YAML.
+ */
+@JvmName("writeRepositoryLicenseFindingCurationsAsYaml")
+internal fun RepositoryLicenseFindingCurations.writeAsYaml(targetFile: File) {
+    targetFile.parentFile.apply { safeMkdirs() }
+
+    yamlMapper.writeValue(
+        targetFile,
+        mapValues { (_, curations) ->
+            curations.sortedBy { it.path.removePrefix("*").removePrefix("*") }
+        }.toSortedMap()
+    )
+}
+
+/**
  * Merge the given [RepositoryPathExcludes] replacing entries with equal [PathExclude.pattern].
  * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
  */
@@ -652,6 +667,7 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 /**
  * Serialize this [RepositoryPathExcludes] to the given [targetFile] as YAML.
  */
+@JvmName("writeRepositoryPathExcludesAsYaml")
 internal fun RepositoryPathExcludes.writeAsYaml(targetFile: File) {
     targetFile.parentFile.apply { safeMkdirs() }
 
