@@ -26,11 +26,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.commands.writeAsYaml
 import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.findRepositories
 import org.ossreviewtoolkit.helper.common.getPathExcludesByRepository
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
+import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
