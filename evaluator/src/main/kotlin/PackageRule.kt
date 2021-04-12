@@ -136,7 +136,7 @@ open class PackageRule(
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
         resolvedLicenseInfo.filter(licenseView, filterSources = true)
-            .applyChoices(ruleSet.ortResult.getLicenseChoices(pkg.id))
+            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.id))
             .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices()).forEach { resolvedLicense ->
             resolvedLicense.sources.forEach { licenseSource ->
                 licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)

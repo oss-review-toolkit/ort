@@ -389,7 +389,7 @@ data class OrtResult(
     /**
      * Return all [LicenseChoice]s for the [Package] with [id].
      */
-    fun getLicenseChoices(id: Identifier): List<LicenseChoice> =
+    fun getPackageLicenseChoices(id: Identifier): List<LicenseChoice> =
         repository.config.licenseChoices.packageLicenseChoices.find { it.packageId == id }?.licenseChoices.orEmpty()
 
     /**
