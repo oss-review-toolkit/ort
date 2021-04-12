@@ -136,12 +136,12 @@ open class PackageRule(
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
         resolvedLicenseInfo.filter(licenseView, filterSources = true)
-            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.id))
-            .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices()).forEach { resolvedLicense ->
-            resolvedLicense.sources.forEach { licenseSource ->
-                licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)
+            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.id), licenseView)
+            .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView).forEach { resolvedLicense ->
+                resolvedLicense.sources.forEach { licenseSource ->
+                    licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)
+                }
             }
-        }
     }
 
     fun issue(severity: Severity, message: String, howToFix: String) =

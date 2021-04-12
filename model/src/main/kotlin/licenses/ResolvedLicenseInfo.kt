@@ -116,10 +116,13 @@ data class ResolvedLicenseInfo(
         }
 
     /**
-     * Apply [licenseChoices] on the effective license of [LicenseView.ALL].
+     * Apply [licenseChoices] on the effective license of the [licenseView].
      */
-    fun applyChoices(licenseChoices: List<LicenseChoice>): ResolvedLicenseInfo {
-        val licenses = effectiveLicense(LicenseView.ALL, licenseChoices)?.decompose().orEmpty()
+    fun applyChoices(
+        licenseChoices: List<LicenseChoice>,
+        licenseView: LicenseView = LicenseView.ALL
+    ): ResolvedLicenseInfo {
+        val licenses = effectiveLicense(licenseView, licenseChoices)?.decompose().orEmpty()
 
         return this.copy(licenses = this.licenses.filter { it.license in licenses })
     }
