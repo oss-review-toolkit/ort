@@ -114,17 +114,12 @@ class ReportTableModelMapper(
         val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
-        requireNotNull(ortResult.analyzer?.result) {
-            "The provided ORT result does not contain an analyzer result."
-        }
-
-        val analyzerResult = ortResult.analyzer!!.result
+        val analyzerResult = ortResult.analyzer?.result
+        val analyzerIssuesForPackages = ortResult.getPackages().associateBy({ it.pkg.id }, { it.pkg.collectIssues() })
+        val scanRecord = ortResult.scanner?.results
         val excludes = ortResult.getExcludes()
 
-        val scanRecord = ortResult.scanner?.results
-        val analyzerIssuesForPackages = ortResult.getPackages().associateBy({ it.pkg.id }, { it.pkg.collectIssues() })
-
-        val projectTables = analyzerResult.projects.associateWith { project ->
+        val projectTables = analyzerResult?.projects?.associateWith { project ->
             val scopesForDependencies = project.getScopesForDependencies(excludes)
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
@@ -224,7 +219,7 @@ class ReportTableModelMapper(
                 ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
                 pathExcludes
             )
-        }.toSortedMap()
+        }.orEmpty().toSortedMap()
 
         val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
 
