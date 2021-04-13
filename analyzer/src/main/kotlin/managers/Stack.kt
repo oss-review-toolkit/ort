@@ -25,10 +25,7 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
 import java.util.SortedSet
-
-import okhttp3.Request
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -214,25 +211,11 @@ class Stack(
         "https://hackage.haskell.org/package/$name-$version"
 
     private fun downloadCabalFile(pkgId: Identifier): String? {
-        val pkgRequest = Request.Builder()
-            .get()
-            .url("${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal")
-            .build()
+        val url = "${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal"
 
-        return OkHttpClientHelper.execute(pkgRequest).use { response ->
-            val body = response.body?.string()?.trim()
-
-            if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                log.warn { "Unable to retrieve Hackage meta-data for package '${pkgId.toCoordinates()}'." }
-                if (body != null) {
-                    log.warn { "The response was '$body' (code ${response.code})." }
-                }
-
-                null
-            } else {
-                body
-            }
-        }
+        return OkHttpClientHelper.downloadText(url).onFailure {
+            log.warn { "Unable to retrieve Hackage meta-data for package '${pkgId.toCoordinates()}'." }
+        }.getOrNull()
     }
 
     private fun parseKeyValue(i: ListIterator<String>, keyPrefix: String = ""): Map<String, String> {
