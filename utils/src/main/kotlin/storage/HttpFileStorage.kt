@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.utils.storage
 
 import java.io.IOException
 import java.io.InputStream
-import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit
 
 import okhttp3.CacheControl
@@ -68,8 +67,7 @@ class HttpFileStorage(
             .url(urlForPath(path))
             .build()
 
-        val response = OkHttpClientHelper.execute(request)
-        return response.code == HttpURLConnection.HTTP_OK
+        return OkHttpClientHelper.execute(request).isSuccessful
     }
 
     override fun read(path: String): InputStream {
@@ -83,7 +81,7 @@ class HttpFileStorage(
         log.debug { "Reading file from storage: ${request.url}" }
 
         val response = OkHttpClientHelper.execute(request)
-        if (response.code == HttpURLConnection.HTTP_OK) {
+        if (response.isSuccessful) {
             response.body?.let { body ->
                 return body.byteStream()
             }
@@ -107,7 +105,7 @@ class HttpFileStorage(
             log.debug { "Writing file to storage: ${request.url}" }
 
             return OkHttpClientHelper.execute(request).use { response ->
-                if (response.code != HttpURLConnection.HTTP_CREATED && response.code != HttpURLConnection.HTTP_OK) {
+                if (!response.isSuccessful) {
                     throw IOException(
                         "Could not store file at '${request.url}': ${response.code} - ${response.message}"
                     )
