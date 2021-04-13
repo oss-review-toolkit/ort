@@ -114,7 +114,13 @@ for a concluded license those statements are kept.
 --]
 [#assign
 resolvedLicenses =
-    helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED").filter(package.licensesNotInLicenseFiles())
+    helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED")
+      .filter(
+          package.licensesNotInLicenseFiles(
+            helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED")
+                .filter(package.license, package.licenseChoices).licenses
+          )
+      )
 ]
 [#if resolvedLicenses?has_content]
 
