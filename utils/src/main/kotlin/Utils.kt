@@ -135,7 +135,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
         it.startsWith(project.orEmpty())
     }.let {
         // Fall back to the original list if filtering by project results in an empty list.
-        if (it.isEmpty()) filteredNames else it
+        it.ifEmpty { filteredNames }
     }
 }
 
