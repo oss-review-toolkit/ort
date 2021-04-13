@@ -254,7 +254,7 @@ private fun Collection<Edge>.toPackageReferenceForest(
     )
 
     val nodes = mutableMapOf<Identifier, Node>()
-    fun addNode(id: Identifier): Node? = if (!ignoreNode(id)) nodes.getOrPut(id, { Node(id) }) else null
+    fun addNode(id: Identifier): Node? = if (!ignoreNode(id)) nodes.getOrPut(id) { Node(id) } else null
 
     forEach { edge ->
         val source = addNode(edge.source)

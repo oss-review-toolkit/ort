@@ -580,7 +580,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
             return
         }
 
-        val curations = result.getOrPut(repositoryUrl, { mutableMapOf() })
+        val curations = result.getOrPut(repositoryUrl) { mutableMapOf() }
 
         val key = curation.hashKey()
         if (updateOnlyUpdateExisting && !curations.containsKey(key)) {
@@ -622,7 +622,7 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
             return
         }
 
-        val pathExcludes = result.getOrPut(repositoryUrl, { mutableMapOf() })
+        val pathExcludes = result.getOrPut(repositoryUrl) { mutableMapOf() }
         if (updateOnlyUpdateExisting && !result.containsKey(pathExclude.pattern)) {
             return
         }

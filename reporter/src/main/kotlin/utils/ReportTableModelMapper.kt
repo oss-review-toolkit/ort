@@ -59,8 +59,8 @@ private fun Project.getScopesForDependencies(excludes: Excludes): Map<Identifier
 
     scopes.forEach { scope ->
         scope.collectDependencies().forEach { dependency ->
-            result.getOrPut(dependency, { mutableMapOf() })
-                .getOrPut(scope.name, { excludes.findScopeExcludes(scope.name) })
+            result.getOrPut(dependency) { mutableMapOf() }
+                .getOrPut(scope.name) { excludes.findScopeExcludes(scope.name) }
         }
     }
 
