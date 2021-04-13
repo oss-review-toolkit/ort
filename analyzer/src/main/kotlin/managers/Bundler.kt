@@ -28,8 +28,6 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.SortedSet
 
-import okhttp3.Request
-
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -50,6 +48,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.HttpDownloadError
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -248,22 +247,13 @@ class Bundler(
 
     private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
         // See http://guides.rubygems.org/rubygems-org-api-v2/.
-        val request = Request.Builder()
-            .get()
-            .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
-            .build()
+        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.json"
 
-        OkHttpClientHelper.execute(request).use { response ->
-            when (response.code) {
-                HttpURLConnection.HTTP_OK -> {
-                    val body = response.body?.string()?.trim()
-                    return if (body.isNullOrEmpty()) null else GemSpec.createFromJson(body)
-                }
-
-                HttpURLConnection.HTTP_NOT_FOUND -> {
-                    log.info { "Gem '$name' was not found on RubyGems." }
-                    return null
-                }
+        return OkHttpClientHelper.downloadText(url).mapCatching {
+            GemSpec.createFromJson(it)
+        }.onFailure {
+            when (val code = (it as HttpDownloadError).code) {
+                HttpURLConnection.HTTP_NOT_FOUND -> log.info { "Gem '$name' was not found on RubyGems." }
 
                 OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
                     throw IOException(
@@ -286,12 +276,11 @@ class Bundler(
 
                 else -> {
                     throw IOException(
-                        "RubyGems reported unhandled HTTP code ${response.code} when requesting meta-data for " +
-                                "gem '$name'."
+                        "RubyGems reported unhandled HTTP code $code when requesting meta-data for gem '$name'."
                     )
                 }
             }
-        }
+        }.getOrNull()
     }
 }
 

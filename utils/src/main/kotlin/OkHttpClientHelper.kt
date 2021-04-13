@@ -39,6 +39,8 @@ import okhttp3.Response
 
 typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
+class HttpDownloadError(val code: Int, message: String) : IOException(message)
+
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
@@ -109,6 +111,31 @@ object OkHttpClientHelper {
      */
     suspend fun await(request: Request, block: BuilderConfiguration? = null): Response =
         buildClient(block).newCall(request).await()
+
+    /**
+     * Download from [url] and return a [Result] with a string representing the response body content on success, or a
+     * [Result] wrapping a [HttpDownloadError] on failure.
+     */
+    fun downloadText(url: String): Result<String> {
+        val request = Request.Builder().get().url(url).build()
+
+        return execute(request).use { response ->
+            log.debug {
+                if (response.cacheResponse != null) {
+                    "Retrieved $url from local cache."
+                } else {
+                    "Downloaded from $url via network."
+                }
+            }
+
+            if (response.isSuccessful) {
+                val text = response.body?.string().orEmpty()
+                Result.success(text)
+            } else {
+                Result.failure(HttpDownloadError(response.code, response.message))
+            }
+        }
+    }
 }
 
 /**

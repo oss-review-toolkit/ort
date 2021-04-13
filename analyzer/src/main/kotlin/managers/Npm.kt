@@ -27,11 +27,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.net.HttpURLConnection
 import java.net.URLEncoder
 import java.util.SortedSet
-
-import okhttp3.Request
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -62,6 +59,7 @@ import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.HttpDownloadError
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
@@ -221,12 +219,12 @@ open class Npm(
 
         nodeModulesDir.walk().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
-        }.forEach {
-            val packageDir = it.parentFile
+        }.forEach { file ->
+            val packageDir = file.parentFile
 
             log.debug { "Found a 'package.json' file in '$packageDir'." }
 
-            val json = it.readValue<ObjectNode>()
+            val json = file.readValue<ObjectNode>()
             val rawName = json["name"].textValue()
             val (namespace, name) = splitNamespaceAndName(rawName)
             val version = json["version"].textValue()
@@ -266,50 +264,35 @@ open class Npm(
             } else {
                 log.debug { "Resolving the package info for '$identifier' via NPM registry." }
 
-                val pkgRequest = Request.Builder()
-                    .get()
-                    .url("$npmRegistry/$encodedName")
-                    .build()
+                OkHttpClientHelper.downloadText("$npmRegistry/$encodedName").onSuccess {
+                    val packageInfo = jsonMapper.readTree(it)
 
-                OkHttpClientHelper.execute(pkgRequest).use { response ->
-                    if (response.code == HttpURLConnection.HTTP_OK) {
-                        log.debug {
-                            if (response.cacheResponse != null) {
-                                "Retrieved info about '$encodedName' from local cache."
-                            } else {
-                                "Downloaded info about '$encodedName' from NPM registry."
-                            }
-                        }
+                    packageInfo["versions"]?.get(version)?.let { versionInfo ->
+                        description = versionInfo["description"].textValueOrEmpty()
+                        homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
-                        response.body?.let { body ->
-                            val packageInfo = jsonMapper.readTree(body.string())
-
-                            packageInfo["versions"]?.get(version)?.let { versionInfo ->
-                                description = versionInfo["description"].textValueOrEmpty()
-                                homepageUrl = versionInfo["homepage"].textValueOrEmpty()
-
-                                versionInfo["dist"]?.let { dist ->
-                                    downloadUrl = dist["tarball"].textValueOrEmpty().let { tarballUrl ->
-                                        if (tarballUrl.startsWith("http://registry.npmjs.org/")) {
-                                            // Work around the issue described at
-                                            // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                                            "https://" + tarballUrl.removePrefix("http://")
-                                        } else {
-                                            tarballUrl
-                                        }
-                                    }
-
-                                    hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                        versionInfo["dist"]?.let { dist ->
+                            downloadUrl = dist["tarball"].textValueOrEmpty().let { tarballUrl ->
+                                if (tarballUrl.startsWith("http://registry.npmjs.org/")) {
+                                    // Work around the issue described at
+                                    // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                                    "https://" + tarballUrl.removePrefix("http://")
+                                } else {
+                                    tarballUrl
                                 }
-
-                                vcsFromPackage = parseVcsInfo(versionInfo)
                             }
+
+                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
                         }
-                    } else {
-                        log.info {
-                            "Could not retrieve package information for '$encodedName' " +
-                                    "from NPM registry $npmRegistry: ${response.message} (code ${response.code})."
-                        }
+
+                        vcsFromPackage = parseVcsInfo(versionInfo)
+                    }
+                }.onFailure {
+                    val e = (it as HttpDownloadError)
+
+                    log.info {
+                        "Could not retrieve package information for '$encodedName' from NPM registry $npmRegistry: " +
+                                "${e.message} (code ${e.code})."
                     }
                 }
             }
