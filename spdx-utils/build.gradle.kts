@@ -40,12 +40,13 @@ plugins {
     id("at.bxm.svntools")
 }
 
-val generateGrammarSource by tasks.existing(AntlrTask::class) {
+tasks.withType<AntlrTask> {
     arguments = arguments + listOf("-visitor")
 }
 
 tasks.withType<KotlinCompile> {
-    dependsOn(generateGrammarSource)
+    val antlrTasks = tasks.withType<AntlrTask>()
+    dependsOn(antlrTasks)
 }
 
 dependencies {
