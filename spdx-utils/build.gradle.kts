@@ -356,10 +356,10 @@ val generateSpdxLicenseEnum by tasks.registering {
             "SpdxLicense",
             resourcePath
         ) { json ->
-            (json["licenses"] as List<Map<String, Any>>).map {
+            (json["licenses"] as List<Map<String, Any>>).associate {
                 val id = it["licenseId"] as String
                 id to LicenseMetaData(it["name"] as String, it["isDeprecatedLicenseId"] as Boolean)
-            }.toMap()
+            }
         }
         generateLicenseTextResources(description, ids, resourcePath)
     }
@@ -382,10 +382,10 @@ val generateSpdxLicenseExceptionEnum by tasks.registering {
             "SpdxLicenseException",
             resourcePath
         ) { json ->
-            (json["exceptions"] as List<Map<String, Any>>).map {
+            (json["exceptions"] as List<Map<String, Any>>).associate {
                 val id = it["licenseExceptionId"] as String
                 id to LicenseMetaData(it["name"] as String, it["isDeprecatedLicenseId"] as Boolean)
-            }.toMap()
+            }
         }
         generateLicenseTextResources(description, ids, resourcePath)
     }

@@ -409,6 +409,6 @@ private fun declaredLicenseMappingCuration(id: Identifier, vararg entries: Pair<
     PackageCuration(
         id,
         PackageCurationData(
-            declaredLicenseMapping = entries.map { it.first to it.second.toSpdx() }.toMap()
+            declaredLicenseMapping = entries.associate { it.first to it.second.toSpdx() }
         )
     )
