@@ -63,5 +63,5 @@ data class MarkedAsIdentifiedFile(
 
     override fun getFileName(): String = file.path!!
 
-    override fun getCopyright(): String? = identificationCopyright
+    override fun getCopyright(): String = identificationCopyright
 }

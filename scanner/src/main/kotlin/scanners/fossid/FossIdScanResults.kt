@@ -62,7 +62,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, Ign
             licenseFindings += finding
         }
 
-        summarizable.getCopyright()?.let {
+        summarizable.getCopyright().let {
             if (it.isNotEmpty()) {
                 copyrightFindings += CopyrightFinding(it, location)
             }

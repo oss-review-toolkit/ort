@@ -36,5 +36,5 @@ interface Summarizable {
     /**
      * Get the copyright of the FossId file result
      */
-    fun getCopyright(): String?
+    fun getCopyright(): String
 }
