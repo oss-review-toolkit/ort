@@ -71,10 +71,10 @@ private fun storageMock(name: String): ScanResultsStorage {
 }
 
 /**
- * Generate a test [LicenseFinding] object based on the given [idx].
+ * Generate a test [LicenseFinding] object based on the given [index].
  */
-private fun licenseFinding(idx: Int): LicenseFinding =
-    LicenseFinding("testLicense$idx", TextLocation("file$idx", idx + 1, idx + 2))
+private fun licenseFinding(index: Int): LicenseFinding =
+    LicenseFinding("testLicense$index", TextLocation("file$index", index + 1, index + 2))
 
 /**
  * Create a [ScanResult] with [resultCount] findings.
