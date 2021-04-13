@@ -80,7 +80,7 @@ private fun licenseFinding(index: Int): LicenseFinding =
  * Create a [ScanResult] with [resultCount] findings.
  */
 private fun createScanResult(resultCount: Int): ScanResult {
-    val licenseFindings = (0 until resultCount).map { licenseFinding(it) }
+    val licenseFindings = List(resultCount) { licenseFinding(it) }
     val summary = ScanSummary(
         startTime = Instant.now(), endTime = Instant.now(), fileCount = resultCount,
         packageVerificationCode = "test$resultCount", licenseFindings = licenseFindings.toSortedSet(),
