@@ -81,7 +81,7 @@ data class ScanSummary(
     val licenses: Set<SpdxExpression> = licenseFindings.mapTo(mutableSetOf()) { it.license }
 
     /**
-     * Filter all detected licenses and copyrights from the [summary] which are underneath [path]. Findings which
+     * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath [path]. Findings which
      * [RootLicenseMatcher] assigns as root license files for [path] are also kept.
      */
     fun filterByPath(path: String): ScanSummary {
