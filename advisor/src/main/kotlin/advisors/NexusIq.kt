@@ -88,15 +88,13 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
                     it.component.packageUrl.substringBefore("?")
                 }
 
-                componentDetails += requestResults
+                componentDetails += requestResults.filterValues { it.securityData.securityIssues.isNotEmpty() }
             }
 
             val endTime = Instant.now()
 
             packages.mapNotNullTo(mutableListOf()) { pkg ->
-                componentDetails[pkg.id.toPurl()]?.takeUnless {
-                    it.securityData.securityIssues.isEmpty()
-                }?.let { details ->
+                componentDetails[pkg.id.toPurl()]?.let { details ->
                     pkg to listOf(
                         AdvisorResult(
                             details.securityData.securityIssues.mapNotNull { it.toVulnerability() },
