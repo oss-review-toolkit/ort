@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.utils.SortedSetComparator
-
 /**
  * A [TextLocation] references text located in a file.
  */
@@ -42,7 +40,6 @@ data class TextLocation(
 ) : Comparable<TextLocation> {
     companion object {
         const val UNKNOWN_LINE = -1
-        val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
     }
 
