@@ -218,9 +218,12 @@ class FreemarkerTemplateProcessor(
          * file and all licenses not contained in those files shall be listed separately.
          */
         @Suppress("UNUSED") // This function is used in the templates.
-        fun licensesNotInLicenseFiles(): List<ResolvedLicense> {
+        @JvmOverloads
+        fun licensesNotInLicenseFiles(
+            resolvedLicenses: List<ResolvedLicense> = license.licenses
+        ): List<ResolvedLicense> {
             val outputFileLicenses = licenseFiles.files.flatMap { it.licenses }
-            return license.filter { it !in outputFileLicenses }
+            return resolvedLicenses.filter { it !in outputFileLicenses }
         }
     }
 
