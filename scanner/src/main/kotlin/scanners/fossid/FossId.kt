@@ -341,10 +341,8 @@ class FossId(
     private fun createResultSummary(startTime: Instant, rawResults: RawResults): ScanResult {
         val associate = rawResults.listIgnoredFiles.associateBy { it.path }
 
-        val (filesCount, licenseFindings, copyrightFindings) = if (rawResults.markedAsIdentifiedFiles.isEmpty()) {
+        val (filesCount, licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
             rawResults.identifiedFiles
-        } else {
-            rawResults.markedAsIdentifiedFiles
         }.mapSummary(associate)
 
         val summary = ScanSummary(
