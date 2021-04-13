@@ -21,15 +21,17 @@ You can do this by defining a `sw360Configuration` scanner storage in the `stora
 
 ```
 ort {
-  storages {
-    sw360Configuration {
-      restUrl = "https://your-sw360-rest-url"
-      authUrl = "https://your-authentication-url"
-      username = username
-      password = password
-      clientId = clientId
-      clientPassword = clientPassword
-      token = token
+  scanner {
+    storages {
+      sw360Configuration {
+        restUrl = "https://your-sw360-rest-url"
+        authUrl = "https://your-authentication-url"
+        username = username
+        password = password
+        clientId = clientId
+        clientPassword = clientPassword
+        token = token
+      }
     }
   }
 }
@@ -111,15 +113,17 @@ You can do this by defining a `sw360Configuration` scanner storage in the `stora
 
 ```
 ort {
-  storages {
-    sw360Configuration {
-      restUrl = "https://your-sw360-rest-url"
-      authUrl = "https://your-authentication-url"
-      username = username
-      password = password
-      clientId = clientId
-      clientPassword = clientPassword
-      token = token
+  scanner {
+    storages {
+      sw360Configuration {
+        restUrl = "https://your-sw360-rest-url"
+        authUrl = "https://your-authentication-url"
+        username = username
+        password = password
+        clientId = clientId
+        clientPassword = clientPassword
+        token = token
+      }
     }
   }
 }
