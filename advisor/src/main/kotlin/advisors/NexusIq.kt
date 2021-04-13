@@ -83,8 +83,8 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
         return try {
             val componentDetails = mutableMapOf<String, NexusIqService.ComponentDetails>()
 
-            components.chunked(REQUEST_CHUNK_SIZE).forEach { component ->
-                val requestResults = getComponentDetails(service, component).componentDetails.associateBy {
+            components.chunked(REQUEST_CHUNK_SIZE).forEach { chunk ->
+                val requestResults = getComponentDetails(service, chunk).componentDetails.associateBy {
                     it.component.packageUrl.substringBefore("?")
                 }
 
