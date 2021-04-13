@@ -27,7 +27,6 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.lang.IllegalArgumentException
-import java.lang.NumberFormatException
 import java.net.HttpURLConnection
 import java.util.SortedSet
 
@@ -191,13 +190,7 @@ class Pip(
          * Return a version string with leading zeros of components stripped.
          */
         private fun stripLeadingZerosFromVersion(version: String) =
-            version.split('.').joinToString(".") {
-                try {
-                    it.toInt().toString()
-                } catch (e: NumberFormatException) {
-                    it
-                }
-            }
+            version.split('.').joinToString(".") { it.trimStart('0').ifEmpty { "0" } }
     }
 
     override fun command(workingDir: File?) = "pip"
