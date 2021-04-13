@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.storage.FileStorage
 import org.ossreviewtoolkit.utils.unpackZip
 
 /**
- * A class to archive files matched by provided [patterns] in a ZIP file that is stored in a [FileStorage][storage].
+ * A class to archive files matched by provided patterns in a ZIP file that is stored in a [FileStorage][storage].
  */
 class FileArchiver(
     /**
@@ -81,7 +81,7 @@ class FileArchiver(
     fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasArchive(provenance)
 
     /**
-     * Archive all files in [directory] matching any of the configured [patterns] in the [storage].
+     * Archive all files in [directory] matching any of the configured patterns in the [storage].
      */
     fun archive(directory: File, provenance: KnownProvenance) {
         val zipFile = createTempFile(ORT_NAME, ".zip").toFile()
