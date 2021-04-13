@@ -105,9 +105,13 @@ class LicenseInfoResolver(
                         location = UNDEFINED_TEXT_LOCATION,
                         appliedCuration = null,
                         matchingPathExcludes = emptyList(),
-                        copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) {
+                        copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) { author ->
+                            val statement = "Copyright (C) $author".takeUnless {
+                                author.contains("Copyright", ignoreCase = true)
+                            } ?: author
+
                             ResolvedCopyrightFinding(
-                                statement = "$COPYRIGHT_PREFIX $it",
+                                statement = statement,
                                 location = UNDEFINED_TEXT_LOCATION,
                                 matchingPathExcludes = emptyList()
                             )
@@ -273,4 +277,3 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
 }
 
 private val UNDEFINED_TEXT_LOCATION = TextLocation(".", TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
-private const val COPYRIGHT_PREFIX = "Copyright (C)"
