@@ -83,7 +83,7 @@ private fun createSpdxDocument(packages: List<SpdxPackage>?, hasExternalDocument
 private fun createSpdxDocument(): SpdxDocument {
     val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
     val definitionFile = projectDir.resolve("project/project.spdx.yml")
-    return SpdxModelMapper.read<SpdxDocument>(definitionFile)
+    return SpdxModelMapper.read(definitionFile)
 }
 
 class SpdxDocumentFileTest : WordSpec({
