@@ -233,7 +233,7 @@ class GoMod(
             .firstOrNull()
             .orEmpty()
 
-        return if (firstProxy.isNotBlank()) firstProxy else DEFAULT_GO_PROXY
+        return firstProxy.ifBlank { DEFAULT_GO_PROXY }
     }
 }
 
