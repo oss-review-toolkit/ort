@@ -699,7 +699,7 @@ class Pip(
                 val value = line.substring(index + 1, line.length).trim()
 
                 if (value.isNotEmpty()) {
-                    map.getOrPut(key, { mutableListOf() }) += value
+                    map.getOrPut(key) { mutableListOf() } += value
                 }
 
                 previousKey = key
@@ -707,7 +707,7 @@ class Pip(
             }
 
             previousKey?.let {
-                map.getOrPut(it, { mutableListOf() }) += line.trim()
+                map.getOrPut(it) { mutableListOf() } += line.trim()
             }
         }
 
