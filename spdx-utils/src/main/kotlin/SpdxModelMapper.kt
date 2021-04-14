@@ -86,7 +86,7 @@ object SpdxModelMapper {
 
     inline fun <reified T : Any> fromJson(json: String): T = jsonMapper.readValue(json)
 
-    fun toJson(obj: Any): String = jsonMapper.writeValueAsString(obj)
+    fun toJson(value: Any): String = jsonMapper.writeValueAsString(value)
 
     /*
      * YAML mapping functions.
@@ -97,7 +97,7 @@ object SpdxModelMapper {
 
     inline fun <reified T : Any> fromYaml(yaml: String): T = yamlMapper.readValue(yaml)
 
-    fun toYaml(obj: Any): String = yamlMapper.writeValueAsString(obj)
+    fun toYaml(value: Any): String = yamlMapper.writeValueAsString(value)
 }
 
 private val mapperConfig: ObjectMapper.() -> Unit = {
