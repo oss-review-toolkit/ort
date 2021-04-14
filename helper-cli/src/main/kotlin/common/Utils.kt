@@ -728,12 +728,11 @@ private data class LicenseFindingCurationKey(
     val path: String,
     val startLines: List<Int> = emptyList(),
     val lineCount: Int? = null,
-    val detectedLicense: SpdxExpression?,
-    val concludedLicense: SpdxExpression
+    val detectedLicense: SpdxExpression?
 )
 
 private fun LicenseFindingCuration.key() =
-    LicenseFindingCurationKey(path, startLines, lineCount, detectedLicense, concludedLicense)
+    LicenseFindingCurationKey(path, startLines, lineCount, detectedLicense)
 
 /**
  * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
