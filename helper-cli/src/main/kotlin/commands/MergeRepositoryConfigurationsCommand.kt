@@ -29,7 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 import org.ossreviewtoolkit.helper.common.merge
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -59,6 +59,6 @@ internal class MergeRepositoryConfigurationsCommand : CliktCommand(
             result = result.merge(repositoryConfiguration)
         }
 
-        result.writeAsYaml(outputRepositoryConfigurationFile)
+        result.write(outputRepositoryConfigurationFile)
     }
 }

@@ -26,7 +26,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.getScanResultFor
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.PackageConfiguration
@@ -79,7 +79,7 @@ internal class RemoveEntriesCommand : CliktCommand(
         packageConfiguration.copy(
             pathExcludes = pathExcludes,
             licenseFindingCurations = licenseFindingCurations
-        ).writeAsYaml(packageConfigurationFile)
+        ).write(packageConfigurationFile)
 
         buildString {
             val removedPathExcludes = packageConfiguration.pathExcludes.size - pathExcludes.size

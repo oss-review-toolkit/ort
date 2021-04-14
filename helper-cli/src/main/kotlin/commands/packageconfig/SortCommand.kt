@@ -25,7 +25,7 @@ import com.github.ajalt.clikt.parameters.arguments.convert
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.sortEntries
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -45,6 +45,6 @@ internal class SortCommand : CliktCommand(
         packageConfigurationFile
             .readValue<PackageConfiguration>()
             .sortEntries()
-            .writeAsYaml(packageConfigurationFile)
+            .write(packageConfigurationFile)
     }
 }

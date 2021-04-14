@@ -28,7 +28,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
@@ -90,7 +90,7 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
         val packageConfiguration = createPackageConfiguration(packageId, this)
         val outputFile = getOutputFile(filename)
 
-        packageConfiguration.writeAsYaml(outputFile)
+        packageConfiguration.write(outputFile)
         println("Wrote a package configuration to '${outputFile.absolutePath}'.")
     }
 

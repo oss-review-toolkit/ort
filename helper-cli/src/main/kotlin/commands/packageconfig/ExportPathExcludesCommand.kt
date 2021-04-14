@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.findRepositories
 import org.ossreviewtoolkit.helper.common.getPathExcludesByRepository
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -82,6 +82,6 @@ class ExportPathExcludesCommand : CliktCommand(
 
         globalPathExcludes
             .mergePathExcludes(localPathExcludes, updateOnlyExisting = updateOnlyExisting)
-            .writeAsYaml(pathExcludesFile)
+            .write(pathExcludesFile)
     }
 }

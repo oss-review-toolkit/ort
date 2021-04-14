@@ -557,9 +557,9 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
     )
 
 /**
- * Serialize a [RepositoryConfiguration] as YAML to the given target [File].
+ * Serialize a [RepositoryConfiguration] to the given [targetFile].
  */
-internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
+internal fun RepositoryConfiguration.write(targetFile: File) {
     targetFile.writeValue(this)
 }
 
@@ -608,10 +608,10 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
 }
 
 /**
- * Serialize this [RepositoryLicenseFindingCurations] to the given [targetFile] as YAML.
+ * Serialize these [RepositoryLicenseFindingCurations] to the given [targetFile].
  */
-@JvmName("writeRepositoryLicenseFindingCurationsAsYaml")
-internal fun RepositoryLicenseFindingCurations.writeAsYaml(targetFile: File) {
+@JvmName("writeRepositoryLicenseFindingCurations")
+internal fun RepositoryLicenseFindingCurations.write(targetFile: File) {
     targetFile.writeValue(
         mapValues { (_, curations) ->
             curations.sortedBy { it.path.removePrefix("*").removePrefix("*") }
@@ -660,10 +660,10 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 }
 
 /**
- * Serialize this [RepositoryPathExcludes] to the given [targetFile] as YAML.
+ * Serialize these [RepositoryPathExcludes] to the given [targetFile].
  */
-@JvmName("writeRepositoryPathExcludesAsYaml")
-internal fun RepositoryPathExcludes.writeAsYaml(targetFile: File) {
+@JvmName("writeRepositoryPathExcludes")
+internal fun RepositoryPathExcludes.write(targetFile: File) {
     targetFile.writeValue(
         mapValues { (_, pathExcludes) ->
             pathExcludes.sortedBy { it.pattern }
@@ -823,9 +823,9 @@ internal fun RepositoryConfiguration.merge(
     )
 
 /**
- * Serialize a [PackageConfiguration] as YAML to the given target [File].
+ * Serialize a [PackageConfiguration] to the given [targetFile].
  */
-internal fun PackageConfiguration.writeAsYaml(targetFile: File) {
+internal fun PackageConfiguration.write(targetFile: File) {
     targetFile.writeValue(this)
 }
 

@@ -25,7 +25,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -53,6 +53,6 @@ class ExtractRepositoryConfigurationCommand : CliktCommand(
         ortFile
             .readValue<OrtResult>()
             .repository
-            .config.writeAsYaml(repositoryConfigurationFile)
+            .config.write(repositoryConfigurationFile)
     }
 }

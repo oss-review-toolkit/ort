@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.helper.common.findFilesRecursive
 import org.ossreviewtoolkit.helper.common.importPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
 import org.ossreviewtoolkit.helper.common.sortPathExcludes
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -83,6 +83,6 @@ class ImportPathExcludesCommand : CliktCommand(
 
         packageConfiguration
             .copy(pathExcludes = pathExcludes)
-            .writeAsYaml(packageConfigurationFile)
+            .write(packageConfigurationFile)
     }
 }
