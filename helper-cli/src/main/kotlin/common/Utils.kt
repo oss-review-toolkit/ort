@@ -575,7 +575,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
     other: RepositoryLicenseFindingCurations,
     updateOnlyExisting: Boolean = false
 ): RepositoryLicenseFindingCurations {
-    val result: MutableMap<String, MutableMap<LicenseFindingCurationHashKey, LicenseFindingCuration>> = mutableMapOf()
+    val result: MutableMap<String, MutableMap<LicenseFindingCurationKey, LicenseFindingCuration>> = mutableMapOf()
 
     fun merge(repositoryUrl: String, curation: LicenseFindingCuration, updateOnlyUpdateExisting: Boolean = false) {
         if (updateOnlyUpdateExisting && !result.containsKey(repositoryUrl)) {
@@ -584,7 +584,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
 
         val curations = result.getOrPut(repositoryUrl) { mutableMapOf() }
 
-        val key = curation.hashKey()
+        val key = curation.key()
         if (updateOnlyUpdateExisting && !curations.containsKey(key)) {
             return
         }
@@ -703,13 +703,13 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
     other: Collection<LicenseFindingCuration>,
     updateOnlyExisting: Boolean = false
 ): List<LicenseFindingCuration> {
-    val result = mutableMapOf<LicenseFindingCurationHashKey, LicenseFindingCuration>()
+    val result = mutableMapOf<LicenseFindingCurationKey, LicenseFindingCuration>()
 
-    associateByTo(result) { it.hashKey() }
+    associateByTo(result) { it.key() }
 
     other.forEach {
-        if (!updateOnlyExisting || result.containsKey(it.hashKey())) {
-            result[it.hashKey()] = it
+        if (!updateOnlyExisting || result.containsKey(it.key())) {
+            result[it.key()] = it
         }
     }
 
@@ -724,7 +724,7 @@ internal fun Collection<LicenseFindingCuration>.sortLicenseFindingCurations(): L
         curation.path.removePrefix("*").removePrefix("*")
     }
 
-private data class LicenseFindingCurationHashKey(
+private data class LicenseFindingCurationKey(
     val path: String,
     val startLines: List<Int> = emptyList(),
     val lineCount: Int? = null,
@@ -732,8 +732,8 @@ private data class LicenseFindingCurationHashKey(
     val concludedLicense: SpdxExpression
 )
 
-private fun LicenseFindingCuration.hashKey() =
-    LicenseFindingCurationHashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
+private fun LicenseFindingCuration.key() =
+    LicenseFindingCurationKey(path, startLines, lineCount, detectedLicense, concludedLicense)
 
 /**
  * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
