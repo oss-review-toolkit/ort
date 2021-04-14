@@ -31,8 +31,8 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class SubtractScanResultsCommand : CliktCommand(
@@ -89,7 +89,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
            )
        )
 
-       outputOrtFile.mapper().writerWithDefaultPrettyPrinter().writeValue(outputOrtFile, result)
+       outputOrtFile.writeValue(result)
     }
 }
 

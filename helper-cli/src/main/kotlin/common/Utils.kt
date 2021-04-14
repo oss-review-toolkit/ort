@@ -69,14 +69,13 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.isSymbolicLink
-import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 import org.ossreviewtoolkit.utils.withoutPrefix
 
@@ -561,8 +560,7 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
  * Serialize a [RepositoryConfiguration] as YAML to the given target [File].
  */
 internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
-    targetFile.absoluteFile.parentFile.safeMkdirs()
-    yamlMapper.writeValue(targetFile, this)
+    targetFile.writeValue(this)
 }
 
 /**
@@ -614,10 +612,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
  */
 @JvmName("writeRepositoryLicenseFindingCurationsAsYaml")
 internal fun RepositoryLicenseFindingCurations.writeAsYaml(targetFile: File) {
-    targetFile.parentFile.apply { safeMkdirs() }
-
-    yamlMapper.writeValue(
-        targetFile,
+    targetFile.writeValue(
         mapValues { (_, curations) ->
             curations.sortedBy { it.path.removePrefix("*").removePrefix("*") }
         }.toSortedMap()
@@ -669,10 +664,7 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
  */
 @JvmName("writeRepositoryPathExcludesAsYaml")
 internal fun RepositoryPathExcludes.writeAsYaml(targetFile: File) {
-    targetFile.parentFile.apply { safeMkdirs() }
-
-    yamlMapper.writeValue(
-        targetFile,
+    targetFile.writeValue(
         mapValues { (_, pathExcludes) ->
             pathExcludes.sortedBy { it.pattern }
         }.toSortedMap()
@@ -834,8 +826,7 @@ internal fun RepositoryConfiguration.merge(
  * Serialize a [PackageConfiguration] as YAML to the given target [File].
  */
 internal fun PackageConfiguration.writeAsYaml(targetFile: File) {
-    targetFile.absoluteFile.parentFile.safeMkdirs()
-    yamlMapper.writeValue(targetFile, this)
+    targetFile.writeValue(this)
 }
 
 internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): List<PathExclude> {
