@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -74,8 +73,7 @@ object SpdxModelMapper {
 
     inline fun <reified T : Any> read(file: File): T = FileFormat.forFile(file).mapper.readValue(file)
 
-    inline fun <reified T : Any> write(file: File) =
-        FileFormat.forFile(file).mapper.writeValue(file, jacksonTypeRef<T>())
+    inline fun <reified T : Any> write(file: File, value: T) = FileFormat.forFile(file).mapper.writeValue(file, value)
 
     /*
      * JSON mapping functions.
