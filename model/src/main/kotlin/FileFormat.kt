@@ -24,6 +24,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 
+import org.ossreviewtoolkit.utils.safeMkdirs
+
 /**
  * An enumeration of supported file formats for (de-)serialization, their primary [fileExtension] and optional aliases
  * (not including the dot).
@@ -80,3 +82,12 @@ fun File.mapper() = FileFormat.forFile(this).mapper
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file.
  */
 inline fun <reified T : Any> File.readValue(): T = mapper().readValue(this)
+
+/**
+ * Use the Jackson mapper returned from [File.mapper] to write an object of type [T] to this file. [prettyPrint]
+ * indicates whether to use pretty printing or not. The function also ensures that the parent directory exists.
+ */
+inline fun <reified T : Any> File.writeValue(value: T, prettyPrint: Boolean = true) {
+    parentFile.safeMkdirs()
+    mapper().apply { if (prettyPrint) writerWithDefaultPrettyPrinter() }.writeValue(this, value)
+}

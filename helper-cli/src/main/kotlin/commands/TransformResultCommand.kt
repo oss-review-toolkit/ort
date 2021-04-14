@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import com.schibsted.spt.data.jslt.Parser
 
+import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.expandTilde
 
@@ -68,7 +69,7 @@ class TransformResultCommand : CliktCommand(
         val expression = Parser.compile(transformationFile)
 
         val result = expression.apply(node)
-        yamlMapper.writeValue(outputFile, result)
+        outputFile.writeValue(result)
 
         println("Wrote result to $outputFile.")
     }

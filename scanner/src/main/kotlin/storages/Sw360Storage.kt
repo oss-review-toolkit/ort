@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
@@ -90,7 +90,7 @@ class Sw360Storage(
         val tempScanResultFile = createTempFileForUpload(id)
 
         return try {
-            yamlMapper.writeValue(tempScanResultFile, scanResult)
+            tempScanResultFile.writeValue(scanResult)
 
             val uploadResult = releaseClient.getSparseReleaseByNameAndVersion(createReleaseName(id), id.version)
                 .flatMap { releaseClient.getReleaseById(it.releaseId) }

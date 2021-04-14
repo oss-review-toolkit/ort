@@ -29,8 +29,8 @@ import java.io.File
 
 import kotlin.io.path.createTempFile
 
-import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.writeValue
 
 class ScannerConfigurationTest : WordSpec({
     "ScannerConfiguration" should {
@@ -39,7 +39,7 @@ class ScannerConfigurationTest : WordSpec({
             val ortConfig = OrtConfiguration.load(file = refConfig)
             val file = createTempFile(suffix = ".yml").toFile().apply { deleteOnExit() }
 
-            file.mapper().writeValue(file, ortConfig.scanner)
+            file.writeValue(ortConfig.scanner)
             val loadedConfig = file.readValue<ScannerConfiguration>()
 
             // Note: loadedConfig cannot be directly compared to the original one, as there have been some changes:

@@ -37,8 +37,8 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 
@@ -116,7 +116,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
         outputFiles.forEach { file ->
             println("Writing advisor result to '$file'.")
-            file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
+            file.writeValue(ortResult)
         }
 
         val advisorResults = ortResult.advisor?.results
