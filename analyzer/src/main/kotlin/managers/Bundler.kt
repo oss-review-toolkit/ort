@@ -252,7 +252,12 @@ class Bundler(
         return OkHttpClientHelper.downloadText(url).mapCatching {
             GemSpec.createFromJson(it)
         }.onFailure {
-            when (val code = (it as HttpDownloadError).code) {
+            val error = (it as? HttpDownloadError) ?: run {
+                log.warn { "Unable to retrieve meta-data for gem '$name' from RubyGems: ${it.message}" }
+                return null
+            }
+
+            when (error.code) {
                 HttpURLConnection.HTTP_NOT_FOUND -> log.info { "Gem '$name' was not found on RubyGems." }
 
                 OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
@@ -276,7 +281,7 @@ class Bundler(
 
                 else -> {
                     throw IOException(
-                        "RubyGems reported unhandled HTTP code $code when requesting meta-data for gem '$name'."
+                        "RubyGems reported unhandled HTTP code ${error.code} when requesting meta-data for gem '$name'."
                     )
                 }
             }
