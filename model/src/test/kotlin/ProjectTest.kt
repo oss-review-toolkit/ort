@@ -233,7 +233,7 @@ class ProjectTest : WordSpec({
             val project = projectWithDependencyGraph()
             jsonMapper.writeValue(outputFile, project)
 
-            val projectCopy = jsonMapper.readValue(outputFile, Project::class.java)
+            val projectCopy = outputFile.readValue<Project>()
             projectCopy.scopes shouldBe project.scopes
         }
     }

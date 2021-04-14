@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.xmlMapper
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
@@ -110,7 +110,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
                     } else {
                         // As of repo 2.4, the active manifest is a real file with an include directive instead of a
                         // symbolic link, see https://gerrit-review.googlesource.com/c/git-repo/+/256313.
-                        val manifest = xmlMapper.readValue(manifestWrapper, Manifest::class.java)
+                        val manifest = manifestWrapper.readValue<Manifest>()
                         workingDir.resolve(manifest.include.name)
                     }
 
