@@ -28,7 +28,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.minimize
 import org.ossreviewtoolkit.helper.common.replaceScopeExcludes
 import org.ossreviewtoolkit.helper.common.sortScopeExcludes
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
@@ -64,7 +64,7 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
             .readValue<RepositoryConfiguration>()
             .replaceScopeExcludes(scopeExcludes)
             .sortScopeExcludes()
-            .writeAsYaml(repositoryConfigurationFile)
+            .write(repositoryConfigurationFile)
     }
 }
 

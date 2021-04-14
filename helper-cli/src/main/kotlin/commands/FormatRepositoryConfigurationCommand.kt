@@ -24,7 +24,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -43,6 +43,6 @@ internal class FormatRepositoryConfigurationCommand : CliktCommand(
     override fun run() {
         repositoryConfigurationFile
             .readValue<RepositoryConfiguration>()
-            .writeAsYaml(repositoryConfigurationFile)
+            .write(repositoryConfigurationFile)
     }
 }

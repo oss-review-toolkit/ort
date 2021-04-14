@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.replaceLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.sortLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -97,7 +97,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         repositoryConfiguration
             .replaceLicenseFindingCurations(curations)
             .sortLicenseFindingCurations()
-            .writeAsYaml(repositoryConfigurationFile)
+            .write(repositoryConfigurationFile)
     }
 
     private fun importLicenseFindingCurations(ortResult: OrtResult): Set<LicenseFindingCuration> {

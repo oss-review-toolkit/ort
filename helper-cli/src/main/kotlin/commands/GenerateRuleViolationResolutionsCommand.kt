@@ -30,7 +30,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.getUnresolvedRuleViolations
 import org.ossreviewtoolkit.helper.common.replaceRuleViolationResolutions
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -84,6 +84,6 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
 
         repositoryConfiguration
             .replaceRuleViolationResolutions(resolutions)
-            .writeAsYaml(repositoryConfigurationFile)
+            .write(repositoryConfigurationFile)
     }
 }

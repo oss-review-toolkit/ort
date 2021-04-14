@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.helper.common.replaceIssueResolutions
 import org.ossreviewtoolkit.helper.common.replacePathExcludes
 import org.ossreviewtoolkit.helper.common.replaceRuleViolationResolutions
 import org.ossreviewtoolkit.helper.common.replaceScopeExcludes
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
@@ -113,7 +113,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
             .replaceScopeExcludes(scopeExcludes)
             .replaceIssueResolutions(issueResolutions)
             .replaceRuleViolationResolutions(ruleViolationResolutions)
-            .writeAsYaml(repositoryConfigurationFile)
+            .write(repositoryConfigurationFile)
 
         buildString {
             val removedPathExcludes = repositoryConfiguration.excludes.paths.size - pathExcludes.size

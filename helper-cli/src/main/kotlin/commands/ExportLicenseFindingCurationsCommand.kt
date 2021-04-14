@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.getLicenseFindingCurationsByRepository
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.replaceConfig
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
@@ -83,6 +83,6 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
 
         globalLicenseFindingCurations
             .mergeLicenseFindingCurations(localLicenseFindingCurations, updateOnlyExisting = updateOnlyExisting)
-            .writeAsYaml(licenseFindingCurationsFile)
+            .write(licenseFindingCurationsFile)
     }
 }

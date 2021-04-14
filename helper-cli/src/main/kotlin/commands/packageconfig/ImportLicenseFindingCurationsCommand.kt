@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.helper.common.getScanResultFor
 import org.ossreviewtoolkit.helper.common.importLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.sortLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
@@ -101,6 +101,6 @@ class ImportLicenseFindingCurationsCommand : CliktCommand(
 
         packageConfiguration
             .copy(licenseFindingCurations = curations)
-            .writeAsYaml(packageConfigurationFile)
+            .write(packageConfigurationFile)
     }
 }
