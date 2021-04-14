@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.nio.file.Path
 
@@ -46,6 +45,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -74,7 +74,7 @@ class Sw360Storage(
                 .map { getScanResultOfRelease(it, tempScanResultFile.toPath()) }
                 .orElse(emptyList())
                 .map { path ->
-                    yamlMapper.readValue<ScanResult>(path.toFile())
+                    path.toFile().readValue<ScanResult>()
                 }
             Success(scanResults)
         } catch (e: SW360ClientException) {
