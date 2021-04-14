@@ -59,7 +59,6 @@ import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.HttpDownloadError
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
@@ -288,11 +287,9 @@ open class Npm(
                         vcsFromPackage = parseVcsInfo(versionInfo)
                     }
                 }.onFailure {
-                    val e = (it as HttpDownloadError)
-
                     log.info {
                         "Could not retrieve package information for '$encodedName' from NPM registry $npmRegistry: " +
-                                "${e.message} (code ${e.code})."
+                                it.message
                     }
                 }
             }
