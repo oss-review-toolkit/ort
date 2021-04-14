@@ -27,8 +27,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import com.schibsted.spt.data.jslt.Parser
 
+import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.writeValue
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.expandTilde
 
 /**
@@ -64,7 +64,7 @@ class TransformResultCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val node = yamlMapper.readTree(ortFile)
+        val node = ortFile.mapper().readTree(ortFile)
 
         val expression = Parser.compile(transformationFile)
 
