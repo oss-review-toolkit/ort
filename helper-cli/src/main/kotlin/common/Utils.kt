@@ -724,6 +724,10 @@ internal fun Collection<LicenseFindingCuration>.sortLicenseFindingCurations(): L
         curation.path.removePrefix("*").removePrefix("*")
     }
 
+/**
+ * This class holds the matcher attributes of a corresponding [LicenseFindingCuration]. It is supposed to be used by the
+ * import and export commands to determine whether an existing entry shall be replaced by a new entry.
+ */
 private data class LicenseFindingCurationKey(
     val path: String,
     val startLines: List<Int> = emptyList(),
