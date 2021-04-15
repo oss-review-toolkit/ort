@@ -46,7 +46,7 @@ class SbtFunTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = ortResult.toYaml()
+        val actualResult = ortResult.withResolvedScopes().toYaml()
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
         patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
@@ -64,7 +64,7 @@ class SbtFunTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = ortResult.toYaml()
+        val actualResult = ortResult.withResolvedScopes().toYaml()
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
         patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
@@ -85,7 +85,7 @@ class SbtFunTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = ortResult.toYaml()
+        val actualResult = ortResult.withResolvedScopes().toYaml()
         val expectedResult = patchExpectedResult(
             expectedOutputFile,
             url = vcsUrl,
