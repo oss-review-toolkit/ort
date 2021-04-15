@@ -40,7 +40,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 authors = sortedSetOf(),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -54,7 +54,6 @@ class PackageCurationTest : WordSpec({
                 id = pkg.id,
                 data = PackageCurationData(
                     authors = sortedSetOf("author 1", "author 2"),
-                    declaredLicenses = sortedSetOf("license a", "license b"),
                     declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx()),
                     concludedLicense = "license1 OR license2".toSpdx(),
                     description = "description",
@@ -84,7 +83,7 @@ class PackageCurationTest : WordSpec({
             with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 authors shouldBe curation.data.authors
-                declaredLicenses shouldBe curation.data.declaredLicenses
+                declaredLicenses shouldBe pkg.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
                 declaredLicensesProcessed.unmapped should containExactlyInAnyOrder("license b")
                 concludedLicense shouldBe curation.data.concludedLicense

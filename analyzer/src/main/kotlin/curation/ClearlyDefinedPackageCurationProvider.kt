@@ -116,7 +116,7 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
         val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
             // Only take curations of good quality (i.e. those not using deprecated identifiers) and in particular none
             // that contain "OTHER" as a license, also see https://github.com/clearlydefined/curated-data/issues/7836.
-            runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()?.toString()
+            runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()
         }
 
         val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
@@ -124,7 +124,7 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
         val pkgCuration = PackageCuration(
             id = pkgId,
             data = PackageCurationData(
-                declaredLicenses = declaredLicenseParsed?.let { sortedSetOf(it) },
+                concludedLicense = declaredLicenseParsed,
                 homepageUrl = curation.described?.projectWebsite?.toString(),
                 sourceArtifact = sourceLocation as? RemoteArtifact,
                 vcs = sourceLocation as? VcsInfoCurationData,

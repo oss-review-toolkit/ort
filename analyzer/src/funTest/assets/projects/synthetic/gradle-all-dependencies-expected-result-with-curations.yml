@@ -459,12 +459,11 @@ analyzer:
         - "Steve Freeman"
         - "Tom Denley"
         declared_licenses:
-        - "curated license a"
-        - "curated license b"
+        - "New BSD License"
         declared_licenses_processed:
-          unmapped:
-          - "curated license a"
-          - "curated license b"
+          spdx_expression: "BSD-3-Clause"
+          mapped:
+            New BSD License: "BSD-3-Clause"
         description: "Curated description."
         homepage_url: "http://hamcrest.org/JavaHamcrest/"
         binary_artifact:
@@ -500,14 +499,6 @@ analyzer:
         curation:
           comment: "Fix description."
           description: "Curated description."
-      - base:
-          declared_licenses:
-          - "New BSD License"
-        curation:
-          comment: "Declared license in pom.xml is wrong."
-          declared_licenses:
-          - "curated license a"
-          - "curated license b"
     has_issues: true
 scanner: null
 advisor: null

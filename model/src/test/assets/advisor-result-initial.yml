@@ -150,14 +150,7 @@ analyzer:
           url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""
-      curations:
-      - base:
-          declared_licenses:
-          - "New BSD License"
-        curation:
-          declared_licenses:
-          - "BSD-3-Clause"
-          comment: "Provided by ClearlyDefined."
+      curations: []
     - package:
         id: "Maven:org.mockito:mockito-all:1.10.19"
         purl: "pkg:maven/org.mockito/mockito-all@1.10.19"
@@ -189,14 +182,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
-      curations:
-      - base:
-          declared_licenses:
-          - "The MIT License"
-        curation:
-          declared_licenses:
-          - "MIT"
-          comment: "Provided by ClearlyDefined."
+      curations: []
     has_issues: false
 scanner:
   start_time: "2021-03-30T01:25:55.052430Z"
