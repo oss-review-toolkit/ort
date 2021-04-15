@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
 
-import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingResult
 
 import org.eclipse.aether.artifact.Artifact
@@ -31,24 +30,20 @@ import org.eclipse.aether.repository.WorkspaceRepository
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.showStackTrace
 
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.
@@ -88,6 +83,9 @@ class Maven(
 
     private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
+    /** The builder for the shared dependency graph. */
+    private lateinit var graphBuilder: DependencyGraphBuilder<DependencyNode>
+
     private var sbtMode = false
 
     /**
@@ -97,22 +95,29 @@ class Maven(
 
     override fun beforeResolution(definitionFiles: List<File>) {
         localProjectBuildingResults += mvn.prepareMavenProjects(definitionFiles)
+
+        val localProjects = localProjectBuildingResults.mapValues { it.value.project }
+        val dependencyHandler = MavenDependencyHandler(managerName, mvn, localProjects, sbtMode)
+        graphBuilder = DependencyGraphBuilder(dependencyHandler)
     }
+
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>):
+            PackageManagerResult =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages().toSortedSet())
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val projectBuildingResult = mvn.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
-        val packagesById = mutableMapOf<String, Package>()
-        val scopesByName = mutableMapOf<String, Scope>()
+        val projectId = Identifier(
+            type = managerName,
+            namespace = mavenProject.groupId,
+            name = mavenProject.artifactId,
+            version = mavenProject.version
+        )
 
-        projectBuildingResult.dependencyResolutionResult.dependencyGraph.children.forEach { node ->
-            val scopeName = node.dependency.scope
-            val scope = scopesByName.getOrPut(scopeName) {
-                Scope(scopeName, sortedSetOf())
-            }
-
-            scope.dependencies += parseDependency(node, packagesById)
+        projectBuildingResult.dependencies.forEach { node ->
+            graphBuilder.addDependency(DependencyGraph.qualifyScope(projectId, node.dependency.scope), node)
         }
 
         val declaredLicenses = MavenSupport.parseLicenses(mavenProject)
@@ -133,12 +138,7 @@ class Maven(
         val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl).toTypedArray()
 
         val project = Project(
-            id = Identifier(
-                type = managerName,
-                namespace = mavenProject.groupId,
-                name = mavenProject.artifactId,
-                version = mavenProject.version
-            ),
+            id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = MavenSupport.parseAuthors(mavenProject),
             declaredLicenses = declaredLicenses,
@@ -146,10 +146,10 @@ class Maven(
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),
-            scopeDependencies = scopesByName.values.toSortedSet()
+            scopeNames = projectBuildingResult.dependencies.mapTo(sortedSetOf()) { it.dependency.scope }
         )
 
-        val packages = packagesById.values.toSortedSet()
+        val packages = graphBuilder.packages().toSortedSet()
         val issues = packages.mapNotNull { pkg ->
             if (pkg.description == "POM was created by Sonatype Nexus") {
                 createAndLogIssue(
@@ -162,59 +162,12 @@ class Maven(
             }
         }
 
-        return listOf(ProjectAnalyzerResult(project, packages, issues))
-    }
-
-    private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
-        val identifier = node.artifact.identifier()
-
-        try {
-            val dependencies = node.children.mapNotNull { child ->
-                val toolsJarCoordinates = listOf("com.sun:tools:", "jdk.tools:jdk.tools:")
-                if (toolsJarCoordinates.any { child.artifact.identifier().startsWith(it) }) {
-                    log.info { "Omitting the Java < 1.9 system dependency on 'tools.jar'." }
-                    null
-                } else {
-                    parseDependency(child, packages)
-                }
-            }.toSortedSet()
-
-            val localProjects = localProjectBuildingResults.mapValues { it.value.project }
-
-            return if (localProjects.contains(identifier)) {
-                val id = Identifier(
-                    type = managerName,
-                    namespace = node.artifact.groupId,
-                    name = node.artifact.artifactId,
-                    version = node.artifact.version
-                )
-
-                log.info { "Dependency '${id.toCoordinates()}' refers to a local project." }
-
-                PackageReference(id, PackageLinkage.PROJECT_DYNAMIC, dependencies)
-            } else {
-                val pkg = packages.getOrPut(identifier) {
-                    // TODO: Omit the "localProjects" argument here once SBT is implemented independently of Maven as at
-                    //       this point we know already that "identifier" is not a local project.
-                    mvn.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
-                }
-
-                pkg.toReference(dependencies = dependencies)
-            }
-        } catch (e: ProjectBuildingException) {
-            e.showStackTrace()
-
-            return PackageReference(
-                Identifier(managerName, node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
-                dependencies = sortedSetOf(),
-                issues = listOf(
-                    createAndLogIssue(
-                        source = managerName,
-                        message = "Could not get package information for dependency '$identifier': " +
-                                e.collectMessagesAsString()
-                    )
-                )
-            )
-        }
+        return listOf(ProjectAnalyzerResult(project, sortedSetOf(), issues))
     }
 }
+
+/**
+ * Convenience extension property to obtain all the [DependencyNode]s from this [ProjectBuildingResult].
+ */
+private val ProjectBuildingResult.dependencies: List<DependencyNode>
+    get() = dependencyResolutionResult.dependencyGraph.children
