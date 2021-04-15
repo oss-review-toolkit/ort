@@ -75,7 +75,6 @@ class PackageTest : StringSpec({
         diff.binaryArtifact shouldBe pkg.binaryArtifact
         diff.comment should beNull()
         diff.authors shouldBe pkg.authors
-        diff.declaredLicenses shouldBe pkg.declaredLicenses
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
         diff.vcs shouldBe pkg.vcs.toCuration()
@@ -104,7 +103,6 @@ class PackageTest : StringSpec({
         diff.binaryArtifact should beNull()
         diff.comment should beNull()
         diff.authors should beNull()
-        diff.declaredLicenses should beNull()
         diff.homepageUrl should beNull()
         diff.sourceArtifact should beNull()
         diff.vcs should beNull()

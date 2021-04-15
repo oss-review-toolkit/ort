@@ -7,9 +7,3 @@
   curations:
     description: "Curated description."
     comment: "Fix description."
-- id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  curations:
-    declared_licenses:
-    - "curated license a"
-    - "curated license b"
-    comment: "Declared license in pom.xml is wrong."

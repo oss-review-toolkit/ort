@@ -165,7 +165,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
         removedDefinitions = false
     )
 
-    val licenseExpression = data.concludedLicense?.toString() ?: data.declaredLicenses?.joinToString(" AND ")
+    val licenseExpression = data.concludedLicense?.toString()
 
     val described = Described(
         projectWebsite = data.homepageUrl?.let { URI(it) },

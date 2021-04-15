@@ -1,9 +1,6 @@
 ---
 - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   curations:
-    declared_licenses:
-    - "license a"
-    - "license b"
     description: "description"
     homepage_url: "http://home.page"
     binary_artifact:

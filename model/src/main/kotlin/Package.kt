@@ -164,7 +164,6 @@ data class Package(
 
         return PackageCurationData(
             authors = authors.takeIf { it != other.authors },
-            declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },
             description = description.takeIf { it != other.description },
             homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
