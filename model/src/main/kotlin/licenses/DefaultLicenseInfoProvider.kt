@@ -70,7 +70,9 @@ class DefaultLicenseInfoProvider(
                 authors = pkg.authors,
                 licenses = pkg.declaredLicenses,
                 processed = pkg.declaredLicensesProcessed,
-                appliedCurations = curations.filter { it.curation.declaredLicenses != null }
+                appliedCurations = curations.filter {
+                    it.curation.declaredLicenses != null || it.curation.declaredLicenseMapping.isNotEmpty()
+                }
             )
         } ?: DeclaredLicenseInfo(
             authors = sortedSetOf(),
