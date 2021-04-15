@@ -82,7 +82,7 @@ class FossId(
 
     companion object {
         @JvmStatic
-        private val PROJECT_NAME_REGEX = Regex("""^.*\/([\w\-]+)\.git$""")
+        private val PROJECT_NAME_REGEX = Regex("""^.*\/([\w\-]+)(?:\.git)?$""")
 
         @JvmStatic
         private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD")
