@@ -114,7 +114,7 @@ class DownloaderFunTest : StringSpec() {
 
         "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
             val downloaderConfiguration = DownloaderConfiguration(
-                listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
+                sourceCodeOrigins = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
             )
 
             val pkg = Package(
@@ -155,7 +155,7 @@ class DownloaderFunTest : StringSpec() {
 
         "Falls back to downloading from VCS when source package download fails".config(tags = setOf(ExpensiveTag)) {
             val downloaderConfiguration = DownloaderConfiguration(
-                listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
+                sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
             )
 
             val pkg = Package(

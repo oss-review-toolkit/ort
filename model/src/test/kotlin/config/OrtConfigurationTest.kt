@@ -23,6 +23,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.extensions.system.withEnvironment
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
@@ -61,6 +62,7 @@ class OrtConfigurationTest : WordSpec({
             }
 
             ortConfig.downloader shouldNotBeNull {
+                includedLicenseCategories should containExactly("category-a", "category-b")
                 sourceCodeOrigins shouldBe listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
             }
 
