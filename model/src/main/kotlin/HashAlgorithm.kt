@@ -128,9 +128,9 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
     /**
      * Return the hexadecimal digest of this hash for the given [resourceName].
      */
-    fun calculate(resourceName: String): String {
+    fun calculate(resourceName: String): String? {
         val resource = javaClass.getResource(resourceName)
-        val size = resource.openConnection().contentLengthLong
+        val size = resource?.openConnection()?.contentLengthLong ?: return null
         return resource.openStream().use { calculate(it, size) }
     }
 

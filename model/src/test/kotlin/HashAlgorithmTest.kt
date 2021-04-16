@@ -44,4 +44,8 @@ class HashAlgorithmTest : StringSpec({
         HashAlgorithm.SHA1_GIT.calculate("/licenses/Apache-2.0") shouldBe
                 "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
     }
+
+    "Calculating the SHA1-GIT on non-existent field should return null" {
+        HashAlgorithm.SHA1_GIT.calculate("/license/DOESNOTEXIST") shouldBe null
+    }
 })
