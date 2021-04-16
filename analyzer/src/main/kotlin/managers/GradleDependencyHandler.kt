@@ -28,7 +28,6 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.analyzer.managers.utils.DependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
@@ -96,14 +95,7 @@ class GradleDependencyHandler(
                         e.collectMessagesAsString()
             )
 
-            Package.EMPTY.copy(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = dependency.groupId,
-                    name = dependency.artifactId,
-                    version = dependency.version
-                )
-            )
+            null
         }
     }
 
