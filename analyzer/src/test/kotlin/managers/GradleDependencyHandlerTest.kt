@@ -24,13 +24,16 @@ import Dependency
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.contain
 import io.kotest.matchers.types.beTheSameInstanceAs
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
@@ -38,8 +41,11 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 
+import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.util.SortedSet
+
+import org.apache.maven.project.ProjectBuildingException
 
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.repository.RemoteRepository
@@ -47,11 +53,13 @@ import org.eclipse.aether.repository.RemoteRepository
 import org.ossreviewtoolkit.analyzer.managers.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 
 /**
@@ -285,6 +293,27 @@ class GradleDependencyHandlerTest : WordSpec({
             val scopeDependencies = graph.scopes[scope]
             scopeDependencies.shouldNotBeNull()
             scopeDependencies should containExactly(RootDependencyIndex(0))
+        }
+    }
+
+    "GradleDependencyHandler" should {
+        "handle an exception when resolving a package" {
+            val maven = mockk<MavenSupport>()
+            val exception = ProjectBuildingException("project", "Could not build.", IOException("Download exception"))
+            val dep = createDependency("org.apache.commons", "commons-lang3", "3.11")
+            val issues = mutableListOf<OrtIssue>()
+
+            every { maven.parsePackage(any(), any(), any()) } throws exception
+            val handler = GradleDependencyHandler(NAME, maven, remoteRepositories)
+
+            handler.createPackage(dep.toId().toCoordinates(), dep, issues) should beNull()
+
+            issues should haveSize(1)
+            with(issues.first()) {
+                source shouldBe NAME
+                severity shouldBe Severity.ERROR
+                message should contain(dep.toId().toCoordinates())
+            }
         }
     }
 })
