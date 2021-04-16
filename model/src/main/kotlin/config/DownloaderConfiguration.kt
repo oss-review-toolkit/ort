@@ -20,9 +20,16 @@
 package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.SourceCodeOrigin
+import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.spdx.getDuplicates
 
 data class DownloaderConfiguration(
+    /**
+     * The [categories][LicenseCategory] licenses of packages need to be part of in order to get included into the
+     * download.
+     */
+    val includedLicenseCategories: List<String> = emptyList(),
+
     /**
      * Configuration of the considered source code origins and their priority order.
      */
