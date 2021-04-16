@@ -21,6 +21,7 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
+import java.util.Base64
 import java.util.SortedSet
 import java.util.UUID
 
@@ -66,6 +67,8 @@ class CycloneDxReporter : Reporter {
 
     override val reporterName = "CycloneDx"
 
+    private val base64Encoder = Base64.getEncoder()
+
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
         if (url.isBlank()) return
 
@@ -82,19 +85,24 @@ class CycloneDxReporter : Reporter {
     private fun mapLicenseNamesToObjects(licenseNames: Collection<String>, origin: String, input: ReporterInput) =
         licenseNames.map { licenseName ->
             val spdxId = SpdxLicense.forId(licenseName)?.id
+            val licenseText = input.licenseTextProvider.getLicenseText(licenseName)
 
             // Prefer to set the id in case of an SPDX "core" license and only use the name as a fallback, also
             // see https://github.com/CycloneDX/cyclonedx-core-java/issues/8.
             License().apply {
                 id = spdxId
                 name = licenseName.takeIf { spdxId == null }
-                setLicenseText(
-                    AttachmentText().apply {
-                        contentType = "plain/text"
-                        text = input.licenseTextProvider.getLicenseText(licenseName)
-                    }
-                )
                 extensibleTypes = listOf(ExtensibleType(ORT_NAME, "origin", origin))
+
+                if (licenseText != null) {
+                    setLicenseText(
+                        AttachmentText().apply {
+                            contentType = "plain/text"
+                            encoding = "base64"
+                            text = base64Encoder.encodeToString(licenseText.toByteArray())
+                        }
+                    )
+                }
             }
         }
 
