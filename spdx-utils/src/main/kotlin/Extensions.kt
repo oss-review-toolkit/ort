@@ -125,6 +125,12 @@ fun String.isSpdxExpressionOrNotPresent(): Boolean =
     SpdxConstants.isNotPresent(this) || isSpdxExpression()
 
 /**
+ * Return this string lower-cased except for the first character which is upper-cased.
+ */
+fun String.titlecase() =
+    lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+
+/**
  * Parses the string as an [SpdxExpression] and returns the result.
  * @throws SpdxException if the string is not a valid representation of an SPDX expression.
  */

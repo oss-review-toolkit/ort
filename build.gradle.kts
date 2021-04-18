@@ -218,8 +218,9 @@ subprojects {
                 // Ensure all API library versions match our core library version.
                 force("org.apache.logging.log4j:log4j-api:$log4jCoreVersion")
 
-                // Ensure that all transitive versions of "kotlin-reflect" match our version of Kotlin.
+                // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
                 force("org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion")
+                force("org.jetbrains.kotlin:kotlin-script-runtime:$kotlinPluginVersion")
             }
         }
     }
@@ -234,7 +235,7 @@ subprojects {
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = "11"
-            apiVersion = "1.4"
+            apiVersion = "1.5"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
         }
     }

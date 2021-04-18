@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.uppercaseFirstChar
 
 abstract class VersionControlSystem {
     companion object {
@@ -137,7 +138,7 @@ abstract class VersionControlSystem {
             LicenseFilenamePatterns.getInstance().allLicenseFilenames.generateCapitalizationVariants().map { "**/$it" }
 
         private fun Collection<String>.generateCapitalizationVariants() =
-            flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
+            flatMap { listOf(it, it.uppercase(), it.uppercaseFirstChar()) }
     }
 
     /**

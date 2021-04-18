@@ -24,6 +24,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.utils.uppercaseFirstChar
 
 private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
     "copying",
@@ -85,17 +86,8 @@ class RootLicenseMatcherTest : WordSpec({
             ).paths() shouldBe mapOf("" to setOf("PATENTS", "README"))
         }
 
-        "match commonly used license file paths in upper-case" {
-            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toUpperCase() }.forAll {
-                RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
-                    licenseFindings = licenseFindings(it),
-                    directories = listOf("")
-                ).paths() shouldBe mapOf("" to setOf(it))
-            }
-        }
-
         "match commonly used license file paths in lower-case" {
-            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toLowerCase() }.forAll {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.lowercase() }.forAll {
                 RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                     licenseFindings = licenseFindings(it),
                     directories = listOf("")
@@ -103,8 +95,17 @@ class RootLicenseMatcherTest : WordSpec({
             }
         }
 
-        "match commonly used license file paths in capital (case)" {
-            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.capitalize() }.forAll {
+        "match commonly used license file paths in upper-case" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.uppercase() }.forAll {
+                RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
+                    licenseFindings = licenseFindings(it),
+                    directories = listOf("")
+                ).paths() shouldBe mapOf("" to setOf(it))
+            }
+        }
+
+        "match commonly used license file paths in capital-case" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.uppercaseFirstChar() }.forAll {
                 RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                     licenseFindings = licenseFindings(it),
                     directories = listOf("")

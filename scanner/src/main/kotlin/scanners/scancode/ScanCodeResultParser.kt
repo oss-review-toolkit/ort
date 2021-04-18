@@ -50,7 +50,7 @@ data class LicenseKeyReplacement(
     val spdxExpression: String
 )
 
-private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.toLowerCase()}-"
+private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.lowercase()}-"
 
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
 private val UNKNOWN_ERROR_REGEX = Pattern.compile(

@@ -129,7 +129,7 @@ class Carthage(
             "A dependency line must consist of exactly 3 space separated elements."
         }
 
-        val type = DependencyType.valueOf(split[0].toUpperCase())
+        val type = DependencyType.valueOf(split[0].uppercase())
         val id = split[1].removeSurrounding("\"")
         val revision = split[2].removeSurrounding("\"")
 

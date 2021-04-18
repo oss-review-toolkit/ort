@@ -369,6 +369,11 @@ fun String.stripCredentialsFromUrl() =
     toUri { URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString() }.getOrDefault(this)
 
 /**
+ * Return this string lower-cased except for the first character which is upper-cased.
+ */
+fun String.titlecase() = lowercase().uppercaseFirstChar()
+
+/**
  * Return a [Result] that indicates whether the conversion of this [String] to a [URI] was successful.
  */
 fun String.toUri() = runCatching { URI(this) }
@@ -378,6 +383,12 @@ fun String.toUri() = runCatching { URI(this) }
  * the [URI] if so.
  */
 fun <R> String.toUri(transform: (URI) -> R) = toUri().mapCatching(transform)
+
+/**
+ * Return this string with the first character upper-cased.
+ */
+fun String.uppercaseFirstChar() =
+    replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 
 /**
  * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].

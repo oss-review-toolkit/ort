@@ -113,7 +113,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
             // Throw an error message including guidance how to fix the issue.
             error(
                 "The license $license is currently not covered by policy rules. " +
-                        "The license was ${licenseSource.name.toLowerCase()} in package " +
+                        "The license was ${licenseSource.name.lowercase()} in package " +
                         "${pkg.id.toCoordinates()}",
                 howToFixDefault()
             )
@@ -146,10 +146,10 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
             }
 
             val message = if (licenseSource == LicenseSource.DETECTED) {
-                "The ScanCode copyleft categorized license $license was ${licenseSource.name.toLowerCase()} " +
+                "The ScanCode copyleft categorized license $license was ${licenseSource.name.lowercase()} " +
                         "in package ${pkg.id.toCoordinates()}."
             } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} ScanCode copyleft " +
+                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.lowercase()} ScanCode copyleft " +
                         "catalogized license $license."
             }
 
@@ -164,14 +164,14 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
 
             val message = if (licenseSource == LicenseSource.DETECTED) {
                 if (pkg.id.type == "Unmanaged") {
-                    "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.toLowerCase()} " +
+                    "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.lowercase()} " +
                             "in package ${pkg.id.toCoordinates()}."
                 } else {
-                    "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.toLowerCase()} " +
+                    "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.lowercase()} " +
                             "in package ${pkg.id.toCoordinates()}."
                 }
             } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} ScanCode " +
+                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.lowercase()} ScanCode " +
                         "copyleft-limited categorized license $license."
             }
 

@@ -458,7 +458,7 @@ class SpdxDocumentFile(
     ): Scope? =
         getDependencies(projectPackage, spdxDocument, workingDir, packages, relation).takeUnless { it.isEmpty() }?.let {
             Scope(
-                name = relation.name.removeSuffix("_DEPENDENCY_OF").toLowerCase(),
+                name = relation.name.removeSuffix("_DEPENDENCY_OF").lowercase(),
                 dependencies = it
             )
         }

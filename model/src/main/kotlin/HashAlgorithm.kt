@@ -94,7 +94,7 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
         @JvmStatic
         fun fromString(alias: String): HashAlgorithm =
             enumValues<HashAlgorithm>().find {
-                alias.toUpperCase() in it.aliases
+                alias.uppercase() in it.aliases
             } ?: UNKNOWN
 
         /**

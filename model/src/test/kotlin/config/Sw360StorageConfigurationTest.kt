@@ -35,7 +35,7 @@ class Sw360StorageConfigurationTest : StringSpec({
             "clientPassword",
             "token"
         )
-        val yaml = yamlMapper.writeValueAsString(sw360StorageConfiguration).toLowerCase()
+        val yaml = yamlMapper.writeValueAsString(sw360StorageConfiguration).lowercase()
 
         yaml shouldNotContain "password"
         yaml shouldNotContain "token"

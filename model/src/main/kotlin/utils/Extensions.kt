@@ -149,7 +149,7 @@ enum class PurlType(private val value: String) {
  * [Package]'s type if the [PurlType] cannot be determined.
  */
 fun Identifier.getPurlType() =
-    when (val lowerType = type.toLowerCase()) {
+    when (val lowerType = type.lowercase()) {
         "bower" -> PurlType.BOWER
         "composer" -> PurlType.COMPOSER
         "conan" -> PurlType.CONAN

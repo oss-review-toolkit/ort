@@ -89,7 +89,7 @@ enum class Nature {
     }
 
     @JsonValue
-    override fun toString() = name.toLowerCase()
+    override fun toString() = name.lowercase()
 }
 
 /**
@@ -110,7 +110,7 @@ enum class ContributionType {
     }
 
     @JsonValue
-    override fun toString() = name.toLowerCase().capitalize()
+    override fun toString() = name.titlecase()
 }
 
 /**

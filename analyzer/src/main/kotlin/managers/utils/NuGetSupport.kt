@@ -147,7 +147,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
 
     private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
         // Note: The package name in the URL is case-sensitive and must be lower-case!
-        val lowerId = id.name.toLowerCase()
+        val lowerId = id.name.lowercase()
 
         val data = registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
             runCatching {

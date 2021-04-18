@@ -96,9 +96,9 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
 
         "be case-insensitive" {
             SpdxDeclaredLicenseMapping.mapping.asSequence().forAll { (key, license) ->
-                SpdxDeclaredLicenseMapping.map(key.toLowerCase()) shouldBe license
-                SpdxDeclaredLicenseMapping.map(key.toUpperCase()) shouldBe license
-                SpdxDeclaredLicenseMapping.map(key.toLowerCase().capitalize()) shouldBe license
+                SpdxDeclaredLicenseMapping.map(key.lowercase()) shouldBe license
+                SpdxDeclaredLicenseMapping.map(key.uppercase()) shouldBe license
+                SpdxDeclaredLicenseMapping.map(key.titlecase()) shouldBe license
             }
         }
     }

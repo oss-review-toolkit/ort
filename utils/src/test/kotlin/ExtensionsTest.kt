@@ -212,7 +212,7 @@ class ExtensionsTest : WordSpec({
 
             assertSoftly {
                 reserved.forEach {
-                    val hexString = String.format(Locale.ROOT, "%%%02X", it.toInt())
+                    val hexString = String.format(Locale.ROOT, "%%%02X", it.code)
                     it.toString().percentEncode() shouldBe hexString
                 }
 

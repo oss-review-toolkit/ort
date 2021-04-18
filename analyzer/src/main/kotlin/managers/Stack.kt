@@ -248,7 +248,7 @@ class Stack(
                 }
                 2 -> {
                     // Handle lines with a colon.
-                    val key = (keyPrefix + keyValue[0]).toLowerCase()
+                    val key = (keyPrefix + keyValue[0]).lowercase()
 
                     val valueLines = mutableListOf<String>()
 

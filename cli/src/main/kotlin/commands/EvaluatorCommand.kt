@@ -258,7 +258,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }
 
-        log.perf { "Executed the evaluator in ${duration.inMilliseconds}ms." }
+        log.perf { "Executed the evaluator in ${duration.inWholeMilliseconds}ms." }
 
         if (log.delegate.isErrorEnabled) {
             evaluatorRun.violations.forEach { violation ->

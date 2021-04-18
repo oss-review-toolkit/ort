@@ -344,7 +344,7 @@ class SpdxCompoundExpression(
         return validChoices.size == otherValidChoices.size && validChoices.all { otherValidChoices.contains(it) }
     }
 
-    override fun hashCode() = decompose().sumBy { it.hashCode() }
+    override fun hashCode() = decompose().sumOf { it.hashCode() }
 
     override fun toString(): String {
         // If the priority of this operator is higher than the binding of the left or right operator, we need to put the

@@ -33,8 +33,8 @@ class ScannerDetailsTest : WordSpec({
         }
 
         "be compatible if the name differs in case" {
-            val detailsLowerCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toLowerCase())
-            val detailsUpperCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toUpperCase())
+            val detailsLowerCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.lowercase())
+            val detailsUpperCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.uppercase())
             detailsLowerCaseName.isCompatible(detailsUpperCaseName) shouldBe true
         }
 
