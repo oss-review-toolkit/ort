@@ -44,7 +44,7 @@ class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
                     val left = visit(ctx.getChild(0))
                     val operator = ctx.getChild(1).text
 
-                    when (val uppercaseOperator = operator.toUpperCase()) {
+                    when (val uppercaseOperator = operator.uppercase()) {
                         SpdxExpression.WITH -> {
                             val right = ctx.getChild(2).text
                             SpdxLicenseWithExceptionExpression(left as SpdxSimpleExpression, right)

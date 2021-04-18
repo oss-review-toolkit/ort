@@ -267,7 +267,7 @@ class ReporterCommand : CliktCommand(
 
         reportDurationMap.value.forEach { (reporter, timedValue) ->
             val name = reporter.reporterName
-            val durationInSeconds = timedValue.duration.inSeconds
+            val durationInSeconds = timedValue.duration.inWholeSeconds
 
             timedValue.value.onSuccess { files ->
                 val fileList = files.joinToString { "'$it'" }
@@ -282,7 +282,8 @@ class ReporterCommand : CliktCommand(
         }
 
         val successCount = reportFormats.size - failureCount
-        println("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration.inSeconds}s.")
+        println("Created $successCount of ${reportFormats.size} report(s) in " +
+                "${reportDurationMap.duration.inWholeSeconds}s.")
 
         if (failureCount > 0) throw ProgramResult(2)
     }

@@ -155,7 +155,7 @@ class GoDep(
             listOf(uri.host, uri.path.removePrefix("/").removeSuffix(".git"), vcsPath)
                 .filterNot { it.isEmpty() }
                 .joinToString(separator = "/")
-                .toLowerCase()
+                .lowercase()
         }.getOrDefault(projectDir.name)
 
         // TODO Keeping this between scans would speed things up considerably.

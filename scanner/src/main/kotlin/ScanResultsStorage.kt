@@ -200,7 +200,7 @@ abstract class ScanResultsStorage {
 
             log.perf {
                 "Read ${result.result.size} scan results for '${id.toCoordinates()}' from " +
-                        "${javaClass.simpleName} in ${duration.inMilliseconds}ms."
+                        "${javaClass.simpleName} in ${duration.inWholeMilliseconds}ms."
             }
         }
 
@@ -228,7 +228,7 @@ abstract class ScanResultsStorage {
 
             log.perf {
                 "Read ${result.result.size} scan results for '${pkg.id.toCoordinates()}' from " +
-                        "${javaClass.simpleName} in ${duration.inMilliseconds}ms."
+                        "${javaClass.simpleName} in ${duration.inWholeMilliseconds}ms."
             }
         }
 
@@ -256,8 +256,8 @@ abstract class ScanResultsStorage {
             stats.numHits.addAndGet(result.result.count { (_, results) -> results.isNotEmpty() })
 
             log.perf {
-                "Read ${result.result.values.sumBy { it.size }} scan results from ${javaClass.simpleName} in " +
-                        "${duration.inMilliseconds}ms."
+                "Read ${result.result.values.sumOf { it.size }} scan results from ${javaClass.simpleName} in " +
+                        "${duration.inWholeMilliseconds}ms."
             }
         }
 
@@ -293,7 +293,8 @@ abstract class ScanResultsStorage {
         val (result, duration) = measureTimedValue { addInternal(id, scanResult) }
 
         log.perf {
-            "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in ${duration.inMilliseconds}ms."
+            "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in " +
+                    "${duration.inWholeMilliseconds}ms."
         }
 
         return result

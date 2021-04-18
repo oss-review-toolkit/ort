@@ -121,7 +121,7 @@ class CycloneDxReporter : Reporter {
         val createSingleBom = !options[OPTION_SINGLE_BOM].isFalse()
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(",")
-            ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.toUpperCase()) }
+            ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
             ?: setOf(FileFormat.XML)
 
         if (createSingleBom) {

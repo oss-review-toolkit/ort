@@ -76,12 +76,12 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
 
         "be case-insensitive" {
             SpdxSimpleLicenseMapping.customLicenseIds.asSequence().forAll { (key, license) ->
-                SpdxSimpleLicenseMapping.map(key.toLowerCase(), mapDeprecated = false) shouldBe license
-                SpdxSimpleLicenseMapping.map(key.toUpperCase(), mapDeprecated = false) shouldBe license
-                SpdxSimpleLicenseMapping.map(key.toLowerCase().capitalize(), mapDeprecated = false) shouldBe license
-                SpdxSimpleLicenseMapping.map(key.toLowerCase(), mapDeprecated = true) shouldBe license
-                SpdxSimpleLicenseMapping.map(key.toUpperCase(), mapDeprecated = true) shouldBe license
-                SpdxSimpleLicenseMapping.map(key.toLowerCase().capitalize(), mapDeprecated = true) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.lowercase(), mapDeprecated = false) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.uppercase(), mapDeprecated = false) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.titlecase(), mapDeprecated = false) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.lowercase(), mapDeprecated = true) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.uppercase(), mapDeprecated = true) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.titlecase(), mapDeprecated = true) shouldBe license
             }
         }
     }

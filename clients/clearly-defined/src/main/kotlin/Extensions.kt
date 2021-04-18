@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
+import java.util.Locale
+
 import okhttp3.RequestBody
 
 import okio.Buffer
@@ -27,3 +29,9 @@ import okio.Buffer
  * Return the request body as a string, see https://github.com/square/okhttp/issues/1891.
  */
 fun RequestBody.string() = Buffer().also { writeTo(it) }.readUtf8()
+
+/**
+ * Return this string lower-cased except for the first character which is upper-cased.
+ */
+fun String.titlecase() =
+    lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }

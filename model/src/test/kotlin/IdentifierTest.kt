@@ -140,7 +140,7 @@ class IdentifierTest : WordSpec({
         "ignore case in type" {
             val purl = Identifier("MaVeN", "namespace", "name", "version").toPurl()
 
-            purl shouldBe purl.toLowerCase()
+            purl shouldBe purl.lowercase()
         }
 
         "use given type if it is not a known package manager" {

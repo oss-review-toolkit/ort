@@ -98,7 +98,7 @@ data class Identifier(
      */
     fun isFromOrg(vararg names: String) =
         names.any { name ->
-            val lowerName = name.toLowerCase()
+            val lowerName = name.lowercase()
             val vendorNamespace = when (type) {
                 "NPM" -> "@$lowerName"
                 "Gradle", "Maven", "SBT" -> "(com|io|net|org)\\.$lowerName(\\..+)?"

@@ -213,7 +213,7 @@ private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
 
 private fun String.removeDuplicateWhitespaces() = replace(DUPLICATE_WHITESPACES_REGEX, " ")
 
-private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.toUpperCase()
+private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
 
 private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
     val map = mutableMapOf<String, Parts>()

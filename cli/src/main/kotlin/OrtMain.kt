@@ -228,7 +228,7 @@ fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
     val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>().withResolvedScopes() }
 
     log.perf {
-        "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
+        "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inWholeMilliseconds}ms."
     }
 
     return ortResult
@@ -243,7 +243,7 @@ fun CliktCommand.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<Fi
         val duration = measureTime { file.writeValue(ortResult) }
 
         log.perf {
-            "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inMilliseconds}ms."
+            "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inWholeMilliseconds}ms."
         }
 
         log.debug { "Output ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(file)}." }

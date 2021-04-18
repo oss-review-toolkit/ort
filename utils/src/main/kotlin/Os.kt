@@ -34,7 +34,7 @@ object Os {
     /**
      * The operating system name in lower case, for private use.
      */
-    private val nameLowerCase = name.toLowerCase()
+    private val nameLowerCase = name.lowercase()
 
     /**
      * Whether the operating system is Linux or not.

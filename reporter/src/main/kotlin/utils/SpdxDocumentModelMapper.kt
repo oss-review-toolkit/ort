@@ -265,7 +265,7 @@ private fun VcsInfo.toSpdxDownloadLocation(): String {
         VcsType.GIT_REPO -> "repo"
         VcsType.MERCURIAL -> "hg"
         VcsType.SUBVERSION -> "svn"
-        else -> type.toString().toLowerCase()
+        else -> type.toString().lowercase()
     }
 
     return buildString {

@@ -84,7 +84,7 @@ class DiskCache(
      */
     private fun String.asKey(): String {
         // DiskLruCache keys must match regex [a-z0-9_-]{1,64}.
-        val mappedKey = toLowerCase().replace('.', '-').replace(ILLEGAL_KEY_CHARS, "_")
+        val mappedKey = lowercase().replace('.', '-').replace(ILLEGAL_KEY_CHARS, "_")
 
         if (mappedKey.length <= MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH) {
             // String is short enough to be unique, use it as is.

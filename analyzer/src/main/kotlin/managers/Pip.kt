@@ -730,4 +730,4 @@ private fun Package.enrichWith(other: Package?): Package =
  * ASCII numbers, ., -, and _. The name should be lowercased with all runs
  * of the characters ., -, or _ replaced with a single - character."
  */
-private fun String.normalizePackageName(): String = replace(Regex("[-_.]+"), "-").toLowerCase()
+private fun String.normalizePackageName(): String = replace(Regex("[-_.]+"), "-").lowercase()

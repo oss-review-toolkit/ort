@@ -86,7 +86,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     // Create variants of the version string to recognize.
     data class VersionVariant(val name: String, val separators: List<Char>)
 
-    val versionLower = version.toLowerCase()
+    val versionLower = version.lowercase()
     val versionVariants = mutableListOf(VersionVariant(versionLower, versionSeparators))
 
     val separatorRegex = Regex(versionSeparators.joinToString("", "[", "]"))
@@ -95,7 +95,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     }
 
     val filteredNames = names.filter {
-        val name = it.toLowerCase()
+        val name = it.lowercase()
 
         versionVariants.any { versionVariant ->
             // Allow to ignore suffixes in names that are separated by something else than the current separator, e.g.
@@ -286,7 +286,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
  */
 fun resolveWindowsExecutable(executable: File): File? {
     val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
-    return extensions.map { File(executable.path + it.toLowerCase()) }.find { it.isFile }
+    return extensions.map { File(executable.path + it.lowercase()) }.find { it.isFile }
         ?: executable.takeIf { it.isFile }
 }
 

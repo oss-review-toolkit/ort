@@ -50,7 +50,7 @@ class EvaluatedModelReporter : Reporter {
     ): List<File> {
         val evaluatedModel = measureTimedValue { EvaluatedModel.create(input) }
 
-        log.perf { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
+        log.perf { "Generating evaluated model took ${evaluatedModel.duration.inWholeMilliseconds}ms." }
 
         val outputFiles = mutableListOf<File>()
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
