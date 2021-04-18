@@ -19,15 +19,16 @@
 
 package org.ossreviewtoolkit.clients.vulnerablecode
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -38,20 +39,20 @@ import retrofit2.http.POST
 interface VulnerableCodeService {
     companion object {
         /**
-         * The mapper for JSON (de-)serialization used by this service.
+         * The JSON (de-)serialization object used by this service.
          */
-        val JSON_MAPPER = JsonMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-            .registerKotlinModule()
+        val JSON = Json { ignoreUnknownKeys = true }
 
         /**
          * Create a new service instance that connects to the [serverUrl] specified and uses the optionally provided
          * [client].
          */
         fun create(serverUrl: String, client: OkHttpClient? = null): VulnerableCodeService {
+            val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
                 .baseUrl(serverUrl)
-                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
+                .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
             return retrofit.create(VulnerableCodeService::class.java)
@@ -62,8 +63,10 @@ interface VulnerableCodeService {
      * Data class that represents a score assigned to a vulnerability. A source of vulnerability information can
      * provide multiple score values using different scoring systems.
      */
+    @Serializable
     data class Score(
         /** The name of the scoring system. */
+        @SerialName("scoring_system")
         val scoringSystem: String,
 
         /**
@@ -77,7 +80,7 @@ interface VulnerableCodeService {
      * Data class representing a reference to detailed information about a vulnerability. Information about a single
      * vulnerability can come from multiple sources; for each of these sources a reference is added to the data.
      */
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class VulnerabilityReference(
         /**
          * The URL of this reference. From this URL, it is also possible to identify the source of information.
@@ -94,9 +97,10 @@ interface VulnerableCodeService {
     /**
      * Data class representing a single vulnerability with its references to detailed information.
      */
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Vulnerability(
         /** A URL with information about the vulnerability. */
+        @SerialName("vulnerability_id")
         val vulnerabilityId: String,
 
         /** A list with [VulnerabilityReference]s pointing to sources of information about this vulnerability. */
@@ -107,15 +111,17 @@ interface VulnerableCodeService {
      * Data class describing a package in the result of a package query together with the vulnerabilities known for
      * this package.
      */
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class PackageVulnerabilities(
         /** The PURL identifying this package. */
         val purl: String,
 
         /** An optional list with vulnerabilities that have not yet been resolved. */
+        @SerialName("unresolved_vulnerabilities")
         val unresolvedVulnerabilities: List<Vulnerability> = emptyList(),
 
         /** An optional list with vulnerabilities that have already been resolved. */
+        @SerialName("resolved_vulnerabilities")
         val resolvedVulnerabilities: List<Vulnerability> = emptyList()
     )
 
@@ -124,8 +130,11 @@ interface VulnerableCodeService {
      * known for a set of packages can be retrieved. The request body is a JSON object with a property containing a
      * list of package identifiers.
      */
+    @Serializable
     data class PackagesWrapper(
-        val purls: Collection<String>
+        // TODO: Change this back to a Collection once https://github.com/Kotlin/kotlinx.serialization/issues/1421 is
+        //       resolved.
+        val purls: Set<String>
     )
 
     /**
