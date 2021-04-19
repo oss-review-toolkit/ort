@@ -128,8 +128,8 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                 val results = manager.create(USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(files)
 
-                results.size shouldBe files.size
-                results.values.flatten().forAll { result ->
+                results.projectResults.size shouldBe files.size
+                results.projectResults.values.flatten().forAll { result ->
                     VersionControlSystem.forType(result.project.vcsProcessed.type) shouldBe
                             VersionControlSystem.forType(pkg.vcs.type)
                     result.project.vcsProcessed.url shouldBe pkg.vcs.url

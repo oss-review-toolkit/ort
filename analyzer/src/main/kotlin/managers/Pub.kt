@@ -399,7 +399,7 @@ class Pub(
             // Use the latest 5.x Gradle version as Flutter / its Android Gradle plugin does not support Gradle 6 yet.
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
                 .resolveDependencies(listOf(packageFile))
-                .getValue(packageFile)
+                .projectResults.getValue(packageFile)
         }
     }
 
