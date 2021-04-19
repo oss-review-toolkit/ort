@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -150,6 +151,11 @@ interface ClearlyDefinedService {
         val described: Described? = null,
         val licensed: Licensed? = null,
         val files: List<FileEntry>? = null
+    )
+
+    data class ContributedCurations(
+        val curations: Map<Coordinates, Curation>,
+        val contributions: List<JsonNode>
     )
 
     /**
@@ -438,6 +444,13 @@ interface ClearlyDefinedService {
         @Path("name") name: String,
         @Path("revision") revision: String
     ): Curation
+
+    /**
+     * Return a batch of curations for the components given as [coordinates], see
+     * https://api.clearlydefined.io/api-docs/#/curations/post_curations_.
+     */
+    @POST("curations")
+    suspend fun getCurations(@Body coordinates: Collection<Coordinates>): Map<Coordinates, ContributedCurations>
 
     /**
      * Upload curation [patch] data, see https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
