@@ -57,18 +57,35 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     }
 
     "Downloading a contribution patch" should {
-        "return curation data".config(tags = setOf(ExpensiveTag)) {
+        val coordinates = Coordinates(
+            ComponentType.MAVEN,
+            Provider.MAVEN_CENTRAL,
+            "javax.servlet",
+            "javax.servlet-api",
+            "3.1.0"
+        )
+
+        "return single curation data".config(tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
             val curation = service.getCuration(
-                ComponentType.MAVEN,
-                Provider.MAVEN_CENTRAL,
-                "javax.servlet",
-                "javax.servlet-api",
-                "3.1.0"
+                coordinates.type,
+                coordinates.provider,
+                coordinates.namespace.orEmpty(),
+                coordinates.name,
+                coordinates.revision.orEmpty()
             )
 
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+        }
+
+        "return bulk curation data".config(tags = setOf(ExpensiveTag)) {
+            val service = ClearlyDefinedService.create(Server.PRODUCTION)
+
+            val curations = service.getCurations(listOf(coordinates))
+            val curation = curations[coordinates]?.curations?.get(coordinates)
+
+            curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
     }
 
