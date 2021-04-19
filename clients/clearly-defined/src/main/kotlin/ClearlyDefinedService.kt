@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -386,6 +387,7 @@ interface ClearlyDefinedService {
             }
         }
 
+        @JsonValue
         override fun toString() = listOfNotNull(type, provider, namespace ?: "-", name, revision).joinToString("/")
     }
 
