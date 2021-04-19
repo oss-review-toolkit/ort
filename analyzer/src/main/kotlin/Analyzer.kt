@@ -135,7 +135,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                     val results = manager.resolveDependencies(files)
 
                     // By convention, project ids must be of the type of the respective package manager.
-                    results.onEach { (_, result) ->
+                    results.projectResults.onEach { (_, result) ->
                         val invalidProjects = result.filter { it.project.id.type != manager.managerName }
                         require(invalidProjects.isEmpty()) {
                             val projectString = invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }

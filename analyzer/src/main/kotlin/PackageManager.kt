@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.showStackTrace
 
 typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
-typealias ResolutionResult = MutableMap<File, List<ProjectAnalyzerResult>>
 
 /**
  * A class representing a package manager that handles software dependencies. The package manager is referred to by its
@@ -209,7 +208,7 @@ abstract class PackageManager(
      * for all [definitionFiles] which were found by searching the [analysisRoot] directory. By convention, the
      * [definitionFiles] must be absolute.
      */
-    open fun resolveDependencies(definitionFiles: List<File>): ResolutionResult {
+    open fun resolveDependencies(definitionFiles: List<File>): PackageManagerResult {
         definitionFiles.forEach { definitionFile ->
             requireNotNull(definitionFile.relativeToOrNull(analysisRoot)) {
                 "'$definitionFile' must be an absolute path below '$analysisRoot'."
@@ -263,7 +262,7 @@ abstract class PackageManager(
 
         afterResolution(definitionFiles)
 
-        return result
+        return PackageManagerResult(result)
     }
 
     /**

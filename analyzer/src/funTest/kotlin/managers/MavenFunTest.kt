@@ -65,7 +65,8 @@ class MavenFunTest : StringSpec() {
             // jgnash-core depends on jgnash-resources, so we also have to pass the pom.xml of jgnash-resources to
             // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
             // of transitive dependencies would not work.
-            val result = createMaven().resolveDependencies(listOf(pomFileCore, pomFileResources))[pomFileCore]
+            val result = createMaven().resolveDependencies(listOf(pomFileCore, pomFileResources))
+                .projectResults[pomFileCore]
 
             result.shouldNotBeNull()
             result should haveSize(1)
@@ -97,7 +98,7 @@ class MavenFunTest : StringSpec() {
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
             // not work.
-            val result = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib))[pomFileApp]
+            val result = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib)).projectResults[pomFileApp]
 
             result.shouldNotBeNull()
             result should haveSize(1)
