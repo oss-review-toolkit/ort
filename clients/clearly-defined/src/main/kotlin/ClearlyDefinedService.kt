@@ -414,7 +414,7 @@ interface ClearlyDefinedService {
      * https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
      */
     @POST("definitions")
-    suspend fun getDefinitions(@Body coordinates: Collection<String>): Map<String, Defined>
+    suspend fun getDefinitions(@Body coordinates: Collection<Coordinates>): Map<Coordinates, Defined>
 
     /**
      * Search for existing definitions based on the [pattern] string provided, see
