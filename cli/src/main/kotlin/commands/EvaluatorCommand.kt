@@ -116,7 +116,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
     private val licenseClassificationsFile by option(
         "--license-classifications-file",
-        help = "A file containing the license classificationsm which are passed as parameter to the rules script."
+        help = "A file containing the license classifications which are passed as parameter to the rules script."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
