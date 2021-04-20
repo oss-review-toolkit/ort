@@ -447,8 +447,8 @@ packages:
   curations:
   - base: {}
     curation:
-      concluded_license: "GPL-2.0-only OR MIT"
       comment: "Foobar is an imaginary dependency and offers a license choice"
+      concluded_license: "GPL-2.0-only OR MIT"
   paths:
   - 1
   levels:
@@ -496,8 +496,8 @@ packages:
   curations:
   - base: {}
     curation:
-      concluded_license: "MPL-2.0 OR EPL-1.0"
       comment: "H2 database offers a license choice"
+      concluded_license: "MPL-2.0 OR EPL-1.0"
   paths:
   - 2
   levels:
