@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.model.yamlMapper
 
 val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false)
 val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
@@ -86,5 +87,11 @@ fun patchActualResult(
         .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
         .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }
+
+fun patchActualResult(
+    result: OrtResult,
+    patchStartAndEndTime: Boolean = false
+): String =
+    patchActualResult(yamlMapper.writeValueAsString(result), patchStartAndEndTime)
 
 fun readOrtResult(file: String) = File(file).let { it.mapper().readValue<OrtResult>(patchExpectedResult(it)) }

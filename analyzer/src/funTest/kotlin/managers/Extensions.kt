@@ -31,9 +31,12 @@ import org.ossreviewtoolkit.model.yamlMapper
 
 fun Any?.toYaml() = yamlMapper.writeValueAsString(this)!!
 
-fun PackageManager.resolveSingleProject(definitionFile: File): ProjectAnalyzerResult =
-    resolveDependencies(listOf(definitionFile)).projectResults[definitionFile].let { result ->
-        result.shouldNotBeNull()
-        result should haveSize(1)
-        result.single()
+fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult =
+    resolveDependencies(listOf(definitionFile)).projectResults[definitionFile].let { resultList ->
+        resultList.shouldNotBeNull()
+        resultList should haveSize(1)
+        val result = resultList.single()
+
+        if (resolveScopes) result.copy(project = result.project.withResolvedScopes())
+        else result
     }

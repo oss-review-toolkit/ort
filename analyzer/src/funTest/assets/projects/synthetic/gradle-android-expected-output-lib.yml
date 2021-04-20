@@ -15,97 +15,161 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/lib"
   homepage_url: ""
-  dependency_graph:
-    packages:
-    - "Maven:org.apache.commons:commons-text:1.2"
-    - "Maven:org.apache.commons:commons-lang3:3.7"
-    - "Maven:org.apache.commons:commons-compress:1.17"
-    - "Maven:org.apache.commons:commons-text:1.3"
-    scope_roots:
-    - dependencies:
-      - pkg: 1
-    - pkg: 2
-    - pkg: 3
+  scopes:
+  - name: "androidTestUtil"
+    dependencies: []
+  - name: "archives"
+    dependencies: []
+  - name: "compile"
+    dependencies: []
+  - name: "default"
+    dependencies: []
+  - name: "demoDebugAndroidTestAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "demoDebugAndroidTestCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
       dependencies:
-      - pkg: 1
-    scopes:
-      androidTestUtil: []
-      archives: []
-      compile: []
-      default: []
-      demoDebugAndroidTestAnnotationProcessorClasspath: []
-      demoDebugAndroidTestCompileClasspath:
-      - root: 0
-      - root: 2
-      demoDebugAndroidTestRuntimeClasspath:
-      - root: 0
-      - root: 2
-      demoDebugAnnotationProcessorClasspath: []
-      demoDebugCompileClasspath:
-      - root: 0
-      - root: 2
-      demoDebugRuntimeClasspath:
-      - root: 0
-      - root: 2
-      demoDebugUnitTestAnnotationProcessorClasspath: []
-      demoDebugUnitTestCompileClasspath:
-      - root: 0
-      - root: 2
-      demoDebugUnitTestRuntimeClasspath:
-      - root: 0
-      - root: 2
-      demoReleaseAnnotationProcessorClasspath: []
-      demoReleaseCompileClasspath:
-      - root: 0
-      - root: 2
-      demoReleaseRuntimeClasspath:
-      - root: 0
-      - root: 2
-      demoReleaseUnitTestAnnotationProcessorClasspath: []
-      demoReleaseUnitTestCompileClasspath:
-      - root: 0
-      - root: 2
-      demoReleaseUnitTestRuntimeClasspath:
-      - root: 0
-      - root: 2
-      fullDebugAndroidTestAnnotationProcessorClasspath: []
-      fullDebugAndroidTestCompileClasspath:
-      - root: 3
-      - root: 2
-      fullDebugAndroidTestRuntimeClasspath:
-      - root: 3
-      - root: 2
-      fullDebugAnnotationProcessorClasspath: []
-      fullDebugCompileClasspath:
-      - root: 3
-      - root: 2
-      fullDebugRuntimeClasspath:
-      - root: 3
-      - root: 2
-      fullDebugUnitTestAnnotationProcessorClasspath: []
-      fullDebugUnitTestCompileClasspath:
-      - root: 3
-      - root: 2
-      fullDebugUnitTestRuntimeClasspath:
-      - root: 3
-      - root: 2
-      fullReleaseAnnotationProcessorClasspath: []
-      fullReleaseCompileClasspath:
-      - root: 3
-      - root: 2
-      fullReleaseRuntimeClasspath:
-      - root: 3
-      - root: 2
-      fullReleaseUnitTestAnnotationProcessorClasspath: []
-      fullReleaseUnitTestCompileClasspath:
-      - root: 3
-      - root: 2
-      fullReleaseUnitTestRuntimeClasspath:
-      - root: 3
-      - root: 2
-      lintChecks: []
-      lintClassPath: []
-      testCompile: []
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoDebugAndroidTestRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoDebugAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "demoDebugCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoDebugRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoDebugUnitTestAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "demoDebugUnitTestCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoDebugUnitTestRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoReleaseAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "demoReleaseCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoReleaseRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoReleaseUnitTestAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "demoReleaseUnitTestCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "demoReleaseUnitTestRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.2"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullDebugAndroidTestAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "fullDebugAndroidTestCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullDebugAndroidTestRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullDebugAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "fullDebugCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullDebugRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullDebugUnitTestAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "fullDebugUnitTestCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullDebugUnitTestRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullReleaseAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "fullReleaseCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullReleaseRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullReleaseUnitTestAnnotationProcessorClasspath"
+    dependencies: []
+  - name: "fullReleaseUnitTestCompileClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "fullReleaseUnitTestRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-compress:1.17"
+    - id: "Maven:org.apache.commons:commons-text:1.3"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-lang3:3.7"
+  - name: "lintChecks"
+    dependencies: []
+  - name: "lintClassPath"
+    dependencies: []
+  - name: "testCompile"
+    dependencies: []
 packages:
 - id: "Maven:org.apache.commons:commons-compress:1.17"
   purl: "pkg:maven/org.apache.commons/commons-compress@1.17"
