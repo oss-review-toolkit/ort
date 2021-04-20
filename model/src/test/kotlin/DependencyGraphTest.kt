@@ -43,16 +43,46 @@ class DependencyGraphTest : WordSpec({
                     DependencyReference(2)
                 )
             val scopeMap = mapOf(
-                "scope1" to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
-                "scope2" to listOf(RootDependencyIndex(1), RootDependencyIndex(2))
+                "p1:scope1" to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
+                "p2:scope2" to listOf(RootDependencyIndex(1), RootDependencyIndex(2))
             )
 
             val graph = DependencyGraph(ids, fragments, scopeMap)
             val scopes = graph.createScopes()
 
-            scopes.map { it.name } should containExactly("scope1", "scope2")
-            scopeDependencies(scopes, "scope1") shouldBe "${pkgId(ids[1])}${pkgId(ids[0])}"
-            scopeDependencies(scopes, "scope2") shouldBe "${pkgId(ids[1])}${pkgId(ids[2])}"
+            scopes.map { it.name } should containExactly("p1:scope1", "p2:scope2")
+            scopeDependencies(scopes, "p1:scope1") shouldBe "${pkgId(ids[1])}${pkgId(ids[0])}"
+            scopeDependencies(scopes, "p2:scope2") shouldBe "${pkgId(ids[1])}${pkgId(ids[2])}"
+        }
+
+        "support restricting the scopes to a specific set" {
+            val scopeName = "theOneAndOnlyScope"
+            val qualifier = Identifier("test", "namespace", "name", "version")
+            val qualifiedScopeName = DependencyGraph.qualifyScope(qualifier, scopeName)
+            val ids = listOf(
+                id("org.apache.commons", "commons-lang3", "3.11"),
+                id("org.apache.commons", "commons-collections4", "4.4"),
+                id("org.junit", "junit", "5")
+            )
+            val fragments =
+                setOf(
+                    DependencyReference(0),
+                    DependencyReference(1),
+                    DependencyReference(2)
+                )
+            val scopeMap = mapOf(
+                qualifiedScopeName to listOf(RootDependencyIndex(0), RootDependencyIndex(1)),
+                DependencyGraph.qualifyScope(qualifier, "scope2") to listOf(
+                    RootDependencyIndex(1),
+                    RootDependencyIndex(2)
+                )
+            )
+
+            val graph = DependencyGraph(ids, fragments, scopeMap)
+            val scopes = graph.createScopes(setOf(qualifiedScopeName))
+
+            scopes.map { it.name } should containExactly(DependencyGraph.unqualifyScope(scopeName))
+            scopeDependencies(scopes, scopeName) shouldBe "${pkgId(ids[1])}${pkgId(ids[0])}"
         }
 
         "construct a tree with multiple levels" {

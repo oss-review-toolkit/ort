@@ -89,20 +89,40 @@ data class DependencyGraph(
     }
 
     /**
+     * Stores a mapping from dependency indices to [PackageReference] objects. This is needed when converting the
+     * data of this object to the classical layout of dependency information. The structure is created once and then
+     * used to convert parts of this graph.
+     */
+    private val referenceMapping: Map<String, PackageReference> by lazy { constructReferenceMapping() }
+
+    /**
      * Transform the data stored in this object to the classical layout of dependency information, which is a set of
      * [Scope]s referencing the packages they depend on.
      */
-    fun createScopes(): SortedSet<Scope> {
-        val refMapping = constructReferenceMapping()
+    fun createScopes(): SortedSet<Scope> = createScopesFor(scopes, unqualify = false)
 
-        return scopes.mapTo(sortedSetOf()) { entry ->
+    /**
+     * Transform a subset of the data stored in this object to the classical layout of dependency information. This is
+     * analogous to [createScopes], but only the provided [scopeNames] are taken into account. If [unqualify] is
+     * *true*, remove qualifiers from scope names before constructing the [Scope]s.
+     */
+    fun createScopes(scopeNames: Set<String>, unqualify: Boolean = true): SortedSet<Scope> =
+        createScopesFor(scopes.filterKeys { it in scopeNames }, unqualify)
+
+    /**
+     * Convert the given [map] with scope information to a set of [Scope]s. [Optionally][unqualify] remove qualifiers
+     * from scope names.
+     */
+    private fun createScopesFor(map: Map<String, List<RootDependencyIndex>>, unqualify: Boolean): SortedSet<Scope> =
+        map.mapTo(sortedSetOf()) { entry ->
             val dependencies = entry.value.mapTo(sortedSetOf()) { index ->
-                refMapping[index.toKey()] ?: throw IllegalStateException("Could not resolve dependency index $index.")
+                referenceMapping[index.toKey()]
+                    ?: throw IllegalStateException("Could not resolve dependency index $index.")
             }
 
-            Scope(entry.key, dependencies)
+            val scopeName = if (unqualify) unqualifyScope(entry.key) else entry.key
+            Scope(scopeName, dependencies)
         }
-    }
 
     /**
      * Construct a mapping from dependency indices to [PackageReference] objects. Based on this mapping, the
