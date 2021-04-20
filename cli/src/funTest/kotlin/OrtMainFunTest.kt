@@ -30,6 +30,8 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.redirectStdout
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -118,9 +120,11 @@ class OrtMainFunTest : StringSpec() {
                 "-i", projectDir.resolve("gradle").absolutePath,
                 "-o", analyzerOutputDir.path
             )
-            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readText()
 
-            patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
+            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
+            val resolvedResult = analyzerResult.withResolvedScopes()
+
+            patchActualResult(resolvedResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
@@ -139,9 +143,11 @@ class OrtMainFunTest : StringSpec() {
                 "-o", analyzerOutputDir.path,
                 "--package-curations-file", projectDir.resolve("gradle/curations.yml").toString()
             )
-            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readText()
 
-            patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
+            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
+            val resolvedResult = analyzerResult.withResolvedScopes()
+
+            patchActualResult(resolvedResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Passing mutually exclusive evaluator options fails" {

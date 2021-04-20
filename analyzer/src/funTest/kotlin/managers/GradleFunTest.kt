@@ -63,7 +63,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -76,7 +76,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -89,7 +89,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -102,7 +102,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
@@ -119,7 +119,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -175,7 +175,7 @@ class GradleFunTest : StringSpec() {
                     revision = vcsRevision
                 )
 
-                val result = createGradle().resolveSingleProject(packageFile)
+                val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
                 result.toYaml() shouldBe expectedResult
             }

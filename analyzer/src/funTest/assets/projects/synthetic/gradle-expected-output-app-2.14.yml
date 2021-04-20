@@ -15,35 +15,72 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
   homepage_url: ""
-  dependency_graph:
-    identifier_list:
-    - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-    - "Maven:org.apache.commons:commons-text:1.1"
-    - "Maven:org.apache.commons:commons-lang3:3.5"
-    - "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-    scope-roots:
-    - dependencies:
-      - pkg: 1
-        dependencies:
-        - pkg: 2
-      - pkg: 3
+  scopes:
+  - name: "archives"
+    dependencies: []
+  - name: "compile"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       linkage: "PROJECT_DYNAMIC"
-    scopes:
-      archives: []
-      compile:
-      - root: 0
-      compileOnly:
-      - root: 0
-      default:
-      - root: 0
-      runtime:
-      - root: 0
-      testCompile:
-      - root: 0
-      testCompileOnly:
-      - root: 0
-      testRuntime:
-      - root: 0
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "compileOnly"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "default"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "runtime"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "testCompile"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "testCompileOnly"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "testRuntime"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
 packages:
 - id: "Maven:org.apache.commons:commons-lang3:3.5"
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
