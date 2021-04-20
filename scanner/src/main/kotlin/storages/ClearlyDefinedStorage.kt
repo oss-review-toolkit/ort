@@ -28,16 +28,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Failure
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsInfoCurationData
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
@@ -207,9 +212,38 @@ class ClearlyDefinedStorage(
 
         return toolResponse.use {
             jsonMapper.readTree(it.byteStream())["content"]?.let { result ->
+                val definitions = service.getDefinitions(listOf(coordinates))
+                val described = definitions.getValue(coordinates).described
+                val sourceLocation = described.sourceLocation
+
+                val provenance = when {
+                    sourceLocation == null -> UnknownProvenance
+
+                    sourceLocation.type == ComponentType.GIT -> {
+                        RepositoryProvenance(
+                            vcsInfo = VcsInfo(
+                                type = VcsType.GIT,
+                                url = sourceLocation.url.orEmpty(),
+                                revision = sourceLocation.revision,
+                                path = sourceLocation.path.orEmpty()
+                            )
+                        )
+                    }
+
+                    else -> {
+                        ArtifactProvenance(
+                            sourceArtifact = RemoteArtifact(
+                                url = sourceLocation.url.orEmpty(),
+                                hash = Hash.create(described.hashes?.sha1.orEmpty())
+                            )
+                        )
+                    }
+                }
+
                 val summary = generateSummary(startTime, Instant.now(), "", result)
                 val details = generateScannerDetails(result)
-                Success(listOf(ScanResult(UnknownProvenance, details, summary)))
+
+                Success(listOf(ScanResult(provenance, details, summary)))
             } ?: EMPTY_RESULT
         }
     }
