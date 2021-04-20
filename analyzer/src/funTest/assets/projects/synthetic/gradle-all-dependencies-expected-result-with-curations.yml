@@ -491,23 +491,23 @@ analyzer:
       - base:
           homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
         curation:
-          homepage_url: "http://hamcrest.org/JavaHamcrest/"
           comment: "Use the actual homepage instead of the GitHub page."
+          homepage_url: "http://hamcrest.org/JavaHamcrest/"
       - base:
           description: "This is the core API of hamcrest matcher framework to be used\
             \ by third-party framework providers. This includes the a foundation set\
             \ of matcher implementations for common operations."
         curation:
-          description: "Curated description."
           comment: "Fix description."
+          description: "Curated description."
       - base:
           declared_licenses:
           - "New BSD License"
         curation:
+          comment: "Declared license in pom.xml is wrong."
           declared_licenses:
           - "curated license a"
           - "curated license b"
-          comment: "Declared license in pom.xml is wrong."
     has_issues: true
 scanner: null
 advisor: null

@@ -34,6 +34,12 @@ import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class PackageCurationData(
     /**
+     * A plain-text comment about this curation. Should contain information about how and why the curation was
+     * created.
+     */
+    val comment: String? = null,
+
+    /**
      * The list of authors of this package.
      */
     val authors: SortedSet<String>? = null,
@@ -74,12 +80,6 @@ data class PackageCurationData(
      * VCS-related information.
      */
     val vcs: VcsInfoCurationData? = null,
-
-    /**
-     * A plain-text comment about this curation. Should contain information about how and why the curation was
-     * created.
-     */
-    val comment: String? = null,
 
     /**
      * Whether the package is meta data only.
