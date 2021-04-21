@@ -70,9 +70,8 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val labels by option(
         "--label", "-l",
-        help = "Add a label to the ORT result. Can be used multiple times. If an ORT result is used as input for the" +
-                "advisor, any existing label with the same key is overwritten. For example: " +
-                "--label distribution=external"
+        help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
+                "times. For example: --label distribution=external"
     ).associate()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
