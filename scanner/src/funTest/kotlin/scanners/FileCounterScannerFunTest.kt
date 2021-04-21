@@ -50,7 +50,7 @@ class FileCounterScannerFunTest : StringSpec() {
             )
 
             val scanner = FileCounter("FileCounter", ScannerConfiguration(), DownloaderConfiguration())
-            val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir, outputDir.resolve("downloads"))
+            val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir)
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult

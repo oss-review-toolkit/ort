@@ -90,14 +90,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         help = "The list of output formats to be used for the ORT result file(s)."
     ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML)).outputGroup()
 
-    private val downloadDir by option(
-        "--download-dir",
-        help = "The output directory for downloaded source code. (default: <output-dir>/downloads)"
-    ).convert { it.expandTilde() }
-        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.absoluteFile.normalize() }
-        .outputGroup()
-
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
@@ -164,10 +156,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             }
         }
 
-        require(downloadDir?.exists() != true) {
-            "The download directory '$downloadDir' must not exist yet."
-        }
-
         val config = globalOptionsForSubcommands.config
         val scanner = configureScanner(config.scanner, config.downloader)
 
@@ -175,7 +163,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             scanner.scanOrtResult(
                 ortFile = input,
                 outputDirectory = nativeOutputDir,
-                downloadDirectory = downloadDir ?: outputDir.resolve("downloads"),
                 skipExcluded = skipExcluded
             )
         } else {

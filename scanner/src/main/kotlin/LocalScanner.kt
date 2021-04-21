@@ -28,6 +28,7 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
+import kotlin.io.path.createTempDirectory
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -65,6 +66,7 @@ import org.ossreviewtoolkit.utils.fileSystemEncode
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
 
@@ -199,8 +201,7 @@ abstract class LocalScanner(
 
     override suspend fun scanPackages(
         packages: Collection<Package>,
-        outputDirectory: File,
-        downloadDirectory: File
+        outputDirectory: File
     ): Map<Package, List<ScanResult>> {
         val scannerCriteria = getScannerCriteria()
 
@@ -217,14 +218,18 @@ abstract class LocalScanner(
         log.info { "Found stored scan results for ${resultsFromStorage.size} packages and $scannerCriteria." }
 
         if (scannerConfig.createMissingArchives) {
-            createMissingArchives(resultsFromStorage, downloadDirectory)
+            createMissingArchives(resultsFromStorage)
         }
 
         remainingPackages.removeAll { it in resultsFromStorage.keys }
 
         log.info { "Scanning ${remainingPackages.size} packages for which no stored scan results were found." }
 
+        val downloadDirectory = createTempDirectory().toFile()
+
         val resultsFromScanner = remainingPackages.scan(outputDirectory, downloadDirectory)
+
+        downloadDirectory.safeDeleteRecursively(force = true)
 
         return resultsFromStorage + resultsFromScanner
     }
@@ -296,7 +301,7 @@ abstract class LocalScanner(
         )
     }
 
-    private fun createMissingArchives(scanResults: Map<Package, List<ScanResult>>, downloadDirectory: File) {
+    private fun createMissingArchives(scanResults: Map<Package, List<ScanResult>>) {
         val missingArchives = mutableSetOf<Pair<Package, KnownProvenance>>()
 
         scanResults.forEach { (pkg, results) ->
@@ -309,9 +314,11 @@ abstract class LocalScanner(
 
         if (missingArchives.isEmpty()) return
 
+        val tempDirectory = createTempDirectory().toFile()
+
         missingArchives.forEach { (pkg, provenance) ->
-            val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
-            val downloadProvenance = Downloader(downloaderConfig).download(pkg, pkgDownloadDirectory)
+            val downloadDirectory = tempDirectory.resolve(pkg.id.toPath())
+            val downloadProvenance = Downloader(downloaderConfig).download(pkg, downloadDirectory)
 
             if (downloadProvenance == provenance) {
                 archiveFiles(downloadDirectory, pkg.id, provenance)
@@ -319,6 +326,8 @@ abstract class LocalScanner(
                 log.warn { "Mismatching provenance when creating missing archive for $provenance." }
             }
         }
+
+        tempDirectory.safeDeleteRecursively(force = true)
     }
 
     /**
