@@ -67,24 +67,6 @@ abstract class Scanner(
     }
 
     /**
-     * Scan the [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to download
-     * the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may contain
-     * multiple results for the same [Package] if the storage contains more than one result for the specification of
-     * this scanner.
-     */
-    protected abstract suspend fun scanPackages(
-        packages: Collection<Package>,
-        outputDirectory: File,
-        downloadDirectory: File
-    ): Map<Package, List<ScanResult>>
-
-    /**
-     * Filter the options specific to this scanner that will be included into the result, e.g. to perform obfuscation of
-     * credentials.
-     */
-    protected open fun filterOptionsForResult(options: ScannerOptions) = options
-
-    /**
      * Return the scanner-specific SPDX idstring for the given [license].
      */
     fun getSpdxLicenseIdString(license: String) =
@@ -179,4 +161,22 @@ abstract class Scanner(
         // Note: This overwrites any existing ScannerRun from the input file.
         return ortResult.copy(scanner = scannerRun)
     }
+
+    /**
+     * Scan the [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to download
+     * the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may contain
+     * multiple results for the same [Package] if the storage contains more than one result for the specification of
+     * this scanner.
+     */
+    protected abstract suspend fun scanPackages(
+        packages: Collection<Package>,
+        outputDirectory: File,
+        downloadDirectory: File
+    ): Map<Package, List<ScanResult>>
+
+    /**
+     * Filter the options specific to this scanner that will be included into the result, e.g. to perform obfuscation of
+     * credentials.
+     */
+    protected open fun filterOptionsForResult(options: ScannerOptions) = options
 }
