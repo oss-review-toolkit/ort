@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
 import java.io.File
+import java.io.IOException
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,9 +37,11 @@ import org.ossreviewtoolkit.clients.fossid.checkScanStatus
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
+import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
@@ -151,6 +154,23 @@ class FossId(
             v.takeUnless { k in secretKeys }.orEmpty()
         }
 
+    private suspend fun getProject(projectCode: String): Project? =
+        service.getProject(user, apiKey, projectCode).run {
+            when {
+                error == null && data != null -> {
+                    FossId.log.info { "Project '$projectCode' exists." }
+                    data
+                }
+
+                error == "Project does not exist" && status == 0 -> {
+                    FossId.log.info { "Project '$projectCode' does not exist." }
+                    null
+                }
+
+                else -> throw IOException("Could not get project. Additional information : $error")
+            }
+        }
+
     override suspend fun scanPackages(
         packages: Collection<Package>,
         outputDirectory: File,
@@ -169,10 +189,12 @@ class FossId(
                 val revision = pkg.vcsProcessed.revision.ifEmpty { "HEAD" }
                 val projectCode = convertGitUrlToProjectName(url)
 
-                log.info { "Creating project '$projectCode' ..." }
+                if (getProject(projectCode) == null) {
+                    log.info { "Creating project '$projectCode' ..." }
 
-                service.createProject(user, apiKey, projectCode, projectCode)
-                    .checkResponse("create project")
+                    service.createProject(user, apiKey, projectCode, projectCode)
+                        .checkResponse("create project")
+                }
 
                 log.info { "Creating scan for URL $url and revision $revision ..." }
 
