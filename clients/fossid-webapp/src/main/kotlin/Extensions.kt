@@ -52,11 +52,11 @@ fun <B : EntityPostResponseBody<T>, T> B?.checkResponse(operation: String, withD
  * This function streamlines these entities to a list.
  */
 inline fun <reified T : Any> EntityPostResponseBody<Any>.toList(): List<T> =
-    // the list  operation returns different json depending on the amount of scans
+    // The "list" operation returns different JSON depending on the amount of scans.
     when (val data = data) {
         is List<*> -> data.mapNotNull { it?.let { FossIdRestService.JSON_MAPPER.convertValue(it) } }
         is Map<*, *> -> data.values.mapNotNull { it?.let { FossIdRestService.JSON_MAPPER.convertValue(it) } }
-        // the server returns "data: false" when there is no entry -> we streamline it to an empty list
+        // The server sets "data" to "false" when there is no entry. Streamline this to an empty list.
         is Boolean -> emptyList()
         else -> error("Cannot process the returned values")
     }
