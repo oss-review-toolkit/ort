@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.filterByProject
 import org.ossreviewtoolkit.spdx.SpdxLicense
@@ -81,7 +82,7 @@ abstract class Scanner(
      * Filter the options specific to this scanner that will be included into the result, e.g. to perform obfuscation of
      * credentials.
      */
-    protected open fun filterOptionsForResult(options: Map<String, String>) = options
+    protected open fun filterOptionsForResult(options: ScannerOptions) = options
 
     /**
      * Return the scanner-specific SPDX idstring for the given [license].
