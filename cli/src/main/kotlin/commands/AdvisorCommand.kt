@@ -56,7 +56,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val outputDir by option(
         "--output-dir", "-o",
-        help = "The directory to write the advisor results as ORT result file(s) to."
+        help = "The directory to write the ORT result file with advisor results to."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }

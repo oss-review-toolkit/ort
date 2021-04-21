@@ -72,7 +72,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     private val outputDir by option(
         "--output-dir", "-o",
-        help = "The directory to write the analyzer result as ORT result file(s) to, in the specified output format(s)."
+        help = "The directory to write the ORT result file with analyzer results to."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }

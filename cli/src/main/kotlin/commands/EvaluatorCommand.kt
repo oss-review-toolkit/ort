@@ -80,9 +80,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
     private val outputDir by option(
         "--output-dir", "-o",
-        help = "The directory to write the evaluation results as ORT result file(s) to, in the specified output " +
-                "format(s). If no output directory is specified, no ORT result file(s) are written and only the exit " +
-                "code signals a success or failure."
+        help = "The directory to write the ORT result file with evaluation results to.  If no output directory is " +
+                "specified, no ORT result file is written and only the exit code signals a success or failure."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
