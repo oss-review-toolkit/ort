@@ -19,15 +19,15 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-open class EntityPostResponseBody<T> {
-    var operation: String? = null
-    var status: Int? = null
-    var message: String? = null
-    var error: String? = null
+open class EntityPostResponseBody<T>(
+    val operation: String? = null,
+    val status: Int? = null,
+    val message: String? = null,
+    val error: String? = null,
 
-    open var data: T? = null
-}
+    open val data: T? = null
+)
 
-class MapResponseBody<T> : EntityPostResponseBody<Map<String, T>>() {
-    override var data: Map<String, T>? = null
-}
+class MapResponseBody<T>(
+    override val data: Map<String, T>? = null
+) : EntityPostResponseBody<Map<String, T>>()
