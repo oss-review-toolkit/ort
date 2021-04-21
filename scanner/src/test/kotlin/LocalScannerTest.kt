@@ -28,6 +28,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 
 class LocalScannerTest : WordSpec({
     "getScannerCriteria()" should {
@@ -86,7 +87,7 @@ private const val SCANNER_VERSION = "3.2.1.final"
 /**
  * Creates a [ScannerConfiguration] with the given properties for the test scanner.
  */
-private fun createScannerConfig(properties: Map<String, String>): ScannerConfiguration {
+private fun createScannerConfig(properties: ScannerOptions): ScannerConfiguration {
     val options = mapOf(SCANNER_NAME to properties)
     return ScannerConfiguration(options = options)
 }

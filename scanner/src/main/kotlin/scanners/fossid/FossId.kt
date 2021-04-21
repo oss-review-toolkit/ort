@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -149,7 +150,7 @@ class FossId(
         service = retrofit.create(FossIdRestService::class.java)
     }
 
-    override fun filterOptionsForResult(options: Map<String, String>) =
+    override fun filterOptionsForResult(options: ScannerOptions) =
         options.mapValues { (k, v) ->
             v.takeUnless { k in secretKeys }.orEmpty()
         }

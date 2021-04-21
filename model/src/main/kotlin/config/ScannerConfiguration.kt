@@ -26,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.storage.FileStorage
 
+typealias ScannerOptions = Map<String, String>
+
 /**
  * The configuration model of the scanner.
  */
@@ -53,7 +55,7 @@ data class ScannerConfiguration(
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */
     @JsonAlias("scanner")
-    val options: Map<String, Map<String, String>>? = null,
+    val options: Map<String, ScannerOptions>? = null,
 
     /**
      * A map with the configurations of the scan result storages available. Based on this information the actual
