@@ -78,7 +78,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
     private val outputDir by option(
         "--output-dir", "-o",
-        help = "The directory to write the scan results as ORT result file(s) to, in the specified output format(s)."
+        help = "The directory to write the ORT result file with scan results to."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
