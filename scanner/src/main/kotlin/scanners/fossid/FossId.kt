@@ -343,7 +343,7 @@ class FossId(
 
         val responseMarkedAsIdentified = service.listMarkedAsIdentifiedFiles(user, apiKey, scanCode)
             .checkResponse("list marked as identified files", false)
-        val markedAsIdentifiedFiles = responseMarkedAsIdentified.toList(MarkedAsIdentifiedFile::class)
+        val markedAsIdentifiedFiles = responseMarkedAsIdentified.toList<MarkedAsIdentifiedFile>()
 
         log.info {
             "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan code $scanCode."
@@ -353,7 +353,7 @@ class FossId(
         val responseListIgnoredFiles = service.listIgnoredFiles(user, apiKey, scanCode)
             .checkResponse("list ignored files", false)
 
-        val listIgnoredFiles = responseListIgnoredFiles.toList(IgnoredFile::class)
+        val listIgnoredFiles = responseListIgnoredFiles.toList<IgnoredFile>()
         return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles)
     }
 

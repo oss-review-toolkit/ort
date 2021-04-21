@@ -106,7 +106,7 @@ class FossIdClientNewProjectTest : StringSpec({
     "Scans for project can be listed when there is no scan" {
         service.listScansForProject("", "", PROJECT_CODE) shouldNotBeNull {
             checkResponse("list scans")
-            toList(Scan::class) should beEmpty()
+            toList<Scan>() should beEmpty()
         }
     }
 
@@ -197,7 +197,7 @@ class FossIdClientNewProjectTest : StringSpec({
     "Marked files can be listed when there are none" {
         service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list marked as identified files")
-            toList(MarkedAsIdentifiedFile::class) should beEmpty()
+            toList<MarkedAsIdentifiedFile>() should beEmpty()
         }
     }
 
@@ -205,7 +205,7 @@ class FossIdClientNewProjectTest : StringSpec({
         service.listIgnoredFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list ignored files")
 
-            val files = toList(IgnoredFile::class)
+            val files = toList<IgnoredFile>()
             files.size shouldBe 32
             files.first() should {
                 it.path shouldBe ".git/hooks/fsmonitor-watchman.sample"
@@ -218,7 +218,7 @@ class FossIdClientNewProjectTest : StringSpec({
         service.listPendingFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list pending files")
 
-            val files = toList(String::class)
+            val files = toList<String>()
             files.size shouldBe 2
             files.first() shouldBe "src/extra_file.txt"
         }

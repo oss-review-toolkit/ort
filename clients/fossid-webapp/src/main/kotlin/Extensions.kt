@@ -21,7 +21,7 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import kotlin.reflect.KClass
+import com.fasterxml.jackson.module.kotlin.convertValue
 
 private const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
@@ -51,11 +51,11 @@ fun <B : EntityPostResponseBody<T>, T> B?.checkResponse(operation: String, withD
  * The list operations in FossID have inconsistent return types depending on the amount of entities returned.
  * This function streamlines these entities to a list.
  */
-fun <T : Any> EntityPostResponseBody<Any>.toList(cls: KClass<T>): List<T> =
+inline fun <reified T : Any> EntityPostResponseBody<Any>.toList(): List<T> =
     // the list  operation returns different json depending on the amount of scans
     when (val data = data) {
-        is List<*> -> data.map { FossIdRestService.JSON_MAPPER.convertValue(it, cls.java) }
-        is Map<*, *> -> data.values.map { FossIdRestService.JSON_MAPPER.convertValue(it, cls.java) }
+        is List<*> -> data.mapNotNull { it?.let { FossIdRestService.JSON_MAPPER.convertValue(it) } }
+        is Map<*, *> -> data.values.mapNotNull { it?.let { FossIdRestService.JSON_MAPPER.convertValue(it) } }
         // the server returns "data: false" when there is no entry -> we streamline it to an empty list
         is Boolean -> emptyList()
         else -> error("Cannot process the returned values")
