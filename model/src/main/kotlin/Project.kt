@@ -99,9 +99,19 @@ data class Project(
      * Contains dependency information as a [DependencyGraph]. This is an alternative format to store the dependencies
      * referenced by the various scopes. Use the [scopes] property to access dependency information independent on
      * the concrete representation.
+     *
+     * TODO: Remove this after all affected package managers have been converted to use a shared graph.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val dependencyGraph: DependencyGraph? = null
+    val dependencyGraph: DependencyGraph? = null,
+
+    /**
+     * Contains dependency information as a set of scope names in case a shared [DependencyGraph] is used. The scopes
+     * of this project and their dependencies can then be constructed as the corresponding sub graph of the shared
+     * graph.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val scopeNames: SortedSet<String>? = null
 ) : Comparable<Project> {
     companion object {
         /**
@@ -146,6 +156,20 @@ data class Project(
      */
     fun withResolvedScopes(): Project =
         takeUnless { dependencyGraph != null } ?: copy(scopeDependencies = scopes, dependencyGraph = null)
+
+    /**
+     * Return a [Project] instance that has its scope information directly available, resolved from the given [graph].
+     * This function can be used to create a fully initialized [Project] if dependency information is available in a
+     * shared [DependencyGraph]. In this case, the set with [Scope]s is constructed as a subset of the provided shared
+     * graph. Otherwise, result is this same object.
+     */
+    fun withResolvedScopes(graph: DependencyGraph?): Project =
+        takeUnless { graph != null && scopeNames != null }
+            ?: copy(
+                scopeDependencies = graph!!.createScopes(qualifiedScopeNames()),
+                dependencyGraph = null,
+                scopeNames = null
+            )
 
     /**
      * Return the set of package [Identifier]s of all transitive dependencies of this [Project], up to and including a
@@ -224,4 +248,11 @@ data class Project(
             vcs = vcs,
             vcsProcessed = vcsProcessed
         )
+
+    /**
+     * Return a set with scope names that are qualified by this project's identifier. This is necessary when
+     * extracting the scopes of this project from a shared dependency graph.
+     */
+    private fun qualifiedScopeNames(): Set<String> =
+        scopeNames.orEmpty().map { DependencyGraph.qualifyScope(this, it) }.toSet()
 }
