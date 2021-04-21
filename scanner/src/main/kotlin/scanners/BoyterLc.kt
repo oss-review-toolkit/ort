@@ -147,7 +147,7 @@ class BoyterLc(
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
             file["LicenseGuesses"].map {
                 LicenseFinding(
-                    license = getSpdxLicenseIdString(it["LicenseId"].textValue()),
+                    license = getSpdxLicenseRef(it["LicenseId"].textValue()),
                     location = TextLocation(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, filePath),

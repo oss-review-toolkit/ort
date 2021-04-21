@@ -67,9 +67,9 @@ abstract class Scanner(
     }
 
     /**
-     * Return the scanner-specific SPDX idstring for the given [license].
+     * Return the scanner-specific SPDX LicenseRef for the given [license].
      */
-    fun getSpdxLicenseIdString(license: String) =
+    fun getSpdxLicenseRef(license: String) =
         SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
 
     /**
