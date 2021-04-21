@@ -128,6 +128,44 @@ class DependencyGraphTest : WordSpec({
             pkgRefLang.linkage shouldBe PackageLinkage.PROJECT_DYNAMIC
         }
     }
+
+    "qualifyScope" should {
+        "qualify a scope name with a project identifier" {
+            val scopeName = "compile"
+            val projectId = Identifier("Maven", "namespace", "name", "version")
+            val project = Project(
+                id = projectId,
+                definitionFilePath = "/some/path/pom.xml",
+                declaredLicenses = sortedSetOf(),
+                homepageUrl = "https://project.example.org",
+                vcs = VcsInfo.EMPTY
+            )
+
+            val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)
+
+            qualifiedScopeName shouldBe "namespace:name:version:$scopeName"
+        }
+    }
+
+    "unqualifyScope" should {
+        "remove the project prefix from a qualified scope name" {
+            val qualifiedScopeName = "namespace:name:version:scope"
+
+            DependencyGraph.unqualifyScope(qualifiedScopeName) shouldBe "scope"
+        }
+
+        "handle a scope name that is not qualified" {
+            val unqualifiedScopeName = "justAScope"
+
+            DependencyGraph.unqualifyScope(unqualifiedScopeName) shouldBe unqualifiedScopeName
+        }
+
+        "handle a scope name that contains a colon" {
+            val qualifiedScopeName = "namespace:name:version:scope:with:colons"
+
+            DependencyGraph.unqualifyScope(qualifiedScopeName) shouldBe "scope:with:colons"
+        }
+    }
 })
 
 /** The name of the dependency manager used by tests. */

@@ -61,6 +61,33 @@ data class DependencyGraph(
      */
     val scopes: Map<String, List<RootDependencyIndex>>
 ) {
+    companion object {
+        /**
+         * Return a name for the given [scope][scopeName] that is qualified with parts of the identifier of the given
+         * [project]. This is used to ensure that the scope names are unique when constructing a dependency graph from
+         * multiple projects.
+         */
+        fun qualifyScope(project: Project, scopeName: String): String =
+            qualifyScope(project.id, scopeName)
+
+        /**
+         * Return a name for the given [scope][scopeName] that is qualified with parts of the given [projectId]. This
+         * is used to ensure that the scope names are unique when constructing a dependency graph from multiple
+         * projects.
+         */
+        fun qualifyScope(projectId: Identifier, scopeName: String): String =
+            "${projectId.namespace}:${projectId.name}:${projectId.version}:$scopeName"
+
+        /**
+         * Extract the plain (un-qualified) scope name from the given qualified [scopeName]. If the passed in
+         * [scopeName] is not qualified, return it unchanged.
+         */
+        fun unqualifyScope(scopeName: String): String =
+            // To handle the case that the scope contains the separator character, cut off the parts for the
+            // namespace, the name, and the version.
+            scopeName.split(':', limit = 4).getOrElse(3) { scopeName }
+    }
+
     /**
      * Transform the data stored in this object to the classical layout of dependency information, which is a set of
      * [Scope]s referencing the packages they depend on.
