@@ -115,7 +115,7 @@ class Licensee(
         matchedFiles.mapTo(licenseFindings) {
             val filePath = File(it["filename"].textValue())
             LicenseFinding(
-                license = getSpdxLicenseIdString(it["matched_license"].textValue()),
+                license = getSpdxLicenseRef(it["matched_license"].textValue()),
                 location = TextLocation(
                     // The path is already relative.
                     filePath.path,
