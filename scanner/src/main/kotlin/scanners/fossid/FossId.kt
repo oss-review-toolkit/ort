@@ -174,8 +174,7 @@ class FossId(
 
     override suspend fun scanPackages(
         packages: Collection<Package>,
-        outputDirectory: File,
-        downloadDirectory: File
+        outputDirectory: File
     ): Map<Package, List<ScanResult>> {
         val (results, duration) = measureTimedValue {
             val results = mutableMapOf<Package, MutableList<ScanResult>>()

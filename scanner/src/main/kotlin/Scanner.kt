@@ -75,15 +75,9 @@ abstract class Scanner(
 
     /**
      * Scan the [Project]s and [Package]s specified in [ortFile] and store the scan results in [outputDirectory].
-     * The [downloadDirectory] is used to download the source code to for scanning. Return scan results as an
-     * [OrtResult].
+     * Return scan results as an [OrtResult].
      */
-    fun scanOrtResult(
-        ortFile: File,
-        outputDirectory: File,
-        downloadDirectory: File,
-        skipExcluded: Boolean = false
-    ): OrtResult {
+    fun scanOrtResult(ortFile: File, outputDirectory: File, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
 
         val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
@@ -125,7 +119,7 @@ abstract class Scanner(
         }
 
         val scanResults = runBlocking {
-            scanPackages(packagesToScan, outputDirectory, downloadDirectory).mapKeys { it.key.id }
+            scanPackages(packagesToScan, outputDirectory).mapKeys { it.key.id }
         }.toSortedMap()
 
         // Add scan results from de-duplicated project packages to result.
@@ -164,15 +158,13 @@ abstract class Scanner(
     }
 
     /**
-     * Scan the [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to download
-     * the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may contain
-     * multiple results for the same [Package] if the storage contains more than one result for the specification of
-     * this scanner.
+     * Scan the [packages] and store the scan results in [outputDirectory]. [ScanResult]s are returned associated by
+     * [Package]. The map may contain multiple results for the same [Package] if the storage contains more than one
+     * result for the specification of this scanner.
      */
     protected abstract suspend fun scanPackages(
         packages: Collection<Package>,
-        outputDirectory: File,
-        downloadDirectory: File
+        outputDirectory: File
     ): Map<Package, List<ScanResult>>
 
     /**
