@@ -69,10 +69,10 @@ interface FossIdRestService {
     }
 
     @POST("api.php")
-    suspend fun getProject(@Body body: PostRequestBody): EntityPostResponseBody<Project>
+    suspend fun getProject(@Body body: PostRequestBody): EntityResponseBody<Project>
 
     @POST("api.php")
-    suspend fun listScansForProject(@Body body: PostRequestBody): EntityPostResponseBody<Any>
+    suspend fun listScansForProject(@Body body: PostRequestBody): EntityResponseBody<Any>
 
     @POST("api.php")
     suspend fun createProject(@Body body: PostRequestBody): MapResponseBody<String>
@@ -81,19 +81,19 @@ interface FossIdRestService {
     suspend fun createScan(@Body body: PostRequestBody): MapResponseBody<String>
 
     @POST("api.php")
-    suspend fun runScan(@Body body: PostRequestBody): EntityPostResponseBody<Nothing>
+    suspend fun runScan(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
-    suspend fun deleteScan(@Body body: PostRequestBody): EntityPostResponseBody<Int>
+    suspend fun deleteScan(@Body body: PostRequestBody): EntityResponseBody<Int>
 
     @POST("api.php")
-    suspend fun downloadFromGit(@Body body: PostRequestBody): EntityPostResponseBody<Nothing>
+    suspend fun downloadFromGit(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
-    suspend fun checkDownloadStatus(@Body body: PostRequestBody): EntityPostResponseBody<DownloadStatus>
+    suspend fun checkDownloadStatus(@Body body: PostRequestBody): EntityResponseBody<DownloadStatus>
 
     @POST("api.php")
-    suspend fun checkScanStatus(@Body body: PostRequestBody): EntityPostResponseBody<ScanStatus>
+    suspend fun checkScanStatus(@Body body: PostRequestBody): EntityResponseBody<ScanStatus>
 
     @POST("api.php")
     suspend fun listScanResults(@Body body: PostRequestBody): MapResponseBody<FossIdScanResult>
@@ -102,13 +102,13 @@ interface FossIdRestService {
     suspend fun listIdentifiedFiles(@Body body: PostRequestBody): MapResponseBody<IdentifiedFile>
 
     @POST("api.php")
-    suspend fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody): EntityPostResponseBody<Any>
+    suspend fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody): EntityResponseBody<Any>
 
     @POST("api.php")
-    suspend fun listIgnoredFiles(@Body body: PostRequestBody): EntityPostResponseBody<Any>
+    suspend fun listIgnoredFiles(@Body body: PostRequestBody): EntityResponseBody<Any>
 
     @POST("api.php")
-    suspend fun listPendingFiles(@Body body: PostRequestBody): EntityPostResponseBody<Any>
+    suspend fun listPendingFiles(@Body body: PostRequestBody): EntityResponseBody<Any>
 
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
