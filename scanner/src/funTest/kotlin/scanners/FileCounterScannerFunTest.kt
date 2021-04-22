@@ -53,7 +53,7 @@ class FileCounterScannerFunTest : StringSpec() {
             val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir, outputDir.resolve("downloads"))
             val result = yamlMapper.writeValueAsString(ortResult)
 
-            patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
 
             outputDir.safeDeleteRecursively()
             ScanResultsStorage.storage.stats.reset()
