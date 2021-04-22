@@ -335,22 +335,20 @@ class FossId(
      */
     private suspend fun getRawResults(scanCode: String): RawResults {
         val responseIdentifiedFiles = service.listIdentifiedFiles(user, apiKey, scanCode)
-            .checkResponse("list identified files", false)
-
+            .checkResponse("list identified files", true)
         val identifiedFiles = responseIdentifiedFiles.toList<IdentifiedFile>()
         log.info { "${identifiedFiles.size} identified files have been returned for scan code $scanCode." }
 
         val responseMarkedAsIdentified = service.listMarkedAsIdentifiedFiles(user, apiKey, scanCode)
-            .checkResponse("list marked as identified files", false)
+            .checkResponse("list marked as identified files", true)
         val markedAsIdentifiedFiles = responseMarkedAsIdentified.toList<MarkedAsIdentifiedFile>()
-
         log.info {
             "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan code $scanCode."
         }
 
         // The "match_type=ignore" info is already in the ScanResult, but here we also get the ignore reason.
         val responseListIgnoredFiles = service.listIgnoredFiles(user, apiKey, scanCode)
-            .checkResponse("list ignored files", false)
+            .checkResponse("list ignored files", true)
 
         val listIgnoredFiles = responseListIgnoredFiles.toList<IgnoredFile>()
         return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles)
