@@ -45,8 +45,10 @@ import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
@@ -165,10 +167,9 @@ class FossIdClientNewProjectTest : StringSpec({
     "Scan results can be listed" {
         service.listScanResults("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list scan results")
-
-            data shouldNotBeNull {
+            with(toList<FossIdScanResult>()) {
                 size shouldBe 58
-                values.last().localPath shouldBe "pom.xml"
+                last().localPath shouldBe "pom.xml"
             }
         }
     }
@@ -176,12 +177,10 @@ class FossIdClientNewProjectTest : StringSpec({
     "Identified files can be listed" {
         service.listIdentifiedFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list identified files")
-
-            data shouldNotBeNull {
+            with(toList<IdentifiedFile>()) {
                 size shouldBe 40
-
-                values.last() should {
-                    it.file shouldNotBeNull {
+                last().should {
+                    it.file.shouldNotBeNull {
                         path shouldBe "LICENSE.md"
                         licenseIdentifier shouldBe "MIT"
                         licenseIsFoss shouldBe true

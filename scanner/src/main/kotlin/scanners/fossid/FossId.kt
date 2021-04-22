@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.model.Project
+import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
@@ -336,9 +337,7 @@ class FossId(
         val responseIdentifiedFiles = service.listIdentifiedFiles(user, apiKey, scanCode)
             .checkResponse("list identified files", false)
 
-        // TODO: Replace the return type of listIdentifiedFiles to Call<EntityPostResponseBody<Any>> and use toList().
-        val identifiedFiles = responseIdentifiedFiles.data?.values?.toList().orEmpty()
-
+        val identifiedFiles = responseIdentifiedFiles.toList<IdentifiedFile>()
         log.info { "${identifiedFiles.size} identified files have been returned for scan code $scanCode." }
 
         val responseMarkedAsIdentified = service.listMarkedAsIdentifiedFiles(user, apiKey, scanCode)
