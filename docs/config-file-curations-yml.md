@@ -20,6 +20,9 @@ Curations can be used to:
   * metadata-only packages, such as Maven BOM files, do not have any source code. Thus, when the flag is set the
   _downloader_ just skips the download and the _scanner_ skips the scan. Also, any _evaluator rule_ may optionally skip
   its execution.
+* set the _is_modified_ flag:
+  * indicates whether files of this package have been modified compared to the original files, e.g., in case of a fork
+    of an upstream Open Source project, or a copy of the code in this project's repository. 
 * set the _declared_license_mapping_ property:
   * Packages may have declared license string values which cannot be parsed to SpdxExpressions. In some cases this can
     be fixed by mapping these strings to a valid license. If multiple curations declare license mapping they get
@@ -69,6 +72,7 @@ The structure of the curations file consist of one or more `id` entries:
       revision: "1234abc"
       path: "subdirectory"
     is_meta_data_only: true
+    is_modified: true
     declared_license_mapping:
       "license a": "Apache-2.0"
 ````
