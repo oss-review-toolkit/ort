@@ -2,7 +2,6 @@
 id: "type:namespace:name:version"
 results:
 - provenance:
-    download_time: "1970-01-02T00:00:00Z"
     source_artifact:
       url: "url"
       hash:
@@ -49,7 +48,6 @@ results:
       message: "issue-12"
       severity: "ERROR"
 - provenance:
-    download_time: "1970-01-03T00:00:00Z"
     vcs_info:
       type: "type"
       url: "url"

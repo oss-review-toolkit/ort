@@ -21,8 +21,6 @@ import RemoteArtifact from './RemoteArtifact';
 import VcsInfo from './VcsInfo';
 
 class Provenance {
-    #downloadTime;
-
     #sourceArtifact = new RemoteArtifact();
 
     #vcsInfo = new VcsInfo();
@@ -31,10 +29,6 @@ class Provenance {
 
     constructor(obj) {
         if (obj instanceof Object) {
-            if (obj.download_time || obj.downloadTime) {
-                this.#downloadTime = obj.download_time || obj.downloadTime;
-            }
-
             if (obj.source_artifact || obj.sourceArtifact) {
                 this.#sourceArtifact = obj.source_artifact || obj.sourceArtifact;
             }
@@ -47,10 +41,6 @@ class Provenance {
                 this.#originalVcsInfo = obj.original_vcs_info || obj.originalVcsInfo;
             }
         }
-    }
-
-    get downloadTime() {
-        return this.#downloadTime;
     }
 
     get sourceArtifact() {

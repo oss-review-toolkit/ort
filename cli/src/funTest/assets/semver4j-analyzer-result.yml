@@ -192,7 +192,6 @@ scanner:
       - id: "Maven:com.vdurmont:semver4j:3.1.0"
         results:
           - provenance:
-              download_time: "2020-09-30T09:27:08.894485Z"
               vcs_info:
                 type: "Git"
                 url: "https://github.com/vdurmont/semver4j.git"
@@ -244,7 +243,6 @@ scanner:
       - id: "Maven:junit:junit:4.12"
         results:
           - provenance:
-              download_time: "2020-09-30T09:28:22.219996Z"
               vcs_info:
                 type: "Git"
                 url: "https://github.com/junit-team/junit.git"

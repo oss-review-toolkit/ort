@@ -234,7 +234,6 @@ scanner:
     scan_results:
       Maven:com.vdurmont:semver4j:3.1.0:
       - provenance:
-          download_time: "2020-09-30T09:27:08.894485Z"
           vcs_info:
             type: "Git"
             url: "https://github.com/vdurmont/semver4j.git"
@@ -285,7 +284,6 @@ scanner:
               end_line: 3
       Maven:junit:junit:4.12:
       - provenance:
-          download_time: "2021-03-22T16:38:03.486241Z"
           vcs_info:
             type: "Git"
             url: "https://github.com/junit-team/junit4.git"
@@ -361,7 +359,6 @@ scanner:
               end_line: 3
       Maven:org.hamcrest:hamcrest-core:1.3:
       - provenance:
-          download_time: "2021-03-23T07:34:08.704983Z"
           vcs_info:
             type: "Git"
             url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
@@ -662,7 +659,6 @@ scanner:
               start_line: 3
               end_line: 3
       - provenance:
-          download_time: "2020-09-30T09:29:05.259873Z"
           source_artifact:
             url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
             hash:
@@ -747,7 +743,6 @@ scanner:
               end_line: 1
       Maven:org.mockito:mockito-all:1.10.19:
       - provenance:
-          download_time: "2020-09-30T09:29:12.938665Z"
           source_artifact:
             url: "https://repo.maven.apache.org/maven2/org/mockito/mockito-all/1.10.19/mockito-all-1.10.19-sources.jar"
             hash:

@@ -37,11 +37,9 @@ class ScanResultContainerTest : WordSpec() {
     private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)
 
     private val provenance1 = ArtifactProvenance(
-        downloadTime = downloadTime1,
         sourceArtifact = RemoteArtifact("url", Hash.create("hash"))
     )
     private val provenance2 = RepositoryProvenance(
-        downloadTime = downloadTime2,
         vcsInfo = VcsInfo(VcsType("type"), "url", "revision", "resolvedRevision", "path")
     )
 

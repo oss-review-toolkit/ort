@@ -87,26 +87,13 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
     private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)
 
-    private val provenanceWithSourceArtifact1 = ArtifactProvenance(
-        downloadTime = downloadTime1,
-        sourceArtifact = sourceArtifact1
-    )
-    private val provenanceWithVcsInfo1 = RepositoryProvenance(
-        downloadTime = downloadTime2,
-        vcsInfo = vcs1
-    )
+    private val provenanceWithSourceArtifact1 = ArtifactProvenance(sourceArtifact = sourceArtifact1)
+    private val provenanceWithVcsInfo1 = RepositoryProvenance(vcsInfo = vcs1)
 
-    private val provenanceWithSourceArtifact2 = ArtifactProvenance(
-        downloadTime = downloadTime1,
-        sourceArtifact = sourceArtifact2
-    )
-    private val provenanceWithVcsInfo2 = RepositoryProvenance(
-        downloadTime = downloadTime2,
-        vcsInfo = vcs2
-    )
+    private val provenanceWithSourceArtifact2 = ArtifactProvenance(sourceArtifact = sourceArtifact2)
+    private val provenanceWithVcsInfo2 = RepositoryProvenance(vcsInfo = vcs2)
 
     private val provenanceWithOriginalVcsInfo = RepositoryProvenance(
-        downloadTime = downloadTime2,
         vcsInfo = vcs1,
         originalVcsInfo = pkgWithoutRevision.vcsProcessed
     )

@@ -57,7 +57,6 @@ class ProvenanceTest : WordSpec({
         "be serializable" {
             json.normalizeLineBreaks() shouldBe """
                 {
-                  "download_time" : "1970-01-01T00:00:00Z",
                   "source_artifact" : {
                     "url" : "url",
                     "hash" : {
@@ -104,7 +103,6 @@ class ProvenanceTest : WordSpec({
         "be serializable" {
             json.normalizeLineBreaks() shouldBe """
                 {
-                  "download_time" : "1970-01-01T00:00:00Z",
                   "vcs_info" : {
                     "type" : "",
                     "url" : "url",
