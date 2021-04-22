@@ -1,0 +1,26 @@
+{
+  "id" : "a40124c7-ecba-49ec-abec-57abb5b3cf41",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"get_marked_as_identified_files\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_2_20201203_090342\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"get_marked_as_identified_files\",\"status\":\"1\",\"data\":{\"2\": {\n      \"row_id\": \"2\",\n      \"file_path\": \"src\\/FileWithoutLicense.java\",\n      \"file_id\": \"754803\",\n      \"is_distributed\": \"1\",\n      \"file_md5\": \"f6ed9e5e51888ca574a987536c9f422b\",\n      \"file_sha1\": \"fcf5a18336476cdd9248a4a4fb19f5bd623fbc22\",\n      \"file_sha256\": \"cb75d8a36aed92b6ebbb57e7c7ff0bb8777254594ac036ee707df164d27bef9d\",\n      \"file_size\": \"1587\",\n      \"identification_id\": \"1309401\",\n      \"identification_copyright\": \"\",\n      \"component_id\": null,\n      \"component_name\": null,\n      \"component_version\": null,\n      \"component_copyright\": null,\n      \"component_cpe\": null,\n      \"component_license_name\": null,\n      \"component_license_identifier\": null,\n      \"component_license_is_foss\": null,\n      \"component_license_is_spdx_standard\": null,\n      \"component_include_in_report\": null,\n      \"component_is_copyleft\": null,\n      \"comment\": null\n    }}}}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:04:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "a40124c7-ecba-49ec-abec-57abb5b3cf41",
+  "persistent" : true,
+  "insertionIndex" : 1
+}
