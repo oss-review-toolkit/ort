@@ -44,11 +44,15 @@ class GradleDependencyHandler(
     val managerName: String,
 
     /** The helper object to resolve packages via Maven. */
-    private val maven: MavenSupport,
-
-    /** A list with repositories to use when resolving packages. */
-    private val repositories: List<RemoteRepository>
+    private val maven: MavenSupport
 ) : DependencyHandler<Dependency> {
+    /**
+     * A list with repositories to use when resolving packages. This list must be set before using this handler for
+     * constructing the dependency graph of a project. As different projects may use different repositories, this
+     * property is writable.
+     */
+    var repositories: List<RemoteRepository> = emptyList()
+
     override fun identifierFor(dependency: Dependency): String =
         "${dependency.dependencyType()}:${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
 

@@ -26,17 +26,35 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.yamlMapper
 
 fun Any?.toYaml() = yamlMapper.writeValueAsString(this)!!
 
-fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult =
-    resolveDependencies(listOf(definitionFile)).projectResults[definitionFile].let { resultList ->
+fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult {
+    val managerResult = resolveDependencies(listOf(definitionFile))
+
+    return managerResult.projectResults[definitionFile].let { resultList ->
         resultList.shouldNotBeNull()
         resultList should haveSize(1)
         val result = resultList.single()
 
-        if (resolveScopes) result.copy(project = result.project.withResolvedScopes())
-        else result
+        if (resolveScopes) managerResult.resolveScopes(result) else result
     }
+}
+
+/**
+ * Transform the given [projectResult] to the classic scope-based representation of dependencies by extracting the
+ * relevant information from the [DependencyGraph] stored in this [PackageManagerResult].
+ */
+fun PackageManagerResult.resolveScopes(projectResult: ProjectAnalyzerResult): ProjectAnalyzerResult {
+    val resolvedProject = projectResult.project.withResolvedScopes(dependencyGraph)
+
+    // The result must contain packages for all the dependencies declared by the project; otherwise, the
+    // check in ProjectAnalyzerResult.init fails. When using a shared dependency graph, the set of packages
+    // is typically empty, so it has to be populated manually.
+    val packages = projectResult.packages.takeIf { it.isNotEmpty() } ?: sharedPackages
+    return projectResult.copy(project = resolvedProject, packages = packages.toSortedSet())
+}

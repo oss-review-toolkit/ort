@@ -21,18 +21,22 @@ package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldMatch
 
+import java.io.File
 import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.test.readOrtResult
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtResultTest : WordSpec({
     "collectDependencies" should {
@@ -140,6 +144,19 @@ class OrtResultTest : WordSpec({
             }
 
             e.message shouldMatch "The .* of project .* cannot be found in .*"
+        }
+    }
+
+    "projects" should {
+        "return projects with resolved scopes" {
+            val resultFile = File("src/test/assets/analyzer-result-with-dependency-graph.yml")
+            val result = resultFile.readValue<OrtResult>()
+
+            val project = result.getProject(Identifier("Maven:com.vdurmont:semver4j:3.1.0"))
+
+            project.shouldNotBeNull {
+                scopes shouldNot beEmpty()
+            }
         }
     }
 })
