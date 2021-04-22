@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.filterByProject
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.formatSizeInMib
@@ -70,7 +71,7 @@ abstract class Scanner(
      * Return the scanner-specific SPDX LicenseRef for the given [license].
      */
     fun getSpdxLicenseRef(license: String) =
-        SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
+        SpdxLicense.forId(license)?.id ?: "${SpdxConstants.LICENSE_REF_PREFIX}$scannerName-$license"
 
     /**
      * Scan the [Project]s and [Package]s specified in [ortFile] and store the scan results in [outputDirectory].
