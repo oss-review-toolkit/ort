@@ -96,16 +96,6 @@ data class Project(
     val scopeDependencies: SortedSet<Scope>? = null,
 
     /**
-     * Contains dependency information as a [DependencyGraph]. This is an alternative format to store the dependencies
-     * referenced by the various scopes. Use the [scopes] property to access dependency information independent on
-     * the concrete representation.
-     *
-     * TODO: Remove this after all affected package managers have been converted to use a shared graph.
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val dependencyGraph: DependencyGraph? = null,
-
-    /**
      * Contains dependency information as a set of scope names in case a shared [DependencyGraph] is used. The scopes
      * of this project and their dependencies can then be constructed as the corresponding sub graph of the shared
      * graph.
@@ -132,8 +122,8 @@ data class Project(
     }
 
     init {
-        require(scopeDependencies == null || dependencyGraph == null) {
-            "Not both 'scopeDependencies' and 'dependencyGraph' may be set, as otherwise it is ambiguous which one " +
+        require(scopeDependencies == null || scopeNames == null) {
+            "Not both 'scopeDependencies' and 'scopeNames' may be set, as otherwise it is ambiguous which one " +
                     "to use."
         }
     }
@@ -143,19 +133,7 @@ data class Project(
      * matter whether this information has been initialized directly or has been encoded in a [DependencyGraph].
      */
     @get:JsonIgnore
-    val scopes by lazy {
-        dependencyGraph?.createScopes() ?: scopeDependencies ?: sortedSetOf()
-    }
-
-    /**
-     * Return a [Project] instance that has its scope information directly available. A project can be constructed
-     * either with a set of [Scope] objects or with a [DependencyGraph]. In the latter case, the graph has to be
-     * converted first into the scope representation. This function ensures that this step was done: If the project
-     * has a [DependencyGraph], it returns a new instance with the converted scope information (and the dependency
-     * graph removed to save memory); otherwise, it returns this same object.
-     */
-    fun withResolvedScopes(): Project =
-        takeUnless { dependencyGraph != null } ?: copy(scopeDependencies = scopes, dependencyGraph = null)
+    val scopes by lazy { scopeDependencies ?: sortedSetOf() }
 
     /**
      * Return a [Project] instance that has its scope information directly available, resolved from the given [graph].
@@ -167,7 +145,6 @@ data class Project(
         takeUnless { graph != null && scopeNames != null }
             ?: copy(
                 scopeDependencies = graph!!.createScopes(qualifiedScopeNames()),
-                dependencyGraph = null,
                 scopeNames = null
             )
 

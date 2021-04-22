@@ -20,24 +20,23 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.fail
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beTheSameInstanceAs
 
+import io.mockk.mockk
+
 import java.io.File
 import java.time.Instant
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.utils.test.containExactly
-import org.ossreviewtoolkit.utils.test.createSpecTempFile
 
 private fun readAnalyzerResult(analyzerResultFilename: String): Project =
     File("../analyzer/src/funTest/assets/projects/synthetic")
@@ -52,20 +51,6 @@ private val textId = Identifier("$MANAGER:org.apache.commons:commons-text:1.1")
 private val langId = Identifier("$MANAGER:org.apache.commons:commons-lang3:3.5")
 private val strutsId = Identifier("$MANAGER:org.apache.struts:struts2-assembly:2.5.14.1")
 private val csvId = Identifier("$MANAGER:org.apache.commons:commons-csv:1.4")
-
-/**
- * Create a [Project] whose dependencies are represented as a [DependencyGraph].
- */
-private fun projectWithDependencyGraph(): Project =
-    Project(
-        id = projectId,
-        definitionFilePath = "/some/path",
-        declaredLicenses = sortedSetOf(),
-        vcs = VcsInfo.EMPTY,
-        homepageUrl = "https//www.test-project.org",
-        scopeDependencies = null,
-        dependencyGraph = createDependencyGraph()
-    )
 
 /**
  * Create a [DependencyGraph] containing some test dependencies, optionally with [qualified] scope names.
@@ -101,18 +86,18 @@ private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
  */
 private fun Identifier.toDependencyId() = "$MANAGER:$namespace:$name:$version"
 
-/**
- * Lookup the scope with the given [name] in the set of [scopes].
- */
-private fun findScope(scopes: SortedSet<Scope>, name: String): Scope =
-    scopes.find { it.name == name } ?: fail("Could not resolve scope $name.")
-
-/**
- * Return a set with the identifiers of the (direct) dependencies of the given [scope].
- */
-private fun scopeDependencies(scope: Scope): Set<Identifier> = scope.dependencies.map { it.id }.toSet()
-
 class ProjectTest : WordSpec({
+    "init" should {
+        "fail if both scopeDependencies and scopeNames are provided" {
+            shouldThrow<IllegalArgumentException> {
+                Project.EMPTY.copy(
+                    scopeDependencies = sortedSetOf(mockk()),
+                    scopeNames = sortedSetOf("test", "compile", "other")
+                )
+            }
+        }
+    }
+
     "collectDependencies" should {
         "get all dependencies by default" {
             val project = readAnalyzerResult("gradle-expected-output-lib.yml")
@@ -183,19 +168,6 @@ class ProjectTest : WordSpec({
             project.scopes shouldBe project.scopeDependencies
         }
 
-        "be initialized from a dependency graph" {
-            val project = projectWithDependencyGraph()
-            val scopes = project.scopes
-            scopes.map { it.name } shouldContainExactly listOf("compile", "default", "partial", "test")
-
-            val defaultScope = findScope(scopes, "default")
-            scopeDependencies(defaultScope) should io.kotest.matchers.collections.containExactly(exampleId)
-            val testScope = findScope(scopes, "test")
-            scopeDependencies(testScope) should containExactlyInAnyOrder(exampleId, csvId)
-            val partialScope = findScope(scopes, "partial")
-            scopeDependencies(partialScope) should io.kotest.matchers.collections.containExactly(textId)
-        }
-
         "be initialized to an empty set if no information is available" {
             val project = Project(
                 id = projectId,
@@ -203,8 +175,6 @@ class ProjectTest : WordSpec({
                 declaredLicenses = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
                 homepageUrl = "https//www.test-project.org",
-                scopeDependencies = null,
-                dependencyGraph = null
             )
 
             project.scopes.shouldBeEmpty()
@@ -212,21 +182,12 @@ class ProjectTest : WordSpec({
     }
 
     "withResolvedScopes" should {
-        "return the same instance if no dependency graph is available" {
+        "return the same instance if scope dependencies are available" {
             val project = readAnalyzerResult("maven-expected-output-app.yml")
 
-            val resolvedProject = project.withResolvedScopes()
+            val resolvedProject = project.withResolvedScopes(createDependencyGraph())
 
             resolvedProject should beTheSameInstanceAs(project)
-        }
-
-        "return an instance with scope information extracted from the dependency graph" {
-            val project = projectWithDependencyGraph()
-
-            val resolvedProject = project.withResolvedScopes()
-
-            resolvedProject.dependencyGraph.shouldBeNull()
-            resolvedProject.scopes shouldBe project.scopes
         }
 
         "return an instance with scope information extracted from a sub graph of a shared dependency graph" {
@@ -244,19 +205,7 @@ class ProjectTest : WordSpec({
 
             resolvedProject.scopeNames should beNull()
             resolvedProject.scopes shouldHaveSize 1
-            findScope(resolvedProject.scopes, "partial")
-        }
-    }
-
-    "A Project" should {
-        "be serializable with a dependency graph" {
-            val outputFile = createSpecTempFile(prefix = "project", suffix = ".yml")
-
-            val project = projectWithDependencyGraph()
-            outputFile.writeValue(project)
-
-            val projectCopy = outputFile.readValue<Project>()
-            projectCopy.scopes shouldBe project.scopes
+            resolvedProject.scopes.find { it.name == "partial" } ?: fail("Could not resolve scope ${"partial"}.")
         }
     }
 })
