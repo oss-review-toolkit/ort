@@ -261,7 +261,7 @@ resolutions:
     comment: "CVE-9999-9999 is a false positive"
 ```
 
-# License Choices
+## License Choices
 
 ### When to Use License Choices
 
