@@ -25,7 +25,7 @@ Curations can be used to:
     of an upstream Open Source project, or a copy of the code in this project's repository. 
 * set the _declared_license_mapping_ property:
   * Packages may have declared license string values which cannot be parsed to SpdxExpressions. In some cases this can
-    be fixed by mapping these strings to a valid license. If multiple curations declare license mapping they get
+    be fixed by mapping these strings to a valid license. If multiple curations declare license mappings, they get
     combined into a single mapping. Thus, multiple curations can contribute to the declared license mapping for the
     package. The effect of its application can be seen in the _declared_license_processed_ property of the respective
     curated package. 
