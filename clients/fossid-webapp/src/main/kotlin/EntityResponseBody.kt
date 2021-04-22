@@ -19,15 +19,13 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-open class EntityResponseBody<T>(
+class EntityResponseBody<T>(
     val operation: String? = null,
     val status: Int? = null,
     val message: String? = null,
     val error: String? = null,
 
-    open val data: T? = null
+    val data: T? = null
 )
 
-class MapResponseBody<T>(
-    override val data: Map<String, T>? = null
-) : EntityResponseBody<Map<String, T>>()
+typealias MapResponseBody<T> = EntityResponseBody<Map<String, T>>
