@@ -6,6 +6,7 @@ The items below can be configured by adding an `.ort.yml` file to the root of th
   not included in released artifacts.
 * [license finding curations](#curations) - Overwrite scan results to correct identified licenses.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
+* [license choices](#License-Choices) - Select a license for packages which offer a license choice.
 
 The sections below explain each in further detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml) for the
 OSS Review Toolkit itself.
