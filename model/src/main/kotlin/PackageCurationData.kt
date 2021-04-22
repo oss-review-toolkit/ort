@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -31,6 +32,7 @@ import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
  * package with corrections. This is required because the meta data provided by a package can be wrong (e.g. outdated
  * VCS data) or incomplete.
  */
+@JsonIgnoreProperties(value = [/* Backwards-compatibility: */ "declared_licenses"])
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class PackageCurationData(
     /**
