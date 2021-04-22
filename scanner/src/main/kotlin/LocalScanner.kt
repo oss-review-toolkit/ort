@@ -297,20 +297,26 @@ abstract class LocalScanner(
     }
 
     private fun createMissingArchives(scanResults: Map<Package, List<ScanResult>>, downloadDirectory: File) {
+        val missingArchives = mutableSetOf<Pair<Package, KnownProvenance>>()
+
         scanResults.forEach { (pkg, results) ->
-            val missingArchives = results.mapNotNullTo(mutableSetOf()) { result ->
-                result.provenance.takeUnless { it is KnownProvenance && archiver.hasArchive(it) }
-            }
-
-            if (missingArchives.isNotEmpty()) {
-                val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
-                Downloader(downloaderConfig).download(pkg, pkgDownloadDirectory)
-
-                missingArchives.forEach { provenance ->
-                    if (provenance is KnownProvenance) {
-                        archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
-                    }
+            results.forEach { (provenance, _, _) ->
+                if (provenance is KnownProvenance && !archiver.hasArchive(provenance)) {
+                    missingArchives += Pair(pkg, provenance)
                 }
+            }
+        }
+
+        if (missingArchives.isEmpty()) return
+
+        missingArchives.forEach { (pkg, provenance) ->
+            val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
+            val downloadProvenance = Downloader(downloaderConfig).download(pkg, pkgDownloadDirectory)
+
+            if (downloadProvenance == provenance) {
+                archiveFiles(downloadDirectory, pkg.id, provenance)
+            } else {
+                log.warn { "Mismatching provenance when creating missing archive for $provenance." }
             }
         }
     }
