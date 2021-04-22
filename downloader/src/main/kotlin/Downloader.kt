@@ -84,22 +84,15 @@ class Downloader(private val config: DownloaderConfiguration) {
         val exception = DownloadException("Download failed for '${pkg.id.toCoordinates()}'.")
 
         config.sourceCodeOrigins.forEach { origin ->
-            val provenance = handleDownload(origin, pkg, outputDirectory, allowMovingRevisions, exception)
+            val provenance = when (origin) {
+                SourceCodeOrigin.VCS -> handleVcsDownload(pkg, outputDirectory, allowMovingRevisions, exception)
+                SourceCodeOrigin.ARTIFACT -> handleSourceArtifactDownload(pkg, outputDirectory, exception)
+            }
+
             if (provenance != null) return provenance
         }
 
         throw exception
-    }
-
-    private fun handleDownload(
-        origin: SourceCodeOrigin,
-        pkg: Package,
-        outputDirectory: File,
-        allowMovingRevisions: Boolean,
-        exception: DownloadException
-    ) = when (origin) {
-        SourceCodeOrigin.VCS -> handleVcsDownload(pkg, outputDirectory, allowMovingRevisions, exception)
-        SourceCodeOrigin.ARTIFACT -> handleSourceArtifactDownload(pkg, outputDirectory, exception)
     }
 
     /**
