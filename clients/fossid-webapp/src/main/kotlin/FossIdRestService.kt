@@ -30,8 +30,6 @@ import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
 import org.ossreviewtoolkit.clients.fossid.model.Project
-import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 
@@ -96,10 +94,10 @@ interface FossIdRestService {
     suspend fun checkScanStatus(@Body body: PostRequestBody): EntityResponseBody<ScanStatus>
 
     @POST("api.php")
-    suspend fun listScanResults(@Body body: PostRequestBody): MapResponseBody<FossIdScanResult>
+    suspend fun listScanResults(@Body body: PostRequestBody): EntityResponseBody<Any>
 
     @POST("api.php")
-    suspend fun listIdentifiedFiles(@Body body: PostRequestBody): MapResponseBody<IdentifiedFile>
+    suspend fun listIdentifiedFiles(@Body body: PostRequestBody): EntityResponseBody<Any>
 
     @POST("api.php")
     suspend fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody): EntityResponseBody<Any>
