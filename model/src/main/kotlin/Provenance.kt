@@ -27,8 +27,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
-import java.time.Instant
-
 /**
  * Provenance information about the origin of source code.
  */
@@ -44,19 +42,12 @@ object UnknownProvenance : Provenance() {
     override fun matches(pkg: Package): Boolean = false
 }
 
-sealed class KnownProvenance : Provenance() {
-    /**
-     * The time when the source code was downloaded.
-     */
-    abstract val downloadTime: Instant
-}
+sealed class KnownProvenance : Provenance()
 
 /**
  * Provenance information for a source artifact.
  */
 data class ArtifactProvenance(
-    override val downloadTime: Instant = Instant.EPOCH,
-
     /**
      * The source artifact that was downloaded.
      */
@@ -69,8 +60,6 @@ data class ArtifactProvenance(
  * Provenance information for a Version Control System location.
  */
 data class RepositoryProvenance(
-    override val downloadTime: Instant = Instant.EPOCH,
-
     /**
      * The VCS repository that was downloaded.
      */
@@ -113,15 +102,13 @@ private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::c
         val node = p.codec.readTree<JsonNode>(p)
         return when {
             node.has("source_artifact") -> {
-                val downloadTime = jsonMapper.treeToValue<Instant>(node["download_time"])!!
                 val sourceArtifact = jsonMapper.treeToValue<RemoteArtifact>(node["source_artifact"])!!
-                ArtifactProvenance(downloadTime, sourceArtifact)
+                ArtifactProvenance(sourceArtifact)
             }
             node.has("vcs_info") -> {
-                val downloadTime = jsonMapper.treeToValue<Instant>(node["download_time"])!!
                 val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs_info"])!!
                 val originalVcsInfo = node["original_vcs_info"]?.let { jsonMapper.treeToValue<VcsInfo>(it)!! }
-                RepositoryProvenance(downloadTime, vcsInfo, originalVcsInfo)
+                RepositoryProvenance(vcsInfo, originalVcsInfo)
             }
             else -> UnknownProvenance
         }

@@ -342,7 +342,6 @@ scanner:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       results:
       - provenance:
-          download_time: "1970-01-01T00:00:00Z"
           vcs_info:
             type: "Git"
             url: "https://github.com/oss-review-toolkit/ort.git"
@@ -396,7 +395,6 @@ scanner:
     - id: "Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0"
       results:
       - provenance:
-          download_time: "1970-01-01T00:00:00Z"
           vcs_info:
             type: "Git"
             url: "https://example.com/git"
@@ -447,7 +445,6 @@ scanner:
     - id: "Ant:junit:junit:4.12"
       results:
       - provenance:
-          download_time: "1970-01-01T00:00:00Z"
           source_artifact:
             url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
             hash:
@@ -467,7 +464,6 @@ scanner:
     - id: "Maven:org.apache.commons:commons-lang3:3.5"
       results:
       - provenance:
-          download_time: "1970-01-01T00:00:00Z"
           source_artifact:
             url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
             hash:
@@ -487,7 +483,6 @@ scanner:
     - id: "Maven:org.apache.commons:commons-text:1.1"
       results:
       - provenance:
-          download_time: "1970-01-01T00:00:00Z"
           source_artifact:
             url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
             hash:
@@ -507,7 +502,6 @@ scanner:
     - id: "Maven:org.hamcrest:hamcrest-core:1.3"
       results:
       - provenance:
-          download_time: "1970-01-01T00:00:00Z"
           source_artifact:
             url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
             hash:
@@ -527,7 +521,6 @@ scanner:
     - id: "Maven:com.h2database:h2:1.4.200"
       results:
       - provenance:
-          download_time: "1970-01-01T00:00:00Z"
           source_artifact:
             url: "https://repo.maven.apache.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200-sources.jar"
             hash:

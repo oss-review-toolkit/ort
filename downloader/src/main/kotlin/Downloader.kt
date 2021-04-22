@@ -23,7 +23,6 @@ package org.ossreviewtoolkit.downloader
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.time.Instant
 
 import kotlin.io.path.createTempDirectory
 import kotlin.io.path.createTempFile
@@ -255,7 +254,6 @@ class Downloader(private val config: DownloaderConfiguration) {
             throw DownloadException("Unsupported VCS type '${pkg.vcsProcessed.type}'.")
         }
 
-        val startTime = Instant.now()
         val workingTree = try {
             applicableVcs.download(pkg, outputDirectory, allowMovingRevisions)
         } catch (e: DownloadException) {
@@ -290,7 +288,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             path = pkg.vcsProcessed.path
         )
 
-        return RepositoryProvenance(startTime, vcsInfo, pkg.vcsProcessed.takeIf { it != vcsInfo })
+        return RepositoryProvenance(vcsInfo, pkg.vcsProcessed.takeIf { it != vcsInfo })
     }
 
     /**
@@ -307,8 +305,6 @@ class Downloader(private val config: DownloaderConfiguration) {
         if (pkg.sourceArtifact.url.isBlank()) {
             throw DownloadException("No source artifact URL provided for '${pkg.id.toCoordinates()}'.")
         }
-
-        val startTime = Instant.now()
 
         // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
         val sourceArchive = if (pkg.sourceArtifact.url.startsWith("file:/")) {
@@ -411,7 +407,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                     "'${outputDirectory.absolutePath}'..."
         }
 
-        return ArtifactProvenance(startTime, pkg.sourceArtifact)
+        return ArtifactProvenance(pkg.sourceArtifact)
     }
 }
 

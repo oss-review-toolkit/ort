@@ -34,8 +34,7 @@ class ScanRecordTest : StringSpec({
             ---
             scan_results:
               type:namespace:name:version:
-              - provenance:
-                  download_time: "1970-01-01T00:00:00Z"
+              - provenance: {}
                 scanner:
                   name: "scanner"
                   version: "version"
