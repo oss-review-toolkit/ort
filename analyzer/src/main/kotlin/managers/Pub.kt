@@ -398,8 +398,12 @@ class Pub(
         return analyzerResultCacheAndroid.getOrPut(packageName) {
             // Use the latest 5.x Gradle version as Flutter / its Android Gradle plugin does not support Gradle 6 yet.
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
-                .resolveDependencies(listOf(packageFile))
-                .projectResults.getValue(packageFile)
+                .resolveDependencies(listOf(packageFile)).run {
+                    projectResults.getValue(packageFile).map { result ->
+                        val project = result.project.withResolvedScopes(dependencyGraph)
+                        result.copy(project = project, packages = sharedPackages)
+                    }
+                }
         }
     }
 

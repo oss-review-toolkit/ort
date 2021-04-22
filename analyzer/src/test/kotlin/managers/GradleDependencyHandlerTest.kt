@@ -304,7 +304,7 @@ class GradleDependencyHandlerTest : WordSpec({
             val issues = mutableListOf<OrtIssue>()
 
             every { maven.parsePackage(any(), any(), any()) } throws exception
-            val handler = GradleDependencyHandler(NAME, maven, remoteRepositories)
+            val handler = GradleDependencyHandler(NAME, maven)
 
             handler.createPackage(dep.toId().toCoordinates(), dep, issues) should beNull()
 
@@ -353,7 +353,8 @@ private fun createDependency(
  * this class.
  */
 private fun createGraphBuilder(): DependencyGraphBuilder<Dependency> {
-    val dependencyHandler = GradleDependencyHandler(NAME, createMavenSupport(), remoteRepositories)
+    val dependencyHandler = GradleDependencyHandler(NAME, createMavenSupport())
+    dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
 }
 

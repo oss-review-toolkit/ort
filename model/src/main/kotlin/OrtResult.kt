@@ -372,7 +372,7 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getProjects(omitExcluded: Boolean = false): Set<Project> =
-        analyzer?.result?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
+        analyzer?.result?.withScopesResolved()?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
             !omitExcluded || !isExcluded(project.id)
         }
 
@@ -461,9 +461,7 @@ data class OrtResult(
     fun withResolvedScopes(): OrtResult =
         copy(
             analyzer = analyzer?.copy(
-                result = analyzer.result.copy(
-                    projects = analyzer.result.projects.mapTo(sortedSetOf()) { it.withResolvedScopes() }
-                )
+                result = analyzer.result.withScopesResolved()
             )
         )
 }

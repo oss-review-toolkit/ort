@@ -135,17 +135,22 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                     val results = manager.resolveDependencies(files)
 
                     // By convention, project ids must be of the type of the respective package manager.
-                    results.projectResults.onEach { (_, result) ->
+                    results.projectResults.forEach { (_, result) ->
                         val invalidProjects = result.filter { it.project.id.type != manager.managerName }
                         require(invalidProjects.isEmpty()) {
                             val projectString = invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }
                             "Projects $projectString must be of type '${manager.managerName}'."
                         }
                     }
+
+                    manager to results
                 }
-            }.forEach { resolutionResult ->
-                resolutionResult.await().forEach { (_, analyzerResults) ->
-                    analyzerResults.forEach { analyzerResultBuilder.addResult(it) }
+            }.forEach { deferredResult ->
+                val (manager, managerResult) = deferredResult.await()
+                managerResult.projectResults.values.flatten().forEach { analyzerResultBuilder.addResult(it) }
+                managerResult.dependencyGraph?.let {
+                    analyzerResultBuilder.addDependencyGraph(manager.managerName, it)
+                        .addPackages(managerResult.sharedPackages)
                 }
             }
         }
