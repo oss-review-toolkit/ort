@@ -95,7 +95,7 @@ excludes:
     comment: "Packages for testing only."
 ```
 
-The above example excludes all of the following scopes for all projects: `testAnnotationProcessor`,`testApi`,
+The above example excludes all the following scopes for all projects: `testAnnotationProcessor`,`testApi`,
 `testCompile`, `testCompileClasspath`, `testCompileOnly`, `testImplementation`, `testRuntime`, `testRuntimeClasspath`,
 `testRuntimeOnly`.
 
@@ -208,7 +208,7 @@ resolutions:
 
 ### Resolving Policy Rule Violations
 
-Resolutions should not be not used to resolve license policy rule violations as they do not change the generated open
+Resolutions should not be used to resolve license policy rule violations as they do not change the generated open
 source notices. To resolve a license policy rule violation either add a [license finding curation](#curations) to the
 .ort.yml file if the finding is in your code repository or add a curation to the
 [curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
