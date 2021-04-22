@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-open class EntityPostResponseBody<T>(
+open class EntityResponseBody<T>(
     val operation: String? = null,
     val status: Int? = null,
     val message: String? = null,
@@ -30,4 +30,4 @@ open class EntityPostResponseBody<T>(
 
 class MapResponseBody<T>(
     override val data: Map<String, T>? = null
-) : EntityPostResponseBody<Map<String, T>>()
+) : EntityResponseBody<Map<String, T>>()

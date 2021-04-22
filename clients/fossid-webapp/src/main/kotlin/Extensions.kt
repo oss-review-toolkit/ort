@@ -30,7 +30,7 @@ private const val PROJECT_GROUP = "projects"
  * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.
  * If [withDataCheck] is true, also the payload data is checked, otherwise that check is skipped.
  */
-fun <B : EntityPostResponseBody<T>, T> B?.checkResponse(operation: String, withDataCheck: Boolean = true): B {
+fun <B : EntityResponseBody<T>, T> B?.checkResponse(operation: String, withDataCheck: Boolean = true): B {
     // The null check is here to avoid the caller to wrap the call of this function in a null check.
     requireNotNull(this)
 
@@ -51,7 +51,7 @@ fun <B : EntityPostResponseBody<T>, T> B?.checkResponse(operation: String, withD
  * The list operations in FossID have inconsistent return types depending on the amount of entities returned.
  * This function streamlines these entities to a list.
  */
-inline fun <reified T : Any> EntityPostResponseBody<Any>.toList(): List<T> =
+inline fun <reified T : Any> EntityResponseBody<Any>.toList(): List<T> =
     // The "list" operation returns different JSON depending on the amount of scans.
     when (val data = data) {
         is List<*> -> data.mapNotNull { it?.let { FossIdRestService.JSON_MAPPER.convertValue(it) } }
