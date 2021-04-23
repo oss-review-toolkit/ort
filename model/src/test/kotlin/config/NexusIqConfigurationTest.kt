@@ -33,14 +33,14 @@ import org.ossreviewtoolkit.model.writeValue
 class NexusIqConfigurationTest : WordSpec({
     "NexusIqConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
-            val referenceOrtConfig = OrtConfiguration.load(file = File("src/main/resources/reference.conf"))
-            val rereadOrtConfig = createTempFile(suffix = ".yml").toFile().apply {
-                writeValue(referenceOrtConfig)
-                deleteOnExit()
-            }.readValue<OrtConfiguration>()
+            val ortConfig = OrtConfiguration.load(file = File("src/main/resources/reference.conf"))
+            val rereadOrtConfig = createTempFile(suffix = ".yml").toFile().run {
+                writeValue(ortConfig)
+                readValue<OrtConfiguration>().also { deleteOnExit() }
+            }
 
-            val expectedNexusIqConfig = referenceOrtConfig.advisor.nexusIq
             val actualNexusIqConfiguration = rereadOrtConfig.advisor.nexusIq
+            val expectedNexusIqConfig = ortConfig.advisor.nexusIq
 
             expectedNexusIqConfig.shouldBeInstanceOf<NexusIqConfiguration>()
             actualNexusIqConfiguration.shouldBeInstanceOf<NexusIqConfiguration>()
