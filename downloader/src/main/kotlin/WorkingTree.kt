@@ -100,8 +100,7 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
                 )
             versionNames.size > 1 ->
                 throw IOException(
-                    "Multiple matching tags found for version '$version': $versionNames. Please add a "
-                            + "curation."
+                    "Multiple matching tags found for version '$version': $versionNames. Please add a curation."
                 )
             else -> versionNames.first()
         }
