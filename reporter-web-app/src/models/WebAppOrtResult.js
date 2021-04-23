@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
  * License-Filename: LICENSE
  */
 
+import MetaData from './MetaData';
 import Repository from './Repository';
 import Statistics from './Statistics';
 import WebAppCopyright from './WebAppCopyright';
@@ -64,6 +66,8 @@ class WebAppOrtResult {
     #licenses = [];
 
     #licensesIndexesByNameMap = new Map();
+
+    #metaData = {};
 
     #packages = [];
 
@@ -115,6 +119,10 @@ class WebAppOrtResult {
                     this.#licensesIndexesByNameMap.set(licenses[i].id, i);
                     this.#licenses.push(new WebAppLicense(licenses[i]));
                 }
+            }
+
+            if (obj.meta_data || obj.metaData) {
+                this.#metaData = new MetaData(obj.meta_data || obj.metaData);
             }
 
             if (obj.packages) {
@@ -369,6 +377,10 @@ class WebAppOrtResult {
 
     get licenses() {
         return this.#licenses;
+    }
+
+    get metaData() {
+        return this.#metaData;
     }
 
     get packages() {

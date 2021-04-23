@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +41,7 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.utils.MetaDataCalculator
 import org.ossreviewtoolkit.reporter.utils.StatisticsCalculator
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
@@ -120,7 +122,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             ),
             repository = input.ortResult.repository,
             repositoryConfiguration = yamlMapper.writeValueAsString(input.ortResult.repository.config),
-            labels = input.ortResult.labels
+            labels = input.ortResult.labels,
+            metaData = MetaDataCalculator().getMetaData(input.ortResult)
         )
     }
 
