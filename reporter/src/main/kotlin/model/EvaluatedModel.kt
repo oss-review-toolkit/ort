@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +112,9 @@ data class EvaluatedModel(
      */
     val repositoryConfiguration: String,
 
-    val labels: Map<String, String>
+    val labels: Map<String, String>,
+
+    val metaData: MetaData
 ) {
     companion object {
         private val INT_ID_TYPES = listOf(
