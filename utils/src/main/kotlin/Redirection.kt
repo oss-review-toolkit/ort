@@ -26,7 +26,7 @@ import java.io.PrintStream
 import kotlin.io.path.createTempFile
 
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val tempFile = createTempFile(ORT_NAME, "redirect").toFile().apply { deleteOnExit() }
+    val tempFile = createTempFile(ORT_NAME, "redirect").toFile()
     val fileStream = FileOutputStream(tempFile)
 
     try {
@@ -38,7 +38,7 @@ private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream)
         setOutput(originalOutput)
     }
 
-    return tempFile.readText()
+    return tempFile.readText().also { tempFile.delete() }
 }
 
 /**

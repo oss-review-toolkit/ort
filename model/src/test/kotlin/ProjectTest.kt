@@ -226,15 +226,14 @@ class ProjectTest : WordSpec({
 
     "A Project" should {
         "be serializable with a dependency graph" {
-            val outputFile = kotlin.io.path.createTempFile(prefix = "project", suffix = ".yml").toFile().apply {
-                deleteOnExit()
-            }
-
+            val outputFile = kotlin.io.path.createTempFile(prefix = "project", suffix = ".yml").toFile()
             val project = projectWithDependencyGraph()
-            outputFile.writeValue(project)
 
+            outputFile.writeValue(project)
             val projectCopy = outputFile.readValue<Project>()
+
             projectCopy.scopes shouldBe project.scopes
+            outputFile.delete() shouldBe true
         }
     }
 })

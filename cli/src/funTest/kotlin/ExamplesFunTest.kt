@@ -27,6 +27,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
@@ -53,6 +54,7 @@ import org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExamplesFunTest : StringSpec() {
@@ -146,9 +148,7 @@ class ExamplesFunTest : StringSpec() {
         }
 
         "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
-            val outputDir = createTempDirectory("$ORT_NAME-${ExamplesFunTest::class.simpleName}").toFile().apply {
-                deleteOnExit()
-            }
+            val outputDir = createTempDirectory("$ORT_NAME-${ExamplesFunTest::class.simpleName}").toFile()
 
             takeExampleFile("asciidoctor-pdf-theme.yml")
 
@@ -159,6 +159,7 @@ class ExamplesFunTest : StringSpec() {
             )
 
             report shouldHaveSize 1
+            outputDir.safeDeleteRecursively(force = true) shouldBe true
         }
 
         "All example files should have been tested" {
