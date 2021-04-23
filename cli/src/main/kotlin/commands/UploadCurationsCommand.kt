@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.ErrorResponse
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -96,7 +96,7 @@ class UploadCurationsCommand : CliktCommand(
         }
 
     override fun run() {
-        val curations = inputFile.readValue<List<PackageCuration>>()
+        val curations = inputFile.readValueOrDefault(emptyList<PackageCuration>())
         val curationsToCoordinates = curations.mapNotNull { curation ->
             curation.id.toClearlyDefinedCoordinates()?.let { coordinates ->
                 curation to coordinates
