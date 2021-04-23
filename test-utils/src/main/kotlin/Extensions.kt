@@ -19,13 +19,18 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import io.kotest.core.TestConfiguration
 import io.kotest.matchers.nulls.shouldNotBeNull
 
+import java.io.File
 import java.net.InetSocketAddress
 import java.net.Proxy
 
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.utils.createOrtTempDir
+import org.ossreviewtoolkit.utils.createOrtTempFile
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 fun Proxy.toGenericString() =
@@ -41,3 +46,23 @@ fun FileArchiver.Companion.createDefault(): FileArchiver =
         patterns = LicenseFilenamePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
         storage = LocalFileStorage(DEFAULT_ARCHIVE_DIR)
     )
+
+fun TestConfiguration.createTestTempDir(vararg infixes: String): File {
+    val dir = createOrtTempDir(*infixes)
+
+    afterSpec {
+        dir.safeDeleteRecursively(force = true)
+    }
+
+    return dir
+}
+
+fun TestConfiguration.createTestTempFile(prefix: String? = null, suffix: String? = null): File {
+    val file = createOrtTempFile(prefix, suffix)
+
+    afterSpec {
+        file.delete()
+    }
+
+    return file
+}
