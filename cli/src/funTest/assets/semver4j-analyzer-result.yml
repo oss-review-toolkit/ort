@@ -198,11 +198,6 @@ scanner:
                 revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
                 resolved_revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
                 path: ""
-              original_vcs_info:
-                type: "Git"
-                url: "https://github.com/vdurmont/semver4j.git"
-                revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
-                path: ""
             scanner:
               name: "ScanCode"
               version: "3.2.1-rc2"
@@ -248,11 +243,6 @@ scanner:
                 url: "https://github.com/junit-team/junit.git"
                 revision: "r4.12"
                 resolved_revision: "64155f8a9babcfcf4263cf4d08253a1556e75481"
-                path: ""
-              original_vcs_info:
-                type: "Git"
-                url: "https://github.com/junit-team/junit.git"
-                revision: "r4.12"
                 path: ""
             scanner:
               name: "ScanCode"

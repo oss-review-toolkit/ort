@@ -89,12 +89,6 @@ class ProvenanceTest : WordSpec({
                 revision = "revision",
                 resolvedRevision = "resolvedRevision",
                 path = "path"
-            ),
-            originalVcsInfo = VcsInfo(
-                type = VcsType.UNKNOWN,
-                url = "originalUrl",
-                revision = "originalRevision",
-                path = "originalPath"
             )
         )
 
@@ -109,12 +103,6 @@ class ProvenanceTest : WordSpec({
                     "revision" : "revision",
                     "resolved_revision" : "resolvedRevision",
                     "path" : "path"
-                  },
-                  "original_vcs_info" : {
-                    "type" : "",
-                    "url" : "originalUrl",
-                    "revision" : "originalRevision",
-                    "path" : "originalPath"
                   }
                 }
             """.trimIndent()

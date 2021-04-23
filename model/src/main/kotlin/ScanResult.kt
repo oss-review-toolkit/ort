@@ -53,10 +53,7 @@ data class ScanResult(
         val summary = summary.filterByPath(path)
 
         return if (provenance is RepositoryProvenance) {
-            val vcsProvenance = provenance.copy(
-                vcsInfo = provenance.vcsInfo.copy(path = path),
-                originalVcsInfo = provenance.originalVcsInfo?.copy(path = path)
-            )
+            val vcsProvenance = provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = path))
 
             ScanResult(vcsProvenance, scanner, summary)
         } else {

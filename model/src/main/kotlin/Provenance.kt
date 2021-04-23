@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
@@ -63,26 +62,15 @@ data class RepositoryProvenance(
     /**
      * The VCS repository that was downloaded.
      */
-    val vcsInfo: VcsInfo,
-
-    /**
-     * The original [VcsInfo] that was used to download the source code. It can be different to [vcsInfo] if any
-     * automatic detection took place. For example if the original [VcsInfo] does not contain any revision and the
-     * revision was automatically detected by searching for a tag that matches the version of the package there
-     * would be no way to match the package to the [Provenance] without downloading the source code and searching
-     * for the tag again.
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val originalVcsInfo: VcsInfo? = null
+    val vcsInfo: VcsInfo
 ) : KnownProvenance() {
     override fun matches(pkg: Package): Boolean {
         // If no VCS information is present either, or it does not have a resolved revision, there is no way of
         // verifying matching provenance.
         if (vcsInfo.resolvedRevision == null) return false
 
-        // If pkg.vcsProcessed equals originalVcsInfo or vcsInfo this provenance was definitely created when
-        // downloading this package.
-        if (pkg.vcsProcessed == originalVcsInfo || pkg.vcsProcessed.equalsIgnoreResolvedRevision(vcsInfo)) return true
+        // This provenance was definitely created when downloading this package.
+        if (pkg.vcsProcessed.equalsIgnoreResolvedRevision(vcsInfo)) return true
 
         return listOf(pkg.vcs, pkg.vcsProcessed).any {
             if (it.resolvedRevision != null) {
@@ -107,8 +95,7 @@ private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::c
             }
             node.has("vcs_info") -> {
                 val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs_info"])!!
-                val originalVcsInfo = node["original_vcs_info"]?.let { jsonMapper.treeToValue<VcsInfo>(it)!! }
-                RepositoryProvenance(vcsInfo, originalVcsInfo)
+                RepositoryProvenance(vcsInfo)
             }
             else -> UnknownProvenance
         }
