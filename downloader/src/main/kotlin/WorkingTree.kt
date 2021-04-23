@@ -89,12 +89,14 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
     fun guessRevisionName(project: String, version: String): String {
         if (version.isBlank()) throw IOException("Cannot guess a revision name from a blank version.")
 
-        val versionNames = filterVersionNames(version, listRemoteTags(), project)
+        val remoteTags = listRemoteTags()
+        val versionNames = filterVersionNames(version, remoteTags, project)
+
         return when {
             versionNames.isEmpty() ->
                 throw IOException(
-                    "No matching tag found for version '$version'. Please create a tag whose name "
-                            + "contains the version."
+                    "No matching tag found for version '$version' among tags ${remoteTags.joinToString { "'$it'" }}. " +
+                            "Please create a tag whose name contains the version."
                 )
             versionNames.size > 1 ->
                 throw IOException(
