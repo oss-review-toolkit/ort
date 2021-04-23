@@ -86,8 +86,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
     private val provenanceEmpty = UnknownProvenance
     private val provenanceWithoutRevision = RepositoryProvenance(
-        vcsInfo = pkgWithoutRevision.vcsProcessed.copy(resolvedRevision = "resolvedRevision"),
-        originalVcsInfo = pkgWithoutRevision.vcsProcessed
+        vcsInfo = pkgWithoutRevision.vcsProcessed.copy(resolvedRevision = "resolvedRevision")
     )
     private val provenanceWithSourceArtifact1 = ArtifactProvenance(sourceArtifact = sourceArtifact1)
     private val provenanceWithSourceArtifact2 = ArtifactProvenance(sourceArtifact = sourceArtifact2)
