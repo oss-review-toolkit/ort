@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -59,6 +60,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
@@ -205,7 +207,8 @@ class ReporterCommand : CliktCommand(
         var ortResult = readOrtResult(ortFile)
 
         repositoryConfigurationFile?.let {
-            ortResult = ortResult.replaceConfig(it.readValue())
+            val config = it.readValueOrDefault(RepositoryConfiguration())
+            ortResult = ortResult.replaceConfig(config)
         }
 
         val resolutionProvider = DefaultResolutionProvider()

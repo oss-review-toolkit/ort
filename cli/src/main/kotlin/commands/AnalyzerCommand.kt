@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
@@ -172,7 +172,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.let {
             log.info { "Using configuration file '${it.absolutePath}'." }
-            it.readValue()
+            it.readValueOrNull()
         } ?: RepositoryConfiguration()
 
         val ortResult = analyzer.analyze(
