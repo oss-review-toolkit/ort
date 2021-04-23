@@ -26,7 +26,6 @@ import io.kotest.matchers.should
 
 import java.io.File
 
-import kotlin.IllegalArgumentException
 import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.OrtResult
