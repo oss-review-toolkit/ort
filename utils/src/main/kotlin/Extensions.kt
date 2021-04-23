@@ -40,6 +40,34 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.util.Locale
 
 /**
+ * Create a temporary directory with a name specific to ORT, and optional [infixes].
+ */
+fun createOrtTempDir(vararg infixes: String): File {
+    val prefix = listOfNotNull(ORT_NAME, *infixes).joinToString("-")
+    return kotlin.io.path.createTempDirectory(prefix).toFile()
+}
+
+/**
+ * Create a temporary directory with a name specific to ORT, the calling class, and optional [infixes].
+ */
+fun Any.createOrtTempDir(vararg infixes: String): File =
+    org.ossreviewtoolkit.utils.createOrtTempDir(javaClass.simpleName, *infixes)
+
+/**
+ * Create a temporary file with optionally specified [prefix] and [suffix] inside a directory with a name specific to
+ * ORT.
+ */
+fun createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
+    kotlin.io.path.createTempFile(createOrtTempDir().toPath(), prefix, suffix).toFile()
+
+/**
+ * Create a temporary file with optionally specified [prefix] and [suffix] inside a directory with a name specific to
+ * ORT and the calling class.
+ */
+fun Any.createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
+    kotlin.io.path.createTempFile(createOrtTempDir().toPath(), prefix, suffix).toFile()
+
+/**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
 fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
