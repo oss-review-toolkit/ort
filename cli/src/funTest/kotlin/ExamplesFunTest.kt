@@ -34,8 +34,6 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -51,8 +49,8 @@ import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExamplesFunTest : StringSpec() {
@@ -146,9 +144,7 @@ class ExamplesFunTest : StringSpec() {
         }
 
         "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
-            val outputDir = createTempDirectory("$ORT_NAME-${ExamplesFunTest::class.simpleName}").toFile().apply {
-                deleteOnExit()
-            }
+            val outputDir = createTestTempDir()
 
             takeExampleFile("asciidoctor-pdf-theme.yml")
 
