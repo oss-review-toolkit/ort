@@ -37,6 +37,7 @@ import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.lib.SymbolicRef
 import org.eclipse.jgit.transport.JschConfigSessionFactory
+import org.eclipse.jgit.transport.NetRCCredentialsProvider
 import org.eclipse.jgit.transport.OpenSshConfig
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
@@ -61,6 +62,11 @@ class Git : VersionControlSystem(), CommandLineTool {
     companion object {
         init {
             installAuthenticatorAndProxySelector()
+
+            // While the OrtAuthenticator already provides .netrc parsing, JGit will complain with a confusing "no
+            // CredentialsProvider registered" message if authentication fails. Avoid that by installing JGit's own
+            // .netrc credential provider in addition to ORT's authenticator.
+            NetRCCredentialsProvider.install()
 
             val sessionFactory = object : JschConfigSessionFactory() {
                 @Suppress("EmptyFunctionBlock")
