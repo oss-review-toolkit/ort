@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -74,6 +75,11 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
         help = "Place the output YAML files in the directory '\$outputdir/\$type/\$namespace/\$name/\$version'."
     ).flag()
 
+    private val forceOverwrite by option(
+        "--force-overwrite",
+        help = "Overwrite any output files if they already exist."
+    ).flag()
+
     override fun run() {
         outputDir.safeMkdirs()
 
@@ -89,6 +95,10 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
     private fun Provenance.writePackageConfigurationFile(filename: String) {
         val packageConfiguration = createPackageConfiguration(packageId, this)
         val outputFile = getOutputFile(filename)
+
+        if (!forceOverwrite && outputFile.exists()) {
+            throw UsageError("The output file '${outputFile.absolutePath}' must not exist yet.", statusCode = 2)
+        }
 
         packageConfiguration.write(outputFile)
         println("Wrote a package configuration to '${outputFile.absolutePath}'.")
