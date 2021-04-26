@@ -114,10 +114,10 @@ for a concluded license those statements are kept.
 --]
 [#assign
 resolvedLicenses =
-    helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED")
+    LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
       .filter(
           package.licensesNotInLicenseFiles(
-            helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED")
+            LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
                 .filter(package.license, package.licenseChoices).licenses
           )
       )
@@ -153,7 +153,7 @@ Append the text of all licenses that have been listed in the above lists for lic
 [appendix]
 == License Texts
 
-[#assign mergedLicenses = helper.mergeLicenses(projects + packages, helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED"), true)]
+[#assign mergedLicenses = helper.mergeLicenses(projects + packages, LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED, true)]
 [#list mergedLicenses as resolvedLicense]
 === ${resolvedLicense.license}
 

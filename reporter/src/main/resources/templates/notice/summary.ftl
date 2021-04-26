@@ -37,7 +37,7 @@ cannot have concluded licenses. If copyrights were detected for a concluded lice
 filter all licenses that are configured not to be included in notice files.
 --]
 [#assign mergedLicenses = helper.filterForCategory(
-    helper.mergeLicenses(projects + packages, helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED")),
+    helper.mergeLicenses(projects + packages, LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED),
     "include-in-notice-file"
 )]
 [#list mergedLicenses as resolvedLicense]

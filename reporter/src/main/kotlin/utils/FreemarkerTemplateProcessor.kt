@@ -26,8 +26,6 @@ import freemarker.template.TemplateExceptionHandler
 import java.io.File
 import java.util.SortedMap
 
-import kotlin.reflect.full.memberProperties
-
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
@@ -120,6 +118,7 @@ class FreemarkerTemplateProcessor(
             "packages" to packages,
             "ortResult" to input.ortResult,
             "licenseTextProvider" to input.licenseTextProvider,
+            "LicenseView" to LicenseView,
             "helper" to TemplateHelper(input.ortResult, input.licenseClassifications, input.resolutionProvider),
             "projectsAsPackages" to projectsAsPackages
         )
@@ -254,15 +253,6 @@ class FreemarkerTemplateProcessor(
             licenses.filter { resolvedLicense ->
                 licenseClassifications[resolvedLicense.license]?.contains(category) ?: true
             }
-
-        /**
-         * Return a [LicenseView] constant by name to make them easily available to the Freemarker templates.
-         */
-        @Suppress("UNUSED") // This function is used in the templates.
-        fun licenseView(name: String): LicenseView =
-            LicenseView.Companion::class.memberProperties
-                .first { it.name == name }
-                .get(LicenseView.Companion) as LicenseView
 
         /**
          * Merge the [ResolvedLicense]s of multiple [models] and filter them using [licenseView] and
