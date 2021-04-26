@@ -97,7 +97,7 @@ notice files, and filter all licenses that are contained in the license files al
 --]
 [#assign
 resolvedLicenses = helper.filterForCategory(
-    helper.licenseView("CONCLUDED_OR_DECLARED_AND_DETECTED").filter(package.licensesNotInLicenseFiles()),
+    LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED.filter(package.licensesNotInLicenseFiles()),
     "include-in-notice-file"
 )]
 [#if resolvedLicenses?has_content]
