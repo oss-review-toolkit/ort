@@ -19,16 +19,9 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import kotlin.io.path.createTempDirectory
-
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class FileBasedStorageFunTest : AbstractStorageFunTest() {
-    override fun createStorage() =
-        FileBasedStorage(
-            LocalFileStorage(
-                createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
-            )
-        )
+    override fun createStorage() = FileBasedStorage(LocalFileStorage(createTestTempDir()))
 }

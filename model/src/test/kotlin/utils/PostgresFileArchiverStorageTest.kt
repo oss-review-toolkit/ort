@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private val PG_STARTUP_WAIT = Duration.ofSeconds(20)
@@ -60,12 +61,9 @@ class PostgresFileArchiverStorageTest : WordSpec() {
     private lateinit var postgres: EmbeddedPostgres
     private lateinit var storage: PostgresFileArchiverStorage
 
-    private val tempFiles = mutableListOf<File>()
-
     private fun createTempFile(content: String): File =
-        kotlin.io.path.createTempFile().toFile().apply {
+        createTestTempFile().apply {
             writeText(content)
-            tempFiles += this
         }
 
     override fun beforeSpec(spec: Spec) {
@@ -75,8 +73,6 @@ class PostgresFileArchiverStorageTest : WordSpec() {
 
     override fun afterSpec(spec: Spec) {
         postgres.close()
-        tempFiles.forEach { it.delete() }
-        tempFiles.clear()
     }
 
     override fun isolationMode() = IsolationMode.InstancePerTest

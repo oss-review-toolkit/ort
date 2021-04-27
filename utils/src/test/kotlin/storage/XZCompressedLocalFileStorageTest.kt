@@ -25,17 +25,13 @@ import io.kotest.matchers.shouldBe
 import java.io.BufferedReader
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class XZCompressedLocalFileStorageTest : StringSpec() {
     private fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
-        val directory = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+        val directory = createTestTempDir()
         val storage = XZCompressedLocalFileStorage(directory)
         block(storage, directory)
-        directory.safeDeleteRecursively()
     }
 
     init {

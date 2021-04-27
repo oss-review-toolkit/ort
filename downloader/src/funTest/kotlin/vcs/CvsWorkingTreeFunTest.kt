@@ -28,14 +28,11 @@ import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.Ci
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.unpack
 
 class CvsWorkingTreeFunTest : StringSpec() {
@@ -45,14 +42,10 @@ class CvsWorkingTreeFunTest : StringSpec() {
     override fun beforeSpec(spec: Spec) {
         val zipFile = File("src/funTest/assets/jhove-2019-12-11-cvs.zip")
 
-        zipContentDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+        zipContentDir = createSpecTempDir()
 
         println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)
-    }
-
-    override fun afterSpec(spec: Spec) {
-        zipContentDir.safeDeleteRecursively(force = true)
     }
 
     init {

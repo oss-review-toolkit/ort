@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
 import io.kotest.matchers.file.containNFiles
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.should
@@ -30,7 +29,7 @@ import io.kotest.matchers.shouldNot
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class DirectoryStashTest : StringSpec() {
     private lateinit var sandboxDir: File
@@ -40,7 +39,7 @@ class DirectoryStashTest : StringSpec() {
     private lateinit var b1: File
 
     override fun beforeTest(testCase: TestCase) {
-        sandboxDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+        sandboxDir = createTestTempDir()
         a = sandboxDir.resolve("a")
         a1 = a.resolve("a1")
         b = sandboxDir.resolve("b")
@@ -48,10 +47,6 @@ class DirectoryStashTest : StringSpec() {
 
         check(a1.mkdirs())
         check(b1.mkdirs())
-    }
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        sandboxDir.safeDeleteRecursively(force = true)
     }
 
     private fun sandboxDirShouldBeInOriginalState() {

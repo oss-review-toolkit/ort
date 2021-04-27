@@ -24,14 +24,11 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -42,7 +39,7 @@ class FileCounterScannerFunTest : StringSpec() {
 
     init {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
-            outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+            outputDir = createTestTempDir()
 
             val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
             val expectedResult = patchExpectedResult(
@@ -55,7 +52,6 @@ class FileCounterScannerFunTest : StringSpec() {
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
 
-            outputDir.safeDeleteRecursively()
             ScanResultsStorage.storage.stats.reset()
         }
     }

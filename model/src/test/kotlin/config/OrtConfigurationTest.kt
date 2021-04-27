@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.config
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.collections.shouldContainExactly
@@ -33,11 +34,9 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import java.io.File
 import java.lang.IllegalArgumentException
 
-import kotlin.io.path.createTempFile
-
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
+import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtConfigurationTest : WordSpec({
@@ -279,8 +278,7 @@ class OrtConfigurationTest : WordSpec({
 /**
  * Create a test configuration with the [data] specified.
  */
-private fun createTestConfig(data: String): File =
-    createTempFile(ORT_NAME, ".conf").toFile().apply {
+private fun TestConfiguration.createTestConfig(data: String): File =
+    createTestTempFile(suffix = ".conf").apply {
         writeText(data)
-        deleteOnExit()
     }

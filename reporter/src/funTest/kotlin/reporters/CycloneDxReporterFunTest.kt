@@ -29,19 +29,17 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-import kotlin.io.path.createTempDirectory
-
 import org.cyclonedx.CycloneDxSchema
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class CycloneDxReporterFunTest : WordSpec({
     val options = mapOf("single.bom" to "true")
-    val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
+    val outputDir = createSpecTempDir()
 
     "A generated BOM" should {
         "be valid XML according to schema version 1.2" {

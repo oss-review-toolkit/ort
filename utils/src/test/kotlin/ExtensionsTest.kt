@@ -31,10 +31,10 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 
-import kotlin.io.path.createTempDirectory
-import kotlin.io.path.createTempFile
-
 import org.ossreviewtoolkit.utils.test.containExactly
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
+import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExtensionsTest : WordSpec({
@@ -55,7 +55,7 @@ class ExtensionsTest : WordSpec({
     }
 
     "File.isSymbolicLink" should {
-        val tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+        val tempDir = createSpecTempDir()
         val file = tempDir.resolve("file").apply { createNewFile() }
         val directory = tempDir.resolve("directory").apply { safeMkdirs() }
 
@@ -111,8 +111,6 @@ class ExtensionsTest : WordSpec({
                 symlinkToDirectory.isSymbolicLink() shouldBe true
             }
         }
-
-        tempDir.safeDeleteRecursively()
     }
 
     "File.searchUpwardsForFile" should {
@@ -151,7 +149,7 @@ class ExtensionsTest : WordSpec({
 
     "File.safeMkDirs" should {
         "succeed if directory already exists" {
-            val directory = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
+            val directory = createTestTempDir()
 
             directory.isDirectory shouldBe true
             shouldNotThrow<IOException> { directory.safeMkdirs() }
@@ -159,8 +157,8 @@ class ExtensionsTest : WordSpec({
         }
 
         "succeed if directory could be created" {
-            val parent = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
-            val child = File(parent, "child").apply { deleteOnExit() }
+            val parent = createTestTempDir()
+            val child = File(parent, "child")
 
             parent.isDirectory shouldBe true
             shouldNotThrow<IOException> { child.safeMkdirs() }
@@ -171,9 +169,9 @@ class ExtensionsTest : WordSpec({
             // Test case for an unexpected behaviour of File.mkdirs() which returns false for
             // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
             // directory was successfully created.
-            val parent = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
-            val nonExistingParent = File(parent, "parent1/parent2").apply { deleteOnExit() }
-            val child = File(nonExistingParent, "/").apply { deleteOnExit() }
+            val parent = createTestTempDir()
+            val nonExistingParent = File(parent, "parent1/parent2")
+            val child = File(nonExistingParent, "/")
 
             parent.isDirectory shouldBe true
             nonExistingParent.exists() shouldBe false
@@ -183,7 +181,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "throw exception if file is not a directory" {
-            val file = createTempFile(ORT_NAME, javaClass.simpleName).toFile().apply { deleteOnExit() }
+            val file = createTestTempFile()
 
             file.isFile shouldBe true
             shouldThrow<IOException> { file.safeMkdirs() }
@@ -265,11 +263,10 @@ class ExtensionsTest : WordSpec({
         }
 
         "create a valid file name" {
-            val tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+            val tempDir = createTestTempDir()
             val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
 
             fileFromStr.isFile shouldBe true
-            shouldNotThrow<IOException> { tempDir.safeDeleteRecursively(force = true) }
         }
     }
 

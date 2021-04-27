@@ -21,21 +21,17 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 private val PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
@@ -53,16 +49,10 @@ class FileArchiverTest : StringSpec() {
     private lateinit var storage: LocalFileStorage
 
     override fun beforeTest(testCase: TestCase) {
-        workingDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-workingDir").toFile()
-        storageDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-storageDir").toFile()
-        targetDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-targetDir").toFile()
+        workingDir = createTestTempDir("workingDir")
+        storageDir = createTestTempDir("storageDir")
+        targetDir = createTestTempDir("targetDir")
         storage = LocalFileStorage(storageDir)
-    }
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        workingDir.safeDeleteRecursively()
-        storageDir.safeDeleteRecursively()
-        targetDir.safeDeleteRecursively()
     }
 
     private fun createFile(path: String) {

@@ -20,18 +20,17 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.should
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class AsciiDocTemplateReporterFunTest : StringSpec({
     "PDF output is created successfully from an existing result and default template" {
@@ -53,14 +52,12 @@ class AsciiDocTemplateReporterFunTest : StringSpec({
     }
 })
 
-private fun generateReport(
+private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     options: Map<String, String> = emptyMap()
 ): List<File> {
     val input = ReporterInput(ortResult)
-
-    val outputDir = createTempDirectory("$ORT_NAME-${AsciiDocTemplateReporterFunTest::class.simpleName}")
-        .toFile().apply { deleteOnExit() }
+    val outputDir = createTestTempDir()
 
     return AsciiDocTemplateReporter().generateReport(input, outputDir, options)
 }
