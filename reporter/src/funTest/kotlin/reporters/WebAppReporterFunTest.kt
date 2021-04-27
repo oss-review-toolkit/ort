@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.reporter.reporters
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.longs.shouldBeGreaterThan
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class WebAppReporterFunTest : WordSpec({
@@ -35,7 +33,7 @@ class WebAppReporterFunTest : WordSpec({
                 "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
             )
 
-            val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
+            val outputDir = createTestTempDir()
 
             val report = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir).single()
 

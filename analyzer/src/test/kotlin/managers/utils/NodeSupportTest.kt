@@ -32,13 +32,10 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ProtocolProxyMap
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.toGenericString
 
 class NodeSupportTest : WordSpec() {
@@ -281,12 +278,11 @@ class NodeSupportTest : WordSpec() {
 
     override fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
-        tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+        tempDir = createTestTempDir()
         definitionFiles.clear()
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
-        tempDir.safeDeleteRecursively(force = true)
         definitionFiles.clear()
         super.afterTest(testCase, result)
     }

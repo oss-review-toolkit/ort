@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.spdx
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -33,19 +32,13 @@ import io.kotest.matchers.string.startWith
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class SpdxUtilsTest : WordSpec() {
     private lateinit var tempDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        tempDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
-    }
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        tempDir.deleteRecursively()
+        tempDir = createTestTempDir()
     }
 
     private fun setupTempFile(filename: String, content: String) =

@@ -19,13 +19,12 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.time.Instant
-
-import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -67,8 +66,8 @@ import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SpdxDocumentReporterFunTest : WordSpec({
@@ -97,15 +96,13 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 })
 
-private fun generateReport(ortResult: OrtResult, format: FileFormat): String {
+private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileFormat): String {
     val input = ReporterInput(
         ortResult = ortResult,
         licenseTextProvider = DefaultLicenseTextProvider()
     )
 
-    val outputDir = createTempDirectory("$ORT_NAME-${SpdxDocumentReporterFunTest::class.simpleName}").toFile().apply {
-        deleteOnExit()
-    }
+    val outputDir = createTestTempDir()
 
     val reportOptions = mapOf(
         SpdxDocumentReporter.OPTION_CREATION_INFO_COMMENT to "some creation info comment",

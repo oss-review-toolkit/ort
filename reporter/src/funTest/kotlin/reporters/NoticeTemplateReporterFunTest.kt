@@ -19,12 +19,11 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-
-import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
@@ -39,7 +38,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class NoticeTemplateReporterFunTest : WordSpec({
     "The default template" should {
@@ -86,7 +85,7 @@ class NoticeTemplateReporterFunTest : WordSpec({
     }
 })
 
-private fun generateReport(
+private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     config: OrtConfiguration = OrtConfiguration(),
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
@@ -99,9 +98,7 @@ private fun generateReport(
         licenseClassifications = createLicenseClassifications()
     )
 
-    val outputDir = createTempDirectory("$ORT_NAME-${NoticeTemplateReporterFunTest::class.simpleName}").toFile().apply {
-        deleteOnExit()
-    }
+    val outputDir = createTestTempDir()
 
     return NoticeTemplateReporter().generateReport(input, outputDir, options).single().readText()
 }
