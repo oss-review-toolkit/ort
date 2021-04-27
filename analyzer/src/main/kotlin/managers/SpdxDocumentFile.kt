@@ -144,8 +144,8 @@ private fun resolveExternalDocumentReference(
 
     if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
         val referencedFile = workingDir.resolve(uri.path)
-        val spdxFile = (referencedFile.takeIf { it.isFile }
-            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file."))
+        val spdxFile = referencedFile.takeIf { it.isFile }
+            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file.")
         return SpdxModelMapper.read(spdxFile)
     }
 
