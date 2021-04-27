@@ -491,7 +491,8 @@ open class Npm(
         }
 
         val dependencyNames = scopes.flatMapTo(mutableSetOf()) { scope ->
-            json[scope].fieldNamesOrEmpty().asSequence()
+            // Yarn ignores "//" keys in the dependencies to allow comments, therefore ignore them here as well.
+            json[scope].fieldNamesOrEmpty().asSequence().filterNot { it == "//" }
         }
 
         return ModuleInfo(
