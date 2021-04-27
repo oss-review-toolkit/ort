@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.log
@@ -489,12 +490,14 @@ open class Npm(
             }
         }
 
+        val dependencyNames = scopes.flatMapTo(mutableSetOf()) { scope ->
+            json[scope].fieldNamesOrEmpty().asSequence()
+        }
+
         return ModuleInfo(
             name = name,
             version = version,
-            dependencyNames = scopes.map { scope ->
-                json[scope]?.fieldNames()?.asSequence()?.toSet().orEmpty()
-            }.flatten().toSet()
+            dependencyNames = dependencyNames
         )
     }
 
