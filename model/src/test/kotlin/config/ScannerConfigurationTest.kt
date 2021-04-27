@@ -55,7 +55,7 @@ class ScannerConfigurationTest : WordSpec({
 
             actualStorages.keys shouldContainExactly expectedStorages.keys
             actualStorages.entries.forAll { (storageKey, storage) ->
-                val orgStorage = expectedStorages[storageKey] ?: this
+                val orgStorage = expectedStorages.getOrDefault(storageKey, this)
                 storage::class shouldBe orgStorage::class
             }
         }
