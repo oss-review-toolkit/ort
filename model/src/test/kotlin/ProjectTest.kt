@@ -35,7 +35,7 @@ import java.time.Instant
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.utils.test.containExactly
-import org.ossreviewtoolkit.utils.test.createTestTempFile
+import org.ossreviewtoolkit.utils.test.createSpecTempFile
 
 private fun readAnalyzerResult(analyzerResultFilename: String): Project =
     File("../analyzer/src/funTest/assets/projects/synthetic")
@@ -227,7 +227,7 @@ class ProjectTest : WordSpec({
 
     "A Project" should {
         "be serializable with a dependency graph" {
-            val outputFile = createTestTempFile(prefix = "project", suffix = ".yml")
+            val outputFile = createSpecTempFile(prefix = "project", suffix = ".yml")
 
             val project = projectWithDependencyGraph()
             outputFile.writeValue(project)
