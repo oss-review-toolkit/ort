@@ -47,7 +47,7 @@ fun FileArchiver.Companion.createDefault(): FileArchiver =
         storage = LocalFileStorage(DEFAULT_ARCHIVE_DIR)
     )
 
-fun TestConfiguration.createTestTempDir(vararg infixes: String): File {
+fun TestConfiguration.createSpecTempDir(vararg infixes: String): File {
     val dir = createOrtTempDir(*infixes)
 
     afterSpec {
@@ -57,7 +57,7 @@ fun TestConfiguration.createTestTempDir(vararg infixes: String): File {
     return dir
 }
 
-fun TestConfiguration.createTestTempFile(prefix: String? = null, suffix: String? = null): File {
+fun TestConfiguration.createSpecTempFile(prefix: String? = null, suffix: String? = null): File {
     val file = createOrtTempFile(prefix, suffix)
 
     afterSpec {
