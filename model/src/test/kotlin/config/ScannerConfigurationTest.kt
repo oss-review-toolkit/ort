@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.config
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -53,7 +54,7 @@ class ScannerConfigurationTest : WordSpec({
             actualScannerConfig.archive?.fileStorage?.httpFileStorage should beNull()
 
             actualStorages.keys shouldContainExactly expectedStorages.keys
-            actualStorages.forEach { e ->
+            actualStorages.entries.forAll { e ->
                 val orgStorage = expectedStorages[e.key] ?: this
                 e.value::class shouldBe orgStorage::class
             }
