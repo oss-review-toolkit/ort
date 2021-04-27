@@ -66,3 +66,23 @@ fun TestConfiguration.createSpecTempFile(prefix: String? = null, suffix: String?
 
     return file
 }
+
+fun TestConfiguration.createTestTempDir(vararg infixes: String): File {
+    val dir = createOrtTempDir(*infixes)
+
+    afterTest {
+        dir.safeDeleteRecursively(force = true)
+    }
+
+    return dir
+}
+
+fun TestConfiguration.createTestTempFile(prefix: String? = null, suffix: String? = null): File {
+    val file = createOrtTempFile(prefix, suffix)
+
+    afterTest {
+        file.delete()
+    }
+
+    return file
+}
