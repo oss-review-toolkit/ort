@@ -121,7 +121,7 @@ private fun createPackageConfiguration(id: Identifier, provenance: Provenance): 
                     type = provenance.vcsInfo.type,
                     url = provenance.vcsInfo.url,
                     revision = provenance.vcsInfo.resolvedRevision!!,
-                    path = provenance.vcsInfo.path.takeIf { provenance.vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
+                    path = provenance.vcsInfo.path.takeIf { provenance.vcsInfo.type == VcsType.GIT_REPO }
                 )
             )
         }
