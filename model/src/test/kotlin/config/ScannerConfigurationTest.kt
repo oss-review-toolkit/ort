@@ -54,9 +54,9 @@ class ScannerConfigurationTest : WordSpec({
             actualScannerConfig.archive?.fileStorage?.httpFileStorage should beNull()
 
             actualStorages.keys shouldContainExactly expectedStorages.keys
-            actualStorages.entries.forAll { e ->
-                val orgStorage = expectedStorages[e.key] ?: this
-                e.value::class shouldBe orgStorage::class
+            actualStorages.entries.forAll { (storageKey, storage) ->
+                val orgStorage = expectedStorages[storageKey] ?: this
+                storage::class shouldBe orgStorage::class
             }
         }
     }
