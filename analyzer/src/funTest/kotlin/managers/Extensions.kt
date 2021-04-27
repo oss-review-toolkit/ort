@@ -24,10 +24,13 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
 import java.io.File
+import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.yamlMapper
 
@@ -54,7 +57,15 @@ fun PackageManagerResult.resolveScopes(projectResult: ProjectAnalyzerResult): Pr
 
     // The result must contain packages for all the dependencies declared by the project; otherwise, the
     // check in ProjectAnalyzerResult.init fails. When using a shared dependency graph, the set of packages
-    // is typically empty, so it has to be populated manually.
-    val packages = projectResult.packages.takeIf { it.isNotEmpty() } ?: sharedPackages
+    // is typically empty, so it has to be populated manually from the subset of shared packages that are
+    // referenced from this project.
+    val packages = projectResult.packages.takeUnless { it.isEmpty() }
+        ?: resolvedProject.filterReferencedPackages(sharedPackages)
     return projectResult.copy(project = resolvedProject, packages = packages.toSortedSet())
 }
+
+/**
+ * Return only those packages from the given set of [allPackages] that are referenced by this [Project].
+ */
+private fun Project.filterReferencedPackages(allPackages: SortedSet<Package>): SortedSet<Package> =
+    collectDependencies().run { allPackages.filter { it.id in this }.toSortedSet() }
