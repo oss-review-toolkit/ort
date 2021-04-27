@@ -28,7 +28,6 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
-import kotlin.io.path.createTempDirectory
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -62,6 +61,7 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.createOrtTempDir
 import org.ossreviewtoolkit.utils.fileSystemEncode
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
@@ -225,7 +225,7 @@ abstract class LocalScanner(
 
         log.info { "Scanning ${remainingPackages.size} packages for which no stored scan results were found." }
 
-        val downloadDirectory = createTempDirectory().toFile()
+        val downloadDirectory = createOrtTempDir()
 
         val resultsFromScanner = remainingPackages.scan(outputDirectory, downloadDirectory)
 
@@ -314,7 +314,7 @@ abstract class LocalScanner(
 
         if (missingArchives.isEmpty()) return
 
-        val tempDirectory = createTempDirectory().toFile()
+        val tempDirectory = createOrtTempDir()
 
         missingArchives.forEach { (pkg, provenance) ->
             val downloadDirectory = tempDirectory.resolve(pkg.id.toPath())
