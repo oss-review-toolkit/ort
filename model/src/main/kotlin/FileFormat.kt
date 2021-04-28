@@ -89,5 +89,10 @@ inline fun <reified T : Any> File.readValue(): T = mapper().readValue(this)
  */
 inline fun <reified T : Any> File.writeValue(value: T, prettyPrint: Boolean = true) {
     parentFile.safeMkdirs()
-    mapper().apply { if (prettyPrint) writerWithDefaultPrettyPrinter() }.writeValue(this, value)
+
+    if (prettyPrint) {
+        mapper().writerWithDefaultPrettyPrinter().writeValue(this, value)
+    } else {
+        mapper().writeValue(this, value)
+    }
 }
