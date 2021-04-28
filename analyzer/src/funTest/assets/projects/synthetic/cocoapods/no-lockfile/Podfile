@@ -1,0 +1,3 @@
+target 'a-test-project' do
+    pod 'RestKit'
+end
