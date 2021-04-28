@@ -227,9 +227,11 @@ abstract class LocalScanner(
 
         val downloadDirectory = createOrtTempDir()
 
-        val resultsFromScanner = remainingPackages.scan(outputDirectory, downloadDirectory)
-
-        downloadDirectory.safeDeleteRecursively(force = true)
+        val resultsFromScanner = try {
+            remainingPackages.scan(outputDirectory, downloadDirectory)
+        } finally {
+            downloadDirectory.safeDeleteRecursively(force = true)
+        }
 
         return resultsFromStorage + resultsFromScanner
     }
@@ -316,18 +318,20 @@ abstract class LocalScanner(
 
         val tempDirectory = createOrtTempDir()
 
-        missingArchives.forEach { (pkg, provenance) ->
-            val downloadDirectory = tempDirectory.resolve(pkg.id.toPath())
-            val downloadProvenance = Downloader(downloaderConfig).download(pkg, downloadDirectory)
+        try {
+            missingArchives.forEach { (pkg, provenance) ->
+                val downloadDirectory = tempDirectory.resolve(pkg.id.toPath())
+                val downloadProvenance = Downloader(downloaderConfig).download(pkg, downloadDirectory)
 
-            if (downloadProvenance == provenance) {
-                archiveFiles(downloadDirectory, pkg.id, provenance)
-            } else {
-                log.warn { "Mismatching provenance when creating missing archive for $provenance." }
+                if (downloadProvenance == provenance) {
+                    archiveFiles(downloadDirectory, pkg.id, provenance)
+                } else {
+                    log.warn { "Mismatching provenance when creating missing archive for $provenance." }
+                }
             }
+        } finally {
+            tempDirectory.safeDeleteRecursively(force = true)
         }
-
-        tempDirectory.safeDeleteRecursively(force = true)
     }
 
     /**
