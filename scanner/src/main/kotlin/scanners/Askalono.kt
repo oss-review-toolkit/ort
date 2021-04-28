@@ -149,7 +149,7 @@ class Askalono(
         result.mapTo(licenseFindings) {
             val filePath = File(it["Path"].textValue())
             LicenseFinding(
-                license = getSpdxLicenseRef(it["License"].textValue()),
+                license = it["License"].textValue(),
                 location = TextLocation(
                     // Turn absolute paths in the native result into relative paths to not expose any information.
                     relativizePath(scanPath, filePath),
