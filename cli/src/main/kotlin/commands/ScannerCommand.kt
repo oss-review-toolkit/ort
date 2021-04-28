@@ -41,6 +41,7 @@ import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -194,9 +195,15 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             throw ProgramResult(1)
         }
 
-        if (scanResults.hasIssues) {
-            println("The scan result contains issues.")
+        val hasSevereIssues = scanResults.scanResults.any { (_, results) ->
+            results.any { it.summary.issues.any { issue -> issue.severity > Severity.HINT } }
+        }
+
+        if (hasSevereIssues) {
+            println("The scan result contains errors or warnings.")
             throw ProgramResult(2)
         }
+
+        println("The scan result contains hints only.")
     }
 }
