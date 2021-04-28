@@ -42,15 +42,13 @@ import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableViolation
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
 
-private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation>(
-    { it.isResolved },
-    { it.violation.severity },
-    { it.violation.rule },
-    { it.violation.pkg },
-    { it.violation.license.toString() },
-    { it.violation.message },
-    { it.resolutionDescription }
-)
+private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation> { it.isResolved }
+    .thenByDescending { it.violation.severity }
+    .thenBy { it.violation.rule }
+    .thenBy { it.violation.pkg }
+    .thenBy { it.violation.license.toString() }
+    .thenBy { it.violation.message }
+    .thenBy { it.resolutionDescription }
 
 private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 

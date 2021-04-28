@@ -22,13 +22,13 @@ package org.ossreviewtoolkit.model
 import org.apache.logging.log4j.Level
 
 /**
- * A generic class describing a severity, e.g. of issues.
+ * A generic class describing a severity, e.g. of issues, sorted from least severe to most severe.
  */
 enum class Severity {
     /**
-     * An error is something that has to be addressed.
+     * A hint is something that is provided for information only.
      */
-    ERROR,
+    HINT,
 
     /**
      * A warning is something that should be addressed.
@@ -36,17 +36,17 @@ enum class Severity {
     WARNING,
 
     /**
-     * A hint is something that is provided for information only.
+     * An error is something that has to be addressed.
      */
-    HINT;
+    ERROR;
 
     /**
      * Map the [Severity] to a Log4j [Level].
      */
     fun toLog4jLevel(): Level =
         when (this) {
-            ERROR -> Level.ERROR
-            WARNING -> Level.WARN
             HINT -> Level.INFO
+            WARNING -> Level.WARN
+            ERROR -> Level.ERROR
         }
 }
