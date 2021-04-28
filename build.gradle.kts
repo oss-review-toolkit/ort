@@ -231,7 +231,6 @@ subprojects {
             jvmTarget = "11"
             apiVersion = "1.4"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-            useIR = true
         }
     }
 
