@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.vdurmont.semver4j.Semver
 
+import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
@@ -256,7 +257,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 storage.add(id1, scanResultIncompatible) should beSuccess()
                 val readResult = storage.read(pkg1, criteriaForDetails(scannerDetails1))
 
-                readResult should beSuccess()
+                withClue(lazy { (readResult as Failure).error }) {
+                    readResult should beSuccess()
+                }
+
                 (readResult as Success).result should containExactlyInAnyOrder(
                     scanResult,
                     scanResultCompatible1,
@@ -420,7 +424,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
                 val readResult = storage.read(listOf(pkg1, pkg2), criteriaForDetails(scannerDetails1))
 
-                readResult should beSuccess()
+                withClue(lazy { (readResult as Failure).error }) {
+                    readResult should beSuccess()
+                }
+
                 (readResult as Success).result.let { result ->
                     result.keys should containExactly(id1, id2)
                     result[id1] should containExactlyInAnyOrder(
