@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -120,7 +121,8 @@ class FreemarkerTemplateProcessor(
             "licenseTextProvider" to input.licenseTextProvider,
             "LicenseView" to LicenseView,
             "helper" to TemplateHelper(input.ortResult, input.licenseClassifications, input.resolutionProvider),
-            "projectsAsPackages" to projectsAsPackages
+            "projectsAsPackages" to projectsAsPackages,
+            "vulnerabilityReference" to VulnerabilityReference
         )
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
