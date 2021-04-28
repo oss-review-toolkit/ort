@@ -1,0 +1,366 @@
+---
+project:
+  id: "CocoaPods::src/funTest/assets/projects/synthetic/cocoapods/regular/Podfile:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/cocoapods/regular/Podfile"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Pod::RestKit:0.27.3"
+      dependencies:
+      - id: "Pod::RestKit/Core:0.27.3"
+        dependencies:
+        - id: "Pod::RestKit/CoreData:0.27.3"
+          dependencies:
+          - id: "Pod::RestKit/ObjectMapping:0.27.3"
+            dependencies:
+            - id: "Pod::ISO8601DateFormatterValueTransformer:0.6.1"
+              dependencies:
+              - id: "Pod::RKValueTransformers:1.1.3"
+            - id: "Pod::RKValueTransformers:1.1.3"
+            - id: "Pod::RestKit/Support:0.27.3"
+              dependencies:
+              - id: "Pod::TransitionKit:2.2.1"
+        - id: "Pod::RestKit/Network:0.27.3"
+          dependencies:
+          - id: "Pod::RestKit/ObjectMapping:0.27.3"
+            dependencies:
+            - id: "Pod::ISO8601DateFormatterValueTransformer:0.6.1"
+              dependencies:
+              - id: "Pod::RKValueTransformers:1.1.3"
+            - id: "Pod::RKValueTransformers:1.1.3"
+            - id: "Pod::RestKit/Support:0.27.3"
+              dependencies:
+              - id: "Pod::TransitionKit:2.2.1"
+          - id: "Pod::RestKit/Support:0.27.3"
+            dependencies:
+            - id: "Pod::TransitionKit:2.2.1"
+          - id: "Pod::SOCKit:1.1"
+        - id: "Pod::RestKit/ObjectMapping:0.27.3"
+          dependencies:
+          - id: "Pod::ISO8601DateFormatterValueTransformer:0.6.1"
+            dependencies:
+            - id: "Pod::RKValueTransformers:1.1.3"
+          - id: "Pod::RKValueTransformers:1.1.3"
+          - id: "Pod::RestKit/Support:0.27.3"
+            dependencies:
+            - id: "Pod::TransitionKit:2.2.1"
+packages:
+- id: "Pod::ISO8601DateFormatterValueTransformer:0.6.1"
+  purl: "pkg:pod/ISO8601DateFormatterValueTransformer@0.6.1"
+  declared_licenses:
+  - "Apache2"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache2: "Apache-2.0"
+  description: "A small library that integrates ISO8601DateFormatter with RKValueTransformers"
+  homepage_url: "https://github.com/blakewatters/ISO8601DateFormatterValueTransformer"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/blakewatters/ISO8601DateFormatterValueTransformer.git"
+    revision: "v0.6.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/blakewatters/ISO8601DateFormatterValueTransformer.git"
+    revision: "v0.6.1"
+    path: ""
+- id: "Pod::RKValueTransformers:1.1.3"
+  purl: "pkg:pod/RKValueTransformers@1.1.3"
+  declared_licenses:
+  - "Apache2"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache2: "Apache-2.0"
+  description: "A powerful value transformation API extracted from RestKit."
+  homepage_url: "https://github.com/RestKit/RKValueTransformers"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/RestKit/RKValueTransformers.git"
+    revision: "v1.1.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RestKit/RKValueTransformers.git"
+    revision: "v1.1.3"
+    path: ""
+- id: "Pod::RestKit:0.27.3"
+  purl: "pkg:pod/RestKit@0.27.3"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "RestKit is a framework for consuming and modeling RESTful web resources\
+    \ on iOS and OS X."
+  homepage_url: "https://github.com/RestKit/RestKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+- id: "Pod::RestKit/Core:0.27.3"
+  purl: "pkg:pod/RestKit%2FCore@0.27.3"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "RestKit is a framework for consuming and modeling RESTful web resources\
+    \ on iOS and OS X."
+  homepage_url: "https://github.com/RestKit/RestKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+- id: "Pod::RestKit/CoreData:0.27.3"
+  purl: "pkg:pod/RestKit%2FCoreData@0.27.3"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "RestKit is a framework for consuming and modeling RESTful web resources\
+    \ on iOS and OS X."
+  homepage_url: "https://github.com/RestKit/RestKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+- id: "Pod::RestKit/Network:0.27.3"
+  purl: "pkg:pod/RestKit%2FNetwork@0.27.3"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "RestKit is a framework for consuming and modeling RESTful web resources\
+    \ on iOS and OS X."
+  homepage_url: "https://github.com/RestKit/RestKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+- id: "Pod::RestKit/ObjectMapping:0.27.3"
+  purl: "pkg:pod/RestKit%2FObjectMapping@0.27.3"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "RestKit is a framework for consuming and modeling RESTful web resources\
+    \ on iOS and OS X."
+  homepage_url: "https://github.com/RestKit/RestKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+- id: "Pod::RestKit/Support:0.27.3"
+  purl: "pkg:pod/RestKit%2FSupport@0.27.3"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "RestKit is a framework for consuming and modeling RESTful web resources\
+    \ on iOS and OS X."
+  homepage_url: "https://github.com/RestKit/RestKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/RestKit/RestKit.git"
+    revision: "v0.27.3"
+    path: ""
+- id: "Pod::SOCKit:1.1"
+  purl: "pkg:pod/SOCKit@1.1"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "String <-> Object Coder for Objective-C."
+  homepage_url: "http://github.com/jverkoey/SOCKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/jverkoey/sockit.git"
+    revision: "1.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jverkoey/sockit.git"
+    revision: "1.1"
+    path: ""
+- id: "Pod::TransitionKit:2.2.1"
+  purl: "pkg:pod/TransitionKit@2.2.1"
+  declared_licenses:
+  - "Apache2"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache2: "Apache-2.0"
+  description: "A block-based State Machine API for Objective-C."
+  homepage_url: "https://github.com/blakewatters/TransitionKit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/blakewatters/TransitionKit.git"
+    revision: "2.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/blakewatters/TransitionKit.git"
+    revision: "2.2.1"
+    path: ""

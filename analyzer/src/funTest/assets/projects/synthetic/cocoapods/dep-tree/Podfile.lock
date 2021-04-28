@@ -1,0 +1,131 @@
+PODS:
+  - Alamofire (5.4.3)
+  - base64url (1.1.0)
+  - CryptoSwift (1.4.0)
+  - DeviceKit (3.2.0)
+  - IQKeyboardManagerSwift (3.3.7)
+  - JGProgressHUD (2.2)
+  - LicensesViewController (0.9.0)
+  - MaterialComponents/AnimationTiming (124.2.0)
+  - MaterialComponents/Availability (124.2.0)
+  - MaterialComponents/Buttons (124.2.0):
+    - MaterialComponents/Elevation
+    - MaterialComponents/Ink
+    - MaterialComponents/private/Math
+    - MaterialComponents/Ripple
+    - MaterialComponents/Shadow
+    - MaterialComponents/ShadowElevations
+    - MaterialComponents/ShadowLayer
+    - MaterialComponents/ShapeLibrary
+    - MaterialComponents/Shapes
+    - MaterialComponents/Typography
+    - MDFInternationalization
+    - MDFTextAccessibility
+  - MaterialComponents/Elevation (124.2.0):
+    - MaterialComponents/Availability
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+  - MaterialComponents/Ink (124.2.0):
+    - MaterialComponents/Availability
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+  - MaterialComponents/Palettes (124.2.0)
+  - MaterialComponents/private/Application (124.2.0)
+  - MaterialComponents/private/Color (124.2.0):
+    - MaterialComponents/Availability
+  - MaterialComponents/private/Math (124.2.0)
+  - MaterialComponents/Ripple (124.2.0):
+    - MaterialComponents/AnimationTiming
+    - MaterialComponents/Availability
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+  - MaterialComponents/Shadow (124.2.0):
+    - MaterialComponents/Availability
+  - MaterialComponents/ShadowElevations (124.2.0)
+  - MaterialComponents/ShadowLayer (124.2.0):
+    - MaterialComponents/ShadowElevations
+  - MaterialComponents/ShapeLibrary (124.2.0):
+    - MaterialComponents/private/Math
+    - MaterialComponents/Shapes
+  - MaterialComponents/Shapes (124.2.0):
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+    - MaterialComponents/ShadowLayer
+  - MaterialComponents/TextFields (124.2.0):
+    - MaterialComponents/AnimationTiming
+    - MaterialComponents/Buttons
+    - MaterialComponents/Elevation
+    - MaterialComponents/Palettes
+    - MaterialComponents/private/Math
+    - MaterialComponents/Typography
+    - MDFInternationalization
+  - MaterialComponents/Typography (124.2.0):
+    - MaterialComponents/private/Application
+    - MaterialComponents/private/Math
+    - MDFTextAccessibility
+  - MDFInternationalization (3.0.0)
+  - MDFTextAccessibility (2.0.1)
+  - Mocker (2.2.0)
+  - PhoneNumberKit (3.3.3):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.3.3)
+    - PhoneNumberKit/UIKit (= 3.3.3)
+  - PhoneNumberKit/PhoneNumberKitCore (3.3.3)
+  - PhoneNumberKit/UIKit (3.3.3):
+    - PhoneNumberKit/PhoneNumberKitCore
+  - SimpleCheckbox (2.1.0)
+  - TTTAttributedLabel (2.0.0)
+  - Validator (3.2.1)
+
+DEPENDENCIES:
+  - Alamofire (~> 5.2)
+  - base64url
+  - CryptoSwift (~> 1.0)
+  - DeviceKit (~> 3)
+  - IQKeyboardManagerSwift (~> 3)
+  - JGProgressHUD
+  - LicensesViewController (~> 0.9.0)
+  - MaterialComponents/TextFields
+  - Mocker (~> 2.2.0)
+  - PhoneNumberKit (~> 3.3)
+  - SimpleCheckbox
+  - TTTAttributedLabel
+  - Validator
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - base64url
+    - CryptoSwift
+    - DeviceKit
+    - IQKeyboardManagerSwift
+    - JGProgressHUD
+    - LicensesViewController
+    - MaterialComponents
+    - MDFInternationalization
+    - MDFTextAccessibility
+    - Mocker
+    - PhoneNumberKit
+    - SimpleCheckbox
+    - TTTAttributedLabel
+    - Validator
+
+SPEC CHECKSUMS:
+  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  base64url: 92e81bb256f2070359a34fc93a7a7d4b9a9d689f
+  CryptoSwift: 7cc902df1784de3b389a387756c7d710f197730c
+  DeviceKit: d081659419cce07c0b5239dbc9fb39ed7413c7fe
+  IQKeyboardManagerSwift: 7d06186460470f3f7e767630861a1303980ee5cf
+  JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
+  LicensesViewController: 6487b7721aa19d81d90f2ede98b44177f74bcf1f
+  MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
+  MDFInternationalization: d697c55307816222a55685c4ccb1044ffb030c12
+  MDFTextAccessibility: f4bb4cc2194286651b59a215fdeaa0e05dc90ba5
+  Mocker: d0ceb340eddd5c28539a691ce67d068674cef9a0
+  PhoneNumberKit: 4ce83273551c4d2ae10b7361162f4283dd02835f
+  SimpleCheckbox: ddcd433ab8c3a8f57300bebda13151a8f302c7f9
+  TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
+  Validator: 80a6f567220c962dfd2d9928ae98a8c1d164f6f4
+
+PODFILE CHECKSUM: c45fdfac3ec59530363500de09c26cedda73f9ac
+
+COCOAPODS: 1.10.1

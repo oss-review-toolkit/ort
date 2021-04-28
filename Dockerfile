@@ -68,7 +68,7 @@ ENV \
     GOPATH=$HOME/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH="$PATH:$HOME/.local/bin:$GOPATH/bin:/opt/go/bin"
+    PATH="$PATH:$HOME/.local/bin:$GOPATH/bin:/opt/go/bin:$GEM_PATH/bin"
 
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
@@ -110,6 +110,7 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         python3-dev \
         python3-pip \
         python3-setuptools \
+        ruby-dev \
         sbt=$SBT_VERSION \
     && \
     rm -rf /var/lib/apt/lists/*
@@ -149,6 +150,15 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi && \
     yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
+    # Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released, make a
+    # build from the latest revision of the master branch.
+    git clone https://github.com/CocoaPods/CocoaPods.git && \
+        cd CocoaPods && \
+        git checkout 9461b346aeb8cba6df71fd4e71661688138ec21b && \
+        gem build cocoapods.gemspec && \
+        gem install cocoapods-1.10.1.gem && \
+        cd .. && \
+        rm -rf CocoaPods && \
     # Add scanners (in versions known to work).
     curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
