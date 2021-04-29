@@ -44,7 +44,7 @@ tasks.withType<AntlrTask> {
     arguments = arguments + listOf("-visitor")
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType<KotlinCompile>().configureEach {
     val antlrTasks = tasks.withType<AntlrTask>()
     dependsOn(antlrTasks)
 }
