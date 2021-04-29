@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.withoutPrefix
 
 private const val DEFAULT_SCOPE_NAME = "default"
@@ -457,7 +458,14 @@ class SpdxDocumentFile(
             // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies,
             // or a package-style SPDX document that describes a single (dependency-)package.
             spdxDocument.isProject()
-        }.keys.toList()
+        }.keys.toList().also { remainingFiles ->
+            val discardedFiles = definitionFiles - remainingFiles
+            if (discardedFiles.isNotEmpty()) {
+                log.info {
+                    "Discarded the following non-project SPDX files: ${discardedFiles.joinToString { "'$it'" }}"
+                }
+            }
+        }
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
