@@ -478,6 +478,11 @@ class SpdxDocumentFile(
             "The SPDX document file at '$definitionFile' does not describe a project."
         }
 
+        log.info {
+            "File '$definitionFile' contains SPDX document '${spdxDocument.name}' which describes project " +
+                    "'${projectPackage.name}'."
+        }
+
         val packages = mutableSetOf<Package>()
 
         val scopes = SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
