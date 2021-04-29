@@ -89,7 +89,11 @@ private fun SpdxDocument.isProject(): Boolean = projectPackage() != null
  * defined.
  */
 internal fun SpdxDocument.projectPackage(): SpdxPackage? =
+    // An SpdxDocument that describes a project must have at least 2 packages, one for the project itself, and another
+    // one for at least one dependency package.
     packages.takeIf { it.size > 1 || (it.size == 1 && externalDocumentRefs.isNotEmpty()) }
+        // The package that describes a project must have an "empty" package filename (as the "filename" is the project
+        // directory itself).
         ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
 
 /**
