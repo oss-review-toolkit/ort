@@ -52,7 +52,7 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
-tasks.withType<Jar> {
+tasks.withType<Jar>().configureEach {
     manifest {
         val versionCandidates = listOf(project.version, rootProject.version)
         attributes["Implementation-Version"] = versionCandidates.find {

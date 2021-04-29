@@ -219,7 +219,7 @@ subprojects {
         }
     }
 
-    tasks.withType<KotlinCompile> {
+    tasks.withType<KotlinCompile>().configureEach {
         val customCompilerArgs = listOf(
             "-Xallow-result-return-type",
             "-Xopt-in=kotlin.io.path.ExperimentalPathApi",
@@ -281,7 +281,7 @@ subprojects {
     gradle.taskGraph.whenReady {
         val enabled = allTasks.any { it is JacocoReport }
 
-        tasks.withType<Test> {
+        tasks.withType<Test>().configureEach {
             extensions.configure(JacocoTaskExtension::class) {
                 isEnabled = enabled
             }
