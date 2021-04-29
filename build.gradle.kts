@@ -83,7 +83,7 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
     setProperty("termsOfServiceAgree", "yes")
 }
 
-tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
+tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     val nonFinalQualifiers = listOf(
         "alpha", "b", "beta", "cr", "ea", "eap", "m", "milestone", "pr", "preview", "rc"
     ).joinToString("|", "(", ")")
@@ -303,14 +303,14 @@ subprojects {
         }
     }
 
-    tasks.named<JacocoReport>("jacocoTestReport") {
+    tasks.named<JacocoReport>("jacocoTestReport").configure {
         reports {
             // Enable XML in addition to HTML for CI integration.
             xml.isEnabled = true
         }
     }
 
-    tasks.register<JacocoReport>("jacocoFunTestReport") {
+    tasks.register<JacocoReport>("jacocoFunTestReport").configure {
         description = "Generates code coverage report for the funTest task."
         group = "Reporting"
 
@@ -323,23 +323,23 @@ subprojects {
         }
     }
 
-    tasks.register("jacocoReport") {
+    tasks.register("jacocoReport").configure {
         description = "Generates code coverage reports for all test tasks."
         group = "Reporting"
 
         dependsOn(tasks.withType<JacocoReport>())
     }
 
-    tasks.named("check") {
+    tasks.named("check").configure {
         dependsOn(funTest)
     }
 
-    tasks.register<Jar>("sourcesJar") {
+    tasks.register<Jar>("sourcesJar").configure {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
 
-    tasks.register<Jar>("dokkaHtmlJar") {
+    tasks.register<Jar>("dokkaHtmlJar").configure {
         dependsOn(tasks.dokkaHtml)
 
         description = "Assembles a jar archive containing the minimalistic HTML documentation."
@@ -349,7 +349,7 @@ subprojects {
         from(tasks.dokkaHtml)
     }
 
-    tasks.register<Jar>("dokkaJavadocJar") {
+    tasks.register<Jar>("dokkaJavadocJar").configure {
         dependsOn(tasks.dokkaJavadoc)
 
         description = "Assembles a jar archive containing the Javadoc documentation."
@@ -388,11 +388,13 @@ subprojects {
     }
 }
 
-tasks.register("allDependencies") {
-    val dependenciesTasks = allprojects.map { it.tasks.named("dependencies").get() }
+tasks.register("allDependencies").configure {
+    val dependenciesTasks = allprojects.map { it.tasks.named("dependencies") }
     dependsOn(dependenciesTasks)
 
     dependenciesTasks.zipWithNext().forEach { (a, b) ->
-        b.mustRunAfter(a)
+        b.configure {
+            mustRunAfter(a)
+        }
     }
 }
