@@ -179,6 +179,25 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         }
     }
 
+    packageRule("HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE") {
+        val maxAcceptedSeverity = "5.0"
+        val scoringSystem = "CVSS2"
+
+        require {
+            -isExcluded()
+            +hasVulnerability(maxAcceptedSeverity, scoringSystem) { value, threshold ->
+                value.toFloat().compareTo(threshold.toFloat())
+            }
+        }
+
+        issue(
+            Severity.ERROR,
+            "The package ${pkg.id.toCoordinates()} has a vulnerability with $scoringSystem severity > " +
+                    "$maxAcceptedSeverity",
+            howToFixDefault()
+        )
+    }
+
     // Define a rule that is executed for each dependency of a project.
     dependencyRule("COPYLEFT_IN_DEPENDENCY") {
         licenseRule("COPYLEFT_IN_DEPENDENCY", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {

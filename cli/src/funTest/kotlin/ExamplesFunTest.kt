@@ -138,9 +138,13 @@ class ExamplesFunTest : StringSpec() {
 
             val result = evaluator.run(script)
 
-            result.violations shouldHaveSize 2
+            result.violations shouldHaveSize 3
             val failedRules = result.violations.map { it.rule }
-            failedRules shouldContainExactlyInAnyOrder listOf("UNHANDLED_LICENSE", "COPYLEFT_LIMITED_IN_SOURCE")
+            failedRules shouldContainExactlyInAnyOrder listOf(
+                "UNHANDLED_LICENSE",
+                "COPYLEFT_LIMITED_IN_SOURCE",
+                "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE"
+            )
         }
 
         "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
