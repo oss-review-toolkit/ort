@@ -334,6 +334,11 @@ subprojects {
         dependsOn(funTest)
     }
 
+    tasks.withType<Jar>().configureEach {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
+
     tasks.register<Jar>("sourcesJar").configure {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
