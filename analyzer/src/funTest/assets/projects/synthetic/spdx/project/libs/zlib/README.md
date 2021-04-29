@@ -1,1 +1,1 @@
-This directory contains the source code of the `zlib` dependencies.
+This directory contains the source code of the `zlib` dependency.
