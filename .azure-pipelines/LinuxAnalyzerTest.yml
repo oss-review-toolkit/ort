@@ -57,9 +57,9 @@ jobs:
   # Gradle build cache, see: https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | analyzer-test | gradle-caches | v2 | gradle.properties, settings.gradle.kts, **/build.gradle.kts'
+      key: '"$(Agent.OS)" | analyzer-test | gradle-caches | v3 | gradle.properties, settings.gradle.kts, **/build.gradle.kts'
       restoreKeys: |
-        "$(Agent.OS)" | analyzer-test | gradle-caches | v2
+        "$(Agent.OS)" | analyzer-test | gradle-caches | v3
       path: $(GRADLE_USER_HOME)/caches
     displayName: Cache Gradle Caches
 
