@@ -325,4 +325,38 @@ scanner:
       num_reads: 4
       num_hits: 4
     has_issues: false
+advisor:
+  start_time: "2021-04-29T14:54:16.562951Z"
+  end_time: "2021-04-29T14:54:18.969210Z"
+  environment:
+    ort_version: "7fcbb3b"
+    java_version: "11.0.8"
+    os: "Linux"
+    processors: 4
+    max_memory: 12884901888
+    variables:
+      JAVA_HOME: "/opt/java/openjdk"
+      ANDROID_HOME: "/opt/android-sdk"
+      GOPATH: "/go"
+    tool_versions: {}
+  config:
+    nexus_iq:
+      server_url: "https://oss-review-toolkit.org"
+      browse_url: "https://oss-review-toolkit.org"
+      username: "user"
+  results:
+    advisor_results:
+      Maven:junit:junit:4.12:
+      - vulnerabilities:
+        - id: "CVE-2020-15250"
+          references:
+          - url: "http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-15250"
+            scoring_system: "CVSS2"
+            severity: "5.5"
+        advisor:
+          name: "NexusIQ"
+        summary:
+          start_time: "2021-04-29T14:54:17.322191Z"
+          end_time: "2021-04-29T14:54:18.966672Z"
+    has_issues: false
 evaluator: null

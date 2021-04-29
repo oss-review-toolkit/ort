@@ -19,9 +19,15 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import java.net.URI
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.AdvisorDetails
+import org.ossreviewtoolkit.model.AdvisorRecord
+import org.ossreviewtoolkit.model.AdvisorResult
+import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -41,6 +47,9 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.VulnerabilityReference
+import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.LicenseChoices
@@ -95,6 +104,10 @@ val packageWithConcludedAndDeclaredLicense = Package.EMPTY.copy(
     concludedLicense = concludedLicense,
     declaredLicenses = declaredLicenses,
     declaredLicensesProcessed = declaredLicensesProcessed
+)
+
+val packageWithVulnerabilities = Package.EMPTY.copy(
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-vulnerabilities:1.0")
 )
 
 val packageMetaDataOnly = Package.EMPTY.copy(
@@ -193,6 +206,44 @@ val ortResult = OrtResult(
                 projectIncluded
             ),
             packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
+        )
+    ),
+    advisor = AdvisorRun(
+        startTime = Instant.EPOCH,
+        endTime = Instant.EPOCH,
+        environment = Environment(),
+        config = AdvisorConfiguration(),
+        results = AdvisorRecord(
+            advisorResults = sortedMapOf(
+                packageWithVulnerabilities.id to listOf(
+                    AdvisorResult(
+                        vulnerabilities = listOf(
+                            Vulnerability(
+                                id = "CVE-2021-critical",
+                                references = listOf(
+                                    VulnerabilityReference(
+                                        url = URI("https://oss-review-toolkit.org"),
+                                        scoringSystem = "CVSS3",
+                                        severity = "9.0"
+                                    )
+                                )
+                            ),
+                            Vulnerability(
+                                id = "CVE-2021-trivial",
+                                references = listOf(
+                                    VulnerabilityReference(
+                                        url = URI("https://oss-review-toolkit.org"),
+                                        scoringSystem = "CVSS3",
+                                        severity = "2.0"
+                                    )
+                                )
+                            )
+                        ),
+                        advisor = AdvisorDetails.EMPTY,
+                        summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH)
+                    )
+                )
+            )
         )
     ),
     scanner = ScannerRun(
