@@ -90,7 +90,7 @@ private fun SpdxDocument.isProject(): Boolean = projectPackage() != null
  */
 internal fun SpdxDocument.projectPackage(): SpdxPackage? =
     packages.takeIf { it.size > 1 || (it.size == 1 && externalDocumentRefs.isNotEmpty()) }
-        ?.find { it.packageFilename.isEmpty() || it.packageFilename == "." }
+        ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
 
 /**
  * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
