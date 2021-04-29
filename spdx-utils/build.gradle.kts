@@ -40,7 +40,7 @@ plugins {
     id("at.bxm.svntools")
 }
 
-tasks.withType<AntlrTask> {
+tasks.withType<AntlrTask>().configureEach {
     arguments = arguments + listOf("-visitor")
 }
 

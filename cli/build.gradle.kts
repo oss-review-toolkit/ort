@@ -41,7 +41,7 @@ application {
     mainClassName = "org.ossreviewtoolkit.OrtMainKt"
 }
 
-tasks.named<CreateStartScripts>("startScripts") {
+tasks.named<CreateStartScripts>("startScripts").configure {
     doLast {
         // Work around the command line length limit on Windows when passing the classpath to Java, see
         // https://github.com/gradle/gradle/issues/1989#issuecomment-395001392.
