@@ -38,15 +38,15 @@ val loggerOfClass = ConcurrentHashMap<Any, KotlinLogger>()
 /**
  * An extension property for adding a log instance to any (unique) class.
  */
-val <reified T : Any> T.log: KotlinLogger
-    inline get() = loggerOfClass.getOrPut(T::class.java) {
-        T::class.qualifiedName?.let { name ->
+val Any.log: KotlinLogger
+    inline get() = loggerOfClass.getOrPut(this::class.java) {
+        this::class.qualifiedName?.let { name ->
             require(name.startsWith("org.ossreviewtoolkit.")) {
                 "Logging is only allowed on ORT classes, but '$name' is used."
             }
         }
 
-        loggerOf(T::class.java)
+        loggerOf(this::class.java)
     }
 
 val KotlinLogger.statements by lazy { mutableSetOf<Triple<Any, Level, String>>() }
