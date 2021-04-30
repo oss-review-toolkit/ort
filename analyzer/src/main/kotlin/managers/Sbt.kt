@@ -54,7 +54,7 @@ class Sbt(
         // See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.
         private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
 
-        private val VERSION_REGEX = Regex("\\[info]\\s+($SBT_VERSION_PATTERN)")
+        private val VERSION_REGEX = Regex("(?:\\[info]\\s+)?($SBT_VERSION_PATTERN)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
@@ -103,7 +103,7 @@ class Sbt(
         return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively(force = true) }
     }
 
-    override fun getVersionArguments() = "${SBT_OPTIONS.joinToString(" ")} sbtVersion"
+    override fun getVersionArguments() = "${SBT_OPTIONS.joinToString(" ")} sbtVersion --numeric-version"
 
     override fun transformVersion(output: String): String {
         val versions = output.lines().mapNotNull { line ->
