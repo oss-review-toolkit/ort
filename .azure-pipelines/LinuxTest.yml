@@ -69,21 +69,6 @@ jobs:
       path: $(ORT_DATA_DIR)
     displayName: Cache ORT Data Dir
 
-  # Check requirements.
-  # Enable this task to check installed requirements, e.g. after upgrading the required version of a system
-  # dependency.
-  - task: Gradle@2
-    displayName: Check Requirements
-    continueOnError: true
-    enabled: false # TODO: Make this a Pipeline parameter to be able to activate it in the UI.
-    inputs:
-      gradleWrapperFile: gradlew
-      options: --no-daemon -x reporter-web-app:yarnBuild
-      tasks: 'cli:run --args="requirements"'
-      javaHomeOption: JDKVersion
-      jdkVersionOption: 1.11
-      gradleOptions: -Xmx4096m
-
   # Build and test.
   - task: Gradle@2
     displayName: Run Tests

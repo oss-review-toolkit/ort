@@ -96,7 +96,7 @@ jobs:
   - task: Gradle@2
     displayName: Check requirements
     continueOnError: true
-    enabled: false # TODO: Make this a Pipeline parameter to be able to activate it in the UI.
+    enabled: true # TODO: Make this a Pipeline parameter to be able to activate it in the UI.
     inputs:
       gradleWrapperFile: gradlew
       options: --no-daemon -x reporter-web-app:yarnBuild
