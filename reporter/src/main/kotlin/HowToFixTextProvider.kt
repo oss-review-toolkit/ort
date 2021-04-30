@@ -50,7 +50,11 @@ fun interface HowToFixTextProvider {
 private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
     override val preface = """
             import org.ossreviewtoolkit.model.*
+            import org.ossreviewtoolkit.model.config.*
+            import org.ossreviewtoolkit.model.licenses.*
+            import org.ossreviewtoolkit.model.utils.*
             import org.ossreviewtoolkit.reporter.HowToFixTextProvider
+            import org.ossreviewtoolkit.utils.*
 
         """.trimIndent()
 
