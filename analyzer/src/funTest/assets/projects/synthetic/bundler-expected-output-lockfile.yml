@@ -91,7 +91,7 @@ packages:
   description: "Simplistic port-like solution for developers. It provides a standard\
     \ and simplified way to compile against dependency libraries without messing up\
     \ your system."
-  homepage_url: "http://github.com/flavorjones/mini_portile"
+  homepage_url: "https://github.com/flavorjones/mini_portile"
   binary_artifact:
     url: ""
     hash:
