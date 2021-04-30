@@ -99,7 +99,7 @@ jobs:
     enabled: true # TODO: Make this a Pipeline parameter to be able to activate it in the UI.
     inputs:
       gradleWrapperFile: gradlew
-      options: --no-daemon -x reporter-web-app:yarnBuild
+      options: --no-daemon -x reporter-web-app:yarnBuild --scan
       tasks: 'cli:run --args="requirements"'
       javaHomeOption: JDKVersion
       jdkVersionOption: 1.11
