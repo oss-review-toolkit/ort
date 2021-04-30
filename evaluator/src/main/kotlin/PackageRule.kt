@@ -71,6 +71,21 @@ open class PackageRule(
     }
 
     /**
+     * A [RuleMatcher] that checks whether any vulnerability was found for the [package][pkg].
+     */
+    fun hasVulnerability(): RuleMatcher {
+        return object : RuleMatcher {
+            override val description = "hasVulnerability()"
+
+            override fun matches() = ruleSet.ortResult.advisor
+                ?.results
+                ?.getVulnerabilities(pkg.id)
+                ?.isNotEmpty()
+                ?: false
+        }
+    }
+
+    /**
      * A [RuleMatcher] that checks whether any vulnerability for the [package][pkg] has a score that equals or is
      * greater than [threshold] according to the [scoringSystem] and the belonging [severityComparator].
      */

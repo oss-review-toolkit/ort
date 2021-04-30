@@ -179,6 +179,19 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         }
     }
 
+    packageRule("VULNERABILITY_IN_PACKAGE") {
+        require {
+            -isExcluded()
+            +hasVulnerability()
+        }
+
+        issue(
+            Severity.WARNING,
+            "The package ${pkg.id.toCoordinates()} has a vulnerability",
+            howToFixDefault()
+        )
+    }
+
     packageRule("HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE") {
         val maxAcceptedSeverity = "5.0"
         val scoringSystem = "CVSS2"

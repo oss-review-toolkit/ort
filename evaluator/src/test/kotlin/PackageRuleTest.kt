@@ -174,6 +174,20 @@ class PackageRuleTest : WordSpec() {
         }
 
         "hasVulnerability()" should {
+            "return true if any vulnerability is found" {
+                val rule = createPackageRule(packageWithVulnerabilities)
+                val matcher = rule.hasVulnerability()
+
+                matcher.matches() shouldBe true
+            }
+
+            "return false if no vulnerabilities are found" {
+                val rule = createPackageRule(packageWithOnlyDetectedLicense)
+                val matcher = rule.hasVulnerability()
+
+                matcher.matches() shouldBe false
+            }
+
             "return true if a severity of a vulnerability is higher than the threshold" {
                 val rule = createPackageRule(packageWithVulnerabilities)
                 val matcher = rule.hasVulnerability("8.9", "CVSS3") { value, threshold ->
