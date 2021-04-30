@@ -25,8 +25,6 @@ import com.github.ajalt.clikt.core.ProgramResult
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -155,13 +153,6 @@ class OrtMainFunTest : StringSpec() {
                     "--rules-resource", "DUMMY"
                 )
             }
-        }
-
-        "Requirements are listed correctly" {
-            val stdout = runMain("requirements")
-            val errorLogs = stdout.find { it.contains(" ERROR ") }
-
-            errorLogs should beNull()
         }
     }
 
