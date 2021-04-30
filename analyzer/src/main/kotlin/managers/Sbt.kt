@@ -97,7 +97,7 @@ class Sbt(
             resolve("project").mkdir()
         }
 
-        return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively() }
+        return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively(force = true) }
     }
 
     override fun getVersionArguments() = "${SBT_OPTIONS.joinToString(" ")} sbtVersion"
