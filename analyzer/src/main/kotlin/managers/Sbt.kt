@@ -94,7 +94,7 @@ class Sbt(
         // Avoid newer Sbt versions to warn about "Neither build.sbt nor a 'project' directory in the current directory"
         // and prompt the user to continue or quit on Windows where the "-batch" option is not supported.
         val dummyProjectDir = createOrtTempDir(managerName).apply {
-            resolve("build.sbt").createNewFile()
+            resolve("project").mkdir()
         }
 
         return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively() }
