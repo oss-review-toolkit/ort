@@ -355,6 +355,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 storage.add(id2, scanResult6) should beSuccess()
                 val readResult = storage.read(listOf(pkg1, pkg2), criteriaForDetails(scannerDetails1))
 
+                withClue(lazy { (readResult as Failure).error }) {
+                    readResult should beSuccess()
+                }
+
                 (readResult as Success).result.let { result ->
                     result.keys should containExactly(id1, id2)
                     result[id1] should containExactlyInAnyOrder(scanResult1, scanResult2)
@@ -385,6 +389,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 storage.add(id2, scanResult5) should beSuccess()
                 storage.add(id2, scanResult6) should beSuccess()
                 val readResult = storage.read(listOf(pkg1, pkg2), criteria)
+
+                withClue(lazy { (readResult as Failure).error }) {
+                    readResult should beSuccess()
+                }
 
                 (readResult as Success).result.let { result ->
                     result.keys should containExactly(id1, id2)
@@ -476,7 +484,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
                 val readResult = storage.read(listOf(pkg1, pkg2), criteria)
 
-                readResult should beSuccess()
+                withClue(lazy { (readResult as Failure).error }) {
+                    readResult should beSuccess()
+                }
+
                 (readResult as Success).result.let { result ->
                     result.keys should containExactly(id1, id2)
                     result[id1] should containExactlyInAnyOrder(
@@ -541,7 +552,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
                 val readResult = storage.read(listOf(pkg1, pkg2), criteriaForDetails(scannerDetails1))
 
-                readResult should beSuccess()
+                withClue(lazy { (readResult as Failure).error }) {
+                    readResult should beSuccess()
+                }
+
                 (readResult as Success).result.let { result ->
                     result.keys should containExactly(id1, id2)
                     result[id1] should containExactlyInAnyOrder(
@@ -562,8 +576,14 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult = storage.add(id1, scanResult)
                 val readResult = storage.read(listOf(pkgWithoutRevision), criteriaForDetails(scannerDetails1))
 
-                addResult should beSuccess()
-                readResult should beSuccess()
+                withClue(lazy { (addResult as Failure).error }) {
+                    addResult should beSuccess()
+                }
+
+                withClue(lazy { (readResult as Failure).error }) {
+                    readResult should beSuccess()
+                }
+
                 (readResult as Success).result.let { result ->
                     result.keys should containExactly(id1)
                     result[id1] should containExactly(scanResult)
