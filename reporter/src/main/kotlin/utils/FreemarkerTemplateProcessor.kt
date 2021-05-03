@@ -288,7 +288,7 @@ class FreemarkerTemplateProcessor(
          * Return a list of [ResolvedLicense]s where all duplicate entries for a single license in [licenses] are
          * merged. The returned list is sorted by license identifier.
          */
-        // This function is used in the templates and needs to be public.
+        @Suppress("MemberVisibilityCanBePrivate") // This function is used in the templates.
         fun mergeResolvedLicenses(licenses: List<ResolvedLicense>): List<ResolvedLicense> =
             licenses.groupBy { it.license }
                 .map { (_, licenses) -> licenses.merge() }
@@ -297,7 +297,7 @@ class FreemarkerTemplateProcessor(
         /**
          * Return true if and only if the given [license] is not one of the special cases _NONE_ or _NOASSERTION_.
          */
-        @Suppress("WEAKER_ACCESS") // This function is used in the templates.
+        @Suppress("MemberVisibilityCanBePrivate") // This function is used in the templates.
         fun isLicensePresent(license: ResolvedLicense): Boolean = SpdxConstants.isPresent(license.license.toString())
 
         /**
