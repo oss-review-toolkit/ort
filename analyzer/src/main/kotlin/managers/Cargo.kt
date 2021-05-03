@@ -236,10 +236,21 @@ private fun checksumKeyOf(metadata: JsonNode): String {
 
 private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
 
-private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
-    node["license"].textValueOrEmpty().split('/')
+private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
+    val declaredLicenses = node["license"].textValueOrEmpty().split('/')
         .map { it.trim() }
         .filterTo(sortedSetOf()) { it.isNotEmpty() }
+
+    // Cargo allows to declare non-SPDX licenses only by referencing a license file. If a license file is specified, add
+    // an unknown declared license to indicate that there is a declared license but we cannot know which it is at this
+    // point.
+    // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
+    if (node["license_file"].textValueOrEmpty().isNotBlank()) {
+        declaredLicenses += "LicenseRef-ort-unknown-license-reference"
+    }
+
+    return declaredLicenses
+}
 
 private fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
     // While the previously used "/" was not explicit about the intended license operator, the community consensus
