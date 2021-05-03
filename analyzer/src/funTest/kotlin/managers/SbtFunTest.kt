@@ -39,6 +39,10 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class SbtFunTest : StringSpec({
+    "Getting the Sbt version works" {
+        Sbt.Factory().create()
+    }
+
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly".config(
         enabled = !Ci.isAzureWindows // Disabled as a prompt in Sbt 1.5.0 blocks execution when getting the version.
     ) {
