@@ -150,8 +150,8 @@ fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentic
         return PasswordAuthentication(it.first, it.second.toCharArray())
     }
 
-    return credentialsPerMachine["default"]?.let {
+    return credentialsPerMachine["default"]?.let { (login, password) ->
         OrtAuthenticator.log.debug { "Using default .netrc entry for $machine." }
-        PasswordAuthentication(it.first, it.second.toCharArray())
+        PasswordAuthentication(login, password.toCharArray())
     }
 }
