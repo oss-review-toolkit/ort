@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -300,21 +301,26 @@ class FreemarkerTemplateProcessor(
         fun isLicensePresent(license: ResolvedLicense): Boolean = SpdxConstants.isPresent(license.license.toString())
 
         /**
-         * Return `true` if there are any unresolved [OrtIssue]s, or `false` otherwise.
+         * Return `true` if there are any unresolved [OrtIssue]s whose severity is equal to or greater than the
+         * [threshold], or `false` otherwise.
          */
+        @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
-        fun hasUnresolvedIssues() =
+        fun hasUnresolvedIssues(threshold: Severity = Severity.HINT) =
             ortResult.collectIssues().values.flatten().any { issue ->
-                resolutionProvider.getIssueResolutionsFor(issue).isEmpty()
+                issue.severity >= threshold && resolutionProvider.getIssueResolutionsFor(issue).isEmpty()
             }
 
         /**
-         * Return `true` if there are any unresolved [RuleViolation]s, or `false` otherwise.
+         * Return `true` if there are any unresolved [RuleViolation]s whose severity is equal to or greater than the
+         * [threshold], or `false` otherwise.
          */
+        @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
-        fun hasUnresolvedRuleViolations() =
+        fun hasUnresolvedRuleViolations(threshold: Severity = Severity.HINT) =
             ortResult.evaluator?.violations?.any { violation ->
-                resolutionProvider.getRuleViolationResolutionsFor(violation).isEmpty()
+                violation.severity >= threshold && resolutionProvider.getRuleViolationResolutionsFor(violation)
+                    .isEmpty()
             } ?: false
 
         /**
