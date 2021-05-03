@@ -151,7 +151,14 @@ fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentic
     }
 
     return credentialsPerMachine["default"]?.let { (login, password) ->
-        OrtAuthenticator.log.debug { "Using default .netrc entry for $machine." }
-        PasswordAuthentication(login, password.toCharArray())
+        if (credentialsPerMachine.entries.last().key != "default") {
+            // Note that "there can be only one default token, and it must be after all machine tokens", see
+            // https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html
+            OrtAuthenticator.log.debug { "Discarding default .netrc entry as it does not come last." }
+            null
+        } else {
+            OrtAuthenticator.log.debug { "Using default .netrc entry for $machine." }
+            PasswordAuthentication(login, password.toCharArray())
+        }
     }
 }

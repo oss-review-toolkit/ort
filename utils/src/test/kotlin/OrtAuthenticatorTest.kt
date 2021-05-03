@@ -66,18 +66,26 @@ class OrtAuthenticatorTest : WordSpec({
             }
         }
 
-        "prefer machine-specific entries over the default" {
+        "recognize a default entry if it is the only entry" {
+            val authentication = getNetrcAuthentication("""
+                default login foo password bar
+            """.trimIndent(), "gitlab.com")
+
+            authentication shouldNotBeNull {
+                userName shouldBe "foo"
+                password shouldBe "bar".toCharArray()
+            }
+        }
+
+        "disregard a default entry that comes before machine entries" {
             val authentication = getNetrcAuthentication("""
                 default login foo password bar
                 machine github.com
                 login git
                 password hub
-            """.trimIndent(), "github.com")
+            """.trimIndent(), "gitlab.com")
 
-            authentication shouldNotBeNull {
-                userName shouldBe "git"
-                password shouldBe "hub".toCharArray()
-            }
+            authentication should beNull()
         }
 
         "ignore superfluous statements" {
