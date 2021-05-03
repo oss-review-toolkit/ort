@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["anon <anon@example.org>", "Another Author", "<mail.only@example.org>"]
 edition = "2018"
 license = "MIT/Apache-2.0"
+license-file = "LICENSE"
 homepage = "https://example.org"
 
 [dependencies]
