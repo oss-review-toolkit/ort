@@ -52,7 +52,7 @@ class OrtAuthenticatorTest : WordSpec({
             }
         }
 
-        "recognize the default machine" {
+        "recognize a default entry that comes after all machine entries" {
             val authentication = getNetrcAuthentication("""
                 machine github.com
                 login git
