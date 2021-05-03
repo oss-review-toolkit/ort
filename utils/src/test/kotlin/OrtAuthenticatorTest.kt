@@ -66,20 +66,6 @@ class OrtAuthenticatorTest : WordSpec({
             }
         }
 
-        "prefer machine-specific entries over the default" {
-            val authentication = getNetrcAuthentication("""
-                default login foo password bar
-                machine github.com
-                login git
-                password hub
-            """.trimIndent(), "github.com")
-
-            authentication shouldNotBeNull {
-                userName shouldBe "git"
-                password shouldBe "hub".toCharArray()
-            }
-        }
-
         "ignore superfluous statements" {
             val authentication = getNetrcAuthentication("""
                 machine "# A funky way to add comments."
