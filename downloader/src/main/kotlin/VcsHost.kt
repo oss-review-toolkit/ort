@@ -276,9 +276,7 @@ enum class VcsHost(
                     VcsInfo(
                         type = VcsType.GIT,
                         url = normalizeVcsUrl(projectUrl),
-                        revision = "",
-                        resolvedRevision = null,
-                        path = ""
+                        revision = ""
                     )
                 }
 
@@ -290,7 +288,6 @@ enum class VcsHost(
                         type = VcsType.GIT,
                         url = "$url.git",
                         revision = "",
-                        resolvedRevision = null,
                         path = path
                     )
                 }
@@ -303,8 +300,6 @@ enum class VcsHost(
                         type = VcsType.GIT,
                         url = url,
                         revision = revision,
-                        resolvedRevision = null,
-                        path = ""
                     )
                 }
 
