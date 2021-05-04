@@ -93,39 +93,39 @@ private fun createSpdxDocument(): SpdxDocument {
 class SpdxDocumentFileTest : WordSpec({
     "getBinaryArtifact()" should {
         "return a RemoteArtifact for a downloadLocation that points to a binary artifact" {
-            getBinaryArtifact(pkgForBinaryArtifact) shouldBe RemoteArtifact(
+            pkgForBinaryArtifact.getBinaryArtifact() shouldBe RemoteArtifact(
                 url = "https://repo1.maven.org/maven2/junit/junit/4.11/junit-4.11.jar",
                 hash = Hash.NONE
             )
         }
 
         "return null for a downloadLocation that does not point to a binary artifact" {
-            getBinaryArtifact(pkgForBinaryArtifact.copy(downloadLocation = SpdxConstants.NONE)) should beNull()
-            getBinaryArtifact(pkgForBinaryArtifact.copy(downloadLocation = SpdxConstants.NOASSERTION)) should beNull()
-            getBinaryArtifact(pkgForSourceArtifact) should beNull()
-            getBinaryArtifact(pkgForVcs) should beNull()
+            pkgForBinaryArtifact.copy(downloadLocation = SpdxConstants.NONE).getBinaryArtifact() should beNull()
+            pkgForBinaryArtifact.copy(downloadLocation = SpdxConstants.NOASSERTION).getBinaryArtifact() should beNull()
+            pkgForSourceArtifact.getBinaryArtifact() should beNull()
+            pkgForVcs.getBinaryArtifact() should beNull()
         }
     }
 
     "getSourceArtifact()" should {
         "return a RemoteArtifact for a downloadLocation that points to a source artifact" {
-            getSourceArtifact(pkgForSourceArtifact) shouldBe RemoteArtifact(
+            pkgForSourceArtifact.getSourceArtifact() shouldBe RemoteArtifact(
                 url = "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
                 hash = Hash.NONE
             )
         }
 
         "return null for a downloadLocation that does not point to a source artifact" {
-            getSourceArtifact(pkgForSourceArtifact.copy(downloadLocation = SpdxConstants.NONE)) should beNull()
-            getSourceArtifact(pkgForSourceArtifact.copy(downloadLocation = SpdxConstants.NOASSERTION)) should beNull()
-            getSourceArtifact(pkgForBinaryArtifact) should beNull()
-            getSourceArtifact(pkgForVcs) should beNull()
+            pkgForSourceArtifact.copy(downloadLocation = SpdxConstants.NONE).getSourceArtifact() should beNull()
+            pkgForSourceArtifact.copy(downloadLocation = SpdxConstants.NOASSERTION).getSourceArtifact() should beNull()
+            pkgForBinaryArtifact.getSourceArtifact() should beNull()
+            pkgForVcs.getSourceArtifact() should beNull()
         }
     }
 
     "getVcsInfo()" should {
         "return the VcsInfo for a downloadLocation that points to a VCS" {
-            getVcsInfo(pkgForVcs) shouldBe VcsInfo(
+            pkgForVcs.getVcsInfo() shouldBe VcsInfo(
                 type = VcsType.GIT,
                 url = "https://git.myproject.org/MyProject.git",
                 revision = "master",
@@ -134,10 +134,10 @@ class SpdxDocumentFileTest : WordSpec({
         }
 
         "return null for a downloadLocation that does not point to a VCS" {
-            getVcsInfo(pkgForVcs.copy(downloadLocation = SpdxConstants.NONE)) should beNull()
-            getVcsInfo(pkgForVcs.copy(downloadLocation = SpdxConstants.NOASSERTION)) should beNull()
-            getVcsInfo(pkgForBinaryArtifact) should beNull()
-            getVcsInfo(pkgForSourceArtifact) should beNull()
+            pkgForVcs.copy(downloadLocation = SpdxConstants.NONE).getVcsInfo() should beNull()
+            pkgForVcs.copy(downloadLocation = SpdxConstants.NOASSERTION).getVcsInfo() should beNull()
+            pkgForBinaryArtifact.getVcsInfo() should beNull()
+            pkgForSourceArtifact.getVcsInfo() should beNull()
         }
     }
 

@@ -169,53 +169,53 @@ private fun requestSpdxDocument(uri: URI): SpdxDocument =
  * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
  * of NONE or NOASSERTION.
  */
-private fun getConcludedLicense(pkg: SpdxPackage): SpdxExpression? =
-    pkg.licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
+private fun SpdxPackage.getConcludedLicense(): SpdxExpression? =
+    licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
 
 /**
- * Return a [RemoteArtifact] for the binary artifact that the [pkg]'s [downloadLocation][SpdxPackage.downloadLocation]
- * points to. If the download location is a "not present" value, or if it points to a source artifact or a VCS location
+ * Return a [RemoteArtifact] for the binary artifact that the [downloadLocation][SpdxPackage.downloadLocation] points
+ * to. If the download location is a "not present" value, or if it points to a source artifact or a VCS location
  * instead, return null.
  */
-internal fun getBinaryArtifact(pkg: SpdxPackage): RemoteArtifact? =
-    getRemoteArtifact(pkg).takeUnless {
+internal fun SpdxPackage.getBinaryArtifact(): RemoteArtifact? =
+    getRemoteArtifact().takeUnless {
         // Note: The "FilesAnalyzed" field "Indicates whether the file content of this package has been available for or
         // subjected to analysis when creating the SPDX document". It does not indicate whether files were actually
         // analyzed.
         // If files were available, do *not* consider this do be a *binary* artifact.
-        pkg.filesAnalyzed
+        filesAnalyzed
     }
 
 /**
- * Return a [RemoteArtifact] for the source artifact that the [pkg]'s [downloadLocation][SpdxPackage.downloadLocation]
- * points to. If the download location is a "not present" value, or if it points to a binary artifact or a VCS location
+ * Return a [RemoteArtifact] for the source artifact that the [downloadLocation][SpdxPackage.downloadLocation] points
+ * to. If the download location is a "not present" value, or if it points to a binary artifact or a VCS location
  * instead, return null.
  */
-internal fun getSourceArtifact(pkg: SpdxPackage): RemoteArtifact? =
-    getRemoteArtifact(pkg).takeIf {
+internal fun SpdxPackage.getSourceArtifact(): RemoteArtifact? =
+    getRemoteArtifact().takeIf {
         // Note: The "FilesAnalyzed" field "Indicates whether the file content of this package has been available for or
         // subjected to analysis when creating the SPDX document". It does not indicate whether files were actually
         // analyzed.
         // If files were available, *do* consider this do be a *source* artifact.
-        pkg.filesAnalyzed
+        filesAnalyzed
     }
 
-private fun getRemoteArtifact(pkg: SpdxPackage): RemoteArtifact? =
+private fun SpdxPackage.getRemoteArtifact(): RemoteArtifact? =
     when {
-        SpdxConstants.isNotPresent(pkg.downloadLocation) -> null
-        SPDX_VCS_PREFIXES.any { (prefix, _) -> pkg.downloadLocation.startsWith(prefix) } -> null
-        else -> RemoteArtifact(pkg.downloadLocation, Hash.NONE)
+        SpdxConstants.isNotPresent(downloadLocation) -> null
+        SPDX_VCS_PREFIXES.any { (prefix, _) -> downloadLocation.startsWith(prefix) } -> null
+        else -> RemoteArtifact(downloadLocation, Hash.NONE)
     }
 
 /**
- * Return the [VcsInfo] contained in [pkg]'s [downloadLocation][SpdxPackage.downloadLocation], or null if the download
+ * Return the [VcsInfo] contained in the [downloadLocation][SpdxPackage.downloadLocation], or null if the download
  * location is a "not present" value / does not point to a VCS location.
  */
-internal fun getVcsInfo(pkg: SpdxPackage): VcsInfo? {
-    if (SpdxConstants.isNotPresent(pkg.downloadLocation)) return null
+internal fun SpdxPackage.getVcsInfo(): VcsInfo? {
+    if (SpdxConstants.isNotPresent(downloadLocation)) return null
 
     return SPDX_VCS_PREFIXES.mapNotNull { (prefix, vcsType) ->
-        pkg.downloadLocation.withoutPrefix(prefix)?.let { url ->
+        downloadLocation.withoutPrefix(prefix)?.let { url ->
             var vcsUrl = url
 
             val vcsPath = vcsUrl.substringAfterLast('#', "")
@@ -309,7 +309,7 @@ class SpdxDocumentFile(
 
         // If the VCS information cannot be determined from the download location, fall back to try getting it from the
         // VCS working tree itself.
-        val vcs = getVcsInfo(this) ?: run {
+        val vcs = getVcsInfo() ?: run {
             val packageDir = workingDir.resolve(packageFilename)
             VersionControlSystem.forDirectory(packageDir)?.getInfo()
         } ?: VcsInfo.EMPTY
@@ -319,11 +319,11 @@ class SpdxDocumentFile(
             // TODO: Find a way to track authors.
             authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(licenseDeclared),
-            concludedLicense = getConcludedLicense(this),
+            concludedLicense = getConcludedLicense(),
             description = packageDescription,
             homepageUrl = homepage.mapNotPresentToEmpty(),
-            binaryArtifact = getBinaryArtifact(this) ?: RemoteArtifact.EMPTY,
-            sourceArtifact = getSourceArtifact(this) ?: RemoteArtifact.EMPTY,
+            binaryArtifact = getBinaryArtifact() ?: RemoteArtifact.EMPTY,
+            sourceArtifact = getSourceArtifact() ?: RemoteArtifact.EMPTY,
             vcs = vcs
         )
     }
