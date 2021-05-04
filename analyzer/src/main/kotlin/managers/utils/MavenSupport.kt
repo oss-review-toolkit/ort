@@ -243,7 +243,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                         // clear cases.
                         log.warn { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
 
-                        VcsInfo(VcsType.GIT, connection, tag)
+                        VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
                     } else {
                         log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
 
