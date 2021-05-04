@@ -273,22 +273,46 @@ enum class VcsHost(
                 }
 
                 projectUrl.endsWith(".git") -> {
-                    VcsInfo(VcsType.GIT, normalizeVcsUrl(projectUrl), "", null, "")
+                    VcsInfo(
+                        type = VcsType.GIT,
+                        url = normalizeVcsUrl(projectUrl),
+                        revision = "",
+                        resolvedRevision = null,
+                        path = ""
+                    )
                 }
 
                 projectUrl.contains(".git/") -> {
                     val url = normalizeVcsUrl(projectUrl.substringBefore(".git/"))
                     val path = projectUrl.substringAfter(".git/")
-                    VcsInfo(VcsType.GIT, "$url.git", "", null, path)
+
+                    VcsInfo(
+                        type = VcsType.GIT,
+                        url = "$url.git",
+                        revision = "",
+                        resolvedRevision = null,
+                        path = path
+                    )
                 }
 
                 projectUrl.contains(".git#") || GIT_REVISION_FRAGMENT.matches(projectUrl) -> {
                     val url = normalizeVcsUrl(projectUrl.substringBeforeLast('#'))
                     val revision = projectUrl.substringAfterLast('#')
-                    VcsInfo(VcsType.GIT, url, revision, null, "")
+
+                    VcsInfo(
+                        type = VcsType.GIT,
+                        url = url,
+                        revision = revision,
+                        resolvedRevision = null,
+                        path = ""
+                    )
                 }
 
-                else -> VcsInfo(VcsType.UNKNOWN, projectUrl, "")
+                else -> VcsInfo(
+                    type = VcsType.UNKNOWN,
+                    url = projectUrl,
+                    revision = ""
+                )
             }
         }
 
