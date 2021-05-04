@@ -66,7 +66,12 @@ import org.ossreviewtoolkit.utils.test.createDefault
 class LicenseInfoResolverTest : WordSpec() {
     init {
         val pkgId = Identifier("Gradle:org.ossreviewtoolkit:ort:1.0.0")
-        val vcsInfo = VcsInfo(VcsType.GIT, "https://github.com/oss-review-toolkit/ort.git", "master", "master")
+        val vcsInfo = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/oss-review-toolkit/ort.git",
+            revision = "master",
+            resolvedRevision = "master"
+        )
         val provenance = RepositoryProvenance(vcsInfo = vcsInfo)
 
         "resolveLicenseInfo()" should {
