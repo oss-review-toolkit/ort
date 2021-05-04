@@ -98,26 +98,6 @@ internal fun SpdxDocument.projectPackage(): SpdxPackage? =
         ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
 
 /**
- * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
- * specified.
- */
-private fun String.extractOrganization(): String? =
-    lineSequence().mapNotNull { line ->
-        line.withoutPrefix(SpdxConstants.ORGANIZATION)
-    }.firstOrNull()
-
-/**
- * Return whether the string has the format of an [SpdxExternalDocumentReference], with or without an additional
- * package id.
- */
-private fun String.isExternalDocumentReferenceId(): Boolean = startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)
-
-/**
- * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.
- */
-private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
-
-/**
  * Get the [SpdxPackage] from the [SpdxExternalDocumentReference] that the [packageId] refers to, where [workingDir] is
  * used to resolve local relative URIs to files.
  */
@@ -134,36 +114,6 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(packageId: String, wor
 
     return spdxPackage.copy(packageFilename = workingDir.resolve(URI(spdxDocument).path).parentFile.absolutePath)
 }
-
-/**
- * Return [File] referred to by [SpdxExternalDocumentReference.spdxDocument].
- */
-private fun resolveExternalDocumentReference(
-    externalDocumentReference: SpdxExternalDocumentReference,
-    workingDir: File
-): SpdxDocument {
-    val uri = runCatching { URI(externalDocumentReference.spdxDocument) }.getOrElse {
-        throw IllegalArgumentException("'${externalDocumentReference.spdxDocument}' identified by " +
-                "${externalDocumentReference.externalDocumentId} is not a valid URI. }")
-    }
-
-    if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
-        val referencedFile = workingDir.resolve(uri.path)
-        val spdxFile = referencedFile.takeIf { it.isFile }
-            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file.")
-        return SpdxModelMapper.read(spdxFile)
-    }
-
-    return requestSpdxDocument(uri)
-}
-
-/**
- * Returns [SpdxDocument] downloaded from a given [URI], if it can be found.
- */
-private fun requestSpdxDocument(uri: URI): SpdxDocument =
-    OkHttpClientHelper.downloadText(uri.toString()).map {
-        SpdxModelMapper.FileFormat.forFile(File(uri.path)).mapper.readValue<SpdxDocument>(it)
-    }.getOrThrow()
 
 /**
  * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
@@ -230,6 +180,26 @@ internal fun SpdxPackage.getVcsInfo(): VcsInfo? {
 }
 
 /**
+ * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
+ * specified.
+ */
+private fun String.extractOrganization(): String? =
+    lineSequence().mapNotNull { line ->
+        line.withoutPrefix(SpdxConstants.ORGANIZATION)
+    }.firstOrNull()
+
+/**
+ * Return whether the string has the format of an [SpdxExternalDocumentReference], with or without an additional
+ * package id.
+ */
+private fun String.isExternalDocumentReferenceId(): Boolean = startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)
+
+/**
+ * Map a "not preset" SPDX value, i.e. NONE or NOASSERTION, to an empty string.
+ */
+private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
+
+/**
  * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
  * relationship is found, return [PackageLinkage.DYNAMIC].
  */
@@ -266,6 +236,36 @@ private fun hasDependsOnRelationship(
 
     return relation in SPDX_LINKAGE_RELATIONSHIPS && !hasScopeRelationship
 }
+
+/**
+ * Return [File] referred to by [SpdxExternalDocumentReference.spdxDocument].
+ */
+private fun resolveExternalDocumentReference(
+    externalDocumentReference: SpdxExternalDocumentReference,
+    workingDir: File
+): SpdxDocument {
+    val uri = runCatching { URI(externalDocumentReference.spdxDocument) }.getOrElse {
+        throw IllegalArgumentException("'${externalDocumentReference.spdxDocument}' identified by " +
+                "${externalDocumentReference.externalDocumentId} is not a valid URI. }")
+    }
+
+    if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
+        val referencedFile = workingDir.resolve(uri.path)
+        val spdxFile = referencedFile.takeIf { it.isFile }
+            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file.")
+        return SpdxModelMapper.read(spdxFile)
+    }
+
+    return requestSpdxDocument(uri)
+}
+
+/**
+ * Returns [SpdxDocument] downloaded from a given [URI], if it can be found.
+ */
+private fun requestSpdxDocument(uri: URI): SpdxDocument =
+    OkHttpClientHelper.downloadText(uri.toString()).map {
+        SpdxModelMapper.FileFormat.forFile(File(uri.path)).mapper.readValue<SpdxDocument>(it)
+    }.getOrThrow()
 
 /**
  * A "fake" package manager implementation that uses SPDX documents as definition files to declare projects and describe
