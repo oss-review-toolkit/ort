@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.spdx.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonValue
 
 /**
  *  References an external source of additional information, metadata, enumerations, asset identifiers, or downloadable
@@ -50,14 +49,11 @@ data class SpdxExternalReference(
      */
     val referenceType: String
 ) {
-    enum class Category(
-        @JsonValue
-        val serializedName: String
-    ) {
-        SECURITY("SECURITY"),
-        PACKAGE_MANAGER("PACKAGE_MANAGER"),
-        PERSISTENT_ID("PERSISTENT_ID"),
-        OTHER("OTHER");
+    enum class Category {
+        SECURITY,
+        PACKAGE_MANAGER,
+        PERSISTENT_ID,
+        OTHER
     }
 
     // TODO: Using new values as per https://github.com/spdx/spdx-spec/issues/451.
