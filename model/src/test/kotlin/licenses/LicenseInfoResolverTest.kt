@@ -70,7 +70,7 @@ class LicenseInfoResolverTest : WordSpec() {
             type = VcsType.GIT,
             url = "https://github.com/oss-review-toolkit/ort.git",
             revision = "master",
-            resolvedRevision = "master"
+            resolvedRevision = "0000000011111111222222223333333344444444"
         )
         val provenance = RepositoryProvenance(vcsInfo = vcsInfo)
 
