@@ -254,31 +254,25 @@ enum class VcsHost(
             val svnTrunkMatch = SVN_TRUNK_PATTERN.matchEntire(projectUrl)
 
             return when {
-                svnBranchOrTagMatch != null -> {
-                    VcsInfo(
-                        type = VcsType.SUBVERSION,
-                        url = svnBranchOrTagMatch.groupValues[1],
-                        revision = "${svnBranchOrTagMatch.groupValues[2]}/${svnBranchOrTagMatch.groupValues[3]}",
-                        path = svnBranchOrTagMatch.groupValues[4]
-                    )
-                }
+                svnBranchOrTagMatch != null -> VcsInfo(
+                    type = VcsType.SUBVERSION,
+                    url = svnBranchOrTagMatch.groupValues[1],
+                    revision = "${svnBranchOrTagMatch.groupValues[2]}/${svnBranchOrTagMatch.groupValues[3]}",
+                    path = svnBranchOrTagMatch.groupValues[4]
+                )
 
-                svnTrunkMatch != null -> {
-                    VcsInfo(
-                        type = VcsType.SUBVERSION,
-                        url = svnTrunkMatch.groupValues[1],
-                        revision = svnTrunkMatch.groupValues[2],
-                        path = svnTrunkMatch.groupValues[3]
-                    )
-                }
+                svnTrunkMatch != null -> VcsInfo(
+                    type = VcsType.SUBVERSION,
+                    url = svnTrunkMatch.groupValues[1],
+                    revision = svnTrunkMatch.groupValues[2],
+                    path = svnTrunkMatch.groupValues[3]
+                )
 
-                projectUrl.endsWith(".git") -> {
-                    VcsInfo(
-                        type = VcsType.GIT,
-                        url = normalizeVcsUrl(projectUrl),
-                        revision = ""
-                    )
-                }
+                projectUrl.endsWith(".git") -> VcsInfo(
+                    type = VcsType.GIT,
+                    url = normalizeVcsUrl(projectUrl),
+                    revision = ""
+                )
 
                 projectUrl.contains(".git/") -> {
                     val url = normalizeVcsUrl(projectUrl.substringBefore(".git/"))
