@@ -87,7 +87,7 @@ packages:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
 - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
-  purl: "pkg:spdxdocumentfile/OpenSSL%20Development%20Team/openssl@1.1.1g"
+  purl: "pkg:a-name/openssl@1.1.1g"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:

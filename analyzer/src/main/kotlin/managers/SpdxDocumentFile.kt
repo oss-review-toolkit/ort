@@ -45,11 +45,13 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.model.SpdxExternalDocumentReference
+import org.ossreviewtoolkit.spdx.model.SpdxExternalReference
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.spdx.toSpdx
@@ -178,6 +180,13 @@ internal fun SpdxPackage.getVcsInfo(): VcsInfo? {
         }
     }.firstOrNull()
 }
+
+/**
+ * Return the location of the first [external reference][SpdxExternalReference] of the given [type] in this
+ * [SpdxPackage], or null if there is no such reference.
+ */
+private fun SpdxPackage.locateExternalReference(type: SpdxExternalReference.Type): String? =
+    externalRefs.find { it.referenceType == type.typeName && it.referenceCategory == type.category }?.referenceLocator
 
 /**
  * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
@@ -314,8 +323,11 @@ class SpdxDocumentFile(
             VersionControlSystem.forDirectory(packageDir)?.getInfo()
         } ?: VcsInfo.EMPTY
 
+        val id = toIdentifier()
+
         return Package(
-            id = toIdentifier(),
+            id = id,
+            purl = locateExternalReference(SpdxExternalReference.Type.PURL) ?: id.toPurl(),
             // TODO: Find a way to track authors.
             authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(licenseDeclared),
