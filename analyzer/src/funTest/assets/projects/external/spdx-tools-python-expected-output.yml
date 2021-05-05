@@ -30,10 +30,10 @@ project:
       dependencies:
       - id: "PyPI::isodate:0.6.0"
         dependencies:
-        - id: "PyPI::six:1.15.0"
+        - id: "PyPI::six:1.16.0"
       - id: "PyPI::pyparsing:2.4.7"
-      - id: "PyPI::six:1.15.0"
-    - id: "PyPI::six:1.15.0"
+      - id: "PyPI::six:1.16.0"
+    - id: "PyPI::six:1.16.0"
 packages:
 - id: "PyPI::isodate:0.6.0"
   purl: "pkg:pypi/isodate@0.6.0"
@@ -168,8 +168,8 @@ packages:
     url: "https://github.com/RDFLib/rdflib.git"
     revision: ""
     path: ""
-- id: "PyPI::six:1.15.0"
-  purl: "pkg:pypi/six@1.15.0"
+- id: "PyPI::six:1.16.0"
+  purl: "pkg:pypi/six@1.16.0"
   authors:
   - "Benjamin Peterson"
   declared_licenses:
@@ -182,14 +182,14 @@ packages:
   description: "Python 2 and 3 compatibility utilities"
   homepage_url: "https://github.com/benjaminp/six"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/ee/ff/48bde5c0f013094d729fe4b0316ba2a24774b3ff1c52d924a8a4cb04078a/six-1.15.0-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl"
     hash:
-      value: "16dc2d0f87a1ed05579ad7c4965cf0ef"
+      value: "529d7fd7e14612ccde86417b4402d6f3"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426/six-1.15.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz"
     hash:
-      value: "9f90a0eaa0ea7747fda01ca79d21ebcb"
+      value: "a7c927740e4964dd29b72cebfc1429bb"
       algorithm: "MD5"
   vcs:
     type: ""
