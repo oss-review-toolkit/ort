@@ -50,15 +50,15 @@ data class ScanResult(
     fun filterByPath(path: String): ScanResult {
         if (path.isBlank()) return this
 
-        val summary = summary.filterByPath(path)
-
-        return if (provenance is RepositoryProvenance) {
-            val vcsProvenance = provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = path))
-
-            ScanResult(vcsProvenance, scanner, summary)
-        } else {
-            ScanResult(provenance, scanner, summary)
-        }
+        return ScanResult(
+            provenance = if (provenance is RepositoryProvenance) {
+                provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = path))
+            } else {
+                provenance
+            },
+            scanner = scanner,
+            summary = summary.filterByPath(path),
+        )
     }
 
     /**
