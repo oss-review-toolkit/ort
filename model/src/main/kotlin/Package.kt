@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -39,7 +38,6 @@ import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
-@JsonIgnoreProperties(value = ["purl"], allowGetters = true)
 data class Package(
     /**
      * The unique identifier of this package. The [id]'s type is the name of the package type or protocol (e.g. "Maven"

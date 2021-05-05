@@ -363,7 +363,7 @@ packages:
   id: "Ant:junit:junit:4.12"
   is_project: false
   definition_file_path: ""
-  purl: "pkg:ant/junit/junit@4.12"
+  purl: "pkg:maven/junit/junit@4.12"
   declared_licenses:
   - 9
   declared_licenses_processed:
