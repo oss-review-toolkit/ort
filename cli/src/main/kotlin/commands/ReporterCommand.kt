@@ -276,7 +276,8 @@ class ReporterCommand : CliktCommand(
             val durationInSeconds = timedValue.duration.inSeconds
 
             timedValue.value.onSuccess { files ->
-                println("Successfully created the '$name' report at $files in ${durationInSeconds}s.")
+                val fileList = files.joinToString { "'$it'" }
+                println("Successfully created '$name' report(s) at $fileList in ${durationInSeconds}s.")
             }.onFailure { e ->
                 e.showStackTrace()
 
