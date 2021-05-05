@@ -90,6 +90,13 @@ data class SpdxExternalReference(
                     "'$referenceCategory'."
         }
     }
+
+    constructor(referenceType: Type, referenceLocator: String, comment: String = "") : this(
+        comment,
+        referenceType.category,
+        referenceLocator,
+        referenceType
+    )
 }
 
 private class ReferenceTypeDeserializer : StdDeserializer<SpdxExternalReference.Type>(
