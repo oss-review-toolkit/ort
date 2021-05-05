@@ -262,15 +262,17 @@ class Downloader(private val config: DownloaderConfiguration) {
                 throw e
             }
         }
-        val revision = workingTree.getRevision()
+        val resolvedRevision = workingTree.getRevision()
 
-        log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
+        log.info {
+            "Finished downloading source code revision '$resolvedRevision' to '${outputDirectory.absolutePath}'."
+        }
 
         val vcsInfo = VcsInfo(
             type = applicableVcs.type,
             url = pkg.vcsProcessed.url,
-            revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
-            resolvedRevision = revision,
+            revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: resolvedRevision,
+            resolvedRevision = resolvedRevision,
             path = pkg.vcsProcessed.path
         )
 
