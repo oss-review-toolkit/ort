@@ -82,7 +82,7 @@ data class RepositoryProvenance(
 
         // If pkg.vcsProcessed equals originalVcsInfo or vcsInfo this provenance was definitely created when
         // downloading this package.
-        if (pkg.vcsProcessed == originalVcsInfo || pkg.vcsProcessed == vcsInfo) return true
+        if (pkg.vcsProcessed == originalVcsInfo || pkg.vcsProcessed.equalsIgnoreResolvedRevision(vcsInfo)) return true
 
         return listOf(pkg.vcs, pkg.vcsProcessed).any {
             if (it.resolvedRevision != null) {
@@ -114,3 +114,6 @@ private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::c
         }
     }
 }
+
+private fun VcsInfo.equalsIgnoreResolvedRevision(other: VcsInfo): Boolean =
+    copy(resolvedRevision = "") == other.copy(resolvedRevision = "")
