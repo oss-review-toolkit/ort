@@ -206,9 +206,9 @@ private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
     if (purl.isEmpty()) return emptyList()
 
     val reference = SpdxExternalReference(
-        referenceCategory = SpdxExternalReference.Type.PURL.category,
+        referenceCategory = SpdxExternalReference.Type.Purl.category,
         referenceLocator = purl,
-        referenceType = SpdxExternalReference.Type.PURL.typeName
+        referenceType = SpdxExternalReference.Type.Purl
     )
 
     return listOf(reference)

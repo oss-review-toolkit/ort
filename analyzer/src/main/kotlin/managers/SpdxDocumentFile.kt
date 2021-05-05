@@ -186,7 +186,7 @@ internal fun SpdxPackage.getVcsInfo(): VcsInfo? {
  * [SpdxPackage], or null if there is no such reference.
  */
 private fun SpdxPackage.locateExternalReference(type: SpdxExternalReference.Type): String? =
-    externalRefs.find { it.referenceType == type.typeName && it.referenceCategory == type.category }?.referenceLocator
+    externalRefs.find { it.referenceType == type }?.referenceLocator
 
 /**
  * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
@@ -327,7 +327,7 @@ class SpdxDocumentFile(
 
         return Package(
             id = id,
-            purl = locateExternalReference(SpdxExternalReference.Type.PURL) ?: id.toPurl(),
+            purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
             // TODO: Find a way to track authors.
             authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(licenseDeclared),

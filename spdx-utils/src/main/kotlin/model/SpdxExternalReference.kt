@@ -20,6 +20,12 @@
 package org.ossreviewtoolkit.spdx.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 /**
  *  References an external source of additional information, metadata, enumerations, asset identifiers, or downloadable
@@ -47,7 +53,8 @@ data class SpdxExternalReference(
      * The references type as specified by
      * https://github.com/spdx/spdx-spec/blob/master/chapters/appendix-VI-external-repository-identifiers.md.
      */
-    val referenceType: String
+    @JsonDeserialize(using = ReferenceTypeDeserializer::class)
+    val referenceType: Type
 ) {
     enum class Category {
         SECURITY,
@@ -56,25 +63,43 @@ data class SpdxExternalReference(
         OTHER
     }
 
-    // TODO: Using new values as per https://github.com/spdx/spdx-spec/issues/451.
-    enum class Type(
-        val typeName: String,
+    sealed class Type(
+        @JsonValue
+        val name: String,
         val category: Category
     ) {
-        BOWER("bower", Category.PACKAGE_MANAGER),
-        CPE_22_TYPE("cpe22Type", Category.SECURITY),
-        CPE_23_TYPE("cpe23Type", Category.SECURITY),
-        MAVEN_CENTRAL("maven-central", Category.PACKAGE_MANAGER),
-        NPM("npm", Category.PACKAGE_MANAGER),
-        NUGET("nuget", Category.PACKAGE_MANAGER),
-        PURL("purl", Category.PACKAGE_MANAGER),
-        SWH("swh", Category.PERSISTENT_ID),
-        OTHER("OTHER", Category.OTHER);
+        object Cpe22Type : Type("cpe22Type", Category.SECURITY)
+        object Cpe23Type : Type("cpe23Type", Category.SECURITY)
+
+        object Bower : Type("bower", Category.PACKAGE_MANAGER)
+        object MavenCentral : Type("maven-central", Category.PACKAGE_MANAGER)
+        object Npm : Type("npm", Category.PACKAGE_MANAGER)
+        object NuGet : Type("nuget", Category.PACKAGE_MANAGER)
+        object Purl : Type("purl", Category.PACKAGE_MANAGER)
+
+        object SoftwareHeritage : Type("swh", Category.PERSISTENT_ID)
+
+        class Other(typeName: String) : Type(typeName, Category.OTHER)
     }
 
     init {
         require(referenceLocator.isNotBlank()) { "The referenceLocator must not be blank." }
 
-        require(referenceType.isNotBlank()) { "The referenceType must not be blank." }
+        require(referenceType.category == Category.OTHER || referenceType.category == referenceCategory) {
+            "The category for '${referenceType.name}' must be '${referenceType.category}', but was " +
+                    "'$referenceCategory'."
+        }
+    }
+}
+
+private class ReferenceTypeDeserializer : StdDeserializer<SpdxExternalReference.Type>(
+    SpdxExternalReference.Type::class.java
+) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): SpdxExternalReference.Type {
+        val node = p.codec.readTree<JsonNode>(p)
+        val typeName = node.textValue()
+        val type = SpdxExternalReference.Type::class.sealedSubclasses.mapNotNull { it.objectInstance }
+            .find { it.name == typeName }
+        return type ?: SpdxExternalReference.Type.Other(typeName)
     }
 }
