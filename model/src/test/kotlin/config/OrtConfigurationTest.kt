@@ -75,7 +75,7 @@ class OrtConfigurationTest : WordSpec({
 
                     postgresStorage shouldNotBeNull {
                         url shouldBe "url"
-                        schema shouldBe "schema"
+                        schema shouldBe "public"
                         username shouldBe "user"
                         password shouldBe "password"
                     }
@@ -101,7 +101,7 @@ class OrtConfigurationTest : WordSpec({
                     val postgresStorage = this["postgres"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                    postgresStorage.schema shouldBe "schema"
+                    postgresStorage.schema shouldBe "public"
                     postgresStorage.username shouldBe "username"
                     postgresStorage.password shouldBe "password"
                     postgresStorage.sslmode shouldBe "required"
@@ -146,7 +146,7 @@ class OrtConfigurationTest : WordSpec({
                     storages {
                       postgresStorage {
                         url = "postgresql://your-postgresql-server:5444/your-database"
-                        schema = schema
+                        schema = "public"
                         username = username
                         password = password
                       }
@@ -222,7 +222,7 @@ class OrtConfigurationTest : WordSpec({
                     storages {
                       postgresStorage {
                         url = "postgresql://your-postgresql-server:5444/your-database"
-                        schema = schema
+                        schema = "public"
                         username = ${'$'}{POSTGRES_USERNAME}
                         password = ${'$'}{POSTGRES_PASSWORD}
                       }
@@ -251,7 +251,7 @@ class OrtConfigurationTest : WordSpec({
             val user = "user"
             val password = "password"
             val url = "url"
-            val schema = "schema"
+            val schema = "public"
             val env = mapOf(
                 "ort.scanner.storages.postgresStorage.username" to user,
                 "ort.scanner.storages.postgresStorage.url" to url,

@@ -492,7 +492,7 @@ ort {
     storages {
       postgresStorage {
         url = "jdbc:postgresql://example.com:5444/database"
-        schema = "schema"
+        schema = "public"
         username = "username"
         password = "password"
         sslmode = "verify-full"
@@ -510,7 +510,9 @@ ort {
 }
 ```
 
-While the specified schema already needs to exist, the _scanner_ will itself create a table called `scan_results` and
+The database needs to exist. If the schema is defined and is not the default postgress _public_, it need to be previously created and grant usage for the specific database user. Left schema entry empty will always default to _public_.
+
+The _scanner_ will itself create a table called `scan_results` and
 store the data in a [jsonb](https://www.postgresql.org/docs/current/datatype-json.html) column.
 
 If you do not want to use SSL set the `sslmode` to `disable`, other possible values are explained in the

@@ -74,7 +74,7 @@ data class PostgresStorageConfiguration(
     /**
      * The name of the database to use.
      */
-    val schema: String,
+    val schema: String = "public",
 
     /**
      * The username to use for authentication.

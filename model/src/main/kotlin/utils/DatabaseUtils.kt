@@ -42,10 +42,6 @@ object DatabaseUtils {
             "URL for PostgreSQL storage is missing."
         }
 
-        require(config.schema.isNotBlank()) {
-            "Schema for PostgreSQL storage is missing."
-        }
-
         require(config.username.isNotBlank()) {
             "Username for PostgreSQL storage is missing."
         }
