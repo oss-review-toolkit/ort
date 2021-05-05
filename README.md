@@ -608,7 +608,6 @@ well. See [rules.kts](./examples/rules.kts) for an example file.
 The _reporter_ generates a wide variety of documents in different formats from ORT result files. Currently, the
 following formats are supported (reporter names are case-insensitive):
 
-* [Amazon OSS Attribution Builder](https://github.com/amzn/oss-attribution-builder) document (*experimental*, `-f AmazonOssAttributionBuilder`)
 * [AsciiDoc Template](docs/reporters/AsciiDocTemplateReporter.md) (`-f AsciiDocTemplate`)
   * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
   * Supports all AsciiDoc backends

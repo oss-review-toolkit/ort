@@ -1,4 +1,3 @@
-org.ossreviewtoolkit.reporter.reporters.AmazonOssAttributionBuilderReporter
 org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
 org.ossreviewtoolkit.reporter.reporters.EvaluatedModelReporter
