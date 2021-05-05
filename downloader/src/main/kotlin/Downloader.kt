@@ -276,7 +276,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             path = pkg.vcsProcessed.path
         )
 
-        return RepositoryProvenance(vcsInfo, pkg.vcsProcessed.takeIf { it != vcsInfo })
+        return RepositoryProvenance(vcsInfo, pkg.vcsProcessed)
     }
 
     /**
