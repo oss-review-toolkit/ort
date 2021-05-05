@@ -271,7 +271,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         val vcsInfo = VcsInfo(
             type = applicableVcs.type,
             url = pkg.vcsProcessed.url,
-            revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: resolvedRevision,
+            revision = pkg.vcsProcessed.revision,
             resolvedRevision = resolvedRevision,
             path = pkg.vcsProcessed.path
         )
