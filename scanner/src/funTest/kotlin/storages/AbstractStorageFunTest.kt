@@ -71,14 +71,14 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val pkg1 = Package.EMPTY.copy(
         id = id1,
         sourceArtifact = sourceArtifact1,
-        vcs = vcs1,
+        vcs = vcs1.copy(resolvedRevision = null),
         vcsProcessed = vcs1.normalize()
     )
 
     private val pkg2 = Package.EMPTY.copy(
         id = id2,
         sourceArtifact = sourceArtifact2,
-        vcs = vcs2,
+        vcs = vcs2.copy(resolvedRevision = null),
         vcsProcessed = vcs2.normalize()
     )
 
