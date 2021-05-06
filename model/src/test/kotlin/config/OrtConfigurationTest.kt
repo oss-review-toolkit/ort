@@ -63,7 +63,7 @@ class OrtConfigurationTest : WordSpec({
 
             ortConfig.downloader shouldNotBeNull {
                 includedLicenseCategories should containExactly("category-a", "category-b")
-                sourceCodeOrigins shouldBe listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
+                sourceCodeOrigins should containExactly(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
             }
 
             with(ortConfig.scanner) {
