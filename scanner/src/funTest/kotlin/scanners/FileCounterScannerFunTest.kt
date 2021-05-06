@@ -26,6 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -47,7 +48,7 @@ class FileCounterScannerFunTest : StringSpec() {
             )
 
             val scanner = FileCounter("FileCounter", ScannerConfiguration(), DownloaderConfiguration())
-            val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir)
+            val ortResult = scanner.scanOrtResult(analyzerResultFile.readValue(), outputDir)
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult

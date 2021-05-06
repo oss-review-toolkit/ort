@@ -37,11 +37,15 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -50,6 +54,9 @@ import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.formatSizeInMib
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.writeOrtResult
@@ -156,11 +163,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val scanner = configureScanner(config.scanner, config.downloader)
 
         val ortResult = if (input.isFile) {
-            scanner.scanOrtResult(
-                ortFile = input,
-                outputDirectory = nativeOutputDir,
-                skipExcluded = skipExcluded
-            )
+            val (ortResult, duration) = measureTimedValue { input.readValue<OrtResult>() }
+
+            log.perf {
+                "Read ORT result from '${input.name}' (${input.formatSizeInMib}) in ${duration.inMilliseconds}ms."
+            }
+
+            scanner.scanOrtResult(ortResult, nativeOutputDir, skipExcluded)
         } else {
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."

@@ -24,8 +24,6 @@ import java.lang.IllegalArgumentException
 import java.time.Instant
 import java.util.ServiceLoader
 
-import kotlin.time.measureTimedValue
-
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
@@ -38,12 +36,9 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.filterByProject
 import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
 
 const val TOOL_NAME = "scanner"
 
@@ -66,22 +61,16 @@ abstract class Scanner(
     }
 
     /**
-     * Scan the [Project]s and [Package]s specified in [ortFile] and store the scan results in [outputDirectory].
+     * Scan the [Project]s and [Package]s specified in [ortResult] and store the scan results in [outputDirectory].
      * Return scan results as an [OrtResult].
      */
-    fun scanOrtResult(ortFile: File, outputDirectory: File, skipExcluded: Boolean = false): OrtResult {
+    fun scanOrtResult(ortResult: OrtResult, outputDirectory: File, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
-
-        val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-        }
 
         if (ortResult.analyzer == null) {
             log.warn {
-                "Cannot run the scanner as the provided ORT result file '${ortFile.canonicalPath}' does not contain " +
-                        "an analyzer result. No result will be added."
+                "Cannot run the scanner as the provided ORT result does not contain an analyzer result. " +
+                        "No result will be added."
             }
 
             return ortResult
