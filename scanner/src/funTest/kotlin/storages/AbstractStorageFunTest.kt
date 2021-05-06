@@ -112,9 +112,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val scannerStartTime2 = downloadTime2 + Duration.ofMinutes(1)
     private val scannerEndTime2 = scannerStartTime2 + Duration.ofMinutes(1)
 
-    private val error1 = OrtIssue(source = "source-1", message = "error-1")
-    private val error2 = OrtIssue(source = "source-2", message = "error-2")
-
     private val scanSummaryWithFiles = ScanSummary(
         startTime = scannerStartTime1,
         endTime = scannerEndTime1,
@@ -125,7 +122,10 @@ abstract class AbstractStorageFunTest : WordSpec() {
             LicenseFinding("license-1.2", DUMMY_TEXT_LOCATION)
         ),
         copyrightFindings = sortedSetOf(),
-        issues = mutableListOf(error1, error2)
+        issues = mutableListOf(
+            OrtIssue(source = "source-1", message = "error-1"),
+            OrtIssue(source = "source-2", message = "error-2")
+        )
     )
     private val scanSummaryWithoutFiles = ScanSummary(
         startTime = scannerStartTime2,
