@@ -20,11 +20,8 @@
 
 package org.ossreviewtoolkit.advisor
 
-import java.io.File
 import java.time.Instant
 import java.util.ServiceLoader
-
-import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -35,11 +32,8 @@ import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
 
 /**
  * The class to manage [VulnerabilityProvider]s that retrieve security advisories.
@@ -57,19 +51,13 @@ class Advisor(
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
     }
 
-    fun retrieveVulnerabilityInformation(ortFile: File, skipExcluded: Boolean = false): OrtResult {
+    fun retrieveVulnerabilityInformation(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
-
-        val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-        }
 
         if (ortResult.analyzer == null) {
             log.warn {
-                "Cannot run the advisor as the provided ORT result file '${ortFile.canonicalPath}' does not contain " +
-                        "an analyzer result. No result will be added."
+                "Cannot run the advisor as the provided ORT result does not contain an analyzer result. " +
+                        "No result will be added."
             }
 
             return ortResult
