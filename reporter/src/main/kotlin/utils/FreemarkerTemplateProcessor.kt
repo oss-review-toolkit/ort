@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.reporter.utils
 
 import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
+import freemarker.template.DefaultObjectWrapper
 import freemarker.template.TemplateExceptionHandler
 
 import java.io.File
@@ -138,6 +139,8 @@ class FreemarkerTemplateProcessor(
                 "templates/$templatesResourceDirectory"
             )
             wrapUncheckedExceptions = true
+
+            setSharedVariable("statics", (objectWrapper as DefaultObjectWrapper).staticModels)
         }
 
         val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
