@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
@@ -55,13 +54,13 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.perf
@@ -233,13 +232,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             "The '--ort-file' option is required unless the '--check-syntax' option is used."
         }
 
-        var (ortResultInput, readDuration) = measureTimedValue { existingOrtFile.readValue<OrtResult>() }
-
-        ortFile?.let { file ->
-            log.perf {
-                "Read ORT result from '${file.name}' (${file.formatSizeInMib}) in ${readDuration.inMilliseconds}ms."
-            }
-        }
+        var ortResultInput = readOrtResult(existingOrtFile)
 
         repositoryConfigurationFile?.let {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())

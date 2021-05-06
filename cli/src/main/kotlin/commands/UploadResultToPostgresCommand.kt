@@ -29,8 +29,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.sql.SQLException
 
-import kotlin.time.measureTimedValue
-
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
@@ -42,16 +40,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
+import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.showStackTrace
 
 class UploadResultToPostgresCommand : CliktCommand(
@@ -87,11 +82,7 @@ class UploadResultToPostgresCommand : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-        }
+        val ortResult = readOrtResult(ortFile)
 
         val postgresConfig = globalOptionsForSubcommands.config.scanner.storages?.values
             ?.filterIsInstance<PostgresStorageConfiguration>()?.singleOrNull()

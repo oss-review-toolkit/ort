@@ -42,7 +42,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.GlobalOptions
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.Resolutions
@@ -54,6 +53,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
@@ -68,10 +68,8 @@ import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
 
@@ -200,11 +198,7 @@ class ReporterCommand : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        var (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-        }
+        var ortResult = readOrtResult(ortFile)
 
         repositoryConfigurationFile?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
