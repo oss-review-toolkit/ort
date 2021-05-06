@@ -85,8 +85,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val pkgWithoutRevision = pkg1.copy(vcs = vcsWithoutRevision, vcsProcessed = vcsWithoutRevision.normalize())
 
     private val provenanceEmpty = UnknownProvenance
-    private val provenanceWithOriginalVcsInfo = RepositoryProvenance(
-        vcsInfo = vcs1,
+    private val provenanceWithoutRevision = RepositoryProvenance(
+        vcsInfo = pkgWithoutRevision.vcsProcessed.copy(resolvedRevision = "resolvedRevision"),
         originalVcsInfo = pkgWithoutRevision.vcsProcessed
     )
     private val provenanceWithSourceArtifact1 = ArtifactProvenance(sourceArtifact = sourceArtifact1)
@@ -312,8 +312,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 )
             }
 
-            "find a scan result if the revision was detected from a version" {
-                val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
+            "find a scan result if the revision was resolved from a version" {
+                val scanResult = ScanResult(provenanceWithoutRevision, scannerDetails1, scanSummaryWithFiles)
 
                 storage.add(id1, scanResult) should beSuccess()
                 val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
@@ -547,8 +547,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 }
             }
 
-            "find a scan result if the revision was detected from a version" {
-                val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
+            "find a scan result if the revision was resolved from a version" {
+                val scanResult = ScanResult(provenanceWithoutRevision, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult = storage.add(id1, scanResult)
                 val readResult = storage.read(listOf(pkgWithoutRevision), criteriaForDetails(scannerDetails1))
