@@ -29,8 +29,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import kotlin.time.measureTimedValue
-
 import org.eclipse.sw360.clients.adapter.SW360Connection
 import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
 import org.eclipse.sw360.clients.adapter.SW360ProjectClientAdapter
@@ -50,13 +48,11 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
 
 class UploadResultToSw360Command : CliktCommand(
     name = "upload-result-to-sw360",
@@ -76,11 +72,7 @@ class UploadResultToSw360Command : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-        }
+        val ortResult = readOrtResult(ortFile)
 
         val sw360Config = globalOptionsForSubcommands.config.scanner.storages?.values
             ?.filterIsInstance<Sw360StorageConfiguration>()?.singleOrNull()

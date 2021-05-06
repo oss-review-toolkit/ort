@@ -37,6 +37,7 @@ import java.io.File
 
 import kotlin.system.exitProcess
 import kotlin.time.measureTime
+import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
@@ -45,6 +46,7 @@ import org.ossreviewtoolkit.commands.*
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_CONFIG_DIR_ENV_NAME
@@ -213,6 +215,19 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
         return header.joinToString("\n", postfix = "\n")
     }
+}
+
+/**
+ * Read [ortFile] into an [OrtResult] and return it.
+ */
+fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
+    val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
+
+    log.perf {
+        "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
+    }
+
+    return ortResult
 }
 
 /**

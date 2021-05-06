@@ -34,18 +34,12 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import kotlin.time.measureTimedValue
-
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.writeOrtResult
 
@@ -116,12 +110,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
         val advisor = Advisor(distinctProviders, globalOptionsForSubcommands.config.advisor)
 
-        val (ortResultInput, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-        }
-
+        val ortResultInput = readOrtResult(ortFile)
         val ortResultOutput = advisor.retrieveVulnerabilityInformation(ortResultInput, skipExcluded).mergeLabels(labels)
 
         outputDir.safeMkdirs()

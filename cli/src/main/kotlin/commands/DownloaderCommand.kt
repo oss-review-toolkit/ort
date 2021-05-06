@@ -38,8 +38,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import kotlin.time.measureTimedValue
-
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
@@ -48,21 +46,18 @@ import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.spdx.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ArchiveType
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.packZip
-import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
 
@@ -180,12 +175,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         when (input) {
             is FileType -> {
                 val ortFile = (input as FileType).file
-                val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-                log.perf {
-                    "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in " +
-                            "${duration.inMilliseconds}ms."
-                }
+                val ortResult = readOrtResult(ortFile)
 
                 val analyzerResult = ortResult.analyzer?.result
 
