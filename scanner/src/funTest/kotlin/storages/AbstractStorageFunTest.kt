@@ -86,9 +86,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
     private val pkgWithoutRevision = pkg1.copy(vcs = vcsWithoutRevision, vcsProcessed = vcsWithoutRevision.normalize())
 
-    private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
-    private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)
-
     private val provenanceWithSourceArtifact1 = ArtifactProvenance(sourceArtifact = sourceArtifact1)
     private val provenanceWithVcsInfo1 = RepositoryProvenance(vcsInfo = vcs1)
 
@@ -107,14 +104,9 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val scannerDetailsCompatibleVersion2 = ScannerDetails("name 1", "1.0.1-alpha.1", "config 1")
     private val scannerDetailsIncompatibleVersion = ScannerDetails("name 1", "1.1.0", "config 1")
 
-    private val scannerStartTime1 = downloadTime1 + Duration.ofMinutes(1)
-    private val scannerEndTime1 = scannerStartTime1 + Duration.ofMinutes(1)
-    private val scannerStartTime2 = downloadTime2 + Duration.ofMinutes(1)
-    private val scannerEndTime2 = scannerStartTime2 + Duration.ofMinutes(1)
-
     private val scanSummaryWithFiles = ScanSummary(
-        startTime = scannerStartTime1,
-        endTime = scannerEndTime1,
+        startTime = Instant.EPOCH + Duration.ofMinutes(1),
+        endTime = Instant.EPOCH + Duration.ofMinutes(2),
         fileCount = 1,
         packageVerificationCode = "packageVerificationCode",
         licenseFindings = sortedSetOf(
@@ -128,8 +120,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
         )
     )
     private val scanSummaryWithoutFiles = ScanSummary(
-        startTime = scannerStartTime2,
-        endTime = scannerEndTime2,
+        startTime = Instant.EPOCH + Duration.ofMinutes(3),
+        endTime = Instant.EPOCH + Duration.ofMinutes(4),
         fileCount = 0,
         packageVerificationCode = "packageVerificationCode",
         licenseFindings = sortedSetOf(),
