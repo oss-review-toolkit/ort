@@ -24,6 +24,7 @@ import com.vdurmont.semver4j.Semver
 
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.test.TestCase
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -136,6 +137,13 @@ abstract class AbstractStorageFunTest : WordSpec() {
         mutableListOf()
     )
 
+    private lateinit var storage: ScanResultsStorage
+
+    override fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
+        storage = createStorage()
+    }
+
     abstract fun createStorage(): ScanResultsStorage
 
     /**
@@ -152,7 +160,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
     init {
         "Adding a scan result" should {
             "succeed for a valid scan result" {
-                val storage = createStorage()
                 val scanResult = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult = storage.add(id1, scanResult)
@@ -164,7 +171,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "fail if the fileCount is 0" {
-                val storage = createStorage()
                 val scanResult = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithoutFiles)
 
                 val addResult = storage.add(id1, scanResult)
@@ -178,7 +184,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "fail if provenance information is missing" {
-                val storage = createStorage()
                 val scanResult = ScanResult(provenanceEmpty, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult = storage.add(id1, scanResult)
@@ -194,7 +199,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
         "Reading a scan result" should {
             "find all scan results for an id" {
-                val storage = createStorage()
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResult2 = ScanResult(provenanceWithSourceArtifact1, scannerDetails2, scanSummaryWithFiles)
 
@@ -207,7 +211,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find all scan results for a specific scanner" {
-                val storage = createStorage()
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResult2 = ScanResult(provenanceWithVcsInfo1, scannerDetails1, scanSummaryWithFiles)
                 val scanResult3 = ScanResult(provenanceWithSourceArtifact1, scannerDetails2, scanSummaryWithFiles)
@@ -222,7 +225,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find all scan results for scanners with names matching a pattern" {
-                val storage = createStorage()
                 val detailsCompatibleOtherScanner = scannerDetails1.copy(name = "name 2")
                 val detailsIncompatibleOtherScanner = scannerDetails1.copy(name = "other Scanner name")
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
@@ -242,7 +244,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find all scan results for compatible scanners" {
-                val storage = createStorage()
                 val scanResult = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResultCompatible1 =
                     ScanResult(provenanceWithSourceArtifact1, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
@@ -269,7 +270,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find all scan results for a scanner in a version range" {
-                val storage = createStorage()
                 val scanResult = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResultCompatible1 =
                     ScanResult(provenanceWithSourceArtifact1, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
@@ -295,7 +295,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find only packages with matching provenance" {
-                val storage = createStorage()
                 val scanResultSourceArtifactMatching =
                     ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo1, scannerDetails1, scanSummaryWithFiles)
@@ -326,7 +325,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find a scan result if the revision was detected from a version" {
-                val storage = createStorage()
                 val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
 
                 storage.add(id1, scanResult) should beSuccess()
@@ -339,7 +337,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
         "Reading scan results for multiple packages" should {
             "find all scan results for a specific scanner" {
-                val storage = createStorage()
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResult2 = ScanResult(provenanceWithVcsInfo1, scannerDetails1, scanSummaryWithFiles)
                 val scanResult3 = ScanResult(provenanceWithSourceArtifact1, scannerDetails2, scanSummaryWithFiles)
@@ -367,7 +364,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find all scan results for scanners with names matching a pattern" {
-                val storage = createStorage()
                 val detailsCompatibleOtherScanner = scannerDetails1.copy(name = "name 2")
                 val detailsIncompatibleOtherScanner = scannerDetails1.copy(name = "other Scanner name")
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
@@ -402,8 +398,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find all scan results for compatible scanners" {
-                val storage = createStorage()
-
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResult1Compatible1 =
                     ScanResult(provenanceWithSourceArtifact1, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
@@ -452,8 +446,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find all scan results for a scanner in a version range" {
-                val storage = createStorage()
-
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResult1Compatible1 =
                     ScanResult(provenanceWithSourceArtifact1, scannerDetailsCompatibleVersion1, scanSummaryWithFiles)
@@ -506,8 +498,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find only packages with matching provenance" {
-                val storage = createStorage()
-
                 val scanResultSourceArtifactMatching1 =
                     ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)
                 val scanResultVcsMatching1 = ScanResult(provenanceWithVcsInfo1, scannerDetails1, scanSummaryWithFiles)
@@ -570,7 +560,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
 
             "find a scan result if the revision was detected from a version" {
-                val storage = createStorage()
                 val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult = storage.add(id1, scanResult)
