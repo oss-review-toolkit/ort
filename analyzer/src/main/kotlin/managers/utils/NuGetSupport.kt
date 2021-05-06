@@ -172,8 +172,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             VcsInfo(
                 type = VcsType(it.type.orEmpty()),
                 url = it.url.orEmpty(),
-                revision = (it.commit ?: it.branch).orEmpty(),
-                path = ""
+                revision = (it.commit ?: it.branch).orEmpty()
             )
         } ?: VcsInfo.EMPTY
 
