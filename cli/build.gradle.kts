@@ -129,5 +129,5 @@ dependencies {
     funTestImplementation(sourceSets["test"].output)
 }
 
-configurations["funTestImplementation"].extendsFrom(configurations.testImplementation.get())
-configurations["funTestRuntime"].extendsFrom(configurations.testRuntime.get())
+configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
+configurations["funTestRuntime"].extendsFrom(configurations["testRuntime"])
