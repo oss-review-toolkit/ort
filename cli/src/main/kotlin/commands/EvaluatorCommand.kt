@@ -36,7 +36,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.GlobalOptions
@@ -56,7 +55,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
@@ -68,6 +66,7 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.writeOrtResult
 
 class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT result files against policy rules.") {
     private val ortFile by option(
@@ -279,17 +278,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             val ortResultOutput = finalOrtResult.copy(evaluator = evaluatorRun).mergeLabels(labels)
 
             absoluteOutputDir.safeMkdirs()
-
-            outputFiles.forEach { file ->
-                println("Writing evaluation result to '$file'.")
-                val writeDuration = measureTime {
-                    file.writeValue(ortResultOutput)
-                }
-
-                log.perf {
-                    "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${writeDuration.inMilliseconds}ms."
-                }
-            }
+            writeOrtResult(ortResultOutput, outputFiles, "evaluation")
         }
 
         val counts = evaluatorRun.violations.groupingBy { it.severity }.eachCount()
