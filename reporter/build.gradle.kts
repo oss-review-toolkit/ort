@@ -72,7 +72,6 @@ repositories {
 dependencies {
     api(project(":model"))
 
-    implementation(project(":clients:oss-attribution-builder"))
     implementation(project(":downloader"))
     implementation(project(":spdx-utils"))
     implementation(project(":utils"))
