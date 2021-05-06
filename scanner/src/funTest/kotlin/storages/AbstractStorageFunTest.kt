@@ -55,11 +55,9 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
-abstract class AbstractStorageFunTest : WordSpec() {
-    private companion object {
-        val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
-    }
+private val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
 
+abstract class AbstractStorageFunTest : WordSpec() {
     private val id1 = Identifier("type", "namespace", "name1", "version")
     private val id2 = Identifier("type", "namespace", "name2", "version")
 
