@@ -15,7 +15,6 @@ import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
-import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
@@ -79,17 +78,11 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Scans for project can be listed when there is none" {
-        service.listScansForProject("", "", PROJECT_CODE_1) shouldNotBeNull {
-            checkResponse("list scans")
-            toList<Scan>() should beEmpty()
-        }
+        service.listScansForProject("", "", PROJECT_CODE_1) should beEmpty()
     }
 
     "Scans for project can be listed when there is some" {
-        service.listScansForProject("", "", PROJECT_CODE_2) shouldNotBeNull {
-            checkResponse("list scans")
-            toList<Scan>() shouldNot beEmpty()
-        }
+        service.listScansForProject("", "", PROJECT_CODE_2) shouldNot beEmpty()
     }
 
     "Scan results can be listed when there is none" {

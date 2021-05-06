@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.clients.fossid
 
 import com.fasterxml.jackson.module.kotlin.convertValue
 
+import org.ossreviewtoolkit.clients.fossid.model.Scan
+
 private const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
 
@@ -76,10 +78,12 @@ suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCo
  *
  * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
-suspend fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectCode: String) =
-    listScansForProject(
-        PostRequestBody("get_all_scans", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
-    )
+suspend fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectCode: String): List<Scan> {
+    val body = PostRequestBody("get_all_scans", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
+    return listScansForProject(body)
+        .checkResponse("list scans")
+        .toList()
+}
 
 /**
  * Create a new project with the given [projectCode], [projectName] and optional [comment].
