@@ -43,6 +43,7 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.commands.*
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -221,6 +222,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
  * Read [ortFile] into an [OrtResult] and return it.
  */
 fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
+    log.debug { "Input ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(ortFile)}." }
+
     val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
 
     log.perf {
@@ -241,6 +244,8 @@ fun CliktCommand.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<Fi
         log.perf {
             "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inMilliseconds}ms."
         }
+
+        log.debug { "Output ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(file)}." }
     }
 }
 
