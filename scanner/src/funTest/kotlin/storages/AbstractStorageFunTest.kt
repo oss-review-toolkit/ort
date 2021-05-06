@@ -116,25 +116,25 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val error2 = OrtIssue(source = "source-2", message = "error-2")
 
     private val scanSummaryWithFiles = ScanSummary(
-        scannerStartTime1,
-        scannerEndTime1,
-        1,
-        "packageVerificationCode",
-        sortedSetOf(
+        startTime = scannerStartTime1,
+        endTime = scannerEndTime1,
+        fileCount = 1,
+        packageVerificationCode = "packageVerificationCode",
+        licenseFindings = sortedSetOf(
             LicenseFinding("license-1.1", DUMMY_TEXT_LOCATION),
             LicenseFinding("license-1.2", DUMMY_TEXT_LOCATION)
         ),
-        sortedSetOf(),
-        mutableListOf(error1, error2)
+        copyrightFindings = sortedSetOf(),
+        issues = mutableListOf(error1, error2)
     )
     private val scanSummaryWithoutFiles = ScanSummary(
-        scannerStartTime2,
-        scannerEndTime2,
-        0,
-        "packageVerificationCode",
-        sortedSetOf(),
-        sortedSetOf(),
-        mutableListOf()
+        startTime = scannerStartTime2,
+        endTime = scannerEndTime2,
+        fileCount = 0,
+        packageVerificationCode = "packageVerificationCode",
+        licenseFindings = sortedSetOf(),
+        copyrightFindings = sortedSetOf(),
+        issues = mutableListOf()
     )
 
     private lateinit var storage: ScanResultsStorage
