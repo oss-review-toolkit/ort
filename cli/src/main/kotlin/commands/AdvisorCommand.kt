@@ -38,9 +38,9 @@ import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.writeOrtResult
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
     private val allVulnerabilityProvidersByName = Advisor.ALL.associateBy { it.providerName }
@@ -112,11 +112,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         val ortResult = advisor.retrieveVulnerabilityInformation(ortFile, skipExcluded).mergeLabels(labels)
 
         outputDir.safeMkdirs()
-
-        outputFiles.forEach { file ->
-            println("Writing advisor result to '$file'.")
-            file.writeValue(ortResult)
-        }
+        writeOrtResult(ortResult, outputFiles, "advisor")
 
         val advisorResults = ortResult.advisor?.results
 

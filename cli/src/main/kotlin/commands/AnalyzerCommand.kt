@@ -35,8 +35,6 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import kotlin.time.measureTime
-
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -46,15 +44,12 @@ import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.writeOrtResult
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
     private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName }
@@ -171,15 +166,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         println("Found ${ortResult.getProjects().size} project(s) in total.")
 
         outputDir.safeMkdirs()
-
-        outputFiles.forEach { file ->
-            println("Writing analyzer result to '$file'.")
-            val duration = measureTime { file.writeValue(ortResult) }
-
-            log.perf {
-                "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-            }
-        }
+        writeOrtResult(ortResult, outputFiles, "analyzer")
 
         val analyzerResult = ortResult.analyzer?.result
 
