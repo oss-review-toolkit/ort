@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils
 
+import java.io.File
 import java.io.IOException
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
@@ -36,6 +37,9 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+
+import okio.buffer
+import okio.sink
 
 typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
@@ -137,6 +141,75 @@ object OkHttpClientHelper {
         } else {
             Result.failure(HttpDownloadError(response.code, response.message))
         }
+    }
+
+    /**
+     * Download from [url] and return a [Result] with a file inside [directory] that holds the response body content on
+     * success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
+     */
+    fun downloadFile(url: String, directory: File): Result<File> {
+        val request = Request.Builder()
+            // Disable transparent gzip compression, as otherwise we might end up writing a tar file to disk while
+            // expecting to find a tar.gz file, and fail to unpack the archive. See
+            // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
+            .header("Accept-Encoding", "identity")
+            .get()
+            .url(url)
+            .build()
+
+        val response = runCatching { execute(request) }.getOrElse { return Result.failure(it) }
+
+        log.debug {
+            if (response.cacheResponse != null) {
+                "Retrieved $url from local cache."
+            } else {
+                "Downloaded from $url via network."
+            }
+        }
+
+        val body = response.body
+
+        if (!response.isSuccessful || body == null) {
+            return Result.failure(HttpDownloadError(response.code, response.message))
+        }
+
+        // Depending on the server, we may only get a useful target file name when looking at the response
+        // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
+        //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
+        // to
+        //     https://static.crates.io/crates/cfg-if/cfg-if-0.1.9.crate
+        //
+        // On the other hand, e.g. for GitHub exactly the opposite is the case, as there a get-request for URL
+        //     https://github.com/microsoft/tslib/archive/1.10.0.zip
+        // resolves to the less meaningful
+        //     https://codeload.github.com/microsoft/tslib/zip/1.10.0
+        //
+        // So first look for a dedicated header in the response, but then also try both redirected and
+        // original URLs to find a name which has a recognized archive type extension.
+        val candidateNames = mutableSetOf<String>()
+
+        response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
+            val filenames = value.split(';').mapNotNull { it.trim().withoutPrefix("filename=") }
+            filenames.firstOrNull()?.removeSurrounding("\"")
+        }
+
+        listOf(response.request.url, request.url).mapTo(candidateNames) {
+            it.pathSegments.last()
+        }
+
+        check(candidateNames.isNotEmpty())
+
+        val filename = candidateNames.find {
+            ArchiveType.getType(it) != ArchiveType.NONE
+        } ?: candidateNames.first()
+
+        val file = directory.resolve(filename)
+
+        file.sink().buffer().use { target ->
+            body.use { target.writeAll(it.source()) }
+        }
+
+        return Result.success(file)
     }
 }
 
