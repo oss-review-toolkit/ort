@@ -383,9 +383,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                     sourceArchive.unpack(gemDirectory)
                     dataFile.unpack(outputDirectory)
                 } finally {
-                    if (!gemDirectory.deleteRecursively()) {
-                        log.warn { "Unable to delete temporary directory '$gemDirectory'." }
-                    }
+                    gemDirectory.safeDeleteRecursively(force = true)
                 }
             } else {
                 sourceArchive.unpack(outputDirectory)
