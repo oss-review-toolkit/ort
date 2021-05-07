@@ -22,16 +22,9 @@
 package org.ossreviewtoolkit.helper.common
 
 import java.io.File
-import java.io.IOException
 import java.nio.file.Paths
 
 import kotlin.io.path.createTempDirectory
-import kotlin.io.path.createTempFile
-
-import okhttp3.Request
-
-import okio.buffer
-import okio.sink
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -73,8 +66,6 @@ import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 import org.ossreviewtoolkit.utils.withoutPrefix
@@ -87,36 +78,6 @@ const val ORTH_NAME = "orth"
 internal typealias RepositoryPathExcludes = Map<String, List<PathExclude>>
 
 internal typealias RepositoryLicenseFindingCurations = Map<String, List<LicenseFindingCuration>>
-
-/**
- * Try to download the [url] and return the downloaded temporary file. The file is automatically deleted on exit. If the
- * download fails, throw an [IOException].
- */
-internal fun download(url: String): File {
-    val request = Request.Builder()
-        // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to
-        // find a tar.gz file, thus failing to unpack the archive.
-        // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
-        // http/BridgeInterceptor.java#L79
-        .addHeader("Accept-Encoding", "identity")
-        .get()
-        .url(url)
-        .build()
-
-    OkHttpClientHelper.execute(request).use { response ->
-        val body = response.body
-        if (!response.isSuccessful || body == null) {
-            throw IOException(response.message)
-        }
-
-        // Use the filename from the request for the last redirect.
-        val tempFileName = response.request.url.pathSegments.last()
-        return createTempFile(ORT_NAME, tempFileName).toFile().also { tempFile ->
-            tempFile.sink().buffer().use { it.writeAll(body.source()) }
-            tempFile.deleteOnExit()
-        }
-    }
-}
 
 /**
  * Return all files underneath the given [directory].

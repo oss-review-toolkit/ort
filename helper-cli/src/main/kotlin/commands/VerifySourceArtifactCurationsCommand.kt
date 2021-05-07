@@ -27,11 +27,13 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.helper.common.download
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.createOrtTempDir
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 internal class VerifySourceArtifactCurationsCommand : CliktCommand(
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
@@ -52,8 +54,10 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
                 println("Checking source artifact for ${curation.id.toCoordinates()}.")
                 println("Downloading ${sourceArtifact.url}.")
 
+                val tempDir = createOrtTempDir()
+
                 try {
-                    val file = download(sourceArtifact.url)
+                    val file = OkHttpClientHelper.downloadFile(sourceArtifact.url, tempDir).getOrThrow()
                     val hash = sourceArtifact.hash.algorithm.calculate(file)
 
                     println("Expected hash: ${sourceArtifact.hash.algorithm} ${sourceArtifact.hash.value}")
@@ -70,6 +74,8 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
                     val message = "Failed to download source artifact: ${e.collectMessagesAsString()}"
                     println(message)
                     false
+                } finally {
+                    tempDir.safeDeleteRecursively(force = true)
                 }
             } ?: true
         }
