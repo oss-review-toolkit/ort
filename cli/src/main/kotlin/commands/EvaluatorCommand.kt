@@ -229,7 +229,11 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             }
         }
 
-        var (ortResultInput, readDuration) = measureTimedValue { ortFile?.readValue<OrtResult>() }
+        val existingOrtFile = requireNotNull(ortFile) {
+            "The '--ort-file' option is required unless the '--check-syntax' option is used."
+        }
+
+        var (ortResultInput, readDuration) = measureTimedValue { existingOrtFile.readValue<OrtResult>() }
 
         ortFile?.let { file ->
             log.perf {
@@ -238,22 +242,18 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         }
 
         repositoryConfigurationFile?.let {
-            ortResultInput = ortResultInput?.replaceConfig(it.readValue())
+            ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
         packageCurationsFile?.let {
-            ortResultInput = ortResultInput?.replacePackageCurations(it.readValue())
-        }
-
-        val finalOrtResult = requireNotNull(ortResultInput) {
-            "The '--ort-file' option is required unless the '--check-syntax' option is used."
+            ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
         }
 
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(
-            provider = DefaultLicenseInfoProvider(finalOrtResult, packageConfigurationProvider),
+            provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
             archiver = globalOptionsForSubcommands.config.scanner.archive.createFileArchiver(),
             licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
@@ -261,7 +261,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         val licenseClassifications =
             licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
-        val evaluator = Evaluator(finalOrtResult, licenseInfoResolver, licenseClassifications)
+        val evaluator = Evaluator(ortResultInput, licenseInfoResolver, licenseClassifications)
 
         val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }
 
@@ -275,7 +275,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         outputDir?.let { absoluteOutputDir ->
             // Note: This overwrites any existing EvaluatorRun from the input file.
-            val ortResultOutput = finalOrtResult.copy(evaluator = evaluatorRun).mergeLabels(labels)
+            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).mergeLabels(labels)
 
             absoluteOutputDir.safeMkdirs()
             writeOrtResult(ortResultOutput, outputFiles, "evaluation")
