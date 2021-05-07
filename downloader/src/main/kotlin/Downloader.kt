@@ -25,13 +25,7 @@ import java.io.IOException
 import java.net.URI
 
 import kotlin.io.path.createTempDirectory
-import kotlin.io.path.createTempFile
 import kotlin.time.TimeSource
-
-import okhttp3.Request
-
-import okio.buffer
-import okio.sink
 
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -46,17 +40,16 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.utils.ArchiveType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.createOrtTempDir
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 import org.ossreviewtoolkit.utils.unpack
-import org.ossreviewtoolkit.utils.withoutPrefix
 
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
@@ -302,62 +295,15 @@ class Downloader(private val config: DownloaderConfiguration) {
         // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
         val isLocalFileUrl = pkg.sourceArtifact.url.startsWith("file:/")
 
+        var tempDir: File? = null
+
         val sourceArchive = if (isLocalFileUrl) {
             File(URI(pkg.sourceArtifact.url))
         } else {
-            val request = Request.Builder()
-                // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to
-                // find a tar.gz file, thus failing to unpack the archive.
-                // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
-                // http/BridgeInterceptor.java#L79
-                .header("Accept-Encoding", "identity")
-                .get()
-                .url(pkg.sourceArtifact.url)
-                .build()
-
-            try {
-                OkHttpClientHelper.execute(request).use { response ->
-                    val body = response.body
-                    if (!response.isSuccessful || body == null) {
-                        throw DownloadException("Failed to download source artifact: $response")
-                    }
-
-                    val candidateNames = mutableSetOf<String>()
-
-                    // Depending on the package manager / registry, we may only get a useful source artifact file name
-                    // when looking at the response header or at a redirected URL. For example for Cargo, we want to
-                    // resolve
-                    //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
-                    // to
-                    //     https://static.crates.io/crates/cfg-if/cfg-if-0.1.9.crate
-                    //
-                    // On the other hand, e.g. for GitHub exactly the opposite is the case, as it turns getting URL
-                    //     https://github.com/microsoft/tslib/archive/1.10.0.zip
-                    // to
-                    //     https://codeload.github.com/microsoft/tslib/zip/1.10.0
-                    //
-                    // So first look for a dedicated header in the response, but then also try both redirected and
-                    // original URLs to find a name which has a recognized archive type extension.
-                    response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
-                        val filenames = value.split(';').mapNotNull { it.trim().withoutPrefix("filename=") }
-                        filenames.firstOrNull()?.removeSurrounding("\"")
-                    }
-
-                    listOf(response.request.url, request.url).mapTo(candidateNames) {
-                        it.pathSegments.last()
-                    }
-
-                    val tempFileName = candidateNames.find {
-                        ArchiveType.getType(it) != ArchiveType.NONE
-                    } ?: candidateNames.first()
-
-                    createTempFile(ORT_NAME, tempFileName).toFile().also { tempFile ->
-                        tempFile.sink().buffer().use { it.writeAll(body.source()) }
-                        tempFile.deleteOnExit()
-                    }
-                }
-            } catch (e: IOException) {
-                throw DownloadException("Failed to download source artifact.", e)
+            tempDir = createOrtTempDir()
+            OkHttpClientHelper.downloadFile(pkg.sourceArtifact.url, tempDir).getOrElse {
+                tempDir.safeDeleteRecursively(force = true)
+                throw DownloadException("Failed to download source artifact.", it)
             }
         }
 
@@ -367,9 +313,8 @@ class Downloader(private val config: DownloaderConfiguration) {
                     "Cannot verify source artifact with ${pkg.sourceArtifact.hash}, skipping verification."
                 }
             } else if (!pkg.sourceArtifact.hash.verify(sourceArchive)) {
-                throw DownloadException(
-                    "Source artifact does not match expected ${pkg.sourceArtifact.hash}."
-                )
+                tempDir?.safeDeleteRecursively(force = true)
+                throw DownloadException("Source artifact does not match expected ${pkg.sourceArtifact.hash}.")
             }
         }
 
@@ -392,6 +337,8 @@ class Downloader(private val config: DownloaderConfiguration) {
             log.error {
                 "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessagesAsString()}"
             }
+
+            tempDir?.safeDeleteRecursively(force = true)
             throw DownloadException(e)
         }
 
@@ -400,6 +347,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                     "'${outputDirectory.absolutePath}'..."
         }
 
+        tempDir?.safeDeleteRecursively(force = true)
         return ArtifactProvenance(pkg.sourceArtifact)
     }
 }
