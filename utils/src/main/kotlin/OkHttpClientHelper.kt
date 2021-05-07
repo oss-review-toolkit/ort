@@ -123,21 +123,19 @@ object OkHttpClientHelper {
         val request = Request.Builder().get().url(url).build()
         val response = runCatching { execute(request) }.getOrElse { return Result.failure(it) }
 
-        return response.use {
-            log.debug {
-                if (it.cacheResponse != null) {
-                    "Retrieved $url from local cache."
-                } else {
-                    "Downloaded from $url via network."
-                }
-            }
-
-            if (it.isSuccessful) {
-                val text = it.body?.string().orEmpty()
-                Result.success(text)
+        log.debug {
+            if (response.cacheResponse != null) {
+                "Retrieved $url from local cache."
             } else {
-                Result.failure(HttpDownloadError(it.code, it.message))
+                "Downloaded from $url via network."
             }
+        }
+
+        return if (response.isSuccessful) {
+            val text = response.body?.use { it.string() }.orEmpty()
+            Result.success(text)
+        } else {
+            Result.failure(HttpDownloadError(response.code, response.message))
         }
     }
 }
