@@ -300,7 +300,9 @@ class Downloader(private val config: DownloaderConfiguration) {
         }
 
         // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
-        val sourceArchive = if (pkg.sourceArtifact.url.startsWith("file:/")) {
+        val isLocalFileUrl = pkg.sourceArtifact.url.startsWith("file:/")
+
+        val sourceArchive = if (isLocalFileUrl) {
             File(URI(pkg.sourceArtifact.url))
         } else {
             val request = Request.Builder()
