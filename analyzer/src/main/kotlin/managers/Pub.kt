@@ -75,7 +75,7 @@ private const val GRADLE_VERSION = "5.6.4"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
-private val pubCommand = if (Os.isWindows) "pub.bat" else "pub"
+private val pubCommand = if (Os.isWindows) "pub.bat" else "dart pub"
 
 private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "2.0.6-stable"
 private val flutterInstallDir = "$ortToolsDirectory/flutter-$flutterVersion"
