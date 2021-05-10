@@ -263,6 +263,7 @@ project:
               dependencies:
               - id: "NPM::is-extendable:0.1.1"
             - id: "NPM::map-cache:0.2.2"
+            - id: "NPM::source-map:0.5.7"
             - id: "NPM::source-map-resolve:0.5.3"
               dependencies:
               - id: "NPM::atob:2.1.2"
@@ -270,7 +271,6 @@ project:
               - id: "NPM::resolve-url:0.2.1"
               - id: "NPM::source-map-url:0.4.0"
               - id: "NPM::urix:0.1.0"
-            - id: "NPM::source-map:0.5.7"
             - id: "NPM::use:3.1.1"
           - id: "NPM::to-regex:3.0.2"
             dependencies:
@@ -555,6 +555,7 @@ project:
             - id: "NPM::kind-of:3.2.2"
               dependencies:
               - id: "NPM::is-buffer:1.1.6"
+          - id: "NPM::source-map:0.5.7"
           - id: "NPM::source-map-resolve:0.5.3"
             dependencies:
             - id: "NPM::atob:2.1.2"
@@ -562,13 +563,12 @@ project:
             - id: "NPM::resolve-url:0.2.1"
             - id: "NPM::source-map-url:0.4.0"
             - id: "NPM::urix:0.1.0"
-          - id: "NPM::source-map:0.5.7"
           - id: "NPM::use:3.1.1"
       - id: "NPM::vinyl:2.2.0"
         dependencies:
+        - id: "NPM::clone:2.1.2"
         - id: "NPM::clone-buffer:1.0.0"
         - id: "NPM::clone-stats:1.0.0"
-        - id: "NPM::clone:2.1.2"
         - id: "NPM::cloneable-readable:1.1.3"
           dependencies:
           - id: "NPM::inherits:2.0.4"
@@ -1095,6 +1095,36 @@ packages:
     url: "https://github.com/jonschlinkert/class-utils.git"
     revision: "0ad9e639d6a63d6dc04043ac5931df85fb898e06"
     path: ""
+- id: "NPM::clone:2.1.2"
+  purl: "pkg:npm/clone@2.1.2"
+  authors:
+  - "Paul Vorbach"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "deep cloning of objects and arrays"
+  homepage_url: "https://github.com/pvorb/node-clone#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
+    hash:
+      value: "1b7f4b9f591f1e8f83670401600345a02887435f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/pvorb/node-clone.git"
+    revision: "765941803d27761a6008cb1aa32b199f0c42deb2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pvorb/node-clone.git"
+    revision: "765941803d27761a6008cb1aa32b199f0c42deb2"
+    path: ""
 - id: "NPM::clone-buffer:1.0.0"
   purl: "pkg:npm/clone-buffer@1.0.0"
   authors:
@@ -1155,36 +1185,6 @@ packages:
     type: "Git"
     url: "https://github.com/hughsk/clone-stats.git"
     revision: "25810f469944326c761f9f6273268453734a8465"
-    path: ""
-- id: "NPM::clone:2.1.2"
-  purl: "pkg:npm/clone@2.1.2"
-  authors:
-  - "Paul Vorbach"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "deep cloning of objects and arrays"
-  homepage_url: "https://github.com/pvorb/node-clone#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
-    hash:
-      value: "1b7f4b9f591f1e8f83670401600345a02887435f"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/pvorb/node-clone.git"
-    revision: "765941803d27761a6008cb1aa32b199f0c42deb2"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/pvorb/node-clone.git"
-    revision: "765941803d27761a6008cb1aa32b199f0c42deb2"
     path: ""
 - id: "NPM::cloneable-readable:1.1.3"
   purl: "pkg:npm/cloneable-readable@1.1.3"
@@ -4211,6 +4211,67 @@ packages:
     url: "https://github.com/jonschlinkert/set-value.git"
     revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
     path: ""
+- id: "NPM::snapdragon:0.11.5"
+  purl: "pkg:npm/snapdragon@0.11.5"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Easy-to-use plugin system for creating powerful, fast and versatile\
+    \ parsers and compilers, with built-in source-map support."
+  homepage_url: "https://github.com/here-be/snapdragon"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.11.5.tgz"
+    hash:
+      value: "522812d175f24f919629fd37406b02e434e645e6"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/here-be/snapdragon.git"
+    revision: "3067f0fe16d5d2771aea793c450f09cb2da533ca"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/here-be/snapdragon.git"
+    revision: "3067f0fe16d5d2771aea793c450f09cb2da533ca"
+    path: ""
+- id: "NPM::snapdragon:0.8.2"
+  purl: "pkg:npm/snapdragon@0.8.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fast, pluggable and easy-to-use parser-renderer factory."
+  homepage_url: "https://github.com/jonschlinkert/snapdragon"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.8.2.tgz"
+    hash:
+      value: "64922e7c565b0e14204ba1aa7d6964278d25182d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/jonschlinkert/snapdragon.git"
+    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/snapdragon.git"
+    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    path: ""
 - id: "NPM::snapdragon-node:1.0.6"
   purl: "pkg:npm/snapdragon-node@1.0.6"
   authors:
@@ -4302,67 +4363,6 @@ packages:
     url: "https://github.com/jonschlinkert/snapdragon-util.git"
     revision: "0ea032c8ea02010338568e82e8510a4054966203"
     path: ""
-- id: "NPM::snapdragon:0.11.5"
-  purl: "pkg:npm/snapdragon@0.11.5"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Easy-to-use plugin system for creating powerful, fast and versatile\
-    \ parsers and compilers, with built-in source-map support."
-  homepage_url: "https://github.com/here-be/snapdragon"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.11.5.tgz"
-    hash:
-      value: "522812d175f24f919629fd37406b02e434e645e6"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/here-be/snapdragon.git"
-    revision: "3067f0fe16d5d2771aea793c450f09cb2da533ca"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/here-be/snapdragon.git"
-    revision: "3067f0fe16d5d2771aea793c450f09cb2da533ca"
-    path: ""
-- id: "NPM::snapdragon:0.8.2"
-  purl: "pkg:npm/snapdragon@0.8.2"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Fast, pluggable and easy-to-use parser-renderer factory."
-  homepage_url: "https://github.com/jonschlinkert/snapdragon"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.8.2.tgz"
-    hash:
-      value: "64922e7c565b0e14204ba1aa7d6964278d25182d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/jonschlinkert/snapdragon.git"
-    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/snapdragon.git"
-    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
-    path: ""
 - id: "NPM::sort-by-value:0.1.0"
   purl: "pkg:npm/sort-by-value@0.1.0"
   authors:
@@ -4393,66 +4393,6 @@ packages:
     type: "Git"
     url: "https://github.com/jonschlinkert/sort-by-value.git"
     revision: "e3ba2adb16e5efd28396f97367e19ed4913f74a6"
-    path: ""
-- id: "NPM::source-map-resolve:0.5.3"
-  purl: "pkg:npm/source-map-resolve@0.5.3"
-  authors:
-  - "Simon Lydell"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Resolve the source map and/or sources for a generated file."
-  homepage_url: "https://github.com/lydell/source-map-resolve#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/source-map-resolve/-/source-map-resolve-0.5.3.tgz"
-    hash:
-      value: "190866bece7553e1f8f267a2ee82c606b5509a1a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/lydell/source-map-resolve.git"
-    revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/lydell/source-map-resolve.git"
-    revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
-    path: ""
-- id: "NPM::source-map-url:0.4.0"
-  purl: "pkg:npm/source-map-url@0.4.0"
-  authors:
-  - "Simon Lydell"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Tools for working with sourceMappingURL comments."
-  homepage_url: "https://github.com/lydell/source-map-url#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/source-map-url/-/source-map-url-0.4.0.tgz"
-    hash:
-      value: "3e935d7ddd73631b97659956d55128e87b5084a3"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/lydell/source-map-url.git"
-    revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/lydell/source-map-url.git"
-    revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
     path: ""
 - id: "NPM::source-map:0.5.7"
   purl: "pkg:npm/source-map@0.5.7"
@@ -4513,6 +4453,66 @@ packages:
     type: "Git"
     url: "ssh://git@github.com/mozilla/source-map.git"
     revision: "ac518d2f21818146f3310557bd51c13d8cff2ba8"
+    path: ""
+- id: "NPM::source-map-resolve:0.5.3"
+  purl: "pkg:npm/source-map-resolve@0.5.3"
+  authors:
+  - "Simon Lydell"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Resolve the source map and/or sources for a generated file."
+  homepage_url: "https://github.com/lydell/source-map-resolve#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/source-map-resolve/-/source-map-resolve-0.5.3.tgz"
+    hash:
+      value: "190866bece7553e1f8f267a2ee82c606b5509a1a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/lydell/source-map-resolve.git"
+    revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lydell/source-map-resolve.git"
+    revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
+    path: ""
+- id: "NPM::source-map-url:0.4.0"
+  purl: "pkg:npm/source-map-url@0.4.0"
+  authors:
+  - "Simon Lydell"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Tools for working with sourceMappingURL comments."
+  homepage_url: "https://github.com/lydell/source-map-url#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/source-map-url/-/source-map-url-0.4.0.tgz"
+    hash:
+      value: "3e935d7ddd73631b97659956d55128e87b5084a3"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/lydell/source-map-url.git"
+    revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/lydell/source-map-url.git"
+    revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
     path: ""
 - id: "NPM::split-string:3.1.0"
   purl: "pkg:npm/split-string@3.1.0"

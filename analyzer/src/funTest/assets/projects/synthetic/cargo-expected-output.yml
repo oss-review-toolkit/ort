@@ -693,6 +693,37 @@ packages:
     url: "https://github.com/mvdnes/spin-rs.git"
     revision: ""
     path: ""
+- id: "Crate::winapi:0.3.8"
+  purl: "pkg:cargo/winapi@0.3.8"
+  authors:
+  - "Peter Atashian"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR MIT"
+  description: "Raw FFI bindings for all of Windows API."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://crates.io/api/v1/crates/winapi/0.3.8/download"
+    hash:
+      value: "8093091eeb260906a183e6ae1abdba2ef5ef2257a21801128899c3fc699229c6"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/retep998/winapi-rs.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/retep998/winapi-rs.git"
+    revision: ""
+    path: ""
 - id: "Crate::winapi-i686-pc-windows-gnu:0.4.0"
   purl: "pkg:cargo/winapi-i686-pc-windows-gnu@0.4.0"
   authors:
@@ -746,37 +777,6 @@ packages:
     url: "https://crates.io/api/v1/crates/winapi-x86_64-pc-windows-gnu/0.4.0/download"
     hash:
       value: "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
-      algorithm: "SHA-256"
-  vcs:
-    type: "Git"
-    url: "https://github.com/retep998/winapi-rs.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/retep998/winapi-rs.git"
-    revision: ""
-    path: ""
-- id: "Crate::winapi:0.3.8"
-  purl: "pkg:cargo/winapi@0.3.8"
-  authors:
-  - "Peter Atashian"
-  declared_licenses:
-  - "Apache-2.0"
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0 OR MIT"
-  description: "Raw FFI bindings for all of Windows API."
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://crates.io/api/v1/crates/winapi/0.3.8/download"
-    hash:
-      value: "8093091eeb260906a183e6ae1abdba2ef5ef2257a21801128899c3fc699229c6"
       algorithm: "SHA-256"
   vcs:
     type: "Git"

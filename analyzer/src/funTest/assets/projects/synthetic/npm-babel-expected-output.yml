@@ -873,25 +873,6 @@ project:
                   - id: "NPM::repeat-string:1.6.1"
               - id: "NPM::isobject:3.0.1"
               - id: "NPM::repeat-element:1.1.3"
-              - id: "NPM::snapdragon-node:2.1.1"
-                dependencies:
-                - id: "NPM::define-property:1.0.0"
-                  dependencies:
-                  - id: "NPM::is-descriptor:1.0.2"
-                    dependencies:
-                    - id: "NPM::is-accessor-descriptor:1.0.0"
-                      dependencies:
-                      - id: "NPM::kind-of:6.0.2"
-                    - id: "NPM::is-data-descriptor:1.0.0"
-                      dependencies:
-                      - id: "NPM::kind-of:6.0.2"
-                    - id: "NPM::kind-of:6.0.2"
-                - id: "NPM::isobject:3.0.1"
-                - id: "NPM::snapdragon-util:3.0.1"
-                  dependencies:
-                  - id: "NPM::kind-of:3.2.2"
-                    dependencies:
-                    - id: "NPM::is-buffer:1.1.6"
               - id: "NPM::snapdragon:0.8.2"
                 dependencies:
                 - id: "NPM::base:0.11.2"
@@ -1084,6 +1065,7 @@ project:
                   dependencies:
                   - id: "NPM::is-extendable:0.1.1"
                 - id: "NPM::map-cache:0.2.2"
+                - id: "NPM::source-map:0.5.7"
                 - id: "NPM::source-map-resolve:0.5.2"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
@@ -1091,8 +1073,26 @@ project:
                   - id: "NPM::resolve-url:0.2.1"
                   - id: "NPM::source-map-url:0.4.0"
                   - id: "NPM::urix:0.1.0"
-                - id: "NPM::source-map:0.5.7"
                 - id: "NPM::use:3.1.1"
+              - id: "NPM::snapdragon-node:2.1.1"
+                dependencies:
+                - id: "NPM::define-property:1.0.0"
+                  dependencies:
+                  - id: "NPM::is-descriptor:1.0.2"
+                    dependencies:
+                    - id: "NPM::is-accessor-descriptor:1.0.0"
+                      dependencies:
+                      - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::is-data-descriptor:1.0.0"
+                      dependencies:
+                      - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.2"
+                - id: "NPM::isobject:3.0.1"
+                - id: "NPM::snapdragon-util:3.0.1"
+                  dependencies:
+                  - id: "NPM::kind-of:3.2.2"
+                    dependencies:
+                    - id: "NPM::is-buffer:1.1.6"
               - id: "NPM::split-string:3.1.0"
                 dependencies:
                 - id: "NPM::extend-shallow:3.0.2"
@@ -1404,6 +1404,7 @@ project:
                     dependencies:
                     - id: "NPM::is-extendable:0.1.1"
                   - id: "NPM::map-cache:0.2.2"
+                  - id: "NPM::source-map:0.5.7"
                   - id: "NPM::source-map-resolve:0.5.2"
                     dependencies:
                     - id: "NPM::atob:2.1.2"
@@ -1411,7 +1412,6 @@ project:
                     - id: "NPM::resolve-url:0.2.1"
                     - id: "NPM::source-map-url:0.4.0"
                     - id: "NPM::urix:0.1.0"
-                  - id: "NPM::source-map:0.5.7"
                   - id: "NPM::use:3.1.1"
                 - id: "NPM::to-regex:3.0.2"
                   dependencies:
@@ -1662,6 +1662,7 @@ project:
                   dependencies:
                   - id: "NPM::is-extendable:0.1.1"
                 - id: "NPM::map-cache:0.2.2"
+                - id: "NPM::source-map:0.5.7"
                 - id: "NPM::source-map-resolve:0.5.2"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
@@ -1669,7 +1670,6 @@ project:
                   - id: "NPM::resolve-url:0.2.1"
                   - id: "NPM::source-map-url:0.4.0"
                   - id: "NPM::urix:0.1.0"
-                - id: "NPM::source-map:0.5.7"
                 - id: "NPM::use:3.1.1"
               - id: "NPM::to-regex:3.0.2"
                 dependencies:
@@ -1950,6 +1950,7 @@ project:
                   dependencies:
                   - id: "NPM::is-extendable:0.1.1"
                 - id: "NPM::map-cache:0.2.2"
+                - id: "NPM::source-map:0.5.7"
                 - id: "NPM::source-map-resolve:0.5.2"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
@@ -1957,7 +1958,6 @@ project:
                   - id: "NPM::resolve-url:0.2.1"
                   - id: "NPM::source-map-url:0.4.0"
                   - id: "NPM::urix:0.1.0"
-                - id: "NPM::source-map:0.5.7"
                 - id: "NPM::use:3.1.1"
               - id: "NPM::to-regex:3.0.2"
                 dependencies:
@@ -2205,6 +2205,7 @@ project:
                 dependencies:
                 - id: "NPM::is-extendable:0.1.1"
               - id: "NPM::map-cache:0.2.2"
+              - id: "NPM::source-map:0.5.7"
               - id: "NPM::source-map-resolve:0.5.2"
                 dependencies:
                 - id: "NPM::atob:2.1.2"
@@ -2212,7 +2213,6 @@ project:
                 - id: "NPM::resolve-url:0.2.1"
                 - id: "NPM::source-map-url:0.4.0"
                 - id: "NPM::urix:0.1.0"
-              - id: "NPM::source-map:0.5.7"
               - id: "NPM::use:3.1.1"
             - id: "NPM::to-regex:3.0.2"
               dependencies:
@@ -4731,66 +4731,6 @@ packages:
     url: "https://github.com/jonschlinkert/get-value.git"
     revision: "5dc7466a65eec37e3b9e3d94f274b7aba193ea60"
     path: ""
-- id: "NPM::glob-base:0.3.0"
-  purl: "pkg:npm/glob-base@0.3.0"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Returns an object with the (non-glob) base path and the actual pattern."
-  homepage_url: "https://github.com/jonschlinkert/glob-base"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/glob-base/-/glob-base-0.3.0.tgz"
-    hash:
-      value: "dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/jonschlinkert/glob-base.git"
-    revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/glob-base.git"
-    revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
-    path: ""
-- id: "NPM::glob-parent:2.0.0"
-  purl: "pkg:npm/glob-parent@2.0.0"
-  authors:
-  - "Elan Shanker"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Strips glob magic from a string to provide the parent path"
-  homepage_url: "https://github.com/es128/glob-parent"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/glob-parent/-/glob-parent-2.0.0.tgz"
-    hash:
-      value: "81383d72db054fcccf5336daa902f182f6edbb28"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/es128/glob-parent.git"
-    revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/es128/glob-parent.git"
-    revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
-    path: ""
 - id: "NPM::glob:7.1.3"
   purl: "pkg:npm/glob@7.1.3"
   authors:
@@ -4850,6 +4790,66 @@ packages:
     type: "Git"
     url: "https://github.com/isaacs/node-glob.git"
     revision: "2da9af3ed730811d0fe743bec1281e169374428e"
+    path: ""
+- id: "NPM::glob-base:0.3.0"
+  purl: "pkg:npm/glob-base@0.3.0"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Returns an object with the (non-glob) base path and the actual pattern."
+  homepage_url: "https://github.com/jonschlinkert/glob-base"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/glob-base/-/glob-base-0.3.0.tgz"
+    hash:
+      value: "dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/jonschlinkert/glob-base.git"
+    revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/glob-base.git"
+    revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
+    path: ""
+- id: "NPM::glob-parent:2.0.0"
+  purl: "pkg:npm/glob-parent@2.0.0"
+  authors:
+  - "Elan Shanker"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "Strips glob magic from a string to provide the parent path"
+  homepage_url: "https://github.com/es128/glob-parent"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/glob-parent/-/glob-parent-2.0.0.tgz"
+    hash:
+      value: "81383d72db054fcccf5336daa902f182f6edbb28"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/es128/glob-parent.git"
+    revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/es128/glob-parent.git"
+    revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
     path: ""
 - id: "NPM::globals:9.18.0"
   purl: "pkg:npm/globals@9.18.0"
@@ -8389,6 +8389,36 @@ packages:
     url: "https://github.com/sindresorhus/slash.git"
     revision: "c801dd4568ad9380b534067eabe88942394f82ff"
     path: ""
+- id: "NPM::snapdragon:0.8.2"
+  purl: "pkg:npm/snapdragon@0.8.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fast, pluggable and easy-to-use parser-renderer factory."
+  homepage_url: "https://github.com/jonschlinkert/snapdragon"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.8.2.tgz"
+    hash:
+      value: "64922e7c565b0e14204ba1aa7d6964278d25182d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/jonschlinkert/snapdragon.git"
+    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/snapdragon.git"
+    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    path: ""
 - id: "NPM::snapdragon-node:2.1.1"
   purl: "pkg:npm/snapdragon-node@2.1.1"
   authors:
@@ -8450,35 +8480,35 @@ packages:
     url: "https://github.com/jonschlinkert/snapdragon-util.git"
     revision: "1655d7f02f5957ebddc9cc7757a25bf8f221e5a7"
     path: ""
-- id: "NPM::snapdragon:0.8.2"
-  purl: "pkg:npm/snapdragon@0.8.2"
+- id: "NPM::source-map:0.5.7"
+  purl: "pkg:npm/source-map@0.5.7"
   authors:
-  - "Jon Schlinkert"
+  - "Nick Fitzgerald"
   declared_licenses:
-  - "MIT"
+  - "BSD-3-Clause"
   declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Fast, pluggable and easy-to-use parser-renderer factory."
-  homepage_url: "https://github.com/jonschlinkert/snapdragon"
+    spdx_expression: "BSD-3-Clause"
+  description: "Generates and consumes source maps"
+  homepage_url: "https://github.com/mozilla/source-map"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.8.2.tgz"
+    url: "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
     hash:
-      value: "64922e7c565b0e14204ba1aa7d6964278d25182d"
+      value: "8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "git+https://github.com/jonschlinkert/snapdragon.git"
-    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    url: "git+ssh://git@github.com/mozilla/source-map.git"
+    revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/jonschlinkert/snapdragon.git"
-    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    url: "ssh://git@github.com/mozilla/source-map.git"
+    revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
 - id: "NPM::source-map-resolve:0.5.2"
   purl: "pkg:npm/source-map-resolve@0.5.2"
@@ -8567,36 +8597,6 @@ packages:
     type: "Git"
     url: "https://github.com/lydell/source-map-url.git"
     revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
-    path: ""
-- id: "NPM::source-map:0.5.7"
-  purl: "pkg:npm/source-map@0.5.7"
-  authors:
-  - "Nick Fitzgerald"
-  declared_licenses:
-  - "BSD-3-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-  description: "Generates and consumes source maps"
-  homepage_url: "https://github.com/mozilla/source-map"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
-    hash:
-      value: "8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+ssh://git@github.com/mozilla/source-map.git"
-    revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "ssh://git@github.com/mozilla/source-map.git"
-    revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
 - id: "NPM::split-string:3.1.0"
   purl: "pkg:npm/split-string@3.1.0"
@@ -8899,6 +8899,36 @@ packages:
     url: "https://github.com/jonschlinkert/to-object-path.git"
     revision: "56f6627285b7f5b7563e6f3ffe3766d966368c17"
     path: ""
+- id: "NPM::to-regex:3.0.2"
+  purl: "pkg:npm/to-regex@3.0.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Generate a regex from a string or array of strings."
+  homepage_url: "https://github.com/jonschlinkert/to-regex"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/to-regex/-/to-regex-3.0.2.tgz"
+    hash:
+      value: "13cfdd9b336552f30b51f33a8ae1b42a7a7599ce"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/jonschlinkert/to-regex.git"
+    revision: "cc5735f98f62c8e9cfb98ae5b309abea1c8a2432"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/to-regex.git"
+    revision: "cc5735f98f62c8e9cfb98ae5b309abea1c8a2432"
+    path: ""
 - id: "NPM::to-regex-range:2.1.1"
   purl: "pkg:npm/to-regex-range@2.1.1"
   authors:
@@ -8929,36 +8959,6 @@ packages:
     type: "Git"
     url: "https://github.com/micromatch/to-regex-range.git"
     revision: "de34e5079dbf33f8ac992d87914fa5e3507fa07d"
-    path: ""
-- id: "NPM::to-regex:3.0.2"
-  purl: "pkg:npm/to-regex@3.0.2"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Generate a regex from a string or array of strings."
-  homepage_url: "https://github.com/jonschlinkert/to-regex"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/to-regex/-/to-regex-3.0.2.tgz"
-    hash:
-      value: "13cfdd9b336552f30b51f33a8ae1b42a7a7599ce"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/jonschlinkert/to-regex.git"
-    revision: "cc5735f98f62c8e9cfb98ae5b309abea1c8a2432"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/to-regex.git"
-    revision: "cc5735f98f62c8e9cfb98ae5b309abea1c8a2432"
     path: ""
 - id: "NPM::trim-right:1.0.1"
   purl: "pkg:npm/trim-right@1.0.1"

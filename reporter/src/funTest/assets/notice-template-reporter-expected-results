@@ -109,7 +109,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ----
 
-Package: @ort:license-file-and-additional-licenses:1.0
+Package: @ort:license-file:1.0
 
 The following copyrights and licenses were found in the source code of this package:
 
@@ -137,7 +137,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ----
 
-Package: @ort:license-file:1.0
+Package: @ort:license-file-and-additional-licenses:1.0
 
 The following copyrights and licenses were found in the source code of this package:
 

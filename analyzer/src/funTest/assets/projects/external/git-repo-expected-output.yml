@@ -153,8 +153,8 @@ analyzer:
         - id: "Maven:com.google.code.gson:gson:2.8.0"
         - id: "Maven:com.google.guava:guava:16.0.1"
         - id: "Maven:net.sf.opencsv:opencsv:2.3"
-        - id: "Maven:net.sf.saxon:saxon-dom:8.7"
         - id: "Maven:net.sf.saxon:saxon:8.7"
+        - id: "Maven:net.sf.saxon:saxon-dom:8.7"
         - id: "Maven:nu.validator.htmlparser:htmlparser:1.4"
         - id: "Maven:org.antlr:antlr:3.4"
           dependencies:
@@ -167,14 +167,6 @@ analyzer:
         - id: "Maven:org.apache.jena:apache-jena-libs:3.9.0"
           dependencies:
           - id: "Maven:org.apache.jena:jena-rdfconnection:3.9.0"
-          - id: "Maven:org.apache.jena:jena-tdb2:3.9.0"
-            dependencies:
-            - id: "Maven:org.apache.jena:jena-dboe-trans-data:3.9.0"
-              dependencies:
-              - id: "Maven:org.apache.jena:jena-dboe-index:3.9.0"
-              - id: "Maven:org.apache.jena:jena-dboe-transaction:3.9.0"
-                dependencies:
-                - id: "Maven:org.apache.jena:jena-dboe-base:3.9.0"
           - id: "Maven:org.apache.jena:jena-tdb:3.9.0"
             dependencies:
             - id: "Maven:org.apache.jena:jena-arq:3.9.0"
@@ -186,10 +178,10 @@ analyzer:
                   dependencies:
                   - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.9.0"
                 - id: "Maven:commons-io:commons-io:2.6"
-              - id: "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
               - id: "Maven:org.apache.httpcomponents:httpclient:4.5.5"
                 dependencies:
                 - id: "Maven:org.apache.httpcomponents:httpcore:4.4.9"
+              - id: "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
               - id: "Maven:org.apache.jena:jena-core:3.9.0"
                 dependencies:
                 - id: "Maven:commons-cli:commons-cli:1.4"
@@ -201,11 +193,23 @@ analyzer:
               - id: "Maven:org.apache.jena:jena-shaded-guava:3.9.0"
               - id: "Maven:org.apache.thrift:libthrift:0.10.0"
               - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+          - id: "Maven:org.apache.jena:jena-tdb2:3.9.0"
+            dependencies:
+            - id: "Maven:org.apache.jena:jena-dboe-trans-data:3.9.0"
+              dependencies:
+              - id: "Maven:org.apache.jena:jena-dboe-index:3.9.0"
+              - id: "Maven:org.apache.jena:jena-dboe-transaction:3.9.0"
+                dependencies:
+                - id: "Maven:org.apache.jena:jena-dboe-base:3.9.0"
           - id: "Maven:org.slf4j:slf4j-api:1.7.25"
         - id: "Maven:org.apache.jena:jena-iri:3.9.0"
         - id: "Maven:org.apache.logging.log4j:log4j-api:2.10.0"
         - id: "Maven:org.apache.logging.log4j:log4j-core:2.10.0"
         - id: "Maven:org.apache.logging.log4j:log4j-slf4j-impl:2.10.0"
+        - id: "Maven:org.apache.poi:poi:3.15"
+          dependencies:
+          - id: "Maven:commons-codec:commons-codec:1.10"
+          - id: "Maven:org.apache.commons:commons-collections4:4.1"
         - id: "Maven:org.apache.poi:poi-ooxml:3.15"
           dependencies:
           - id: "Maven:com.github.virtuald:curvesapi:1.04"
@@ -214,10 +218,6 @@ analyzer:
             - id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
               dependencies:
               - id: "Maven:stax:stax-api:1.0.1"
-        - id: "Maven:org.apache.poi:poi:3.15"
-          dependencies:
-          - id: "Maven:commons-codec:commons-codec:1.10"
-          - id: "Maven:org.apache.commons:commons-collections4:4.1"
         - id: "Maven:org.jsoup:jsoup:1.7.2"
       - name: "test"
         dependencies:
@@ -1007,20 +1007,20 @@ analyzer:
           path: ""
       curations: []
     - package:
-        id: "Maven:net.sf.saxon:saxon-dom:8.7"
-        purl: "pkg:maven/net.sf.saxon/saxon-dom@8.7"
+        id: "Maven:net.sf.saxon:saxon:8.7"
+        purl: "pkg:maven/net.sf.saxon/saxon@8.7"
         declared_licenses:
         - "Mozilla Public License Version 1.0"
         declared_licenses_processed:
           spdx_expression: "MPL-1.0"
           mapped:
             Mozilla Public License Version 1.0: "MPL-1.0"
-        description: "Saxon support library for third-party object model DOM"
+        description: "The XSLT and XQuery Processor"
         homepage_url: "http://saxon.sf.net"
         binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon-dom/8.7/saxon-dom-8.7.jar"
+          url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon/8.7/saxon-8.7.jar"
           hash:
-            value: "ca5abeba98e41eca830e6ddc74385a9538c0c908"
+            value: "68f963a06e2c384ab8d60aaa89ed0363928f6e84"
             algorithm: "SHA-1"
         source_artifact:
           url: ""
@@ -1039,20 +1039,20 @@ analyzer:
           path: ""
       curations: []
     - package:
-        id: "Maven:net.sf.saxon:saxon:8.7"
-        purl: "pkg:maven/net.sf.saxon/saxon@8.7"
+        id: "Maven:net.sf.saxon:saxon-dom:8.7"
+        purl: "pkg:maven/net.sf.saxon/saxon-dom@8.7"
         declared_licenses:
         - "Mozilla Public License Version 1.0"
         declared_licenses_processed:
           spdx_expression: "MPL-1.0"
           mapped:
             Mozilla Public License Version 1.0: "MPL-1.0"
-        description: "The XSLT and XQuery Processor"
+        description: "Saxon support library for third-party object model DOM"
         homepage_url: "http://saxon.sf.net"
         binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon/8.7/saxon-8.7.jar"
+          url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon-dom/8.7/saxon-dom-8.7.jar"
           hash:
-            value: "68f963a06e2c384ab8d60aaa89ed0363928f6e84"
+            value: "ca5abeba98e41eca830e6ddc74385a9538c0c908"
             algorithm: "SHA-1"
         source_artifact:
           url: ""
@@ -1156,6 +1156,35 @@ analyzer:
           path: ""
       curations: []
     - package:
+        id: "Maven:org.antlr:antlr:3.4"
+        purl: "pkg:maven/org.antlr/antlr@3.4"
+        declared_licenses: []
+        declared_licenses_processed: {}
+        description: "Sonatype helps open source projects to set up Maven repositories\
+          \ on https://oss.sonatype.org/"
+        homepage_url: "http://antlr.org"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4.jar"
+          hash:
+            value: "7797e70e3f5cb4229695f08ff50333266cf81125"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4-sources.jar"
+          hash:
+            value: "2e6a31f24631eb533d8170da9cac6849345f8fda"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Subversion"
+          url: "http://svn.sonatype.org/spice/tags/oss-parent-7"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Subversion"
+          url: "http://svn.sonatype.org/spice"
+          revision: "tags/oss-parent-7"
+          path: ""
+      curations: []
+    - package:
         id: "Maven:org.antlr:antlr-runtime:3.4"
         purl: "pkg:maven/org.antlr/antlr-runtime@3.4"
         authors:
@@ -1185,35 +1214,6 @@ analyzer:
           type: ""
           url: ""
           revision: ""
-          path: ""
-      curations: []
-    - package:
-        id: "Maven:org.antlr:antlr:3.4"
-        purl: "pkg:maven/org.antlr/antlr@3.4"
-        declared_licenses: []
-        declared_licenses_processed: {}
-        description: "Sonatype helps open source projects to set up Maven repositories\
-          \ on https://oss.sonatype.org/"
-        homepage_url: "http://antlr.org"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4.jar"
-          hash:
-            value: "7797e70e3f5cb4229695f08ff50333266cf81125"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4-sources.jar"
-          hash:
-            value: "2e6a31f24631eb533d8170da9cac6849345f8fda"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Subversion"
-          url: "http://svn.sonatype.org/spice/tags/oss-parent-7"
-          revision: ""
-          path: ""
-        vcs_processed:
-          type: "Subversion"
-          url: "http://svn.sonatype.org/spice"
-          revision: "tags/oss-parent-7"
           path: ""
       curations: []
     - package:
@@ -1500,55 +1500,6 @@ analyzer:
           path: ""
       curations: []
     - package:
-        id: "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
-        purl: "pkg:maven/org.apache.httpcomponents/httpclient-cache@4.5.5"
-        authors:
-        - "Ant Elder"
-        - "Asankha C. Perera"
-        - "Erik Abele"
-        - "Francois-Xavier Bonnet"
-        - "Gary Gregory"
-        - "Jonathan Moore"
-        - "Karl Wright"
-        - "Oleg Kalnichevski"
-        - "Ortwin Glueck"
-        - "Paul Fremantle"
-        - "Roland Weber"
-        - "Sam Berlin"
-        - "Sean C. Sullivan"
-        - "Sebastian Bazley"
-        - "The Apache Software Foundation"
-        - "William Speirs"
-        declared_licenses:
-        - "Apache License, Version 2.0"
-        declared_licenses_processed:
-          spdx_expression: "Apache-2.0"
-          mapped:
-            Apache License, Version 2.0: "Apache-2.0"
-        description: "Apache HttpComponents HttpClient - Cache"
-        homepage_url: "http://hc.apache.org/httpcomponents-client"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5.jar"
-          hash:
-            value: "8115af15235c603db957db37f24e0faa168474f7"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5-sources.jar"
-          hash:
-            value: "f619aff61d2307f2f01de79ca4ffb554f695d7c3"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
-          revision: "4.5.5"
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
-          revision: "4.5.5"
-          path: ""
-      curations: []
-    - package:
         id: "Maven:org.apache.httpcomponents:httpclient:4.5.5"
         purl: "pkg:maven/org.apache.httpcomponents/httpclient@4.5.5"
         authors:
@@ -1585,6 +1536,55 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.5.5/httpclient-4.5.5-sources.jar"
           hash:
             value: "9fd59f6f22326a4241f9524fdfd66a1f34824054"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
+          revision: "4.5.5"
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
+          revision: "4.5.5"
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
+        purl: "pkg:maven/org.apache.httpcomponents/httpclient-cache@4.5.5"
+        authors:
+        - "Ant Elder"
+        - "Asankha C. Perera"
+        - "Erik Abele"
+        - "Francois-Xavier Bonnet"
+        - "Gary Gregory"
+        - "Jonathan Moore"
+        - "Karl Wright"
+        - "Oleg Kalnichevski"
+        - "Ortwin Glueck"
+        - "Paul Fremantle"
+        - "Roland Weber"
+        - "Sam Berlin"
+        - "Sean C. Sullivan"
+        - "Sebastian Bazley"
+        - "The Apache Software Foundation"
+        - "William Speirs"
+        declared_licenses:
+        - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
+        description: "Apache HttpComponents HttpClient - Cache"
+        homepage_url: "http://hc.apache.org/httpcomponents-client"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5.jar"
+          hash:
+            value: "8115af15235c603db957db37f24e0faa168474f7"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5-sources.jar"
+          hash:
+            value: "f619aff61d2307f2f01de79ca4ffb554f695d7c3"
             algorithm: "SHA-1"
         vcs:
           type: "Git"
@@ -2056,6 +2056,41 @@ analyzer:
           path: ""
       curations: []
     - package:
+        id: "Maven:org.apache.jena:jena-tdb:3.9.0"
+        purl: "pkg:maven/org.apache.jena/jena-tdb@3.9.0"
+        authors:
+        - "The Apache Software Foundation"
+        declared_licenses:
+        - "The Apache Software License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
+        description: "TDB is a storage subsystem for Jena and ARQ, it is a native\
+          \ triple store providing persisent disk based storage of triples/quads."
+        homepage_url: "http://jena.apache.org/jena-tdb/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0.jar"
+          hash:
+            value: "f2e40a4fa8a8ee02aaaec5c9a5f3dc7579e68227"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0-sources.jar"
+          hash:
+            value: "fe2889a11367d5538ca4e17204155a984ac8c101"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "https://git-wip-us.apache.org/repos/asf/jena.git"
+          revision: "jena-3.9.0-rc1"
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://git-wip-us.apache.org/repos/asf/jena.git"
+          revision: "jena-3.9.0-rc1"
+          path: ""
+      curations: []
+    - package:
         id: "Maven:org.apache.jena:jena-tdb2:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-tdb2@3.9.0"
         authors:
@@ -2083,41 +2118,6 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb2/3.9.0/jena-tdb2-3.9.0-sources.jar"
           hash:
             value: "9aa945b5f64400870893b9399d93ac6a4942417e"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "https://git-wip-us.apache.org/repos/asf/jena.git"
-          revision: "jena-3.9.0-rc1"
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "https://git-wip-us.apache.org/repos/asf/jena.git"
-          revision: "jena-3.9.0-rc1"
-          path: ""
-      curations: []
-    - package:
-        id: "Maven:org.apache.jena:jena-tdb:3.9.0"
-        purl: "pkg:maven/org.apache.jena/jena-tdb@3.9.0"
-        authors:
-        - "The Apache Software Foundation"
-        declared_licenses:
-        - "The Apache Software License, Version 2.0"
-        declared_licenses_processed:
-          spdx_expression: "Apache-2.0"
-          mapped:
-            The Apache Software License, Version 2.0: "Apache-2.0"
-        description: "TDB is a storage subsystem for Jena and ARQ, it is a native\
-          \ triple store providing persisent disk based storage of triples/quads."
-        homepage_url: "http://jena.apache.org/jena-tdb/"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0.jar"
-          hash:
-            value: "f2e40a4fa8a8ee02aaaec5c9a5f3dc7579e68227"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0-sources.jar"
-          hash:
-            value: "fe2889a11367d5538ca4e17204155a984ac8c101"
             algorithm: "SHA-1"
         vcs:
           type: "Git"
@@ -2257,8 +2257,8 @@ analyzer:
           path: ""
       curations: []
     - package:
-        id: "Maven:org.apache.poi:poi-ooxml-schemas:3.15"
-        purl: "pkg:maven/org.apache.poi/poi-ooxml-schemas@3.15"
+        id: "Maven:org.apache.poi:poi:3.15"
+        purl: "pkg:maven/org.apache.poi/poi@3.15"
         authors:
         - "Apache Software Foundation"
         declared_licenses:
@@ -2270,15 +2270,15 @@ analyzer:
         description: "Apache POI - Java API To Access Microsoft Format Files"
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml-schemas/3.15/poi-ooxml-schemas-3.15.jar"
+          url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15.jar"
           hash:
-            value: "de4a50ca39de48a19606b35644ecadb2f733c479"
+            value: "965bba8899988008bb2341e300347de62aad5391"
             algorithm: "SHA-1"
         source_artifact:
-          url: ""
+          url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15-sources.jar"
           hash:
-            value: ""
-            algorithm: ""
+            value: "bd552aa859b560a2ab85694f23771b6ef50698dd"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: ""
@@ -2325,8 +2325,8 @@ analyzer:
           path: ""
       curations: []
     - package:
-        id: "Maven:org.apache.poi:poi:3.15"
-        purl: "pkg:maven/org.apache.poi/poi@3.15"
+        id: "Maven:org.apache.poi:poi-ooxml-schemas:3.15"
+        purl: "pkg:maven/org.apache.poi/poi-ooxml-schemas@3.15"
         authors:
         - "Apache Software Foundation"
         declared_licenses:
@@ -2338,15 +2338,15 @@ analyzer:
         description: "Apache POI - Java API To Access Microsoft Format Files"
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15.jar"
+          url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml-schemas/3.15/poi-ooxml-schemas-3.15.jar"
           hash:
-            value: "965bba8899988008bb2341e300347de62aad5391"
+            value: "de4a50ca39de48a19606b35644ecadb2f733c479"
             algorithm: "SHA-1"
         source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15-sources.jar"
+          url: ""
           hash:
-            value: "bd552aa859b560a2ab85694f23771b6ef50698dd"
-            algorithm: "SHA-1"
+            value: ""
+            algorithm: ""
         vcs:
           type: ""
           url: ""
@@ -3068,38 +3068,6 @@ analyzer:
           path: ""
       curations: []
     - package:
-        id: "NPM::cson-parser:1.3.5"
-        purl: "pkg:npm/cson-parser@1.3.5"
-        authors:
-        - "Groupon"
-        declared_licenses:
-        - "BSD-3-Clause"
-        declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause"
-        description: "Safe parsing of CSON files"
-        homepage_url: "https://github.com/groupon/cson-parser"
-        binary_artifact:
-          url: ""
-          hash:
-            value: ""
-            algorithm: ""
-        source_artifact:
-          url: "https://registry.npmjs.org/cson-parser/-/cson-parser-1.3.5.tgz"
-          hash:
-            value: "7ec675e039145533bf2a6a856073f1599d9c2d24"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "git+ssh://git@github.com/groupon/cson-parser.git"
-          revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "ssh://git@github.com/groupon/cson-parser.git"
-          revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
-          path: ""
-      curations: []
-    - package:
         id: "NPM::cson:4.1.0"
         purl: "pkg:npm/cson@4.1.0"
         authors:
@@ -3130,6 +3098,38 @@ analyzer:
           type: "Git"
           url: "https://github.com/bevry/cson.git"
           revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::cson-parser:1.3.5"
+        purl: "pkg:npm/cson-parser@1.3.5"
+        authors:
+        - "Groupon"
+        declared_licenses:
+        - "BSD-3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
+        description: "Safe parsing of CSON files"
+        homepage_url: "https://github.com/groupon/cson-parser"
+        binary_artifact:
+          url: ""
+          hash:
+            value: ""
+            algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/cson-parser/-/cson-parser-1.3.5.tgz"
+          hash:
+            value: "7ec675e039145533bf2a6a856073f1599d9c2d24"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "git+ssh://git@github.com/groupon/cson-parser.git"
+          revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "ssh://git@github.com/groupon/cson-parser.git"
+          revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
           path: ""
       curations: []
     - package:

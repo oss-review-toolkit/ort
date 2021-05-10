@@ -24,6 +24,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
@@ -67,6 +68,18 @@ class IdentifierTest : WordSpec({
             mapping.entries.forAll { (stringRepresentation, identifier) ->
                 Identifier(stringRepresentation) shouldBe identifier
             }
+        }
+
+        "be sorted as expected" {
+            val ids = listOf(
+                Identifier("Maven:org.springframework.boot:spring-boot-actuator"),
+                Identifier("Maven:org.springframework.boot:spring-boot")
+            )
+
+            ids.sorted() should containExactly(
+                Identifier("Maven:org.springframework.boot:spring-boot"),
+                Identifier("Maven:org.springframework.boot:spring-boot-actuator")
+            )
         }
 
         "be serialized correctly" {
