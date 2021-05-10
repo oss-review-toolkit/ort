@@ -49,7 +49,15 @@ data class AnalyzerResult(
      */
     @JsonAlias("errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf()
+    val issues: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf(),
+
+    /**
+     * A map with [DependencyGraph]s keyed by the name of the package manager that created this graph. Package
+     * managers supporting this feature can construct a shared [DependencyGraph] over all projects and store it in
+     * this map.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val dependencyGraphs: Map<String, DependencyGraph> = sortedMapOf()
 ) {
     companion object {
         /**
@@ -90,4 +98,20 @@ data class AnalyzerResult(
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasIssues by lazy { collectIssues().isNotEmpty() }
+
+    /**
+     * Return a result, in which all contained [Project]s have their scope information resolved. If this result
+     * has shared dependency graphs, the projects referring to one of these graphs are replaced by corresponding
+     * instances that store their dependencies in the classic [Scope]-based format. Otherwise, this instance is
+     * returned without changes.
+     */
+    fun withScopesResolved(): AnalyzerResult =
+        if (dependencyGraphs.isNotEmpty()) {
+            copy(
+                projects = projects.map { it.withResolvedScopes(dependencyGraphs[it.id.type]) }.toSortedSet(),
+                dependencyGraphs = sortedMapOf()
+            )
+        } else {
+            this
+        }
 }

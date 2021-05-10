@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.analyzer
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -34,8 +35,9 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val issues = sortedMapOf<Identifier, List<OrtIssue>>()
+    private val dependencyGraphs = sortedMapOf<String, DependencyGraph>()
 
-    fun build() = AnalyzerResult(projects, packages, issues)
+    fun build() = AnalyzerResult(projects, packages, issues, dependencyGraphs)
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult): AnalyzerResultBuilder {
         // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
@@ -88,6 +90,15 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
             }
         }
 
+        return this
+    }
+
+    /**
+     * Add a [DependencyGraph][graph] with all dependencies detected by the [PackageManager] with the given
+     * [name][packageManagerName] to the result produced by this builder.
+     */
+    fun addDependencyGraph(packageManagerName: String, graph: DependencyGraph): AnalyzerResultBuilder {
+        dependencyGraphs[packageManagerName] = graph
         return this
     }
 }
