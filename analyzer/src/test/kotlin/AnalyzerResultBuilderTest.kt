@@ -22,18 +22,24 @@ package org.ossreviewtoolkit.analyzer
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beTheSameInstanceAs
 
 import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.containExactly
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerResultBuilderTest : WordSpec() {
     private val issue1 = OrtIssue(source = "source-1", message = "message-1")
@@ -61,6 +67,29 @@ class AnalyzerResultBuilderTest : WordSpec() {
         id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
         scopeDependencies = sortedSetOf(scope1, scope2)
     )
+    private val project3 = Project.EMPTY.copy(
+        id = Identifier("type-1", "namespace-3", "project-1.2", "version-1"),
+        scopeNames = sortedSetOf("scope-2"),
+        scopeDependencies = null
+    )
+
+    private val dependencies1 = listOf(package1.id.toCoordinates(), package2.id.toCoordinates())
+    private val dependencies2 = listOf(package3.id.toCoordinates())
+
+    private val depRef1 = DependencyReference(0)
+    private val depRef2 = DependencyReference(1)
+    private val depRef3 = DependencyReference(0)
+
+    private val scopeMapping1 = mapOf(
+        DependencyGraph.qualifyScope(project1, "scope-1") to listOf(RootDependencyIndex(0)),
+        DependencyGraph.qualifyScope(project3, "scope-2") to listOf(RootDependencyIndex(1))
+    )
+    private val scopeMapping2 = mapOf(
+        DependencyGraph.qualifyScope(project2, "scope-3") to listOf(RootDependencyIndex(0))
+    )
+
+    private val graph1 = DependencyGraph(dependencies1, setOf(depRef1, depRef2), scopeMapping1)
+    private val graph2 = DependencyGraph(dependencies2, setOf(depRef3), scopeMapping2)
 
     private val analyzerResult1 = ProjectAnalyzerResult(
         project1, sortedSetOf(package1), listOf(issue3, issue4)
@@ -82,6 +111,24 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 deserializedMergedResults shouldBe mergedResults
             }
+
+            "be serialized and deserialized correctly with a dependency graph" {
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
+                val result = AnalyzerResult(
+                    projects = sortedSetOf(p1, p2, project3),
+                    packages = sortedSetOf(),
+                    dependencyGraphs = sortedMapOf(
+                        project1.id.type to graph1,
+                        project2.id.type to graph2
+                    )
+                )
+
+                val serializedResult = yamlMapper.writeValueAsString(result)
+                val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
+
+                deserializedResult.withScopesResolved() shouldBe result.withScopesResolved()
+            }
         }
 
         "collectIssues" should {
@@ -97,6 +144,54 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     project1.id to setOf(issue3, issue4),
                     project2.id to setOf(issue4)
                 )
+            }
+        }
+
+        "withResolvedScopes" should {
+            "return the same instance if no shared dependency graphs are present" {
+                val analyzerResult = AnalyzerResultBuilder()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build()
+
+                analyzerResult.withScopesResolved() should beTheSameInstanceAs(analyzerResult)
+            }
+
+            "resolve the dependency information in affected projects" {
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope-1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope-3"))
+                val analyzerResult = AnalyzerResultBuilder()
+                    .addResult(ProjectAnalyzerResult(p1, sortedSetOf()))
+                    .addDependencyGraph(p1.id.type, graph1)
+                    .addResult(ProjectAnalyzerResult(project3, sortedSetOf()))
+                    .addResult(ProjectAnalyzerResult(p2, sortedSetOf()))
+                    .addDependencyGraph(p2.id.type, graph2)
+                    .build()
+
+                val resolvedResult = analyzerResult.withScopesResolved()
+
+                resolvedResult.dependencyGraphs.isEmpty() shouldBe true
+
+                resolvedResult.projects.find { it.id == p1.id } shouldNotBeNull {
+                    scopes shouldHaveSize 1
+                    scopes.first().name shouldBe "scope-1"
+                    scopes.first().dependencies shouldHaveSize 1
+                    scopes.first().dependencies.first().id shouldBe package1.id
+                }
+
+                resolvedResult.projects.find { it.id == project3.id } shouldNotBeNull {
+                    scopes shouldHaveSize 1
+                    scopes.first().name shouldBe "scope-2"
+                    scopes.first().dependencies shouldHaveSize 1
+                    scopes.first().dependencies.first().id shouldBe package2.id
+                }
+
+                resolvedResult.projects.find { it.id == p2.id } shouldNotBeNull {
+                    scopes shouldHaveSize 1
+                    scopes.first().name shouldBe "scope-3"
+                    scopes.first().dependencies shouldHaveSize 1
+                    scopes.first().dependencies.first().id shouldBe package3.id
+                }
             }
         }
 
