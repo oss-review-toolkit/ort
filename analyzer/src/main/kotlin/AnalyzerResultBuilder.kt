@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -61,20 +62,29 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
             issues[existingProject.id] = projectIssues + issue
         } else {
             projects += projectAnalyzerResult.project
-
-            packages += projectAnalyzerResult.packages.map { pkg ->
-                val curations = curationProvider.getCurationsFor(pkg.id)
-                curations.fold(pkg.toCuratedPackage()) { cur, packageCuration ->
-                    log.debug {
-                        "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
-                    }
-
-                    packageCuration.apply(cur)
-                }
-            }
+            addPackages(projectAnalyzerResult.packages)
 
             if (projectAnalyzerResult.issues.isNotEmpty()) {
                 issues[projectAnalyzerResult.project.id] = projectAnalyzerResult.issues
+            }
+        }
+
+        return this
+    }
+
+    /**
+     * Add the given [packageSet] to this builder. This function can be used for packages that have been obtained
+     * independently of a [ProjectAnalyzerResult].
+     */
+    fun addPackages(packageSet: Set<Package>): AnalyzerResultBuilder {
+        packages += packageSet.map { pkg ->
+            val curations = curationProvider.getCurationsFor(pkg.id)
+            curations.fold(pkg.toCuratedPackage()) { cur, packageCuration ->
+                log.debug {
+                    "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
+                }
+
+                packageCuration.apply(cur)
             }
         }
 
