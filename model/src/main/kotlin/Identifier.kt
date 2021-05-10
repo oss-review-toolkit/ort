@@ -61,6 +61,9 @@ data class Identifier(
             name = "",
             version = ""
         )
+
+        private val COMPARATOR = compareBy<Identifier> { it.type }.thenBy { it.namespace }.thenBy { it.name }
+            .thenBy { it.version }
     }
 
     private constructor(components: List<String>) : this(
@@ -88,7 +91,7 @@ data class Identifier(
         }
     }
 
-    override fun compareTo(other: Identifier) = toCoordinates().compareTo(other.toCoordinates())
+    override fun compareTo(other: Identifier) = COMPARATOR.compare(this, other)
 
     /**
      * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].

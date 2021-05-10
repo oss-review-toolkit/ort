@@ -22,8 +22,8 @@ project:
     - id: "Maven:com.mchange:c3p0:0.9.5.2"
       dependencies:
       - id: "Maven:com.mchange:mchange-commons-java:0.2.11"
-    - id: "Maven:com.thoughtworks.xstream:xstream-hibernate:1.4.9"
     - id: "Maven:com.thoughtworks.xstream:xstream:1.4.9"
+    - id: "Maven:com.thoughtworks.xstream:xstream-hibernate:1.4.9"
     - id: "Maven:io.netty:netty-codec:4.1.9.Final"
       dependencies:
       - id: "Maven:io.netty:netty-transport:4.1.9.Final"
@@ -39,13 +39,12 @@ project:
     - id: "Maven:org.apache.poi:poi-ooxml:3.14"
       dependencies:
       - id: "Maven:com.github.virtuald:curvesapi:1.03"
-      - id: "Maven:org.apache.poi:poi-ooxml-schemas:3.14"
-        dependencies:
-        - id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
       - id: "Maven:org.apache.poi:poi:3.14"
         dependencies:
         - id: "Maven:commons-codec:commons-codec:1.10"
-    - id: "Maven:org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"
+      - id: "Maven:org.apache.poi:poi-ooxml-schemas:3.14"
+        dependencies:
+        - id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
     - id: "Maven:org.hibernate:hibernate-c3p0:5.2.10.Final"
     - id: "Maven:org.hibernate:hibernate-core:5.2.10.Final"
       dependencies:
@@ -54,9 +53,10 @@ project:
       - id: "Maven:dom4j:dom4j:1.6.1"
       - id: "Maven:org.hibernate.common:hibernate-commons-annotations:5.0.1.Final"
       - id: "Maven:org.javassist:javassist:3.20.0-GA"
+      - id: "Maven:org.jboss:jandex:2.0.3.Final"
       - id: "Maven:org.jboss.logging:jboss-logging:3.3.0.Final"
       - id: "Maven:org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.1.Final"
-      - id: "Maven:org.jboss:jandex:2.0.3.Final"
+    - id: "Maven:org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"
     - id: "Maven:org.hsqldb:hsqldb:2.4.0"
     - id: "Maven:org.slf4j:slf4j-api:1.7.21"
     - id: "Maven:org.slf4j:slf4j-log4j12:1.7.21"
@@ -267,39 +267,6 @@ packages:
     url: "ssh://git@github.com/swaldman/mchange-commons-java.git"
     revision: ""
     path: ""
-- id: "Maven:com.thoughtworks.xstream:xstream-hibernate:1.4.9"
-  purl: "pkg:maven/com.thoughtworks.xstream/xstream-hibernate@1.4.9"
-  authors:
-  - "XStream"
-  - "XStream Committers"
-  declared_licenses:
-  - "BSD style"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD style: "BSD-3-Clause"
-  description: "XStream extension for Hibernate 3/4 to untie Java objects from Hibernate."
-  homepage_url: "http://x-stream.github.io/xstream-hibernate"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9.jar"
-    hash:
-      value: "340bab230ead26225457a8968e342f3034dcb6c2"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9-sources.jar"
-    hash:
-      value: "f81ce4545c480c4e7a7d73fd6faf7578479b130a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/x-stream/xstream.git"
-    revision: "v-1.4.x"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/x-stream/xstream.git"
-    revision: "v-1.4.x"
-    path: ""
 - id: "Maven:com.thoughtworks.xstream:xstream:1.4.9"
   purl: "pkg:maven/com.thoughtworks.xstream/xstream@1.4.9"
   authors:
@@ -322,6 +289,39 @@ packages:
     url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.4.9/xstream-1.4.9-sources.jar"
     hash:
       value: "a9eb7942e1c58d99d53226b13cc21b4b88cb5cab"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/x-stream/xstream.git"
+    revision: "v-1.4.x"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/x-stream/xstream.git"
+    revision: "v-1.4.x"
+    path: ""
+- id: "Maven:com.thoughtworks.xstream:xstream-hibernate:1.4.9"
+  purl: "pkg:maven/com.thoughtworks.xstream/xstream-hibernate@1.4.9"
+  authors:
+  - "XStream"
+  - "XStream Committers"
+  declared_licenses:
+  - "BSD style"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD style: "BSD-3-Clause"
+  description: "XStream extension for Hibernate 3/4 to untie Java objects from Hibernate."
+  homepage_url: "http://x-stream.github.io/xstream-hibernate"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9.jar"
+    hash:
+      value: "340bab230ead26225457a8968e342f3034dcb6c2"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9-sources.jar"
+    hash:
+      value: "f81ce4545c480c4e7a7d73fd6faf7578479b130a"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -745,8 +745,8 @@ packages:
     url: "http://svn.apache.org/repos/asf/commons/proper/lang"
     revision: "trunk"
     path: ""
-- id: "Maven:org.apache.poi:poi-ooxml-schemas:3.14"
-  purl: "pkg:maven/org.apache.poi/poi-ooxml-schemas@3.14"
+- id: "Maven:org.apache.poi:poi:3.14"
+  purl: "pkg:maven/org.apache.poi/poi@3.14"
   authors:
   - "Apache Software Foundation"
   declared_licenses:
@@ -758,15 +758,15 @@ packages:
   description: "Apache POI - Java API To Access Microsoft Format Files"
   homepage_url: "http://poi.apache.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml-schemas/3.14/poi-ooxml-schemas-3.14.jar"
+    url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.14/poi-3.14.jar"
     hash:
-      value: "97fe4bfdef7f103bfd9ec63c98ea90469afeec7b"
+      value: "fad7ae6d2e59c59ffdb45f1981500babfa765180"
       algorithm: "SHA-1"
   source_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.14/poi-3.14-sources.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "5cf7a94c492c51ed82cf32c44cb63494d353a048"
+      algorithm: "SHA-1"
   vcs:
     type: ""
     url: ""
@@ -809,8 +809,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "Maven:org.apache.poi:poi:3.14"
-  purl: "pkg:maven/org.apache.poi/poi@3.14"
+- id: "Maven:org.apache.poi:poi-ooxml-schemas:3.14"
+  purl: "pkg:maven/org.apache.poi/poi-ooxml-schemas@3.14"
   authors:
   - "Apache Software Foundation"
   declared_licenses:
@@ -822,15 +822,15 @@ packages:
   description: "Apache POI - Java API To Access Microsoft Format Files"
   homepage_url: "http://poi.apache.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.14/poi-3.14.jar"
+    url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml-schemas/3.14/poi-ooxml-schemas-3.14.jar"
     hash:
-      value: "fad7ae6d2e59c59ffdb45f1981500babfa765180"
+      value: "97fe4bfdef7f103bfd9ec63c98ea90469afeec7b"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.14/poi-3.14-sources.jar"
+    url: ""
     hash:
-      value: "5cf7a94c492c51ed82cf32c44cb63494d353a048"
-      algorithm: "SHA-1"
+      value: ""
+      algorithm: ""
   vcs:
     type: ""
     url: ""
@@ -914,6 +914,70 @@ packages:
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""
+- id: "Maven:org.hibernate:hibernate-c3p0:5.2.10.Final"
+  purl: "pkg:maven/org.hibernate/hibernate-c3p0@5.2.10.Final"
+  authors:
+  - "Hibernate.org"
+  declared_licenses:
+  - "GNU Lesser General Public License"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-or-later"
+    mapped:
+      GNU Lesser General Public License: "LGPL-2.1-or-later"
+  description: "Integration for c3p0 Connection pooling into Hibernate O/RM"
+  homepage_url: "http://hibernate.org"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-c3p0/5.2.10.Final/hibernate-c3p0-5.2.10.Final.jar"
+    hash:
+      value: "0e98696f92ea8df4147a95fae9bab9093db294da"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-c3p0/5.2.10.Final/hibernate-c3p0-5.2.10.Final-sources.jar"
+    hash:
+      value: "eec7c630bc036b28e082949d5f9463bd9abc57b7"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "http://github.com/hibernate/hibernate-orm.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/hibernate/hibernate-orm.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.hibernate:hibernate-core:5.2.10.Final"
+  purl: "pkg:maven/org.hibernate/hibernate-core@5.2.10.Final"
+  authors:
+  - "Hibernate.org"
+  declared_licenses:
+  - "GNU Lesser General Public License"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-or-later"
+    mapped:
+      GNU Lesser General Public License: "LGPL-2.1-or-later"
+  description: "The core O/RM functionality as provided by Hibernate"
+  homepage_url: "http://hibernate.org"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-core/5.2.10.Final/hibernate-core-5.2.10.Final.jar"
+    hash:
+      value: "b46a4ba34b52d335cc45c0f33d029f782f7db887"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-core/5.2.10.Final/hibernate-core-5.2.10.Final-sources.jar"
+    hash:
+      value: "6a853e528cfaa39342f408619b404fda6a9af228"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "http://github.com/hibernate/hibernate-orm.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/hibernate/hibernate-orm.git"
+    revision: ""
+    path: ""
 - id: "Maven:org.hibernate.common:hibernate-commons-annotations:5.0.1.Final"
   purl: "pkg:maven/org.hibernate.common/hibernate-commons-annotations@5.0.1.Final"
   authors:
@@ -979,70 +1043,6 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/hibernate/hibernate-jpa-api.git"
-    revision: ""
-    path: ""
-- id: "Maven:org.hibernate:hibernate-c3p0:5.2.10.Final"
-  purl: "pkg:maven/org.hibernate/hibernate-c3p0@5.2.10.Final"
-  authors:
-  - "Hibernate.org"
-  declared_licenses:
-  - "GNU Lesser General Public License"
-  declared_licenses_processed:
-    spdx_expression: "LGPL-2.1-or-later"
-    mapped:
-      GNU Lesser General Public License: "LGPL-2.1-or-later"
-  description: "Integration for c3p0 Connection pooling into Hibernate O/RM"
-  homepage_url: "http://hibernate.org"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-c3p0/5.2.10.Final/hibernate-c3p0-5.2.10.Final.jar"
-    hash:
-      value: "0e98696f92ea8df4147a95fae9bab9093db294da"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-c3p0/5.2.10.Final/hibernate-c3p0-5.2.10.Final-sources.jar"
-    hash:
-      value: "eec7c630bc036b28e082949d5f9463bd9abc57b7"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "http://github.com/hibernate/hibernate-orm.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/hibernate/hibernate-orm.git"
-    revision: ""
-    path: ""
-- id: "Maven:org.hibernate:hibernate-core:5.2.10.Final"
-  purl: "pkg:maven/org.hibernate/hibernate-core@5.2.10.Final"
-  authors:
-  - "Hibernate.org"
-  declared_licenses:
-  - "GNU Lesser General Public License"
-  declared_licenses_processed:
-    spdx_expression: "LGPL-2.1-or-later"
-    mapped:
-      GNU Lesser General Public License: "LGPL-2.1-or-later"
-  description: "The core O/RM functionality as provided by Hibernate"
-  homepage_url: "http://hibernate.org"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-core/5.2.10.Final/hibernate-core-5.2.10.Final.jar"
-    hash:
-      value: "b46a4ba34b52d335cc45c0f33d029f782f7db887"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/hibernate/hibernate-core/5.2.10.Final/hibernate-core-5.2.10.Final-sources.jar"
-    hash:
-      value: "6a853e528cfaa39342f408619b404fda6a9af228"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "http://github.com/hibernate/hibernate-orm.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/hibernate/hibernate-orm.git"
     revision: ""
     path: ""
 - id: "Maven:org.hsqldb:hsqldb:2.4.0"
@@ -1117,6 +1117,39 @@ packages:
     url: "ssh://git@github.com/jboss-javassist/javassist.git"
     revision: ""
     path: ""
+- id: "Maven:org.jboss:jandex:2.0.3.Final"
+  purl: "pkg:maven/org.jboss/jandex@2.0.3.Final"
+  authors:
+  - "JBoss by Red Hat"
+  - "JBoss.org"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
+  description: "Parent POM for JBoss projects. Provides default project build configuration."
+  homepage_url: "http://www.jboss.org/jandex"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jboss/jandex/2.0.3.Final/jandex-2.0.3.Final.jar"
+    hash:
+      value: "bfc4d6257dbff7a33a357f0de116be6ff951d849"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jboss/jandex/2.0.3.Final/jandex-2.0.3.Final-sources.jar"
+    hash:
+      value: "edc4552ad816df11579a8e02e19f778c77a915b5"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:jboss/jboss-parent-pom.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/jboss/jboss-parent-pom.git"
+    revision: ""
+    path: ""
 - id: "Maven:org.jboss.logging:jboss-logging:3.3.0.Final"
   purl: "pkg:maven/org.jboss.logging/jboss-logging@3.3.0.Final"
   authors:
@@ -1185,39 +1218,6 @@ packages:
     type: "Git"
     url: "ssh://git@github.com/jboss/jboss-transaction-api_spec.git"
     revision: "jboss-transaction-api_1.2_spec-1.0.1.Final"
-    path: ""
-- id: "Maven:org.jboss:jandex:2.0.3.Final"
-  purl: "pkg:maven/org.jboss/jandex@2.0.3.Final"
-  authors:
-  - "JBoss by Red Hat"
-  - "JBoss.org"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache License, Version 2.0: "Apache-2.0"
-  description: "Parent POM for JBoss projects. Provides default project build configuration."
-  homepage_url: "http://www.jboss.org/jandex"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jboss/jandex/2.0.3.Final/jandex-2.0.3.Final.jar"
-    hash:
-      value: "bfc4d6257dbff7a33a357f0de116be6ff951d849"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jboss/jandex/2.0.3.Final/jandex-2.0.3.Final-sources.jar"
-    hash:
-      value: "edc4552ad816df11579a8e02e19f778c77a915b5"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git@github.com:jboss/jboss-parent-pom.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "ssh://git@github.com/jboss/jboss-parent-pom.git"
-    revision: ""
     path: ""
 - id: "Maven:org.slf4j:slf4j-api:1.7.21"
   purl: "pkg:maven/org.slf4j/slf4j-api@1.7.21"

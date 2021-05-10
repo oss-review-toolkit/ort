@@ -51,17 +51,17 @@ analyzer:
           dependencies:
           - id: "Maven:ch.qos.logback:logback-core:1.2.3"
           - id: "Maven:org.slf4j:slf4j-api:1.7.25"
+        - id: "Maven:com.typesafe:config:1.3.1"
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
+          - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
             dependencies:
             - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
-          - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
           - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
         - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
           dependencies:
           - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
-        - id: "Maven:com.typesafe:config:1.3.1"
         - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
           dependencies:
           - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
@@ -110,17 +110,17 @@ analyzer:
         - id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
           dependencies:
           - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
+        - id: "Maven:com.typesafe:config:1.3.1"
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
+          - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
             dependencies:
             - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
-          - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
           - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
         - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
           dependencies:
           - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
-        - id: "Maven:com.typesafe:config:1.3.1"
         - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
           dependencies:
           - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
@@ -172,17 +172,17 @@ analyzer:
             dependencies:
             - id: "Maven:org.scala-lang:scala-compiler:2.12.3"
             - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
+        - id: "Maven:com.typesafe:config:1.3.1"
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
+          - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
             dependencies:
             - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
-          - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
           - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
         - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
           dependencies:
           - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
-        - id: "Maven:com.typesafe:config:1.3.1"
         - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
           dependencies:
           - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
@@ -596,6 +596,77 @@ analyzer:
           path: ""
       curations: []
     - package:
+        id: "Maven:com.typesafe:config:1.3.1"
+        purl: "pkg:maven/com.typesafe/config@1.3.1"
+        authors:
+        - "Havoc Pennington"
+        - "com.typesafe"
+        declared_licenses:
+        - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
+        description: "config"
+        homepage_url: "https://github.com/typesafehub/config"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/com/typesafe/config/1.3.1/config-1.3.1.jar"
+          hash:
+            value: "2cf7a6cc79732e3bdf1647d7404279900ca63eb0"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/com/typesafe/config/1.3.1/config-1.3.1-sources.jar"
+          hash:
+            value: "a27878630ff503b63ed25ff2a25fa8ef888740b3"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "git://github.com/typesafehub/config.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://github.com/typesafehub/config.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
+        purl: "pkg:maven/com.typesafe/ssl-config-core_2.12@0.2.2"
+        authors:
+        - "Konrad Malawski"
+        - "Will Sargent"
+        - "com.typesafe"
+        declared_licenses:
+        - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
+        description: "ssl-config-core"
+        homepage_url: "https://github.com/typesafehub/ssl-config"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/com/typesafe/ssl-config-core_2.12/0.2.2/ssl-config-core_2.12-0.2.2.jar"
+          hash:
+            value: "8a357d491f7f94c5b4b1e0b27644e1306cc8742d"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/com/typesafe/ssl-config-core_2.12/0.2.2/ssl-config-core_2.12-0.2.2-sources.jar"
+          hash:
+            value: "1baaec9149929d0970330aa80aca73e3f1f15624"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "git://github.com/typesafehub/ssl-config.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://github.com/typesafehub/ssl-config.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
         id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
         purl: "pkg:maven/com.typesafe.akka/akka-actor_2.12@2.5.6"
         authors:
@@ -702,77 +773,6 @@ analyzer:
           path: ""
       curations: []
     - package:
-        id: "Maven:com.typesafe:config:1.3.1"
-        purl: "pkg:maven/com.typesafe/config@1.3.1"
-        authors:
-        - "Havoc Pennington"
-        - "com.typesafe"
-        declared_licenses:
-        - "Apache License, Version 2.0"
-        declared_licenses_processed:
-          spdx_expression: "Apache-2.0"
-          mapped:
-            Apache License, Version 2.0: "Apache-2.0"
-        description: "config"
-        homepage_url: "https://github.com/typesafehub/config"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/com/typesafe/config/1.3.1/config-1.3.1.jar"
-          hash:
-            value: "2cf7a6cc79732e3bdf1647d7404279900ca63eb0"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/com/typesafe/config/1.3.1/config-1.3.1-sources.jar"
-          hash:
-            value: "a27878630ff503b63ed25ff2a25fa8ef888740b3"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "git://github.com/typesafehub/config.git"
-          revision: ""
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "https://github.com/typesafehub/config.git"
-          revision: ""
-          path: ""
-      curations: []
-    - package:
-        id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
-        purl: "pkg:maven/com.typesafe/ssl-config-core_2.12@0.2.2"
-        authors:
-        - "Konrad Malawski"
-        - "Will Sargent"
-        - "com.typesafe"
-        declared_licenses:
-        - "Apache License, Version 2.0"
-        declared_licenses_processed:
-          spdx_expression: "Apache-2.0"
-          mapped:
-            Apache License, Version 2.0: "Apache-2.0"
-        description: "ssl-config-core"
-        homepage_url: "https://github.com/typesafehub/ssl-config"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/com/typesafe/ssl-config-core_2.12/0.2.2/ssl-config-core_2.12-0.2.2.jar"
-          hash:
-            value: "8a357d491f7f94c5b4b1e0b27644e1306cc8742d"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/com/typesafe/ssl-config-core_2.12/0.2.2/ssl-config-core_2.12-0.2.2-sources.jar"
-          hash:
-            value: "1baaec9149929d0970330aa80aca73e3f1f15624"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "git://github.com/typesafehub/ssl-config.git"
-          revision: ""
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "https://github.com/typesafehub/ssl-config.git"
-          revision: ""
-          path: ""
-      curations: []
-    - package:
         id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
         purl: "pkg:maven/net.logstash.logback/logstash-logback-encoder@4.11"
         authors:
@@ -842,6 +842,111 @@ analyzer:
         vcs_processed:
           type: "Git"
           url: "ssh://git@github.com/reactive-streams/reactive-streams.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.scala-lang:scala-compiler:2.12.3"
+        purl: "pkg:maven/org.scala-lang/scala-compiler@2.12.3"
+        authors:
+        - "LAMP/EPFL"
+        - "Lightbend, Inc."
+        declared_licenses:
+        - "BSD 3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD 3-Clause: "BSD-3-Clause"
+        description: "Compiler for the Scala Programming Language"
+        homepage_url: "http://www.scala-lang.org/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar"
+          hash:
+            value: "b6b9ca202fc8405260d30e703b9790e91c75cd85"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3-sources.jar"
+          hash:
+            value: "b8fe133c260f72b7fe9889195e19efeeab1b8087"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "git://github.com/scala/scala.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://github.com/scala/scala.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.scala-lang:scala-library:2.12.3"
+        purl: "pkg:maven/org.scala-lang/scala-library@2.12.3"
+        authors:
+        - "LAMP/EPFL"
+        - "Lightbend, Inc."
+        declared_licenses:
+        - "BSD 3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD 3-Clause: "BSD-3-Clause"
+        description: "Standard library for the Scala Programming Language"
+        homepage_url: "http://www.scala-lang.org/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar"
+          hash:
+            value: "f2e496f21af2d80b48e0a61773f84c3a76a0d06f"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3-sources.jar"
+          hash:
+            value: "499c91b0a64bc706eee174481a3b7dde81b3591d"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "git://github.com/scala/scala.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://github.com/scala/scala.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.scala-lang:scala-reflect:2.12.2"
+        purl: "pkg:maven/org.scala-lang/scala-reflect@2.12.2"
+        authors:
+        - "LAMP/EPFL"
+        - "Lightbend, Inc."
+        declared_licenses:
+        - "BSD 3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD 3-Clause: "BSD-3-Clause"
+        description: "Compiler for the Scala Programming Language"
+        homepage_url: "http://www.scala-lang.org/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.2/scala-reflect-2.12.2.jar"
+          hash:
+            value: "fa13c13351566738ff156ef8a56b869868f4b77e"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.2/scala-reflect-2.12.2-sources.jar"
+          hash:
+            value: "a8808be417014e233b25ee44439f725e1f5e92a4"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "git://github.com/scala/scala.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://github.com/scala/scala.git"
           revision: ""
           path: ""
       curations: []
@@ -950,111 +1055,6 @@ analyzer:
         vcs_processed:
           type: "Git"
           url: "https://github.com/scala/scala-xml.git"
-          revision: ""
-          path: ""
-      curations: []
-    - package:
-        id: "Maven:org.scala-lang:scala-compiler:2.12.3"
-        purl: "pkg:maven/org.scala-lang/scala-compiler@2.12.3"
-        authors:
-        - "LAMP/EPFL"
-        - "Lightbend, Inc."
-        declared_licenses:
-        - "BSD 3-Clause"
-        declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause"
-          mapped:
-            BSD 3-Clause: "BSD-3-Clause"
-        description: "Compiler for the Scala Programming Language"
-        homepage_url: "http://www.scala-lang.org/"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3.jar"
-          hash:
-            value: "b6b9ca202fc8405260d30e703b9790e91c75cd85"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-compiler/2.12.3/scala-compiler-2.12.3-sources.jar"
-          hash:
-            value: "b8fe133c260f72b7fe9889195e19efeeab1b8087"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "git://github.com/scala/scala.git"
-          revision: ""
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "https://github.com/scala/scala.git"
-          revision: ""
-          path: ""
-      curations: []
-    - package:
-        id: "Maven:org.scala-lang:scala-library:2.12.3"
-        purl: "pkg:maven/org.scala-lang/scala-library@2.12.3"
-        authors:
-        - "LAMP/EPFL"
-        - "Lightbend, Inc."
-        declared_licenses:
-        - "BSD 3-Clause"
-        declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause"
-          mapped:
-            BSD 3-Clause: "BSD-3-Clause"
-        description: "Standard library for the Scala Programming Language"
-        homepage_url: "http://www.scala-lang.org/"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar"
-          hash:
-            value: "f2e496f21af2d80b48e0a61773f84c3a76a0d06f"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3-sources.jar"
-          hash:
-            value: "499c91b0a64bc706eee174481a3b7dde81b3591d"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "git://github.com/scala/scala.git"
-          revision: ""
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "https://github.com/scala/scala.git"
-          revision: ""
-          path: ""
-      curations: []
-    - package:
-        id: "Maven:org.scala-lang:scala-reflect:2.12.2"
-        purl: "pkg:maven/org.scala-lang/scala-reflect@2.12.2"
-        authors:
-        - "LAMP/EPFL"
-        - "Lightbend, Inc."
-        declared_licenses:
-        - "BSD 3-Clause"
-        declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause"
-          mapped:
-            BSD 3-Clause: "BSD-3-Clause"
-        description: "Compiler for the Scala Programming Language"
-        homepage_url: "http://www.scala-lang.org/"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.2/scala-reflect-2.12.2.jar"
-          hash:
-            value: "fa13c13351566738ff156ef8a56b869868f4b77e"
-            algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.12.2/scala-reflect-2.12.2-sources.jar"
-          hash:
-            value: "a8808be417014e233b25ee44439f725e1f5e92a4"
-            algorithm: "SHA-1"
-        vcs:
-          type: "Git"
-          url: "git://github.com/scala/scala.git"
-          revision: ""
-          path: ""
-        vcs_processed:
-          type: "Git"
-          url: "https://github.com/scala/scala.git"
           revision: ""
           path: ""
       curations: []

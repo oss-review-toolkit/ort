@@ -456,11 +456,11 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
           <a href="#issue-summary">Issue Summary (1 errors, 0 warnings, 0 hints to resolve)</a>
         </li>
         <li>
-          <a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</a>
-        </li>
-        <li>
           <a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0">Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0 <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div>
           </a>
+        </li>
+        <li>
+          <a href="#Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0">Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0</a>
         </li>
         <li>
           <a href="#repository-configuration">Repository Configuration</a>
@@ -579,6 +579,64 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
 
                 </details>
               </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2 id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0">Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0 (sub/module/project/build.gradle)</h2>
+      <h3>Project is Excluded</h3>
+      <p>The project is excluded for the following reason(s):</p>
+      <p>
+        <div class="ort-reason">EXAMPLE_OF - The project is an example.</div>
+      </p>
+      <h3 class="ort-excluded">VCS Information</h3>
+      <table class="ort-report-labels ort-excluded">
+        <tbody>
+          <tr>
+            <td>Type</td><td>Git</td>
+          </tr>
+          <tr>
+            <td>URL</td><td>https://example.com/git</td>
+          </tr>
+          <tr>
+            <td>Path</td><td>project</td>
+          </tr>
+          <tr>
+            <td>Revision</td><td>master</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3 class="ort-excluded">Packages</h3>
+      <table class="ort-report-table ort-packages ort-excluded">
+        <thead>
+          <tr>
+            <th>#</th><th>Package</th><th>Scopes</th><th>Licenses</th><th>Analyzer Issues</th><th>Scanner Issues</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">
+            <td><a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">1</a></td><td>Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0</td><td></td><td><em>Declared Licenses:</em>
+              <dl>
+                <dd>
+                  <div>CC-BY-NC-3.0</div>
+                  <div>GPL-3.0-only WITH GCC-exception-3.1</div>
+                </dd>
+              </dl>
+              <em>Detected Licenses (from <a href="https://example.com/git">VCS</a>):</em>
+              <dl>
+                <dd>
+                  <div>Apache-2.0</div>
+                  <div class="ort-excluded">MIT (Excluded: EXAMPLE_OF - These are example files.)</div>
+                </dd>
+              </dl>
+              <em>Effective License:</em>
+              <dl>
+                <dd>Apache-2.0 AND CC-BY-NC-3.0 AND GPL-3.0-only WITH GCC-exception-3.1 AND MIT</dd>
+              </dl>
+            </td><td>
+              <ul></ul>
+            </td><td>
+              <ul></ul>
             </td>
           </tr>
         </tbody>
@@ -771,64 +829,6 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
               <em>Effective License:</em>
               <dl>
                 <dd>BSD-3-Clause</dd>
-              </dl>
-            </td><td>
-              <ul></ul>
-            </td><td>
-              <ul></ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <h2 id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0">Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0 (sub/module/project/build.gradle)</h2>
-      <h3>Project is Excluded</h3>
-      <p>The project is excluded for the following reason(s):</p>
-      <p>
-        <div class="ort-reason">EXAMPLE_OF - The project is an example.</div>
-      </p>
-      <h3 class="ort-excluded">VCS Information</h3>
-      <table class="ort-report-labels ort-excluded">
-        <tbody>
-          <tr>
-            <td>Type</td><td>Git</td>
-          </tr>
-          <tr>
-            <td>URL</td><td>https://example.com/git</td>
-          </tr>
-          <tr>
-            <td>Path</td><td>project</td>
-          </tr>
-          <tr>
-            <td>Revision</td><td>master</td>
-          </tr>
-        </tbody>
-      </table>
-      <h3 class="ort-excluded">Packages</h3>
-      <table class="ort-report-table ort-packages ort-excluded">
-        <thead>
-          <tr>
-            <th>#</th><th>Package</th><th>Scopes</th><th>Licenses</th><th>Analyzer Issues</th><th>Scanner Issues</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="ort-success " id="Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">
-            <td><a href="#Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0-pkg-1">1</a></td><td>Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0</td><td></td><td><em>Declared Licenses:</em>
-              <dl>
-                <dd>
-                  <div>CC-BY-NC-3.0</div>
-                  <div>GPL-3.0-only WITH GCC-exception-3.1</div>
-                </dd>
-              </dl>
-              <em>Detected Licenses (from <a href="https://example.com/git">VCS</a>):</em>
-              <dl>
-                <dd>
-                  <div>Apache-2.0</div>
-                  <div class="ort-excluded">MIT (Excluded: EXAMPLE_OF - These are example files.)</div>
-                </dd>
-              </dl>
-              <em>Effective License:</em>
-              <dl>
-                <dd>Apache-2.0 AND CC-BY-NC-3.0 AND GPL-3.0-only WITH GCC-exception-3.1 AND MIT</dd>
               </dl>
             </td><td>
               <ul></ul>
