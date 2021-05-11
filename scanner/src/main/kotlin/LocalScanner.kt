@@ -320,7 +320,7 @@ abstract class LocalScanner(
 
         try {
             missingArchives.forEach { (pkg, provenance) ->
-                val downloadDirectory = tempDirectory.resolve(pkg.id.toPath())
+                val downloadDirectory = tempDirectory.resolve(pkg.id.toPath()).resolve(provenance.javaClass.simpleName)
                 val downloadProvenance = Downloader(downloaderConfig).download(pkg, downloadDirectory)
 
                 if (downloadProvenance == provenance) {
