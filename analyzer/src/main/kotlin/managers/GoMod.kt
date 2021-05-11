@@ -184,18 +184,8 @@ class GoMod(
         return result
     }
 
-    private fun createPackage(id: Identifier): Package {
-        val vcsFromId = if (id.name.startsWith("github.com")) {
-            VcsInfo(
-                type = VcsType.GIT,
-                url = "https://${id.name.removeSuffix("/")}.git",
-                revision = getRevision(id.version)
-            )
-        } else {
-            VcsInfo.EMPTY
-        }
-
-        return Package(
+    private fun createPackage(id: Identifier): Package =
+        Package(
             id = Identifier(managerName, "", id.name, id.version),
             authors = sortedSetOf(), // Go mod doesn't support author information.
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
@@ -203,9 +193,8 @@ class GoMod(
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = getSourceArtifactForPackage(id),
-            vcs = vcsFromId
+            vcs = id.toVcsInfo()
         )
-    }
 
     private fun getSourceArtifactForPackage(id: Identifier): RemoteArtifact {
         /**
@@ -297,3 +286,14 @@ internal fun getRevision(version: String): String {
 
     return version
 }
+
+internal fun Identifier.toVcsInfo(): VcsInfo =
+    if (name.startsWith("github.com")) {
+        VcsInfo(
+            type = VcsType.GIT,
+            url = "https://${name.removeSuffix("/")}.git",
+            revision = getRevision(version)
+        )
+    } else {
+        VcsInfo.EMPTY
+    }
