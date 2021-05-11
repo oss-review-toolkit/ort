@@ -279,7 +279,7 @@ private fun Collection<Edge>.toPackageReferenceForest(
 // See https://golang.org/ref/mod#pseudo-versions.
 private val PSEUDO_VERSION_REGEX = "^v0.0.0-(?:[\\d]{14}-(?<sha1>[0-9a-f]+)$)".toRegex()
 
-internal fun getRevision(version: String): String {
+private fun getRevision(version: String): String {
     PSEUDO_VERSION_REGEX.find(version)?.let { matchResult ->
         return matchResult.groups["sha1"]!!.value
     }

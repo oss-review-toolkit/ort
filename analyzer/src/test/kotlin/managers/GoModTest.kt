@@ -26,15 +26,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.VcsType
 
 class GoModTest : WordSpec({
-    "getVersion" should {
-        "return the SHA1 from a 'pseudo version'" {
-            // See https://golang.org/ref/mod#pseudo-versions.
-            val version = "v0.0.0-20191109021931-daa7c04131f5"
-
-            getRevision(version) shouldBe "daa7c04131f5"
-        }
-    }
-
     "toVcsInfo" should {
         "return the VCS type 'Git'" {
             val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
@@ -64,6 +55,13 @@ class GoModTest : WordSpec({
                 path shouldBe "autorest/date"
                 url shouldBe "https://github.com/Azure/go-autorest.git"
             }
+        }
+
+        "return the SHA1 from a 'pseudo version'" {
+            // See https://golang.org/ref/mod#pseudo-versions.
+            val id = Identifier("GoMod::github.com/Azure/go-autorest/autorest/date:v0.0.0-20191109021931-daa7c04131f5")
+
+            id.toVcsInfo().revision shouldBe "daa7c04131f5"
         }
     }
 })
