@@ -43,5 +43,15 @@ class GoModTest : WordSpec({
                 url shouldBe "https://github.com/chai2010/gettext-go.git"
             }
         }
+
+        "return the VCS URL and path for a package from a mono repository".config(enabled = false) {
+            val id = Identifier("GoMod::github.com/Azure/go-autorest/autorest/date:v0.1.0")
+
+            // FIXME: The url should actually be https://github.com/Azure/go-autorest.git.
+            with(id.toVcsInfo()) {
+                path shouldBe ""
+                url shouldBe "https://github.com/Azure/go-autorest/autorest/date.git"
+            }
+        }
     }
 })
