@@ -229,19 +229,19 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
                         packages.filter { pkg ->
-                        // A package is only downloaded if its license is part of a category that is part of the
-                        // DownloaderConfiguration's includedLicenseCategories.
-                        getLicenseCategoriesForPackage(
-                            pkg,
-                            licenseCategorizations,
-                            licenseInfoResolver,
-                            ortResult.getRepositoryLicenseChoices(),
-                            ortResult.getPackageLicenseChoices(pkg.id)
-                        ).any { it in includedLicenseCategories }
-                    }
-                } else {
-                    packages
-                }.associateWith { outputDir.resolve(it.id.toPath()) }
+                            // A package is only downloaded if its license is part of a category that is part of the
+                            // DownloaderConfiguration's includedLicenseCategories.
+                            getLicenseCategoriesForPackage(
+                                pkg,
+                                licenseCategorizations,
+                                licenseInfoResolver,
+                                ortResult.getRepositoryLicenseChoices(),
+                                ortResult.getPackageLicenseChoices(pkg.id)
+                            ).any { it in includedLicenseCategories }
+                        }
+                    } else {
+                        packages
+                    }.associateWith { outputDir.resolve(it.id.toPath()) }
 
                 packageDownloadDirs.forEach { (pkg, dir) ->
                     try {
