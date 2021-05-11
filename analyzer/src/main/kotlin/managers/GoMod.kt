@@ -189,7 +189,7 @@ class GoMod(
             VcsInfo(
                 type = VcsType.GIT,
                 url = "https://${id.name.removeSuffix("/")}.git",
-                revision = id.version
+                revision = getRevision(id.version)
             )
         } else {
             VcsInfo.EMPTY
@@ -285,4 +285,15 @@ private fun Collection<Edge>.toPackageReferenceForest(
     }
 
     return nodes.values.filter { it.incomingEdges.isEmpty() }.map { getPackageReference(it.id) }.toSortedSet()
+}
+
+// See https://golang.org/ref/mod#pseudo-versions.
+private val PSEUDO_VERSION_REGEX = "^v0.0.0-(?:[\\d]{14}-(?<sha1>[0-9a-f]+)$)".toRegex()
+
+internal fun getRevision(version: String): String {
+    PSEUDO_VERSION_REGEX.find(version)?.let { matchResult ->
+        return matchResult.groups["sha1"]!!.value
+    }
+
+    return version
 }
