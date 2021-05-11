@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.spdx.getDuplicates
 data class DownloaderConfiguration(
     /**
      * The [categories][LicenseCategory] licenses of packages need to be part of in order to get included into the
-     * download.
+     * download, or an empty list to include all packages.
      */
     val includedLicenseCategories: List<String> = emptyList(),
 
