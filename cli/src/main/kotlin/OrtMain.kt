@@ -219,12 +219,13 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 }
 
 /**
- * Read [ortFile] into an [OrtResult] and return it.
+ * Read [ortFile] into an [OrtResult] and return it. Make sure that information about project scopes is available
+ * (by calling [OrtResult.withResolvedScopes]), so that it can be processed.
  */
 fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
     log.debug { "Input ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(ortFile)}." }
 
-    val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
+    val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>().withResolvedScopes() }
 
     log.perf {
         "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
