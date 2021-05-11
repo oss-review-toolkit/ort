@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.VcsType
 
 class GoModTest : WordSpec({
     "getVersion" should {
@@ -35,6 +36,18 @@ class GoModTest : WordSpec({
     }
 
     "toVcsInfo" should {
+        "return the VCS type 'Git'" {
+            val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
+
+            id.toVcsInfo().type shouldBe VcsType.GIT
+        }
+
+        "return null as resolved revision" {
+            val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
+
+            id.toVcsInfo().resolvedRevision shouldBe null
+        }
+
         "return the VCS URL and path for a package from a single module repository" {
             val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
 
