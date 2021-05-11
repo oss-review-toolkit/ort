@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.Identifier
+
 class GoModTest : WordSpec({
     "getVersion" should {
         "return the SHA1 from a 'pseudo version'" {
@@ -29,6 +31,17 @@ class GoModTest : WordSpec({
             val version = "v0.0.0-20191109021931-daa7c04131f5"
 
             getRevision(version) shouldBe "daa7c04131f5"
+        }
+    }
+
+    "toVcsInfo" should {
+        "return the VCS URL and path for a package from a single module repository" {
+            val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
+
+            with(id.toVcsInfo()) {
+                path shouldBe ""
+                url shouldBe "https://github.com/chai2010/gettext-go.git"
+            }
         }
     }
 })
