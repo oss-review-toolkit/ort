@@ -24,6 +24,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -35,7 +36,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.CommandLineTool
@@ -289,11 +289,10 @@ internal fun getRevision(version: String): String {
 
 internal fun Identifier.toVcsInfo(): VcsInfo =
     if (name.startsWith("github.com")) {
-        VcsInfo(
-            type = VcsType.GIT,
-            url = "https://${name.removeSuffix("/")}.git",
-            revision = getRevision(version)
-        )
+        val projectUrl = "https://${name.removeSuffix("/")}"
+        val vcsInfo = VcsHost.toVcsInfo(projectUrl)
+
+        vcsInfo.copy(revision = getRevision(version))
     } else {
         VcsInfo.EMPTY
     }
