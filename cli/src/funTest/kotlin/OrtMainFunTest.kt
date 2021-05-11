@@ -25,11 +25,16 @@ import com.github.ajalt.clikt.core.ProgramResult
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.io.File
 
+import org.ossreviewtoolkit.commands.AdvisorCommand
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
@@ -37,6 +42,7 @@ import org.ossreviewtoolkit.utils.redirectStdout
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A test for the main entry point of the application.
@@ -158,6 +164,23 @@ class OrtMainFunTest : StringSpec() {
                     "--rules-file", "build.gradle.kts",
                     "--rules-resource", "DUMMY"
                 )
+            }
+        }
+
+        "Commands load OrtResults with resolved scopes" {
+            val cmd = AdvisorCommand()
+            val resultFile = File("src/funTest/assets/analyzer-result-with-dependency-graph.yml")
+
+            val result = cmd.readOrtResult(resultFile)
+
+            result.analyzer?.result shouldNotBeNull {
+                dependencyGraphs.keys should beEmpty()
+            }
+
+            val project = result.getProject(Identifier("Maven:com.vdurmont:semver4j:3.1.0"))
+
+            project shouldNotBeNull {
+                scopes shouldNot beEmpty()
             }
         }
     }
