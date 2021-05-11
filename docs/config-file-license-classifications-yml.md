@@ -12,6 +12,9 @@ The second section, _categorizations_, assigns licenses to the categories define
 using SPDX identifiers. Each license can be assigned an arbitrary number of categories by listing the names of these
 categories. Note that only names can be used that reference one of the categories from the first section.
 
+For a more sophisticated example of a license classification for ORT, see the [generated license-classifications.yml]
+from the [LDBcollector] project.
+
 ### When to Use
 
 The mechanism of assigning categories to licenses is rather generic and can be customized for specific use cases.
@@ -51,6 +54,8 @@ cli/build/install/ort/bin/ort evaluate
 ```
 
 [license-classifications.yml example]: ../examples/license-classifications.yml
+[generated license-classifications.yml]: https://github.com/maxhbr/LDBcollector/blob/generated/ort/license-classifications.yml
+[LDBcollector]: https://github.com/maxhbr/LDBcollector
 [Rules]: file-rules-kts.md
 [Notice templates]: notice-templates.md
 [license-classifications.yml example]: ../examples/license-classifications.yml
