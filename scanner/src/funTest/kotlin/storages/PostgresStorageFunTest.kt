@@ -49,6 +49,5 @@ class PostgresStorageFunTest : AbstractStorageFunTest() {
         postgres.close()
     }
 
-    override fun createStorage() =
-        PostgresStorage(postgres.postgresDatabase)
+    override fun createStorage() = PostgresStorage(postgres.postgresDatabase)
 }
