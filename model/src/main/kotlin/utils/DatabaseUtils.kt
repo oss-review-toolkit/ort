@@ -26,7 +26,6 @@ import kotlinx.coroutines.Deferred
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -100,7 +99,7 @@ object DatabaseUtils {
      * Return true if and only if a table named [tableName] exists.
      */
     fun Transaction.tableExists(tableName: String): Boolean =
-        tableName in TransactionManager.current().db.dialect.allTablesNames().map { it.substringAfterLast(".") }
+        tableName in db.dialect.allTablesNames().map { it.substringAfterLast(".") }
 
     /**
      * Start a new transaction to execute the given [statement] on this [Database].
