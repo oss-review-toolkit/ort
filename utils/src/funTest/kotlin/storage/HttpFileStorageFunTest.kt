@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.log
 class HttpFileStorageFunTest : WordSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
     private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
-        .also { log.debug { "Using port $it for test server." } }
+        .also { log.debug { "Using port $it for HTTP server." } }
 
     private val handler = object : HttpHandler {
         val requests = mutableMapOf<String, String>()
