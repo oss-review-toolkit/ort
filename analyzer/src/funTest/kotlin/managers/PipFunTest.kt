@@ -25,6 +25,7 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -48,7 +49,7 @@ class PipFunTest : WordSpec() {
                 result.toYaml() shouldBe expectedResult
             }
 
-            "resolve requirements.txt dependencies correctly for example-python-flask" {
+            "resolve requirements.txt dependencies correctly for example-python-flask".config(enabled = !Os.isWindows) {
                 val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
 
                 val result = createPIP().resolveSingleProject(definitionFile)
