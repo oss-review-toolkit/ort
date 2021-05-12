@@ -280,6 +280,8 @@ private fun Collection<Edge>.toPackageReferenceForest(
 private val PSEUDO_VERSION_REGEX = "^v0.0.0-(?:[\\d]{14}-(?<sha1>[0-9a-f]+)$)".toRegex()
 
 private fun getRevision(version: String): String {
+    if (version.endsWith("+incompatible")) return getRevision(version.removeSuffix("+incompatible"))
+
     PSEUDO_VERSION_REGEX.find(version)?.let { matchResult ->
         return matchResult.groups["sha1"]!!.value
     }
