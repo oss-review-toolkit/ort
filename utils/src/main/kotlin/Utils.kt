@@ -98,35 +98,31 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
         val name = it.toLowerCase()
 
         versionVariants.any { versionVariant ->
-            when {
-                // Allow to ignore suffixes in names that are separated by something else than the current
-                // separator, e.g. for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
-                name.startsWith(versionVariant.name) -> {
-                    val tail = name.removePrefix(versionVariant.name)
-                    tail.firstOrNull() !in versionVariant.separators
-                }
+            // Allow to ignore suffixes in names that are separated by something else than the current separator, e.g.
+            // for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
+            val hasIgnorableSuffix = name.withoutPrefix(versionVariant.name)?.let { tail ->
+                tail.firstOrNull() !in versionVariant.separators
+            } ?: false
 
-                // Allow to ignore prefixes in names that are separated by something else than the current
-                // separator, e.g. for version "0.10" accept "docutils-0.10" but not "1.0.10".
-                name.endsWith(versionVariant.name) -> {
-                    val head = name.removeSuffix(versionVariant.name)
-                    val last = head.lastOrNull()
-                    val forelast = head.dropLast(1).lastOrNull()
+            // Allow to ignore prefixes in names that are separated by something else than the current separator, e.g.
+            // for version "0.10" accept "docutils-0.10" but not "1.0.10".
+            val hasIgnorablePrefix = name.withoutSuffix(versionVariant.name)?.let { head ->
+                val last = head.lastOrNull()
+                val forelast = head.dropLast(1).lastOrNull()
 
-                    val currentSeparators = if (versionHasSeparator) versionVariant.separators else versionSeparators
+                val currentSeparators = if (versionHasSeparator) versionVariant.separators else versionSeparators
 
-                    // Full match with the current version variant.
-                    last == null
-                            // The prefix does not end with the current separators or a digit.
-                            || (last !in currentSeparators && !last.isDigit())
-                            // The prefix ends with the current separators but the forelast character is not a digit.
-                            || (last in currentSeparators && (forelast == null || !forelast.isDigit()))
-                            // The prefix ends with 'v' and the forelast character is a separator.
-                            || (last == 'v' && (forelast == null || forelast in currentSeparators))
-                }
+                // Full match with the current version variant.
+                last == null
+                        // The prefix does not end with the current separators or a digit.
+                        || (last !in currentSeparators && !last.isDigit())
+                        // The prefix ends with the current separators but the forelast character is not a digit.
+                        || (last in currentSeparators && (forelast == null || !forelast.isDigit()))
+                        // The prefix ends with 'v' and the forelast character is a separator.
+                        || (last == 'v' && (forelast == null || forelast in currentSeparators))
+            } ?: false
 
-                else -> false
-            }
+            hasIgnorableSuffix || hasIgnorablePrefix
         }
     }
 
