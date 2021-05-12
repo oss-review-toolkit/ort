@@ -35,8 +35,6 @@ import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
@@ -44,8 +42,10 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.asyncTx
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.tx
 import org.ossreviewtoolkit.model.utils.arrayParam
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
@@ -78,30 +78,28 @@ class PostgresStorage(
         private const val VERSION_EXPRESSION = "$VERSION_ARRAY::int[]"
     }
 
-    init {
-        setupDatabase()
-    }
+    /** The [Database] instance on which all operations are executed. */
+    private val database = setupDatabase()
 
     /**
      * Setup the database.
      */
-    private fun setupDatabase() {
+    private fun setupDatabase(): Database =
         Database.connect(dataSource).apply {
             defaultFetchSize(1000)
-        }
 
-        transaction {
-            withDataBaseLock {
-                if (!tableExists(TABLE_NAME)) {
-                    checkDatabaseEncoding()
+            tx {
+                withDataBaseLock {
+                    if (!tableExists(TABLE_NAME)) {
+                        checkDatabaseEncoding()
 
-                    createMissingTablesAndColumns(ScanResults)
+                        createMissingTablesAndColumns(ScanResults)
 
-                    createIdentifierAndScannerVersionIndex()
+                        createIdentifierAndScannerVersionIndex()
+                    }
                 }
             }
         }
-    }
 
     private fun Transaction.createIdentifierAndScannerVersionIndex() =
         exec(
@@ -120,7 +118,7 @@ class PostgresStorage(
     override fun readInternal(id: Identifier): Result<List<ScanResult>> {
         @Suppress("TooGenericExceptionCaught")
         return try {
-            transaction {
+            database.tx {
                 val scanResults =
                     ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
 
@@ -148,7 +146,7 @@ class PostgresStorage(
 
         @Suppress("TooGenericExceptionCaught")
         return try {
-            transaction {
+            database.tx {
                 val scanResults = ScanResultDao.find {
                     (ScanResults.identifier eq pkg.id.toCoordinates()) and
                             (rawParam("scan_result->'scanner'->>'name'") tilde scannerCriteria.regScannerName) and
@@ -193,7 +191,7 @@ class PostgresStorage(
         return try {
             val scanResults = runBlocking(Dispatchers.IO) {
                 packages.chunked(max(packages.size / LocalScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
-                    suspendedTransactionAsync {
+                    database.asyncTx {
                         @Suppress("MaxLineLength")
                         ScanResultDao.find {
                             (ScanResults.identifier inList chunk.map { it.id.toCoordinates() }) and
@@ -241,7 +239,7 @@ class PostgresStorage(
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
 
         try {
-            transaction {
+            database.tx {
                 ScanResultDao.new {
                     identifier = id
                     this.scanResult = scanResult
