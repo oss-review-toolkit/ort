@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.stashDirectories
+import org.ossreviewtoolkit.utils.withoutSuffix
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go. The implementation is
@@ -280,7 +281,7 @@ private fun Collection<Edge>.toPackageReferenceForest(
 private val PSEUDO_VERSION_REGEX = "^v0.0.0-(?:[\\d]{14}-(?<sha1>[0-9a-f]+)$)".toRegex()
 
 private fun getRevision(version: String): String {
-    if (version.endsWith("+incompatible")) return getRevision(version.removeSuffix("+incompatible"))
+    version.withoutSuffix("+incompatible")?.let { return getRevision(it) }
 
     PSEUDO_VERSION_REGEX.find(version)?.let { matchResult ->
         return matchResult.groups["sha1"]!!.value
