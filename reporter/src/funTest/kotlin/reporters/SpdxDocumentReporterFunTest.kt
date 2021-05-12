@@ -295,7 +295,7 @@ private fun createOrtResult(): OrtResult {
                                 startTime = Instant.MIN,
                                 endTime = Instant.MIN,
                                 fileCount = 10,
-                                packageVerificationCode = "1111222233334444555566667777888899990000",
+                                packageVerificationCode = "0000000000000000000000000000000000000000",
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "Apache-2.0",
@@ -329,7 +329,7 @@ private fun createOrtResult(): OrtResult {
                                 startTime = Instant.MIN,
                                 endTime = Instant.MIN,
                                 fileCount = 10,
-                                packageVerificationCode = "0000000000000000000011111111111111111111",
+                                packageVerificationCode = "0000000000000000000000000000000000000000",
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
                                         license = "BSD-2-Clause",

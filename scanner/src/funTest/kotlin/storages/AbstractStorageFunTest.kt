@@ -288,7 +288,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo1, scannerDetails1, scanSummaryWithFiles)
                 val provenanceSourceArtifactNonMatching = provenanceWithSourceArtifact1.copy(
                     sourceArtifact = sourceArtifact1.copy(
-                        hash = Hash.create("0123456789012345678901234567890123456789")
+                        hash = Hash.create("0000000000000000000000000000000000000000")
                     )
                 )
                 val scanResultSourceArtifactNonMatching =
@@ -491,7 +491,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultVcsMatching1 = ScanResult(provenanceWithVcsInfo1, scannerDetails1, scanSummaryWithFiles)
                 val provenanceSourceArtifactNonMatching1 = provenanceWithSourceArtifact1.copy(
                     sourceArtifact = sourceArtifact1.copy(
-                        hash = Hash.create("0123456789012345678901234567890123456789")
+                        hash = Hash.create("0000000000000000000000000000000000000000")
                     )
                 )
                 val scanResultSourceArtifactNonMatching1 =
@@ -507,7 +507,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultVcsMatching2 = ScanResult(provenanceWithVcsInfo2, scannerDetails1, scanSummaryWithFiles)
                 val provenanceSourceArtifactNonMatching2 = provenanceWithSourceArtifact2.copy(
                     sourceArtifact = sourceArtifact2.copy(
-                        hash = Hash.create("0123456789012345678901234567890123456789")
+                        hash = Hash.create("0000000000000000000000000000000000000000")
                     )
                 )
                 val scanResultSourceArtifactNonMatching2 =
