@@ -386,6 +386,12 @@ fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { 
     this?.removePrefix(prefix)?.takeIf { it != this } ?: missingPrefixValue()
 
 /**
+ * If this string ends with [suffix], return the string without the suffix, otherwise return [missingSuffixValue].
+ */
+fun String?.withoutSuffix(suffix: String, missingSuffixValue: () -> String? = { null }): String? =
+    this?.removeSuffix(suffix)?.takeIf { it != this } ?: missingSuffixValue()
+
+/**
  * Recursively collect the messages of this [Throwable] and all its causes.
  */
 fun Throwable.collectMessages(): List<String> {
