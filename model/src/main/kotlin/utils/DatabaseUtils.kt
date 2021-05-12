@@ -22,8 +22,13 @@ package org.ossreviewtoolkit.model.utils
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 
+import kotlinx.coroutines.Deferred
+
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
+import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
@@ -96,6 +101,18 @@ object DatabaseUtils {
      */
     fun Transaction.tableExists(tableName: String): Boolean =
         tableName in TransactionManager.current().db.dialect.allTablesNames().map { it.substringAfterLast(".") }
+
+    /**
+     * Start a new transaction to execute the given [statement] on this [Database].
+     */
+    fun <T> Database.tx(statement: Transaction.() -> T): T =
+        transaction(this, statement)
+
+    /**
+     * Start a new asynchronous transaction to execute the given [statement] on this [Database].
+     */
+    suspend fun <T> Database.asyncTx(statement: suspend Transaction.() -> T): Deferred<T> =
+        suspendedTransactionAsync(db = this, statement = statement)
 
     /**
      * Add a property with the given [key] and [value] to the [HikariConfig]. If the [value] is *null*, this
