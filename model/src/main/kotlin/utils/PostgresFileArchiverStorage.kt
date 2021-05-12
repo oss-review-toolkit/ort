@@ -35,7 +35,6 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -43,6 +42,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.tx
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.log
 
@@ -55,10 +55,11 @@ class PostgresFileArchiverStorage(
      */
     dataSource: DataSource
 ) : FileArchiverStorage {
-    init {
-        Database.connect(dataSource).apply { defaultFetchSize(1000) }
+    /** Stores the database connection used by this object. */
+    val database = Database.connect(dataSource).apply {
+        defaultFetchSize(1000)
 
-        transaction {
+        tx {
             withDataBaseLock {
                 if (!tableExists(FileArchiveTable.tableName)) {
                     checkDatabaseEncoding()
@@ -71,12 +72,12 @@ class PostgresFileArchiverStorage(
     }
 
     override fun hasArchive(provenance: KnownProvenance): Boolean =
-        transaction {
+        database.tx {
             queryFileArchive(provenance)
         } != null
 
     override fun addArchive(provenance: KnownProvenance, zipFile: File) =
-        transaction {
+        database.tx {
             if (queryFileArchive(provenance) == null) {
                 try {
                     FileArchive.new {
@@ -93,7 +94,7 @@ class PostgresFileArchiverStorage(
         }
 
     override fun getArchive(provenance: KnownProvenance): File? {
-        val fileArchive = transaction {
+        val fileArchive = database.tx {
             queryFileArchive(provenance)
         } ?: return null
 
