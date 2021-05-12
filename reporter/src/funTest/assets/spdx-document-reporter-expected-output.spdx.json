@@ -59,7 +59,7 @@
     "licenseDeclared" : "NOASSERTION",
     "name" : "Maven:first-package-group:first-package",
     "packageVerificationCode" : {
-      "packageVerificationCodeValue" : "0000000000000000000011111111111111111111"
+      "packageVerificationCodeValue" : "0000000000000000000000000000000000000000"
     },
     "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with a scan result containing two copyright finding matched to a license finding.",
     "versionInfo" : "0.0.1"
@@ -78,7 +78,7 @@
     "licenseDeclared" : "NOASSERTION",
     "name" : "Maven:first-package-group:first-package",
     "packageVerificationCode" : {
-      "packageVerificationCodeValue" : "1111222233334444555566667777888899990000"
+      "packageVerificationCodeValue" : "0000000000000000000000000000000000000000"
     },
     "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with a scan result containing two copyright finding matched to a license finding.",
     "versionInfo" : "0.0.1"
