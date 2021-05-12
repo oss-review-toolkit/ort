@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.model.utils
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
 
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -68,14 +68,21 @@ class PostgresFileArchiverStorageTest : WordSpec() {
 
     override fun beforeSpec(spec: Spec) {
         postgres = EmbeddedPostgres.builder().setPGStartupWait(PG_STARTUP_WAIT).start()
+    }
+
+    override fun beforeTest(testCase: TestCase) {
+        postgres.postgresDatabase.connection.use { c ->
+            val s = c.createStatement()
+            s.execute("DROP SCHEMA public CASCADE")
+            s.execute("CREATE SCHEMA public")
+        }
+
         storage = PostgresFileArchiverStorage(postgres.postgresDatabase)
     }
 
     override fun afterSpec(spec: Spec) {
         postgres.close()
     }
-
-    override fun isolationMode() = IsolationMode.InstancePerTest
 
     init {
         "hasArchive()" should {
