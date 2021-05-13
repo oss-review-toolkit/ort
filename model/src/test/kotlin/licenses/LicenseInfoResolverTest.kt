@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.assertions.show.show
+import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
@@ -29,6 +30,7 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 import java.lang.IllegalArgumentException
@@ -55,6 +57,8 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
+import org.ossreviewtoolkit.model.utils.getArchivePath
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.getLicenseText
@@ -574,6 +578,11 @@ class LicenseInfoResolverTest : WordSpec() {
 
                 val result = resolver.resolveLicenseFiles(pkgId)
 
+                archiver.storage.shouldBeTypeOf<FileArchiverFileStorage>().apply {
+                    withClue(archiveDir.resolve(getArchivePath(provenance))) {
+                        hasArchive(provenance) shouldBe true
+                    }
+                }
                 result.id shouldBe pkgId
                 result.files should haveSize(1)
 

@@ -93,4 +93,4 @@ private fun KnownProvenance.hash(): String {
     return SHA1_DIGEST.digest(key.toByteArray()).toHexString()
 }
 
-private fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/archive.zip"
+internal fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/archive.zip"
