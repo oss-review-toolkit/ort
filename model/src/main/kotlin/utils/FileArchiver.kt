@@ -51,7 +51,7 @@ class FileArchiver(
     /**
      * The [FileArchiverStorage] to use for archiving files.
      */
-    private val storage: FileArchiverStorage
+    internal val storage: FileArchiverStorage
 ) {
     constructor(
         /**
