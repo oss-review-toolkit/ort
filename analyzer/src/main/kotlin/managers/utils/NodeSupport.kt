@@ -39,6 +39,13 @@ import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.toUri
 
 /**
+ * A dummy object to provide a logger for top-level functions.
+ *
+ * TODO: Remove this once https://youtrack.jetbrains.com/issue/KT-21599 is implemented.
+ */
+object NodeSupport
+
+/**
  * Return whether the [directory] contains an NPM lock file.
  */
 fun hasNpmLockFile(directory: File) =
@@ -179,7 +186,9 @@ private fun isYarnWorkspaceRoot(definitionFile: File) =
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        e.log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
+        NodeSupport.log.error {
+            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}"
+        }
 
         false
     }
@@ -214,7 +223,9 @@ private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        e.log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
+        NodeSupport.log.error {
+            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}"
+        }
 
         null
     }
