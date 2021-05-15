@@ -25,8 +25,6 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.analyzer.managers.toYaml
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
@@ -38,6 +36,7 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.convertToDependencyGraph
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -46,21 +45,13 @@ private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 private const val REPO_MANIFEST = "manifest.xml"
 
 class GitRepoFunTest : StringSpec() {
-    private lateinit var outputDir: File
+    private val outputDir = createSpecTempDir()
 
     override fun beforeSpec(spec: Spec) {
-        // Do not use the class name as a suffix here to shorten the path. Otherwise the path will get too long for
-        // Windows to handle.
-        outputDir = createTempDirectory(ORT_NAME).toFile()
-
         val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)
         val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
         GitRepo().download(pkg, outputDir)
-    }
-
-    override fun afterSpec(spec: Spec) {
-        outputDir.safeDeleteRecursively(force = true)
     }
 
     init {
