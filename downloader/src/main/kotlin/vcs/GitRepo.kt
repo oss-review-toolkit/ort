@@ -205,12 +205,12 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     private fun runRepoCommand(targetDir: File, vararg args: String) =
         if (Os.isWindows) {
-            val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
+            val repo = getPathFromEnvironment(command()) ?: throw IOException("'repo' not found in PATH.")
 
             // On Windows, the script itself is not executable, so we need to explicitly specify Python as the
             // interpreter. As of repo version 2.4, Python 3.6 is required also on Windows.
             ProcessCapture(targetDir, "py", "-3", repo.absolutePath, *args).requireSuccess()
         } else {
-            ProcessCapture(targetDir, "repo", *args).requireSuccess()
+            run(targetDir, *args)
         }
 }
