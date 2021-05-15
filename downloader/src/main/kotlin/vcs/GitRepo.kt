@@ -118,7 +118,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
                 }
 
                 override fun getNested(): Map<String, VcsInfo> {
-                    val paths = runRepoCommand(workingDir, "list", "-p").stdout.lines().filter { it.isNotBlank() }
+                    val paths = runRepo(workingDir, "list", "-p").stdout.lines().filter { it.isNotBlank() }
                     val nested = mutableMapOf<String, VcsInfo>()
 
                     paths.forEach { path ->
@@ -152,7 +152,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
         }
 
         // Clone all projects instead of only those in the "default" group until we support specifying groups.
-        runRepoCommand(
+        runRepo(
             targetDir,
             "init", "--groups=all", "--no-repo-verify",
             "--no-clone-bundle", "--repo-branch=$GIT_REPO_BRANCH",
@@ -175,7 +175,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
         return try {
             // Switching manifest branches / revisions requires running "init" again.
-            runRepoCommand(workingTree.workingDir, "init", "-b", manifestRevision, "-m", manifestPath)
+            runRepo(workingTree.workingDir, "init", "-b", manifestRevision, "-m", manifestPath)
 
             // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
             // nested Git checkout overwrites files in a directory of the upper-level Git repository. However, we still
@@ -186,9 +186,9 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
                 syncArgs += "--fetch-submodules"
             }
 
-            runRepoCommand(workingTree.workingDir, *syncArgs.toTypedArray())
+            runRepo(workingTree.workingDir, *syncArgs.toTypedArray())
 
-            log.debug { runRepoCommand(workingTree.workingDir, "info").stdout }
+            log.debug { runRepo(workingTree.workingDir, "info").stdout }
 
             true
         } catch (e: IOException) {
@@ -203,7 +203,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
         }
     }
 
-    private fun runRepoCommand(targetDir: File, vararg args: String) =
+    private fun runRepo(targetDir: File, vararg args: String) =
         if (Os.isWindows) {
             val repo = getPathFromEnvironment(command()) ?: throw IOException("'repo' not found in PATH.")
 
