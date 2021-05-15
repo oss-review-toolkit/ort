@@ -173,7 +173,7 @@ class Git : VersionControlSystem(), CommandLineTool {
     private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Boolean {
         try {
             log.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
-            val fetch = run(workingTree.workingDir, "fetch", "--depth", "$GIT_HISTORY_DEPTH", "origin", revision)
+            val fetch = workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "origin", revision)
 
             // The documentation for git-fetch states that "By default, any tag that points into the histories being
             // fetched is also fetched", but that is not true for shallow fetches of a tag; then the tag itself is
@@ -183,10 +183,10 @@ class Git : VersionControlSystem(), CommandLineTool {
             }.firstOrNull()
 
             if (revision == tag) {
-                run(workingTree.workingDir, "tag", revision, "FETCH_HEAD")
+                workingTree.runGit("tag", revision, "FETCH_HEAD")
             }
 
-            return run(workingTree.workingDir, "checkout", revision).isSuccess
+            return workingTree.runGit("checkout", revision).isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
@@ -199,8 +199,8 @@ class Git : VersionControlSystem(), CommandLineTool {
         // Fall back to fetching all refs with limited depth of history.
         try {
             log.info { "Trying to fetch all refs with depth limited to $GIT_HISTORY_DEPTH." }
-            run(workingTree.workingDir, "fetch", "--depth", GIT_HISTORY_DEPTH.toString(), "--tags", "origin")
-            return run(workingTree.workingDir, "checkout", revision).isSuccess
+            workingTree.runGit("fetch", "--depth", GIT_HISTORY_DEPTH.toString(), "--tags", "origin")
+            return workingTree.runGit("checkout", revision).isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
@@ -215,12 +215,12 @@ class Git : VersionControlSystem(), CommandLineTool {
             log.info { "Trying to fetch everything including tags." }
 
             if (workingTree.isShallow()) {
-                run(workingTree.workingDir, "fetch", "--unshallow", "--tags", "origin")
+                workingTree.runGit("fetch", "--unshallow", "--tags", "origin")
             } else {
-                run(workingTree.workingDir, "fetch", "--tags", "origin")
+                workingTree.runGit("fetch", "--tags", "origin")
             }
 
-            run(workingTree.workingDir, "checkout", revision).isSuccess
+            workingTree.runGit("checkout", revision).isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
@@ -233,7 +233,7 @@ class Git : VersionControlSystem(), CommandLineTool {
     private fun updateSubmodules(workingTree: WorkingTree) =
         try {
             !workingTree.workingDir.resolve(".gitmodules").isFile
-                    || run(workingTree.workingDir, "submodule", "update", "--init", "--recursive").isSuccess
+                    || workingTree.runGit("submodule", "update", "--init", "--recursive").isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
@@ -241,4 +241,6 @@ class Git : VersionControlSystem(), CommandLineTool {
 
             false
         }
+
+    private fun WorkingTree.runGit(vararg args: String) = run(*args, workingDir = workingDir)
 }
