@@ -167,11 +167,21 @@ class Git : VersionControlSystem(), CommandLineTool {
         return getWorkingTree(targetDir)
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
-        updateWorkingTreeWithoutSubmodules(workingTree, revision) && (!recursive || updateSubmodules(workingTree))
+    override fun updateWorkingTree(
+        workingTree: WorkingTree,
+        revision: String,
+        path: String,
+        recursive: Boolean
+    ): Result<String> =
+        updateWorkingTreeWithoutSubmodules(workingTree, revision).mapCatching {
+            // In case this throws the exception gets encapsulated as a failure.
+            if (recursive) updateSubmodules(workingTree)
 
-    private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Boolean {
-        try {
+            revision
+        }
+
+    private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Result<String> =
+        runCatching {
             log.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
             val fetch = workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "origin", revision)
 
@@ -186,33 +196,28 @@ class Git : VersionControlSystem(), CommandLineTool {
                 workingTree.runGit("tag", revision, "FETCH_HEAD")
             }
 
-            return workingTree.runGit("checkout", revision).isSuccess
-        } catch (e: IOException) {
-            e.showStackTrace()
+            workingTree.runGit("checkout", revision)
+        }.onFailure {
+            it.showStackTrace()
 
             log.warn {
-                "Could not fetch only revision '$revision': ${e.collectMessagesAsString()}\n" +
+                "Could not fetch only revision '$revision': ${it.collectMessagesAsString()}\n" +
                         "Falling back to fetching all refs."
             }
-        }
+        }.recoverCatching {
+            log.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
 
-        // Fall back to fetching all refs with limited depth of history.
-        try {
-            log.info { "Trying to fetch all refs with depth limited to $GIT_HISTORY_DEPTH." }
             workingTree.runGit("fetch", "--depth", GIT_HISTORY_DEPTH.toString(), "--tags", "origin")
-            return workingTree.runGit("checkout", revision).isSuccess
-        } catch (e: IOException) {
-            e.showStackTrace()
+            workingTree.runGit("checkout", revision).isSuccess
+        }.onFailure {
+            it.showStackTrace()
 
             log.warn {
-                "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${e.collectMessagesAsString()}\n" +
+                "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessagesAsString()}\n" +
                         "Falling back to fetching everything."
             }
-        }
-
-        // Fall back to fetching everything.
-        return try {
-            log.info { "Trying to fetch everything including tags." }
+        }.recoverCatching {
+            log.info { "Falling back to fetch everything including tags." }
 
             if (workingTree.isShallow()) {
                 workingTree.runGit("fetch", "--unshallow", "--tags", "origin")
@@ -220,27 +225,19 @@ class Git : VersionControlSystem(), CommandLineTool {
                 workingTree.runGit("fetch", "--tags", "origin")
             }
 
-            workingTree.runGit("checkout", revision).isSuccess
-        } catch (e: IOException) {
-            e.showStackTrace()
+            workingTree.runGit("checkout", revision)
+        }.onFailure {
+            it.showStackTrace()
 
-            log.warn { "Failed to fetch everything: ${e.collectMessagesAsString()}" }
-
-            false
+            log.warn { "Failed to fetch everything: ${it.collectMessagesAsString()}" }
+        }.map {
+            revision
         }
+
+    private fun updateSubmodules(workingTree: WorkingTree) {
+        if (!workingTree.workingDir.resolve(".gitmodules").isFile) return
+        workingTree.runGit("submodule", "update", "--init", "--recursive")
     }
-
-    private fun updateSubmodules(workingTree: WorkingTree) =
-        try {
-            !workingTree.workingDir.resolve(".gitmodules").isFile
-                    || workingTree.runGit("submodule", "update", "--init", "--recursive").isSuccess
-        } catch (e: IOException) {
-            e.showStackTrace()
-
-            log.warn { "Failed to update submodules: ${e.collectMessagesAsString()}" }
-
-            false
-        }
 
     private fun WorkingTree.runGit(vararg args: String) = run(*args, workingDir = workingDir)
 }

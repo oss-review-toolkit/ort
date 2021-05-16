@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
-import java.io.IOException
 import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -132,7 +131,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
     }
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
-        try {
+        runCatching {
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
@@ -142,11 +141,11 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
             // Explicitly update the working tree to the desired revision.
             run(workingTree.workingDir, "update", revision).isSuccess
-        } catch (e: IOException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
-            log.warn { "Failed to update $type working tree to revision '$revision': ${e.collectMessagesAsString()}" }
-
-            false
+            log.warn { "Failed to update $type working tree to revision '$revision': ${it.collectMessagesAsString()}" }
+        }.map {
+            revision
         }
 }
