@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.downloader.vcs.GitRepo
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -55,8 +54,7 @@ class GitRepoFunTest : StringSpec() {
     }
 
     init {
-        // Disabled on Azure Windows because it fails for unknown reasons.
-        "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isAzureWindows) {
+        "Analyzer correctly reports VcsInfo for git-repo projects" {
             val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir)
             val actualResult = ortResult.withResolvedScopes().toYaml()
             val expectedResult = convertToDependencyGraph(
