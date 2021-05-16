@@ -169,11 +169,11 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
         revision: String,
         path: String,
         recursive: Boolean
-    ): Boolean {
+    ): Result<String> {
         val manifestRevision = revision.takeUnless { it.isBlank() } ?: "master"
         val manifestPath = path.takeUnless { it.isBlank() } ?: "default.xml"
 
-        return try {
+        return runCatching {
             // Switching manifest branches / revisions requires running "init" again.
             runRepo(workingTree.workingDir, "init", "-b", manifestRevision, "-m", manifestPath)
 
@@ -189,17 +189,15 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             runRepo(workingTree.workingDir, *syncArgs.toTypedArray())
 
             log.debug { runRepo(workingTree.workingDir, "info").stdout }
-
-            true
-        } catch (e: IOException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
             log.warn {
                 "Failed to sync the working tree to revision '$manifestRevision' using manifest '$manifestPath': " +
-                        e.collectMessagesAsString()
+                        it.collectMessagesAsString()
             }
-
-            false
+        }.map {
+            revision
         }
     }
 

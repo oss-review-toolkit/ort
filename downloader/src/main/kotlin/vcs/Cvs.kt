@@ -184,5 +184,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
         runCatching {
             // Checkout the working tree of the desired revision.
             run(workingTree.workingDir, "checkout", "-r", revision, path.takeUnless { it.isEmpty() } ?: ".")
-        }.isSuccess
+        }.map {
+            revision
+        }
 }

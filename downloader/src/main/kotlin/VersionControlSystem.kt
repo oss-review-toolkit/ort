@@ -283,11 +283,17 @@ abstract class VersionControlSystem {
             throw DownloadException("Unable to determine a revision to checkout.")
         }
 
-        var i = 0
-        val workingTreeRevision = revisionCandidates.find { revision ->
-            log.info { "Trying revision candidate '$revision' (${++i} of ${revisionCandidates.size})..." }
-            updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
-        } ?: throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.")
+        val results = mutableListOf<Result<String>>()
+
+        revisionCandidates.forEachIndexed { index, revision ->
+            log.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
+            results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
+            if (results.last().isSuccess) return@forEachIndexed
+        }
+
+        val workingTreeRevision = results.last().getOrElse {
+            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", it)
+        }
 
         pkg.vcsProcessed.path.let {
             if (it.isNotBlank() && !workingTree.workingDir.resolve(it).exists()) {
@@ -314,15 +320,15 @@ abstract class VersionControlSystem {
 
     /**
      * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given
-     * [path] and [recursively][recursive] updating any nested working trees. Return true on success and false
-     * otherwise.
+     * [path] and [recursively][recursive] updating any nested working trees. Return a [Result] that encapsulates the
+     * originally requested [revision] on success, or the occurred exception on failure.
      */
     abstract fun updateWorkingTree(
         workingTree: WorkingTree,
         revision: String,
         path: String = "",
         recursive: Boolean = false
-    ): Boolean
+    ): Result<String>
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
