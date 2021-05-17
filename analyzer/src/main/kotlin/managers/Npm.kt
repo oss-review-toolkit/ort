@@ -90,6 +90,96 @@ open class Npm(
         ) = Npm(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    companion object {
+        /**
+         * Parse information about licenses from the [package.json][json] file of a module.
+         */
+        internal fun parseLicenses(json: JsonNode): SortedSet<String> {
+            val declaredLicenses = sortedSetOf<String>()
+
+            // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
+            // which ...
+            json["license"]?.let { licenseNode ->
+                // ... can either be a direct text value, an array of text values (which is not officially supported),
+                // or an object containing nested "type" (and "url") text nodes.
+                when {
+                    licenseNode.isTextual -> declaredLicenses += licenseNode.textValue()
+                    licenseNode.isArray -> licenseNode.mapNotNullTo(declaredLicenses) { it.textValue() }
+                    licenseNode.isObject -> declaredLicenses += licenseNode["type"].textValue()
+                    else -> throw IllegalArgumentException("Unsupported node type in '$licenseNode'.")
+                }
+            }
+
+            // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url")
+            // text nodes.
+            json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
+                licenseNode["type"]?.textValue()
+            }
+
+            return declaredLicenses.mapTo(sortedSetOf()) { declaredLicense ->
+                when {
+                    // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use
+                    // a private or unpublished package under any terms", which corresponds to SPDX's "NONE".
+                    declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
+                    // NPM allows to declare non-SPDX licenses only by referencing a license file. Avoid reporting an
+                    // [OrtIssue] by mapping this to a valid license identifier.
+                    declaredLicense.startsWith("SEE LICENSE IN ") -> "LicenseRef-ort-unknown-license-reference"
+                    else -> declaredLicense
+                }
+            }
+        }
+
+        /**
+         * Parse information about the author from the [package.json][json] file of a module. According to
+         * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
+         * specify the author of a package: An object with multiple properties or a single string.
+         */
+        internal fun parseAuthors(json: JsonNode): SortedSet<String> =
+            sortedSetOf<String>().apply {
+                json["author"]?.let { authorNode ->
+                    when {
+                        authorNode.isObject -> authorNode["name"]?.textValue()
+                        authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
+                        else -> null
+                    }
+                }?.let { add(it) }
+            }
+
+        /**
+         * Parse information about the VCS from the [package.json][node] file of a module.
+         */
+        internal fun parseVcsInfo(node: JsonNode): VcsInfo {
+            // See https://github.com/npm/read-package-json/issues/7 for some background info.
+            val head = node["gitHead"].textValueOrEmpty()
+
+            return node["repository"]?.let { repo ->
+                val type = repo["type"].textValueOrEmpty()
+                val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
+                val path = repo["directory"].textValueOrEmpty()
+
+                VcsInfo(
+                    type = VcsType(type),
+                    url = expandNpmShortcutUrl(url),
+                    revision = head,
+                    path = path
+                )
+            } ?: VcsInfo(
+                type = VcsType.UNKNOWN,
+                url = "",
+                revision = head
+            )
+        }
+
+        /**
+         * Split the given [rawName] of a module to a pair with namespace and name.
+         */
+        internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
+            val name = rawName.substringAfterLast("/")
+            val namespace = rawName.removeSuffix(name).removeSuffix("/")
+            return Pair(namespace, name)
+        }
+    }
+
     private val ortProxySelector = installAuthenticatorAndProxySelector()
 
     private val npmRegistry: String
@@ -159,57 +249,6 @@ open class Npm(
             )
         }
     }
-
-    private fun parseLicenses(json: JsonNode): SortedSet<String> {
-        val declaredLicenses = sortedSetOf<String>()
-
-        // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
-        // which ...
-        json["license"]?.let { licenseNode ->
-            // ... can either be a direct text value, an array of text values (which is not officially supported), or
-            // an object containing nested "type" (and "url") text nodes.
-            when {
-                licenseNode.isTextual -> declaredLicenses += licenseNode.textValue()
-                licenseNode.isArray -> licenseNode.mapNotNullTo(declaredLicenses) { it.textValue() }
-                licenseNode.isObject -> declaredLicenses += licenseNode["type"].textValue()
-                else -> throw IllegalArgumentException("Unsupported node type in '$licenseNode'.")
-            }
-        }
-
-        // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url")
-        // text nodes.
-        json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
-            licenseNode["type"]?.textValue()
-        }
-
-        return declaredLicenses.mapTo(sortedSetOf()) { declaredLicense ->
-            when {
-                // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use a
-                // private or unpublished package under any terms", which corresponds to SPDX's "NONE".
-                declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
-                // NPM allows to declare non-SPDX licenses only by referencing a license file. Avoid reporting an
-                // [OrtIssue] by mapping this to a valid license identifier.
-                declaredLicense.startsWith("SEE LICENSE IN ") -> "LicenseRef-ort-unknown-license-reference"
-                else -> declaredLicense
-            }
-        }
-    }
-
-    /**
-     * Parse information about the author. According to
-     * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
-     * specify the author of a package: An object with multiple properties or a single string.
-     */
-    private fun parseAuthors(json: JsonNode): SortedSet<String> =
-        sortedSetOf<String>().apply {
-            json["author"]?.let { authorNode ->
-                when {
-                    authorNode.isObject -> authorNode["name"]?.textValue()
-                    authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
-                    else -> null
-                }
-            }?.let { add(it) }
-        }
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
@@ -361,28 +400,6 @@ open class Npm(
         }
 
         return modulesDir.takeIf { it.name == "node_modules" }
-    }
-
-    private fun parseVcsInfo(node: JsonNode): VcsInfo {
-        // See https://github.com/npm/read-package-json/issues/7 for some background info.
-        val head = node["gitHead"].textValueOrEmpty()
-
-        return node["repository"]?.let { repo ->
-            val type = repo["type"].textValueOrEmpty()
-            val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
-            val path = repo["directory"].textValueOrEmpty()
-
-            VcsInfo(
-                type = VcsType(type),
-                url = expandNpmShortcutUrl(url),
-                revision = head,
-                path = path
-            )
-        } ?: VcsInfo(
-            type = VcsType.UNKNOWN,
-            url = "",
-            revision = head
-        )
     }
 
     private fun getPackageReferenceForMissingModule(moduleName: String, rootModuleDir: File): PackageReference {
@@ -580,11 +597,5 @@ open class Npm(
 
         // TODO: Capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         //       platforms except for Mac.
-    }
-
-    private fun splitNamespaceAndName(rawName: String): Pair<String, String> {
-        val name = rawName.substringAfterLast("/")
-        val namespace = rawName.removeSuffix(name).removeSuffix("/")
-        return Pair(namespace, name)
     }
 }
