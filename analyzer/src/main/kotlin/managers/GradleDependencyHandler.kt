@@ -28,6 +28,7 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.analyzer.managers.utils.DependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
@@ -53,8 +54,13 @@ class GradleDependencyHandler(
      */
     var repositories: List<RemoteRepository> = emptyList()
 
-    override fun identifierFor(dependency: Dependency): String =
-        "${dependency.dependencyType()}:${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
+    override fun identifierFor(dependency: Dependency): Identifier =
+        Identifier(
+            type = dependency.dependencyType(),
+            namespace = dependency.groupId,
+            name = dependency.artifactId,
+            version = dependency.version
+        )
 
     override fun dependenciesFor(dependency: Dependency): Collection<Dependency> = dependency.dependencies
 

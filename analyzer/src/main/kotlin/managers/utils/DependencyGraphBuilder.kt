@@ -161,7 +161,7 @@ class DependencyGraphBuilder<D>(
     private fun addDependencyToGraph(scopeName: String, dependency: D, transitive: Boolean): DependencyReference {
         val identifier = dependencyHandler.identifierFor(dependency)
         val issues = dependencyHandler.issuesForDependency(dependency).toMutableList()
-        val index = updateDependencyMappingAndPackages(identifier, dependency, issues)
+        val index = updateDependencyMappingAndPackages(identifier.toCoordinates(), dependency, issues)
 
         val ref = when (val result = findDependencyInGraph(index, dependency)) {
             is DependencyGraphSearchResult.Found -> result.ref
@@ -234,7 +234,7 @@ class DependencyGraphBuilder<D>(
         if (ref.dependencies.size != dependencies.size) return false
 
         val dependencies1 = ref.dependencies.map { dependencyIds[it.pkg] }
-        val dependencies2 = dependencies.associateBy(dependencyHandler::identifierFor)
+        val dependencies2 = dependencies.associateBy { dependencyHandler.identifierFor(it).toCoordinates() }
         if (!dependencies2.keys.containsAll(dependencies1)) return false
 
         return ref.dependencies.all { refDep ->
