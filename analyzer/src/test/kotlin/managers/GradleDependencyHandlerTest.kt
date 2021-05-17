@@ -306,7 +306,7 @@ class GradleDependencyHandlerTest : WordSpec({
             every { maven.parsePackage(any(), any(), any()) } throws exception
             val handler = GradleDependencyHandler(NAME, maven)
 
-            handler.createPackage(dep.toId().toCoordinates(), dep, issues) should beNull()
+            handler.createPackage(dep.toId(), dep, issues) should beNull()
 
             issues should haveSize(1)
             with(issues.first()) {

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyReference
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RootDependencyIndex
@@ -100,12 +101,12 @@ class DependencyGraphBuilder<D>(
      * A list storing the identifiers of all dependencies added to this builder. This list is then used to resolve
      * dependencies based on their indices.
      */
-    private val dependencyIds = mutableListOf<String>()
+    private val dependencyIds = mutableListOf<Identifier>()
 
     /**
      * A mapping of the identifiers of the dependencies known to this builder to their numeric indices.
      */
-    private val dependencyIndexMapping = mutableMapOf<String, Int>()
+    private val dependencyIndexMapping = mutableMapOf<Identifier, Int>()
 
     /**
      * Stores all the references to dependencies that have been added so far. Each element of the list represents a
@@ -147,7 +148,11 @@ class DependencyGraphBuilder<D>(
     /**
      * Construct the [DependencyGraph] from the dependencies passed to this builder so far.
      */
-    fun build(): DependencyGraph = DependencyGraph(dependencyIds, directDependencies, scopeMapping)
+    fun build(): DependencyGraph = DependencyGraph(
+        dependencyIds.map { it.toCoordinates() },
+        directDependencies,
+        scopeMapping
+    )
 
     /**
      * Return a set with all the packages that have been encountered for the current project.
@@ -161,7 +166,7 @@ class DependencyGraphBuilder<D>(
     private fun addDependencyToGraph(scopeName: String, dependency: D, transitive: Boolean): DependencyReference {
         val identifier = dependencyHandler.identifierFor(dependency)
         val issues = dependencyHandler.issuesForDependency(dependency).toMutableList()
-        val index = updateDependencyMappingAndPackages(identifier.toCoordinates(), dependency, issues)
+        val index = updateDependencyMappingAndPackages(identifier, dependency, issues)
 
         val ref = when (val result = findDependencyInGraph(index, dependency)) {
             is DependencyGraphSearchResult.Found -> result.ref
@@ -188,7 +193,7 @@ class DependencyGraphBuilder<D>(
      * to the data managed by this instance, resolve the package, and update the [issues] if necessary. Return the
      * numeric index for this dependency.
      */
-    private fun updateDependencyMappingAndPackages(id: String, dependency: D, issues: MutableList<OrtIssue>): Int {
+    private fun updateDependencyMappingAndPackages(id: Identifier, dependency: D, issues: MutableList<OrtIssue>): Int {
         val dependencyIndex = dependencyIndexMapping[id]
         if (dependencyIndex != null) return dependencyIndex
 
@@ -237,7 +242,7 @@ class DependencyGraphBuilder<D>(
         if (ref.dependencies.size != dependencies.size) return false
 
         val dependencies1 = ref.dependencies.map { dependencyIds[it.pkg] }
-        val dependencies2 = dependencies.associateBy { dependencyHandler.identifierFor(it).toCoordinates() }
+        val dependencies2 = dependencies.associateBy { dependencyHandler.identifierFor(it) }
         if (!dependencies2.keys.containsAll(dependencies1)) return false
 
         return ref.dependencies.all { refDep ->
@@ -298,7 +303,7 @@ class DependencyGraphBuilder<D>(
      * Construct a [Package] for the given [dependency]. Add the new package to the set managed by this object. If this
      * fails, record a corresponding message in [issues].
      */
-    private fun updateResolvedPackages(identifier: String, dependency: D, issues: MutableList<OrtIssue>) {
+    private fun updateResolvedPackages(identifier: Identifier, dependency: D, issues: MutableList<OrtIssue>) {
         dependencyHandler.createPackage(identifier, dependency, issues)?.let { resolvedPackages += it }
     }
 
