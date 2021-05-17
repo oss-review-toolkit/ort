@@ -119,12 +119,8 @@ class GradleDependencyHandler(
 /**
  * Determine the [PackageLinkage] for this [Dependency].
  */
-private fun Dependency.linkage() =
-    if (isProjectDependency()) {
-        PackageLinkage.PROJECT_DYNAMIC
-    } else {
-        PackageLinkage.DYNAMIC
-    }
+private fun Dependency.linkage(): PackageLinkage =
+    PackageLinkage.PROJECT_DYNAMIC.takeIf { isProjectDependency() } ?: PackageLinkage.DYNAMIC
 
 /**
  * Return a flag whether this dependency references another project in the current build.
