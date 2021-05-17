@@ -272,6 +272,7 @@
 "GPL v3+": GPL-3.0-or-later
 "GPL version 2": GPL-2.0-only
 "GPL2 w/ CPE": GPL-2.0-only WITH Classpath-exception-2.0
+"GPLv2 license, includes the CLASSPATH exception": GPL-2.0-only WITH Classpath-exception-2.0
 "GPLv2+CE": GPL-2.0-only WITH Classpath-exception-2.0
 "GWT Terms": Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-1.0 AND LGPL-2.1-only AND MPL-1.1
 "General Public License (GPL)": GPL-2.0-or-later
