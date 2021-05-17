@@ -48,12 +48,12 @@ class MavenDependencyHandler(
      * A map with information about the local projects in the current Maven build. Dependencies pointing to projects
      * sometimes need to be treated in a special way.
      */
-    val localProjects: Map<String, MavenProject>,
+    private val localProjects: Map<String, MavenProject>,
 
     /**
      * A flag whether [SBT compatibility mode][Maven.enableSbtMode] is enabled.
      */
-    val sbtMode: Boolean
+    private val sbtMode: Boolean
 ) : DependencyHandler<DependencyNode> {
     override fun identifierFor(dependency: DependencyNode): String {
         val id = dependency.identifier()
