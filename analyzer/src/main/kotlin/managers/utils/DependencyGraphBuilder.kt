@@ -193,6 +193,7 @@ class DependencyGraphBuilder<D>(
         if (dependencyIndex != null) return dependencyIndex
 
         updateResolvedPackages(id, dependency, issues)
+
         return dependencyIds.size.also {
             dependencyIds += id
             dependencyIndexMapping[id] = it
@@ -209,6 +210,7 @@ class DependencyGraphBuilder<D>(
         }
 
         val compatibleReference = mappingForCompatibleFragment?.let { it[index] }
+
         return compatibleReference?.let { DependencyGraphSearchResult.Found(it) }
             ?: handleNoCompatibleDependencyInGraph(index)
     }
@@ -220,6 +222,7 @@ class DependencyGraphBuilder<D>(
      */
     private fun handleNoCompatibleDependencyInGraph(index: Int): DependencyGraphSearchResult {
         val mappingToInsert = referenceMappings.withIndex().find { index !in it.value }
+
         return mappingToInsert?.let { DependencyGraphSearchResult.NotFound(it.index) }
             ?: DependencyGraphSearchResult.Incompatible
     }
@@ -258,6 +261,7 @@ class DependencyGraphBuilder<D>(
         val fragmentMapping = mutableMapOf<Int, DependencyReference>()
         val dependencyIndex = RootDependencyIndex(index, referenceMappings.size)
         referenceMappings += fragmentMapping
+
         return insertIntoGraph(dependencyIndex, scopeName, dependency, issues, transitive)
     }
 
@@ -285,8 +289,8 @@ class DependencyGraphBuilder<D>(
             linkage = dependencyHandler.linkageFor(dependency),
             issues = issues
         )
-
         fragmentMapping[index.root] = ref
+
         return updateDirectDependencies(ref, transitive)
     }
 
@@ -306,6 +310,7 @@ class DependencyGraphBuilder<D>(
     private fun updateDirectDependencies(ref: DependencyReference, transitive: Boolean): DependencyReference {
         directDependencies.removeAll(ref.dependencies)
         if (!transitive) directDependencies += ref
+
         return ref
     }
 
