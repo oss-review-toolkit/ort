@@ -77,7 +77,8 @@ class GradleDependencyHandler(
             }
         )
 
-    override fun linkageFor(dependency: Dependency): PackageLinkage = dependency.linkage()
+    override fun linkageFor(dependency: Dependency): PackageLinkage =
+        if (dependency.isProjectDependency()) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
     override fun createPackage(identifier: String, dependency: Dependency, issues: MutableList<OrtIssue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
@@ -115,16 +116,6 @@ class GradleDependencyHandler(
             pomFile?.let { "Maven" } ?: "Unknown"
         }
 }
-
-/**
- * Determine the [PackageLinkage] for this [Dependency].
- */
-private fun Dependency.linkage() =
-    if (isProjectDependency()) {
-        PackageLinkage.PROJECT_DYNAMIC
-    } else {
-        PackageLinkage.DYNAMIC
-    }
 
 /**
  * Return a flag whether this dependency references another project in the current build.
