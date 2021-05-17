@@ -36,11 +36,9 @@ import org.ossreviewtoolkit.model.PackageLinkage
  */
 interface DependencyHandler<D> {
     /**
-     * Construct a unique identifier for the given [dependency]. This identifier should be derived from the
-     * coordinates of the dependency. It is later converted to an [Identifier]; so it has to adhere to the
-     * string-representation of this class.
+     * Construct a unique identifier for the given [dependency].
      */
-    fun identifierFor(dependency: D): String
+    fun identifierFor(dependency: D): Identifier
 
     /**
      * Return a collection with the dependencies of the given [dependency]. [DependencyGraphBuilder] invokes this

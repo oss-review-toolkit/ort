@@ -43,6 +43,7 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.identifier
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
@@ -59,7 +60,7 @@ class MavenDependencyHandlerTest : WordSpec({
 
             val handler = createHandler()
 
-            handler.identifierFor(dependency) shouldBe "Maven:$IDENTIFIER"
+            handler.identifierFor(dependency) shouldBe Identifier("Maven:$IDENTIFIER")
         }
 
         "return the identifier for an inter-project dependency" {
@@ -67,7 +68,7 @@ class MavenDependencyHandlerTest : WordSpec({
 
             val handler = createHandler()
 
-            handler.identifierFor(dependency) shouldBe "$MANAGER_NAME:$PROJECT_ID"
+            handler.identifierFor(dependency) shouldBe Identifier("$MANAGER_NAME:$PROJECT_ID")
         }
     }
 
@@ -218,8 +219,15 @@ private val PROJECT_ID = LOCAL_PROJECTS.toList().first().first
  * `identifier()` extension function must have been mocked statically.
  */
 private fun createArtifact(id: String): Artifact {
+    val parts = id.split(":")
     val artifact = mockk<Artifact>()
+
     every { artifact.identifier() } returns id
+    every { artifact.groupId } returns parts.getOrElse(0) { "" }
+    every { artifact.artifactId } returns parts.getOrElse(1) { "" }
+    every { artifact.version } returns parts.getOrElse(2) { "" }
+    every { artifact.identifier() } returns id
+
     return artifact
 }
 

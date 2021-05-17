@@ -26,6 +26,7 @@ import org.eclipse.aether.graph.DependencyNode
 import org.ossreviewtoolkit.analyzer.managers.utils.DependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.identifier
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
@@ -55,10 +56,15 @@ class MavenDependencyHandler(
      */
     private val sbtMode: Boolean
 ) : DependencyHandler<DependencyNode> {
-    override fun identifierFor(dependency: DependencyNode): String {
+    override fun identifierFor(dependency: DependencyNode): Identifier {
         val id = dependency.identifier()
-        val type = if (isLocalProject(id)) managerName else "Maven"
-        return "$type:$id"
+
+        return Identifier(
+            type = if (isLocalProject(id)) managerName else "Maven",
+            namespace = dependency.artifact.groupId,
+            name = dependency.artifact.artifactId,
+            version = dependency.artifact.version
+        )
     }
 
     override fun dependenciesFor(dependency: DependencyNode): Collection<DependencyNode> {
