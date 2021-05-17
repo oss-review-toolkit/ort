@@ -238,11 +238,12 @@ abstract class PackageManager(
                 } catch (e: Exception) {
                     e.showStackTrace()
 
+                    val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
+
                     // In case of Maven we might be able to do better than inferring the name from the path.
                     val id = if (e is ProjectBuildingException && e.projectId?.isEmpty() == false) {
                         Identifier("Maven:${e.projectId}")
                     } else {
-                        val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
                         Identifier.EMPTY.copy(type = managerName, name = relativePath)
                     }
 
@@ -255,7 +256,7 @@ abstract class PackageManager(
                     val errors = listOf(
                         createAndLogIssue(
                             source = managerName,
-                            message = "Resolving dependencies for '${definitionFile.name}' failed with: " +
+                            message = "Resolving dependencies for '$relativePath' failed with: " +
                                     e.collectMessagesAsString()
                         )
                     )

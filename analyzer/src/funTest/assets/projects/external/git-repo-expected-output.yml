@@ -4321,10 +4321,10 @@ analyzer:
       'NPM::submodules/test-data-npm/long.js/package.json:':
       - timestamp: "1970-01-01T00:00:00Z"
         source: "NPM"
-        message: "Resolving dependencies for 'package.json' failed with: IllegalArgumentException:\
-          \ No lockfile found in 'submodules/test-data-npm/long.js'. This potentially\
-          \ results in unstable versions of dependencies. To allow this, enable support\
-          \ for dynamic versions."
+        message: "Resolving dependencies for 'submodules/test-data-npm/long.js/package.json'\
+          \ failed with: IllegalArgumentException: No lockfile found in 'submodules/test-data-npm/long.js'.\
+          \ This potentially results in unstable versions of dependencies. To allow\
+          \ this, enable support for dynamic versions."
         severity: "ERROR"
     has_issues: true
 scanner: null
