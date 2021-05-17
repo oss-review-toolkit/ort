@@ -256,7 +256,7 @@ abstract class PackageManager(
                     val errors = listOf(
                         createAndLogIssue(
                             source = managerName,
-                            message = "Resolving dependencies for '$relativePath' failed with: " +
+                            message = "Resolving $managerName dependencies for '$relativePath' failed with: " +
                                     e.collectMessagesAsString()
                         )
                     )
