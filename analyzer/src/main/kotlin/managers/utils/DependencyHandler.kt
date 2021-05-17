@@ -58,7 +58,7 @@ interface DependencyHandler<D> {
      * add a corresponding issue to the provided [issues] list. If the [dependency] does not map to a package, an
      * implementation should return *null*.
      */
-    fun createPackage(identifier: String, dependency: D, issues: MutableList<OrtIssue>): Package?
+    fun createPackage(identifier: Identifier, dependency: D, issues: MutableList<OrtIssue>): Package?
 
     /**
      * Return a collection with known issues for the given [dependency]. Some package manager implementations may
