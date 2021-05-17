@@ -51,7 +51,7 @@ class GradleDependencyHandler(
      * constructing the dependency graph of a project. As different projects may use different repositories, this
      * property is writable.
      */
-    var repositories: List<RemoteRepository> = emptyList()
+    var repositories = emptyList<RemoteRepository>()
 
     override fun identifierFor(dependency: Dependency): String =
         "${dependency.dependencyType()}:${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
