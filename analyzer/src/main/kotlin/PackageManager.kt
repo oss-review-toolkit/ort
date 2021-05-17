@@ -242,7 +242,7 @@ abstract class PackageManager(
                     val id = if (e is ProjectBuildingException && e.projectId?.isEmpty() == false) {
                         Identifier("Maven:${e.projectId}")
                     } else {
-                        val relativePath = definitionFile.absoluteFile.relativeTo(analysisRoot).invariantSeparatorsPath
+                        val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
                         Identifier.EMPTY.copy(type = managerName, name = relativePath)
                     }
 
