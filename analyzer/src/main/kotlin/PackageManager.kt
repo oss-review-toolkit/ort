@@ -264,9 +264,7 @@ abstract class PackageManager(
                 }
             }
 
-            log.info {
-                "Resolving $managerName dependencies for '${definitionFile.name}' took ${duration.inSeconds}s."
-            }
+            log.info { "Resolving $managerName dependencies for '$definitionFile' took ${duration.inSeconds}s." }
         }
 
         afterResolution(definitionFiles)
