@@ -56,16 +56,13 @@ class MavenDependencyHandler(
      */
     val sbtMode: Boolean
 ) : DependencyHandler<DependencyNode> {
-    override fun identifierFor(dependency: DependencyNode): Identifier {
-        val id = dependency.identifier()
-
-        return Identifier(
-            type = if (isLocalProject(id)) managerName else "Maven",
+    override fun identifierFor(dependency: DependencyNode): Identifier =
+        Identifier(
+            type = if (isLocalProject(dependency.identifier())) managerName else "Maven",
             namespace = dependency.artifact.groupId,
             name = dependency.artifact.artifactId,
             version = dependency.artifact.version
         )
-    }
 
     override fun dependenciesFor(dependency: DependencyNode): Collection<DependencyNode> {
         val childrenWithoutToolDependencies = dependency.children.filterNot { node ->
