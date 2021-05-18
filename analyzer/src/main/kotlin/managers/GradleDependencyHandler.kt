@@ -87,7 +87,7 @@ class GradleDependencyHandler(
         if (dependency.isProjectDependency()) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
     override fun createPackage(
-        identifier: Identifier,
+        id: Identifier,
         dependency: Dependency,
         issues: MutableList<OrtIssue>
     ): Package? {
@@ -106,7 +106,7 @@ class GradleDependencyHandler(
 
             issues += createAndLogIssue(
                 source = managerName,
-                message = "Could not get package information for dependency '${identifier.toCoordinates()}': " +
+                message = "Could not get package information for dependency '${id.toCoordinates()}': " +
                         e.collectMessagesAsString()
             )
 
