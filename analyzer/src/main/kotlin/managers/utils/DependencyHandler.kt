@@ -52,13 +52,13 @@ interface DependencyHandler<D> {
     fun linkageFor(dependency: D): PackageLinkage
 
     /**
-     * Create a [Package] to represent the [dependency] with the given [id]. This is used to populate the
-     * packages in the analyzer result. The creation of a package may fail, e.g. if the dependency cannot be resolved.
-     * In this case, a concrete implementation is expected to return a dummy [Package] with correct coordinates and
-     * add a corresponding issue to the provided [issues] list. If the [dependency] does not map to a package, an
-     * implementation should return *null*.
+     * Create a [Package] to represent the given [dependency]. This is used to populate the packages in the analyzer
+     * result. The creation of a package may fail, e.g. if the dependency cannot be resolved. In this case, a concrete
+     * implementation is expected to return a dummy [Package] with correct coordinates and add a corresponding issue to
+     * the provided [issues] list. If the [dependency] does not map to a package, an implementation should return
+     * *null*.
      */
-    fun createPackage(id: Identifier, dependency: D, issues: MutableList<OrtIssue>): Package?
+    fun createPackage(dependency: D, issues: MutableList<OrtIssue>): Package?
 
     /**
      * Return a collection with known issues for the given [dependency]. Some package manager implementations may

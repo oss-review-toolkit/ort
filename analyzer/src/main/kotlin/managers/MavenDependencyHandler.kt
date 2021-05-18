@@ -79,11 +79,7 @@ class MavenDependencyHandler(
     override fun linkageFor(dependency: DependencyNode): PackageLinkage =
         if (isLocalProject(dependency)) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(
-        id: Identifier,
-        dependency: DependencyNode,
-        issues: MutableList<OrtIssue>
-    ): Package? {
+    override fun createPackage(dependency: DependencyNode, issues: MutableList<OrtIssue>): Package? {
         if (isLocalProject(dependency)) return null
 
         return runCatching {

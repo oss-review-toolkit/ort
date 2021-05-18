@@ -197,7 +197,7 @@ class DependencyGraphBuilder<D>(
         val dependencyIndex = dependencyIndexMapping[id]
         if (dependencyIndex != null) return dependencyIndex
 
-        updateResolvedPackages(id, dependency, issues)
+        updateResolvedPackages(dependency, issues)
 
         return dependencyIds.size.also {
             dependencyIds += id
@@ -303,8 +303,8 @@ class DependencyGraphBuilder<D>(
      * Construct a [Package] for the given [dependency]. Add the new package to the set managed by this object. If this
      * fails, record a corresponding message in [issues].
      */
-    private fun updateResolvedPackages(id: Identifier, dependency: D, issues: MutableList<OrtIssue>) {
-        dependencyHandler.createPackage(id, dependency, issues)?.let { resolvedPackages += it }
+    private fun updateResolvedPackages(dependency: D, issues: MutableList<OrtIssue>) {
+        dependencyHandler.createPackage(dependency, issues)?.let { resolvedPackages += it }
     }
 
     /**
