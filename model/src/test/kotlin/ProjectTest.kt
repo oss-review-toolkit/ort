@@ -57,11 +57,11 @@ private val csvId = Identifier("$MANAGER:org.apache.commons:commons-csv:1.4")
  */
 private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
     val dependencies = listOf(
-        langId.toDependencyId(),
-        textId.toDependencyId(),
-        strutsId.toDependencyId(),
-        csvId.toDependencyId(),
-        exampleId.toDependencyId()
+        langId,
+        textId,
+        strutsId,
+        csvId,
+        exampleId
     )
     val langRef = DependencyReference(0)
     val textRef = DependencyReference(1, dependencies = sortedSetOf(langRef))
@@ -80,11 +80,6 @@ private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
 
     return DependencyGraph(dependencies, setOf(exampleRef, csvRef), scopeMapping)
 }
-
-/**
- * Construct the short reference from this [Identifier] used internally by the dependency graph.
- */
-private fun Identifier.toDependencyId() = "$MANAGER:$namespace:$name:$version"
 
 class ProjectTest : WordSpec({
     "init" should {

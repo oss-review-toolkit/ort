@@ -51,8 +51,8 @@ class DependencyGraphTest : WordSpec({
             val scopes = graph.createScopes()
 
             scopes.map { it.name } should containExactly("p1:scope1", "p2:scope2")
-            scopeDependencies(scopes, "p1:scope1") shouldBe "${pkgId(ids[1])}${pkgId(ids[0])}"
-            scopeDependencies(scopes, "p2:scope2") shouldBe "${pkgId(ids[1])}${pkgId(ids[2])}"
+            scopeDependencies(scopes, "p1:scope1") shouldBe "${ids[1]}${ids[0]}"
+            scopeDependencies(scopes, "p2:scope2") shouldBe "${ids[1]}${ids[2]}"
         }
 
         "support restricting the scopes to a specific set" {
@@ -82,7 +82,7 @@ class DependencyGraphTest : WordSpec({
             val scopes = graph.createScopes(setOf(qualifiedScopeName))
 
             scopes.map { it.name } should containExactly(DependencyGraph.unqualifyScope(scopeName))
-            scopeDependencies(scopes, scopeName) shouldBe "${pkgId(ids[1])}${pkgId(ids[0])}"
+            scopeDependencies(scopes, scopeName) shouldBe "${ids[1]}${ids[0]}"
         }
 
         "construct a tree with multiple levels" {
@@ -101,8 +101,7 @@ class DependencyGraphTest : WordSpec({
             val graph = DependencyGraph(ids, fragments, scopeMap)
             val scopes = graph.createScopes()
 
-            scopeDependencies(scopes, "s") shouldBe "${pkgId(ids[3])}<${pkgId(ids[2])}<${pkgId(ids[1])}" +
-                    "${pkgId(ids[0])}>>"
+            scopeDependencies(scopes, "s") shouldBe "${ids[3]}<${ids[2]}<${ids[1]}${ids[0]}>>"
         }
 
         "construct scopes from different fragments" {
@@ -128,9 +127,8 @@ class DependencyGraphTest : WordSpec({
             val graph = DependencyGraph(ids, fragments, scopeMap)
             val scopes = graph.createScopes()
 
-            scopeDependencies(scopes, "s1") shouldBe "${pkgId(ids[2])}<${pkgId(ids[1])}${pkgId(ids[0])}>"
-            scopeDependencies(scopes, "s2") shouldBe "${pkgId(ids[2])}<${pkgId(ids[1])}<${pkgId(ids[3])}>" +
-                    "${pkgId(ids[0])}>"
+            scopeDependencies(scopes, "s1") shouldBe "${ids[2]}<${ids[1]}${ids[0]}>"
+            scopeDependencies(scopes, "s2") shouldBe "${ids[2]}<${ids[1]}<${ids[3]}>${ids[0]}>"
         }
 
         "deal with attributes of package references" {
@@ -204,12 +202,8 @@ private const val MANAGER_NAME = "TestManager"
 /**
  * Create an identifier string with the given [group], [artifact] ID and [version].
  */
-private fun id(group: String, artifact: String, version: String): String = "$MANAGER_NAME:$group:$artifact:$version"
-
-/**
- * Create an [Identifier] based on the given [id] string.
- */
-private fun pkgId(id: String): Identifier = Identifier(id)
+private fun id(group: String, artifact: String, version: String): Identifier =
+    Identifier("$MANAGER_NAME:$group:$artifact:$version")
 
 /**
  * Output the dependency tree of the given scope as a string.
