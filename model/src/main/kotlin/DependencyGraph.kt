@@ -46,7 +46,7 @@ data class DependencyGraph(
      * A list with the identifiers of the packages that appear in the dependency graph. This list is used to resolve
      * the numeric indices contained in the [DependencyReference] objects.
      */
-    val packages: List<String>,
+    val packages: List<Identifier>,
 
     /**
      * Stores the dependency graph as a list of root nodes for the direct dependencies referenced by scopes. Starting
@@ -153,7 +153,7 @@ data class DependencyGraph(
             }
 
             PackageReference(
-                id = Identifier(packages[ref.pkg]),
+                id = packages[ref.pkg],
                 dependencies = dependencies,
                 linkage = ref.linkage,
                 issues = ref.issues

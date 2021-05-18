@@ -149,7 +149,7 @@ class DependencyGraphBuilder<D>(
      * Construct the [DependencyGraph] from the dependencies passed to this builder so far.
      */
     fun build(): DependencyGraph = DependencyGraph(
-        dependencyIds.map { it.toCoordinates() },
+        dependencyIds,
         directDependencies,
         scopeMapping
     )

@@ -73,8 +73,8 @@ class AnalyzerResultBuilderTest : WordSpec() {
         scopeDependencies = null
     )
 
-    private val dependencies1 = listOf(package1.id.toCoordinates(), package2.id.toCoordinates())
-    private val dependencies2 = listOf(package3.id.toCoordinates())
+    private val dependencies1 = listOf(package1.id, package2.id)
+    private val dependencies2 = listOf(package3.id)
 
     private val depRef1 = DependencyReference(0)
     private val depRef2 = DependencyReference(1)
