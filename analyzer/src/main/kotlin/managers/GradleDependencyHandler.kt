@@ -28,6 +28,7 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.analyzer.managers.utils.DependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
+import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -94,19 +95,19 @@ class GradleDependencyHandler(
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency()) return null
 
-        return try {
-            val artifact = DefaultArtifact(
-                dependency.groupId, dependency.artifactId, dependency.classifier,
-                dependency.extension, dependency.version
-            )
+        val artifact = DefaultArtifact(
+            dependency.groupId, dependency.artifactId, dependency.classifier,
+            dependency.extension, dependency.version
+        )
 
+        return try {
             maven.parsePackage(artifact, repositories)
         } catch (e: ProjectBuildingException) {
             e.showStackTrace()
 
             issues += createAndLogIssue(
                 source = managerName,
-                message = "Could not get package information for dependency '${id.toCoordinates()}': " +
+                message = "Could not get package information for dependency '${artifact.identifier()}': " +
                         e.collectMessagesAsString()
             )
 
