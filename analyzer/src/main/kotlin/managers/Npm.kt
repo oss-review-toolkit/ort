@@ -171,99 +171,15 @@ open class Npm(
         }
 
         /**
-         * Split the given [rawName] of a module to a pair with namespace and name.
+         * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
+         * content from the [npmRegistry]. Result is a [Pair] with the raw identifier and the new package.
          */
-        internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
-            val name = rawName.substringAfterLast("/")
-            val namespace = rawName.removeSuffix(name).removeSuffix("/")
-            return Pair(namespace, name)
-        }
-    }
-
-    private val ortProxySelector = installAuthenticatorAndProxySelector()
-
-    private val npmRegistry: String
-
-    init {
-        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
-        npmRegistry = if (npmRcFile.isFile) {
-            val npmRcContent = npmRcFile.readText()
-            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcContent))
-            readRegistryFromNpmRc(npmRcContent) ?: PUBLIC_NPM_REGISTRY
-        } else {
-            PUBLIC_NPM_REGISTRY
-        }
-    }
-
-    /**
-     * Array of parameters passed to the install command when installing dependencies.
-     */
-    protected open val installParameters = arrayOf("--ignore-scripts")
-
-    protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
-
-    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
-
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 6.14.*")
-
-    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
-
-    override fun beforeResolution(definitionFiles: List<File>) {
-        // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
-        // fixed minor version to be sure to get consistent results.
-        checkVersion(analyzerConfig.ignoreToolVersions)
-    }
-
-    override fun afterResolution(definitionFiles: List<File>) {
-        ortProxySelector.removeProxyOrigin(managerName)
-    }
-
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val workingDir = definitionFile.parentFile
-
-        stashDirectories(workingDir.resolve("node_modules")).use {
-            // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
-            // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
-            // dependency is only ever downloaded once.
-            installDependencies(workingDir)
-
-            val packages = parseInstalledModules(workingDir)
-
-            // Optional dependencies are just like regular dependencies except that NPM ignores failures when installing
-            // them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are not a separate
-            // scope in our semantics.
-            val dependencies = getModuleDependencies(workingDir, setOf("dependencies", "optionalDependencies"))
-            val dependenciesScope = Scope("dependencies", dependencies.toSortedSet())
-
-            val devDependencies = getModuleDependencies(workingDir, setOf("devDependencies"))
-            val devDependenciesScope = Scope("devDependencies", devDependencies)
-
-            // TODO: add support for peerDependencies and bundledDependencies.
-
-            return listOf(
-                parseProject(
-                    definitionFile,
-                    sortedSetOf(dependenciesScope, devDependenciesScope),
-                    packages.values.toSortedSet()
-                )
-            )
-        }
-    }
-
-    private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
-        val packages = mutableMapOf<String, Package>()
-        val nodeModulesDir = rootDirectory.resolve("node_modules")
-
-        log.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
-
-        nodeModulesDir.walk().filter {
-            it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
-        }.forEach { file ->
-            val packageDir = file.parentFile
+        internal fun parsePackage(packageFile: File, npmRegistry: String): Pair<String, Package> {
+            val packageDir = packageFile.parentFile
 
             log.debug { "Found a 'package.json' file in '$packageDir'." }
 
-            val json = file.readValue<ObjectNode>()
+            val json = packageFile.readValue<ObjectNode>()
             val rawName = json["name"].textValue()
             val (namespace, name) = splitNamespaceAndName(rawName)
             val version = json["version"].textValue()
@@ -367,7 +283,100 @@ open class Npm(
                 "Generated package info for $identifier has no version."
             }
 
-            packages[identifier] = module
+            return Pair(identifier, module)
+        }
+
+        /**
+         * Split the given [rawName] of a module to a pair with namespace and name.
+         */
+        internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
+            val name = rawName.substringAfterLast("/")
+            val namespace = rawName.removeSuffix(name).removeSuffix("/")
+            return Pair(namespace, name)
+        }
+    }
+
+    private val ortProxySelector = installAuthenticatorAndProxySelector()
+
+    private val npmRegistry: String
+
+    init {
+        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
+        npmRegistry = if (npmRcFile.isFile) {
+            val npmRcContent = npmRcFile.readText()
+            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcContent))
+            readRegistryFromNpmRc(npmRcContent) ?: PUBLIC_NPM_REGISTRY
+        } else {
+            PUBLIC_NPM_REGISTRY
+        }
+    }
+
+    /**
+     * Array of parameters passed to the install command when installing dependencies.
+     */
+    protected open val installParameters = arrayOf("--ignore-scripts")
+
+    protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
+
+    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
+
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 6.14.*")
+
+    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
+
+    override fun beforeResolution(definitionFiles: List<File>) {
+        // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
+        // fixed minor version to be sure to get consistent results.
+        checkVersion(analyzerConfig.ignoreToolVersions)
+    }
+
+    override fun afterResolution(definitionFiles: List<File>) {
+        ortProxySelector.removeProxyOrigin(managerName)
+    }
+
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+        val workingDir = definitionFile.parentFile
+
+        stashDirectories(workingDir.resolve("node_modules")).use {
+            // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+            // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
+            // dependency is only ever downloaded once.
+            installDependencies(workingDir)
+
+            val packages = parseInstalledModules(workingDir)
+
+            // Optional dependencies are just like regular dependencies except that NPM ignores failures when installing
+            // them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are not a separate
+            // scope in our semantics.
+            val dependencies = getModuleDependencies(workingDir, setOf("dependencies", "optionalDependencies"))
+            val dependenciesScope = Scope("dependencies", dependencies.toSortedSet())
+
+            val devDependencies = getModuleDependencies(workingDir, setOf("devDependencies"))
+            val devDependenciesScope = Scope("devDependencies", devDependencies)
+
+            // TODO: add support for peerDependencies and bundledDependencies.
+
+            return listOf(
+                parseProject(
+                    definitionFile,
+                    sortedSetOf(dependenciesScope, devDependenciesScope),
+                    packages.values.toSortedSet()
+                )
+            )
+        }
+    }
+
+    private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
+        val packages = mutableMapOf<String, Package>()
+        val nodeModulesDir = rootDirectory.resolve("node_modules")
+
+        log.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
+
+        nodeModulesDir.walk().filter {
+            it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
+        }.forEach { file ->
+            val (id, pkg) = parsePackage(file, npmRegistry)
+            packages[id] = pkg
         }
 
         return packages
