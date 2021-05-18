@@ -132,18 +132,16 @@ class DependencyGraphBuilder<D>(
      * explicitly, as they are recorded automatically by _addDependency()_. However, if there are scopes without
      * dependencies, this function can be used to include them into the builder result.
      */
-    fun addScope(scopeName: String) {
-        scopeMapping.putIfAbsent(scopeName, emptyList())
-    }
+    fun addScope(scopeName: String): DependencyGraphBuilder<D> =
+        apply { scopeMapping.putIfAbsent(scopeName, emptyList()) }
 
     /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
      * called all the direct dependencies of all scopes. That way the builder gets sufficient information to construct
      * the [DependencyGraph].
      */
-    fun addDependency(scopeName: String, dependency: D) {
-        addDependencyToGraph(scopeName, dependency, transitive = false)
-    }
+    fun addDependency(scopeName: String, dependency: D): DependencyGraphBuilder<D> =
+        apply { addDependencyToGraph(scopeName, dependency, transitive = false) }
 
     /**
      * Construct the [DependencyGraph] from the dependencies passed to this builder so far.
