@@ -22,15 +22,14 @@ package org.ossreviewtoolkit.analyzer.managers
 import Dependency
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
@@ -61,6 +60,7 @@ import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A test class to test the integration of the [Gradle] package manager with [DependencyGraphBuilder]. This class
@@ -280,11 +280,13 @@ class GradleDependencyHandlerTest : WordSpec({
                 .addScope(scope)
                 .build()
 
-            graph.scopeRoots.shouldBeEmpty()
-            graph.scopes.keys shouldContainExactly setOf(scope)
-            val scopeDependencies = graph.scopes[scope]
-            scopeDependencies.shouldNotBeNull()
-            scopeDependencies.shouldBeEmpty()
+            with(graph) {
+                scopeRoots should beEmpty()
+                scopes.keys shouldContainExactly setOf(scope)
+                scopes[scope] shouldNotBeNull {
+                    this should beEmpty()
+                }
+            }
         }
 
         "not override a scope's dependencies when adding it again" {
@@ -296,9 +298,9 @@ class GradleDependencyHandlerTest : WordSpec({
                 .addScope(scope)
                 .build()
 
-            val scopeDependencies = graph.scopes[scope]
-            scopeDependencies.shouldNotBeNull()
-            scopeDependencies should containExactly(RootDependencyIndex(0))
+            graph.scopes[scope] shouldNotBeNull {
+                this should containExactly(RootDependencyIndex(0))
+            }
         }
     }
 
