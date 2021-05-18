@@ -141,7 +141,7 @@ class MavenDependencyHandlerTest : WordSpec({
             every { dependency.repositories } returns repos
             every { handler.support.parsePackage(artifact, repos, LOCAL_PROJECTS) } returns pkg
 
-            handler.createPackage(Identifier("Maven:$IDENTIFIER"), dependency, issues) shouldBe pkg
+            handler.createPackage(dependency, issues) shouldBe pkg
             issues should beEmpty()
         }
 
@@ -157,7 +157,7 @@ class MavenDependencyHandlerTest : WordSpec({
             every { dependency.repositories } returns repos
             every { handler.support.parsePackage(artifact, repos, LOCAL_PROJECTS, sbtMode = true) } returns pkg
 
-            handler.createPackage(Identifier("$MANAGER_NAME:$IDENTIFIER"), dependency, issues) shouldBe pkg
+            handler.createPackage(dependency, issues) shouldBe pkg
             issues should beEmpty()
         }
 
@@ -167,7 +167,7 @@ class MavenDependencyHandlerTest : WordSpec({
 
             val handler = createHandler()
 
-            handler.createPackage(Identifier("$MANAGER_NAME:$PROJECT_ID"), projectDependency, issues) should beNull()
+            handler.createPackage(projectDependency, issues) should beNull()
             issues should beEmpty()
         }
 
@@ -186,7 +186,7 @@ class MavenDependencyHandlerTest : WordSpec({
             every { dependency.repositories } returns repos
             every { handler.support.parsePackage(artifact, repos, LOCAL_PROJECTS) } throws exception
 
-            handler.createPackage(Identifier("Maven:$IDENTIFIER"), dependency, issues) should beNull()
+            handler.createPackage(dependency, issues) should beNull()
 
             issues should haveSize(1)
             with(issues[0]) {

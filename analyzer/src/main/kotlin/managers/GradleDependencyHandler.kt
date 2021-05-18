@@ -87,11 +87,7 @@ class GradleDependencyHandler(
     override fun linkageFor(dependency: Dependency): PackageLinkage =
         if (dependency.isProjectDependency()) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(
-        id: Identifier,
-        dependency: Dependency,
-        issues: MutableList<OrtIssue>
-    ): Package? {
+    override fun createPackage(dependency: Dependency, issues: MutableList<OrtIssue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency()) return null
 

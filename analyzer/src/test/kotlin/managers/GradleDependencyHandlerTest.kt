@@ -306,13 +306,13 @@ class GradleDependencyHandlerTest : WordSpec({
             every { maven.parsePackage(any(), any(), any()) } throws exception
             val handler = GradleDependencyHandler(NAME, maven)
 
-            handler.createPackage(dep.toId(), dep, issues) should beNull()
+            handler.createPackage(dep, issues) should beNull()
 
             issues should haveSize(1)
             with(issues.first()) {
                 source shouldBe NAME
                 severity shouldBe Severity.ERROR
-                message should contain(dep.toId().toCoordinates())
+                message should contain("${dep.groupId}:${dep.artifactId}:${dep.version}")
             }
         }
     }
