@@ -431,16 +431,11 @@ private fun Collection<PackageReference>.findId(id: Identifier): PackageReferenc
     find { it.id == id } ?: throw IllegalArgumentException("Package with id $id is not contained in $this.")
 
 /**
- * Return the identifiers of the dependencies of this [PackageReference].
- */
-private fun PackageReference.dependencyIds(): List<Identifier> = dependencies.identifiers()
-
-/**
  * Check whether this [PackageReference] contains exactly the given [dependencies][expectedDependencies].
  */
 private fun PackageReference.checkDependencies(vararg expectedDependencies: Dependency): Set<PackageReference> {
     dependencies shouldHaveSize expectedDependencies.size
     val ids = expectedDependencies.map { it.toId() }
-    dependencyIds() should containExactlyInAnyOrder(ids)
+    dependencies.identifiers() should containExactlyInAnyOrder(ids)
     return dependencies
 }
