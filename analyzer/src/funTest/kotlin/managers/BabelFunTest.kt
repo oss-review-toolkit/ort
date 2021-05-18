@@ -48,7 +48,7 @@ class BabelFunTest : WordSpec() {
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
                 )
-                val actualResult = createNPM().resolveSingleProject(packageFile)
+                val actualResult = createNPM().resolveSingleProject(packageFile, resolveScopes = true)
 
                 patchActualResult(actualResult.toYaml()) shouldBe expectedResult
             }

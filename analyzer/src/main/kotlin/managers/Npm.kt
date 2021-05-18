@@ -32,6 +32,8 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutUrl
 import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
@@ -40,6 +42,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.readRegistryFromNpmRc
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -47,7 +50,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -91,6 +93,15 @@ open class Npm(
     }
 
     companion object {
+        /** Name of the scope with the regular dependencies. */
+        private const val DEPENDENCIES_SCOPE = "dependencies"
+
+        /** Name of the scope with optional dependencies. */
+        private const val OPTIONAL_DEPENDENCIES_SCOPE = "optionalDependencies"
+
+        /** Name of the scope with development dependencies. */
+        private const val DEV_DEPENDENCIES_SCOPE = "devDependencies"
+
         /**
          * Parse information about licenses from the [package.json][json] file of a module.
          */
@@ -311,6 +322,8 @@ open class Npm(
         }
     }
 
+    private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(npmRegistry))
+
     /**
      * Array of parameters passed to the install command when installing dependencies.
      */
@@ -334,6 +347,10 @@ open class Npm(
         ortProxySelector.removeProxyOrigin(managerName)
     }
 
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>):
+            PackageManagerResult =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages().toSortedSet())
+
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
@@ -343,25 +360,37 @@ open class Npm(
             // dependency is only ever downloaded once.
             installDependencies(workingDir)
 
+            // Create packages for all modules found in the workspace and add them to the graph builder. They are
+            // reused when they are referenced by scope dependencies.
             val packages = parseInstalledModules(workingDir)
+            graphBuilder.addPackages(packages.values)
 
-            // Optional dependencies are just like regular dependencies except that NPM ignores failures when installing
-            // them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are not a separate
-            // scope in our semantics.
-            val dependencies = getModuleDependencies(workingDir, setOf("dependencies", "optionalDependencies"))
-            val dependenciesScope = Scope("dependencies", dependencies.toSortedSet())
+            val project = parseProject(definitionFile)
 
-            val devDependencies = getModuleDependencies(workingDir, setOf("devDependencies"))
-            val devDependenciesScope = Scope("devDependencies", devDependencies)
+            // Optional dependencies are just like regular dependencies except that NPM ignores failures when
+            // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
+            // not a separate scope in our semantics.
+            buildDependencyGraphForScopes(
+                project,
+                workingDir,
+                setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
+                DEPENDENCIES_SCOPE
+            )
+
+            buildDependencyGraphForScopes(
+                project,
+                workingDir,
+                setOf(DEV_DEPENDENCIES_SCOPE),
+                DEV_DEPENDENCIES_SCOPE
+            )
 
             // TODO: add support for peerDependencies and bundledDependencies.
 
+            val scopeNames = sortedSetOf(DEPENDENCIES_SCOPE, DEV_DEPENDENCIES_SCOPE)
+            scopeNames.forEach { graphBuilder.addScope(DependencyGraph.qualifyScope(project, it)) }
+
             return listOf(
-                parseProject(
-                    definitionFile,
-                    sortedSetOf(dependenciesScope, devDependenciesScope),
-                    packages.values.toSortedSet()
-                )
+                ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), sortedSetOf())
             )
         }
     }
@@ -411,6 +440,22 @@ open class Npm(
         return modulesDir.takeIf { it.name == "node_modules" }
     }
 
+    /**
+     * Retrieve all the dependencies of [project] from the given [scopes] and add them to the dependency graph under
+     * the given [targetScope]. Return the target scope name if dependencies are found; *null* otherwise.
+     */
+    private fun buildDependencyGraphForScopes(
+        project: Project,
+        workingDir: File,
+        scopes: Set<String>,
+        targetScope: String
+    ) {
+        val qualifiedScopeName = DependencyGraph.qualifyScope(project, targetScope)
+        val moduleDependencies = getModuleDependencies(workingDir, scopes)
+
+        moduleDependencies.forEach { graphBuilder.addDependency(qualifiedScopeName, it) }
+    }
+
     private fun getPackageReferenceForMissingModule(moduleName: String, rootModuleDir: File): PackageReference {
         val issue = createAndLogIssue(
             source = managerName,
@@ -441,27 +486,27 @@ open class Npm(
         }
     }
 
-    private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
+    private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): Set<NpmModuleInfo> {
         val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
 
-        return sortedSetOf<PackageReference>().apply {
-            addAll(getPackageReferenceForModule(moduleDir, scopes)!!.dependencies)
+        return mutableSetOf<NpmModuleInfo>().apply {
+            addAll(getModuleInfo(moduleDir, scopes)!!.dependencies)
 
             workspaceModuleDirs.forEach { workspaceModuleDir ->
-                addAll(getPackageReferenceForModule(workspaceModuleDir, scopes, listOf(moduleDir))!!.dependencies)
+                addAll(getModuleInfo(workspaceModuleDir, scopes, listOf(moduleDir))!!.dependencies)
             }
         }
     }
 
-    private fun getPackageReferenceForModule(
+    private fun getModuleInfo(
         moduleDir: File,
         scopes: Set<String>,
         ancestorModuleDirs: List<File> = emptyList(),
         ancestorModuleIds: List<Identifier> = emptyList(),
         packageType: String = managerName
-    ): PackageReference? {
-        val moduleInfo = getModuleInfo(moduleDir, scopes)
-        val dependencies = sortedSetOf<PackageReference>()
+    ): NpmModuleInfo? {
+        val moduleInfo = parsePackageJson(moduleDir, scopes)
+        val dependencies = mutableSetOf<NpmModuleInfo>()
         val moduleId = splitNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
             Identifier(packageType, namespace, name, moduleInfo.version)
         }
@@ -484,7 +529,7 @@ open class Npm(
                 val dependencyModuleDir = dependencyModuleDirPath.first()
                 log.debug { "Found module dir for '$dependencyName' at '$dependencyModuleDir'." }
 
-                getPackageReferenceForModule(
+                getModuleInfo(
                     moduleDir = dependencyModuleDir,
                     scopes = setOf("dependencies", "optionalDependencies"),
                     ancestorModuleDirs = dependencyModuleDirPath.subList(1, dependencyModuleDirPath.size),
@@ -499,16 +544,22 @@ open class Npm(
             getPackageReferenceForMissingModule(dependencyName, pathToRoot.first())
         }
 
-        return PackageReference(id = moduleId, dependencies = dependencies)
+        return NpmModuleInfo(moduleId, moduleInfo.packageJson, dependencies)
     }
 
-    private data class ModuleInfo(
+    /**
+     * An internally used data class with information about a module retrieved from the module's package.json. This
+     * information is further processed and eventually converted to an [NpmModuleInfo] object containing everything
+     * required by the Npm package manager.
+     */
+    private data class RawModuleInfo(
         val name: String,
         val version: String,
-        val dependencyNames: Set<String>
+        val dependencyNames: Set<String>,
+        val packageJson: File
     )
 
-    private fun getModuleInfo(moduleDir: File, scopes: Set<String>): ModuleInfo {
+    private fun parsePackageJson(moduleDir: File, scopes: Set<String>): RawModuleInfo {
         val packageJsonFile = moduleDir.resolve("package.json")
         val json = readJsonFile(packageJsonFile)
 
@@ -531,10 +582,11 @@ open class Npm(
             json[scope].fieldNamesOrEmpty().asSequence().filterNot { it == "//" }
         }
 
-        return ModuleInfo(
+        return RawModuleInfo(
             name = name,
             version = version,
-            dependencyNames = dependencyNames
+            dependencyNames = dependencyNames,
+            packageJson = packageJsonFile
         )
     }
 
@@ -549,8 +601,7 @@ open class Npm(
         return emptyList()
     }
 
-    private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>):
-            ProjectAnalyzerResult {
+    private fun parseProject(packageJson: File): Project {
         log.debug { "Parsing project info from '$packageJson'." }
 
         val json = jsonMapper.readTree(packageJson)
@@ -572,7 +623,7 @@ open class Npm(
         val projectDir = packageJson.parentFile
         val vcsFromPackage = parseVcsInfo(json)
 
-        val project = Project(
+        return Project(
             id = Identifier(
                 type = managerName,
                 namespace = namespace,
@@ -584,11 +635,8 @@ open class Npm(
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
-            homepageUrl = homepageUrl,
-            scopeDependencies = scopes
+            homepageUrl = homepageUrl
         )
-
-        return ProjectAnalyzerResult(project, packages)
     }
 
     /**
