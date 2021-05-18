@@ -164,9 +164,9 @@ class DependencyGraphBuilder<D>(
      * [scopeName]. All the dependencies of this dependency are processed recursively.
      */
     private fun addDependencyToGraph(scopeName: String, dependency: D, transitive: Boolean): DependencyReference {
-        val identifier = dependencyHandler.identifierFor(dependency)
+        val id = dependencyHandler.identifierFor(dependency)
         val issues = dependencyHandler.issuesForDependency(dependency).toMutableList()
-        val index = updateDependencyMappingAndPackages(identifier, dependency, issues)
+        val index = updateDependencyMappingAndPackages(id, dependency, issues)
 
         val ref = when (val result = findDependencyInGraph(index, dependency)) {
             is DependencyGraphSearchResult.Found -> result.ref
@@ -303,8 +303,8 @@ class DependencyGraphBuilder<D>(
      * Construct a [Package] for the given [dependency]. Add the new package to the set managed by this object. If this
      * fails, record a corresponding message in [issues].
      */
-    private fun updateResolvedPackages(identifier: Identifier, dependency: D, issues: MutableList<OrtIssue>) {
-        dependencyHandler.createPackage(identifier, dependency, issues)?.let { resolvedPackages += it }
+    private fun updateResolvedPackages(id: Identifier, dependency: D, issues: MutableList<OrtIssue>) {
+        dependencyHandler.createPackage(id, dependency, issues)?.let { resolvedPackages += it }
     }
 
     /**
