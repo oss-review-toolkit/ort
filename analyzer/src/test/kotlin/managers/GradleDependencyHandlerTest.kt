@@ -434,7 +434,6 @@ private fun Collection<PackageReference>.findId(id: Identifier): PackageReferenc
  * Check whether this [PackageReference] contains exactly the given [dependencies][expectedDependencies].
  */
 private fun PackageReference.checkDependencies(vararg expectedDependencies: Dependency): Set<PackageReference> {
-    dependencies shouldHaveSize expectedDependencies.size
     val ids = expectedDependencies.map { it.toId() }
     dependencies.identifiers() should containExactlyInAnyOrder(ids)
     return dependencies
