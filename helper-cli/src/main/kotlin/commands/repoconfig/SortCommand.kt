@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
-internal class SortRepositoryConfigurationCommand : CliktCommand(
+internal class SortCommand : CliktCommand(
     help = "Sorts all exclude and curation entries of the given repository configuration alphabetically. The output " +
             "is written to the given repository configuration file."
 ) {
