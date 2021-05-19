@@ -21,10 +21,10 @@ project:
     - id: "PyPI::flask:0.12"
       dependencies:
       - id: "PyPI::click:8.0.0"
-      - id: "PyPI::itsdangerous:2.0.0"
+      - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
-        - id: "PyPI::markupsafe:2.0.0"
+        - id: "PyPI::markupsafe:2.0.1"
       - id: "PyPI::werkzeug:2.0.1"
         dependencies:
         - id: "PyPI::dataclasses:0.8"
@@ -165,8 +165,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::itsdangerous:2.0.0"
-  purl: "pkg:pypi/itsdangerous@2.0.0"
+- id: "PyPI::itsdangerous:2.0.1"
+  purl: "pkg:pypi/itsdangerous@2.0.1"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -179,14 +179,14 @@ packages:
   description: "Safely pass data to untrusted environments and back."
   homepage_url: "https://palletsprojects.com/p/itsdangerous/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/c4/af/93fb95dc8bc90a5580084f3dc4be049d243c6f687ff2e253ed3a6df30db4/itsdangerous-2.0.0-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/9c/96/26f935afba9cd6140216da5add223a0c465b99d0f112b68a4ca426441019/itsdangerous-2.0.1-py3-none-any.whl"
     hash:
-      value: "0ebcd0ff2111af1ae7494cfde6042ac9"
+      value: "5f220a8fb0b37b5ba8b436c618d5b987"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/af/1a/d00de29ae487412998f4a2172f0e8322dbe707d4475d981daec560b0ff58/itsdangerous-2.0.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/58/66/d6c5859dcac92b442626427a8c7a42322068c5cd5d4a463ce78b93f730b7/itsdangerous-2.0.1.tar.gz"
     hash:
-      value: "040b810d9aec891c3276f0567519ed89"
+      value: "996b9763d1b4bd0edd6eb86f0a490629"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -234,8 +234,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::markupsafe:2.0.0"
-  purl: "pkg:pypi/markupsafe@2.0.0"
+- id: "PyPI::markupsafe:2.0.1"
+  purl: "pkg:pypi/markupsafe@2.0.1"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -248,14 +248,14 @@ packages:
   description: "Safely add untrusted strings to HTML/XML markup."
   homepage_url: "https://palletsprojects.com/p/markupsafe/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/2f/73/2f1acfb49f2304b550ab7932e3102b7997b1beef03458ec7bd25f7f60608/MarkupSafe-2.0.0-cp36-cp36m-macosx_10_9_x86_64.whl"
+    url: "https://files.pythonhosted.org/packages/27/c3/20f02d95e78756d59a4c02f179a6ee66e3283cc34e3051d436fd152d1e76/MarkupSafe-2.0.1-cp36-cp36m-macosx_10_9_x86_64.whl"
     hash:
-      value: "0b245ad022ab2c40f7424700b5cda0e3"
+      value: "bbc36137aaabd877ede6ba8f4e040fb0"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/67/6a/5b3ed5c122e20c33d2562df06faf895a6b91b0a6b96a4626440ffe1d5c8e/MarkupSafe-2.0.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/bf/10/ff66fea6d1788c458663a84d88787bae15d45daa16f6b3ef33322a51fc7e/MarkupSafe-2.0.1.tar.gz"
     hash:
-      value: "c72c9018cea2fe1ec3a6e21d60cc405a"
+      value: "892e0fefa3c488387e5cc0cad2daa523"
       algorithm: "MD5"
   vcs:
     type: ""
