@@ -118,8 +118,8 @@ class DependencyGraphBuilder<D>(
     /** The mapping from scopes to dependencies constructed by this builder. */
     private val scopeMapping = mutableMapOf<String, List<RootDependencyIndex>>()
 
-    /** Stores all packages encountered in the dependency tree. */
-    private val resolvedPackages = mutableSetOf<Package>()
+    /** Stores all packages encountered in the dependency tree associated by their ID. */
+    private val resolvedPackages = mutableMapOf<Identifier, Package>()
 
     /**
      * A set storing the packages that are direct dependencies of one of the scopes. These are the entry points into
@@ -144,6 +144,15 @@ class DependencyGraphBuilder<D>(
         apply { addDependencyToGraph(scopeName, dependency, transitive = false) }
 
     /**
+     * Add the given [packages] to this builder. They are stored internally and also returned when querying the set of
+     * known packages. This function can be used by package managers that have to deal with packages not part of
+     * normal scope dependencies. One example would be Yarn; here packages can be defined in the workspace and are not
+     * necessarily referenced by manifest files.
+     */
+    fun addPackages(packages: Collection<Package>): DependencyGraphBuilder<D> =
+        apply { resolvedPackages += packages.associateBy { it.id } }
+
+    /**
      * Construct the [DependencyGraph] from the dependencies passed to this builder so far.
      */
     fun build(): DependencyGraph = DependencyGraph(
@@ -155,7 +164,7 @@ class DependencyGraphBuilder<D>(
     /**
      * Return a set with all the packages that have been encountered for the current project.
      */
-    fun packages(): Set<Package> = resolvedPackages
+    fun packages(): Set<Package> = resolvedPackages.values.toSet()
 
     /**
      * Update the dependency graph by adding the given [dependency], which may be [transitive], for the scope with name
@@ -195,7 +204,7 @@ class DependencyGraphBuilder<D>(
         val dependencyIndex = dependencyIndexMapping[id]
         if (dependencyIndex != null) return dependencyIndex
 
-        updateResolvedPackages(dependency, issues)
+        updateResolvedPackages(id, dependency, issues)
 
         return dependencyIds.size.also {
             dependencyIds += id
@@ -298,11 +307,12 @@ class DependencyGraphBuilder<D>(
     }
 
     /**
-     * Construct a [Package] for the given [dependency]. Add the new package to the set managed by this object. If this
-     * fails, record a corresponding message in [issues].
+     * Construct a [Package] for the given [id] that corresponds to the given [dependency]. If the package is already
+     * available, nothing has to be done. Otherwise, create a new one and add it to the set managed by this object. If
+     * this fails, record a corresponding message in [issues].
      */
-    private fun updateResolvedPackages(dependency: D, issues: MutableList<OrtIssue>) {
-        dependencyHandler.createPackage(dependency, issues)?.let { resolvedPackages += it }
+    private fun updateResolvedPackages(id: Identifier, dependency: D, issues: MutableList<OrtIssue>) {
+        resolvedPackages.compute(id) { _, pkg -> pkg ?: dependencyHandler.createPackage(dependency, issues) }
     }
 
     /**
