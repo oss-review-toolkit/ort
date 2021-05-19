@@ -220,7 +220,9 @@ abstract class VersionControlSystem {
         // revision candidates instead of a single revision.
         val revisionCandidates = mutableSetOf<String>()
 
-        try {
+        val emptyRevisionCandidatesException = DownloadException("Unable to determine a revision to checkout.")
+
+        runCatching {
             pkg.vcsProcessed.revision.also {
                 if (it.isNotBlank() && (allowMovingRevisions || isFixedRevision(workingTree, it))) {
                     if (revisionCandidates.add(it)) {
@@ -230,16 +232,18 @@ abstract class VersionControlSystem {
                     }
                 }
             }
-        } catch (e: IOException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
             log.info {
-                "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${e.collectMessagesAsString()}"
+                "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessagesAsString()}"
             }
+
+            emptyRevisionCandidatesException.addSuppressed(it)
         }
 
         fun addGuessedRevision(project: String, version: String): Boolean =
-            try {
+            runCatching {
                 workingTree.guessRevisionName(project, version).also {
                     if (revisionCandidates.add(it)) {
                         log.info {
@@ -248,18 +252,16 @@ abstract class VersionControlSystem {
                         }
                     }
                 }
-
-                true
-            } catch (e: IOException) {
-                e.showStackTrace()
+            }.onFailure {
+                it.showStackTrace()
 
                 log.info {
                     "No $type revision for package '$project' and version '$version' found: " +
-                            e.collectMessagesAsString()
+                            it.collectMessagesAsString()
                 }
 
-                false
-            }
+                emptyRevisionCandidatesException.addSuppressed(it)
+            }.isSuccess
 
         if (!addGuessedRevision(pkg.id.name, pkg.id.version)) {
             when {
@@ -279,9 +281,7 @@ abstract class VersionControlSystem {
             }
         }
 
-        if (revisionCandidates.isEmpty()) {
-            throw DownloadException("Unable to determine a revision to checkout.")
-        }
+        if (revisionCandidates.isEmpty()) throw emptyRevisionCandidatesException
 
         val results = mutableListOf<Result<String>>()
 
