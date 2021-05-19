@@ -30,18 +30,10 @@ import com.github.ajalt.clikt.parameters.options.switch
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
-import org.ossreviewtoolkit.helper.commands.ExportLicenseFindingCurationsCommand
-import org.ossreviewtoolkit.helper.commands.ExportPathExcludesCommand
 import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
-import org.ossreviewtoolkit.helper.commands.FormatRepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.GeneratePackageConfigurationsCommand
-import org.ossreviewtoolkit.helper.commands.GenerateProjectExcludesCommand
-import org.ossreviewtoolkit.helper.commands.GenerateRuleViolationResolutionsCommand
-import org.ossreviewtoolkit.helper.commands.GenerateScopeExcludesCommand
 import org.ossreviewtoolkit.helper.commands.GenerateTimeoutErrorResolutionsCommand
 import org.ossreviewtoolkit.helper.commands.ImportCopyrightGarbageCommand
-import org.ossreviewtoolkit.helper.commands.ImportLicenseFindingCurationsCommand
-import org.ossreviewtoolkit.helper.commands.ImportPathExcludesCommand
 import org.ossreviewtoolkit.helper.commands.ImportScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.ListCopyrightsCommand
 import org.ossreviewtoolkit.helper.commands.ListLicenseCategoriesCommand
@@ -50,12 +42,11 @@ import org.ossreviewtoolkit.helper.commands.ListPackagesCommand
 import org.ossreviewtoolkit.helper.commands.ListStoredScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.MapCopyrightsCommand
 import org.ossreviewtoolkit.helper.commands.MergeRepositoryConfigurationsCommand
-import org.ossreviewtoolkit.helper.commands.RemoveConfigurationEntriesCommand
-import org.ossreviewtoolkit.helper.commands.SortRepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.SubtractScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.TransformResultCommand
 import org.ossreviewtoolkit.helper.commands.VerifySourceArtifactCurationsCommand
 import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCommand
+import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
 import org.ossreviewtoolkit.utils.printStackTrace
 
@@ -80,18 +71,10 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
         }
 
         subcommands(
-            ExportLicenseFindingCurationsCommand(),
-            ExportPathExcludesCommand(),
             ExtractRepositoryConfigurationCommand(),
-            FormatRepositoryConfigurationCommand(),
             GeneratePackageConfigurationsCommand(),
-            GenerateProjectExcludesCommand(),
-            GenerateRuleViolationResolutionsCommand(),
-            GenerateScopeExcludesCommand(),
             GenerateTimeoutErrorResolutionsCommand(),
             ImportCopyrightGarbageCommand(),
-            ImportLicenseFindingCurationsCommand(),
-            ImportPathExcludesCommand(),
             ImportScanResultsCommand(),
             ListCopyrightsCommand(),
             ListLicenseCategoriesCommand(),
@@ -101,8 +84,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             MapCopyrightsCommand(),
             MergeRepositoryConfigurationsCommand(),
             PackageConfigurationCommand(),
-            RemoveConfigurationEntriesCommand(),
-            SortRepositoryConfigurationCommand(),
+            RepositoryConfigurationCommand(),
             SubtractScanResultsCommand(),
             TransformResultCommand(),
             VerifySourceArtifactCurationsCommand()
