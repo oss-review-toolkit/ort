@@ -302,6 +302,32 @@ class GradleDependencyHandlerTest : WordSpec({
                 this should containExactly(RootDependencyIndex(0))
             }
         }
+
+        "support adding packages directly" {
+            val identifiers = listOf(
+                Identifier("Maven:org.apache.commons:commons-lang3:3.11"),
+                Identifier("Maven:commons-logging:commons-logging:1.2"),
+                Identifier("Maven:org.apache.commons:commons-configuration2:2.7")
+            )
+            val packages = identifiers.map { Package.EMPTY.copy(id = it) }
+            val builder = createGraphBuilder()
+
+            builder.addPackages(packages)
+
+            builder.packages() should containExactly(packages)
+        }
+
+        "use packages that have been added directly rather than creating them anew" {
+            val id = Identifier("Maven:org.apache.commons:commons-lang3:3.11")
+            val dependency = createDependency(id.namespace, id.name, id.version)
+            val pkg = Package.EMPTY.copy(id = id)
+            val builder = createGraphBuilder()
+
+            builder.addPackages(listOf(pkg))
+            builder.addDependency("compile", dependency)
+
+            builder.packages() should containExactly(pkg)
+        }
     }
 
     "GradleDependencyHandler" should {
