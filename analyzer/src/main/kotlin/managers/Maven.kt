@@ -103,7 +103,7 @@ class Maven(
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>):
             PackageManagerResult =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages().toSortedSet())
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
@@ -149,7 +149,7 @@ class Maven(
             scopeNames = projectBuildingResult.dependencies.mapTo(sortedSetOf()) { it.dependency.scope }
         )
 
-        val packages = graphBuilder.packages().toSortedSet()
+        val packages = graphBuilder.packages()
         val issues = packages.mapNotNull { pkg ->
             if (pkg.description == "POM was created by Sonatype Nexus") {
                 createAndLogIssue(

@@ -121,7 +121,7 @@ class Gradle(
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>):
             PackageManagerResult =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages().toSortedSet())
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val gradleSystemProperties = mutableListOf<Pair<String, String>>()

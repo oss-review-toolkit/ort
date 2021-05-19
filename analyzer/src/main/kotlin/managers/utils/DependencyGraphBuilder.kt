@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.Identifier
@@ -153,9 +155,9 @@ class DependencyGraphBuilder<D>(
     )
 
     /**
-     * Return a set with all the packages that have been encountered for the current project.
+     * Return a sorted set with all the packages that have been encountered for the current project.
      */
-    fun packages(): Set<Package> = resolvedPackages
+    fun packages(): SortedSet<Package> = resolvedPackages.toSortedSet()
 
     /**
      * Update the dependency graph by adding the given [dependency], which may be [transitive], for the scope with name
