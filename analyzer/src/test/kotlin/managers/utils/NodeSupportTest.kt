@@ -162,6 +162,11 @@ class NodeSupportTest : WordSpec() {
                 expandNpmShortcutUrl("") shouldBe ""
             }
 
+            "return valid URLs unmodified" {
+                expandNpmShortcutUrl("https://github.com/oss-review-toolkit/ort") shouldBe
+                        "https://github.com/oss-review-toolkit/ort"
+            }
+
             "properly handle NPM shortcut URLs" {
                 val packages = mapOf(
                     "npm/npm"
