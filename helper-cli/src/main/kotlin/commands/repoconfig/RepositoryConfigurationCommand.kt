@@ -29,14 +29,14 @@ class RepositoryConfigurationCommand : CliktCommand(
         subcommands(
             ExportLicenseFindingCurationsCommand(),
             ExportPathExcludesCommand(),
-            FormatRepositoryConfigurationCommand(),
+            FormatCommand(),
             GenerateProjectExcludesCommand(),
             GenerateRuleViolationResolutionsCommand(),
             GenerateScopeExcludesCommand(),
             ImportLicenseFindingCurationsCommand(),
             ImportPathExcludesCommand(),
-            RemoveConfigurationEntriesCommand(),
-            SortRepositoryConfigurationCommand()
+            RemoveEntriesCommand(),
+            SortCommand()
         )
     }
 

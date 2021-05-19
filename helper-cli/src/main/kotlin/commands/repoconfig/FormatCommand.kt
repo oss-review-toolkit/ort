@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
-internal class FormatRepositoryConfigurationCommand : CliktCommand(
+internal class FormatCommand : CliktCommand(
     help = "Applies the formatting used by all ort-helper commands and strips all YAML comments. The output is " +
             "written to the given repository configuration file."
 ) {
