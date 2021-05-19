@@ -58,9 +58,10 @@ fun PackageManagerResult.resolveScopes(projectResult: ProjectAnalyzerResult): Pr
     // The result must contain packages for all the dependencies declared by the project; otherwise, the
     // check in ProjectAnalyzerResult.init fails. When using a shared dependency graph, the set of packages
     // is typically empty, so it has to be populated manually from the subset of shared packages that are
-    // referenced from this project.
+    // referenced from this project. If there is a single project only, use all packages; this handles corner
+    // cases with package managers producing packages not assigned to project scopes.
     val packages = projectResult.packages.takeUnless { it.isEmpty() }
-        ?: resolvedProject.filterReferencedPackages(sharedPackages)
+        ?: if (projectResults.size > 1) resolvedProject.filterReferencedPackages(sharedPackages) else sharedPackages
     return projectResult.copy(project = resolvedProject, packages = packages.toSortedSet())
 }
 
