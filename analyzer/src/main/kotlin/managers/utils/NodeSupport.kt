@@ -80,7 +80,7 @@ fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
 /**
  * Expand NPM shortcuts in [url] that refer to hosting sites to full URLs so that they can be used in a regular way.
  */
-fun expandNpmShortcutURL(url: String): String {
+fun expandNpmShortcutUrl(url: String): String {
     // A hierarchical URI looks like
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax

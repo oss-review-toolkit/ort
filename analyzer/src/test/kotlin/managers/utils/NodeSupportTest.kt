@@ -157,9 +157,9 @@ class NodeSupportTest : WordSpec() {
             }
         }
 
-        "expandNpmShortcutURL" should {
+        "expandNpmShortcutUrl" should {
             "do nothing for empty URLs" {
-                expandNpmShortcutURL("") shouldBe ""
+                expandNpmShortcutUrl("") shouldBe ""
             }
 
             "properly handle NPM shortcut URLs" {
@@ -179,7 +179,7 @@ class NodeSupportTest : WordSpec() {
                 )
 
                 packages.entries.forAll { (actualUrl, expectedUrl) ->
-                    expandNpmShortcutURL(actualUrl) shouldBe expectedUrl
+                    expandNpmShortcutUrl(actualUrl) shouldBe expectedUrl
                 }
             }
 
@@ -194,7 +194,7 @@ class NodeSupportTest : WordSpec() {
                 )
 
                 packages.entries.forAll { (actualUrl, expectedUrl) ->
-                    expandNpmShortcutURL(actualUrl) shouldBe expectedUrl
+                    expandNpmShortcutUrl(actualUrl) shouldBe expectedUrl
                 }
             }
         }

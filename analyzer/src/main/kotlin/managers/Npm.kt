@@ -32,7 +32,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutURL
+import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutUrl
 import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
 import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingsFromNpmRc
@@ -295,7 +295,7 @@ open class Npm(
                 }
             }
 
-            val vcsFromDownloadUrl = VcsHost.toVcsInfo(expandNpmShortcutURL(downloadUrl))
+            val vcsFromDownloadUrl = VcsHost.toVcsInfo(expandNpmShortcutUrl(downloadUrl))
             if (vcsFromDownloadUrl.url != downloadUrl) {
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
             }
@@ -374,7 +374,7 @@ open class Npm(
 
             VcsInfo(
                 type = VcsType(type),
-                url = expandNpmShortcutURL(url),
+                url = expandNpmShortcutUrl(url),
                 revision = head,
                 path = path
             )
