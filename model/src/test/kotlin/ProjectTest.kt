@@ -78,7 +78,7 @@ private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
     val scopeMapping = if (qualified) plainScopeMapping.mapKeys { DependencyGraph.qualifyScope(projectId, it.key) }
     else plainScopeMapping
 
-    return DependencyGraph(dependencies, setOf(exampleRef, csvRef), scopeMapping)
+    return DependencyGraph(dependencies, sortedSetOf(exampleRef, csvRef), scopeMapping)
 }
 
 class ProjectTest : WordSpec({

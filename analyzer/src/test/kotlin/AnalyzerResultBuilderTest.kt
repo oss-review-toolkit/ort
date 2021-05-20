@@ -88,8 +88,18 @@ class AnalyzerResultBuilderTest : WordSpec() {
         DependencyGraph.qualifyScope(project2, "scope-3") to listOf(RootDependencyIndex(0))
     )
 
-    private val graph1 = DependencyGraph(dependencies1, setOf(depRef1, depRef2), scopeMapping1)
-    private val graph2 = DependencyGraph(dependencies2, setOf(depRef3), scopeMapping2)
+    private val graph1 =
+        DependencyGraph(
+            dependencies1,
+            sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef1, depRef2),
+            scopeMapping1
+        )
+    private val graph2 =
+        DependencyGraph(
+            dependencies2,
+            sortedSetOf(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR, depRef3),
+            scopeMapping2
+        )
 
     private val analyzerResult1 = ProjectAnalyzerResult(
         project1, sortedSetOf(package1), listOf(issue3, issue4)
@@ -128,6 +138,25 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
 
                 deserializedResult.withScopesResolved() shouldBe result.withScopesResolved()
+            }
+
+            "not change its representation when serialized again" {
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
+                val result = AnalyzerResult(
+                    projects = sortedSetOf(p1, p2, project3),
+                    packages = sortedSetOf(),
+                    dependencyGraphs = sortedMapOf(
+                        project1.id.type to graph1,
+                        project2.id.type to graph2
+                    )
+                )
+
+                val serializedResult = yamlMapper.writeValueAsString(result)
+                val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
+                val serializedResult2 = yamlMapper.writeValueAsString(deserializedResult)
+
+                serializedResult2 shouldBe serializedResult
             }
         }
 

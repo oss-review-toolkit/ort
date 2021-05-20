@@ -53,7 +53,7 @@ data class DependencyGraph(
      * with these nodes, the whole graph can be traversed. The nodes are constructed from the direct dependencies
      * declared by scopes that cannot be reached via other paths in the dependency graph.
      */
-    val scopeRoots: Set<DependencyReference>,
+    val scopeRoots: SortedSet<DependencyReference>,
 
     /**
      * A mapping from scope names to the direct dependencies of the scopes. Based on this information, the set of
@@ -62,6 +62,12 @@ data class DependencyGraph(
     val scopes: Map<String, List<RootDependencyIndex>>
 ) {
     companion object {
+        /**
+         * A comparator for [DependencyReference] objects. Note that the concrete order does not really matter, it
+         * just has to be well-defined.
+         */
+        val DEPENDENCY_REFERENCE_COMPARATOR = compareBy<DependencyReference> { it.pkg }.thenBy { it.fragment }
+
         /**
          * Return a name for the given [scope][scopeName] that is qualified with parts of the identifier of the given
          * [project]. This is used to ensure that the scope names are unique when constructing a dependency graph from
