@@ -203,11 +203,32 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     private fun runRepo(targetDir: File, vararg args: String) =
         if (Os.isWindows) {
+            val (scope, value) = ProcessCapture("git", "config", "--show-scope", "core.longpaths").stdout.let {
+                it.substringBefore('\t', "") to it.substringAfter('\t', "")
+            }
+
+            if (scope.isEmpty() || value.isEmpty()) {
+                log.debug { "Git is not configured with 'core.longpaths'." }
+            } else {
+                log.debug { "Git has 'core.longpaths' set to '$value' at '$scope' scope." }
+            }
+
+            if (value != "true") {
+                log.debug { "Configuring Git with 'core.longpaths' set to 'true' at 'local' scope." }
+                ProcessCapture("git", "config", "--global", "core.longpaths", "true").requireSuccess()
+            }
+
             val repo = getPathFromEnvironment(command()) ?: throw IOException("'repo' not found in PATH.")
 
             // On Windows, the script itself is not executable, so we need to explicitly specify Python as the
             // interpreter. As of repo version 2.4, Python 3.6 is required also on Windows.
             ProcessCapture(targetDir, "py", "-3", repo.absolutePath, *args).requireSuccess()
+
+            if (scope == "global" && value != "true") {
+                ProcessCapture("git", "config", "--global", "core.longpaths", value).requireSuccess()
+            } else {
+                ProcessCapture("git", "config", "--unset", "--global", "core.longpaths").requireSuccess()
+            }
         } else {
             run(targetDir, *args)
         }
