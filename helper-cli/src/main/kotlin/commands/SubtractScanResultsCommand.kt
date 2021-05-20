@@ -41,7 +41,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
 ) {
     private val lhsOrtFile by option(
         "--lhs-ort-file",
-        help = "The ORT result containing the left-hand-side scan result."
+        help = "The ORT result containing the left-hand side scan result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -49,7 +49,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
 
     private val rhsOrtFile by option(
         "--rhs-ort-file",
-        help = "The ORT result containing the left-hand-side scan result."
+        help = "The ORT result containing the right-hand side scan result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -57,7 +57,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
 
     private val outputOrtFile by option(
         "--output-ort-file",
-        help = "The ORT result containing the left-hand-side scan result."
+        help = "The file to write the output ORT result to."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
