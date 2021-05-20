@@ -25,8 +25,8 @@ import java.io.File
 import kotlin.io.path.createTempDirectory
 
 import org.asciidoctor.Asciidoctor
-import org.asciidoctor.AttributesBuilder
-import org.asciidoctor.OptionsBuilder
+import org.asciidoctor.Attributes
+import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 
 import org.ossreviewtoolkit.reporter.Reporter
@@ -92,7 +92,7 @@ class AsciiDocTemplateReporter : Reporter {
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val templateOptions = options.toMutableMap()
-        val asciidoctorAttributes = AttributesBuilder.attributes()
+        val attributesBuilder = Attributes.builder()
 
         // Also see https://github.com/asciidoctor/asciidoctorj/issues/438 for supported backends.
         val backend = templateOptions.remove(OPTION_BACKEND) ?: BACKEND_PDF
@@ -103,7 +103,7 @@ class AsciiDocTemplateReporter : Reporter {
 
                 require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
 
-                asciidoctorAttributes.attribute("pdf-theme", pdfThemeFile.toString())
+                attributesBuilder.attribute("pdf-theme", pdfThemeFile.toString())
             }
 
             templateOptions.remove(OPTION_PDF_FONTS_DIR)?.let {
@@ -111,7 +111,7 @@ class AsciiDocTemplateReporter : Reporter {
 
                 require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
 
-                asciidoctorAttributes.attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
+                attributesBuilder.attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
             }
         }
 
@@ -136,16 +136,16 @@ class AsciiDocTemplateReporter : Reporter {
                 file.copyTo(outputFile)
             }
         } else {
+            val asciidoctorAttributes = attributesBuilder.build()
+            val optionsBuilder = Options.builder()
+                .attributes(asciidoctorAttributes)
+                .backend(backend)
+                .safe(SafeMode.UNSAFE)
+
             asciiDocFiles.forEach { file ->
                 val outputFile = outputDir.resolve("${file.nameWithoutExtension}.$backend")
 
-                val asciidoctorOptions = OptionsBuilder.options()
-                    .backend(backend)
-                    .toFile(outputFile)
-                    .attributes(asciidoctorAttributes)
-                    .safe(SafeMode.UNSAFE)
-
-                asciidoctor.convertFile(file, asciidoctorOptions)
+                asciidoctor.convertFile(file, optionsBuilder.toFile(outputFile).build())
                 file.delete()
 
                 outputFiles += outputFile
