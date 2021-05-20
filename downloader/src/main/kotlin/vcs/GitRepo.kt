@@ -207,11 +207,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
             // On Windows, the script itself is not executable, so we need to explicitly specify Python as the
             // interpreter. As of repo version 2.4, Python 3.6 is required also on Windows.
-            ProcessCapture(
-                "py", "-3", repo.absolutePath, *args,
-                workingDir = targetDir,
-                environment = GIT_LONG_PATHS_ENVIRONMENT
-            ).requireSuccess()
+            ProcessCapture(targetDir, "py", "-3", repo.absolutePath, *args).requireSuccess()
         } else {
             run(targetDir, *args)
         }
