@@ -848,3 +848,13 @@ internal fun OrtResult.getScanResultFor(packageConfiguration: PackageConfigurati
     getScanResultsForId(packageConfiguration.id).find { scanResult ->
         packageConfiguration.matches(packageConfiguration.id, scanResult.provenance)
     }
+
+/**
+ * Read [ortFile] into an [OrtResult] and return it.
+ */
+fun readOrtResult(ortFile: File): OrtResult = ortFile.readValue()
+
+/**
+ * Write the [ortResult] to [file].
+ */
+fun writeOrtResult(ortResult: OrtResult, file: File): Unit = file.writeValue(ortResult)

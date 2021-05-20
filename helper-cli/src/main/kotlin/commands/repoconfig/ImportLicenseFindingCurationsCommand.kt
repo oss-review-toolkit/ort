@@ -28,6 +28,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
+import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.sortLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.write
@@ -76,7 +77,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
     private val findingCurationMatcher = FindingCurationMatcher()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
+        val ortResult = readOrtResult(ortFile)
         val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
             repositoryConfigurationFile.readValue()
         } else {

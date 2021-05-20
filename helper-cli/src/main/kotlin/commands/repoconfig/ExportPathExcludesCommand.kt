@@ -29,9 +29,9 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.getRepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
+import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.helper.common.write
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
@@ -68,8 +68,7 @@ internal class ExportPathExcludesCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val localPathExcludes = ortFile
-            .readValue<OrtResult>()
+        val localPathExcludes = readOrtResult(ortFile)
             .replaceConfig(repositoryConfigurationFile)
             .getRepositoryPathExcludes()
 
