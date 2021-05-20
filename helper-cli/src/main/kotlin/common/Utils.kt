@@ -850,9 +850,10 @@ internal fun OrtResult.getScanResultFor(packageConfiguration: PackageConfigurati
     }
 
 /**
- * Read [ortFile] into an [OrtResult] and return it.
+ * Read [ortFile] into an [OrtResult] and return it. Make sure that information about project scopes is available
+ * (by calling [OrtResult.withResolvedScopes]), so that it can be processed.
  */
-fun readOrtResult(ortFile: File): OrtResult = ortFile.readValue()
+fun readOrtResult(ortFile: File): OrtResult = ortFile.readValue<OrtResult>().withResolvedScopes()
 
 /**
  * Write the [ortResult] to [file].
