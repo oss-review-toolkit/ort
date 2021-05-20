@@ -25,14 +25,13 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.readOrtResult
+import org.ossreviewtoolkit.helper.common.writeOrtResult
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class SubtractScanResultsCommand : CliktCommand(
@@ -64,8 +63,8 @@ internal class SubtractScanResultsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val lhsOrtResult = lhsOrtFile.readValue<OrtResult>()
-        val rhsOrtResult = rhsOrtFile.readValue<OrtResult>()
+        val lhsOrtResult = readOrtResult(lhsOrtFile)
+        val rhsOrtResult = readOrtResult(rhsOrtFile)
 
         val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.value }.associateBy(
             keySelector = { it.provenance.key() },
@@ -89,7 +88,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
             )
         )
 
-        outputOrtFile.writeValue(result)
+        writeOrtResult(result, outputOrtFile)
     }
 }
 

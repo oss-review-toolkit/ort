@@ -26,8 +26,8 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
+import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class MapCopyrightsCommand : CliktCommand(
@@ -61,8 +61,7 @@ internal class MapCopyrightsCommand : CliktCommand(
     override fun run() {
         val processedCopyrightStatements = inputCopyrightGarbageFile.readLines().filterNot { it.isBlank() }
 
-        val unprocessedCopyrightStatements = ortFile
-            .readValue<OrtResult>()
+        val unprocessedCopyrightStatements = readOrtResult(ortFile)
             .getUnprocessedCopyrightStatements(processedCopyrightStatements)
 
         outputCopyrightsFile.writeText(unprocessedCopyrightStatements.joinToString(separator = "\n"))

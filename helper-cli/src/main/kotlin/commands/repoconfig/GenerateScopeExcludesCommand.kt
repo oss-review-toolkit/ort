@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.minimize
+import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceScopeExcludes
 import org.ossreviewtoolkit.helper.common.sortScopeExcludes
 import org.ossreviewtoolkit.helper.common.write
@@ -57,7 +58,7 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
+        val ortResult = readOrtResult(ortFile)
         val scopeExcludes = ortResult.generateScopeExcludes()
 
         repositoryConfigurationFile

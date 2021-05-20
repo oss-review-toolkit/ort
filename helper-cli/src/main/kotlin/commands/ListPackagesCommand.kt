@@ -27,10 +27,9 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.licenses.LicenseView
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.expandTilde
 
@@ -51,7 +50,7 @@ class ListPackagesCommand : CliktCommand(
     ).split(",").default(emptyList())
 
     override fun run() {
-        val ortResult = ortFile.readValue<OrtResult>()
+        val ortResult = readOrtResult(ortFile)
 
         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 

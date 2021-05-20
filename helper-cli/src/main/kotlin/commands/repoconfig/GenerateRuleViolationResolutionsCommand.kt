@@ -29,9 +29,9 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.getUnresolvedRuleViolations
+import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceRuleViolationResolutions
 import org.ossreviewtoolkit.helper.common.write
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
@@ -67,7 +67,7 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
 
     override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        val ortResult = ortFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
+        val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfiguration)
 
         val generatedResolutions = ortResult
             .getUnresolvedRuleViolations()

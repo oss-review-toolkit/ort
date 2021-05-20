@@ -27,10 +27,9 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.helper.common.readOrtResult
+import org.ossreviewtoolkit.helper.common.writeOrtResult
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class SetLabelsCommand : CliktCommand(
@@ -64,12 +63,12 @@ internal class SetLabelsCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        var ortResult = inputOrtFile.readValue<OrtResult>()
+        var ortResult = readOrtResult(inputOrtFile)
 
         if (removeExistingLabels) {
            ortResult = ortResult.copy(labels = emptyMap())
         }
 
-        outputOrtFile.writeValue(ortResult.mergeLabels(labels))
+        writeOrtResult(ortResult.mergeLabels(labels), outputOrtFile)
     }
 }
