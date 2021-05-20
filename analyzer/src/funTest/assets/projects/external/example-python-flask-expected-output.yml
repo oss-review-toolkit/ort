@@ -20,7 +20,12 @@ project:
     dependencies:
     - id: "PyPI::flask:0.12"
       dependencies:
-      - id: "PyPI::click:8.0.0"
+      - id: "PyPI::click:8.0.1"
+        dependencies:
+        - id: "PyPI::importlib-metadata:4.0.1"
+          dependencies:
+          - id: "PyPI::typing-extensions:3.10.0.0"
+          - id: "PyPI::zipp:3.4.1"
       - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
@@ -30,8 +35,8 @@ project:
         - id: "PyPI::dataclasses:0.8"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
-- id: "PyPI::click:8.0.0"
-  purl: "pkg:pypi/click@8.0.0"
+- id: "PyPI::click:8.0.1"
+  purl: "pkg:pypi/click@8.0.1"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -44,14 +49,14 @@ packages:
   description: "Composable command line interface toolkit"
   homepage_url: "https://palletsprojects.com/p/click/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/80/11/597f9102867dc0972b698972f05f50925f586639e57beba4db352029e8f9/click-8.0.0-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/76/0a/b6c5f311e32aeb3b406e03c079ade51e905ea630fc19d1262a46249c1c86/click-8.0.1-py3-none-any.whl"
     hash:
-      value: "8a76555e9c299ed5f92110a815e2bae6"
+      value: "b0ea4bceb2610bece94ded2424ce9448"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/d5/99/286fd2fdfb501620a9341319ba47444040c7b3094d3b6c797d7281469bf8/click-8.0.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/21/83/308a74ca1104fe1e3197d31693a7a2db67c2d4e668f20f43a2fca491f9f7/click-8.0.1.tar.gz"
     hash:
-      value: "72f2aca7431d359e3bf4f20c5305a301"
+      value: "ff66f850b8eb4dc618b405d7fe22a0c2"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -165,6 +170,38 @@ packages:
     url: ""
     revision: ""
     path: ""
+- id: "PyPI::importlib-metadata:4.0.1"
+  purl: "pkg:pypi/importlib-metadata@4.0.1"
+  authors:
+  - "Jason R. Coombs"
+  declared_licenses:
+  - "Apache Software License"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      Apache Software License: "Apache-2.0"
+  description: "Read metadata from Python packages"
+  homepage_url: "https://github.com/python/importlib_metadata"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/8e/e2/49966924c93909d47612bb47d911448140a2f6c1390aec2f4c1afbe3748f/importlib_metadata-4.0.1-py3-none-any.whl"
+    hash:
+      value: "a8817ad342eb80c6fc36733eb954df16"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/91/b6/4f8d521c15fa22bca780aeff56a5b43665ac522585b2b2090e3626ca585f/importlib_metadata-4.0.1.tar.gz"
+    hash:
+      value: "de8753734db41db35d763475b3cf56be"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/python/importlib_metadata.git"
+    revision: ""
+    path: ""
 - id: "PyPI::itsdangerous:2.0.1"
   purl: "pkg:pypi/itsdangerous@2.0.1"
   authors:
@@ -267,6 +304,40 @@ packages:
     url: ""
     revision: ""
     path: ""
+- id: "PyPI::typing-extensions:3.10.0.0"
+  purl: "pkg:pypi/typing-extensions@3.10.0.0"
+  authors:
+  - "Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee"
+  declared_licenses:
+  - "PSF"
+  - "Python Software Foundation License"
+  declared_licenses_processed:
+    spdx_expression: "PSF-2.0"
+    mapped:
+      PSF: "PSF-2.0"
+      Python Software Foundation License: "PSF-2.0"
+  description: "Backported and Experimental Type Hints for Python 3.5+"
+  homepage_url: "https://github.com/python/typing/blob/master/typing_extensions/README.rst"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/dd/3a/b2cfe97bec9e7c317af222f0cee66a37b68bfa52e743c675bdc881ce1aeb/typing_extensions-3.10.0.0-py2-none-any.whl"
+    hash:
+      value: "19760404c4469cae06305e99a3f484c2"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/aa/55/62e2d4934c282a60b4243a950c9dbfa01ae7cac0e8d6c0b5315b87432c81/typing_extensions-3.10.0.0.tar.gz"
+    hash:
+      value: "9b5b33ae64c94479fa0862cf8ae89d58"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/python/typing.git"
+    revision: "master"
+    path: "typing_extensions/README.rst"
 - id: "PyPI::werkzeug:2.0.1"
   purl: "pkg:pypi/werkzeug@2.0.1"
   authors:
@@ -298,5 +369,37 @@ packages:
   vcs_processed:
     type: ""
     url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::zipp:3.4.1"
+  purl: "pkg:pypi/zipp@3.4.1"
+  authors:
+  - "Jason R. Coombs"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Backport of pathlib-compatible object wrapper for zip files"
+  homepage_url: "https://github.com/jaraco/zipp"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/0f/8c/715c54e9e34c0c4820f616a913a7de3337d0cd79074dd1bed4dd840f16ae/zipp-3.4.1-py3-none-any.whl"
+    hash:
+      value: "483005e4371c4272901908cffc968ac2"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/38/f9/4fa6df2753ded1bcc1ce2fdd8046f78bd240ff7647f5c9bcf547c0df77e3/zipp-3.4.1.tar.gz"
+    hash:
+      value: "3d91c7ab73b62ac3674210df94df600a"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jaraco/zipp.git"
     revision: ""
     path: ""
