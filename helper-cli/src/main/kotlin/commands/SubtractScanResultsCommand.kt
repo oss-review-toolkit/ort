@@ -81,15 +81,15 @@ internal class SubtractScanResultsCommand : CliktCommand(
             }
         }
 
-       val result = lhsOrtResult.copy(
-           scanner = lhsOrtResult.scanner!!.copy(
-               results = lhsOrtResult.scanner!!.results.copy(
+        val result = lhsOrtResult.copy(
+            scanner = lhsOrtResult.scanner!!.copy(
+                results = lhsOrtResult.scanner!!.results.copy(
                     scanResults = scanResults
-               )
-           )
-       )
+                )
+            )
+        )
 
-       outputOrtFile.writeValue(result)
+        outputOrtFile.writeValue(result)
     }
 }
 
