@@ -157,7 +157,7 @@ class DependencyGraphBuilder<D>(
      */
     fun build(): DependencyGraph = DependencyGraph(
         dependencyIds,
-        directDependencies,
+        directDependencies.toSortedSet(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR),
         scopeMapping
     )
 
