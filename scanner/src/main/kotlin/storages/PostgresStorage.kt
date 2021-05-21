@@ -42,10 +42,10 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
-import org.ossreviewtoolkit.model.utils.DatabaseUtils.asyncTx
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
-import org.ossreviewtoolkit.model.utils.DatabaseUtils.tx
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.transactionAsync
 import org.ossreviewtoolkit.model.utils.arrayParam
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
@@ -88,7 +88,7 @@ class PostgresStorage(
         Database.connect(dataSource).apply {
             defaultFetchSize(1000)
 
-            tx {
+            transaction {
                 withDataBaseLock {
                     if (!tableExists(TABLE_NAME)) {
                         checkDatabaseEncoding()
@@ -118,7 +118,7 @@ class PostgresStorage(
     override fun readInternal(id: Identifier): Result<List<ScanResult>> {
         @Suppress("TooGenericExceptionCaught")
         return try {
-            database.tx {
+            database.transaction {
                 val scanResults =
                     ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
 
@@ -146,7 +146,7 @@ class PostgresStorage(
 
         @Suppress("TooGenericExceptionCaught")
         return try {
-            database.tx {
+            database.transaction {
                 val scanResults = ScanResultDao.find {
                     (ScanResults.identifier eq pkg.id.toCoordinates()) and
                             (rawParam("scan_result->'scanner'->>'name'") tilde scannerCriteria.regScannerName) and
@@ -191,7 +191,7 @@ class PostgresStorage(
         return try {
             val scanResults = runBlocking(Dispatchers.IO) {
                 packages.chunked(max(packages.size / LocalScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
-                    database.asyncTx {
+                    database.transactionAsync {
                         @Suppress("MaxLineLength")
                         ScanResultDao.find {
                             (ScanResults.identifier inList chunk.map { it.id.toCoordinates() }) and
@@ -239,7 +239,7 @@ class PostgresStorage(
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
 
         try {
-            database.tx {
+            database.transaction {
                 ScanResultDao.new {
                     identifier = id
                     this.scanResult = scanResult

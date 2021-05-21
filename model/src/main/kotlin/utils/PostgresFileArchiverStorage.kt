@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
-import org.ossreviewtoolkit.model.utils.DatabaseUtils.tx
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.log
 
@@ -59,7 +59,7 @@ class PostgresFileArchiverStorage(
     val database = Database.connect(dataSource).apply {
         defaultFetchSize(1000)
 
-        tx {
+        transaction {
             withDataBaseLock {
                 if (!tableExists(FileArchiveTable.tableName)) {
                     checkDatabaseEncoding()
@@ -72,12 +72,12 @@ class PostgresFileArchiverStorage(
     }
 
     override fun hasArchive(provenance: KnownProvenance): Boolean =
-        database.tx {
+        database.transaction {
             queryFileArchive(provenance)
         } != null
 
     override fun addArchive(provenance: KnownProvenance, zipFile: File) =
-        database.tx {
+        database.transaction {
             if (queryFileArchive(provenance) == null) {
                 try {
                     FileArchive.new {
@@ -94,7 +94,7 @@ class PostgresFileArchiverStorage(
         }
 
     override fun getArchive(provenance: KnownProvenance): File? {
-        val fileArchive = database.tx {
+        val fileArchive = database.transaction {
             queryFileArchive(provenance)
         } ?: return null
 
