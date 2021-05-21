@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  * with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
  * For each Freemarker template provided using the options described below a separate intermediate file is created
  * that can be processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if
- * security vulnerability information is available also the "vulernability_report" template.
+ * security vulnerability information is available also the "vulnerability_report" template.
  *
  * After the intermediate files are generated, they are processed by  AsciidoctorJ PDF.
  * A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or images displayed in the PDF can
@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
  *
  * This reporter supports the following options:
  * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently, the "disclosure_document" and
- *                  "vulernability_report" templates are available.
+ *                  "vulnerability_report" templates are available.
  * - *template.path*: A comma-separated list of paths to template files provided by the user.
  * - *backend*: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
  *              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
