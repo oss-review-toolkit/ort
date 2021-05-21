@@ -1,0 +1,17 @@
+# Please see the documentation for all configuration options:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+- package-ecosystem: "github-actions"
+  # Must be "/" for github-actions, see:
+  # https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/configuration-options-for-dependency-updates#directory
+  directory: "/"
+  schedule:
+    interval: "daily"
+- package-ecosystem: "npm"
+  directory: "/reporter-web-app"
+  schedule:
+    interval: "daily"
+  labels:
+  - "reporter"
