@@ -104,13 +104,13 @@ object DatabaseUtils {
     /**
      * Start a new transaction to execute the given [statement] on this [Database].
      */
-    fun <T> Database.tx(statement: Transaction.() -> T): T =
+    fun <T> Database.transaction(statement: Transaction.() -> T): T =
         transaction(this, statement)
 
     /**
      * Start a new asynchronous transaction to execute the given [statement] on this [Database].
      */
-    suspend fun <T> Database.asyncTx(statement: suspend Transaction.() -> T): Deferred<T> =
+    suspend fun <T> Database.transactionAsync(statement: suspend Transaction.() -> T): Deferred<T> =
         suspendedTransactionAsync(db = this, statement = statement)
 
     /**
