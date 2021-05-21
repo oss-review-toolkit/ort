@@ -76,10 +76,14 @@ class OrtConfigurationTest : WordSpec({
                     }
 
                     postgresStorage shouldNotBeNull {
-                        url shouldBe "url"
+                        url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
                         schema shouldBe "public"
-                        username shouldBe "user"
+                        username shouldBe "username"
                         password shouldBe "password"
+                        sslmode shouldBe "required"
+                        sslcert shouldBe "/defaultdir/postgresql.crt"
+                        sslkey shouldBe "/defaultdir/postgresql.pk8"
+                        sslrootcert shouldBe "/defaultdir/root.crt"
                     }
                 }
 
