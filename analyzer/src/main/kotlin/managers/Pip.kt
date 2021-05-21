@@ -302,12 +302,15 @@ class Pip(
         }
 
         // Amend information from "setup.py" with that from "requirements.txt".
-        val projectName = when (Pair(setupName.isNotEmpty(), requirementsName.isNotEmpty())) {
-            Pair(true, false) -> setupName
+        val hasSetupName = setupName.isNotEmpty()
+        val hasRequirementsName = requirementsName.isNotEmpty()
+
+        val projectName = when {
+            hasSetupName && !hasRequirementsName -> setupName
             // In case of only a requirements file without further meta-data, use the relative path to the analyzer
             // root as a unique project name.
-            Pair(false, true) -> definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
-            Pair(true, true) -> "$setupName-requirements$requirementsSuffix"
+            !hasSetupName && hasRequirementsName -> definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
+            hasSetupName && hasRequirementsName -> "$setupName-requirements$requirementsSuffix"
             else -> throw IllegalArgumentException("Unable to determine a project name for '$definitionFile'.")
         }
         val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
