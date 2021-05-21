@@ -4,7 +4,7 @@ The AsciiDocTemplateReporter creates PDF files using a combination of [Apache Fr
 with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
 For each Freemarker template provided using the options described below a separate intermediate file is created that can be
 processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if security
-vulnerability information is available also the "vulernability_report" template.
+vulnerability information is available also the "vulnerability_report" template.
 
 After the intermediate files are generated, they are processed by AsciidoctorJ or to be more precise by its PDF
 implementation AsciidoctorJ PDF. A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or
