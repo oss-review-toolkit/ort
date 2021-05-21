@@ -99,6 +99,7 @@ enum class SpdxLicense(
     BSD_3_CLAUSE_CLEAR("BSD-3-Clause-Clear", "BSD 3-Clause Clear License"),
     BSD_3_CLAUSE_LBNL("BSD-3-Clause-LBNL", "Lawrence Berkeley National Labs BSD variant license"),
     BSD_3_CLAUSE_MODIFICATION("BSD-3-Clause-Modification", "BSD 3-Clause Modification"),
+    BSD_3_CLAUSE_NO_MILITARY_LICENSE("BSD-3-Clause-No-Military-License", "BSD 3-Clause No Military License"),
     BSD_3_CLAUSE_NO_NUCLEAR_LICENSE("BSD-3-Clause-No-Nuclear-License", "BSD 3-Clause No Nuclear License"),
     BSD_3_CLAUSE_NO_NUCLEAR_LICENSE_2014("BSD-3-Clause-No-Nuclear-License-2014", "BSD 3-Clause No Nuclear License 2014"),
     BSD_3_CLAUSE_NO_NUCLEAR_WARRANTY("BSD-3-Clause-No-Nuclear-Warranty", "BSD 3-Clause No Nuclear Warranty"),
@@ -151,13 +152,14 @@ enum class SpdxLicense(
     CC_BY_SA_2_1_JP("CC-BY-SA-2.1-JP", "Creative Commons Attribution Share Alike 2.1 Japan"),
     CC_BY_SA_2_5("CC-BY-SA-2.5", "Creative Commons Attribution Share Alike 2.5 Generic"),
     CC_BY_SA_3_0("CC-BY-SA-3.0", "Creative Commons Attribution Share Alike 3.0 Unported"),
-    CC_BY_SA_3_0_AT("CC-BY-SA-3.0-AT", "Creative Commons Attribution-Share Alike 3.0 Austria"),
+    CC_BY_SA_3_0_AT("CC-BY-SA-3.0-AT", "Creative Commons Attribution Share Alike 3.0 Austria"),
     CC_BY_SA_4_0("CC-BY-SA-4.0", "Creative Commons Attribution Share Alike 4.0 International"),
     CC_PDDC("CC-PDDC", "Creative Commons Public Domain Dedication and Certification"),
     CDDL_1_0("CDDL-1.0", "Common Development and Distribution License 1.0"),
     CDDL_1_1("CDDL-1.1", "Common Development and Distribution License 1.1"),
     CDLA_PERMISSIVE_1_0("CDLA-Permissive-1.0", "Community Data License Agreement Permissive 1.0"),
     CDLA_SHARING_1_0("CDLA-Sharing-1.0", "Community Data License Agreement Sharing 1.0"),
+    CDL_1_0("CDL-1.0", "Common Documentation License 1.0"),
     CECILL_1_0("CECILL-1.0", "CeCILL Free Software License Agreement v1.0"),
     CECILL_1_1("CECILL-1.1", "CeCILL Free Software License Agreement v1.1"),
     CECILL_2_0("CECILL-2.0", "CeCILL Free Software License Agreement v2.0"),
@@ -507,7 +509,7 @@ enum class SpdxLicense(
         /**
          * The version of the license list.
          */
-        const val LICENSE_LIST_VERSION = "3.12"
+        const val LICENSE_LIST_VERSION = "3.13"
 
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
