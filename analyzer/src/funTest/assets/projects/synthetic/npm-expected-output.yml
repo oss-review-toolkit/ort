@@ -73,6 +73,7 @@ project:
     - id: "NPM::promise:7.3.1"
       dependencies:
       - id: "NPM::asap:2.0.6"
+    - id: "NPM::web-animations-js:2.3.2-pr208"
   - name: "devDependencies"
     dependencies:
     - id: "NPM::cson:4.1.0"
@@ -1128,6 +1129,34 @@ packages:
     type: "Git"
     url: "https://github.com/TooTallNate/util-deprecate.git"
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
+    path: ""
+- id: "NPM::web-animations-js:2.3.2-pr208"
+  purl: "pkg:npm/web-animations-js@2.3.2-pr208"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "JavaScript implementation of the Web Animations API"
+  homepage_url: "https://github.com/web-animations"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://github.com/angular/web-animations-js/archive/release_pr208.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/web-animations/web-animations-js.git"
+    revision: "release_pr208"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/web-animations/web-animations-js.git"
+    revision: "release_pr208"
     path: ""
 - id: "NPM:@types:node:12.6.8"
   purl: "pkg:npm/%40types/node@12.6.8"

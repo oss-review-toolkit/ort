@@ -305,6 +305,10 @@
       "version": "1.0.2",
       "resolved": "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz",
       "integrity": "sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8="
+    },
+    "web-animations-js": {
+      "version": "github:angular/web-animations-js#96635c1a82a730fc71cc5d6cabe5dfe7c8349ec5",
+      "from": "github:angular/web-animations-js#release_pr208"
     }
   }
 }

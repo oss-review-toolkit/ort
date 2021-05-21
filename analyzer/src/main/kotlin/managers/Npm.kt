@@ -200,7 +200,11 @@ open class Npm(
 
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
-            var downloadUrl = json["_resolved"].textValueOrEmpty()
+            var downloadUrl = expandNpmShortcutUrl(json["_resolved"].textValueOrEmpty()).ifEmpty {
+                // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
+                val fromVersion = json["_from"].textValueOrEmpty().substringAfterLast('@')
+                expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
+            }
 
             var vcsFromPackage = parseVcsInfo(json)
 
@@ -261,7 +265,7 @@ open class Npm(
                 }
             }
 
-            val vcsFromDownloadUrl = VcsHost.toVcsInfo(expandNpmShortcutUrl(downloadUrl))
+            val vcsFromDownloadUrl = VcsHost.toVcsInfo(downloadUrl)
             if (vcsFromDownloadUrl.url != downloadUrl) {
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
             }
@@ -279,7 +283,7 @@ open class Npm(
                 homepageUrl = homepageUrl,
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
-                    url = downloadUrl,
+                    url = VcsHost.toArchiveDownloadUrl(vcsFromDownloadUrl) ?: downloadUrl,
                     hash = hash
                 ),
                 vcs = vcsFromPackage,
