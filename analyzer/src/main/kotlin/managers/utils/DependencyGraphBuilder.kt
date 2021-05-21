@@ -95,7 +95,7 @@ class DependencyGraphBuilder<D>(
      * The [DependencyHandler] used by this builder instance to extract information from the dependency objects when
      * constructing the [DependencyGraph].
      */
-    val dependencyHandler: DependencyHandler<D>
+    private val dependencyHandler: DependencyHandler<D>
 ) {
     /**
      * A list storing the identifiers of all dependencies added to this builder. This list is then used to resolve
