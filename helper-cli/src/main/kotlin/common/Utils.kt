@@ -431,10 +431,10 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
 
 /**
  * Return a copy of this [OrtResult] with the [Repository.config] with the content of the given
- * [respositoryConfigurationFile].
+ * [repositoryConfigurationFile].
  */
-fun OrtResult.replaceConfig(respositoryConfigurationFile: File?): OrtResult =
-    respositoryConfigurationFile?.let {
+fun OrtResult.replaceConfig(repositoryConfigurationFile: File?): OrtResult =
+    repositoryConfigurationFile?.let {
         replaceConfig(it.readValue())
     } ?: this
 
