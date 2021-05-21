@@ -37,7 +37,7 @@ enum class VcsHost(
     /**
      * The hostname of VCS host.
      */
-    private val hostname: String,
+    protected val hostname: String,
 
     /**
      * The VCS types the host supports.
@@ -86,6 +86,9 @@ enum class VcsHost(
                     }
                 }
             }
+
+        override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://$hostname/$userOrOrg/$project/get/${vcsInfo.revision}.tar.gz"
     },
 
     /**
@@ -118,6 +121,9 @@ enum class VcsHost(
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-L")
+
+        override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://$hostname/$userOrOrg/$project/archive/${vcsInfo.revision}.tar.gz"
     },
 
     /**
@@ -156,6 +162,9 @@ enum class VcsHost(
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-")
+
+        override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://$hostname/$userOrOrg/$project/-/archive/${vcsInfo.revision}/$project-${vcsInfo.revision}.tar.gz"
     },
 
     SOURCEHUT("sr.ht", VcsType.GIT, VcsType.MERCURIAL) {
@@ -230,6 +239,10 @@ enum class VcsHost(
 
                 else -> ""
             }
+
+        override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://${vcsInfo.type.toString().toLowerCase()}.$hostname/~$userOrOrg/$project/archive/" +
+                    "${vcsInfo.revision}.tar.gz"
     };
 
     companion object {
@@ -307,6 +320,21 @@ enum class VcsHost(
         }
 
         /**
+         * Return the download URL to an archive generated for the referenced [vcsInfo], or null if no download URL can
+         * be determined.
+         */
+        fun toArchiveDownloadUrl(vcsInfo: VcsInfo): String? {
+            val normalizedVcsInfo = vcsInfo.normalize()
+            val host = values().find { it.isApplicable(normalizedVcsInfo) } ?: return null
+
+            return normalizedVcsInfo.url.toUri {
+                val userOrOrg = host.getUserOrOrgInternal(it) ?: return@toUri null
+                val project = host.getProjectInternal(it) ?: return@toUri null
+                host.toArchiveDownloadUrlInternal(userOrOrg, project, normalizedVcsInfo)
+            }.getOrNull()
+        }
+
+        /**
          * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional
          * highlighting of [startLine] to [endLine].
          */
@@ -357,6 +385,23 @@ enum class VcsHost(
         projectUrl.toUri { if (isApplicable(it)) toVcsInfoInternal(it) else null }.getOrNull()
 
     protected abstract fun toVcsInfoInternal(projectUrl: URI): VcsInfo
+
+    /**
+     * Return the download URL to an archive generated for the referenced [vcsInfo], or null if no download URL can be
+     * determined.
+     */
+    fun toArchiveDownloadUrl(vcsInfo: VcsInfo): String? {
+        val normalizedVcsInfo = vcsInfo.normalize()
+        if (!isApplicable(normalizedVcsInfo)) return null
+
+        return normalizedVcsInfo.url.toUri {
+            val userOrOrg = getUserOrOrgInternal(it) ?: return@toUri null
+            val project = getProjectInternal(it) ?: return@toUri null
+            toArchiveDownloadUrlInternal(userOrOrg, project, normalizedVcsInfo)
+        }.getOrNull()
+    }
+
+    abstract fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo): String
 
     /**
      * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional

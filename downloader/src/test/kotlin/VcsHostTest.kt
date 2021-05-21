@@ -62,6 +62,11 @@ class VcsHostTest : WordSpec({
             BITBUCKET.toPermalink(vcsInfo, 4, 8) shouldBe "https://bitbucket.org/yevster/spdxtraxample/" +
                     "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt#lines-4:8"
         }
+
+        "be able to create source archive links from project URLs" {
+            BITBUCKET.toArchiveDownloadUrl(vcsInfo) shouldBe
+                    "https://bitbucket.org/yevster/spdxtraxample/get/287aebca5e7ff4167af1fb648640dcdbdf4ec666.tar.gz"
+        }
     }
 
     "The GitHub implementation" should {
@@ -106,6 +111,11 @@ class VcsHostTest : WordSpec({
             GITHUB.toPermalink(vcsInfo, 27, 28) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27-L28"
         }
+
+        "be able to create source archive links from project URLs" {
+            GITHUB.toArchiveDownloadUrl(vcsInfo) shouldBe
+                    "https://github.com/oss-review-toolkit/ort/archive/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7.tar.gz"
+        }
     }
 
     "The GitLab implementation" should {
@@ -148,6 +158,12 @@ class VcsHostTest : WordSpec({
                     "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5"
             GITLAB.toPermalink(vcsInfo, 5, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
                     "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5-7"
+        }
+
+        "be able to create source archive links from project URLs" {
+            GITLAB.toArchiveDownloadUrl(vcsInfo) shouldBe
+                    "https://gitlab.com/mbunkus/mkvtoolnix/-/archive/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/" +
+                    "mkvtoolnix-ec80478f87f1941fe52f15c5f4fa7ee6a70d7006.tar.gz"
         }
     }
 
@@ -195,6 +211,10 @@ class VcsHostTest : WordSpec({
             SOURCEHUT.toPermalink(hgVcsInfo, 9) shouldBe
                     "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt#L9"
             // SourceHut does not support an end line in permalinks to Mercurial repos.
+        }
+
+        "be able to create source archive links from project URLs" {
+            SOURCEHUT.toArchiveDownloadUrl(gitVcsInfo) shouldBe "https://git.sr.ht/~ben/web/archive/2c3d173d.tar.gz"
         }
     }
 
