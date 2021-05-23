@@ -19,6 +19,8 @@
  * License-Filename: LICENSE
  */
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 val cliktVersion: String by project
 val config4kVersion: String by project
 val exposedVersion: String by project
@@ -34,11 +36,18 @@ val sw360ClientVersion: String by project
 plugins {
     // Apply core plugins.
     application
+
+    // Apply third-party plugins.
+    id("com.github.johnrengelman.shadow")
 }
 
 application {
     applicationName = "ort"
     mainClassName = "org.ossreviewtoolkit.OrtMainKt"
+}
+
+tasks.withType<ShadowJar> {
+    isZip64 = true
 }
 
 tasks.named<CreateStartScripts>("startScripts").configure {
@@ -48,34 +57,6 @@ tasks.named<CreateStartScripts>("startScripts").configure {
         windowsScript.writeText(windowsScript.readText().replace(Regex("set CLASSPATH=.*"),
             "set CLASSPATH=%APP_HOME%\\\\lib\\\\*"))
     }
-}
-
-val fatJar by tasks.registering(Jar::class) {
-    description = "Creates a fat jar that includes all required dependencies."
-    group = "Build"
-
-    archiveBaseName.set(application.applicationName)
-
-    manifest.from(tasks.jar.get().manifest)
-    manifest {
-        attributes["Main-Class"] = application.mainClassName
-    }
-
-    isZip64 = true
-
-    val classpath = configurations.runtimeClasspath.get().filterNot {
-        it.isFile && it.extension == "pom"
-    }.map {
-        if (it.isDirectory) it else zipTree(it)
-    }
-
-    from(classpath) {
-        exclude("META-INF/*.DSA")
-        exclude("META-INF/*.RSA")
-        exclude("META-INF/*.SF")
-    }
-
-    with(tasks.jar.get())
 }
 
 repositories {
