@@ -246,9 +246,6 @@ class Gradle(
                             dependency
                         )
                     }
-
-                    // Make sure that scopes without dependencies are recorded.
-                    graphBuilder.addScope(DependencyGraph.qualifyScope(projectId, configuration.name))
                 }
 
                 val project = Project(

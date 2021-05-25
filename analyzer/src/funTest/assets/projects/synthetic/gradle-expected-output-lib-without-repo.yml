@@ -16,10 +16,6 @@ project:
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
   homepage_url: ""
   scopes:
-  - name: "annotationProcessor"
-    dependencies: []
-  - name: "archives"
-    dependencies: []
   - name: "compile"
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
@@ -40,8 +36,6 @@ project:
           \ dependency org.apache.commons:commons-text:1.1 because no repositories\
           \ are defined."
         severity: "ERROR"
-  - name: "compileOnly"
-    dependencies: []
   - name: "default"
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
@@ -72,8 +66,6 @@ project:
           \ dependency org.apache.commons:commons-text:1.1 because no repositories\
           \ are defined."
         severity: "ERROR"
-  - name: "testAnnotationProcessor"
-    dependencies: []
   - name: "testCompile"
     dependencies:
     - id: "Unknown:junit:junit:4.12"
@@ -108,8 +100,6 @@ project:
           \ dependency org.apache.commons:commons-text:1.1 because no repositories\
           \ are defined."
         severity: "ERROR"
-  - name: "testCompileOnly"
-    dependencies: []
   - name: "testRuntime"
     dependencies:
     - id: "Unknown:junit:junit:4.12"
