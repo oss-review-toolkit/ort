@@ -166,4 +166,5 @@ RUN tar xf /opt/ort.tar -C /opt/ort --strip-components 1 && \
 COPY --from=build /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
 COPY --from=build /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
 
-ENTRYPOINT ["/opt/ort/bin/ort"]
+COPY scripts/entrypoint.sh /opt/scripts/entrypoint.sh
+ENTRYPOINT ["/opt/scripts/entrypoint.sh"]
