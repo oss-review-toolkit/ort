@@ -78,7 +78,8 @@ fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
     }.mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
- * Expand NPM shortcuts in [url] that refer to hosting sites to full URLs so that they can be used in a regular way.
+ * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
+ * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies.
  */
 fun expandNpmShortcutUrl(url: String): String {
     // A hierarchical URI looks like
