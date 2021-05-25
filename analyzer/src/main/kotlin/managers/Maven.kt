@@ -101,9 +101,8 @@ class Maven(
         graphBuilder = DependencyGraphBuilder(dependencyHandler)
     }
 
-    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>):
-            PackageManagerResult =
-        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages().toSortedSet())
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
