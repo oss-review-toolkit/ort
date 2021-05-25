@@ -16,16 +16,12 @@ project:
     path: "analyzer/src/funTest/assets/projects/external/multi-kotlin-project/core"
   homepage_url: ""
   scopes:
-  - name: "annotationProcessor"
-    dependencies: []
   - name: "apiDependenciesMetadata"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
       dependencies:
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "archives"
-    dependencies: []
   - name: "compile"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
@@ -38,10 +34,6 @@ project:
       dependencies:
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "compileOnly"
-    dependencies: []
-  - name: "compileOnlyDependenciesMetadata"
-    dependencies: []
   - name: "default"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
@@ -54,10 +46,6 @@ project:
       dependencies:
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "kapt"
-    dependencies: []
-  - name: "kaptTest"
-    dependencies: []
   - name: "kotlinCompilerClasspath"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.11"
@@ -76,10 +64,6 @@ project:
   - name: "kotlinCompilerPluginClasspath"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.11"
-  - name: "kotlinNativeCompilerPluginClasspath"
-    dependencies: []
-  - name: "kotlinScriptDef"
-    dependencies: []
   - name: "runtime"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
@@ -92,10 +76,6 @@ project:
       dependencies:
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "runtimeOnlyDependenciesMetadata"
-    dependencies: []
-  - name: "testAnnotationProcessor"
-    dependencies: []
   - name: "testApiDependenciesMetadata"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
@@ -114,18 +94,12 @@ project:
       dependencies:
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "testCompileOnly"
-    dependencies: []
-  - name: "testCompileOnlyDependenciesMetadata"
-    dependencies: []
   - name: "testImplementationDependenciesMetadata"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
       dependencies:
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "testKotlinScriptDef"
-    dependencies: []
   - name: "testRuntime"
     dependencies:
     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
@@ -138,8 +112,6 @@ project:
       dependencies:
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "testRuntimeOnlyDependenciesMetadata"
-    dependencies: []
 packages:
 - id: "Maven:org.jetbrains:annotations:13.0"
   purl: "pkg:maven/org.jetbrains/annotations@13.0"

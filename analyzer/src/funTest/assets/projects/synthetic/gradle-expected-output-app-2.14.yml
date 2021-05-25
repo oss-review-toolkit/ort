@@ -16,8 +16,6 @@ project:
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
   homepage_url: ""
   scopes:
-  - name: "archives"
-    dependencies: []
   - name: "compile"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"

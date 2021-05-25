@@ -16,8 +16,6 @@ project:
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
   homepage_url: ""
   scopes:
-  - name: "archives"
-    dependencies: []
   - name: "compile"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -27,8 +25,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "compileOnly"
-    dependencies: []
   - name: "default"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -56,8 +52,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-  - name: "testCompileOnly"
-    dependencies: []
   - name: "testRuntime"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"

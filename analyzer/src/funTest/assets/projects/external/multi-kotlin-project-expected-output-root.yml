@@ -39,8 +39,6 @@ project:
         dependencies:
         - id: "Maven:org.jetbrains:annotations:13.0"
         - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
-  - name: "default"
-    dependencies: []
 packages:
 - id: "Maven:org.jetbrains:annotations:13.0"
   purl: "pkg:maven/org.jetbrains/annotations@13.0"
