@@ -68,5 +68,5 @@ fun PackageManagerResult.resolveScopes(projectResult: ProjectAnalyzerResult): Pr
 /**
  * Return only those packages from the given set of [allPackages] that are referenced by this [Project].
  */
-private fun Project.filterReferencedPackages(allPackages: SortedSet<Package>): SortedSet<Package> =
+private fun Project.filterReferencedPackages(allPackages: Set<Package>): SortedSet<Package> =
     collectDependencies().run { allPackages.filter { it.id in this }.toSortedSet() }
