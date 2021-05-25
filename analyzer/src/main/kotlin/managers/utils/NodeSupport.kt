@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.utils.AuthenticatedProxy
 import org.ossreviewtoolkit.utils.ProtocolProxyMap
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.determineProxyFromURL
-import org.ossreviewtoolkit.utils.hasRevisionFragment
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.toUri
@@ -98,7 +97,7 @@ fun expandNpmShortcutUrl(url: String): String {
 
     return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
         // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#github-urls.
-        val revision = if (uri.hasRevisionFragment()) "#${uri.fragment}" else ""
+        val revision = uri.fragment?.let { "#$it" }.orEmpty()
 
         // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository.
         when (uri.scheme) {
