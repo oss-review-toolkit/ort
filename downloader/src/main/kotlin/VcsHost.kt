@@ -26,7 +26,6 @@ import java.nio.file.Paths
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.hasRevisionFragment
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.toUri
 
@@ -112,8 +111,6 @@ enum class VcsHost(
                         // Just treat all the extra components as a path.
                         path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
                     }
-                } else {
-                    if (projectUrl.hasRevisionFragment()) revision = projectUrl.fragment
                 }
 
                 VcsInfo(VcsType.GIT, baseUrl, revision, path = path)
@@ -152,8 +149,6 @@ enum class VcsHost(
                         // Just treat all the extra components as a path.
                         path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
                     }
-                } else {
-                    if (projectUrl.hasRevisionFragment()) revision = projectUrl.fragment
                 }
 
                 VcsInfo(VcsType.GIT, baseUrl, revision, path = path)
@@ -246,14 +241,13 @@ enum class VcsHost(
          * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
          */
         fun toVcsInfo(projectUrl: String): VcsInfo {
-            val vcs = projectUrl.toUri { toVcsHost(it)?.toVcsInfoInternal(it) }.getOrNull()
-            if (vcs != null) return vcs
+            val vcsInfoFromHost = projectUrl.toUri { toVcsHost(it)?.toVcsInfoInternal(it) }.getOrNull()
 
             // Fall back to generic URL detection for unknown VCS hosts.
             val svnBranchOrTagMatch = SVN_BRANCH_OR_TAG_PATTERN.matchEntire(projectUrl)
             val svnTrunkMatch = SVN_TRUNK_PATTERN.matchEntire(projectUrl)
 
-            return when {
+            val vcsInfoFromUrl = when {
                 svnBranchOrTagMatch != null -> VcsInfo(
                     type = VcsType.SUBVERSION,
                     url = svnBranchOrTagMatch.groupValues[1],
@@ -303,6 +297,8 @@ enum class VcsHost(
                     revision = ""
                 )
             }
+
+            return vcsInfoFromHost?.merge(vcsInfoFromUrl) ?: vcsInfoFromUrl
         }
 
         /**
