@@ -401,7 +401,7 @@ class Pub(
                 .resolveDependencies(listOf(packageFile)).run {
                     projectResults.getValue(packageFile).map { result ->
                         val project = result.project.withResolvedScopes(dependencyGraph)
-                        result.copy(project = project, packages = sharedPackages)
+                        result.copy(project = project, packages = sharedPackages.toSortedSet())
                     }
                 }
         }

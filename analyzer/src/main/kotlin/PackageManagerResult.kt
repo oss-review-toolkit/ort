@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer
 
 import java.io.File
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Package
@@ -49,5 +48,5 @@ data class PackageManagerResult(
      * produce a shared [DependencyGraph] typically do not collect packages on a project-level, but globally. Such
      * packages can be stored in this property.
      */
-    val sharedPackages: SortedSet<Package> = sortedSetOf()
+    val sharedPackages: Set<Package> = sortedSetOf()
 )
