@@ -148,14 +148,14 @@ class FossIdClientReturnTypeTest : StringSpec({
         }
     }
 
-    "Pending files can be listed when there is some" {
+    "Pending files can be listed when there is none" {
         service.listPendingFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list pending files")
             toList<String>() should beEmpty()
         }
     }
 
-    "Pending files can be listed when there is none" {
+    "Pending files can be listed when there is some" {
         service.listPendingFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list pending files")
             toList<String>() shouldNot beEmpty()
