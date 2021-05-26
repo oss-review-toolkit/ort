@@ -385,7 +385,7 @@ private fun projectUrlToUserOrOrgAndProject(projectUrl: URI): Pair<String, Strin
 
         if (pathIterator.hasNext()) {
             val project = pathIterator.next()
-            return Pair(userOrOrg.toString(), project.toString())
+            return Pair(userOrOrg.toString(), project.toString().removeSuffix(".git"))
         }
     }
 
