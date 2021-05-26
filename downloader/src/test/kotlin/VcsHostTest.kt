@@ -37,6 +37,12 @@ class VcsHostTest : WordSpec({
     "The Bitbucket implementation" should {
         val projectUrl = "https://bitbucket.org/yevster/spdxtraxample/" +
                 "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt"
+        val vcsInfo = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://bitbucket.org/yevster/spdxtraxample.git",
+            revision = "287aebca5e7ff4167af1fb648640dcdbdf4ec666",
+            path = "LICENSE.txt"
+        )
 
         "correctly get the user or organization name" {
             BITBUCKET.getUserOrOrganization(projectUrl) shouldBe "yevster"
@@ -47,23 +53,10 @@ class VcsHostTest : WordSpec({
         }
 
         "be able to extract VCS information from a project URL" {
-            BITBUCKET.toVcsInfo(projectUrl) shouldBe
-                    VcsInfo(
-                        type = VcsType.GIT,
-                        url = "https://bitbucket.org/yevster/spdxtraxample.git",
-                        revision = "287aebca5e7ff4167af1fb648640dcdbdf4ec666",
-                        path = "LICENSE.txt"
-                    )
+            BITBUCKET.toVcsInfo(projectUrl) shouldBe vcsInfo
         }
 
         "be able to create permalinks from VCS information" {
-            val vcsInfo = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://bitbucket.org/yevster/spdxtraxample.git",
-                revision = "287aebca5e7ff4167af1fb648640dcdbdf4ec666",
-                path = "LICENSE.txt"
-            )
-
             BITBUCKET.toPermalink(vcsInfo, 1) shouldBe "https://bitbucket.org/yevster/spdxtraxample/" +
                     "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt#lines-1"
             BITBUCKET.toPermalink(vcsInfo, 4, 8) shouldBe "https://bitbucket.org/yevster/spdxtraxample/" +
@@ -72,8 +65,14 @@ class VcsHostTest : WordSpec({
     }
 
     "The GitHub implementation" should {
-        val projectUrl = "https://github.com/oss-review-toolkit/ort/blob/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/" +
-                "README.md"
+        val projectUrl = "https://github.com/oss-review-toolkit/ort/" +
+                "blob/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
+        val vcsInfo = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/oss-review-toolkit/ort.git",
+            revision = "da7e3a814fc0e6301bf3ed394eba1a661e4d88d7",
+            path = "README.md"
+        )
 
         "correctly get the user or organization name" {
             GITHUB.getUserOrOrganization(projectUrl) shouldBe "oss-review-toolkit"
@@ -84,37 +83,24 @@ class VcsHostTest : WordSpec({
         }
 
         "be able to extract VCS information from a project URL" {
-            GITHUB.toVcsInfo(projectUrl) shouldBe
-                    VcsInfo(
-                        type = VcsType.GIT,
-                        url = "https://github.com/oss-review-toolkit/ort.git",
-                        revision = "da7e3a814fc0e6301bf3ed394eba1a661e4d88d7",
-                        path = "README.md"
-                    )
+            GITHUB.toVcsInfo(projectUrl) shouldBe vcsInfo
         }
 
         "be able to create permalinks from VCS information" {
-            val vcsInfo = VcsInfo(
+            val scpVcsInfo = VcsInfo(
                 type = VcsType.GIT,
                 url = "git@github.com:oss-review-toolkit/ort.git",
                 revision = "4a836c3a6a42d358362fa07b014b7d83572a13ed",
                 path = "docs/examples/gradle.ort.yml"
             )
 
-            GITHUB.toPermalink(vcsInfo, 3) shouldBe "https://github.com/oss-review-toolkit/ort/" +
+            GITHUB.toPermalink(scpVcsInfo, 3) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3"
-            GITHUB.toPermalink(vcsInfo, 3, 5) shouldBe "https://github.com/oss-review-toolkit/ort/" +
+            GITHUB.toPermalink(scpVcsInfo, 3, 5) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3-L5"
         }
 
         "be able to create permalinks to Markdown files" {
-            val vcsInfo = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/oss-review-toolkit/ort.git",
-                revision = "da7e3a814fc0e6301bf3ed394eba1a661e4d88d7",
-                path = "README.md"
-            )
-
             GITHUB.toPermalink(vcsInfo, 27) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27"
             GITHUB.toPermalink(vcsInfo, 27, 28) shouldBe "https://github.com/oss-review-toolkit/ort/" +
@@ -124,6 +110,12 @@ class VcsHostTest : WordSpec({
 
     "The GitLab implementation" should {
         val projectUrl = "https://gitlab.com/mbunkus/mkvtoolnix/-/blob/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
+        val vcsInfo = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://gitlab.com/mbunkus/mkvtoolnix.git",
+            revision = "ec80478f87f1941fe52f15c5f4fa7ee6a70d7006",
+            path = "NEWS.md"
+        )
 
         "correctly get the user or organization name" {
             GITLAB.getUserOrOrganization(projectUrl) shouldBe "mbunkus"
@@ -134,37 +126,24 @@ class VcsHostTest : WordSpec({
         }
 
         "be able to extract VCS information from a project URL" {
-            GITLAB.toVcsInfo(projectUrl) shouldBe
-                    VcsInfo(
-                        type = VcsType.GIT,
-                        url = "https://gitlab.com/mbunkus/mkvtoolnix.git",
-                        revision = "ec80478f87f1941fe52f15c5f4fa7ee6a70d7006",
-                        path = "NEWS.md"
-                    )
+            GITLAB.toVcsInfo(projectUrl) shouldBe vcsInfo
         }
 
         "be able to create permalinks from VCS information" {
-            val vcsInfo = VcsInfo(
+            val scpVcsInfo = VcsInfo(
                 type = VcsType.GIT,
-                url = "https://gitlab.com/mbunkus/mkvtoolnix.git",
+                url = "git@gitlab.com:mbunkus/mkvtoolnix.git",
                 revision = "12542c481ff1e0abcf8d561d6741e561ef5675ca",
                 path = "autogen.sh"
             )
 
-            GITLAB.toPermalink(vcsInfo, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
+            GITLAB.toPermalink(scpVcsInfo, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
                     "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7"
-            GITLAB.toPermalink(vcsInfo, 7, 9) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
+            GITLAB.toPermalink(scpVcsInfo, 7, 9) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
                     "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7-9"
         }
 
         "be able to create permalinks to Markdown files" {
-            val vcsInfo = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://gitlab.com/mbunkus/mkvtoolnix.git",
-                revision = "ec80478f87f1941fe52f15c5f4fa7ee6a70d7006",
-                path = "NEWS.md"
-            )
-
             GITLAB.toPermalink(vcsInfo, 5) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
                     "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5"
             GITLAB.toPermalink(vcsInfo, 5, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
@@ -173,61 +152,47 @@ class VcsHostTest : WordSpec({
     }
 
     "The SourceHut implementation" should {
-        val projectUrl = "https://git.sr.ht/~ben/web/tree/2c3d173d/pkgs.nix"
+        val gitProjectUrl = "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css"
+        val gitVcsInfo = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://git.sr.ht/~ben/web",
+            revision = "2c3d173d",
+            path = "assets/css/main.css"
+        )
+
+        val hgProjectUrl = "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt"
+        val hgVcsInfo = VcsInfo(
+            type = VcsType.MERCURIAL,
+            url = "https://hg.sr.ht/~duangle/paniq_legacy",
+            revision = "f04521a92844",
+            path = "masagin/README.txt"
+        )
 
         "correctly get the user or organization name" {
-            SOURCEHUT.getUserOrOrganization(projectUrl) shouldBe "ben"
+            SOURCEHUT.getUserOrOrganization(gitProjectUrl) shouldBe "ben"
         }
 
         "correctly get the project name" {
-            SOURCEHUT.getProject(projectUrl) shouldBe "web"
+            SOURCEHUT.getProject(gitProjectUrl) shouldBe "web"
         }
 
         "be able to extract VCS information from a Git project URL" {
-            SOURCEHUT.toVcsInfo(projectUrl) shouldBe
-                    VcsInfo(
-                        type = VcsType.GIT,
-                        url = "https://git.sr.ht/~ben/web",
-                        revision = "2c3d173d",
-                        path = "pkgs.nix"
-                    )
+            SOURCEHUT.toVcsInfo(gitProjectUrl) shouldBe gitVcsInfo
         }
 
         "be able to extract VCS information from a Mercurial project URL" {
-            SOURCEHUT.toVcsInfo(
-                "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/visual_cues.png"
-            ) shouldBe
-                    VcsInfo(
-                        type = VcsType.MERCURIAL,
-                        url = "https://hg.sr.ht/~duangle/paniq_legacy",
-                        revision = "f04521a92844",
-                        path = "masagin/visual_cues.png"
-                    )
+            SOURCEHUT.toVcsInfo(hgProjectUrl) shouldBe hgVcsInfo
         }
 
         "be able to create permalinks from Git VCS information" {
-            val vcsInfo = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://git.sr.ht/~ben/web",
-                revision = "2c3d173d",
-                path = "assets/css/main.css"
-            )
-
-            SOURCEHUT.toPermalink(vcsInfo, 26) shouldBe
+            SOURCEHUT.toPermalink(gitVcsInfo, 26) shouldBe
                     "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26"
-            SOURCEHUT.toPermalink(vcsInfo, 26, 29) shouldBe
+            SOURCEHUT.toPermalink(gitVcsInfo, 26, 29) shouldBe
                     "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26-29"
         }
 
         "be able to create permalinks from Mercurial VCS information" {
-            val vcsInfo = VcsInfo(
-                type = VcsType.MERCURIAL,
-                url = "https://hg.sr.ht/~duangle/paniq_legacy",
-                revision = "f04521a92844",
-                path = "masagin/README.txt"
-            )
-
-            SOURCEHUT.toPermalink(vcsInfo, 9) shouldBe
+            SOURCEHUT.toPermalink(hgVcsInfo, 9) shouldBe
                     "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt#L9"
             // SourceHut does not support an end line in permalinks to Mercurial repos.
         }
