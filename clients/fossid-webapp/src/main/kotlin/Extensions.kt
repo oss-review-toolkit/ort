@@ -21,8 +21,6 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import com.fasterxml.jackson.module.kotlin.convertValue
-
 private const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
 
@@ -46,20 +44,6 @@ fun <B : EntityResponseBody<T>, T> B?.checkResponse(operation: String, withDataC
 
     return this
 }
-
-/**
- * The list operations in FossID have inconsistent return types depending on the amount of entities returned.
- * This function streamlines these entities to a list.
- */
-inline fun <reified T : Any> EntityResponseBody<Any>.toList(): List<T> =
-    // The "list" operation returns different JSON depending on the amount of scans.
-    when (val data = data) {
-        is List<*> -> data.mapNotNull { it?.let { FossIdRestService.JSON_MAPPER.convertValue(it) } }
-        is Map<*, *> -> data.values.mapNotNull { it?.let { FossIdRestService.JSON_MAPPER.convertValue(it) } }
-        // The server sets "data" to "false" when there is no entry. Streamline this to an empty list.
-        is Boolean -> emptyList()
-        else -> error("Cannot process the returned values")
-    }
 
 /**
  * Get the project for the given [projectCode].
