@@ -147,7 +147,7 @@ class FossIdClientNewProjectTest : StringSpec({
 
     "A scan can be deleted" {
         service.deleteScan("", "", SCAN_CODE) shouldNotBeNull {
-            checkResponse("delete scan", true)
+            checkResponse("delete scan")
 
             data shouldBe 2976
             message shouldContain "has been deleted"
