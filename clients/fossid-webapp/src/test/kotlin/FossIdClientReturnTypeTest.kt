@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 
@@ -15,12 +16,6 @@ import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
-import org.ossreviewtoolkit.clients.fossid.model.Scan
-import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
-import org.ossreviewtoolkit.clients.fossid.toList
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /*
@@ -48,13 +43,10 @@ private const val SCAN_CODE_1 = "${PROJECT_CODE_1}_20201203_090342"
 private const val SCAN_CODE_2 = "${PROJECT_CODE_2}_20201203_090342"
 
 /**
- * As explained in the [toList] function, the FossID server is not consistent.
+ * The FossID server is not consistent.
  * It usually returns a List or a Map, but if there is no entry, it returns data:false.
- * The [toList] function abstracts this behaviour, but we nevertheless need a Kotlin representation that could be all
- * these types at once, to be able to deserialize them from JSON.
- * Therefore we use [org.ossreviewtoolkit.clients.fossid.EntityResponseBody] typed by [Any] to represent these
- * "multi-types" response objects.
- * This Test class tests this behaviour and the abstraction provided by [toList].
+ * This class tests the abstraction provided by the custom Jackson deserializer wired in
+ * [FossIdRestService.JSON_MAPPER].
  */
 class FossIdClientReturnTypeTest : StringSpec({
     val wiremock = WireMockServer(
@@ -81,84 +73,108 @@ class FossIdClientReturnTypeTest : StringSpec({
     "Scans for project can be listed when there is none" {
         service.listScansForProject("", "", PROJECT_CODE_1) shouldNotBeNull {
             checkResponse("list scans")
-            toList<Scan>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmptyMap()
+            }
         }
     }
 
     "Scans for project can be listed when there is some" {
         service.listScansForProject("", "", PROJECT_CODE_2) shouldNotBeNull {
             checkResponse("list scans")
-            toList<Scan>() shouldNot beEmpty()
+            data shouldNotBeNull {
+                this shouldNot beEmptyMap()
+            }
         }
     }
 
     "Scan results can be listed when there is none" {
         service.listScanResults("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list scan results")
-            toList<FossIdScanResult>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmptyMap()
+            }
         }
     }
 
     "Scan results can be listed when there is some" {
         service.listScanResults("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list scan results")
-            toList<FossIdScanResult>() shouldNot beEmpty()
+            data shouldNotBeNull {
+                this shouldNot beEmptyMap()
+            }
         }
     }
 
     "Identified files can be listed when there is none" {
         service.listIdentifiedFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list identified files")
-            toList<IdentifiedFile>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmptyMap()
+            }
         }
     }
 
     "Identified files can be listed when there is some" {
         service.listIdentifiedFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list identified files")
-            toList<IdentifiedFile>() shouldNot beEmpty()
+            data shouldNotBeNull {
+                this shouldNot beEmptyMap()
+            }
         }
     }
 
     "Marked as identified  files can be listed when there is none" {
         service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list marked as identified files")
-            toList<MarkedAsIdentifiedFile>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmptyMap()
+            }
         }
     }
 
     "Marked as identified  files can be listed when there is some" {
         service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list marked as identified files")
-            toList<MarkedAsIdentifiedFile>() shouldNot beEmpty()
+            data shouldNotBeNull {
+                this shouldNot beEmptyMap()
+            }
         }
     }
 
     "Ignored files can be listed when there is none" {
         service.listIgnoredFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list ignored files")
-            toList<IgnoredFile>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmpty()
+            }
         }
     }
 
     "Ignored files can be listed when there is some" {
         service.listIgnoredFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list ignored files")
-            toList<IgnoredFile>() shouldNot beEmpty()
+            data shouldNotBeNull {
+                this shouldNot beEmpty()
+            }
         }
     }
 
     "Pending files can be listed when there is none" {
         service.listPendingFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list pending files")
-            toList<String>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmptyMap()
+            }
         }
     }
 
     "Pending files can be listed when there is some" {
         service.listPendingFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list pending files")
-            toList<String>() shouldNot beEmpty()
+            data shouldNotBeNull {
+                this shouldNot beEmptyMap()
+            }
         }
     }
 })

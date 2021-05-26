@@ -42,13 +42,9 @@ import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.model.Project
-import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
-import org.ossreviewtoolkit.clients.fossid.toList
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -334,23 +330,22 @@ class FossId(
      * Get the different kind of results from the scan with [scanCode]
      */
     private suspend fun getRawResults(scanCode: String): RawResults {
-        val responseIdentifiedFiles = service.listIdentifiedFiles(user, apiKey, scanCode)
-            .checkResponse("list identified files", true)
-        val identifiedFiles = responseIdentifiedFiles.toList<IdentifiedFile>()
+        val identifiedFiles = service.listIdentifiedFiles(user, apiKey, scanCode)
+            .checkResponse("list identified files")
+            .data!!.values.toList()
         log.info { "${identifiedFiles.size} identified files have been returned for scan code $scanCode." }
 
-        val responseMarkedAsIdentified = service.listMarkedAsIdentifiedFiles(user, apiKey, scanCode)
-            .checkResponse("list marked as identified files", true)
-        val markedAsIdentifiedFiles = responseMarkedAsIdentified.toList<MarkedAsIdentifiedFile>()
+        val markedAsIdentifiedFiles = service.listMarkedAsIdentifiedFiles(user, apiKey, scanCode)
+            .checkResponse("list marked as identified files")
+            .data!!.values.toList()
         log.info {
             "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan code $scanCode."
         }
 
         // The "match_type=ignore" info is already in the ScanResult, but here we also get the ignore reason.
-        val responseListIgnoredFiles = service.listIgnoredFiles(user, apiKey, scanCode)
-            .checkResponse("list ignored files", true)
-
-        val listIgnoredFiles = responseListIgnoredFiles.toList<IgnoredFile>()
+        val listIgnoredFiles = service.listIgnoredFiles(user, apiKey, scanCode)
+            .checkResponse("list ignored files")
+            .data!!
         return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles)
     }
 

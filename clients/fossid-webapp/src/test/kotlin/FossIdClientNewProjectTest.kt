@@ -22,7 +22,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -44,15 +44,9 @@ import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
-import org.ossreviewtoolkit.clients.fossid.model.Scan
-import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
-import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
-import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
-import org.ossreviewtoolkit.clients.fossid.toList
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private const val PROJECT_CODE = "semver4j"
@@ -108,7 +102,9 @@ class FossIdClientNewProjectTest : StringSpec({
     "Scans for project can be listed when there is no scan" {
         service.listScansForProject("", "", PROJECT_CODE) shouldNotBeNull {
             checkResponse("list scans")
-            toList<Scan>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmpty()
+            }
         }
     }
 
@@ -167,9 +163,9 @@ class FossIdClientNewProjectTest : StringSpec({
     "Scan results can be listed" {
         service.listScanResults("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list scan results")
-            with(toList<FossIdScanResult>()) {
+            data shouldNotBeNull {
                 size shouldBe 58
-                last().localPath shouldBe "pom.xml"
+                values.last().localPath shouldBe "pom.xml"
             }
         }
     }
@@ -177,17 +173,19 @@ class FossIdClientNewProjectTest : StringSpec({
     "Identified files can be listed" {
         service.listIdentifiedFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list identified files")
-            with(toList<IdentifiedFile>()) {
-                size shouldBe 40
-                last().should {
-                    it.file.shouldNotBeNull {
-                        path shouldBe "LICENSE.md"
-                        licenseIdentifier shouldBe "MIT"
-                        licenseIsFoss shouldBe true
-                        licenseIsCopyleft shouldBe true
-                    }
+            data shouldNotBeNull {
+                with(values) {
+                    size shouldBe 40
+                    last().should {
+                        it.file.shouldNotBeNull {
+                            path shouldBe "LICENSE.md"
+                            licenseIdentifier shouldBe "MIT"
+                            licenseIsFoss shouldBe true
+                            licenseIsCopyleft shouldBe true
+                        }
 
-                    it.identificationCopyright shouldBe "• David Gundersen (2016)\n"
+                        it.identificationCopyright shouldBe "• David Gundersen (2016)\n"
+                    }
                 }
             }
         }
@@ -196,19 +194,21 @@ class FossIdClientNewProjectTest : StringSpec({
     "Marked files can be listed when there are none" {
         service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list marked as identified files")
-            toList<MarkedAsIdentifiedFile>() should beEmpty()
+            data shouldNotBeNull {
+                this should beEmpty()
+            }
         }
     }
 
     "Ignored files can be listed" {
         service.listIgnoredFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list ignored files")
-
-            val files = toList<IgnoredFile>()
-            files.size shouldBe 32
-            files.first() should {
-                it.path shouldBe ".git/hooks/fsmonitor-watchman.sample"
-                it.reason shouldBe "Directory rule (.git)"
+            data shouldNotBeNull {
+                size shouldBe 32
+                first() should { ignoredFile ->
+                    ignoredFile.path shouldBe ".git/hooks/fsmonitor-watchman.sample"
+                    ignoredFile.reason shouldBe "Directory rule (.git)"
+                }
             }
         }
     }
@@ -216,10 +216,12 @@ class FossIdClientNewProjectTest : StringSpec({
     "Pending files can be listed" {
         service.listPendingFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list pending files")
-
-            val files = toList<String>()
-            files.size shouldBe 2
-            files.first() shouldBe "src/extra_file.txt"
+            data shouldNotBeNull {
+                values.should {
+                    it.size shouldBe 2
+                    it.first() shouldBe "src/extra_file.txt"
+                }
+            }
         }
     }
 })
