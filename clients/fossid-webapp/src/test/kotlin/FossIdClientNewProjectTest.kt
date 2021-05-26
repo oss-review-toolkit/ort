@@ -156,7 +156,7 @@ class FossIdClientNewProjectTest : StringSpec({
 
     "Scan status can be queried" {
         service.checkScanStatus("", "", SCAN_CODE) shouldNotBeNull {
-            checkResponse("get scan status", false)
+            checkResponse("get scan status")
 
             data shouldNotBeNull {
                 state shouldBe ScanState.FINISHED
