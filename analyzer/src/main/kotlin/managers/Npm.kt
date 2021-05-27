@@ -367,30 +367,29 @@ open class Npm(
 
             val project = parseProject(definitionFile)
 
-            // Optional dependencies are just like regular dependencies except that NPM ignores failures when
-            // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
-            // not a separate scope in our semantics.
-            buildDependencyGraphForScopes(
-                project,
-                workingDir,
-                setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
-                DEPENDENCIES_SCOPE
-            )
+            val scopeNames = listOfNotNull(
+                // Optional dependencies are just like regular dependencies except that NPM ignores failures when
+                // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
+                // not a separate scope in our semantics.
+                buildDependencyGraphForScopes(
+                    project,
+                    workingDir,
+                    setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
+                    DEPENDENCIES_SCOPE
+                ),
 
-            buildDependencyGraphForScopes(
-                project,
-                workingDir,
-                setOf(DEV_DEPENDENCIES_SCOPE),
-                DEV_DEPENDENCIES_SCOPE
+                buildDependencyGraphForScopes(
+                    project,
+                    workingDir,
+                    setOf(DEV_DEPENDENCIES_SCOPE),
+                    DEV_DEPENDENCIES_SCOPE
+                )
             )
 
             // TODO: add support for peerDependencies and bundledDependencies.
 
-            val scopeNames = sortedSetOf(DEPENDENCIES_SCOPE, DEV_DEPENDENCIES_SCOPE)
-            scopeNames.forEach { graphBuilder.addScope(DependencyGraph.qualifyScope(project, it)) }
-
             return listOf(
-                ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), sortedSetOf())
+                ProjectAnalyzerResult(project.copy(scopeNames = scopeNames.toSortedSet()), sortedSetOf())
             )
         }
     }
@@ -449,11 +448,13 @@ open class Npm(
         workingDir: File,
         scopes: Set<String>,
         targetScope: String
-    ) {
+    ): String? {
         val qualifiedScopeName = DependencyGraph.qualifyScope(project, targetScope)
         val moduleDependencies = getModuleDependencies(workingDir, scopes)
 
         moduleDependencies.forEach { graphBuilder.addDependency(qualifiedScopeName, it) }
+
+        return targetScope.takeUnless { moduleDependencies.isEmpty() }
     }
 
     private fun getPackageReferenceForMissingModule(moduleName: String, rootModuleDir: File): PackageReference {
