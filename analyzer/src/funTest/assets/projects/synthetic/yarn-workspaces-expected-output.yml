@@ -26,8 +26,6 @@ project:
     - id: "NPM:@here:harp-fetch:0.3.6"
       dependencies:
       - id: "NPM::node-fetch:2.6.0"
-  - name: "devDependencies"
-    dependencies: []
 packages:
 - id: "NPM::node-fetch:2.6.0"
   purl: "pkg:npm/node-fetch@2.6.0"

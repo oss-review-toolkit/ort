@@ -2302,8 +2302,6 @@ project:
       - id: "NPM::v8flags:2.1.1"
         dependencies:
         - id: "NPM::user-home:1.1.1"
-  - name: "devDependencies"
-    dependencies: []
 packages:
 - id: "NPM::abbrev:1.1.1"
   purl: "pkg:npm/abbrev@1.1.1"

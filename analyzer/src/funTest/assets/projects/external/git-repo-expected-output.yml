@@ -244,8 +244,6 @@ analyzer:
         path: ""
       homepage_url: "https://github.com/juliangruber/isarray"
       scopes:
-      - name: "dependencies"
-        dependencies: []
       - name: "devDependencies"
         dependencies:
         - id: "NPM::tape:2.13.4"
