@@ -128,14 +128,6 @@ class DependencyGraphBuilder<D>(
     private val directDependencies = mutableSetOf<DependencyReference>()
 
     /**
-     * Add the scope with the given [scopeName] to this builder. In most cases, it is not necessary to add scopes
-     * explicitly, as they are recorded automatically by _addDependency()_. However, if there are scopes without
-     * dependencies, this function can be used to include them into the builder result.
-     */
-    fun addScope(scopeName: String): DependencyGraphBuilder<D> =
-        apply { scopeMapping.putIfAbsent(scopeName, emptyList()) }
-
-    /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
      * called all the direct dependencies of all scopes. That way the builder gets sufficient information to construct
      * the [DependencyGraph].
