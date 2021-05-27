@@ -22,11 +22,9 @@ package org.ossreviewtoolkit.analyzer.managers
 import Dependency
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
@@ -56,11 +54,9 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A test class to test the integration of the [Gradle] package manager with [DependencyGraphBuilder]. This class
@@ -271,36 +267,6 @@ class GradleDependencyHandlerTest : WordSpec({
             refConfigExclude.checkDependencies(depLang)
             refConfigExclude.dependencies.findDependency(depLang) shouldBeSameInstanceAs refConfigFull
                 .dependencies.findDependency(depLang)
-        }
-
-        "support scopes without dependencies" {
-            val scope = "EmptyScope"
-
-            val graph = createGraphBuilder()
-                .addScope(scope)
-                .build()
-
-            with(graph) {
-                scopeRoots should beEmpty()
-                scopes.keys shouldContainExactly setOf(scope)
-                scopes[scope] shouldNotBeNull {
-                    this should beEmpty()
-                }
-            }
-        }
-
-        "not override a scope's dependencies when adding it again" {
-            val scope = "compile"
-            val dep = createDependency("org.apache.commons", "commons-lang3", "3.11")
-
-            val graph = createGraphBuilder()
-                .addDependency(scope, dep)
-                .addScope(scope)
-                .build()
-
-            graph.scopes[scope] shouldNotBeNull {
-                this should containExactly(RootDependencyIndex(0))
-            }
         }
 
         "support adding packages directly" {
