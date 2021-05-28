@@ -113,7 +113,7 @@ class ReportTableModelMapper(
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
         val analyzerResult = ortResult.analyzer?.result
-        val analyzerIssuesForPackages = ortResult.getPackages().associateBy({ it.pkg.id }, { it.pkg.collectIssues() })
+        val analyzerIssuesForPackages = ortResult.getPackages().associateBy({ it.pkg.id }, { it.collectIssues() })
         val scanRecord = ortResult.scanner?.results
         val excludes = ortResult.getExcludes()
 
