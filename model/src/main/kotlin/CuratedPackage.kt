@@ -47,6 +47,19 @@ data class CuratedPackage(
     override fun compareTo(other: CuratedPackage) = pkg.id.compareTo(other.pkg.id)
 
     /**
+     * Check if this package contains any erroneous data.
+     */
+    fun collectIssues(): List<OrtIssue> =
+        pkg.declaredLicensesProcessed.unmapped.map { unmappedLicense ->
+            OrtIssue(
+                severity = Severity.WARNING,
+                source = pkg.id.toCoordinates(),
+                message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
+                        "parsed as an SPDX expression."
+            )
+        }
+
+    /**
      * Return a [Package] representing the same package as this one but which does not have any curations applied.
      */
     fun toUncuratedPackage() =
