@@ -241,7 +241,7 @@ enum class VcsHost(
             }
 
         override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
-            "https://${vcsInfo.type.toString().toLowerCase()}.$hostname/~$userOrOrg/$project/archive/" +
+            "https://${vcsInfo.type.toString().lowercase()}.$hostname/~$userOrOrg/$project/archive/" +
                     "${vcsInfo.revision}.tar.gz"
     };
 
