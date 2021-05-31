@@ -66,10 +66,6 @@ Files: gradle/*
 Copyright: 2007-2020 The original author or authors <info@gradle.com>
 License: Apache-2.0
 
-Files: reporter-web-app/src/data/choosealicense/*
-Copyright: 2013-2020 GitHub, Inc. and contributors <support@github.com>
-License: CC-BY-3.0
-
 Files: spdx-utils/src/main/resources/exceptions/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC0-1.0
@@ -85,4 +81,3 @@ License: CC0-1.0
 Files: spdx-utils/src/test/resources/spdx-spec-examples/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC-BY-3.0
-

@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import { UNIQUE_COLORS } from '../data/colors';
-
 class WebAppLicense {
     #_id;
 
@@ -33,9 +31,6 @@ class WebAppLicense {
             if (obj.id) {
                 this.#id = obj.id;
             }
-
-            const { data: colors } = UNIQUE_COLORS;
-            this.color = colors[this.#_id % colors.length];
         }
     }
 
