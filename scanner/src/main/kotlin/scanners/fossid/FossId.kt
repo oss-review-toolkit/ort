@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
@@ -119,8 +120,7 @@ class FossId(
 
     private val service: FossIdRestService
 
-    // TODO: Parse the version from the FossID login page.
-    override val version = ""
+    override val version: String
 
     override val configuration = ""
 
@@ -145,12 +145,40 @@ class FossId(
             .build()
 
         service = retrofit.create(FossIdRestService::class.java)
+
+        version = runBlocking {
+            parseVersion().orEmpty()
+        }
     }
 
     override fun filterOptionsForResult(options: ScannerOptions) =
         options.mapValues { (k, v) ->
             v.takeUnless { k in secretKeys }.orEmpty()
         }
+
+    /**
+     * Extract the version version from the login page.
+     * Example: &nbsp;&nbsp;&nbsp;cli.  3.1.16 (build 5634934d, RELEASE)
+     */
+    private suspend fun parseVersion(): String? {
+        // TODO: replace with an API call when FossID provides a function (starting at version 21.2).
+        val regex = Regex("^.*&nbsp;(cli. *[0-9. ]+\\(build[\\w, ]+\\)).*$")
+
+        val response = service.getLoginPage()
+
+        response.charStream().buffered().useLines { lines ->
+            lines.forEach { line ->
+                val matcher = regex.matchEntire(line)
+                if (matcher != null && matcher.groupValues.size == 2) {
+                    val version = matcher.groupValues[1]
+                    FossId.log.info { "Version from FossId Server is $version." }
+                    return version
+                }
+            }
+        }
+        log.warn { "Version from FossId Server cannot be found!" }
+        return null
+    }
 
     private suspend fun getProject(projectCode: String): Project? =
         service.getProject(user, apiKey, projectCode).run {
