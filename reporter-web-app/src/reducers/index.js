@@ -79,7 +79,7 @@ const initState = {
     }
 };
 
-export default (state = initState, action) => {
+const states = (state = initState, action) => {
     switch (action.type) {
     case 'APP::LOADING_DONE': {
         return {
@@ -446,3 +446,5 @@ export default (state = initState, action) => {
         return state;
     }
 };
+
+export default states;
