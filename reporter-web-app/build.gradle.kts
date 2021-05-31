@@ -74,10 +74,8 @@ tasks {
 
         dependsOn("yarnInstall")
 
-        inputs.dir("config")
         inputs.dir("node_modules")
         inputs.dir("public")
-        inputs.dir("scripts")
         inputs.dir("src")
 
         outputs.dir("build")
