@@ -201,9 +201,11 @@ class WebAppPackage {
             }
 
             if (obj.findings && webAppOrtResult) {
-                for (let i = 0, len = obj.findings.length; i < len; i++) {
-                    this.#findings.push(new WebAppFinding(obj.findings[i], webAppOrtResult));
-                }
+                setTimeout(() => {
+                    for (let i = 0, len = obj.findings.length; i < len; i++) {
+                        this.#findings.push(new WebAppFinding(obj.findings[i], webAppOrtResult));
+                    }
+                }, 0);
             }
 
             if (obj.is_project || obj.isProject) {

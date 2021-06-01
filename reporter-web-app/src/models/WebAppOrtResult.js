@@ -173,9 +173,11 @@ class WebAppOrtResult {
             if (obj.scan_results || obj.scanResults) {
                 const scanResults = obj.scan_results || obj.scanResults;
 
-                for (let i = 0, len = scanResults.length; i < len; i++) {
-                    this.#scanResults.push(new WebAppScanResult(scanResults[i]));
-                }
+                setTimeout(() => {
+                    for (let i = 0, len = scanResults.length; i < len; i++) {
+                        this.#scanResults.push(new WebAppScanResult(scanResults[i]));
+                    }
+                }, 0);
             }
 
             if (obj.repository) {
@@ -308,13 +310,15 @@ class WebAppOrtResult {
                 };
 
                 for (let i = 0, len = dependencyTrees.length; i < len; i++) {
-                    this.#dependencyTrees.push(
-                        new WebAppTreeNode(
-                            dependencyTrees[i],
-                            this,
-                            callback
-                        )
-                    );
+                    setTimeout(() => {
+                        this.#dependencyTrees.push(
+                            new WebAppTreeNode(
+                                dependencyTrees[i],
+                                this,
+                                callback
+                            )
+                        );
+                    }, 0);
                 }
 
                 this.#treeNodesByPackageIndexMap = treeNodesByPackageIndexMap;
