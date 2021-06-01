@@ -155,7 +155,9 @@ const AboutModal = (props) => {
                         rel="noopener noreferrer"
                         target="_blank"
                     >
-                        <div className="ort-loading-logo ort-logo" />
+                        <div
+                            className="ort-about-logo ort-logo"
+                        />
                     </a>
                     <p>
                         For documentation on how to create this report please see

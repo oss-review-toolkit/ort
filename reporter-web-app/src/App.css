@@ -112,6 +112,12 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     color: #FAAD14;
 }
 
+.ort-about-logo {
+    width: 420px;
+    height: 90px;
+    margin-bottom: 10px;
+}
+
 .ort-loading-logo {
     width: 285px;
     height: 60px;
