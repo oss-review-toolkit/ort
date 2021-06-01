@@ -104,14 +104,16 @@ class WebAppTreeNode {
             if (obj.children) {
                 const { children } = obj;
                 for (let i = 0, len = children.length; i < len; i++) {
-                    this.#children.push(
-                        new WebAppTreeNode(
-                            children[i],
-                            webAppOrtResult,
-                            callback,
-                            that
-                        )
-                    );
+                    setTimeout(() => {
+                        this.#children.push(
+                            new WebAppTreeNode(
+                                children[i],
+                                webAppOrtResult,
+                                callback,
+                                that
+                            )
+                        );
+                    }, 0);
                 }
             }
 
