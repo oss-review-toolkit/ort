@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.cli.commands
+package org.ossreviewtoolkit.cli.utils
 
 const val OPTION_GROUP_CONFIGURATION = "Configuration Options"
 const val OPTION_GROUP_INPUT = "Input Options"
