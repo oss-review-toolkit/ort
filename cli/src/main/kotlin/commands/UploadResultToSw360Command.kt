@@ -24,13 +24,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.eclipse.sw360.clients.adapter.AttachmentUploadRequest
 import org.eclipse.sw360.clients.adapter.SW360ProjectClientAdapter
 import org.eclipse.sw360.clients.adapter.SW360ReleaseClientAdapter
 import org.eclipse.sw360.clients.rest.resource.SW360Visibility
+import org.eclipse.sw360.clients.rest.resource.attachments.SW360AttachmentType
 import org.eclipse.sw360.clients.rest.resource.projects.SW360Project
 import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
 import org.eclipse.sw360.clients.utils.SW360ClientException
@@ -38,6 +41,7 @@ import org.eclipse.sw360.clients.utils.SW360ClientException
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
+import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -46,9 +50,12 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
+import org.ossreviewtoolkit.utils.archive
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.createOrtTempDir
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 class UploadResultToSw360Command : CliktCommand(
     name = "upload-result-to-sw360",
@@ -64,6 +71,11 @@ class UploadResultToSw360Command : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
         .inputGroup()
+
+    private val attachSources by option(
+        "--attach-sources", "-a",
+        help = "Download sources of packages and upload them as attachments to SW360 releases."
+    ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -81,13 +93,50 @@ class UploadResultToSw360Command : CliktCommand(
         val sw360Connection = Sw360Storage.createConnection(sw360Config, sw360JsonMapper)
         val sw360ReleaseClient = sw360Connection.releaseAdapter
         val sw360ProjectClient = sw360Connection.projectAdapter
+        val downloader = Downloader(globalOptionsForSubcommands.config.downloader)
 
         getProjectWithPackages(ortResult).forEach { (project, pkgList) ->
             val linkedReleases = pkgList.mapNotNull { pkg ->
                 val name = createReleaseName(pkg.id)
-                sw360ReleaseClient.getSparseReleaseByNameAndVersion(name, pkg.id.version)
+                val release = sw360ReleaseClient.getSparseReleaseByNameAndVersion(name, pkg.id.version)
                     .flatMap { sw360ReleaseClient.enrichSparseRelease(it) }
                     .orElseGet { createSw360Release(pkg, sw360ReleaseClient) }
+
+                if (attachSources) {
+                    val tempDirectory = createOrtTempDir(pkg.id.toPath())
+                    try {
+                        // First, download the sources of the package into a sources directory, whose parent directory
+                        // is temporary.
+                        val sourcesDirectory = tempDirectory.resolve("sources")
+                        downloader.download(pkg, sourcesDirectory)
+
+                        // After downloading the source files successfully in a sources directory, create a
+                        // ZIP file of the sources directory and save it in the root directory of it.
+                        // Finally the created ZIP file of the sources can be uploaded to SW360 as an attachment
+                        // of the release.
+                        val zipFile = tempDirectory.resolve("${pkg.id.toPath("-")}.zip")
+                        val archiveResult = archive(sourcesDirectory, zipFile)
+
+                        val uploadResult = sw360ReleaseClient.uploadAttachments(
+                            AttachmentUploadRequest.builder(release)
+                                .addAttachment(archiveResult.getOrThrow().toPath(), SW360AttachmentType.SOURCE)
+                                .build()
+                        )
+
+                        if (uploadResult.isSuccess) {
+                            log.info {
+                                "Successfully uploaded source attachment '${zipFile.name}' to release " +
+                                        "${release.id}:${release.name}"
+                            }
+                        } else {
+                            log.error { "Could not upload source attachment: " + uploadResult.failedUploads() }
+                        }
+                    } finally {
+                        tempDirectory.safeDeleteRecursively(force = true)
+                    }
+                }
+
+                release
             }
 
             val sw360Project = sw360ProjectClient.getProjectByNameAndVersion(project.id.name, project.id.version)
