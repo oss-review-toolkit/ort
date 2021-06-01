@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
@@ -28,7 +28,7 @@ import com.typesafe.config.ConfigRenderOptions
 
 import io.github.config4k.toConfig
 
-import org.ossreviewtoolkit.GlobalOptions
+import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 
 class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT configurations") {

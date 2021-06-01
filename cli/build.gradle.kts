@@ -43,7 +43,7 @@ plugins {
 
 application {
     applicationName = "ort"
-    mainClassName = "org.ossreviewtoolkit.OrtMainKt"
+    mainClassName = "org.ossreviewtoolkit.cli.OrtMainKt"
 }
 
 tasks.withType<ShadowJar> {

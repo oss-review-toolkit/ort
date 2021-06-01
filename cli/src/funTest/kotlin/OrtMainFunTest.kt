@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit
+package org.ossreviewtoolkit.cli
 
 import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
 import com.github.ajalt.clikt.core.ProgramResult
@@ -32,7 +32,7 @@ import io.kotest.matchers.shouldNot
 
 import java.io.File
 
-import org.ossreviewtoolkit.commands.AdvisorCommand
+import org.ossreviewtoolkit.cli.commands.AdvisorCommand
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
