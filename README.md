@@ -679,10 +679,9 @@ the following steps to import the project.
 
 To set up a basic run configuration for debugging, navigate to `OrtMain.kt` in the `cli` module and look for the
 `fun main(args: Array<String>)` function. In the gutter next to it, a green "Play" icon should be displayed. Click on it
-and select `Run 'org.ossreviewtoolkit.Main'` to run the entry point, which implicitly creates a run configuration.
-Double-check that running ORT without any arguments will simply show the command line help in IDEA's *Run* tool window.
-Finally, edit the created run configuration to your needs, e.g. by adding an argument and options to run a specific ORT
-sub-command.
+and select `Run 'OrtMainKt'` to run the entry point, which implicitly creates a run configuration. Double-check that
+running ORT without any arguments will simply show the command line help in IDEA's *Run* tool window. Finally, edit the
+created run configuration to your needs, e.g. by adding an argument and options to run a specific ORT sub-command.
 
 ## Testing
 
