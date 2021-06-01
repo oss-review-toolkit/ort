@@ -20,12 +20,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Button,
     Collapse,
     Dropdown,
-    Input,
     Menu,
-    Space,
     Table,
     Tooltip
 } from 'antd';
@@ -35,8 +32,7 @@ import {
     EyeInvisibleOutlined,
     FileAddOutlined,
     FileExcelOutlined,
-    LaptopOutlined,
-    SearchOutlined
+    LaptopOutlined
 } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import {
@@ -57,6 +53,7 @@ import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
 import PathExcludesTable from './PathExcludesTable';
 import ScopeExcludesTable from './ScopeExcludesTable';
+import { getColumnSearchProps } from './Shared';
 
 const { Panel } = Collapse;
 
@@ -74,53 +71,6 @@ class TableView extends React.Component {
             type: 'TABLE::COLUMNS_PACKAGES_TABLE_TOGGLE'
         });
     }
-
-    getColumnSearchProps = (dataIndex, filteredInfo) => ({
-        filterDropdown: ({
-            setSelectedKeys, selectedKeys, confirm, clearFilters
-        }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={(node) => {
-                        this.searchInput = node;
-                    }}
-                    placeholder="Search..."
-                    value={selectedKeys[0]}
-                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => confirm()}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        onClick={() => clearFilters()}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Reset
-                    </Button>
-                    <Button
-                        icon={<SearchOutlined />}
-                        onClick={() => confirm()}
-                        size="small"
-                        style={{ width: 90 }}
-                        type="primary"
-                    >
-                        Search
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        filteredValue: filteredInfo ? filteredInfo[dataIndex] : '',
-        onFilter: (value, record) => (record[dataIndex]
-            ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-            : false),
-        onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-                setTimeout(() => this.searchInput.select());
-            }
-        }
-    });
 
     render() {
         const {
@@ -208,7 +158,7 @@ class TableView extends React.Component {
             sorter: (a, b) => a.id.localeCompare(b.id),
             sortOrder: sortedInfo.field === 'id' && sortedInfo.order,
             title: 'Package',
-            ...this.getColumnSearchProps('id', filteredInfo)
+            ...getColumnSearchProps('id', filteredInfo, this)
         });
 
         if (webAppOrtResult.hasScopes()) {
@@ -366,7 +316,7 @@ class TableView extends React.Component {
                 sortOrder: sortedInfo.field === 'homepageUrl' && sortedInfo.order,
                 textWrap: 'word-break',
                 title: 'Homepage',
-                ...this.getColumnSearchProps('Homepage', filteredInfo)
+                ...getColumnSearchProps('Homepage', filteredInfo, this)
             });
         }
 
@@ -385,7 +335,7 @@ class TableView extends React.Component {
                 sortOrder: sortedInfo.field === 'vcsProcessedUrl' && sortedInfo.order,
                 textWrap: 'word-break',
                 title: 'Repository',
-                ...this.getColumnSearchProps('vcsProcessedUrl', filteredInfo)
+                ...getColumnSearchProps('vcsProcessedUrl', filteredInfo, this)
             });
         }
 
