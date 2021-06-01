@@ -326,7 +326,8 @@ open class Npm(
         }
     }
 
-    private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(npmRegistry))
+    private val graphBuilder: DependencyGraphBuilder<NpmModuleInfo> =
+        DependencyGraphBuilder(NpmDependencyHandler(npmRegistry))
 
     /**
      * Array of parameters passed to the install command when installing dependencies.
