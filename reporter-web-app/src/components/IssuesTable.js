@@ -35,312 +35,320 @@ import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
 import PackageFindingsTable from './PackageFindingsTable';
 import PathExcludesTable from './PathExcludesTable';
-import ScopeExcludesTable from './ScopeExcludesTable';
 import ResolutionTable from './ResolutionTable';
+import ScopeExcludesTable from './ScopeExcludesTable';
+import { getColumnSearchProps } from './Shared';
 
 const { Panel } = Collapse;
 
 // Generates the HTML to display violations as a Table
-const IssuesTable = (props) => {
-    const {
-        filter,
-        issues,
-        onChange,
-        showExcludesColumn
-    } = props;
-    const {
-        filteredInfo = {}
-    } = filter;
+class IssuesTable extends React.Component {
+    render () {
+        const {
+            filter,
+            issues,
+            onChange,
+            showExcludesColumn
+        } = this.props;
+        const {
+            filteredInfo = {},
+            sortedInfo
+        } = filter;
 
-    // If return null to prevent React render error
-    if (!issues) {
-        return null;
-    }
-
-    const columns = [
-        {
-            align: 'center',
-            dataIndex: 'severityIndex',
-            defaultSortOrder: 'ascend',
-            filters: (() => [
-                {
-                    text: (
-                        <span>
-                            <ExclamationCircleOutlined className="ort-error" />
-                            {' '}
-                            Errors
-                        </span>
-                    ),
-                    value: 0
-                },
-                {
-                    text: (
-                        <span>
-                            <WarningOutlined className="ort-warning" />
-                            {' '}
-                            Warnings
-                        </span>
-                    ),
-                    value: 1
-                },
-                {
-                    text: (
-                        <span>
-                            <InfoCircleOutlined className="ort-hint" />
-                            {' '}
-                            Hints
-                        </span>
-                    ),
-                    value: 2
-                },
-                {
-                    text: (
-                        <span>
-                            <IssuesCloseOutlined className="ort-ok" />
-                            {' '}
-                            Resolved
-                        </span>
-                    ),
-                    value: 3
-                }
-            ])(),
-            filteredValue: filteredInfo.severityIndex || null,
-            onFilter: (value, webAppOrtIssue) => webAppOrtIssue.severityIndex === Number(value),
-            sorter: (a, b) => a.severityIndex - b.severityIndex,
-            render: (text, webAppOrtIssue) => (
-                webAppOrtIssue.isResolved
-                    ? (
-                        <Tooltip
-                            placement="right"
-                            title={Array.from(webAppOrtIssue.resolutionReasons).join(', ')}
-                        >
-                            <IssuesCloseOutlined
-                                className="ort-ok"
-                            />
-                        </Tooltip>
-                    ) : (
-                        <span>
-                            {
-                                webAppOrtIssue.severity === 'ERROR'
-                                && (
-                                    <ExclamationCircleOutlined
-                                        className="ort-error"
-                                    />
-                                )
-                            }
-                            {
-                                webAppOrtIssue.severity === 'WARNING'
-                                && (
-                                    <WarningOutlined
-                                        className="ort-warning"
-                                    />
-                                )
-                            }
-                            {
-                                webAppOrtIssue.severity === 'HINT'
-                                && (
-                                    <InfoCircleOutlined
-                                        className="ort-hint"
-                                    />
-                                )
-                            }
-                        </span>
-                    )
-            ),
-            width: '5em'
+        // If return null to prevent React render error
+        if (!issues) {
+            return null;
         }
-    ];
 
-    if (showExcludesColumn) {
-        columns.push({
-            align: 'right',
-            filters: (() => [
-                {
-                    text: (
-                        <span>
-                            <FileExcelOutlined className="ort-excluded" />
-                            {' '}
-                            Excluded
-                        </span>
-                    ),
-                    value: 'excluded'
-                },
-                {
-                    text: (
-                        <span>
-                            <FileAddOutlined />
-                            {' '}
-                            Included
-                        </span>
-                    ),
-                    value: 'included'
-                }
-            ])(),
-            filteredValue: filteredInfo.excludes || null,
-            key: 'excludes',
-            onFilter: (value, webAppOrtIssue) => {
-                const webAppPackage = webAppOrtIssue.package;
+        const columns = [
+            {
+                align: 'center',
+                dataIndex: 'severityIndex',
+                defaultSortOrder: 'ascend',
+                filters: (() => [
+                    {
+                        text: (
+                            <span>
+                                <ExclamationCircleOutlined className="ort-error" />
+                                {' '}
+                                Errors
+                            </span>
+                        ),
+                        value: 0
+                    },
+                    {
+                        text: (
+                            <span>
+                                <WarningOutlined className="ort-warning" />
+                                {' '}
+                                Warnings
+                            </span>
+                        ),
+                        value: 1
+                    },
+                    {
+                        text: (
+                            <span>
+                                <InfoCircleOutlined className="ort-hint" />
+                                {' '}
+                                Hints
+                            </span>
+                        ),
+                        value: 2
+                    },
+                    {
+                        text: (
+                            <span>
+                                <IssuesCloseOutlined className="ort-ok" />
+                                {' '}
+                                Resolved
+                            </span>
+                        ),
+                        value: 3
+                    }
+                ])(),
+                filteredValue: filteredInfo.severityIndex || null,
+                onFilter: (value, webAppOrtIssue) => webAppOrtIssue.severityIndex === Number(value),
+                sorter: (a, b) => a.severityIndex - b.severityIndex,
+                render: (text, webAppOrtIssue) => (
+                    webAppOrtIssue.isResolved
+                        ? (
+                            <Tooltip
+                                placement="right"
+                                title={Array.from(webAppOrtIssue.resolutionReasons).join(', ')}
+                            >
+                                <IssuesCloseOutlined
+                                    className="ort-ok"
+                                />
+                            </Tooltip>
+                        ) : (
+                            <span>
+                                {
+                                    webAppOrtIssue.severity === 'ERROR'
+                                    && (
+                                        <ExclamationCircleOutlined
+                                            className="ort-error"
+                                        />
+                                    )
+                                }
+                                {
+                                    webAppOrtIssue.severity === 'WARNING'
+                                    && (
+                                        <WarningOutlined
+                                            className="ort-warning"
+                                        />
+                                    )
+                                }
+                                {
+                                    webAppOrtIssue.severity === 'HINT'
+                                    && (
+                                        <InfoCircleOutlined
+                                            className="ort-hint"
+                                        />
+                                    )
+                                }
+                            </span>
+                        )
+                ),
+                width: '5em'
+            }
+        ];
 
-                if (value === 'excluded') {
-                    return webAppPackage.isExcluded;
-                }
-
-                if (value === 'included') {
-                    return !webAppPackage.isExcluded;
-                }
-
-                return false;
-            },
-            render: (webAppOrtIssue) => {
-                const webAppPackage = webAppOrtIssue.package;
-
-                return webAppPackage.isExcluded ? (
-                    <span className="ort-excludes">
-                        <Tooltip
-                            placement="right"
-                            title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                        >
-                            <FileExcelOutlined className="ort-excluded" />
-                        </Tooltip>
-                    </span>
-                ) : (
-                    <FileAddOutlined />
-                );
-            },
-            width: '2em'
-        });
-    }
-
-    columns.push(
-        {
-            ellipsis: true,
-            dataIndex: 'packageName',
-            key: 'packageName',
-            title: 'Package',
-            width: '25%'
-        },
-        {
-            dataIndex: 'message',
-            key: 'message',
-            textWrap: 'word-break',
-            title: 'Message'
-        }
-    );
-
-    return (
-        <Table
-            className="ort-table-issues"
-            columns={columns}
-            dataSource={issues}
-            expandedRowRender={
-                (webAppOrtIssue) => {
-                    const defaultActiveKey = [1];
+        if (showExcludesColumn) {
+            columns.push({
+                align: 'right',
+                filters: (() => [
+                    {
+                        text: (
+                            <span>
+                                <FileExcelOutlined className="ort-excluded" />
+                                {' '}
+                                Excluded
+                            </span>
+                        ),
+                        value: 'excluded'
+                    },
+                    {
+                        text: (
+                            <span>
+                                <FileAddOutlined />
+                                {' '}
+                                Included
+                            </span>
+                        ),
+                        value: 'included'
+                    }
+                ])(),
+                filteredValue: filteredInfo.excludes || null,
+                key: 'excludes',
+                onFilter: (value, webAppOrtIssue) => {
                     const webAppPackage = webAppOrtIssue.package;
 
-                    if (webAppOrtIssue.isResolved) {
-                        defaultActiveKey.unshift(0);
+                    if (value === 'excluded') {
+                        return webAppPackage.isExcluded;
                     }
 
-                    return (
-                        <Collapse
-                            className="ort-package-collapse"
-                            bordered={false}
-                            defaultActiveKey={defaultActiveKey}
-                        >
-                            {
-                                webAppOrtIssue.hasHowToFix()
-                                && (
-                                    <Panel header="How to fix" key="0">
-                                        <Markdown
-                                            className="ort-how-to-fix"
-                                        >
-                                            {webAppOrtIssue.howToFix}
-                                        </Markdown>
-                                    </Panel>
-                                )
-                            }
-                            {
-                                webAppOrtIssue.isResolved
-                                && (
-                                    <Panel header="Resolutions" key="1">
-                                        <ResolutionTable
-                                            resolutions={webAppOrtIssue.resolutions}
-                                        />
-                                    </Panel>
-                                )
-                            }
-                            <Panel header="Details" key="2">
-                                <PackageDetails webAppPackage={webAppPackage} />
-                            </Panel>
-                            {
-                                webAppPackage.hasLicenses()
-                                && (
-                                    <Panel header="Licenses" key="3">
-                                        <PackageLicenses webAppPackage={webAppPackage} />
-                                    </Panel>
-                                )
-                            }
-                            {
-                                webAppPackage.hasPaths()
-                                && (
-                                    <Panel header="Paths" key="4">
-                                        <PackagePaths paths={webAppPackage.paths} />
-                                    </Panel>
-                                )
-                            }
-                            {
-                                webAppPackage.hasFindings()
-                                && (
-                                    <Panel header="Scan Results" key="5">
-                                        <PackageFindingsTable
-                                            webAppPackage={webAppPackage}
-                                        />
-                                    </Panel>
-                                )
-                            }
-                            {
-                                webAppPackage.hasPathExcludes()
-                                && (
-                                    <Panel header="Path Excludes" key="6">
-                                        <PathExcludesTable
-                                            excludes={webAppPackage.pathExcludes}
-                                        />
-                                    </Panel>
-                                )
-                            }
-                            {
-                                webAppPackage.hasScopeExcludes()
-                                && (
-                                    <Panel header="Scope Excludes" key="7">
-                                        <ScopeExcludesTable
-                                            excludes={webAppPackage.scopeExcludes}
-                                        />
-                                    </Panel>
-                                )
-                            }
-                        </Collapse>
+                    if (value === 'included') {
+                        return !webAppPackage.isExcluded;
+                    }
+
+                    return false;
+                },
+                render: (webAppOrtIssue) => {
+                    const webAppPackage = webAppOrtIssue.package;
+
+                    return webAppPackage.isExcluded ? (
+                        <span className="ort-excludes">
+                            <Tooltip
+                                placement="right"
+                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                            >
+                                <FileExcelOutlined className="ort-excluded" />
+                            </Tooltip>
+                        </span>
+                    ) : (
+                        <FileAddOutlined />
                     );
-                }
+                },
+                width: '2em'
+            });
+        }
+
+        columns.push(
+            {
+                ellipsis: true,
+                dataIndex: 'packageName',
+                key: 'packageName',
+                sorter: (a, b) => a.packageName.localeCompare(b.packageName),
+                sortOrder: sortedInfo.field === 'packageName' && sortedInfo.order,
+                title: 'Package',
+                width: '25%',
+                ...getColumnSearchProps('packageName', filteredInfo, this)
+            },
+            {
+                dataIndex: 'message',
+                key: 'message',
+                textWrap: 'word-break',
+                title: 'Message',
+                ...getColumnSearchProps('message', filteredInfo, this)
             }
-            locale={{
-                emptyText: 'No issues'
-            }}
-            onChange={onChange}
-            pagination={
-                {
-                    defaultPageSize: 25,
-                    hideOnSinglePage: true,
-                    pageSizeOptions: ['50', '100', '250', '500'],
-                    position: 'bottom',
-                    showQuickJumper: true,
-                    showSizeChanger: true,
-                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
+        );
+
+        return (
+            <Table
+                className="ort-table-issues"
+                columns={columns}
+                dataSource={issues}
+                expandedRowRender={
+                    (webAppOrtIssue) => {
+                        const defaultActiveKey = [1];
+                        const webAppPackage = webAppOrtIssue.package;
+
+                        if (webAppOrtIssue.isResolved) {
+                            defaultActiveKey.unshift(0);
+                        }
+
+                        return (
+                            <Collapse
+                                className="ort-package-collapse"
+                                bordered={false}
+                                defaultActiveKey={defaultActiveKey}
+                            >
+                                {
+                                    webAppOrtIssue.hasHowToFix()
+                                    && (
+                                        <Panel header="How to fix" key="0">
+                                            <Markdown
+                                                className="ort-how-to-fix"
+                                            >
+                                                {webAppOrtIssue.howToFix}
+                                            </Markdown>
+                                        </Panel>
+                                    )
+                                }
+                                {
+                                    webAppOrtIssue.isResolved
+                                    && (
+                                        <Panel header="Resolutions" key="1">
+                                            <ResolutionTable
+                                                resolutions={webAppOrtIssue.resolutions}
+                                            />
+                                        </Panel>
+                                    )
+                                }
+                                <Panel header="Details" key="2">
+                                    <PackageDetails webAppPackage={webAppPackage} />
+                                </Panel>
+                                {
+                                    webAppPackage.hasLicenses()
+                                    && (
+                                        <Panel header="Licenses" key="3">
+                                            <PackageLicenses webAppPackage={webAppPackage} />
+                                        </Panel>
+                                    )
+                                }
+                                {
+                                    webAppPackage.hasPaths()
+                                    && (
+                                        <Panel header="Paths" key="4">
+                                            <PackagePaths paths={webAppPackage.paths} />
+                                        </Panel>
+                                    )
+                                }
+                                {
+                                    webAppPackage.hasFindings()
+                                    && (
+                                        <Panel header="Scan Results" key="5">
+                                            <PackageFindingsTable
+                                                webAppPackage={webAppPackage}
+                                            />
+                                        </Panel>
+                                    )
+                                }
+                                {
+                                    webAppPackage.hasPathExcludes()
+                                    && (
+                                        <Panel header="Path Excludes" key="6">
+                                            <PathExcludesTable
+                                                excludes={webAppPackage.pathExcludes}
+                                            />
+                                        </Panel>
+                                    )
+                                }
+                                {
+                                    webAppPackage.hasScopeExcludes()
+                                    && (
+                                        <Panel header="Scope Excludes" key="7">
+                                            <ScopeExcludesTable
+                                                excludes={webAppPackage.scopeExcludes}
+                                            />
+                                        </Panel>
+                                    )
+                                }
+                            </Collapse>
+                        );
+                    }
                 }
-            }
-            rowKey="key"
-            size="small"
-        />
-    );
+                locale={{
+                    emptyText: 'No issues'
+                }}
+                onChange={onChange}
+                pagination={
+                    {
+                        defaultPageSize: 25,
+                        hideOnSinglePage: true,
+                        pageSizeOptions: ['50', '100', '250', '500'],
+                        position: 'bottom',
+                        showQuickJumper: true,
+                        showSizeChanger: true,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
+                    }
+                }
+                rowKey="key"
+                size="small"
+            />
+        );
+    }
 };
 
 IssuesTable.propTypes = {

@@ -79,23 +79,25 @@ class SummaryView extends React.Component {
         });
     }
 
-    static onChangeIssuesTable(pagination, filters) {
+    static onChangeIssuesTable(pagination, filters, sorter) {
         store.dispatch({
             type: 'SUMMARY::CHANGE_ISSUES_TABLE',
             payload: {
                 issuesFilter: {
-                    filteredInfo: filters
+                    filteredInfo: filters,
+                    sortedInfo: sorter
                 }
             }
         });
     }
 
-    static onChangeRuleViolationsTable(pagination, filters) {
+    static onChangeRuleViolationsTable(pagination, filters, sorter) {
         store.dispatch({
             type: 'SUMMARY::CHANGE_RULE_VIOLATIONS_TABLE',
             payload: {
                 ruleViolationsFilter: {
-                    filteredInfo: filters
+                    filteredInfo: filters,
+                    sortedInfo: sorter
                 }
             }
         });
