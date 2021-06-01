@@ -35,6 +35,7 @@ import java.net.URI
 
 import kotlinx.coroutines.runBlocking
 
+import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch

@@ -42,8 +42,13 @@ import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
 import org.ossreviewtoolkit.cli.readOrtResult
+import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
+import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.createProvider
+import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.writeOrtResult
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat

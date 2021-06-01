@@ -43,8 +43,12 @@ import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.readOrtResult
+import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.createProvider
+import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.Resolutions

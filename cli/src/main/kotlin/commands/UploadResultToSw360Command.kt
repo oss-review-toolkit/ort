@@ -43,6 +43,7 @@ import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.readOrtResult
+import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package

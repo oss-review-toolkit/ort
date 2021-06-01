@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.cli.commands
+package org.ossreviewtoolkit.cli.utils
 
 import com.github.ajalt.clikt.core.GroupableOption
 

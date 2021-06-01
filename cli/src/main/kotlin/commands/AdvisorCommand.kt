@@ -37,6 +37,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.readOrtResult
+import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.mergeLabels

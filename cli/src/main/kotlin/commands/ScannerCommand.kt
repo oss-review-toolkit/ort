@@ -39,6 +39,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.readOrtResult
+import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
+import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Severity

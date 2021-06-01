@@ -42,6 +42,9 @@ import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.utils.configurationGroup
+import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.mergeLabels
