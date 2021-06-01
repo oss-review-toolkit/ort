@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit
+package org.ossreviewtoolkit.cli
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.withClue

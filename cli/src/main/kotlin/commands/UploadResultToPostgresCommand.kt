@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
@@ -37,13 +37,13 @@ import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.ossreviewtoolkit.GlobalOptions
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
-import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde

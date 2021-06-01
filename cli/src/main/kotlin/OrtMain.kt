@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit
+package org.ossreviewtoolkit.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
@@ -42,7 +42,7 @@ import kotlin.time.measureTimedValue
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
-import org.ossreviewtoolkit.commands.*
+import org.ossreviewtoolkit.cli.commands.*
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns

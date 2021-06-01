@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
@@ -38,9 +38,13 @@ import java.io.File
 
 import kotlin.time.measureTimedValue
 
-import org.ossreviewtoolkit.GlobalOptions
-import org.ossreviewtoolkit.GroupTypes.FileType
-import org.ossreviewtoolkit.GroupTypes.StringType
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.GroupTypes.FileType
+import org.ossreviewtoolkit.cli.GroupTypes.StringType
+import org.ossreviewtoolkit.cli.readOrtResult
+import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.cli.utils.createProvider
+import org.ossreviewtoolkit.cli.writeOrtResult
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Severity
@@ -54,18 +58,14 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.PackageConfigurationOption
-import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.writeOrtResult
 
 class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT result files against policy rules.") {
     private val ortFile by option(

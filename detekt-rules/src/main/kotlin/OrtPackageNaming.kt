@@ -58,7 +58,6 @@ class OrtPackageNaming : Rule() {
         val projectName = when (val projectDir = File(pathPrefix).name) {
             "buildSrc" -> ".gradle"
             "clearly-defined" -> ".clients.clearlydefined"
-            "cli" -> ""
             "detekt-rules" -> ".detekt"
             "fossid-webapp" -> ".clients.fossid"
             "helper-cli" -> ".helper"

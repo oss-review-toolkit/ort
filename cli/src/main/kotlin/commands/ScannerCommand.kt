@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
@@ -37,13 +37,14 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.GlobalOptions
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.readOrtResult
+import org.ossreviewtoolkit.cli.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
@@ -53,7 +54,6 @@ import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
-import org.ossreviewtoolkit.writeOrtResult
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(

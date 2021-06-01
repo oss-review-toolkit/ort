@@ -61,7 +61,7 @@ style:
     excludes: ''
     excludeImports: '
       org.ossreviewtoolkit.analyzer.managers.*,
-      org.ossreviewtoolkit.commands.*,
+      org.ossreviewtoolkit.cli.commands.*,
       org.ossreviewtoolkit.downloader.vcs.*,
       org.ossreviewtoolkit.helper.commands.*,
       org.ossreviewtoolkit.reporter.reporters.*,

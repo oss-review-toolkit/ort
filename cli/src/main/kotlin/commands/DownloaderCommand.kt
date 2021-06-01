@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
@@ -39,9 +39,10 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.GlobalOptions
-import org.ossreviewtoolkit.GroupTypes.FileType
-import org.ossreviewtoolkit.GroupTypes.StringType
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.GroupTypes.FileType
+import org.ossreviewtoolkit.cli.GroupTypes.StringType
+import org.ossreviewtoolkit.cli.readOrtResult
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -59,7 +60,6 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.readOrtResult
 import org.ossreviewtoolkit.spdx.VCS_DIRECTORIES
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.ArchiveType
