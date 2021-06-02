@@ -125,6 +125,11 @@ sealed class SpdxExpression {
     abstract fun normalize(mapDeprecated: Boolean = true): SpdxExpression
 
     /**
+     * Sort this expression lexicographically.
+     */
+    open fun sort(): SpdxExpression = this
+
+    /**
      * Validate this expression. [strictness] defines whether only the syntax is checked
      * ([ALLOW_ANY][Strictness.ALLOW_ANY]), or semantics are also checked but deprecated license identifiers are
      * allowed ([ALLOW_DEPRECATED][Strictness.ALLOW_DEPRECATED]) or only current license identifiers are allowed
@@ -254,6 +259,36 @@ class SpdxCompoundExpression(
 
     override fun normalize(mapDeprecated: Boolean) =
         SpdxCompoundExpression(left.normalize(mapDeprecated), operator, right.normalize(mapDeprecated))
+
+    override fun sort(): SpdxExpression {
+        /**
+         * Get all transitive children of this expression that are concatenated with the same operator as this compound
+         * expression. These can be re-ordered because the AND and OR operators are both commutative.
+         */
+        fun getSortedChildrenWithSameOperator(expression: SpdxCompoundExpression): List<SpdxExpression> {
+            val children = mutableListOf<SpdxExpression>()
+
+            fun addChildren(child: SpdxExpression) {
+                if (child is SpdxCompoundExpression && child.operator == operator) {
+                    children += getSortedChildrenWithSameOperator(child)
+                } else {
+                    children += child.sort()
+                }
+            }
+
+            addChildren(expression.left)
+            addChildren(expression.right)
+
+            return children.sortedBy { it.toString() }
+        }
+
+        return getSortedChildrenWithSameOperator(this).reduce(
+            when (operator) {
+                SpdxOperator.AND -> SpdxExpression::and
+                SpdxOperator.OR -> SpdxExpression::or
+            }
+        )
+    }
 
     override fun validate(strictness: Strictness) {
         left.validate(strictness)
