@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.output.CliktHelpFormatter
@@ -41,6 +42,7 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.cli.commands.*
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.Environment
@@ -70,6 +72,37 @@ data class GlobalOptions(
     val config: OrtConfiguration,
     val forceOverwrite: Boolean
 )
+
+/**
+ * A helper function to print statistics about the [counts] of severities. Throw a ProgramResult exception with
+ * [severeStatusCode] if there are severities exceeding [threshold].
+ */
+fun printSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
+    var hasSevereIssues = false
+
+    fun getSeverityCount(severity: Severity) =
+        counts.getOrDefault(severity, 0).also { hasSevereIssues = it > 0 && severity > threshold }
+
+    val hintCount = getSeverityCount(Severity.HINT)
+    val warningCount = getSeverityCount(Severity.WARNING)
+    val errorCount = getSeverityCount(Severity.ERROR)
+
+    println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
+
+    if (hasSevereIssues) {
+        println("There are issues with a severity greater than the $threshold threshold.")
+        throw ProgramResult(severeStatusCode)
+    }
+}
+
+/**
+ * The entry point for the application with [args] being the list of arguments.
+ */
+fun main(args: Array<String>) {
+    Os.fixupUserHomeProperty()
+    OrtMain().main(args)
+    exitProcess(0)
+}
 
 class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
@@ -207,13 +240,4 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
         return header.joinToString("\n", postfix = "\n")
     }
-}
-
-/**
- * The entry point for the application with [args] being the list of arguments.
- */
-fun main(args: Array<String>) {
-    Os.fixupUserHomeProperty()
-    OrtMain().main(args)
-    exitProcess(0)
 }
