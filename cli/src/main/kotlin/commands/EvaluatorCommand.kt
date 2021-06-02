@@ -41,6 +41,7 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
+import org.ossreviewtoolkit.cli.printSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
@@ -280,16 +281,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         }
 
         val counts = evaluatorRun.violations.groupingBy { it.severity }.eachCount()
-
-        val errorCount = counts[Severity.ERROR] ?: 0
-        val warningCount = counts[Severity.WARNING] ?: 0
-        val hintCount = counts[Severity.HINT] ?: 0
-
-        if (errorCount > 0 || warningCount > 0) {
-            println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
-            throw ProgramResult(2)
-        }
-
-        println("Found $hintCount hints only.")
+        printSeverityStats(counts, Severity.HINT, 2)
     }
 }

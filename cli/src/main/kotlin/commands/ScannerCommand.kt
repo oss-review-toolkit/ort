@@ -38,6 +38,7 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.printSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
@@ -182,15 +183,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             throw ProgramResult(1)
         }
 
-        val hasSevereIssues = scanResults.scanResults.any { (_, results) ->
-            results.any { it.summary.issues.any { issue -> issue.severity > Severity.HINT } }
-        }
-
-        if (hasSevereIssues) {
-            println("The scan result contains errors or warnings.")
-            throw ProgramResult(2)
-        }
-
-        println("The scan result contains hints only.")
+        val counts = scanResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
+        printSeverityStats(counts, Severity.HINT, 2)
     }
 }
