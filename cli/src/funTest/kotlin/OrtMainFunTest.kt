@@ -33,6 +33,7 @@ import io.kotest.matchers.shouldNot
 import java.io.File
 
 import org.ossreviewtoolkit.cli.commands.AdvisorCommand
+import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult

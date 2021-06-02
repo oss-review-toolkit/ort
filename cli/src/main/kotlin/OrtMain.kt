@@ -36,19 +36,13 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 import kotlin.system.exitProcess
-import kotlin.time.measureTime
-import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.cli.commands.*
-import org.ossreviewtoolkit.model.HashAlgorithm
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
@@ -57,11 +51,8 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.PERFORMANCE
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.printStackTrace
 
 /**
@@ -215,38 +206,6 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         }
 
         return header.joinToString("\n", postfix = "\n")
-    }
-}
-
-/**
- * Read [ortFile] into an [OrtResult] and return it. Make sure that information about project scopes is available
- * (by calling [OrtResult.withResolvedScopes]), so that it can be processed.
- */
-fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
-    log.debug { "Input ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(ortFile)}." }
-
-    val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>().withResolvedScopes() }
-
-    log.perf {
-        "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inWholeMilliseconds}ms."
-    }
-
-    return ortResult
-}
-
-/**
- * Write the [ortResult] to all [outputFiles] for the given [resultName].
- */
-fun CliktCommand.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, resultName: String) {
-    outputFiles.forEach { file ->
-        println("Writing $resultName result to '$file'.")
-        val duration = measureTime { file.writeValue(ortResult) }
-
-        log.perf {
-            "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inWholeMilliseconds}ms."
-        }
-
-        log.debug { "Output ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(file)}." }
     }
 }
 
