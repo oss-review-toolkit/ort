@@ -106,7 +106,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://proxy.golang.org/github.com/fatih/color/@v/v1.7.0.zip"
+    url: ""
     hash:
       value: ""
       algorithm: ""
@@ -132,7 +132,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://proxy.golang.org/github.com/golang/protobuf/@v/v1.2.0.zip"
+    url: ""
     hash:
       value: ""
       algorithm: ""
@@ -158,7 +158,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://proxy.golang.org/github.com/hashicorp/errwrap/@v/v1.0.0.zip"
+    url: ""
     hash:
       value: ""
       algorithm: ""
@@ -184,7 +184,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://proxy.golang.org/github.com/hashicorp/go-multierror/@v/v1.0.0.zip"
+    url: ""
     hash:
       value: ""
       algorithm: ""
@@ -210,7 +210,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://proxy.golang.org/github.com/mattn/go-colorable/@v/v0.1.4.zip"
+    url: ""
     hash:
       value: ""
       algorithm: ""
@@ -236,7 +236,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://proxy.golang.org/github.com/mattn/go-isatty/@v/v0.0.10.zip"
+    url: ""
     hash:
       value: ""
       algorithm: ""
@@ -262,7 +262,7 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://proxy.golang.org/github.com/mattn/go-isatty/@v/v0.0.8.zip"
+    url: ""
     hash:
       value: ""
       algorithm: ""

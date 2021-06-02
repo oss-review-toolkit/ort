@@ -185,17 +185,24 @@ class GoMod(
         return result
     }
 
-    private fun createPackage(id: Identifier): Package =
-        Package(
+    private fun createPackage(id: Identifier): Package {
+        val vcsInfo = id.toVcsInfo()
+
+        return Package(
             id = Identifier(managerName, "", id.name, id.version),
             authors = sortedSetOf(), // Go mod doesn't support author information.
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = getSourceArtifactForPackage(id),
-            vcs = id.toVcsInfo()
+            sourceArtifact = if (vcsInfo == VcsInfo.EMPTY) {
+                getSourceArtifactForPackage(id)
+            } else {
+                RemoteArtifact.EMPTY
+            },
+            vcs = vcsInfo
         )
+    }
 
     private fun getSourceArtifactForPackage(id: Identifier): RemoteArtifact {
         /**
