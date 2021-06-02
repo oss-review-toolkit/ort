@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import com.jcraft.jsch.JSch
+import com.jcraft.jsch.ProxyHTTP
 import com.jcraft.jsch.Session
 import com.jcraft.jsch.agentproxy.AgentProxyException
 import com.jcraft.jsch.agentproxy.RemoteIdentityRepository
@@ -30,6 +31,7 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
+import java.net.URI
 import java.util.regex.Pattern
 
 import org.eclipse.jgit.api.Git
@@ -69,8 +71,14 @@ class Git : VersionControlSystem(), CommandLineTool {
             NetRCCredentialsProvider.install()
 
             val sessionFactory = object : JschConfigSessionFactory() {
-                @Suppress("EmptyFunctionBlock")
-                override fun configure(hc: OpenSshConfig.Host, session: Session) {}
+                override fun configure(hc: OpenSshConfig.Host, session: Session) {
+                    // If SSH protocol is using in environments where reverse proxy
+                    // is needed ( corkscrew style ), set env proxy if exists
+                    if (! Os.env["http_proxy"].isNullOrEmpty()) {
+                        val uri = URI(Os.env["http_proxy"])
+                        session.setProxy(ProxyHTTP(uri.host, uri.port))
+                    }
+                }
 
                 override fun configureJSch(jsch: JSch) {
                     // Accept unknown hosts.
