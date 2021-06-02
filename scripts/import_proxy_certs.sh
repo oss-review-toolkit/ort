@@ -22,7 +22,7 @@ if [ -z "$https_proxy" ]; then
     exit
 fi
 
-CONNECT_SERVER="jcenter.bintray.com:443"
+CONNECT_SERVER="repo.maven.apache.org:443"
 
 TEMP_DIR="$(mktemp -d)"
 FILE="$TEMP_DIR/proxy.crt"
