@@ -23,18 +23,16 @@ package org.ossreviewtoolkit.clients.fossid
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.BeanDescription
-import com.fasterxml.jackson.databind.DeserializationConfig
+import com.fasterxml.jackson.databind.BeanProperty
 import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier
-import com.fasterxml.jackson.databind.deser.std.DelegatingDeserializer
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.databind.type.CollectionType
-import com.fasterxml.jackson.databind.type.MapType
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 
 import okhttp3.OkHttpClient
@@ -65,44 +63,52 @@ interface FossIdRestService {
             // FossID has a bug in get_results/scan.
             // Sometimes the match_type is "ignored", sometimes it is "Ignored".
             .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-            .registerModule(kotlinModule().setDeserializerModifier(FossIdDeserializerModifier()))
+            .registerModule(kotlinModule()
+                .addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer()))
 
         /**
          * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
          * sent by the FossID server.
          * FossID usually returns data as a List or Map, but in case of no entries it returns a Boolean (which is set to
-         * false). To handle this special case, this class makes sure that a custom deserializer is used for lists or
-         * maps that detects such a result and converts it to an empty list or map, respective. That way, the FossID
-         * service interface can use meaningful result types.
+         * false). This custom deserializer streamLines the result:
+         * - maps are converted to lists by ignoring the keys
+         * - empty list is returned when the result is Boolean
+         * - to address a FossID bug in get_all_scans operation, arrays are converted to list.
          */
-        private class FossIdDeserializerModifier : BeanDeserializerModifier() {
-            override fun modifyMapDeserializer(
-                config: DeserializationConfig,
-                type: MapType,
-                beanDesc: BeanDescription,
-                deserializer: JsonDeserializer<*>
-            ): JsonDeserializer<*> = FalseValueDeserializer(deserializer) { mutableMapOf<Any, Any>() }
+        private class PolymorphicListDeserializer(val boundType: JavaType? = null) :
+            StdDeserializer<PolymorphicList<Any>>(PolymorphicList::class.java), ContextualDeserializer {
+            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicList<Any> {
+                requireNotNull(boundType) {
+                    "The PolymorphicListDeserializer needs a type to deserialize values!"
+                }
+                return when (p.currentToken) {
+                    JsonToken.VALUE_FALSE -> PolymorphicList()
+                    JsonToken.START_ARRAY -> {
+                        val arrayType = JSON_MAPPER.typeFactory.constructArrayType(boundType)
+                        val array = JSON_MAPPER.readValue<Array<Any>>(p, arrayType)
+                        PolymorphicList(array.toList())
+                    }
+                    JsonToken.START_OBJECT -> {
+                        val mapType = JSON_MAPPER.typeFactory.constructMapType(
+                            LinkedHashMap::class.java,
+                            String::class.java,
+                            boundType.rawClass
+                        )
+                        val map = JSON_MAPPER.readValue<Map<Any, Any>>(p, mapType)
+                        // we keep only the values of the map: when the FossID functions which return a PolymorphicList
+                        // return a map, this is always the list of elements grouped by id. Since the ids are also
+                        // present in the elements themselves, we don't lose any information by discarding the keys.
+                        PolymorphicList(map.values.toList())
+                    }
+                    else -> throw IllegalStateException("FossID returned a type not handled by this deserializer!")
+                }
+            }
 
-            override fun modifyCollectionDeserializer(
-                config: DeserializationConfig?,
-                type: CollectionType?,
-                beanDesc: BeanDescription?,
-                deserializer: JsonDeserializer<*>
-            ): JsonDeserializer<*> = FalseValueDeserializer(deserializer) { mutableListOf<Any>() }
-        }
-
-        /**
-         * Custom Jackson deserializer that abstracts the behaviour explained above. [creator] is a function that
-         * creates the 'replacement' object when a Boolean value set to false is received. When not, the standard
-         * Kotlin/Jackson deserializer is called by delegation.
-         */
-        private class FalseValueDeserializer(delegate: JsonDeserializer<*>, private val creator: () -> Any) :
-            DelegatingDeserializer(delegate) {
-            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Any =
-                if (p.currentToken == JsonToken.VALUE_FALSE) creator() else super.deserialize(p, ctxt)
-
-            override fun newDelegatingInstance(newDelegatee: JsonDeserializer<*>): JsonDeserializer<*> =
-                FalseValueDeserializer(newDelegatee, creator)
+            override fun createContextual(ctxt: DeserializationContext?, property: BeanProperty?): JsonDeserializer<*> {
+                // Extract the type from the property, i.e. the T in PolymorphicList.data<T>
+                val type = property?.member?.type?.bindings?.getBoundType(0)
+                return PolymorphicListDeserializer(type)
+            }
         }
 
         /**
@@ -124,7 +130,7 @@ interface FossIdRestService {
     suspend fun getProject(@Body body: PostRequestBody): EntityResponseBody<Project>
 
     @POST("api.php")
-    suspend fun listScansForProject(@Body body: PostRequestBody): MapResponseBody<Scan>
+    suspend fun listScansForProject(@Body body: PostRequestBody): PolymorphicResponseBody<Scan>
 
     @POST("api.php")
     suspend fun createProject(@Body body: PostRequestBody): MapResponseBody<String>
@@ -148,19 +154,20 @@ interface FossIdRestService {
     suspend fun checkScanStatus(@Body body: PostRequestBody): EntityResponseBody<ScanStatus>
 
     @POST("api.php")
-    suspend fun listScanResults(@Body body: PostRequestBody): MapResponseBody<FossIdScanResult>
+    suspend fun listScanResults(@Body body: PostRequestBody): PolymorphicResponseBody<FossIdScanResult>
 
     @POST("api.php")
-    suspend fun listIdentifiedFiles(@Body body: PostRequestBody): MapResponseBody<IdentifiedFile>
+    suspend fun listIdentifiedFiles(@Body body: PostRequestBody): PolymorphicResponseBody<IdentifiedFile>
 
     @POST("api.php")
-    suspend fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody): MapResponseBody<MarkedAsIdentifiedFile>
+    suspend fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody):
+            PolymorphicResponseBody<MarkedAsIdentifiedFile>
 
     @POST("api.php")
-    suspend fun listIgnoredFiles(@Body body: PostRequestBody): EntityResponseBody<List<IgnoredFile>>
+    suspend fun listIgnoredFiles(@Body body: PostRequestBody): PolymorphicResponseBody<IgnoredFile>
 
     @POST("api.php")
-    suspend fun listPendingFiles(@Body body: PostRequestBody): MapResponseBody<String>
+    suspend fun listPendingFiles(@Body body: PostRequestBody): PolymorphicResponseBody<String>
 
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody

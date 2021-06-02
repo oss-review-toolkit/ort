@@ -22,7 +22,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -103,7 +103,7 @@ class FossIdClientNewProjectTest : StringSpec({
         service.listScansForProject("", "", PROJECT_CODE) shouldNotBeNull {
             checkResponse("list scans")
             data shouldNotBeNull {
-                this should beEmpty()
+                isEmpty() shouldBe true
             }
         }
     }
@@ -165,7 +165,7 @@ class FossIdClientNewProjectTest : StringSpec({
             checkResponse("list scan results")
             data shouldNotBeNull {
                 size shouldBe 58
-                values.last().localPath shouldBe "pom.xml"
+                last().localPath shouldBe "pom.xml"
             }
         }
     }
@@ -174,18 +174,16 @@ class FossIdClientNewProjectTest : StringSpec({
         service.listIdentifiedFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list identified files")
             data shouldNotBeNull {
-                with(values) {
-                    size shouldBe 40
-                    last().should {
-                        it.file.shouldNotBeNull {
-                            path shouldBe "LICENSE.md"
-                            licenseIdentifier shouldBe "MIT"
-                            licenseIsFoss shouldBe true
-                            licenseIsCopyleft shouldBe true
-                        }
-
-                        it.identificationCopyright shouldBe "• David Gundersen (2016)\n"
+                size shouldBe 40
+                last().should {
+                    it.file.shouldNotBeNull {
+                        path shouldBe "LICENSE.md"
+                        licenseIdentifier shouldBe "MIT"
+                        licenseIsFoss shouldBe true
+                        licenseIsCopyleft shouldBe true
                     }
+
+                    it.identificationCopyright shouldBe "• David Gundersen (2016)\n"
                 }
             }
         }
@@ -217,10 +215,8 @@ class FossIdClientNewProjectTest : StringSpec({
         service.listPendingFiles("", "", SCAN_CODE) shouldNotBeNull {
             checkResponse("list pending files")
             data shouldNotBeNull {
-                values.should {
-                    it.size shouldBe 2
-                    it.first() shouldBe "src/extra_file.txt"
-                }
+                size shouldBe 2
+                first() shouldBe "src/extra_file.txt"
             }
         }
     }

@@ -4,9 +4,10 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.checkResponse
@@ -16,6 +17,11 @@ import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
+import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
+import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /*
@@ -39,6 +45,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private const val PROJECT_CODE_1 = "semver4j"
 private const val PROJECT_CODE_2 = "semver4j_2"
+private const val PROJECT_CODE_3 = "semver4j_3"
 private const val SCAN_CODE_1 = "${PROJECT_CODE_1}_20201203_090342"
 private const val SCAN_CODE_2 = "${PROJECT_CODE_2}_20201203_090342"
 
@@ -74,7 +81,19 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listScansForProject("", "", PROJECT_CODE_1) shouldNotBeNull {
             checkResponse("list scans")
             data shouldNotBeNull {
-                this should beEmptyMap()
+                this should beEmpty()
+            }
+        }
+    }
+
+    "Scans for project can be listed when there is exactly one" {
+        service.listScansForProject("", "", PROJECT_CODE_3) shouldNotBeNull {
+            checkResponse("list scans")
+            data shouldNotBeNull {
+                size shouldBe 1
+                forEach {
+                    it.shouldBeTypeOf<Scan>()
+                }
             }
         }
     }
@@ -83,7 +102,8 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listScansForProject("", "", PROJECT_CODE_2) shouldNotBeNull {
             checkResponse("list scans")
             data shouldNotBeNull {
-                this shouldNot beEmptyMap()
+                this shouldNot beEmpty()
+                this[0].shouldBeTypeOf<Scan>()
             }
         }
     }
@@ -92,7 +112,7 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listScanResults("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list scan results")
             data shouldNotBeNull {
-                this should beEmptyMap()
+                this should beEmpty()
             }
         }
     }
@@ -101,7 +121,10 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listScanResults("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list scan results")
             data shouldNotBeNull {
-                this shouldNot beEmptyMap()
+                this shouldNot beEmpty()
+                forEach {
+                    it.shouldBeTypeOf<FossIdScanResult>()
+                }
             }
         }
     }
@@ -110,7 +133,7 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listIdentifiedFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list identified files")
             data shouldNotBeNull {
-                this should beEmptyMap()
+                this should beEmpty()
             }
         }
     }
@@ -119,7 +142,10 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listIdentifiedFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list identified files")
             data shouldNotBeNull {
-                this shouldNot beEmptyMap()
+                this shouldNot beEmpty()
+                forEach {
+                    it.shouldBeTypeOf<IdentifiedFile>()
+                }
             }
         }
     }
@@ -128,7 +154,7 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list marked as identified files")
             data shouldNotBeNull {
-                this should beEmptyMap()
+                this should beEmpty()
             }
         }
     }
@@ -137,7 +163,10 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list marked as identified files")
             data shouldNotBeNull {
-                this shouldNot beEmptyMap()
+                this shouldNot beEmpty()
+                forEach {
+                    it.shouldBeTypeOf<MarkedAsIdentifiedFile>()
+                }
             }
         }
     }
@@ -156,6 +185,9 @@ class FossIdClientReturnTypeTest : StringSpec({
             checkResponse("list ignored files")
             data shouldNotBeNull {
                 this shouldNot beEmpty()
+                forEach {
+                    it.shouldBeTypeOf<IgnoredFile>()
+                }
             }
         }
     }
@@ -164,7 +196,7 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listPendingFiles("", "", SCAN_CODE_1) shouldNotBeNull {
             checkResponse("list pending files")
             data shouldNotBeNull {
-                this should beEmptyMap()
+                this should beEmpty()
             }
         }
     }
@@ -173,7 +205,10 @@ class FossIdClientReturnTypeTest : StringSpec({
         service.listPendingFiles("", "", SCAN_CODE_2) shouldNotBeNull {
             checkResponse("list pending files")
             data shouldNotBeNull {
-                this shouldNot beEmptyMap()
+                this shouldNot beEmpty()
+                forEach {
+                    it.shouldBeTypeOf<String>()
+                }
             }
         }
     }

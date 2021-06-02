@@ -360,12 +360,12 @@ class FossId(
     private suspend fun getRawResults(scanCode: String): RawResults {
         val identifiedFiles = service.listIdentifiedFiles(user, apiKey, scanCode)
             .checkResponse("list identified files")
-            .data!!.values.toList()
+            .data!!
         log.info { "${identifiedFiles.size} identified files have been returned for scan code $scanCode." }
 
         val markedAsIdentifiedFiles = service.listMarkedAsIdentifiedFiles(user, apiKey, scanCode)
             .checkResponse("list marked as identified files")
-            .data!!.values.toList()
+            .data!!
         log.info {
             "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan code $scanCode."
         }
