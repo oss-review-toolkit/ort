@@ -36,8 +36,8 @@ import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
 import org.eclipse.sw360.clients.utils.SW360ClientException
 
 import org.ossreviewtoolkit.cli.GlobalOptions
-import org.ossreviewtoolkit.cli.readOrtResult
 import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
