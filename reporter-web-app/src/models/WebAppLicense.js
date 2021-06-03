@@ -17,10 +17,14 @@
  * License-Filename: LICENSE
  */
 
+import { licenseToHslColor } from '../utils';
+
 class WebAppLicense {
     #_id;
 
     #id;
+
+    #color;
 
     constructor(obj) {
         if (obj) {
@@ -31,6 +35,8 @@ class WebAppLicense {
             if (obj.id) {
                 this.#id = obj.id;
             }
+
+            this.#color = licenseToHslColor(this.#id);
         }
     }
 
@@ -40,6 +46,10 @@ class WebAppLicense {
 
     get id() {
         return this.#id;
+    }
+
+    get color() {
+        return this.#color;
     }
 }
 
