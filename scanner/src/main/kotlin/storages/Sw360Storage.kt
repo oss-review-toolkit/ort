@@ -53,17 +53,17 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 /**
- * The SW360 storage back-end uses the sw360-client library in order to read/add attachments from the configured
+ * The SW360 storage back-end uses the SW360-client library in order to read/add attachments from the configured
  * SW360 instance.
  */
 class Sw360Storage(
-    sw360Configuration: Sw360StorageConfiguration
+    configuration: Sw360StorageConfiguration
 ) : ScanResultsStorage() {
-    private val sw360ConnectionFactory = createSw360Connection(
-        sw360Configuration,
+    private val connectionFactory = createConnection(
+        configuration,
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     )
-    private val releaseClient = sw360ConnectionFactory.releaseAdapter
+    private val releaseClient = connectionFactory.releaseAdapter
 
     override fun readInternal(id: Identifier): Result<List<ScanResult>> {
         val tempScanResultFile = createTempFileForUpload(id)
@@ -145,7 +145,7 @@ private fun createTempFileForUpload(id: Identifier) =
         .resolve(SCAN_RESULTS_FILE_NAME)
         .toFile()
 
-private fun createSw360Connection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
+private fun createConnection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
     val httpClientConfig = HttpClientConfig
         .basicConfig()
         .withObjectMapper(jsonMapper)
