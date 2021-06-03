@@ -49,10 +49,13 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
@@ -164,8 +167,16 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             )
         )
 
+        val actualRepositoryConfigurationFile = repositoryConfigurationFile
+            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)
+
+        val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.let {
+            log.info { "Using configuration file '${it.absolutePath}'." }
+            it.readValue()
+        } ?: RepositoryConfiguration()
+
         val ortResult = analyzer.analyze(
-            inputDir, distinctPackageManagers, curationProvider, repositoryConfigurationFile
+            inputDir, distinctPackageManagers, curationProvider, repositoryConfiguration
         ).mergeLabels(labels)
 
         println("Found ${ortResult.getProjects().size} project(s) in total.")
