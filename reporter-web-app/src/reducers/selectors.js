@@ -41,6 +41,7 @@ export const getOrtResult = (state) => state.data.ortResult;
 
 // ---- SummaryView selectors ----
 
+export const getSummaryColumns = (state) => state.summary.columns;
 export const getSummaryDeclaredLicensesProcessed = memoizeOne(
     (state) => {
         const licenses = [];
@@ -69,16 +70,23 @@ export const getSummaryDeclaredLicensesProcessed = memoizeOne(
     },
     hasOrtResultChanged
 );
-export const getSummaryDeclaredLicensesProcessedChart = (state) => {
-    const declaredLicenses = getSummaryDeclaredLicensesProcessed(state);
 
-    if (state.summary.declaredLicensesChart.length === 0 && declaredLicenses.length !== 0) {
-        return declaredLicenses;
+export const getSummaryCharts = (state) => {
+    const declaredLicensesProcessed = getSummaryDeclaredLicensesProcessed(state);
+    const detectedLicensesProcessed = getSummaryDetectedLicensesProcessed(state);
+    let charts = state.summary.charts;
+
+    if (state.summary.charts.declaredLicensesProcessed.length === 0 && declaredLicensesProcessed.length !== 0) {
+        charts.declaredLicensesProcessed = declaredLicensesProcessed;
     }
 
-    return state.summary.declaredLicensesChart;
+    if (state.summary.charts.detectedLicensesProcessed.length === 0 && detectedLicensesProcessed.length !== 0) {
+        charts.detectedLicensesProcessed = detectedLicensesProcessed;
+    }
+
+    return charts;
 };
-export const getSummaryDeclaredLicensesProcessedFilter = (state) => state.summary.declaredLicensesFilter;
+
 export const getSummaryDetectedLicensesProcessed = memoizeOne(
     (state) => {
         const licenses = [];
@@ -107,18 +115,13 @@ export const getSummaryDetectedLicensesProcessed = memoizeOne(
     },
     hasOrtResultChanged
 );
-export const getSummaryDetectedLicensesProcessedChart = (state) => {
-    const detectedLicenses = getSummaryDetectedLicensesProcessed(state);
 
-    if (state.summary.detectedLicensesProcessedChart.length === 0 && detectedLicenses.length !== 0) {
-        return detectedLicenses;
-    }
-
-    return state.summary.detectedLicensesProcessedChart;
+export const getSummaryStats = (state) => {
+    return {
+        declaredLicensesProcessed: getSummaryDeclaredLicensesProcessed(state),
+        detectedLicensesProcessed: getSummaryDetectedLicensesProcessed(state)
+    };
 };
-export const getSummaryDetectedLicensesProcessedFilter = (state) => state.summary.detectedLicensesProcessedFilter;
-export const getSummaryIssuesFilter = (state) => state.summary.issuesFilter;
-export const getSummaryRuleViolationsFilter = (state) => state.summary.ruleViolationsFilter;
 
 export const getSummaryView = (state) => state.summary;
 export const getSummaryViewShouldComponentUpdate = (state) => state.summary.shouldComponentUpdate;

@@ -46,15 +46,15 @@ const { Panel } = Collapse;
 class RuleViolationsTable extends React.Component {
     render () {
         const {
-            filter,
             onChange,
             ruleViolations,
-            showExcludesColumn
+            showExcludesColumn,
+            state
         } = this.props;
         const {
             filteredInfo,
             sortedInfo
-        } = filter;
+        } = state;
 
         // If return null to prevent React render error
         if (!ruleViolations) {
@@ -365,10 +365,10 @@ class RuleViolationsTable extends React.Component {
 }
 
 RuleViolationsTable.propTypes = {
-    filter: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
+    ruleViolations: PropTypes.array.isRequired,
     showExcludesColumn: PropTypes.bool,
-    ruleViolations: PropTypes.array.isRequired
+    state: PropTypes.object.isRequired
 };
 
 RuleViolationsTable.defaultProps = {

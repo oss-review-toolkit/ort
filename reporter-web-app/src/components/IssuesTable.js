@@ -45,15 +45,15 @@ const { Panel } = Collapse;
 class IssuesTable extends React.Component {
     render () {
         const {
-            filter,
             issues,
             onChange,
-            showExcludesColumn
+            showExcludesColumn,
+            state
         } = this.props;
         const {
             filteredInfo = {},
             sortedInfo
-        } = filter;
+        } = state;
 
         // If return null to prevent React render error
         if (!issues) {
@@ -352,10 +352,10 @@ class IssuesTable extends React.Component {
 };
 
 IssuesTable.propTypes = {
-    filter: PropTypes.object.isRequired,
     issues: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
-    showExcludesColumn: PropTypes.bool
+    showExcludesColumn: PropTypes.bool,
+    state: PropTypes.object.isRequired
 };
 
 IssuesTable.defaultProps = {

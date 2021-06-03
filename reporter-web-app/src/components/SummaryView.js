@@ -37,14 +37,9 @@ import LicenseStatsTable from './LicenseStatsTable';
 import RuleViolationsTable from './RuleViolationsTable';
 import {
     getOrtResult,
-    getSummaryDeclaredLicensesProcessed,
-    getSummaryDeclaredLicensesProcessedChart,
-    getSummaryDeclaredLicensesProcessedFilter,
-    getSummaryDetectedLicensesProcessed,
-    getSummaryDetectedLicensesProcessedChart,
-    getSummaryDetectedLicensesProcessedFilter,
-    getSummaryIssuesFilter,
-    getSummaryRuleViolationsFilter,
+    getSummaryCharts,
+    getSummaryColumns,
+    getSummaryStats,
     getSummaryViewShouldComponentUpdate
 } from '../reducers/selectors';
 import store from '../store';
@@ -57,10 +52,14 @@ class SummaryView extends React.Component {
         store.dispatch({
             type: 'SUMMARY::CHANGE_DECLARED_LICENSES_TABLE',
             payload: {
-                declaredLicensesChart: extra.currentDataSource,
-                declaredLicensesFilter: {
-                    filteredInfo: filters,
-                    sortedInfo: sorter
+                charts: {
+                    declaredLicenses: extra.currentDataSource,
+                },
+                columns: {
+                    declaredLicenses: {
+                        filteredInfo: filters,
+                        sortedInfo: sorter
+                    }
                 }
             }
         });
@@ -70,10 +69,14 @@ class SummaryView extends React.Component {
         store.dispatch({
             type: 'SUMMARY::CHANGE_DETECTED_LICENSES_TABLE',
             payload: {
-                detectedLicensesProcessedChart: extra.currentDataSource,
-                detectedLicensesProcessedFilter: {
-                    filteredInfo: filters,
-                    sortedInfo: sorter
+                charts: {
+                    detectedLicensesProcessed: extra.currentDataSource,
+                },
+                columns: {
+                    detectedLicensesProcessed: {
+                        filteredInfo: filters,
+                        sortedInfo: sorter
+                    }
                 }
             }
         });
@@ -83,9 +86,11 @@ class SummaryView extends React.Component {
         store.dispatch({
             type: 'SUMMARY::CHANGE_ISSUES_TABLE',
             payload: {
-                issuesFilter: {
-                    filteredInfo: filters,
-                    sortedInfo: sorter
+                columns: {
+                    issues: {
+                        filteredInfo: filters,
+                        sortedInfo: sorter
+                    }
                 }
             }
         });
@@ -95,9 +100,11 @@ class SummaryView extends React.Component {
         store.dispatch({
             type: 'SUMMARY::CHANGE_RULE_VIOLATIONS_TABLE',
             payload: {
-                ruleViolationsFilter: {
-                    filteredInfo: filters,
-                    sortedInfo: sorter
+                columns: {
+                    ruleViolations: {
+                        filteredInfo: filters,
+                        sortedInfo: sorter
+                    }
                 }
             }
         });
@@ -110,14 +117,9 @@ class SummaryView extends React.Component {
 
     render() {
         const {
-            declaredLicensesProcessedChart,
-            declaredLicensesProcessedFilter,
-            declaredLicenseProcessedStats,
-            detectedLicensesProcessedChart,
-            detectedLicensesProcessedFilter,
-            detectedLicensesProcessedStats,
-            issuesFilter,
-            ruleViolationsFilter,
+            charts,
+            columns,
+            stats,
             webAppOrtResult
         } = this.props;
 
@@ -371,12 +373,12 @@ class SummaryView extends React.Component {
                                                 key="1"
                                             >
                                                 <RuleViolationsTable
-                                                    filter={ruleViolationsFilter}
                                                     onChange={
                                                         SummaryView.onChangeRuleViolationsTable
                                                     }
-                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
                                                     ruleViolations={webAppOrtResult.ruleViolations}
+                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                    state={columns.ruleViolations}
                                                 />
                                             </TabPane>
                                         )
@@ -400,12 +402,12 @@ class SummaryView extends React.Component {
                                                 key="2"
                                             >
                                                 <IssuesTable
-                                                    filter={issuesFilter}
                                                     issues={webAppOrtResult.issues}
                                                     onChange={
                                                         SummaryView.onChangeIssuesTable
                                                     }
                                                     showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                    state={columns.issues}
                                                 />
                                             </TabPane>
                                         )
@@ -428,16 +430,16 @@ class SummaryView extends React.Component {
                                                     <Col xs={24} sm={24} md={24} lg={24} xl={9}>
                                                         <LicenseStatsTable
                                                             emptyText="No declared licenses"
-                                                            filter={declaredLicensesProcessedFilter}
+                                                            filter={columns.declaredLicensesProcessed}
                                                             licenses={declaredLicensesProcessed}
-                                                            licenseStats={declaredLicenseProcessedStats}
+                                                            licenseStats={stats.declaredLicensesProcessed}
                                                             onChange={
                                                                 SummaryView.onChangeDeclaredLicensesTable
                                                             }
                                                         />
                                                     </Col>
                                                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>
-                                                        <LicenseChart licenses={declaredLicensesProcessedChart} />
+                                                        <LicenseChart licenses={charts.declaredLicensesProcessed} />
                                                     </Col>
                                                 </Row>
                                             </TabPane>
@@ -461,14 +463,14 @@ class SummaryView extends React.Component {
                                                     <Col xs={24} sm={24} md={24} lg={24} xl={9}>
                                                         <LicenseStatsTable
                                                             emptyText="No detected licenses"
-                                                            filter={detectedLicensesProcessedFilter}
+                                                            filter={columns.detectedLicensesProcessed}
                                                             licenses={detectedLicensesProcessed}
-                                                            licenseStats={detectedLicensesProcessedStats}
+                                                            licenseStats={stats.detectedLicensesProcessed}
                                                             onChange={SummaryView.onChangeDetectedLicensesTable}
                                                         />
                                                     </Col>
                                                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>
-                                                        <LicenseChart licenses={detectedLicensesProcessedChart} />
+                                                        <LicenseChart licenses={charts.detectedLicensesProcessed} />
                                                     </Col>
                                                 </Row>
                                             </TabPane>
@@ -485,28 +487,18 @@ class SummaryView extends React.Component {
 }
 
 SummaryView.propTypes = {
-    declaredLicensesProcessedChart: PropTypes.array.isRequired,
-    declaredLicensesProcessedFilter: PropTypes.object.isRequired,
-    declaredLicenseProcessedStats: PropTypes.array.isRequired,
-    detectedLicensesProcessedChart: PropTypes.array.isRequired,
-    detectedLicensesProcessedFilter: PropTypes.object.isRequired,
-    detectedLicensesProcessedStats: PropTypes.array.isRequired,
-    issuesFilter: PropTypes.object.isRequired,
+    charts: PropTypes.object.isRequired,
+    columns: PropTypes.object.isRequired,
     shouldComponentUpdate: PropTypes.bool.isRequired,
-    ruleViolationsFilter: PropTypes.object.isRequired,
+    stats: PropTypes.object.isRequired,
     webAppOrtResult: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    declaredLicensesProcessedChart: getSummaryDeclaredLicensesProcessedChart(state),
-    declaredLicensesProcessedFilter: getSummaryDeclaredLicensesProcessedFilter(state),
-    declaredLicenseProcessedStats: getSummaryDeclaredLicensesProcessed(state),
-    detectedLicensesProcessedChart: getSummaryDetectedLicensesProcessedChart(state),
-    detectedLicensesProcessedFilter: getSummaryDetectedLicensesProcessedFilter(state),
-    detectedLicensesProcessedStats: getSummaryDetectedLicensesProcessed(state),
-    issuesFilter: getSummaryIssuesFilter(state),
+    charts: getSummaryCharts(state),
+    columns: getSummaryColumns(state),
     shouldComponentUpdate: getSummaryViewShouldComponentUpdate(state),
-    ruleViolationsFilter: getSummaryRuleViolationsFilter(state),
+    stats: getSummaryStats(state),
     webAppOrtResult: getOrtResult(state)
 });
 
