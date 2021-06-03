@@ -59,6 +59,29 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
 class Sw360Storage(
     configuration: Sw360StorageConfiguration
 ) : ScanResultsStorage() {
+    companion object {
+        fun createConnection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
+            val httpClientConfig = HttpClientConfig
+                .basicConfig()
+                .withObjectMapper(jsonMapper)
+            val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
+
+            val sw360ClientConfig = SW360ClientConfig.createConfig(
+                config.restUrl,
+                config.authUrl,
+                config.username,
+                config.password,
+                config.clientId,
+                config.clientPassword,
+                config.token,
+                httpClient,
+                jsonMapper
+            )
+
+            return SW360ConnectionFactory().newConnection(sw360ClientConfig)
+        }
+    }
+
     private val connectionFactory = createConnection(
         configuration,
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -144,24 +167,3 @@ private fun createTempFileForUpload(id: Identifier) =
     createTempDirectory(id.toCoordinates())
         .resolve(SCAN_RESULTS_FILE_NAME)
         .toFile()
-
-private fun createConnection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
-    val httpClientConfig = HttpClientConfig
-        .basicConfig()
-        .withObjectMapper(jsonMapper)
-    val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
-
-    val sw360ClientConfig = SW360ClientConfig.createConfig(
-        config.restUrl,
-        config.authUrl,
-        config.username,
-        config.password,
-        config.clientId,
-        config.clientPassword,
-        config.token,
-        httpClient,
-        jsonMapper
-    )
-
-    return SW360ConnectionFactory().newConnection(sw360ClientConfig)
-}
