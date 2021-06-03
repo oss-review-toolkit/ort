@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.cli.commands
 
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
@@ -29,17 +28,12 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.eclipse.sw360.clients.adapter.SW360Connection
-import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
 import org.eclipse.sw360.clients.adapter.SW360ProjectClientAdapter
 import org.eclipse.sw360.clients.adapter.SW360ReleaseClientAdapter
-import org.eclipse.sw360.clients.config.SW360ClientConfig
 import org.eclipse.sw360.clients.rest.resource.SW360Visibility
 import org.eclipse.sw360.clients.rest.resource.projects.SW360Project
 import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
 import org.eclipse.sw360.clients.utils.SW360ClientException
-import org.eclipse.sw360.http.HttpClientFactoryImpl
-import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.readOrtResult
@@ -51,6 +45,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.scanner.storages.Sw360Storage
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
@@ -83,7 +78,7 @@ class UploadResultToSw360Command : CliktCommand(
         }
 
         val sw360JsonMapper = jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        val sw360Connection = createSw360Connection(sw360Config, sw360JsonMapper)
+        val sw360Connection = Sw360Storage.createConnection(sw360Config, sw360JsonMapper)
         val sw360ReleaseClient = sw360Connection.releaseAdapter
         val sw360ProjectClient = sw360Connection.projectAdapter
 
@@ -151,27 +146,6 @@ class UploadResultToSw360Command : CliktCommand(
 
             null
         }
-    }
-
-    private fun createSw360Connection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
-        val httpClientConfig = HttpClientConfig
-            .basicConfig()
-            .withObjectMapper(jsonMapper)
-        val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
-
-        val sw360ClientConfig = SW360ClientConfig.createConfig(
-            config.restUrl,
-            config.authUrl,
-            config.username,
-            config.password,
-            config.clientId,
-            config.clientPassword,
-            config.token,
-            httpClient,
-            jsonMapper
-        )
-
-        return SW360ConnectionFactory().newConnection(sw360ClientConfig)
     }
 
     private fun getProjectWithPackages(ortResult: OrtResult): Map<Project, List<Package>> =
