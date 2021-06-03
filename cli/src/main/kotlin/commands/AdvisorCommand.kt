@@ -36,10 +36,12 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.printSeverityStats
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -124,9 +126,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
             throw ProgramResult(1)
         }
 
-        if (advisorResults.hasIssues) {
-            println("The advisor result contains issues.")
-            throw ProgramResult(2)
-        }
+        val counts = advisorResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
+        printSeverityStats(counts, Severity.HINT, 2)
     }
 }

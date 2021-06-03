@@ -42,11 +42,13 @@ import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.printSeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
@@ -178,9 +180,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             throw ProgramResult(1)
         }
 
-        if (analyzerResult.hasIssues) {
-            println("The analyzer result contains issues.")
-            throw ProgramResult(2)
-        }
+        val counts = analyzerResult.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
+        printSeverityStats(counts, Severity.HINT, 2)
     }
 }
