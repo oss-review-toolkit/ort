@@ -122,46 +122,46 @@ class Sw360Storage(
                 ?.map { it.id }
         )
 
-    private fun isAttachmentAScanResult(attachment: SW360SparseAttachment) =
-        attachment.attachmentType == SW360AttachmentType.SCAN_RESULT_REPORT
-                && attachment.filename == SCAN_RESULTS_FILE_NAME
-
-    private fun createReleaseName(id: Identifier) =
-        listOfNotNull(id.namespace, id.name).joinToString("/")
-
     private fun getScanResultOfRelease(release: SW360Release, output: Path) =
         release.embedded.attachments
             .filter { isAttachmentAScanResult(it) }
             .mapNotNull { releaseClient.downloadAttachment(release, it, output).orElse(null) }
+}
 
-    private fun createAttachmentOfScanResult(release: SW360Release, cachedScanResult: Path) =
-        AttachmentUploadRequest.builder(release)
-            .addAttachment(cachedScanResult, SW360AttachmentType.SCAN_RESULT_REPORT)
-            .build()
+private fun isAttachmentAScanResult(attachment: SW360SparseAttachment) =
+    attachment.attachmentType == SW360AttachmentType.SCAN_RESULT_REPORT
+            && attachment.filename == SCAN_RESULTS_FILE_NAME
 
-    private fun createTempFileForUpload(id: Identifier) =
-        createTempDirectory(id.toCoordinates())
-            .resolve(SCAN_RESULTS_FILE_NAME)
-            .toFile()
+private fun createReleaseName(id: Identifier) =
+    listOfNotNull(id.namespace, id.name).joinToString("/")
 
-    private fun createSw360Connection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
-        val httpClientConfig = HttpClientConfig
-            .basicConfig()
-            .withObjectMapper(jsonMapper)
-        val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
+private fun createAttachmentOfScanResult(release: SW360Release, cachedScanResult: Path) =
+    AttachmentUploadRequest.builder(release)
+        .addAttachment(cachedScanResult, SW360AttachmentType.SCAN_RESULT_REPORT)
+        .build()
 
-        val sw360ClientConfig = SW360ClientConfig.createConfig(
-            config.restUrl,
-            config.authUrl,
-            config.username,
-            config.password,
-            config.clientId,
-            config.clientPassword,
-            config.token,
-            httpClient,
-            jsonMapper
-        )
+private fun createTempFileForUpload(id: Identifier) =
+    createTempDirectory(id.toCoordinates())
+        .resolve(SCAN_RESULTS_FILE_NAME)
+        .toFile()
 
-        return SW360ConnectionFactory().newConnection(sw360ClientConfig)
-    }
+private fun createSw360Connection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
+    val httpClientConfig = HttpClientConfig
+        .basicConfig()
+        .withObjectMapper(jsonMapper)
+    val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
+
+    val sw360ClientConfig = SW360ClientConfig.createConfig(
+        config.restUrl,
+        config.authUrl,
+        config.username,
+        config.password,
+        config.clientId,
+        config.clientPassword,
+        config.token,
+        httpClient,
+        jsonMapper
+    )
+
+    return SW360ConnectionFactory().newConnection(sw360ClientConfig)
 }
