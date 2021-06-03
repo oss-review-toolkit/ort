@@ -356,6 +356,6 @@ class Composer(
 
         // The "install" command creates a "composer.lock" file (if not yet present) except for projects without any
         // dependencies, see https://getcomposer.org/doc/01-basic-usage.md#installing-without-composer-lock.
-        run(workingDir, "install")
+        run(workingDir, "install", "--ignore-platform-reqs")
     }
 }
