@@ -92,35 +92,27 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use {
-            val edges = getDependencyGraph(projectDir)
+            val graph = getDependencyGraph(projectDir)
             val vendorModules = getVendorModules(projectDir)
 
-            val projectName = edges.getNodes().filterTo(mutableSetOf()) {
-                it.version.isBlank()
-            }.let { idsWithoutVersion ->
-                require(idsWithoutVersion.size == 1) {
-                    "Expected exactly one unique package without version but got ${idsWithoutVersion.joinToString()}."
-                }
+            val (projectIds, packageIds) = graph.nodes().partition { it.version.isBlank() }
+            require(projectIds.size == 1) {
+                "Expected exactly one unique package without version but got ${projectIds.joinToString()}."
+            }
 
-                idsWithoutVersion.first()
-            }.name
-
+            val projectId = projectIds.first()
             val projectVcs = processProjectVcs(projectDir)
 
-            val packages = edges.getNodes().filter {
-                it.version.isNotBlank()
-            }.mapTo(sortedSetOf()) {
-                createPackage(it)
-            }
+            val packages = packageIds.mapTo(sortedSetOf()) { createPackage(it) }
 
             val scopes = sortedSetOf(
                 Scope(
                     name = "all",
-                    dependencies = edges.toPackageReferenceForest { it.version.isBlank() }
+                    dependencies = graph.toPackageReferenceForest(projectId)
                 ),
                 Scope(
                     name = "vendor",
-                    dependencies = edges.toPackageReferenceForest { it.version.isBlank() || it !in vendorModules }
+                    dependencies = graph.subgraph(vendorModules + projectId).toPackageReferenceForest(projectId)
                 )
             )
 
@@ -130,7 +122,7 @@ class GoMod(
                         id = Identifier(
                             type = managerName,
                             namespace = "",
-                            name = projectName,
+                            name = projectId.name,
                             version = projectVcs.revision
                         ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -159,7 +151,7 @@ class GoMod(
             }
             .toSet()
 
-    private fun getDependencyGraph(projectDir: File): Set<Edge> {
+    private fun getDependencyGraph(projectDir: File): Graph {
         val graph = run("mod", "graph", workingDir = projectDir).requireSuccess().stdout
 
         fun parsePackageEntry(entry: String) =
@@ -170,7 +162,7 @@ class GoMod(
                 version = entry.substringAfter('@', "")
             )
 
-        val result = mutableSetOf<Edge>()
+        val result = Graph()
         for (line in graph.lines()) {
             if (line.isBlank()) continue
 
@@ -180,7 +172,7 @@ class GoMod(
             val parent = parsePackageEntry(columns[0])
             val child = parsePackageEntry(columns[1])
 
-            result += Edge(parent, child)
+            result.addEdge(parent, child)
         }
 
         return result
@@ -235,54 +227,66 @@ class GoMod(
     }
 }
 
-private data class Edge(
-    val source: Identifier,
-    val target: Identifier
-)
+/**
+ * A class to represent a graph with dependencies. This representation is basically an adjacency list implemented by a
+ * map whose keys are package identifiers and whose values are the identifiers of packages these packages depend on.
+ */
+private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>> = mutableMapOf()) {
+    /**
+     * Return a set with all nodes (i.e. package identifiers) contained in this graph.
+     */
+    fun nodes(): Set<Identifier> = nodeMap.keys
 
-private fun Collection<Edge>.getNodes(): Set<Identifier> = flatMap { listOf(it.source, it.target) }.toSet()
+    /**
+     * Return the size of this graph. This is the number of nodes it contains.
+     */
+    fun size() = nodeMap.size
 
-private fun Collection<Edge>.toPackageReferenceForest(
-    ignoreNode: (Identifier) -> Boolean = { false }
-): SortedSet<PackageReference> {
-    data class Node(
-        val id: Identifier,
-        val outgoingEdges: MutableSet<Identifier> = mutableSetOf(),
-        val incomingEdges: MutableSet<Identifier> = mutableSetOf()
-    )
-
-    val nodes = mutableMapOf<Identifier, Node>()
-    fun addNode(id: Identifier): Node? = if (!ignoreNode(id)) nodes.getOrPut(id) { Node(id) } else null
-
-    forEach { edge ->
-        val source = addNode(edge.source)
-        val target = addNode(edge.target)
-
-        if (source != null && target != null) {
-            source.outgoingEdges += target.id
-            target.incomingEdges += source.id
-        }
+    /**
+     * Add an edge (i.e. a dependency relation) from [source] to [target] to this dependency graph. Add missing nodes if
+     * necessary.
+     */
+    fun addEdge(source: Identifier, target: Identifier) {
+        nodeMap.merge(source, setOf(target)) { set, _ -> set + target }
+        nodeMap.getOrPut(target) { emptySet() }
     }
 
-    fun getPackageReference(id: Identifier, predecessorNodes: Set<Identifier> = mutableSetOf()): PackageReference {
-        val node = nodes[id]!!
+    /**
+     * Return a subgraph of this [Graph] that contains only nodes from the given set of [subNodes]. This can be used to
+     * construct graphs for specific scopes.
+     */
+    fun subgraph(subNodes: Set<Identifier>): Graph =
+        Graph(nodeMap.filter { it.key in subNodes }
+            .mapValuesTo(mutableMapOf()) { e -> e.value.filterTo(mutableSetOf()) { it in subNodes } })
 
-        val dependencies = node.outgoingEdges.mapNotNull {
-            if (predecessorNodes.contains(it)) {
-                null
-            } else {
-                getPackageReference(it, predecessorNodes + id)
+    /**
+     * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
+     * of the given [root] package.
+     */
+    fun toPackageReferenceForest(root: Identifier): SortedSet<PackageReference> {
+        fun getPackageReference(id: Identifier, predecessorNodes: Set<Identifier> = mutableSetOf()): PackageReference {
+            val currentDependencies = dependencies(id) - predecessorNodes
+            val nextPredecessorNodes = predecessorNodes + currentDependencies
+
+            val dependencyReferences = currentDependencies.mapTo(sortedSetOf()) {
+                getPackageReference(it, nextPredecessorNodes)
             }
-        }.toSortedSet()
 
-        return PackageReference(
-            id = id,
-            linkage = PackageLinkage.PROJECT_STATIC,
-            dependencies = dependencies
-        )
+            return PackageReference(
+                id = id,
+                linkage = PackageLinkage.PROJECT_STATIC,
+                dependencies = dependencyReferences
+            )
+        }
+
+        val startNodes = dependencies(root)
+        return startNodes.mapTo(sortedSetOf()) { getPackageReference(it, startNodes) }
     }
 
-    return nodes.values.filter { it.incomingEdges.isEmpty() }.map { getPackageReference(it.id) }.toSortedSet()
+    /**
+     * Return the identifiers of the direct dependencies of the package denoted by [id].
+     */
+    private fun dependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
 
 // See https://golang.org/ref/mod#pseudo-versions.
