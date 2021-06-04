@@ -229,7 +229,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 val packageDownloadDirs =
                     if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
                         val licenseCategorizations =
-                            licenseClassificationsFile.readValue<LicenseClassifications>().orEmpty().categorizations
+                            licenseClassificationsFile.readValue<LicenseClassifications>().categorizations
                         val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
                         packages.filter { pkg ->
