@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.CommandLineTool
@@ -186,7 +187,7 @@ class GoMod(
     }
 
     private fun createPackage(id: Identifier): Package {
-        val vcsInfo = id.toVcsInfo()
+        val vcsInfo = id.toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN } ?: VcsInfo.EMPTY
 
         return Package(
             id = Identifier(managerName, "", id.name, id.version),
@@ -297,12 +298,7 @@ private fun getRevision(version: String): String {
     return version
 }
 
-internal fun Identifier.toVcsInfo(): VcsInfo =
-    if (name.startsWith("github.com")) {
-        val projectUrl = "https://${name.removeSuffix("/")}"
-        val vcsInfo = VcsHost.toVcsInfo(projectUrl)
-
-        vcsInfo.copy(revision = getRevision(version))
-    } else {
-        VcsInfo.EMPTY
-    }
+internal fun Identifier.toVcsInfo(): VcsInfo {
+    val vcsInfo = VcsHost.toVcsInfo("https://$name")
+    return vcsInfo.copy(revision = getRevision(version))
+}
