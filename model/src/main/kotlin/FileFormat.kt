@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
@@ -82,6 +83,24 @@ fun File.mapper() = FileFormat.forFile(this).mapper
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file.
  */
 inline fun <reified T : Any> File.readValue(): T = mapper().readValue(this)
+
+/**
+ * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return null if
+ * the file has no content.
+ */
+inline fun <reified T : Any> File.readValueOrNull(): T? {
+    val mapper = mapper()
+
+    // Parse the file in a two-step process to avoid readValue() throwing an exception on empty files. Also see
+    // https://github.com/FasterXML/jackson-databind/issues/1406#issuecomment-252676674.
+    return mapper.readTree(this)?.let { mapper.convertValue(it) }
+}
+
+/**
+ * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return the
+ * [default] value if the file has no content.
+ */
+inline fun <reified T : Any> File.readValueOrDefault(default: T): T = readValueOrNull() ?: default
 
 /**
  * Use the Jackson mapper returned from [File.mapper] to write an object of type [T] to this file. [prettyPrint]
