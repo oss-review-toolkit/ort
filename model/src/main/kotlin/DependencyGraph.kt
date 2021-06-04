@@ -166,6 +166,27 @@ data class DependencyGraph(
             )
         }
     }
+
+    /**
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
+     */
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+
+        fun addIssues(ref: DependencyReference) {
+            if (ref.issues.isNotEmpty()) {
+                collectedIssues.getOrPut(packages[ref.pkg]) { mutableSetOf() } += ref.issues
+            }
+
+            ref.dependencies.forEach { addIssues(it) }
+        }
+
+        for (ref in scopeRoots) {
+            addIssues(ref)
+        }
+
+        return collectedIssues
+    }
 }
 
 /**
