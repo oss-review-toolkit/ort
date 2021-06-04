@@ -92,9 +92,7 @@ data class AnalyzerResult(
 
         dependencyGraphs.values.forEach { graph ->
             graph.collectIssues().forEach { (id, issues) ->
-                if (issues.isNotEmpty()) {
-                    collectedIssues.getOrPut(id) { mutableSetOf() } += issues
-                }
+                collectedIssues.getOrPut(id) { mutableSetOf() } += issues
             }
         }
 
