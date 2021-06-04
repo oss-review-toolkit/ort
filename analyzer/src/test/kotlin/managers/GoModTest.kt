@@ -20,6 +20,9 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.Identifier
@@ -68,6 +71,51 @@ class GoModTest : WordSpec({
             val id = Identifier("GoMod::github.com/Azure/azure-sdk-for-go:v43.3.0+incompatible")
 
             id.toVcsInfo().revision shouldBe "v43.3.0"
+        }
+    }
+
+    "parseWhyOutput" should {
+        "detect packages that are used" {
+            val output = """
+                # cloud.google.com/go
+                foo
+                
+                # github.com/fatih/color
+                bar
+                
+                # github.com/hashicorp/go-multierror
+                baz
+            """.trimIndent()
+
+            parseWhyOutput(output) should containExactlyInAnyOrder(
+                "cloud.google.com/go",
+                "github.com/fatih/color",
+                "github.com/hashicorp/go-multierror"
+            )
+        }
+
+        "handle a missing current package" {
+            val output = "foo"
+
+            parseWhyOutput(output) should beEmpty()
+        }
+
+        "skip unused packages" {
+            val output = """
+                # cloud.google.com/go
+                foo
+                
+                # github.com/fatih/color
+                bar
+                
+                # github.com/hashicorp/go-multierror
+                (main module does not need package github.com/hashicorp/go-multierror
+            """.trimIndent()
+
+            parseWhyOutput(output) should containExactlyInAnyOrder(
+                "cloud.google.com/go",
+                "github.com/fatih/color"
+            )
         }
     }
 })
