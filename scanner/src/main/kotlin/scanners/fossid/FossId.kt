@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
@@ -221,17 +222,31 @@ class FossId(
                         .checkResponse("create project")
                 }
 
-                log.info { "Creating scan for URL $url and revision $revision ..." }
+                val scans = service.listScansForProject(user, apiKey, projectCode)
+                    .checkResponse("list scans for project").data
+                checkNotNull(scans)
 
-                val scanCode = createScan(projectCode, url, revision)
+                val existingScan = scans.sortedByDescending { it.id }.find { scan ->
+                    scan.gitBranch == revision && scan.gitRepoUrl == url
+                }
 
-                log.info { "Initiating download from Git repository ..." }
+                val scanCode = if (existingScan == null) {
+                    log.info { "No scan found for $url and revision $revision. Creating scan ..." }
+                    val scanCode = createScan(projectCode, url, revision)
 
-                service.downloadFromGit(user, apiKey, scanCode)
-                    .checkResponse("download data from Git", false)
+                    log.info { "Initiating data download ..." }
+                    service.downloadFromGit(user, apiKey, scanCode)
+                        .checkResponse("download data from Git", false)
+                    scanCode
+                } else {
+                    log.info { "Scan found for $url and revision $revision." }
+
+                    requireNotNull(existingScan.code) {
+                        "FossId returned a null scancode for an existing scan"
+                    }
+                }
 
                 checkScan(scanCode)
-
                 val rawResults = getRawResults(scanCode)
                 val resultsSummary = createResultSummary(startTime, rawResults)
 
