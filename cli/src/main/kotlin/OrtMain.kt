@@ -108,6 +108,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
