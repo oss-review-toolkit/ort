@@ -141,6 +141,8 @@ class FossId(
 
         val client = OkHttpClientHelper.buildClient()
 
+        log.info { "FossID server URL is $serverUrl." }
+
         val retrofit = Retrofit.Builder()
             .client(client)
             .baseUrl(serverUrl)
