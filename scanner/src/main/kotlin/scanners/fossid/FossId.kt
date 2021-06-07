@@ -88,7 +88,7 @@ class FossId(
         private val PROJECT_NAME_REGEX = Regex("""^.*\/([\w\-]+)(?:\.git)?$""")
 
         @JvmStatic
-        private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD")
+        private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
 
         @JvmStatic
         private val WAIT_INTERVAL_MS = 10000L
