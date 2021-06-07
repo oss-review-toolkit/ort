@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -184,6 +183,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
 
         val counts = scanResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, Severity.HINT, 2)
+        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
     }
 }

@@ -41,7 +41,6 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -111,7 +110,8 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         println("The following advisors are activated:")
         println("\t" + distinctProviders.joinToString())
 
-        val advisor = Advisor(distinctProviders, globalOptionsForSubcommands.config.advisor)
+        val config = globalOptionsForSubcommands.config
+        val advisor = Advisor(distinctProviders, config.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
         val ortResultOutput = advisor.retrieveVulnerabilityInformation(ortResultInput, skipExcluded).mergeLabels(labels)
@@ -127,6 +127,6 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         }
 
         val counts = advisorResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, Severity.HINT, 2)
+        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
     }
 }

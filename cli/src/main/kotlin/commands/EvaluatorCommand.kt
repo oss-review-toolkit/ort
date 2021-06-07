@@ -54,7 +54,6 @@ import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -256,10 +255,11 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
+        val config = globalOptionsForSubcommands.config
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner.archive.createFileArchiver(),
+            archiver = config.scanner.archive.createFileArchiver(),
             licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )
 
@@ -286,6 +286,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         }
 
         val counts = evaluatorRun.violations.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, Severity.HINT, 2)
+        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
     }
 }

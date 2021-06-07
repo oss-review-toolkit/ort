@@ -48,7 +48,6 @@ import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -192,6 +191,6 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         }
 
         val counts = analyzerResult.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, Severity.HINT, 2)
+        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
     }
 }

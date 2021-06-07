@@ -74,14 +74,14 @@ data class GlobalOptions(
 )
 
 /**
- * A helper function to print statistics about the [counts] of severities. If there are severities exceeding
- * [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
+ * A helper function to print statistics about the [counts] of severities. If there are severities equal to or greater
+ * than [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
  */
 fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
     var hasSevereIssues = false
 
     fun getSeverityCount(severity: Severity) =
-        counts.getOrDefault(severity, 0).also { hasSevereIssues = it > 0 && severity > threshold }
+        counts.getOrDefault(severity, 0).also { hasSevereIssues = it >= 0 && severity > threshold }
 
     val hintCount = getSeverityCount(Severity.HINT)
     val warningCount = getSeverityCount(Severity.WARNING)
