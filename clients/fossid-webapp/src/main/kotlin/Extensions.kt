@@ -117,11 +117,13 @@ suspend fun FossIdRestService.createScan(
     )
 
 /**
- * Trigger a scan with the given [scanCode].
+ * Trigger a scan with the given [scanCode]. Additional [options] can be passed to FossID.
  *
  * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
-suspend fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.runScan(
+    user: String, apiKey: String, scanCode: String, vararg options: Pair<String, String>
+) =
     runScan(
         PostRequestBody(
             "run",
@@ -130,7 +132,8 @@ suspend fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: St
             apiKey,
             "scan_code" to scanCode,
             "auto_identification_detect_declaration" to "1",
-            "auto_identification_detect_copyright" to "1"
+            "auto_identification_detect_copyright" to "1",
+            *options
         )
     )
 
