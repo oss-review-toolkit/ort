@@ -38,9 +38,19 @@ import org.ossreviewtoolkit.utils.log
  */
 data class OrtConfiguration(
     /**
+     * The license file patterns.
+     */
+    val licenseFilePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT,
+
+    /**
      * The configuration of the analyzer.
      */
     val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),
+
+    /**
+     * The configuration of the advisors, using the advisor's name as the key.
+     */
+    val advisor: AdvisorConfiguration = AdvisorConfiguration(),
 
     /**
      * The configuration of the downloader.
@@ -50,17 +60,7 @@ data class OrtConfiguration(
     /**
      * The configuration of the scanner.
      */
-    val scanner: ScannerConfiguration = ScannerConfiguration(),
-
-    /**
-     * The license file patterns.
-     */
-    val licenseFilePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT,
-
-    /**
-     * The configuration of the advisors, using the advisor's name as the key.
-     */
-    val advisor: AdvisorConfiguration = AdvisorConfiguration()
+    val scanner: ScannerConfiguration = ScannerConfiguration()
 ) {
     companion object {
         /**
