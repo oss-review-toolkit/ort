@@ -31,6 +31,7 @@ import com.sksamuel.hoplite.parsers.toNode
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.log
 
 /**
@@ -41,6 +42,11 @@ data class OrtConfiguration(
      * The license file patterns.
      */
     val licenseFilePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT,
+
+    /**
+     * The threshold from which on issues count as severe.
+     */
+    val severeIssueThreshold: Severity = Severity.WARNING,
 
     /**
      * The configuration of the analyzer.
