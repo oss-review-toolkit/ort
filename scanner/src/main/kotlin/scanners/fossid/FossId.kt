@@ -120,6 +120,7 @@ class FossId(
     private val secretKeys = listOf("serverUrl", "apiKey", "user")
 
     private val service: FossIdRestService
+    private val packageNamespaceFilter: String
 
     override val version: String
 
@@ -136,6 +137,7 @@ class FossId(
             ?: throw IllegalArgumentException("No FossId API Key configuration found.")
         user = fossIdScannerOptions["user"]
             ?: throw IllegalArgumentException("No FossId User configuration found.")
+        packageNamespaceFilter = fossIdScannerOptions["packageNamespaceFilter"].orEmpty()
 
         val client = OkHttpClientHelper.buildClient()
 
@@ -205,7 +207,20 @@ class FossId(
         val (results, duration) = measureTimedValue {
             val results = mutableMapOf<Package, MutableList<ScanResult>>()
 
-            packages.forEach { pkg: Package ->
+            log.info {
+                if (packageNamespaceFilter.isEmpty()) "No package namespace filter is set."
+                else "Package namespace filter is '$packageNamespaceFilter'."
+            }
+
+            val filteredPackages = packages
+                .filter { packageNamespaceFilter.isEmpty() || it.id.namespace == packageNamespaceFilter }
+
+            if (filteredPackages.isEmpty()) {
+                log.warn { "There is no package to scan !" }
+                return results
+            }
+
+            filteredPackages.forEach { pkg ->
                 val startTime = Instant.now()
 
                 // TODO: Continue the processing of other packages and add an issue to the scan result.
