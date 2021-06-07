@@ -41,7 +41,7 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
-import org.ossreviewtoolkit.cli.printSeverityStats
+import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
@@ -286,6 +286,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         }
 
         val counts = evaluatorRun.violations.groupingBy { it.severity }.eachCount()
-        printSeverityStats(counts, Severity.HINT, 2)
+        concludeSeverityStats(counts, Severity.HINT, 2)
     }
 }

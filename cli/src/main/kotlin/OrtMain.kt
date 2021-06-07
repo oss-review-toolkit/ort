@@ -74,10 +74,10 @@ data class GlobalOptions(
 )
 
 /**
- * A helper function to print statistics about the [counts] of severities. Throw a ProgramResult exception with
- * [severeStatusCode] if there are severities exceeding [threshold].
+ * A helper function to print statistics about the [counts] of severities. If there are severities exceeding
+ * [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
  */
-fun printSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
+fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
     var hasSevereIssues = false
 
     fun getSeverityCount(severity: Severity) =
