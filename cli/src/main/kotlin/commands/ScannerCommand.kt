@@ -38,7 +38,7 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.cli.GlobalOptions
-import org.ossreviewtoolkit.cli.printSeverityStats
+import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
@@ -184,6 +184,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
 
         val counts = scanResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        printSeverityStats(counts, Severity.HINT, 2)
+        concludeSeverityStats(counts, Severity.HINT, 2)
     }
 }

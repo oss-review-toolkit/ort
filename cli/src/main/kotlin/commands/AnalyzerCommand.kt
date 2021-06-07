@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
-import org.ossreviewtoolkit.cli.printSeverityStats
+import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
@@ -192,6 +192,6 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         }
 
         val counts = analyzerResult.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        printSeverityStats(counts, Severity.HINT, 2)
+        concludeSeverityStats(counts, Severity.HINT, 2)
     }
 }
