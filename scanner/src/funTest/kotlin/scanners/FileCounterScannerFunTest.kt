@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.utils.test.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -43,8 +44,10 @@ class FileCounterScannerFunTest : StringSpec() {
             outputDir = createTestTempDir()
 
             val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
-            val expectedResult = patchExpectedResult(
-                assetsDir.resolve("file-counter-expected-output-for-analyzer-result.yml")
+            val expectedResult = convertToDependencyGraph(
+                patchExpectedResult(
+                    assetsDir.resolve("file-counter-expected-output-for-analyzer-result.yml")
+                )
             )
 
             val scanner = FileCounter("FileCounter", ScannerConfiguration(), DownloaderConfiguration())

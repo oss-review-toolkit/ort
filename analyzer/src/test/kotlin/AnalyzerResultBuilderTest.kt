@@ -119,7 +119,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
                 val deserializedMergedResults = yamlMapper.readValue<AnalyzerResult>(serializedMergedResults)
 
-                deserializedMergedResults shouldBe mergedResults
+                deserializedMergedResults.withScopesResolved() shouldBe mergedResults
             }
 
             "be serialized and deserialized correctly with a dependency graph" {
@@ -157,6 +157,20 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val serializedResult2 = yamlMapper.writeValueAsString(deserializedResult)
 
                 serializedResult2 shouldBe serializedResult
+            }
+
+            "use the dependency graph representation on serialization" {
+                val mergedResults = AnalyzerResultBuilder()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build()
+
+                val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
+                val resultTree = yamlMapper.readTree(serializedMergedResults)
+
+                resultTree["dependency_graphs"] shouldNotBeNull {
+                    count() shouldBe 2
+                }
             }
         }
 
