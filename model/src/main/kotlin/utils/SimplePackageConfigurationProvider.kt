@@ -60,7 +60,7 @@ class SimplePackageConfigurationProvider(
         }
 
         fun findPackageConfigurationFiles(directory: File): List<File> =
-            directory.walkBottomUp().filter { !it.isHidden && it.isFile }.toList()
+            directory.walkBottomUp().filter { it.isFile }.toList()
 
         /**
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found in the given
