@@ -82,8 +82,8 @@ class BabelFunTest : StringSpec() {
                 vcsInfo.type shouldBe pkg.vcsProcessed.type
                 vcsInfo.url shouldBe pkg.vcsProcessed.url
                 vcsInfo.revision shouldBe "master"
-                vcsInfo.resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
                 vcsInfo.path shouldBe pkg.vcsProcessed.path
+                resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
             }
 
             workingTree shouldNotBeNull {

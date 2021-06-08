@@ -87,9 +87,9 @@ class ProvenanceTest : WordSpec({
                 type = VcsType.UNKNOWN,
                 url = "url",
                 revision = "revision",
-                resolvedRevision = "resolvedRevision",
                 path = "path"
-            )
+            ),
+            resolvedRevision = "resolvedRevision"
         )
 
         val json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(provenance)
@@ -101,9 +101,9 @@ class ProvenanceTest : WordSpec({
                     "type" : "",
                     "url" : "url",
                     "revision" : "revision",
-                    "resolved_revision" : "resolvedRevision",
                     "path" : "path"
-                  }
+                  },
+                  "resolved_revision" : "resolvedRevision"
                 }
             """.trimIndent()
         }

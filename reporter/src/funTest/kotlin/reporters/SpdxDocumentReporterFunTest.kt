@@ -131,7 +131,6 @@ private fun createOrtResult(): OrtResult {
     val analyzedVcs = VcsInfo(
         type = VcsType.GIT,
         revision = "master",
-        resolvedRevision = "10203040",
         url = "https://github.com/path/first-project.git",
         path = ""
     )
@@ -210,7 +209,6 @@ private fun createOrtResult(): OrtResult {
                             vcs = VcsInfo(
                                 type = VcsType.GIT,
                                 revision = "master",
-                                resolvedRevision = "deadbeef",
                                 url = "ssh://git@github.com/path/first-package-repo.git",
                                 path = "project-path"
                             )
@@ -319,10 +317,10 @@ private fun createOrtResult(): OrtResult {
                                 vcsInfo = VcsInfo(
                                     type = VcsType.GIT,
                                     revision = "master",
-                                    resolvedRevision = "deadbeef",
                                     url = "ssh://git@github.com/path/first-package-repo.git",
                                     path = "project-path"
-                                )
+                                ),
+                                resolvedRevision = "deadbeef"
                             ),
                             scanner = ScannerDetails.EMPTY,
                             summary = ScanSummary(

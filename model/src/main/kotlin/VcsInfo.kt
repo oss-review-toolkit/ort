@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
@@ -54,13 +53,6 @@ data class VcsInfo(
     val revision: String,
 
     /**
-     * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
-     * contain symbolic names like branches or tags.
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val resolvedRevision: String? = null,
-
-    /**
      * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
      * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
      * interpreted as the path to the manifest file.
@@ -76,7 +68,6 @@ data class VcsInfo(
             type = VcsType.UNKNOWN,
             url = "",
             revision = "",
-            resolvedRevision = null,
             path = ""
         )
     }
@@ -94,7 +85,6 @@ data class VcsInfo(
             type.takeUnless { it == EMPTY.type } ?: other.type,
             url.takeUnless { it == EMPTY.url } ?: other.url,
             revision.takeUnless { it == EMPTY.revision } ?: other.revision,
-            resolvedRevision.takeUnless { it == EMPTY.resolvedRevision } ?: other.resolvedRevision,
             path.takeUnless { it == EMPTY.path } ?: other.path
         )
     }
@@ -107,12 +97,15 @@ data class VcsInfo(
     /**
      * Return a [VcsInfoCurationData] with the properties from this [VcsInfo].
      */
-    fun toCuration() = VcsInfoCurationData(type, url, revision, resolvedRevision, path)
+    fun toCuration() = VcsInfoCurationData(type, url, revision, path)
 }
 
 private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     companion object {
-        val KNOWN_FIELDS by lazy { VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } }
+        val KNOWN_FIELDS by lazy {
+            VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } +
+                    PROPERTY_NAMING_STRATEGY.translate("resolvedRevision")
+        }
     }
 
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
@@ -128,8 +121,9 @@ private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java
         return VcsInfo(
             VcsType(node["type"].textValueOrEmpty()),
             node["url"].textValueOrEmpty(),
-            node["revision"].textValueOrEmpty(),
-            (node["resolved_revision"] ?: node["resolvedRevision"])?.textValue(),
+            // For backward compatibility, if resolved_revision is set, prefer it over revision because it is more
+            // specific.
+            node["resolved_revision"]?.textValue() ?: node["revision"].textValueOrEmpty(),
             node["path"].textValueOrEmpty()
         )
     }

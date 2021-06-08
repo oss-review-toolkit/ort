@@ -77,7 +77,7 @@ private fun scanResults(
 
     return listOf(
         ScanResult(
-            provenance = RepositoryProvenance(vcsInfo = vcsInfo),
+            provenance = RepositoryProvenance(vcsInfo = vcsInfo, resolvedRevision = vcsInfo.revision),
             scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
             summary = ScanSummary(
                 startTime = Instant.EPOCH,
@@ -95,15 +95,13 @@ private val PROJECT_VCS_INFO = VcsInfo(
     type = VcsType.GIT_REPO,
     url = "ssh://git@host/manifests/repo",
     path = "path/to/manifest.xml",
-    revision = "deadbeaf44444444333333332222222211111111",
-    resolvedRevision = "deadbeaf44444444333333332222222211111111"
+    revision = "deadbeaf44444444333333332222222211111111"
 )
 private val NESTED_VCS_INFO = VcsInfo(
     type = VcsType.GIT,
     url = "ssh://git@host/project/repo",
     path = "",
-    revision = "0000000000000000000000000000000000000000",
-    resolvedRevision = "0000000000000000000000000000000000000000"
+    revision = "0000000000000000000000000000000000000000"
 )
 
 private val ORT_RESULT = OrtResult(

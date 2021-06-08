@@ -64,21 +64,21 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val sourceArtifact1 = RemoteArtifact("url1", Hash.create("0123456789abcdef0123456789abcdef01234567"))
     private val sourceArtifact2 = RemoteArtifact("url2", Hash.create("0123456789abcdef0123456789abcdef01234567"))
 
-    private val vcs1 = VcsInfo(VcsType("type"), "url1", "revision", "resolvedRevision", "path")
-    private val vcs2 = VcsInfo(VcsType("type"), "url2", "revision", "resolvedRevision", "path")
-    private val vcsWithoutRevision = VcsInfo(VcsType("type"), "url", "", "")
+    private val vcs1 = VcsInfo(VcsType("type"), "url1", "revision", "path")
+    private val vcs2 = VcsInfo(VcsType("type"), "url2", "revision", "path")
+    private val vcsWithoutRevision = VcsInfo(VcsType("type"), "url", "")
 
     private val pkg1 = Package.EMPTY.copy(
         id = id1,
         sourceArtifact = sourceArtifact1,
-        vcs = vcs1.copy(resolvedRevision = null),
+        vcs = vcs1,
         vcsProcessed = vcs1.normalize()
     )
 
     private val pkg2 = Package.EMPTY.copy(
         id = id2,
         sourceArtifact = sourceArtifact2,
-        vcs = vcs2.copy(resolvedRevision = null),
+        vcs = vcs2,
         vcsProcessed = vcs2.normalize()
     )
 
@@ -86,12 +86,13 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
     private val provenanceEmpty = UnknownProvenance
     private val provenanceWithoutRevision = RepositoryProvenance(
-        vcsInfo = pkgWithoutRevision.vcsProcessed.copy(resolvedRevision = "resolvedRevision")
+        vcsInfo = pkgWithoutRevision.vcsProcessed,
+        resolvedRevision = "resolvedRevision"
     )
     private val provenanceWithSourceArtifact1 = ArtifactProvenance(sourceArtifact = sourceArtifact1)
     private val provenanceWithSourceArtifact2 = ArtifactProvenance(sourceArtifact = sourceArtifact2)
-    private val provenanceWithVcsInfo1 = RepositoryProvenance(vcsInfo = vcs1)
-    private val provenanceWithVcsInfo2 = RepositoryProvenance(vcsInfo = vcs2)
+    private val provenanceWithVcsInfo1 = RepositoryProvenance(vcsInfo = vcs1, resolvedRevision = "resolvedRevision")
+    private val provenanceWithVcsInfo2 = RepositoryProvenance(vcsInfo = vcs2, resolvedRevision = "resolvedRevision")
 
     private val scannerDetails1 = ScannerDetails("name 1", "1.0.0", "config 1")
     private val scannerDetails2 = ScannerDetails("name 2", "2.0.0", "config 2")
@@ -292,7 +293,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultSourceArtifactNonMatching =
                     ScanResult(provenanceSourceArtifactNonMatching, scannerDetails1, scanSummaryWithFiles)
                 val provenanceVcsNonMatching = provenanceWithVcsInfo1.copy(
-                    vcsInfo = vcs1.copy(revision = "revision2", resolvedRevision = "resolvedRevision2")
+                    vcsInfo = vcs1.copy(revision = "revision2"),
+                    resolvedRevision = "resolvedRevision2"
                 )
                 val scanResultVcsNonMatching =
                     ScanResult(provenanceVcsNonMatching, scannerDetails1, scanSummaryWithFiles)
@@ -495,7 +497,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultSourceArtifactNonMatching1 =
                     ScanResult(provenanceSourceArtifactNonMatching1, scannerDetails1, scanSummaryWithFiles)
                 val provenanceVcsNonMatching1 = provenanceWithVcsInfo1.copy(
-                    vcsInfo = vcs1.copy(revision = "revision2", resolvedRevision = "resolvedRevision2")
+                    vcsInfo = vcs1.copy(revision = "revision2"),
+                    resolvedRevision = "resolvedRevision2"
                 )
                 val scanResultVcsNonMatching1 =
                     ScanResult(provenanceVcsNonMatching1, scannerDetails1, scanSummaryWithFiles)
@@ -511,7 +514,8 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val scanResultSourceArtifactNonMatching2 =
                     ScanResult(provenanceSourceArtifactNonMatching2, scannerDetails1, scanSummaryWithFiles)
                 val provenanceVcsNonMatching2 = provenanceWithVcsInfo2.copy(
-                    vcsInfo = vcs2.copy(revision = "revision2", resolvedRevision = "resolvedRevision2")
+                    vcsInfo = vcs2.copy(revision = "revision2"),
+                    resolvedRevision = "resolvedRevision2"
                 )
                 val scanResultVcsNonMatching2 =
                     ScanResult(provenanceVcsNonMatching2, scannerDetails1, scanSummaryWithFiles)

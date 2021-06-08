@@ -42,12 +42,6 @@ data class VcsInfoCurationData(
     val revision: String? = null,
 
     /**
-     * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
-     * contain symbolic names like branches or tags.
-     */
-    val resolvedRevision: String? = null,
-
-    /**
      * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
      * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
      * interpreted as the path to the manifest file.

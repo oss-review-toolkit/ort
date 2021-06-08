@@ -73,8 +73,8 @@ class BeanUtilsFunTest : StringSpec() {
                 vcsInfo.type shouldBe VcsType.SUBVERSION
                 vcsInfo.url shouldBe vcsFromCuration.url
                 vcsInfo.revision shouldBe ""
-                vcsInfo.resolvedRevision shouldBe "928490"
                 vcsInfo.path shouldBe vcsFromCuration.path
+                resolvedRevision shouldBe "928490"
             }
         }
     }

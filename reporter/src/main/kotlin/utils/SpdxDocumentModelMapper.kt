@@ -112,12 +112,13 @@ object SpdxDocumentModelMapper {
             if (pkg.vcsProcessed.url.isNotBlank()) {
                 val vcsScanResult =
                     ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is RepositoryProvenance }
+                val provenance = vcsScanResult?.provenance as? RepositoryProvenance
 
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = binaryPackage.copy(
                     spdxId = spdxPackageIdGenerator.nextId("${pkg.id.name}-vcs"),
                     filesAnalyzed = vcsScanResult != null,
-                    downloadLocation = pkg.vcsProcessed.toSpdxDownloadLocation(),
+                    downloadLocation = pkg.vcsProcessed.toSpdxDownloadLocation(provenance?.resolvedRevision),
                     licenseConcluded = SpdxConstants.NOASSERTION,
                     licenseDeclared = SpdxConstants.NOASSERTION,
                     packageVerificationCode = vcsScanResult?.toSpdxPackageVerificationCode()
@@ -258,7 +259,7 @@ private fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
         else -> toString()
     }
 
-private fun VcsInfo.toSpdxDownloadLocation(): String {
+private fun VcsInfo.toSpdxDownloadLocation(resolvedRevision: String?): String {
     val vcsTool = when (type) {
         VcsType.CVS -> "cvs"
         VcsType.GIT -> "git"
