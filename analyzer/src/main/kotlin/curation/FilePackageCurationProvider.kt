@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +27,24 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValueOrDefault
+import org.ossreviewtoolkit.utils.log
 
 /**
- * A [PackageCurationProvider] that loads [PackageCuration]s from a single file. Supports all file formats specified
- * in [FileFormat].
+ * A [PackageCurationProvider] that loads [PackageCuration]s from all [curationFiles]. Supports all file formats
+ * specified in [FileFormat].
  */
-class FilePackageCurationProvider(curationFile: File) : PackageCurationProvider {
-    internal val packageCurations by lazy { curationFile.readValueOrDefault(emptyList<PackageCuration>()) }
+class FilePackageCurationProvider(curationFiles: Collection<File>) : PackageCurationProvider {
+    constructor(curationFile: File) : this(listOf(curationFile))
+
+    internal val packageCurations by lazy {
+        curationFiles.mapNotNull { curationFile ->
+            runCatching {
+                curationFile.readValueOrDefault(emptyList<PackageCuration>())
+            }.onFailure {
+                log.warn { "Failed parsing package curation from '${curationFile.absoluteFile}'." }
+            }.getOrNull()
+        }.flatten()
+    }
 
     override fun getCurationsFor(pkgId: Identifier) = packageCurations.filter { it.isApplicable(pkgId) }
 }
