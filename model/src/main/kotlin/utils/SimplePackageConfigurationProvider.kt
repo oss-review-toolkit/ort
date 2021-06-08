@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import java.io.File
 import java.io.IOException
 
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
@@ -48,7 +49,7 @@ class SimplePackageConfigurationProvider(
          * configuration per [Identifier] and [Provenance].
          */
         fun forDirectory(directory: File): SimplePackageConfigurationProvider {
-            val entries = findPackageConfigurationFiles(directory).mapTo(mutableListOf()) { file ->
+            val entries = FileFormat.findFilesWithKnownExtensions(directory).mapTo(mutableListOf()) { file ->
                 try {
                     file.readValue<PackageConfiguration>()
                 } catch (e: IOException) {
@@ -58,9 +59,6 @@ class SimplePackageConfigurationProvider(
 
             return SimplePackageConfigurationProvider(entries)
         }
-
-        fun findPackageConfigurationFiles(directory: File): List<File> =
-            directory.walkBottomUp().filter { it.isFile }.toList()
 
         /**
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found in the given
