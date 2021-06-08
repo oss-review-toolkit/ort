@@ -44,9 +44,9 @@ class SimplePackageConfigurationProvider(
 
         /**
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found recursively
-         * in the given [directory]. All non-hidden files within the given [directory] must be package curation files,
-         * each only containing a single package configuration. Throws an exception if there is more than one
-         * configuration per [Identifier] and [Provenance].
+         * in the given [directory]. All files with known extensions within the given [directory] must be package
+         * curation files, each only containing a single package configuration. Throws an exception if there is more
+         * than one configuration per [Identifier] and [Provenance].
          */
         fun forDirectory(directory: File): SimplePackageConfigurationProvider {
             val entries = FileFormat.findFilesWithKnownExtensions(directory).mapTo(mutableListOf()) { file ->
