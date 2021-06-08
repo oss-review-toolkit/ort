@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.log
 
 /**
  * A provider for [PackageConfiguration]s providing exactly the packages of the given list.
@@ -41,6 +42,31 @@ class SimplePackageConfigurationProvider(
          * A provider without any package configurations.
          */
         val EMPTY = SimplePackageConfigurationProvider(emptyList())
+
+        /**
+         * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found (recursively)
+         * in the given [fileOrDirectory], and in optionally [moreFiles].
+         */
+        fun forFiles(fileOrDirectory: File, vararg moreFiles: File): SimplePackageConfigurationProvider {
+            val configurations = mutableListOf<PackageConfiguration>()
+            val files = FileFormat.findFilesWithKnownExtensions(fileOrDirectory).toMutableList()
+
+            moreFiles.forEach {
+                files += FileFormat.findFilesWithKnownExtensions(it)
+            }
+
+            files.forEach { file ->
+                runCatching {
+                    configurations += file.readValue<PackageConfiguration>()
+                }.recoverCatching {
+                    configurations += file.readValue<List<PackageConfiguration>>()
+                }.onFailure {
+                    log.warn { "Unable to read package configuration(s) from '${file.absoluteFile}': ${it.message}" }
+                }
+            }
+
+            return SimplePackageConfigurationProvider(configurations)
+        }
     }
 
     private val configurationsById: Map<Identifier, List<PackageConfiguration>>
