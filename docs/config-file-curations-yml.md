@@ -89,6 +89,15 @@ cli/build/install/ort/bin/ort analyze
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
 ```
 
+Alternatively specify a directory with multiple curation files using the `--package-curations-dir` to the _analyzer_:
+
+```bash
+cli/build/install/ort/bin/ort analyze
+  -i [source-code-of-project-dir]
+  -o [analyzer-output-dir]
+  --package-curations-dir $ORT_CONFIG_DIR/curations
+``` 
+
 ORT can use [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. The preferred workflow is to
 use curations from ClearlyDefined, and to submit curations there. However, this is not always possible, for example in
 case of curations for organization internal packages. To support this workflow, ClearlyDefined can be enabled as the

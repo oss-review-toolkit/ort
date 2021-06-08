@@ -35,6 +35,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
@@ -95,6 +97,14 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         .default(ortConfigDirectory.resolve(ORT_CURATIONS_FILENAME))
         .configurationGroup()
 
+    private val packageCurationsDir by option(
+        "--package-curations-dir",
+        help = "A directory containing package curation data."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
+
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, the '$ORT_REPO_CONFIG_FILENAME' file from " +
@@ -142,9 +152,9 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             }
         }
 
-        val configurationFiles = listOfNotNull(packageCurationsFile, repositoryConfigurationFile)
-                .map { it.absolutePath }
-        println("The following configuration files are used:")
+        val configurationFiles = listOfNotNull(packageCurationsFile, packageCurationsDir, repositoryConfigurationFile)
+            .map { it.absolutePath }
+        println("The following configuration files and directories are used:")
         println("\t" + configurationFiles.joinToString("\n\t"))
 
         val distinctPackageManagers = packageManagers.distinct()
@@ -156,9 +166,13 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val config = globalOptionsForSubcommands.config
         val analyzer = Analyzer(config.analyzer)
 
+        val curationFiles = mutableListOf<File>()
+        packageCurationsFile.takeIf { it.isFile }?.let { curationFiles += it }
+        packageCurationsDir?.let { curationFiles += FileFormat.findFilesWithKnownExtensions(it) }
+
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
-                packageCurationsFile.takeIf { it.isFile }?.let { FilePackageCurationProvider(it) },
+                FilePackageCurationProvider(curationFiles),
                 config.analyzer.sw360Configuration?.let {
                     Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
                 },

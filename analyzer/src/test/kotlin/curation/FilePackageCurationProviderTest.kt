@@ -27,9 +27,11 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 
 class FilePackageCurationProviderTest : StringSpec() {
+    private val curationsDir = File("src/test/assets/package-curations-dir")
     private val curationsFile = File("src/test/assets/package-curations.yml")
 
     init {
@@ -37,6 +39,20 @@ class FilePackageCurationProviderTest : StringSpec() {
             val provider = FilePackageCurationProvider(curationsFile)
 
             provider.packageCurations should haveSize(8)
+        }
+
+        "Provider can read from multiple yaml files" {
+            val provider = FilePackageCurationProvider(FileFormat.findFilesWithKnownExtensions(curationsDir))
+            val idsWithExistingCurations = listOf(
+                Identifier("maven", "org.ossreviewtoolkit", "example", "1.0"),
+                Identifier("maven", "org.foo", "bar", "0.42")
+            )
+
+            idsWithExistingCurations.forEach {
+                val curations = provider.getCurationsFor(it)
+
+                curations should haveSize(1)
+            }
         }
 
         "Provider returns only matching curations for a fixed version" {
