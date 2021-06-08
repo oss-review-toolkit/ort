@@ -93,4 +93,20 @@ fun patchActualResult(
 ): String =
     patchActualResult(yamlMapper.writeValueAsString(result), patchStartAndEndTime)
 
-fun readOrtResult(file: String) = File(file).let { it.mapper().readValue<OrtResult>(patchExpectedResult(it)) }
+fun patchActualResultObject(result: OrtResult, patchStartAndEndTime: Boolean = false): OrtResult =
+    yamlMapper.readValue(patchActualResult(result, patchStartAndEndTime))
+
+fun readOrtResult(file: String) = readOrtResult(File(file))
+
+fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
+
+/**
+ * Deserialize an [OrtResult] from the given [string representation][result] and then serialize it again. As for some
+ * of the components in the result custom serializers or deserializers are registered, this can cause some
+ * modifications and conversions on the original result. This function is also used to convert expected test results
+ * stored in the assets to the most recent serialization format.
+ */
+fun convertToDependencyGraph(result: String): String {
+    val ortResult = yamlMapper.readValue<OrtResult>(result)
+    return yamlMapper.writeValueAsString(ortResult)
+}

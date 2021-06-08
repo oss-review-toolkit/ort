@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -27,11 +29,14 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.patchActualResultObject
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'directories' single project should be detected correctly".config(
@@ -46,10 +51,9 @@ class SbtFunTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = ortResult.withResolvedScopes().toYaml()
-        val expectedResult = patchExpectedResult(expectedOutputFile)
+        val expectedResult = readOrtResult(expectedOutputFile)
 
-        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResultObject(ortResult, patchStartAndEndTime = true).withResolvedScopes() shouldBe expectedResult
     }
 
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly".config(
@@ -64,10 +68,9 @@ class SbtFunTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = ortResult.withResolvedScopes().toYaml()
-        val expectedResult = patchExpectedResult(expectedOutputFile)
+        val expectedResult = readOrtResult(expectedOutputFile)
 
-        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResultObject(ortResult, patchStartAndEndTime = true).withResolvedScopes() shouldBe expectedResult
     }
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly".config(
@@ -85,14 +88,15 @@ class SbtFunTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = ortResult.withResolvedScopes().toYaml()
-        val expectedResult = patchExpectedResult(
-            expectedOutputFile,
-            url = vcsUrl,
-            revision = vcsRevision,
-            urlProcessed = normalizeVcsUrl(vcsUrl)
+        val expectedResult = yamlMapper.readValue<OrtResult>(
+            patchExpectedResult(
+                expectedOutputFile,
+                url = vcsUrl,
+                revision = vcsRevision,
+                urlProcessed = normalizeVcsUrl(vcsUrl)
+            )
         )
 
-        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResultObject(ortResult, patchStartAndEndTime = true).withResolvedScopes() shouldBe expectedResult
     }
 })
