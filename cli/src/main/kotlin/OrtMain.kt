@@ -81,7 +81,7 @@ fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, sever
     var hasSevereIssues = false
 
     fun getSeverityCount(severity: Severity) =
-        counts.getOrDefault(severity, 0).also { hasSevereIssues = it >= 0 && severity > threshold }
+        counts.getOrDefault(severity, 0).also { hasSevereIssues = it > 0 && severity >= threshold }
 
     val hintCount = getSeverityCount(Severity.HINT)
     val warningCount = getSeverityCount(Severity.WARNING)
@@ -90,7 +90,7 @@ fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, sever
     println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
 
     if (hasSevereIssues) {
-        println("There are issues with a severity greater than the $threshold threshold.")
+        println("There are issues with a severity equal to or greater than the $threshold threshold.")
         throw ProgramResult(severeStatusCode)
     }
 }
