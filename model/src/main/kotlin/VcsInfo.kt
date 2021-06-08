@@ -54,11 +54,19 @@ data class VcsInfo(
     val revision: String,
 
     /**
-     * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
-     * contain symbolic names like branches or tags.
+     * True if the [revision] was already resolved. Resolved means that the revision must be fixed and confirmed to be
+     * correct.
+     *
+     * Fixed means that the revision must not be a moving reference. For example, in the case of Git it must be the SHA1
+     * of a commit, not a branch or tag name, because those could be changed to reference a different revision.
+     *
+     * Confirmed to be correct means that there is reasonable certainty that the revision is correct. For example, if
+     * the revision is provided by a package manager it should not be marked as resolved if it comes from metadata
+     * provided by the user, because this could be wrong. But if the package manager confirms the revision somehow, for
+     * example by downloading the source code during the installation of dependencies, it can be marked as resolved.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val resolvedRevision: String? = null,
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val isResolvedRevision: Boolean = false,
 
     /**
      * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
@@ -76,7 +84,7 @@ data class VcsInfo(
             type = VcsType.UNKNOWN,
             url = "",
             revision = "",
-            resolvedRevision = null,
+            isResolvedRevision = false,
             path = ""
         )
     }
@@ -94,7 +102,7 @@ data class VcsInfo(
             type.takeUnless { it == EMPTY.type } ?: other.type,
             url.takeUnless { it == EMPTY.url } ?: other.url,
             revision.takeUnless { it == EMPTY.revision } ?: other.revision,
-            resolvedRevision.takeUnless { it == EMPTY.resolvedRevision } ?: other.resolvedRevision,
+            isResolvedRevision.takeUnless { revision == EMPTY.revision } ?: other.isResolvedRevision,
             path.takeUnless { it == EMPTY.path } ?: other.path
         )
     }
@@ -107,12 +115,15 @@ data class VcsInfo(
     /**
      * Return a [VcsInfoCurationData] with the properties from this [VcsInfo].
      */
-    fun toCuration() = VcsInfoCurationData(type, url, revision, resolvedRevision, path)
+    fun toCuration() = VcsInfoCurationData(type, url, revision, isResolvedRevision, path)
 }
 
 private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     companion object {
-        val KNOWN_FIELDS by lazy { VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } }
+        val KNOWN_FIELDS by lazy {
+            VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } +
+                    PROPERTY_NAMING_STRATEGY.translate("resolvedRevision")
+        }
     }
 
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
@@ -125,11 +136,20 @@ private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java
             }
         }
 
+        // For backward compatibility, if "resolved_revision" is not blank, use it for "revision" and set
+        // "isResolvedRevision" to true.
+        val resolvedRevision = node["resolved_revision"].textValueOrEmpty()
+        val (revision, isResolvedRevision) = if (resolvedRevision.isNotEmpty()) {
+            Pair(resolvedRevision, true)
+        } else {
+            Pair(node["revision"].textValueOrEmpty(), node["is_resolved_revision"]?.booleanValue() ?: false)
+        }
+
         return VcsInfo(
             VcsType(node["type"].textValueOrEmpty()),
             node["url"].textValueOrEmpty(),
-            node["revision"].textValueOrEmpty(),
-            (node["resolved_revision"] ?: node["resolvedRevision"])?.textValue(),
+            revision,
+            isResolvedRevision,
             node["path"].textValueOrEmpty()
         )
     }

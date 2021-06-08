@@ -36,10 +36,11 @@ class GoModTest : WordSpec({
             id.toVcsInfo().type shouldBe VcsType.GIT
         }
 
-        "return null as resolved revision" {
+        "return an unresolved revision" {
             val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
 
-            id.toVcsInfo().resolvedRevision shouldBe null
+            id.toVcsInfo().revision shouldBe "v1.0.0"
+            id.toVcsInfo().isResolvedRevision shouldBe false
         }
 
         "return the VCS URL and path for a package from a single module repository" {
@@ -65,12 +66,14 @@ class GoModTest : WordSpec({
             val id = Identifier("GoMod::github.com/Azure/go-autorest/autorest/date:v0.0.0-20191109021931-daa7c04131f5")
 
             id.toVcsInfo().revision shouldBe "daa7c04131f5"
+            id.toVcsInfo().isResolvedRevision shouldBe false
         }
 
         "return the SHA1 for a version with a '+incompatible' suffix" {
             val id = Identifier("GoMod::github.com/Azure/azure-sdk-for-go:v43.3.0+incompatible")
 
             id.toVcsInfo().revision shouldBe "v43.3.0"
+            id.toVcsInfo().isResolvedRevision shouldBe false
         }
     }
 

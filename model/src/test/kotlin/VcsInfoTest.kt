@@ -117,7 +117,7 @@ class VcsInfoTest : WordSpec({
                 type = VcsType("type"),
                 url = "url",
                 revision = "revision",
-                resolvedRevision = "resolvedRevision",
+                isResolvedRevision = true,
                 path = "path"
             )
 
@@ -125,7 +125,7 @@ class VcsInfoTest : WordSpec({
                 type = VcsType("type"),
                 url = "url",
                 revision = "revision",
-                resolvedRevision = "resolvedRevision",
+                isResolvedRevision = true,
                 path = "path"
             )
 

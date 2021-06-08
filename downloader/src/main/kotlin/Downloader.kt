@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.UnknownProvenance
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -268,15 +267,9 @@ class Downloader(private val config: DownloaderConfiguration) {
             "Finished downloading source code revision '$resolvedRevision' to '${outputDirectory.absolutePath}'."
         }
 
-        val vcsInfo = VcsInfo(
-            type = applicableVcs.type,
-            url = pkg.vcsProcessed.url,
-            revision = pkg.vcsProcessed.revision,
-            resolvedRevision = resolvedRevision,
-            path = pkg.vcsProcessed.path
-        )
+        val vcsInfo = pkg.vcsProcessed.copy(type = applicableVcs.type)
 
-        return RepositoryProvenance(vcsInfo)
+        return RepositoryProvenance(vcsInfo, resolvedRevision)
     }
 
     /**

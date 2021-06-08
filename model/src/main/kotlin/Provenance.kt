@@ -62,23 +62,29 @@ data class RepositoryProvenance(
     /**
      * The VCS repository that was downloaded.
      */
-    val vcsInfo: VcsInfo
+    val vcsInfo: VcsInfo,
+
+    /**
+     * The VCS revision of the source code that was downloaded. Must equals the [revision][VcsInfo.revision] of
+     * [vcsInfo] if [VcsInfo.isResolvedRevision] is true, otherwise it can be different if it was resolved during the
+     * download.
+     */
+    val resolvedRevision: String
 ) : KnownProvenance() {
-    override fun matches(pkg: Package): Boolean {
-        // If no VCS information is present either, or it does not have a resolved revision, there is no way of
-        // verifying matching provenance.
-        if (vcsInfo.resolvedRevision == null) return false
-
-        // This provenance was definitely created when downloading this package.
-        if (pkg.vcsProcessed.equalsIgnoreResolvedRevision(vcsInfo)) return true
-
-        return listOf(pkg.vcs, pkg.vcsProcessed).any {
-            if (it.resolvedRevision != null) {
-                it.resolvedRevision == vcsInfo.resolvedRevision
-            } else {
-                it.revision == vcsInfo.revision || it.revision == vcsInfo.resolvedRevision
-            } && it.type == vcsInfo.type && it.url == vcsInfo.url && it.path == vcsInfo.path
+    init {
+        if (vcsInfo.isResolvedRevision) {
+            require(vcsInfo.revision == resolvedRevision) {
+                "The revision '${vcsInfo.revision}' of vcsInfo is resolved but does not equals the resolvedRevision " +
+                        "'$resolvedRevision' of the provenance."
+            }
         }
+    }
+
+    override fun matches(pkg: Package): Boolean {
+        // If there is no resolved revision, there is no way of verifying matching provenance.
+        if (resolvedRevision.isBlank()) return false
+
+        return vcsInfo == pkg.vcsProcessed
     }
 }
 
@@ -95,12 +101,11 @@ private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::c
             }
             node.has("vcs_info") -> {
                 val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs_info"])!!
-                RepositoryProvenance(vcsInfo)
+                // For backward compatibility, if there is no resolved_revision use the revision from vcsInfo.
+                val resolvedRevision = node["resolved_revision"]?.textValue() ?: vcsInfo.revision
+                RepositoryProvenance(vcsInfo, resolvedRevision)
             }
             else -> UnknownProvenance
         }
     }
 }
-
-private fun VcsInfo.equalsIgnoreResolvedRevision(other: VcsInfo): Boolean =
-    copy(resolvedRevision = "") == other.copy(resolvedRevision = "")

@@ -85,7 +85,7 @@ fun Identifier.toClearlyDefinedSourceLocation(
     sourceArtifact: RemoteArtifact?
 ): SourceLocation? {
     val vcsUrl = vcs?.url
-    val vcsRevision = vcs?.resolvedRevision
+    val vcsRevision = vcs?.revision
     val matchGroups = vcsUrl?.let { REG_GIT_URL.matchEntire(it)?.groupValues }
 
     return when {

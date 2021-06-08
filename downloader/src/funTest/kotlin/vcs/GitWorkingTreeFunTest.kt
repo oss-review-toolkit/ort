@@ -73,7 +73,7 @@ class GitWorkingTreeFunTest : StringSpec() {
                 type = VcsType.GIT,
                 url = "https://github.com/naiquevin/pipdeptree.git",
                 revision = "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c",
-                resolvedRevision = null,
+                isResolvedRevision = true,
                 path = ""
             )
             workingTree.getNested() should beEmpty()

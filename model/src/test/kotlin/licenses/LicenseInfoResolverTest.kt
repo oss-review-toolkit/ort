@@ -73,10 +73,12 @@ class LicenseInfoResolverTest : WordSpec() {
         val vcsInfo = VcsInfo(
             type = VcsType.GIT,
             url = "https://github.com/oss-review-toolkit/ort.git",
-            revision = "master",
+            revision = "master"
+        )
+        val provenance = RepositoryProvenance(
+            vcsInfo = vcsInfo,
             resolvedRevision = "0000000000000000000000000000000000000000"
         )
-        val provenance = RepositoryProvenance(vcsInfo = vcsInfo)
 
         "resolveLicenseInfo()" should {
             "resolve declared licenses" {

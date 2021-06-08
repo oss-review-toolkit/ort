@@ -75,7 +75,7 @@ class CvsWorkingTreeFunTest : StringSpec() {
                 type = VcsType.CVS,
                 url = ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/jhove",
                 revision = "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0",
-                resolvedRevision = null,
+                isResolvedRevision = true,
                 path = ""
             )
             workingTree.getNested() should beEmpty()

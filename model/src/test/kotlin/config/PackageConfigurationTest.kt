@@ -56,9 +56,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
-                        revision = "",
-                        resolvedRevision = "12345678"
-                    )
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
                 )
             ) shouldBe true
         }
@@ -72,9 +72,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
-                        revision = "",
-                        resolvedRevision = "12345678"
-                    )
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
                 )
             ) shouldBe false
         }
@@ -88,9 +88,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://host/repo.git",
-                        revision = "",
-                        resolvedRevision = "12345678"
-                    )
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
                 )
             ) shouldBe true
         }
@@ -104,9 +104,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
-                        revision = "12345678",
-                        resolvedRevision = "12"
-                    )
+                        revision = "12345678"
+                    ),
+                    resolvedRevision = "12"
                 )
             ) shouldBe false
         }

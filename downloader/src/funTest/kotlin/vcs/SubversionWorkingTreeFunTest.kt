@@ -72,7 +72,7 @@ class SubversionWorkingTreeFunTest : StringSpec() {
                 type = VcsType.SUBVERSION,
                 url = "https://svn.code.sf.net/p/docutils/code/trunk/docutils",
                 revision = "8207",
-                resolvedRevision = null,
+                isResolvedRevision = true,
                 path = ""
             )
             workingTree.getNested() should beEmpty()

@@ -71,7 +71,7 @@ private fun ClearlyDefinedService.SourceLocation.toCoordinates(): ClearlyDefined
  * Convert a [VcsInfo] to a [VcsInfoCurationData] object.
  */
 private fun VcsInfo.toVcsInfoCurationData(): VcsInfoCurationData =
-    VcsInfoCurationData(type, url, revision, resolvedRevision, path)
+    VcsInfoCurationData(type, url, revision, isResolvedRevision, path)
 
 /**
  * Generate the coordinates for ClearlyDefined based on the [id], the [vcs], and a [sourceArtifact].
@@ -226,7 +226,8 @@ class ClearlyDefinedStorage(
                                 url = sourceLocation.url.orEmpty(),
                                 revision = sourceLocation.revision,
                                 path = sourceLocation.path.orEmpty()
-                            )
+                            ),
+                            resolvedRevision = sourceLocation.revision
                         )
                     }
 

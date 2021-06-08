@@ -131,7 +131,7 @@ private fun KnownProvenance.storageKey(): String =
             // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes
             // the Git-Repo manifest location rather than the path to be (sparse) checked out.
             val path = vcsInfo.path.takeIf { vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
-            "vcs|${vcsInfo.type}|${vcsInfo.url}|${vcsInfo.resolvedRevision}|$path"
+            "vcs|${vcsInfo.type}|${vcsInfo.url}|$resolvedRevision|$path"
         }
     }
 

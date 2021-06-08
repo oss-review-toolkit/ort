@@ -272,7 +272,7 @@ private fun VcsInfo.toSpdxDownloadLocation(): String {
         append(vcsTool)
         if (vcsTool.isNotEmpty()) append("+")
         append(url.replaceCredentialsInUri())
-        if (!resolvedRevision.isNullOrBlank()) append("@$resolvedRevision")
+        if (revision.isNotBlank()) append("@$revision")
         if (path.isNotBlank()) append("#$path")
     }
 }

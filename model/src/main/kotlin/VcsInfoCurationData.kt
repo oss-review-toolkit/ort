@@ -42,10 +42,18 @@ data class VcsInfoCurationData(
     val revision: String? = null,
 
     /**
-     * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
-     * contain symbolic names like branches or tags.
+     * True if the [revision] was already resolved. Resolved means that the revision must be fixed and confirmed to be
+     * correct.
+     *
+     * Fixed means that the revision must not be a moving reference. For example, in the case of Git it must be the SHA1
+     * of a commit, not a branch or tag name, because those could be changed to reference a different revision.
+     *
+     * Confirmed to be correct means that there is reasonable certainty that the revision is correct. For example, if
+     * the revision is provided by a package manager it should not be marked as resolved if it comes from metadata
+     * provided by the user, because this could be wrong. But if the package manager confirms the revision somehow, for
+     * example by downloading the source code during the installation of dependencies, it can be marked as resolved.
      */
-    val resolvedRevision: String? = null,
+    val isResolvedRevision: Boolean? = null,
 
     /**
      * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For

@@ -96,7 +96,7 @@ data class VcsMatcher(
     val url: String,
 
     /**
-     * The [revision] to match for equality against [VcsInfo.resolvedRevision].
+     * The [revision] to match for equality against [RepositoryProvenance.resolvedRevision].
      */
     val revision: String,
 
@@ -125,7 +125,7 @@ data class VcsMatcher(
         type == provenance.vcsInfo.type &&
                 matchesWithoutCredentials(url, provenance.vcsInfo.url) &&
                 (path == null || path == provenance.vcsInfo.path) &&
-                revision == provenance.vcsInfo.resolvedRevision
+                revision == provenance.resolvedRevision
 }
 
 private fun matchesWithoutCredentials(lhs: String, rhs: String): Boolean =

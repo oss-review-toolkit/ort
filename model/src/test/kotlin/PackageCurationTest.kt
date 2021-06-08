@@ -70,7 +70,7 @@ class PackageCurationTest : WordSpec({
                         type = VcsType.GIT,
                         url = "http://url.git",
                         revision = "revision",
-                        resolvedRevision = "resolvedRevision",
+                        isResolvedRevision = true,
                         path = "path"
                     ),
                     isMetaDataOnly = true,
@@ -119,7 +119,7 @@ class PackageCurationTest : WordSpec({
                     type = VcsType.GIT,
                     url = "http://url.git",
                     revision = "revision",
-                    resolvedRevision = "resolvedRevision",
+                    isResolvedRevision = true,
                     path = "path"
                 ),
                 isMetaDataOnly = false,
@@ -151,7 +151,7 @@ class PackageCurationTest : WordSpec({
                     type = pkg.vcs.type,
                     url = curation.data.vcs!!.url!!,
                     revision = pkg.vcs.revision,
-                    resolvedRevision = pkg.vcs.resolvedRevision,
+                    isResolvedRevision = true,
                     path = pkg.vcs.path
                 )
                 isMetaDataOnly shouldBe false

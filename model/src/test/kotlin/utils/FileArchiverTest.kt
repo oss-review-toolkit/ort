@@ -37,9 +37,9 @@ private val PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "url",
-        revision = "0000000000000000000000000000000000000000",
-        resolvedRevision = "0000000000000000000000000000000000000000"
-    )
+        revision = "0000000000000000000000000000000000000000"
+    ),
+    resolvedRevision = "0000000000000000000000000000000000000000"
 )
 
 class FileArchiverTest : StringSpec() {

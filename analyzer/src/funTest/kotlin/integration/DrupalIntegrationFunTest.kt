@@ -43,10 +43,10 @@ class DrupalIntegrationFunTest : AbstractIntegrationSpec() {
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = RemoteArtifact.EMPTY,
         vcs = VcsInfo(
-            VcsType.GIT,
-            "https://github.com/drupal/drupal.git",
-            "4a765491d80d1bcb11e542ffafccf10aef05b853",
-            ""
+            type = VcsType.GIT,
+            url = "https://github.com/drupal/drupal.git",
+            revision = "4a765491d80d1bcb11e542ffafccf10aef05b853",
+            isResolvedRevision = true
         )
     )
 

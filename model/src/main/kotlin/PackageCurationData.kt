@@ -115,7 +115,7 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
             type = it.type ?: base.vcs.type,
             url = it.url ?: base.vcs.url,
             revision = it.revision ?: base.vcs.revision,
-            resolvedRevision = it.resolvedRevision ?: base.vcs.resolvedRevision,
+            isResolvedRevision = it.isResolvedRevision ?: base.vcs.isResolvedRevision,
             path = it.path ?: base.vcs.path
         )
     } ?: base.vcs
