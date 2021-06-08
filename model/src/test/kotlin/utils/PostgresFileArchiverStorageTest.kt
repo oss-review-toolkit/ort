@@ -45,9 +45,9 @@ private val VCS_PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "url",
-        revision = "0000000000000000000000000000000000000000",
-        resolvedRevision = "0000000000000000000000000000000000000000"
-    )
+        revision = "0000000000000000000000000000000000000000"
+    ),
+    resolvedRevision = "0000000000000000000000000000000000000000"
 )
 
 private fun File.readTextAndDelete(): String {

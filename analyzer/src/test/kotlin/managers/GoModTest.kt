@@ -36,10 +36,10 @@ class GoModTest : WordSpec({
             id.toVcsInfo().type shouldBe VcsType.GIT
         }
 
-        "return null as resolved revision" {
+        "return the revision" {
             val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
 
-            id.toVcsInfo().resolvedRevision shouldBe null
+            id.toVcsInfo().revision shouldBe "v1.0.0"
         }
 
         "return the VCS URL and path for a package from a single module repository" {

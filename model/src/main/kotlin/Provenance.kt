@@ -62,24 +62,22 @@ data class RepositoryProvenance(
     /**
      * The VCS repository that was downloaded.
      */
-    val vcsInfo: VcsInfo
+    val vcsInfo: VcsInfo,
+
+    /**
+     * The VCS revision of the source code that was downloaded, resolved from [vcsInfo] during download. Must not be
+     * blank, and must also be fixed revision, e.g. the SHA1 of a Git commit instead of a branch or tag name.
+     */
+    val resolvedRevision: String
 ) : KnownProvenance() {
-    override fun matches(pkg: Package): Boolean {
-        // If no VCS information is present either, or it does not have a resolved revision, there is no way of
-        // verifying matching provenance.
-        if (vcsInfo.resolvedRevision == null) return false
-
-        // This provenance was definitely created when downloading this package.
-        if (pkg.vcsProcessed.equalsIgnoreResolvedRevision(vcsInfo)) return true
-
-        return listOf(pkg.vcs, pkg.vcsProcessed).any {
-            if (it.resolvedRevision != null) {
-                it.resolvedRevision == vcsInfo.resolvedRevision
-            } else {
-                it.revision == vcsInfo.revision || it.revision == vcsInfo.resolvedRevision
-            } && it.type == vcsInfo.type && it.url == vcsInfo.url && it.path == vcsInfo.path
-        }
+    init {
+        require(resolvedRevision.isNotBlank()) { "The resolved revision must not be blank." }
     }
+
+    /**
+     * Return true if this provenance matches the VCS information of the [package][pkg].
+     */
+    override fun matches(pkg: Package): Boolean = vcsInfo == pkg.vcs || vcsInfo == pkg.vcsProcessed
 }
 
 /**
@@ -95,12 +93,11 @@ private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::c
             }
             node.has("vcs_info") -> {
                 val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs_info"])!!
-                RepositoryProvenance(vcsInfo)
+                // For backward compatibility, if there is no resolved_revision use the revision from vcsInfo.
+                val resolvedRevision = node["resolved_revision"]?.textValue() ?: vcsInfo.revision
+                RepositoryProvenance(vcsInfo, resolvedRevision)
             }
             else -> UnknownProvenance
         }
     }
 }
-
-private fun VcsInfo.equalsIgnoreResolvedRevision(other: VcsInfo): Boolean =
-    copy(resolvedRevision = "") == other.copy(resolvedRevision = "")

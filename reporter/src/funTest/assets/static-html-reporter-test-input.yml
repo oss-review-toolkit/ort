@@ -346,8 +346,8 @@ scanner:
             type: "Git"
             url: "https://github.com/oss-review-toolkit/ort.git"
             revision: "master"
-            resolved_revision: "3dcca3e6ee0dea120922f90495bf04b4e09ae455"
             path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+          resolved_revision: "3dcca3e6ee0dea120922f90495bf04b4e09ae455"
         scanner:
           name: "FakeScanner"
           version: "1.0"
@@ -399,8 +399,8 @@ scanner:
             type: "Git"
             url: "https://example.com/git"
             revision: "master"
-            resolved_revision: "0000000000000000000000000000000000000000"
             path: "project"
+          resolved_revision: "0000000000000000000000000000000000000000"
         scanner:
           name: "FakeScanner"
           version: "1.0"

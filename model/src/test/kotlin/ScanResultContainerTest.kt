@@ -40,7 +40,8 @@ class ScanResultContainerTest : WordSpec() {
         sourceArtifact = RemoteArtifact("url", Hash.create("hash"))
     )
     private val provenance2 = RepositoryProvenance(
-        vcsInfo = VcsInfo(VcsType("type"), "url", "revision", "resolvedRevision", "path")
+        vcsInfo = VcsInfo(VcsType("type"), "url", "revision", "path"),
+        resolvedRevision = "resolvedRevision"
     )
 
     private val scannerDetails1 = ScannerDetails("name 1", "version 1", "config 1")

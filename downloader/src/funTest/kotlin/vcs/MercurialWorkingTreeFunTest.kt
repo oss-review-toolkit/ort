@@ -71,7 +71,6 @@ class MercurialWorkingTreeFunTest : StringSpec() {
                 type = VcsType.MERCURIAL,
                 url = "https://bitbucket.org/facebook/lz4revlog",
                 revision = "422ca71c35132f1f55d20a13355708aec7669b50",
-                resolvedRevision = null,
                 path = ""
             )
             workingTree.getNested() should beEmpty()
