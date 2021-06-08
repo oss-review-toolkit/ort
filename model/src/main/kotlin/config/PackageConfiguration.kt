@@ -76,13 +76,13 @@ data class PackageConfiguration(
         return when (provenance) {
             is UnknownProvenance -> false
             is ArtifactProvenance -> sourceArtifactUrl != null && sourceArtifactUrl == provenance.sourceArtifact.url
-            is RepositoryProvenance -> vcs != null && vcs.matches(provenance.vcsInfo)
+            is RepositoryProvenance -> vcs != null && vcs.matches(provenance)
         }
     }
 }
 
 /**
- * A matcher which matches its properties against [VcsInfo]s.
+ * A matcher which matches its properties against a [RepositoryProvenance].
  */
 data class VcsMatcher(
     /**
@@ -96,7 +96,7 @@ data class VcsMatcher(
     val url: String,
 
     /**
-     * The [url] to match for equality against [VcsInfo.resolvedRevision].
+     * The [revision] to match for equality against [VcsInfo.resolvedRevision].
      */
     val revision: String,
 
@@ -121,9 +121,11 @@ data class VcsMatcher(
         }
     }
 
-    fun matches(vcsInfo: VcsInfo): Boolean =
-        type == vcsInfo.type && matchesWithoutCredentials(url, vcsInfo.url) && (path == null || path == vcsInfo.path) &&
-                revision == vcsInfo.resolvedRevision
+    fun matches(provenance: RepositoryProvenance): Boolean =
+        type == provenance.vcsInfo.type &&
+                matchesWithoutCredentials(url, provenance.vcsInfo.url) &&
+                (path == null || path == provenance.vcsInfo.path) &&
+                revision == provenance.vcsInfo.resolvedRevision
 }
 
 private fun matchesWithoutCredentials(lhs: String, rhs: String): Boolean =
