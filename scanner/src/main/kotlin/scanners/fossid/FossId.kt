@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 
 import java.io.File
 import java.io.IOException
+import java.net.Authenticator
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -59,6 +60,8 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.toUri
 
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -111,6 +114,33 @@ class FossId(
 
             return projectName
         }
+
+        /**
+         * This function fetches credentials for [repoUrl] and insert them between the URL scheme and the host. If no
+         * matching host is found by [Authenticator], the [repoUrl] is returned untouched.
+         */
+        private fun queryAuthenticator(repoUrl: String): String {
+            val repoUri = repoUrl.toUri().getOrElse {
+                log.warn { "Host cannot be extracted for $repoUrl." }
+                return repoUrl
+            }
+
+            log.info { "Requesting authenticator for host ${repoUri.host} ..." }
+
+            val creds = Authenticator.getDefault().requestPasswordAuthenticationInstance(
+                repoUri.host,
+                null,
+                0,
+                null,
+                null,
+                null,
+                null,
+                Authenticator.RequestorType.SERVER
+            )
+            return creds?.let {
+                repoUrl.replaceCredentialsInUri("${creds.userName}:${String(creds.password)}")
+            } ?: repoUrl
+        }
     }
 
     private val serverUrl: String
@@ -121,6 +151,8 @@ class FossId(
 
     private val service: FossIdRestService
     private val packageNamespaceFilter: String
+
+    private val addAuthenticationToUrl: Boolean
 
     override val version: String
 
@@ -138,6 +170,7 @@ class FossId(
         user = fossIdScannerOptions["user"]
             ?: throw IllegalArgumentException("No FossId User configuration found.")
         packageNamespaceFilter = fossIdScannerOptions["packageNamespaceFilter"].orEmpty()
+        addAuthenticationToUrl = fossIdScannerOptions["addAuthenticationToUrl"].toBoolean()
 
         val client = OkHttpClientHelper.buildClient()
 
@@ -249,8 +282,10 @@ class FossId(
 
                 val scanCode = if (existingScan == null) {
                     log.info { "No scan found for $url and revision $revision. Creating scan ..." }
-                    val scanCode = createScan(projectCode, url, revision)
 
+                    val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
+
+                    val scanCode = createScan(projectCode, newUrl, revision)
                     log.info { "Initiating data download ..." }
                     service.downloadFromGit(user, apiKey, scanCode)
                         .checkResponse("download data from Git", false)
