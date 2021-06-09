@@ -17,16 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.model.utils
 
-import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 
 /**
- * An interface used by [DependencyGraphBuilder] to handle the specific representations of concrete [PackageManager]
+ * An interface used by [DependencyGraphBuilder] to handle the specific representations of concrete _PackageManager_
  * implementations in a generic way.
  *
  * A package manager may use its own, internal representation of a type [D] of a dependency. When constructing the
