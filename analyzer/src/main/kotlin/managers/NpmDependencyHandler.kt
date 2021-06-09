@@ -21,11 +21,11 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.managers.utils.DependencyHandler
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.utils.DependencyHandler
 
 /**
  * A data class storing information about a specific NPM module and its dependencies.

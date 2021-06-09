@@ -47,7 +47,6 @@ import org.apache.maven.project.ProjectBuildingException
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.repository.RemoteRepository
 
-import org.ossreviewtoolkit.analyzer.managers.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -57,6 +56,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 
 /**
  * A test class to test the integration of the [Gradle] package manager with [DependencyGraphBuilder]. This class
