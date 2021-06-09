@@ -27,6 +27,7 @@ internal class PackageConfigurationCommand : CliktCommand(
 ) {
     init {
         subcommands(
+            CreateCommand(),
             FindCommand(),
             FormatCommand(),
             ExportLicenseFindingCurationsCommand(),
