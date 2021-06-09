@@ -43,8 +43,8 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
-internal class GeneratePackageConfigurationsCommand : CliktCommand(
-    help = "Generates one package configuration for the source artifact scan and one for the VCS scan, if " +
+internal class CreatePackageConfigurationsCommand : CliktCommand(
+    help = "Creates one package configuration for the source artifact scan and one for the VCS scan, if " +
             "a corresponding scan result exists in the given ORT result for the respective provenance. The output " +
             "package configuration YAML files are written to the given output directory."
 ) {
