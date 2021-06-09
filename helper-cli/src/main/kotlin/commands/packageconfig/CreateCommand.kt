@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands
+package org.ossreviewtoolkit.helper.commands.packageconfig
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
-internal class CreatePackageConfigurationsCommand : CliktCommand(
+internal class CreateCommand : CliktCommand(
     help = "Creates one package configuration for the source artifact scan and one for the VCS scan, if " +
             "a corresponding scan result exists in the given ORT result for the respective provenance. The output " +
             "package configuration YAML files are written to the given output directory."
