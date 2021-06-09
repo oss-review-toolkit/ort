@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
+import org.ossreviewtoolkit.utils.replaceCredentialsInUri
 
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
@@ -271,7 +271,7 @@ private fun VcsInfo.toSpdxDownloadLocation(): String {
     return buildString {
         append(vcsTool)
         if (vcsTool.isNotEmpty()) append("+")
-        append(url.stripCredentialsFromUrl())
+        append(url.replaceCredentialsInUri())
         if (!resolvedRevision.isNullOrBlank()) append("@$resolvedRevision")
         if (path.isNotBlank()) append("#$path")
     }

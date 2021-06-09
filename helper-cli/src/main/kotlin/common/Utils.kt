@@ -67,7 +67,7 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.isSymbolicLink
-import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
+import org.ossreviewtoolkit.utils.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.withoutPrefix
 
 const val ORTH_NAME = "orth"
@@ -100,7 +100,7 @@ internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
     val result = mutableMapOf<String, MutableSet<String>>()
 
     findRepositories(directory).forEach { (path, vcs) ->
-        result.getOrPut(vcs.url.stripCredentialsFromUrl()) { mutableSetOf() } += path
+        result.getOrPut(vcs.url.replaceCredentialsInUri()) { mutableSetOf() } += path
     }
 
     return result
