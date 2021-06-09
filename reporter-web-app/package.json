@@ -44,7 +44,7 @@
     "devDependencies": {
         "@babel/core": "7.13.10",
         "@svgr/webpack": "5.5.0",
-        "@testing-library/jest-dom": "^5.11.9",
+        "@testing-library/jest-dom": "^5.13.0",
         "@testing-library/react": "^11.2.5",
         "@testing-library/user-event": "^13.0.1",
         "@typescript-eslint/eslint-plugin": "^4.18.0",
