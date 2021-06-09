@@ -264,20 +264,22 @@ abstract class VersionControlSystem {
                 emptyRevisionCandidatesException.addSuppressed(it)
             }.isSuccess
 
-        if (!addGuessedRevision(pkg.id.name, pkg.id.version)) {
-            when {
-                pkg.id.type == "NPM" && pkg.id.namespace.isNotEmpty() -> {
-                    // Fallback for Lerna workspaces when scoped packages combined with independent versioning are used,
-                    // e.g. support Git tag of the format "@organisation/my-component@x.x.x".
-                    addGuessedRevision("${pkg.id.namespace}/${pkg.id.name}", pkg.id.version)
-                }
+        if (!pkg.vcsProcessed.isResolvedRevision) {
+            if (!addGuessedRevision(pkg.id.name, pkg.id.version)) {
+                when {
+                    pkg.id.type == "NPM" && pkg.id.namespace.isNotEmpty() -> {
+                        // Fallback for Lerna workspaces when scoped packages combined with independent versioning are
+                        // used, e.g. support Git tag of the format "@organisation/my-component@x.x.x".
+                        addGuessedRevision("${pkg.id.namespace}/${pkg.id.name}", pkg.id.version)
+                    }
 
-                pkg.id.type == "GoMod" && pkg.vcsProcessed.path.isNotEmpty() -> {
-                    // Fallback for GoMod packages from mono repos which use the tag format described in
-                    // https://golang.org/ref/mod#vcs-version.
-                    val tag = "${pkg.vcsProcessed.path}/${pkg.id.version}"
+                    pkg.id.type == "GoMod" && pkg.vcsProcessed.path.isNotEmpty() -> {
+                        // Fallback for GoMod packages from mono repos which use the tag format described in
+                        // https://golang.org/ref/mod#vcs-version.
+                        val tag = "${pkg.vcsProcessed.path}/${pkg.id.version}"
 
-                    if (tag in workingTree.listRemoteTags()) revisionCandidates += tag
+                        if (tag in workingTree.listRemoteTags()) revisionCandidates += tag
+                    }
                 }
             }
         }
