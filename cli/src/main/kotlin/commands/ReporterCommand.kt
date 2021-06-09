@@ -218,10 +218,10 @@ class ReporterCommand : CliktCommand(
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
-        val packageConfigurationFiles = FileFormat.findFilesWithKnownExtensions(packageConfigurationDir).toMutableList()
-        packageConfigurationFile?.let { packageConfigurationFiles += FileFormat.findFilesWithKnownExtensions(it) }
-        val packageConfigurations = packageConfigurationFiles.map { it.readValue<PackageConfiguration>() }
-        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations)
+        val packageConfigurationProvider = SimplePackageConfigurationProvider.forFiles(
+            packageConfigurationDir,
+            packageConfigurationFile
+        )
 
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),

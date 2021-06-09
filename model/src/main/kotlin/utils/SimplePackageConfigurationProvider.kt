@@ -47,11 +47,11 @@ class SimplePackageConfigurationProvider(
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found (recursively)
          * in the given [fileOrDirectory], and in optionally [moreFiles].
          */
-        fun forFiles(fileOrDirectory: File, vararg moreFiles: File): SimplePackageConfigurationProvider {
+        fun forFiles(fileOrDirectory: File, vararg moreFiles: File?): SimplePackageConfigurationProvider {
             val configurations = mutableListOf<PackageConfiguration>()
             val files = FileFormat.findFilesWithKnownExtensions(fileOrDirectory).toMutableList()
 
-            moreFiles.forEach {
+            moreFiles.filterNotNull().forEach {
                 files += FileFormat.findFilesWithKnownExtensions(it)
             }
 
