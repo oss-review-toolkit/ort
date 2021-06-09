@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
@@ -363,12 +362,12 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
     val excludePaths = mutableSetOf<String>()
 
     targetProjects.forEach { id ->
-        val repositoryPath = getRepositoryPath(getProject(id)!!.vcsProcessed)
 
         getScanResultsForId(id).forEach { scanResult ->
-            val vcsInfo = (scanResult.provenance as RepositoryProvenance).vcsInfo
-            val vcsPath = vcsInfo.path
-            val isGitRepo = vcsInfo.type == VcsType.GIT_REPO
+            val provenance = scanResult.provenance as RepositoryProvenance
+            val vcsPath = provenance.vcsInfo.path
+            val isGitRepo = provenance.vcsInfo.type == VcsType.GIT_REPO
+            val repositoryPath = getRepositoryPath(provenance)
 
             val findingPaths = with(scanResult.summary) {
                 copyrightFindings.mapTo(mutableSetOf()) { it.location.path } + licenseFindings.map { it.location.path }
@@ -386,7 +385,7 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
         } else {
             results.map { scanResult ->
                 val summary = scanResult.summary
-                val repositoryPath = getRepositoryPath((scanResult.provenance as RepositoryProvenance).vcsInfo)
+                val repositoryPath = getRepositoryPath(scanResult.provenance as RepositoryProvenance)
                 fun TextLocation.isExcluded() = "$repositoryPath$path" !in excludePaths
 
                 val copyrightFindings = summary.copyrightFindings.filterTo(sortedSetOf()) { it.location.isExcluded() }
@@ -406,13 +405,13 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
 }
 
 /**
- * Return the path where the repository given by [vcsInfo] is linked into the source tree.
+ * Return the path where the repository given by [provenance] is linked into the source tree.
  */
-private fun OrtResult.getRepositoryPath(vcsInfo: VcsInfo): String {
-    repository.nestedRepositories.forEach { (path, provenance) ->
-        if (vcsInfo.type == provenance.type
-            && vcsInfo.url == provenance.url
-            && vcsInfo.revision == vcsInfo.resolvedRevision) {
+private fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): String {
+    repository.nestedRepositories.forEach { (path, vcsInfo) ->
+        if (vcsInfo.type == provenance.vcsInfo.type
+            && vcsInfo.url == provenance.vcsInfo.url
+            && vcsInfo.revision == provenance.vcsInfo.resolvedRevision) {
             return "/$path/"
         }
     }
