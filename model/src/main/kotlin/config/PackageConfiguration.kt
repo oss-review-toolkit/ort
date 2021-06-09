@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
+import org.ossreviewtoolkit.utils.replaceCredentialsInUri
 
 /**
  * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and
@@ -127,4 +127,4 @@ data class VcsMatcher(
 }
 
 private fun matchesWithoutCredentials(lhs: String, rhs: String): Boolean =
-    lhs.stripCredentialsFromUrl() == rhs.stripCredentialsFromUrl()
+    lhs.replaceCredentialsInUri() == rhs.replaceCredentialsInUri()

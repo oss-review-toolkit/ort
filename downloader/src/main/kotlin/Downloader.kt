@@ -46,9 +46,9 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.createOrtTempDir
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
+import org.ossreviewtoolkit.utils.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 import org.ossreviewtoolkit.utils.unpack
 
 /**
@@ -245,7 +245,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         } catch (e: DownloadException) {
             // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
             //       non-strict mode.
-            val vcsUrlNoCredentials = pkg.vcsProcessed.url.stripCredentialsFromUrl()
+            val vcsUrlNoCredentials = pkg.vcsProcessed.url.replaceCredentialsInUri()
             if (vcsUrlNoCredentials != pkg.vcsProcessed.url) {
                 // Try once more with any user name / password stripped from the URL.
                 log.info {

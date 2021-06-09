@@ -362,11 +362,13 @@ fun String.percentEncode(): String =
         .replace("%7E", "~")
 
 /**
- * Strip any user name / password off the URL represented by this [String]. Return the unmodified [String] if it does
- * not represent a URL or if it does not include a user name.
+ * Replace any user name / password in the URI represented by this [String] with [userInfo]. If [userInfo] is null, the
+ * user name / password are stripped. Return the unmodified [String] if it does not represent a URI.
  */
-fun String.stripCredentialsFromUrl() =
-    toUri { URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString() }.getOrDefault(this)
+fun String.replaceCredentialsInUri(userInfo: String? = null) =
+    toUri {
+        URI(it.scheme, userInfo, it.host, it.port, it.path, it.query, it.fragment).toString()
+    }.getOrDefault(this)
 
 /**
  * Return this string lower-cased except for the first character which is upper-cased.
