@@ -48,7 +48,7 @@ location of source artifacts.
 
 The structure of the curations file consist of one or more `id` entries:
 
-```
+```yaml
 - id: "package identifier."
   curations:
     comment: "An explanation why the curation is needed or the reasoning for a license conclusion"
@@ -82,7 +82,7 @@ The structure of the curations file consist of one or more `id` entries:
 To use the `curations.yml` file put it to `$ORT_CONFIG_DIR/curations.yml` or pass it to the `--package-curations-file`
 option of the _analyzer_:
 
-```
+```bash
 cli/build/install/ort/bin/ort analyze
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]
@@ -104,7 +104,7 @@ case of curations for organization internal packages. To support this workflow, 
 single source for curations or in combination with a `curations.yml` with the `--clearly-defined-curations` option of
 the analyzer:  
 
-```
+```bash
 cli/build/install/ort/bin/ort analyze
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]
