@@ -366,9 +366,9 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
         val repositoryPath = getRepositoryPath(getProject(id)!!.vcsProcessed)
 
         getScanResultsForId(id).forEach { scanResult ->
-            val vcsInfo = (scanResult.provenance as? RepositoryProvenance)?.vcsInfo
-            val vcsPath = vcsInfo?.path.orEmpty()
-            val isGitRepo = vcsInfo?.type == VcsType.GIT_REPO
+            val vcsInfo = (scanResult.provenance as RepositoryProvenance).vcsInfo
+            val vcsPath = vcsInfo.path
+            val isGitRepo = vcsInfo.type == VcsType.GIT_REPO
 
             val findingPaths = with(scanResult.summary) {
                 copyrightFindings.mapTo(mutableSetOf()) { it.location.path } + licenseFindings.map { it.location.path }
