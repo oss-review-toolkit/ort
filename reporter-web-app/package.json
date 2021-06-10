@@ -17,7 +17,7 @@
         "@ant-design/icons": "^4.5.0",
         "antd": "^4.14.0",
         "markdown-to-jsx": "^7.1.2",
-        "memoize-one": "^5.1.1",
+        "memoize-one": "^5.2.1",
         "pako": "^2.0.3",
         "postcss": "^8.2.8",
         "prop-types": "^15.7.2",
