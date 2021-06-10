@@ -226,7 +226,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "String.stripCredentialsFromUrl" should {
+    "String.replaceCredentialsInUri" should {
         "strip the user name from a string representing a URL" {
             "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
                     "ssh://gerrit.host.com:29418/parent/project"
@@ -235,6 +235,16 @@ class ExtensionsTest : WordSpec({
         "strip the user name and password from a string representing a URL" {
             "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
                     "ssh://gerrit.host.com:29418/parent/project"
+        }
+
+        "replace the user name from a string representing a URL" {
+            "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user") shouldBe
+                    "ssh://user@gerrit.host.com:29418/parent/project"
+        }
+
+        "replace the user name and password from a string representing a URL" {
+            "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user:secret") shouldBe
+                    "ssh://user:secret@gerrit.host.com:29418/parent/project"
         }
 
         "not modify encodings in a URL" {
