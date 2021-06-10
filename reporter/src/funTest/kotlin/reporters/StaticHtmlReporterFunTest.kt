@@ -60,7 +60,7 @@ class StaticHtmlReporterFunTest : WordSpec({
 
             val expectedReport = patchExpectedResult(
                 File("src/funTest/assets/static-html-reporter-test-expected-output.html"),
-                mapOf("<REPLACE_ORT_VERSION>" to Environment().ortVersion)
+                mapOf("<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION)
             )
 
             actualReport shouldBe expectedReport

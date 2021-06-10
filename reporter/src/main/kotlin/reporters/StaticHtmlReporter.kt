@@ -132,7 +132,7 @@ class StaticHtmlReporter : Reporter {
                             href = "http://oss-review-toolkit.org/"
                             +ORT_FULL_NAME
                         }
-                        +", version ${Environment().ortVersion} on ${Instant.now()}."
+                        +", version ${Environment.ORT_VERSION} on ${Instant.now()}."
                     }
 
                     h2 { +"Project" }
