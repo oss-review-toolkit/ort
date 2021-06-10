@@ -58,17 +58,14 @@ internal class SplitCurations : CliktCommand(
         }
 
         val packageCurations = inputCurationsFile.readValue<List<PackageCuration>>()
+        val groupedCurations = packageCurations.groupBy {
+            outputCurationsDir.resolve(it.id.type.encodeOrUnknown())
+                .resolve(it.id.namespace.fileSystemEncode())
+                .resolve("${it.id.name.encodeOrUnknown()}.${inputCurationsFile.extension}")
+        }
 
-        packageCurations.forEach { curation ->
-            val type = curation.id.type.encodeOrUnknown()
-            val namespace = curation.id.namespace.fileSystemEncode()
-            val name = curation.id.name.encodeOrUnknown()
-
-            val outputFile = outputCurationsDir.resolve(type)
-                .resolve(namespace)
-                .resolve(name + ".${inputCurationsFile.extension}")
-
-            outputFile.writeValue(curation)
+        groupedCurations.forEach { (outputFile, curations) ->
+            outputFile.writeValue(curations)
         }
     }
 }
