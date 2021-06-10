@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.log
 
@@ -105,7 +106,15 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         val endTime = Instant.now()
 
-        val run = AnalyzerRun(startTime, endTime, Environment(), config, analyzerResult)
+        val toolVersions = mutableMapOf<String, String>()
+
+        managedFiles.keys.forEach { manager ->
+            if (manager is CommandLineTool) {
+                toolVersions[manager.managerName] = manager.getVersion()
+            }
+        }
+
+        val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
 
         return OrtResult(repository, run)
     }
