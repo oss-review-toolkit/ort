@@ -78,6 +78,10 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * * **"serverUrl":** The URL of the FossID server.
  * * **"user":** The user to connect to the FossID server.
  * * **"apiKey":** The API key of the user which connects to the FossID server.
+ * * **"packageNamespaceFilter":** If this optional filter is set, only packages having an identifier in given namespace
+ * will be scanned.
+ * * **"packageAuthorsFilter":** If this optional filter is set, only packages from a given author will be scanned.
+ * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
  */
 class FossId(
     name: String,
