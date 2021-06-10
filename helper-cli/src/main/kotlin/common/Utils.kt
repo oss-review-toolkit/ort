@@ -66,6 +66,8 @@ import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.encodeOrUnknown
+import org.ossreviewtoolkit.utils.fileSystemEncode
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.withoutPrefix
@@ -118,6 +120,14 @@ internal fun findRepositories(directory: File): Map<String, VcsInfo> {
 
     return ortResult.repository.nestedRepositories
 }
+
+/**
+ * Build the file for the split curations.
+ */
+internal fun getSplitCurationFile(parent: File, packageId: Identifier, fileExtension: String) =
+    parent.resolve(packageId.type.encodeOrUnknown())
+        .resolve(packageId.namespace.fileSystemEncode())
+        .resolve("${packageId.name.encodeOrUnknown()}.$fileExtension")
 
 /**
  * Return an approximation for the Set-Cover Problem, see https://en.wikipedia.org/wiki/Set_cover_problem.
