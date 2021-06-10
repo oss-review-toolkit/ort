@@ -337,8 +337,10 @@ Currently, the following package managers are supported:
 * [NPM](https://www.npmjs.com/) (Node.js)
 * [NuGet](https://www.nuget.org/) (.NET, with currently some
   [limitations](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))
-* [PIP](https://pip.pypa.io/) (Python)
-* [Pipenv](https://pipenv.readthedocs.io/) (Python)
+* [PIP](https://pip.pypa.io/) (Python, currently [limited](https://github.com/oss-review-toolkit/ort/issues/3671) to
+  projects that are compatible with Python 2.7 or Python 3.6)
+* [Pipenv](https://pipenv.readthedocs.io/) (Python, currently [limited](https://github.com/oss-review-toolkit/ort/issues/3671)
+  to projects that are compatible with Python 2.7 or Python 3.6)
 * [Pub](https://pub.dev/) (Dart / Flutter)
 * [SBT](http://www.scala-sbt.org/) (Scala)
 * [SPDX](https://spdx.dev/specifications/) (SPDX documents used to describe
