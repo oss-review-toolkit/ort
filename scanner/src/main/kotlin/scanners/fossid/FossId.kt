@@ -43,14 +43,17 @@ import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -447,7 +450,12 @@ class FossId(
         val listIgnoredFiles = service.listIgnoredFiles(user, apiKey, scanCode)
             .checkResponse("list ignored files")
             .data!!
-        return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles)
+
+        val pendingFiles = service.listPendingFiles(user, apiKey, scanCode)
+            .checkResponse("list pending files")
+            .data!!
+
+        return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles, pendingFiles)
     }
 
     /**
@@ -468,7 +476,9 @@ class FossId(
             licenseFindings = licenseFindings.toSortedSet(),
             copyrightFindings = copyrightFindings.toSortedSet(),
             // TODO: Maybe get issues from FossId (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
-            issues = emptyList()
+            issues = rawResults.listPendingFiles.map {
+                OrtIssue(source = it, message = "pending", severity = Severity.HINT)
+            }
         )
 
         return ScanResult(UnknownProvenance, details, summary)
