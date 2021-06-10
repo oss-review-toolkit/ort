@@ -32,13 +32,34 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class GoModFunTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/gomod").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val testDir = File("src/funTest/assets/projects/synthetic").absoluteFile
 
     init {
         "Project dependencies are detected correctly" {
+            val projectDir = testDir.resolve("gomod")
+            val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+            val vcsUrl = vcsDir.getRemoteUrl()
+            val vcsRevision = vcsDir.getRevision()
+            val definitionFile = projectDir.resolve("go.mod")
+            val vcsPath = vcsDir.getPathToRoot(projectDir)
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("gomod-expected-output.yml"),
+                definitionFilePath = "$vcsPath/go.mod",
+                path = vcsPath,
+                revision = vcsRevision,
+                url = normalizeVcsUrl(vcsUrl)
+            )
+
+            val result = createGoMod().resolveSingleProject(definitionFile)
+
+            result.toYaml() shouldBe expectedResult
+        }
+
+        "Project dependencies are detected correctly if the main package does not contain any code" {
+            val projectDir = testDir.resolve("gomod-subpkg")
+            val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+            val vcsUrl = vcsDir.getRemoteUrl()
+            val vcsRevision = vcsDir.getRevision()
             val definitionFile = projectDir.resolve("go.mod")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(

@@ -94,18 +94,15 @@ class GoMod(
 
         stashDirectories(projectDir.resolve("vendor")).use {
             val fullGraph = getDependencyGraph(projectDir)
-            val graph = fullGraph.subgraph(getUsedPackages(fullGraph, projectDir))
+            val projectId = fullGraph.projectId()
+
+            val graph = fullGraph.subgraph(getUsedPackages(fullGraph, projectDir, projectId))
             val vendorModules = getVendorModules(projectDir)
 
-            val (projectIds, packageIds) = graph.nodes().partition { it.version.isBlank() }
-            require(projectIds.size == 1) {
-                "Expected exactly one unique package without version but got ${projectIds.joinToString()}."
-            }
-
-            val projectId = projectIds.first()
-            val projectVcs = processProjectVcs(projectDir)
-
+            val packageIds = graph.nodes() - projectId
             val packages = packageIds.mapTo(sortedSetOf()) { createPackage(it) }
+
+            val projectVcs = processProjectVcs(projectDir)
 
             val scopes = sortedSetOf(
                 Scope(
@@ -181,11 +178,11 @@ class GoMod(
     }
 
     /**
-     * Determine the set of packages that are actually used by the main module by running the _go mod why_ command
-     * repeatedly in [projectDir].
+     * Determine the set of packages that are actually used by the [main module][projectId] by running the _go mod why_
+     * command repeatedly in [projectDir].
      */
-    private fun getUsedPackages(graph: Graph, projectDir: File): Set<Identifier> {
-        val usedPackageNames = mutableSetOf<String>()
+    private fun getUsedPackages(graph: Graph, projectDir: File, projectId: Identifier): Set<Identifier> {
+        val usedPackageNames = mutableSetOf(projectId.name)
 
         graph.nodes().chunked(WHY_CHUNK_SIZE).forEach { ids ->
             val pkgNames = ids.map { it.name }.toTypedArray()
@@ -281,6 +278,19 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
     fun subgraph(subNodes: Set<Identifier>): Graph =
         Graph(nodeMap.filter { it.key in subNodes }
             .mapValuesTo(mutableMapOf()) { e -> e.value.filterTo(mutableSetOf()) { it in subNodes } })
+
+    /**
+     * Search for the single package that represents the main project. This is the only package without a version.
+     * Fail if no single package with this criterion can be found.
+     */
+    fun projectId(): Identifier =
+        nodes().filter { it.version.isBlank() }.let { idsWithoutVersion ->
+            require(idsWithoutVersion.size == 1) {
+                "Expected exactly one unique package without version but got ${idsWithoutVersion.joinToString()}."
+            }
+
+            idsWithoutVersion.first()
+        }
 
     /**
      * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
