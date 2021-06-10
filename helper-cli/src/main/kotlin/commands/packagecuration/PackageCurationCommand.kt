@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.core.subcommands
 internal class PackageCurationCommand : CliktCommand() {
     init {
         subcommands(
+            CreateCommand(),
             SplitCommand()
         )
     }
