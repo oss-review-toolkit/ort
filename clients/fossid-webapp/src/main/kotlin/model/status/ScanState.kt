@@ -25,6 +25,7 @@ enum class ScanState {
     @JsonProperty("AUTO-ID")
     AUTO_ID,
     FINISHED,
+    INTERRUPTED,
     @JsonProperty("NOT STARTED")
     NOT_STARTED,
     QUEUED,

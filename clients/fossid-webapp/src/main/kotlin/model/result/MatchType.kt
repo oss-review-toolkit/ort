@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.clients.fossid.model.result
 
 enum class MatchType {
+    ERROR,
     FAILED,
     FULL,
     IGNORED,
