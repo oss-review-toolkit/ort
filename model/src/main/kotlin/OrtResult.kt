@@ -95,6 +95,10 @@ data class OrtResult(
         )
     }
 
+    /** An object that can be used to navigate the dependency information contained in this result. */
+    @get:JsonIgnore
+    val dependencyNavigator: DependencyNavigator = DependencyTreeNavigator
+
     private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
 
     /**

@@ -159,4 +159,14 @@ class OrtResultTest : WordSpec({
             }
         }
     }
+
+    "dependencyNavigator" should {
+        "return a navigator for the dependency tree" {
+            val ortResult = readOrtResult(
+                "../analyzer/src/funTest/assets/projects/external/sbt-multi-project-example-expected-output.yml"
+            )
+
+            ortResult.dependencyNavigator shouldBe DependencyTreeNavigator
+        }
+    }
 })
