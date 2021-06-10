@@ -120,7 +120,7 @@ private fun patchExpectedResult(expectedResultFile: String, actualSpdxDocument: 
         File(expectedResultFile),
         mapOf(
             "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-"),
-            "<REPLACE_ORT_VERSION>" to Environment().ortVersion,
+            "<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION,
             "<REPLACE_CREATION_DATE_AND_TIME>" to actualSpdxDocument.creationInfo.created.toString(),
             "<REPLACE_DOCUMENT_NAMESPACE>" to actualSpdxDocument.documentNamespace
         )
