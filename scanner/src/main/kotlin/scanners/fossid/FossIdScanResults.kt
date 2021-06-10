@@ -33,7 +33,8 @@ import org.ossreviewtoolkit.model.TextLocation
 internal data class RawResults(
     val identifiedFiles: List<IdentifiedFile>,
     val markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
-    val listIgnoredFiles: List<IgnoredFile>
+    val listIgnoredFiles: List<IgnoredFile>,
+    val listPendingFiles: List<String>
 )
 
 /**
