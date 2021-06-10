@@ -151,7 +151,7 @@ class FossId(
 
     private val service: FossIdRestService
     private val packageNamespaceFilter: String
-
+    private val packageAuthorsFilter: String
     private val addAuthenticationToUrl: Boolean
 
     override val version: String
@@ -170,6 +170,7 @@ class FossId(
         user = fossIdScannerOptions["user"]
             ?: throw IllegalArgumentException("No FossId User configuration found.")
         packageNamespaceFilter = fossIdScannerOptions["packageNamespaceFilter"].orEmpty()
+        packageAuthorsFilter = fossIdScannerOptions["packageAuthorsFilter"].orEmpty()
         addAuthenticationToUrl = fossIdScannerOptions["addAuthenticationToUrl"].toBoolean()
 
         val client = OkHttpClientHelper.buildClient()
@@ -246,9 +247,14 @@ class FossId(
                 if (packageNamespaceFilter.isEmpty()) "No package namespace filter is set."
                 else "Package namespace filter is '$packageNamespaceFilter'."
             }
+            log.info {
+                if (packageAuthorsFilter.isEmpty()) "No package authors filter is set."
+                else "Package authors filter is '$packageAuthorsFilter'."
+            }
 
             val filteredPackages = packages
                 .filter { packageNamespaceFilter.isEmpty() || it.id.namespace == packageNamespaceFilter }
+                .filter { packageAuthorsFilter.isEmpty() || packageAuthorsFilter in it.authors }
 
             if (filteredPackages.isEmpty()) {
                 log.warn { "There is no package to scan !" }
