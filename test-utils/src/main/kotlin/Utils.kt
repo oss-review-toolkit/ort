@@ -40,10 +40,7 @@ val USER_DIR = File(System.getProperty("user.dir"))
 
 private val ORT_VERSION_REGEX = Regex("(ort_version): \".*\"")
 private val JAVA_VERSION_REGEX = Regex("(java_version): \".*\"")
-private val ENV_VAR_REGEX = Regex(
-    "(variables):.*?^(\\s{4}\\w+):",
-    setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)
-)
+private val ENV_VAR_REGEX = Regex("(\\s{4}variables:)\\n(?:\\s{6}.+)+")
 private val ENV_TOOL_REGEX = Regex("(\\s{4}tool_versions:)\\n(?:\\s{6}.+)+")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
@@ -84,7 +81,7 @@ fun patchActualResult(
     return result
         .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
         .replace(JAVA_VERSION_REGEX) { "${it.groupValues[1]}: \"${System.getProperty("java.version")}\"" }
-        .replace(ENV_VAR_REGEX) { "${it.groupValues[1]}: {}\n${it.groupValues[2]}:" }
+        .replace(ENV_VAR_REGEX) { "${it.groupValues[1]} {}" }
         .replace(ENV_TOOL_REGEX) { "${it.groupValues[1]} {}" }
         .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
         .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
