@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.commands
+package org.ossreviewtoolkit.helper.commands.packagecuration
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.fileSystemEncode
 
-internal class SplitCurationsCommand : CliktCommand(
+internal class SplitCommand : CliktCommand(
     help = "Split a single curations file into a directory structure using the format '<type>/<namespace>/<name>.yml'."
 ) {
     private val inputCurationsFile by option(
