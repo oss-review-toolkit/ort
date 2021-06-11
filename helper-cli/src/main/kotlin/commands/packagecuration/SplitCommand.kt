@@ -26,12 +26,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.getSplitCurationFile
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
-import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.fileSystemEncode
 
 internal class SplitCommand : CliktCommand(
     help = "Split a single curations file into a directory structure using the format '<type>/<namespace>/<name>.yml'."
@@ -59,9 +58,7 @@ internal class SplitCommand : CliktCommand(
 
         val packageCurations = inputCurationsFile.readValue<List<PackageCuration>>()
         val groupedCurations = packageCurations.groupBy {
-            outputCurationsDir.resolve(it.id.type.encodeOrUnknown())
-                .resolve(it.id.namespace.fileSystemEncode())
-                .resolve("${it.id.name.encodeOrUnknown()}.${inputCurationsFile.extension}")
+            getSplitCurationFile(outputCurationsDir, it.id, inputCurationsFile.extension)
         }
 
         groupedCurations.forEach { (outputFile, curations) ->
