@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.fileSystemEncode
 
-internal class SplitCurations : CliktCommand(
+internal class SplitCurationsCommand : CliktCommand(
     help = "Split a single curations file into a directory structure using the format '<type>/<namespace>/<name>.yml'."
 ) {
     private val inputCurationsFile by option(
