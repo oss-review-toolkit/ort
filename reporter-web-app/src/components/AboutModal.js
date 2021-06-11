@@ -167,7 +167,7 @@ const AboutModal = (props) => {
                             rel="noopener noreferrer"
                             target="_blank"
                         >
-                            http://oss-review-toolkit.org
+                            https://oss-review-toolkit.org/
                         </a>
                         .
                     </p>
