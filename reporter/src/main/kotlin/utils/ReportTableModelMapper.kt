@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.reporter.utils
 
+import org.ossreviewtoolkit.model.DependencyNavigator
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
@@ -51,13 +52,16 @@ private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation> { it.isResolve
 
 private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 
-private fun Project.getScopesForDependencies(excludes: Excludes): Map<Identifier, Map<String, List<ScopeExclude>>> {
+private fun Project.getScopesForDependencies(
+    excludes: Excludes,
+    navigator: DependencyNavigator
+): Map<Identifier, Map<String, List<ScopeExclude>>> {
     val result = mutableMapOf<Identifier, MutableMap<String, List<ScopeExclude>>>()
 
-    scopes.forEach { scope ->
-        scope.collectDependencies().forEach { dependency ->
+    navigator.scopeDependencies(this).forEach { (scopeName, dependencies) ->
+        dependencies.forEach { dependency ->
             result.getOrPut(dependency) { mutableMapOf() }
-                .getOrPut(scope.name) { excludes.findScopeExcludes(scope.name) }
+                .getOrPut(scopeName) { excludes.findScopeExcludes(scopeName) }
         }
     }
 
@@ -116,7 +120,7 @@ class ReportTableModelMapper(
         val excludes = ortResult.getExcludes()
 
         val projectTables = analyzerResult?.projects?.associateWith { project ->
-            val scopesForDependencies = project.getScopesForDependencies(excludes)
+            val scopesForDependencies = project.getScopesForDependencies(excludes, ortResult.dependencyNavigator)
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
             val allIds = sortedSetOf(project.id)
