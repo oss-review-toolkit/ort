@@ -186,16 +186,6 @@ data class Project(
     }
 
     /**
-     * Return the set of [Identifier]s that refer to sub-projects of this [Project].
-     */
-    fun collectSubProjects(): SortedSet<Identifier> =
-        scopes.fold(sortedSetOf()) { refs, scope ->
-            refs.also {
-                it += scope.collectDependencies { ref -> ref.linkage in PackageLinkage.PROJECT_LINKAGE }
-            }
-        }
-
-    /**
      * A comparison function to sort projects by their identifier.
      */
     override fun compareTo(other: Project) = id.compareTo(other.id)
