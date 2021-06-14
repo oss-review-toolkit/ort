@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +39,7 @@ import java.io.File
 
 import kotlin.time.measureTimedValue
 
+import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
@@ -53,7 +55,6 @@ import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -159,6 +160,15 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         .convert { it.absoluteFile.normalize() }
         .configurationGroup()
 
+    private val packageCurationsDir by option(
+        "--package-curations-dir",
+        help = "A directory containing package curation data. This replaces all package curations contained in the " +
+                "given ORT result file with the ones present in the given directory."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
+
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, the '$ORT_REPO_CONFIG_FILENAME' overrides " +
@@ -247,8 +257,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             ortResultInput = ortResultInput.replaceConfig(config)
         }
 
-        packageCurationsFile?.let {
-            val curations = it.readValueOrDefault(emptyList<PackageCuration>())
+        val curations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations
+        if (curations.isNotEmpty()) {
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
 

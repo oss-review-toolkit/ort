@@ -47,7 +47,7 @@ class FilePackageCurationProvider(curationFiles: Collection<File>) : PackageCura
         }
     }
 
-    internal val packageCurations: Set<PackageCuration> = run {
+    val packageCurations: Set<PackageCuration> = run {
         val allCurations = curationFiles.mapNotNull { curationFile ->
             runCatching {
                 curationFile.readValueOrDefault(emptyList<PackageCuration>())
