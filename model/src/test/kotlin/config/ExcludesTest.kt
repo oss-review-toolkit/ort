@@ -483,18 +483,21 @@ class ExcludesTest : WordSpec() {
                 val excludes = Excludes(scopes = listOf(scopeExclude1))
 
                 excludes.isScopeExcluded(scope1) shouldBe true
+                excludes.isScopeExcluded(scope1.name) shouldBe true
             }
 
             "return true if the scope is excluded using a regex" {
                 val excludes = Excludes(scopes = listOf(scopeExclude1.copy(pattern = "sc.*")))
 
                 excludes.isScopeExcluded(scope1) shouldBe true
+                excludes.isScopeExcluded(scope1.name) shouldBe true
             }
 
             "return false if the scope is not excluded" {
                 val excludes = Excludes()
 
                 excludes.isScopeExcluded(scope1) shouldBe false
+                excludes.isScopeExcluded(scope1.name) shouldBe false
             }
         }
     }
