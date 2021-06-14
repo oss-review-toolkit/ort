@@ -126,7 +126,7 @@ internal fun findRepositories(directory: File): Map<String, VcsInfo> {
  */
 internal fun getSplitCurationFile(parent: File, packageId: Identifier, fileExtension: String) =
     parent.resolve(packageId.type.encodeOrUnknown())
-        .resolve(packageId.namespace.fileSystemEncode())
+        .resolve(packageId.namespace.ifBlank { "_" }.fileSystemEncode())
         .resolve("${packageId.name.encodeOrUnknown()}.$fileExtension")
 
 /**
