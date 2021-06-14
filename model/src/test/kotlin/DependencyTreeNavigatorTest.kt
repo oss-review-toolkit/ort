@@ -159,6 +159,17 @@ class DependencyTreeNavigatorTest : WordSpec() {
                 )
             }
         }
+
+        "collectSubProjects" should {
+            "find all the sub projects of a project" {
+                val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT")
+                val project = testResult.getProject(projectId)!!
+
+                val subProjectIds = navigator.collectSubProjects(project)
+
+                subProjectIds should containExactly(PROJECT_ID)
+            }
+        }
     }
 }
 

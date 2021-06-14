@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import java.util.SortedSet
+
 /**
  * Alias for a function that is used while navigating through the dependency graph to determine which dependencies
  * should be followed or skipped. The function is passed the current dependency node; it returns a flag whether this
@@ -41,6 +43,20 @@ interface DependencyNavigator {
          * dependency graph.
          */
         val MATCH_ALL: DependencyMatcher = { true }
+
+        /**
+         * A pre-defined [DependencyMatcher] that matches only dependencies with a linkage indicating sub projects.
+         */
+        private val MATCH_SUB_PROJECTS: DependencyMatcher = { node ->
+            node.linkage in PackageLinkage.PROJECT_LINKAGE
+        }
+
+        /**
+         * Return a sorted set with all the [Identifier]s contained in the given map of scope dependencies. This is
+         * useful if all dependencies are needed independent of the scope they belong to.
+         */
+        private fun Map<String, Set<Identifier>>.collectDependencies(): SortedSet<Identifier> =
+            flatMapTo(sortedSetOf()) { it.value }
     }
 
     /**
@@ -77,4 +93,10 @@ interface DependencyNavigator {
         matcher: DependencyMatcher = MATCH_ALL
     ): Map<String, Set<Identifier>> =
         scopeNames(project).associateWith { dependenciesForScope(project, it, maxDepth, matcher) }
+
+    /**
+     * Return the set of [Identifier]s that refer to sub-projects of the given [project].
+     */
+    fun collectSubProjects(project: Project): SortedSet<Identifier> =
+        scopeDependencies(project, matcher = MATCH_SUB_PROJECTS).collectDependencies()
 }

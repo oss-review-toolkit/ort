@@ -221,7 +221,7 @@ data class OrtResult(
             val allSubProjects = sortedSetOf<Identifier>()
 
             getProjects().forEach {
-                allSubProjects += it.collectSubProjects()
+                allSubProjects += dependencyNavigator.collectSubProjects(it)
             }
 
             projectsAndPackages -= allSubProjects
