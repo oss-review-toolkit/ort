@@ -89,7 +89,7 @@ internal class RemoveEntriesCommand : CliktCommand(
 
         val scopeExcludes = ortResult
             .getProjects()
-            .flatMap { project -> project.scopes.map { it.name } }
+            .flatMap(ortResult.dependencyNavigator::scopeNames)
             .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
 
         val ruleViolationResolutions = ortResult.getRuleViolations().let { ruleViolations ->

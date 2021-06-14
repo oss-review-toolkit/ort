@@ -155,18 +155,18 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     }
                 }
             }
-            project.scopes.forEach { scope ->
-                val scopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
-                val scopeDependencies = scope.collectDependencies()
+
+            input.ortResult.dependencyNavigator.scopeDependencies(project).forEach { (scopeName, dependencies) ->
+                val scopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scopeName)
                 if (scopeExcludes.isNotEmpty()) {
-                    scopeDependencies.forEach { id ->
+                    dependencies.forEach { id ->
                         val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
                         if (info.isExcluded) {
                             info.scopeExcludes += scopeExcludes
                         }
                     }
                 } else if (pathExcludes.isEmpty()) {
-                    scopeDependencies.forEach { id ->
+                    dependencies.forEach { id ->
                         val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
                         info.isExcluded = false
                         info.pathExcludes.clear()
@@ -179,7 +179,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private fun createScopes() {
         input.ortResult.getProjects().flatMap { project ->
-            project.scopes.map { it.name }
+            input.ortResult.dependencyNavigator.scopeNames(project)
         }.forEach { scope ->
             scopes[scope] = EvaluatedScope(
                 name = scope,
