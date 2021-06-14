@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.helper.commands.packagecuration
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class PackageCurationCommand : CliktCommand() {
+internal class PackageCurationsCommand : CliktCommand() {
     init {
         subcommands(
             CreateCommand(),
