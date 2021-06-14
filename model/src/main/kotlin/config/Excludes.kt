@@ -72,5 +72,10 @@ data class Excludes(
     /**
      * True if the [scope] is excluded by this [Excludes] configuration.
      */
-    fun isScopeExcluded(scope: Scope): Boolean = findScopeExcludes(scope).isNotEmpty()
+    fun isScopeExcluded(scope: Scope): Boolean = isScopeExcluded(scope.name)
+
+    /**
+     * True if the scope with the given [scopeName] is excluded by this [Excludes] configuration.
+     */
+    fun isScopeExcluded(scopeName: String): Boolean = findScopeExcludes(scopeName).isNotEmpty()
 }
