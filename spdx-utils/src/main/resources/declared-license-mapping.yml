@@ -300,6 +300,7 @@
 "LGPL v3+": LGPL-3.0-or-later
 "LGPL with exceptions or ZPL": LGPL-3.0-or-later OR ZPL-2.1
 "LGPL+BSD": LGPL-2.1-or-later AND BSD-2-Clause
+"LGPL, v2.1 or later": LGPL-2.1-or-later
 "LGPL, version 2.1": LGPL-2.1-only
 "LGPL, version 3.0": LGPL-3.0-only
 "LGPL/MIT": LGPL-3.0-or-later OR MIT
