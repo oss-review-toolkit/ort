@@ -144,10 +144,8 @@ data class OrtResult(
             val includedDependencies = mutableSetOf<Identifier>()
 
             projects.forEach { project ->
-                project.scopes.forEach { scope ->
-                    val isScopeExcluded = getExcludes().isScopeExcluded(scope)
-
-                    val dependencies = scope.collectDependencies()
+                dependencyNavigator.scopeDependencies(project).forEach { (scopeName, dependencies) ->
+                    val isScopeExcluded = getExcludes().isScopeExcluded(scopeName)
                     allDependencies += dependencies
 
                     if (!isProjectExcluded(project.id) && !isScopeExcluded) {
