@@ -43,7 +43,7 @@ data class PackageReference(
     /**
      * The identifier of the package.
      */
-    val id: Identifier,
+    override val id: Identifier,
 
     /**
      * The type of linkage used for the referred package from its dependent package. As most of our supported
@@ -51,7 +51,7 @@ data class PackageReference(
      * default value here to not blow up our result files.
      */
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
-    val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
+    override val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
     /**
      * The list of references to packages this package depends on. Note that this list depends on the scope in
@@ -63,8 +63,8 @@ data class PackageReference(
      * A list of [OrtIssue]s that occurred handling this [PackageReference].
      */
     @JsonAlias("errors")
-    val issues: List<OrtIssue> = emptyList()
-) : Comparable<PackageReference> {
+    override val issues: List<OrtIssue> = emptyList()
+) : Comparable<PackageReference>, DependencyNode {
     /**
      * Return the set of [Identifier]s the package referred by this [PackageReference] transitively depends on,
      * up to and including a depth of [maxDepth] where counting starts at 0 (for the [PackageReference] itself) and 1
@@ -128,4 +128,6 @@ data class PackageReference(
         }
         return transform(copy(dependencies = transformedDependencies.toSortedSet()))
     }
+
+    override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies.asSequence())
 }

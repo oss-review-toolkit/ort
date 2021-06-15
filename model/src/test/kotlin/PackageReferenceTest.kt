@@ -84,5 +84,13 @@ class PackageReferenceTest : WordSpec() {
                 }
             }
         }
+
+        "visitNodes" should {
+            "invoke the code block on the child dependencies" {
+                val children = root.visitDependencies { it.toList() }
+
+                children should containExactly(node1, node2, node3)
+            }
+        }
     }
 }
