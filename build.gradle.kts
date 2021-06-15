@@ -36,7 +36,6 @@ val detektPluginVersion: String by project
 val kotlinPluginVersion: String by project
 
 val jacksonVersion: String by project
-val jacocoVersion: String by project
 val kotestVersion: String by project
 val log4jCoreVersion: String by project
 val okhttpVersion: String by project
@@ -165,10 +164,6 @@ subprojects {
     // Apply third-party plugins.
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.dokka")
-
-    extensions.findByName("jacoco")?.withGroovyBuilder {
-        setProperty("toolVersion", jacocoVersion)
-    }
 
     sourceSets.create("funTest") {
         withConvention(KotlinSourceSet::class) {
