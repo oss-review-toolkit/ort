@@ -340,7 +340,7 @@ data class OrtResult(
     /**
      * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the given [curations].
      */
-    fun replacePackageCurations(curations: List<PackageCuration>): OrtResult =
+    fun replacePackageCurations(curations: Collection<PackageCuration>): OrtResult =
         copy(
             analyzer = analyzer?.copy(
                 result = analyzer.result.copy(
