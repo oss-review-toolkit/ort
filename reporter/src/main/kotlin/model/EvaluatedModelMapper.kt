@@ -21,9 +21,9 @@
 package org.ossreviewtoolkit.reporter.model
 
 import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -380,7 +380,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addDependencyTree(project: Project, pkg: EvaluatedPackage) {
-        fun PackageReference.toEvaluatedTreeNode(
+        fun DependencyNode.toEvaluatedTreeNode(
             scope: EvaluatedScope,
             path: List<EvaluatedPackage>
         ): DependencyTreeNode {
@@ -405,17 +405,19 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 linkage = linkage,
                 pkg = dependency,
                 scope = null,
-                children = dependencies.map { it.toEvaluatedTreeNode(scope, path + dependency) },
+                children = visitDependencies { dependencies ->
+                    dependencies.map { it.toEvaluatedTreeNode(scope, path + dependency) }.toList()
+                },
                 pathExcludes = emptyList(),
                 scopeExcludes = emptyList(),
                 issues = issues
             )
         }
 
-        val scopeTrees = project.scopes.map { scope ->
-            val subTrees = scope.dependencies.map {
-                it.toEvaluatedTreeNode(scopes.getValue(scope.name), mutableListOf())
-            }
+        val scopeTrees = input.ortResult.dependencyNavigator.scopeNames(project).map { scope ->
+            val subTrees = input.ortResult.dependencyNavigator.directDependencies(project, scope).map {
+                it.toEvaluatedTreeNode(scopes.getValue(scope), mutableListOf())
+            }.toList()
 
             val applicableScopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
             val evaluatedScopeExcludes = scopeExcludes.addIfRequired(applicableScopeExcludes)
@@ -423,7 +425,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             DependencyTreeNode(
                 linkage = null,
                 pkg = null,
-                scope = scopes.getValue(scope.name),
+                scope = scopes.getValue(scope),
                 children = subTrees,
                 pathExcludes = emptyList(),
                 scopeExcludes = evaluatedScopeExcludes,
