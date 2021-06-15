@@ -186,9 +186,7 @@ data class OrtResult(
                 dependencies += project.collectDependencies(maxLevel)
             }
 
-            project.findReferences(id).forEach { ref ->
-                dependencies += ref.collectDependencies(maxLevel)
-            }
+            dependencies += dependencyNavigator.packageDependencies(project, id, maxLevel)
         }
 
         return dependencies

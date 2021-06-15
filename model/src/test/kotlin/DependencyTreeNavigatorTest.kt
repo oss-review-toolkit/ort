@@ -160,6 +160,54 @@ class DependencyTreeNavigatorTest : WordSpec() {
             }
         }
 
+        "packageDependencies" should {
+            "return the dependencies of an existing package in a project" {
+                val pkgId = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+
+                val dependencies = navigator.packageDependencies(testProject, pkgId)
+
+                dependencies should containExactlyInAnyOrder(
+                    Identifier("Maven:com.typesafe:ssl-config-core_2.12:0.2.2"),
+                    Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"),
+                    Identifier("Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"),
+                    Identifier("Maven:org.reactivestreams:reactive-streams:1.0.1")
+                )
+            }
+
+            "return an empty set for the dependencies of a non-existing package" {
+                val pkgId = Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.7")
+
+                val dependencies = navigator.packageDependencies(testProject, pkgId)
+
+                dependencies should beEmpty()
+            }
+
+            "support a maxDepth filter" {
+                val pkgId = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+
+                val dependencies = navigator.packageDependencies(testProject, pkgId, maxDepth = 1)
+
+                dependencies should containExactlyInAnyOrder(
+                    Identifier("Maven:com.typesafe:ssl-config-core_2.12:0.2.2"),
+                    Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"),
+                    Identifier("Maven:org.reactivestreams:reactive-streams:1.0.1")
+                )
+            }
+
+            "support a DependencyMatcher" {
+                val pkgId = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+
+                val dependencies = navigator.packageDependencies(testProject, pkgId) { node ->
+                    node.id.namespace.startsWith("com.typesafe")
+                }
+
+                dependencies should containExactlyInAnyOrder(
+                    Identifier("Maven:com.typesafe:ssl-config-core_2.12:0.2.2"),
+                    Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6")
+                )
+            }
+        }
+
         "collectSubProjects" should {
             "find all the sub projects of a project" {
                 val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT")
