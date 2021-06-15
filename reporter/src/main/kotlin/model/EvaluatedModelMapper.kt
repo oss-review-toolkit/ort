@@ -587,14 +587,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addShortestPaths(project: Project) {
-        project.scopes.forEach { scope ->
-            scope.getShortestPaths().forEach { (id, path) ->
+        input.ortResult.dependencyNavigator.getShortestPaths(project).forEach { (scopeName, scopePaths) ->
+            scopePaths.forEach { (id, path) ->
                 val pkg = packages.getValue(id)
 
                 val packagePath = EvaluatedPackagePath(
                     pkg = pkg,
                     project = packages.getValue(project.id),
-                    scope = scopes.getValue(scope.name),
+                    scope = scopes.getValue(scopeName),
                     path = path.map { parentId -> packages.getValue(parentId) }
                 )
 

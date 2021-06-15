@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import java.util.LinkedList
 import java.util.SortedSet
 
 /**
@@ -36,6 +37,7 @@ typealias DependencyMatcher = (DependencyNode) -> Boolean
  * accessible easily. To simplify dealing with dependencies, this interface offers functionality tailored towards the
  * typical use cases required by the single ORT components.
  */
+@Suppress("TooManyFunctions")
 interface DependencyNavigator {
     companion object {
         /**
@@ -108,8 +110,73 @@ interface DependencyNavigator {
     ): Set<Identifier>
 
     /**
+     * Return a map with the shortest paths to each dependency in all scopes of the given [project]. The path to a
+     * dependency is defined by the nodes of the dependency tree that need to be passed to get to the dependency. For
+     * direct dependencies the shortest path is empty. The resulting map has scope names as keys; the values are maps
+     * with the shorted paths to all the dependencies contained in that scope.
+     */
+    fun getShortestPaths(project: Project): Map<String, Map<Identifier, List<Identifier>>> {
+        val pathMap = mutableMapOf<String, Map<Identifier, List<Identifier>>>()
+
+        scopeNames(project).forEach { scope ->
+            pathMap[scope] = getShortestPathForScope(project, scope)
+        }
+
+        return pathMap
+    }
+
+    /**
      * Return the set of [Identifier]s that refer to sub-projects of the given [project].
      */
     fun collectSubProjects(project: Project): SortedSet<Identifier> =
         scopeDependencies(project, matcher = MATCH_SUB_PROJECTS).collectDependencies()
+
+    /**
+     * Determine the map of shortest paths for all the dependencies of a [project], given its map of
+     * [scopeDependencies].
+     */
+    private fun getShortestPathForScope(
+        project: Project,
+        scope: String
+    ): Map<Identifier, List<Identifier>> =
+        getShortestPathsForScope(directDependencies(project, scope), dependenciesForScope(project, scope))
+
+    /**
+     * Determine the map of shortest paths for a specific scope given its direct dependency [nodes] and a set with
+     * [allDependencies].
+     */
+    private fun getShortestPathsForScope(
+        nodes: Sequence<DependencyNode>,
+        allDependencies: Set<Identifier>
+    ): Map<Identifier, List<Identifier>> {
+        data class QueueItem(
+            val pkgRef: DependencyNode,
+            val parents: List<Identifier>
+        )
+
+        val remainingIds = allDependencies.toMutableSet()
+        val queue = LinkedList<QueueItem>()
+        val result = sortedMapOf<Identifier, List<Identifier>>()
+
+        nodes.forEach { queue.offer(QueueItem(it, emptyList())) }
+
+        while (queue.isNotEmpty()) {
+            val item = queue.poll()
+            if (item.pkgRef.id in remainingIds) {
+                result[item.pkgRef.id] = item.parents
+                remainingIds -= item.pkgRef.id
+            }
+
+            val newParents = item.parents + item.pkgRef.id
+            item.pkgRef.visitDependencies { dependencyNodes ->
+                dependencyNodes.forEach { node -> queue.offer(QueueItem(node, newParents)) }
+            }
+        }
+
+        require(remainingIds.isEmpty()) {
+            "Could not find the shortest path for these dependencies: ${remainingIds.joinToString()}"
+        }
+
+        return result
+    }
 }

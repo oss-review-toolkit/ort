@@ -208,6 +208,107 @@ class DependencyTreeNavigatorTest : WordSpec() {
             }
         }
 
+        "getShortestPaths" should {
+            "return the shortest paths for a project" {
+                val paths = navigator.getShortestPaths(testProject)
+
+                paths.keys should haveSize(2)
+
+                paths["compile"]!! should org.ossreviewtoolkit.utils.test.containExactly(
+                    Identifier("Maven:ch.qos.logback:logback-classic:1.2.3") to emptyList(),
+                    Identifier("Maven:ch.qos.logback:logback-core:1.2.3") to listOf(
+                        Identifier("Maven:ch.qos.logback:logback-classic:1.2.3")
+                    ),
+                    Identifier("Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0") to listOf(
+                        Identifier("Maven:net.logstash.logback:logstash-logback-encoder:4.11"),
+                        Identifier("Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9")
+                    ),
+                    Identifier("Maven:com.fasterxml.jackson.core:jackson-core:2.8.9") to listOf(
+                        Identifier("Maven:net.logstash.logback:logstash-logback-encoder:4.11"),
+                        Identifier("Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9")
+                    ),
+                    Identifier("Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9") to listOf(
+                        Identifier("Maven:net.logstash.logback:logstash-logback-encoder:4.11")
+                    ),
+                    Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6") to listOf(
+                        Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+                    ),
+                    Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6") to emptyList(),
+                    Identifier("Maven:com.typesafe:config:1.3.1") to emptyList(),
+                    Identifier("Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2") to emptyList(),
+                    Identifier("Maven:com.typesafe:ssl-config-core_2.12:0.2.2") to listOf(
+                        Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+                    ),
+                    Identifier("Maven:net.logstash.logback:logstash-logback-encoder:4.11") to emptyList(),
+                    Identifier("Maven:org.scala-lang:scala-library:2.12.3") to emptyList(),
+                    Identifier("Maven:org.scala-lang:scala-reflect:2.12.2") to listOf(
+                        Identifier("Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2")
+                    ),
+                    Identifier("Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0") to listOf(
+                        Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"),
+                        Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6")
+                    ),
+                    Identifier("Maven:org.reactivestreams:reactive-streams:1.0.1") to listOf(
+                        Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+                    ),
+                    Identifier("Maven:org.slf4j:jcl-over-slf4j:1.7.25") to emptyList(),
+                    Identifier("Maven:org.slf4j:slf4j-api:1.7.25") to listOf(
+                        Identifier("Maven:ch.qos.logback:logback-classic:1.2.3")
+                    ),
+                )
+            }
+
+            "find the shortest paths to each dependency in a scope" {
+                // This test case comes from ScopeTest initially. It uses a specific dependency tree to test
+                // various corner cases.
+                val scope = Scope(
+                    name = "test",
+                    dependencies = sortedSetOf(
+                        pkg("A"),
+                        pkg("B") {
+                            pkg("A")
+                        },
+                        pkg("C") {
+                            pkg("B") {
+                                pkg("A") {
+                                    pkg("H")
+                                    pkg("I") {
+                                        pkg("H")
+                                    }
+                                }
+                            }
+                            pkg("D") {
+                                pkg("E")
+                            }
+                        },
+                        pkg("F") {
+                            pkg("E") {
+                                pkg("I")
+                            }
+                        },
+                        pkg("G") {
+                            pkg("E")
+                        }
+                    )
+                )
+
+                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+                val paths = navigator.getShortestPaths(project)[scope.name]!!
+
+                paths should org.ossreviewtoolkit.utils.test.containExactly(
+                    Identifier("A") to emptyList(),
+                    Identifier("B") to emptyList(),
+                    Identifier("C") to emptyList(),
+                    Identifier("D") to listOf(Identifier("C")),
+                    Identifier("E") to listOf(Identifier("F")),
+                    Identifier("F") to emptyList(),
+                    Identifier("G") to emptyList(),
+                    Identifier("H") to listOf(Identifier("C"), Identifier("B"), Identifier("A")),
+                    Identifier("I") to listOf(Identifier("F"), Identifier("E"))
+                )
+            }
+        }
+
         "collectSubProjects" should {
             "find all the sub projects of a project" {
                 val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT")
@@ -227,3 +328,17 @@ private const val RESULT_FILE =
 
 /** Identifier of the project used by the tests. */
 private val PROJECT_ID = Identifier("SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT")
+
+private class PackageRefBuilder(id: String) {
+    private val id = Identifier(id)
+    private val dependencies = sortedSetOf<PackageReference>()
+
+    fun pkg(id: String, block: PackageRefBuilder.() -> Unit = {}) {
+        dependencies += PackageRefBuilder(id).apply { block() }.build()
+    }
+
+    fun build(): PackageReference = PackageReference(id = id, dependencies = dependencies)
+}
+
+private fun pkg(id: String, block: PackageRefBuilder.() -> Unit = {}): PackageReference =
+    PackageRefBuilder(id).apply { block() }.build()

@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import java.util.LinkedList
 import java.util.SortedSet
 
 /**
@@ -90,43 +89,5 @@ data class Scope(
             dependencies.map { dependency -> 1 + getTreeDepthRec(dependency.dependencies) }.maxOrNull() ?: 0
 
         return getTreeDepthRec(dependencies)
-    }
-
-    /**
-     * Return the shortest path to each dependency in this scope. The path to a dependency is defined by the nodes of
-     * the dependency tree that need to be passed to get to the dependency. For direct dependencies the shortest path is
-     * empty.
-     */
-    @JsonIgnore
-    fun getShortestPaths(): Map<Identifier, List<Identifier>> {
-        data class QueueItem(
-            val pkgRef: PackageReference,
-            val parents: List<Identifier>
-        )
-
-        val remainingIds = collectDependencies().toMutableSet()
-        val queue = LinkedList<QueueItem>()
-        val result = sortedMapOf<Identifier, List<Identifier>>()
-
-        dependencies.forEach { queue.offer(QueueItem(it, emptyList())) }
-
-        while (queue.isNotEmpty()) {
-            val item = queue.poll()
-            if (item.pkgRef.id in remainingIds) {
-                result[item.pkgRef.id] = item.parents
-                remainingIds -= item.pkgRef.id
-            }
-
-            val newParents = item.parents + item.pkgRef.id
-            item.pkgRef.dependencies.forEach { pkgRef ->
-                queue.offer(QueueItem(pkgRef, newParents))
-            }
-        }
-
-        require(remainingIds.isEmpty()) {
-            "Could not find the shortest path for these dependencies: ${remainingIds.joinToString()}"
-        }
-
-        return result
     }
 }
