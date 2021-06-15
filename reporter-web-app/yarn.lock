@@ -2541,10 +2541,10 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-antd@^4.16.2:
-  version "4.16.2"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-4.16.2.tgz#23b6ee8822c9ec21d9fe11b89246d49414878c48"
-  integrity sha512-8aRrhzVz0Z32PptW9syq0eQqjc9wfJn3nxgVqqxGNH5BkFr1LRiqM0wJ6FNiYc6XVbpnqP20z5gufYFHC7BHqw==
+antd@^4.16.3:
+  version "4.16.3"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-4.16.3.tgz#9836613eaeabb55a0bcd4423551df699d65f67a8"
+  integrity sha512-goFcDw8MB9PKgb+fHjUEOwoseL5iuMNelzcdFJOJaG1LXPm9d/ZQhQWdYbzQf5l7v6bmvvvi91WNB1rDsuXh3w==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/icons" "^4.6.2"
