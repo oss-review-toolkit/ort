@@ -273,7 +273,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         if (log.delegate.isErrorEnabled) {
             evaluatorRun.violations.forEach { violation ->
-                log.error(violation.toString())
+                log.error { violation.toString() }
             }
         }
 
