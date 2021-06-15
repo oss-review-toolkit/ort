@@ -18,6 +18,8 @@
  * License-Filename: LICENSE
  */
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 val cliktVersion: String by project
 val jsltVersion: String by project
 val log4jCoreVersion: String by project
@@ -25,11 +27,18 @@ val log4jCoreVersion: String by project
 plugins {
     // Apply core plugins.
     application
+
+    // Apply third-party plugins.
+    id("com.github.johnrengelman.shadow")
 }
 
 application {
     applicationName = "orth"
     mainClassName = "org.ossreviewtoolkit.helper.HelperMainKt"
+}
+
+tasks.withType<ShadowJar> {
+    isZip64 = true
 }
 
 tasks.named<CreateStartScripts>("startScripts").configure {
