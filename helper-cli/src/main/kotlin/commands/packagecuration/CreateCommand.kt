@@ -28,12 +28,12 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
+import org.ossreviewtoolkit.helper.common.createBlockYamlMapper
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class CreateCommand : CliktCommand(
@@ -60,12 +60,19 @@ internal class CreateCommand : CliktCommand(
             throw UsageError("File ${outputFile.absolutePath} already exists.")
         }
 
+        val mapper = createBlockYamlMapper()
+
         try {
+            val text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+                listOf(
+                    // A block comment without any text is not valid in YAML. Therefore add a dummy comment with a line
+                    // break to force the YAML mapper to create a block comment.
+                    PackageCuration(packageId, PackageCurationData(comment = "Curation comment.\n"))
+                )
+            )
+
             outputFile.parentFile.mkdirs()
-            outputFile.writeValue(listOf(
-                // Adding an empty comment to avoid `{}` for an empty PackageCurationData.
-                PackageCuration(packageId, PackageCurationData(comment = ""))
-            ))
+            outputFile.writeText(text)
         } catch (e: IOException) {
             throw IOException("Failed to create ${outputFile.absoluteFile}.", e)
         }
