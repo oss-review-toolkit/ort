@@ -149,20 +149,6 @@ data class Project(
             )
 
     /**
-     * Return the set of package [Identifier]s of all transitive dependencies of this [Project], up to and including a
-     * depth of [maxDepth] where counting starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A
-     * value below 0 means to not limit the depth. If the given [filterPredicate] is false for a specific
-     * [PackageReference] the corresponding [Identifier] is excluded from the result.
-     */
-    fun collectDependencies(
-        maxDepth: Int = -1,
-        filterPredicate: (PackageReference) -> Boolean = { true }
-    ): Set<Identifier> =
-        scopes.fold(mutableSetOf()) { refs, scope ->
-            refs.also { it += scope.collectDependencies(maxDepth, filterPredicate) }
-        }
-
-    /**
      * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
      */
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {

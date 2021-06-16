@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.model
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
@@ -90,42 +88,6 @@ class ProjectTest : WordSpec({
                     scopeNames = sortedSetOf("test", "compile", "other")
                 )
             }
-        }
-    }
-
-    "collectDependencies" should {
-        "get all dependencies by default" {
-            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
-
-            val dependencies = project.collectDependencies().map { it.toCoordinates() }
-
-            dependencies should containExactlyInAnyOrder(
-                "Maven:junit:junit:4.12",
-                "Maven:org.apache.commons:commons-lang3:3.5",
-                "Maven:org.apache.commons:commons-text:1.1",
-                "Maven:org.apache.struts:struts2-assembly:2.5.14.1",
-                "Maven:org.hamcrest:hamcrest-core:1.3"
-            )
-        }
-
-        "get no dependencies for a depth of 0" {
-            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
-
-            val dependencies = project.collectDependencies(maxDepth = 0)
-
-            dependencies should beEmpty()
-        }
-
-        "get only direct dependencies for a depth of 1" {
-            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
-
-            val dependencies = project.collectDependencies(maxDepth = 1).map { it.toCoordinates() }
-
-            dependencies should containExactlyInAnyOrder(
-                "Maven:junit:junit:4.12",
-                "Maven:org.apache.commons:commons-text:1.1",
-                "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            )
         }
     }
 
