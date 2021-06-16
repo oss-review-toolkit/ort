@@ -72,7 +72,7 @@ private fun OrtResult.getTargetPackagesWithDefinitionFiles(skipExcluded: Boolean
         val definitionFilePath = project.definitionFilePath
 
         // Omit non-referenced and maybe also excluded packages:
-        project.collectDependencies { !skipExcluded || !isExcluded(it.id) }.forEach { id ->
+        dependencyNavigator.projectDependencies(project) { !skipExcluded || !isExcluded(it.id) }.forEach { id ->
             result.getOrPut(id) { mutableListOf() } += definitionFilePath
         }
     }

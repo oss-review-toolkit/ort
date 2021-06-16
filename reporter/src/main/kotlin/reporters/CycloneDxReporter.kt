@@ -146,7 +146,10 @@ class CycloneDxReporter : Reporter {
                 "URL to the ${vcs.type} repository of the projects"
             )
 
-            val allDirectDependencies = projects.flatMapTo(mutableSetOf()) { it.collectDependencies(1) }
+            val allDirectDependencies = projects.flatMapTo(mutableSetOf()) { project ->
+                input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
+            }
+
             input.ortResult.getPackages().forEach { (pkg, _) ->
                 val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
                 addPackageToBom(input, pkg, bom, dependencyType)
@@ -179,12 +182,13 @@ class CycloneDxReporter : Reporter {
                     "Package-URL of the project"
                 )
 
-                val dependencies = project.collectDependencies()
+                val dependencies = input.ortResult.dependencyNavigator.projectDependencies(project)
                 val packages = input.ortResult.getPackages().mapNotNull { (pkg, _) ->
                     pkg.takeIf { it.id in dependencies }
                 }
 
-                val directDependencies = project.collectDependencies(1)
+                val directDependencies =
+                    input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
                 packages.forEach { pkg ->
                     val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
                     addPackageToBom(input, pkg, bom, dependencyType)

@@ -132,6 +132,17 @@ interface DependencyNavigator {
         scopeDependencies(project, matcher = MATCH_SUB_PROJECTS).collectDependencies()
 
     /**
+     * Return a set with the [Identifier]s of all dependencies of the given [project] across all scopes. As usual,
+     * it is possible to restrict the dependencies to be fetched with [maxDepth] and [matcher].
+     */
+    fun projectDependencies(
+        project: Project,
+        maxDepth: Int = -1,
+        matcher: DependencyMatcher = MATCH_ALL
+    ): SortedSet<Identifier> =
+        scopeDependencies(project, maxDepth, matcher).collectDependencies()
+
+    /**
      * Return the depth of the dependency tree rooted at the given [project] associated with this [scopeName]. If the
      * scope cannot be resolved, return -1.
      */

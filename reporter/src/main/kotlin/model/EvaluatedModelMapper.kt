@@ -138,7 +138,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
             val pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
-            val dependencies = project.collectDependencies()
+            val dependencies = input.ortResult.dependencyNavigator.projectDependencies(project)
             if (pathExcludes.isEmpty()) {
                 val info = packageExcludeInfo.getValue(project.id)
                 if (info.isExcluded) {

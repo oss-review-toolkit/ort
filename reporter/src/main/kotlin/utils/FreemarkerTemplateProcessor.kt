@@ -243,7 +243,7 @@ class FreemarkerTemplateProcessor(
             projectIds: Collection<Identifier>
         ): List<PackageModel> {
             val dependencies = projectIds.mapNotNull { input.ortResult.getProject(it) }
-                .flatMapTo(mutableSetOf()) { it.collectDependencies() }
+                .flatMapTo(mutableSetOf()) { input.ortResult.dependencyNavigator.projectDependencies(it) }
 
             return packages.filter { pkg -> pkg.id in dependencies }
         }
