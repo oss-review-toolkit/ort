@@ -42,7 +42,7 @@ RUN --mount=type=cache,target=/root/.gradle/ \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM adoptopenjdk:11-jre-hotspot-bionic
+FROM adoptopenjdk:11-jdk-hotspot-bionic
 
 ENV \
     # Package manager versions.
