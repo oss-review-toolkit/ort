@@ -132,6 +132,13 @@ interface DependencyNavigator {
         scopeDependencies(project, matcher = MATCH_SUB_PROJECTS).collectDependencies()
 
     /**
+     * Return the depth of the dependency tree rooted at the given [project] associated with this [scopeName]. If the
+     * scope cannot be resolved, return -1.
+     */
+    fun dependencyTreeDepth(project: Project, scopeName: String): Int =
+        getTreeDepthRecursive(directDependencies(project, scopeName))
+
+    /**
      * Determine the map of shortest paths for all the dependencies of a [project], given its map of
      * [scopeDependencies].
      */
@@ -179,4 +186,12 @@ interface DependencyNavigator {
 
         return result
     }
+
+    /**
+     * Traverse the given sequence of [dependencies] recursively to determine the depth of the dependency tree.
+     */
+    private fun getTreeDepthRecursive(dependencies: Sequence<DependencyNode>): Int =
+        dependencies.map { dependency ->
+            1 + dependency.visitDependencies { getTreeDepthRecursive(it) }
+        }.maxOrNull() ?: 0
 }

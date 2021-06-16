@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import java.util.SortedSet
@@ -79,15 +78,4 @@ data class Scope(
      */
     fun findReferences(id: Identifier) =
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
-
-    /**
-     * Return the depth of the dependency tree rooted at the project associated with this scope.
-     */
-    @JsonIgnore
-    fun getDependencyTreeDepth(): Int {
-        fun getTreeDepthRec(dependencies: Collection<PackageReference>): Int =
-            dependencies.map { dependency -> 1 + getTreeDepthRec(dependency.dependencies) }.maxOrNull() ?: 0
-
-        return getTreeDepthRec(dependencies)
-    }
 }
