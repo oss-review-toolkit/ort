@@ -1,5 +1,3 @@
-# syntax = docker/dockerfile:experimental
-
 # Copyright (C) 2020 Bosch Software Innovations GmbH
 # Copyright (C) 2021 Alliander N.V.
 #
