@@ -46,21 +46,6 @@ data class ProjectAnalyzerResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
 ) {
-    init {
-        // Perform a sanity check to ensure we have no references to non-existing packages.
-        val packageIds = packages.map { it.id }
-        val referencedIds = project.collectDependencies {
-            // Exclude project dependencies in multi-projects from the check as these appear as references in the
-            // dependency tree but not in the list of packages used.
-            !it.hasIssues() && it.linkage !in PackageLinkage.PROJECT_LINKAGE
-        }
-
-        // Note that not all packageIds have to be contained in the referencedIds, e.g. for NPM optional dependencies.
-        require(packageIds.containsAll(referencedIds)) {
-            "The following references do not actually refer to packages: ${referencedIds - packageIds}."
-        }
-    }
-
     fun collectIssues(): Map<Identifier, List<OrtIssue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
 
