@@ -183,7 +183,7 @@ data class OrtResult(
 
         getProjects().forEach { project ->
             if (project.id == id) {
-                dependencies += project.collectDependencies(maxLevel)
+                dependencies += dependencyNavigator.projectDependencies(project, maxLevel)
             }
 
             dependencies += dependencyNavigator.packageDependencies(project, id, maxLevel)

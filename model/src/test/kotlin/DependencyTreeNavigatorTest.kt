@@ -310,6 +310,41 @@ class DependencyTreeNavigatorTest : WordSpec() {
             }
         }
 
+        "projectDependencies" should {
+            "return the dependencies of a project" {
+                val scopeDependencies = navigator.scopeDependencies(testProject)
+                val projectDependencies = navigator.projectDependencies(testProject)
+
+                projectDependencies should containExactlyInAnyOrder(
+                    scopeDependencies.getValue("compile") + scopeDependencies.getValue("test")
+                )
+            }
+
+            "support filtering the dependencies of a project" {
+                val dependencies = navigator.projectDependencies(testProject, 1) {
+                    it.linkage != PackageLinkage.PROJECT_DYNAMIC
+                }
+
+                dependencies should containExactlyInAnyOrder(
+                    Identifier("Maven:ch.qos.logback:logback-classic:1.2.3"),
+                    Identifier("Maven:com.typesafe:config:1.3.1"),
+                    Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"),
+                    Identifier("Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"),
+                    Identifier("Maven:net.logstash.logback:logstash-logback-encoder:4.11"),
+                    Identifier("Maven:org.scala-lang:scala-library:2.12.3"),
+                    Identifier("Maven:org.slf4j:jcl-over-slf4j:1.7.25"),
+                    Identifier("Maven:org.scalacheck:scalacheck_2.12:1.13.5"),
+                    Identifier("Maven:org.scalatest:scalatest_2.12:3.0.4")
+                )
+            }
+
+            "return no dependencies for a maxDepth of 0" {
+                val dependencies = navigator.projectDependencies(testProject, 0)
+
+                dependencies should beEmpty()
+            }
+        }
+
         "collectSubProjects" should {
             "find all the sub projects of a project" {
                 val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT")
