@@ -21,6 +21,9 @@
 
 package org.ossreviewtoolkit.helper.common
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
+
 import java.io.File
 import java.nio.file.Paths
 
@@ -63,6 +66,7 @@ import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.model.writeValue
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
@@ -404,6 +408,41 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     val pathExcludes = repository.config.excludes.paths.filterNot { isDefinitionsFile(it) }
 
     return getPathExcludesByRepository(pathExcludes, repository.nestedRepositories)
+}
+
+/**
+ * Wrap this string on word boundaries with line breaks at the given [column].
+ */
+internal fun String.wrapAt(column: Int): String {
+    val paragraph = StringBuilder()
+
+    var text = this
+    while (text.isNotEmpty()) {
+        val spaceIndex = text.indexOf(' ', column)
+
+        var index = spaceIndex
+        while (index > column) {
+            // Find the last space before the column.
+            while (index > 0 && text[--index] != ' ');
+        }
+
+        // If there is no space before the column, take the first space after the column.
+        if (index == 0) index = spaceIndex
+
+        val line = if (index != -1) {
+            text.substring(0, index)
+        } else {
+            text
+        }
+
+        // Drop the line from the remaining text and trim any resulting leading whitespace.
+        text = text.removePrefix(line).trimStart()
+
+        paragraph.appendLine(line)
+    }
+
+    // Return the paragraph as a single string with the last appended line break trimmed.
+    return paragraph.toString().trimEnd()
 }
 
 /**
@@ -799,6 +838,12 @@ internal fun RepositoryConfiguration.merge(
 internal fun PackageConfiguration.write(targetFile: File) {
     targetFile.writeValue(this)
 }
+
+internal fun createBlockYamlMapper(): ObjectMapper =
+    yamlMapper.copy()
+        .enable(YAMLGenerator.Feature.LITERAL_BLOCK_STYLE)
+        .disable(YAMLGenerator.Feature.SPLIT_LINES)
+        .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
 
 internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): List<PathExclude> {
     println("Analyzing $sourceCodeDir...")
