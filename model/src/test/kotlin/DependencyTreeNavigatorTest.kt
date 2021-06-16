@@ -28,6 +28,7 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.utils.test.readOrtResult
@@ -317,6 +318,69 @@ class DependencyTreeNavigatorTest : WordSpec() {
                 val subProjectIds = navigator.collectSubProjects(project)
 
                 subProjectIds should containExactly(PROJECT_ID)
+            }
+        }
+
+        "dependencyTreeDepth" should {
+            "calculate the dependency tree depth for a project" {
+                navigator.dependencyTreeDepth(testProject, "compile") shouldBe 3
+                navigator.dependencyTreeDepth(testProject, "test") shouldBe 2
+            }
+
+            "return 0 if the scope cannot be resolved" {
+                navigator.dependencyTreeDepth(testProject, "unknownScope") shouldBe 0
+            }
+
+            "return 0 if the scope does not contain any package" {
+                val scope = Scope(name = "test", dependencies = sortedSetOf())
+                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+
+                navigator.dependencyTreeDepth(project, scope.name) shouldBe 0
+            }
+
+            "return 1 if the scope contains only direct dependencies" {
+                val scope = Scope(
+                    name = "test",
+                    dependencies = sortedSetOf(
+                        PackageReference(id = Identifier("a")),
+                        PackageReference(id = Identifier("b"))
+                    )
+                )
+                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+
+                navigator.dependencyTreeDepth(project, scope.name) shouldBe 1
+            }
+
+            "return 2 if the scope contains a tree of height 2" {
+                val scope = Scope(
+                    name = "test",
+                    dependencies = sortedSetOf(
+                        pkg("a") {
+                            pkg("a1")
+                        }
+                    )
+                )
+                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+
+                navigator.dependencyTreeDepth(project, scope.name) shouldBe 2
+            }
+
+            "return 3 if it contains a tree of height 3" {
+                val scope = Scope(
+                    name = "test",
+                    dependencies = sortedSetOf(
+                        pkg("a") {
+                            pkg("a1") {
+                                pkg("a11")
+                                pkg("a12")
+                            }
+                        },
+                        pkg("b")
+                    )
+                )
+                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+
+                navigator.dependencyTreeDepth(project, scope.name) shouldBe 3
             }
         }
     }
