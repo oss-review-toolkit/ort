@@ -35,8 +35,6 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
@@ -166,13 +164,9 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val config = globalOptionsForSubcommands.config
         val analyzer = Analyzer(config.analyzer)
 
-        val curationFiles = mutableListOf<File>()
-        packageCurationsFile.takeIf { it.isFile }?.let { curationFiles += it }
-        packageCurationsDir?.let { curationFiles += FileFormat.findFilesWithKnownExtensions(it) }
-
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
-                FilePackageCurationProvider(curationFiles),
+                FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir),
                 config.analyzer.sw360Configuration?.let {
                     Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
                 },
