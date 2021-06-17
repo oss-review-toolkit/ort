@@ -129,4 +129,13 @@ data class Scope(
 
         return result
     }
+
+    /**
+     * Return the amount of [PackageReference]s contained in this scope.
+      */
+    fun size(): Int {
+        fun PackageReference.size(): Int = 1 + dependencies.sumOf { it.size() }
+
+        return dependencies.sumOf { it.size() }
+    }
 }

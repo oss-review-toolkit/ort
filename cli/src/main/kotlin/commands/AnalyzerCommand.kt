@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -187,6 +188,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         ).mergeLabels(labels)
 
         println("Found ${ortResult.getProjects().size} project(s) in total.")
+        ortResult.printPackageReferenceStats()
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")
@@ -202,3 +204,19 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         concludeSeverityStats(counts, config.severeIssueThreshold, 2)
     }
 }
+
+fun OrtResult.printPackageReferenceStats(): String =
+    buildString {
+        appendLine("Package reference counts by project:")
+        appendLine()
+
+        val packageReferenceCountForProject = getProjects(omitExcluded = false).map {
+                project -> project to project.scopes.sumOf { scope -> scope.size() }
+        }.sortedByDescending { (_, count) -> count }
+
+        packageReferenceCountForProject.forEach { (project, count) ->
+            append("${project.definitionFilePath}: $count")
+        }
+        appendLine()
+        appendLine("Overall number of package references: ${packageReferenceCountForProject.sumOf { it.second }}")
+    }
