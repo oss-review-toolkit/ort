@@ -679,7 +679,7 @@ class Pip(
         }
 
         val declaredLicenses = sortedSetOf<String>()
-        getLicenseFromLicenseField(map["License"]?.single())?.let { declaredLicenses += it }
+        map["License"]?.mapNotNullTo(declaredLicenses) { getLicenseFromLicenseField(it) }
         map["Classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it) }
 
         val authors = parseAuthorString(map["Author"]?.singleOrNull())
