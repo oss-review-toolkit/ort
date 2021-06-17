@@ -37,8 +37,6 @@ import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
@@ -61,19 +59,17 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
-import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.spdx.VCS_DIRECTORIES
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.ArchiveType
 import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
+import org.ossreviewtoolkit.utils.archive
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.packZip
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
 
@@ -370,20 +366,5 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             .filter { it.id in effectiveLicenses }
             .flatMap { it.categories }
             .toSet()
-    }
-}
-
-private fun archive(inputDir: File, zipFile: File, prefix: String = ""): Result<File> {
-    return runCatching {
-        inputDir.packZip(
-            zipFile,
-            prefix,
-            directoryFilter = { it.name !in VCS_DIRECTORIES },
-            fileFilter = { it != zipFile }
-        )
-
-        zipFile
-    }.onFailure {
-        it.showStackTrace()
     }
 }
