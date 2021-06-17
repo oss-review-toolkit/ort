@@ -24,8 +24,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forAtLeastOne
 import io.kotest.inspectors.forOne
-import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 
@@ -37,7 +35,6 @@ import org.ossreviewtoolkit.analyzer.ManagedProjectFiles
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -66,11 +63,6 @@ abstract class AbstractIntegrationSpec : StringSpec() {
      * [expectedManagedFiles], but can be e.g. limited to a subset of files in big projects to speed up the test.
      */
     protected open val managedFilesForTest by lazy { expectedManagedFiles }
-
-    /**
-     * The list of package identifiers for which issues are expected.
-     */
-    protected open val identifiersWithExpectedIssues = setOf<Identifier>()
 
     /**
      * The temporary parent directory for downloads.
@@ -141,8 +133,6 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     listOf(results.dependencyGraph != null, result.packages.isNotEmpty()).forAtLeastOne {
                         it shouldBe true
                     }
-
-                    result.collectIssues().keys should containExactly(identifiersWithExpectedIssues)
                 }
             }
         }

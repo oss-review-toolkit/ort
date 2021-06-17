@@ -46,35 +46,6 @@ data class ProjectAnalyzerResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
 ) {
-    fun collectIssues(): Map<Identifier, List<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
-
-        fun addIssues(pkgReference: PackageReference) {
-            val issuesForPkg = collectedIssues.getOrPut(pkgReference.id) { mutableListOf() }
-            issuesForPkg += pkgReference.issues
-
-            pkgReference.dependencies.forEach { addIssues(it) }
-        }
-
-        for (scope in project.scopes) {
-            for (dependency in scope.dependencies) {
-                addIssues(dependency)
-            }
-        }
-
-        return mutableMapOf<Identifier, List<OrtIssue>>().apply {
-            if (issues.isNotEmpty()) {
-                this[project.id] = issues.toMutableList()
-            }
-
-            collectedIssues.forEach { (pkgId, issues) ->
-                if (issues.isNotEmpty()) {
-                    this[pkgId] = issues.distinct()
-                }
-            }
-        }
-    }
-
     fun collectPackagesByScope(scopeName: String): List<Package> {
         val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
         return packages.filter { it.id in scope }
