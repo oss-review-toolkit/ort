@@ -643,8 +643,10 @@ class Pip(
 
         val rootNode = jsonMapper.readTree(json) as ArrayNode
 
-        return rootNode.elements().asSequence().mapTo(mutableSetOf()) {
-            Identifier("PyPI", "", it["name"].textValue(), it["version"].textValue())
+        return rootNode.elements().asSequence().mapNotNullTo(mutableSetOf()) {
+            val name = it["name"].textValue()
+            val version = it["version"].textValue()
+            Identifier("PyPI", "", name, version).takeUnless { isPhonyDependency(name, version) }
         }
     }
 
