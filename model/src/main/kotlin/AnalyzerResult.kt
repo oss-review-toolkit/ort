@@ -84,8 +84,12 @@ data class AnalyzerResult(
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
         val collectedIssues = issues.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
 
-        projects.forEach { project ->
-            project.collectIssues().forEach { (id, issues) ->
+        // Collecting issues from projects is necessary only if they use the dependency tree format; otherwise, the
+        // issues can be retrieved from the graph. So, once analyzer results are created with dependency graphs
+        // exclusively, this step can be removed.
+        projects.filter { it.scopeDependencies != null }.forEach { project ->
+            val projectDependencies = project.scopeDependencies.orEmpty().asSequence().flatMap(Scope::dependencies)
+            DependencyNavigator.collectIssues(projectDependencies).forEach { (id, issues) ->
                 collectedIssues.getOrPut(id) { mutableSetOf() } += issues
             }
         }

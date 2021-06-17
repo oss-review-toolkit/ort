@@ -149,29 +149,6 @@ data class Project(
             )
 
     /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
-     */
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
-
-        fun addIssues(pkgRef: PackageReference) {
-            if (pkgRef.issues.isNotEmpty()) {
-                collectedIssues.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.issues
-            }
-
-            pkgRef.dependencies.forEach { addIssues(it) }
-        }
-
-        for (scope in scopes) {
-            for (dependency in scope.dependencies) {
-                addIssues(dependency)
-            }
-        }
-
-        return collectedIssues
-    }
-
-    /**
      * A comparison function to sort projects by their identifier.
      */
     override fun compareTo(other: Project) = id.compareTo(other.id)

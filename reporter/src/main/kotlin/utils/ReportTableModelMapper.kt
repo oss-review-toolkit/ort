@@ -126,7 +126,7 @@ class ReportTableModelMapper(
             val allIds = sortedSetOf(project.id)
             allIds += ortResult.dependencyNavigator.projectDependencies(project)
 
-            val projectIssues = project.collectIssues()
+            val projectIssues = ortResult.dependencyNavigator.projectIssues(project)
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord?.scanResults?.get(id)
 
