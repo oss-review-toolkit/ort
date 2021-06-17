@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValueOrDefault
+import org.ossreviewtoolkit.spdx.getDuplicates
 import org.ossreviewtoolkit.utils.log
 
 /**
@@ -36,15 +37,25 @@ import org.ossreviewtoolkit.utils.log
 class FilePackageCurationProvider(curationFiles: Collection<File>) : PackageCurationProvider {
     constructor(curationFile: File) : this(listOf(curationFile))
 
-    internal val packageCurations by lazy {
-        curationFiles.mapNotNull { curationFile ->
+    internal val packageCurations: Set<PackageCuration> = run {
+        val allCurations = curationFiles.mapNotNull { curationFile ->
             runCatching {
                 curationFile.readValueOrDefault(emptyList<PackageCuration>())
             }.onFailure {
                 log.warn { "Failed parsing package curation from '${curationFile.absoluteFile}'." }
             }.getOrNull()
         }.flatten()
+
+        val duplicates = allCurations.getDuplicates()
+
+        if (duplicates.isNotEmpty()) {
+            throw DuplicatedCurationException("Duplicated curation for $duplicates found.")
+        }
+
+        allCurations.toSet()
     }
 
     override fun getCurationsFor(pkgId: Identifier) = packageCurations.filter { it.isApplicable(pkgId) }
 }
+
+private class DuplicatedCurationException(message: String?) : Exception(message)
