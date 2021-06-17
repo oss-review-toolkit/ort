@@ -436,13 +436,12 @@ class Pip(
         return declaredLicenses
     }
 
-    private fun getLicenseFromLicenseField(value: String?): String? =
-        value?.let {
-            // Work-around for projects that declare licenses in classifier-style syntax.
-            getLicenseFromClassifier(it) ?: it
-        }?.takeUnless {
-            it.isBlank() || it == "UNKNOWN"
-        }
+    private fun getLicenseFromLicenseField(value: String?): String? {
+        if (value.isNullOrBlank() || value == "UNKNOWN" || "\n" in value) return null
+
+        // Apply a work-around for projects that declare licenses in classifier-syntax in the license field.
+        return getLicenseFromClassifier(value) ?: value
+    }
 
     private fun getLicenseFromClassifier(classifier: String): String? =
         // Example license classifier:
