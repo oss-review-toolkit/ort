@@ -32,9 +32,6 @@ import io.kotest.matchers.types.beTheSameInstanceAs
 import io.mockk.mockk
 
 import java.io.File
-import java.time.Instant
-
-import org.ossreviewtoolkit.utils.test.containExactly
 
 private fun readAnalyzerResult(analyzerResultFilename: String): Project =
     File("../analyzer/src/funTest/assets/projects/synthetic")
@@ -88,33 +85,6 @@ class ProjectTest : WordSpec({
                     scopeNames = sortedSetOf("test", "compile", "other")
                 )
             }
-        }
-    }
-
-    "collectIssues" should {
-        "find all issues" {
-            val project = readAnalyzerResult("gradle-expected-output-lib-without-repo.yml")
-
-            val issues = project.collectIssues()
-
-            issues should containExactly(
-                Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
-                    OrtIssue(
-                        Instant.EPOCH,
-                        "Gradle",
-                        "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
-                                "org.apache.commons:commons-text:1.1 because no repositories are defined."
-                    )
-                ),
-                Identifier("Unknown:junit:junit:4.12") to setOf(
-                    OrtIssue(
-                        Instant.EPOCH,
-                        "Gradle",
-                        "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
-                                "junit:junit:4.12 because no repositories are defined."
-                    )
-                )
-            )
         }
     }
 

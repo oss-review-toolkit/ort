@@ -46,6 +46,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
     private val issue2 = OrtIssue(source = "source-2", message = "message-2")
     private val issue3 = OrtIssue(source = "source-3", message = "message-3")
     private val issue4 = OrtIssue(source = "source-4", message = "message-4")
+    private val issue5 = OrtIssue(source = "source-5", message = "message-5")
 
     private val package1 = Package.EMPTY.copy(id = Identifier("type-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("type-2", "namespace-2", "package-2", "version-2"))
@@ -78,7 +79,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
     private val depRef1 = DependencyReference(0)
     private val depRef2 = DependencyReference(1)
-    private val depRef3 = DependencyReference(0)
+    private val depRef3 = DependencyReference(0, issues = listOf(issue5))
 
     private val scopeMapping1 = mapOf(
         DependencyGraph.qualifyScope(project1, "scope-1") to listOf(RootDependencyIndex(0)),
@@ -181,11 +182,12 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val analyzerResult = AnalyzerResultBuilder()
                     .addResult(analyzerResult1)
                     .addResult(analyzerResult2)
+                    .addDependencyGraph("foo", graph2)
                     .build()
 
                 analyzerResult.collectIssues() should containExactly(
                     package1.id to setOf(issue1),
-                    package3.id to setOf(issue2),
+                    package3.id to setOf(issue2, issue5),
                     project1.id to setOf(issue3, issue4),
                     project2.id to setOf(issue4)
                 )
