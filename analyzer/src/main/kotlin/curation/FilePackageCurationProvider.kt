@@ -37,6 +37,16 @@ import org.ossreviewtoolkit.utils.log
 class FilePackageCurationProvider(curationFiles: Collection<File>) : PackageCurationProvider {
     constructor(curationFile: File) : this(listOf(curationFile))
 
+    companion object {
+        fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {
+            val curationFiles = mutableListOf<File>()
+            file?.takeIf { it.isFile }?.let { curationFiles += it }
+            dir?.let { curationFiles += FileFormat.findFilesWithKnownExtensions(it) }
+
+            return FilePackageCurationProvider(curationFiles)
+        }
+    }
+
     internal val packageCurations: Set<PackageCuration> = run {
         val allCurations = curationFiles.mapNotNull { curationFile ->
             runCatching {

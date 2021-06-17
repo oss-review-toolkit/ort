@@ -55,6 +55,24 @@ class FilePackageCurationProviderTest : StringSpec() {
             }
         }
 
+        "Provider can read from a single file and directories" {
+            val provider = FilePackageCurationProvider.from(curationsFile, curationsDir)
+
+            val idsWithExistingCurations = listOf(
+                // File
+                Identifier("npm", "", "ramda", "0.21.0"),
+                // Directory
+                Identifier("maven", "org.ossreviewtoolkit", "example", "1.0"),
+                Identifier("maven", "org.foo", "bar", "0.42")
+            )
+
+            idsWithExistingCurations.forEach {
+                val curations = provider.getCurationsFor(it)
+
+                curations should haveSize(1)
+            }
+        }
+
         "Provider returns only matching curations for a fixed version" {
             val provider = FilePackageCurationProvider(curationsFile)
 
