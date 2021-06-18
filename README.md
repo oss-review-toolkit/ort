@@ -285,8 +285,8 @@ or rule violations resolutions in the context of the repository.
 #### [Package configuration file / directory](./docs/config-file-package-configuration-yml.md)
 
 A single file or a directory with multiple files containing configurations to set provenance-specific path excludes and
-license finding curations for dependency packages to address issues found within a scan result. The `helper-cli`'s
-[GeneratePackageConfigurationsCommand](./helper-cli/src/main/kotlin/commands/GeneratePackageConfigurationsCommand.kt)
+license finding curations for dependency packages to address issues found within a scan result. `helper-cli`'s
+[`package-config create` command](./helper-cli/src/main/kotlin/commands/packageconfig/CreateCommand.kt)
 can be used to populate a directory with template package configuration files.
 
 | Format | Scope | Default location | Default value |
