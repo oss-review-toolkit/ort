@@ -286,7 +286,7 @@ or rule violations resolutions in the context of the repository.
 
 A single file or a directory with multiple files containing configurations to set provenance-specific path excludes and
 license finding curations for dependency packages to address issues found within a scan result. The `helper-cli`'s
-[GeneratePackageConfigurationsCommand](./helper-cli/src/main/kotlin/commands/GeneratePackageConfigurationsCommand.kt)
+[*package-configuration create* command](./helper-cli/src/main/kotlin/commands/packageconfig/CreateCommand.kt)
 can be used to populate a directory with template package configuration files.
 
 | Format | Scope | Default location | Default value |
