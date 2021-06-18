@@ -322,6 +322,8 @@ Currently, the following package managers are supported:
 * [Bundler](http://bundler.io/) (Ruby)
 * [Cargo](https://doc.rust-lang.org/cargo/) (Rust)
 * [Carthage](https://github.com/Carthage/Carthage) (iOS / Cocoa)
+* [CocoaPods](https://github.com/CocoaPods/CocoaPods) (iOS / Cocoa, with currently some
+  [limitations](https://github.com/oss-review-toolkit/ort/issues/4188))  
 * [Composer](https://getcomposer.org/) (PHP)
 * [Conan](https://conan.io/) (C / C++, *experimental* as the VCS locations often times do not contain the actual source
   code, see [issue #2037](https://github.com/oss-review-toolkit/ort/issues/2037))
