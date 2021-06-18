@@ -46,9 +46,7 @@ import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.withoutSuffix
 
 /**
- * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go. The implementation is
- * experimental since it lacks resolving VCS locations and also the way source artifact URLs are crafted needs to proof
- * being useful. It seems favorable to adjust the implementation to only set VCS but not source artifact URLs.
+ * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.
  *
  * Note: The file `go.sum` is not a lockfile as go modules already allows for reproducible builds without that file.
  * Thus no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
