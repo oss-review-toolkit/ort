@@ -330,8 +330,7 @@ Currently, the following package managers are supported:
   [limitations](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))
 * [Glide](https://github.com/Masterminds/glide) (Go)
 * [Godep](https://github.com/tools/godep) (Go)
-* [GoMod](https://github.com/golang/go/wiki/Modules) (Go, *experimental* as only proxy-based source artifacts but no VCS
-  locations are supported)
+* [GoMod](https://github.com/golang/go/wiki/Modules) (Go)
 * [Gradle](https://gradle.org/) (Java)
 * [Maven](http://maven.apache.org/) (Java)
 * [NPM](https://www.npmjs.com/) (Node.js)
