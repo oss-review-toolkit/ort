@@ -210,7 +210,7 @@ class Pub(
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
-        val url = "https://storage.googleapis.com/flutter_infra/releases/stable/$archive"
+        val url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/$archive"
 
         log.info { "Downloading flutter-$flutterVersion from $url... " }
 
