@@ -37,7 +37,7 @@ plugins {
 repositories {
     exclusiveContent {
         forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases-local/")
+            maven("https://repo.gradle.org/artifactory/libs-releases-local/")
         }
 
         filter {
