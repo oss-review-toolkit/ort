@@ -88,7 +88,7 @@ internal class ListLicensesCommand : CliktCommand(
     private val offendingSeverity by option(
         "--offending-severity",
         help = "Set the severities to use filtering enabled by --offending-only, specified as comma-separated " +
-                "values. Allowed values: ERROR,WARNING,HINT."
+                "values."
     ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
 
     private val omitExcluded by option(
