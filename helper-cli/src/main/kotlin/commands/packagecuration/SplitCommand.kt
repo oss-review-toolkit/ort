@@ -82,7 +82,12 @@ internal class SplitCommand : CliktCommand(
                 val text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(listOf(curation))
 
                 outputFile.parentFile.safeMkdirs()
-                outputFile.writeText(text)
+
+                if (outputFile.isFile) {
+                    outputFile.appendText("\n$text")
+                } else {
+                    outputFile.writeText(text)
+                }
             }
         }
     }
