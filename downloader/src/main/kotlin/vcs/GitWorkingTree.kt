@@ -34,8 +34,9 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.log
 
-private fun findGitOrSubmoduleDir(workingDir: File): Repository =
-    runCatching {
+private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
+    val workingDir = (workingDirOrFile.takeIf { it.isDirectory } ?: workingDirOrFile.parentFile).absoluteFile
+    return runCatching {
         // First try to open an existing working tree exactly at the given directory. This also works for submodules
         // which since Git 1.7.8 do not have their own ".git" directory anymore in favor of a ".git" file.
         FileRepositoryBuilder().setWorkTree(workingDir).setMustExist(true).build()
@@ -46,9 +47,10 @@ private fun findGitOrSubmoduleDir(workingDir: File): Repository =
         // Finally, fall back to treating the directory as a working tree that is yet to be created.
         FileRepositoryBuilder().setWorkTree(workingDir).build()
     }.getOrThrow()
+}
 
 open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
-    private val repo = findGitOrSubmoduleDir(workingDir.absoluteFile)
+    private val repo = findGitOrSubmoduleDir(workingDir)
 
     override fun isValid(): Boolean = repo.objectDatabase?.exists() == true
 
