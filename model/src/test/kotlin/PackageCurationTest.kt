@@ -399,6 +399,19 @@ class PackageCurationTest : WordSpec({
             )
         }
     }
+
+    "Curations with a version range" should {
+        "apply when using suffixes in version" {
+            val curation = PackageCuration(
+                id = Identifier("Maven:com.google.guava:guava:[28.0-jre,30.0-jre]"),
+                data = PackageCurationData()
+            )
+
+            val isApplicable = curation.isApplicable(Identifier("Maven:com.google.guava:guava:28.1-jre"))
+
+            isApplicable shouldBe true
+        }
+    }
 })
 
 private fun declaredLicenseMappingCuration(id: Identifier, vararg entries: Pair<String, String>): PackageCuration =
