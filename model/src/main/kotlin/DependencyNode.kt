@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 /**
  * A generic interface describing the properties of a node in a dependency tree independent on its concrete
  * representation.
@@ -26,6 +28,14 @@ package org.ossreviewtoolkit.model
  * The purpose of this interface is to abstract over the data structures used to store dependency information in a
  * specific format. Via the properties and functions defined here, all the relevant information about a single
  * dependency can be queried, and it is possible to navigate the dependency tree.
+ *
+ * Note that client code should not store [DependencyNode] instances. This is because the underlying data structures
+ * may not map directly to the properties defined by this interface. Rather than creating adapter objects (which would
+ * be rather costly for big graphs), an implementation may therefore decide to reuse objects during an iteration over
+ * nodes. Then these instances would change their properties whenever iteration moves on to the next node (refer also
+ * to the [visitDependencies] function). For use cases, in which a permanent reference to a [DependencyNode] is needed
+ * that stays valid even after an iteration, use the [getStableReference] function. A concrete implementation is
+ * required to create an adapter object that can be accessed safely if this is necessary.
  */
 interface DependencyNode {
     /** The identifier of this dependency. */
@@ -53,4 +63,14 @@ interface DependencyNode {
      *   It is safe to recursively call [visitDependencies] on the nodes in the sequence.
      */
     fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T
+
+    /**
+     * Return a permanent reference to this [DependencyNode], which keeps its properties during an iteration over the
+     * dependency graph. This means that a concrete implementation has to create an adapter object that stores the
+     * properties of a node if necessary. The returned [DependencyNode] should also have meaningful implementations
+     * for _equals()_ and _hashCode()_. Refer to the class comment for further information. This base implementation
+     * returns the same instance assuming that this object is directly mapped to an underlying data structure.
+     */
+    @JsonIgnore
+    fun getStableReference(): DependencyNode = this
 }
