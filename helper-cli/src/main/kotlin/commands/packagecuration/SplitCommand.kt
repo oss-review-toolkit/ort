@@ -68,27 +68,31 @@ internal class SplitCommand : CliktCommand(
 
         val mapper = createBlockYamlMapper()
         groupedCurations.forEach { (outputFile, curations) ->
-            curations.forEach { originalCuration ->
+            val curationsToPersist = if (outputFile.isFile) {
+                outputFile.readValue<MutableSet<PackageCuration>>()
+            } else {
+                mutableSetOf()
+            }
+
+            curationsToPersist += curations
+
+            val curationsWithBlockComment = curationsToPersist.map { originalCuration ->
                 val comment = originalCuration.data.comment?.wrapAt(COMMENT_WRAP_COLUMN)
 
-                val curation = if (comment != null) {
+                if (comment != null) {
                     // Ensure at least a single "\n" is contained in the comment to force the YAML mapper to use block
                     // quotes.
                     originalCuration.copy(data = originalCuration.data.copy(comment = "$comment\n"))
                 } else {
                     originalCuration
                 }
+            }.toSet()
 
-                val text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(listOf(curation))
+            val text = mapper.writerWithDefaultPrettyPrinter()
+                .writeValueAsString(curationsWithBlockComment.sortedBy { it.id.version })
 
-                outputFile.parentFile.safeMkdirs()
-
-                if (outputFile.isFile) {
-                    outputFile.appendText("\n$text")
-                } else {
-                    outputFile.writeText(text)
-                }
-            }
+            outputFile.parentFile.safeMkdirs()
+            outputFile.writeText(text)
         }
     }
 }
