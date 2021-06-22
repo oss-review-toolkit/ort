@@ -30,6 +30,7 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.types.beTheSameInstanceAs
 
 import java.io.File
 import java.time.Instant
@@ -474,6 +475,14 @@ class DependencyTreeNavigatorTest : WordSpec() {
                         )
                     )
                 )
+            }
+        }
+
+        "dependency nodes" should {
+            "return themselves as stable reference" {
+                val dependencies = navigator.directDependencies(testProject, "compile")
+
+                dependencies.forEach { it.getStableReference() should beTheSameInstanceAs(it) }
             }
         }
     }
