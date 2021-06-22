@@ -28,6 +28,7 @@ internal class PackageCurationsCommand : CliktCommand(
     init {
         subcommands(
             CreateCommand(),
+            SetCommand(),
             SplitCommand()
         )
     }
