@@ -46,11 +46,6 @@ data class ScanSummary(
     val endTime: Instant,
 
     /**
-     * The number of scanned files.
-     */
-    val fileCount: Int,
-
-    /**
      * The [SPDX package verification code](https://spdx.dev/spdx_specification_2_0_html#h.2p2csry), calculated from
      * all files in the package. Note that if the scanner is configured to ignore certain files they will still be
      * included in the calculation of this code.
@@ -97,13 +92,8 @@ data class ScanSummary(
 
         val licenseFindings = licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
         val copyrightFindings = copyrightFindings.filter { it.location.matchesPath() }.toSortedSet()
-        val fileCount = mutableSetOf<String>().also { set ->
-            licenseFindings.mapTo(set) { it.location.path }
-            copyrightFindings.mapTo(set) { it.location.path }
-        }.size
 
         return copy(
-            fileCount = fileCount,
             licenseFindings = licenseFindings,
             copyrightFindings = copyrightFindings
         )

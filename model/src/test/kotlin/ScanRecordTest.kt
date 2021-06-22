@@ -42,7 +42,6 @@ class ScanRecordTest : StringSpec({
                 summary:
                   start_time: "1970-01-01T00:00:00Z"
                   end_time: "1970-01-01T00:00:00Z"
-                  file_count: 1
                   package_verification_code: "0123456789abcdef0123456789abcdef01234567"
                   licenses: []
                   copyrights: []
@@ -75,7 +74,6 @@ class ScanRecordTest : StringSpec({
                 summary:
                   start_time: "1970-01-01T00:00:00Z"
                   end_time: "1970-01-01T00:00:00Z"
-                  file_count: 1
                   package_verification_code: "0123456789abcdef0123456789abcdef01234567"
                   licenses: []
                   copyrights: []

@@ -82,8 +82,10 @@ private fun licenseFinding(index: Int): LicenseFinding =
 private fun createScanResult(resultCount: Int): ScanResult {
     val licenseFindings = List(resultCount) { licenseFinding(it) }
     val summary = ScanSummary(
-        startTime = Instant.now(), endTime = Instant.now(), fileCount = resultCount,
-        packageVerificationCode = "test$resultCount", licenseFindings = licenseFindings.toSortedSet(),
+        startTime = Instant.now(),
+        endTime = Instant.now(),
+        packageVerificationCode = "test$resultCount",
+        licenseFindings = licenseFindings.toSortedSet(),
         copyrightFindings = sortedSetOf()
     )
     val provenance = ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY)

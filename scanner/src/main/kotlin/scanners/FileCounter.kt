@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.time.Instant
 
@@ -66,18 +64,15 @@ class FileCounter(
 
         val endTime = Instant.now()
 
-        val result = getRawResult(resultsFile)
-        return generateSummary(startTime, endTime, path, result)
+        return generateSummary(startTime, endTime, path)
     }
 
     override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
-        val fileCount = result["file_count"].intValue()
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File): ScanSummary {
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            fileCount = fileCount,
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = sortedSetOf(),
             copyrightFindings = sortedSetOf(),

@@ -103,7 +103,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val scanSummaryWithFiles = ScanSummary(
         startTime = Instant.EPOCH + Duration.ofMinutes(1),
         endTime = Instant.EPOCH + Duration.ofMinutes(2),
-        fileCount = 1,
         packageVerificationCode = "packageVerificationCode",
         licenseFindings = sortedSetOf(
             LicenseFinding("license-1.1", DUMMY_TEXT_LOCATION),
@@ -114,15 +113,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
             OrtIssue(source = "source-1", message = "error-1"),
             OrtIssue(source = "source-2", message = "error-2")
         )
-    )
-    private val scanSummaryWithoutFiles = ScanSummary(
-        startTime = Instant.EPOCH + Duration.ofMinutes(3),
-        endTime = Instant.EPOCH + Duration.ofMinutes(4),
-        fileCount = 0,
-        packageVerificationCode = "packageVerificationCode",
-        licenseFindings = sortedSetOf(),
-        copyrightFindings = sortedSetOf(),
-        issues = mutableListOf()
     )
 
     private lateinit var storage: ScanResultsStorage
@@ -155,19 +145,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 addResult should beSuccess()
                 readResult should beSuccess()
                 (readResult as Success).result should containExactly(scanResult)
-            }
-
-            "fail if the fileCount is 0" {
-                val scanResult = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithoutFiles)
-
-                val addResult = storage.add(id1, scanResult)
-                val readResult = storage.read(id1)
-
-                addResult should beFailure()
-                (addResult as Failure).error shouldBe
-                        "Not storing scan result for '${id1.toCoordinates()}' because no files were scanned."
-                readResult should beSuccess()
-                (readResult as Success).result should beEmpty()
             }
 
             "fail if provenance information is missing" {

@@ -80,7 +80,6 @@ private fun scanResults(
             summary = ScanSummary(
                 startTime = Instant.EPOCH,
                 endTime = Instant.EPOCH,
-                fileCount = 0,
                 packageVerificationCode = "",
                 licenseFindings = licenseFindings,
                 copyrightFindings = copyrightFindings,

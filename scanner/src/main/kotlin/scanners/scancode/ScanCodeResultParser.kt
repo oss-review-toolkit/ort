@@ -105,27 +105,11 @@ internal fun generateSummary(
     ScanSummary(
         startTime = startTime,
         endTime = endTime,
-        fileCount = getFileCount(result),
         packageVerificationCode = verificationCode,
         licenseFindings = getLicenseFindings(result, parseExpressions).toSortedSet(),
         copyrightFindings = getCopyrightFindings(result).toSortedSet(),
         issues = getIssues(result)
     )
-
-/**
- * Get the number of files that have been scanned.
- */
-private fun getFileCount(result: JsonNode): Int {
-    // ScanCode 2.9.8 and above nest the files count in an extra header.
-    result["headers"]?.forEach { header ->
-        header["extra_data"]?.get("files_count")?.let {
-            return it.intValue()
-        }
-    }
-
-    // ScanCode 2.9.7 and below contain the files count at the top level.
-    return result["files_count"]?.intValue() ?: 0
-}
 
 /**
  * Generate an object with details about the ScanCode scanner that produced the given [result]. The corresponding

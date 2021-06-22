@@ -72,7 +72,6 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
             summary shouldNotBeNull {
-                fileCount shouldBe 1
                 licenses shouldBe expectedFileLicenses
                 licenseFindings.forAll {
                     File(it.location.path) shouldNotStartWithPath inputDir
@@ -85,7 +84,6 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
             summary shouldNotBeNull {
-                fileCount shouldBe commonlyDetectedFiles.size
                 licenses shouldBe expectedDirectoryLicenses
                 licenseFindings.forAll {
                     File(it.location.path) shouldNotStartWithPath inputDir

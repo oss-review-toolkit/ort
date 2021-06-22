@@ -258,7 +258,6 @@ val ortResult = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 1,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),

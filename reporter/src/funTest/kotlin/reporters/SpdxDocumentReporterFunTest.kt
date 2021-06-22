@@ -292,7 +292,6 @@ private fun createOrtResult(): OrtResult {
                             summary = ScanSummary(
                                 startTime = Instant.MIN,
                                 endTime = Instant.MIN,
-                                fileCount = 10,
                                 packageVerificationCode = "0000000000000000000000000000000000000000",
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
@@ -326,7 +325,6 @@ private fun createOrtResult(): OrtResult {
                             summary = ScanSummary(
                                 startTime = Instant.MIN,
                                 endTime = Instant.MIN,
-                                fileCount = 10,
                                 packageVerificationCode = "0000000000000000000000000000000000000000",
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(

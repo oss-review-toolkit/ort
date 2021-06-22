@@ -222,7 +222,6 @@ val ORT_RESULT = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 0,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
@@ -246,7 +245,6 @@ val ORT_RESULT = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 0,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(),
                             copyrightFindings = sortedSetOf()
@@ -260,7 +258,6 @@ val ORT_RESULT = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 0,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
@@ -289,7 +286,6 @@ val ORT_RESULT = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 0,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
@@ -326,7 +322,6 @@ val ORT_RESULT = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 0,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
@@ -371,7 +366,6 @@ val ORT_RESULT = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 0,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
@@ -408,7 +402,6 @@ val ORT_RESULT = OrtResult(
                         summary = ScanSummary(
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
-                            fileCount = 0,
                             packageVerificationCode = "",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
