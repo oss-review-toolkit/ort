@@ -61,9 +61,9 @@ const val ORT_COPYRIGHT_GARBAGE_FILENAME = "copyright-garbage.yml"
 const val ORT_CUSTOM_LICENSE_TEXTS_DIRNAME = "custom-license-texts"
 
 /**
- * The name of the ORT curations configuration file.
+ * The name of the ORT package curations configuration file.
  */
-const val ORT_CURATIONS_FILENAME = "curations.yml"
+const val ORT_PACKAGE_CURATIONS_FILENAME = "curations.yml"
 
 /**
  * The name of the ORT how to fix text provider script file.
