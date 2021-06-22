@@ -335,7 +335,6 @@ class FossId(
                     val summary = ScanSummary(
                         startTime = startTime,
                         endTime = Instant.now(),
-                        fileCount = 0,
                         packageVerificationCode = "",
                         licenseFindings = sortedSetOf(),
                         copyrightFindings = sortedSetOf(),
@@ -499,14 +498,13 @@ class FossId(
     private fun createResultSummary(startTime: Instant, provenance: Provenance, rawResults: RawResults): ScanResult {
         val associate = rawResults.listIgnoredFiles.associateBy { it.path }
 
-        val (filesCount, licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
+        val (licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
             rawResults.identifiedFiles
         }.mapSummary(associate)
 
         val summary = ScanSummary(
             startTime = startTime,
             endTime = Instant.now(),
-            fileCount = filesCount,
             packageVerificationCode = "",
             licenseFindings = licenseFindings.toSortedSet(),
             copyrightFindings = copyrightFindings.toSortedSet(),

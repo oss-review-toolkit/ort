@@ -41,7 +41,6 @@ internal data class RawResults(
  * A simple Triple data class to hold FossId mapped results.
  */
 internal data class FindingsContainer(
-    val filesCount: Int,
     val licenseFindings: MutableList<LicenseFinding>,
     val copyrightFindings: MutableList<CopyrightFinding>
 )
@@ -71,7 +70,6 @@ internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, Ign
     }
 
     return FindingsContainer(
-        filesCount = files.size,
         licenseFindings = licenseFindings,
         copyrightFindings = copyrightFindings
     )

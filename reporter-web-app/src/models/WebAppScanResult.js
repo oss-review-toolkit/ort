@@ -25,8 +25,6 @@ class WebAppScanResult {
 
     #endTime;
 
-    #fileCount;
-
     #issues = [];
 
     #packageVerificationCode = '';
@@ -45,10 +43,6 @@ class WebAppScanResult {
 
             if (obj.end_time || obj.endTime) {
                 this.#endTime = obj.end_time || obj.endTime;
-            }
-
-            if (Number.isInteger(obj.file_count) || Number.isInteger(obj.fileCount)) {
-                this.#fileCount = obj.file_count || obj.fileCount;
             }
 
             if (obj.issues !== null) {
@@ -80,10 +74,6 @@ class WebAppScanResult {
 
     get endTime() {
         return this.#endTime;
-    }
-
-    get fileCount() {
-        return this.#fileCount;
     }
 
     get issues() {

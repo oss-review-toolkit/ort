@@ -36,7 +36,6 @@ data class EvaluatedScanResult(
     val scanner: ScannerDetails,
     val startTime: Instant,
     val endTime: Instant,
-    val fileCount: Int,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageVerificationCode: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

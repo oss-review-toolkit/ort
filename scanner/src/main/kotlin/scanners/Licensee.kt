@@ -127,7 +127,6 @@ class Licensee(
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            fileCount = matchedFiles.count(),
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),

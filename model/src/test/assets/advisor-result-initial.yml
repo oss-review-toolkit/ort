@@ -248,7 +248,6 @@ scanner:
         summary:
           start_time: "2020-09-30T09:27:12.023451Z"
           end_time: "2020-09-30T09:28:20.525647Z"
-          file_count: 16
           package_verification_code: "48ba11487d53ce933b5d4db1d069b70a803ff19b"
           licenses:
           - license: "BSD-3-Clause"
@@ -293,7 +292,6 @@ scanner:
         summary:
           start_time: "2021-03-22T16:38:10.201134Z"
           end_time: "2021-03-22T16:39:16.747151Z"
-          file_count: 478
           package_verification_code: "2acb4f0b06b706fa94e9159c2f9abc1397c46ba0"
           licenses:
           - license: "Apache-2.0"
@@ -363,7 +361,6 @@ scanner:
         summary:
           start_time: "2021-03-23T07:34:13.547701Z"
           end_time: "2021-03-23T07:34:44.000299Z"
-          file_count: 213
           package_verification_code: "251423eeb35c4e26853c23c4ffadd9381a5d07eb"
           licenses:
           - license: "Apache-2.0"
@@ -657,7 +654,6 @@ scanner:
         summary:
           start_time: "2020-09-30T09:29:05.608077Z"
           end_time: "2020-09-30T09:29:11.356106Z"
-          file_count: 41
           package_verification_code: "a42897bec728695ae0e3ecdcc891ced065dae355"
           licenses: []
           copyrights:
@@ -741,7 +737,6 @@ scanner:
         summary:
           start_time: "2020-09-30T09:29:13.204350Z"
           end_time: "2020-09-30T09:30:08.409869Z"
-          file_count: 576
           package_verification_code: "956e73550e4be365fdc0d20d75614c5c983da68d"
           licenses:
           - license: "Apache-2.0"

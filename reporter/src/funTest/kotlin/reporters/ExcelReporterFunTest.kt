@@ -54,7 +54,7 @@ class ExcelReporterFunTest : WordSpec({
             val actualSheetNames = actualWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
 
             // Open the sheet in shared read mode so Excel can have the file opened in the background.
-            val path = Paths.get("src/funTest/assets/file-counter-expected-scan-report.xlsx")
+            val path = Paths.get("src/funTest/assets/dummy-expected-scan-report.xlsx")
             val expectedWorkbook = Files.newInputStream(path, StandardOpenOption.READ).use {
                 WorkbookFactory.create(it)
             }

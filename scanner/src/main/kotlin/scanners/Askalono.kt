@@ -161,7 +161,6 @@ class Askalono(
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            fileCount = result.size(),
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),

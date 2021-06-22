@@ -206,7 +206,6 @@ scanner:
             summary:
               start_time: "2020-09-30T09:27:12.023451Z"
               end_time: "2020-09-30T09:28:20.525647Z"
-              file_count: 16
               package_verification_code: "48ba11487d53ce933b5d4db1d069b70a803ff19b"
               licenses:
                 - license: "BSD-3-Clause"
@@ -252,7 +251,6 @@ scanner:
             summary:
               start_time: "2020-09-30T09:28:32.817956Z"
               end_time: "2020-09-30T09:29:02.889213Z"
-              file_count: 478
               package_verification_code: "2acb4f0b06b706fa94e9159c2f9abc1397c46ba0"
               licenses:
                 - license: "Apache-2.0"
