@@ -78,19 +78,24 @@ data class GlobalOptions(
  * than [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
  */
 fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
-    var hasSevereIssues = false
+    var severeIssueCount = 0
 
     fun getSeverityCount(severity: Severity) =
-        counts.getOrDefault(severity, 0).also { hasSevereIssues = it > 0 && severity >= threshold }
+        counts.getOrDefault(severity, 0).also {
+            if (it > 0 && severity >= threshold) ++severeIssueCount
+        }
 
     val hintCount = getSeverityCount(Severity.HINT)
     val warningCount = getSeverityCount(Severity.WARNING)
     val errorCount = getSeverityCount(Severity.ERROR)
 
-    println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
+    println("Found $errorCount error(s), $warningCount warning(s), $hintCount hint(s).")
 
-    if (hasSevereIssues) {
-        println("There are issues with a severity equal to or greater than the $threshold threshold.")
+    if (severeIssueCount > 0) {
+        println(
+            "There are $severeIssueCount issue(s) with a severity equal to or greater than the $threshold threshold."
+        )
+
         throw ProgramResult(severeStatusCode)
     }
 }
