@@ -5,9 +5,9 @@ of the generated open source notices with [Apache Freemarker](https://freemarker
 
 ORT provides two templates that can be used as a base for creating your custom open source notices:
 
-* [default](../reporter/src/main/resources/template.notice/default.ftl): Prints a summary of all licenses found in the
+* [default](../reporter/src/main/resources/templates/notice/default.ftl): Prints a summary of all licenses found in the
   project itself and lists licenses for all dependencies separately.
-* [summary](../reporter/src/main/resources/template.notice/summary.ftl): Prints a summary of all licenses found in the
+* [summary](../reporter/src/main/resources/templates/notice/summary.ftl): Prints a summary of all licenses found in the
   project itself and all dependencies.
 
 See the code comments in the templates for how they work.
