@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.spdx.getDuplicates
 import org.ossreviewtoolkit.utils.log
 
 /**
- * A [PackageCurationProvider] that loads [PackageCuration]s from all [curationFiles]. Supports all file formats
+ * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation files. Supports all file formats
  * specified in [FileFormat].
  */
 class FilePackageCurationProvider(curationFiles: Collection<File>) : PackageCurationProvider {
