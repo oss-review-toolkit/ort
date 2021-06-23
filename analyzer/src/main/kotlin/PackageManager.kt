@@ -247,13 +247,13 @@ abstract class PackageManager(
                         Identifier.EMPTY.copy(type = managerName, name = relativePath)
                     }
 
-                    val errorProject = Project.EMPTY.copy(
+                    val projectWithIssues = Project.EMPTY.copy(
                         id = id,
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    val errors = listOf(
+                    val issues = listOf(
                         createAndLogIssue(
                             source = managerName,
                             message = "Resolving $managerName dependencies for '$relativePath' failed with: " +
@@ -261,7 +261,7 @@ abstract class PackageManager(
                         )
                     )
 
-                    result[definitionFile] = listOf(ProjectAnalyzerResult(errorProject, sortedSetOf(), errors))
+                    result[definitionFile] = listOf(ProjectAnalyzerResult(projectWithIssues, sortedSetOf(), issues))
                 }
             }
 
