@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.helper.commands.packagecuration
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -57,10 +56,6 @@ internal class SplitCommand : CliktCommand(
         .required()
 
     override fun run() {
-        if (!outputCurationsDir.list().isNullOrEmpty()) {
-            throw UsageError("Output directory $outputCurationsDir must be empty.")
-        }
-
         val packageCurations = inputCurationsFile.readValue<List<PackageCuration>>()
         val groupedCurations = packageCurations.groupBy {
             getSplitCurationFile(outputCurationsDir, it.id, inputCurationsFile.extension)
