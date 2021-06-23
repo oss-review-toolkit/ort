@@ -45,7 +45,7 @@ Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
 Files: clients/fossid-webapp/src/test/assets/*
-Copyright: 2020-2021 Bosch.IO GmbH
+Copyright: 2020-2021 Bosch.IO GmbH <osm@bosch.com>
 License: Apache-2.0
 
 Files: */src/test/assets/*
