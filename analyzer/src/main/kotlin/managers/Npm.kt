@@ -106,7 +106,7 @@ open class Npm(
          * Parse information about licenses from the [package.json][json] file of a module.
          */
         internal fun parseLicenses(json: JsonNode): SortedSet<String> {
-            val declaredLicenses = sortedSetOf<String>()
+            val declaredLicenses = mutableListOf<String>()
 
             // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
             // which ...
