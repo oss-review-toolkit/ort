@@ -127,15 +127,17 @@ open class Npm(
                 licenseNode["type"]?.textValue()
             }
 
-            return declaredLicenses.mapTo(sortedSetOf()) { declaredLicense ->
+            return declaredLicenses.mapNotNullTo(sortedSetOf()) { declaredLicense ->
                 when {
                     // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use
                     // a private or unpublished package under any terms", which corresponds to SPDX's "NONE".
                     declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
+
                     // NPM allows to declare non-SPDX licenses only by referencing a license file. Avoid reporting an
                     // [OrtIssue] by mapping this to a valid license identifier.
                     declaredLicense.startsWith("SEE LICENSE IN ") -> "LicenseRef-ort-unknown-license-reference"
-                    else -> declaredLicense
+
+                    else -> declaredLicense.takeUnless { it.isBlank() }
                 }
             }
         }
