@@ -115,6 +115,11 @@ val packageMetaDataOnly = Package.EMPTY.copy(
     isMetaDataOnly = true
 )
 
+val packageDependency = Package.EMPTY.copy(
+    id = Identifier("Maven:org.ossreviewtoolkit:common-lib:1.0"),
+    declaredLicenses = declaredLicenses
+)
+
 val allPackages = listOf(
     packageExcluded,
     packageDynamicallyLinked,
@@ -123,7 +128,8 @@ val allPackages = listOf(
     packageWithOnlyConcludedLicense,
     packageWithOnlyDeclaredLicense,
     packageWithConcludedAndDeclaredLicense,
-    packageMetaDataOnly
+    packageMetaDataOnly,
+    packageDependency
 )
 
 val scopeExcluded = Scope(
@@ -147,7 +153,7 @@ val scopeIncluded = Scope(
     dependencies = sortedSetOf(
         packageWithoutLicense.toReference(),
         packageWithOnlyConcludedLicense.toReference(),
-        packageWithOnlyDeclaredLicense.toReference(),
+        packageWithOnlyDeclaredLicense.toReference(dependencies = sortedSetOf(packageDependency.toReference())),
         packageWithConcludedAndDeclaredLicense.toReference(),
         packageRefDynamicallyLinked,
         packageRefStaticallyLinked,

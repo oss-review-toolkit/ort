@@ -21,8 +21,12 @@
 package org.ossreviewtoolkit.evaluator
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
+
+import io.mockk.every
+import io.mockk.spyk
 
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -154,6 +158,38 @@ class RuleSetTest : WordSpec() {
                 }
 
                 ruleSet.violations should haveSize(0)
+            }
+
+            "use stable references as ancestor nodes" {
+                val result = spyk(ortResult)
+                val navigator = spyk(ortResult.dependencyNavigator)
+                every { result.dependencyNavigator } returns navigator
+
+                every { navigator.directDependencies(any(), any()) } answers {
+                    ortResult.dependencyNavigator.directDependencies(firstArg(), secondArg()).map { node ->
+                        val spyNode = spyk(node)
+                        every { spyNode.getStableReference() } answers {
+                            val ref = spyk(spyNode)
+                            every { ref.id } answers { node.id.copy(name = node.id.name + "-ref") }
+                            ref
+                        }
+                        spyNode
+                    }
+                }
+
+                val ruleSet = ruleSet(result) {
+                    dependencyRule("test") {
+                        require {
+                            -isStaticallyLinked()
+                        }
+
+                        if (ancestors.any { !it.id.name.endsWith("-ref") }) {
+                            error("Node is not a reference.", howToFix)
+                        }
+                    }
+                }
+
+                ruleSet.violations should beEmpty()
             }
         }
     }

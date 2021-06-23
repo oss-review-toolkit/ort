@@ -19,12 +19,11 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.log
@@ -60,31 +59,31 @@ class RuleSet(
     }
 
     /**
-     * A DSL function to configure a [DependencyRule]. The rule is applied to each [PackageReference] from the
+     * A DSL function to configure a [DependencyRule]. The rule is applied to each [DependencyNode] from the
      * dependency trees contained in [ortResult]. If the same dependency appears multiple times in the dependency tree,
      * the rule will be applied on each occurrence.
      */
     fun dependencyRule(name: String, configure: DependencyRule.() -> Unit) {
         fun traverse(
-            pkgRef: PackageReference,
-            ancestors: List<PackageReference>,
+            node: DependencyNode,
+            ancestors: List<DependencyNode>,
             level: Int,
-            scope: Scope,
+            scopeName: String,
             project: Project,
-            visitedPackages: MutableSet<PackageReference>
+            visitedPackages: MutableSet<DependencyNode>
         ) {
-            if (visitedPackages.contains(pkgRef)) {
-                log.debug { "Skipping rule $name for already visited dependency ${pkgRef.id.toCoordinates()}." }
+            if (node in visitedPackages) {
+                log.debug { "Skipping rule $name for already visited dependency ${node.id.toCoordinates()}." }
                 return
             }
 
-            visitedPackages += pkgRef
+            visitedPackages += node
 
-            val curatedPackage = ortResult.getPackage(pkgRef.id)
-                ?: ortResult.getProject(pkgRef.id)?.toPackage()?.toCuratedPackage()
+            val curatedPackage = ortResult.getPackage(node.id)
+                ?: ortResult.getProject(node.id)?.toPackage()?.toCuratedPackage()
 
             if (curatedPackage == null) {
-                log.warn { "Could not find package for dependency ${pkgRef.id.toCoordinates()}, skipping rule $name." }
+                log.warn { "Could not find package for dependency ${node.id.toCoordinates()}, skipping rule $name." }
             } else {
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(curatedPackage.pkg.id)
 
@@ -94,10 +93,10 @@ class RuleSet(
                     curatedPackage.pkg,
                     curatedPackage.curations,
                     resolvedLicenseInfo,
-                    pkgRef,
+                    node,
                     ancestors,
                     level,
-                    scope,
+                    scopeName,
                     project
                 ).apply {
                     configure()
@@ -105,16 +104,25 @@ class RuleSet(
                 }
             }
 
-            pkgRef.dependencies.forEach { dependency ->
-                traverse(dependency, listOf(pkgRef) + ancestors, level + 1, scope, project, visitedPackages)
+            node.visitDependencies { dependencies ->
+                dependencies.forEach { dependency ->
+                    traverse(
+                        dependency,
+                        listOf(node.getStableReference()) + ancestors,
+                        level + 1,
+                        scopeName,
+                        project,
+                        visitedPackages
+                    )
+                }
             }
         }
 
         ortResult.analyzer?.result?.projects?.forEach { project ->
-            project.scopes.forEach { scope ->
-                val visitedPackages = mutableSetOf<PackageReference>()
-                scope.dependencies.forEach { pkgRef ->
-                    traverse(pkgRef, emptyList(), 0, scope, project, visitedPackages)
+            ortResult.dependencyNavigator.scopeNames(project).forEach { scopeName ->
+                val visitedPackages = mutableSetOf<DependencyNode>()
+                ortResult.dependencyNavigator.directDependencies(project, scopeName).forEach { dependency ->
+                    traverse(dependency, emptyList(), 0, scopeName, project, visitedPackages)
                 }
             }
         }
