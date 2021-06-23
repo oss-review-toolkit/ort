@@ -38,7 +38,7 @@ class DependencyRuleTest : WordSpec() {
             dependency = dependency,
             ancestors = emptyList(),
             level = 0,
-            scope = scopeIncluded,
+            scopeName = scopeIncluded.name,
             project = projectIncluded
         )
 

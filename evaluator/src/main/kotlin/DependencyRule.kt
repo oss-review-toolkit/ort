@@ -19,18 +19,17 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.spdx.enumSetOf
 
 /**
- * A [Rule] to check a single [dependency][PackageReference].
+ * A [Rule] to check a single [dependency][DependencyNode].
  */
 class DependencyRule(
     ruleSet: RuleSet,
@@ -40,16 +39,16 @@ class DependencyRule(
     resolvedLicenseInfo: ResolvedLicenseInfo,
 
     /**
-     * The [dependency][PackageReference] to check.
+     * The [dependency][DependencyNode] to check.
      */
-    val dependency: PackageReference,
+    val dependency: DependencyNode,
 
     /**
      * The ancestors of the [dependency] in the dependency tree, sorted from farthest to closest: The first entry is the
      * direct dependency of a project, the last entry (at index `level - 1`) is a direct parent of this [dependency].
      * If the list is empty it means that this dependency is a direct dependency.
      */
-    val ancestors: List<PackageReference>,
+    val ancestors: List<DependencyNode>,
 
     /**
      * The level of the [dependency] inside the dependency tree. Starts with 0 for a direct dependency of a project.
@@ -57,9 +56,9 @@ class DependencyRule(
     val level: Int,
 
     /**
-     * The [Scope] that contains the [dependency].
+     * The [name][scopeName] of the scope that contains the [dependency].
      */
-    val scope: Scope,
+    val scopeName: String,
 
     /**
      * The [Project] that contains the [dependency].
@@ -68,10 +67,10 @@ class DependencyRule(
 ) : PackageRule(ruleSet, name, pkg, curations, resolvedLicenseInfo) {
     override val description =
         "Evaluating rule '$name' for dependency '${dependency.id.toCoordinates()}' " +
-                "(project=${project.id.toCoordinates()}, scope=${scope.name}, level=$level)."
+                "(project=${project.id.toCoordinates()}, scope=$scopeName, level=$level)."
 
     override fun issueSource() =
-        "$name - ${pkg.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope ${scope.name})"
+        "$name - ${pkg.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope $scopeName)"
 
     /**
      * A [RuleMatcher] that checks if the level of the [dependency] inside the dependency tree equals [level].
