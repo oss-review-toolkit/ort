@@ -41,14 +41,12 @@ import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
-import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
-import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxConstants
@@ -122,7 +120,7 @@ class FreemarkerTemplateProcessor(
             "ortResult" to input.ortResult,
             "licenseTextProvider" to input.licenseTextProvider,
             "LicenseView" to LicenseView,
-            "helper" to TemplateHelper(input.ortResult, input.licenseClassifications, input.resolutionProvider),
+            "helper" to TemplateHelper(input),
             "projectsAsPackages" to projectsAsPackages,
             "vulnerabilityReference" to VulnerabilityReference
         )
@@ -235,11 +233,7 @@ class FreemarkerTemplateProcessor(
     /**
      * A collection of helper functions for the Freemarker templates.
      */
-    class TemplateHelper(
-        private val ortResult: OrtResult,
-        private val licenseClassifications: LicenseClassifications,
-        private val resolutionProvider: ResolutionProvider
-    ) {
+    class TemplateHelper(private val input: ReporterInput) {
         /**
          * Return [packages] that are a dependency of at least one of the provided [projects][projectIds].
          */
@@ -248,7 +242,7 @@ class FreemarkerTemplateProcessor(
             packages: Collection<PackageModel>,
             projectIds: Collection<Identifier>
         ): List<PackageModel> {
-            val dependencies = projectIds.mapNotNull { ortResult.getProject(it) }
+            val dependencies = projectIds.mapNotNull { input.ortResult.getProject(it) }
                 .flatMapTo(mutableSetOf()) { it.collectDependencies() }
 
             return packages.filter { pkg -> pkg.id in dependencies }
@@ -257,7 +251,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
-                licenseClassifications[resolvedLicense.license]?.contains(category) ?: true
+                input.licenseClassifications[resolvedLicense.license]?.contains(category) ?: true
             }
 
         /**
@@ -308,9 +302,9 @@ class FreemarkerTemplateProcessor(
          */
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
-        fun hasUnresolvedIssues(threshold: Severity = Severity.HINT) =
-            ortResult.collectIssues().values.flatten().any { issue ->
-                issue.severity >= threshold && resolutionProvider.getIssueResolutionsFor(issue).isEmpty()
+        fun hasUnresolvedIssues(threshold: Severity = input.ortConfig.severeIssueThreshold) =
+            input.ortResult.collectIssues().values.flatten().any { issue ->
+                issue.severity >= threshold && input.resolutionProvider.getIssueResolutionsFor(issue).isEmpty()
             }
 
         /**
@@ -319,9 +313,9 @@ class FreemarkerTemplateProcessor(
          */
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
-        fun hasUnresolvedRuleViolations(threshold: Severity = Severity.HINT) =
-            ortResult.evaluator?.violations?.any { violation ->
-                violation.severity >= threshold && resolutionProvider.getRuleViolationResolutionsFor(violation)
+        fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeIssueThreshold) =
+            input.ortResult.evaluator?.violations?.any { violation ->
+                violation.severity >= threshold && input.resolutionProvider.getRuleViolationResolutionsFor(violation)
                     .isEmpty()
             } ?: false
 
@@ -330,7 +324,7 @@ class FreemarkerTemplateProcessor(
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
-                vulnerabilities.filter { resolutionProvider.getVulnerabilityResolutionsFor(it).isEmpty() }
+                vulnerabilities.filter { input.resolutionProvider.getVulnerabilityResolutionsFor(it).isEmpty() }
     }
 }
 

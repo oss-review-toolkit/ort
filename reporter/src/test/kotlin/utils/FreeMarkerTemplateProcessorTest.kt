@@ -54,11 +54,9 @@ import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
-import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -275,11 +273,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val pkg2 = FreemarkerTemplateProcessor.PackageModel(projects[1].id, input)
             val pkg3 = FreemarkerTemplateProcessor.PackageModel(projects[2].id, input)
 
-            val result = FreemarkerTemplateProcessor.TemplateHelper(
-                OrtResult.EMPTY,
-                LicenseClassifications(),
-                DefaultResolutionProvider()
-            ).mergeLicenses(listOf(pkg1, pkg2, pkg3))
+            val result = FreemarkerTemplateProcessor.TemplateHelper(input).mergeLicenses(listOf(pkg1, pkg2, pkg3))
 
             result should haveSize(2)
             with(result[0]) {
@@ -314,11 +308,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val pkg1 = FreemarkerTemplateProcessor.PackageModel(projects[0].id, input)
             val pkg2 = FreemarkerTemplateProcessor.PackageModel(projects[1].id, input)
 
-            val result = FreemarkerTemplateProcessor.TemplateHelper(
-                OrtResult.EMPTY,
-                LicenseClassifications(),
-                DefaultResolutionProvider()
-            ).mergeLicenses(listOf(pkg1, pkg2))
+            val result = FreemarkerTemplateProcessor.TemplateHelper(input).mergeLicenses(listOf(pkg1, pkg2))
 
             result should haveSize(1)
             result.first().license.toString() shouldBe "MIT"
@@ -345,11 +335,8 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val pkg1 = FreemarkerTemplateProcessor.PackageModel(projects[0].id, input)
             val pkg2 = FreemarkerTemplateProcessor.PackageModel(projects[1].id, input)
 
-            val result = FreemarkerTemplateProcessor.TemplateHelper(
-                OrtResult.EMPTY,
-                LicenseClassifications(),
-                DefaultResolutionProvider()
-            ).mergeLicenses(listOf(pkg1, pkg2), omitNotPresent = true)
+            val result = FreemarkerTemplateProcessor.TemplateHelper(input)
+                .mergeLicenses(listOf(pkg1, pkg2), omitNotPresent = true)
 
             result should haveSize(1)
             result.first().license.toString() shouldBe "MIT"
@@ -387,11 +374,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val input = ReporterInput(ortResult, licenseInfoResolver = resolver)
             val pkg = FreemarkerTemplateProcessor.PackageModel(projects[1].id, input)
 
-            val result = FreemarkerTemplateProcessor.TemplateHelper(
-                OrtResult.EMPTY,
-                LicenseClassifications(),
-                DefaultResolutionProvider()
-            ).mergeLicenses(listOf(pkg))
+            val result = FreemarkerTemplateProcessor.TemplateHelper(input).mergeLicenses(listOf(pkg))
 
             result should haveSize(1)
             with(result[0]) {
