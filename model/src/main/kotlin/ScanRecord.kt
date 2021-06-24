@@ -68,7 +68,6 @@ data class ScanRecord(
     /**
      * True if any of the [scanResults] contain [OrtIssue]s.
      */
-    @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasIssues by lazy {
         scanResults.any { (_, results) ->
             results.any { it.summary.issues.isNotEmpty() }

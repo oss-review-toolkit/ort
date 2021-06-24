@@ -109,7 +109,6 @@ data class AnalyzerResult(
     /**
      * True if there were any issues during the analysis, false otherwise.
      */
-    @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasIssues by lazy { collectIssues().isNotEmpty() }
 
     /**

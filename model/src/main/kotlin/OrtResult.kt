@@ -447,7 +447,6 @@ data class OrtResult(
     /**
      * Return true if and only if the given [id] denotes a [Package] contained in this [OrtResult].
      */
-    @Suppress("UNUSED")
     fun isPackage(id: Identifier): Boolean = getPackage(id) != null
 
     /**
