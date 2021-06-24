@@ -616,3 +616,8 @@ private fun parseAuthors(pubspec: JsonNode): SortedSet<String> =
     (listOfNotNull(pubspec["author"]) + pubspec["authors"]?.toList().orEmpty()).mapNotNullTo(sortedSetOf()) {
         parseAuthorString(it.textValue())
     }
+
+private fun ProjectAnalyzerResult.collectPackagesByScope(scopeName: String): List<Package> {
+    val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
+    return packages.filter { it.id in scope }
+}
