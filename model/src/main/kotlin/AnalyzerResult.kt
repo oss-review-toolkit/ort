@@ -149,6 +149,7 @@ private class AnalyzerResultSerializer : StdSerializer<AnalyzerResult>(AnalyzerR
             }
 
             gen.writeObjectField("dependency_graphs", dependencyGraphs)
+            gen.writeBooleanField("has_issues", hasIssues)
         }
 
         gen.writeEndObject()

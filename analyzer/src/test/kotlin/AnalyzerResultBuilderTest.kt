@@ -171,6 +171,8 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 resultTree["dependency_graphs"] shouldNotBeNull {
                     count() shouldBe 2
                 }
+
+                resultTree["has_issues"].asBoolean() shouldBe true
             }
         }
 
