@@ -22,11 +22,11 @@ package org.ossreviewtoolkit.analyzer.integration
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.beEmpty
+import io.kotest.inspectors.forAtLeastOne
+import io.kotest.inspectors.forOne
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
@@ -133,8 +133,15 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     VersionControlSystem.forType(result.project.vcsProcessed.type) shouldBe
                             VersionControlSystem.forType(pkg.vcs.type)
                     result.project.vcsProcessed.url shouldBe pkg.vcs.url
-                    result.project.scopes shouldNot beEmpty()
-                    result.packages shouldNot beEmpty()
+
+                    listOf(result.project.scopeDependencies, result.project.scopeNames).forOne {
+                        it.isNullOrEmpty() shouldBe false
+                    }
+
+                    listOf(results.dependencyGraph != null, result.packages.isNotEmpty()).forAtLeastOne {
+                        it shouldBe true
+                    }
+
                     result.collectIssues().keys should containExactly(identifiersWithExpectedIssues)
                 }
             }
