@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.helper.commands.packagecuration
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -34,6 +33,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class CreateCommand : CliktCommand(
@@ -56,27 +56,32 @@ internal class CreateCommand : CliktCommand(
     override fun run() {
         val outputFile = getSplitCurationFile(outputDir, packageId, FileFormat.YAML.fileExtension)
 
-        if (outputFile.exists()) {
-            throw UsageError("File ${outputFile.absolutePath} already exists.")
+        val curations = if (outputFile.isFile) {
+            outputFile.readValue<MutableSet<PackageCuration>>()
+        } else {
+            mutableSetOf()
         }
 
+        if (packageId in curations.map { it.id }) {
+            println("Curation for ${packageId.toCoordinates()} already exists in '${outputFile.absolutePath}'.")
+
+            return
+        }
+
+        // A block comment without any text is not valid in YAML. Therefore add a dummy comment with a line break to
+        // force the YAML mapper to create a block comment.
+        curations += PackageCuration(packageId, PackageCurationData(comment = "Curation comment.\n"))
+
         val mapper = createBlockYamlMapper()
+        val text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(curations.sortedBy { it.id })
 
         try {
-            val text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                listOf(
-                    // A block comment without any text is not valid in YAML. Therefore add a dummy comment with a line
-                    // break to force the YAML mapper to create a block comment.
-                    PackageCuration(packageId, PackageCurationData(comment = "Curation comment.\n"))
-                )
-            )
-
             outputFile.parentFile.mkdirs()
             outputFile.writeText(text)
         } catch (e: IOException) {
-            throw IOException("Failed to create ${outputFile.absoluteFile}.", e)
+            throw IOException("Failed to create '${outputFile.absoluteFile}'.", e)
         }
 
-        println("${outputFile.absoluteFile} created.")
+        println("Curation created in '${outputFile.absoluteFile}'.")
     }
 }
