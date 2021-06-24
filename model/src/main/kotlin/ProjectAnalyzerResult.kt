@@ -45,9 +45,4 @@ data class ProjectAnalyzerResult(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
-) {
-    fun collectPackagesByScope(scopeName: String): List<Package> {
-        val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
-        return packages.filter { it.id in scope }
-    }
-}
+)
