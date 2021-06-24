@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Scope
 
 /**
  * Defines which parts of a repository should be excluded.
@@ -60,19 +59,9 @@ data class Excludes(
     fun findScopeExcludes(scopeName: String): List<ScopeExclude> = scopes.filter { it.matches(scopeName) }
 
     /**
-     * Return the [ScopeExclude]s for the provided [scope].
-     */
-    fun findScopeExcludes(scope: Scope): List<ScopeExclude> = findScopeExcludes(scope.name)
-
-    /**
      * True if any [path exclude][paths] matches [path].
      */
     fun isPathExcluded(path: String) = paths.any { it.matches(path) }
-
-    /**
-     * True if the [scope] is excluded by this [Excludes] configuration.
-     */
-    fun isScopeExcluded(scope: Scope): Boolean = isScopeExcluded(scope.name)
 
     /**
      * True if the scope with the given [scopeName] is excluded by this [Excludes] configuration.
