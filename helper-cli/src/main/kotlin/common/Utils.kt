@@ -428,7 +428,6 @@ internal fun String.wrapAt(column: Int): String {
             text
         }
 
-        // Drop the line from the remaining text and trim any resulting leading whitespace.
         text = text.removePrefix(line).trimStart()
 
         paragraph.appendLine(line)
