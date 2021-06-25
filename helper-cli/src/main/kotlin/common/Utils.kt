@@ -415,8 +415,8 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
  */
 internal fun String.wrapAt(column: Int): String {
     val paragraph = StringBuilder()
-
     var text = this
+
     while (text.isNotEmpty()) {
         val firstSpaceAfterColumnIndex = text.indexOf(' ', column)
         val lastSpaceBeforeColumnIndex = text.lastIndexOf(' ', column - 1)
