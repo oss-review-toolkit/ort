@@ -58,12 +58,12 @@ internal class SplitCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val groupedCurations = readPackageCurations(inputCurationsFile).groupBy {
+        val curationsByOutputFile = readPackageCurations(inputCurationsFile).groupBy {
             getSplitCurationFile(outputCurationsDir, it.id, inputCurationsFile.extension)
         }
 
         val mapper = createBlockYamlMapper()
-        groupedCurations.forEach { (outputFile, curations) ->
+        curationsByOutputFile.forEach { (outputFile, curations) ->
             val curationsToPersist = readPackageCurations(outputFile).toMutableSet()
 
             curationsToPersist += curations
