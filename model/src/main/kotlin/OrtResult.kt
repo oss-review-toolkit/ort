@@ -372,7 +372,7 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getProjects(omitExcluded: Boolean = false): Set<Project> =
-        analyzer?.result?.withScopesResolved()?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
+        analyzer?.result?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
             !omitExcluded || !isExcluded(project.id)
         }
 
