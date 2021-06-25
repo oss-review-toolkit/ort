@@ -25,13 +25,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
+import org.ossreviewtoolkit.helper.common.readPackageCurations
 import org.ossreviewtoolkit.helper.common.wrapAt
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 // Wrap at column 120 minus 6 spaces of indentation.
@@ -71,13 +69,6 @@ internal class SplitCommand : CliktCommand(
         }
     }
 }
-
-private fun readPackageCurations(file: File): List<PackageCuration> =
-    if (file.isFile) {
-        file.readValue()
-    } else {
-        emptyList()
-    }
 
 private fun PackageCuration.formatComment(): PackageCuration {
     val comment = data.comment ?: return this
