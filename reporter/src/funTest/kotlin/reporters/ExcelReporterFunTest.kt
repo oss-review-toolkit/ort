@@ -46,7 +46,7 @@ class ExcelReporterFunTest : WordSpec({
             // TODO: Find out why Apache POI seems to prevent immediate deletion of the written XLSX file on Windows.
             val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
             val ortResult = readOrtResult(
-                "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
+                "../scanner/src/funTest/assets/dummy-expected-output-for-analyzer-result.yml"
             )
 
             val report = ExcelReporter().generateReport(ReporterInput(ortResult), outputDir).single()

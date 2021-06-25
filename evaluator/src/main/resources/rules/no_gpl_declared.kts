@@ -20,7 +20,7 @@
 
 // Use this rule like:
 //
-// $ ort evaluate -i scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml --rules-resource /rules/no_gpl_declared.kts
+// $ ort evaluate -i scanner/src/funTest/assets/dummy-expected-output-for-analyzer-result.yml --rules-resource /rules/no_gpl_declared.kts
 
 // Define a custom rule matcher.
 fun PackageRule.LicenseRule.isGpl() =

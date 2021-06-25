@@ -508,7 +508,7 @@ abstract class LocalScanner(
     /**
      * Return the scanner's raw result in a JSON representation.
      */
-    internal abstract fun getRawResult(resultsFile: File): JsonNode
+    abstract fun getRawResult(resultsFile: File): JsonNode
 
     /**
      * Return the invariant relative path of the [scanned file][scannedFilename] with respect to the
