@@ -25,15 +25,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.formatComment
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
 import org.ossreviewtoolkit.helper.common.readPackageCurations
-import org.ossreviewtoolkit.helper.common.wrapAt
 import org.ossreviewtoolkit.helper.common.writeAsYaml
-import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.utils.expandTilde
-
-// Wrap at column 120 minus 6 spaces of indentation.
-private const val COMMENT_WRAP_COLUMN = 120 - 6
 
 internal class SplitCommand : CliktCommand(
     help = "Split a single curations file into a directory structure using the format '<type>/<namespace>/<name>.yml'."
@@ -68,13 +64,4 @@ internal class SplitCommand : CliktCommand(
             curationsToPersist.writeAsYaml(outputFile)
         }
     }
-}
-
-private fun PackageCuration.formatComment(): PackageCuration {
-    val comment = data.comment ?: return this
-    val wrappedComment = comment.wrapAt(COMMENT_WRAP_COLUMN)
-    // Ensure at least a single "\n" is contained in the comment to force the YAML mapper to use block quotes.
-    val wrappedCommentWithLinebreak = "$wrappedComment\n"
-
-    return copy(data = data.copy(comment = wrappedCommentWithLinebreak))
 }

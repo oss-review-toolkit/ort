@@ -830,6 +830,21 @@ internal fun PackageConfiguration.write(targetFile: File) {
     targetFile.writeValue(this)
 }
 
+// Wrap at column 120 minus 6 spaces of indentation.
+private const val COMMENT_WRAP_COLUMN = 120 - 6
+
+/**
+ * Return a copy of this [PackageCuration] with the comment formamtted.
+ */
+internal fun PackageCuration.formatComment(): PackageCuration {
+    val comment = data.comment ?: return this
+    val wrappedComment = comment.wrapAt(COMMENT_WRAP_COLUMN)
+    // Ensure at least a single "\n" is contained in the comment to force the YAML mapper to use block quotes.
+    val wrappedCommentWithLinebreak = "$wrappedComment\n"
+
+    return copy(data = data.copy(comment = wrappedCommentWithLinebreak))
+}
+
 /**
  * Read a list of [PackageCuration]s from the given [file].
  */

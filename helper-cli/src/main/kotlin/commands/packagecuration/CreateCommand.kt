@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
+import org.ossreviewtoolkit.helper.common.formatComment
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
 import org.ossreviewtoolkit.helper.common.readPackageCurations
 import org.ossreviewtoolkit.helper.common.writeAsYaml
@@ -64,9 +65,7 @@ internal class CreateCommand : CliktCommand(
             return
         }
 
-        // A block comment without any text is not valid in YAML. Therefore add a dummy comment with a line break to
-        // force the YAML mapper to create a block comment.
-        curations += PackageCuration(packageId, PackageCurationData(comment = "Curation comment.\n"))
+        curations += PackageCuration(packageId, PackageCurationData(comment = "Curation comment")).formatComment()
 
         try {
             curations.sortedBy { it.id }.writeAsYaml(outputFile)
