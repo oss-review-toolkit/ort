@@ -81,8 +81,8 @@ fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, sever
     var severeIssueCount = 0
 
     fun getSeverityCount(severity: Severity) =
-        counts.getOrDefault(severity, 0).also {
-            if (it > 0 && severity >= threshold) ++severeIssueCount
+        counts.getOrDefault(severity, 0).also { count ->
+            if (severity >= threshold) severeIssueCount += count
         }
 
     val hintCount = getSeverityCount(Severity.HINT)
