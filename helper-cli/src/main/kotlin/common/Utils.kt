@@ -413,29 +413,26 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
 /**
  * Wrap this string on word boundaries with line breaks at the given [column].
  */
-internal fun String.wrapAt(column: Int): String {
-    val paragraph = StringBuilder()
-    var text = this
+internal fun String.wrapAt(column: Int): String =
+    buildString {
+        var text = this@wrapAt
 
-    while (text.isNotEmpty()) {
-        val firstSpaceAfterColumnIndex = text.indexOf(' ', column)
-        val lastSpaceBeforeColumnIndex = text.lastIndexOf(' ', column - 1)
-        val wrapIndex = lastSpaceBeforeColumnIndex.takeUnless { it == -1 } ?: firstSpaceAfterColumnIndex
+        while (text.isNotEmpty()) {
+            val firstSpaceAfterColumnIndex = text.indexOf(' ', column)
+            val lastSpaceBeforeColumnIndex = text.lastIndexOf(' ', column - 1)
+            val wrapIndex = lastSpaceBeforeColumnIndex.takeUnless { it == -1 } ?: firstSpaceAfterColumnIndex
 
-        val line = if (wrapIndex != -1) {
-            text.substring(0, wrapIndex)
-        } else {
-            text
+            val line = if (wrapIndex != -1) {
+                text.substring(0, wrapIndex)
+            } else {
+                text
+            }
+
+            text = text.removePrefix(line).trimStart()
+
+            appendLine(line)
         }
-
-        text = text.removePrefix(line).trimStart()
-
-        paragraph.appendLine(line)
-    }
-
-    // Return the paragraph as a single string with the last appended line break trimmed.
-    return paragraph.toString().trimEnd()
-}
+    }.trimEnd()
 
 /**
  * Return all path excludes from [pathExcludes] represented as [RepositoryPathExcludes].
