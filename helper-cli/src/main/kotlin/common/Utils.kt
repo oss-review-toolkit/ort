@@ -418,16 +418,9 @@ internal fun String.wrapAt(column: Int): String {
 
     var text = this
     while (text.isNotEmpty()) {
-        val spaceIndex = text.indexOf(' ', column)
-
-        var index = spaceIndex
-        while (index > column) {
-            // Find the last space before the column.
-            while (index > 0 && text[--index] != ' ');
-        }
-
-        // If there is no space before the column, take the first space after the column.
-        if (index == 0) index = spaceIndex
+        val firstSpaceAfterColumnIndex = text.indexOf(' ', column)
+        val lastSpaceBeforeColumnIndex = text.lastIndexOf(' ', column - 1)
+        val index = lastSpaceBeforeColumnIndex.takeUnless { it == -1 } ?: firstSpaceAfterColumnIndex
 
         val line = if (index != -1) {
             text.substring(0, index)
