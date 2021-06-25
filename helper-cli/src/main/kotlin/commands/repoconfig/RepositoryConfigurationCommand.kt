@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.helper.commands.repoconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-class RepositoryConfigurationCommand : CliktCommand(
+class RepositoryConfigurationCommand : NoOpCliktCommand(
     help = "Commands for working with package configurations."
 ) {
     init {
@@ -38,9 +38,5 @@ class RepositoryConfigurationCommand : CliktCommand(
             RemoveEntriesCommand(),
             SortCommand()
         )
-    }
-
-    override fun run() {
-        // Intentionally empty, because all logic is implemented inside the sub commands..
     }
 }

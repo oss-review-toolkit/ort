@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class PackageConfigurationCommand : CliktCommand(
+internal class PackageConfigurationCommand : NoOpCliktCommand(
     help = "Commands for working with package configurations."
 ) {
     init {
@@ -37,9 +37,5 @@ internal class PackageConfigurationCommand : CliktCommand(
             SortCommand(),
             RemoveEntriesCommand()
         )
-    }
-
-    override fun run() {
-        // Intentionally empty, because all logic is implemented inside the sub commands..
     }
 }
