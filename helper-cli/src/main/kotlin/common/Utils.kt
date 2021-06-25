@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -74,6 +75,7 @@ import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.fileSystemEncode
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.withoutPrefix
 
 const val ORTH_NAME = "orth"
@@ -828,7 +830,20 @@ internal fun PackageConfiguration.write(targetFile: File) {
     targetFile.writeValue(this)
 }
 
-internal fun createBlockYamlMapper(): ObjectMapper =
+/**
+ * Serialize [PackageCuration] to the given [targetFile] as YAML.
+ */
+internal fun Collection<PackageCuration>.writeAsYaml(targetFile: File) {
+    targetFile.parentFile.safeMkdirs()
+
+    val yaml = createBlockYamlMapper()
+        .writerWithDefaultPrettyPrinter()
+        .writeValueAsString(this)
+
+    targetFile.writeText(yaml)
+}
+
+private fun createBlockYamlMapper(): ObjectMapper =
     yamlMapper.copy()
         .enable(YAMLGenerator.Feature.LITERAL_BLOCK_STYLE)
         .disable(YAMLGenerator.Feature.SPLIT_LINES)

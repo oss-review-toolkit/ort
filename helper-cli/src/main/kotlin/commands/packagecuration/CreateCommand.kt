@@ -27,8 +27,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.helper.common.createBlockYamlMapper
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
+import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
@@ -72,12 +72,8 @@ internal class CreateCommand : CliktCommand(
         // force the YAML mapper to create a block comment.
         curations += PackageCuration(packageId, PackageCurationData(comment = "Curation comment.\n"))
 
-        val mapper = createBlockYamlMapper()
-        val text = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(curations.sortedBy { it.id })
-
         try {
-            outputFile.parentFile.mkdirs()
-            outputFile.writeText(text)
+            curations.sortedBy { it.id }.writeAsYaml(outputFile)
         } catch (e: IOException) {
             throw IOException("Failed to create '${outputFile.absoluteFile}'.", e)
         }
