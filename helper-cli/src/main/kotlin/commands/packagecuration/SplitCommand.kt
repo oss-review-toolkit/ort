@@ -58,9 +58,7 @@ internal class SplitCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val packageCurations = readPackageCurations(inputCurationsFile)
-
-        val groupedCurations = packageCurations.groupBy {
+        val groupedCurations = readPackageCurations(inputCurationsFile).groupBy {
             getSplitCurationFile(outputCurationsDir, it.id, inputCurationsFile.extension)
         }
 
