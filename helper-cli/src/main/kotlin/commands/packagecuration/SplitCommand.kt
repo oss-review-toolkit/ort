@@ -27,13 +27,12 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.helper.common.createBlockYamlMapper
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
 import org.ossreviewtoolkit.helper.common.wrapAt
+import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.safeMkdirs
 
 // Wrap at column 120 minus 6 spaces of indentation.
 private const val COMMENT_WRAP_COLUMN = 120 - 6
@@ -62,18 +61,13 @@ internal class SplitCommand : CliktCommand(
             getSplitCurationFile(outputCurationsDir, it.id, inputCurationsFile.extension)
         }
 
-        val mapper = createBlockYamlMapper()
         curationsByOutputFile.forEach { (outputFile, curations) ->
             val curationsToPersist = (readPackageCurations(outputFile) + curations)
                 .map { it.formatComment() }
                 .distinct()
                 .sortedBy { it.id.version }
 
-            val text = mapper.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(curationsToPersist)
-
-            outputFile.parentFile.safeMkdirs()
-            outputFile.writeText(text)
+            curationsToPersist.writeAsYaml(outputFile)
         }
     }
 }
