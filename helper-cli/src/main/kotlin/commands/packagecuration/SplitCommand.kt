@@ -64,14 +64,13 @@ internal class SplitCommand : CliktCommand(
 
         val mapper = createBlockYamlMapper()
         curationsByOutputFile.forEach { (outputFile, curations) ->
-            val curationsToPersist = readPackageCurations(outputFile).toMutableSet()
-
-            curationsToPersist += curations
-
-            val curationsWithBlockComment = curationsToPersist.mapTo(mutableSetOf()) { it.formatComment() }
+            val curationsToPersist = (readPackageCurations(outputFile) + curations)
+                .map { it.formatComment() }
+                .distinct()
+                .sortedBy { it.id.version }
 
             val text = mapper.writerWithDefaultPrettyPrinter()
-                .writeValueAsString(curationsWithBlockComment.sortedBy { it.id.version })
+                .writeValueAsString(curationsToPersist)
 
             outputFile.parentFile.safeMkdirs()
             outputFile.writeText(text)
