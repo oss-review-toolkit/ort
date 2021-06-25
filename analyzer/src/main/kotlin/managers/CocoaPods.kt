@@ -204,7 +204,7 @@ class CocoaPods(
 
         val podspecFile = podspecCommand.stdout.trim().let { File(it) }
 
-        podspecFile.readValue<Podspec>().withSubspecs().associateByTo(podspecCache, { it.name })
+        podspecFile.readValue<Podspec>().withSubspecs().associateByTo(podspecCache) { it.name }
 
         return podspecCache.getValue(id.name)
     }
