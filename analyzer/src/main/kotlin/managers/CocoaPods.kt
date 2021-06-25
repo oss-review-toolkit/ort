@@ -169,7 +169,8 @@ class CocoaPods(
     }
 
     private fun getPackage(id: Identifier, workingDir: File): Package {
-        val podspec = getPodspec(id, workingDir)
+        // TODO: Emit a warning / hint when no Podspec is found.
+        val podspec = getPodspec(id, workingDir) ?: return Package.EMPTY.copy(id = id)
 
         val vcs = podspec.source["git"]?.let { url ->
             VcsInfo(
@@ -192,14 +193,16 @@ class CocoaPods(
         )
     }
 
-    private fun getPodspec(id: Identifier, workingDir: File): Podspec {
+    private fun getPodspec(id: Identifier, workingDir: File): Podspec? {
         podspecCache[id.name]?.let { return it }
 
         val podspecName = id.name.substringBefore("/")
 
-        val podspecFile = run(
+        val podspecCommand = run(
             "spec", "which", podspecName, "--version=${id.version}", "--allow-root", "--regex", workingDir = workingDir
-        ).requireSuccess().stdout.trim().let { File(it) }
+        ).takeIf { it.isSuccess } ?: return null
+
+        val podspecFile = podspecCommand.stdout.trim().let { File(it) }
 
         podspecFile.readValue<Podspec>().withSubspecs().associateByTo(podspecCache, { it.name })
 
