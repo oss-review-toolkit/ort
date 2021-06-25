@@ -71,7 +71,7 @@ internal class SplitCommand : CliktCommand(
 
             curationsToPersist += curations
 
-            val curationsWithBlockComment = curationsToPersist.map { originalCuration ->
+            val curationsWithBlockComment = curationsToPersist.mapTo(mutableSetOf()) { originalCuration ->
                 val comment = originalCuration.data.comment?.wrapAt(COMMENT_WRAP_COLUMN)
 
                 if (comment != null) {
@@ -81,7 +81,7 @@ internal class SplitCommand : CliktCommand(
                 } else {
                     originalCuration
                 }
-            }.toSet()
+            }
 
             val text = mapper.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(curationsWithBlockComment.sortedBy { it.id.version })
