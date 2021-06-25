@@ -65,7 +65,7 @@ import org.ossreviewtoolkit.utils.textValueOrEmpty
  * dependencies and is not supported by this class.
  *
  * The only interactions with the 'pod' command happen in order to obtain meta-data for dependencies. Therefore
- * 'pod repo update' and 'pod spec which' get executed, which works also under Linux.
+ * 'pod spec which' gets executed, which works also under Linux.
  *
  * Note: This class depends on https://github.com/CocoaPods/CocoaPods/pull/10609 which is not yet released.
   */
