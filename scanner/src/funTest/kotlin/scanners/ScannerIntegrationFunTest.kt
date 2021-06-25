@@ -23,18 +23,25 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+import java.time.Instant
 
+import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.scanner.AbstractScannerFactory
+import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.test.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class FileCounterScannerFunTest : StringSpec() {
+class ScannerIntegrationFunTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")
 
     private lateinit var outputDir: File
@@ -46,11 +53,11 @@ class FileCounterScannerFunTest : StringSpec() {
             val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
             val expectedResult = convertToDependencyGraph(
                 patchExpectedResult(
-                    assetsDir.resolve("file-counter-expected-output-for-analyzer-result.yml")
+                    assetsDir.resolve("dummy-expected-output-for-analyzer-result.yml")
                 )
             )
 
-            val scanner = FileCounter("FileCounter", ScannerConfiguration(), DownloaderConfiguration())
+            val scanner = DummyScanner("Dummy", ScannerConfiguration(), DownloaderConfiguration())
             val ortResult = scanner.scanOrtResult(analyzerResultFile.readValue(), outputDir)
             val result = yamlMapper.writeValueAsString(ortResult)
 
@@ -58,5 +65,40 @@ class FileCounterScannerFunTest : StringSpec() {
 
             ScanResultsStorage.storage.stats.reset()
         }
+    }
+
+    class DummyScanner(
+        name: String,
+        scannerConfig: ScannerConfiguration,
+        downloaderConfig: DownloaderConfiguration
+    ) : LocalScanner(name, scannerConfig, downloaderConfig) {
+        class Factory : AbstractScannerFactory<DummyScanner>("Dummy") {
+            override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+                DummyScanner(scannerName, scannerConfig, downloaderConfig)
+        }
+
+        override val resultFileExt = "json"
+        override val expectedVersion = "1.0"
+        override val version = expectedVersion
+        override val configuration = ""
+
+        override fun command(workingDir: File?) = ""
+
+        override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
+            val startTime = Instant.now()
+            resultsFile.writeText(jsonMapper.writeValueAsString("Dummy"))
+            val endTime = Instant.now()
+
+            return ScanSummary(
+                startTime = startTime,
+                endTime = endTime,
+                packageVerificationCode = calculatePackageVerificationCode(path),
+                licenseFindings = sortedSetOf(),
+                copyrightFindings = sortedSetOf(),
+                issues = mutableListOf()
+            )
+        }
+
+        override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
     }
 }

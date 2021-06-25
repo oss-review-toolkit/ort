@@ -30,7 +30,7 @@ class WebAppReporterFunTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
             val ortResult = readOrtResult(
-                "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
+                "../scanner/src/funTest/assets/dummy-expected-output-for-analyzer-result.yml"
             )
 
             val outputDir = createTestTempDir()

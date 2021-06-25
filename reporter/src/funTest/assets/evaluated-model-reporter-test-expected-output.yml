@@ -63,7 +63,7 @@ issues:
 - _id: 0
   timestamp: "1970-01-01T00:00:00Z"
   type: "SCANNER"
-  source: "FileCounter"
+  source: "Dummy"
   message: "DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\n\
     Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\
     \ Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom"
@@ -112,7 +112,7 @@ scan_results:
         value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
         algorithm: "SHA-1"
   scanner:
-    name: "FileCounter"
+    name: "Dummy"
     version: "1.0"
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
@@ -126,7 +126,7 @@ scan_results:
         value: "3b5883b7a5a05b932c699760f0854ca565785a84"
         algorithm: "SHA-1"
   scanner:
-    name: "FileCounter"
+    name: "Dummy"
     version: "1.0"
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
@@ -140,7 +140,7 @@ scan_results:
         value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
         algorithm: "SHA-1"
   scanner:
-    name: "FileCounter"
+    name: "Dummy"
     version: "1.0"
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
@@ -154,7 +154,7 @@ scan_results:
         value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
         algorithm: "SHA-1"
   scanner:
-    name: "FileCounter"
+    name: "Dummy"
     version: "1.0"
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
@@ -168,7 +168,7 @@ scan_results:
         value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
         algorithm: "SHA-1"
   scanner:
-    name: "FileCounter"
+    name: "Dummy"
     version: "1.0"
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"

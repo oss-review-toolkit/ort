@@ -85,7 +85,7 @@
     "_id" : 0,
     "timestamp" : "1970-01-01T00:00:00Z",
     "type" : "SCANNER",
-    "source" : "FileCounter",
+    "source" : "Dummy",
     "message" : "DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\nCaused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'. Please make sure the published POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom",
     "severity" : "ERROR",
     "pkg" : 0,
@@ -143,7 +143,7 @@
       }
     },
     "scanner" : {
-      "name" : "FileCounter",
+      "name" : "Dummy",
       "version" : "1.0",
       "configuration" : ""
     },
@@ -162,7 +162,7 @@
       }
     },
     "scanner" : {
-      "name" : "FileCounter",
+      "name" : "Dummy",
       "version" : "1.0",
       "configuration" : ""
     },
@@ -181,7 +181,7 @@
       }
     },
     "scanner" : {
-      "name" : "FileCounter",
+      "name" : "Dummy",
       "version" : "1.0",
       "configuration" : ""
     },
@@ -200,7 +200,7 @@
       }
     },
     "scanner" : {
-      "name" : "FileCounter",
+      "name" : "Dummy",
       "version" : "1.0",
       "configuration" : ""
     },
@@ -219,7 +219,7 @@
       }
     },
     "scanner" : {
-      "name" : "FileCounter",
+      "name" : "Dummy",
       "version" : "1.0",
       "configuration" : ""
     },
