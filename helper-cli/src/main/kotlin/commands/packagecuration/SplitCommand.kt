@@ -25,6 +25,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import org.ossreviewtoolkit.helper.common.createBlockYamlMapper
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
 import org.ossreviewtoolkit.helper.common.wrapAt
@@ -56,18 +58,15 @@ internal class SplitCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val packageCurations = inputCurationsFile.readValue<List<PackageCuration>>()
+        val packageCurations = readPackageCurations(inputCurationsFile)
+
         val groupedCurations = packageCurations.groupBy {
             getSplitCurationFile(outputCurationsDir, it.id, inputCurationsFile.extension)
         }
 
         val mapper = createBlockYamlMapper()
         groupedCurations.forEach { (outputFile, curations) ->
-            val curationsToPersist = if (outputFile.isFile) {
-                outputFile.readValue<MutableSet<PackageCuration>>()
-            } else {
-                mutableSetOf()
-            }
+            val curationsToPersist = readPackageCurations(outputFile).toMutableSet()
 
             curationsToPersist += curations
 
@@ -81,6 +80,13 @@ internal class SplitCommand : CliktCommand(
         }
     }
 }
+
+private fun readPackageCurations(file: File): List<PackageCuration> =
+    if (file.isFile) {
+        file.readValue()
+    } else {
+        emptyList()
+    }
 
 private fun PackageCuration.formatComment(): PackageCuration {
     val comment = data.comment ?: return this
