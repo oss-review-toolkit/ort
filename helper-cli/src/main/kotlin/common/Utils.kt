@@ -831,6 +831,16 @@ internal fun PackageConfiguration.write(targetFile: File) {
 }
 
 /**
+ * Read a list of [PackageCuration]s from the given [file].
+ */
+internal fun readPackageCurations(file: File): List<PackageCuration> =
+    if (file.isFile) {
+        file.readValue()
+    } else {
+        emptyList()
+    }
+
+/**
  * Serialize [PackageCuration] to the given [targetFile] as YAML.
  */
 internal fun Collection<PackageCuration>.writeAsYaml(targetFile: File) {

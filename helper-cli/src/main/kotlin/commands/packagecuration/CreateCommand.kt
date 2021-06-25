@@ -28,12 +28,12 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.IOException
 
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
+import org.ossreviewtoolkit.helper.common.readPackageCurations
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class CreateCommand : CliktCommand(
@@ -56,11 +56,7 @@ internal class CreateCommand : CliktCommand(
     override fun run() {
         val outputFile = getSplitCurationFile(outputDir, packageId, FileFormat.YAML.fileExtension)
 
-        val curations = if (outputFile.isFile) {
-            outputFile.readValue<MutableSet<PackageCuration>>()
-        } else {
-            mutableSetOf()
-        }
+        val curations = readPackageCurations(outputFile).toMutableSet()
 
         if (packageId in curations.map { it.id }) {
             println("Curation for ${packageId.toCoordinates()} already exists in '${outputFile.absolutePath}'.")
