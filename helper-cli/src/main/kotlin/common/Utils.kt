@@ -420,10 +420,10 @@ internal fun String.wrapAt(column: Int): String {
     while (text.isNotEmpty()) {
         val firstSpaceAfterColumnIndex = text.indexOf(' ', column)
         val lastSpaceBeforeColumnIndex = text.lastIndexOf(' ', column - 1)
-        val index = lastSpaceBeforeColumnIndex.takeUnless { it == -1 } ?: firstSpaceAfterColumnIndex
+        val wrapIndex = lastSpaceBeforeColumnIndex.takeUnless { it == -1 } ?: firstSpaceAfterColumnIndex
 
-        val line = if (index != -1) {
-            text.substring(0, index)
+        val line = if (wrapIndex != -1) {
+            text.substring(0, wrapIndex)
         } else {
             text
         }
