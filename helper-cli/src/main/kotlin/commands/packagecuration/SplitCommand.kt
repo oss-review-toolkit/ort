@@ -71,17 +71,7 @@ internal class SplitCommand : CliktCommand(
 
             curationsToPersist += curations
 
-            val curationsWithBlockComment = curationsToPersist.mapTo(mutableSetOf()) { originalCuration ->
-                val comment = originalCuration.data.comment?.wrapAt(COMMENT_WRAP_COLUMN)
-
-                if (comment != null) {
-                    // Ensure at least a single "\n" is contained in the comment to force the YAML mapper to use block
-                    // quotes.
-                    originalCuration.copy(data = originalCuration.data.copy(comment = "$comment\n"))
-                } else {
-                    originalCuration
-                }
-            }
+            val curationsWithBlockComment = curationsToPersist.mapTo(mutableSetOf()) { it.formatComment() }
 
             val text = mapper.writerWithDefaultPrettyPrinter()
                 .writeValueAsString(curationsWithBlockComment.sortedBy { it.id.version })
@@ -90,4 +80,13 @@ internal class SplitCommand : CliktCommand(
             outputFile.writeText(text)
         }
     }
+}
+
+private fun PackageCuration.formatComment(): PackageCuration {
+    val comment = data.comment ?: return this
+    val wrappedComment = comment.wrapAt(COMMENT_WRAP_COLUMN)
+    // Ensure at least a single "\n" is contained in the comment to force the YAML mapper to use block quotes.
+    val wrappedCommentWithLinebreak = "$wrappedComment\n"
+
+    return copy(data = data.copy(comment = wrappedCommentWithLinebreak))
 }
