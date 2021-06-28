@@ -202,7 +202,7 @@ class CocoaPods(
             "spec", "which", podspecName, "--version=${id.version}", "--allow-root", "--regex", workingDir = workingDir
         ).takeIf { it.isSuccess } ?: return null
 
-        val podspecFile = podspecCommand.stdout.trim().let { File(it) }
+        val podspecFile = File(podspecCommand.stdout.trim())
 
         podspecFile.readValue<Podspec>().withSubspecs().associateByTo(podspecCache) { it.name }
 
