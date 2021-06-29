@@ -116,7 +116,7 @@ class VulnerableCode(
      */
     private fun VulnerableCodeService.VulnerabilityReference.toModel(): List<VulnerabilityReference> {
         val sourceUri = URI(url)
-        return scores.map { VulnerabilityReference(sourceUri, it.scoringSystem, it.value) }.takeUnless { it.isEmpty() }
-            ?: listOf(VulnerabilityReference(sourceUri, null, null))
+        if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
+        return scores.map { VulnerabilityReference(sourceUri, it.scoringSystem, it.value) }
     }
 }
