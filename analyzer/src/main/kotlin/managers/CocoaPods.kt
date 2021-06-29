@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
@@ -169,8 +170,11 @@ class CocoaPods(
     }
 
     private fun getPackage(id: Identifier, workingDir: File): Package {
-        // TODO: Emit a warning / hint when no Podspec is found.
-        val podspec = getPodspec(id, workingDir) ?: return Package.EMPTY.copy(id = id)
+        val podspec = getPodspec(id, workingDir) ?: run {
+            log.warn { "Could not find a '.podspec' file for package '${id.toCoordinates()}'." }
+
+            return Package.EMPTY.copy(id = id)
+        }
 
         val vcs = podspec.source["git"]?.let { url ->
             VcsInfo(
