@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
@@ -82,6 +83,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * will be scanned.
  * * **"packageAuthorsFilter":** If this optional filter is set, only packages from a given author will be scanned.
  * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
+ * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
+ * completed. As a consequence, scan results won't be available in ORT result.
  */
 class FossId(
     name: String,
@@ -153,7 +156,7 @@ class FossId(
     private val serverUrl: String
     private val apiKey: String
     private val user: String
-
+    private val waitForResult: Boolean
     private val secretKeys = listOf("serverUrl", "apiKey", "user")
 
     private val service: FossIdRestService
@@ -179,6 +182,9 @@ class FossId(
         packageNamespaceFilter = fossIdScannerOptions["packageNamespaceFilter"].orEmpty()
         packageAuthorsFilter = fossIdScannerOptions["packageAuthorsFilter"].orEmpty()
         addAuthenticationToUrl = fossIdScannerOptions["addAuthenticationToUrl"].toBoolean()
+        waitForResult = fossIdScannerOptions["waitForResult"]?.toBooleanStrictOrNull() ?: true
+
+        log.info { "waitForResult parameter is set to '$waitForResult'" }
 
         val client = OkHttpClientHelper.buildClient()
 
@@ -311,11 +317,35 @@ class FossId(
                     }
                 }
 
-                checkScan(scanCode)
-                val rawResults = getRawResults(scanCode)
-                val resultsSummary = createResultSummary(startTime, rawResults)
+                if (waitForResult) {
+                    checkScan(scanCode)
+                    val rawResults = getRawResults(scanCode)
+                    val resultsSummary = createResultSummary(startTime, rawResults)
 
-                results.getOrPut(pkg) { mutableListOf() } += resultsSummary
+                    results.getOrPut(pkg) { mutableListOf() } += resultsSummary
+                } else {
+                    val issue = OrtIssue(
+                        source = pkg.id.toCoordinates(),
+                        message = "This package has been scanned in asynchronous mode. Scan results are available " +
+                                "on the FossID instance.",
+                        severity = Severity.HINT
+                    )
+                    val summary = ScanSummary(
+                        startTime = startTime,
+                        endTime = Instant.now(),
+                        fileCount = 0,
+                        packageVerificationCode = "",
+                        licenseFindings = sortedSetOf(),
+                        copyrightFindings = sortedSetOf(),
+                        issues = listOf(
+                            issue
+                        )
+                    )
+
+                    val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
+                    val scanResult = ScanResult(provenance, details, summary)
+                    results.getOrPut(pkg) { mutableListOf() } += scanResult
+                }
             }
 
             results
