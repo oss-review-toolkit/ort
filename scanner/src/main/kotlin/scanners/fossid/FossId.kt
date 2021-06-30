@@ -51,11 +51,11 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -317,10 +317,12 @@ class FossId(
                     }
                 }
 
+                val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
+
                 if (waitForResult) {
                     checkScan(scanCode)
                     val rawResults = getRawResults(scanCode)
-                    val resultsSummary = createResultSummary(startTime, rawResults)
+                    val resultsSummary = createResultSummary(startTime, provenance, rawResults)
 
                     results.getOrPut(pkg) { mutableListOf() } += resultsSummary
                 } else {
@@ -342,7 +344,6 @@ class FossId(
                         )
                     )
 
-                    val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
                     val scanResult = ScanResult(provenance, details, summary)
                     results.getOrPut(pkg) { mutableListOf() } += scanResult
                 }
@@ -495,7 +496,7 @@ class FossId(
     /**
      * Construct the [ScanSummary] for this FossId scan.
      */
-    private fun createResultSummary(startTime: Instant, rawResults: RawResults): ScanResult {
+    private fun createResultSummary(startTime: Instant, provenance: Provenance, rawResults: RawResults): ScanResult {
         val associate = rawResults.listIgnoredFiles.associateBy { it.path }
 
         val (filesCount, licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
@@ -515,6 +516,6 @@ class FossId(
             }
         )
 
-        return ScanResult(UnknownProvenance, details, summary)
+        return ScanResult(provenance, details, summary)
     }
 }
