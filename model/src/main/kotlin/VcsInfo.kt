@@ -100,6 +100,11 @@ data class VcsInfo(
     fun toCuration() = VcsInfoCurationData(type, url, revision, path)
 }
 
+/**
+ * Return this [VcsInfo] if not null or else [VcsInfo.EMPTY].
+ */
+fun VcsInfo?.orEmpty(): VcsInfo = this ?: VcsInfo.EMPTY
+
 private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     companion object {
         val KNOWN_FIELDS by lazy {
