@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -33,7 +34,9 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -101,6 +104,25 @@ class DependencyGraphConverterTest : WordSpec({
                 resultWithGraph.getProject(gradleProject.id)
             )
         }
+
+        "take the issues of dependencies into account" {
+            val mavenProject1 = createProject("Maven", index = 1)
+
+            val result = createAnalyzerResult(mavenProject1.createResult())
+
+            val convertedResult = DependencyGraphConverter.convert(result)
+
+            val graph = convertedResult.dependencyGraphs["Maven"]!!
+            val issues = mutableListOf<OrtIssue>()
+
+            fun collectIssues(ref: DependencyReference) {
+                issues += ref.issues
+                ref.dependencies.forEach(::collectIssues)
+            }
+
+            graph.scopeRoots.forEach(::collectIssues)
+            issues shouldNot beEmpty()
+        }
     }
 })
 
@@ -135,8 +157,16 @@ private fun createIdentifier(managerName: String, index: Int, forProject: Boolea
  */
 private fun createDependencies(managerName: String, startIndex: Int, count: Int): SortedSet<PackageReference> =
     (startIndex..(startIndex + count)).mapTo(sortedSetOf()) { index ->
-        PackageReference(createIdentifier(managerName, index, forProject = false))
+        PackageReference(createIdentifier(managerName, index, forProject = false), issues = createIssues(index))
     }
+
+/**
+ * Create a list with issues for a test dependency based on its [index].
+ */
+private fun createIssues(index: Int): List<OrtIssue> =
+    emptyList<OrtIssue>().takeIf { index % 2 == 0 } ?: listOf(
+        OrtIssue(source = "test", message = "Test issue $index.")
+    )
 
 /**
  * Construct an [AnalyzerResult] from the given sequence of [projectResults].
