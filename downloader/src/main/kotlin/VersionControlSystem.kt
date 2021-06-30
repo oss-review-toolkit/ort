@@ -216,12 +216,57 @@ abstract class VersionControlSystem {
             throw DownloadException("Failed to initialize $type working tree at '$targetDir'.", e)
         }
 
-        // E.g. for NPM packages is it sometimes the case that the "gitHead" from the registry points to a non-fetchable
-        // commit, but the repository still has a tag for the package version (pointing to a different commit). In order
-        // to allow to fall back to the guessed revision based on the version in such cases, use a prioritized list of
-        // revision candidates instead of a single revision.
-        val revisionCandidates = mutableSetOf<String>()
+        val revisionCandidates = getRevisionCandidates(workingTree, pkg, allowMovingRevisions)
+        val results = mutableListOf<Result<String>>()
 
+        revisionCandidates.forEachIndexed { index, revision ->
+            log.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
+            results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
+            if (results.last().isSuccess) return@forEachIndexed
+        }
+
+        val workingTreeRevision = results.last().getOrElse {
+            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", it)
+        }
+
+        pkg.vcsProcessed.path.let {
+            if (it.isNotBlank() && !workingTree.workingDir.resolve(it).exists()) {
+                throw DownloadException(
+                    "The $type working directory at '${workingTree.workingDir}' does not contain the requested path " +
+                            "'$it'."
+                )
+            }
+        }
+
+        log.info {
+            "Successfully downloaded revision $workingTreeRevision for package '${pkg.id.toCoordinates()}.'."
+        }
+
+        return workingTree
+    }
+
+    /**
+     * Get a set of revision candidates for the [package][pkg]. The iteration order of the elements of the returned set
+     * represents the priority of the revision candidates. If no revision candidates can be found a [DownloadException]
+     * is thrown.
+     *
+     * The provided [workingTree] must have been created from the [processed VCS information][Package.vcsProcessed] of
+     * the [package][pkg] for the function to return correct results.
+     *
+     * [allowMovingRevisions] toggles whether symbolic names, for which the revision they point to might change, are
+     * accepted or not.
+     *
+     * Revision candidates are created from the [processed VCS information[Package.vcsProcessed] of the [package][pkg]
+     * and from [guessing revisions][WorkingTree.guessRevisionName] based on the name and version of the [package][pkg].
+     * This is useful when the metadata of the package does not contain a revision or if the revision points to a
+     * non-fetchable commit, but the repository still has a tag for the package version.
+     */
+    private fun getRevisionCandidates(
+        workingTree: WorkingTree,
+        pkg: Package,
+        allowMovingRevisions: Boolean
+    ): Set<String> {
+        val revisionCandidates = mutableSetOf<String>()
         val emptyRevisionCandidatesException = DownloadException("Unable to determine a revision to checkout.")
 
         runCatching {
@@ -249,8 +294,8 @@ abstract class VersionControlSystem {
                 workingTree.guessRevisionName(project, version).also {
                     if (revisionCandidates.add(it)) {
                         log.info {
-                            "Adding $type revision '$it' (guessed from package '$project' and version " +
-                                    "'$version') as a candidate."
+                            "Adding $type revision '$it' (guessed from package '$project' and version '$version') as " +
+                                    "a candidate."
                         }
                     }
                 }
@@ -285,32 +330,7 @@ abstract class VersionControlSystem {
 
         if (revisionCandidates.isEmpty()) throw emptyRevisionCandidatesException
 
-        val results = mutableListOf<Result<String>>()
-
-        revisionCandidates.forEachIndexed { index, revision ->
-            log.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
-            results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
-            if (results.last().isSuccess) return@forEachIndexed
-        }
-
-        val workingTreeRevision = results.last().getOrElse {
-            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", it)
-        }
-
-        pkg.vcsProcessed.path.let {
-            if (it.isNotBlank() && !workingTree.workingDir.resolve(it).exists()) {
-                throw DownloadException(
-                    "The $type working directory at '${workingTree.workingDir}' does not contain the requested path " +
-                            "'$it'."
-                )
-            }
-        }
-
-        log.info {
-            "Successfully downloaded revision $workingTreeRevision for package '${pkg.id.toCoordinates()}.'."
-        }
-
-        return workingTree
+        return revisionCandidates
     }
 
     /**
