@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
@@ -117,7 +118,7 @@ abstract class VersionControlSystem {
         /**
          * Return all VCS information about a [workingDir]. This is a convenience wrapper around [WorkingTree.getInfo].
          */
-        fun getCloneInfo(workingDir: File) = forDirectory(workingDir)?.getInfo() ?: VcsInfo.EMPTY
+        fun getCloneInfo(workingDir: File): VcsInfo = forDirectory(workingDir)?.getInfo().orEmpty()
 
         /**
          * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like a Git submodule or
@@ -128,7 +129,7 @@ abstract class VersionControlSystem {
             return forDirectory(dir)?.let { workingTree ->
                 // Always return the relative path to the (nested) VCS root.
                 workingTree.getInfo().copy(path = workingTree.getPathToRoot(path))
-            } ?: VcsInfo.EMPTY
+            }.orEmpty()
         }
 
         /**

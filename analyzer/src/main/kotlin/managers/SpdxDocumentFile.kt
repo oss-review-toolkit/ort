@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -321,7 +322,7 @@ class SpdxDocumentFile(
         val vcs = getVcsInfo() ?: run {
             val packageDir = workingDir.resolve(packageFilename)
             VersionControlSystem.forDirectory(packageDir)?.getInfo()
-        } ?: VcsInfo.EMPTY
+        }.orEmpty()
 
         val id = toIdentifier()
 

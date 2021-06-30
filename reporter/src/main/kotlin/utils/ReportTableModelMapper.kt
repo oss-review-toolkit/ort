@@ -26,11 +26,11 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
@@ -148,7 +148,7 @@ class ReportTableModelMapper(
                 DependencyRow(
                     id = id,
                     sourceArtifact = packageForId?.sourceArtifact ?: RemoteArtifact.EMPTY,
-                    vcsInfo = packageForId?.vcsProcessed ?: VcsInfo.EMPTY,
+                    vcsInfo = packageForId?.vcsProcessed.orEmpty(),
                     scopes = scopesForDependencies[id].orEmpty().toSortedMap(),
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,
