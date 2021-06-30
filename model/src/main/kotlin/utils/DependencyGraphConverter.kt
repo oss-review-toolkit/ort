@@ -112,5 +112,8 @@ object DependencyGraphConverter {
         override fun linkageFor(dependency: PackageReference): PackageLinkage = dependency.linkage
 
         override fun createPackage(dependency: PackageReference, issues: MutableList<OrtIssue>): Package? = null
+
+        override fun issuesForDependency(dependency: PackageReference): Collection<OrtIssue> =
+            dependency.issues
     }
 }
