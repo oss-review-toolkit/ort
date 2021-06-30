@@ -27,6 +27,7 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
+import io.kotest.matchers.types.beInstanceOf
 
 import java.lang.IllegalArgumentException
 
@@ -150,6 +151,12 @@ class OrtResultTest : WordSpec({
             )
 
             ortResult.dependencyNavigator shouldBe DependencyTreeNavigator
+        }
+
+        "return a navigator for the dependency graph" {
+            val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-graph.yml")
+
+            ortResult.dependencyNavigator should beInstanceOf<DependencyGraphNavigator>()
         }
     }
 })

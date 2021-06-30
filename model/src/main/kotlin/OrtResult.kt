@@ -97,7 +97,7 @@ data class OrtResult(
 
     /** An object that can be used to navigate the dependency information contained in this result. */
     @get:JsonIgnore
-    val dependencyNavigator: DependencyNavigator = DependencyTreeNavigator
+    val dependencyNavigator: DependencyNavigator by lazy { createDependencyNavigator() }
 
     private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
 
@@ -463,4 +463,12 @@ data class OrtResult(
                 result = analyzer.result.withScopesResolved()
             )
         )
+
+    /**
+     * Create the [DependencyNavigator] for this [OrtResult]. The concrete navigator implementation depends on the
+     * format, in which dependency information is stored.
+     */
+    private fun createDependencyNavigator(): DependencyNavigator =
+        DependencyTreeNavigator.takeIf { analyzer?.result?.dependencyGraphs.isNullOrEmpty() }
+            ?: DependencyGraphNavigator(this)
 }

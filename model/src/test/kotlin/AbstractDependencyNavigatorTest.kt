@@ -31,6 +31,7 @@ import io.kotest.matchers.sequences.beEmpty as beEmptySequence
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 import java.time.Instant
@@ -57,7 +58,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 
     private val testResult by lazy { readOrtResult(resultFileName) }
 
-    private val testProject by lazy { testResult.getProject(PROJECT_ID)!! }
+    protected val testProject by lazy { testResult.getProject(PROJECT_ID)!! }
 
     protected val navigator by lazy { testResult.dependencyNavigator }
 
@@ -362,6 +363,38 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                         )
                     )
                 )
+            }
+        }
+
+        "DependencyNode.equals" should {
+            "be reflexive" {
+                val node = navigator.directDependencies(testProject, "compile").iterator().next()
+
+                node shouldBe node
+            }
+
+            "return false for a different node" {
+                val iterator = navigator.directDependencies(testProject, "compile").iterator()
+                val node1 = iterator.next().getStableReference()
+                val node2 = iterator.next()
+
+                node1 shouldNotBe node2
+            }
+
+            "return true the same node" {
+                val node1 = navigator.directDependencies(testProject, "compile").iterator().next()
+                    .getStableReference()
+                val node2 = navigator.directDependencies(testProject, "compile").iterator().next()
+                    .getStableReference()
+
+                node1 shouldBe node2
+                node1.hashCode() shouldBe node2.hashCode()
+            }
+
+            "return false for another object" {
+                val node = navigator.directDependencies(testProject, "compile").iterator().next()
+
+                node shouldNotBe this
             }
         }
     }
