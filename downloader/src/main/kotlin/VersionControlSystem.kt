@@ -197,8 +197,8 @@ abstract class VersionControlSystem {
 
     /**
      * Download the source code as specified by the [pkg] information to [targetDir]. [allowMovingRevisions] toggles
-     * whether symbolic names for which the revision they point might change are accepted or not. If [recursive] is
-     * true, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too.
+     * whether symbolic names, for which the revision they point to might change, are accepted or not. If [recursive] is
+     * `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too.
      *
      * @return An object describing the downloaded working tree.
      *
