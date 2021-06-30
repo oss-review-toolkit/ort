@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
@@ -231,7 +232,7 @@ open class Npm(
                 // as the trigger to get VcsInfo locally instead of querying the NPM registry.
                 log.debug { "Resolving the package info for '$identifier' locally from '$realPackageDir'." }
 
-                val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo() ?: VcsInfo.EMPTY
+                val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
                 log.debug { "Resolving the package info for '$identifier' via NPM registry." }

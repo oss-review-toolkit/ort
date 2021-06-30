@@ -64,6 +64,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.await
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -174,7 +175,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                 url = it.url.orEmpty(),
                 revision = (it.commit ?: it.branch).orEmpty()
             )
-        } ?: VcsInfo.EMPTY
+        }.orEmpty()
 
         return with(all.details) {
             Package(

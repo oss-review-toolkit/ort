@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.log
@@ -197,7 +198,7 @@ class GoMod(
     }
 
     private fun createPackage(id: Identifier): Package {
-        val vcsInfo = id.toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN } ?: VcsInfo.EMPTY
+        val vcsInfo = id.toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN }.orEmpty()
 
         return Package(
             id = Identifier(managerName, "", id.name, id.version),

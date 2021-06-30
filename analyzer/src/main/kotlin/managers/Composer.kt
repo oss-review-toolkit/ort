@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
@@ -321,14 +322,14 @@ class Composer(
             packageInfo["license"]?.mapNotNullTo(set) { it.textValue() }
         }
 
-    private fun parseVcsInfo(packageInfo: JsonNode) =
+    private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
         packageInfo["source"]?.let {
             VcsInfo(
                 type = VcsType(it["type"].textValueOrEmpty()),
                 url = it["url"].textValueOrEmpty(),
                 revision = it["reference"].textValueOrEmpty()
             )
-        } ?: VcsInfo.EMPTY
+        }.orEmpty()
 
     private fun parseArtifact(packageInfo: JsonNode) =
         packageInfo["dist"]?.let {

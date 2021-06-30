@@ -32,9 +32,9 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.log
@@ -97,7 +97,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val analyzerResult = analyzeInParallel(managedFiles, curationProvider)
 
         val workingTree = VersionControlSystem.forDirectory(absoluteProjectPath)
-        val vcs = workingTree?.getInfo() ?: VcsInfo.EMPTY
+        val vcs = workingTree?.getInfo().orEmpty()
         val nestedVcs = workingTree?.getNested()?.filter { (path, _) ->
             // Only include nested VCS if they are part of the analyzed directory.
             workingTree.getRootPath().resolve(path).startsWith(absoluteProjectPath)

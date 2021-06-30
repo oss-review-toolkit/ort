@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 
 /**
@@ -97,7 +98,7 @@ class Carthage(
      */
     private fun getProjectInfoFromVcs(workingDir: File): ProjectInfo {
         val workingTree = VersionControlSystem.forDirectory(workingDir)
-        val vcsInfo = workingTree?.getInfo() ?: VcsInfo.EMPTY
+        val vcsInfo = workingTree?.getInfo().orEmpty()
         val normalizedVcsUrl = normalizeVcsUrl(vcsInfo.url)
         val vcsHost = VcsHost.toVcsHost(URI(normalizedVcsUrl))
 

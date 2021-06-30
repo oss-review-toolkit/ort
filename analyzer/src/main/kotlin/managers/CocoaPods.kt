@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
@@ -182,7 +183,7 @@ class CocoaPods(
                 url = url,
                 revision = podspec.source["tag"].orEmpty()
             )
-        } ?: VcsInfo.EMPTY
+        }.orEmpty()
 
         return Package(
             id = id,
