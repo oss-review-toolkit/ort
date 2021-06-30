@@ -105,7 +105,7 @@ jobs:
     enabled: true # TODO: Make this a Pipeline parameter to be able to activate it in the UI.
     inputs:
       gradleWrapperFile: gradlew
-      options: --no-daemon -x reporter-web-app:yarnBuild --scan
+      options:  --rerun-tasks --no-build-cache --no-daemon -x reporter-web-app:yarnBuild --scan
       tasks: 'cli:run --args="requirements"'
       javaHomeOption: JDKVersion
       jdkVersionOption: 1.11
@@ -117,7 +117,7 @@ jobs:
     inputs:
       gradleWrapperFile: gradlew
       # TODO: Only exclude ExpensiveTag on PR builds.
-      options: --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -PbuildCacheRetentionDays=3
+      options:  --rerun-tasks --no-build-cache --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -PbuildCacheRetentionDays=3
       tasks: analyzer:test analyzer:funTest jacocoReport
       publishJUnitResults: true
       testResultsFiles: '**/flattened/TEST-*.xml'
