@@ -204,7 +204,7 @@ interface DependencyNavigator {
         val queue = LinkedList<QueueItem>()
         val result = sortedMapOf<Identifier, List<Identifier>>()
 
-        nodes.forEach { queue.offer(QueueItem(it, emptyList())) }
+        nodes.forEach { queue.offer(QueueItem(it.getStableReference(), emptyList())) }
 
         while (queue.isNotEmpty()) {
             val item = queue.poll()
@@ -215,7 +215,7 @@ interface DependencyNavigator {
 
             val newParents = item.parents + item.pkgRef.id
             item.pkgRef.visitDependencies { dependencyNodes ->
-                dependencyNodes.forEach { node -> queue.offer(QueueItem(node, newParents)) }
+                dependencyNodes.forEach { node -> queue.offer(QueueItem(node.getStableReference(), newParents)) }
             }
         }
 
