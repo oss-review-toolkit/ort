@@ -112,7 +112,6 @@ class ReportTableModelMapper(
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
         val analyzerResult = ortResult.analyzer?.result
-        val analyzerIssuesForPackages = ortResult.getPackages().associateBy({ it.pkg.id }, { it.collectIssues() })
         val scanRecord = ortResult.scanner?.results
         val excludes = ortResult.getExcludes()
 
@@ -135,8 +134,7 @@ class ReportTableModelMapper(
                 val detectedLicenses = resolvedLicenseInfo.filter { LicenseSource.DETECTED in it.sources }
                     .sortedBy { it.license.toString() }
 
-                val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty() +
-                        analyzerIssuesForPackages[id].orEmpty()
+                val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty()
 
                 val scanIssues = scanResult?.flatMapTo(mutableSetOf()) {
                     it.summary.issues

@@ -326,10 +326,6 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             result += addIssues(analyzerIssues, EvaluatedOrtIssueType.ANALYZER, pkg, null, null)
         }
 
-        input.ortResult.getPackage(id)?.let {
-            result += addIssues(it.collectIssues(), EvaluatedOrtIssueType.ANALYZER, pkg, null, null)
-        }
-
         return result
     }
 
