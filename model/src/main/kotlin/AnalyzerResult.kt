@@ -90,13 +90,6 @@ data class AnalyzerResult(
             }
         }
 
-        packages.forEach { curatedPackage ->
-            val issues = curatedPackage.collectIssues()
-            if (issues.isNotEmpty()) {
-                collectedIssues.getOrPut(curatedPackage.pkg.id) { mutableSetOf() } += issues
-            }
-        }
-
         dependencyGraphs.values.forEach { graph ->
             graph.collectIssues().forEach { (id, issues) ->
                 collectedIssues.getOrPut(id) { mutableSetOf() } += issues
