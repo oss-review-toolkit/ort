@@ -261,7 +261,7 @@ abstract class VersionControlSystem {
      * This is useful when the metadata of the package does not contain a revision or if the revision points to a
      * non-fetchable commit, but the repository still has a tag for the package version.
      */
-    private fun getRevisionCandidates(
+    fun getRevisionCandidates(
         workingTree: WorkingTree,
         pkg: Package,
         allowMovingRevisions: Boolean
