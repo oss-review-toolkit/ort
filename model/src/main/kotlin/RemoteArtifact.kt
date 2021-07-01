@@ -44,3 +44,8 @@ data class RemoteArtifact(
         )
     }
 }
+
+/**
+ * Return this [RemoteArtifact] if not null or else [RemoteArtifact.EMPTY].
+ */
+fun RemoteArtifact?.orEmpty(): RemoteArtifact = this ?: RemoteArtifact.EMPTY
