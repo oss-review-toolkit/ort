@@ -192,7 +192,7 @@ class CocoaPods(
             description = podspec.summary,
             homepageUrl = podspec.homepage,
             binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = podspec.source["http"]?.let { RemoteArtifact(it, Hash.NONE) } ?: RemoteArtifact.EMPTY,
+            sourceArtifact = podspec.source["http"]?.let { RemoteArtifact(it, Hash.NONE) }.orEmpty(),
             vcs = vcs,
             vcsProcessed = processPackageVcs(vcs, podspec.homepage)
         )

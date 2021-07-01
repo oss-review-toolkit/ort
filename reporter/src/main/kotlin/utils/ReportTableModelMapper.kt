@@ -24,7 +24,6 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
@@ -147,7 +146,7 @@ class ReportTableModelMapper(
 
                 DependencyRow(
                     id = id,
-                    sourceArtifact = packageForId?.sourceArtifact ?: RemoteArtifact.EMPTY,
+                    sourceArtifact = packageForId?.sourceArtifact.orEmpty(),
                     vcsInfo = packageForId?.vcsProcessed.orEmpty(),
                     scopes = scopesForDependencies[id].orEmpty().toSortedMap(),
                     concludedLicense = concludedLicense,

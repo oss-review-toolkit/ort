@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
@@ -270,7 +271,7 @@ private fun extractPackage(node: JsonNode, hashes: Map<String, String>): Package
         declaredLicensesProcessed = declaredLicensesProcessed,
         description = node["description"].textValueOrEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = extractSourceArtifact(node, hashes) ?: RemoteArtifact.EMPTY,
+        sourceArtifact = extractSourceArtifact(node, hashes).orEmpty(),
         homepageUrl = "",
         vcs = extractVcsInfo(node)
     )
