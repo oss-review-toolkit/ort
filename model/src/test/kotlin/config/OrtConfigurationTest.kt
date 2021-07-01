@@ -137,6 +137,17 @@ class OrtConfigurationTest : WordSpec({
                 ignorePatterns shouldContainExactly listOf("**/META-INF/DEPENDENCIES")
             }
 
+            with(ortConfig.notifier) {
+                mail shouldNotBeNull {
+                    hostName shouldBe "localhost"
+                    port shouldBe 465
+                    username shouldBe "user"
+                    password shouldBe "secret"
+                    useSsl shouldBe true
+                    fromAddress shouldBe "no-reply@oss-review-toolkit.org"
+                }
+            }
+
             with(ortConfig.licenseFilePatterns) {
                 licenseFilenames shouldContainExactly listOf("license*")
                 patentFilenames shouldContainExactly listOf("patents")

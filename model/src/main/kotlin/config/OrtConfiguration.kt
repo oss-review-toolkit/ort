@@ -66,7 +66,12 @@ data class OrtConfiguration(
     /**
      * The configuration of the scanner.
      */
-    val scanner: ScannerConfiguration = ScannerConfiguration()
+    val scanner: ScannerConfiguration = ScannerConfiguration(),
+
+    /**
+     * The configuration of the notifier.
+     */
+    val notifier: NotifierConfiguration = NotifierConfiguration()
 ) {
     companion object {
         /**
