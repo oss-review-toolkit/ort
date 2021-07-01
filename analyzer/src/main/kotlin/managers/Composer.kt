@@ -335,7 +335,7 @@ class Composer(
         packageInfo["dist"]?.let {
             val shasum = it["shasum"].textValueOrEmpty()
             RemoteArtifact(it["url"].textValueOrEmpty(), Hash.create(shasum))
-        } ?: RemoteArtifact.EMPTY
+        }.orEmpty()
 
     private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
         listOf("packages", "packages-dev").forEach {

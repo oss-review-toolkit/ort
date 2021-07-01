@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
@@ -68,9 +69,9 @@ class Sw360PackageCurationProvider(sw360Configuration: Sw360StorageConfiguration
                             concludedLicense = sw360Release.embedded?.licenses.orEmpty().toSpdx(),
                             homepageUrl = getHomepageOfRelease(sw360Release).orEmpty(),
                             binaryArtifact = getAttachmentAsRemoteArtifact(sw360Release, SW360AttachmentType.BINARY)
-                                ?: RemoteArtifact.EMPTY,
+                                .orEmpty(),
                             sourceArtifact = getAttachmentAsRemoteArtifact(sw360Release, SW360AttachmentType.SOURCE)
-                                ?: RemoteArtifact.EMPTY,
+                                .orEmpty(),
                             vcs = null,
                             comment = "Provided by SW360."
                         )

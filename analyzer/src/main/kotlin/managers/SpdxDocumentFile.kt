@@ -335,8 +335,8 @@ class SpdxDocumentFile(
             concludedLicense = getConcludedLicense(),
             description = packageDescription,
             homepageUrl = homepage.mapNotPresentToEmpty(),
-            binaryArtifact = getBinaryArtifact() ?: RemoteArtifact.EMPTY,
-            sourceArtifact = getSourceArtifact() ?: RemoteArtifact.EMPTY,
+            binaryArtifact = getBinaryArtifact().orEmpty(),
+            sourceArtifact = getSourceArtifact().orEmpty(),
             vcs = vcs
         )
     }
