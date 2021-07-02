@@ -2,6 +2,8 @@ jobs:
 - job: LinuxTest
   pool:
     vmImage: ubuntu-18.04
+  variables:
+    GRADLE_OPTS: -Dorg.gradle.daemon=false
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
@@ -75,7 +77,7 @@ jobs:
     inputs:
       gradleWrapperFile: gradlew
       # TODO: Only exclude ExpensiveTag on PR builds.
-      options: --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -x analyzer:test -x analyzer:funTest -PbuildCacheRetentionDays=3
+      options: --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -x analyzer:test -x analyzer:funTest -PbuildCacheRetentionDays=3
       tasks: test funTest jacocoReport
       publishJUnitResults: true
       testResultsFiles: '**/flattened/TEST-*.xml'

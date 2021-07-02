@@ -3,6 +3,8 @@ jobs:
   pool:
     # See https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md.
     vmImage: windows-2019
+  variables:
+    GRADLE_OPTS: -Dorg.gradle.daemon=false
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
@@ -96,7 +98,7 @@ jobs:
     enabled: false # TODO: Make this a Pipeline parameter to be able to activate it in the UI.
     inputs:
       gradleWrapperFile: gradlew.bat
-      options: --no-daemon -x reporter-web-app:yarnBuild --scan
+      options: -x reporter-web-app:yarnBuild --scan
       tasks: 'cli:run --args="requirements"'
       javaHomeOption: JDKVersion
       jdkVersionOption: 1.11
@@ -108,7 +110,7 @@ jobs:
     inputs:
       gradleWrapperFile: gradlew.bat
       # TODO: Only exclude ExpensiveTag on PR builds.
-      options: --no-daemon --stacktrace -x reporter-web-app:yarnBuild -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -PbuildCacheRetentionDays=3
+      options: --stacktrace -x reporter-web-app:yarnBuild -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -PbuildCacheRetentionDays=3
       tasks: analyzer:test analyzer:funTest
       publishJUnitResults: true
       testResultsFiles: '**/flattened/TEST-*.xml'
@@ -122,7 +124,6 @@ jobs:
     displayName: Gradle Clean
     inputs:
       gradleWrapperFile: gradlew.bat
-      options: --no-daemon
       tasks: clean
       javaHomeOption: JDKVersion
       jdkVersionOption: 1.11
