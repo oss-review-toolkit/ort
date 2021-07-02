@@ -4,7 +4,7 @@ jobs:
     # See https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md.
     vmImage: windows-2019
   variables:
-    GRADLE_OPTS: -Dorg.gradle.daemon=false
+    GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.vfs.watch=false
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6

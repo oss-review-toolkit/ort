@@ -3,7 +3,7 @@ jobs:
   pool:
     vmImage: ubuntu-18.04
   variables:
-    GRADLE_OPTS: -Dorg.gradle.daemon=false
+    GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.vfs.watch=false
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
