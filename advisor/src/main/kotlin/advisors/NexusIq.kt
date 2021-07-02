@@ -115,16 +115,15 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
      * expected to have a URI.)
      */
     private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability? {
-        val browseUrl = if (url == null && reference.startsWith(NexusIqService.SONATYPE_PREFIX)) {
-            URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
-        } else {
-            url
-        }
+        val references = mutableListOf<VulnerabilityReference>()
 
-        return browseUrl?.let { uri ->
-            val ref = VulnerabilityReference(uri, scoringSystem(), severity.toString())
-            Vulnerability(reference, listOf(ref))
-        }
+        val browseUrl = URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
+        val nexusIqReference = VulnerabilityReference(browseUrl, scoringSystem(), severity.toString())
+
+        references += nexusIqReference
+        url.takeIf { it != browseUrl }?.let { references += nexusIqReference.copy(url = it) }
+
+        return Vulnerability(reference, references)
     }
 
     /**

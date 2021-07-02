@@ -49,12 +49,6 @@ interface NexusIqService {
         const val CVSS3_SCORE = "CVSS3"
 
         /**
-         * A Sonatype-specific prefix for references of security issues. The prefix determines how some of the
-         * properties need to be interpreted, e.g. the severity value.
-         */
-        const val SONATYPE_PREFIX = "sonatype-"
-
-        /**
          * The mapper for JSON (de-)serialization used by this service.
          */
         val JSON_MAPPER = JsonMapper().registerKotlinModule()
