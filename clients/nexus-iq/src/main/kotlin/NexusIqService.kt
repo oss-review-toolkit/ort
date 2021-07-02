@@ -117,12 +117,13 @@ interface NexusIqService {
         val url: URI?,
         val threatCategory: String
     ) {
+        // See https://guides.sonatype.com/iqserver/technical-guides/sonatype-vuln-data/#how-is-a-vulnerability-score-severity-calculated.
+        private val cvss3Sources = listOf("cve", "sonatype")
+
         /**
-         * Return an identifier for the scoring system used for this issue. According to the documentation, the
-         * prefix of the reference determines the scoring system. See
-         * https://guides.sonatype.com/iqserver/technical-guides/sonatype-vuln-data/#how-is-a-vulnerability-score-severity-calculated
+         * Return an identifier for the scoring system used for this issue.
          */
-        fun scoringSystem(): String = if (reference.startsWith(SONATYPE_PREFIX)) CVSS3_SCORE else CVSS2_SCORE
+        fun scoringSystem(): String = if (source in cvss3Sources) CVSS3_SCORE else CVSS2_SCORE
     }
 
     data class ComponentsWrapper(
