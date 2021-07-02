@@ -28,9 +28,11 @@ class NexusIqServiceTest : WordSpec({
     "SecurityIssue" should {
         "return the correct scoring system for sonatype references" {
             val issue = NexusIqService.SecurityIssue(
-                "${NexusIqService.SONATYPE_PREFIX}foo",
-                1.7f,
-                URI("https://security.example.org/an-issue")
+                source = "sonatype",
+                reference = "${NexusIqService.SONATYPE_PREFIX}foo",
+                severity = 1.7f,
+                url = URI("https://security.example.org/an-issue"),
+                threatCategory = "dummy"
             )
 
             issue.scoringSystem() shouldBe NexusIqService.CVSS3_SCORE
@@ -38,9 +40,11 @@ class NexusIqServiceTest : WordSpec({
 
         "return the correct scoring system for other references" {
             val issue = NexusIqService.SecurityIssue(
-                "CVE-0815",
-                2.7f,
-                URI("https://security.example.org/another-issue")
+                source = "cve",
+                reference = "CVE-0815",
+                severity = 2.7f,
+                url = URI("https://security.example.org/another-issue"),
+                threatCategory = "dummy"
             )
 
             issue.scoringSystem() shouldBe NexusIqService.CVSS2_SCORE
