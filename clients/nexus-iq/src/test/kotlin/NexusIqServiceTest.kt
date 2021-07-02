@@ -29,7 +29,7 @@ class NexusIqServiceTest : WordSpec({
         "return CVSS3 as the scoring system for 'sonatype' references" {
             val issue = NexusIqService.SecurityIssue(
                 source = "sonatype",
-                reference = "${NexusIqService.SONATYPE_PREFIX}foo",
+                reference = "sonatype-foo",
                 severity = 1.7f,
                 url = URI("https://security.example.org/an-issue"),
                 threatCategory = "dummy"
