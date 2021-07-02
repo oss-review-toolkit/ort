@@ -26,7 +26,7 @@ import java.net.URI
 
 class NexusIqServiceTest : WordSpec({
     "SecurityIssue" should {
-        "return the correct scoring system for sonatype references" {
+        "return CVSS3 as the scoring system for 'sonatype' references" {
             val issue = NexusIqService.SecurityIssue(
                 source = "sonatype",
                 reference = "${NexusIqService.SONATYPE_PREFIX}foo",
@@ -38,12 +38,24 @@ class NexusIqServiceTest : WordSpec({
             issue.scoringSystem() shouldBe NexusIqService.CVSS3_SCORE
         }
 
-        "return the correct scoring system for other references" {
+        "return CVSS3 as the scoring system for 'CVE' references" {
             val issue = NexusIqService.SecurityIssue(
                 source = "cve",
                 reference = "CVE-0815",
                 severity = 2.7f,
                 url = URI("https://security.example.org/another-issue"),
+                threatCategory = "dummy"
+            )
+
+            issue.scoringSystem() shouldBe NexusIqService.CVSS3_SCORE
+        }
+
+        "return CVSS2 as the scoring system for other references" {
+            val issue = NexusIqService.SecurityIssue(
+                source = "osvdb",
+                reference = "37071",
+                severity = 4.2f,
+                url = URI("http://osvdb.org/37071"),
                 threatCategory = "dummy"
             )
 
