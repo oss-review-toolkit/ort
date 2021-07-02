@@ -111,9 +111,11 @@ interface NexusIqService {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class SecurityIssue(
+        val source: String,
         val reference: String,
         val severity: Float,
-        val url: URI?
+        val url: URI?,
+        val threatCategory: String
     ) {
         /**
          * Return an identifier for the scoring system used for this issue. According to the documentation, the
