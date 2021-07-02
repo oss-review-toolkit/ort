@@ -127,7 +127,3 @@ jobs:
       tasks: clean
       javaHomeOption: JDKVersion
       jdkVersionOption: 1.11
-
-  # Ensure that any running Gradle daemon is stopped before caching starts.
-  - bash: ./gradlew --stop
-    displayName: Stop Gradle Daemon
