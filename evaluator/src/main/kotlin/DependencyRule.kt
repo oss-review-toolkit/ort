@@ -45,13 +45,14 @@ class DependencyRule(
     val dependency: PackageReference,
 
     /**
-     * The ancestors of the [dependency] in the dependency tree. The first entry is the root of the tree, the last entry
-     * (at [level] - 1) is the direct parent.
+     * The ancestors of the [dependency] in the dependency tree, sorted from farthest to closest: The first entry is the
+     * direct dependency of a project, the last entry (at index `level - 1`) is a direct parent of this [dependency].
+     * If the list is empty it means that this dependency is a direct dependency.
      */
     val ancestors: List<PackageReference>,
 
     /**
-     * The level of the [dependency] inside the dependency tree. Starts with 0 for root level entries.
+     * The level of the [dependency] inside the dependency tree. Starts with 0 for a direct dependency of a project.
      */
     val level: Int,
 
