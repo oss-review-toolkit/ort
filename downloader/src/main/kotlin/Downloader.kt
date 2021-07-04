@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -177,10 +177,16 @@ class Downloader(private val config: DownloaderConfiguration) {
     /**
      * Download the source code of the [package][pkg] to the [outputDirectory] using its VCS information. The
      * [allowMovingRevisions] parameter indicates whether the download accepts symbolic names, like branches, instead of
-     * only fixed revisions. A [Provenance] is returned on success or a [DownloadException] is thrown in case of
-     * failure.
+     * only fixed revisions. If [recursive] is `true`, any nested repositories (like Git submodules or Mercurial
+     * subrepositories) are downloaded, too. A [Provenance] is returned on success or a [DownloadException] is thrown in
+     * case of failure.
      */
-    fun downloadFromVcs(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean): Provenance {
+    fun downloadFromVcs(
+        pkg: Package,
+        outputDirectory: File,
+        allowMovingRevisions: Boolean,
+        recursive: Boolean = true
+    ): Provenance {
         verifyOutputDirectory(outputDirectory)
 
         log.info {
@@ -240,7 +246,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         }
 
         val workingTree = try {
-            applicableVcs.download(pkg, outputDirectory, allowMovingRevisions)
+            applicableVcs.download(pkg, outputDirectory, allowMovingRevisions, recursive)
         } catch (e: DownloadException) {
             // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
             //       non-strict mode.
@@ -256,7 +262,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 outputDirectory.safeMkdirs()
 
                 val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
-                applicableVcs.download(fallbackPkg, outputDirectory, allowMovingRevisions)
+                applicableVcs.download(fallbackPkg, outputDirectory, allowMovingRevisions, recursive)
             } else {
                 throw e
             }
