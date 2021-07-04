@@ -38,4 +38,10 @@ data class NestedProvenance(
      * empty.
      */
     val subRepositories: Map<String, RepositoryProvenance>
-)
+) {
+    /**
+     * Return a set of all contained [KnownProvenance]s.
+     */
+    fun getProvenances(): Set<KnownProvenance> =
+        subRepositories.values.toMutableSet<KnownProvenance>().also { it += root }
+}
