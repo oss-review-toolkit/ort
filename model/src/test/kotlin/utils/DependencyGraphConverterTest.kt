@@ -123,6 +123,24 @@ class DependencyGraphConverterTest : WordSpec({
             graph.scopeRoots.forEach(::collectIssues)
             issues shouldNot beEmpty()
         }
+
+        "not override a dependency graph for an empty project" {
+            val gradleProject = createProject("Gradle", index = 1)
+            val gradleEmptyProject = createProject("Gradle", index = 2).copy(scopeDependencies = sortedSetOf())
+
+            val orgResult = createAnalyzerResult(gradleProject.createResult())
+            val resultWithGraph = DependencyGraphConverter.convert(orgResult)
+            val mixedResult = resultWithGraph.copy(
+                projects = sortedSetOf(gradleEmptyProject).apply { addAll(resultWithGraph.projects) }
+            )
+
+            val convertedResult = DependencyGraphConverter.convert(mixedResult)
+
+            convertedResult.dependencyGraphs["Gradle"] shouldNotBeNull {
+                scopeRoots shouldNot beEmpty()
+                scopes.keys shouldNot beEmpty()
+            }
+        }
     }
 })
 
