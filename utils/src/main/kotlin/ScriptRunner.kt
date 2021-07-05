@@ -65,5 +65,5 @@ open class ScriptRunner {
     /**
      * Run the given [script], returning its last statement.
      */
-    open fun run(script: String): Any = engine.eval(completeScript(script))
+    open fun run(script: String): Any? = engine.eval(completeScript(script))
 }
