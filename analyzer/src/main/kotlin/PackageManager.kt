@@ -250,7 +250,9 @@ abstract class PackageManager(
                     val projectWithIssues = Project.EMPTY.copy(
                         id = id,
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                        vcsProcessed = processProjectVcs(definitionFile.parentFile)
+                        vcsProcessed = processProjectVcs(definitionFile.parentFile),
+                        scopeDependencies = null,
+                        scopeNames = sortedSetOf()
                     )
 
                     val issues = listOf(
