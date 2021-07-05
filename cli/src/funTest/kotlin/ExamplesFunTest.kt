@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,10 @@
 
 package org.ossreviewtoolkit.cli
 
+import com.icegreen.greenmail.util.GreenMail
+import com.icegreen.greenmail.util.GreenMailUtil
+import com.icegreen.greenmail.util.ServerSetup
+
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.StringSpec
@@ -27,6 +32,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
@@ -40,11 +46,14 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.NotifierConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.SendMailConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
+import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
@@ -160,6 +169,37 @@ class ExamplesFunTest : StringSpec() {
             )
 
             report shouldHaveSize 1
+        }
+
+        "notifications.kts can be complied and executed" {
+            val greenMail = GreenMail(ServerSetup.SMTP.dynamicPort())
+            greenMail.setUser("no-reply@oss-review-toolkit.org", "no-reply@oss-review-toolkit.org", "pwd")
+            greenMail.start()
+
+            val ortResult = File("src/funTest/assets/semver4j-analyzer-result.yml").readValue<OrtResult>()
+            val notifier = Notifier(
+                ortResult, NotifierConfiguration(
+                    SendMailConfiguration(
+                        hostName = "localhost",
+                        port = greenMail.smtp.serverSetup.port,
+                        username = "no-reply@oss-review-toolkit.org",
+                        password = "pwd",
+                        useSsl = false,
+                        fromAddress = "no-reply@oss-review-toolkit.org"
+                    )
+                )
+            )
+
+            val notifications = takeExampleFile("notifications.kts").readText()
+
+            notifier.run(notifications)
+
+            greenMail.waitForIncomingEmail(1000, 1) shouldBe true
+            val actualBody = GreenMailUtil.getBody(greenMail.receivedMessages[0])
+
+            actualBody shouldBe "Number of issues found: ${ortResult.collectIssues().size}"
+
+            greenMail.stop()
         }
 
         "All example files should have been tested" {
