@@ -75,11 +75,7 @@ analyzer:
         revision: "941c5c62471168b5d18153755c2a7b38d2560e58"
         path: ""
       homepage_url: ""
-      scopes:
-      - name: "dependencies"
-        dependencies: []
-      - name: "devDependencies"
-        dependencies: []
+      scopes: []
     - id: "Maven:org.apache.commons:commons-text:1.6"
       definition_file_path: "pom.xml"
       authors:
@@ -397,7 +393,7 @@ analyzer:
         revision: "<REPLACE_REVISION>"
         path: "manifest.xml"
       homepage_url: ""
-      scopes: []
+      scope_names: []
     packages:
     - package:
         id: "Maven:antlr:antlr:2.7.7"

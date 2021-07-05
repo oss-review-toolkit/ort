@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.analyzer
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -120,7 +121,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
                 val deserializedMergedResults = yamlMapper.readValue<AnalyzerResult>(serializedMergedResults)
 
-                deserializedMergedResults.withScopesResolved() shouldBe mergedResults
+                deserializedMergedResults shouldBe mergedResults
             }
 
             "be serialized and deserialized correctly with a dependency graph" {
@@ -138,7 +139,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val serializedResult = yamlMapper.writeValueAsString(result)
                 val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
 
-                deserializedResult.withScopesResolved() shouldBe result.withScopesResolved()
+                deserializedResult shouldBe result
             }
 
             "not change its representation when serialized again" {
@@ -219,6 +220,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addResult(analyzerResult1)
                     .addResult(analyzerResult2)
                     .build()
+                    .withScopesResolved()
 
                 analyzerResult.withScopesResolved() should beTheSameInstanceAs(analyzerResult)
             }
@@ -275,6 +277,15 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 )
                 mergedResults.issues shouldBe
                         sortedMapOf(project1.id to analyzerResult1.issues, project2.id to analyzerResult2.issues)
+            }
+
+            "convert to the dependency graph representation when building" {
+                val mergedResults = AnalyzerResultBuilder()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build()
+
+                mergedResults.dependencyGraphs.keys should containExactlyInAnyOrder("type-1", "type-2")
             }
         }
     }

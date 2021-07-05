@@ -15,7 +15,7 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: ""
-  scopes: []
+  scope_names: []
 packages: []
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
