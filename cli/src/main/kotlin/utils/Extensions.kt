@@ -44,13 +44,12 @@ fun <T : GroupableOption> T.outputGroup(): T = group(OPTION_GROUP_OUTPUT)
 fun <T : GroupableOption> T.configurationGroup(): T = group(OPTION_GROUP_CONFIGURATION)
 
 /**
- * Read [ortFile] into an [OrtResult] and return it. Make sure that information about project scopes is available
- * (by calling [OrtResult.withResolvedScopes]), so that it can be processed.
+ * Read [ortFile] into an [OrtResult] and return it.
  */
 fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
     log.debug { "Input ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(ortFile)}." }
 
-    val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>().withResolvedScopes() }
+    val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
 
     log.perf {
         "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inWholeMilliseconds}ms."
