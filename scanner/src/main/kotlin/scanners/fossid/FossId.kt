@@ -23,8 +23,6 @@ import java.io.File
 import java.io.IOException
 import java.net.Authenticator
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 import kotlin.time.measureTimedValue
 
@@ -85,6 +83,12 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
  * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
  * completed. As a consequence, scan results won't be available in ORT result.
+ *
+ * Naming conventions options. If they are not set, default naming convention are used.
+ * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
+ * variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
+ * [NAMING_CONVENTION_VARIABLE_PREFIX] e.g. namingVariableVar1 = "foo".
+ * * **"namingScanPattern":** A pattern for scan names when scans are created on the FossID instance.
  */
 class FossId(
     name: String,
@@ -108,6 +112,11 @@ class FossId(
 
         @JvmStatic
         private val WAIT_REPETITION = 50
+
+        /**
+         * The scanner options beginning with this prefix will be used to parametrize project and scan names.
+         */
+        private const val NAMING_CONVENTION_VARIABLE_PREFIX = "namingVariable"
 
         /**
          * Convert a Git repository URL to a valid project name, e.g.
@@ -158,6 +167,7 @@ class FossId(
     private val user: String
     private val waitForResult: Boolean
     private val secretKeys = listOf("serverUrl", "apiKey", "user")
+    private val namingProvider: FossIdNamingProvider
 
     private val service: FossIdRestService
     private val packageNamespaceFilter: String
@@ -185,6 +195,19 @@ class FossId(
         waitForResult = fossIdScannerOptions["waitForResult"]?.toBooleanStrictOrNull() ?: true
 
         log.info { "waitForResult parameter is set to '$waitForResult'" }
+
+        val namingProjectPattern = fossIdScannerOptions["namingProjectPattern"]?.apply {
+            FossId.log.info { "Naming pattern for projects is $this." }
+        }
+        val namingScanPattern = fossIdScannerOptions["namingScanPattern"]?.apply {
+            FossId.log.info { "Naming pattern for scans is $this." }
+        }
+
+        val namingConventionVariables = fossIdScannerOptions
+            .filterKeys { it.startsWith(NAMING_CONVENTION_VARIABLE_PREFIX) }
+            .mapKeys { it.key.substringAfter(NAMING_CONVENTION_VARIABLE_PREFIX) }
+
+        namingProvider = FossIdNamingProvider(namingProjectPattern, namingScanPattern, namingConventionVariables)
 
         val client = OkHttpClientHelper.buildClient()
 
@@ -282,7 +305,8 @@ class FossId(
 
                 val url = pkg.vcsProcessed.url
                 val revision = pkg.vcsProcessed.revision.ifEmpty { "HEAD" }
-                val projectCode = convertGitUrlToProjectName(url)
+                val projectName = convertGitUrlToProjectName(url)
+                val projectCode = namingProvider.createProjectCode(projectName)
 
                 if (getProject(projectCode) == null) {
                     log.info { "Creating project '$projectCode' ..." }
@@ -304,13 +328,13 @@ class FossId(
 
                     val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
 
-                    val scanCode = createScan(projectCode, newUrl, revision)
+                    val scanCode = createScan(projectCode, projectName, newUrl, revision)
                     log.info { "Initiating data download ..." }
                     service.downloadFromGit(user, apiKey, scanCode)
                         .checkResponse("download data from Git", false)
                     scanCode
                 } else {
-                    log.info { "Scan found for $url and revision $revision." }
+                    log.info { "Scan ${existingScan.code} found for $url and revision $revision." }
 
                     requireNotNull(existingScan.code) {
                         "FossId returned a null scancode for an existing scan"
@@ -359,9 +383,12 @@ class FossId(
     /**
      * Create a new scan in the FossID server and return the scan code.
      */
-    private suspend fun createScan(projectCode: String, url: String, revision: String): String {
-        val formatter = DateTimeFormatter.ofPattern("'$projectCode'_yyyyMMdd_HHmmss")
-        val scanCode = formatter.format(LocalDateTime.now())
+    private suspend fun createScan(
+        projectCode: String, projectName: String, url: String, revision: String
+    ): String {
+        val scanCode = namingProvider.createScanCode(projectName)
+
+        log.info { "Creating scan $scanCode ..." }
 
         val response = service.createScan(user, apiKey, projectCode, scanCode, url, revision)
             .checkResponse("create scan")
