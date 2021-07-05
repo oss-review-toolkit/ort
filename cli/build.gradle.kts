@@ -100,6 +100,7 @@ dependencies {
     implementation(project(":downloader"))
     implementation(project(":evaluator"))
     implementation(project(":model"))
+    implementation(project(":notifier"))
     implementation(project(":reporter"))
     implementation(project(":scanner"))
     implementation(project(":utils"))

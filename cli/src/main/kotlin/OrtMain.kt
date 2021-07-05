@@ -179,6 +179,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
             ConfigCommand(),
             DownloaderCommand(),
             EvaluatorCommand(),
+            NotifierCommand(),
             ReporterCommand(),
             RequirementsCommand(),
             ScannerCommand(),
