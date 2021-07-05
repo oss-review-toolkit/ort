@@ -183,7 +183,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                                 "available: ${e.message}")
                     }
 
-                    List<Dependency> dependencies = result.getRoot().getDependencies().collect {
+                    List<Dependency> dependencies = result.getRoot().getDependencies().findResults {
                         fetchDependency(it, project, resolvedArtifacts, [] as Set<String>)
                     }
 
@@ -230,6 +230,11 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
          */
         private Dependency fetchDependency(DependencyResult dependencyResult, Project project,
                                            Set<ResolvedArtifact> resolvedArtifacts, Set<String> visited) {
+            // Ignore this dependency if it is a BOM imported from Maven, because BOMs do not define dependencies but
+            // version constraints.
+            // See: https://docs.gradle.org/current/userguide/platforms.html#sub:bom_import
+            if (isBom(dependencyResult)) return null
+
             def dependencyId = identifierFor(dependencyResult, project)
             dependencies.putIfAbsent(dependencyId, [])
             def dependency = dependencies[dependencyId].find {
@@ -243,6 +248,26 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             dependency = parseDependency(dependencyResult, project, resolvedArtifacts, visited)
             dependencies[dependencyId].add(dependency)
             return dependency
+        }
+
+        /**
+         * Return true if the provided DependencyResult represents an imported Maven BOM.
+         */
+        private boolean isBom(DependencyResult dependencyResult) {
+            if (dependencyResult instanceof ResolvedDependencyResult &&
+                    dependencyResult.selected.hasProperty('variants')) {
+                return dependencyResult.selected.variants.every {
+                    def categoryAttribute = it.attributes.keySet().find { it.name == 'org.gradle.category' }
+                    if (categoryAttribute != null) {
+                        def value = it.attributes.getAttribute(categoryAttribute)
+                        return value == 'platform' || value == 'enforced-platform'
+                    }
+
+                    false
+                }
+            }
+
+            return false
         }
 
         /**
