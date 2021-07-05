@@ -229,7 +229,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
 
     dependencyRule("COPYLEFT_LIMITED_STATIC_LINK_IN_DIRECT_DEPENDENCY") {
         require {
-            +isAtTreeLevel(1)
+            +isAtTreeLevel(0)
             +isStaticallyLinked()
         }
 
