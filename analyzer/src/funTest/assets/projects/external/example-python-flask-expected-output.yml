@@ -22,10 +22,10 @@ project:
       dependencies:
       - id: "PyPI::click:8.0.1"
         dependencies:
-        - id: "PyPI::importlib-metadata:4.6.0"
+        - id: "PyPI::importlib-metadata:4.6.1"
           dependencies:
           - id: "PyPI::typing-extensions:3.10.0.0"
-          - id: "PyPI::zipp:3.4.1"
+          - id: "PyPI::zipp:3.5.0"
       - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
@@ -170,8 +170,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::importlib-metadata:4.6.0"
-  purl: "pkg:pypi/importlib-metadata@4.6.0"
+- id: "PyPI::importlib-metadata:4.6.1"
+  purl: "pkg:pypi/importlib-metadata@4.6.1"
   authors:
   - "Jason R. Coombs"
   declared_licenses:
@@ -183,14 +183,14 @@ packages:
   description: "Read metadata from Python packages"
   homepage_url: "https://github.com/python/importlib_metadata"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/de/25/37646ca4b30781793b71d8282ed44c11cd506d42a0e985238d4f35218169/importlib_metadata-4.6.0-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/3f/e1/e5bba549a033adf77448699a34ecafc7a32adaeeb4369396b35f56d5cc3e/importlib_metadata-4.6.1-py3-none-any.whl"
     hash:
-      value: "df9f4f69558402f87513803ded96bbc6"
+      value: "1ac169f8da4c72ea992c4cbf304a6c4b"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/0e/75/92eed8e2ae8cd78f03c8ab9faf26e561482f3453a6f271a81e792178dd54/importlib_metadata-4.6.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/a7/08/c5f2e6193c12ceb5b5048d579e8f1f82c9957b57427da808c15b44479dec/importlib_metadata-4.6.1.tar.gz"
     hash:
-      value: "4264d30c3f8a251dfd3ee2a47bad6dd8"
+      value: "fdcaf30ec824b518c9ec83f7684e82b5"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -371,8 +371,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::zipp:3.4.1"
-  purl: "pkg:pypi/zipp@3.4.1"
+- id: "PyPI::zipp:3.5.0"
+  purl: "pkg:pypi/zipp@3.5.0"
   authors:
   - "Jason R. Coombs"
   declared_licenses:
@@ -384,14 +384,14 @@ packages:
   description: "Backport of pathlib-compatible object wrapper for zip files"
   homepage_url: "https://github.com/jaraco/zipp"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/0f/8c/715c54e9e34c0c4820f616a913a7de3337d0cd79074dd1bed4dd840f16ae/zipp-3.4.1-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/92/d9/89f433969fb8dc5b9cbdd4b4deb587720ec1aeb59a020cf15002b9593eef/zipp-3.5.0-py3-none-any.whl"
     hash:
-      value: "483005e4371c4272901908cffc968ac2"
+      value: "0ec47fbf522751f6c5fa904cb33f1f59"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/38/f9/4fa6df2753ded1bcc1ce2fdd8046f78bd240ff7647f5c9bcf547c0df77e3/zipp-3.4.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/3a/9f/1d4b62cbe8d222539a84089eeab603d8e45ee1f897803a0ae0860400d6e7/zipp-3.5.0.tar.gz"
     hash:
-      value: "3d91c7ab73b62ac3674210df94df600a"
+      value: "617efbf3edb707c57008ec00f408972f"
       algorithm: "MD5"
   vcs:
     type: ""
