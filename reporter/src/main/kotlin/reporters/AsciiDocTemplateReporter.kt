@@ -146,7 +146,6 @@ class AsciiDocTemplateReporter : Reporter {
                 val outputFile = outputDir.resolve("${file.nameWithoutExtension}.$backend")
 
                 asciidoctor.convertFile(file, optionsBuilder.toFile(outputFile).build())
-                file.delete()
 
                 outputFiles += outputFile
             }
