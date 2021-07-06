@@ -449,12 +449,10 @@ class SpdxLicenseWithExceptionExpression(
 
     override fun exception() = exception
 
-    override fun normalize(mapDeprecated: Boolean): SpdxExpression {
+    override fun normalize(mapDeprecated: Boolean) =
         // Manually cast to SpdxLicenseException, because the type resolver does not recognize that in all subclasses of
         // SpdxSimpleExpression normalize() returns an SpdxSingleLicenseExpression.
-        val normalizedLicense = license.normalize(mapDeprecated) as SpdxSingleLicenseExpression
-
-        return when (normalizedLicense) {
+        when (val normalizedLicense = license.normalize(mapDeprecated) as SpdxSingleLicenseExpression) {
             is SpdxSimpleExpression -> SpdxLicenseWithExceptionExpression(normalizedLicense, exception)
 
             // This case happens if a deprecated license identifier that contains an exception is used together with
@@ -471,7 +469,6 @@ class SpdxLicenseWithExceptionExpression(
                 }
             }
         }
-    }
 
     override fun validate(strictness: Strictness) {
         license.validate(strictness)
