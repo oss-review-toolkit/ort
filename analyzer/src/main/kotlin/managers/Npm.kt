@@ -188,6 +188,7 @@ open class Npm(
          * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
          * content from the [npmRegistry]. Result is a [Pair] with the raw identifier and the new package.
          */
+        @Suppress("HttpUrlsUsage")
         internal fun parsePackage(packageFile: File, npmRegistry: String): Pair<String, Package> {
             val packageDir = packageFile.parentFile
 
@@ -245,15 +246,10 @@ open class Npm(
                         homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
                         versionInfo["dist"]?.let { dist ->
-                            downloadUrl = dist["tarball"].textValueOrEmpty().let { tarballUrl ->
-                                if (tarballUrl.startsWith("http://registry.npmjs.org/")) {
-                                    // Work around the issue described at
-                                    // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                                    "https://" + tarballUrl.removePrefix("http://")
-                                } else {
-                                    tarballUrl
-                                }
-                            }
+                            downloadUrl = dist["tarball"].textValueOrEmpty()
+                                // Work around the issue described at
+                                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
 
                             hash = Hash.create(dist["shasum"].textValueOrEmpty())
                         }
