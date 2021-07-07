@@ -26,6 +26,8 @@ import java.net.HttpURLConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
+import okhttp3.OkHttpClient
+
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
@@ -82,8 +84,13 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
 /**
  * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
-class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
+class ClearlyDefinedPackageCurationProvider(
+    serverUrl: String,
+    client: OkHttpClient? = null
+) : PackageCurationProvider {
+    constructor(server: Server = Server.PRODUCTION) : this(server.url)
+
+    private val service by lazy { ClearlyDefinedService.create(serverUrl, client ?: OkHttpClientHelper.buildClient()) }
 
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider() ?: return emptyList()
