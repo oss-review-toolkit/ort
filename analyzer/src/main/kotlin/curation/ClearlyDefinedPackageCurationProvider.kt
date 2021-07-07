@@ -96,29 +96,41 @@ class ClearlyDefinedPackageCurationProvider(
         val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider() ?: return emptyList()
         val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
 
-        val curation = try {
+        val curation = runCatching {
             // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
             //       classes could deal with coroutines more easily.
             runBlocking(Dispatchers.IO) { service.getCuration(type, provider, namespace, pkgId.name, pkgId.version) }
-        } catch (e: HttpException) {
-            // A "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a failure.
-            if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
-                e.showStackTrace()
+        }.onFailure { e ->
+            when (e) {
+                is HttpException -> {
+                    // A "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a
+                    // failure.
+                    if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
+                        e.showStackTrace()
 
-                log.warn {
-                    val message = e.response()?.errorBody()?.string() ?: e.collectMessagesAsString()
-                    "Getting curations for '${pkgId.toCoordinates()}' failed with code ${e.code()}: $message"
+                        log.warn {
+                            val message = e.response()?.errorBody()?.string() ?: e.collectMessagesAsString()
+                            "Getting curations for '${pkgId.toCoordinates()}' failed with code ${e.code()}: $message"
+                        }
+                    }
+                }
+
+                is JsonMappingException -> {
+                    e.showStackTrace()
+
+                    log.warn { "Deserializing the ClearlyDefined curation for '${pkgId.toCoordinates()}' failed." }
+                }
+
+                else -> {
+                    e.showStackTrace()
+
+                    log.warn {
+                        "Querying ClearlyDefined curation for '${pkgId.toCoordinates()}' failed: " +
+                                e.collectMessagesAsString()
+                    }
                 }
             }
-
-            return emptyList()
-        } catch (e: JsonMappingException) {
-            e.showStackTrace()
-
-            log.warn { "Deserializing the ClearlyDefined curation for '${pkgId.toCoordinates()}' failed." }
-
-            return emptyList()
-        }
+        }.getOrNull() ?: return emptyList()
 
         val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
             // Only take curations of good quality (i.e. those not using deprecated identifiers) and in particular none
