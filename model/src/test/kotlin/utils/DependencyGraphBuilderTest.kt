@@ -19,12 +19,14 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 
 import java.util.SortedSet
 
@@ -173,8 +175,74 @@ class DependencyGraphBuilderTest : WordSpec({
             val scope2Dependencies = scopeDependencies(scopes, scope2)
             scope2Dependencies should containExactly(depAcmeExclude)
         }
+
+        "check for illegal references when building the graph" {
+            val depLang = createDependency("org.apache.commons", "commons-lang3", "3.11")
+            val depNoPkg = createDependency(NO_PACKAGE_NAMESPACE, "invalid", "1.2")
+            val depLog = createDependency("commons-logging", "commons-logging", "1.2", dependencies = listOf(depNoPkg))
+
+            val exception = shouldThrow<IllegalArgumentException> {
+                createGraphBuilder()
+                    .addDependency("someScope", depLang)
+                    .addDependency("someScope", depLog)
+                    .build()
+            }
+
+            exception.message shouldContain depNoPkg.id.toString()
+        }
+
+        "take issues into account when checking for illegal references" {
+            val depLang = createDependency("org.apache.commons", "commons-lang3", "3.11")
+            val depIssuesPkg = createDependency(NO_PACKAGE_NAMESPACE, "errors", "1.2").copy(
+                issues = listOf(OrtIssue(source = "test", message = "test issue"))
+            )
+            val depLog =
+                createDependency("commons-logging", "commons-logging", "1.2", dependencies = listOf(depIssuesPkg))
+
+            createGraphBuilder()
+                .addDependency("s", depLang)
+                .addDependency("s", depLog)
+                .build()
+        }
+
+        "take the linkage into account when checking for illegal references" {
+            val depLang = createDependency("org.apache.commons", "commons-lang3", "3.11")
+            val depProjectStaticPkg = createDependency(NO_PACKAGE_NAMESPACE, "static", "1.2").copy(
+                linkage = PackageLinkage.PROJECT_STATIC
+            )
+            val depProjectDynamicPkg = createDependency(NO_PACKAGE_NAMESPACE, "dynamic", "1.2").copy(
+                linkage = PackageLinkage.PROJECT_DYNAMIC
+            )
+            val depLog = createDependency(
+                "commons-logging",
+                "commons-logging",
+                "1.2",
+                dependencies = listOf(depProjectDynamicPkg, depProjectStaticPkg)
+            )
+
+            createGraphBuilder()
+                .addDependency("s", depLang)
+                .addDependency("s", depLog)
+                .build()
+        }
+
+        "allow disabling the check for illegal references" {
+            val depLang = createDependency("org.apache.commons", "commons-lang3", "3.11")
+            val depNoPkg = createDependency(NO_PACKAGE_NAMESPACE, "invalid", "1.2")
+            val depLog = createDependency("commons-logging", "commons-logging", "1.2", dependencies = listOf(depNoPkg))
+
+            createGraphBuilder()
+                .addDependency("s", depLang)
+                .addDependency("s", depLog)
+                .build(checkReferences = false)
+        }
     }
 })
+
+/**
+ * A special namespace used by dependencies, for which [PackageRefDependencyHandler] should not create a package.
+ */
+private const val NO_PACKAGE_NAMESPACE = "no-package"
 
 /**
  * A [DependencyHandler] implementation that operates on [PackageReference] objects. This is used to handle the
@@ -188,8 +256,8 @@ private object PackageRefDependencyHandler : DependencyHandler<PackageReference>
 
     override fun linkageFor(dependency: PackageReference): PackageLinkage = dependency.linkage
 
-    override fun createPackage(dependency: PackageReference, issues: MutableList<OrtIssue>): Package =
-        Package.EMPTY.copy(id = dependency.id)
+    override fun createPackage(dependency: PackageReference, issues: MutableList<OrtIssue>): Package? =
+        Package.EMPTY.copy(id = dependency.id).takeUnless { dependency.id.namespace == NO_PACKAGE_NAMESPACE }
 
     override fun issuesForDependency(dependency: PackageReference): Collection<OrtIssue> =
         dependency.issues

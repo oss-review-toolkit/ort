@@ -76,7 +76,7 @@ object DependencyGraphConverter {
                 }
             }
 
-            graphs[type] = builder.build()
+            graphs[type] = builder.build(checkReferences = false)
         }
 
         return graphs
