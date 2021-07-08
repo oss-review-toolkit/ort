@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RootDependencyIndex
 
 /**
@@ -104,6 +105,12 @@ class DependencyGraphBuilder<D>(
     private val dependencyIds = mutableListOf<Identifier>()
 
     /**
+     * A set storing the identifiers of all package dependencies with no issues. This is used to check whether there
+     * are references to packages not contained in this builder's list of packages.
+     */
+    private val validPackageDependencies = mutableSetOf<Identifier>()
+
+    /**
      * A mapping of the identifiers of the dependencies known to this builder to their numeric indices.
      */
     private val dependencyIndexMapping = mutableMapOf<Identifier, Int>()
@@ -145,13 +152,24 @@ class DependencyGraphBuilder<D>(
         apply { resolvedPackages += packages.associateBy { it.id } }
 
     /**
-     * Construct the [DependencyGraph] from the dependencies passed to this builder so far.
+     * Construct the [DependencyGraph] from the dependencies passed to this builder so far. If [checkReferences] is
+     * *true*, check whether all dependency references used in the graph point to packages managed by this builder.
+     * This check is enabled by default and should be done for all package manager implementations. Only for special
+     * cases, e.g. the conversion from the dependency tree to the dependency graph format, it needs to be disabled as
+     * the conditions do not hold then.
      */
-    fun build(): DependencyGraph = DependencyGraph(
-        dependencyIds,
-        directDependencies.toSortedSet(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR),
-        scopeMapping
-    )
+    fun build(checkReferences: Boolean = true): DependencyGraph {
+        require(!checkReferences || resolvedPackages.keys.containsAll(validPackageDependencies)) {
+            "The following references do not actually refer to packages: " +
+                    "${validPackageDependencies - resolvedPackages.keys}."
+        }
+
+        return DependencyGraph(
+            dependencyIds,
+            directDependencies.toSortedSet(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR),
+            scopeMapping
+        )
+    }
 
     /**
      * Return a set with all the packages that have been encountered for the current project.
@@ -172,6 +190,7 @@ class DependencyGraphBuilder<D>(
 
             is DependencyGraphSearchResult.NotFound -> {
                 insertIntoGraph(
+                    id,
                     RootDependencyIndex(index, result.fragmentIndex),
                     scopeName,
                     dependency,
@@ -181,7 +200,7 @@ class DependencyGraphBuilder<D>(
             }
 
             is DependencyGraphSearchResult.Incompatible ->
-                insertIntoNewFragment(index, scopeName, dependency, issues, transitive)
+                insertIntoNewFragment(id, index, scopeName, dependency, issues, transitive)
         }
 
         return updateScopeMapping(scopeName, ref, transitive)
@@ -250,12 +269,13 @@ class DependencyGraphBuilder<D>(
     }
 
     /**
-     * Add a new fragment to the dependency graph for the [dependency] with the given [index], which may be
+     * Add a new fragment to the dependency graph for the [dependency] with the given [id] and [index], which may be
      * [transitive] and belongs to the scope with the given [scopeName]. This function is called for dependencies that
      * cannot be added to already existing fragments. Therefore, create a new fragment and add the [dependency] to it,
      * together with its own dependencies. Store the given [issues] for the dependency.
      */
     private fun insertIntoNewFragment(
+        id: Identifier,
         index: Int,
         scopeName: String,
         dependency: D,
@@ -266,15 +286,17 @@ class DependencyGraphBuilder<D>(
         val dependencyIndex = RootDependencyIndex(index, referenceMappings.size)
         referenceMappings += fragmentMapping
 
-        return insertIntoGraph(dependencyIndex, scopeName, dependency, issues, transitive)
+        return insertIntoGraph(id, dependencyIndex, scopeName, dependency, issues, transitive)
     }
 
     /**
-     * Insert the [dependency] with the given [RootDependencyIndex][index], which belongs to the scope with the given
-     * [scopeName] and may be [transitive] into the dependency graph. Insert the dependencies of this [dependency]
-     * recursively. Create a new [DependencyReference] for the dependency and initialize it with the list of [issues].
+     * Insert the [dependency] with the given [id] and [RootDependencyIndex][index], which belongs to the scope with
+     * the given [scopeName] and may be [transitive] into the dependency graph. Insert the dependencies of this
+     * [dependency] recursively. Create a new [DependencyReference] for the dependency and initialize it with the list
+     * of [issues].
      */
     private fun insertIntoGraph(
+        id: Identifier,
         index: RootDependencyIndex,
         scopeName: String,
         dependency: D,
@@ -294,6 +316,10 @@ class DependencyGraphBuilder<D>(
             issues = issues
         )
         fragmentMapping[index.root] = ref
+
+        if (ref.issues.isEmpty() && ref.linkage !in PackageLinkage.PROJECT_LINKAGE) {
+            validPackageDependencies += id
+        }
 
         return updateDirectDependencies(ref, transitive)
     }
