@@ -35,8 +35,10 @@ import org.ossreviewtoolkit.utils.log
  * Available builtin variables:
  * * **projectName**: The name of the project (i.e. the part of the URL before .git).
  * * **currentTimestamp**: The current time.
+ * * **deltaTag** (scan code only): If delta scans is enabled, this qualify the scan as an *origin* scan or a *delta*
+ * scan.
  */
-class FossIdNamingProvider(
+internal class FossIdNamingProvider(
     private val namingProjectPattern: String?,
     private val namingScanPattern: String?,
     private val namingConventionVariables: Map<String, String>
@@ -47,26 +49,36 @@ class FossIdNamingProvider(
     }
 
     fun createProjectCode(projectName: String): String = namingProjectPattern?.let {
-        replaceNamingConventionVariables(namingProjectPattern, projectName, namingConventionVariables)
+        val builtins = mapOf(
+            "#projectName" to projectName
+        )
+        replaceNamingConventionVariables(namingProjectPattern, builtins, namingConventionVariables)
     } ?: projectName
 
-    fun createScanCode(projectName: String): String {
-        val pattern = namingScanPattern ?: "#projectName_#currentTimestamp"
-        return replaceNamingConventionVariables(pattern, projectName, namingConventionVariables)
+    fun createScanCode(projectName: String, deltaTag: FossId.DeltaTag? = null): String {
+        var defaultPattern = "#projectName_#currentTimestamp"
+        val builtins = mutableMapOf("#projectName" to projectName)
+
+        deltaTag?.let {
+            defaultPattern += "_#deltaTag"
+            builtins += "#deltaTag" to deltaTag.name.lowercase()
+        }
+
+        val pattern = namingScanPattern ?: defaultPattern
+        return replaceNamingConventionVariables(pattern, builtins, namingConventionVariables)
     }
 
     /**
      * Replace the naming convention variables with their values. Used for projects and scans.
      */
     private fun replaceNamingConventionVariables(
-        namingConventionPattern: String, projectName: String,
-        namingConventionVariables: Map<String, String>
+        namingConventionPattern: String, builtins: Map<String, String>, namingConventionVariables: Map<String, String>
     ): String {
-        log.info { "Parametrizing the name with naming=$namingConventionPattern, projectName=$projectName" }
+        log.info { "Parametrizing the name with naming=$namingConventionPattern." }
         val currentTimestamp = FORMATTER.format(LocalDateTime.now())
-        val builtins = mapOf("#projectName" to projectName, "#currentTimestamp" to currentTimestamp)
 
-        val allVariables = namingConventionVariables.mapKeys { "\$${it.key}" } + builtins
+        val allVariables =
+            namingConventionVariables.mapKeys { "\$${it.key}" } + builtins + ("#currentTimestamp" to currentTimestamp)
 
         return allVariables.entries.fold(namingConventionPattern) { acc, entry ->
             acc.replace(entry.key, entry.value)
