@@ -329,9 +329,9 @@ class FossId(
                 val scanCode = if (existingScan == null) {
                     log.info { "No scan found for $url and revision $revision. Creating scan ..." }
 
+                    val scanCode = namingProvider.createScanCode(projectName)
                     val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
-
-                    val scanCode = createScan(projectCode, projectName, newUrl, revision)
+                    createScan(projectCode, scanCode, newUrl, revision)
                     log.info { "Initiating data download ..." }
                     service.downloadFromGit(user, apiKey, scanCode)
                         .checkResponse("download data from Git", false)
@@ -386,11 +386,7 @@ class FossId(
     /**
      * Create a new scan in the FossID server and return the scan code.
      */
-    private suspend fun createScan(
-        projectCode: String, projectName: String, url: String, revision: String
-    ): String {
-        val scanCode = namingProvider.createScanCode(projectName)
-
+    private suspend fun createScan(projectCode: String, scanCode: String, url: String, revision: String): String {
         log.info { "Creating scan $scanCode ..." }
 
         val response = service.createScan(user, apiKey, projectCode, scanCode, url, revision)
