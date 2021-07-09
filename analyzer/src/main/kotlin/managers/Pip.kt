@@ -170,6 +170,8 @@ class Pip(
     }
 
     companion object {
+        private const val SHORT_STRING_MAX_CHARS = 200
+
         private val INSTALL_OPTIONS = arrayOf(
             "--no-warn-conflicts",
             "--prefer-binary"
@@ -437,7 +439,10 @@ class Pip(
     }
 
     private fun getLicenseFromLicenseField(value: String?): String? {
-        if (value.isNullOrBlank() || value == "UNKNOWN" || "\n" in value) return null
+        if (value.isNullOrBlank() || value == "UNKNOWN") return null
+
+        val isShortString = value.length <= SHORT_STRING_MAX_CHARS && "\n" !in value
+        if (!isShortString) return null
 
         // Apply a work-around for projects that declare licenses in classifier-syntax in the license field.
         return getLicenseFromClassifier(value) ?: value
