@@ -51,7 +51,7 @@ class FossIdNamingProvider(
     } ?: projectName
 
     fun createScanCode(projectName: String): String {
-        val pattern = namingScanPattern ?: "${projectName}_#currentTimestamp"
+        val pattern = namingScanPattern ?: "#projectName_#currentTimestamp"
         return replaceNamingConventionVariables(pattern, projectName, namingConventionVariables)
     }
 
