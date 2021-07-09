@@ -84,6 +84,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
  * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
  * completed. As a consequence, scan results won't be available in ORT result.
+ * * **"deltaScans":** When set, ORT will create delta scans. When only changes in a repository need to be scanned,
+ * delta scans reuse the identifications of latest scan on this repository to reduce the amount of findings. If
+ * deltaScans is set and no scan exist yet, an initial scan called "origin" scan will be created.
  *
  * Naming conventions options. If they are not set, default naming convention are used.
  * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
@@ -163,6 +166,20 @@ class FossId(
         }
     }
 
+    /**
+     * The qualifier of a scan when delta scans are enabled.
+     */
+    internal enum class DeltaTag {
+        /**
+         * Qualifier used when there is no scan and the first one is created.
+         */
+        ORIGIN,
+        /**
+         * Qualifier used for all the scans after the first one.
+         */
+        DELTA
+    }
+
     private val serverUrl: String
     private val apiKey: String
     private val user: String
@@ -174,6 +191,7 @@ class FossId(
     private val packageNamespaceFilter: String
     private val packageAuthorsFilter: String
     private val addAuthenticationToUrl: Boolean
+    private val deltaScans: Boolean
 
     override val version: String
 
@@ -194,6 +212,7 @@ class FossId(
         packageAuthorsFilter = fossIdScannerOptions["packageAuthorsFilter"].orEmpty()
         addAuthenticationToUrl = fossIdScannerOptions["addAuthenticationToUrl"].toBoolean()
         waitForResult = fossIdScannerOptions["waitForResult"]?.toBooleanStrictOrNull() ?: true
+        deltaScans = fossIdScannerOptions["deltaScans"].toBoolean()
 
         log.info { "waitForResult parameter is set to '$waitForResult'" }
 
@@ -320,12 +339,15 @@ class FossId(
                     .checkResponse("list scans for project").data
                 checkNotNull(scans)
 
-                val scanCode = checkAndCreateScan(scans, revision, url, projectCode, projectName)
+                val scanCode = if (deltaScans) {
+                    checkAndCreateDeltaScan(scans, revision, url, projectCode, projectName)
+                } else {
+                    checkAndCreateScan(scans, revision, url, projectCode, projectName)
+                }
 
                 val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
 
                 if (waitForResult) {
-                    checkScan(scanCode)
                     val rawResults = getRawResults(scanCode)
                     val resultsSummary = createResultSummary(startTime, provenance, rawResults)
 
@@ -375,7 +397,7 @@ class FossId(
             scan.gitBranch == revision && urlWithoutCredentials == url
         }
 
-        return if (existingScan == null) {
+        val scanCode = if (existingScan == null) {
             log.info { "No scan found for $url and revision $revision. Creating scan ..." }
 
             val scanCode = namingProvider.createScanCode(projectName)
@@ -394,6 +416,64 @@ class FossId(
                 "FossId returned a null scancode for an existing scan"
             }
         }
+        if (waitForResult) checkScan(scanCode)
+        return scanCode
+    }
+
+    private suspend fun checkAndCreateDeltaScan(
+        scans: List<Scan>,
+        revision: String,
+        url: String,
+        projectCode: String,
+        projectName: String
+    ): String {
+        val existingScan = scans.sortedByDescending { it.id }.find { scan ->
+            // The scans in the server contain the url with the credentials so we have to remove it for the
+            // comparison. If we don't, the scans won't be matched if the password changes!
+            val urlWithoutCredentials = scan.gitRepoUrl?.replaceCredentialsInUri()
+            // we ignore the revision because we want to do a delta scan
+            urlWithoutCredentials == url
+        }
+
+        val scanCode = if (existingScan == null) {
+            log.info { "No scan found for $url and revision $revision. Creating origin scan ..." }
+            namingProvider.createScanCode(projectName, DeltaTag.ORIGIN)
+        } else {
+            log.info { "No scan found for $url and revision $revision. Creating delta scan ..." }
+            namingProvider.createScanCode(projectName, DeltaTag.DELTA)
+        }
+
+        val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
+        createScan(projectCode, scanCode, newUrl, revision)
+
+        log.info { "Initiating data download ..." }
+        service.downloadFromGit(user, apiKey, scanCode)
+            .checkResponse("download data from Git", false)
+
+        if (existingScan == null) {
+            checkScan(scanCode)
+        } else {
+            val existingScancode = requireNotNull(existingScan.code) {
+                "FossId returned a null scancode for an existing scan"
+            }
+
+            log.info { "Reusing identifications from $existingScancode." }
+
+            // TODO: Change the logic of 'waitForResult' to wait for download results but not for scan results.
+            //  Hence we could trigger 'runScan' even when 'waitForResult' is set to false.
+            if (!waitForResult) {
+                log.info { "Ignoring unset 'waitForResult' because delta scans are requested." }
+            }
+
+            checkScan(
+                scanCode,
+                "reuse_identification" to "1",
+                "identification_reuse_type" to "specific_scan",
+                "specific_code" to existingScancode
+            )
+        }
+
+        return scanCode
     }
 
     /**
@@ -417,7 +497,7 @@ class FossId(
     /**
      * Check the repository has been downloaded and the scan has completed. The latter will be triggered if needed.
      */
-    private suspend fun checkScan(scanCode: String) {
+    private suspend fun checkScan(scanCode: String, vararg runOptions: Pair<String, String>) {
         waitDownloadComplete(scanCode)
 
         val response = service.checkScanStatus(user, apiKey, scanCode)
@@ -426,7 +506,7 @@ class FossId(
         if (response.data?.state == ScanState.NOT_STARTED) {
             log.info { "Triggering scan as it has not yet been started." }
 
-            service.runScan(user, apiKey, scanCode)
+            service.runScan(user, apiKey, scanCode, *runOptions)
                 .checkResponse("trigger scan", false)
 
             waitScanComplete(scanCode)
