@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.Project
+import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
 import org.ossreviewtoolkit.clients.fossid.runScan
@@ -319,30 +320,7 @@ class FossId(
                     .checkResponse("list scans for project").data
                 checkNotNull(scans)
 
-                val existingScan = scans.sortedByDescending { it.id }.find { scan ->
-                    // The scans in the server contain the url with the credentials so we have to remove it for the
-                    // comparison. If we don't, the scans won't be matched if the password changes!
-                    val urlWithoutCredentials = scan.gitRepoUrl?.replaceCredentialsInUri()
-                    scan.gitBranch == revision && urlWithoutCredentials == url
-                }
-
-                val scanCode = if (existingScan == null) {
-                    log.info { "No scan found for $url and revision $revision. Creating scan ..." }
-
-                    val scanCode = namingProvider.createScanCode(projectName)
-                    val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
-                    createScan(projectCode, scanCode, newUrl, revision)
-                    log.info { "Initiating data download ..." }
-                    service.downloadFromGit(user, apiKey, scanCode)
-                        .checkResponse("download data from Git", false)
-                    scanCode
-                } else {
-                    log.info { "Scan ${existingScan.code} found for $url and revision $revision." }
-
-                    requireNotNull(existingScan.code) {
-                        "FossId returned a null scancode for an existing scan"
-                    }
-                }
+                val scanCode = checkAndCreateScan(scans, revision, url, projectCode, projectName)
 
                 val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
 
@@ -381,6 +359,41 @@ class FossId(
         log.info { "Scan has been performed. Total time was ${duration.inWholeSeconds}s." }
 
         return results
+    }
+
+    private suspend fun checkAndCreateScan(
+        scans: List<Scan>,
+        revision: String,
+        url: String,
+        projectCode: String,
+        projectName: String
+    ): String {
+        val existingScan = scans.sortedByDescending { it.id }.find { scan ->
+            // The scans in the server contain the url with the credentials so we have to remove it for the
+            // comparison. If we don't, the scans won't be matched if the password changes!
+            val urlWithoutCredentials = scan.gitRepoUrl?.replaceCredentialsInUri()
+            scan.gitBranch == revision && urlWithoutCredentials == url
+        }
+
+        return if (existingScan == null) {
+            log.info { "No scan found for $url and revision $revision. Creating scan ..." }
+
+            val scanCode = namingProvider.createScanCode(projectName)
+            val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
+            createScan(projectCode, scanCode, newUrl, revision)
+
+            log.info { "Initiating data download ..." }
+            service.downloadFromGit(user, apiKey, scanCode)
+                .checkResponse("download data from Git", false)
+
+            scanCode
+        } else {
+            log.info { "Scan ${existingScan.code} found for $url and revision $revision." }
+
+            requireNotNull(existingScan.code) {
+                "FossId returned a null scancode for an existing scan"
+            }
+        }
     }
 
     /**
