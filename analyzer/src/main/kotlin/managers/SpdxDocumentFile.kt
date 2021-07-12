@@ -317,12 +317,10 @@ class SpdxDocumentFile(
     private fun SpdxPackage.toPackage(workingDir: File): Package {
         val packageDescription = description.takeUnless { it.isEmpty() } ?: summary
 
-        // If the VCS information cannot be determined from the download location, fall back to try getting it from the
-        // VCS working tree itself.
-        val vcs = getVcsInfo() ?: run {
-            val packageDir = workingDir.resolve(packageFilename)
-            VersionControlSystem.forDirectory(packageDir)?.getInfo()
-        }.orEmpty()
+        // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
+        // from the download location.
+        val packageDir = workingDir.resolve(packageFilename)
+        val vcs = VersionControlSystem.forDirectory(packageDir)?.getInfo() ?: getVcsInfo().orEmpty()
 
         val id = toIdentifier()
 

@@ -109,11 +109,11 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "ssh://github.com/openssl/openssl.git"
-    revision: "e2e09d9fba1187f8d6aafaa34d4172f56f1ffb72"
-    path: ""
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"
   vcs_processed:
     type: "Git"
-    url: "ssh://git@github.com/openssl/openssl.git"
-    revision: "e2e09d9fba1187f8d6aafaa34d4172f56f1ffb72"
-    path: ""
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"
