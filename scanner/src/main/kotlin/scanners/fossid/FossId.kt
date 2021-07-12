@@ -383,6 +383,31 @@ class FossId(
         return results
     }
 
+    private suspend fun List<Scan>.findLatestPendingOrFinishedScan(url: String, revision: String? = null): Scan? =
+        filter {
+            // The scans in the server contain the url with the credentials so we have to remove it for the
+            // comparison. If we don't, the scans won't be matched if the password changes!
+            val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
+            urlWithoutCredentials == url && (revision == null || (it.gitBranch == revision))
+        }.sortedByDescending { scan -> scan.id }.find { scan ->
+            val scanCode = requireNotNull(scan.code) {
+                "FossId returned a null scancode for an existing scan."
+            }
+
+            val response = service.checkScanStatus(user, apiKey, scanCode)
+                .checkResponse("check scan status", false)
+            when (response.data?.state) {
+                ScanState.FINISHED -> true
+                null, ScanState.NOT_STARTED, ScanState.INTERRUPTED -> false
+                ScanState.STARTED, ScanState.SCANNING, ScanState.AUTO_ID, ScanState.QUEUED -> {
+                    log.warn { "Found previous scan but it is still running." }
+                    log.warn { "Ignoring the 'waitForResult' option and waiting ..." }
+                    waitScanComplete(scanCode)
+                    true
+                }
+            }
+        }
+
     private suspend fun checkAndCreateScan(
         scans: List<Scan>,
         revision: String,
@@ -390,12 +415,7 @@ class FossId(
         projectCode: String,
         projectName: String
     ): String {
-        val existingScan = scans.sortedByDescending { it.id }.find { scan ->
-            // The scans in the server contain the url with the credentials so we have to remove it for the
-            // comparison. If we don't, the scans won't be matched if the password changes!
-            val urlWithoutCredentials = scan.gitRepoUrl?.replaceCredentialsInUri()
-            scan.gitBranch == revision && urlWithoutCredentials == url
-        }
+        val existingScan = scans.findLatestPendingOrFinishedScan(url, revision)
 
         val scanCode = if (existingScan == null) {
             log.info { "No scan found for $url and revision $revision. Creating scan ..." }
@@ -427,13 +447,8 @@ class FossId(
         projectCode: String,
         projectName: String
     ): String {
-        val existingScan = scans.sortedByDescending { it.id }.find { scan ->
-            // The scans in the server contain the url with the credentials so we have to remove it for the
-            // comparison. If we don't, the scans won't be matched if the password changes!
-            val urlWithoutCredentials = scan.gitRepoUrl?.replaceCredentialsInUri()
-            // we ignore the revision because we want to do a delta scan
-            urlWithoutCredentials == url
-        }
+        // we ignore the revision because we want to do a delta scan
+        val existingScan = scans.findLatestPendingOrFinishedScan(url)
 
         val scanCode = if (existingScan == null) {
             log.info { "No scan found for $url and revision $revision. Creating origin scan ..." }
