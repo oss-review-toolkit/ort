@@ -454,7 +454,7 @@ class FossId(
             log.info { "No scan found for $url and revision $revision. Creating origin scan ..." }
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN)
         } else {
-            log.info { "No scan found for $url and revision $revision. Creating delta scan ..." }
+            log.info { "Scan found for $url and revision $revision. Creating delta scan ..." }
             namingProvider.createScanCode(projectName, DeltaTag.DELTA)
         }
 
