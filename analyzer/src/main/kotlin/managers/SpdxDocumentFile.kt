@@ -470,6 +470,9 @@ class SpdxDocumentFile(
             // or a package-style SPDX document that describes a single (dependency-)package.
             spdxDocument.isProject()
         }.keys.toList().also { remainingFiles ->
+            if (remainingFiles.isEmpty()) {
+                return definitionFiles
+            }
             val discardedFiles = definitionFiles - remainingFiles
             if (discardedFiles.isNotEmpty()) {
                 log.info {
@@ -484,9 +487,15 @@ class SpdxDocumentFile(
         // For direct callers of this function mapDefinitionFiles() did not populate the map before, so add a fallback.
         val spdxDocument = spdxDocumentForFile.getOrPut(definitionFile) { SpdxModelMapper.read(definitionFile) }
 
-        // Guard against direct callers passing SPDX documents that do not describe a project.
-        val projectPackage = requireNotNull(spdxDocument.projectPackage()) {
-            "The SPDX document file at '$definitionFile' does not describe a project."
+        val packages = mutableSetOf<Package>()
+        val scopes = sortedSetOf<Scope>()
+
+        val projectPackage = if (!spdxDocument.isProject()) {
+            spdxDocument.packages[0]
+        } else {
+            requireNotNull(spdxDocument.projectPackage()) {
+                "The SPDX document file at '$definitionFile' does not describe a project."
+            }
         }
 
         log.info {
@@ -494,9 +503,7 @@ class SpdxDocumentFile(
                     "'${projectPackage.name}'."
         }
 
-        val packages = mutableSetOf<Package>()
-
-        val scopes = SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
+        scopes += SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
             createScope(spdxDocument, projectPackage, type, workingDir, packages)
         }
 
