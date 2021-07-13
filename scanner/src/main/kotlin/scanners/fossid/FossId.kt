@@ -357,9 +357,9 @@ class FossId(
                     checkNotNull(scans)
 
                     val scanCode = if (deltaScans) {
-                        checkAndCreateDeltaScan(scans, revision, url, path, projectCode, projectName)
+                        checkAndCreateDeltaScan(scans, url, revision, path, projectCode, projectName)
                     } else {
-                        checkAndCreateScan(scans, revision, url, path, projectCode, projectName)
+                        checkAndCreateScan(scans, url, revision, path, projectCode, projectName)
                     }
 
                     if (waitForResult) {
@@ -420,8 +420,8 @@ class FossId(
 
     private suspend fun List<Scan>.findLatestPendingOrFinishedScan(
         url: String,
-        targetPath: String,
-        revision: String? = null
+        revision: String? = null,
+        targetPath: String
     ): Scan? =
         filter {
             // The scans in the server contain the url with the credentials so we have to remove it for the
@@ -450,13 +450,13 @@ class FossId(
 
     private suspend fun checkAndCreateScan(
         scans: List<Scan>,
-        revision: String,
         url: String,
+        revision: String,
         targetPath: String,
         projectCode: String,
         projectName: String
     ): String {
-        val existingScan = scans.findLatestPendingOrFinishedScan(url, targetPath, revision)
+        val existingScan = scans.findLatestPendingOrFinishedScan(url, revision, targetPath)
 
         val scanCode = if (existingScan == null) {
             log.info { "No scan found for $url and path '$targetPath' and revision $revision. Creating scan ..." }
@@ -483,14 +483,14 @@ class FossId(
 
     private suspend fun checkAndCreateDeltaScan(
         scans: List<Scan>,
-        revision: String,
         url: String,
+        revision: String,
         targetPath: String,
         projectCode: String,
         projectName: String
     ): String {
         // we ignore the revision because we want to do a delta scan
-        val existingScan = scans.findLatestPendingOrFinishedScan(url, targetPath)
+        val existingScan = scans.findLatestPendingOrFinishedScan(url, targetPath = targetPath)
 
         val scanCode = if (existingScan == null) {
             log.info {
