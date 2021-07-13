@@ -54,7 +54,26 @@ class SpdxDocumentFileFunTest : StringSpec() {
             actualResult shouldBe expectedResult
         }
 
-        "mapDefinitionFiles() removes SPDX documents that do not describe a project" {
+        "Package dependencies are detected correctly, if no project is provided" {
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("spdx-packages-expected-output.yml"),
+                url = vcsUrl,
+                urlProcessed = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+
+            val packageFileCurl = projectDir.resolve("package/libs/curl/package.spdx.yml")
+            val packageFileZlib = projectDir.resolve("package/libs/zlib/package.spdx.yml")
+
+            val definitionFiles = listOf(packageFileCurl, packageFileZlib)
+            // Extracting projectResults to avoid depending on analyzer result specific items (e.g. dependency graph).
+            val actualResult = createSpdxDocumentFile().resolveDependencies(definitionFiles)
+                .projectResults.flatMap { (_, projectResult) -> projectResult }.toYaml()
+
+            actualResult shouldBe expectedResult
+        }
+
+        "mapDefinitionFiles() removes SPDX documents that do not describe a project if a project file is provided" {
             val projectFile = projectDir.resolve("project/project.spdx.yml")
             val packageFile = projectDir.resolve("package/libs/curl/package.spdx.yml")
 
@@ -63,6 +82,17 @@ class SpdxDocumentFileFunTest : StringSpec() {
             val result = createSpdxDocumentFile().mapDefinitionFiles(definitionFiles)
 
             result should containExactly(projectFile)
+        }
+
+        "mapDefinitionFiles() keeps SPDX documents that do not describe a project if no project file is provided" {
+            val packageFileCurl = projectDir.resolve("package/libs/curl/package.spdx.yml")
+            val packageFileZlib = projectDir.resolve("package/libs/zlib/package.spdx.yml")
+
+            val definitionFiles = listOf(packageFileCurl, packageFileZlib)
+
+            val result = createSpdxDocumentFile().mapDefinitionFiles(definitionFiles)
+
+            result should containExactly(definitionFiles)
         }
 
         // TODO: Test that we can read in files written by SpdxDocumentReporter.

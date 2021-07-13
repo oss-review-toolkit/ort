@@ -1,0 +1,45 @@
+---
+- project:
+    id: "SpdxDocumentFile::curl:7.70.0"
+    definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl/package.spdx.yml"
+    declared_licenses:
+    - "curl"
+    declared_licenses_processed:
+      spdx_expression: "curl"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "<REPLACE_URL_PROCESSED>"
+      revision: "<REPLACE_REVISION>"
+      path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl"
+    homepage_url: "https://curl.haxx.se/"
+    scopes:
+    - name: "default"
+      dependencies: []
+  packages: []
+- project:
+    id: "SpdxDocumentFile::zlib:1.2.11"
+    definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib/package.spdx.yml"
+    declared_licenses:
+    - "Zlib"
+    declared_licenses_processed:
+      spdx_expression: "Zlib"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "<REPLACE_URL_PROCESSED>"
+      revision: "<REPLACE_REVISION>"
+      path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
+    homepage_url: "http://zlib.net"
+    scopes:
+    - name: "default"
+      dependencies: []
+  packages: []
