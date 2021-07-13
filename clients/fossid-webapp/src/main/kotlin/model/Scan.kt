@@ -38,7 +38,7 @@ data class Scan(
 
     val isArchived: Boolean?,
 
-    val targetPath: Boolean?,
+    val targetPath: String?,
 
     val isBlindAudit: Boolean?,
 

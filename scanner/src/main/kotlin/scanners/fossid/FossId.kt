@@ -325,7 +325,13 @@ class FossId(
 
                 val url = pkg.vcsProcessed.url
                 val revision = pkg.vcsProcessed.revision.ifEmpty { "HEAD" }
-                val projectName = convertGitUrlToProjectName(url)
+                var projectName = convertGitUrlToProjectName(url)
+
+                val path = pkg.vcsProcessed.path
+                if (path.isNotEmpty()) {
+                    projectName += "_${path.replace("/", "_")}"
+                }
+
                 val projectCode = namingProvider.createProjectCode(projectName)
 
                 if (getProject(projectCode) == null) {
@@ -340,9 +346,9 @@ class FossId(
                 checkNotNull(scans)
 
                 val scanCode = if (deltaScans) {
-                    checkAndCreateDeltaScan(scans, revision, url, projectCode, projectName)
+                    checkAndCreateDeltaScan(scans, revision, url, path, projectCode, projectName)
                 } else {
-                    checkAndCreateScan(scans, revision, url, projectCode, projectName)
+                    checkAndCreateScan(scans, revision, url, path, projectCode, projectName)
                 }
 
                 val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
@@ -383,12 +389,17 @@ class FossId(
         return results
     }
 
-    private suspend fun List<Scan>.findLatestPendingOrFinishedScan(url: String, revision: String? = null): Scan? =
+    private suspend fun List<Scan>.findLatestPendingOrFinishedScan(
+        url: String,
+        targetPath: String,
+        revision: String? = null
+    ): Scan? =
         filter {
             // The scans in the server contain the url with the credentials so we have to remove it for the
             // comparison. If we don't, the scans won't be matched if the password changes!
             val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
-            urlWithoutCredentials == url && (revision == null || (it.gitBranch == revision))
+            urlWithoutCredentials == url && it.targetPath == targetPath
+                    && (revision == null || (it.gitBranch == revision))
         }.sortedByDescending { scan -> scan.id }.find { scan ->
             val scanCode = requireNotNull(scan.code) {
                 "FossId returned a null scancode for an existing scan."
@@ -412,17 +423,18 @@ class FossId(
         scans: List<Scan>,
         revision: String,
         url: String,
+        targetPath: String,
         projectCode: String,
         projectName: String
     ): String {
-        val existingScan = scans.findLatestPendingOrFinishedScan(url, revision)
+        val existingScan = scans.findLatestPendingOrFinishedScan(url, targetPath, revision)
 
         val scanCode = if (existingScan == null) {
-            log.info { "No scan found for $url and revision $revision. Creating scan ..." }
+            log.info { "No scan found for $url and path '$targetPath' and revision $revision. Creating scan ..." }
 
             val scanCode = namingProvider.createScanCode(projectName)
             val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
-            createScan(projectCode, scanCode, newUrl, revision)
+            createScan(projectCode, scanCode, newUrl, revision, targetPath)
 
             log.info { "Initiating data download ..." }
             service.downloadFromGit(user, apiKey, scanCode)
@@ -430,7 +442,7 @@ class FossId(
 
             scanCode
         } else {
-            log.info { "Scan ${existingScan.code} found for $url and revision $revision." }
+            log.info { "Scan ${existingScan.code} found for $url and path '$targetPath' and revision $revision." }
 
             requireNotNull(existingScan.code) {
                 "FossId returned a null scancode for an existing scan"
@@ -444,22 +456,25 @@ class FossId(
         scans: List<Scan>,
         revision: String,
         url: String,
+        targetPath: String,
         projectCode: String,
         projectName: String
     ): String {
         // we ignore the revision because we want to do a delta scan
-        val existingScan = scans.findLatestPendingOrFinishedScan(url)
+        val existingScan = scans.findLatestPendingOrFinishedScan(url, targetPath)
 
         val scanCode = if (existingScan == null) {
-            log.info { "No scan found for $url and revision $revision. Creating origin scan ..." }
+            log.info {
+                "No scan found for $url and path '$targetPath' and revision $revision. Creating origin scan ..."
+            }
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN)
         } else {
-            log.info { "Scan found for $url and revision $revision. Creating delta scan ..." }
+            log.info { "Scan found for $url and path '$targetPath' and revision $revision. Creating delta scan ..." }
             namingProvider.createScanCode(projectName, DeltaTag.DELTA)
         }
 
         val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
-        createScan(projectCode, scanCode, newUrl, revision)
+        createScan(projectCode, scanCode, newUrl, revision, targetPath)
 
         log.info { "Initiating data download ..." }
         service.downloadFromGit(user, apiKey, scanCode)
@@ -494,10 +509,16 @@ class FossId(
     /**
      * Create a new scan in the FossID server and return the scan code.
      */
-    private suspend fun createScan(projectCode: String, scanCode: String, url: String, revision: String): String {
+    private suspend fun createScan(
+        projectCode: String,
+        scanCode: String,
+        url: String,
+        revision: String,
+        targetPath: String
+    ): String {
         log.info { "Creating scan $scanCode ..." }
 
-        val response = service.createScan(user, apiKey, projectCode, scanCode, url, revision)
+        val response = service.createScan(user, apiKey, projectCode, scanCode, url, revision, targetPath)
             .checkResponse("create scan")
 
         val scanId = response.data?.get("scan_id")
