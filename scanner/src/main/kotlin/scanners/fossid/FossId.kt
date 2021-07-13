@@ -61,9 +61,11 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
+import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.NAMING_CONVENTION_VARIABLE_PREFIX
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.toUri
 
 import retrofit2.Retrofit
@@ -332,48 +334,54 @@ class FossId(
                     projectName += "_${path.replace("/", "_")}"
                 }
 
-                val projectCode = namingProvider.createProjectCode(projectName)
-
-                if (getProject(projectCode) == null) {
-                    log.info { "Creating project '$projectCode' ..." }
-
-                    service.createProject(user, apiKey, projectCode, projectCode)
-                        .checkResponse("create project")
-                }
-
-                val scans = service.listScansForProject(user, apiKey, projectCode)
-                    .checkResponse("list scans for project").data
-                checkNotNull(scans)
-
-                val scanCode = if (deltaScans) {
-                    checkAndCreateDeltaScan(scans, revision, url, path, projectCode, projectName)
-                } else {
-                    checkAndCreateScan(scans, revision, url, path, projectCode, projectName)
-                }
-
                 val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
 
-                if (waitForResult) {
-                    val rawResults = getRawResults(scanCode)
-                    val resultsSummary = createResultSummary(startTime, provenance, rawResults)
+                try {
+                    val projectCode = namingProvider.createProjectCode(projectName)
 
-                    results.getOrPut(pkg) { mutableListOf() } += resultsSummary
-                } else {
-                    val issue = OrtIssue(
-                        source = pkg.id.toCoordinates(),
-                        message = "This package has been scanned in asynchronous mode. Scan results are available " +
-                                "on the FossID instance.",
-                        severity = Severity.HINT
-                    )
-                    val summary = ScanSummary(
-                        startTime = startTime,
-                        endTime = Instant.now(),
-                        packageVerificationCode = "",
-                        licenseFindings = sortedSetOf(),
-                        copyrightFindings = sortedSetOf(),
-                        issues = listOf(
-                            issue
+                    if (getProject(projectCode) == null) {
+                        log.info { "Creating project '$projectCode' ..." }
+
+                        service.createProject(user, apiKey, projectCode, projectCode)
+                            .checkResponse("create project")
+                    }
+
+                    val scans = service.listScansForProject(user, apiKey, projectCode)
+                        .checkResponse("list scans for project").data
+                    checkNotNull(scans)
+
+                    val scanCode = if (deltaScans) {
+                        checkAndCreateDeltaScan(scans, revision, url, path, projectCode, projectName)
+                    } else {
+                        checkAndCreateScan(scans, revision, url, path, projectCode, projectName)
+                    }
+
+                    if (waitForResult) {
+                        val rawResults = getRawResults(scanCode)
+                        val resultsSummary = createResultSummary(startTime, provenance, rawResults)
+
+                        results.getOrPut(pkg) { mutableListOf() } += resultsSummary
+                    } else {
+                        val summary = createSingleIssueSummary(
+                            pkg.id.toCoordinates(),
+                            "This package has been scanned in asynchronous mode. Scan results are " +
+                                    "available on the FossID instance.",
+                            Severity.HINT,
+                            startTime
                         )
+
+                        val scanResult = ScanResult(provenance, details, summary)
+                        results.getOrPut(pkg) { mutableListOf() } += scanResult
+                    }
+                } catch (e: IllegalStateException) {
+                    e.showStackTrace()
+                    log.error("Package at url=$url and path='$path' cannot be scanned")
+
+                    val summary = createSingleIssueSummary(
+                        pkg.id.toCoordinates(),
+                        "This package has failed to be scanned by FossID.",
+                        Severity.ERROR,
+                        startTime
                     )
 
                     val scanResult = ScanResult(provenance, details, summary)
@@ -387,6 +395,16 @@ class FossId(
         log.info { "Scan has been performed. Total time was ${duration.inWholeSeconds}s." }
 
         return results
+    }
+
+    private fun createSingleIssueSummary(
+        source: String,
+        message: String,
+        severity: Severity,
+        startTime: Instant
+    ): ScanSummary {
+        val issue = OrtIssue(source = source, message = message, severity = severity)
+        return ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
     }
 
     private suspend fun List<Scan>.findLatestPendingOrFinishedScan(
