@@ -138,6 +138,8 @@ data class SpdxDocument(
 
         require(dataLicense.isNotBlank()) { "The data license must not be blank." }
 
+        require(packages.isNotEmpty()) { "At least one package must be listed in packages" }
+
         val duplicateExternalDocumentRefs = externalDocumentRefs.getDuplicates { it.externalDocumentId }
         require(duplicateExternalDocumentRefs.isEmpty()) {
             "The document must not contain duplicate external document references but has " +
