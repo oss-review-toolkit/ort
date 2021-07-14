@@ -148,6 +148,14 @@ class OrtConfigurationTest : WordSpec({
                 }
             }
 
+            with(ortConfig.notifier) {
+                jira shouldNotBeNull {
+                    host shouldBe "localhost"
+                    username shouldBe "user"
+                    password shouldBe "secret"
+                }
+            }
+
             with(ortConfig.licenseFilePatterns) {
                 licenseFilenames shouldContainExactly listOf("license*")
                 patentFilenames shouldContainExactly listOf("patents")
