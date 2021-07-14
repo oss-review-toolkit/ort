@@ -19,7 +19,19 @@
 
 package org.ossreviewtoolkit.model.config
 
-data class NotifierConfiguration(
-    val mail: SendMailConfiguration? = null,
-    val jira: JiraConfiguration? = null
+data class JiraConfiguration(
+    /**
+     * The host for the Jira instance.
+     */
+    val host: String,
+
+    /**
+     * The username used for the authentication.
+     */
+    val username: String,
+
+    /**
+     * The password used for the authentication.
+     */
+    val password: String
 )
