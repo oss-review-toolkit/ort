@@ -22,6 +22,8 @@
 #      url: "http://example.com/repo.git"
 #      revision: "1234abc"
 #      path: "subdirectory"
+#    is_meta_data_only: true # Whether the package is meta data only.
+#    is_modified: true # Whether the package is modified compared to the original source.
 
 - id: "Maven:asm:asm" # No version means the curation will be applied to all versions of the package.
   curations:
