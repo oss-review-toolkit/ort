@@ -73,6 +73,8 @@ The structure of the curations file consist of one or more `id` entries:
     is_meta_data_only: true
     is_modified: true
 ````
+Where the list of available options for curations is defined in
+[PackageCurationData.kt](../model/src/main/kotlin/PackageCurationData.kt).
 
 ## Command Line
 
