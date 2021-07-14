@@ -52,11 +52,10 @@ The structure of the curations file consist of one or more `id` entries:
 - id: "package identifier."
   curations:
     comment: "An explanation why the curation is needed or the reasoning for a license conclusion"
-    concluded_license: "valid SPDX license expression to override the license findings."
-    declared_licenses:
-    - "license a"
-    - "license b"
-    description: "Curated description"
+    concluded_license: "Valid SPDX license expression to override the license findings."
+    declared_license_mapping:
+      "license a": "SPDX license identifier."
+    description: "Curated description."
     homepage_url: "http://example.com"
     binary_artifact:
       url: "http://example.com/binary.zip"
@@ -73,8 +72,6 @@ The structure of the curations file consist of one or more `id` entries:
       path: "subdirectory"
     is_meta_data_only: true
     is_modified: true
-    declared_license_mapping:
-      "license a": "Apache-2.0"
 ````
 
 ## Command Line

@@ -3,11 +3,11 @@
 #- id: "Maven:org.hamcrest:hamcrest-core:1.3"
 #  curations:
 #    comment: "An explanation why the curation is needed or the reasoning for a license conclusion."
-#    concluded_license: "Apache-2.0 OR MIT" # Valid SPDX license expression to override the license findings.
-#    declared_licenses:
-#    - "license a"
-#    - "license b"
-#    description: "Curated description"
+#    concluded_license: "Apache-2.0 OR BSD-3-Clause" # Valid SPDX license expression to override the license findings.
+#    declared_license_mapping:
+#      "Copyright (C) 2013, Martin Journois": "NONE"
+#      "BSD": "BSD-3-Clause"
+#    description: "Curated description."
 #    homepage_url: "http://example.com"
 #    binary_artifact:
 #      url: "http://example.com/binary.zip"
