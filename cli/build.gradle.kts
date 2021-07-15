@@ -93,6 +93,15 @@ repositories {
             includeGroup("com.github.everit-org.json-schema")
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven("https://packages.atlassian.com/maven-external")
+        }
+
+        filter {
+            includeGroupByRegex("com\\.atlassian\\..*")
+        }
+    }
 }
 
 dependencies {
