@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.checkScanStatus
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
+import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
 import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
@@ -188,6 +189,11 @@ class FossId(
     private val waitForResult: Boolean
     private val secretKeys = listOf("serverUrl", "apiKey", "user")
     private val namingProvider: FossIdNamingProvider
+    // A list of all scans created in an ORT run, to be able to delete them in case of error.
+    // The reasoning is that either all these scans are successful, either none is created at all (clean slate).
+    // A use case is that an ORT run is created regularly e.g. nightly, and we want to have exactly the same amount
+    // of scans for each package.
+    private val createdScans = mutableSetOf<String>()
 
     private val service: FossIdRestService
     private val packageNamespaceFilter: String
@@ -386,6 +392,11 @@ class FossId(
 
                     val scanResult = ScanResult(provenance, details, summary)
                     results.getOrPut(pkg) { mutableListOf() } += scanResult
+
+                    createdScans.forEach {
+                        log.warn("Deleting previous scan $it.")
+                        deleteScan(it)
+                    }
                 }
             }
 
@@ -544,7 +555,7 @@ class FossId(
         requireNotNull(scanId) { "Scan could not be created. The response was: ${response.message}." }
 
         log.info { "Scan has been created with ID $scanId." }
-
+        createdScans.add(scanCode)
         return scanCode
     }
 
@@ -635,6 +646,16 @@ class FossId(
         requireNotNull(result) { "Timeout while waiting for the scan to complete" }
 
         log.info { "Scan has been completed." }
+    }
+
+    /**
+     * Delete a scan with [scanCode].
+     */
+    private suspend fun deleteScan(scanCode: String) {
+        val response = service.deleteScan(user, apiKey, scanCode)
+        response.error?.let {
+            log.error { "Cannot delete scan $scanCode: $it." }
+        }
     }
 
     /**
