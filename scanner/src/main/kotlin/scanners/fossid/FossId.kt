@@ -118,7 +118,7 @@ class FossId(
         private val WAIT_INTERVAL_MS = 10000L
 
         @JvmStatic
-        private val WAIT_REPETITION = 50
+        private val WAIT_REPETITION = 360
 
         /**
          * The scanner options beginning with this prefix will be used to parametrize project and scan names.
