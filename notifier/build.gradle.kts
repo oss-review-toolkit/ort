@@ -18,10 +18,25 @@
  */
 
 val apacheCommonsEmailVersion: String by project
+val jiraRestApiVersion: String by project
+val mockkVersion: String by project
+val wiremockVersion: String by project
 
 plugins {
     // Apply core plugins.
     `java-library`
+}
+
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven("https://packages.atlassian.com/maven-external")
+        }
+
+        filter {
+            includeGroupByRegex("com\\.atlassian\\..*")
+        }
+    }
 }
 
 dependencies {
@@ -29,5 +44,10 @@ dependencies {
 
     implementation(project(":utils"))
 
+    implementation("com.atlassian.jira:jira-rest-java-client-api:$jiraRestApiVersion")
+    implementation("com.atlassian.jira:jira-rest-java-client-app:$jiraRestApiVersion")
     implementation("org.apache.commons:commons-email:$apacheCommonsEmailVersion")
+
+    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
