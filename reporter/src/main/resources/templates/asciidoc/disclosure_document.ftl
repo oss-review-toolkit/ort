@@ -74,8 +74,6 @@ The applicable license information is listed below:
 [/#list]
 [/#if]
 <<<
-[#-- Add the licenses of all dependencies. --]
-
 
 [#-- List all rule violations and their status --]
 == Rule Violation Summary
@@ -149,6 +147,7 @@ ${issueErrors} errors, ${issueWarns} warnings, ${issueHint} hints to resolve
 
 [/#if]
 
+[#-- Add the licenses of all dependencies. --]
 == Dependencies
 
 [#if packages?has_content]
