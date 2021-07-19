@@ -42,7 +42,7 @@
     "devDependencies": {
         "@testing-library/jest-dom": "^5.13.0",
         "@testing-library/react": "^11.2.7",
-        "@testing-library/user-event": "^13.1.9",
+        "@testing-library/user-event": "^13.2.0",
         "@rescripts/cli": "^0.0.16",
         "fs-extra": "^10.0.0",
         "html-inline-css-webpack-plugin": "^1.11.1",
