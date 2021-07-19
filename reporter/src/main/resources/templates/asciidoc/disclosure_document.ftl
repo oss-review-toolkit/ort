@@ -75,6 +75,80 @@ The applicable license information is listed below:
 [/#if]
 <<<
 [#-- Add the licenses of all dependencies. --]
+
+
+[#-- List all rule violations and their status --]
+== Rule Violation Summary
+
+[#assign
+ruleViolationErrors = tabularScanRecord
+    .ruleViolations
+    ?filter( it -> !it.isResolved() && it.violation.severity == Severity.ERROR )
+    ?size
+]
+
+[#assign
+ruleViolationWarns = tabularScanRecord
+    .ruleViolations
+    ?filter( it -> !it.isResolved() && it.violation.severity == Severity.WARNING )
+    ?size
+]
+
+[#assign
+ruleViolationHint = tabularScanRecord
+    .ruleViolations
+    ?filter( it -> !it.isResolved() && it.violation.severity == Severity.HINT )
+    ?size
+]
+${ruleViolationErrors} errors, ${ruleViolationWarns} warnings, ${ruleViolationHint} hints to resolve
+
+[#if tabularScanRecord.ruleViolations?size == 0]
+No rule violations found.
+[#else]
+
+[#list tabularScanRecord.ruleViolations as ruleViolation]
+
+|====
+| **Rule:** | ${ruleViolation.violation.rule}
+| **Severity:** | [#if ruleViolation.isResolved()]Resolved[#else][#if ruleViolation.violation.severity == Severity.ERROR]Error[/#if][#if ruleViolation.violation.severity == Severity.WARNING]Warning[/#if][#if ruleViolation.violation.severity == Severity.HINT]Hint[/#if][/#if]
+[#if ruleViolation.isResolved()]
+| **Package:** | ${ruleViolation.violation.pkg.toCoordinates()} 
+| **License:** | [#if ruleViolation.violation.license?has_content]${ruleViolation.violation.licenseSource}: ${ruleViolation.violation.license}[#else]-[/#if]
+| **Message:** | ${ruleViolation.violation.message}
+| **Resolution:** | ${ruleViolation.resolutionDescription}
+[#else]
+| **How to fix:** | ${ruleViolation.violation.howToFix}
+[/#if]
+|====
+[/#list]
+
+[/#if]
+
+[#-- List all issues and their status --]
+[#if tabularScanRecord.issueSummary.rows?size > 0]
+== Issue Summary
+
+[#assign
+issueErrors = tabularScanRecord
+    .issueSummary
+    .errorCount
+]
+
+[#assign
+issueWarns = tabularScanRecord
+    .issueSummary
+    .warningCount
+]
+
+[#assign
+issueHint = tabularScanRecord
+    .issueSummary
+    .hintCount
+]
+${issueErrors} errors, ${issueWarns} warnings, ${issueHint} hints to resolve
+
+[/#if]
+
 == Dependencies
 
 [#if packages?has_content]
