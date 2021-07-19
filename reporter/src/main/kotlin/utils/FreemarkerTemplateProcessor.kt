@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2021 Agora Voting SL.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +50,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
@@ -114,6 +116,14 @@ class FreemarkerTemplateProcessor(
             PackageModel(pkg.pkg.id, input)
         }
 
+        val tabularScanRecord = ReportTableModelMapper(
+                input.resolutionProvider, 
+                input.howToFixTextProvider
+            ).mapToReportTableModel(
+                input.ortResult,
+                input.licenseInfoResolver
+            )
+
         val dataModel = mapOf(
             "projects" to projects,
             "packages" to packages,
@@ -122,7 +132,8 @@ class FreemarkerTemplateProcessor(
             "LicenseView" to LicenseView,
             "helper" to TemplateHelper(input),
             "projectsAsPackages" to projectsAsPackages,
-            "vulnerabilityReference" to VulnerabilityReference
+            "vulnerabilityReference" to VulnerabilityReference,
+            "tabularScanRecord" to tabularScanRecord
         )
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
