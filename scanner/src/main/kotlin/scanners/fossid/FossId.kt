@@ -333,13 +333,7 @@ class FossId(
 
                 val url = pkg.vcsProcessed.url
                 val revision = pkg.vcsProcessed.revision.ifEmpty { "HEAD" }
-                var projectName = convertGitUrlToProjectName(url)
-
-                val path = pkg.vcsProcessed.path
-                if (path.isNotEmpty()) {
-                    projectName += "_${path.replace("/", "_")}"
-                }
-
+                val projectName = convertGitUrlToProjectName(url)
                 val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
 
                 try {
@@ -357,9 +351,9 @@ class FossId(
                     checkNotNull(scans)
 
                     val scanCode = if (deltaScans) {
-                        checkAndCreateDeltaScan(scans, url, revision, path, projectCode, projectName)
+                        checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName)
                     } else {
-                        checkAndCreateScan(scans, url, revision, path, projectCode, projectName)
+                        checkAndCreateScan(scans, url, revision, projectCode, projectName)
                     }
 
                     if (waitForResult) {
@@ -381,7 +375,7 @@ class FossId(
                     }
                 } catch (e: IllegalStateException) {
                     e.showStackTrace()
-                    log.error("Package at url=$url and path='$path' cannot be scanned")
+                    log.error("Package at url=$url cannot be scanned")
 
                     val summary = createSingleIssueSummary(
                         pkg.id.toCoordinates(),
@@ -420,15 +414,13 @@ class FossId(
 
     private suspend fun List<Scan>.findLatestPendingOrFinishedScan(
         url: String,
-        revision: String? = null,
-        targetPath: String
+        revision: String? = null
     ): Scan? =
         filter {
             // The scans in the server contain the url with the credentials so we have to remove it for the
             // comparison. If we don't, the scans won't be matched if the password changes!
             val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
-            urlWithoutCredentials == url && it.targetPath == targetPath
-                    && (revision == null || (it.gitBranch == revision))
+            urlWithoutCredentials == url && (revision == null || (it.gitBranch == revision))
         }.sortedByDescending { scan -> scan.id }.find { scan ->
             val scanCode = requireNotNull(scan.code) {
                 "FossId returned a null scancode for an existing scan."
@@ -452,18 +444,17 @@ class FossId(
         scans: List<Scan>,
         url: String,
         revision: String,
-        targetPath: String,
         projectCode: String,
         projectName: String
     ): String {
-        val existingScan = scans.findLatestPendingOrFinishedScan(url, revision, targetPath)
+        val existingScan = scans.findLatestPendingOrFinishedScan(url, revision)
 
         val scanCode = if (existingScan == null) {
-            log.info { "No scan found for $url and path '$targetPath' and revision $revision. Creating scan ..." }
+            log.info { "No scan found for $url and revision $revision. Creating scan ..." }
 
             val scanCode = namingProvider.createScanCode(projectName)
             val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
-            createScan(projectCode, scanCode, newUrl, revision, targetPath)
+            createScan(projectCode, scanCode, newUrl, revision)
 
             log.info { "Initiating data download ..." }
             service.downloadFromGit(user, apiKey, scanCode)
@@ -471,7 +462,7 @@ class FossId(
 
             scanCode
         } else {
-            log.info { "Scan ${existingScan.code} found for $url and path '$targetPath' and revision $revision." }
+            log.info { "Scan ${existingScan.code} found for $url and revision $revision." }
 
             requireNotNull(existingScan.code) {
                 "FossId returned a null scancode for an existing scan"
@@ -485,25 +476,22 @@ class FossId(
         scans: List<Scan>,
         url: String,
         revision: String,
-        targetPath: String,
         projectCode: String,
         projectName: String
     ): String {
         // we ignore the revision because we want to do a delta scan
-        val existingScan = scans.findLatestPendingOrFinishedScan(url, targetPath = targetPath)
+        val existingScan = scans.findLatestPendingOrFinishedScan(url)
 
         val scanCode = if (existingScan == null) {
-            log.info {
-                "No scan found for $url and path '$targetPath' and revision $revision. Creating origin scan ..."
-            }
+            log.info { "No scan found for $url and revision $revision. Creating origin scan ..." }
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN)
         } else {
-            log.info { "Scan found for $url and path '$targetPath' and revision $revision. Creating delta scan ..." }
+            log.info { "Scan found for $url and revision $revision. Creating delta scan ..." }
             namingProvider.createScanCode(projectName, DeltaTag.DELTA)
         }
 
         val newUrl = if (addAuthenticationToUrl) queryAuthenticator(url) else url
-        createScan(projectCode, scanCode, newUrl, revision, targetPath)
+        createScan(projectCode, scanCode, newUrl, revision)
 
         log.info { "Initiating data download ..." }
         service.downloadFromGit(user, apiKey, scanCode)
@@ -542,12 +530,11 @@ class FossId(
         projectCode: String,
         scanCode: String,
         url: String,
-        revision: String,
-        targetPath: String
+        revision: String
     ): String {
         log.info { "Creating scan $scanCode ..." }
 
-        val response = service.createScan(user, apiKey, projectCode, scanCode, url, revision, targetPath)
+        val response = service.createScan(user, apiKey, projectCode, scanCode, url, revision)
             .checkResponse("create scan")
 
         val scanId = response.data?.get("scan_id")
