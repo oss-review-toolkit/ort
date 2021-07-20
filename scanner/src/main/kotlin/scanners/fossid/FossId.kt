@@ -319,6 +319,11 @@ class FossId(
             val filteredPackages = packages
                 .filter { packageNamespaceFilter.isEmpty() || it.id.namespace == packageNamespaceFilter }
                 .filter { packageAuthorsFilter.isEmpty() || packageAuthorsFilter in it.authors }
+                .onEach {
+                    if (it.vcsProcessed.path.isNotEmpty()) {
+                        log.warn { "Ignoring package with url ${it.vcs.url} with non-null path ${it.vcs.path}" }
+                    }
+                }.filter { it.vcsProcessed.path.isEmpty() }
 
             if (filteredPackages.isEmpty()) {
                 log.warn { "There is no package to scan !" }
