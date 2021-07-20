@@ -319,6 +319,26 @@ class FossId(
             val filteredPackages = packages
                 .filter { packageNamespaceFilter.isEmpty() || it.id.namespace == packageNamespaceFilter }
                 .filter { packageAuthorsFilter.isEmpty() || packageAuthorsFilter in it.authors }
+                .onEach {
+                    if (it.vcsProcessed.path.isNotEmpty()) {
+                        log.warn {
+                            "Ignoring package with url ${it.vcsProcessed.url} " +
+                                    "with non-null path ${it.vcsProcessed.path}"
+                        }
+
+                        val provenance = RepositoryProvenance(it.vcsProcessed, it.vcsProcessed.revision)
+                        val summary = createSingleIssueSummary(
+                            it.id.toCoordinates(),
+                            "This package has been ignored because it contains a non-empty VCS path." +
+                                    "FossID does not support partial checkouts of a Git repository.",
+                            Severity.HINT,
+                            Instant.now()
+                        )
+
+                        val scanResult = ScanResult(provenance, details, summary)
+                        results.getOrPut(it) { mutableListOf() } += scanResult
+                    }
+                }.filter { it.vcsProcessed.path.isEmpty() }
 
             if (filteredPackages.isEmpty()) {
                 log.warn { "There is no package to scan !" }
