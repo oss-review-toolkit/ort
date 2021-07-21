@@ -38,6 +38,10 @@ data class Scan(
 
     val isArchived: Boolean?,
 
+    /**
+     * Used when the files are available on the FossID server prior to the api call creating the scan.
+     * This property and [gitRepoUrl] are exclusive and should never be used at the same time.
+     */
     val targetPath: String?,
 
     val isBlindAudit: Boolean?,
