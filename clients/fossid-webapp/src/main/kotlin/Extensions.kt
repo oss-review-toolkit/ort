@@ -100,8 +100,7 @@ suspend fun FossIdRestService.createScan(
     projectCode: String,
     scanCode: String,
     gitRepoUrl: String,
-    gitBranch: String,
-    targetPath: String = "",
+    gitBranch: String
 ): MapResponseBody<String> =
     createScan(
         PostRequestBody(
@@ -113,8 +112,7 @@ suspend fun FossIdRestService.createScan(
             "scan_code" to scanCode,
             "scan_name" to scanCode,
             "git_repo_url" to gitRepoUrl,
-            "git_branch" to gitBranch,
-            "target_path" to targetPath
+            "git_branch" to gitBranch
         )
     )
 
