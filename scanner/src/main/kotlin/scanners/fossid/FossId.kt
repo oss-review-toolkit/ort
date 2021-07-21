@@ -329,7 +329,7 @@ class FossId(
                         val provenance = RepositoryProvenance(it.vcsProcessed, it.vcsProcessed.revision)
                         val summary = createSingleIssueSummary(
                             it.id.toCoordinates(),
-                            "This package has been ignored because it contains a non-empty VCS path." +
+                            "This package has been ignored because it contains a non-empty VCS path. " +
                                     "FossID does not support partial checkouts of a Git repository.",
                             Severity.HINT,
                             Instant.now()
