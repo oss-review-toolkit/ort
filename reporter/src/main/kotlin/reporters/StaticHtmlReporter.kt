@@ -65,12 +65,13 @@ import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.isValidUri
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
-@Suppress("LargeClass")
+@Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {
     override val reporterName = "StaticHtml"
 
     private val reportFilename = "scan-report.html"
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
+    private val licensesSha1 = mutableMapOf<String, String>()
 
     override fun generateReport(
         input: ReporterInput,
@@ -630,36 +631,42 @@ class StaticHtmlReporter : Reporter {
         val renderer = HtmlRenderer.builder().build()
         unsafe { +renderer.render(document) }
     }
-}
 
-private fun DIV.licenseLink(license: String) {
-    val licenseResourcePath = getLicenseResourcePath(license)
-    val sha1Git = HashAlgorithm.SHA1_GIT.calculate(licenseResourcePath) ?: return +license
+    private fun DIV.licenseLink(license: String) {
+        val licenseResourcePath = getLicenseResourcePath(license)
+        val sha1Git = licensesSha1.getOrPut(license) {
+            HashAlgorithm.SHA1_GIT.calculate(licenseResourcePath) ?: license
+        }
 
-    // Software Heritage is able to identify textual content by providing a sha1_git, as explained here:
-    // https://docs.softwareheritage.org/devel/swh-web/uri-scheme-browse-content.html
-    a(href = "https://archive.softwareheritage.org/browse/content/sha1_git:$sha1Git") {
-        +license
+        if (sha1Git == license) {
+            +license
+        } else {
+            // Software Heritage is able to identify textual content by providing a sha1_git, as explained here:
+            // https://docs.softwareheritage.org/devel/swh-web/uri-scheme-browse-content.html
+            a(href = "https://archive.softwareheritage.org/browse/content/sha1_git:$sha1Git") {
+                +license
+            }
+        }
     }
-}
 
-private fun DIV.licensesLink(expression: SpdxExpression) {
-    when (expression) {
-        is SpdxLicenseIdExpression -> {
-            licenseLink(expression.toString())
-        }
-        is SpdxLicenseWithExceptionExpression -> {
-            licenseLink(expression.simpleLicense())
-            +" WITH "
-            licenseLink(expression.exception)
-        }
-        is SpdxCompoundExpression -> {
-            licensesLink(expression.left)
-            +" ${expression.operator} "
-            licensesLink(expression.right)
-        }
-        else -> {
-            +expression.toString()
+    private fun DIV.licensesLink(expression: SpdxExpression) {
+        when (expression) {
+            is SpdxLicenseIdExpression -> {
+                licenseLink(expression.toString())
+            }
+            is SpdxLicenseWithExceptionExpression -> {
+                licenseLink(expression.simpleLicense())
+                +" WITH "
+                licenseLink(expression.exception)
+            }
+            is SpdxCompoundExpression -> {
+                licensesLink(expression.left)
+                +" ${expression.operator} "
+                licensesLink(expression.right)
+            }
+            else -> {
+                +expression.toString()
+            }
         }
     }
 }
