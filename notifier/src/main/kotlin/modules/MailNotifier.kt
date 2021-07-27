@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.config.SendMailConfiguration
 /**
  * Notification module that provides a configured email client.
  */
-class EmailNotifier(config: SendMailConfiguration) {
+class MailNotifier(config: SendMailConfiguration) {
     private val client: Email
 
     init {
@@ -42,7 +42,7 @@ class EmailNotifier(config: SendMailConfiguration) {
     }
 
     @Suppress("UNUSED") // This is intended to be used by notification script implementations.
-    fun sendEmail(subject: String, message: String, vararg receivers: String) {
+    fun sendMail(subject: String, message: String, vararg receivers: String) {
         client.subject = subject
         client.setMsg(message)
         client.addTo(*receivers)

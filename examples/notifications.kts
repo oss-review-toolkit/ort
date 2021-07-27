@@ -20,7 +20,7 @@
 val issues: Map<Identifier, Set<OrtIssue>> = ortResult.collectIssues()
 
 if (issues.isNotEmpty()) {
-    emailClient.sendEmail(
+    mailClient.sendMail(
         subject = "Issues found",
         message = "Number of issues found: ${issues.size}",
         receivers = arrayOf("example1@ossreviewtoolkit.org", "example2@ossreviewtoolkit.org")
