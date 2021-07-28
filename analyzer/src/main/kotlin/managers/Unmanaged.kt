@@ -55,10 +55,8 @@ class Unmanaged(
     }
 
     /**
-     * Return a [ProjectAnalyzerResult] for the [Project] contained in the [definitionFile] directory, but does not
-     * perform any dependency resolution.
-     *
-     * @param definitionFile The directory containing the unmanaged project.
+     * Return a list with a single [ProjectAnalyzerResult] for the "unmanaged" [Project] defined by the
+     * [definitionFile], which in this case is a directory. No dependency resolution is performed.
      */
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val vcsInfo = VersionControlSystem.getCloneInfo(definitionFile)
