@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import com.jcraft.jsch.JSch
-import com.jcraft.jsch.Session
 import com.jcraft.jsch.agentproxy.AgentProxyException
 import com.jcraft.jsch.agentproxy.RemoteIdentityRepository
 import com.jcraft.jsch.agentproxy.connector.SSHAgentConnector
@@ -38,7 +37,6 @@ import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.lib.SymbolicRef
 import org.eclipse.jgit.transport.JschConfigSessionFactory
 import org.eclipse.jgit.transport.NetRCCredentialsProvider
-import org.eclipse.jgit.transport.OpenSshConfig
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 
@@ -68,9 +66,6 @@ class Git : VersionControlSystem(), CommandLineTool {
             NetRCCredentialsProvider.install()
 
             val sessionFactory = object : JschConfigSessionFactory() {
-                @Suppress("EmptyFunctionBlock")
-                override fun configure(hc: OpenSshConfig.Host, session: Session) {}
-
                 override fun configureJSch(jsch: JSch) {
                     // Accept unknown hosts.
                     JSch.setConfig("StrictHostKeyChecking", "no")
