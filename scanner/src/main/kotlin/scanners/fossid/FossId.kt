@@ -611,6 +611,9 @@ class FossId internal constructor(
         val pendingFiles = service.listPendingFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list pending files")
             .data!!
+        log.info {
+            "${pendingFiles.size} pending files have been returned for scan code $scanCode."
+        }
 
         return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles, pendingFiles)
     }
