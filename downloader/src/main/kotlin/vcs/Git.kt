@@ -29,14 +29,17 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
+import java.net.Authenticator
 import java.util.regex.Pattern
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
+import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.lib.SymbolicRef
+import org.eclipse.jgit.transport.CredentialItem
+import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.JschConfigSessionFactory
-import org.eclipse.jgit.transport.NetRCCredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 
@@ -60,10 +63,9 @@ class Git : VersionControlSystem(), CommandLineTool {
         init {
             installAuthenticatorAndProxySelector()
 
-            // While the OrtAuthenticator already provides .netrc parsing, JGit will complain with a confusing "no
-            // CredentialsProvider registered" message if authentication fails. Avoid that by installing JGit's own
-            // .netrc credential provider in addition to ORT's authenticator.
-            NetRCCredentialsProvider.install()
+            // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
+            // discrepancies in the way .netrc files are interpreted between JGit's and ORT's implementation.
+            CredentialsProvider.setDefault(AuthenticatorCredentialsProvider)
 
             val sessionFactory = object : JschConfigSessionFactory() {
                 override fun configureJSch(jsch: JSch) {
@@ -230,4 +232,42 @@ class Git : VersionControlSystem(), CommandLineTool {
     }
 
     private fun WorkingTree.runGit(vararg args: String) = run(*args, workingDir = workingDir)
+}
+
+/**
+ * A special JGit [CredentialsProvider] implementation that delegates requests for credentials to the current
+ * [Authenticator]. An instance of this class is installed by [Git], making sure that JGit uses the exact same
+ * authentication mechanism as ORT.
+ */
+private object AuthenticatorCredentialsProvider : CredentialsProvider() {
+    override fun isInteractive(): Boolean = false
+
+    override fun supports(vararg items: CredentialItem): Boolean =
+        items.all {
+            it is CredentialItem.Username || it is CredentialItem.Password
+        }
+
+    override fun get(uri: URIish, vararg items: CredentialItem): Boolean {
+        log.debug { "JGit queries credentials for ${uri.host}." }
+        val auth = Authenticator.requestPasswordAuthentication(
+            uri.host,
+            null,
+            uri.port,
+            null,
+            uri.humanishName,
+            uri.scheme
+        ) ?: return false
+
+        log.debug { "Passing credentials for ${uri.host} to JGit." }
+
+        items.forEach { item ->
+            when (item) {
+                is CredentialItem.Username -> item.value = auth.userName
+                is CredentialItem.Password -> item.value = auth.password
+                else -> throw UnsupportedCredentialItem(uri, "${item.javaClass.name}: ${item.promptText}")
+            }
+        }
+
+        return true
+    }
 }
