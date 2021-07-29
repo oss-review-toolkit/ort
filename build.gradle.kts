@@ -279,13 +279,17 @@ subprojects {
                 isEnabled = enabled
             }
 
-            systemProperties = listOf(
+            val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
+
+            listOf(
                 "kotest.assertions.multi-line-diff",
                 "kotest.tags.include",
                 "kotest.tags.exclude"
-            ).associateWith { System.getProperty(it) } + mapOf(
-                "gradle.build.dir" to project.buildDir
-            )
+            ).mapNotNullTo(testSystemProperties) { key ->
+                System.getProperty(key)?.let { key to it }
+            }
+
+            systemProperties = testSystemProperties.toMap()
 
             testLogging {
                 events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
