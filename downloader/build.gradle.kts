@@ -20,6 +20,7 @@
 
 val jgitVersion: String by project
 val jSchAgentProxyVersion: String by project
+val mockkVersion: String by project
 val svnkitVersion: String by project
 
 plugins {
@@ -44,4 +45,6 @@ dependencies {
     implementation("org.eclipse.jgit:org.eclipse.jgit:$jgitVersion")
     implementation("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:$jgitVersion")
     implementation("org.tmatesoft.svnkit:svnkit:$svnkitVersion")
+
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
