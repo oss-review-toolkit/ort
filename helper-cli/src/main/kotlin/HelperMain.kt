@@ -32,6 +32,7 @@ import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.GenerateTimeoutErrorResolutionsCommand
+import org.ossreviewtoolkit.helper.commands.GetPackageLicensesCommand
 import org.ossreviewtoolkit.helper.commands.ImportCopyrightGarbageCommand
 import org.ossreviewtoolkit.helper.commands.ImportScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.ListCopyrightsCommand
@@ -76,6 +77,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
         subcommands(
             ExtractRepositoryConfigurationCommand(),
             GenerateTimeoutErrorResolutionsCommand(),
+            GetPackageLicensesCommand(),
             ImportCopyrightGarbageCommand(),
             ImportScanResultsCommand(),
             ListCopyrightsCommand(),
