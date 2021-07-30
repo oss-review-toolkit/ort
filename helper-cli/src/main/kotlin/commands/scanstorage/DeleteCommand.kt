@@ -77,7 +77,7 @@ internal class DeleteCommand : CliktCommand(
     )
 
     override fun run() {
-        val database = initDatabase(OrtConfiguration.load(configArguments, configFile))
+        val database = connectPostgresStorage(OrtConfiguration.load(configArguments, configFile))
 
         val provenanceKeys = sourceCodeOrigins.map { origin ->
             when (origin) {
@@ -107,7 +107,7 @@ internal class DeleteCommand : CliktCommand(
         log.info { "Successfully deleted stored scan results." }
     }
 
-    private fun initDatabase(config: OrtConfiguration): Database {
+    private fun connectPostgresStorage(config: OrtConfiguration): Database {
         val storageConfig = config.scanner.storages?.get("postgresStorage") as? PostgresStorageConfiguration
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
