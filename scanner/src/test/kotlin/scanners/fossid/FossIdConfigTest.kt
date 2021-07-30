@@ -19,6 +19,13 @@
 
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.equalTo
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
@@ -29,11 +36,11 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class FossIdConfigTest : WordSpec({
     "create" should {
-            "throw if no options for FossID are provided in the scanner configuration" {
-                val scannerConfig = ScannerConfiguration()
+        "throw if no options for FossID are provided in the scanner configuration" {
+            val scannerConfig = ScannerConfiguration()
 
-                shouldThrow<IllegalArgumentException> { FossIdConfig.create(scannerConfig) }
-            }
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(scannerConfig) }
+        }
 
         "read all properties from the scanner configuration" {
             val options = mapOf(
@@ -149,6 +156,39 @@ class FossIdConfigTest : WordSpec({
             val scanCode = namingProvider.createScanCode("TestProject", FossId.DeltaTag.DELTA)
 
             scanCode shouldBe "TestProject_TestOrganization_TestUnit_delta"
+        }
+    }
+
+    "createService" should {
+        "create a correctly configured FossIdRestService" {
+            val loginPage = "Welcome to FossID"
+            val wiremock = WireMockServer(WireMockConfiguration.options().dynamicPort())
+            wiremock.start()
+
+            try {
+                val serverUrl = "http://localhost:${wiremock.port()}"
+                val scannerConfig = mapOf(
+                    "serverUrl" to serverUrl,
+                    "apiKey" to API_KEY,
+                    "user" to USER
+                ).toScannerConfig()
+
+                wiremock.stubFor(
+                    get(urlPathEqualTo("/index.php"))
+                        .withQueryParam("form", equalTo("login"))
+                        .willReturn(
+                            aResponse().withStatus(200)
+                                .withBody(loginPage)
+                        )
+                )
+
+                val fossIdConfig = FossIdConfig.create(scannerConfig)
+                val service = fossIdConfig.createService()
+
+                service.getLoginPage().string() shouldBe loginPage
+            } finally {
+                wiremock.stop()
+            }
         }
     }
 })
