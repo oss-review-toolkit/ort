@@ -383,7 +383,7 @@ internal fun OrtResult.getProvenance(id: Identifier): Provenance? {
  * Return all issues from scan results. Issues for excludes [Project]s or [Package]s are not returned if and only if
  * the given [omitExcluded] is true.
  */
-fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
+internal fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
     val result = mutableListOf<OrtIssue>()
 
     scanner?.results?.scanResults?.forEach { (id, results) ->
@@ -473,7 +473,7 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
  * Return a copy of this [OrtResult] with the [Repository.config] with the content of the given
  * [repositoryConfigurationFile].
  */
-fun OrtResult.replaceConfig(repositoryConfigurationFile: File?): OrtResult =
+internal fun OrtResult.replaceConfig(repositoryConfigurationFile: File?): OrtResult =
     repositoryConfigurationFile?.let {
         replaceConfig(it.readValue())
     } ?: this
@@ -937,9 +937,9 @@ internal fun OrtResult.getScanResultFor(packageConfiguration: PackageConfigurati
  * Read [ortFile] into an [OrtResult] and return it. Make sure that information about project scopes is available
  * (by calling [OrtResult.withResolvedScopes]), so that it can be processed.
  */
-fun readOrtResult(ortFile: File): OrtResult = ortFile.readValue<OrtResult>().withResolvedScopes()
+internal fun readOrtResult(ortFile: File): OrtResult = ortFile.readValue<OrtResult>().withResolvedScopes()
 
 /**
  * Write the [ortResult] to [file].
  */
-fun writeOrtResult(ortResult: OrtResult, file: File): Unit = file.writeValue(ortResult)
+internal fun writeOrtResult(ortResult: OrtResult, file: File): Unit = file.writeValue(ortResult)
