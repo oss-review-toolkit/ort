@@ -113,6 +113,44 @@ class FossIdConfigTest : WordSpec({
             shouldThrow<IllegalArgumentException> { FossIdConfig.create(scannerConfig) }
         }
     }
+
+    "createNamingProvider" should {
+        "create a naming provider with a correct project naming convention" {
+            val scannerConfig = mapOf(
+                "serverUrl" to SERVER_URL,
+                "apiKey" to API_KEY,
+                "user" to USER,
+                "namingProjectPattern" to "#projectName_\$Org_\$Unit",
+                "namingVariableOrg" to "TestOrganization",
+                "namingVariableUnit" to "TestUnit"
+            ).toScannerConfig()
+
+            val fossIdConfig = FossIdConfig.create(scannerConfig)
+            val namingProvider = fossIdConfig.createNamingProvider()
+
+            val projectName = namingProvider.createProjectCode("TestProject")
+
+            projectName shouldBe "TestProject_TestOrganization_TestUnit"
+        }
+
+        "create a naming provider with a correct scan naming convention" {
+            val scannerConfig = mapOf(
+                "serverUrl" to SERVER_URL,
+                "apiKey" to API_KEY,
+                "user" to USER,
+                "namingScanPattern" to "#projectName_\$Org_\$Unit_#deltaTag",
+                "namingVariableOrg" to "TestOrganization",
+                "namingVariableUnit" to "TestUnit"
+            ).toScannerConfig()
+
+            val fossIdConfig = FossIdConfig.create(scannerConfig)
+            val namingProvider = fossIdConfig.createNamingProvider()
+
+            val scanCode = namingProvider.createScanCode("TestProject", FossId.DeltaTag.DELTA)
+
+            scanCode shouldBe "TestProject_TestOrganization_TestUnit_delta"
+        }
+    }
 })
 
 private const val SERVER_URL = "https://www.example.org/fossid"

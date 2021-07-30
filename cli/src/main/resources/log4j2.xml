@@ -20,5 +20,6 @@
     </Logger>
 
     <Logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossId" level="info"/>
+    <Logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossIdConfig" level="info"/>
   </Loggers>
 </Configuration>

@@ -76,8 +76,19 @@ internal data class FossIdConfig(
         /** Name of the configuration property controlling whether ORT should wait for FossID results. */
         private const val WAIT_FOR_RESULT_PROPERTY = "waitForResult"
 
+        /** Name of the configuration property defining the naming convention for projects. */
+        private const val NAMING_PROJECT_PATTERN_PROPERTY = "namingProjectPattern"
+
+        /** Name of the configuration property defining the naming convention for scans. */
+        private const val NAMING_SCAN_PATTERN_PROPERTY = "namingScanPattern"
+
         /** Name of the configuration property controlling whether delta scans are to be created. */
         private const val DELTA_SCAN_PROPERTY = "deltaScans"
+
+        /**
+         * The scanner options beginning with this prefix will be used to parametrize project and scan names.
+         */
+        private const val NAMING_CONVENTION_VARIABLE_PREFIX = "namingVariable"
 
         fun create(scannerConfig: ScannerConfiguration): FossIdConfig {
             val fossIdScannerOptions = scannerConfig.options?.get("FossId")
@@ -110,5 +121,24 @@ internal data class FossIdConfig(
                 fossIdScannerOptions
             )
         }
+    }
+
+    /**
+     * Create a [FossIdNamingProvider] helper object based on the configuration stored in this object.
+     */
+    fun createNamingProvider(): FossIdNamingProvider {
+        val namingProjectPattern = options[NAMING_PROJECT_PATTERN_PROPERTY]?.also {
+            log.info { "Naming pattern for projects is $it." }
+        }
+
+        val namingScanPattern = options[NAMING_SCAN_PATTERN_PROPERTY]?.also {
+            log.info { "Naming pattern for scans is $it." }
+        }
+
+        val namingConventionVariables = options
+            .filterKeys { it.startsWith(NAMING_CONVENTION_VARIABLE_PREFIX) }
+            .mapKeys { it.key.substringAfter(NAMING_CONVENTION_VARIABLE_PREFIX) }
+
+        return FossIdNamingProvider(namingProjectPattern, namingScanPattern, namingConventionVariables)
     }
 }
