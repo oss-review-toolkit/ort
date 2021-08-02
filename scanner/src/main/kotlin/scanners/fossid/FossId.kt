@@ -61,7 +61,6 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
-import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.NAMING_CONVENTION_VARIABLE_PREFIX
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -70,27 +69,8 @@ import org.ossreviewtoolkit.utils.toUri
 /**
  * A wrapper for [FossID](https://fossid.com/).
  *
- * This scanner can be configured in [ScannerConfiguration.options] using the key "FossId". It offers the following
- * configuration options:
- *
- * * **"serverUrl":** The URL of the FossID server.
- * * **"user":** The user to connect to the FossID server.
- * * **"apiKey":** The API key of the user which connects to the FossID server.
- * * **"packageNamespaceFilter":** If this optional filter is set, only packages having an identifier in given namespace
- * will be scanned.
- * * **"packageAuthorsFilter":** If this optional filter is set, only packages from a given author will be scanned.
- * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
- * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
- * completed. As a consequence, scan results won't be available in ORT result.
- * * **"deltaScans":** When set, ORT will create delta scans. When only changes in a repository need to be scanned,
- * delta scans reuse the identifications of latest scan on this repository to reduce the amount of findings. If
- * deltaScans is set and no scan exist yet, an initial scan called "origin" scan will be created.
- *
- * Naming conventions options. If they are not set, default naming convention are used.
- * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
- * variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
- * [NAMING_CONVENTION_VARIABLE_PREFIX] e.g. namingVariableVar1 = "foo".
- * * **"namingScanPattern":** A pattern for scan names when scans are created on the FossID instance.
+ * This scanner can be configured in [ScannerConfiguration.options]. For the options available and their documentation
+ * refer to [FossIdConfig].
  */
 class FossId internal constructor(
     name: String,
@@ -115,11 +95,6 @@ class FossId internal constructor(
 
         @JvmStatic
         private val WAIT_REPETITION = 360
-
-        /**
-         * The scanner options beginning with this prefix will be used to parametrize project and scan names.
-         */
-        private const val NAMING_CONVENTION_VARIABLE_PREFIX = "namingVariable"
 
         /**
          * Convert a Git repository URL to a valid project name, e.g.
