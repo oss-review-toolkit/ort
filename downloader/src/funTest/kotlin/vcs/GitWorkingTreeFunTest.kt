@@ -114,7 +114,8 @@ class GitWorkingTreeFunTest : StringSpec() {
                 "0.9.0",
                 "1.0.0",
                 "2.0.0",
-                "2.0.0b1"
+                "2.0.0b1",
+                "2.1.0"
             )
         }
 
