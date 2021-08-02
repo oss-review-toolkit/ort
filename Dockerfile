@@ -131,8 +131,8 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
     npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION && \
-    pip install wheel && \
-    pip install conan==$CONAN_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
+    pip install --no-cache-dir wheel && \
+    pip install --no-cache-dir conan==$CONAN_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
     curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
