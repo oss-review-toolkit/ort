@@ -152,12 +152,12 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
     # Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
     curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | \
-          tar -zxC . && \
-          cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
-          gem build cocoapods.gemspec && \
-          gem install cocoapods-1.10.1.gem && \
-          cd .. && \
-          rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
+        tar -zxC . && \
+        (cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
+            gem build cocoapods.gemspec && \
+            gem install cocoapods-1.10.1.gem \
+        ) && \
+        rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
     # Add scanners (in versions known to work).
     curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
