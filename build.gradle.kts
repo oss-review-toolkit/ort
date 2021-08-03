@@ -44,6 +44,7 @@ plugins {
     kotlin("jvm")
 
     id("com.github.ben-manes.versions")
+    id("com.github.gmazzo.buildconfig")
     id("io.gitlab.arturbosch.detekt")
     id("org.barfuin.gradle.taskinfo")
     id("org.jetbrains.dokka")
@@ -112,6 +113,7 @@ allprojects {
         mavenCentral()
     }
 
+    apply(plugin = "com.github.gmazzo.buildconfig")
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     // Note: Kotlin DSL cannot directly access configurations that are created by applying a plugin in the very same
