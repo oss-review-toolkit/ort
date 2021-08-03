@@ -22,20 +22,58 @@ package org.ossreviewtoolkit.analyzer
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.managers.*
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class PackageManagerTest : WordSpec({
-    val projectDir = File("src/funTest/assets/projects/synthetic").absoluteFile
+    val definitonFiles = listOf(
+        "bower/bower.json",
+        "bundler/Gemfile",
+        "bundler/Cargo.toml",
+        "bundler/Cartfile.resolved",
+        "cocoapods/Podfile",
+        "composer/composer.json",
+        "conan-py/conanfile.py",
+        "conan-txt/conanfile.txt",
+        "dotnet/dotnet.csproj",
+        "glide/glide.yaml",
+        "godep/Gopkg.toml",
+        "godeps/Godeps.json",
+        "gomod/go.mod",
+        "gradle-groovy/build.gradle",
+        "gradle-kotlin/build.gradle.kts",
+        "maven/pom.xml",
+
+        // Note that the NPM and Yarn implementations share code. Internal logic decides dynamically whether to process
+        // "package.json" with NPM or Yarn.
+        "npm-and-yarn/package.json",
+
+        "nuget/packages.config",
+        "pip-requirements/requirements.txt",
+        "pip-setup/setup.py",
+        "pipenv/Pipfile.lock",
+        "pub/pubspec.yaml",
+        "sbt/build.sbt",
+        "spdx-package/package.spdx.yml",
+        "spdx-project/project.spdx.yml",
+        "stack/stack.yaml"
+    )
+    val projectDir = createSpecTempDir()
+
+    beforeSpec {
+        definitonFiles.forEach { file ->
+            projectDir.resolve(file).also { dir ->
+                dir.parentFile.mkdirs()
+            }.writeText("Dummy text to avoid the file to be empty, as empty files are skipped.")
+        }
+    }
 
     "findManagedFiles" should {
         "find all managed files" {
@@ -47,94 +85,37 @@ class PackageManagerTest : WordSpec({
 
             // The keys in expected and actual maps of definition files are different instances of package manager
             // factories. So to compare values use the package manager names as keys instead.
-            val managedFilesByName = managedFiles.mapKeys { (manager, _) ->
-                manager.managerName
-            }
+            val managedFilesByName = managedFiles.map { (manager, files) ->
+                manager.managerName to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
+            }.toMap()
 
             assertSoftly {
-                managedFilesByName["Bower"] should containExactlyInAnyOrder(
-                    EXPECTED_BOWER_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Bundler"] should containExactlyInAnyOrder(
-                    EXPECTED_BUNDLER_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Cargo"] should containExactlyInAnyOrder(
-                    EXPECTED_CARGO_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Carthage"] should containExactlyInAnyOrder(
-                    EXPECTED_CARTHAGE_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["CocoaPods"] should containExactlyInAnyOrder(
-                    EXPECTED_COCOAPODS_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Composer"] should containExactlyInAnyOrder(
-                    EXPECTED_COMPOSER_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Conan"] should containExactlyInAnyOrder(
-                    EXPECTED_CONAN_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["DotNet"] should containExactlyInAnyOrder(
-                    EXPECTED_DOTNET_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["GoDep"] should containExactlyInAnyOrder(
-                    EXPECTED_GODEP_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["GoMod"] should containExactlyInAnyOrder(
-                    EXPECTED_GOMOD_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Gradle"] should containExactlyInAnyOrder(
-                    EXPECTED_GRADLE_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Maven"] should containExactlyInAnyOrder(
-                    EXPECTED_MAVEN_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["NPM"] should containExactlyInAnyOrder(
-                    EXPECTED_NPM_YARN_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["NuGet"] should containExactlyInAnyOrder(
-                    EXPECTED_NUGET_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["PIP"] should containExactlyInAnyOrder(
-                    EXPECTED_PIP_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Pipenv"] should containExactlyInAnyOrder(
-                    EXPECTED_PIPENV_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Pub"] should containExactlyInAnyOrder(
-                    EXPECTED_PUB_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["SBT"] should containExactlyInAnyOrder(
-                    EXPECTED_SBT_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder(
-                    EXPECTED_SPDX_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Stack"] should containExactlyInAnyOrder(
-                    EXPECTED_STACK_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
-
-                managedFilesByName["Yarn"] should containExactlyInAnyOrder(
-                    EXPECTED_NPM_YARN_DEFINITION_FILES.map { projectDir.resolve(it) }
-                )
+                managedFilesByName["Bower"] should containExactlyInAnyOrder("bower/bower.json")
+                managedFilesByName["Bundler"] should containExactlyInAnyOrder("bundler/Gemfile")
+                managedFilesByName["Cargo"] should containExactlyInAnyOrder("bundler/Cargo.toml")
+                managedFilesByName["Carthage"] should containExactlyInAnyOrder("bundler/Cartfile.resolved")
+                managedFilesByName["CocoaPods"] should containExactlyInAnyOrder("cocoapods/Podfile")
+                managedFilesByName["Composer"] should containExactlyInAnyOrder("composer/composer.json")
+                managedFilesByName["Conan"] should containExactlyInAnyOrder("conan-py/conanfile.py",
+                    "conan-txt/conanfile.txt")
+                managedFilesByName["DotNet"] should containExactlyInAnyOrder("dotnet/dotnet.csproj")
+                managedFilesByName["GoDep"] should containExactlyInAnyOrder("glide/glide.yaml",
+                    "godep/Gopkg.toml", "godeps/Godeps.json")
+                managedFilesByName["GoMod"] should containExactlyInAnyOrder("gomod/go.mod")
+                managedFilesByName["Gradle"] should containExactlyInAnyOrder("gradle-groovy/build.gradle",
+                    "gradle-kotlin/build.gradle.kts")
+                managedFilesByName["Maven"] should containExactlyInAnyOrder("maven/pom.xml")
+                managedFilesByName["NPM"] should containExactlyInAnyOrder("npm-and-yarn/package.json")
+                managedFilesByName["NuGet"] should containExactlyInAnyOrder("nuget/packages.config")
+                managedFilesByName["PIP"] should containExactlyInAnyOrder("pip-requirements/requirements.txt",
+                    "pip-setup/setup.py")
+                managedFilesByName["Pipenv"] should containExactlyInAnyOrder("pipenv/Pipfile.lock")
+                managedFilesByName["Pub"] should containExactlyInAnyOrder("pub/pubspec.yaml")
+                managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
+                managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder("spdx-package/package.spdx.yml",
+                    "spdx-project/project.spdx.yml")
+                managedFilesByName["Stack"] should containExactlyInAnyOrder("stack/stack.yaml")
+                managedFilesByName["Yarn"] should containExactlyInAnyOrder("npm-and-yarn/package.json")
             }
         }
 
@@ -148,21 +129,15 @@ class PackageManagerTest : WordSpec({
 
             // The keys in expected and actual maps of definition files are different instances of package manager
             // factories. So to compare values use the package manager names as keys instead.
-            val managedFilesByName = managedFiles.mapKeys { (manager, _) ->
-                manager.managerName
-            }
+            val managedFilesByName = managedFiles.map { (manager, files) ->
+                manager.managerName to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
+            }.toMap()
 
-            managedFilesByName["Gradle"] should containExactlyInAnyOrder(
-                EXPECTED_GRADLE_DEFINITION_FILES.map { projectDir.resolve(it) }
-            )
-
-            managedFilesByName["PIP"] should containExactlyInAnyOrder(
-                EXPECTED_PIP_DEFINITION_FILES.map { projectDir.resolve(it) }
-            )
-
-            managedFilesByName["SBT"] should containExactly(
-                EXPECTED_SBT_DEFINITION_FILES.map { projectDir.resolve(it) }
-            )
+            managedFilesByName["Gradle"] should containExactlyInAnyOrder("gradle-groovy/build.gradle",
+                "gradle-kotlin/build.gradle.kts")
+            managedFilesByName["PIP"] should containExactlyInAnyOrder("pip-requirements/requirements.txt",
+                "pip-setup/setup.py")
+            managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
         }
 
         "find no files if no package managers are active" {
@@ -225,135 +200,3 @@ class PackageManagerTest : WordSpec({
         }
     }
 })
-
-private val EXPECTED_BOWER_DEFINITION_FILES = listOf(
-    "bower/bower.json"
-)
-
-private val EXPECTED_BUNDLER_DEFINITION_FILES = listOf(
-    "bundler/gemspec/Gemfile",
-    "bundler/lockfile/Gemfile",
-    "bundler/no-lockfile/Gemfile"
-)
-
-private val EXPECTED_CARGO_DEFINITION_FILES = listOf(
-    "cargo/Cargo.toml",
-    "cargo-subcrate/Cargo.toml",
-    "cargo-subcrate/client/Cargo.toml",
-    "cargo-subcrate/integration/Cargo.toml"
-)
-
-private val EXPECTED_CARTHAGE_DEFINITION_FILES = listOf(
-    "carthage/Cartfile.resolved"
-)
-
-private val EXPECTED_COCOAPODS_DEFINITION_FILES = listOf(
-    "cocoapods/dep-tree/Podfile",
-    "cocoapods/no-lockfile/Podfile",
-    "cocoapods/regular/Podfile"
-)
-
-private val EXPECTED_COMPOSER_DEFINITION_FILES = listOf(
-    "composer/empty-deps/composer.json",
-    "composer/no-deps/composer.json",
-    "composer/lockfile/composer.json",
-    "composer/no-lockfile/composer.json",
-    "composer/with-provide/composer.json",
-    "composer/with-replace/composer.json"
-)
-
-private val EXPECTED_CONAN_DEFINITION_FILES = listOf(
-    "conan-py/conanfile.py",
-    "conan-txt/conanfile.txt"
-)
-
-private val EXPECTED_DOTNET_DEFINITION_FILES = listOf(
-    "dotnet/subProjectTest/test.csproj",
-    "dotnet/subProjectTestWithNuspec/test.csproj"
-)
-
-private val EXPECTED_GODEP_DEFINITION_FILES = listOf(
-    "godep/glide/glide.yaml",
-    "godep/godeps/Godeps/Godeps.json",
-    "godep/lockfile/Gopkg.toml"
-)
-
-private val EXPECTED_GOMOD_DEFINITION_FILES = listOf(
-    "gomod/go.mod",
-    "gomod-subpkg/go.mod"
-)
-
-private val EXPECTED_GRADLE_DEFINITION_FILES = listOf(
-    "gradle/build.gradle",
-    "gradle/app/build.gradle",
-    "gradle/lib/build.gradle",
-    "gradle/lib-without-repo/build.gradle",
-    "gradle-library/build.gradle",
-    "gradle-library/app/build.gradle",
-    "gradle-library/lib/build.gradle",
-    "gradle-unsupported-version/build.gradle",
-    "gradle-android/build.gradle",
-    "gradle-android/app/build.gradle",
-    "gradle-android/lib/build.gradle",
-    "gradle-bom/build.gradle"
-)
-
-private val EXPECTED_MAVEN_DEFINITION_FILES = listOf(
-    "maven/pom.xml",
-    "maven/app/pom.xml",
-    "maven/lib/pom.xml",
-    "maven-parent/pom.xml",
-    "maven-wagon/pom.xml"
-)
-
-private val EXPECTED_NPM_YARN_DEFINITION_FILES = listOf(
-    // Note that the NPM and Yarn implementations share code. Internal logic decides dynamically whether to process
-    // "package.json" with NPM or Yarn.
-    "npm/node-modules/package.json",
-    "npm/package-lock/package.json",
-    "npm/shrinkwrap/package.json",
-    "npm/no-lockfile/package.json",
-    "npm-babel/package.json",
-    "npm-version-urls/package.json",
-
-    "yarn/package.json",
-    "yarn-workspaces/package.json",
-    "yarn-workspaces/packages/pkg1/package.json",
-    "yarn-workspaces/packages/pkg2/package.json"
-)
-
-private val EXPECTED_NUGET_DEFINITION_FILES = listOf(
-    "nuget/packages.config"
-)
-
-private val EXPECTED_PIP_DEFINITION_FILES = listOf(
-    // Note that while "pip/setup.py" is also present, ORT only lists "requirements.txt" as the definition file if
-    // "setup.py" is in the same directory. Still, information from both files is considered by ORT.
-    "pip/requirements.txt",
-    "pip-python3/requirements.txt"
-)
-
-private val EXPECTED_PIPENV_DEFINITION_FILES = listOf(
-    "pipenv/Pipfile.lock",
-    "pipenv-python3/Pipfile.lock"
-)
-
-private val EXPECTED_PUB_DEFINITION_FILES = listOf(
-    "pub/any-version/pubspec.yaml",
-    "pub/no-lockfile/pubspec.yaml",
-    "pub/project-with-flutter/pubspec.yaml"
-)
-
-private val EXPECTED_SBT_DEFINITION_FILES = listOf(
-    "sbt-http4s-template/build.sbt"
-)
-
-private val EXPECTED_SPDX_DEFINITION_FILES = listOf(
-    "spdx/package/libs/curl/package.spdx.yml",
-    "spdx/package/libs/zlib/package.spdx.yml",
-    "spdx/project/project.spdx.yml"
-)
-
-private val EXPECTED_STACK_DEFINITION_FILES = listOf(
-    "stack-yesodweb-simple/stack.yaml"
-)
