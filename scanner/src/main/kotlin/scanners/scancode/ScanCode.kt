@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
+import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -103,7 +104,7 @@ class ScanCode(
         }
     }
 
-    override val expectedVersion = "3.2.1-rc2"
+    override val expectedVersion = BuildConfig.SCANCODE_VERSION
 
     override val configuration by lazy {
         mutableListOf<String>().apply {
