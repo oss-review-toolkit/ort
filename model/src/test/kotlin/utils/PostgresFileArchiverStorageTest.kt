@@ -21,9 +21,8 @@ package org.ossreviewtoolkit.model.utils
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
 
-import io.kotest.core.spec.Spec
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -57,20 +56,20 @@ private fun File.readTextAndDelete(): String {
     return text
 }
 
-class PostgresFileArchiverStorageTest : WordSpec() {
-    private lateinit var postgres: EmbeddedPostgres
-    private lateinit var storage: PostgresFileArchiverStorage
+private fun TestConfiguration.createTempFile(content: String): File =
+    createTestTempFile().apply {
+        writeText(content)
+    }
 
-    private fun createTempFile(content: String): File =
-        createTestTempFile().apply {
-            writeText(content)
-        }
+class PostgresFileArchiverStorageTest : WordSpec({
+    lateinit var postgres: EmbeddedPostgres
+    lateinit var storage: PostgresFileArchiverStorage
 
-    override fun beforeSpec(spec: Spec) {
+    beforeSpec {
         postgres = EmbeddedPostgres.builder().setPGStartupWait(PG_STARTUP_WAIT).start()
     }
 
-    override fun beforeTest(testCase: TestCase) {
+    beforeTest {
         postgres.postgresDatabase.connection.use { c ->
             val s = c.createStatement()
             s.execute("DROP SCHEMA public CASCADE")
@@ -80,33 +79,31 @@ class PostgresFileArchiverStorageTest : WordSpec() {
         storage = PostgresFileArchiverStorage(postgres.postgresDatabase)
     }
 
-    override fun afterSpec(spec: Spec) {
+    afterSpec {
         postgres.close()
     }
 
-    init {
-        "hasArchive()" should {
-            "return false when no archive for the given provenance has been added" {
-                storage.hasArchive(VCS_PROVENANCE) shouldBe false
-            }
-
-            "return true when an archive for the given provenance has been added" {
-                storage.addArchive(VCS_PROVENANCE, createTempFile("content"))
-
-                storage.hasArchive(VCS_PROVENANCE) shouldBe true
-            }
+    "hasArchive()" should {
+        "return false when no archive for the given provenance has been added" {
+            storage.hasArchive(VCS_PROVENANCE) shouldBe false
         }
 
-        "getArchive()" should {
-            "return the archives corresponding to the given provenance given such archive has been added" {
-                storage.addArchive(VCS_PROVENANCE, createTempFile("VCS"))
-                storage.addArchive(SOURCE_ARTIFACT_PROVENANCE, createTempFile("source artifact"))
+        "return true when an archive for the given provenance has been added" {
+            storage.addArchive(VCS_PROVENANCE, createTempFile("content"))
 
-                storage.getArchive(VCS_PROVENANCE) shouldNotBeNull { readTextAndDelete() shouldBe "VCS" }
-                storage.getArchive(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
-                    readTextAndDelete() shouldBe "source artifact"
-                }
+            storage.hasArchive(VCS_PROVENANCE) shouldBe true
+        }
+    }
+
+    "getArchive()" should {
+        "return the archives corresponding to the given provenance given such archive has been added" {
+            storage.addArchive(VCS_PROVENANCE, createTempFile("VCS"))
+            storage.addArchive(SOURCE_ARTIFACT_PROVENANCE, createTempFile("source artifact"))
+
+            storage.getArchive(VCS_PROVENANCE) shouldNotBeNull { readTextAndDelete() shouldBe "VCS" }
+            storage.getArchive(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
+                readTextAndDelete() shouldBe "source artifact"
             }
         }
     }
-}
+})

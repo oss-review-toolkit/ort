@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
-import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
@@ -35,77 +34,72 @@ import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.unpack
 
-class CvsWorkingTreeFunTest : StringSpec() {
-    private val cvs = Cvs()
-    private lateinit var zipContentDir: File
+class CvsWorkingTreeFunTest : StringSpec({
+    val cvs = Cvs()
+    val zipContentDir = createSpecTempDir()
 
-    override fun beforeSpec(spec: Spec) {
+    beforeSpec {
         val zipFile = File("src/funTest/assets/jhove-2019-12-11-cvs.zip")
-
-        zipContentDir = createSpecTempDir()
-
         println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)
     }
 
-    init {
-        // Disabled on Azure Windows build because CVS is not installed there.
-        "Detected CVS version is not empty".config(enabled = !Ci.isAzureWindows) {
-            val version = cvs.getVersion()
-            println("CVS version $version detected.")
-            version shouldNotBe ""
-        }
-
-        // Disabled on Azure Windows build because CVS is not installed there.
-        "CVS detects non-working-trees".config(enabled = !Ci.isAzureWindows) {
-            cvs.getWorkingTree(ortDataDirectory).isValid() shouldBe false
-        }
-
-        "CVS correctly detects URLs to remote repositories" {
-            cvs.isApplicableUrl(":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
-            cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
-            cvs.isApplicableUrl("https://svn.code.sf.net/p/grepwin/code/") shouldBe false
-        }
-
-        "Detected CVS working tree information is correct".config(enabled = false /* Failing due to SF issues. */) {
-            val workingTree = cvs.getWorkingTree(zipContentDir)
-
-            workingTree.isValid() shouldBe true
-            workingTree.getInfo() shouldBe VcsInfo(
-                type = VcsType.CVS,
-                url = ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/jhove",
-                revision = "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0",
-                path = ""
-            )
-            workingTree.getNested() should beEmpty()
-            workingTree.getRootPath() shouldBe zipContentDir
-            workingTree.getPathToRoot(zipContentDir.resolve("lib")) shouldBe "lib"
-        }
-
-        "CVS correctly lists remote branches".config(enabled = false /* Failing due to SF issues. */) {
-            val expectedBranches = listOf(
-                "JHOVE_1_7",
-                "branch_lpeer",
-                "junit_tests",
-                "pdfprofile_noncompliance_analyzer"
-            )
-
-            val workingTree = cvs.getWorkingTree(zipContentDir)
-            workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
-        }
-
-        "CVS correctly lists remote tags".config(enabled = false /* Failing due to SF issues. */) {
-            val expectedTags = listOf(
-                "JHOVE_1_1",
-                "JHOVE_1_11",
-                "JHOVE_1_8",
-                "JHOVE_1_9",
-                "Root_JHOVE_1_7",
-                "lpeer_0"
-            )
-
-            val workingTree = cvs.getWorkingTree(zipContentDir)
-            workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
-        }
+    // Disabled on Azure Windows build because CVS is not installed there.
+    "Detected CVS version is not empty".config(enabled = !Ci.isAzureWindows) {
+        val version = cvs.getVersion()
+        println("CVS version $version detected.")
+        version shouldNotBe ""
     }
-}
+
+    // Disabled on Azure Windows build because CVS is not installed there.
+    "CVS detects non-working-trees".config(enabled = !Ci.isAzureWindows) {
+        cvs.getWorkingTree(ortDataDirectory).isValid() shouldBe false
+    }
+
+    "CVS correctly detects URLs to remote repositories" {
+        cvs.isApplicableUrl(":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
+        cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
+        cvs.isApplicableUrl("https://svn.code.sf.net/p/grepwin/code/") shouldBe false
+    }
+
+    "Detected CVS working tree information is correct".config(enabled = false /* Failing due to SF issues. */) {
+        val workingTree = cvs.getWorkingTree(zipContentDir)
+
+        workingTree.isValid() shouldBe true
+        workingTree.getInfo() shouldBe VcsInfo(
+            type = VcsType.CVS,
+            url = ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/jhove",
+            revision = "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0",
+            path = ""
+        )
+        workingTree.getNested() should beEmpty()
+        workingTree.getRootPath() shouldBe zipContentDir
+        workingTree.getPathToRoot(zipContentDir.resolve("lib")) shouldBe "lib"
+    }
+
+    "CVS correctly lists remote branches".config(enabled = false /* Failing due to SF issues. */) {
+        val expectedBranches = listOf(
+            "JHOVE_1_7",
+            "branch_lpeer",
+            "junit_tests",
+            "pdfprofile_noncompliance_analyzer"
+        )
+
+        val workingTree = cvs.getWorkingTree(zipContentDir)
+        workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+    }
+
+    "CVS correctly lists remote tags".config(enabled = false /* Failing due to SF issues. */) {
+        val expectedTags = listOf(
+            "JHOVE_1_1",
+            "JHOVE_1_11",
+            "JHOVE_1_8",
+            "JHOVE_1_9",
+            "Root_JHOVE_1_7",
+            "lpeer_0"
+        )
+
+        val workingTree = cvs.getWorkingTree(zipContentDir)
+        workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
+    }
+})
