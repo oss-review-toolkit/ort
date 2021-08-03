@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val antlrVersion: String by project
 val jacksonVersion: String by project
+val scancodeVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -62,7 +63,8 @@ val importScanCodeLicenseTexts by tasks.registering(SvnExport::class) {
     description = "Imports license texts from the ScanCode repository."
     group = "SPDX"
 
-    svnUrl = "https://github.com/nexB/scancode-toolkit/trunk/src/licensedcode/data/licenses"
+    val versionWithoutHyphen = scancodeVersion.replace("-", "")
+    svnUrl = "https://github.com/nexB/scancode-toolkit/tags/v$versionWithoutHyphen/src/licensedcode/data/licenses"
     targetDir = "$buildDir/SvnExport/licenses/scancode-toolkit"
 
     outputs.dir(targetDir)
