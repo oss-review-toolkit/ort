@@ -9,9 +9,3 @@ updates:
   directory: "/"
   schedule:
     interval: "daily"
-- package-ecosystem: "npm"
-  directory: "/reporter-web-app"
-  schedule:
-    interval: "daily"
-  labels:
-  - "reporter"
