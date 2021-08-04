@@ -2,7 +2,6 @@
 
 <component-set>
     <components>
-
         <!--
          | Define empty lifecycle mappings for packaging types that are unknown otherwise.
          | The default packagings (https://maven.apache.org/ref/3.5.2/maven-core/default-bindings.html) are defined by
@@ -156,11 +155,11 @@
         </component>
 
         <!--
-         | Jenkins Module (https://mvnrepository.com/artifact/org.jenkins-ci.modules/instance-identity/)
+         | Jenkins Plugin (https://jenkins.io/doc/book/managing/plugins/)
          |-->
         <component>
             <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
-            <role-hint>jenkins-module</role-hint>
+            <role-hint>hpi</role-hint>
             <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
             <configuration>
                 <lifecycles>
@@ -174,11 +173,11 @@
         </component>
 
         <!--
-         | Jenkins Plugin (https://jenkins.io/doc/book/managing/plugins/)
+         | Jenkins Module (https://mvnrepository.com/artifact/org.jenkins-ci.modules/instance-identity/)
          |-->
         <component>
             <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
-            <role-hint>hpi</role-hint>
+            <role-hint>jenkins-module</role-hint>
             <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
             <configuration>
                 <lifecycles>
