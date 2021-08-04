@@ -55,7 +55,6 @@ import org.ossreviewtoolkit.utils.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
@@ -152,8 +151,13 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             }
         }
 
-        val configurationFiles = listOfNotNull(packageCurationsFile, packageCurationsDir, repositoryConfigurationFile)
-            .map { it.absolutePath }
+        val actualRepositoryConfigurationFile = (repositoryConfigurationFile
+            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)).takeIf { it.isFile }
+
+        val configurationFiles = listOfNotNull(
+            packageCurationsFile, packageCurationsDir, actualRepositoryConfigurationFile
+        ).map { it.absolutePath }
+
         println("The following configuration files and directories are used:")
         println("\t" + configurationFiles.joinToString("\n\t"))
 
@@ -176,13 +180,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             )
         )
 
-        val actualRepositoryConfigurationFile = repositoryConfigurationFile
-            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)
-
-        val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.let {
-            log.info { "Using configuration file '${it.absolutePath}'." }
-            it.readValueOrNull()
-        } ?: RepositoryConfiguration()
+        val repositoryConfiguration = actualRepositoryConfigurationFile?.readValueOrNull() ?: RepositoryConfiguration()
 
         val ortResult = analyzer.analyze(
             inputDir, distinctPackageManagers, curationProvider, repositoryConfiguration
