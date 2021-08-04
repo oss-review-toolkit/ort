@@ -191,6 +191,24 @@
         </component>
 
         <!--
+         | Orbit Signed OSGi Bundle (https://www.eclipse.org/orbit/)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>orbit</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+        <!--
          | Plain Linux Shared Object files as used e.g. by sqlite4java.
          |-->
         <component>
