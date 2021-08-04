@@ -29,14 +29,18 @@ import org.ossreviewtoolkit.helper.common.findFilesRecursive
 import org.ossreviewtoolkit.helper.common.minimize
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceIssueResolutions
+import org.ossreviewtoolkit.helper.common.replaceLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.replacePathExcludes
 import org.ossreviewtoolkit.helper.common.replaceRuleViolationResolutions
 import org.ossreviewtoolkit.helper.common.replaceScopeExcludes
 import org.ossreviewtoolkit.helper.common.write
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class RemoveEntriesCommand : CliktCommand(
@@ -77,6 +81,8 @@ internal class RemoveEntriesCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
 
+    private val findingsMatcher = FindingCurationMatcher()
+
     override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
         val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfiguration)
@@ -91,6 +97,11 @@ internal class RemoveEntriesCommand : CliktCommand(
             .getProjects()
             .flatMap(ortResult.dependencyNavigator::scopeNames)
             .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
+
+        val licenseFindings = ortResult.getProjectLicenseFindings()
+        val licenseFindingCurations = ortResult.repository.config.curations.licenseFindings.filter { curation ->
+            licenseFindings.any { finding -> findingsMatcher.matches(finding, curation) }
+        }
 
         val ruleViolationResolutions = ortResult.getRuleViolations().let { ruleViolations ->
             ortResult.getResolutions().ruleViolations.filter { resolution ->
@@ -111,6 +122,7 @@ internal class RemoveEntriesCommand : CliktCommand(
         repositoryConfiguration
             .replacePathExcludes(pathExcludes)
             .replaceScopeExcludes(scopeExcludes)
+            .replaceLicenseFindingCurations(licenseFindingCurations)
             .replaceIssueResolutions(issueResolutions)
             .replaceRuleViolationResolutions(ruleViolationResolutions)
             .write(repositoryConfigurationFile)
@@ -118,6 +130,8 @@ internal class RemoveEntriesCommand : CliktCommand(
         buildString {
             val removedPathExcludes = repositoryConfiguration.excludes.paths.size - pathExcludes.size
             val removedScopeExcludes = repositoryConfiguration.excludes.scopes.size - scopeExcludes.size
+            val removedLicenseFindingCurations = repositoryConfiguration.curations.licenseFindings.size -
+                    licenseFindingCurations.size
             val removedIssueResolutions = repositoryConfiguration.resolutions.issues.size - issueResolutions.size
             val removedRuleViolationResolutions = repositoryConfiguration.resolutions.ruleViolations.size -
                     ruleViolationResolutions.size
@@ -126,8 +140,29 @@ internal class RemoveEntriesCommand : CliktCommand(
             appendLine()
             appendLine("  path excludes             : $removedPathExcludes")
             appendLine("  scope excludes            : $removedScopeExcludes")
+            appendLine("  license finding curations : $removedLicenseFindingCurations")
             appendLine("  issue resolutions         : $removedIssueResolutions")
             appendLine("  rule violation resolutions: $removedRuleViolationResolutions")
         }.let { println(it) }
     }
 }
+
+private fun OrtResult.getProjectLicenseFindings(): List<LicenseFinding> =
+    getProjects().flatMap { project ->
+        val path = getDefinitionFilePathRelativeToAnalyzerRoot(project).substringBeforeLast("/")
+        val scanResults = getScanResultsForId(project.id)
+
+        scanResults.flatMap { scanResult ->
+            scanResult.summary.licenseFindings.map { finding ->
+                if (path.isBlank()) {
+                    finding
+                } else {
+                    finding.copy(
+                        location = finding.location.copy(
+                            path = "$path/${finding.location.path}"
+                        )
+                    )
+                }
+            }
+        }
+    }.distinct()
