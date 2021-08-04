@@ -241,7 +241,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     } else if (connection.startsWith("git://") || connection.endsWith(".git")) {
                         // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
                         // clear cases.
-                        log.warn { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
+                        log.info { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
 
                         VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
                     } else {
