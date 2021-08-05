@@ -102,7 +102,7 @@ class JiraNotifier(
                         Success(issue)
                     } catch (e: RestClientException) {
                         log.error { "The comment for the issue '${issue.key} could not be added: " +
-                                "${e.collectMessagesAsString()}" }
+                                e.collectMessagesAsString() }
 
                         Failure(e.collectMessagesAsString())
                     }
@@ -121,7 +121,7 @@ class JiraNotifier(
                 Success(resultIssue)
             } catch (e: RestClientException) {
                 log.error { "The issue for the project '$projectKey' could not be created: " +
-                        "${e.collectMessagesAsString()}" }
+                        e.collectMessagesAsString() }
 
                 Failure(e.collectMessagesAsString())
             }
