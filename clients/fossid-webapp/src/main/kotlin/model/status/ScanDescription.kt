@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.clients.fossid.model.status
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class ScanStatus(
+data class ScanDescription(
     val scanId: String,
     val scanName: String,
     val scanCode: String,
