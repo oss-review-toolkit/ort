@@ -39,23 +39,6 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class SbtFunTest : StringSpec({
-    "Dependencies of the external 'directories' single project should be detected correctly".config(
-        enabled = !Ci.isAzureWindows // Disabled as a prompt in Sbt 1.5.0 blocks execution when getting the version.
-    ) {
-        val projectName = "directories"
-        val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
-        val expectedOutputFile = projectDir.resolveSibling("$projectName-expected-output.yml")
-
-        // Clean any previously generated POM files / target directories.
-        Git().run(projectDir, "clean", "-fd")
-
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
-
-        val expectedResult = readOrtResult(expectedOutputFile)
-
-        patchActualResultObject(ortResult, patchStartAndEndTime = true).withResolvedScopes() shouldBe expectedResult
-    }
-
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly".config(
         enabled = !Ci.isAzureWindows // Disabled as a prompt in Sbt 1.5.0 blocks execution when getting the version.
     ) {

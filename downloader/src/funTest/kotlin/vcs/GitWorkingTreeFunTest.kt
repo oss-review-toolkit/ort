@@ -117,7 +117,6 @@ class GitWorkingTreeFunTest : StringSpec({
     "Git correctly lists submodules" {
         val expectedSubmodules = listOf(
             "analyzer/src/funTest/assets/projects/external/dart-http",
-            "analyzer/src/funTest/assets/projects/external/directories",
             "analyzer/src/funTest/assets/projects/external/example-python-flask",
             "analyzer/src/funTest/assets/projects/external/jgnash",
             "analyzer/src/funTest/assets/projects/external/quickcheck-state-machine",

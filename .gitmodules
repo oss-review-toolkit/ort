@@ -1,7 +1,3 @@
-[submodule "directories"]
-	path = analyzer/src/funTest/assets/projects/external/directories
-	url = https://github.com/soc/directories-jvm
-	ignore = untracked
 [submodule "example-python-flask"]
 	path = analyzer/src/funTest/assets/projects/external/example-python-flask
 	url = https://github.com/deis/example-python-flask.git
