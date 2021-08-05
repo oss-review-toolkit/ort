@@ -44,6 +44,17 @@ class StackFunTest : StringSpec({
 
         actualResult shouldBe expectedResult
     }
+
+    "Dependencies of the synthetic 'yesodweb-simple' project should be detected correctly" {
+        val definitionFile = projectsDir.resolve("synthetic/stack-yesodweb-simple/stack.yaml")
+
+        val result = createStack().resolveSingleProject(definitionFile)
+        val expectedOutput = "synthetic/stack-yesodweb-simple-expected-output.yml"
+        val expectedResult = projectsDir.resolve(expectedOutput).readText()
+        val actualResult = result.toYaml()
+
+        actualResult shouldBe expectedResult
+    }
 })
 
 private val projectsDir = File("src/funTest/assets/projects").absoluteFile

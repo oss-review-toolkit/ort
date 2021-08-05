@@ -1,0 +1,60 @@
+---
+project:
+  id: "Stack::stack-yesodweb-simple:0.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/stack-yesodweb-simple/stack.yaml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/oss-review-toolkit/ort.git"
+    revision: "4fe9cb6376b08627de343dc92ba955418de8d457"
+    path: "analyzer/src/funTest/assets/projects/synthetic/stack-yesodweb-simple"
+  homepage_url: ""
+  scopes:
+  - name: "bench"
+    dependencies: []
+  - name: "external"
+    dependencies:
+    - id: "Hackage:Control:monad-control:1.0.2.3"
+      dependencies:
+      - id: "Hackage:Compatibility:transformers-compat:0.6.6"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.6.2"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.13.0.0"
+      - id: "Hackage:Concurrency:stm:2.5.0.0"
+      - id: "Hackage:Control:transform<...>s_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Chunk of memory, polymorphic byte array management and manipulation\n\
+    \n* A polymorphic byte array abstraction and function similar to strict ByteString.\n\
+    \n* Different type of byte array abstraction.\n\n* Raw memory IO operations (memory\
+    \ set, memory copy, ..)\n\n* Aliasing with endianness support.\n\n* Encoding :\
+    \ Base16, Base32, Base64.\n\n* Hashing : FNV, SipHash"
+  homepage_url: "https://github.com/vincenthz/hs-memory"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/memory-0.15.0/memory-0.15.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/vincenthz/hs-memory"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vincenthz/hs-memory.git"
+    revision: ""
+    path: ""
