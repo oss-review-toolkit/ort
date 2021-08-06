@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
@@ -89,7 +90,7 @@ class GetPackageLicensesCommand : CliktCommand(
         val scanResults = getScanResultStorage().getScanResults(packageId)
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
-        scanResults.firstOrNull()?.let { scanResult ->
+        val result = scanResults.firstOrNull()?.let { scanResult ->
             val packageConfiguration = packageConfigurationProvider.getPackageConfiguration(
                 packageId, scanResult.provenance)
             val licenseFindingCurations = packageConfiguration?.licenseFindingCurations.orEmpty()
@@ -110,8 +111,10 @@ class GetPackageLicensesCommand : CliktCommand(
                 directories = listOf("") // TODO: use the proper VCS path.
             ).values.flatten().toSpdxExpression()
 
-            println(Result(detectedLicense, rootLicense).toYaml())
-        }
+            Result(detectedLicense, rootLicense)
+        } ?: Result(SpdxConstants.NOASSERTION, SpdxConstants.NOASSERTION)
+
+        println(result.toYaml())
     }
 
     private fun getScanResultStorage(): ScanResultsStorage {
