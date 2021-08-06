@@ -372,8 +372,9 @@ class FossId internal constructor(
                 .checkResponse("check scan status", false)
             when (response.data?.state) {
                 ScanStatus.FINISHED -> true
-                null, ScanStatus.NOT_STARTED, ScanStatus.INTERRUPTED -> false
-                ScanStatus.STARTED, ScanStatus.SCANNING, ScanStatus.AUTO_ID, ScanStatus.QUEUED -> {
+                null, ScanStatus.NOT_STARTED, ScanStatus.INTERRUPTED, ScanStatus.NEW -> false
+                ScanStatus.STARTED, ScanStatus.STARTING, ScanStatus.RUNNING, ScanStatus.SCANNING, ScanStatus.AUTO_ID,
+                ScanStatus.QUEUED -> {
                     log.warn { "Found previous scan but it is still running." }
                     log.warn { "Ignoring the 'waitForResult' option and waiting ..." }
                     waitScanComplete(scanCode)
