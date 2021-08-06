@@ -125,7 +125,11 @@ class GetPackageLicensesCommand : CliktCommand(
 }
 
 private fun Collection<LicenseFinding>.toSpdxExpression(): String =
-    asSequence().map { it.license }.distinct().reduce(SpdxExpression::and).sort().toString()
+    if (isEmpty()) {
+        SpdxConstants.NONE
+    } else {
+        asSequence().map { it.license }.distinct().reduce(SpdxExpression::and).sort().toString()
+    }
 
 private fun ScanResultsStorage.getScanResults(id: Identifier): List<ScanResult> =
     when (val status = read(id)) {
