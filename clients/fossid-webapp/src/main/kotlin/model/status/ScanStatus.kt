@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /**
  * An enumeration for the state of a FossID scan, as returned by the "check_status" operation.
  */
-enum class ScanState {
+enum class ScanStatus {
     /**
      * FossID is automatically applying top matched component.
      */

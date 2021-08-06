@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
-import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
+import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -155,7 +155,7 @@ class FossIdClientNewProjectTest : StringSpec({
             checkResponse("get scan status")
 
             data shouldNotBeNull {
-                state shouldBe ScanState.FINISHED
+                state shouldBe ScanStatus.FINISHED
             }
         }
     }

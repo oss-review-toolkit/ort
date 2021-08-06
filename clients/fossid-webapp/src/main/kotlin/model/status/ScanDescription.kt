@@ -30,7 +30,7 @@ data class ScanDescription(
     val type: ScanStatusType,
 
     @JsonProperty("status")
-    val state: ScanState,
+    val state: ScanStatus,
 
     val isFinished: Int,
 

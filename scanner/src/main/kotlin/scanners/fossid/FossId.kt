@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
-import org.ossreviewtoolkit.clients.fossid.model.status.ScanState
+import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -371,9 +371,9 @@ class FossId internal constructor(
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check scan status", false)
             when (response.data?.state) {
-                ScanState.FINISHED -> true
-                null, ScanState.NOT_STARTED, ScanState.INTERRUPTED -> false
-                ScanState.STARTED, ScanState.SCANNING, ScanState.AUTO_ID, ScanState.QUEUED -> {
+                ScanStatus.FINISHED -> true
+                null, ScanStatus.NOT_STARTED, ScanStatus.INTERRUPTED -> false
+                ScanStatus.STARTED, ScanStatus.SCANNING, ScanStatus.AUTO_ID, ScanStatus.QUEUED -> {
                     log.warn { "Found previous scan but it is still running." }
                     log.warn { "Ignoring the 'waitForResult' option and waiting ..." }
                     waitScanComplete(scanCode)
@@ -497,7 +497,7 @@ class FossId internal constructor(
         val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
             .checkResponse("check scan status", false)
 
-        if (response.data?.state == ScanState.NOT_STARTED) {
+        if (response.data?.state == ScanStatus.NOT_STARTED) {
             log.info { "Triggering scan as it has not yet been started." }
 
             service.runScan(config.user, config.apiKey, scanCode, *runOptions)
@@ -559,7 +559,7 @@ class FossId internal constructor(
                 .checkResponse("check scan status", false)
 
             response.data?.let {
-                if (it.state == ScanState.FINISHED) {
+                if (it.state == ScanStatus.FINISHED) {
                     true
                 } else {
                     FossId.log.info {
