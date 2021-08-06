@@ -560,7 +560,6 @@ class FossId internal constructor(
 
             response.data?.let {
                 if (it.state == ScanState.FINISHED) {
-                    FossId.log.info { "Scan finished with response: ${response.data?.comment}." }
                     true
                 } else {
                     FossId.log.info {
