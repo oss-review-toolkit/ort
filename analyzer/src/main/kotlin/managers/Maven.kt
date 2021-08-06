@@ -153,7 +153,7 @@ class Maven(
             if (pkg.description == "POM was created by Sonatype Nexus") {
                 createAndLogIssue(
                     managerName,
-                    "Package '${pkg.id.toCoordinates()}' seem to use an auto-generated POM which might lack metadata.",
+                    "Package '${pkg.id.toCoordinates()}' seems to use an auto-generated POM which might lack metadata.",
                     Severity.HINT
                 )
             } else {
