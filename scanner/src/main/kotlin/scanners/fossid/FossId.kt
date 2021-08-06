@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
+import org.ossreviewtoolkit.spdx.enumSetOf
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -95,6 +96,12 @@ class FossId internal constructor(
 
         @JvmStatic
         private val WAIT_REPETITION = 360
+
+        /**
+         * The scan states for which a scan can be triggered.
+         */
+        @JvmStatic
+        private val SCAN_STATE_FOR_TRIGGER = enumSetOf(ScanStatus.NOT_STARTED, ScanStatus.NEW)
 
         /**
          * Convert a Git repository URL to a valid project name, e.g.
@@ -498,7 +505,7 @@ class FossId internal constructor(
         val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
             .checkResponse("check scan status", false)
 
-        if (response.data?.state == ScanStatus.NOT_STARTED) {
+        if (response.data?.state in SCAN_STATE_FOR_TRIGGER) {
             log.info { "Triggering scan as it has not yet been started." }
 
             service.runScan(config.user, config.apiKey, scanCode, *runOptions)
