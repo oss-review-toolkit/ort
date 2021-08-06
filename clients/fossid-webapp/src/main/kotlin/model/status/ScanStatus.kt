@@ -42,6 +42,11 @@ enum class ScanStatus {
     INTERRUPTED,
 
     /**
+     * The scan has been created, but not started.
+     */
+    NEW,
+
+    /**
      * The scan has not started yet.
      */
     @JsonProperty("NOT STARTED")
@@ -55,10 +60,20 @@ enum class ScanStatus {
     /**
      * The scan is running.
      */
+    RUNNING,
+
+    /**
+     * The scan is running.
+     */
     SCANNING,
 
     /**
      * The scan has started.
      */
-    STARTED
+    STARTED,
+
+    /**
+     * The scan is starting.
+     */
+    STARTING
 }
