@@ -79,7 +79,7 @@ class FossIdClientNewProjectTest : StringSpec({
 
     "Version can be extracted from index" {
         service.getLoginPage() shouldNotBeNull {
-            string() shouldContain "cli.  3.1.16 (build 5634934d, RELEASE)"
+            string() shouldContain "2020.1.2"
         }
     }
 

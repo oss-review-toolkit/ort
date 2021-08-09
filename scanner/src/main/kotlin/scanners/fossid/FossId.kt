@@ -190,11 +190,11 @@ class FossId internal constructor(
 
     /**
      * Extract the version version from the login page.
-     * Example: &nbsp;&nbsp;&nbsp;cli.  3.1.16 (build 5634934d, RELEASE)
+     * Example: `<link rel='stylesheet' href='style/fossid.css?v=2021.2.2#7936'>`
      */
     private suspend fun parseVersion(): String? {
-        // TODO: replace with an API call when FossID provides a function (starting at version 21.2).
-        val regex = Regex("^.*&nbsp;(cli. *[0-9. ]+\\(build[\\w, ]+\\)).*$")
+        // TODO: replace with an API call when FossID provides a function.
+        val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*\$")
 
         val response = service.getLoginPage()
 
