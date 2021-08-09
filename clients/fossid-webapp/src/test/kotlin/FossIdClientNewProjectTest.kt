@@ -28,8 +28,11 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
+import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
+import org.ossreviewtoolkit.clients.fossid.VersionedFossIdService
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.checkScanStatus
@@ -61,12 +64,12 @@ class FossIdClientNewProjectTest : StringSpec({
             .dynamicPort()
             .usingFilesUnderDirectory("src/test/assets/new-project")
     )
-    lateinit var service: FossIdRestService
+    lateinit var service: FossIdServiceWithVersion
 
     beforeSpec {
         wiremock.start()
         WireMock.configureFor(wiremock.port())
-        service = FossIdRestService.create("http://localhost:${wiremock.port()}")
+        service = FossIdServiceWithVersion.instance(FossIdRestService.create("http://localhost:${wiremock.port()}"))
     }
 
     afterSpec {
@@ -77,10 +80,9 @@ class FossIdClientNewProjectTest : StringSpec({
         wiremock.resetAll()
     }
 
-    "Version can be extracted from index" {
-        service.getLoginPage() shouldNotBeNull {
-            string() shouldContain "2020.1.2"
-        }
+    "Version can be parsed of login page" {
+        service.version shouldBe "2020.1.2"
+        service.shouldBeInstanceOf<VersionedFossIdService>()
     }
 
     "Projects can be listed when there is none" {

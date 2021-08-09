@@ -18,6 +18,7 @@
  */
 
 val jacksonVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 val retrofitVersion: String by project
 val wiremockVersion: String by project
 
@@ -33,6 +34,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 
     testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
 }
