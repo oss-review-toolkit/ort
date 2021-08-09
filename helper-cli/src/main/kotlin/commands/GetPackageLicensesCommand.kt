@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.common.createProvider
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -101,13 +102,12 @@ class GetPackageLicensesCommand : CliktCommand(
                 .applyAll(nonExcludedLicenseFindings, licenseFindingCurations)
                 .mapNotNull { it.curatedFinding }
 
-            val detectedLicense = curatedFindings.map { it.license.toString() }
-                .distinct().sorted().joinToString(" AND ")
+            val detectedLicense = curatedFindings.toSpdxExpression()
 
             val rootLicense = RootLicenseMatcher().getApplicableRootLicenseFindingsForDirectories(
                 licenseFindings = curatedFindings,
                 directories = listOf("") // TODO: use the proper VCS path.
-            ).values.flatten().map { it.license.toString() }.distinct().sorted().joinToString(" AND ")
+            ).values.flatten().toSpdxExpression()
 
             println(Result(detectedLicense, rootLicense).toYaml())
         }
@@ -119,6 +119,9 @@ class GetPackageLicensesCommand : CliktCommand(
         return ScanResultsStorage.storage
     }
 }
+
+private fun Collection<LicenseFinding>.toSpdxExpression(): String =
+    asSequence().map { it.license.toString() }.distinct().sorted().joinToString(" AND ")
 
 private fun ScanResultsStorage.getScanResults(id: Identifier): List<ScanResult> =
     when (val status = read(id)) {
