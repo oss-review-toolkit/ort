@@ -118,6 +118,16 @@ class FossId internal constructor(
         }
 
         /**
+         * Generate a list of pairs to be passed as parameters when starting a new delta scan for [existingScancode].
+         */
+        internal fun deltaScanRunParameters(existingScancode: String): Array<Pair<String, String>> =
+            arrayOf(
+                "reuse_identification" to "1",
+                "identification_reuse_type" to "specific_scan",
+                "specific_code" to existingScancode
+            )
+
+        /**
          * This function fetches credentials for [repoUrl] and insert them between the URL scheme and the host. If no
          * matching host is found by [Authenticator], the [repoUrl] is returned untouched.
          */
@@ -436,12 +446,7 @@ class FossId internal constructor(
                 log.info { "Ignoring unset 'waitForResult' because delta scans are requested." }
             }
 
-            checkScan(
-                scanCode,
-                "reuse_identification" to "1",
-                "identification_reuse_type" to "specific_scan",
-                "specific_code" to existingScancode
-            )
+            checkScan(scanCode, *deltaScanRunParameters(existingScancode))
         }
 
         return scanCode
