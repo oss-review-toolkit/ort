@@ -27,9 +27,9 @@ import java.time.Instant
 import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
+import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.checkScanStatus
@@ -171,46 +171,16 @@ class FossId internal constructor(
     // of scans for each package.
     private val createdScans = mutableSetOf<String>()
 
-    private val service = config.createService()
+    private val service = FossIdServiceWithVersion.instance(config.createService())
 
-    override val version: String
+    override val version: String = service.version
 
     override val configuration = ""
-
-    init {
-        version = runBlocking {
-            parseVersion().orEmpty()
-        }
-    }
 
     override fun filterOptionsForResult(options: ScannerOptions) =
         options.mapValues { (k, v) ->
             v.takeUnless { k in secretKeys }.orEmpty()
         }
-
-    /**
-     * Extract the version version from the login page.
-     * Example: `<link rel='stylesheet' href='style/fossid.css?v=2021.2.2#7936'>`
-     */
-    private suspend fun parseVersion(): String? {
-        // TODO: replace with an API call when FossID provides a function.
-        val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*\$")
-
-        val response = service.getLoginPage()
-
-        response.charStream().buffered().useLines { lines ->
-            lines.forEach { line ->
-                val matcher = regex.matchEntire(line)
-                if (matcher != null && matcher.groupValues.size == 2) {
-                    val version = matcher.groupValues[1]
-                    FossId.log.info { "Version from FossId Server is $version." }
-                    return version
-                }
-            }
-        }
-        log.warn { "Version from FossId Server cannot be found!" }
-        return null
-    }
 
     private suspend fun getProject(projectCode: String): Project? =
         service.getProject(config.user, config.apiKey, projectCode).run {
@@ -233,6 +203,12 @@ class FossId internal constructor(
         packages: Collection<Package>,
         outputDirectory: File
     ): Map<Package, List<ScanResult>> {
+        if (version.isEmpty()) {
+            log.warn { "Version from FossId Server cannot be found!" }
+        } else {
+            log.info { "Version from FossId Server is $version." }
+        }
+
         val (results, duration) = measureTimedValue {
             val results = mutableMapOf<Package, MutableList<ScanResult>>()
 
