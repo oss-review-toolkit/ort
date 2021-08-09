@@ -665,6 +665,7 @@ following formats are supported (reporter names are case-insensitive):
   * List license texts and copyrights by package (`-f NoticeTemplate`)
   * Summarize all license texts and copyrights (`-f NoticeTemplate -O NoticeTemplate=template.id=summary`)
   * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates
+* Opossum input that can be visualized and edited in the [OpossumUI](https://github.com/opossum-tool/opossumUI)  (`-f Opossum`)
 * [SPDX Document](https://spdx.dev/specifications/), version 2.2 (`-f SpdxDocument`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
