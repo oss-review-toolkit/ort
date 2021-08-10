@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.VersionedFossIdService
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
-import org.ossreviewtoolkit.clients.fossid.checkScanStatus
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
@@ -157,7 +156,7 @@ class FossIdClientNewProjectTest : StringSpec({
             checkResponse("get scan status")
 
             data shouldNotBeNull {
-                state shouldBe ScanStatus.FINISHED
+                status shouldBe ScanStatus.FINISHED
             }
         }
     }

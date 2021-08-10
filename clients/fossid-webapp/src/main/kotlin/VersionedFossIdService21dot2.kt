@@ -19,6 +19,15 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
+import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
+
 class VersionedFossIdService21dot2(
     val delegate: FossIdRestService, version: String
-) : FossIdRestService by delegate, FossIdServiceWithVersion(version)
+) : FossIdRestService by delegate, FossIdServiceWithVersion(version) {
+    override suspend fun checkScanStatus(
+        user: String,
+        apiKey: String,
+        scanCode: String): EntityResponseBody<out UnversionedScanDescription> = delegate.checkScanStatus21m2(
+        PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
+    )
+}

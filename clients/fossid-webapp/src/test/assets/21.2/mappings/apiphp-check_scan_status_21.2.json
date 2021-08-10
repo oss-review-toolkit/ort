@@ -1,0 +1,26 @@
+{
+  "id" : "584e3cce-204a-41f0-b5cb-2ace14f99101",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"check_status\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342_21.2\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\n  \"operation\": \"scans_check_status\",\n  \"status\": \"1\",\n  \"data\": {\n    \"id\": 58,\n    \"scan_id\": 3843,\n    \"scan_name\": \"semver4j.git_20210728_121100\",\n    \"scan_code\": \"semver4j.git_20210728_121100\",\n    \"type\": \"SCAN\",\n    \"pid\": 7926,\n    \"status\": \"FINISHED\",\n    \"state\": \"SCAN_COMPLETE\",\n    \"current_file\": null,\n    \"ignored_files\": null,\n    \"failed_files\": null,\n    \"is_finished\": true,\n    \"percentage_done\": 100,\n    \"current_step\": \"scanCleanup\",\n    \"info\": null,\n    \"comment\": null,\n    \"current_filename\": null,\n    \"comment_2\": null,\n    \"comment_3\": null,\n    \"blind_source\": null,\n    \"started\": \"2021-07-28 12:11:11\",\n    \"finished\": \"2021-07-28 12:11:17\",\n    \"total_files\": null\n  }\n}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:04:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "584e3cce-204a-41f0-b5cb-2ace14f99101",
+  "persistent" : true,
+  "insertionIndex" : 13
+}

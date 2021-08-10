@@ -21,7 +21,11 @@ package org.ossreviewtoolkit.clients.fossid.model.status
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class ScanDescription(
+/**
+ * A description of scan status. This class is for FossID version 21.2.
+ */
+data class ScanDescription21dot2(
+    val id: Long?,
     val scanId: String,
     val scanName: String,
     val scanCode: String,
@@ -30,16 +34,28 @@ data class ScanDescription(
     val type: ScanStatusType,
 
     override val status: ScanStatus,
+    val state: String?,
 
-    val isFinished: Int,
+    val isFinished: Boolean,
 
     val percentageDone: String,
 
-    override val comment: String,
+    val currentFile: String?,
+    val currentFilename: String?,
+    val ignoredFiles: String?,
+    val failedFiles: String?,
+
+    val totalFiles: String?,
+
+    val currentStep: String?,
+    val info: String?,
+    val blindSource: String?,
+
+    override val comment: String?,
     @JsonProperty("comment_2")
-    val comment2: String,
+    val comment2: String?,
     @JsonProperty("comment_3")
-    val comment3: String,
+    val comment3: String?,
 
     @JsonProperty("started")
     val startedAt: String?,

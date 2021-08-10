@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.clients.fossid
 
 import kotlinx.coroutines.runBlocking
 
+import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
+
 abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService {
     companion object {
         /**
@@ -58,4 +60,15 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
             return null
         }
     }
+
+    /**
+     * Get the scan status for the given [scanCode].
+     *
+     * The HTTP request is sent with [user] and [apiKey] as credentials.
+     */
+    abstract suspend fun checkScanStatus(
+        user: String,
+        apiKey: String,
+        scanCode: String
+    ): EntityResponseBody<out UnversionedScanDescription>
 }
