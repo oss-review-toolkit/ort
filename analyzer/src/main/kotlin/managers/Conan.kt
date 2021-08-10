@@ -99,7 +99,16 @@ class Conan(
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val conanHome = Os.userHomeDirectory.resolve(".conan")
 
-        stashDirectories(File(conanHome.resolve("data").path)).use {
+        // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
+        // layout does not support packages from different remotes that are named (and versioned) the same.
+        //
+        // TODO: Consider using the experimental (and by default disabled) download cache [2] to lift these limitations.
+        //
+        // [1]: https://docs.conan.io/en/latest/reference/config_files/conan.conf.html#storage
+        // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
+        val conanStoragePath = conanHome.resolve("data")
+
+        stashDirectories(conanStoragePath).use {
             val workingDir = definitionFile.parentFile
 
             installDependencies(workingDir)
