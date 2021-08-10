@@ -108,8 +108,15 @@ class Conan(
         // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
         val conanStoragePath = conanHome.resolve("data")
 
-        stashDirectories(conanStoragePath).use {
-            val workingDir = definitionFile.parentFile
+        val workingDir = definitionFile.parentFile
+        val conanConfig = listOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
+            .find { it.isDirectory }
+        val directoryToStash = conanConfig?.let { conanHome } ?: conanStoragePath
+
+        stashDirectories(directoryToStash).use {
+            conanConfig?.also {
+                run("config", "install", it.absolutePath)
+            }
 
             installDependencies(workingDir)
 
