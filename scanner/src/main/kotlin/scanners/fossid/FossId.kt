@@ -32,7 +32,6 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
-import org.ossreviewtoolkit.clients.fossid.checkScanStatus
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
@@ -353,7 +352,7 @@ class FossId internal constructor(
 
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check scan status", false)
-            when (response.data?.state) {
+            when (response.data?.status) {
                 ScanStatus.FINISHED -> true
                 null, ScanStatus.NOT_STARTED, ScanStatus.INTERRUPTED, ScanStatus.NEW -> false
                 ScanStatus.STARTED, ScanStatus.STARTING, ScanStatus.RUNNING, ScanStatus.SCANNING, ScanStatus.AUTO_ID,
@@ -481,7 +480,7 @@ class FossId internal constructor(
         val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
             .checkResponse("check scan status", false)
 
-        if (response.data?.state in SCAN_STATE_FOR_TRIGGER) {
+        if (response.data?.status in SCAN_STATE_FOR_TRIGGER) {
             log.info { "Triggering scan as it has not yet been started." }
 
             service.runScan(config.user, config.apiKey, scanCode, *runOptions)
@@ -543,11 +542,11 @@ class FossId internal constructor(
                 .checkResponse("check scan status", false)
 
             response.data?.let {
-                if (it.state == ScanStatus.FINISHED) {
+                if (it.status == ScanStatus.FINISHED) {
                     true
                 } else {
                     FossId.log.info {
-                        "Scan status for scan code '$scanCode' is '${response.data?.state}'. Waiting ..."
+                        "Scan status for scan code '$scanCode' is '${response.data?.status}'. Waiting ..."
                     }
 
                     false

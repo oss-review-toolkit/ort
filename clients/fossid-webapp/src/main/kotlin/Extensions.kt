@@ -21,7 +21,7 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-private const val SCAN_GROUP = "scans"
+internal const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
 
 /**
@@ -168,16 +168,6 @@ suspend fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scan
             apiKey,
             "scan_code" to scanCode
         )
-    )
-
-/**
- * Get the scan status for the given [scanCode].
- *
- * The HTTP request is sent with [user] and [apiKey] as credentials.
- */
-suspend fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scanCode: String) =
-    checkScanStatus(
-        PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
     )
 
 /**
