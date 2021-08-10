@@ -131,6 +131,39 @@ class DependencyGraphTest : WordSpec({
             scopeDependencies(scopes, "s2") shouldBe "${ids[2]}<${ids[1]}<${ids[3]}>${ids[0]}>"
         }
 
+        "construct scopes from graph nodes and edges" {
+            val ids = listOf(
+                id("org.apache.commons", "commons-lang3", "3.11"),
+                id("org.apache.commons", "commons-collections4", "4.4"),
+                id("org.apache.commons", "commons-configuration2", "2.8"),
+                id("org.apache.commons", "commons-logging", "1.3")
+            )
+            val nodeLogging = DependencyGraphNode(3)
+            val nodeLang = DependencyGraphNode(0)
+            val nodeCollections1 = DependencyGraphNode(1)
+            val nodeCollections2 = DependencyGraphNode(1, fragment = 1)
+            val nodeConfig1 = DependencyGraphNode(2)
+            val nodeConfig2 = DependencyGraphNode(2, fragment = 1)
+            val nodes = listOf(nodeLogging, nodeLang, nodeCollections1, nodeCollections2, nodeConfig1, nodeConfig2)
+            val edges = listOf(
+                DependencyGraphEdge(3, 0),
+                DependencyGraphEdge(4, 1),
+                DependencyGraphEdge(4, 2),
+                DependencyGraphEdge(5, 1),
+                DependencyGraphEdge(5, 3)
+            )
+            val scopeMap = mapOf(
+                "s1" to listOf(RootDependencyIndex(2)),
+                "s2" to listOf(RootDependencyIndex(2, fragment = 1))
+            )
+
+            val graph = DependencyGraph(ids, sortedSetOf(), scopeMap, nodes, edges)
+            val scopes = graph.createScopes()
+
+            scopeDependencies(scopes, "s1") shouldBe "${ids[2]}<${ids[1]}${ids[0]}>"
+            scopeDependencies(scopes, "s2") shouldBe "${ids[2]}<${ids[1]}<${ids[3]}>${ids[0]}>"
+        }
+
         "deal with attributes of package references" {
             val ids = listOf(
                 id("org.apache.commons", "commons-lang3", "3.10"),
