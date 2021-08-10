@@ -36,8 +36,8 @@ class PackageManagerTest : WordSpec({
     val definitonFiles = listOf(
         "bower/bower.json",
         "bundler/Gemfile",
-        "bundler/Cargo.toml",
-        "bundler/Cartfile.resolved",
+        "cargo/Cargo.toml",
+        "carthage/Cartfile.resolved",
         "cocoapods/Podfile",
         "composer/composer.json",
         "conan-py/conanfile.py",
@@ -92,8 +92,8 @@ class PackageManagerTest : WordSpec({
             assertSoftly {
                 managedFilesByName["Bower"] should containExactlyInAnyOrder("bower/bower.json")
                 managedFilesByName["Bundler"] should containExactlyInAnyOrder("bundler/Gemfile")
-                managedFilesByName["Cargo"] should containExactlyInAnyOrder("bundler/Cargo.toml")
-                managedFilesByName["Carthage"] should containExactlyInAnyOrder("bundler/Cartfile.resolved")
+                managedFilesByName["Cargo"] should containExactlyInAnyOrder("cargo/Cargo.toml")
+                managedFilesByName["Carthage"] should containExactlyInAnyOrder("carthage/Cartfile.resolved")
                 managedFilesByName["CocoaPods"] should containExactlyInAnyOrder("cocoapods/Podfile")
                 managedFilesByName["Composer"] should containExactlyInAnyOrder("composer/composer.json")
                 managedFilesByName["Conan"] should containExactlyInAnyOrder("conan-py/conanfile.py",
