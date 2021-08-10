@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
@@ -36,6 +37,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DependencyGraphBuilderTest : WordSpec({
     "DependencyGraphBuilder" should {
@@ -53,7 +55,15 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope2, dep1)
                 .build()
 
-            graph.scopeRoots shouldHaveSize 3
+            graph.scopeRoots should beEmpty()
+            graph.nodes shouldNotBeNull {
+                this shouldHaveSize 3
+            }
+
+            graph.edges shouldNotBeNull {
+                this should beEmpty()
+            }
+
             val scopes = graph.createScopes()
             scopes.map { it.name } should containExactlyInAnyOrder(scope1, scope2)
 
@@ -102,10 +112,12 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope2, dep4)
                 .build()
 
-            graph.scopeRoots shouldHaveSize 2
-            graph.scopeRoots.all { it.fragment == 0 } shouldBe true
-            val scopes = graph.createScopes()
+            graph.nodes shouldNotBeNull {
+                this shouldHaveSize 5
+                all { it.fragment == 0 } shouldBe true
+            }
 
+            val scopes = graph.createScopes()
             val scopeDependencies1 = scopeDependencies(scopes, scope1)
             scopeDependencies1 should containExactly(dep5, dep3, dep1)
 

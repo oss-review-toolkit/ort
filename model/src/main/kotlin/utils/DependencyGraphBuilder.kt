@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.model.utils
 
 import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.DependencyGraphEdge
+import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -164,11 +166,9 @@ class DependencyGraphBuilder<D>(
                     "${validPackageDependencies - resolvedPackages.keys}."
         }
 
-        return DependencyGraph(
-            dependencyIds,
-            directDependencies.toSortedSet(DependencyGraph.DEPENDENCY_REFERENCE_COMPARATOR),
-            scopeMapping
-        )
+        val (nodes, edges) = directDependencies.toGraph()
+
+        return DependencyGraph(dependencyIds, sortedSetOf(), scopeMapping, nodes, edges)
     }
 
     /**
@@ -361,4 +361,33 @@ class DependencyGraphBuilder<D>(
 
         return ref
     }
+}
+
+/**
+ * Convert the direct dependency references of all projects to a list of nodes and edges that represent the final
+ * dependency graph.
+ */
+private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraphNode>, List<DependencyGraphEdge>> {
+    val nodes = mutableSetOf<DependencyGraphNode>()
+    val edges = mutableListOf<DependencyGraphEdge>()
+    val nodeIndexMapping = mutableMapOf<DependencyReference, Int>()
+
+    fun constructGraph(dependencies: Collection<DependencyReference>) {
+        dependencies.forEach { ref ->
+            val node = DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
+            if (node !in nodes) {
+                val fromIndex = nodes.size.also { nodeIndexMapping[ref] = it }
+                nodes += node
+
+                constructGraph(ref.dependencies)
+
+                ref.dependencies.forEach { dep ->
+                    edges += DependencyGraphEdge(fromIndex, nodeIndexMapping.getValue(dep))
+                }
+            }
+        }
+    }
+
+    constructGraph(this)
+    return nodes.toList() to edges
 }

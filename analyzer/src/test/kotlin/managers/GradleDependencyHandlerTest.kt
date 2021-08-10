@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.analyzer.managers
 import Dependency
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
@@ -57,6 +58,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A test class to test the integration of the [Gradle] package manager with [DependencyGraphBuilder]. This class
@@ -78,7 +80,10 @@ class GradleDependencyHandlerTest : WordSpec({
                 .addDependency(scope2, dep1)
                 .build()
 
-            graph.scopeRoots shouldHaveSize 3
+            graph.nodes shouldNotBeNull {
+                this shouldHaveSize 3
+            }
+
             val scopes = graph.createScopes()
             scopes.map { it.name } should containExactlyInAnyOrder(scope1, scope2)
 
@@ -168,10 +173,13 @@ class GradleDependencyHandlerTest : WordSpec({
                 .addDependency(scope2, dep4)
                 .build()
 
-            graph.scopeRoots shouldHaveSize 2
-            graph.scopeRoots.all { it.fragment == 0 } shouldBe true
-            val scopes = graph.createScopes()
+            graph.scopeRoots should beEmpty()
+            graph.nodes shouldNotBeNull {
+                this shouldHaveSize 5
+                all { it.fragment == 0 } shouldBe true
+            }
 
+            val scopes = graph.createScopes()
             val scopeDependencies1 = scopeDependencies(scopes, scope1)
             scopeDependencies1.identifiers() should containExactly(dep5.toId(), dep3.toId(), dep1.toId())
             val dep5Pkg = scopeDependencies1.findDependency(dep5)
