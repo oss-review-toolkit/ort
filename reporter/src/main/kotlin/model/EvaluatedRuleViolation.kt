@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 data class EvaluatedRuleViolation(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val rule: String,
-    val pkg: EvaluatedPackage,
+    val pkg: EvaluatedPackage?,
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val license: LicenseId?,
     @JsonInclude(JsonInclude.Include.NON_NULL)

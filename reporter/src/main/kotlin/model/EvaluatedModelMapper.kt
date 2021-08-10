@@ -360,7 +360,10 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private fun addRuleViolation(ruleViolation: RuleViolation) {
         val resolutions = addResolutions(ruleViolation)
-        val pkg = packages[ruleViolation.pkg] ?: createEmptyPackage(ruleViolation.pkg)
+        val pkg = ruleViolation.pkg?.let { id ->
+            packages[id] ?: createEmptyPackage(id)
+        }
+
         val license = ruleViolation.license?.let { licenses.addIfRequired(LicenseId(it.toString())) }
 
         val evaluatedViolation = EvaluatedRuleViolation(
