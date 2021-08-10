@@ -30,7 +30,7 @@ data class RuleViolation(
     /**
      * The identifier of the package that caused this rule violation.
      */
-    val pkg: Identifier,
+    val pkg: Identifier?,
 
     /**
      * The name of the license that caused this rule violation. Can be null if the rule does not work on licenses.
