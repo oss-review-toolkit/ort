@@ -34,7 +34,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.CuratedPackage
-import org.ossreviewtoolkit.model.DependencyReference
+import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -115,12 +115,12 @@ class DependencyGraphConverterTest : WordSpec({
             val graph = convertedResult.dependencyGraphs["Maven"]!!
             val issues = mutableListOf<OrtIssue>()
 
-            fun collectIssues(ref: DependencyReference) {
-                issues += ref.issues
-                ref.dependencies.forEach(::collectIssues)
+            fun collectIssues(node: DependencyGraphNode) {
+                issues += node.issues
+                graph.dependencies[node]?.forEach(::collectIssues)
             }
 
-            graph.scopeRoots.forEach(::collectIssues)
+            graph.nodes?.forEach(::collectIssues)
             issues shouldNot beEmpty()
         }
 
@@ -137,7 +137,10 @@ class DependencyGraphConverterTest : WordSpec({
             val convertedResult = DependencyGraphConverter.convert(mixedResult)
 
             convertedResult.dependencyGraphs["Gradle"] shouldNotBeNull {
-                scopeRoots shouldNot beEmpty()
+                nodes shouldNotBeNull {
+                    this shouldNot beEmpty()
+                }
+
                 scopes.keys shouldNot beEmpty()
             }
         }
