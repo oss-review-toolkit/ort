@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortConfigDirectory
@@ -122,7 +122,7 @@ class GetPackageLicensesCommand : CliktCommand(
 }
 
 private fun Collection<LicenseFinding>.toSpdxExpression(): String =
-    asSequence().map { it.license }.distinct().joinToString(" AND ").toSpdx().sort().toString()
+    asSequence().map { it.license }.distinct().reduce(SpdxExpression::and).sort().toString()
 
 private fun ScanResultsStorage.getScanResults(id: Identifier): List<ScanResult> =
     when (val status = read(id)) {
