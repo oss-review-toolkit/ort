@@ -45,7 +45,9 @@ dependencies {
     implementation(project(":utils"))
 
     implementation("com.atlassian.jira:jira-rest-java-client-api:$jiraRestApiVersion")
-    implementation("com.atlassian.jira:jira-rest-java-client-app:$jiraRestApiVersion")
+    implementation("com.atlassian.jira:jira-rest-java-client-app:$jiraRestApiVersion") {
+        exclude("org.slf4j", "slf4j-log4j12")
+    }
     implementation("org.apache.commons:commons-email:$apacheCommonsEmailVersion")
 
     testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
