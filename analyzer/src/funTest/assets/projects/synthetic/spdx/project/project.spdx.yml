@@ -15,12 +15,12 @@ externalDocumentRefs:
 - externalDocumentId: "DocumentRef-curl-7.70.0"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "a2ab98f8e10bad892313ccc573b3820369551dcb"
+    checksumValue: "d884ee4774abb0540a9eab31c422645ffcd43b19"
   spdxDocument: "https://raw.githubusercontent.com/oss-review-toolkit/ort/master/analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl/package.spdx.yml"
 - externalDocumentId: "DocumentRef-zlib-1.2.11"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "16b1c4c5c0f2a0655643d04f20ecee385ca8cf29"
+    checksumValue: "9ffefb62ce14b40f675345a05b45846900740689"
   spdxDocument: "../package/libs/zlib/package.spdx.yml"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
