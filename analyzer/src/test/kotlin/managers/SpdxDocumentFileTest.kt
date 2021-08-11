@@ -173,7 +173,7 @@ class SpdxDocumentFileTest : WordSpec({
             )
 
             val exception = shouldThrow<IllegalArgumentException> {
-                externalDocumentReference.getSpdxPackage("SPDXRef-Package_wrong_id", File(""))
+                externalDocumentReference.getSpdxPackage("SPDXRef-Package_wrong_id", File(""), mutableListOf())
             }
 
             exception.message shouldContain externalDocumentReference.externalDocumentId
@@ -187,7 +187,7 @@ class SpdxDocumentFileTest : WordSpec({
             )
 
             val spdxPackageId = "SPDXRef-Package-zlib"
-            val spdxPackage = externalDocumentReference.getSpdxPackage(spdxPackageId, File(""))
+            val spdxPackage = externalDocumentReference.getSpdxPackage(spdxPackageId, File(""), mutableListOf())
 
             spdxPackage.spdxId shouldBe spdxPackageId
         }
