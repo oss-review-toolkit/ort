@@ -115,7 +115,8 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(packageId: String, wor
     val spdxPackage = externalSpdxDocument.packages.find { it.spdxId == packageId }
         ?: throw IllegalArgumentException("$packageId can not be found in external document $externalDocumentId.")
 
-    return spdxPackage.copy(packageFilename = workingDir.resolve(URI(spdxDocument).path).parentFile.absolutePath)
+    val spdxDocumentPath = URI(spdxDocument).path
+    return spdxPackage.copy(packageFilename = workingDir.resolve(spdxDocumentPath).parentFile.absolutePath)
 }
 
 /**
