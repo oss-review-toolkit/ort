@@ -340,7 +340,7 @@ class SpdxDocumentFile(
     }
 
     /**
-     * Get the [SpdxPackage] for the given [identifier] by resolving against packages an external document references
+     * Get the [SpdxPackage] for the given [identifier] by resolving against packages or external document references
      * contained in [doc].
      */
     private fun getSpdxPackageForId(doc: SpdxDocument, identifier: String, workingDir: File): SpdxPackage {
