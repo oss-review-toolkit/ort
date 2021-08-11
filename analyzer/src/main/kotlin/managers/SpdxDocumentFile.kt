@@ -105,7 +105,7 @@ internal fun SpdxDocument.projectPackage(): SpdxPackage? =
  * used to resolve local relative URIs to files.
  */
 internal fun SpdxExternalDocumentReference.getSpdxPackage(packageId: String, workingDir: File): SpdxPackage {
-    val externalSpdxDocument = resolveExternalDocumentReference(this, workingDir)
+    val externalSpdxDocument = resolve(workingDir)
 
     if (externalSpdxDocument.isProject()) {
         throw IllegalArgumentException("$externalDocumentId refers to a file that contains more than a single " +
@@ -117,6 +117,24 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(packageId: String, wor
 
     val spdxDocumentPath = URI(spdxDocument).path
     return spdxPackage.copy(packageFilename = workingDir.resolve(spdxDocumentPath).parentFile.absolutePath)
+}
+
+/**
+ * Return the [SpdxDocument] this [SpdxExternalDocumentReference]'s [SpdxDocument] refers to.
+ */
+private fun SpdxExternalDocumentReference.resolve(workingDir: File): SpdxDocument {
+    val uri = runCatching { URI(spdxDocument) }.getOrElse {
+        throw IllegalArgumentException("'$spdxDocument' identified by $externalDocumentId is not a valid URI. }")
+    }
+
+    if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
+        val referencedFile = workingDir.resolve(uri.path)
+        val spdxFile = referencedFile.takeIf { it.isFile }
+            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file.")
+        return SpdxModelMapper.read(spdxFile)
+    }
+
+    return requestSpdxDocument(uri)
 }
 
 /**
@@ -246,28 +264,6 @@ private fun hasDependsOnRelationship(
     }
 
     return relation in SPDX_LINKAGE_RELATIONSHIPS && !hasScopeRelationship
-}
-
-/**
- * Return [File] referred to by [SpdxExternalDocumentReference.spdxDocument].
- */
-private fun resolveExternalDocumentReference(
-    externalDocumentReference: SpdxExternalDocumentReference,
-    workingDir: File
-): SpdxDocument {
-    val uri = runCatching { URI(externalDocumentReference.spdxDocument) }.getOrElse {
-        throw IllegalArgumentException("'${externalDocumentReference.spdxDocument}' identified by " +
-                "${externalDocumentReference.externalDocumentId} is not a valid URI. }")
-    }
-
-    if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
-        val referencedFile = workingDir.resolve(uri.path)
-        val spdxFile = referencedFile.takeIf { it.isFile }
-            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file.")
-        return SpdxModelMapper.read(spdxFile)
-    }
-
-    return requestSpdxDocument(uri)
 }
 
 /**
