@@ -350,7 +350,7 @@ class SpdxDocumentFile(
         val externalDocumentReference = doc.externalDocumentRefs.find {
             it.externalDocumentId == documentRef
         } ?: throw IllegalArgumentException(
-            "No single package or externalDocumentRef with ID '$identifier' found."
+            "ID '$identifier' could neither be resolved to a package nor to an externalDocumentRef."
         )
 
         return packageForExternalDocumentId.getOrPut(externalDocumentReference.externalDocumentId) {
