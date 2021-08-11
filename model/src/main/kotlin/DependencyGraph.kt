@@ -41,11 +41,32 @@ typealias NodeDependencies = Map<DependencyGraphNode, List<DependencyGraphNode>>
  * using different dependencies in different scopes. Then the dependency graph is split into multiple fragments, and
  * each fragment has a consistent view on the dependencies it contains.
  *
- * To further reduce memory consumption, package identifiers are not repeated, but are listed once and then referenced
- * by indices. The storage format defined by this class is not really human-readable, but it causes a significant
- * reduction of memory usage. On deserialization, the information stored can be manually converted again to a structure
- * with [Scope] and [PackageReference] objects (with shared references, so keeping memory consumption low, too), so
- * that it can be processed in the usual ways.
+ * When constructing a dependency graph the dependencies are organized as a connected structure of
+ * [DependencyReference] objects in memory. Originally, the serialization format of a graph was based on this
+ * structure, but that turned out to be not ideal: During serialization, sub graphs referenced from multiple nodes
+ * (e.g. libraries with transitive dependencies referenced from multiple projects) get duplicated, which can cause a
+ * significant amount of redundancy. Therefore, the data representation has been changed again to a form, which can be
+ * serialized without introducing redundancy. It consists of the following elements:
+ *
+ * - *packages*: A list with the coordinates of all the packages (free of duplication) that are referenced by the
+ *   graph. This allows extracting the packages directly, but also has the advantage that the package coordinates do
+ *   not have to be repeated over and over: All the references to packages are expressed by indices into this list.
+ * - *nodes*: An ordered list with the nodes of the dependency graph. A single node represents a package, and
+ *   therefore has a reference into the list with package coordinates. It can, however, happen that packages occur
+ *   multiple times in the graph if they are in different sub trees with different sets of transitive dependencies.
+ *   Then there are multiple nodes for the packages affected, and a *fragmentIndex* is used to identify them uniquely.
+ *   Nodes also store information about issues of a package and their linkage.
+ * - *edges*: Here the structure of the graph comes in. Each edge connects two nodes and represents a directed
+ *   *depends-on* relationship. The nodes are referenced by numeric indices into the list of *nodes*.
+ * - *scopes*: This is a map that associates the scopes used by projects with their direct dependencies. A single
+ *   dependency graph contains the dependencies of all the projects processed by a specific package manager.
+ *   Therefore, the keys of this map are scope names qualified by the coordinates of a project; which makes them
+ *   unique. The values are references to the nodes in the graph that correspond to the packages the scopes depend on
+ *   directly.
+ *
+ * So to navigate this structure, start with a *scope* and gather the references to its direct dependency *nodes*.
+ * Then, by following the *edges* starting from these *nodes*, the set of transitive dependencies can be determined.
+ * The numeric indices can be resolved via the *packages* list.
  */
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 data class DependencyGraph(
