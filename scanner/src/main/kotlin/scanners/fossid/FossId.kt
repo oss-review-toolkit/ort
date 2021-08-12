@@ -29,7 +29,6 @@ import kotlin.time.measureTimedValue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeoutOrNull
 
-import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.createProject
@@ -170,7 +169,7 @@ class FossId internal constructor(
     // of scans for each package.
     private val createdScans = mutableSetOf<String>()
 
-    private val service = FossIdServiceWithVersion.instance(config.createService())
+    private val service = config.createService()
 
     override val version: String = service.version
 
