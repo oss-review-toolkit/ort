@@ -285,9 +285,9 @@ packages:
   description: "Safely add untrusted strings to HTML/XML markup."
   homepage_url: "https://palletsprojects.com/p/markupsafe/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/27/c3/20f02d95e78756d59a4c02f179a6ee66e3283cc34e3051d436fd152d1e76/MarkupSafe-2.0.1-cp36-cp36m-macosx_10_9_x86_64.whl"
+    url: "https://files.pythonhosted.org/packages/81/8b/f28eac2790d49dde61f89ae9e007ac65002edc90bb2dd63c3b9e653820d2/MarkupSafe-2.0.1-cp310-cp310-macosx_10_9_universal2.whl"
     hash:
-      value: "bbc36137aaabd877ede6ba8f4e040fb0"
+      value: "f42b3feff99f5f5f0fa9637d2e790288"
       algorithm: "MD5"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/bf/10/ff66fea6d1788c458663a84d88787bae15d45daa16f6b3ef33322a51fc7e/MarkupSafe-2.0.1.tar.gz"
