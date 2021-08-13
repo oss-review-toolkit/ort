@@ -128,9 +128,9 @@ private fun SpdxExternalDocumentReference.resolve(workingDir: File): SpdxDocumen
     }
 
     if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
-        val referencedFile = workingDir.resolve(uri.path)
+        val referencedFile = workingDir.resolve(uri.path).absoluteFile.normalize()
         val spdxFile = referencedFile.takeIf { it.isFile }
-            ?: throw IllegalArgumentException("The local file URI '$uri' does not point to an existing file.")
+            ?: throw IllegalArgumentException("The file '$referencedFile' pointed to by URI '$uri' does not exist.")
         return SpdxModelMapper.read(spdxFile)
     }
 
