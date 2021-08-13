@@ -51,6 +51,7 @@ class FossIdConfigTest : WordSpec({
                 "packageAuthorsFilter" to AUTHOR_FILTER,
                 "waitForResult" to "false",
                 "deltaScans" to "true",
+                "deltaScanLimit" to "42",
                 "addAuthenticationToUrl" to "false"
             )
             val scannerConfig = options.toScannerConfig()
@@ -65,6 +66,7 @@ class FossIdConfigTest : WordSpec({
                 packageNamespaceFilter = NAMESPACE_FILTER,
                 waitForResult = false,
                 deltaScans = true,
+                deltaScanLimit = 42,
                 addAuthenticationToUrl = false,
                 options = options
             )
@@ -88,6 +90,7 @@ class FossIdConfigTest : WordSpec({
                 packageNamespaceFilter = "",
                 waitForResult = true,
                 deltaScans = false,
+                deltaScanLimit = Int.MAX_VALUE,
                 addAuthenticationToUrl = false,
                 options = options
             )
@@ -115,6 +118,17 @@ class FossIdConfigTest : WordSpec({
             val scannerConfig = mapOf(
                 "serverUrl" to SERVER_URL,
                 "apiKey" to API_KEY
+            ).toScannerConfig()
+
+            shouldThrow<IllegalArgumentException> { FossIdConfig.create(scannerConfig) }
+        }
+
+        "throw if the deltaScanLimit is invalid" {
+            val scannerConfig = mapOf(
+                "serverUrl" to SERVER_URL,
+                "apiKey" to API_KEY,
+                "user" to USER,
+                "deltaScanLimit" to "0"
             ).toScannerConfig()
 
             shouldThrow<IllegalArgumentException> { FossIdConfig.create(scannerConfig) }
