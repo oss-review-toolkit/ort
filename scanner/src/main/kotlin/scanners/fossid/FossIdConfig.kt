@@ -45,6 +45,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  * * **"deltaScans":** When set, ORT will create delta scans. When only changes in a repository need to be scanned,
  * delta scans reuse the identifications of latest scan on this repository to reduce the amount of findings. If
  * deltaScans is set and no scan exist yet, an initial scan called "origin" scan will be created.
+ * * **"deltaScanLimit":** This setting can be used to limit the number of delta scans to keep for a given repository.
+ * So if another delta scan is created, older delta scans are deleted until this number is reached. If unspecified, no
+ * limit is enforced on the number of delta scans to keeo. This property is evaluated only if *deltaScans* is enabled.
  *
  * Naming conventions options. If they are not set, default naming convention are used.
  * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
@@ -76,6 +79,9 @@ internal data class FossIdConfig(
 
     /** Flag whether delta scans should be triggered. */
     val deltaScans: Boolean,
+
+    /** A maximum number of delta scans to keep for a single repository. */
+    val deltaScanLimit: Int,
 
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
@@ -111,6 +117,9 @@ internal data class FossIdConfig(
         /** Name of the configuration property controlling whether delta scans are to be created. */
         private const val DELTA_SCAN_PROPERTY = "deltaScans"
 
+        /** Name of the configuration property that limits the number of delta scans. */
+        private const val DELTA_SCAN_LIMIT_PROPERTY = "deltaScanLimit"
+
         /**
          * The scanner options beginning with this prefix will be used to parametrize project and scan names.
          */
@@ -133,6 +142,11 @@ internal data class FossIdConfig(
             val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toBooleanStrictOrNull() ?: true
             val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY].toBoolean()
 
+            val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
+            require(deltaScanLimit > 0) {
+                "deltaScanLimit must be > 0, current value is $deltaScanLimit."
+            }
+
             log.info { "waitForResult parameter is set to '$waitForResult'" }
 
             return FossIdConfig(
@@ -144,6 +158,7 @@ internal data class FossIdConfig(
                 packageAuthorsFilter,
                 addAuthenticationToUrl,
                 deltaScans,
+                deltaScanLimit,
                 fossIdScannerOptions
             )
         }
