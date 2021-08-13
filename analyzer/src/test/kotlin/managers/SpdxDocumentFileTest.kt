@@ -165,15 +165,17 @@ class SpdxDocumentFileTest : WordSpec({
     }
 
     "getSpdxPackage()" should {
+        val spdxProjectFile = File("src/funTest/assets/projects/synthetic/spdx/project/project.spdx.yml")
+
         "throw if an external package id does not match relationship id" {
             val externalDocumentReference = SpdxExternalDocumentReference(
                 "DocumentRef-zlib-1.2.11",
                 SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "9ffefb62ce14b40f675345a05b45846900740689"),
-                "src/funTest/assets/projects/synthetic/spdx/package/libs/zlib/package.spdx.yml"
+                "../package/libs/zlib/package.spdx.yml"
             )
 
             val exception = shouldThrow<IllegalArgumentException> {
-                externalDocumentReference.getSpdxPackage("SPDXRef-Package_wrong_id", File(""), mutableListOf())
+                externalDocumentReference.getSpdxPackage("SPDXRef-Package_wrong_id", spdxProjectFile, mutableListOf())
             }
 
             exception.message shouldContain externalDocumentReference.externalDocumentId
@@ -183,11 +185,11 @@ class SpdxDocumentFileTest : WordSpec({
             val externalDocumentReference = SpdxExternalDocumentReference(
                 "DocumentRef-zlib-1.2.11",
                 SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "9ffefb62ce14b40f675345a05b45846900740689"),
-                "src/funTest/assets/projects/synthetic/spdx/package/libs/zlib/package.spdx.yml"
+                "../package/libs/zlib/package.spdx.yml"
             )
 
             val spdxPackageId = "SPDXRef-Package-zlib"
-            val spdxPackage = externalDocumentReference.getSpdxPackage(spdxPackageId, File(""), mutableListOf())
+            val spdxPackage = externalDocumentReference.getSpdxPackage(spdxPackageId, spdxProjectFile, mutableListOf())
 
             spdxPackage.spdxId shouldBe spdxPackageId
         }
