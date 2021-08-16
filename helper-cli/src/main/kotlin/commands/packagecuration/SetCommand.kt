@@ -26,9 +26,8 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
+import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.writeOrtResult
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 class SetCommand : CliktCommand(
@@ -60,7 +59,7 @@ class SetCommand : CliktCommand(
     override fun run() {
         val curations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations
 
-        val ortResult = ortFile.readValue<OrtResult>().replacePackageCurations(curations)
+        val ortResult = readOrtResult(ortFile).replacePackageCurations(curations)
 
         writeOrtResult(ortResult, ortFile)
     }
