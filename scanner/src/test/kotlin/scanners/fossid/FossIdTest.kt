@@ -38,6 +38,7 @@ import io.mockk.spyk
 
 import java.io.File
 import java.time.Instant
+import java.util.concurrent.atomic.AtomicInteger
 
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.runBlocking
@@ -479,6 +480,61 @@ class FossIdTest : WordSpec({
                 service.deleteScan(USER, API_KEY, scanCode)
             }
         }
+
+        "enforce a limit on the number of delta scans" {
+            val numberOfDeltaScans = 8
+            val deltaScanLimit = 4
+            val projectCode = projectCode(PROJECT)
+            val originCode = scanCode(PROJECT, FossId.DeltaTag.ORIGIN, index = 0)
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig(deltaScanLimit = deltaScanLimit)
+            val vcsInfo = createVcsInfo()
+            val originScan = createScan(vcsInfo.url, vcsInfo.revision, originCode, scanId = "${SCAN_ID}0")
+            val otherScan1 = createScan(vcsInfo.url, "${vcsInfo.revision}_other", "anotherCode")
+            val otherScan2 = createScan("someURL", "someRevision", "someCode", scanId = "zzz")
+            val deltaScans = (1..numberOfDeltaScans).map {
+                createScan(
+                    vcsInfo.url,
+                    vcsInfo.revision,
+                    scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA, it),
+                    "$SCAN_ID$it"
+                )
+            }
+
+            val recentScan = deltaScans.last()
+            val scans = deltaScans + listOf(otherScan1, otherScan2, originScan)
+
+            val service = config.createService()
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, scans)
+                .expectCheckScanStatus(recentScan.code!!, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDownload(scanCode)
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 200)
+            coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 200)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+
+            coVerify {
+                (1..(numberOfDeltaScans - deltaScanLimit + 1)).map {
+                    service.deleteScan(USER, API_KEY, scanCode(PROJECT, FossId.DeltaTag.DELTA, index = it))
+                }
+
+                service.deleteScan(USER, API_KEY, originCode)
+            }
+
+            coVerify(exactly = 0) {
+                service.deleteScan(
+                    USER,
+                    API_KEY,
+                    scanCode(PROJECT, FossId.DeltaTag.DELTA, index = numberOfDeltaScans - deltaScanLimit + 2)
+                )
+            }
+        }
     }
 })
 
@@ -513,12 +569,13 @@ private fun createConfig(
     waitForResult: Boolean = true,
     packageNamespaceFilter: String = "",
     packageAuthorsFilter: String = "",
-    deltaScans: Boolean = true
+    deltaScans: Boolean = true,
+    deltaScanLimit: Int = Int.MAX_VALUE
 ): FossIdConfig {
     val config = FossIdConfig(
         "https://www.example.org/fossid",
         API_KEY, USER, waitForResult, packageNamespaceFilter, packageAuthorsFilter, addAuthenticationToUrl = false,
-        deltaScans, 0, emptyMap()
+        deltaScans, deltaScanLimit, emptyMap()
     )
 
     val service = createServiceMock()
@@ -535,6 +592,7 @@ private fun createConfig(
  * _createXXX()_ functions.
  */
 private fun createNamingProviderMock(): FossIdNamingProvider {
+    val counter = AtomicInteger()
     val provider = mockk<FossIdNamingProvider>()
 
     every { provider.createProjectCode(any()) } answers {
@@ -542,7 +600,7 @@ private fun createNamingProviderMock(): FossIdNamingProvider {
     }
 
     every { provider.createScanCode(any(), any()) } answers {
-        scanCode(firstArg(), secondArg())
+        scanCode(firstArg(), secondArg(), index = counter.incrementAndGet())
     }
 
     return provider
@@ -566,9 +624,10 @@ private fun createServiceMock(): FossIdServiceWithVersion {
 private fun projectCode(name: String): String = "$name:projectCode"
 
 /**
- * Generate a synthetic scan code for the project with the given [name] and [tag].
+ * Generate a synthetic scan code for the project with the given [name], [tag], and [index].
  */
-private fun scanCode(name: String, tag: FossId.DeltaTag?): String = "$name:${tag?.name}:scanCode"
+private fun scanCode(name: String, tag: FossId.DeltaTag? = null, index: Int = 1): String =
+    "$name:${tag?.name}:scanCode$index"
 
 /**
  * Create a mock [UnversionedScanDescription] that returns the given [state].
@@ -583,11 +642,12 @@ private fun createScanDescription(state: ScanStatus): UnversionedScanDescription
 /**
  * Create a mock [Scan] with the given properties.
  */
-private fun createScan(url: String, revision: String, scanCode: String): Scan {
+private fun createScan(url: String, revision: String, scanCode: String, scanId: String = SCAN_ID): Scan {
     val scan = mockk<Scan>()
     every { scan.gitRepoUrl } returns url
     every { scan.gitBranch } returns revision
     every { scan.code } returns scanCode
+    every { scan.id } returns scanId
     return scan
 }
 

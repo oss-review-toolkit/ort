@@ -320,9 +320,9 @@ class FossId internal constructor(
                     val scanResult = ScanResult(provenance, details, summary)
                     results.getOrPut(pkg) { mutableListOf() } += scanResult
 
-                    createdScans.forEach {
-                        log.warn("Deleting previous scan $it.")
-                        deleteScan(it)
+                    createdScans.forEach { code ->
+                        log.warn { "Deleting scan $code during exception cleanup." }
+                        deleteScan(code)
                     }
                 }
             }
@@ -345,16 +345,13 @@ class FossId internal constructor(
         return ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
     }
 
-    private suspend fun List<Scan>.findLatestPendingOrFinishedScan(
-        url: String,
-        revision: String? = null
-    ): Scan? =
-        filter {
-            // The scans in the server contain the url with the credentials so we have to remove it for the
-            // comparison. If we don't, the scans won't be matched if the password changes!
-            val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
-            urlWithoutCredentials == url && (revision == null || (it.gitBranch == revision))
-        }.sortedByDescending { scan -> scan.id }.find { scan ->
+    /**
+     * Find the latest [Scan] in this list with a finished state. If necessary, wait for a scan to finish. Note that
+     * this function expects that [recentScansForRepository] has been applied to this list for the current
+     * repository.
+     */
+    private suspend fun List<Scan>.findLatestPendingOrFinishedScan(): Scan? =
+        find { scan ->
             val scanCode = requireNotNull(scan.code) {
                 "FossId returned a null scancode for an existing scan."
             }
@@ -374,6 +371,20 @@ class FossId internal constructor(
             }
         }
 
+    /**
+     * Filter this list of [Scan]s for the repository defined by [url] and an optional [revision] and sort it by
+     * scan ID, so that the most recent scan comes first and the oldest scan comes last.
+     */
+    private fun List<Scan>.recentScansForRepository(
+        url: String,
+        revision: String? = null
+    ): List<Scan> = filter {
+        // The scans in the server contain the url with the credentials so we have to remove it for the
+        // comparison. If we don't, the scans won't be matched if the password changes!
+        val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
+        urlWithoutCredentials == url && (revision == null || (it.gitBranch == revision))
+    }.sortedByDescending { scan -> scan.id }
+
     private suspend fun checkAndCreateScan(
         scans: List<Scan>,
         url: String,
@@ -381,7 +392,7 @@ class FossId internal constructor(
         projectCode: String,
         projectName: String
     ): String {
-        val existingScan = scans.findLatestPendingOrFinishedScan(url, revision)
+        val existingScan = scans.recentScansForRepository(url, revision).findLatestPendingOrFinishedScan()
 
         val scanCode = if (existingScan == null) {
             log.info { "No scan found for $url and revision $revision. Creating scan ..." }
@@ -414,7 +425,8 @@ class FossId internal constructor(
         projectName: String
     ): String {
         // we ignore the revision because we want to do a delta scan
-        val existingScan = scans.findLatestPendingOrFinishedScan(url)
+        val recentScans = scans.recentScansForRepository(url)
+        val existingScan = recentScans.findLatestPendingOrFinishedScan()
 
         val scanCode = if (existingScan == null) {
             log.info { "No scan found for $url and revision $revision. Creating origin scan ..." }
@@ -447,9 +459,33 @@ class FossId internal constructor(
             }
 
             checkScan(scanCode, *deltaScanRunParameters(existingScancode))
+
+            enforceDeltaScanLimit(recentScans)
         }
 
         return scanCode
+    }
+
+    /**
+     * Make sure that only the configured number of delta scans exists for the current package. Based on the list of
+     * [existingScans], delete older scans until the maximum number of delta scans is reached.
+     */
+    private suspend fun enforceDeltaScanLimit(existingScans: List<Scan>) {
+        log.info { "Number of delta scans to keep: ${config.deltaScanLimit}." }
+
+        // The current scan needs to be counted as well, in addition to the already existing scans.
+        if (existingScans.size + 1 > config.deltaScanLimit) {
+            log.info { "Deleting ${existingScans.size + 1 - config.deltaScanLimit} older scans." }
+        }
+
+        // Drop the most recent scans to keep in order to iterate over the remaining ones to delete them.
+        existingScans.drop(config.deltaScanLimit - 1)
+            .forEach { scan ->
+                scan.code?.let { code ->
+                    log.info { "Deleting scan $code to enforce the maximum number of delta scans." }
+                    deleteScan(code)
+                }
+            }
     }
 
     /**
