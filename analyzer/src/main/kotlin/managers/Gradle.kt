@@ -55,6 +55,8 @@ import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.temporaryProperties
 
+private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
+
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
  */
@@ -86,7 +88,7 @@ class Gradle(
      */
     private class GradleCacheReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository("gradleCache")
-        private val gradleCacheRoot = Os.userHomeDirectory.resolve(".gradle/caches/modules-2/files-2.1")
+        private val gradleCacheRoot = GRADLE_USER_HOME.resolve("caches/modules-2/files-2.1")
 
         override fun findArtifact(artifact: Artifact): File? {
             val artifactRootDir = File(
@@ -132,7 +134,7 @@ class Gradle(
         // API. A typical use case for this is to apply proxy settings so that the Gradle distribution used by the build
         // can be downloaded behind a proxy, see https://github.com/gradle/gradle/issues/6825#issuecomment-502720562.
         // For simplicity, limit the search for system properties to the current user's Gradle properties file for now.
-        val gradlePropertiesFile = Os.userHomeDirectory.resolve(".gradle/gradle.properties")
+        val gradlePropertiesFile = GRADLE_USER_HOME.resolve("gradle.properties")
         if (gradlePropertiesFile.isFile) {
             gradlePropertiesFile.inputStream().use {
                 val properties = Properties().apply { load(it) }
