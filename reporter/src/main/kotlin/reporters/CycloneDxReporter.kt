@@ -61,7 +61,7 @@ import org.ossreviewtoolkit.utils.isFalse
  */
 class CycloneDxReporter : Reporter {
     companion object {
-        const val REPORT_BASE_FILENAME = "CycloneDX-BOM"
+        const val REPORT_BASE_FILENAME = "bom.cyclonedx"
 
         const val OPTION_SINGLE_BOM = "single.bom"
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
