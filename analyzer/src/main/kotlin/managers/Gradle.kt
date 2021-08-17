@@ -132,7 +132,10 @@ class Gradle(
         // API. A typical use case for this is to apply proxy settings so that the Gradle distribution used by the build
         // can be downloaded behind a proxy, see https://github.com/gradle/gradle/issues/6825#issuecomment-502720562.
         // For simplicity, limit the search for system properties to the current user's Gradle properties file for now.
-        val gradlePropertiesFile = Os.userHomeDirectory.resolve(".gradle/gradle.properties")
+        var gradlePropertiesFile = Os.userHomeDirectory.resolve(".gradle/gradle.properties")
+        if (Os.env.containsKey("GRADLE_USER_HOME")) {
+            gradlePropertiesFile = File(Os.env["GRADLE_USER_HOME"]).resolve("gradle.properties")
+        }
         if (gradlePropertiesFile.isFile) {
             gradlePropertiesFile.inputStream().use {
                 val properties = Properties().apply { load(it) }
