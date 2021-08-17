@@ -42,6 +42,8 @@ import org.ossreviewtoolkit.spdx.model.SpdxDocument
  */
 class SpdxDocumentReporter : Reporter {
     companion object {
+        const val REPORT_BASE_FILENAME = "bom.spdx"
+
         const val OPTION_CREATION_INFO_COMMENT = "creationInfo.comment"
         const val OPTION_DOCUMENT_COMMENT = "document.comment"
         const val OPTION_DOCUMENT_NAME = "document.name"
@@ -78,7 +80,7 @@ class SpdxDocumentReporter : Reporter {
         return outputFileFormats.map { fileFormat ->
             val serializedDocument = fileFormat.mapper.writeValueAsString(spdxDocument)
 
-            outputDir.resolve("document.spdx.${fileFormat.fileExtension}").apply {
+            outputDir.resolve("$REPORT_BASE_FILENAME.${fileFormat.fileExtension}").apply {
                 bufferedWriter().use { it.write(serializedDocument) }
             }
         }
