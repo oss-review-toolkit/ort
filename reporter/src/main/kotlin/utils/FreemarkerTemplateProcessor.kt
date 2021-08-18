@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +48,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
+import org.ossreviewtoolkit.model.licenses.filterLicenseResolutions
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxConstants
@@ -261,12 +263,14 @@ class FreemarkerTemplateProcessor(
          * applied by default. The returned list is sorted by license identifier.
          */
         @JvmOverloads
+        @Suppress("LongParameterList")
         fun mergeLicenses(
             models: Collection<PackageModel>,
             licenseView: LicenseView = LicenseView.ALL,
             omitNotPresent: Boolean = false,
             omitExcluded: Boolean = true,
-            skipLicenseChoices: Boolean = false
+            skipLicenseChoices: Boolean = false,
+            omitResolvedLicenseViolations: Boolean = false
         ): List<ResolvedLicense> =
             mergeResolvedLicenses(
                 models.filter { !omitExcluded || !it.excluded }.flatMap { model ->
@@ -274,9 +278,26 @@ class FreemarkerTemplateProcessor(
                         model.license,
                         model.licenseChoices
                     )
+
                     val licenses = chosenResolvedLicenseInfo.filter(licenseView).licenses
-                    val filteredLicenses = if (omitExcluded) licenses.filterExcluded() else licenses
-                    if (omitNotPresent) filteredLicenses.filter(::isLicensePresent) else filteredLicenses
+
+                    val licensesWithoutExclusions = if (omitExcluded) licenses.filterExcluded() else licenses
+
+                    val licensesWithoutResolutions = if (omitResolvedLicenseViolations) {
+                        licensesWithoutExclusions.filterLicenseResolutions(
+                            model.id,
+                            input.ortResult.evaluator?.violations ?: emptyList(),
+                            input.resolutionProvider.getResolutionsFor(input.ortResult).ruleViolations
+                        )
+                    } else {
+                        licensesWithoutExclusions
+                    }
+
+                    if (omitNotPresent) {
+                        licensesWithoutResolutions.filter(::isLicensePresent)
+                    } else {
+                        licensesWithoutResolutions
+                    }
                 }
             )
 
