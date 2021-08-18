@@ -593,7 +593,7 @@ authentication is not required:
 ```hocon
 ort {
   advisor {
-    VulnerableCode {
+    vulnerableCode {
       serverUrl = "http://localhost:8000"
     }
   }
