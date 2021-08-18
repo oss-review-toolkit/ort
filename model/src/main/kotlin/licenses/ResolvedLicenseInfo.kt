@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +24,12 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
@@ -290,6 +293,24 @@ fun List<ResolvedLicense>.filterExcluded() =
         resolvedLicense.sources != setOf(LicenseSource.DETECTED) ||
                 resolvedLicense.locations.any { it.matchingPathExcludes.isEmpty() }
     }.map { it.filterExcludedCopyrights() }
+
+/**
+ * Filter licenses for which a resolution exists. Licenses are removed if all the conditions match:
+ *  * Any of the [resolutions] matches the [violations].
+ *  * The violation was caused by a [license][RuleViolation.license].
+ *  * The package with the [packageId] is licensed with the license from the violation.
+ */
+fun List<ResolvedLicense>.filterLicenseResolutions(
+    packageId: Identifier,
+    violations: List<RuleViolation>,
+    resolutions: List<RuleViolationResolution>
+) = filter { resolvedLicense ->
+    violations.none { ruleViolation ->
+        ruleViolation.pkg == packageId &&
+                resolvedLicense.license == ruleViolation.license &&
+                resolutions.any { it.matches(ruleViolation) }
+    }
+}
 
 private fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: Boolean): List<ResolvedCopyright> {
     val allStatements = map { it.statement }

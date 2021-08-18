@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -27,6 +29,10 @@ import io.mockk.mockk
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
 import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
@@ -141,6 +147,177 @@ class ResolvedLicenseInfoTest : WordSpec() {
                 val filteredResolvedLicenseInfo = resolvedLicenseInfo.applyChoices(choices)
 
                 filteredResolvedLicenseInfo.licenses should containLicensesExactly(mit, bsd)
+            }
+        }
+
+        "filterLicenseResolutions()" should {
+            "remove license that is resolved by a license rule violation resolution" {
+                val resolvedLicenseInfo = ResolvedLicenseInfo(
+                    id = Identifier.EMPTY,
+                    licenseInfo = mockk(),
+                    licenses = listOf(
+                        ResolvedLicense(
+                            license = gpl.toSpdx() as SpdxSingleLicenseExpression,
+                            originalDeclaredLicenses = setOf(gpl),
+                            originalExpressions = mapOf(
+                                LicenseSource.DECLARED to setOf(gpl.toSpdx()),
+                                LicenseSource.DETECTED to setOf(gpl.toSpdx())
+                            ),
+                            locations = emptySet()
+                        )
+                    ),
+                    copyrightGarbage = emptyMap(),
+                    unmatchedCopyrights = emptyMap()
+                )
+
+                val violations = listOf(
+                    RuleViolation(
+                        "example rule",
+                        Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.1"),
+                        SpdxSingleLicenseExpression.parse(gpl),
+                        null,
+                        Severity.ERROR,
+                        "example message",
+                        "how to fix"
+                    )
+                )
+
+                val resolutions = listOf(
+                    RuleViolationResolution(
+                        "example message", RuleViolationResolutionReason.CANT_FIX_EXCEPTION, "example comment"
+                    ),
+                    RuleViolationResolution(
+                        "different regex", RuleViolationResolutionReason.CANT_FIX_EXCEPTION, "example comment"
+                    )
+                )
+
+                val filteredLicenses = resolvedLicenseInfo.licenses.filterLicenseResolutions(
+                    Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.1"),
+                    violations,
+                    resolutions
+                )
+
+                filteredLicenses should beEmpty()
+            }
+
+            "only remove license if it is the licenses of the specified package" {
+                val resolvedLicenses = listOf(
+                    ResolvedLicense(
+                        license = gpl.toSpdx() as SpdxSingleLicenseExpression,
+                        originalDeclaredLicenses = setOf(gpl),
+                        originalExpressions = mapOf(
+                            LicenseSource.DECLARED to setOf(gpl.toSpdx()),
+                            LicenseSource.DETECTED to setOf(gpl.toSpdx())
+                        ),
+                        locations = emptySet()
+                    ),
+                    ResolvedLicense(
+                        license = bsd.toSpdx() as SpdxSingleLicenseExpression,
+                        originalDeclaredLicenses = setOf(bsd),
+                        originalExpressions = mapOf(
+                            LicenseSource.DECLARED to setOf(bsd.toSpdx()),
+                            LicenseSource.DETECTED to setOf(bsd.toSpdx())
+                        ),
+                        locations = emptySet()
+                    ),
+                )
+
+                val violations = listOf(
+                    RuleViolation(
+                        "example rule",
+                        Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.1"),
+                        SpdxSingleLicenseExpression.parse(gpl),
+                        null,
+                        Severity.ERROR,
+                        "example message",
+                        "how to fix"
+                    ),
+                    RuleViolation(
+                        "example rule",
+                        Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.10"),
+                        SpdxSingleLicenseExpression.parse(bsd),
+                        null,
+                        Severity.ERROR,
+                        "example message",
+                        "how to fix"
+                    ),
+                )
+
+                val resolutions = listOf(
+                    RuleViolationResolution(
+                        "example message", RuleViolationResolutionReason.CANT_FIX_EXCEPTION, "example comment"
+                    ),
+                    RuleViolationResolution(
+                        "different regex", RuleViolationResolutionReason.CANT_FIX_EXCEPTION, "example comment"
+                    )
+                )
+
+                val filteredLicenses = resolvedLicenses.filterLicenseResolutions(
+                    Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.1"),
+                    violations,
+                    resolutions
+                )
+
+                filteredLicenses should haveSize(1)
+                filteredLicenses[0].license shouldBe SpdxSingleLicenseExpression.parse(bsd)
+            }
+
+            "not remove license that does not contain a license rule violation resolution" {
+                val resolvedLicenses = listOf(
+                    ResolvedLicense(
+                        license = gpl.toSpdx() as SpdxSingleLicenseExpression,
+                        originalDeclaredLicenses = setOf(gpl),
+                        originalExpressions = mapOf(
+                            LicenseSource.DECLARED to setOf(gpl.toSpdx()),
+                            LicenseSource.DETECTED to setOf(gpl.toSpdx())
+                        ),
+                        locations = emptySet()
+                    ),
+                    ResolvedLicense(
+                        license = bsd.toSpdx() as SpdxSingleLicenseExpression,
+                        originalDeclaredLicenses = setOf(bsd),
+                        originalExpressions = mapOf(
+                            LicenseSource.DECLARED to setOf(bsd.toSpdx()),
+                            LicenseSource.DETECTED to setOf(bsd.toSpdx())
+                        ),
+                        locations = emptySet()
+                    ),
+                )
+
+                val violations = listOf(
+                    RuleViolation(
+                        "example rule",
+                        Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.1"),
+                        SpdxSingleLicenseExpression.parse(gpl),
+                        null,
+                        Severity.ERROR,
+                        "example message",
+                        "how to fix"
+                    ),
+                    RuleViolation(
+                        "example rule",
+                        Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.10"),
+                        SpdxSingleLicenseExpression.parse(bsd),
+                        null,
+                        Severity.ERROR,
+                        "example message",
+                        "how to fix"
+                    ),
+                )
+
+                val resolutions = listOf(
+                    RuleViolationResolution(
+                        "different regex", RuleViolationResolutionReason.CANT_FIX_EXCEPTION, "example comment"
+                    )
+                )
+
+                val filteredLicenses = resolvedLicenses.filterLicenseResolutions(
+                    Identifier("Maven", "org.oss-review-toolkit", "example", "0.0.1"),
+                    violations,
+                    resolutions
+                )
+
+                filteredLicenses should haveSize(2)
             }
         }
     }
