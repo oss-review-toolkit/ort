@@ -151,7 +151,7 @@ class Sbt(
         }
 
         if (internalProjectNames.isEmpty()) {
-            log.warn { "No SBT projects found inside the '$workingDir' directory." }
+            log.warn { "No SBT project found inside the '$workingDir' directory." }
         }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
