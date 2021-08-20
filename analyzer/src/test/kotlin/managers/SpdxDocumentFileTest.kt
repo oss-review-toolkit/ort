@@ -19,16 +19,17 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -38,6 +39,7 @@ import org.ossreviewtoolkit.spdx.model.SpdxChecksum
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /*
  * The below package data is based on example data taken from the SPDX specification.
@@ -173,12 +175,12 @@ class SpdxDocumentFileTest : WordSpec({
                 SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "9ffefb62ce14b40f675345a05b45846900740689"),
                 "../package/libs/zlib/package.spdx.yml"
             )
+            val issues = mutableListOf<OrtIssue>()
 
-            val exception = shouldThrow<IllegalArgumentException> {
-                externalDocumentReference.getSpdxPackage("SPDXRef-Package_wrong_id", spdxProjectFile, mutableListOf())
-            }
+            externalDocumentReference.getSpdxPackage("SPDXRef-Package_wrong_id", spdxProjectFile, issues)
 
-            exception.message shouldContain externalDocumentReference.externalDocumentId
+            issues shouldHaveSize 1
+            issues shouldHaveSingleElement { externalDocumentReference.externalDocumentId in it.message }
         }
 
         "return the correct SPDX package" {
@@ -191,7 +193,9 @@ class SpdxDocumentFileTest : WordSpec({
             val spdxPackageId = "SPDXRef-Package-zlib"
             val spdxPackage = externalDocumentReference.getSpdxPackage(spdxPackageId, spdxProjectFile, mutableListOf())
 
-            spdxPackage.spdxId shouldBe spdxPackageId
+            spdxPackage shouldNotBeNull {
+                spdxId shouldBe spdxPackageId
+            }
         }
     }
 })

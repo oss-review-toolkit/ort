@@ -109,16 +109,25 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(
     packageId: String,
     definitionFile: File,
     issues: MutableList<OrtIssue>
-): SpdxPackage {
-    val externalSpdxDocument = resolve(definitionFile, issues)
+): SpdxPackage? {
+    val externalSpdxDocument = resolve(definitionFile, issues) ?: return null
 
     if (externalSpdxDocument.isProject()) {
-        throw IllegalArgumentException("$externalDocumentId refers to a file that contains more than a single " +
-                "package. This is currently not supported yet.")
+        issues += createAndLogIssue(
+            source = MANAGER_NAME,
+            message = "$externalDocumentId refers to a file that contains more than a single package. This is " +
+                    "currently not supported."
+        )
+        return null
     }
 
-    val spdxPackage = externalSpdxDocument.packages.find { it.spdxId == packageId }
-        ?: throw IllegalArgumentException("$packageId can not be found in external document $externalDocumentId.")
+    val spdxPackage = externalSpdxDocument.packages.find { it.spdxId == packageId } ?: run {
+        issues += createAndLogIssue(
+            source = MANAGER_NAME,
+            message = "$packageId can not be found in external document $externalDocumentId."
+        )
+        return null
+    }
 
     val spdxDocumentPath = URI(spdxDocument).path
     return spdxPackage.copy(packageFilename = definitionFile.resolveSibling(spdxDocumentPath).parentFile.absolutePath)
@@ -127,20 +136,36 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(
 /**
  * Return the [SpdxDocument] this [SpdxExternalDocumentReference]'s [SpdxDocument] refers to.
  */
-private fun SpdxExternalDocumentReference.resolve(definitionFile: File, issues: MutableList<OrtIssue>): SpdxDocument {
+private fun SpdxExternalDocumentReference.resolve(definitionFile: File, issues: MutableList<OrtIssue>): SpdxDocument? {
     val uri = runCatching { URI(spdxDocument) }.getOrElse {
-        throw IllegalArgumentException("'$spdxDocument' identified by $externalDocumentId is not a valid URI. }")
+        issues += createAndLogIssue(
+            source = MANAGER_NAME,
+            message = "'$spdxDocument' identified by $externalDocumentId is not a valid URI. }"
+        )
+        return null
     }
 
     var tempDir: File? = null
 
     val spdxFile = if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
         val referencedFile = definitionFile.resolveSibling(uri.path).absoluteFile.normalize()
-        referencedFile.takeIf { it.isFile }
-            ?: throw IllegalArgumentException("The file '$referencedFile' pointed to by URI '$uri' does not exist.")
+        referencedFile.takeIf { it.isFile } ?: run {
+            issues += createAndLogIssue(
+                source = MANAGER_NAME,
+                message = "The file '$referencedFile' pointed to by URI '$uri' does not exist."
+            )
+            return null
+        }
     } else {
         tempDir = createOrtTempDir()
-        OkHttpClientHelper.downloadFile(uri.toString(), tempDir).getOrThrow()
+        OkHttpClientHelper.downloadFile(uri.toString(), tempDir).getOrNull() ?: run {
+            tempDir.safeDeleteRecursively(force = true)
+            issues += createAndLogIssue(
+                source = MANAGER_NAME,
+                message = "Failed to download '$spdxDocument' from $uri."
+            )
+            return null
+        }
     }
 
     val hash = Hash.create(checksum.checksumValue, checksum.algorithm.name)
@@ -355,18 +380,23 @@ class SpdxDocumentFile(
         identifier: String,
         definitionFile: File,
         issues: MutableList<OrtIssue>
-    ): SpdxPackage {
+    ): SpdxPackage? {
         doc.packages.find { it.spdxId == identifier }?.let { return it }
 
         val documentRef = identifier.substringBefore(":")
         val externalDocumentReference = doc.externalDocumentRefs.find {
             it.externalDocumentId == documentRef
-        } ?: throw IllegalArgumentException(
-            "ID '$identifier' could neither be resolved to a package nor to an externalDocumentRef."
-        )
+        } ?: run {
+            issues += createAndLogIssue(
+                source = MANAGER_NAME,
+                message = "ID '$identifier' could neither be resolved to a package nor to an externalDocumentRef."
+            )
+            return null
+        }
 
         return packageForExternalDocumentId.getOrPut(externalDocumentReference.externalDocumentId) {
             externalDocumentReference.getSpdxPackage(identifier.substringAfter(":"), definitionFile, issues)
+                ?: return null
         }
     }
 
@@ -383,16 +413,16 @@ class SpdxDocumentFile(
     ): SortedSet<PackageReference> =
         getDependencies(pkg, doc, definitionFile, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
             val issues = mutableListOf<OrtIssue>()
-            val dependency = getSpdxPackageForId(doc, target, definitionFile, issues)
+            getSpdxPackageForId(doc, target, definitionFile, issues)?.let { dependency ->
+                packages += dependency.toPackage(definitionFile)
 
-            packages += dependency.toPackage(definitionFile)
-
-            PackageReference(
-                id = dependency.toIdentifier(),
-                dependencies = getDependencies(dependency, doc, definitionFile, packages),
-                linkage = getLinkageForDependency(dependency, pkg.spdxId, doc.relationships),
-                issues = issues
-            )
+                PackageReference(
+                    id = dependency.toIdentifier(),
+                    dependencies = getDependencies(dependency, doc, definitionFile, packages),
+                    linkage = getLinkageForDependency(dependency, pkg.spdxId, doc.relationships),
+                    issues = issues
+                )
+            }
         }
 
     /**
@@ -421,22 +451,22 @@ class SpdxDocumentFile(
                         )
                     }
 
-                    val dependency = getSpdxPackageForId(doc, source, definitionFile, issues)
-
-                    packages += dependency.toPackage(definitionFile)
-                    PackageReference(
-                        id = dependency.toIdentifier(),
-                        dependencies = getDependencies(
-                            dependency,
-                            doc,
-                            definitionFile,
-                            packages,
-                            SpdxRelationship.Type.DEPENDENCY_OF,
-                            dependsOnCase
-                        ),
-                        issues = issues,
-                        linkage = getLinkageForDependency(dependency, target, doc.relationships)
-                    )
+                    getSpdxPackageForId(doc, source, definitionFile, issues)?.let { dependency ->
+                        packages += dependency.toPackage(definitionFile)
+                        PackageReference(
+                            id = dependency.toIdentifier(),
+                            dependencies = getDependencies(
+                                dependency,
+                                doc,
+                                definitionFile,
+                                packages,
+                                SpdxRelationship.Type.DEPENDENCY_OF,
+                                dependsOnCase
+                            ),
+                            issues = issues,
+                            linkage = getLinkageForDependency(dependency, target, doc.relationships)
+                        )
+                    }
                 }
 
                 // ...or on the source.
