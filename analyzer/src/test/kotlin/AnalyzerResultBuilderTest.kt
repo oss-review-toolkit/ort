@@ -175,6 +175,25 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 resultTree["has_issues"].asBoolean() shouldBe true
             }
+
+            "be serialized and deserialized correctly with an empty dependency graph" {
+                val emptyGraph = DependencyGraph(packages = emptyList(), scopes = emptyMap())
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
+                val result = AnalyzerResult(
+                    projects = sortedSetOf(p1, p2, project3),
+                    packages = sortedSetOf(),
+                    dependencyGraphs = sortedMapOf(
+                        project1.id.type to graph1,
+                        project2.id.type to emptyGraph
+                    )
+                )
+
+                val serializedResult = yamlMapper.writeValueAsString(result)
+                val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
+
+                deserializedResult.withScopesResolved() shouldBe result.withScopesResolved()
+            }
         }
 
         "collectIssues" should {
