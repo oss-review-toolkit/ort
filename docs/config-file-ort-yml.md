@@ -6,7 +6,7 @@ increased degree of automation and local configurations should only be done if t
 
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as
   not included in released artifacts.
-* [license finding curations](#curations) - Overwrite scan results to correct identified licenses.
+* [curations](#curations) - Overwrite package metadata, set a concluded license or correct license findings.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
 * [license choices](#License-Choices) - Select a license for packages which offer a license choice.
 
@@ -127,11 +127,11 @@ scopes defined in the examples below match the scopes in your project.
 
 ### When to Use Curations
 
-Curations should be used when you want to correct the licenses detected in the source code of the
-project. If you need to correct the license findings for a third-party dependency then add a curation to
-[curations.yml](config-file-curations-yml.md) or [package configuration](config-file-package-configuration-yml.md).
+License finding curations should be used when you want to correct the licenses detected in the source code of the
+project. To define path excludes on a global level for third-party packages, please use the
+[package configurations](config-file-package-configuration-yml.md).
 
-### Curating License Findings
+### Curating Project License Findings
 
 An `ort scan` result represents the detected licenses as a collection of license findings. A single `LicenseFinding` is
 represented as a tuple: `(license id, file path, start line, end line)`. Applying a `LicenseFindingCuration` changes the
@@ -157,6 +157,25 @@ For details of the specification, see
 [LicenseFindingCuration.kt](../model/src/main/kotlin/config/LicenseFindingCuration.kt).
 The list of available options for `reason` are defined in
 [LicenseFindingCurationReason.kt](../model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
+
+### Curating Metadata
+
+Package curations can be added if you want to correct metadata of third-party dependencies.
+
+The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.
+
+e.g.:
+```yaml
+curations:
+  package_curations:
+  - id: "Maven:com.example:dummy:0.0.1"
+    comment: "An explanation why the curation is needed."
+    source_artifact:
+      url: "https://example.com/sources.zip"
+```
+
+For more information about package curations see
+[the documentation for the curations.yml file](config-file-curations-yml.md).
 
 ## Resolutions
 
