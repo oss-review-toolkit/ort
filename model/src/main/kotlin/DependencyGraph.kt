@@ -74,7 +74,7 @@ data class DependencyGraph(
      * A list with the identifiers of the packages that appear in the dependency graph. This list is used to resolve
      * the numeric indices contained in the [DependencyGraphNode] objects.
      */
-    val packages: List<Identifier>,
+    val packages: List<Identifier> = emptyList(),
 
     /**
      * Stores the dependency graph as a list of root nodes for the direct dependencies referenced by scopes. Starting
@@ -88,7 +88,7 @@ data class DependencyGraph(
      * A mapping from scope names to the direct dependencies of the scopes. Based on this information, the set of
      * [Scope]s of a project can be constructed from the serialized form.
      */
-    val scopes: Map<String, List<RootDependencyIndex>>,
+    val scopes: Map<String, List<RootDependencyIndex>> = emptyMap(),
 
     /**
      * A list with the nodes of this dependency graph. Nodes correspond to packages, but in contrast to the [packages]
