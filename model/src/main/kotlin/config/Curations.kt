@@ -21,10 +21,18 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.model.PackageCuration
+
 /**
  * Curations for artifacts in a repository.
  */
 data class Curations(
+    /**
+     * Curations for third-party packages.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val packages: List<PackageCuration> = emptyList(),
+
     /**
      * Curations for license findings.
      */

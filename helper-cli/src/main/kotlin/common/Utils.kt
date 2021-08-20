@@ -812,7 +812,7 @@ internal fun RepositoryConfiguration.merge(
             scopes = excludes.scopes.mergeScopeExcludes(other.excludes.scopes)
         ),
         curations = Curations(
-            curations.licenseFindings.mergeLicenseFindingCurations(other.curations.licenseFindings)
+            licenseFindings = curations.licenseFindings.mergeLicenseFindingCurations(other.curations.licenseFindings)
         ),
         resolutions = Resolutions(
             issues = resolutions.issues.mergeIssueResolutions(other.resolutions.issues),
