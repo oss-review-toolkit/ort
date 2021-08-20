@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
+import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.concludeSeverityStats
@@ -170,17 +171,20 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val config = globalOptionsForSubcommands.config
         val analyzer = Analyzer(config.analyzer)
 
+        val repositoryConfiguration = actualRepositoryConfigurationFile?.readValueOrNull() ?: RepositoryConfiguration()
+
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
-                FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir),
+                SimplePackageCurationProvider(
+                    FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations +
+                            repositoryConfiguration.curations.packages
+                ),
                 config.analyzer.sw360Configuration?.let {
                     Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
                 },
                 ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
             )
         )
-
-        val repositoryConfiguration = actualRepositoryConfigurationFile?.readValueOrNull() ?: RepositoryConfiguration()
 
         val ortResult = analyzer.analyze(
             inputDir, distinctPackageManagers, curationProvider, repositoryConfiguration

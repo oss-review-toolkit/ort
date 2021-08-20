@@ -72,7 +72,7 @@ private class ResolutionsFilter {
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 private class CurationsFilter {
     override fun equals(other: Any?): Boolean =
-        if (other is Curations) other.licenseFindings.isEmpty() else false
+        other is Curations && other.licenseFindings.isEmpty() && other.packages.isEmpty()
 }
 
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
