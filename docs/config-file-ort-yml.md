@@ -1,6 +1,8 @@
 # The `.ort.yml` file
 
 The items below can be configured by adding an `.ort.yml` file to the root of the source code repository.
+All configurations in this file apply only to this Project's context. Usually the global context is preferred for an
+increased degree of automation and local configurations should only be done if there are good reasons.
 
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as
   not included in released artifacts.
@@ -125,7 +127,7 @@ scopes defined in the examples below match the scopes in your project.
 
 ### When to Use Curations
 
-Project-specific curations should be used when you want to correct the licenses detected in the source code of the
+Curations should be used when you want to correct the licenses detected in the source code of the
 project. If you need to correct the license findings for a third-party dependency then add a curation to
 [curations.yml](config-file-curations-yml.md) or [package configuration](config-file-package-configuration-yml.md).
 
@@ -160,7 +162,7 @@ The list of available options for `reason` are defined in
 
 ### When to Use Resolutions
 
-Project-specific resolutions should be used if you are unable to solve an issue by other means.
+Resolutions should be used if you are unable to solve an issue by other means.
 
 If a resolution is not project-specific than add it to [resolutions.yml](./config-file-resolutions-yml.md) so that it is
 applied to each scan.
