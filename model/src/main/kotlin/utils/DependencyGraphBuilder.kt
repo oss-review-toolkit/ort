@@ -166,9 +166,16 @@ class DependencyGraphBuilder<D>(
     fun build(checkReferences: Boolean = true): DependencyGraph {
         if (checkReferences) checkReferences()
 
-        val (nodes, edges) = directDependencies.toGraph()
+        val (sortedDependencyIds, indexMapping) = constructSortedDependencyIds(dependencyIds)
+        val (nodes, edges) = directDependencies.toGraph(indexMapping)
 
-        return DependencyGraph(dependencyIds, sortedSetOf(), scopeMapping, nodes, edges.removeCycles())
+        return DependencyGraph(
+            sortedDependencyIds,
+            sortedSetOf(),
+            constructSortedScopeMappings(scopeMapping, indexMapping),
+            nodes,
+            edges.removeCycles()
+        )
     }
 
     private fun Collection<DependencyGraphEdge>.removeCycles(): List<DependencyGraphEdge> {
@@ -393,16 +400,18 @@ class DependencyGraphBuilder<D>(
 
 /**
  * Convert the direct dependency references of all projects to a list of nodes and edges that represent the final
- * dependency graph.
+ * dependency graph. Apply the given [indexMapping] to the indices pointing to dependencies.
  */
-private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraphNode>, List<DependencyGraphEdge>> {
+private fun Collection<DependencyReference>.toGraph(
+    indexMapping: IntArray
+): Pair<List<DependencyGraphNode>, List<DependencyGraphEdge>> {
     val nodes = mutableSetOf<DependencyGraphNode>()
     val edges = mutableListOf<DependencyGraphEdge>()
     val nodeIndices = mutableMapOf<NodeKey, Int>()
 
     fun getOrAddNodeIndex(ref: DependencyReference): Int =
         nodeIndices.getOrPut(ref.key) {
-            nodes += DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
+            nodes += DependencyGraphNode(indexMapping[ref.pkg], ref.fragment, ref.linkage, ref.issues)
             nodes.size - 1
         }
 
@@ -483,3 +492,47 @@ internal fun breakCycles(edges: Collection<Pair<Int, Int>>): Set<Pair<Int, Int>>
         toNodes.map { toNode -> fromNode to toNode }
     }
 }
+
+/**
+ * Sort the list of [identifiers][ids] for the known dependencies and generate a mapping, so that all index-based
+ * references can be adjusted accordingly. The latter is just an array that contains at index i the new index for the
+ * identifier that was originally at index i.
+ */
+private fun constructSortedDependencyIds(ids: Collection<Identifier>): Pair<List<Identifier>, IntArray> {
+    val sortedIds = ids.withIndex().sortedBy { it.value.toCoordinates() }
+    val indexMapping = IntArray(sortedIds.size)
+
+    var currentIndex = 0
+    sortedIds.forEach { indexMapping[it.index] = currentIndex++ }
+
+    return sortedIds.map { it.value } to indexMapping
+}
+
+/** A Comparator for ordering [RootDependencyIndex] instances. */
+private val rootDependencyIndexComparator = compareBy(RootDependencyIndex::root).thenBy(RootDependencyIndex::fragment)
+
+/**
+ * Sort the given [scopeMappings] by scope names, and the lists of dependencies per scope by their package indices.
+ * Also apply the given [indexMapping] to the dependency indices.
+ */
+private fun constructSortedScopeMappings(
+    scopeMappings: Map<String, List<RootDependencyIndex>>,
+    indexMapping: IntArray
+): Map<String, List<RootDependencyIndex>> {
+    val orderedMappings = mutableMapOf<String, List<RootDependencyIndex>>()
+
+    scopeMappings.keys.toSortedSet().forEach { scope ->
+        orderedMappings[scope] = scopeMappings.getValue(scope)
+            .map { it.mapIndex(indexMapping) }
+            .sortedWith(rootDependencyIndexComparator)
+    }
+
+    return orderedMappings
+}
+
+/**
+ * Apply the given [indexMapping] to this [RootDependencyIndex]. If there is a change, return a new instance with an
+ * updated index.
+ */
+private fun RootDependencyIndex.mapIndex(indexMapping: IntArray): RootDependencyIndex =
+    takeIf { indexMapping[root] == root } ?: copy(root = indexMapping[root])
