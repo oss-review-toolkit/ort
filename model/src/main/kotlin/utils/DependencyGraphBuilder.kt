@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.utils
 
 import java.util.LinkedList
+import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
@@ -210,6 +211,26 @@ class DependencyGraphBuilder<D>(
      * Return a set with all the packages that have been encountered for the current project.
      */
     fun packages(): Set<Package> = resolvedPackages.values.toSet()
+
+    /**
+     * Return a set of all the scope names known to this builder that start with the given [prefix]. If [unqualify] is
+     * *true*, remove this prefix from the returned scope names.
+     */
+    fun scopesFor(prefix: String, unqualify: Boolean = true): SortedSet<String> {
+        val qualifiedScopes = scopeMapping.keys.filter { it.startsWith(prefix) }
+
+        return (qualifiedScopes.takeUnless { unqualify }
+            ?: qualifiedScopes.map { it.substring(prefix.length) }).toSortedSet()
+    }
+
+    /**
+     * Return a set of all the scope names known to this builder that are qualified with the given [projectId]. If
+     * [unqualify] is *true*, remove the project qualifier from the returned scope names. As dependency graphs are
+     * shared between multiple projects, scope names are given a project-specific prefix to make them unique. Using
+     * this function, the scope names of a specific project can be retrieved.
+     */
+    fun scopesFor(projectId: Identifier, unqualify: Boolean = true): SortedSet<String> =
+        scopesFor(DependencyGraph.qualifyScope(projectId, ""), unqualify)
 
     /**
      * Update the dependency graph by adding the given [dependency], which may be [transitive], for the scope with name
