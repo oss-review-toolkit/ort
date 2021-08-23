@@ -32,6 +32,7 @@ import io.kotest.matchers.string.shouldContain
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -272,6 +273,34 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency("s", depLang)
                 .addDependency("s", depLog)
                 .build(checkReferences = false)
+        }
+
+        "collect information about scopes of projects" {
+            val projectId = Identifier("test", "test", "project1", "1.0")
+            val scope1 = DependencyGraph.qualifyScope(projectId, "test")
+            val scope2 = DependencyGraph.qualifyScope(projectId, "compile")
+            val builder = createGraphBuilder()
+
+            builder.addDependency(scope1, createDependency("org.apache.commons", "commons-lang3", "3.11"))
+                .addDependency(scope2, createDependency("org.apache.commons", "commons-collections4", "4.4"))
+                .addDependency(scope1, createDependency("g1", "a1", "1"))
+                .addDependency("anotherScope", createDependency("g2", "a2", "2"))
+
+            builder.scopesFor(projectId) should containExactly("compile", "test")
+        }
+
+        "collect information about qualified scopes of projects" {
+            val projectId = Identifier("test", "test", "project1", "1.0")
+            val scope1 = DependencyGraph.qualifyScope(projectId, "test")
+            val scope2 = DependencyGraph.qualifyScope(projectId, "compile")
+            val builder = createGraphBuilder()
+
+            builder.addDependency(scope1, createDependency("org.apache.commons", "commons-lang3", "3.11"))
+                .addDependency(scope2, createDependency("org.apache.commons", "commons-collections4", "4.4"))
+                .addDependency(scope1, createDependency("g1", "a1", "1"))
+                .addDependency("anotherScope", createDependency("g2", "a2", "2"))
+
+            builder.scopesFor(projectId, unqualify = false) should containExactly(scope2, scope1)
         }
     }
 
