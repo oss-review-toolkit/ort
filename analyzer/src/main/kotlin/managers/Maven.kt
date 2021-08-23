@@ -145,7 +145,7 @@ class Maven(
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, *vcsFallbackUrls),
             homepageUrl = homepageUrl.orEmpty(),
-            scopeNames = projectBuildingResult.dependencies.mapTo(sortedSetOf()) { it.dependency.scope }
+            scopeNames = graphBuilder.scopesFor(projectId)
         )
 
         val packages = graphBuilder.packages().toSortedSet()
