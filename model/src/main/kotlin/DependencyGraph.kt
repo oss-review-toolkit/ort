@@ -229,16 +229,23 @@ data class DependencyGraph(
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
-        fun addIssues(ref: DependencyReference) {
-            if (ref.issues.isNotEmpty()) {
-                collectedIssues.getOrPut(packages[ref.pkg]) { mutableSetOf() } += ref.issues
+        fun addIssues(pkg: Int, issues: Collection<OrtIssue>) {
+            if (issues.isNotEmpty()) {
+                collectedIssues.getOrPut(packages[pkg]) { mutableSetOf() } += issues
             }
+        }
 
+        fun addIssues(ref: DependencyReference) {
+            addIssues(ref.pkg, ref.issues)
             ref.dependencies.forEach { addIssues(it) }
         }
 
         for (ref in scopeRoots) {
             addIssues(ref)
+        }
+
+        nodes?.forEach { node ->
+            addIssues(node.pkg, node.issues)
         }
 
         return collectedIssues
