@@ -253,9 +253,9 @@ private object AuthenticatorCredentialsProvider : CredentialsProvider() {
             /* host = */ uri.host,
             /* addr = */ null,
             /* port = */ uri.port,
-            /* protocol = */ null,
+            /* protocol = */ uri.scheme,
             /* prompt = */ uri.humanishName,
-            /* scheme = */ uri.scheme
+            /* scheme = */ null
         ) ?: return false
 
         log.debug { "Passing credentials for ${uri.host} to JGit." }
