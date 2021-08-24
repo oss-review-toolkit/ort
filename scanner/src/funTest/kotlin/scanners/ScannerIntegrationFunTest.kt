@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.test.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -52,10 +51,8 @@ class ScannerIntegrationFunTest : StringSpec() {
             outputDir = createTestTempDir()
 
             val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
-            val expectedResult = convertToDependencyGraph(
-                patchExpectedResult(
-                    assetsDir.resolve("dummy-expected-output-for-analyzer-result.yml")
-                )
+            val expectedResult = patchExpectedResult(
+                assetsDir.resolve("dummy-expected-output-for-analyzer-result.yml")
             )
 
             val scanner = DummyScanner("Dummy", ScannerConfiguration(), DownloaderConfiguration())
