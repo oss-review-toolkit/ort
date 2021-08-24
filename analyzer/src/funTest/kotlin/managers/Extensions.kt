@@ -28,6 +28,8 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyTreeNavigator
 import org.ossreviewtoolkit.model.Package
@@ -46,6 +48,22 @@ fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boo
         val result = resultList.single()
 
         if (resolveScopes) managerResult.resolveScopes(result) else result
+    }
+}
+
+fun PackageManager.resultForProject(definitionFile: File): AnalyzerResult {
+    val managerResult = resolveDependencies(listOf(definitionFile))
+
+    return managerResult.projectResults[definitionFile].let { resultList ->
+        resultList.shouldNotBeNull()
+        resultList should haveSize(1)
+        val result = resultList.single()
+
+        val issues = result.issues.takeUnless { it.isEmpty() }?.let { sortedMapOf(result.project.id to it) }
+            ?: sortedMapOf()
+        val packages = managerResult.sharedPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
+        val graphs = managerResult.dependencyGraph?.let { sortedMapOf(managerName to it) }.orEmpty()
+        AnalyzerResult(sortedSetOf(result.project), packages, issues, graphs)
     }
 }
 

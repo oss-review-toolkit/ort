@@ -1,6 +1,6 @@
 ---
-project:
-  id: "Gradle:org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0"
+projects:
+- id: "Gradle:org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -15,123 +15,59 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
   homepage_url: ""
-  scopes:
-  - name: "compile"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "compileClasspath"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "default"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "runtime"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "runtimeClasspath"
-    dependencies:
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testCompile"
-    dependencies:
-    - id: "Unknown:junit:junit:4.12"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency junit:junit:4.12 because no repositories are defined."
-        severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testCompileClasspath"
-    dependencies:
-    - id: "Unknown:junit:junit:4.12"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency junit:junit:4.12 because no repositories are defined."
-        severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testRuntime"
-    dependencies:
-    - id: "Unknown:junit:junit:4.12"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency junit:junit:4.12 because no repositories are defined."
-        severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
-  - name: "testRuntimeClasspath"
-    dependencies:
-    - id: "Unknown:junit:junit:4.12"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency junit:junit:4.12 because no repositories are defined."
-        severity: "ERROR"
-    - id: "Unknown:org.apache.commons:commons-text:1.1"
-      issues:
-      - timestamp: "1970-01-01T00:00:00Z"
-        source: "Gradle"
-        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
-          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
-          \ are defined."
-        severity: "ERROR"
+  scope_names:
+  - "compile"
+  - "compileClasspath"
+  - "default"
+  - "runtime"
+  - "runtimeClasspath"
+  - "testCompile"
+  - "testCompileClasspath"
+  - "testRuntime"
+  - "testRuntimeClasspath"
 packages: []
+dependency_graphs:
+  Gradle:
+    packages:
+    - "Unknown:junit:junit:4.12"
+    - "Unknown:org.apache.commons:commons-text:1.1"
+    scopes:
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:compile:
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:compileClasspath:
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:default:
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:runtime:
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:runtimeClasspath:
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:testCompile:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:testCompileClasspath:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:testRuntime:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0:testRuntimeClasspath:
+      - root: 0
+      - root: 1
+    nodes:
+    - pkg: 1
+      issues:
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Gradle"
+        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+          \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+          \ are defined."
+        severity: "ERROR"
+    - issues:
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Gradle"
+        message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+          \ dependency junit:junit:4.12 because no repositories are defined."
+        severity: "ERROR"
+    edges: []
+has_issues: true

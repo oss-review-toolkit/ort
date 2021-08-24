@@ -63,7 +63,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resultForProject(packageFile)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -76,7 +76,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resultForProject(packageFile)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -89,7 +89,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resultForProject(packageFile)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -102,7 +102,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resultForProject(packageFile)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }

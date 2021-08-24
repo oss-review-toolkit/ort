@@ -1,6 +1,6 @@
 ---
-project:
-  id: "Gradle:org.ossreviewtoolkit.gradle.example:Gradle-Android-Example:1.0.0"
+projects:
+- id: "Gradle:org.ossreviewtoolkit.gradle.example:Gradle-Android-Example:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/build.gradle"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -15,5 +15,10 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android"
   homepage_url: ""
-  scopes: []
+  scope_names: []
 packages: []
+dependency_graphs:
+  Gradle:
+    nodes: []
+    edges: []
+has_issues: false

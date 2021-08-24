@@ -1,6 +1,6 @@
 ---
-project:
-  id: "Gradle:org.ossreviewtoolkit.gradle.example:app:1.0.0"
+projects:
+- id: "Gradle:org.ossreviewtoolkit.gradle.example:app:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/app/build.gradle"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -15,679 +15,548 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/app"
   homepage_url: ""
-  scopes:
-  - name: "amazonDemoDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonDemoDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonDemoReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonDemoReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonDemoReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-  - name: "amazonFullReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "amazonFullReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-      dependencies:
-      - id: "Maven:com.squareup.okio:okio:1.14.0"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleDemoDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleDemoDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleDemoDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleDemoDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleDemoReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleDemoReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleDemoReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.2"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullDebugAndroidTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleFullDebugAndroidTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleFullDebugCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleFullDebugRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleFullDebugUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullDebugUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullReleaseCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-  - name: "googleFullReleaseRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-  - name: "googleFullReleaseUnitTestCompileClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  - name: "googleFullReleaseUnitTestRuntimeClasspath"
-    dependencies:
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      linkage: "PROJECT_DYNAMIC"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-compress:1.17"
-      - id: "Maven:org.apache.commons:commons-text:1.3"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.7"
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+  scope_names:
+  - "amazonDemoDebugAndroidTestCompileClasspath"
+  - "amazonDemoDebugAndroidTestRuntimeClasspath"
+  - "amazonDemoDebugCompileClasspath"
+  - "amazonDemoDebugRuntimeClasspath"
+  - "amazonDemoDebugUnitTestCompileClasspath"
+  - "amazonDemoDebugUnitTestRuntimeClasspath"
+  - "amazonDemoReleaseCompileClasspath"
+  - "amazonDemoReleaseRuntimeClasspath"
+  - "amazonDemoReleaseUnitTestCompileClasspath"
+  - "amazonDemoReleaseUnitTestRuntimeClasspath"
+  - "amazonFullDebugAndroidTestCompileClasspath"
+  - "amazonFullDebugAndroidTestRuntimeClasspath"
+  - "amazonFullDebugCompileClasspath"
+  - "amazonFullDebugRuntimeClasspath"
+  - "amazonFullDebugUnitTestCompileClasspath"
+  - "amazonFullDebugUnitTestRuntimeClasspath"
+  - "amazonFullReleaseCompileClasspath"
+  - "amazonFullReleaseRuntimeClasspath"
+  - "amazonFullReleaseUnitTestCompileClasspath"
+  - "amazonFullReleaseUnitTestRuntimeClasspath"
+  - "googleDemoDebugAndroidTestCompileClasspath"
+  - "googleDemoDebugAndroidTestRuntimeClasspath"
+  - "googleDemoDebugCompileClasspath"
+  - "googleDemoDebugRuntimeClasspath"
+  - "googleDemoDebugUnitTestCompileClasspath"
+  - "googleDemoDebugUnitTestRuntimeClasspath"
+  - "googleDemoReleaseCompileClasspath"
+  - "googleDemoReleaseRuntimeClasspath"
+  - "googleDemoReleaseUnitTestCompileClasspath"
+  - "googleDemoReleaseUnitTestRuntimeClasspath"
+  - "googleFullDebugAndroidTestCompileClasspath"
+  - "googleFullDebugAndroidTestRuntimeClasspath"
+  - "googleFullDebugCompileClasspath"
+  - "googleFullDebugRuntimeClasspath"
+  - "googleFullDebugUnitTestCompileClasspath"
+  - "googleFullDebugUnitTestRuntimeClasspath"
+  - "googleFullReleaseCompileClasspath"
+  - "googleFullReleaseRuntimeClasspath"
+  - "googleFullReleaseUnitTestCompileClasspath"
+  - "googleFullReleaseUnitTestRuntimeClasspath"
 packages:
-- id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
-  purl: "pkg:maven/com.squareup.okhttp3/okhttp@3.10.0"
-  declared_licenses:
-  - "Apache 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache 2.0: "Apache-2.0"
-  description: "An HTTP+HTTP/2 client for Android and Java applications"
-  homepage_url: "https://github.com/square/okhttp/okhttp"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/squareup/okhttp3/okhttp/3.10.0/okhttp-3.10.0-sources.jar"
-    hash:
-      value: "0e99b7b608968f16b07104b93e62cb90701174d0"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/square/okhttp.git"
-    revision: "parent-3.10.0"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/square/okhttp.git"
-    revision: "parent-3.10.0"
-    path: ""
-- id: "Maven:com.squareup.okio:okio:1.14.0"
-  purl: "pkg:maven/com.squareup.okio/okio@1.14.0"
-  declared_licenses:
-  - "Apache 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache 2.0: "Apache-2.0"
-  description: "A modern I/O API for Java"
-  homepage_url: "https://github.com/square/okio/okio"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/squareup/okio/okio/1.14.0/okio-1.14.0-sources.jar"
-    hash:
-      value: "e7c96b4fe5651490d8f3c022042940d743a3bdd9"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/square/okio.git"
-    revision: "okio-parent-1.14.0"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/square/okio.git"
-    revision: "okio-parent-1.14.0"
-    path: ""
-- id: "Maven:junit:junit:4.12"
-  purl: "pkg:maven/junit/junit@4.12"
-  authors:
-  - "David Saff"
-  - "JUnit"
-  - "Kevin Cooney"
-  - "Marc Philipp"
-  - "Stefan Birkner"
-  declared_licenses:
-  - "Eclipse Public License 1.0"
-  declared_licenses_processed:
-    spdx_expression: "EPL-1.0"
-    mapped:
-      Eclipse Public License 1.0: "EPL-1.0"
-  description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
-    \ and Kent Beck."
-  homepage_url: "http://junit.org"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
-    hash:
-      value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/junit-team/junit.git"
-    revision: "r4.12"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/junit-team/junit.git"
-    revision: "r4.12"
-    path: ""
-- id: "Maven:org.apache.commons:commons-compress:1.17"
-  purl: "pkg:maven/org.apache.commons/commons-compress@1.17"
-  authors:
-  - "Christian Grobmeier"
-  - "Damjan Jovanovic"
-  - "Emmanuel Bourg"
-  - "Gary Gregory"
-  - "Julius Davies"
-  - "Rob Tompkins"
-  - "Sebastian Bazley"
-  - "Stefan Bodewig"
-  - "The Apache Software Foundation"
-  - "Torsten Curdt"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache License, Version 2.0: "Apache-2.0"
-  description: "Apache Commons Compress software defines an API for working with\n\
-    compression and archive formats.  These include: bzip2, gzip, pack200,\nlzma,\
-    \ xz, Snappy, traditional Unix Compress, DEFLATE, DEFLATE64, LZ4,\nBrotli, Zstandard\
-    \ and ar, cpio, jar, tar, zip, dump, 7z, arj."
-  homepage_url: "https://commons.apache.org/proper/commons-compress/"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17-sources.jar"
-    hash:
-      value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
-    revision: ""
-    path: ""
-- id: "Maven:org.apache.commons:commons-lang3:3.7"
-  purl: "pkg:maven/org.apache.commons/commons-lang3@3.7"
-  authors:
-  - "Benedikt Ritter"
-  - "Carman Consulting, Inc."
-  - "CollabNet, Inc."
-  - "Duncan Jones"
-  - "Fredrik Westermarck"
-  - "Gary D. Gregory"
-  - "Henri Yandell"
-  - "Joerg Schaible"
-  - "Loic Guibert"
-  - "Matt Benson"
-  - "Niall Pemberton"
-  - "Oliver Heger"
-  - "Paul Benedict"
-  - "Rob Tompkins"
-  - "Robert Burrell Donkin"
-  - "SITA ATS Ltd"
-  - "Steven Caswell"
-  - "The Apache Software Foundation"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache License, Version 2.0: "Apache-2.0"
-  description: "Apache Commons Lang, a package of Java utility classes for the\n \
-    \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
-    \ as to justify existence in java.lang."
-  homepage_url: "http://commons.apache.org/proper/commons-lang/"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7-sources.jar"
-    hash:
-      value: "e7e36219edde1c66c93495a75490d8f526c377cb"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
-    revision: "LANG_3_6"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
-    revision: "LANG_3_6"
-    path: ""
-- id: "Maven:org.apache.commons:commons-text:1.2"
-  purl: "pkg:maven/org.apache.commons/commons-text@1.2"
-  authors:
-  - "Benedikt Ritter"
-  - "Bruno P. Kinoshita"
-  - "Duncan Jones"
-  - "Gary Gregory"
-  - "Rob Tompkins"
-  - "The Apache Software Foundation"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache License, Version 2.0: "Apache-2.0"
-  description: "Apache Commons Text is a library focused on algorithms working on\
-    \ strings."
-  homepage_url: "http://commons.apache.org/proper/commons-text/"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.2/commons-text-1.2-sources.jar"
-    hash:
-      value: "679282ee0f6f2b236f58a7a1dc8395861ad9fd97"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: ""
-    path: ""
-- id: "Maven:org.apache.commons:commons-text:1.3"
-  purl: "pkg:maven/org.apache.commons/commons-text@1.3"
-  authors:
-  - "Benedikt Ritter"
-  - "Bruno P. Kinoshita"
-  - "Duncan Jones"
-  - "Gary Gregory"
-  - "Rob Tompkins"
-  - "The Apache Software Foundation"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache License, Version 2.0: "Apache-2.0"
-  description: "Apache Commons Text is a library focused on algorithms working on\
-    \ strings."
-  homepage_url: "http://commons.apache.org/proper/commons-text/"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.3/commons-text-1.3-sources.jar"
-    hash:
-      value: "9c51853f855aca4ea31785f30385e980a58eaf4b"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: ""
-    path: ""
-- id: "Maven:org.hamcrest:hamcrest-core:1.3"
-  purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
-  authors:
-  - "Joe Walnes"
-  - "Nat Pryce"
-  - "Neil Dunn"
-  - "Steve Freeman"
-  - "Tom Denley"
-  declared_licenses:
-  - "New BSD License"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      New BSD License: "BSD-3-Clause"
-  description: "This is the core API of hamcrest matcher framework to be used by third-party\
-    \ framework providers. This includes the a foundation set of matcher implementations\
-    \ for common operations."
-  homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
-    hash:
-      value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git@github.com:hamcrest/JavaHamcrest.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
-    revision: ""
-    path: ""
+- package:
+    id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
+    purl: "pkg:maven/com.squareup.okhttp3/okhttp@3.10.0"
+    declared_licenses:
+    - "Apache 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+      mapped:
+        Apache 2.0: "Apache-2.0"
+    description: "An HTTP+HTTP/2 client for Android and Java applications"
+    homepage_url: "https://github.com/square/okhttp/okhttp"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/com/squareup/okhttp3/okhttp/3.10.0/okhttp-3.10.0-sources.jar"
+      hash:
+        value: "0e99b7b608968f16b07104b93e62cb90701174d0"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "https://github.com/square/okhttp.git"
+      revision: "parent-3.10.0"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/square/okhttp.git"
+      revision: "parent-3.10.0"
+      path: ""
+  curations: []
+- package:
+    id: "Maven:com.squareup.okio:okio:1.14.0"
+    purl: "pkg:maven/com.squareup.okio/okio@1.14.0"
+    declared_licenses:
+    - "Apache 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+      mapped:
+        Apache 2.0: "Apache-2.0"
+    description: "A modern I/O API for Java"
+    homepage_url: "https://github.com/square/okio/okio"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/com/squareup/okio/okio/1.14.0/okio-1.14.0-sources.jar"
+      hash:
+        value: "e7c96b4fe5651490d8f3c022042940d743a3bdd9"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "https://github.com/square/okio.git"
+      revision: "okio-parent-1.14.0"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/square/okio.git"
+      revision: "okio-parent-1.14.0"
+      path: ""
+  curations: []
+- package:
+    id: "Maven:junit:junit:4.12"
+    purl: "pkg:maven/junit/junit@4.12"
+    authors:
+    - "David Saff"
+    - "JUnit"
+    - "Kevin Cooney"
+    - "Marc Philipp"
+    - "Stefan Birkner"
+    declared_licenses:
+    - "Eclipse Public License 1.0"
+    declared_licenses_processed:
+      spdx_expression: "EPL-1.0"
+      mapped:
+        Eclipse Public License 1.0: "EPL-1.0"
+    description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
+      \ and Kent Beck."
+    homepage_url: "http://junit.org"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+      hash:
+        value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git://github.com/junit-team/junit.git"
+      revision: "r4.12"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/junit-team/junit.git"
+      revision: "r4.12"
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-compress:1.17"
+    purl: "pkg:maven/org.apache.commons/commons-compress@1.17"
+    authors:
+    - "Christian Grobmeier"
+    - "Damjan Jovanovic"
+    - "Emmanuel Bourg"
+    - "Gary Gregory"
+    - "Julius Davies"
+    - "Rob Tompkins"
+    - "Sebastian Bazley"
+    - "Stefan Bodewig"
+    - "The Apache Software Foundation"
+    - "Torsten Curdt"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
+    description: "Apache Commons Compress software defines an API for working with\n\
+      compression and archive formats.  These include: bzip2, gzip, pack200,\nlzma,\
+      \ xz, Snappy, traditional Unix Compress, DEFLATE, DEFLATE64, LZ4,\nBrotli, Zstandard\
+      \ and ar, cpio, jar, tar, zip, dump, 7z, arj."
+    homepage_url: "https://commons.apache.org/proper/commons-compress/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17-sources.jar"
+      hash:
+        value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-lang3:3.7"
+    purl: "pkg:maven/org.apache.commons/commons-lang3@3.7"
+    authors:
+    - "Benedikt Ritter"
+    - "Carman Consulting, Inc."
+    - "CollabNet, Inc."
+    - "Duncan Jones"
+    - "Fredrik Westermarck"
+    - "Gary D. Gregory"
+    - "Henri Yandell"
+    - "Joerg Schaible"
+    - "Loic Guibert"
+    - "Matt Benson"
+    - "Niall Pemberton"
+    - "Oliver Heger"
+    - "Paul Benedict"
+    - "Rob Tompkins"
+    - "Robert Burrell Donkin"
+    - "SITA ATS Ltd"
+    - "Steven Caswell"
+    - "The Apache Software Foundation"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
+    description: "Apache Commons Lang, a package of Java utility classes for the\n\
+      \  classes that are in java.lang's hierarchy, or are considered to be so\n \
+      \ standard as to justify existence in java.lang."
+    homepage_url: "http://commons.apache.org/proper/commons-lang/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7-sources.jar"
+      hash:
+        value: "e7e36219edde1c66c93495a75490d8f526c377cb"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+      revision: "LANG_3_6"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+      revision: "LANG_3_6"
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-text:1.2"
+    purl: "pkg:maven/org.apache.commons/commons-text@1.2"
+    authors:
+    - "Benedikt Ritter"
+    - "Bruno P. Kinoshita"
+    - "Duncan Jones"
+    - "Gary Gregory"
+    - "Rob Tompkins"
+    - "The Apache Software Foundation"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
+    description: "Apache Commons Text is a library focused on algorithms working on\
+      \ strings."
+    homepage_url: "http://commons.apache.org/proper/commons-text/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.2/commons-text-1.2-sources.jar"
+      hash:
+        value: "679282ee0f6f2b236f58a7a1dc8395861ad9fd97"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-text:1.3"
+    purl: "pkg:maven/org.apache.commons/commons-text@1.3"
+    authors:
+    - "Benedikt Ritter"
+    - "Bruno P. Kinoshita"
+    - "Duncan Jones"
+    - "Gary Gregory"
+    - "Rob Tompkins"
+    - "The Apache Software Foundation"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
+    description: "Apache Commons Text is a library focused on algorithms working on\
+      \ strings."
+    homepage_url: "http://commons.apache.org/proper/commons-text/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.3/commons-text-1.3-sources.jar"
+      hash:
+        value: "9c51853f855aca4ea31785f30385e980a58eaf4b"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.hamcrest:hamcrest-core:1.3"
+    purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
+    authors:
+    - "Joe Walnes"
+    - "Nat Pryce"
+    - "Neil Dunn"
+    - "Steve Freeman"
+    - "Tom Denley"
+    declared_licenses:
+    - "New BSD License"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+      mapped:
+        New BSD License: "BSD-3-Clause"
+    description: "This is the core API of hamcrest matcher framework to be used by\
+      \ third-party framework providers. This includes the a foundation set of matcher\
+      \ implementations for common operations."
+    homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+      hash:
+        value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git@github.com:hamcrest/JavaHamcrest.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
+      revision: ""
+      path: ""
+  curations: []
+dependency_graphs:
+  Gradle:
+    packages:
+    - "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+    - "Maven:com.squareup.okhttp3:okhttp:3.10.0"
+    - "Maven:com.squareup.okio:okio:1.14.0"
+    - "Maven:junit:junit:4.12"
+    - "Maven:org.apache.commons:commons-compress:1.17"
+    - "Maven:org.apache.commons:commons-lang3:3.7"
+    - "Maven:org.apache.commons:commons-text:1.2"
+    - "Maven:org.apache.commons:commons-text:1.3"
+    - "Maven:org.hamcrest:hamcrest-core:1.3"
+    scopes:
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugAndroidTestCompileClasspath:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugAndroidTestRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugCompileClasspath:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugUnitTestCompileClasspath:
+      - root: 0
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseCompileClasspath:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseUnitTestCompileClasspath:
+      - root: 0
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugAndroidTestCompileClasspath:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugAndroidTestRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugCompileClasspath:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugUnitTestCompileClasspath:
+      - root: 0
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseCompileClasspath:
+      - root: 0
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      - root: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseUnitTestCompileClasspath:
+      - root: 0
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      - root: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugAndroidTestCompileClasspath:
+      - root: 0
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugAndroidTestRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugCompileClasspath:
+      - root: 0
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugUnitTestCompileClasspath:
+      - root: 0
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseCompileClasspath:
+      - root: 0
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseUnitTestCompileClasspath:
+      - root: 0
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 1
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugAndroidTestCompileClasspath:
+      - root: 0
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugAndroidTestRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugCompileClasspath:
+      - root: 0
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugUnitTestCompileClasspath:
+      - root: 0
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseCompileClasspath:
+      - root: 0
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseUnitTestCompileClasspath:
+      - root: 0
+      - root: 3
+      org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseUnitTestRuntimeClasspath:
+      - root: 0
+        fragment: 2
+      - root: 3
+    nodes:
+    - linkage: "PROJECT_DYNAMIC"
+    - fragment: 1
+      linkage: "PROJECT_DYNAMIC"
+    - pkg: 4
+    - pkg: 6
+    - pkg: 5
+    - fragment: 2
+      linkage: "PROJECT_DYNAMIC"
+    - pkg: 7
+    - pkg: 1
+    - pkg: 2
+    - pkg: 3
+    - pkg: 8
+    edges:
+    - from: 3
+      to: 4
+    - from: 1
+      to: 2
+    - from: 1
+      to: 3
+    - from: 6
+      to: 4
+    - from: 5
+      to: 2
+    - from: 5
+      to: 6
+    - from: 7
+      to: 8
+    - from: 9
+      to: 10
+has_issues: false
