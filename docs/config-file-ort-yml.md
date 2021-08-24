@@ -128,8 +128,8 @@ scopes defined in the examples below match the scopes in your project.
 ### When to Use Curations
 
 License finding curations should be used when you want to correct the licenses detected in the source code of the
-project. To define path excludes on a global level for third-party packages, please use the
-[package configurations](config-file-package-configuration-yml.md).
+project. To define curations on global level for third-party packages, please use 
+[curations](config-file-curations-yml.md) or [package configurations](config-file-package-configuration-yml.md).
 
 ### Curating Project License Findings
 
@@ -152,6 +152,22 @@ curations:
     comment: "The scanner matches a variable named `gpl`."
     concluded_license: "Apache-2.0"
  ```
+
+For findings in third-party dependencies package-configurations can be used to replace findings:
+```yaml
+configurations:
+  package_configurations:
+  - id: 'Maven:com.example:package:1.2.3'
+    source_artifact_url: "https://repo.maven.apache.org/maven2/com/example/package/1.2.3/package-1.2.3-sources.jar"
+    license_finding_curations:
+    - path: "path/to/problematic/file.java"
+      start_lines: 22
+      line_count: 1
+      detected_license: "GPL-2.0-only"
+      reason: "CODE"
+      comment: "The scanner matches a variable named `gpl`."
+      concluded_license: "Apache-2.0"
+```
 
 For details of the specification, see 
 [LicenseFindingCuration.kt](../model/src/main/kotlin/config/LicenseFindingCuration.kt).
