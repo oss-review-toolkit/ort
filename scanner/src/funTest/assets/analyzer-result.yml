@@ -6,7 +6,7 @@ repository:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: ""
     revision: ""
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
@@ -34,7 +34,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: ""
         revision: ""
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
