@@ -258,7 +258,12 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
                 authMayBeStored: Boolean
             ): SVNAuthentication? {
                 val auth = Authenticator.requestPasswordAuthentication(
-                    svnurl.host, null, svnurl.port, svnurl.protocol, null, null
+                    /* host = */ svnurl.host,
+                    /* addr = */ null,
+                    /* port = */ svnurl.port,
+                    /* protocol = */ svnurl.protocol,
+                    /* prompt = */ null,
+                    /* scheme = */ null
                 ) ?: return null
 
                 return SVNPasswordAuthentication.newInstance(
