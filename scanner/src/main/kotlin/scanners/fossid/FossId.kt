@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -261,8 +262,20 @@ class FossId internal constructor(
             filteredPackages.forEach { pkg ->
                 val startTime = Instant.now()
 
-                // TODO: Continue the processing of other packages and add an issue to the scan result.
-                require(pkg.vcsProcessed.type == VcsType.GIT) { "FossID only supports Git repositories." }
+                if (pkg.vcsProcessed.type != VcsType.GIT) {
+                    val summary = createSingleIssueSummary(
+                        scannerName,
+                        "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but only " +
+                                "${VcsType.GIT} is supported.",
+                        Severity.ERROR,
+                        startTime
+                    )
+
+                    val scanResult = ScanResult(UnknownProvenance, details, summary)
+                    results.getOrPut(pkg) { mutableListOf() } += scanResult
+
+                    return@forEach
+                }
 
                 val url = pkg.vcsProcessed.url
                 val revision = pkg.vcsProcessed.revision.ifEmpty { "HEAD" }
