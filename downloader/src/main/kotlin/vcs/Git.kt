@@ -254,7 +254,7 @@ private object AuthenticatorCredentialsProvider : CredentialsProvider() {
             /* addr = */ null,
             /* port = */ uri.port,
             /* protocol = */ uri.scheme,
-            /* prompt = */ uri.humanishName,
+            /* prompt = */ null,
             /* scheme = */ null
         ) ?: return false
 
