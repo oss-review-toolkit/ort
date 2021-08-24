@@ -140,15 +140,13 @@ class FossId internal constructor(
 
             log.info { "Requesting authenticator for host ${repoUri.host} ..." }
 
-            val creds = Authenticator.getDefault().requestPasswordAuthenticationInstance(
+            val creds = Authenticator.requestPasswordAuthentication(
                 repoUri.host,
                 null,
                 0,
                 null,
                 null,
-                null,
-                null,
-                Authenticator.RequestorType.SERVER
+                null
             )
             return creds?.let {
                 repoUrl.replaceCredentialsInUri("${creds.userName}:${String(creds.password)}")
