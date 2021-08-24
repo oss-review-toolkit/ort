@@ -3,12 +3,12 @@ repository:
   vcs:
     type: "GitRepo"
     url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
-    revision: "<REPLACE_REVISION>"
+    revision: "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
     path: "manifest.xml"
   vcs_processed:
     type: "GitRepo"
     url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git"
-    revision: "<REPLACE_REVISION>"
+    revision: "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
     path: "manifest.xml"
   nested_repositories:
     spdx-tools:
@@ -75,7 +75,9 @@ analyzer:
         revision: "941c5c62471168b5d18153755c2a7b38d2560e58"
         path: ""
       homepage_url: ""
-      scopes: []
+      scope_names:
+      - "dependencies"
+      - "devDependencies"
     - id: "Maven:org.apache.commons:commons-text:1.6"
       definition_file_path: "pom.xml"
       authors:
@@ -102,23 +104,9 @@ analyzer:
         revision: "7643b12421100d29fd2b78053e77bcb04a251b2e"
         path: ""
       homepage_url: "http://commons.apache.org/proper/commons-text"
-      scopes:
-      - name: "compile"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.8.1"
-      - name: "test"
-        dependencies:
-        - id: "Maven:org.assertj:assertj-core:3.11.1"
-        - id: "Maven:org.junit.jupiter:junit-jupiter-engine:5.3.1"
-          dependencies:
-          - id: "Maven:org.apiguardian:apiguardian-api:1.0.0"
-          - id: "Maven:org.junit.jupiter:junit-jupiter-api:5.3.1"
-          - id: "Maven:org.junit.platform:junit-platform-engine:1.3.1"
-            dependencies:
-            - id: "Maven:org.junit.platform:junit-platform-commons:1.3.1"
-            - id: "Maven:org.opentest4j:opentest4j:1.1.1"
-        - id: "Maven:org.junit.jupiter:junit-jupiter-params:5.3.1"
-        - id: "Maven:org.junit.platform:junit-platform-launcher:1.3.1"
+      scope_names:
+      - "compile"
+      - "test"
     - id: "Maven:org.spdx:spdx-tools:2.1.15-SNAPSHOT"
       definition_file_path: "pom.xml"
       authors:
@@ -141,85 +129,9 @@ analyzer:
         revision: "e179fae47590eccedc46186ea0ce20cbade5fda7"
         path: ""
       homepage_url: "http://spdx.org/tools"
-      scopes:
-      - name: "compile"
-        dependencies:
-        - id: "Maven:com.github.cliftonlabs:json-simple:2.3.1"
-        - id: "Maven:com.github.spullara.mustache.java:compiler:0.7.9"
-        - id: "Maven:com.google.code.gson:gson:2.8.0"
-        - id: "Maven:com.google.guava:guava:16.0.1"
-        - id: "Maven:net.sf.opencsv:opencsv:2.3"
-        - id: "Maven:net.sf.saxon:saxon:8.7"
-        - id: "Maven:net.sf.saxon:saxon-dom:8.7"
-        - id: "Maven:nu.validator.htmlparser:htmlparser:1.4"
-        - id: "Maven:org.antlr:antlr:3.4"
-          dependencies:
-          - id: "Maven:org.antlr:ST4:4.0.4"
-          - id: "Maven:org.antlr:antlr-runtime:3.4"
-            dependencies:
-            - id: "Maven:antlr:antlr:2.7.7"
-            - id: "Maven:org.antlr:stringtemplate:3.2.1"
-        - id: "Maven:org.apache.commons:commons-lang3:3.1"
-        - id: "Maven:org.apache.jena:apache-jena-libs:3.9.0"
-          dependencies:
-          - id: "Maven:org.apache.jena:jena-rdfconnection:3.9.0"
-          - id: "Maven:org.apache.jena:jena-tdb:3.9.0"
-            dependencies:
-            - id: "Maven:org.apache.jena:jena-arq:3.9.0"
-              dependencies:
-              - id: "Maven:com.github.jsonld-java:jsonld-java:0.12.1"
-                dependencies:
-                - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.9.6"
-                - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.9.6"
-                  dependencies:
-                  - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.9.0"
-                - id: "Maven:commons-io:commons-io:2.6"
-              - id: "Maven:org.apache.httpcomponents:httpclient:4.5.5"
-                dependencies:
-                - id: "Maven:org.apache.httpcomponents:httpcore:4.4.9"
-              - id: "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
-              - id: "Maven:org.apache.jena:jena-core:3.9.0"
-                dependencies:
-                - id: "Maven:commons-cli:commons-cli:1.4"
-                - id: "Maven:org.apache.jena:jena-base:3.9.0"
-                  dependencies:
-                  - id: "Maven:com.github.andrewoma.dexx:collection:0.7"
-                  - id: "Maven:org.apache.commons:commons-compress:1.17"
-                  - id: "Maven:org.apache.commons:commons-csv:1.5"
-              - id: "Maven:org.apache.jena:jena-shaded-guava:3.9.0"
-              - id: "Maven:org.apache.thrift:libthrift:0.10.0"
-              - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-          - id: "Maven:org.apache.jena:jena-tdb2:3.9.0"
-            dependencies:
-            - id: "Maven:org.apache.jena:jena-dboe-trans-data:3.9.0"
-              dependencies:
-              - id: "Maven:org.apache.jena:jena-dboe-index:3.9.0"
-              - id: "Maven:org.apache.jena:jena-dboe-transaction:3.9.0"
-                dependencies:
-                - id: "Maven:org.apache.jena:jena-dboe-base:3.9.0"
-          - id: "Maven:org.slf4j:slf4j-api:1.7.25"
-        - id: "Maven:org.apache.jena:jena-iri:3.9.0"
-        - id: "Maven:org.apache.logging.log4j:log4j-api:2.10.0"
-        - id: "Maven:org.apache.logging.log4j:log4j-core:2.10.0"
-        - id: "Maven:org.apache.logging.log4j:log4j-slf4j-impl:2.10.0"
-        - id: "Maven:org.apache.poi:poi:3.15"
-          dependencies:
-          - id: "Maven:commons-codec:commons-codec:1.10"
-          - id: "Maven:org.apache.commons:commons-collections4:4.1"
-        - id: "Maven:org.apache.poi:poi-ooxml:3.15"
-          dependencies:
-          - id: "Maven:com.github.virtuald:curvesapi:1.04"
-          - id: "Maven:org.apache.poi:poi-ooxml-schemas:3.15"
-            dependencies:
-            - id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
-              dependencies:
-              - id: "Maven:stax:stax-api:1.0.1"
-        - id: "Maven:org.jsoup:jsoup:1.7.2"
-      - name: "test"
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+      scope_names:
+      - "compile"
+      - "test"
     - id: "NPM::isarray:2.0.5"
       definition_file_path: "package.json"
       authors:
@@ -239,26 +151,8 @@ analyzer:
         revision: "63ea4ca0a0d6b0574d6a470ebd26880c3026db4a"
         path: ""
       homepage_url: "https://github.com/juliangruber/isarray"
-      scopes:
-      - name: "devDependencies"
-        dependencies:
-        - id: "NPM::tape:2.13.4"
-          dependencies:
-          - id: "NPM::deep-equal:0.2.2"
-          - id: "NPM::defined:0.0.0"
-          - id: "NPM::glob:3.2.11"
-            dependencies:
-            - id: "NPM::inherits:2.0.3"
-            - id: "NPM::minimatch:0.3.0"
-              dependencies:
-              - id: "NPM::lru-cache:2.7.3"
-              - id: "NPM::sigmund:1.0.1"
-          - id: "NPM::inherits:2.0.3"
-          - id: "NPM::object-inspect:0.4.0"
-          - id: "NPM::resumer:0.0.0"
-            dependencies:
-            - id: "NPM::through:2.3.8"
-          - id: "NPM::through:2.3.8"
+      scope_names:
+      - "devDependencies"
     - id: "NPM::npm-test-project:1.0.0"
       definition_file_path: "package.json"
       declared_licenses:
@@ -276,92 +170,9 @@ analyzer:
         revision: "ad0367b7b9920144a47b8d30cc0c84cea102b821"
         path: ""
       homepage_url: ""
-      scopes:
-      - name: "dependencies"
-        dependencies:
-        - id: "NPM::cheerio:1.0.0-rc.1"
-          dependencies:
-          - id: "NPM::css-select:1.2.0"
-            dependencies:
-            - id: "NPM::boolbase:1.0.0"
-            - id: "NPM::css-what:2.1.3"
-            - id: "NPM::domutils:1.5.1"
-              dependencies:
-              - id: "NPM::dom-serializer:0.1.1"
-                dependencies:
-                - id: "NPM::domelementtype:1.3.1"
-                - id: "NPM::entities:1.1.2"
-              - id: "NPM::domelementtype:1.3.1"
-            - id: "NPM::nth-check:1.0.2"
-              dependencies:
-              - id: "NPM::boolbase:1.0.0"
-          - id: "NPM::dom-serializer:0.1.1"
-            dependencies:
-            - id: "NPM::domelementtype:1.3.1"
-            - id: "NPM::entities:1.1.2"
-          - id: "NPM::entities:1.1.2"
-          - id: "NPM::htmlparser2:3.10.1"
-            dependencies:
-            - id: "NPM::domelementtype:1.3.1"
-            - id: "NPM::domhandler:2.4.2"
-              dependencies:
-              - id: "NPM::domelementtype:1.3.1"
-            - id: "NPM::domutils:1.5.1"
-              dependencies:
-              - id: "NPM::dom-serializer:0.1.1"
-                dependencies:
-                - id: "NPM::domelementtype:1.3.1"
-                - id: "NPM::entities:1.1.2"
-              - id: "NPM::domelementtype:1.3.1"
-            - id: "NPM::entities:1.1.2"
-            - id: "NPM::inherits:2.0.3"
-            - id: "NPM::readable-stream:3.2.0"
-              dependencies:
-              - id: "NPM::inherits:2.0.3"
-              - id: "NPM::string_decoder:1.2.0"
-                dependencies:
-                - id: "NPM::safe-buffer:5.1.2"
-              - id: "NPM::util-deprecate:1.0.2"
-          - id: "NPM::lodash:4.17.11"
-          - id: "NPM::parse5:3.0.3"
-            dependencies:
-            - id: "NPM:@types:node:11.9.6"
-      - name: "devDependencies"
-        dependencies:
-        - id: "NPM::cson:4.1.0"
-          dependencies:
-          - id: "NPM::coffee-script:1.12.7"
-          - id: "NPM::cson-parser:1.3.5"
-            dependencies:
-            - id: "NPM::coffee-script:1.12.7"
-          - id: "NPM::extract-opts:3.3.1"
-            dependencies:
-            - id: "NPM::eachr:3.2.0"
-              dependencies:
-              - id: "NPM::editions:1.3.4"
-              - id: "NPM::typechecker:4.7.0"
-                dependencies:
-                - id: "NPM::editions:2.1.3"
-                  dependencies:
-                  - id: "NPM::errlop:1.1.1"
-                  - id: "NPM::semver:5.6.0"
-            - id: "NPM::editions:1.3.4"
-            - id: "NPM::typechecker:4.7.0"
-              dependencies:
-              - id: "NPM::editions:2.1.3"
-                dependencies:
-                - id: "NPM::errlop:1.1.1"
-                - id: "NPM::semver:5.6.0"
-          - id: "NPM::requirefresh:2.2.0"
-            dependencies:
-            - id: "NPM::editions:2.1.3"
-              dependencies:
-              - id: "NPM::errlop:1.1.1"
-              - id: "NPM::semver:5.6.0"
-          - id: "NPM::safefs:4.1.0"
-            dependencies:
-            - id: "NPM::editions:1.3.4"
-            - id: "NPM::graceful-fs:4.1.15"
+      scope_names:
+      - "dependencies"
+      - "devDependencies"
     - id: "NPM::submodules/test-data-npm/long.js/package.json:"
       definition_file_path: "package.json"
       declared_licenses: []
@@ -377,8 +188,8 @@ analyzer:
         revision: "941c5c62471168b5d18153755c2a7b38d2560e58"
         path: ""
       homepage_url: ""
-      scopes: []
-    - id: "Unmanaged:manifest.xml:manifest:<REPLACE_REVISION>"
+      scope_names: []
+    - id: "Unmanaged:manifest.xml:manifest:31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
       definition_file_path: ""
       declared_licenses: []
       declared_licenses_processed: {}
@@ -4320,6 +4131,466 @@ analyzer:
           \ This potentially results in unstable versions of dependencies. To allow\
           \ this, enable support for dynamic versions."
         severity: "ERROR"
+    dependency_graphs:
+      Maven:
+        packages:
+        - "Maven:antlr:antlr:2.7.7"
+        - "Maven:com.fasterxml.jackson.core:jackson-annotations:2.9.0"
+        - "Maven:com.fasterxml.jackson.core:jackson-core:2.9.6"
+        - "Maven:com.fasterxml.jackson.core:jackson-databind:2.9.6"
+        - "Maven:com.github.andrewoma.dexx:collection:0.7"
+        - "Maven:com.github.cliftonlabs:json-simple:2.3.1"
+        - "Maven:com.github.jsonld-java:jsonld-java:0.12.1"
+        - "Maven:com.github.spullara.mustache.java:compiler:0.7.9"
+        - "Maven:com.github.virtuald:curvesapi:1.04"
+        - "Maven:com.google.code.gson:gson:2.8.0"
+        - "Maven:com.google.guava:guava:16.0.1"
+        - "Maven:commons-cli:commons-cli:1.4"
+        - "Maven:commons-codec:commons-codec:1.10"
+        - "Maven:commons-io:commons-io:2.6"
+        - "Maven:junit:junit:4.12"
+        - "Maven:net.sf.opencsv:opencsv:2.3"
+        - "Maven:net.sf.saxon:saxon-dom:8.7"
+        - "Maven:net.sf.saxon:saxon:8.7"
+        - "Maven:nu.validator.htmlparser:htmlparser:1.4"
+        - "Maven:org.antlr:ST4:4.0.4"
+        - "Maven:org.antlr:antlr-runtime:3.4"
+        - "Maven:org.antlr:antlr:3.4"
+        - "Maven:org.antlr:stringtemplate:3.2.1"
+        - "Maven:org.apache.commons:commons-collections4:4.1"
+        - "Maven:org.apache.commons:commons-compress:1.17"
+        - "Maven:org.apache.commons:commons-csv:1.5"
+        - "Maven:org.apache.commons:commons-lang3:3.1"
+        - "Maven:org.apache.commons:commons-lang3:3.8.1"
+        - "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
+        - "Maven:org.apache.httpcomponents:httpclient:4.5.5"
+        - "Maven:org.apache.httpcomponents:httpcore:4.4.9"
+        - "Maven:org.apache.jena:apache-jena-libs:3.9.0"
+        - "Maven:org.apache.jena:jena-arq:3.9.0"
+        - "Maven:org.apache.jena:jena-base:3.9.0"
+        - "Maven:org.apache.jena:jena-core:3.9.0"
+        - "Maven:org.apache.jena:jena-dboe-base:3.9.0"
+        - "Maven:org.apache.jena:jena-dboe-index:3.9.0"
+        - "Maven:org.apache.jena:jena-dboe-trans-data:3.9.0"
+        - "Maven:org.apache.jena:jena-dboe-transaction:3.9.0"
+        - "Maven:org.apache.jena:jena-iri:3.9.0"
+        - "Maven:org.apache.jena:jena-rdfconnection:3.9.0"
+        - "Maven:org.apache.jena:jena-shaded-guava:3.9.0"
+        - "Maven:org.apache.jena:jena-tdb2:3.9.0"
+        - "Maven:org.apache.jena:jena-tdb:3.9.0"
+        - "Maven:org.apache.logging.log4j:log4j-api:2.10.0"
+        - "Maven:org.apache.logging.log4j:log4j-core:2.10.0"
+        - "Maven:org.apache.logging.log4j:log4j-slf4j-impl:2.10.0"
+        - "Maven:org.apache.poi:poi-ooxml-schemas:3.15"
+        - "Maven:org.apache.poi:poi-ooxml:3.15"
+        - "Maven:org.apache.poi:poi:3.15"
+        - "Maven:org.apache.thrift:libthrift:0.10.0"
+        - "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
+        - "Maven:org.apiguardian:apiguardian-api:1.0.0"
+        - "Maven:org.assertj:assertj-core:3.11.1"
+        - "Maven:org.hamcrest:hamcrest-core:1.3"
+        - "Maven:org.jsoup:jsoup:1.7.2"
+        - "Maven:org.junit.jupiter:junit-jupiter-api:5.3.1"
+        - "Maven:org.junit.jupiter:junit-jupiter-engine:5.3.1"
+        - "Maven:org.junit.jupiter:junit-jupiter-params:5.3.1"
+        - "Maven:org.junit.platform:junit-platform-commons:1.3.1"
+        - "Maven:org.junit.platform:junit-platform-engine:1.3.1"
+        - "Maven:org.junit.platform:junit-platform-launcher:1.3.1"
+        - "Maven:org.opentest4j:opentest4j:1.1.1"
+        - "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+        - "Maven:org.slf4j:slf4j-api:1.7.25"
+        - "Maven:stax:stax-api:1.0.1"
+        scopes:
+          org.apache.commons:commons-text:1.6:compile:
+          - root: 27
+          org.apache.commons:commons-text:1.6:test:
+          - root: 53
+          - root: 57
+          - root: 58
+          - root: 61
+          org.spdx:spdx-tools:2.1.15-SNAPSHOT:compile:
+          - root: 5
+          - root: 7
+          - root: 9
+          - root: 10
+          - root: 15
+          - root: 16
+          - root: 17
+          - root: 18
+          - root: 21
+          - root: 26
+          - root: 31
+          - root: 39
+          - root: 44
+          - root: 45
+          - root: 46
+          - root: 48
+          - root: 49
+          - root: 55
+          org.spdx:spdx-tools:2.1.15-SNAPSHOT:test:
+          - root: 14
+        nodes:
+        - pkg: 31
+        - pkg: 43
+        - pkg: 32
+        - pkg: 34
+        - pkg: 11
+        - pkg: 33
+        - pkg: 25
+        - pkg: 24
+        - pkg: 4
+        - pkg: 41
+        - pkg: 29
+        - pkg: 30
+        - pkg: 6
+        - pkg: 2
+        - pkg: 3
+        - pkg: 1
+        - pkg: 13
+        - pkg: 28
+        - pkg: 50
+        - pkg: 63
+        - pkg: 42
+        - pkg: 37
+        - pkg: 38
+        - pkg: 35
+        - pkg: 36
+        - pkg: 40
+        - pkg: 64
+        - pkg: 39
+        - pkg: 21
+        - pkg: 20
+        - pkg: 22
+        - {}
+        - pkg: 19
+        - pkg: 26
+        - pkg: 49
+        - pkg: 12
+        - pkg: 23
+        - pkg: 48
+        - pkg: 47
+        - pkg: 51
+        - pkg: 65
+        - pkg: 8
+        - pkg: 15
+        - pkg: 18
+        - pkg: 17
+        - pkg: 55
+        - pkg: 10
+        - pkg: 7
+        - pkg: 44
+        - pkg: 45
+        - pkg: 46
+        - pkg: 14
+        - pkg: 54
+        - pkg: 9
+        - pkg: 16
+        - pkg: 5
+        - pkg: 27
+        - pkg: 57
+        - pkg: 52
+        - pkg: 60
+        - pkg: 59
+        - pkg: 62
+        - pkg: 56
+        - pkg: 58
+        - pkg: 61
+        - pkg: 53
+        edges:
+        - from: 5
+          to: 6
+        - from: 5
+          to: 7
+        - from: 5
+          to: 8
+        - from: 3
+          to: 4
+        - from: 3
+          to: 5
+        - from: 10
+          to: 11
+        - from: 14
+          to: 15
+        - from: 12
+          to: 13
+        - from: 12
+          to: 14
+        - from: 12
+          to: 16
+        - from: 2
+          to: 3
+        - from: 2
+          to: 9
+        - from: 2
+          to: 10
+        - from: 2
+          to: 12
+        - from: 2
+          to: 17
+        - from: 2
+          to: 18
+        - from: 2
+          to: 19
+        - from: 1
+          to: 2
+        - from: 22
+          to: 23
+        - from: 21
+          to: 22
+        - from: 21
+          to: 24
+        - from: 20
+          to: 21
+        - from: 0
+          to: 1
+        - from: 0
+          to: 20
+        - from: 0
+          to: 25
+        - from: 0
+          to: 26
+        - from: 29
+          to: 30
+        - from: 29
+          to: 31
+        - from: 28
+          to: 29
+        - from: 28
+          to: 32
+        - from: 34
+          to: 35
+        - from: 34
+          to: 36
+        - from: 39
+          to: 40
+        - from: 38
+          to: 39
+        - from: 37
+          to: 38
+        - from: 37
+          to: 41
+        - from: 51
+          to: 52
+        - from: 59
+          to: 60
+        - from: 59
+          to: 61
+        - from: 57
+          to: 58
+        - from: 57
+          to: 59
+        - from: 57
+          to: 62
+      NPM:
+        packages:
+        - "NPM::boolbase:1.0.0"
+        - "NPM::cheerio:1.0.0-rc.1"
+        - "NPM::coffee-script:1.12.7"
+        - "NPM::cson-parser:1.3.5"
+        - "NPM::cson:4.1.0"
+        - "NPM::css-select:1.2.0"
+        - "NPM::css-what:2.1.3"
+        - "NPM::deep-equal:0.2.2"
+        - "NPM::defined:0.0.0"
+        - "NPM::dom-serializer:0.1.1"
+        - "NPM::domelementtype:1.3.1"
+        - "NPM::domhandler:2.4.2"
+        - "NPM::domutils:1.5.1"
+        - "NPM::eachr:3.2.0"
+        - "NPM::editions:1.3.4"
+        - "NPM::editions:2.1.3"
+        - "NPM::entities:1.1.2"
+        - "NPM::errlop:1.1.1"
+        - "NPM::extract-opts:3.3.1"
+        - "NPM::glob:3.2.11"
+        - "NPM::graceful-fs:4.1.15"
+        - "NPM::htmlparser2:3.10.1"
+        - "NPM::inherits:2.0.3"
+        - "NPM::lodash:4.17.11"
+        - "NPM::lru-cache:2.7.3"
+        - "NPM::minimatch:0.3.0"
+        - "NPM::nth-check:1.0.2"
+        - "NPM::object-inspect:0.4.0"
+        - "NPM::parse5:3.0.3"
+        - "NPM::readable-stream:3.2.0"
+        - "NPM::requirefresh:2.2.0"
+        - "NPM::resumer:0.0.0"
+        - "NPM::safe-buffer:5.1.2"
+        - "NPM::safefs:4.1.0"
+        - "NPM::semver:5.6.0"
+        - "NPM::sigmund:1.0.1"
+        - "NPM::string_decoder:1.2.0"
+        - "NPM::tape:2.13.4"
+        - "NPM::through:2.3.8"
+        - "NPM::typechecker:4.7.0"
+        - "NPM::util-deprecate:1.0.2"
+        - "NPM:@types:node:11.9.6"
+        scopes:
+          :isarray:2.0.5:devDependencies:
+          - root: 37
+          :npm-test-project:1.0.0:dependencies:
+          - root: 1
+          :npm-test-project:1.0.0:devDependencies:
+          - root: 4
+        nodes:
+        - pkg: 1
+        - pkg: 5
+        - pkg: 6
+        - pkg: 12
+        - pkg: 9
+        - pkg: 10
+        - pkg: 16
+        - {}
+        - pkg: 26
+        - pkg: 21
+        - pkg: 11
+        - pkg: 22
+        - pkg: 29
+        - pkg: 36
+        - pkg: 32
+        - pkg: 40
+        - pkg: 23
+        - pkg: 28
+        - pkg: 41
+        - pkg: 4
+        - pkg: 2
+        - pkg: 3
+        - pkg: 18
+        - pkg: 13
+        - pkg: 14
+        - pkg: 39
+        - pkg: 15
+        - pkg: 17
+        - pkg: 34
+        - pkg: 30
+        - pkg: 33
+        - pkg: 20
+        - pkg: 37
+        - pkg: 7
+        - pkg: 8
+        - pkg: 19
+        - pkg: 25
+        - pkg: 24
+        - pkg: 35
+        - pkg: 27
+        - pkg: 31
+        - pkg: 38
+        edges:
+        - from: 4
+          to: 5
+        - from: 4
+          to: 6
+        - from: 3
+          to: 4
+        - from: 3
+          to: 5
+        - from: 8
+          to: 7
+        - from: 1
+          to: 2
+        - from: 1
+          to: 3
+        - from: 1
+          to: 7
+        - from: 1
+          to: 8
+        - from: 10
+          to: 5
+        - from: 13
+          to: 14
+        - from: 12
+          to: 11
+        - from: 12
+          to: 13
+        - from: 12
+          to: 15
+        - from: 9
+          to: 3
+        - from: 9
+          to: 5
+        - from: 9
+          to: 6
+        - from: 9
+          to: 10
+        - from: 9
+          to: 11
+        - from: 9
+          to: 12
+        - from: 17
+          to: 18
+        - from: 0
+          to: 1
+        - from: 0
+          to: 4
+        - from: 0
+          to: 6
+        - from: 0
+          to: 9
+        - from: 0
+          to: 16
+        - from: 0
+          to: 17
+        - from: 21
+          to: 20
+        - from: 26
+          to: 27
+        - from: 26
+          to: 28
+        - from: 25
+          to: 26
+        - from: 23
+          to: 24
+        - from: 23
+          to: 25
+        - from: 22
+          to: 23
+        - from: 22
+          to: 24
+        - from: 22
+          to: 25
+        - from: 29
+          to: 26
+        - from: 30
+          to: 24
+        - from: 30
+          to: 31
+        - from: 19
+          to: 20
+        - from: 19
+          to: 21
+        - from: 19
+          to: 22
+        - from: 19
+          to: 29
+        - from: 19
+          to: 30
+        - from: 36
+          to: 37
+        - from: 36
+          to: 38
+        - from: 35
+          to: 11
+        - from: 35
+          to: 36
+        - from: 40
+          to: 41
+        - from: 32
+          to: 11
+        - from: 32
+          to: 33
+        - from: 32
+          to: 34
+        - from: 32
+          to: 35
+        - from: 32
+          to: 39
+        - from: 32
+          to: 40
+        - from: 32
+          to: 41
+      Bower:
+        nodes: []
+        edges: []
     has_issues: true
 scanner: null
 advisor: null
