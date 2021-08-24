@@ -103,6 +103,31 @@ class FossIdTest : WordSpec({
     }
 
     "scanPackages()" should {
+        "create issues for packages not hosted in Git" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false)
+            val vcsInfo = createVcsInfo(type = VcsType.UNKNOWN)
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            config.createService()
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).summary(pkgId)
+
+            summary.issues shouldHaveSize 1
+            with(summary.issues.first()) {
+                message shouldContain pkgId.toCoordinates()
+                message shouldContain "but only Git is supported"
+                severity shouldBe Severity.ERROR
+            }
+        }
+
         "create a new scan for an existing project" {
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
