@@ -48,6 +48,12 @@ data class RepositoryConfiguration(
     val curations: Curations = Curations(),
 
     /**
+     * Defines configurations for this repository.
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    val packageConfigurations: List<PackageConfiguration> = emptyList(),
+
+    /**
      * Defines license choices within this repository.
      */
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LicenseChoiceFilter::class)

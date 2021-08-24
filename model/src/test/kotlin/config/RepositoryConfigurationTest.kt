@@ -90,6 +90,24 @@ class RepositoryConfigurationTest : WordSpec({
                   - id: "vulnerability id"
                     reason: "INEFFECTIVE_VULNERABILITY"
                     comment: "vulnerability comment"
+                package_configurations:
+                - id: "Maven:com.example:package:1.2.3"
+                  source_artifact_url: "https://repo.maven.apache.org/com/example/package/package-1.2.3-sources.jar"
+                  license_finding_curations:
+                  - path: "com/example/common/example/ExampleClass.java"
+                    start_lines: 41
+                    line_count: 1
+                    detected_license: "GPL-2.0-only"
+                    reason: "INCORRECT"
+                    comment: "False-positive license finding."
+                    concluded_license: "NONE"
+                  - path: "com/example/common/second/Example.java"
+                    start_lines: 35
+                    line_count: 1
+                    detected_license: "GPL-2.0-only"
+                    reason: "INCORRECT"
+                    comment: "False-positive by ScanCode."
+                    concluded_license: "NONE"
                 license_choices:
                   repository_license_choices:
                   - given: Apache-2.0 or GPL-2.0-only
@@ -142,6 +160,13 @@ class RepositoryConfigurationTest : WordSpec({
                 id shouldBe "vulnerability id"
                 reason shouldBe VulnerabilityResolutionReason.INEFFECTIVE_VULNERABILITY
                 comment shouldBe "vulnerability comment"
+            }
+
+            val packageConfigurations = repositoryConfiguration.packageConfigurations
+            packageConfigurations should haveSize(1)
+            with(packageConfigurations.first()) {
+                licenseFindingCurations should haveSize(2)
+                id shouldBe Identifier("Maven:com.example:package:1.2.3")
             }
 
             val repositoryLicenseChoices = repositoryConfiguration.licenseChoices.repositoryLicenseChoices
