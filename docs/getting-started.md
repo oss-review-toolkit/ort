@@ -134,7 +134,7 @@ repository:
     revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/jshttp/mime-types.git"
     revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
     path: ""
@@ -180,7 +180,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "https://github.com/jshttp/mime-types.git"
         revision: "076f7902e3a730970ea96cd0b9c09bb6110f1127"
         path: ""
@@ -220,12 +220,12 @@ analyzer:
           hash: "91b4792588a7738c25f35dd6f63752a2f8776135"
           hash_algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
           revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/isaacs/abbrev-js.git"
           revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
           path: ""

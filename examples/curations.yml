@@ -18,7 +18,7 @@
 #      hash: "ddce269a1e3d054cae349621c198dd52"
 #      hash_algorithm: "MD5"
 #    vcs:
-#      type: "git"
+#      type: "Git"
 #      url: "http://example.com/repo.git"
 #      revision: "1234abc"
 #      path: "subdirectory"
@@ -29,7 +29,7 @@
   curations:
     comment: "Repository moved to https://gitlab.ow2.org."
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://gitlab.ow2.org/asm/asm.git"
 
 - id: "NPM::ast-traverse:0.1.0"

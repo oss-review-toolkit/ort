@@ -66,7 +66,7 @@ The structure of the curations file consist of one or more `id` entries:
       hash: "ddce269a1e3d054cae349621c198dd52"
       hash_algorithm: "MD5"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://example.com/repo.git"
       revision: "1234abc"
       path: "subdirectory"
