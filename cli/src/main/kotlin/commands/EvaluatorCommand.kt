@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
@@ -262,7 +263,12 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
 
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
+        val repositoryPackageConfigurations = ortResultInput.repository.config.packageConfigurations
+        val optionPackageConfigurations = packageConfigurationOption.createProvider().getPackageConfigurations()
+
+        val packageConfigurationProvider = SimplePackageConfigurationProvider(
+            optionPackageConfigurations + repositoryPackageConfigurations
+        )
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val config = globalOptionsForSubcommands.config
