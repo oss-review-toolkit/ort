@@ -61,8 +61,9 @@ abstract class Scanner(
     }
 
     /**
-     * Scan the [Project]s and [Package]s specified in [ortResult] and store the scan results in [outputDirectory].
-     * Return scan results as an [OrtResult].
+     * Scan the [Project]s and [Package]s specified in [ortResult] and store the scan results in [outputDirectory]. If
+     * [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan results as an
+     * [OrtResult].
      */
     fun scanOrtResult(ortResult: OrtResult, outputDirectory: File, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
