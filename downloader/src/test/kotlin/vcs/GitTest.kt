@@ -86,7 +86,7 @@ class GitTest : WordSpec({
                 override fun getPasswordAuthentication(): PasswordAuthentication {
                     requestingHost shouldBe TestUri.host
                     requestingPort shouldBe TestUri.port
-                    requestingScheme shouldBe TestUri.scheme
+                    requestingProtocol shouldBe TestUri.scheme
 
                     return PasswordAuthentication(user, password)
                 }
