@@ -308,7 +308,7 @@ class FossId internal constructor(
                     }
                 } catch (e: IllegalStateException) {
                     e.showStackTrace()
-                    log.error("Package at url=$url cannot be scanned")
+                    log.error { "Package at URL $url cannot be scanned." }
 
                     val summary = createSingleIssueSummary(
                         pkg.id.toCoordinates(),
