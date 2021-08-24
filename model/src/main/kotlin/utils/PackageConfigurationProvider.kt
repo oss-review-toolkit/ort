@@ -28,6 +28,11 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
  */
 interface PackageConfigurationProvider {
     /**
+     * Return all [PackageConfiguration]s of this provider.
+     */
+    fun getPackageConfigurations(): List<PackageConfiguration>
+
+    /**
      * Return the first matching [PackageConfiguration] for the given [packageId] and [provenance] if any.
      */
     fun getPackageConfiguration(packageId: Identifier, provenance: Provenance): PackageConfiguration?

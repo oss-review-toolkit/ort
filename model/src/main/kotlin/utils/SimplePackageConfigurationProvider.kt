@@ -79,6 +79,8 @@ class SimplePackageConfigurationProvider(
         configurationsById = configurations.groupByTo(HashMap()) { it.id }
     }
 
+    override fun getPackageConfigurations() = configurationsById.values.flatten()
+
     override fun getPackageConfiguration(packageId: Identifier, provenance: Provenance): PackageConfiguration? =
         configurationsById[packageId]?.filter { it.matches(packageId, provenance) }?.let {
             require(it.size <= 1) { "There must be at most one package configuration per Id and provenance." }
