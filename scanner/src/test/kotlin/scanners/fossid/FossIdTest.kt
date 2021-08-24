@@ -353,9 +353,9 @@ class FossIdTest : WordSpec({
             scannerRun.results.collectIssues()[pkgId] shouldNotBeNull {
                 this shouldHaveSize 1
                 val issue = first()
-                issue.source shouldBe pkgId.toCoordinates()
-                issue.severity shouldBe Severity.HINT
+                issue.message shouldContain pkgId.toCoordinates()
                 issue.message shouldContain "asynchronous mode"
+                issue.severity shouldBe Severity.HINT
             }
 
             coVerify(exactly = 0) {
@@ -472,7 +472,7 @@ class FossIdTest : WordSpec({
             scannerRun.results.scanResults.keys shouldHaveSize 2
             scannerRun.results.collectIssues()[id2].shouldNotBeNull {
                 val issue = first()
-                issue.source shouldBe id2.toCoordinates()
+                issue.message shouldContain id2.toCoordinates()
                 issue.severity shouldBe Severity.ERROR
             }
 

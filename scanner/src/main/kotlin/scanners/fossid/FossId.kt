@@ -241,9 +241,9 @@ class FossId internal constructor(
 
                         val provenance = RepositoryProvenance(it.vcsProcessed, it.vcsProcessed.revision)
                         val summary = createSingleIssueSummary(
-                            it.id.toCoordinates(),
-                            "This package has been ignored because it contains a non-empty VCS path. " +
-                                    "FossID does not support partial checkouts of a Git repository.",
+                            scannerName,
+                            "Package '${it.id.toCoordinates()}' has been ignored because it contains a " +
+                                    "non-empty VCS path and partial checkouts are not supported.",
                             Severity.HINT,
                             Instant.now()
                         )
@@ -296,9 +296,9 @@ class FossId internal constructor(
                         results.getOrPut(pkg) { mutableListOf() } += resultsSummary
                     } else {
                         val summary = createSingleIssueSummary(
-                            pkg.id.toCoordinates(),
-                            "This package has been scanned in asynchronous mode. Scan results are " +
-                                    "available on the FossID instance.",
+                            scannerName,
+                            "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. Scan " +
+                                    "results need to be inspected on the server instance.",
                             Severity.HINT,
                             startTime
                         )
@@ -311,8 +311,8 @@ class FossId internal constructor(
                     log.error { "Package at URL $url cannot be scanned." }
 
                     val summary = createSingleIssueSummary(
-                        pkg.id.toCoordinates(),
-                        "This package has failed to be scanned by FossID.",
+                        scannerName,
+                        "Failed to scan package '${pkg.id.toCoordinates()}'.",
                         Severity.ERROR,
                         startTime
                     )
