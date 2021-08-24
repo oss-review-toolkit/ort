@@ -143,8 +143,8 @@ class FossId internal constructor(
             val creds = Authenticator.requestPasswordAuthentication(
                 /* host = */ repoUri.host,
                 /* addr = */ null,
-                /* port = */ 0,
-                /* protocol = */ null,
+                /* port = */ repoUri.port,
+                /* protocol = */ repoUri.scheme,
                 /* prompt = */ null,
                 /* scheme = */ null
             )
