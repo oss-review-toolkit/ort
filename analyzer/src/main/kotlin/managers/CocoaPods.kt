@@ -66,7 +66,7 @@ import org.ossreviewtoolkit.utils.textValueOrEmpty
  * on any platform. Note that obtaining the dependency tree from the 'pod' command without a lock file has Xcode
  * dependencies and is not supported by this class.
  *
- * The only interactions with the 'pod' command happen in order to obtain meta-data for dependencies. Therefore
+ * The only interactions with the 'pod' command happen in order to obtain metadata for dependencies. Therefore
  * 'pod spec which' gets executed, which works also under Linux.
  *
  * Note: This class depends on https://github.com/CocoaPods/CocoaPods/pull/10609 which is not yet released.
@@ -98,7 +98,7 @@ class CocoaPods(
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        // CocoaPods originally used and may still use the Specs repository on GitHub [1] as package meta-data database.
+        // CocoaPods originally used and may still use the Specs repository on GitHub [1] as package metadata database.
         // Using [1] requires an initial clone which is slow to do and consumes already more than 5 GB on disk, see
         // also [2]. (Final) CDN support has been added in version 1.7.2 [3] to speed things up.
         //

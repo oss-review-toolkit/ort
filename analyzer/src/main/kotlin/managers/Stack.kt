@@ -190,7 +190,7 @@ class Stack(
 
                 val pkg = allPackages.getOrPut(pkgId) {
                     if (pkgId.type == "Hackage") {
-                        // Enrich the package with additional meta-data from Hackage.
+                        // Enrich the package with additional metadata from Hackage.
                         downloadCabalFile(pkgId)?.let {
                             parseCabalFile(it)
                         } ?: pkgFallback
@@ -214,7 +214,7 @@ class Stack(
         val url = "${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal"
 
         return OkHttpClientHelper.downloadText(url).onFailure {
-            log.warn { "Unable to retrieve Hackage meta-data for package '${pkgId.toCoordinates()}'." }
+            log.warn { "Unable to retrieve Hackage metadata for package '${pkgId.toCoordinates()}'." }
         }.getOrNull()
     }
 

@@ -41,7 +41,7 @@ It does so by orchestrating a _highly customizable_ pipeline of tools that _abst
 These tools are implemented as libraries (for programmatic use) and exposed via a command line interface (for scripted
 use):
 
-* [_Analyzer_](#analyzer) - determines the dependencies of projects and their meta-data, abstracting which package
+* [_Analyzer_](#analyzer) - determines the dependencies of projects and their metadata, abstracting which package
   managers or build systems are actually being used.
 * [_Downloader_](#downloader) - fetches all source code of the projects and their dependencies, abstracting which
   Version Control System (VCS) or other means are used to retrieve the source code.
@@ -313,7 +313,7 @@ to your existing project source code, like applying build system plugins, are ne
 transitive dependencies per project is written out as part of an
 [OrtResult](https://github.com/oss-review-toolkit/ort/blob/master/model/src/main/kotlin/OrtResult.kt) in YAML (or
 JSON, see `-f`) format to a file named `analyzer-result.yml` in the specified output directory (`-o`). The output file
-exactly documents the status quo of all package-related meta-data. It can be further processed or manually edited before
+exactly documents the status quo of all package-related metadata. It can be further processed or manually edited before
 passing it to one of the other tools.
 
 Currently, the following package managers are supported:

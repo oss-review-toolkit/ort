@@ -82,7 +82,7 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
     }
 
 /**
- * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
+ * A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(
     serverUrl: String,

@@ -209,7 +209,7 @@ abstract class LocalScanner(
 
         val remainingPackages = packages.filterTo(mutableListOf()) { pkg ->
             !pkg.isMetaDataOnly.also {
-                if (it) LocalScanner.log.info { "Skipping '${pkg.id.toCoordinates()}' as it is meta data only." }
+                if (it) LocalScanner.log.info { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
             }
         }
 

@@ -114,7 +114,7 @@ enum class ContributionType {
 }
 
 /**
- * The status of meta-data harvesting of the various tools.
+ * The status of metadata harvesting of the various tools.
  */
 enum class HarvestStatus {
     NOT_HARVESTED,
