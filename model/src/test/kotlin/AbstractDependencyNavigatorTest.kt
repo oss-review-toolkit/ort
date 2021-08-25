@@ -59,7 +59,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 
     private val testResult by lazy { readOrtResult(resultFileName) }
 
-    protected val testProject by lazy { testResult.getProject(PROJECT_ID)!! }
+    private val testProject by lazy { testResult.getProject(PROJECT_ID)!! }
 
     protected val navigator by lazy { testResult.dependencyNavigator }
 
