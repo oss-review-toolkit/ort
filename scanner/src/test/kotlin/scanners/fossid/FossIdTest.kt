@@ -94,7 +94,7 @@ class FossIdTest : WordSpec({
         mockkStatic("org.ossreviewtoolkit.clients.fossid.ExtensionsKt")
     }
 
-    "version" should {
+    "version()" should {
         "return the version reported by FossIdServiceWithVersion" {
             val fossId = createFossId(createConfig())
 
@@ -102,7 +102,7 @@ class FossIdTest : WordSpec({
         }
     }
 
-    "scanPackages" should {
+    "scanPackages()" should {
         "create a new scan for an existing project" {
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
