@@ -756,6 +756,8 @@ rule_violations:
   message: "BSD-3-Clause warning"
   how_to_fix: "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify\
     \ that overflow:scroll is working as expected.\n```"
+vulnerabilities_resolutions: []
+vulnerabilities: []
 statistics:
   open_issues:
     errors: 1
