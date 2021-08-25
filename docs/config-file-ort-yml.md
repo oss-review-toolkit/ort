@@ -167,7 +167,7 @@ The following example corrects the source-artifact URL of the package with the i
 e.g.:
 ```yaml
 curations:
-  package_curations:
+  packages:
   - id: "Maven:com.example:dummy:0.0.1"
     comment: "An explanation why the curation is needed."
     source_artifact:
