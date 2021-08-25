@@ -274,7 +274,7 @@ abstract class VersionControlSystem {
                 if (it.isNotBlank() && (allowMovingRevisions || isFixedRevision(workingTree, it))) {
                     if (revisionCandidates.add(it)) {
                         log.info {
-                            "Adding $type revision '$it' (taken from package meta-data) as a candidate."
+                            "Adding $type revision '$it' (taken from package metadata) as a candidate."
                         }
                     }
                 }
@@ -283,7 +283,7 @@ abstract class VersionControlSystem {
             it.showStackTrace()
 
             log.info {
-                "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessagesAsString()}"
+                "Metadata has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessagesAsString()}"
             }
 
             emptyRevisionCandidatesException.addSuppressed(it)

@@ -23,7 +23,7 @@ package org.ossreviewtoolkit.reporter.model
 import java.time.Instant
 
 /**
- * Meta data about the ORT run itself.
+ * Metadata about the ORT run itself.
  */
 data class MetaData(
     /**

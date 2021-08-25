@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.spdx.SpdxConstants.REF_PREFIX
 import org.ossreviewtoolkit.spdx.isSpdxExpressionOrNotPresent
 
 /**
- * Provides important meta-data about a particular file of a software package.
+ * Provides important metadata about a particular file of a software package.
  */
 @JsonIgnoreProperties("ranges") // TODO: Implement ranges which is broken in the specification examples.
 data class SpdxFile(

@@ -60,7 +60,7 @@ git checkout 2.1.18
 ## 4. Run the analyzer on `mime-types`
 
 The next step is to run the _analyzer_. It will create a JSON or YAML output file containing the full dependency tree of
-`mime-types` including the meta-data of `mime-types` and its dependencies.
+`mime-types` including the metadata of `mime-types` and its dependencies.
 
 ```bash
 # Command line help specific to the analyzer.

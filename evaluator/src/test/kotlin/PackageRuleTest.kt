@@ -106,14 +106,14 @@ class PackageRuleTest : WordSpec() {
         }
 
         "isMetaDataOnly()" should {
-            "return true for a package that has only meta data" {
+            "return true for a package that has only metadata" {
                 val rule = createPackageRule(packageMetaDataOnly)
                 val matcher = rule.isMetaDataOnly()
 
                 matcher.matches() shouldBe true
             }
 
-            "return false for a package that has not only meta data" {
+            "return false for a package that has not only metadata" {
                 val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isMetaDataOnly()
 

@@ -136,7 +136,7 @@ open class PackageRule(
         }
 
     /**
-     * A [RuleMatcher] that checks whether the [package][pkg] is meta data only.
+     * A [RuleMatcher] that checks whether the [package][pkg] is metadata only.
      */
     fun isMetaDataOnly() =
         object : RuleMatcher {

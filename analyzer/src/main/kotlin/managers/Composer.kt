@@ -183,7 +183,7 @@ class Composer(
         dependencies.filterNot { packageName ->
             packageName in EXCLUDED_PACKAGES
                     || packageName.startsWith("ext-") // Exclude extensions to PHP itself.
-                    || packageName in virtualPackages // Exclude virtual packages as they have no meta-data.
+                    || packageName in virtualPackages // Exclude virtual packages as they have no metadata.
         }.forEach { packageName ->
             val packageInfo = packages[packageName]
                 ?: throw IOException("Could not find package info for $packageName")

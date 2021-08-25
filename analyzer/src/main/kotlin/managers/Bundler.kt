@@ -253,7 +253,7 @@ class Bundler(
             GemSpec.createFromJson(it)
         }.onFailure {
             val error = (it as? HttpDownloadError) ?: run {
-                log.warn { "Unable to retrieve meta-data for gem '$name' from RubyGems: ${it.message}" }
+                log.warn { "Unable to retrieve metadata for gem '$name' from RubyGems: ${it.message}" }
                 return null
             }
 
@@ -262,7 +262,7 @@ class Bundler(
 
                 OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
                     throw IOException(
-                        "RubyGems reported too many requests when requesting meta-data for gem '$name', see " +
+                        "RubyGems reported too many requests when requesting metadata for gem '$name', see " +
                                 "https://guides.rubygems.org/rubygems-org-api/#rate-limits."
                     )
                 }
@@ -275,13 +275,13 @@ class Bundler(
                     }
 
                     throw IOException(
-                        "RubyGems reported too many bad gateway errors when requesting meta-data for gem '$name'."
+                        "RubyGems reported too many bad gateway errors when requesting metadata for gem '$name'."
                     )
                 }
 
                 else -> {
                     throw IOException(
-                        "RubyGems reported unhandled HTTP code ${error.code} when requesting meta-data for gem '$name'."
+                        "RubyGems reported unhandled HTTP code ${error.code} when requesting metadata for gem '$name'."
                     )
                 }
             }

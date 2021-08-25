@@ -52,7 +52,7 @@ cli/build/install/ort/bin/ort upload-result-to-sw360
   -i [analyzer-output-dir]/analyzer-result.yml
 ```
 
-## Use SW360 Package Meta-data Curations in ORT
+## Use SW360 Package Metadata Curations in ORT
 
 ### When to use
 

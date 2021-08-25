@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 /**
- * A [PackageCurationProvider] for curated package meta-data from the configured SW360 instance using the REST API.
+ * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.
  */
 class Sw360PackageCurationProvider(sw360Configuration: Sw360StorageConfiguration) : PackageCurationProvider {
     private val sw360Connection = createSw360Connection(

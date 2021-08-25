@@ -358,7 +358,7 @@ open class Npm(
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("node_modules")).use {
-            // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+            // Actually installing the dependencies is the easiest way to get the metadata of all transitive
             // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
             // dependency is only ever downloaded once.
             installDependencies(workingDir)

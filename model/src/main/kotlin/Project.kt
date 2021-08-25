@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
  * A class describing a software project. A [Project] is very similar to a [Package] but contains some additional
- * meta-data like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
+ * metadata like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
  * packages.
  */
 @JsonIgnoreProperties(value = ["aliases", "purl"])
@@ -72,7 +72,7 @@ data class Project(
     val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
 
     /**
-     * Original VCS-related information as defined in the [Project]'s meta-data.
+     * Original VCS-related information as defined in the [Project]'s metadata.
      */
     val vcs: VcsInfo,
 

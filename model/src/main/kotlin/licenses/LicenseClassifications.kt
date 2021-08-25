@@ -29,21 +29,21 @@ import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.getDuplicates
 
 /**
- * Classifications for licenses which allow to assign meta data to licenses. This allows defining rather generic
+ * Classifications for licenses which allow to assign metadata to licenses. This allows defining rather generic
  * categories and assigning licenses to these. That way flexible classifications can be created based on
  * customizable categories. The available license categories need to be declared explicitly; when creating an
  * instance, it is checked that all the references from the [categorizations] point to existing [categories].
  */
 data class LicenseClassifications(
     /**
-     * Defines meta data for the license categories.
+     * Defines metadata for the license categories.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonAlias("license_sets")
     val categories: List<LicenseCategory> = emptyList(),
 
     /**
-     * Defines meta data for licenses.
+     * Defines metadata for licenses.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonAlias("licenses")
