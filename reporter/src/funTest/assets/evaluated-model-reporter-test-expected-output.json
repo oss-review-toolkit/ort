@@ -832,7 +832,16 @@
     "how_to_fix" : "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify that overflow:scroll is working as expected.\n```"
   } ],
   "vulnerabilities_resolutions" : [ ],
-  "vulnerabilities" : [ ],
+  "vulnerabilities" : [ {
+    "id" : "VULCOID-VULNERABILITY_ID",
+    "pkg" : 2,
+    "references" : [ {
+      "url" : "https://registry.vulnerability-url/",
+      "scoring_system" : "SCORING_SYSTEM_NAME",
+      "severity" : "ERROR"
+    } ],
+    "resolutions" : [ ]
+  } ],
   "statistics" : {
     "open_issues" : {
       "errors" : 1,

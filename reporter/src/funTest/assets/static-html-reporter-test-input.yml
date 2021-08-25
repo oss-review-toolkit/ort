@@ -534,6 +534,37 @@ scanner:
       num_reads: 5
       num_hits: 0
     has_issues: true
+advisor:
+  start_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:00:00Z"
+  environment:
+    ort_version: "72463cc"
+    java_version: "1.8.0_181"
+    os: "Linux"
+    variables: {}
+    tool_versions: {}
+  config:
+    nexus_iq:
+      server_url: "https://rest-api-url-of-your-nexus-iq-server"
+      browse_url: "https://web-browsing-url-of-your-nexus-iq-server"
+      username: "username"
+    vulnerable_code:
+      server_url: "http://localhost:8000"
+  results:
+    advisor_results:
+      Ant:junit:junit:4.12:
+      - vulnerabilities:
+        - id: "VULCOID-VULNERABILITY_ID"
+          references:
+          - url: "https://registry.vulnerability-url/"
+            scoring_system: "SCORING_SYSTEM_NAME"
+            severity: "ERROR"
+        advisor:
+          name: "VulnerableCode"
+        summary:
+          start_time: "1970-01-01T00:00:00Z"
+          end_time: "1970-01-01T00:00:00Z"
+    has_issues: false
 evaluator:
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
