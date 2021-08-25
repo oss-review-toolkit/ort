@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.mapperConfig
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -103,6 +104,8 @@ data class EvaluatedModel(
     val dependencyTrees: List<DependencyTreeNode>,
     val ruleViolationResolutions: List<RuleViolationResolution>,
     val ruleViolations: List<EvaluatedRuleViolation>,
+    val vulnerabilitiesResolutions: List<VulnerabilityResolution>,
+    val vulnerabilities: List<EvaluatedVulnerability>,
     val statistics: Statistics,
     val repository: Repository,
 

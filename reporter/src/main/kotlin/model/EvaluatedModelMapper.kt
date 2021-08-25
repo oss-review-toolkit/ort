@@ -31,11 +31,13 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
@@ -63,6 +65,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val scopeExcludes = mutableListOf<ScopeExclude>()
     private val ruleViolations = mutableListOf<EvaluatedRuleViolation>()
     private val ruleViolationResolutions = mutableListOf<RuleViolationResolution>()
+    private val vulnerabilities = mutableListOf<EvaluatedVulnerability>()
+    private val vulnerabilitiesResolutions = mutableListOf<VulnerabilityResolution>()
 
     private val curationsMatcher = FindingCurationMatcher()
     private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(input.ortConfig.licenseFilePatterns))
@@ -92,6 +96,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             addRuleViolation(ruleViolation)
         }
 
+        createVulnerabilities()
+
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
             val pkg = packages.getValue(project.id)
             addDependencyTree(project, pkg)
@@ -115,6 +121,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             dependencyTrees = dependencyTrees,
             ruleViolationResolutions = ruleViolationResolutions,
             ruleViolations = ruleViolations,
+            vulnerabilitiesResolutions = vulnerabilitiesResolutions,
+            vulnerabilities = vulnerabilities,
             statistics = StatisticsCalculator().getStatistics(
                 input.ortResult,
                 input.resolutionProvider,
@@ -186,6 +194,27 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 excludes = scopeExcludes.addIfRequired(input.ortResult.getExcludes().findScopeExcludes(scope))
             )
         }
+    }
+
+    private fun createVulnerabilities() {
+        input.ortResult.advisor
+            ?.results
+            ?.advisorResults
+            ?.flatMap { (id, results) ->
+                val pkg = packages[id] ?: createEmptyPackage(id)
+
+                results.flatMap { result ->
+                    result.vulnerabilities.map { vulnerability ->
+                        val resolutions = addResolutions(vulnerability)
+                        vulnerabilities += EvaluatedVulnerability(
+                            pkg = pkg,
+                            id = vulnerability.id,
+                            references = vulnerability.references,
+                            resolutions = resolutions
+                        )
+                    }
+                }
+            }
     }
 
     private fun TextLocation.getRelativePathToRoot(id: Identifier): String =
@@ -524,6 +553,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val matchingResolutions = input.resolutionProvider.getRuleViolationResolutionsFor(ruleViolation)
 
         return ruleViolationResolutions.addIfRequired(matchingResolutions)
+    }
+
+    private fun addResolutions(vulnerability: Vulnerability): List<VulnerabilityResolution> {
+        val matchingResolutions = input.resolutionProvider.getVulnerabilityResolutionsFor(vulnerability)
+
+        return vulnerabilitiesResolutions.addIfRequired(matchingResolutions)
     }
 
     private fun addLicensesAndCopyrights(
