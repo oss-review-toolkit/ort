@@ -61,6 +61,7 @@ class OpossumReporter : Reporter {
                         "documentConfidence" to 80
                     ),
 
+                    "attributionConfidence" to 80,
                     "preSelected" to false,
 
                     "packageType" to id?.getPurlType(),
@@ -114,12 +115,12 @@ class OpossumReporter : Reporter {
             return tree.isEmpty()
         }
 
-        fun isContainedAFile(path: File) : Boolean {
+        fun isPathAFile(path: File) : Boolean {
             val pathPieces = path.toString().split("/")
-            return isContainedAFile(pathPieces)
+            return isPathAFile(pathPieces)
         }
 
-        private fun isContainedAFile(pathPieces: List<String>) : Boolean {
+        private fun isPathAFile(pathPieces: List<String>) : Boolean {
             if (pathPieces.isEmpty()) {
                 return isFile()
             }
@@ -130,7 +131,7 @@ class OpossumReporter : Reporter {
             if (! tree.containsKey(head)) {
                 return true
             }
-            return tree[head]!!.isContainedAFile(tail)
+            return tree[head]!!.isPathAFile(tail)
         }
 
         fun toJson(): Map<*,*> {
@@ -165,7 +166,7 @@ class OpossumReporter : Reporter {
                     .flatMap { it.asSequence() }
                     .associateBy ( {it.key}, {it.value} ),
                 "resourcesToAttributions" to pathToSignal.mapKeys {
-                    val trailingSlash = if (resources.isContainedAFile(it.key)) { "" } else { "/" }
+                    val trailingSlash = if (resources.isPathAFile(it.key)) { "" } else { "/" }
                     "/${it.key}${trailingSlash}"
                 }
             )
@@ -173,9 +174,9 @@ class OpossumReporter : Reporter {
 
         fun addPackageRoot(id: Identifier, path: File) {
             if (packageToRoot.containsKey(id)) {
-                packageToRoot.get(id)?.add(path)
+                packageToRoot[id]!!.add(path)
             } else {
-                packageToRoot.put(id, sortedSetOf(path))
+                packageToRoot[id] = sortedSetOf(path)
             }
         }
 
@@ -233,9 +234,9 @@ class OpossumReporter : Reporter {
         }
 
         fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
-            log.debug("add project ${project.id}")
-            val definitionFilePath = relRoot.resolve(project.definitionFilePath)
             val projectId = project.id
+            log.debug("add project ${projectId}")
+            val definitionFilePath = relRoot.resolve(project.definitionFilePath)
             // addPackageRoot(projectId, definitionFilePath)
             addPackageRoot(projectId, File(""))
 
