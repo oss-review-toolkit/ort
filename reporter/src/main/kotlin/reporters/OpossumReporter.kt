@@ -151,7 +151,8 @@ class OpossumReporter : Reporter {
         var resources: OpossumResources = OpossumResources(),
         var signals: MutableList<OpossumSignal> = mutableListOf(),
         var pathToSignal: SortedMap<File, SortedSet<UUID>> = sortedMapOf(),
-        var packageToRoot: SortedMap<Identifier, SortedSet<File>> = sortedMapOf()
+        var packageToRoot: SortedMap<Identifier, SortedSet<File>> = sortedMapOf(),
+        var attributionBreakpoints: MutableList<File> = mutableListOf()
     ) {
         fun toJson(): Map<*,*> {
             return sortedMapOf(
@@ -168,7 +169,8 @@ class OpossumReporter : Reporter {
                 "resourcesToAttributions" to pathToSignal.mapKeys {
                     val trailingSlash = if (resources.isPathAFile(it.key)) { "" } else { "/" }
                     "/${it.key}${trailingSlash}"
-                }
+                },
+                "attributionBreakpoints" to attributionBreakpoints
             )
         }
 
@@ -190,7 +192,7 @@ class OpossumReporter : Reporter {
             }
 
             paths.forEach {
-                log.debug("add signal ${signal.id} to ${it}")
+                log.trace("add signal ${signal.id} to ${it}")
                 resources.addResource(it)
                 if (pathToSignal.containsKey(it)) {
                     pathToSignal.get(it)?.add(uuidOfSignal)
@@ -204,38 +206,47 @@ class OpossumReporter : Reporter {
             addSignal(signal, sortedSetOf(path))
         }
 
+        fun addDependency(dependency: PackageReference, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
+            val dependencyId = dependency.id
+
+            log.trace("add dependency ${dependencyId}")
+            val dependencyPath = relRoot
+                .resolve(dependencyId.namespace)
+                .resolve("${dependencyId.name}@${dependencyId.version}")
+            addPackageRoot(dependencyId, dependencyPath)
+
+            val dependencyPackage = curatedPackages
+                .find { curatedPackage -> curatedPackage.pkg.id == dependencyId }
+                ?.pkg ?: Package.EMPTY
+
+            val signalFromDependency = OpossumSignal(
+                "ORT-Dependency",
+                id = dependencyId,
+                url = dependencyPackage.homepageUrl,
+                preselected = true
+            )
+            this.addSignal(signalFromDependency, dependencyPath)
+
+            val rootForDependencies = dependencyPath.resolve("dependencies")
+            attributionBreakpoints.add(rootForDependencies)
+            dependency.dependencies.map { this.addDependency(it, curatedPackages, rootForDependencies ) }
+        }
+
         fun addDependencyScope(scope: Scope, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
+
             val name = scope.name
-            log.debug("add dependency scope ${name}")
+            log.trace("add dependency scope ${name}")
             val dependencies = scope.dependencies
 
             val rootForScope = relRoot.resolve(name)
+            attributionBreakpoints.add(rootForScope)
 
-            dependencies.map {
-                val dependencyId = it.id
-                log.debug("add dependency ${dependencyId}")
-                val dependencyPath = rootForScope
-                    .resolve(dependencyId.namespace)
-                    .resolve("${dependencyId.name}@${dependencyId.version}")
-                addPackageRoot(dependencyId, dependencyPath)
-
-                val dependencyPackage = curatedPackages
-                    .find { curatedPackage -> curatedPackage.pkg.id == dependencyId }
-                    ?.pkg ?: Package.EMPTY
-
-                val signalFromDependency = OpossumSignal(
-                    "ORT-Dependency",
-                    id = dependencyId,
-                    url = dependencyPackage.homepageUrl,
-                    preselected = true
-                )
-                this.addSignal(signalFromDependency, dependencyPath)
-            }
+            dependencies.map { this.addDependency(it, curatedPackages, rootForScope) }
         }
 
         fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
             val projectId = project.id
-            log.debug("add project ${projectId}")
+            log.trace("add project ${projectId}")
             val definitionFilePath = relRoot.resolve(project.definitionFilePath)
             // addPackageRoot(projectId, definitionFilePath)
             addPackageRoot(projectId, File(""))
@@ -262,7 +273,7 @@ class OpossumReporter : Reporter {
         fun addScannerResult(id: Identifier, result: ScanResult) {
             val roots = packageToRoot.get(id) ?: sortedSetOf(File("lost+found/${id.toPurl()}"))
             val scanner = "${result.scanner.name}@${result.scanner.version}"
-            log.debug("add scanner results from ${scanner}")
+            log.trace("add scanner results from ${scanner}")
 
             val licenseFindings = result.summary.licenseFindings
             val copyrightFindings = result.summary.copyrightFindings
