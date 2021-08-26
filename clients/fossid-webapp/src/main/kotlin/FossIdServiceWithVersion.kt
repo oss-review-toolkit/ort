@@ -46,17 +46,15 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
             // TODO: replace with an API call when FossID provides a function (starting at version 21.2).
             val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*\$")
 
-            val response = getLoginPage()
-
-            response.charStream().buffered().useLines { lines ->
+            getLoginPage().charStream().buffered().useLines { lines ->
                 lines.forEach { line ->
                     val matcher = regex.matchEntire(line)
                     if (matcher != null && matcher.groupValues.size == 2) {
-                        val version = matcher.groupValues[1]
-                        return version
+                        return matcher.groupValues[1]
                     }
                 }
             }
+
             return null
         }
     }
