@@ -44,14 +44,13 @@ interface VulnerableCodeService {
         val JSON = Json { ignoreUnknownKeys = true }
 
         /**
-         * Create a new service instance that connects to the [serverUrl] specified and uses the optionally provided
-         * [client].
+         * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
          */
-        fun create(serverUrl: String, client: OkHttpClient? = null): VulnerableCodeService {
+        fun create(url: String, client: OkHttpClient? = null): VulnerableCodeService {
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
-                .baseUrl(serverUrl)
+                .baseUrl(url)
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
