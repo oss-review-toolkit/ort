@@ -400,7 +400,7 @@ class FossId internal constructor(
 
             scanCode
         } else {
-            log.info { "Scan ${existingScan.code} found for $url and revision $revision." }
+            log.info { "Scan '${existingScan.code}' found for $url and revision $revision." }
 
             requireNotNull(existingScan.code) {
                 "FossId returned a null scancode for an existing scan"
@@ -609,13 +609,13 @@ class FossId internal constructor(
         val identifiedFiles = service.listIdentifiedFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list identified files")
             .data!!
-        log.info { "${identifiedFiles.size} identified files have been returned for scan code $scanCode." }
+        log.info { "${identifiedFiles.size} identified files have been returned for scan code '$scanCode'." }
 
         val markedAsIdentifiedFiles = service.listMarkedAsIdentifiedFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list marked as identified files")
             .data!!
         log.info {
-            "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan code $scanCode."
+            "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan code '$scanCode'."
         }
 
         // The "match_type=ignore" info is already in the ScanResult, but here we also get the ignore reason.
@@ -627,7 +627,7 @@ class FossId internal constructor(
             .checkResponse("list pending files")
             .data!!
         log.info {
-            "${pendingFiles.size} pending files have been returned for scan code $scanCode."
+            "${pendingFiles.size} pending files have been returned for scan code '$scanCode'."
         }
 
         return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles, pendingFiles)
