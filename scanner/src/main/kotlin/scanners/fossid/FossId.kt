@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
 import org.ossreviewtoolkit.spdx.enumSetOf
@@ -227,19 +228,18 @@ class FossId internal constructor(
                 .filter { config.packageAuthorsFilter.isEmpty() || config.packageAuthorsFilter in it.authors }
                 .onEach {
                     if (it.vcsProcessed.path.isNotEmpty()) {
-                        log.warn {
-                            "Ignoring package with url ${it.vcsProcessed.url} " +
-                                    "with non-null path ${it.vcsProcessed.path}"
-                        }
+                        val startTime = Instant.now()
 
-                        val provenance = RepositoryProvenance(it.vcsProcessed, it.vcsProcessed.revision)
-                        val summary = createSingleIssueSummary(
-                            scannerName,
-                            "Package '${it.id.toCoordinates()}' has been ignored because it contains a " +
-                                    "non-empty VCS path and partial checkouts are not supported.",
-                            Severity.HINT,
-                            Instant.now()
+                        val issue = createAndLogIssue(
+                            source = scannerName,
+                            message = "Ignoring package '${it.id.toCoordinates()}' from ${it.vcsProcessed.url} as it " +
+                                    "has path '${it.vcsProcessed.path}' set and $scannerName cannot limit scanning " +
+                                    "to paths.",
+                            severity = Severity.WARNING
                         )
+                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
+                            listOf(issue))
+                        val provenance = RepositoryProvenance(it.vcsProcessed, it.vcsProcessed.revision)
 
                         val scanResult = ScanResult(provenance, details, summary)
                         results.getOrPut(it) { mutableListOf() } += scanResult
@@ -255,13 +255,12 @@ class FossId internal constructor(
                 val startTime = Instant.now()
 
                 if (pkg.vcsProcessed.type != VcsType.GIT) {
-                    val summary = createSingleIssueSummary(
-                        scannerName,
-                        "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but only " +
-                                "${VcsType.GIT} is supported.",
-                        Severity.ERROR,
-                        startTime
+                    val issue = createAndLogIssue(
+                        source = scannerName,
+                        message = "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but " +
+                                "only ${VcsType.GIT} is supported."
                     )
+                    val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
 
                     val scanResult = ScanResult(UnknownProvenance, details, summary)
                     results.getOrPut(pkg) { mutableListOf() } += scanResult
@@ -300,27 +299,26 @@ class FossId internal constructor(
 
                         results.getOrPut(pkg) { mutableListOf() } += resultsSummary
                     } else {
-                        val summary = createSingleIssueSummary(
-                            scannerName,
-                            "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. Scan " +
-                                    "results need to be inspected on the server instance.",
-                            Severity.HINT,
-                            startTime
+                        val issue = createAndLogIssue(
+                            source = scannerName,
+                            message = "Package '${pkg.id.toCoordinates()}' has been scanned in asynchronous mode. " +
+                                    "Scan results need to be inspected on the server instance.",
+                            severity = Severity.HINT
                         )
+                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
+                            listOf(issue))
 
                         val scanResult = ScanResult(provenance, details, summary)
                         results.getOrPut(pkg) { mutableListOf() } += scanResult
                     }
                 } catch (e: IllegalStateException) {
                     e.showStackTrace()
-                    log.error { "Package at URL $url cannot be scanned." }
 
-                    val summary = createSingleIssueSummary(
-                        scannerName,
-                        "Failed to scan package '${pkg.id.toCoordinates()}'.",
-                        Severity.ERROR,
-                        startTime
+                    val issue = createAndLogIssue(
+                        source = scannerName,
+                        message = "Failed to scan package '${pkg.id.toCoordinates()}' from $url."
                     )
+                    val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
 
                     val scanResult = ScanResult(provenance, details, summary)
                     results.getOrPut(pkg) { mutableListOf() } += scanResult
@@ -338,16 +336,6 @@ class FossId internal constructor(
         log.info { "Scan has been performed. Total time was ${duration.inWholeSeconds}s." }
 
         return results
-    }
-
-    private fun createSingleIssueSummary(
-        source: String,
-        message: String,
-        severity: Severity,
-        startTime: Instant
-    ): ScanSummary {
-        val issue = OrtIssue(source = source, message = message, severity = severity)
-        return ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
     }
 
     /**
