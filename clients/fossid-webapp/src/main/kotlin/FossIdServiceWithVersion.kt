@@ -37,26 +37,6 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
                 else -> VersionedFossIdService(delegate, version)
             }
         }
-
-        /**
-         * Extract the version from the login page.
-         * Example: `<link rel='stylesheet' href='style/fossid.css?v=2021.2.2#7936'>`
-         */
-        private suspend fun FossIdRestService.getFossIdVersion(): String? {
-            // TODO: replace with an API call when FossID provides a function (starting at version 21.2).
-            val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*\$")
-
-            getLoginPage().charStream().buffered().useLines { lines ->
-                lines.forEach { line ->
-                    val matcher = regex.matchEntire(line)
-                    if (matcher != null && matcher.groupValues.size == 2) {
-                        return matcher.groupValues[1]
-                    }
-                }
-            }
-
-            return null
-        }
     }
 
     /**
