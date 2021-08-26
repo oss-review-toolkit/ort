@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.databind.json.JsonMapper
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
+import org.apache.commons.compress.compressors.gzip.GzipParameters
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -32,8 +34,10 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.log
 import java.io.File
+import java.io.FileOutputStream
 import java.time.LocalDateTime
 import java.util.*
+import java.util.zip.Deflater
 
 /**
  * A [Reporter] that generates an [Opossum Input].
@@ -192,12 +196,12 @@ class OpossumReporter : Reporter {
             }
 
             paths.forEach {
-                log.trace("add signal ${signal.id} to ${it}")
+                log.trace("add signal ${signal.id} of source ${signal.source} to ${it}")
                 resources.addResource(it)
                 if (pathToSignal.containsKey(it)) {
-                    pathToSignal.get(it)?.add(uuidOfSignal)
+                    pathToSignal[it]!!.add(uuidOfSignal)
                 } else {
-                    pathToSignal.put(it, sortedSetOf(uuidOfSignal))
+                    pathToSignal[it] = sortedSetOf(uuidOfSignal)
                 }
             }
         }
@@ -208,8 +212,8 @@ class OpossumReporter : Reporter {
 
         fun addDependency(dependency: PackageReference, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
             val dependencyId = dependency.id
-
             log.trace("add dependency ${dependencyId}")
+            log.debug("${relRoot} - ${dependencyId} - Dependency")
             val dependencyPath = relRoot
                 .resolve(dependencyId.namespace)
                 .resolve("${dependencyId.name}@${dependencyId.version}")
@@ -219,10 +223,12 @@ class OpossumReporter : Reporter {
                 .find { curatedPackage -> curatedPackage.pkg.id == dependencyId }
                 ?.pkg ?: Package.EMPTY
 
+
             val signalFromDependency = OpossumSignal(
                 "ORT-Dependency",
                 id = dependencyId,
                 url = dependencyPackage.homepageUrl,
+                license = dependencyPackage.concludedLicense ?: dependencyPackage.declaredLicensesProcessed.spdxExpression,
                 preselected = true
             )
             this.addSignal(signalFromDependency, dependencyPath)
@@ -233,20 +239,19 @@ class OpossumReporter : Reporter {
         }
 
         fun addDependencyScope(scope: Scope, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
-
             val name = scope.name
             log.trace("add dependency scope ${name}")
-            val dependencies = scope.dependencies
+            log.debug("${relRoot} - ${name} - DependencyScope")
 
             val rootForScope = relRoot.resolve(name)
             attributionBreakpoints.add(rootForScope)
-
-            dependencies.map { this.addDependency(it, curatedPackages, rootForScope) }
+            scope.dependencies.map { this.addDependency(it, curatedPackages, rootForScope) }
         }
 
         fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
             val projectId = project.id
             log.trace("add project ${projectId}")
+            log.debug("${relRoot} - ${projectId} - Project")
             val definitionFilePath = relRoot.resolve(project.definitionFilePath)
             // addPackageRoot(projectId, definitionFilePath)
             addPackageRoot(projectId, File(""))
@@ -271,9 +276,9 @@ class OpossumReporter : Reporter {
         }
 
         fun addScannerResult(id: Identifier, result: ScanResult) {
-            val roots = packageToRoot.get(id) ?: sortedSetOf(File("lost+found/${id.toPurl()}"))
+            val roots = packageToRoot[id] ?: sortedSetOf(File("lost+found/${id.toPurl()}"))
             val scanner = "${result.scanner.name}@${result.scanner.version}"
-            log.trace("add scanner results from ${scanner}")
+            log.debug("add scanner results for ${id} from ${scanner}")
 
             val licenseFindings = result.summary.licenseFindings
             val copyrightFindings = result.summary.copyrightFindings
@@ -304,7 +309,7 @@ class OpossumReporter : Reporter {
                     license = license
                 )
                 roots.forEach { root ->
-                    this.addSignal(pathSignal, sortedSetOf(root.resolve(pathFromFinding)))
+                    this.addSignal(pathSignal, root.resolve(pathFromFinding))
                 }
             }
         }
@@ -337,11 +342,16 @@ class OpossumReporter : Reporter {
         analyzerResultProjects.forEach { collector.addProject(it, analyzerResultPackages) }
         scannerResults?.forEach { entry -> collector.addScannerResults(entry.key, entry.value) }
 
-        val outputFile = outputDir.resolve("opossum.input.json")
-        outputFile.bufferedWriter().use {
-            JsonMapper()
-                .setSerializationInclusion(Include.NON_NULL)
-                .writeValue(it,collector.toJson())
+        val outputFile = outputDir.resolve("opossum.input.json.gz")
+        FileOutputStream(outputFile, /* append = */ false).use { outputStream ->
+            val gzipParameters = GzipParameters().apply {
+                compressionLevel = Deflater.BEST_COMPRESSION
+            }
+            GzipCompressorOutputStream(outputStream, gzipParameters).bufferedWriter().use { gzipWriter ->
+                JsonMapper()
+                    .setSerializationInclusion(Include.NON_NULL)
+                    .writeValue(gzipWriter, collector.toJson())
+            }
         }
         return listOf(outputFile)
     }
