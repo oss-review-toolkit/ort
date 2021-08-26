@@ -25,9 +25,6 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.log
 
-import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
-
 /**
  * A data class that holds the configuration options supported by the [FossId] scanner. An instance of this class is
  * created from the options contained in a [ScannerConfiguration] object under the key _FossId_. It offers the
@@ -187,15 +184,8 @@ internal data class FossIdConfig(
      * Create the [FossIdServiceWithVersion] to interact with the FossID instance described by this configuration.
      */
     fun createService(): FossIdServiceWithVersion {
-        val client = OkHttpClientHelper.buildClient()
-        log.info { "FossID server URL is $serverUrl." }
-
-        val retrofit = Retrofit.Builder()
-            .client(client)
-            .baseUrl(serverUrl)
-            .addConverterFactory(JacksonConverterFactory.create(FossIdRestService.JSON_MAPPER))
-            .build()
-
-        return FossIdServiceWithVersion.instance(retrofit.create(FossIdRestService::class.java))
+        log.info { "The FossID server URL is $serverUrl." }
+        val service = FossIdRestService.create(serverUrl, OkHttpClientHelper.buildClient())
+        return FossIdServiceWithVersion.instance(service)
     }
 }
