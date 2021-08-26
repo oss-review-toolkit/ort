@@ -269,9 +269,23 @@ class FossId internal constructor(
                 }
 
                 val url = pkg.vcsProcessed.url
-                val revision = pkg.vcsProcessed.revision.ifEmpty { "HEAD" }
+                val revision = pkg.vcsProcessed.revision
+
+                if (revision.isEmpty()) {
+                    val issue = createAndLogIssue(
+                        source = scannerName,
+                        message = "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned."
+                    )
+                    val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
+
+                    val scanResult = ScanResult(UnknownProvenance, details, summary)
+                    results.getOrPut(pkg) { mutableListOf() } += scanResult
+
+                    return@forEach
+                }
+
                 val projectName = convertGitUrlToProjectName(url)
-                val provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
+                val provenance = RepositoryProvenance(pkg.vcsProcessed, revision)
 
                 try {
                     val projectCode = namingProvider.createProjectCode(projectName)
