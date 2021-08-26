@@ -210,12 +210,6 @@ class FossId internal constructor(
         packages: Collection<Package>,
         outputDirectory: File
     ): Map<Package, List<ScanResult>> {
-        if (version.isEmpty()) {
-            log.warn { "Version from FossId Server cannot be found!" }
-        } else {
-            log.info { "Version from FossId Server is $version." }
-        }
-
         val (results, duration) = measureTimedValue {
             val results = mutableMapOf<Package, MutableList<ScanResult>>()
 
