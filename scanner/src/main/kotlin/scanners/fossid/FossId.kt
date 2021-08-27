@@ -120,13 +120,13 @@ class FossId internal constructor(
         }
 
         /**
-         * Generate a list of pairs to be passed as parameters when starting a new delta scan for [existingScancode].
+         * Generate a list of pairs to be passed as parameters when starting a new delta scan for [existingScanCode].
          */
-        internal fun deltaScanRunParameters(existingScancode: String): Array<Pair<String, String>> =
+        internal fun deltaScanRunParameters(existingScanCode: String): Array<Pair<String, String>> =
             arrayOf(
                 "reuse_identification" to "1",
                 "identification_reuse_type" to "specific_scan",
-                "specific_code" to existingScancode
+                "specific_code" to existingScanCode
             )
 
         /**
@@ -452,11 +452,11 @@ class FossId internal constructor(
         if (existingScan == null) {
             checkScan(scanCode)
         } else {
-            val existingScancode = requireNotNull(existingScan.code) {
+            val existingScanCode = requireNotNull(existingScan.code) {
                 "FossId returned a null scancode for an existing scan"
             }
 
-            log.info { "Reusing identifications from $existingScancode." }
+            log.info { "Reusing identifications from $existingScanCode." }
 
             // TODO: Change the logic of 'waitForResult' to wait for download results but not for scan results.
             //  Hence we could trigger 'runScan' even when 'waitForResult' is set to false.
@@ -464,7 +464,7 @@ class FossId internal constructor(
                 log.info { "Ignoring unset 'waitForResult' because delta scans are requested." }
             }
 
-            checkScan(scanCode, *deltaScanRunParameters(existingScancode))
+            checkScan(scanCode, *deltaScanRunParameters(existingScanCode))
 
             enforceDeltaScanLimit(recentScans)
         }
