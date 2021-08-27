@@ -226,6 +226,25 @@ class FossId internal constructor(
             val filteredPackages = packages
                 .filter { config.packageNamespaceFilter.isEmpty() || it.id.namespace == config.packageNamespaceFilter }
                 .filter { config.packageAuthorsFilter.isEmpty() || config.packageAuthorsFilter in it.authors }
+                .partition { it.vcsProcessed.revision.isEmpty() }
+                .let { (packagesWithoutRevisions, packagesWithRevisions) ->
+                    packagesWithoutRevisions.forEach {
+                        val startTime = Instant.now()
+
+                        val issue = createAndLogIssue(
+                            source = scannerName,
+                            message = "Package '${it.id.toCoordinates()}' has an empty VCS revision and cannot be " +
+                                    "scanned."
+                        )
+                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
+                            listOf(issue))
+
+                        val scanResult = ScanResult(UnknownProvenance, details, summary)
+                        results.getOrPut(it) { mutableListOf() } += scanResult
+                    }
+
+                    packagesWithRevisions
+                }
                 .partition { it.vcsProcessed.path.isEmpty() }
                 .let { (packagesWithoutPaths, packagesWithPaths) ->
                     packagesWithPaths.forEach {
@@ -272,20 +291,6 @@ class FossId internal constructor(
 
                 val url = pkg.vcsProcessed.url
                 val revision = pkg.vcsProcessed.revision
-
-                if (revision.isEmpty()) {
-                    val issue = createAndLogIssue(
-                        source = scannerName,
-                        message = "Package '${pkg.id.toCoordinates()}' has an empty VCS revision and cannot be scanned."
-                    )
-                    val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
-
-                    val scanResult = ScanResult(UnknownProvenance, details, summary)
-                    results.getOrPut(pkg) { mutableListOf() } += scanResult
-
-                    return@forEach
-                }
-
                 val projectName = convertGitUrlToProjectName(url)
                 val provenance = RepositoryProvenance(pkg.vcsProcessed, revision)
 
