@@ -226,6 +226,25 @@ class FossId internal constructor(
             val filteredPackages = packages
                 .filter { config.packageNamespaceFilter.isEmpty() || it.id.namespace == config.packageNamespaceFilter }
                 .filter { config.packageAuthorsFilter.isEmpty() || config.packageAuthorsFilter in it.authors }
+                .partition { it.vcsProcessed.type == VcsType.GIT }
+                .let { (packagesInsideGit, packagesOutsideGit) ->
+                    packagesOutsideGit.forEach {
+                        val startTime = Instant.now()
+
+                        val issue = createAndLogIssue(
+                            source = scannerName,
+                            message = "Package '${it.id.toCoordinates()}' uses VCS type '${it.vcsProcessed.type}', " +
+                                    "but only ${VcsType.GIT} is supported."
+                        )
+                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
+                            listOf(issue))
+
+                        val scanResult = ScanResult(UnknownProvenance, details, summary)
+                        results.getOrPut(it) { mutableListOf() } += scanResult
+                    }
+
+                    packagesInsideGit
+                }
                 .partition { it.vcsProcessed.revision.isEmpty() }
                 .let { (packagesWithoutRevisions, packagesWithRevisions) ->
                     packagesWithoutRevisions.forEach {
@@ -274,21 +293,6 @@ class FossId internal constructor(
 
             filteredPackages.forEach { pkg ->
                 val startTime = Instant.now()
-
-                if (pkg.vcsProcessed.type != VcsType.GIT) {
-                    val issue = createAndLogIssue(
-                        source = scannerName,
-                        message = "Package '${pkg.id.toCoordinates()}' uses VCS type '${pkg.vcsProcessed.type}', but " +
-                                "only ${VcsType.GIT} is supported."
-                    )
-                    val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
-
-                    val scanResult = ScanResult(UnknownProvenance, details, summary)
-                    results.getOrPut(pkg) { mutableListOf() } += scanResult
-
-                    return@forEach
-                }
-
                 val url = pkg.vcsProcessed.url
                 val revision = pkg.vcsProcessed.revision
                 val projectName = convertGitUrlToProjectName(url)
