@@ -22,8 +22,10 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.databind.json.JsonMapper
+
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.gzip.GzipParameters
+
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -33,9 +35,12 @@ import org.ossreviewtoolkit.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.log
+
 import java.io.File
 import java.io.FileOutputStream
+
 import java.time.LocalDateTime
+
 import java.util.*
 import java.util.zip.Deflater
 
@@ -45,7 +50,7 @@ import java.util.zip.Deflater
  * This reporter supports the following options:
  * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.JSON].
  */
-class OpossumReporter : Reporter {
+class OpossumReporter: Reporter {
 
     data class OpossumSignal (
         val source: String,
@@ -57,7 +62,7 @@ class OpossumReporter : Reporter {
         val preselected: Boolean = false,
         val uuid: UUID = UUID.randomUUID()
     ) {
-        fun toJson(): Map<*,*> {
+        fun toJson(): Map<*, *> {
             return sortedMapOf(
                 uuid.toString() to sortedMapOf(
                     "source" to sortedMapOf(
@@ -119,12 +124,12 @@ class OpossumReporter : Reporter {
             return tree.isEmpty()
         }
 
-        fun isPathAFile(path: File) : Boolean {
+        fun isPathAFile(path: File): Boolean {
             val pathPieces = path.toString().split("/")
             return isPathAFile(pathPieces)
         }
 
-        private fun isPathAFile(pathPieces: List<String>) : Boolean {
+        private fun isPathAFile(pathPieces: List<String>): Boolean {
             if (pathPieces.isEmpty()) {
                 return isFile()
             }
@@ -138,9 +143,9 @@ class OpossumReporter : Reporter {
             return tree[head]!!.isPathAFile(tail)
         }
 
-        fun toJson(): Map<*,*> {
+        fun toJson(): Map<*, *> {
             return tree.asSequence().associateBy (
-                {it.key},
+                { it.key },
                 {
                     if (it.value.isFile()) {
                         1
@@ -148,6 +153,13 @@ class OpossumReporter : Reporter {
                         it.value.toJson()
                     }
                 })
+        }
+
+        fun toFileList(): Set<File> {
+            return tree.asSequence()
+                .flatMap { e -> e.value.toFileList().map { File(e.key).resolve(it) } }
+                .plus(File(""))
+                .toSet()
         }
     }
 
@@ -158,7 +170,7 @@ class OpossumReporter : Reporter {
         var packageToRoot: SortedMap<Identifier, SortedSet<File>> = sortedMapOf(),
         var attributionBreakpoints: MutableList<File> = mutableListOf()
     ) {
-        fun toJson(): Map<*,*> {
+        fun toJson(): Map<*, *> {
             return sortedMapOf(
                 "metadata" to sortedMapOf(
                     "projectId" to "0",
@@ -169,13 +181,18 @@ class OpossumReporter : Reporter {
                     .map { it.toJson() }
                     .asSequence()
                     .flatMap { it.asSequence() }
-                    .associateBy ( {it.key}, {it.value} ),
+                    .associateBy ( { it.key }, { it.value } ),
                 "resourcesToAttributions" to pathToSignal.mapKeys {
                     val trailingSlash = if (resources.isPathAFile(it.key)) { "" } else { "/" }
                     "/${it.key}${trailingSlash}"
                 },
                 "attributionBreakpoints" to attributionBreakpoints
             )
+        }
+
+        fun addAttributionBreakpoint(breakpoint: File) {
+            attributionBreakpoints.add(breakpoint)
+            resources.addResource(breakpoint)
         }
 
         fun addPackageRoot(id: Identifier, path: File) {
@@ -212,7 +229,7 @@ class OpossumReporter : Reporter {
 
         fun addDependency(dependency: PackageReference, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
             val dependencyId = dependency.id
-            log.debug("${relRoot} - ${dependencyId} - Dependency")
+            log.debug("$relRoot - $dependencyId - Dependency")
             val dependencyPath = relRoot
                 .resolve(dependencyId.namespace)
                 .resolve("${dependencyId.name}@${dependencyId.version}")
@@ -232,16 +249,16 @@ class OpossumReporter : Reporter {
             this.addSignal(signalFromDependency, dependencyPath)
 
             val rootForDependencies = dependencyPath.resolve("dependencies")
-            attributionBreakpoints.add(rootForDependencies)
+            addAttributionBreakpoint(rootForDependencies)
             dependency.dependencies.map { this.addDependency(it, curatedPackages, rootForDependencies ) }
         }
 
         fun addDependencyScope(scope: Scope, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
             val name = scope.name
-            log.debug("${relRoot} - ${name} - DependencyScope")
+            log.debug("$relRoot - $name - DependencyScope")
 
             val rootForScope = relRoot.resolve(name)
-            attributionBreakpoints.add(rootForScope)
+            addAttributionBreakpoint(rootForScope)
             scope.dependencies.forEachIndexed { index, dependency ->
                 log.debug("scope -> dependency ${index + 1} of ${scope.dependencies.size}")
                 this.addDependency(dependency, curatedPackages, rootForScope)
@@ -250,25 +267,19 @@ class OpossumReporter : Reporter {
 
         fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
             val projectId = project.id
-            log.debug("${relRoot} - ${projectId} - Project")
-            val definitionFilePath = relRoot.resolve(project.definitionFilePath)
-            // addPackageRoot(projectId, definitionFilePath)
-            addPackageRoot(projectId, File(""))
-
-            val authors = project.authors
-            val copyright = authors.joinToString(separator = "\n")
-            val declaredLicensesProcessed = project.declaredLicensesProcessed
-            val homepageUrl = project.homepageUrl
+            log.debug("$relRoot - $projectId - Project")
+            addPackageRoot(projectId, relRoot)
 
             val signalFromProject = OpossumSignal(
                 "ORT-Project",
                 id = projectId,
-                url = homepageUrl,
-                license = declaredLicensesProcessed.spdxExpression,
-                copyright = copyright,
+                url = project.homepageUrl,
+                license = project.declaredLicensesProcessed.spdxExpression,
+                copyright = project.authors.joinToString(separator = "\n"),
                 preselected = true
             )
 
+            val definitionFilePath = relRoot.resolve(project.definitionFilePath)
             addSignal(signalFromProject, definitionFilePath)
 
             project.scopes.forEachIndexed { index, scope ->
@@ -280,7 +291,7 @@ class OpossumReporter : Reporter {
         fun addScannerResult(id: Identifier, result: ScanResult) {
             val roots = packageToRoot[id] ?: sortedSetOf(File("lost+found/${id.toPurl()}"))
             val scanner = "${result.scanner.name}@${result.scanner.version}"
-            log.debug("add scanner results for ${id} from ${scanner} to ${roots.size} roots")
+            log.debug("add scanner results for $id from $scanner to ${roots.size} roots")
 
             val licenseFindings = result.summary.licenseFindings
             val copyrightFindings = result.summary.copyrightFindings
@@ -293,8 +304,7 @@ class OpossumReporter : Reporter {
                 val licenseFindingsForPath = licenseFindings.filter { it.location.path == pathFromFinding }
                 val copyrightFindingsForPath = copyrightFindings.filter { it.location.path == pathFromFinding }
 
-                val copyright = copyrightFindingsForPath.map { it.statement }
-                    .joinToString(separator = "\n")
+                val copyright = copyrightFindingsForPath.joinToString(separator = "\n") { it.statement }
                 val license = licenseFindingsForPath
                     .map { it.license }
                     .reduceRightOrNull { left, right ->
@@ -306,7 +316,7 @@ class OpossumReporter : Reporter {
                     }
 
                 val pathSignal = OpossumSignal(
-                    "ORT-Scanner-${scanner}",
+                    "ORT-Scanner-$scanner",
                     copyright = copyright,
                     license = license
                 )
@@ -335,13 +345,9 @@ class OpossumReporter : Reporter {
         }
     }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
-        val ortResult = input.ortResult
-
+    fun generateOpossumInput(
+        ortResult: OrtResult
+    ): OpossumInput {
         val analyzerResult = ortResult.analyzer?.result
         val scannerResults = ortResult.scanner?.results?.scanResults
         // val advisorResult = ortResult.advisor?.result
@@ -362,9 +368,17 @@ class OpossumReporter : Reporter {
             opossumInput.addScannerResults(entry.key, entry.value)
         }
 
+        return opossumInput
+    }
+
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>
+    ): List<File> {
+        val opossumInput = generateOpossumInput(input.ortResult)
         val outputFile = outputDir.resolve("opossum.input.json.gz")
         writeReport(outputFile, opossumInput)
         return listOf(outputFile)
     }
 }
-
