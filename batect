@@ -1,0 +1,205 @@
+#!/usr/bin/env bash
+
+{
+    set -euo pipefail
+
+    # This file is part of Batect.
+    # Do not modify this file. It will be overwritten next time you upgrade Batect.
+    # You should commit this file to version control alongside the rest of your project. It should not be installed globally.
+    # For more information, visit https://github.com/batect/batect.
+
+    VERSION="0.78.0"
+    CHECKSUM="${BATECT_DOWNLOAD_CHECKSUM:-bc65ac8e00dd23dd9d68130e2109e429993b769b79e081d262a79798c8c3784b}"
+    DOWNLOAD_URL_ROOT=${BATECT_DOWNLOAD_URL_ROOT:-"https://updates.batect.dev/v1/files"}
+    DOWNLOAD_URL=${BATECT_DOWNLOAD_URL:-"$DOWNLOAD_URL_ROOT/$VERSION/batect-$VERSION.jar"}
+    QUIET_DOWNLOAD=${BATECT_QUIET_DOWNLOAD:-false}
+
+    BATECT_WRAPPER_CACHE_DIR=${BATECT_CACHE_DIR:-"$HOME/.batect/cache"}
+    VERSION_CACHE_DIR="$BATECT_WRAPPER_CACHE_DIR/$VERSION"
+    JAR_PATH="$VERSION_CACHE_DIR/batect-$VERSION.jar"
+    BATECT_WRAPPER_DID_DOWNLOAD=false
+
+    SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+    function main() {
+        if ! haveVersionCachedLocally; then
+            download
+            BATECT_WRAPPER_DID_DOWNLOAD=true
+        fi
+
+        checkChecksum
+        runApplication "$@"
+    }
+
+    function haveVersionCachedLocally() {
+        [ -f "$JAR_PATH" ]
+    }
+
+    function download() {
+        checkForCurl
+
+        mkdir -p "$VERSION_CACHE_DIR"
+        temp_file=$(mktemp)
+
+        if [[ $QUIET_DOWNLOAD == 'true' ]]; then
+            curl --silent --fail --show-error --location --output "$temp_file" "$DOWNLOAD_URL"
+        else
+            echo "Downloading Batect version $VERSION from $DOWNLOAD_URL..."
+            curl -# --fail --show-error --location --output "$temp_file" "$DOWNLOAD_URL"
+        fi
+
+        mv "$temp_file" "$JAR_PATH"
+    }
+
+    function checkChecksum() {
+        local_checksum=$(getLocalChecksum)
+
+        if [[ "$local_checksum" != "$CHECKSUM" ]]; then
+            echo "The downloaded version of Batect does not have the expected checksum. Delete '$JAR_PATH' and then re-run this script to download it again."
+            exit 1
+        fi
+    }
+
+    function getLocalChecksum() {
+        if [[ "$(uname)" == "Darwin" ]]; then
+            shasum -a 256 "$JAR_PATH" | cut -d' ' -f1
+        else
+            sha256sum "$JAR_PATH" | cut -d' ' -f1
+        fi
+    }
+
+    function runApplication() {
+        java_path=$(getPathToJava)
+        checkForJava "$java_path"
+
+        java_version_info=$(getJavaVersionInfo "$java_path")
+        checkJavaVersion "$java_version_info"
+
+        java_version=$(extractJavaVersion "$java_version_info")
+        java_version_major=$(extractJavaMajorVersion "$java_version")
+
+        if (( java_version_major >= 9 )); then
+            JAVA_OPTS=(--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED)
+        else
+            JAVA_OPTS=()
+        fi
+
+        if [[ "$(uname -o 2>&1)" == "Msys" ]] && hash winpty 2>/dev/null && [ -t /dev/stdin ]; then
+            GIT_BASH_PTY_WORKAROUND=(winpty)
+        else
+            GIT_BASH_PTY_WORKAROUND=()
+        fi
+
+        BATECT_WRAPPER_SCRIPT_DIR="$SCRIPT_PATH" \
+        BATECT_WRAPPER_CACHE_DIR="$BATECT_WRAPPER_CACHE_DIR" \
+        BATECT_WRAPPER_DID_DOWNLOAD="$BATECT_WRAPPER_DID_DOWNLOAD" \
+        HOSTNAME="$HOSTNAME" \
+        exec \
+            ${GIT_BASH_PTY_WORKAROUND[@]+"${GIT_BASH_PTY_WORKAROUND[@]}"} \
+            "$java_path" \
+            -Djava.net.useSystemProxies=true \
+            ${JAVA_OPTS[@]+"${JAVA_OPTS[@]}"} \
+            -jar "$JAR_PATH" \
+            "$@"
+    }
+
+    function checkForCurl() {
+        if ! hash curl 2>/dev/null; then
+            echo "curl is not installed or not on your PATH. Please install it and try again." >&2
+            exit 1
+        fi
+    }
+
+    function getPathToJava() {
+        if useJavaHome; then
+            echo "$JAVA_HOME/bin/java"
+        else
+            echo "java"
+        fi
+    }
+
+    function useJavaHome() {
+        test -n "${JAVA_HOME+x}"
+    }
+
+    function checkForJava() {
+        local java_path="$1"
+
+        if ! hash "$java_path" 2>/dev/null; then
+            showJavaNotInstalledError
+        fi
+    }
+
+    function showJavaNotInstalledError() {
+        if useJavaHome; then
+            echo "JAVA_HOME is set to '$JAVA_HOME', but there is no Java executable at '$JAVA_HOME/bin/java'." >&2
+        else
+            echo "Java is not installed or not on your PATH. Please install it and try again." >&2
+        fi
+
+        exit 1
+    }
+
+    function checkJavaVersion() {
+        java_version_info="$1"
+        java_version=$(extractJavaVersion "$java_version_info")
+        java_version_major=$(extractJavaMajorVersion "$java_version")
+        java_version_minor=$(extractJavaMinorVersion "$java_version")
+
+        if (( java_version_major < 1 || ( java_version_major == 1 && java_version_minor <= 7 ) )); then
+            if useJavaHome; then
+                echo "The version of Java that is available in JAVA_HOME is version $java_version, but version 1.8 or greater is required." >&2
+                echo "If you have a newer version of Java installed, please make sure JAVA_HOME is set correctly." >&2
+                echo "JAVA_HOME takes precedence over any versions of Java available on your PATH." >&2
+            else
+                echo "The version of Java that is available on your PATH is version $java_version, but version 1.8 or greater is required." >&2
+                echo "If you have a newer version of Java installed, please make sure your PATH is set correctly." >&2
+            fi
+
+            exit 1
+        fi
+
+        if ! javaIs64Bit "$java_version_info"; then
+            if useJavaHome; then
+                echo "The version of Java that is available in JAVA_HOME is a 32-bit version, but Batect requires a 64-bit Java runtime." >&2
+                echo "If you have a 64-bit version of Java installed, please make sure JAVA_HOME is set correctly." >&2
+                echo "JAVA_HOME takes precedence over any versions of Java available on your PATH." >&2
+            else
+                echo "The version of Java that is available on your PATH is a 32-bit version, but Batect requires a 64-bit Java runtime." >&2
+                echo "If you have a 64-bit version of Java installed, please make sure your PATH is set correctly." >&2
+            fi
+
+            exit 1
+        fi
+    }
+
+    function getJavaVersionInfo() {
+        local java_path="$1"
+
+        "$java_path" -version 2>&1 || showJavaNotInstalledError
+    }
+
+    function extractJavaVersion() {
+        echo "$1" | grep version | sed -En ';s/.* version "([0-9]+)(\.([0-9]+))?.*".*/\1.\3/p;'
+    }
+
+    function extractJavaMajorVersion() {
+        java_version=$1
+
+        echo "${java_version%.*}"
+    }
+
+    function extractJavaMinorVersion() {
+        java_version=$1
+        java_version_minor="${java_version#*.}"
+
+        echo "${java_version_minor:-0}"
+    }
+
+    function javaIs64Bit() {
+        echo "$1" | grep -q '64-[Bb]it'
+    }
+
+    main "$@"
+    exit $?
+}
