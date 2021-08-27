@@ -16,6 +16,10 @@ Files: *.md
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: batect*
+Copyright: 2017-2021 Charles Korn <me@charleskorn.com>
+License: Apache-2.0
+
 Files: mlc_config.json
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
