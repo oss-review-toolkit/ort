@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentifi
 import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanDescription
-import org.ossreviewtoolkit.clients.fossid.model.status.ScanDescription21dot2
+import org.ossreviewtoolkit.clients.fossid.model.status.ScanDescription2021dot2
 
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -155,7 +155,7 @@ interface FossIdRestService {
     suspend fun checkScanStatus(@Body body: PostRequestBody): EntityResponseBody<ScanDescription>
 
     @POST("api.php")
-    suspend fun checkScanStatus21m2(@Body body: PostRequestBody): EntityResponseBody<ScanDescription21dot2>
+    suspend fun checkScanStatus2021dot2(@Body body: PostRequestBody): EntityResponseBody<ScanDescription2021dot2>
 
     @POST("api.php")
     suspend fun listScanResults(@Body body: PostRequestBody): PolymorphicResponseBody<FossIdScanResult>

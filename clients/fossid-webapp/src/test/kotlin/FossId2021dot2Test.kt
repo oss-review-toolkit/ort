@@ -27,22 +27,22 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
-import org.ossreviewtoolkit.clients.fossid.VersionedFossIdService21dot2
+import org.ossreviewtoolkit.clients.fossid.VersionedFossIdService2021dot2
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private const val PROJECT_CODE = "semver4j"
-private const val SCAN_CODE_21_2 = "${PROJECT_CODE}_20201203_090342_21.2"
+private const val SCAN_CODE_2021_2 = "${PROJECT_CODE}_20201203_090342_21.2"
 
 /**
- * This client test tests the calls that have been changed for FossID 21.2.
+ * This client test tests the calls that have been changed for FossID 2021.2.
  */
-class FossId21dot2Test : StringSpec({
+class FossId2021dot2Test : StringSpec({
     val wiremock = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/21.2")
+            .usingFilesUnderDirectory("src/test/assets/2021.2")
     )
     lateinit var service: FossIdServiceWithVersion
 
@@ -60,15 +60,15 @@ class FossId21dot2Test : StringSpec({
         wiremock.resetAll()
     }
 
-    "Version can be parsed of login page (21.2)" {
+    "Version can be parsed of login page (2021.2)" {
         service.version shouldBe "2021.2.2"
-        service.shouldBeInstanceOf<VersionedFossIdService21dot2>()
+        service.shouldBeInstanceOf<VersionedFossIdService2021dot2>()
     }
 
-    "Scan status can be queried (21.2)" {
+    "Scan status can be queried (2021.2)" {
         // because the service caches the version, we must recreate it
         service = FossIdServiceWithVersion.instance(service)
-        service.checkScanStatus("", "", SCAN_CODE_21_2) shouldNotBeNull {
+        service.checkScanStatus("", "", SCAN_CODE_2021_2) shouldNotBeNull {
             checkResponse("get scan status")
 
             data shouldNotBeNull {

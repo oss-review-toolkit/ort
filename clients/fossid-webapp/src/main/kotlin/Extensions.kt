@@ -50,7 +50,7 @@ fun <B : EntityResponseBody<T>, T> B?.checkResponse(operation: String, withDataC
  * Example: `<link rel='stylesheet' href='style/fossid.css?v=2021.2.2#7936'>`
  */
 suspend fun FossIdRestService.getFossIdVersion(): String? {
-    // TODO: replace with an API call when FossID provides a function (starting at version 21.2).
+    // TODO: replace with an API call when FossID provides a function (starting at version 2021.2).
     val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*\$")
 
     getLoginPage().charStream().buffered().useLines { lines ->
