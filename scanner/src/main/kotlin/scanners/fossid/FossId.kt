@@ -223,24 +223,25 @@ class FossId internal constructor(
                 else "Package authors filter is '${config.packageAuthorsFilter}'."
             }
 
+            fun addPackageWithSingleIssue(pkg: Package, issue: OrtIssue, provenance: Provenance) {
+                val time = Instant.now()
+                val summary = ScanSummary(time, time, "", sortedSetOf(), sortedSetOf(), listOf(issue))
+                val scanResult = ScanResult(provenance, details, summary)
+                results.getOrPut(pkg) { mutableListOf() } += scanResult
+            }
+
             val filteredPackages = packages
                 .filter { config.packageNamespaceFilter.isEmpty() || it.id.namespace == config.packageNamespaceFilter }
                 .filter { config.packageAuthorsFilter.isEmpty() || config.packageAuthorsFilter in it.authors }
                 .partition { it.vcsProcessed.type == VcsType.GIT }
                 .let { (packagesInsideGit, packagesOutsideGit) ->
                     packagesOutsideGit.forEach {
-                        val startTime = Instant.now()
-
                         val issue = createAndLogIssue(
                             source = scannerName,
                             message = "Package '${it.id.toCoordinates()}' uses VCS type '${it.vcsProcessed.type}', " +
                                     "but only ${VcsType.GIT} is supported."
                         )
-                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
-                            listOf(issue))
-
-                        val scanResult = ScanResult(UnknownProvenance, details, summary)
-                        results.getOrPut(it) { mutableListOf() } += scanResult
+                        addPackageWithSingleIssue(it, issue, UnknownProvenance)
                     }
 
                     packagesInsideGit
@@ -248,18 +249,12 @@ class FossId internal constructor(
                 .partition { it.vcsProcessed.revision.isEmpty() }
                 .let { (packagesWithoutRevisions, packagesWithRevisions) ->
                     packagesWithoutRevisions.forEach {
-                        val startTime = Instant.now()
-
                         val issue = createAndLogIssue(
                             source = scannerName,
                             message = "Package '${it.id.toCoordinates()}' has an empty VCS revision and cannot be " +
                                     "scanned."
                         )
-                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
-                            listOf(issue))
-
-                        val scanResult = ScanResult(UnknownProvenance, details, summary)
-                        results.getOrPut(it) { mutableListOf() } += scanResult
+                        addPackageWithSingleIssue(it, issue, UnknownProvenance)
                     }
 
                     packagesWithRevisions
@@ -267,20 +262,14 @@ class FossId internal constructor(
                 .partition { it.vcsProcessed.path.isEmpty() }
                 .let { (packagesWithoutPaths, packagesWithPaths) ->
                     packagesWithPaths.forEach {
-                        val startTime = Instant.now()
-
                         val issue = createAndLogIssue(
                             source = scannerName,
                             message = "Ignoring package '${it.id.toCoordinates()}' from ${it.vcsProcessed.url} as it " +
                                     "has path '${it.vcsProcessed.path}' set and scanning cannot be limited to paths.",
                             severity = Severity.WARNING
                         )
-                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
-                            listOf(issue))
                         val provenance = RepositoryProvenance(it.vcsProcessed, it.vcsProcessed.revision)
-
-                        val scanResult = ScanResult(provenance, details, summary)
-                        results.getOrPut(it) { mutableListOf() } += scanResult
+                        addPackageWithSingleIssue(it, issue, provenance)
                     }
 
                     packagesWithoutPaths
