@@ -226,8 +226,9 @@ class FossId internal constructor(
             val filteredPackages = packages
                 .filter { config.packageNamespaceFilter.isEmpty() || it.id.namespace == config.packageNamespaceFilter }
                 .filter { config.packageAuthorsFilter.isEmpty() || config.packageAuthorsFilter in it.authors }
-                .onEach {
-                    if (it.vcsProcessed.path.isNotEmpty()) {
+                .partition { it.vcsProcessed.path.isEmpty() }
+                .let { (packagesWithoutPaths, packagesWithPaths) ->
+                    packagesWithPaths.forEach {
                         val startTime = Instant.now()
 
                         val issue = createAndLogIssue(
@@ -243,7 +244,9 @@ class FossId internal constructor(
                         val scanResult = ScanResult(provenance, details, summary)
                         results.getOrPut(it) { mutableListOf() } += scanResult
                     }
-                }.filter { it.vcsProcessed.path.isEmpty() }
+
+                    packagesWithoutPaths
+                }
 
             if (filteredPackages.isEmpty()) {
                 log.warn { "There is no package to scan !" }
