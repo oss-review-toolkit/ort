@@ -135,11 +135,11 @@ class FossId internal constructor(
          */
         private fun queryAuthenticator(repoUrl: String): String {
             val repoUri = repoUrl.toUri().getOrElse {
-                log.warn { "Host cannot be extracted for $repoUrl." }
+                log.warn { "The repository URL '$repoUrl' is not valid." }
                 return repoUrl
             }
 
-            log.info { "Requesting authenticator for host ${repoUri.host} ..." }
+            log.info { "Requesting authentication for host ${repoUri.host} ..." }
 
             val creds = Authenticator.requestPasswordAuthentication(
                 /* host = */ repoUri.host,
@@ -278,7 +278,7 @@ class FossId internal constructor(
                 }
 
             if (filteredPackages.isEmpty()) {
-                log.warn { "There is no package to scan !" }
+                log.warn { "There is no package to scan." }
                 return results
             }
 
@@ -293,7 +293,7 @@ class FossId internal constructor(
                     val projectCode = namingProvider.createProjectCode(projectName)
 
                     if (getProject(projectCode) == null) {
-                        log.info { "Creating project '$projectCode' ..." }
+                        log.info { "Creating project '$projectCode'..." }
 
                         service.createProject(config.user, config.apiKey, projectCode, projectCode)
                             .checkResponse("create project")
@@ -369,11 +369,16 @@ class FossId internal constructor(
                 .checkResponse("check scan status", false)
             when (response.data?.status) {
                 ScanStatus.FINISHED -> true
+
                 null, ScanStatus.NOT_STARTED, ScanStatus.INTERRUPTED, ScanStatus.NEW -> false
+
                 ScanStatus.STARTED, ScanStatus.STARTING, ScanStatus.RUNNING, ScanStatus.SCANNING, ScanStatus.AUTO_ID,
+
                 ScanStatus.QUEUED -> {
-                    log.warn { "Found previous scan but it is still running." }
-                    log.warn { "Ignoring the 'waitForResult' option and waiting ..." }
+                    log.warn {
+                        "Found a previous scan which is still running. Will ignore the 'waitForResult' option and " +
+                                "wait..."
+                    }
                     waitScanComplete(scanCode)
                     true
                 }
@@ -404,13 +409,13 @@ class FossId internal constructor(
         val existingScan = scans.recentScansForRepository(url, revision).findLatestPendingOrFinishedScan()
 
         val scanCode = if (existingScan == null) {
-            log.info { "No scan found for $url and revision $revision. Creating scan ..." }
+            log.info { "No scan found for $url and revision $revision. Creating scan..." }
 
             val scanCode = namingProvider.createScanCode(projectName)
             val newUrl = if (config.addAuthenticationToUrl) queryAuthenticator(url) else url
             createScan(projectCode, scanCode, newUrl, revision)
 
-            log.info { "Initiating data download ..." }
+            log.info { "Initiating the download..." }
             service.downloadFromGit(config.user, config.apiKey, scanCode)
                 .checkResponse("download data from Git", false)
 
@@ -438,17 +443,17 @@ class FossId internal constructor(
         val existingScan = recentScans.findLatestPendingOrFinishedScan()
 
         val scanCode = if (existingScan == null) {
-            log.info { "No scan found for $url and revision $revision. Creating origin scan ..." }
+            log.info { "No scan found for $url and revision $revision. Creating origin scan..." }
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN)
         } else {
-            log.info { "Scan found for $url and revision $revision. Creating delta scan ..." }
+            log.info { "Scan found for $url and revision $revision. Creating delta scan..." }
             namingProvider.createScanCode(projectName, DeltaTag.DELTA)
         }
 
         val newUrl = if (config.addAuthenticationToUrl) queryAuthenticator(url) else url
         createScan(projectCode, scanCode, newUrl, revision)
 
-        log.info { "Initiating data download ..." }
+        log.info { "Initiating the download..." }
         service.downloadFromGit(config.user, config.apiKey, scanCode)
             .checkResponse("download data from Git", false)
 
@@ -480,7 +485,7 @@ class FossId internal constructor(
      * [existingScans], delete older scans until the maximum number of delta scans is reached.
      */
     private suspend fun enforceDeltaScanLimit(existingScans: List<Scan>) {
-        log.info { "Number of delta scans to keep: ${config.deltaScanLimit}." }
+        log.info { "Will retain up to ${config.deltaScanLimit} delta scans." }
 
         // The current scan needs to be counted as well, in addition to the already existing scans.
         if (existingScans.size + 1 > config.deltaScanLimit) {
@@ -595,7 +600,7 @@ class FossId internal constructor(
                     true
                 } else {
                     FossId.log.info {
-                        "Scan status for scan '$scanCode' is '${response.data?.status}'. Waiting ..."
+                        "Scan status for scan '$scanCode' is '${response.data?.status}'. Waiting..."
                     }
 
                     false
