@@ -233,8 +233,7 @@ class FossId internal constructor(
                         val issue = createAndLogIssue(
                             source = scannerName,
                             message = "Ignoring package '${it.id.toCoordinates()}' from ${it.vcsProcessed.url} as it " +
-                                    "has path '${it.vcsProcessed.path}' set and $scannerName cannot limit scanning " +
-                                    "to paths.",
+                                    "has path '${it.vcsProcessed.path}' set and scanning cannot be limited to paths.",
                             severity = Severity.WARNING
                         )
                         val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
