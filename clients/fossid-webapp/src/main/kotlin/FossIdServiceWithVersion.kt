@@ -33,7 +33,7 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
             val version = delegate.getFossIdVersion().orEmpty()
 
             when {
-                version >= "2021.2" -> VersionedFossIdService21dot2(delegate, version)
+                version >= "2021.2" -> VersionedFossIdService2021dot2(delegate, version)
                 else -> VersionedFossIdService(delegate, version)
             }
         }
