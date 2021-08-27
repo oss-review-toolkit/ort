@@ -337,7 +337,7 @@ class FossId internal constructor(
                     results.getOrPut(pkg) { mutableListOf() } += scanResult
 
                     createdScans.forEach { code ->
-                        log.warn { "Deleting scan $code during exception cleanup." }
+                        log.warn { "Deleting scan '$code' during exception cleanup." }
                         deleteScan(code)
                     }
                 }
@@ -359,7 +359,7 @@ class FossId internal constructor(
     private suspend fun List<Scan>.findLatestPendingOrFinishedScan(): Scan? =
         find { scan ->
             val scanCode = requireNotNull(scan.code) {
-                "FossId returned a null scancode for an existing scan."
+                "The code for an existing scan must not be null."
             }
 
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
@@ -416,7 +416,7 @@ class FossId internal constructor(
             log.info { "Scan '${existingScan.code}' found for $url and revision $revision." }
 
             requireNotNull(existingScan.code) {
-                "FossId returned a null scancode for an existing scan"
+                "The code for an existing scan must not be null."
             }
         }
         if (config.waitForResult) checkScan(scanCode)
@@ -453,10 +453,10 @@ class FossId internal constructor(
             checkScan(scanCode)
         } else {
             val existingScanCode = requireNotNull(existingScan.code) {
-                "FossId returned a null scancode for an existing scan"
+                "The code for an existing scan must not be null."
             }
 
-            log.info { "Reusing identifications from $existingScanCode." }
+            log.info { "Reusing identifications from scan '$existingScanCode'." }
 
             // TODO: Change the logic of 'waitForResult' to wait for download results but not for scan results.
             //  Hence we could trigger 'runScan' even when 'waitForResult' is set to false.
@@ -488,7 +488,7 @@ class FossId internal constructor(
         existingScans.drop(config.deltaScanLimit - 1)
             .forEach { scan ->
                 scan.code?.let { code ->
-                    log.info { "Deleting scan $code to enforce the maximum number of delta scans." }
+                    log.info { "Deleting scan '$code' to enforce the maximum number of delta scans." }
                     deleteScan(code)
                 }
             }
@@ -503,7 +503,7 @@ class FossId internal constructor(
         url: String,
         revision: String
     ): String {
-        log.info { "Creating scan $scanCode ..." }
+        log.info { "Creating scan '$scanCode'..." }
 
         val response = service.createScan(config.user, config.apiKey, projectCode, scanCode, url, revision)
             .checkResponse("create scan")
@@ -554,7 +554,7 @@ class FossId internal constructor(
      */
     private suspend fun waitDownloadComplete(scanCode: String) {
         val result = wait(WAIT_INTERVAL_MS * WAIT_REPETITION, WAIT_INTERVAL_MS) {
-            FossId.log.info { "Checking download status for scan code '$scanCode'." }
+            FossId.log.info { "Checking download status for scan '$scanCode'." }
 
             val response = service.checkDownloadStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check download status")
@@ -582,7 +582,7 @@ class FossId internal constructor(
      */
     private suspend fun waitScanComplete(scanCode: String) {
         val result = wait(WAIT_INTERVAL_MS * WAIT_REPETITION, WAIT_INTERVAL_MS) {
-            FossId.log.info { "Waiting for scan='$scanCode' to complete." }
+            FossId.log.info { "Waiting for scan '$scanCode' to complete." }
 
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check scan status", false)
@@ -592,7 +592,7 @@ class FossId internal constructor(
                     true
                 } else {
                     FossId.log.info {
-                        "Scan status for scan code '$scanCode' is '${response.data?.status}'. Waiting ..."
+                        "Scan status for scan '$scanCode' is '${response.data?.status}'. Waiting ..."
                     }
 
                     false
@@ -611,7 +611,7 @@ class FossId internal constructor(
     private suspend fun deleteScan(scanCode: String) {
         val response = service.deleteScan(config.user, config.apiKey, scanCode)
         response.error?.let {
-            log.error { "Cannot delete scan $scanCode: $it." }
+            log.error { "Cannot delete scan '$scanCode': $it." }
         }
     }
 
@@ -622,13 +622,13 @@ class FossId internal constructor(
         val identifiedFiles = service.listIdentifiedFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list identified files")
             .data!!
-        log.info { "${identifiedFiles.size} identified files have been returned for scan code '$scanCode'." }
+        log.info { "${identifiedFiles.size} identified files have been returned for scan '$scanCode'." }
 
         val markedAsIdentifiedFiles = service.listMarkedAsIdentifiedFiles(config.user, config.apiKey, scanCode)
             .checkResponse("list marked as identified files")
             .data!!
         log.info {
-            "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan code '$scanCode'."
+            "${markedAsIdentifiedFiles.size} marked as identified files have been returned for scan '$scanCode'."
         }
 
         // The "match_type=ignore" info is already in the ScanResult, but here we also get the ignore reason.
@@ -640,7 +640,7 @@ class FossId internal constructor(
             .checkResponse("list pending files")
             .data!!
         log.info {
-            "${pendingFiles.size} pending files have been returned for scan code '$scanCode'."
+            "${pendingFiles.size} pending files have been returned for scan '$scanCode'."
         }
 
         return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles, pendingFiles)
