@@ -114,7 +114,7 @@ class FossId internal constructor(
 
             val projectName = projectNameMatcher.groupValues[1]
 
-            log.info { "Found project name in '$projectName' in URL '$gitRepoUrl'." }
+            log.info { "Found project name '$projectName' in URL '$gitRepoUrl'." }
 
             return projectName
         }
