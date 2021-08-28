@@ -36,6 +36,22 @@ import java.io.File
 import java.time.Instant
 
 class OpossumReporterTest : WordSpec({
+    "pathResolve()" should {
+        "work with basic cases" {
+            pathResolve("/") shouldBe "/"
+            pathResolve("/", "test") shouldBe "/test"
+            pathResolve("/", "/test") shouldBe "/test"
+            pathResolve("/", "/test/") shouldBe "/test"
+            pathResolve("/tost", "test") shouldBe "/tost/test"
+            pathResolve("/tost", "/test") shouldBe "/tost/test"
+            pathResolve("/tost", "/test/") shouldBe "/tost/test"
+        }
+
+        "work with lists" {
+            pathResolve(listOf("/", "test/to/path", "/something/else/")) shouldBe "/test/to/path/something/else"
+        }
+    }
+
     "generateOpossumInput()" should {
         val result = createOrtResult()
         val opossumInput = OpossumReporter().generateOpossumInput(result)
@@ -52,27 +68,27 @@ class OpossumReporterTest : WordSpec({
         val fileList = opossumInput.resources.toFileList()
 
         "file list should contain some specific files" {
-            fileList shouldContain File("")
-            fileList shouldContain File("pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE")
-            fileList shouldContain File("npm-project/package.json/devDependencies/@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3/dependencies")
+            fileList shouldContain "/"
+            fileList shouldContain "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
+            fileList shouldContain "/npm-project/package.json/devDependencies/@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3/dependencies"
         }
 
         "file list should contain files from other lists" {
             opossumInput.pathToSignal.forEach { e -> fileList shouldContain e.key }
             opossumInput.attributionBreakpoints.forEach { fileList shouldContain it }
-            opossumInput.packageToRoot.forEach { it.value.forEach { fileList shouldContain it } }
+            opossumInput.packageToRoot.forEach { it.value.forEach { fileList shouldContain it.key } }
         }
 
         "every package should be found in a signal" {
-            result.analyzer?.result?.packages?.forEach {
-                val id = it.pkg.id
+            result.analyzer!!.result.packages.forEach { pkg ->
+                val id = pkg.pkg.id
                 opossumInput.signals.find { it.id == id } shouldNot beNull()
             }
         }
 
         "LICENSE File added by SCANNER report should have signal with license" {
             val signals = opossumInput.getSignalsForFile(
-                File("pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE")
+                "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
             )
             signals.size shouldBe 2
             val signal = signals
@@ -82,9 +98,7 @@ class OpossumReporterTest : WordSpec({
         }
 
         "some/file File added by SCANNER report should have signal with copyright" {
-            val signals = opossumInput.getSignalsForFile(
-                File("pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
-            )
+            val signals = opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
             signals.size shouldBe 2
             val signal = signals
                 .find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
