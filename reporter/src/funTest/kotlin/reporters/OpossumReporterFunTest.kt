@@ -20,8 +20,10 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import com.fasterxml.jackson.databind.json.JsonMapper
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
@@ -35,10 +37,19 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OpossumReporterFunTest : WordSpec({
     "OpossumReporter" should {
-        "create JSON.GZ output containing an expected string" {
-            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+        val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+        val reportStr = generateReport(ortResult).normalizeLineBreaks()
 
-            generateReport(ortResult).normalizeLineBreaks() shouldContain "fileCreationDate"
+        "create JSON.GZ output containing an expected string" {
+            reportStr shouldContain "fileCreationDate"
+
+        }
+
+        "result should be parseable and contain some expected values" {
+            val reportTree = JsonMapper().readTree(reportStr)
+            reportTree.isObject shouldBe true
+            reportTree.get("metadata").get("projectId").asText() shouldBe "0"
+            reportTree.get("attributionBreakpoints").size() shouldBe 10
         }
     }
 })

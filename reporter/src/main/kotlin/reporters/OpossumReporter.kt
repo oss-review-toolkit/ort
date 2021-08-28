@@ -190,6 +190,13 @@ class OpossumReporter: Reporter {
             )
         }
 
+        fun getSignalsForFile(file: File): List<OpossumSignal> {
+            return pathToSignal[file]
+                ?.map { uuid -> signals.find { it.uuid == uuid } }
+                ?.filterNotNull()
+                ?: emptyList()
+        }
+
         fun addAttributionBreakpoint(breakpoint: File) {
             attributionBreakpoints.add(breakpoint)
             resources.addResource(breakpoint)
@@ -267,7 +274,8 @@ class OpossumReporter: Reporter {
 
         fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, relRoot: File = File("")) {
             val projectId = project.id
-            log.debug("$relRoot - $projectId - Project")
+            val definitionFilePath = relRoot.resolve(project.definitionFilePath)
+            log.debug("$definitionFilePath - $projectId - Project")
             addPackageRoot(projectId, relRoot)
 
             val signalFromProject = OpossumSignal(
@@ -279,7 +287,6 @@ class OpossumReporter: Reporter {
                 preselected = true
             )
 
-            val definitionFilePath = relRoot.resolve(project.definitionFilePath)
             addSignal(signalFromProject, definitionFilePath)
 
             project.scopes.forEachIndexed { index, scope ->
@@ -377,6 +384,14 @@ class OpossumReporter: Reporter {
         options: Map<String, String>
     ): List<File> {
         val opossumInput = generateOpossumInput(input.ortResult)
+
+        val numberOfRootlessPackages = opossumInput.packageToRoot.entries
+            .filter { it.value.any { it.toString().contains("lost+found/") } }
+            .size
+        if (numberOfRootlessPackages > 0) {
+            log.warn("There are $numberOfRootlessPackages packages that had no root")
+        }
+
         val outputFile = outputDir.resolve("opossum.input.json.gz")
         writeReport(outputFile, opossumInput)
         return listOf(outputFile)

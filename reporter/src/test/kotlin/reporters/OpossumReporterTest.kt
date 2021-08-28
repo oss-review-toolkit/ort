@@ -23,7 +23,9 @@ package org.ossreviewtoolkit.reporter.reporters
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.*
@@ -52,6 +54,7 @@ class OpossumReporterTest : WordSpec({
         "file list should contain some specific files" {
             fileList shouldContain File("")
             fileList shouldContain File("pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE")
+            fileList shouldContain File("npm-project/package.json/devDependencies/@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3/dependencies")
         }
 
         "file list should contain files from other lists" {
@@ -67,12 +70,46 @@ class OpossumReporterTest : WordSpec({
             }
         }
 
+        "LICENSE File added by SCANNER report should have signal with license" {
+            val signals = opossumInput.getSignalsForFile(
+                File("pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE")
+            )
+            signals.size shouldBe 2
+            val signal = signals
+                .find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
+            signal shouldNot beNull()
+            signal!!.license.toString() shouldBe "Apache-2.0"
+        }
+
+        "some/file File added by SCANNER report should have signal with copyright" {
+            val signals = opossumInput.getSignalsForFile(
+                File("pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
+            )
+            signals.size shouldBe 2
+            val signal = signals
+                .find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
+            signal shouldNot beNull()
+            signal!!.copyright shouldContain "Copyright 2020 Some copyright holder in source artifact"
+            signal.copyright shouldContain "Copyright 2020 Some other copyright holder in source artifact"
+        }
+
+
         "all uuids from signals should be assigned" {
             opossumInput.pathToSignal.forEach { e ->
                 e.value.forEach { uuid ->
                     opossumInput.signals.find { it.uuid == uuid } shouldNot beNull()
                 }
             }
+        }
+
+        val opossumInputJson = opossumInput.toJson()
+        "opossumInput JSON should have expected top level entries" {
+            opossumInputJson.keys shouldContain "metadata"
+            (opossumInputJson["metadata"] as Map<*,*>).keys shouldContain "projectId"
+            opossumInputJson.keys shouldContain "resources"
+            opossumInputJson.keys shouldContain "externalAttributions"
+            opossumInputJson.keys shouldContain "resourcesToAttributions"
+            opossumInputJson.keys shouldContain "attributionBreakpoints"
         }
     }
 })
@@ -138,6 +175,38 @@ private fun createOrtResult(): OrtResult {
                                 dependencies = sortedSetOf(
                                     PackageReference(
                                         id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1")
+                                    )
+                                )
+                            )
+                        ),
+                        vcs = analyzedVcs
+                    ),
+                    Project(
+                        id = Identifier("NPM:second-project-group:second-project-name:0.0.1"),
+                        declaredLicenses = sortedSetOf("BSD-3-Clause"),
+                        definitionFilePath = "npm-project/package.json",
+                        homepageUrl = "first project's homepage",
+                        scopeDependencies = sortedSetOf(
+                            Scope(
+                                name = "devDependencies",
+                                dependencies = sortedSetOf(
+                                    PackageReference(
+                                        id = Identifier("NPM:@something:somepackage:1.2.3"),
+                                        dependencies = sortedSetOf(
+                                            PackageReference(
+                                                id = Identifier("NPM:@something:somepackage-dep:1.2.3"),
+                                                dependencies = sortedSetOf(
+                                                    PackageReference(
+                                                        id = Identifier("NPM:@something:somepackage-dep-dep:1.2.3"),
+                                                        dependencies = sortedSetOf(
+                                                            PackageReference(
+                                                                id = Identifier("NPM:@something:somepackage-dep-dep-dep:1.2.3"),
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -223,7 +292,27 @@ private fun createOrtResult(): OrtResult {
                             vcs = VcsInfo.EMPTY
                         )
                     )
-                )
+                ).plus(
+                    sortedSetOf(
+                        Identifier("NPM:second-project-group:second-project-name:0.0.1"),
+                        Identifier("NPM:@something:somepackage:1.2.3"),
+                        Identifier("NPM:@something:somepackage-dep:1.2.3"),
+                        Identifier("NPM:@something:somepackage-dep-dep:1.2.3"),
+                        Identifier("NPM:@something:somepackage-dep-dep-dep:1.2.3"),
+                    ).map {
+                        CuratedPackage(
+                            pkg = Package(
+                                id = it,
+                                binaryArtifact = RemoteArtifact.EMPTY,
+                                declaredLicenses = sortedSetOf("MIT"),
+                                description = "Package of ${it}",
+                                homepageUrl = "",
+                                sourceArtifact = RemoteArtifact.EMPTY,
+                                vcs = VcsInfo.EMPTY
+                            )
+                        )
+                    }
+                ).toSortedSet()
             )
         ),
         scanner = ScannerRun(
@@ -239,7 +328,11 @@ private fun createOrtResult(): OrtResult {
                                     hash = Hash.NONE
                                 )
                             ),
-                            scanner = ScannerDetails.EMPTY,
+                            scanner = ScannerDetails(
+                                name = "SCANNER",
+                                version = "1.2.3",
+                                configuration = "configuration"
+                            ),
                             summary = ScanSummary(
                                 startTime = Instant.MIN,
                                 endTime = Instant.MIN,
@@ -272,7 +365,11 @@ private fun createOrtResult(): OrtResult {
                                 ),
                                 resolvedRevision = "deadbeef"
                             ),
-                            scanner = ScannerDetails.EMPTY,
+                            scanner = ScannerDetails(
+                                name = "otherSCANNER",
+                                version = "1.2.3",
+                                configuration = "otherConfiguration"
+                            ),
                             summary = ScanSummary(
                                 startTime = Instant.MIN,
                                 endTime = Instant.MIN,
