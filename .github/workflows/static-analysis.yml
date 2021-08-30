@@ -21,6 +21,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: 11
+        cache: 'gradle'
     - name: Check for Detekt Issues
       uses: burrunan/gradle-cache-action@v1
       with:
