@@ -36,7 +36,7 @@ COPY . /usr/local/src/ort
 WORKDIR /usr/local/src/ort
 
 # Gradle build.
-RUN --mount=type=cache,target=/root/.gradle/ \
+RUN --mount=type=cache,target=$HOME/.gradle/ \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
