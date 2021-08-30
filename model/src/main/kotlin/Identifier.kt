@@ -94,7 +94,8 @@ data class Identifier(
     override fun compareTo(other: Identifier) = COMPARATOR.compare(this, other)
 
     /**
-     * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].
+     * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names] by looking at
+     * the [namespace].
      */
     fun isFromOrg(vararg names: String) =
         names.any { name ->
@@ -105,6 +106,7 @@ data class Identifier(
                 else -> ""
             }
 
+            // TODO: Think about how to handle package managers that do not have the concept of namespaces, like Cargo.
             vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
         }
 
