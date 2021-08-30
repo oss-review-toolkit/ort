@@ -239,7 +239,8 @@ class FossId internal constructor(
                         val issue = createAndLogIssue(
                             source = scannerName,
                             message = "Package '${it.id.toCoordinates()}' uses VCS type '${it.vcsProcessed.type}', " +
-                                    "but only ${VcsType.GIT} is supported."
+                                    "but only ${VcsType.GIT} is supported.",
+                            severity = Severity.WARNING
                         )
                         addPackageWithSingleIssue(it, issue, UnknownProvenance)
                     }
@@ -252,7 +253,8 @@ class FossId internal constructor(
                         val issue = createAndLogIssue(
                             source = scannerName,
                             message = "Package '${it.id.toCoordinates()}' has an empty VCS revision and cannot be " +
-                                    "scanned."
+                                    "scanned.",
+                            severity = Severity.WARNING
                         )
                         addPackageWithSingleIssue(it, issue, UnknownProvenance)
                     }

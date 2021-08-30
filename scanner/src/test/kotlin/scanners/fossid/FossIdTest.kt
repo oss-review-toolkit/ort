@@ -125,7 +125,7 @@ class FossIdTest : WordSpec({
             with(summary.issues.first()) {
                 message shouldContain pkgId.toCoordinates()
                 message shouldContain "but only Git is supported"
-                severity shouldBe Severity.ERROR
+                severity shouldBe Severity.WARNING
             }
         }
 
