@@ -280,6 +280,8 @@ private fun extractPackage(node: JsonNode, hashes: Map<String, String>): Package
 private fun extractPackageId(node: JsonNode) =
     Identifier(
         type = "Crate",
+        // Note that Rust / Cargo do not support package namespaces, see:
+        // https://samsieber.tech/posts/2020/09/registry-structure-influence/
         namespace = "",
         name = node["name"].textValueOrEmpty(),
         version = node["version"].textValueOrEmpty()
