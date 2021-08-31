@@ -398,11 +398,11 @@ private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraph
         return nodeIndices.getValue(ref.key)
     }
 
-    visitEach { ref ->
-        val fromNodeIndex = getOrAddNodeIndex(ref)
+    visitEach { fromRef ->
+        val fromNodeIndex = getOrAddNodeIndex(fromRef)
 
-        ref.dependencies.forEach { dep ->
-            val toNodeIndex = getOrAddNodeIndex(dep)
+        fromRef.dependencies.forEach { toRef ->
+            val toNodeIndex = getOrAddNodeIndex(toRef)
             edges += DependencyGraphEdge(fromNodeIndex, toNodeIndex)
         }
     }
