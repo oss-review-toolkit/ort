@@ -387,15 +387,15 @@ class DependencyGraphBuilder<D>(
 private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraphNode>, List<DependencyGraphEdge>> {
     val nodes = mutableSetOf<DependencyGraphNode>()
     val edges = mutableListOf<DependencyGraphEdge>()
-    val nodeIndexMapping = mutableMapOf<DependencyReferenceKey, Int>()
+    val nodeIndices = mutableMapOf<DependencyReferenceKey, Int>()
 
     fun getOrAddNodeIndex(ref: DependencyReference): Int {
-        if (!nodeIndexMapping.containsKey(ref.key)) {
-            nodeIndexMapping[ref.key] = nodes.size
+        if (!nodeIndices.containsKey(ref.key)) {
+            nodeIndices[ref.key] = nodes.size
             nodes += DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
         }
 
-        return nodeIndexMapping.getValue(ref.key)
+        return nodeIndices.getValue(ref.key)
     }
 
     visitEach { ref ->
