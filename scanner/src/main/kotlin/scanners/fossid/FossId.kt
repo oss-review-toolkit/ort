@@ -542,7 +542,7 @@ class FossId internal constructor(
             // Scans that were added to the queue are interpreted as an error by FossID before version 2021.2.
             // For older versions, `waitScanComplete()` is able to deal with queued scans. Therefore, not checking the
             // response of queued scans.
-            if (version >= "2021.2" || scanResult.error != "Scan was added to queue") {
+            if (version >= "2021.2" || scanResult.error != "Scan was added to queue.") {
                 scanResult.checkResponse("trigger scan", false)
             }
 
