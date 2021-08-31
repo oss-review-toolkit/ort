@@ -64,7 +64,7 @@ fun scanOrtResult(
         return ortResult
     }
 
-    // Add the projects as packages to scan.
+    // Determine the projects to scan as packages.
     val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
     val projectPackages = consolidatedProjects.keys
 
