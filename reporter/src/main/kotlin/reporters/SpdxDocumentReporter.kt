@@ -35,8 +35,8 @@ import org.ossreviewtoolkit.spdx.model.SpdxDocument
  * as a future extension of this [SpdxDocumentReporter] or as a separate [Reporter].
  *
  * This reporter supports the following options:
- * - *creationInfo.comment*: Add the corresponding value as meta-data to the [SpdxDocument].
- * - *document.comment*: Add the corresponding value as meta-data to the [SpdxDocument].
+ * - *creationInfo.comment*: Add the corresponding value as metadata to the [SpdxDocument].
+ * - *document.comment*: Add the corresponding value as metadata to the [SpdxDocument].
  * - *document.name*: The name of the generated [SpdxDocument], defaults to "Unnamed document".
  * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.YAML].
  */

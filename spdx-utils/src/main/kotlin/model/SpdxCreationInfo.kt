@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.Instant
 
 /**
- * Meta data corresponding to a [SpdxDocument].
+ * Metadata corresponding to a [SpdxDocument].
  */
 data class SpdxCreationInfo(
     /**

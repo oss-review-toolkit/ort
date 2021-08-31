@@ -111,7 +111,7 @@ val packageWithVulnerabilities = Package.EMPTY.copy(
 )
 
 val packageMetaDataOnly = Package.EMPTY.copy(
-    id = Identifier("Maven:org.ossreviewtoolkit:package-meta-data-only:1.0"),
+    id = Identifier("Maven:org.ossreviewtoolkit:package-metadata-only:1.0"),
     isMetaDataOnly = true
 )
 

@@ -219,9 +219,9 @@ class Pip(
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
-        // 2. Get meta-data about the local project via pydep (only for setup.py-based projects).
+        // 2. Get metadata about the local project via pydep (only for setup.py-based projects).
         // 3. Get the hierarchy of dependencies via pipdeptree.
-        // 4. Get additional remote package meta-data via PyPIJSON.
+        // 4. Get additional remote package metadata via PyPIJSON.
 
         val workingDir = definitionFile.parentFile
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
@@ -229,7 +229,7 @@ class Pip(
         // List all packages installed locally in the virtualenv.
         val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
 
-        // Get the locally available meta data for all installed packages as a fallback.
+        // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
         // Install pydep after running any other command but before looking at the dependencies because it
@@ -251,7 +251,7 @@ class Pip(
         var authors: SortedSet<String> = sortedSetOf()
         var declaredLicenses: SortedSet<String> = sortedSetOf()
 
-        // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
+        // First try to get metadata from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
             val pydep = if (Os.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
@@ -289,7 +289,7 @@ class Pip(
                 }
             }
 
-            // In case of "requirements*.txt" there is no meta-data at all available, so use the parent directory name
+            // In case of "requirements*.txt" there is no metadata at all available, so use the parent directory name
             // plus what "*" expands to as the project name and the VCS revision, if any, as the project version.
             val suffix = definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
             val name = definitionFile.parentFile.name + suffix
@@ -307,7 +307,7 @@ class Pip(
 
         val projectName = when {
             hasSetupName && !hasRequirementsName -> setupName
-            // In case of only a requirements file without further meta-data, use the relative path to the analyzer
+            // In case of only a requirements file without further metadata, use the relative path to the analyzer
             // root as a unique project name.
             !hasSetupName && hasRequirementsName -> definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
             hasSetupName && hasRequirementsName -> "$setupName-requirements$requirementsSuffix"
@@ -341,9 +341,9 @@ class Pip(
             val packageTemplates = sortedSetOf<Package>()
             parseDependencies(projectDependencies, packageTemplates, installDependencies)
 
-            // Enrich the package templates with additional meta-data from PyPI.
+            // Enrich the package templates with additional metadata from PyPI.
             packageTemplates.mapTo(packages) { pkg ->
-                // TODO: Retrieve meta data of package not hosted on PyPI by querying the respective repository.
+                // TODO: Retrieve metadata of package not hosted on PyPI by querying the respective repository.
                 pkg.enrichWith(getPackageFromPyPi(pkg.id))
                     .enrichWith(installedPackages[pkg.id])
             }
@@ -609,7 +609,7 @@ class Pip(
                 vcsProcessed = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
             )
         }.onFailure {
-            log.warn { "Unable to retrieve PyPI meta-data for package '${id.toCoordinates()}'." }
+            log.warn { "Unable to retrieve PyPI metadata for package '${id.toCoordinates()}'." }
         }.getOrDefault(Package.EMPTY.copy(id = id))
     }
 
