@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.RawOption
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -57,6 +58,13 @@ import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+
+private fun RawOption.convertToScanner() =
+    convert { scannerName ->
+        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
+        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
+            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
+    }
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(
@@ -99,11 +107,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
     private val scannerFactory by option(
         "--scanner", "-s",
         help = "The scanner to use, one of ${Scanner.ALL}."
-    ).convert { scannerName ->
-        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
-            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
-    }.default(ScanCode.Factory())
+    ).convertToScanner().default(ScanCode.Factory())
 
     private val skipExcluded by option(
         "--skip-excluded",
