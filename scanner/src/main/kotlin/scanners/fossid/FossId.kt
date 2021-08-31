@@ -537,8 +537,14 @@ class FossId internal constructor(
         if (response.data?.status in SCAN_STATE_FOR_TRIGGER) {
             log.info { "Triggering scan as it has not yet been started." }
 
-            service.runScan(config.user, config.apiKey, scanCode, *runOptions)
-                .checkResponse("trigger scan", false)
+            val scanResult = service.runScan(config.user, config.apiKey, scanCode, *runOptions)
+
+            // Scans that were added to the queue are interpreted as an error by FossID before version 2021.2.
+            // For older versions, `waitScanComplete()` is able to deal with queued scans. Therefore, not checking the
+            // response of queued scans.
+            if (version >= "2021.2" || scanResult.error != "Scan was added to queue") {
+                scanResult.checkResponse("trigger scan", false)
+            }
 
             waitScanComplete(scanCode)
         }
