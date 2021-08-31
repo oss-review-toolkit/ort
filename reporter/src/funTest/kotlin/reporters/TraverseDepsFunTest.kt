@@ -99,13 +99,60 @@ class TraverseDepsTest : WordSpec({
                 .toSortedSet()
 
             "${name}: type1 should contain all expected IDs" {
-                result1.values.toSortedSet().size shouldBeGreaterThanOrEqual expectedIds.size
-                result1.values.toSortedSet() shouldContainAll  expectedIds
+                val valuesExcludingProjectIds = result1.values
+                    .filter { !projectIds.contains(it) }
+                    .toSortedSet()
+                val idsNotHitInTraversal = expectedIds.filter { ! valuesExcludingProjectIds.contains(it) }
+                idsNotHitInTraversal shouldBe emptySet<Identifier>()
             }
 
             "${name}: type2 should contain all expected IDs" {
-                result2.values.toSortedSet().size shouldBeGreaterThanOrEqual expectedIds.size
-                result2.values.toSortedSet() shouldContainAll  expectedIds
+                val valuesExcludingProjectIds = result2.values
+                    .filter { !projectIds.contains(it) }
+                    .toSortedSet()
+                val idsNotHitInTraversal = expectedIds.filter { ! valuesExcludingProjectIds.contains(it) }
+                idsNotHitInTraversal shouldBe emptySet<Identifier>()
+            }
+        }
+    }
+    "TraverseDepsTest with resolved scopes" should {
+        listOf(
+            "inline" to createOrtResult(),
+            "static-html-reporter-test-input.yml" to readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml"),
+            "cvat-analyzer-result.yml" to readOrtResult("src/funTest/assets/cvat-analyzer-result.yml")
+        ).forEach { (name, ortResult) ->
+
+            val analyzerResultProjects = ortResult.analyzer!!.result.withScopesResolved().projects
+            val result1 = traverseProjects1(analyzerResultProjects)
+            val result2 = traverseProjects2(analyzerResultProjects, ortResult.dependencyNavigator)
+
+            "${name}: type1 and type2 should return same results" {
+
+                result1.size shouldBe result2.size
+                result1.keys.sorted() shouldBe result2.keys.sorted()
+                result1.values.sorted() shouldBe result2.values.sorted()
+            }
+
+            val projectIds = ortResult.analyzer!!.result.projects.map { it.id }
+            val expectedIds = ortResult.analyzer!!.result.packages
+                .map { it.pkg.id }
+                .filter { !projectIds.contains(it) }
+                .toSortedSet()
+
+            "${name}: type1 should contain all expected IDs" {
+                val valuesExcludingProjectIds = result1.values
+                    .filter { !projectIds.contains(it) }
+                    .toSortedSet()
+                val idsNotHitInTraversal = expectedIds.filter { ! valuesExcludingProjectIds.contains(it) }
+                idsNotHitInTraversal shouldBe emptySet<Identifier>()
+            }
+
+            "${name}: type2 should contain all expected IDs" {
+                val valuesExcludingProjectIds = result2.values
+                    .filter { !projectIds.contains(it) }
+                    .toSortedSet()
+                val idsNotHitInTraversal = expectedIds.filter { ! valuesExcludingProjectIds.contains(it) }
+                idsNotHitInTraversal shouldBe emptySet<Identifier>()
             }
         }
     }
