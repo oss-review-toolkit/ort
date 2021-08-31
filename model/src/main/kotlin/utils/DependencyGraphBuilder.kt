@@ -161,14 +161,18 @@ class DependencyGraphBuilder<D>(
      * the conditions do not hold then.
      */
     fun build(checkReferences: Boolean = true): DependencyGraph {
-        require(!checkReferences || resolvedPackages.keys.containsAll(validPackageDependencies)) {
-            "The following references do not actually refer to packages: " +
-                    "${validPackageDependencies - resolvedPackages.keys}."
-        }
+        if (checkReferences) checkReferences()
 
         val (nodes, edges) = directDependencies.toGraph()
 
         return DependencyGraph(dependencyIds, sortedSetOf(), scopeMapping, nodes, edges)
+    }
+
+    private fun checkReferences() {
+        require(resolvedPackages.keys.containsAll(validPackageDependencies)) {
+            "The following references do not actually refer to packages: " +
+                    "${validPackageDependencies - resolvedPackages.keys}."
+        }
     }
 
     /**
