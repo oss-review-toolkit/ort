@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,9 @@
  */
 
 package org.ossreviewtoolkit.model.utils
+
+import java.util.Deque
+import java.util.LinkedList
 
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
@@ -372,22 +376,42 @@ private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraph
     val edges = mutableListOf<DependencyGraphEdge>()
     val nodeIndexMapping = mutableMapOf<DependencyReference, Int>()
 
-    fun constructGraph(dependencies: Collection<DependencyReference>) {
-        dependencies.forEach { ref ->
-            val node = DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
-            if (node !in nodes) {
-                val fromIndex = nodes.size.also { nodeIndexMapping[ref] = it }
-                nodes += node
+    visitEach { ref ->
+        val node = DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
+        if (node !in nodes) {
+            val fromIndex = nodes.size.also { nodeIndexMapping[ref] = it }
+            nodes += node
 
-                constructGraph(ref.dependencies)
-
-                ref.dependencies.forEach { dep ->
-                    edges += DependencyGraphEdge(fromIndex, nodeIndexMapping.getValue(dep))
-                }
+            ref.dependencies.forEach { dep ->
+                edges += DependencyGraphEdge(fromIndex, nodeIndexMapping.getValue(dep))
             }
         }
     }
 
-    constructGraph(this)
     return nodes.toList() to edges
 }
+
+private fun Collection<DependencyReference>.visitEach(visit: (ref: DependencyReference) -> Unit) {
+    val visited = mutableSetOf<DependencyReferenceKey>()
+    val queue: Deque<DependencyReference> = LinkedList(this)
+
+    while (queue.isNotEmpty()) {
+        val ref = queue.removeFirst()
+        val key = ref.key
+
+        if (key !in visited) {
+            visit(ref)
+            visited += ref.key
+
+            queue += ref.dependencies
+        }
+    }
+}
+
+private data class DependencyReferenceKey(
+    val pkg: Int,
+    val fragment: Int
+)
+
+private val DependencyReference.key: DependencyReferenceKey
+    get() = DependencyReferenceKey(pkg, fragment)
