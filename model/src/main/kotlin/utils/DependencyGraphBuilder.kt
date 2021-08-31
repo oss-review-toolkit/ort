@@ -177,6 +177,15 @@ class DependencyGraphBuilder<D>(
             "The following references do not actually refer to packages: " +
                     "${validPackageDependencies - resolvedPackages.keys}."
         }
+
+        val packageReferencesKeysWithMultipleDistintPackageReferences = directDependencies.groupBy { it.key }.filter {
+            it.value.distinct().size > 1
+        }.map { it.key }
+
+        require(packageReferencesKeysWithMultipleDistintPackageReferences.isEmpty()) {
+            "Found multiple distinct package references for each of the following package / fragment index tuples " +
+                "${packageReferencesKeysWithMultipleDistintPackageReferences.joinToString()}."
+        }
     }
 
     /**
