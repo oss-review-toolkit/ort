@@ -24,7 +24,7 @@ project:
         dependencies:
         - id: "PyPI::importlib-metadata:4.8.1"
           dependencies:
-          - id: "PyPI::typing-extensions:3.10.0.1"
+          - id: "PyPI::typing-extensions:3.10.0.2"
           - id: "PyPI::zipp:3.5.0"
       - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
@@ -304,8 +304,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::typing-extensions:3.10.0.1"
-  purl: "pkg:pypi/typing-extensions@3.10.0.1"
+- id: "PyPI::typing-extensions:3.10.0.2"
+  purl: "pkg:pypi/typing-extensions@3.10.0.2"
   authors:
   - "Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee"
   declared_licenses:
@@ -319,14 +319,14 @@ packages:
   description: "Backported and Experimental Type Hints for Python 3.5+"
   homepage_url: "https://github.com/python/typing/blob/master/typing_extensions/README.rst"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/df/93/ef0c164cd0bab2937275daf59b4c284331332d12f9e21866a56f5beb8ded/typing_extensions-3.10.0.1-py2-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/cc/1e/0310dee9d86a41f003c519ce263f3b931c54852fcb15ec780137b2e53d4e/typing_extensions-3.10.0.2-py2-none-any.whl"
     hash:
-      value: "731477c84a2115a42e5c0dcfa95990f4"
+      value: "96296851ac46115ff8ae00bf2f4f574d"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/a5/50/6fbfb5a45d4d8024222849f0731f8d8ddc5c7fe657a8f799bd4c605e93e0/typing_extensions-3.10.0.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/ed/12/c5079a15cf5c01d7f4252b473b00f7e68ee711be605b9f001528f0298b98/typing_extensions-3.10.0.2.tar.gz"
     hash:
-      value: "534781b600f62d5850f22f47949ba744"
+      value: "ed80ecc8eac5cb15840535ca54eb43f3"
       algorithm: "MD5"
   vcs:
     type: ""
