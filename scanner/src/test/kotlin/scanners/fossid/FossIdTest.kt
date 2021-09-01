@@ -577,7 +577,7 @@ private const val PROJECT = "fossId-test-project.git"
 private const val REVISION = "test-revision"
 
 /** The version to be reported by the FossID server. */
-private const val FOSSID_VERSION = "cli.  1.2.3 (build c928fcab, RELEASE)"
+private const val FOSSID_VERSION = "2021.2.2"
 
 /** A test scan ID that is returned by default when mocking the creation of a scan. */
 private const val SCAN_ID = "testScanId"
