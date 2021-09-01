@@ -44,7 +44,7 @@ const val TOOL_NAME = "scanner"
 
 /**
  * Use the [scanner] to scan the [Project]s and [Package]s specified in the [ortResult]. Scan results are stored in the
- * [outputDirectory].  If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
+ * [outputDirectory]. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
  * results as an [OrtResult].
  */
 fun scanOrtResult(
