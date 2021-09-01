@@ -294,7 +294,7 @@ class FossIdTest : WordSpec({
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
             coEvery { service.createProject(USER, API_KEY, projectCode, projectCode) } returns
-                    MapResponseBody(status = 200, data = mapOf())
+                    MapResponseBody(status = 1, data = mapOf())
 
             val fossId = createFossId(config)
 
@@ -318,7 +318,7 @@ class FossIdTest : WordSpec({
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
-            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 200)
+            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
@@ -343,7 +343,7 @@ class FossIdTest : WordSpec({
                 .expectDownload(scanCode)
                 .expectDeleteScan(scanCode)
                 .mockFiles(scanCode)
-            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 200)
+            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
@@ -421,7 +421,7 @@ class FossIdTest : WordSpec({
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
-            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 200)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
@@ -448,7 +448,7 @@ class FossIdTest : WordSpec({
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
                 .mockFiles(scanCode, identifiedRange = 1..2, markedRange = 1..2)
-            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 200)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
@@ -489,7 +489,7 @@ class FossIdTest : WordSpec({
 
             service.expectProjectRequest(failedProjectCode)
             coEvery { service.listScansForProject(USER, API_KEY, failedProjectCode) } throws IllegalStateException()
-            coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 200)
+            coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
@@ -538,8 +538,8 @@ class FossIdTest : WordSpec({
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
-            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 200)
-            coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 200)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+            coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
@@ -808,7 +808,7 @@ private fun FossIdServiceWithVersion.expectCheckScanStatus(
     scanCode: String,
     vararg states: ScanStatus
 ): FossIdServiceWithVersion {
-    val statusResponses = states.map { EntityResponseBody(status = 200, data = createScanDescription(it)) }
+    val statusResponses = states.map { EntityResponseBody(status = 1, data = createScanDescription(it)) }
     coEvery { checkScanStatus(USER, API_KEY, scanCode) } returnsMany statusResponses
     return this
 }
@@ -818,7 +818,7 @@ private fun FossIdServiceWithVersion.expectCheckScanStatus(
  */
 private fun FossIdServiceWithVersion.expectListScans(projectCode: String, scans: List<Scan>): FossIdServiceWithVersion {
     coEvery { listScansForProject(USER, API_KEY, projectCode) } returns
-            PolymorphicResponseBody(status = 200, data = PolymorphicList(scans))
+            PolymorphicResponseBody(status = 1, data = PolymorphicList(scans))
     return this
 }
 
@@ -828,9 +828,9 @@ private fun FossIdServiceWithVersion.expectListScans(projectCode: String, scans:
  */
 private fun FossIdServiceWithVersion.expectDownload(scanCode: String): FossIdServiceWithVersion {
     coEvery { downloadFromGit(USER, API_KEY, scanCode) } returns
-            EntityResponseBody(status = 200)
+            EntityResponseBody(status = 1)
     coEvery { checkDownloadStatus(USER, API_KEY, scanCode) } returns
-            EntityResponseBody(status = 200, data = DownloadStatus.FINISHED)
+            EntityResponseBody(status = 1, data = DownloadStatus.FINISHED)
     return this
 }
 
@@ -845,7 +845,7 @@ private fun FossIdServiceWithVersion.expectCreateScan(
 ): FossIdServiceWithVersion {
     coEvery {
         createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
-    } returns MapResponseBody(status = 200, data = mapOf("scan_id" to SCAN_ID))
+    } returns MapResponseBody(status = 1, data = mapOf("scan_id" to SCAN_ID))
     return this
 }
 
@@ -853,7 +853,7 @@ private fun FossIdServiceWithVersion.expectCreateScan(
  * Prepare this service mock to expect a request to delete the scan with the given [scanCode].
  */
 private fun FossIdServiceWithVersion.expectDeleteScan(scanCode: String): FossIdServiceWithVersion {
-    coEvery { deleteScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 200, data = 0)
+    coEvery { deleteScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 1, data = 0)
     return this
 }
 
@@ -875,16 +875,16 @@ private fun FossIdServiceWithVersion.mockFiles(
 
     coEvery { listIdentifiedFiles(USER, API_KEY, scanCode) } returns
             PolymorphicResponseBody(
-                status = 200, data = PolymorphicList(identifiedFiles)
+                status = 1, data = PolymorphicList(identifiedFiles)
             )
     coEvery { listMarkedAsIdentifiedFiles(USER, API_KEY, scanCode) } returns
             PolymorphicResponseBody(
-                status = 200, data = PolymorphicList(markedFiles)
+                status = 1, data = PolymorphicList(markedFiles)
             )
     coEvery { listIgnoredFiles(USER, API_KEY, scanCode) } returns
-            PolymorphicResponseBody(status = 200, data = PolymorphicList(ignoredFiles))
+            PolymorphicResponseBody(status = 1, data = PolymorphicList(ignoredFiles))
     coEvery { listPendingFiles(USER, API_KEY, scanCode) } returns
-            PolymorphicResponseBody(status = 200, data = PolymorphicList(pendingFiles))
+            PolymorphicResponseBody(status = 1, data = PolymorphicList(pendingFiles))
 
     return this
 }
