@@ -135,7 +135,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                     it.isFile && it.name == transformedScanResultsFileName
                 }.count()
 
-                println("Local file storage has $fileCount scan results files.")
+                println("Local file storage has $fileCount scan results file(s).")
             }
         }
 
