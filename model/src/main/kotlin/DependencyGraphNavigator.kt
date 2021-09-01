@@ -230,13 +230,16 @@ private fun collectDependencies(
     nodes: Sequence<DependencyNode>,
     maxDepth: Int,
     matcher: DependencyMatcher,
-    ids: MutableSet<Identifier>
+    ids: MutableSet<Identifier>,
+    visitedNodes: MutableSet<DependencyNode> = mutableSetOf()
 ) {
     if (maxDepth != 0) {
         nodes.forEach { node ->
+            if (node in visitedNodes) return@forEach
             if (matcher(node)) ids += node.id
+            visitedNodes += node
 
-            node.visitDependencies { collectDependencies(it, maxDepth - 1, matcher, ids) }
+            node.visitDependencies { collectDependencies(it, maxDepth - 1, matcher, ids, visitedNodes) }
         }
     }
 }
