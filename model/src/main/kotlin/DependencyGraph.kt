@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.lang.IllegalStateException
+import java.util.Deque
+import java.util.LinkedList
 import java.util.SortedSet
 
 /**
@@ -197,12 +199,20 @@ data class DependencyGraph(
      */
     private fun constructReferenceTree(
         node: DependencyGraphNode,
-        refMapping: MutableMap<String, PackageReference>
+        refMapping: MutableMap<String, PackageReference>,
+        ancestors: Set<String> = emptySet()
     ): PackageReference {
         val indexKey = RootDependencyIndex.generateKey(node.pkg, node.fragment)
+
         return refMapping.getOrPut(indexKey) {
-            val refDependencies = dependencies[node].orEmpty().mapTo(sortedSetOf()) {
-                constructReferenceTree(it, refMapping)
+            val childAncestors = ancestors + indexKey
+
+            val refDependencies = dependencies[node].orEmpty().mapNotNullTo(sortedSetOf()) {
+                if (RootDependencyIndex.generateKey(it.pkg, it.fragment) in childAncestors) {
+                    null
+                } else {
+                    constructReferenceTree(it, refMapping, childAncestors)
+                }
             }
 
             PackageReference(
