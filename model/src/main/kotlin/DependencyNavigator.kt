@@ -66,9 +66,13 @@ interface DependencyNavigator {
          */
         fun collectIssues(dependencies: Sequence<DependencyNode>): Map<Identifier, Set<OrtIssue>> {
             val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+            val visitedNodes = mutableSetOf<DependencyNode>()
 
             fun addIssues(nodes: Sequence<DependencyNode>) {
                 nodes.forEach { node ->
+                    if (node in visitedNodes) return@forEach
+                    visitedNodes += node
+
                     if (node.issues.isNotEmpty()) {
                         collectedIssues.getOrPut(node.id) { mutableSetOf() } += node.issues
                     }
