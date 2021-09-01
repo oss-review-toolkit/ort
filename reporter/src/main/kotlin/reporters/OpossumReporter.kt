@@ -277,9 +277,11 @@ class OpossumReporter : Reporter {
 
             this.addSignal(signalFromPkg(dependencyPackage, dependencyId), dependencyPath)
 
-            val rootForDependencies = pathResolve(dependencyPath, "dependencies")
-            addAttributionBreakpoint(rootForDependencies)
-            dependency.dependencies.map { this.addDependency(it, curatedPackages, rootForDependencies, level + 1 ) }
+            if (dependency.dependencies.isNotEmpty()) {
+                val rootForDependencies = pathResolve(dependencyPath, "dependencies")
+                addAttributionBreakpoint(rootForDependencies)
+                dependency.dependencies.map { this.addDependency(it, curatedPackages, rootForDependencies, level + 1 ) }
+            }
         }
 
         fun addDependencyScope(scope: Scope, curatedPackages: SortedSet<CuratedPackage>, relRoot: String = "/") {
@@ -327,20 +329,53 @@ class OpossumReporter : Reporter {
             val scanner = "${result.scanner.name}@${result.scanner.version}"
             log.debug("add scanner results for $id from $scanner to ${roots.size} roots")
 
+            val rootsBelowMaxDepth = roots
+                .filter { it.value <= maxDepth }
+                .map { it.key }
+            val rootsAboveMaxDepth = roots
+                .filter { it.value > maxDepth }
+                .map { it.key }
+
             val licenseFindings = result.summary.licenseFindings
             val copyrightFindings = result.summary.copyrightFindings
 
-            val pathsFromFindings = licenseFindings
-                .map { it.location.path }
-                .union( copyrightFindings.map { it.location.path } )
+            if (rootsBelowMaxDepth.isNotEmpty()) {
+                val pathsFromFindings = licenseFindings
+                    .map { it.location.path }
+                    .union( copyrightFindings.map { it.location.path } )
 
-            pathsFromFindings.forEach {pathFromFinding ->
+                pathsFromFindings.forEach {pathFromFinding ->
+                    val copyright = copyrightFindings
+                        .filter { it.location.path == pathFromFinding }
+                        .distinct()
+                        .joinToString(separator = "\n") { it.statement }
+                    val license = licenseFindings
+                        .filter { it.location.path == pathFromFinding }
+                        .map { it.license }
+                        .distinct()
+                        .reduceRightOrNull { left, right ->
+                            SpdxCompoundExpression(
+                                left,
+                                SpdxOperator.AND,
+                                right
+                            )
+                        }
+
+                    val pathSignal = OpossumSignal(
+                        "ORT-Scanner-$scanner",
+                        copyright = copyright,
+                        license = license
+                    )
+                    this.addSignal(pathSignal,
+                        rootsBelowMaxDepth.map { pathResolve(it, pathFromFinding)}
+                            .toSortedSet())
+                }
+            }
+            if (rootsAboveMaxDepth.isNotEmpty()) {
                 val copyright = copyrightFindings
-                    .filter { it.location.path == pathFromFinding }
                     .distinct()
                     .joinToString(separator = "\n") { it.statement }
                 val license = licenseFindings
-                    .filter { it.location.path == pathFromFinding }
                     .map { it.license }
                     .distinct()
                     .reduceRightOrNull { left, right ->
@@ -350,17 +385,12 @@ class OpossumReporter : Reporter {
                             right
                         )
                     }
-
-                val pathSignal = OpossumSignal(
+                val rootSignal = OpossumSignal(
                     "ORT-Scanner-$scanner",
                     copyright = copyright,
                     license = license
                 )
-                this.addSignal(pathSignal,
-                    roots.map { pathResolve(it.key, pathFromFinding) to it.value }
-                        .filter { it.second <= maxDepth }
-                        .map { it.first }
-                        .toSortedSet())
+                this.addSignal(rootSignal, rootsAboveMaxDepth.toSortedSet())
             }
         }
 
