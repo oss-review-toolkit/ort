@@ -40,10 +40,10 @@
         "scroll-into-view-if-needed": "^2.2.28"
     },
     "devDependencies": {
+        "@rescripts/cli": "^0.0.16",
         "@testing-library/jest-dom": "^5.13.0",
         "@testing-library/react": "^11.2.7",
         "@testing-library/user-event": "^13.1.9",
-        "@rescripts/cli": "^0.0.16",
         "fs-extra": "^10.0.0",
         "html-inline-css-webpack-plugin": "^1.11.1",
         "webpack-event-plugin": "^1.1.1"
@@ -55,16 +55,16 @@
         ]
     },
     "browserslist": {
-    "production": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
-    ],
-    "development": [
-        "last 1 chrome version",
-        "last 1 firefox version",
-        "last 1 safari version"
-    ]
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
     },
     "homepage": "./"
 }
