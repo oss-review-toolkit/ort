@@ -329,6 +329,36 @@ class FossIdTest : WordSpec({
             }
         }
 
+        "works if scan was queued in FossID older than 2021.2" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false)
+            val vcsInfo = createVcsInfo()
+
+            val service = config.createService()
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, emptyList())
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDownload(scanCode)
+                .mockFiles(scanCode)
+
+            coEvery { service.version } returns "2021.1.1"
+
+            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(
+                status = 0,
+                error = "Scan was added to queue."
+            )
+
+            val fossId = createFossId(config)
+
+            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+
+            coVerify {
+                service.runScan(USER, API_KEY, scanCode)
+            }
+        }
+
         "wait for a scan to complete" {
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
