@@ -370,19 +370,19 @@ class DependencyGraphBuilder<D>(
 private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraphNode>, List<DependencyGraphEdge>> {
     val nodes = mutableSetOf<DependencyGraphNode>()
     val edges = mutableListOf<DependencyGraphEdge>()
-    val nodeIndexMapping = mutableMapOf<DependencyReference, Int>()
+    val nodeIndexMapping = mutableMapOf<NodeKey, Int>()
 
     fun constructGraph(dependencies: Collection<DependencyReference>) {
         dependencies.forEach { ref ->
             val node = DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
             if (node !in nodes) {
-                val fromIndex = nodes.size.also { nodeIndexMapping[ref] = it }
+                val fromIndex = nodes.size.also { nodeIndexMapping[ref.key] = it }
                 nodes += node
 
                 constructGraph(ref.dependencies)
 
                 ref.dependencies.forEach { dep ->
-                    edges += DependencyGraphEdge(fromIndex, nodeIndexMapping.getValue(dep))
+                    edges += DependencyGraphEdge(fromIndex, nodeIndexMapping.getValue(dep.key))
                 }
             }
         }
@@ -391,3 +391,11 @@ private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraph
     constructGraph(this)
     return nodes.toList() to edges
 }
+
+private data class NodeKey(
+    val pkg: Int,
+    val fragment: Int
+)
+
+private val DependencyReference.key: NodeKey
+    get() = NodeKey(pkg, fragment)
