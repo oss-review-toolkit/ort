@@ -63,7 +63,7 @@ ENV \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
     # Scanner versions.
-    SCANCODE_VERSION=3.2.1rc2 \
+    SCANCODE_VERSION=21.8.4 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
     GOPATH=$HOME/go
@@ -160,12 +160,18 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         ) && \
         rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
     # Add scanners (in versions known to work).
-    curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
-        tar -zxC /usr/local && \
-        # Trigger ScanCode configuration for Python 3 and reindex licenses initially.
-        PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --reindex-licenses && \
-        chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
-        ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
+    curl -ksSL https://github.com/nexB/scancode-toolkit/releases/download/v${SCANCODE_VERSION}/scancode-toolkit-${SCANCODE_VERSION}_py36-linux.tar.xz | \
+        tar -JxC /opt/ && \
+        cd /opt/scancode-toolkit-$SCANCODE_VERSION && \
+        PYTHON_EXE=/usr/bin/python3 ./configure && \
+        # cleanup unneeded installed binaries
+        rm -rf /opt/scancode-toolkit-$SCANCODE_VERSION/thirdparty && \
+        # after configure, the bin/scancode points to the already setup virtualenv
+        ln -s /opt/scancode-toolkit-$SCANCODE_VERSION/bin/scancode /usr/local/bin/scancode && \
+        # users can use scancode-pip to install additional scancode plugins in scancode's virtualenv (in a child docker image)
+        ln -s /opt/scancode-toolkit-$SCANCODE_VERSION/bin/pip /usr/local/bin/scancode-pip && \
+        # license indexing takes long and is cached, so we keep the result of caching in the image
+        scancode --reindex-licenses    
 
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
 
