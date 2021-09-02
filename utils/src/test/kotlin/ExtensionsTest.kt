@@ -354,6 +354,29 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "Map.zipWithCollections" should {
+        "correctly merge maps" {
+            val map = mapOf(
+                "1" to listOf(1),
+                "2" to listOf(2),
+                "3" to listOf(3)
+            )
+            val other = mapOf(
+                "3" to listOf(3),
+                "4" to listOf(4)
+            )
+
+            val expectedResult = mapOf(
+                "1" to listOf(1),
+                "2" to listOf(2),
+                "3" to listOf(3, 3),
+                "4" to listOf(4)
+            )
+
+            map.zipWithCollections(other) shouldBe expectedResult
+        }
+    }
+
     "String.isValidUri" should {
         "return true for a valid URI" {
             "https://github.com/oss-review-toolkit/ort".isValidUri() shouldBe true

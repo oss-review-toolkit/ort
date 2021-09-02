@@ -274,6 +274,21 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
     }
 
 /**
+ * Merge two maps which have collections as values by creating the combined key set of both maps and merging the
+ * collections. If there is no entry for a key in one of the maps, the value from the other map is used.
+ */
+@Suppress("UNCHECKED_CAST")
+fun <K, V : Collection<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V> =
+    zip(other) { a, b ->
+        when {
+            // When iterating over the combined key set, not both values can be null.
+            a == null -> b!!
+            b == null -> a
+            else -> (a + b) as V
+        }
+    }
+
+/**
  * Converts this [Number] from bytes to mebibytes (MiB).
  */
 fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)
