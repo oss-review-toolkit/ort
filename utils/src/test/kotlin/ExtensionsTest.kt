@@ -294,14 +294,12 @@ class ExtensionsTest : WordSpec({
                 "4" to 4
             )
 
-            val expectedResult = mapOf(
+            map.zip(other, operation) shouldBe mapOf(
                 "1" to 1,
                 "2" to 2,
                 "3" to 6,
                 "4" to 4
             )
-
-            map.zip(other, operation) shouldBe expectedResult
         }
 
         "not fail if this map is empty" {
@@ -331,14 +329,12 @@ class ExtensionsTest : WordSpec({
                 "4" to 4
             )
 
-            val expectedResult = mapOf(
+            map.zipWithDefault(other, 1, operation) shouldBe mapOf(
                 "1" to 2,
                 "2" to 3,
                 "3" to 6,
                 "4" to 5
             )
-
-            map.zipWithDefault(other, 1, operation) shouldBe expectedResult
         }
 
         "not fail if this map is empty" {
@@ -366,14 +362,12 @@ class ExtensionsTest : WordSpec({
                 "4" to listOf(4)
             )
 
-            val expectedResult = mapOf(
+            map.zipWithCollections(other) shouldBe mapOf(
                 "1" to listOf(1),
                 "2" to listOf(2),
                 "3" to listOf(3, 3),
                 "4" to listOf(4)
             )
-
-            map.zipWithCollections(other) shouldBe expectedResult
         }
     }
 
