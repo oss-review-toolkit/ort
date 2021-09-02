@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.util.LinkedList
+
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
 import org.ossreviewtoolkit.model.DependencyGraphNode
@@ -385,24 +387,34 @@ private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraph
     val edges = mutableListOf<DependencyGraphEdge>()
     val nodeIndices = mutableMapOf<NodeKey, Int>()
 
-    fun constructGraph(dependencies: Collection<DependencyReference>) {
-        dependencies.forEach { ref ->
-            val node = DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
-            if (node !in nodes) {
-                val fromIndex = nodes.size.also { nodeIndices[ref.key] = it }
-                nodes += node
+    visitEach { ref ->
+        val node = DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
+        if (node !in nodes) {
+            val fromIndex = nodes.size.also { nodeIndices[ref.key] = it }
+            nodes += node
 
-                constructGraph(ref.dependencies)
-
-                ref.dependencies.forEach { dep ->
-                    edges += DependencyGraphEdge(fromIndex, nodeIndices.getValue(dep.key))
-                }
+            ref.dependencies.forEach { dep ->
+                edges += DependencyGraphEdge(fromIndex, nodeIndices.getValue(dep))
             }
         }
     }
 
-    constructGraph(this)
     return nodes.toList() to edges
+}
+
+private fun Collection<DependencyReference>.visitEach(visit: (ref: DependencyReference) -> Unit) {
+    val visited = mutableSetOf<NodeKey>()
+    val queue = LinkedList(this)
+
+    while (queue.isNotEmpty()) {
+        val ref = queue.removeFirst()
+
+        if (ref.key !in visited) {
+            visit(ref)
+            visited += ref.key
+            queue += ref.dependencies
+        }
+    }
 }
 
 private data class NodeKey(
