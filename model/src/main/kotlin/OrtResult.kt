@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
-import org.ossreviewtoolkit.utils.zipWithDefault
+import org.ossreviewtoolkit.utils.zipWithCollections
 
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
@@ -200,10 +200,8 @@ data class OrtResult(
         val scannerIssues = scanner?.results?.collectIssues().orEmpty()
         val advisorIssues = advisor?.results?.collectIssues().orEmpty()
 
-        val analyzerAndScannerIssues =
-            analyzerIssues.zipWithDefault(scannerIssues, emptySet()) { left, right -> left + right }
-
-        return analyzerAndScannerIssues.zipWithDefault(advisorIssues, emptySet()) { left, right -> left + right }
+        val analyzerAndScannerIssues = analyzerIssues.zipWithCollections(scannerIssues)
+        return analyzerAndScannerIssues.zipWithCollections(advisorIssues)
     }
 
     /**
