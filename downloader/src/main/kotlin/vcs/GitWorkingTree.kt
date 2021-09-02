@@ -38,6 +38,9 @@ import org.ossreviewtoolkit.utils.log
  * The map of environment variables to set for enabling long paths (> 260 chars) in Git working trees on Windows.
  */
 val GIT_LONG_PATHS_ENVIRONMENT = mapOf(
+    // Legacy way to set configuration via environment before Git 2.31:
+    "GIT_CONFIG_PARAMETERS" to "'core.longpaths'='true'",
+    // Recommended way to set configuration via environment starting with Git 2.31:
     "GIT_CONFIG_COUNT" to "1",
     "GIT_CONFIG_KEY_0" to "core.longpaths",
     "GIT_CONFIG_VALUE_0" to "true",
