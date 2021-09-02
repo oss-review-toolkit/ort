@@ -387,14 +387,14 @@ private fun Collection<DependencyReference>.toGraph(): Pair<List<DependencyGraph
     val edges = mutableListOf<DependencyGraphEdge>()
     val nodeIndices = mutableMapOf<NodeKey, Int>()
 
-    visitEach { ref ->
-        val node = DependencyGraphNode(ref.pkg, ref.fragment, ref.linkage, ref.issues)
+    visitEach { fromRef ->
+        val node = DependencyGraphNode(fromRef.pkg, fromRef.fragment, fromRef.linkage, fromRef.issues)
         if (node !in nodes) {
-            val fromIndex = nodes.size.also { nodeIndices[ref.key] = it }
+            val fromIndex = nodes.size.also { nodeIndices[fromRef.key] = it }
             nodes += node
 
-            ref.dependencies.forEach { dep ->
-                edges += DependencyGraphEdge(fromIndex, nodeIndices.getValue(dep))
+            fromRef.dependencies.forEach { toRef ->
+                edges += DependencyGraphEdge(fromIndex, nodeIndices.getValue(toRef.key))
             }
         }
     }
