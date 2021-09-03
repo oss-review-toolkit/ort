@@ -275,15 +275,21 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
 
-        val repositoryPackageConfigurations = ortResultInput.repository.config.packageConfigurations
-        val optionPackageConfigurations = packageConfigurationOption.createProvider().getPackageConfigurations()
+        val config = globalOptionsForSubcommands.config
 
-        val packageConfigurationProvider = SimplePackageConfigurationProvider(
-            optionPackageConfigurations + repositoryPackageConfigurations
-        )
+        val packageConfigurations =
+            packageConfigurationOption.createProvider().getPackageConfigurations().toMutableList()
+        val repositoryPackageConfigurations = ortResultInput.repository.config.packageConfigurations
+
+        if (config.enableRepositoryPackageConfigurations) {
+            packageConfigurations += repositoryPackageConfigurations
+        } else if (repositoryPackageConfigurations.isNotEmpty()) {
+            log.warn { "Local package configurations were not applied because the feature is not enabled." }
+        }
+
+        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations.toSet())
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
-        val config = globalOptionsForSubcommands.config
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
