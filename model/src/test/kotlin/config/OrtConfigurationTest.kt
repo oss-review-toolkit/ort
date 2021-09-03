@@ -162,9 +162,7 @@ class OrtConfigurationTest : WordSpec({
                     useSsl shouldBe true
                     fromAddress shouldBe "no-reply@oss-review-toolkit.org"
                 }
-            }
 
-            with(ortConfig.notifier) {
                 jira shouldNotBeNull {
                     host shouldBe "localhost"
                     username shouldBe "user"
