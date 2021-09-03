@@ -29,11 +29,10 @@ import org.apache.commons.compress.compressors.gzip.GzipParameters
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.spdx.SpdxCompoundExpression
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxOperator
+import org.ossreviewtoolkit.spdx.*
 import org.ossreviewtoolkit.utils.log
 import java.io.File
 
@@ -182,12 +181,32 @@ class OpossumReporter : Reporter {
         }
     }
 
+    data class OpossumFrequentLicense(
+        var shortName: String,
+        var fullName: String?,
+        var defaultText: String?
+    ) : Comparable<OpossumFrequentLicense> {
+        fun toJson(): Map<*, *> {
+            return sortedMapOf(
+                "shortName" to shortName,
+                "fullName" to fullName,
+                "defaultText" to defaultText
+            )
+        }
+
+        override fun compareTo(other: OpossumFrequentLicense) = compareValuesBy(this, other,
+            { it.shortName },
+            { it.fullName },
+            { it.defaultText })
+    }
+
     data class OpossumInput(
         var resources: OpossumResources = OpossumResources(),
         var signals: MutableList<OpossumSignal> = mutableListOf(),
         var pathToSignal: SortedMap<String, SortedSet<UUID>> = sortedMapOf(),
         var packageToRoot: SortedMap<Identifier, SortedMap<String,Int>> = sortedMapOf(),
-        var attributionBreakpoints: SortedSet<String> = sortedSetOf()
+        var attributionBreakpoints: SortedSet<String> = sortedSetOf(),
+        var frequentLicenses: SortedSet<OpossumFrequentLicense> = sortedSetOf()
     ) {
         fun toJson(): Map<*, *> {
             return sortedMapOf(
@@ -205,7 +224,8 @@ class OpossumReporter : Reporter {
                     val trailingSlash = if (resources.isPathAFile(it.key)) { "" } else { "/" }
                     "${it.key}${trailingSlash}"
                 },
-                "attributionBreakpoints" to attributionBreakpoints
+                "attributionBreakpoints" to attributionBreakpoints,
+                "frequentLicenses" to frequentLicenses.toList().map { it.toJson() }
             )
         }
 
@@ -277,9 +297,11 @@ class OpossumReporter : Reporter {
 
             this.addSignal(signalFromPkg(dependencyPackage, dependencyId), dependencyPath)
 
-            val rootForDependencies = pathResolve(dependencyPath, "dependencies")
-            addAttributionBreakpoint(rootForDependencies)
-            dependency.dependencies.map { this.addDependency(it, curatedPackages, rootForDependencies, level + 1 ) }
+            if (dependency.dependencies.isNotEmpty()) {
+                val rootForDependencies = pathResolve(dependencyPath, "dependencies")
+                addAttributionBreakpoint(rootForDependencies)
+                dependency.dependencies.map { this.addDependency(it, curatedPackages, rootForDependencies, level + 1 ) }
+            }
         }
 
         fun addDependencyScope(scope: Scope, curatedPackages: SortedSet<CuratedPackage>, relRoot: String = "/") {
@@ -327,20 +349,53 @@ class OpossumReporter : Reporter {
             val scanner = "${result.scanner.name}@${result.scanner.version}"
             log.debug("add scanner results for $id from $scanner to ${roots.size} roots")
 
+            val rootsBelowMaxDepth = roots
+                .filter { it.value <= maxDepth }
+                .map { it.key }
+            val rootsAboveMaxDepth = roots
+                .filter { it.value > maxDepth }
+                .map { it.key }
+
             val licenseFindings = result.summary.licenseFindings
             val copyrightFindings = result.summary.copyrightFindings
 
-            val pathsFromFindings = licenseFindings
-                .map { it.location.path }
-                .union( copyrightFindings.map { it.location.path } )
+            if (rootsBelowMaxDepth.isNotEmpty()) {
+                val pathsFromFindings = licenseFindings
+                    .map { it.location.path }
+                    .union( copyrightFindings.map { it.location.path } )
 
-            pathsFromFindings.forEach {pathFromFinding ->
+                pathsFromFindings.forEach {pathFromFinding ->
+                    val copyright = copyrightFindings
+                        .filter { it.location.path == pathFromFinding }
+                        .distinct()
+                        .joinToString(separator = "\n") { it.statement }
+                    val license = licenseFindings
+                        .filter { it.location.path == pathFromFinding }
+                        .map { it.license }
+                        .distinct()
+                        .reduceRightOrNull { left, right ->
+                            SpdxCompoundExpression(
+                                left,
+                                SpdxOperator.AND,
+                                right
+                            )
+                        }
+
+                    val pathSignal = OpossumSignal(
+                        "ORT-Scanner-$scanner",
+                        copyright = copyright,
+                        license = license
+                    )
+                    this.addSignal(pathSignal,
+                        rootsBelowMaxDepth.map { pathResolve(it, pathFromFinding)}
+                            .toSortedSet())
+                }
+            }
+            if (rootsAboveMaxDepth.isNotEmpty()) {
                 val copyright = copyrightFindings
-                    .filter { it.location.path == pathFromFinding }
                     .distinct()
                     .joinToString(separator = "\n") { it.statement }
                 val license = licenseFindings
-                    .filter { it.location.path == pathFromFinding }
                     .map { it.license }
                     .distinct()
                     .reduceRightOrNull { left, right ->
@@ -350,17 +405,12 @@ class OpossumReporter : Reporter {
                             right
                         )
                     }
-
-                val pathSignal = OpossumSignal(
+                val rootSignal = OpossumSignal(
                     "ORT-Scanner-$scanner",
                     copyright = copyright,
                     license = license
                 )
-                this.addSignal(pathSignal,
-                    roots.map { pathResolve(it.key, pathFromFinding) to it.value }
-                        .filter { it.second <= maxDepth }
-                        .map { it.first }
-                        .toSortedSet())
+                this.addSignal(rootSignal, rootsAboveMaxDepth.toSortedSet())
             }
         }
 
@@ -376,6 +426,14 @@ class OpossumReporter : Reporter {
                     addPackageRoot(it.pkg.id, path, Int.MAX_VALUE)
                 }
             }
+        }
+
+        fun addFrequentLicense(
+            shortName: String,
+            fullName: String? = null,
+            defaultText: String?
+        ) {
+            frequentLicenses.add(OpossumFrequentLicense(shortName, fullName, defaultText))
         }
     }
 
@@ -399,6 +457,15 @@ class OpossumReporter : Reporter {
         maxDepth: Int = Int.MAX_VALUE
     ): OpossumInput {
         val opossumInput = OpossumInput()
+
+        SpdxLicense.values().forEach {
+            val licenseText = getLicenseText(it.id)
+            opossumInput.addFrequentLicense(
+                shortName = it.id,
+                fullName = it.fullName,
+                defaultText =  licenseText
+            )
+        }
 
         val analyzerResult = ortResult.analyzer?.result?.withScopesResolved() ?: return opossumInput
         val analyzerResultProjects = analyzerResult.projects

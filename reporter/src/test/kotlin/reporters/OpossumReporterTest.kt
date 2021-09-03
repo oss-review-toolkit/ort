@@ -70,7 +70,9 @@ class OpossumReporterTest : WordSpec({
         "file list should contain some specific files" {
             fileList shouldContain "/"
             fileList shouldContain "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
-            fileList shouldContain "/npm-project/package.json/devDependencies/@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3/dependencies"
+            fileList shouldContain "/npm-project/package.json/devDependencies/@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3"
+
+            opossumInput.attributionBreakpoints shouldContain "/npm-project/package.json/devDependencies/@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/somepackage-dep-dep@1.2.3/dependencies/"
         }
 
         "file list should contain files from other lists" {
@@ -124,6 +126,10 @@ class OpossumReporterTest : WordSpec({
             opossumInputJson.keys shouldContain "externalAttributions"
             opossumInputJson.keys shouldContain "resourcesToAttributions"
             opossumInputJson.keys shouldContain "attributionBreakpoints"
+        }
+
+        "frequentLicenses should be present" {
+            opossumInput.frequentLicenses.map { it.shortName } shouldContain "MIT"
         }
     }
 })
