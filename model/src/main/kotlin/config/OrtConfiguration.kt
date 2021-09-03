@@ -66,6 +66,13 @@ data class OrtConfiguration(
     val enableRepositoryPackageCurations: Boolean = false,
 
     /**
+     * Enable the usage of project-local package configurations from the [RepositoryConfiguration]. If set to true,
+     * apply package configurations from a local .ort.yml file before applying those specified via the command line i.e.
+     * configurations from the .ort.yml take precedence.
+     */
+    val enableRepositoryPackageConfigurations: Boolean = false,
+
+    /**
      * The configuration of the analyzer.
      */
     val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),

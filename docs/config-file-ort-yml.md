@@ -153,7 +153,9 @@ curations:
     concluded_license: "Apache-2.0"
  ```
 
-For findings in third-party dependencies package-configurations can be used to replace findings:
+To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings.
+Note that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the `ort.conf` see
+[reference.conf](../model/src/main/resources/reference.conf).
 ```yaml
 package_configurations:
 - id: 'Maven:com.example:package:1.2.3'

@@ -179,6 +179,7 @@ class OrtConfigurationTest : WordSpec({
             }
 
             ortConfig.enableRepositoryPackageCurations shouldBe true
+            ortConfig.enableRepositoryPackageConfigurations shouldBe true
         }
 
         "correctly prioritize the sources" {
