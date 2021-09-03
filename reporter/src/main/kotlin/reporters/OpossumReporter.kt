@@ -29,11 +29,10 @@ import org.apache.commons.compress.compressors.gzip.GzipParameters
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.spdx.SpdxCompoundExpression
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxOperator
+import org.ossreviewtoolkit.spdx.*
 import org.ossreviewtoolkit.utils.log
 import java.io.File
 
@@ -182,12 +181,32 @@ class OpossumReporter : Reporter {
         }
     }
 
+    data class OpossumFrequentLicense(
+        var shortName: String,
+        var fullName: String?,
+        var defaultText: String?
+    ) : Comparable<OpossumFrequentLicense> {
+        fun toJson(): Map<*, *> {
+            return sortedMapOf(
+                "shortName" to shortName,
+                "fullName" to fullName,
+                "defaultText" to defaultText
+            )
+        }
+
+        override fun compareTo(other: OpossumFrequentLicense) = compareValuesBy(this, other,
+            { it.shortName },
+            { it.fullName },
+            { it.defaultText })
+    }
+
     data class OpossumInput(
         var resources: OpossumResources = OpossumResources(),
         var signals: MutableList<OpossumSignal> = mutableListOf(),
         var pathToSignal: SortedMap<String, SortedSet<UUID>> = sortedMapOf(),
         var packageToRoot: SortedMap<Identifier, SortedMap<String,Int>> = sortedMapOf(),
-        var attributionBreakpoints: SortedSet<String> = sortedSetOf()
+        var attributionBreakpoints: SortedSet<String> = sortedSetOf(),
+        var frequentLicenses: SortedSet<OpossumFrequentLicense> = sortedSetOf()
     ) {
         fun toJson(): Map<*, *> {
             return sortedMapOf(
@@ -205,7 +224,8 @@ class OpossumReporter : Reporter {
                     val trailingSlash = if (resources.isPathAFile(it.key)) { "" } else { "/" }
                     "${it.key}${trailingSlash}"
                 },
-                "attributionBreakpoints" to attributionBreakpoints
+                "attributionBreakpoints" to attributionBreakpoints,
+                "frequentLicenses" to frequentLicenses.toList().map { it.toJson() }
             )
         }
 
@@ -407,6 +427,14 @@ class OpossumReporter : Reporter {
                 }
             }
         }
+
+        fun addFrequentLicense(
+            shortName: String,
+            fullName: String? = null,
+            defaultText: String?
+        ) {
+            frequentLicenses.add(OpossumFrequentLicense(shortName, fullName, defaultText))
+        }
     }
 
     override val reporterName = "Opossum"
@@ -429,6 +457,15 @@ class OpossumReporter : Reporter {
         maxDepth: Int = Int.MAX_VALUE
     ): OpossumInput {
         val opossumInput = OpossumInput()
+
+        SpdxLicense.values().forEach {
+            val licenseText = getLicenseText(it.id)
+            opossumInput.addFrequentLicense(
+                shortName = it.id,
+                fullName = it.fullName,
+                defaultText =  licenseText
+            )
+        }
 
         val analyzerResult = ortResult.analyzer?.result?.withScopesResolved() ?: return opossumInput
         val analyzerResultProjects = analyzerResult.projects

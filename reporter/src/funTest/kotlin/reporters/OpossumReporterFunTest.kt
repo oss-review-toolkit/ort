@@ -45,15 +45,14 @@ class OpossumReporterFunTest : WordSpec({
 
         "create JSON.GZ output containing an expected string" {
             reportStr shouldContain "fileCreationDate"
-
         }
 
         "result should be parseable and contain some expected values" {
             val reportTree = JsonMapper().readTree(reportStr)
             reportTree.isObject shouldBe true
             reportTree.get("metadata").get("projectId").asText() shouldBe "0"
-            reportTree.get("attributionBreakpoints").size() shouldBe 10
-            reportTree.get("resourcesToAttributions").fieldNames().asSequence().toList() shouldContain "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/testCompile/junit/junit@4.12/dependencies/com.foobar/foobar@1.0/"
+            reportTree.get("attributionBreakpoints").size() shouldBe 5
+            reportTree.get("resourcesToAttributions").fieldNames().asSequence().toList() shouldContain "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/testCompile/junit/junit@4.12/dependencies/com.foobar/foobar@1.0"
         }
     }
 })
