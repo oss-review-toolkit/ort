@@ -178,6 +178,8 @@ The list of available options for `reason` are defined in
 Package curations can be added if you want to correct metadata of third-party dependencies.
 
 The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.
+Note that this feature requires `enableRepositoryPackageCurations` to be enabled in the `ort.conf`, see
+[reference.conf](../model/src/main/resources/reference.conf).
 
 e.g.:
 ```yaml
