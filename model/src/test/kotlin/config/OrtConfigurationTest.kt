@@ -177,6 +177,8 @@ class OrtConfigurationTest : WordSpec({
                 patentFilenames shouldContainExactly listOf("patents")
                 rootLicenseFilenames shouldContainExactly listOf("readme*")
             }
+
+            ortConfig.enableRepositoryPackageCurations shouldBe true
         }
 
         "correctly prioritize the sources" {

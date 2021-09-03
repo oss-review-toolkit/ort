@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
@@ -184,12 +185,20 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val repositoryConfiguration = actualRepositoryConfigurationFile?.readValueOrNull() ?: RepositoryConfiguration()
 
+        val packageCurations =
+            FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations.toMutableList()
+
+        val repositoryPackageCurations = repositoryConfiguration.curations.packages
+
+        if (config.enableRepositoryPackageCurations) {
+            packageCurations += repositoryPackageCurations
+        } else if (repositoryPackageCurations.isNotEmpty()) {
+            log.warn { "Local package curation were not applied because the feature is not enabled." }
+        }
+
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
-                SimplePackageCurationProvider(
-                    FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations +
-                            repositoryConfiguration.curations.packages
-                ),
+                SimplePackageCurationProvider(packageCurations.toSet()),
                 config.analyzer.sw360Configuration?.let {
                     Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
                 },
