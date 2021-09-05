@@ -42,6 +42,7 @@ jobs:
     displayName: Cache Gradle Wrapper
 
   - bash: |
+      git --version
       # Create the ORT_DATA_DIR, in case it is not created because the test task is skipped because of the Gradle cache.
       mkdir $ORT_DATA_DIR
 
