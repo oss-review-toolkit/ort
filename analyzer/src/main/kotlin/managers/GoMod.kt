@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.stashDirectories
+import org.ossreviewtoolkit.utils.withoutPrefix
 import org.ossreviewtoolkit.utils.withoutSuffix
 
 /**
@@ -141,7 +142,7 @@ class GoMod(
         run(projectDir, "mod", "vendor", "-v")
             .requireSuccess()
             .stderr
-            .lineSequence()
+            .lines()
             .filter { it.startsWith("# ") }
             .map {
                 val parts = it.removePrefix("# ").split(" ", limit = 2)
