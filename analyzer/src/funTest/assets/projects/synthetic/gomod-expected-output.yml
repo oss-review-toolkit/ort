@@ -27,6 +27,11 @@ project:
         linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
       linkage: "PROJECT_STATIC"
+    - id: "GoMod::rsc.io/quote/v3:v3.0.0"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::rsc.io/sampler:v1.3.0"
+        linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
     - id: "GoMod::github.com/fatih/color:v1.7.0"
@@ -139,4 +144,56 @@ packages:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
     revision: "v0.0.8"
+    path: ""
+- id: "GoMod::rsc.io/quote/v3:v3.0.0"
+  purl: "pkg:golang/rsc.io%2Fquote%2Fv3@v3.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://proxy.golang.org/rsc.io/quote/v3/@v/v3.0.0.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "GoMod::rsc.io/sampler:v1.3.0"
+  purl: "pkg:golang/rsc.io%2Fsampler@v1.3.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://proxy.golang.org/rsc.io/sampler/@v/v1.3.0.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
     path: ""
