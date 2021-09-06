@@ -1,4 +1,4 @@
-# The Package Configuration File (Experimental)
+# The Package Configuration File
 
 A package configuration file allows you to define path excludes and license finding curations for a specific package
 (dependency) and provenance. Conceptually, the file is similar to
