@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,10 +144,21 @@ class GoMod(
             .requireSuccess()
             .stderr
             .lines()
-            .filter { it.startsWith("# ") }
-            .map {
-                val parts = it.removePrefix("# ").split(" ", limit = 2)
-                Identifier(managerName, "", parts[0], parts[1])
+            .mapNotNull { line ->
+                // The package can be replaced using GoMod's replace directive. This should only take the used package
+                // into account, see: https://golang.org/doc/modules/gomod-ref#replace.
+                val replaceIndicator = " => "
+
+                val withoutPrefix = line.withoutPrefix("# ")
+                val moduleVersionLine = if (line.contains(replaceIndicator)) {
+                    withoutPrefix?.substring(line.indexOf(replaceIndicator) + replaceIndicator.length)
+                } else {
+                    withoutPrefix
+                }
+
+                moduleVersionLine?.split(" ", limit = 2)?.let { parts ->
+                    Identifier(managerName, "", parts[0], parts[1])
+                }
             }
             .toSet()
 
