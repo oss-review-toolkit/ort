@@ -34,6 +34,7 @@ import org.apache.maven.project.ProjectBuildingException
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -272,7 +273,7 @@ abstract class PackageManager(
 
         afterResolution(definitionFiles)
 
-        return createPackageManagerResult(result)
+        return createPackageManagerResult(result).addDependencyGraphIfMissing()
     }
 
     /**
@@ -301,3 +302,15 @@ abstract class PackageManager(
  */
 fun parseAuthorString(author: String?, vararg delimiters: Char = charArrayOf('<')): String? =
     author?.split(*delimiters, limit = 2)?.firstOrNull()?.trim()?.ifEmpty { null }
+
+private fun PackageManagerResult.addDependencyGraphIfMissing(): PackageManagerResult {
+    // If the condition is true, then [CompatibilityDependencyNavigator] constructs a [DependencyGraphNavigator].
+    // That construction throws an exception if there is no dependency graph available.
+    val isGraphRequired = projectResults.values.flatten().any { it.project.scopeNames != null }
+
+    return if (isGraphRequired && dependencyGraph == null) {
+        copy(dependencyGraph = DependencyGraph())
+    } else {
+        this
+    }
+}
