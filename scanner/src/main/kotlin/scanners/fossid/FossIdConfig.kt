@@ -135,9 +135,9 @@ internal data class FossIdConfig(
                 ?: throw IllegalArgumentException("No FossId User configuration found.")
             val packageNamespaceFilter = fossIdScannerOptions[NAMESPACE_FILTER_PROPERTY].orEmpty()
             val packageAuthorsFilter = fossIdScannerOptions[AUTHORS_FILTER_PROPERTY].orEmpty()
-            val addAuthenticationToUrl = fossIdScannerOptions[CREDENTIALS_IN_URL_PROPERTY].toBoolean()
-            val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toBooleanStrictOrNull() ?: true
-            val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY].toBoolean()
+            val addAuthenticationToUrl = fossIdScannerOptions[CREDENTIALS_IN_URL_PROPERTY]?.toBoolean() ?: false
+            val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
+            val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
 
             val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
             require(deltaScanLimit > 0) {
