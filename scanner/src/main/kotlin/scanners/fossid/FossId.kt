@@ -458,7 +458,7 @@ class FossId internal constructor(
             .checkResponse("download data from Git", false)
 
         if (existingScan == null) {
-            checkScan(scanCode)
+            if (config.waitForResult) checkScan(scanCode)
         } else {
             val existingScanCode = requireNotNull(existingScan.code) {
                 "The code for an existing scan must not be null."
