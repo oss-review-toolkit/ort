@@ -375,7 +375,7 @@ class FossId internal constructor(
                 ScanStatus.STARTED, ScanStatus.STARTING, ScanStatus.RUNNING, ScanStatus.SCANNING, ScanStatus.AUTO_ID,
 
                 ScanStatus.QUEUED -> {
-                    log.warn {
+                    FossId.log.warn {
                         "Found a previous scan which is still running. Will ignore the 'waitForResult' option and " +
                                 "wait..."
                     }
