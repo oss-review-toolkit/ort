@@ -551,7 +551,8 @@ class Pip(
 
     private fun parseDependencies(
         dependencies: Iterable<JsonNode>,
-        allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>
+        allPackages: SortedSet<Package>,
+        installDependencies: SortedSet<PackageReference>
     ) {
         dependencies.forEach { dependency ->
             val pkg = Package(
