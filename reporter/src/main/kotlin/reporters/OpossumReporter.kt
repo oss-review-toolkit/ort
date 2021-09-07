@@ -55,6 +55,10 @@ fun pathResolve(pieces: List<String>): String {
     return pieces.reduce{ right, left -> pathResolve(right, left) }
 }
 
+fun convertToId(file: String, is_dir: Boolean? = null): String {
+    return pathResolve("/", file) + (if (is_dir == true || (is_dir == null && file.last() == '/')) {"/"} else {""})
+}
+
 /**
  * A [Reporter] that generates an [Opossum Input].
  *
@@ -206,6 +210,7 @@ class OpossumReporter : Reporter {
         var pathToSignal: SortedMap<String, SortedSet<UUID>> = sortedMapOf(),
         var packageToRoot: SortedMap<Identifier, SortedMap<String,Int>> = sortedMapOf(),
         var attributionBreakpoints: SortedSet<String> = sortedSetOf(),
+        var filesWithChildren: SortedSet<String> = sortedSetOf(),
         var frequentLicenses: SortedSet<OpossumFrequentLicense> = sortedSetOf()
     ) {
         fun toJson(): Map<*, *> {
@@ -225,6 +230,7 @@ class OpossumReporter : Reporter {
                     "${it.key}${trailingSlash}"
                 },
                 "attributionBreakpoints" to attributionBreakpoints,
+                "filesWithChildren" to filesWithChildren,
                 "frequentLicenses" to frequentLicenses.toList().map { it.toJson() }
             )
         }
@@ -236,8 +242,12 @@ class OpossumReporter : Reporter {
         }
 
         fun addAttributionBreakpoint(breakpoint: String) {
-            attributionBreakpoints.add("${breakpoint}/")
+            attributionBreakpoints.add(convertToId(breakpoint, true))
             resources.addResource(breakpoint)
+        }
+
+        fun addFileWithChildren(fileWithChildren: String) {
+            filesWithChildren.add(convertToId(fileWithChildren, true))
         }
 
         fun addPackageRoot(id: Identifier, path: String, level: Int = 0) {
@@ -263,10 +273,11 @@ class OpossumReporter : Reporter {
             paths.forEach {
                 log.trace("add signal ${signal.id} of source ${signal.source} to ${it}")
                 resources.addResource(it)
-                if (pathToSignal.containsKey(it)) {
-                    pathToSignal[it]!!.add(uuidOfSignal)
+                val itAsID = convertToId(it)
+                if (pathToSignal.containsKey(itAsID)) {
+                    pathToSignal[itAsID]!!.add(uuidOfSignal)
                 } else {
-                    pathToSignal[it] = sortedSetOf(uuidOfSignal)
+                    pathToSignal[itAsID] = sortedSetOf(uuidOfSignal)
                 }
             }
         }
@@ -321,6 +332,7 @@ class OpossumReporter : Reporter {
             val definitionFilePath = pathResolve(relRoot, project.definitionFilePath)
             log.debug("$definitionFilePath - $projectId - Project")
             addPackageRoot(projectId, relRoot)
+            addFileWithChildren(definitionFilePath)
 
             val signalFromProject = OpossumSignal(
                 "ORT-Project",

@@ -36,6 +36,7 @@ import java.io.File
 import java.time.Instant
 
 class OpossumReporterTest : WordSpec({
+
     "pathResolve()" should {
         "work with basic cases" {
             pathResolve("/") shouldBe "/"
@@ -49,6 +50,21 @@ class OpossumReporterTest : WordSpec({
 
         "work with lists" {
             pathResolve(listOf("/", "test/to/path", "/something/else/")) shouldBe "/test/to/path/something/else"
+        }
+    }
+    "convertToId()" should {
+        "work" {
+            convertToId("path/to/thing") shouldBe "/path/to/thing"
+            convertToId("path/to/thing/") shouldBe "/path/to/thing/"
+            convertToId("/path/to/thing/") shouldBe "/path/to/thing/"
+            convertToId("path/to/thing/", true) shouldBe "/path/to/thing/"
+            convertToId("path/to/thing/", false) shouldBe "/path/to/thing"
+            convertToId("path/to/thing", true) shouldBe "/path/to/thing/"
+            convertToId("path/to/thing", false) shouldBe "/path/to/thing"
+            convertToId("/path/to/thing/", true) shouldBe "/path/to/thing/"
+            convertToId("/path/to/thing/", false) shouldBe "/path/to/thing"
+            convertToId("/path/to/thing", true) shouldBe "/path/to/thing/"
+            convertToId("/path/to/thing", false) shouldBe "/path/to/thing"
         }
     }
 
@@ -130,6 +146,10 @@ class OpossumReporterTest : WordSpec({
 
         "frequentLicenses should be present" {
             opossumInput.frequentLicenses.map { it.shortName } shouldContain "MIT"
+        }
+
+        "filesWithChildren should work" {
+            opossumInput.filesWithChildren shouldContain "/pom.xml/"
         }
     }
 })
