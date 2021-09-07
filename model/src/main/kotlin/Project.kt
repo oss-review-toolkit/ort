@@ -52,9 +52,6 @@ data class Project(
 
     /**
      * The list of authors declared for this package.
-     *
-     * TODO: The annotation can be removed after all package manager implementations have filled the field [authors]
-     *       accordingly.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val authors: SortedSet<String> = sortedSetOf(),
