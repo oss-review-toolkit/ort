@@ -118,7 +118,8 @@ class Pub(
      */
     private class PubCacheReader {
         private val pubCacheRoot by lazy {
-            // TODO: Add support for the PUB_CACHE environment variable.
+            Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
+
             if (Os.isWindows) {
                 File(Os.env["LOCALAPPDATA"], "Pub/Cache")
             } else {
