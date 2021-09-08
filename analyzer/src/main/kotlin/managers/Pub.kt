@@ -122,7 +122,7 @@ class Pub(
             if (Os.isWindows) {
                 File(Os.env["LOCALAPPDATA"], "Pub/Cache")
             } else {
-                Os.userHomeDirectory.resolve(".pub-cache/")
+                Os.userHomeDirectory.resolve(".pub-cache")
             }
         }
 
