@@ -329,8 +329,14 @@ const states = (state = initState, action) => {
                 ...state.table,
                 columns: {
                     filteredInfo: {},
+                    filterData: [],
                     sortedInfo: {},
-                    filterData: []
+                    showKeys: [
+                        'declaredLicensesProcessed',
+                        'detectedLicensesProcessed',
+                        'levels',
+                        'scopeIndexes'
+                    ]
                 }
             }
         };
