@@ -42,11 +42,17 @@ const initState = {
             },
             issues: {
                 filteredInfo: {},
-                sortedInfo: {}
+                sortedInfo: {
+                    order: 'ascend',
+                    field: 'severityIndex'
+                }
             },
             ruleViolations: {
                 filteredInfo: {},
-                sortedInfo: {}
+                sortedInfo: {
+                    order: 'ascend',
+                    field: 'severityIndex'
+                }
             }
         },
         shouldComponentUpdate: false
