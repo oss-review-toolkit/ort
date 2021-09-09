@@ -52,8 +52,8 @@ class RuleViolationsTable extends React.Component {
             state
         } = this.props;
         const {
-            filteredInfo,
-            sortedInfo
+            filteredInfo = {},
+            sortedInfo = {}
         } = state;
 
         // If return null to prevent React render error
@@ -65,49 +65,25 @@ class RuleViolationsTable extends React.Component {
             {
                 align: 'center',
                 dataIndex: 'severityIndex',
-                defaultSortOrder: 'ascend',
-                filters: (() => [
-                    {
-                        text: (
-                            <span>
-                                <ExclamationCircleOutlined className="ort-error" />
-                                {' '}
-                                Errors
-                            </span>
-                        ),
+                key: 'severityIndex',
+                filters: [
+                    { 
+                        text: 'Errors',
                         value: 0
                     },
                     {
-                        text: (
-                            <span>
-                                <WarningOutlined className="ort-warning" />
-                                {' '}
-                                Warnings
-                            </span>
-                        ),
+                        text: 'Warnings',
                         value: 1
                     },
                     {
-                        text: (
-                            <span>
-                                <InfoCircleOutlined className="ort-hint" />
-                                {' '}
-                                Hints
-                            </span>
-                        ),
+                        text: 'Hint',
                         value: 2
                     },
                     {
-                        text: (
-                            <span>
-                                <IssuesCloseOutlined className="ort-ok" />
-                                {' '}
-                                Resolved
-                            </span>
-                        ),
+                        text: 'Resolved',
                         value: 3
                     }
-                ])(),
+                ],
                 filteredValue: filteredInfo.severityIndex || null,
                 onFilter: (value, webAppRuleViolation) => webAppRuleViolation.severityIndex === Number(value),
                 render: (text, webAppRuleViolation) => (
@@ -151,6 +127,7 @@ class RuleViolationsTable extends React.Component {
                         )
                 ),
                 sorter: (a, b) => a.severityIndex - b.severityIndex,
+                sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
                 width: '5em'
             }
         ];
