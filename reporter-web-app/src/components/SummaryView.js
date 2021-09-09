@@ -361,7 +361,7 @@ class SummaryView extends React.Component {
                                                 tab={(
                                                     <span>
                                                         <ExceptionOutlined />
-                                                        Violations (
+                                                        Rule Violations (
                                                         {
                                                             ruleViolations.length !== unresolvedRuleViolations
                                                             && `${unresolvedRuleViolations}/`
