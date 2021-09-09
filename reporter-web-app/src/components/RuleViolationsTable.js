@@ -162,12 +162,14 @@ class RuleViolationsTable extends React.Component {
                 onFilter: (value, webAppRuleViolation) => {
                     const webAppPackage = webAppRuleViolation.package;
 
-                    if (value === 'excluded') {
-                        return webAppPackage.isExcluded;
-                    }
+                    if (webAppPackage) {
+                        if (value === 'excluded') {
+                            return webAppPackage.isExcluded;
+                        }
 
-                    if (value === 'included') {
-                        return !webAppPackage.isExcluded;
+                        if (value === 'included') {
+                            return !webAppPackage.isExcluded;
+                        }
                     }
 
                     return false;
@@ -175,18 +177,22 @@ class RuleViolationsTable extends React.Component {
                 render: (webAppRuleViolation) => {
                     const webAppPackage = webAppRuleViolation.package;
 
-                    return webAppPackage.isExcluded ? (
-                        <span className="ort-excludes">
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                            >
-                                <FileExcelOutlined className="ort-excluded" />
-                            </Tooltip>
-                        </span>
-                    ) : (
-                        <FileAddOutlined />
-                    );
+                    if (webAppPackage) {
+                        return webAppPackage.isExcluded ? (
+                            <span className="ort-excludes">
+                                <Tooltip
+                                    placement="right"
+                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
+                                >
+                                    <FileExcelOutlined className="ort-excluded" />
+                                </Tooltip>
+                            </span>
+                        ) : (
+                            <FileAddOutlined />
+                        );
+                    }
+
+                    return null;
                 },
                 responsive: ['md'],
                 width: '2em'
@@ -266,11 +272,17 @@ class RuleViolationsTable extends React.Component {
                                         </Panel>
                                     )
                                 }
-                                <Panel header="Details" key="2">
-                                    <PackageDetails webAppPackage={webAppPackage} />
-                                </Panel>
                                 {
-                                    webAppPackage.hasLicenses()
+                                    webAppRuleViolation.hasPackage()
+                                    && (
+                                        <Panel header="Details" key="2">
+                                            <PackageDetails webAppPackage={webAppPackage} />
+                                        </Panel>
+                                    )
+                                }
+                                {
+                                    webAppRuleViolation.hasPackage()
+                                    && webAppPackage.hasLicenses()
                                     && (
                                         <Panel header="Licenses" key="3">
                                             <PackageLicenses webAppPackage={webAppPackage} />
@@ -278,7 +290,8 @@ class RuleViolationsTable extends React.Component {
                                     )
                                 }
                                 {
-                                    webAppPackage.hasPaths()
+                                    webAppRuleViolation.hasPackage()
+                                    && webAppPackage.hasPaths()
                                     && (
                                         <Panel header="Paths" key="4">
                                             <PackagePaths paths={webAppPackage.paths} />
@@ -286,7 +299,8 @@ class RuleViolationsTable extends React.Component {
                                     )
                                 }
                                 {
-                                    webAppPackage.hasFindings()
+                                    webAppRuleViolation.hasPackage()
+                                    && webAppPackage.hasFindings()
                                     && (
                                         <Panel header="Scan Results" key="5">
                                             <PackageFindingsTable
@@ -296,7 +310,8 @@ class RuleViolationsTable extends React.Component {
                                     )
                                 }
                                 {
-                                    webAppPackage.hasPathExcludes()
+                                    webAppRuleViolation.hasPackage()
+                                    && webAppPackage.hasPathExcludes()
                                     && (
                                         <Panel header="Path Excludes" key="6">
                                             <PathExcludesTable
@@ -306,7 +321,8 @@ class RuleViolationsTable extends React.Component {
                                     )
                                 }
                                 {
-                                    webAppPackage.hasScopeExcludes()
+                                    webAppRuleViolation.hasPackage()
+                                    && webAppPackage.hasScopeExcludes()
                                     && (
                                         <Panel header="Scope Excludes" key="7">
                                             <ScopeExcludesTable
