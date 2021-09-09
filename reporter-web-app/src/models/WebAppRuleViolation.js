@@ -74,6 +74,8 @@ class WebAppRuleViolation {
 
             if (Number.isInteger(obj.pkg)) {
                 this.#packageIndex = obj.pkg;
+            } else {
+                this.#packageIndex = -1;
             }
 
             if (obj.severity) {
@@ -208,6 +210,10 @@ class WebAppRuleViolation {
 
     hasHowToFix() {
         return !!this.#howToFix;
+    }
+
+    hasPackage() {
+        return !!this.#package;
     }
 }
 
