@@ -114,6 +114,7 @@ class FreemarkerTemplateProcessor(
             PackageModel(pkg.pkg.id, input)
         }
 
+        // Keep this in sync with "resources/templates/freemarker_implicit.ftl".
         val dataModel = mapOf(
             "projects" to projects,
             "packages" to packages,
