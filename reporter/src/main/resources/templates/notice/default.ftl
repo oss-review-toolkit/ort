@@ -28,12 +28,14 @@ Excluded projects and packages are ignored.
 [#assign isFirst = true]
 [#--
 Merge the licenses and copyrights of all projects into a single list. The default LicenseView.ALL is used because
-projects cannot have a concluded license (compare with the handling of packages below). Also filter all licenses that
-are configured not to be included in notice files.
+projects cannot have a concluded license (compare with the handling of packages below).
 --]
-[#assign mergedLicenses = helper.filterForCategory(helper.mergeLicenses(projects), "include-in-notice-file")]
-[#list mergedLicenses as resolvedLicense]
-[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
+[#assign mergedLicenses = helper.mergeLicenses(projects)]
+[#-- Filter for those licenses that are categorized to be included in notice files. --]
+[#assign filteredLicenses = helper.filterForCategory(mergedLicenses, "include-in-notice-file")]
+[#list filteredLicenses as resolvedLicense]
+[#assign licenseName = resolvedLicense.license.simpleLicense()]
+[#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!""]
 [#if licenseText?has_content]
 [#if isFirst]
 This software includes external packages and source code.
@@ -53,7 +55,8 @@ ${copyright}
 [/#list]
 
 ${licenseText}
-[#assign exceptionText = licenseTextProvider.getLicenseText(resolvedLicense.license.exception()!"")!""]
+[#assign exceptionName = resolvedLicense.license.exception()!""]
+[#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!""]
 [#if exceptionText?has_content]
 ${exceptionText}
 [/#if]
@@ -100,7 +103,8 @@ resolvedLicenses = helper.filterForCategory(
 )]
 [#assign isFirst = true]
 [#list resolvedLicenses as resolvedLicense]
-[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
+[#assign licenseName = resolvedLicense.license.simpleLicense()]
+[#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!""]
 [#if licenseText?has_content]
 [#if isFirst]
 
@@ -118,7 +122,8 @@ ${copyright}
 [/#list]
 
 ${licenseText}
-[#assign exceptionText = licenseTextProvider.getLicenseText(resolvedLicense.license.exception()!"")!""]
+[#assign exceptionName = resolvedLicense.license.exception()!""]
+[#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!""]
 [#if exceptionText?has_content]
 ${exceptionText}
 [/#if]
