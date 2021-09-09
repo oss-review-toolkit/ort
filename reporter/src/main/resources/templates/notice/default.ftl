@@ -35,7 +35,7 @@ projects cannot have a concluded license (compare with the handling of packages 
 [#assign filteredLicenses = helper.filterForCategory(mergedLicenses, "include-in-notice-file")]
 [#list filteredLicenses as resolvedLicense]
 [#assign licenseName = resolvedLicense.license.simpleLicense()]
-[#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!""]
+[#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
 [#if licenseText?has_content]
 [#if isFirst]
 This software includes external packages and source code.
@@ -55,8 +55,8 @@ ${copyright}
 [/#list]
 
 ${licenseText}
-[#assign exceptionName = resolvedLicense.license.exception()!""]
-[#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!""]
+[#assign exceptionName = resolvedLicense.license.exception()!]
+[#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
 [#if exceptionText?has_content]
 ${exceptionText}
 [/#if]
@@ -104,7 +104,7 @@ resolvedLicenses = helper.filterForCategory(
 [#assign isFirst = true]
 [#list resolvedLicenses as resolvedLicense]
 [#assign licenseName = resolvedLicense.license.simpleLicense()]
-[#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!""]
+[#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
 [#if licenseText?has_content]
 [#if isFirst]
 
@@ -122,8 +122,8 @@ ${copyright}
 [/#list]
 
 ${licenseText}
-[#assign exceptionName = resolvedLicense.license.exception()!""]
-[#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!""]
+[#assign exceptionName = resolvedLicense.license.exception()!]
+[#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
 [#if exceptionText?has_content]
 ${exceptionText}
 [/#if]
