@@ -249,6 +249,10 @@ class FreemarkerTemplateProcessor(
             return packages.filter { pkg -> pkg.id in dependencies }
         }
 
+        /**
+         * Return only those [licenses] that are classified under the given [category], or that are not categorized at
+         * all.
+         */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
