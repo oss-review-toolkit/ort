@@ -51,7 +51,7 @@ This project contains or depends on third-party software components pursuant to 
             [#else]
 ----
             [/#if]
-            [#assign copyrights = resolvedLicense.getCopyrights(true)]
+            [#assign copyrights = resolvedLicense.getCopyrights()]
             [#list copyrights as copyright]
                 [#if copyright?is_first]
 
