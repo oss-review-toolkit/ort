@@ -24,6 +24,7 @@
 
     Excluded projects and packages are ignored.
 --]
+[#assign noticeCategoryName = "include-in-notice-file"]
 [#-- Add the licenses of the projects. --]
 [#assign hasNoticeProjectLicenses = false]
 [#--
@@ -32,7 +33,7 @@
 --]
 [#assign mergedLicenses = helper.mergeLicenses(projects)]
 [#-- Filter for those licenses that are categorized to be included in notice files. --]
-[#assign filteredLicenses = helper.filterForCategory(mergedLicenses, "include-in-notice-file")]
+[#assign filteredLicenses = helper.filterForCategory(mergedLicenses, noticeCategoryName)]
 [#list filteredLicenses as resolvedLicense]
     [#assign licenseName = resolvedLicense.license.simpleLicense()]
     [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
@@ -100,7 +101,7 @@ ${copyright}
     --]
     [#assign resolvedLicenses = helper.filterForCategory(
         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED.filter(package.licensesNotInLicenseFiles()),
-        "include-in-notice-file"
+        noticeCategoryName
     )]
     [#assign isFirst = true]
     [#list resolvedLicenses as resolvedLicense]
