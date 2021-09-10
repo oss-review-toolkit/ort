@@ -37,30 +37,29 @@
 [#list filteredLicenses as resolvedLicense]
     [#assign licenseName = resolvedLicense.license.simpleLicense()]
     [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
-    [#if licenseText?has_content]
-        [#if !hasNoticeProjectLicenses]
+    [#if !licenseText?has_content][#continue][/#if]
+    [#if !hasNoticeProjectLicenses]
 This software includes external packages and source code.
 The applicable license information is listed below:
 
 ----
-            [#assign hasNoticeProjectLicenses = true]
-        [#else]
+        [#assign hasNoticeProjectLicenses = true]
+    [#else]
   --
-        [/#if]
-        [#assign copyrights = resolvedLicense.getCopyrights()]
-        [#list copyrights as copyright]
-            [#if copyright?is_first]
+    [/#if]
+    [#assign copyrights = resolvedLicense.getCopyrights()]
+    [#list copyrights as copyright]
+        [#if copyright?is_first]
 
-            [/#if]
+        [/#if]
 ${copyright}
-        [/#list]
+    [/#list]
 
 ${licenseText}
-        [#assign exceptionName = resolvedLicense.license.exception()!]
-        [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
-        [#if exceptionText?has_content]
+    [#assign exceptionName = resolvedLicense.license.exception()!]
+    [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
+    [#if exceptionText?has_content]
 ${exceptionText}
-        [/#if]
     [/#if]
 [/#list]
 [#-- Add the licenses of all packages. --]
@@ -107,28 +106,27 @@ ${copyright}
     [#list resolvedLicenses as resolvedLicense]
         [#assign licenseName = resolvedLicense.license.simpleLicense()]
         [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
-        [#if licenseText?has_content]
-            [#if isFirst]
+        [#if !licenseText?has_content][#continue][/#if]
+        [#if isFirst]
 
 The following copyrights and licenses were found in the source code of this package:
-                [#assign isFirst = false]
-            [#else]
+            [#assign isFirst = false]
+        [#else]
   --
-            [/#if]
-            [#assign copyrights = resolvedLicense.getCopyrights()]
-            [#list copyrights as copyright]
-                [#if copyright?is_first]
+        [/#if]
+        [#assign copyrights = resolvedLicense.getCopyrights()]
+        [#list copyrights as copyright]
+            [#if copyright?is_first]
 
-                [/#if]
+            [/#if]
 ${copyright}
-            [/#list]
+        [/#list]
 
 ${licenseText}
-            [#assign exceptionName = resolvedLicense.license.exception()!]
-            [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
-            [#if exceptionText?has_content]
+        [#assign exceptionName = resolvedLicense.license.exception()!]
+        [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
+        [#if exceptionText?has_content]
 ${exceptionText}
-            [/#if]
         [/#if]
     [/#list]
 [/#list]
