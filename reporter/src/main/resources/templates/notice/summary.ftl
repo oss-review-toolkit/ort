@@ -44,7 +44,7 @@ This project contains or depends on third-party software components pursuant to 
     )]
     [#list mergedLicenses as resolvedLicense]
         [#assign licenseName = resolvedLicense.license.simpleLicense()]
-        [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!""]
+        [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
         [#if licenseText?has_content]
             [#if isFirst]
                 [#assign isFirst = false]
@@ -60,8 +60,8 @@ ${copyright}
             [/#list]
 
 ${licenseText}
-            [#assign exceptionName = resolvedLicense.license.exception()!""]
-            [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!""]
+            [#assign exceptionName = resolvedLicense.license.exception()!]
+            [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
             [#if exceptionText?has_content]
 ${exceptionText}
             [/#if]
