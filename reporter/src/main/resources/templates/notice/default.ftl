@@ -67,14 +67,18 @@ ${exceptionText}
     [/#if]
 This software depends on external packages and source code.
 The applicable license information is listed below:
-[/#if]
 
+[/#if]
 [#list packages?filter(p -> !p.excluded) as package]
+    [#assign hasNoticePackageLicenses = false]
+    [#-- List the content of archived license files and associated copyrights. --]
+    [#list package.licenseFiles.files as licenseFile]
+        [#if !hasNoticePackageLicenses]
 ----
 
 Package: [#if package.id.namespace?has_content]${package.id.namespace}:[/#if]${package.id.name}:${package.id.version}
-    [#-- List the content of archived license files and associated copyrights. --]
-    [#list package.licenseFiles.files as licenseFile]
+            [#assign hasNoticePackageLicenses = true]
+        [/#if]
 
 This package contains the file ${licenseFile.path} with the following contents:
 
@@ -103,6 +107,12 @@ ${copyrights?join("\n", "")}
         [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
         [#if !licenseText?has_content][#continue][/#if]
         [#if isFirst]
+            [#if !hasNoticePackageLicenses]
+----
+
+Package: [#if package.id.namespace?has_content]${package.id.namespace}:[/#if]${package.id.name}:${package.id.version}
+                [#assign hasNoticePackageLicenses = true]
+            [/#if]
 
 The following copyrights and licenses were found in the source code of this package:
             [#assign isFirst = false]
