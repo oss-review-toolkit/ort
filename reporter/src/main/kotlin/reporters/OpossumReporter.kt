@@ -29,7 +29,6 @@ import org.apache.commons.compress.compressors.gzip.GzipParameters
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.*
@@ -68,6 +67,7 @@ fun convertToId(file: String, is_dir: Boolean? = null): String {
 class OpossumReporter : Reporter {
     companion object {
         const val OPTION_SCANNER_MAXDEPTH = "scanner.maxDepth"
+        const val OPTION_EXCLUDED_SCOPES = "scopes.excluded"
     }
 
     data class OpossumSignal (
@@ -327,7 +327,7 @@ class OpossumReporter : Reporter {
             }
         }
 
-        fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, relRoot: String = "/") {
+        fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, excludedScopes: Set<String>, relRoot: String = "/") {
             val projectId = project.id
             val definitionFilePath = pathResolve(relRoot, project.definitionFilePath)
             log.debug("$definitionFilePath - $projectId - Project")
@@ -345,20 +345,26 @@ class OpossumReporter : Reporter {
 
             addSignal(signalFromProject, definitionFilePath)
 
-            project.scopes.forEachIndexed { index, scope ->
+            project.scopes
+                .filter{ ! excludedScopes.contains(it.name) }
+                .forEachIndexed { index, scope ->
                 log.debug("analyzerResultProject -> scope ${index + 1} of ${project.scopes.size}")
                 this.addDependencyScope(scope, curatedPackages, definitionFilePath)
             }
         }
-
 
         private fun makeLostAndFoundPath(id: Identifier): String {
             return pathResolve("/lost+found", id.toPurl())
         }
 
         fun addScannerResult(id: Identifier, result: ScanResult, maxDepth: Int) {
-            val roots = packageToRoot[id] ?: sortedMapOf(makeLostAndFoundPath(id) to Int.MAX_VALUE)
             val scanner = "${result.scanner.name}@${result.scanner.version}"
+            val roots = packageToRoot[id]
+            if (roots == null)  {
+                log.info("No root for $id from $scanner")
+                return
+            }
+
             log.debug("add scanner results for $id from $scanner to ${roots.size} roots")
 
             val rootsBelowMaxDepth = roots
@@ -431,12 +437,16 @@ class OpossumReporter : Reporter {
         }
 
         fun addPackagesThatAreRootless(analyzerResultPackages: SortedSet<CuratedPackage>) {
-            analyzerResultPackages.forEach {
-                if(packageToRoot[it.pkg.id] == null) {
+            val numberOfRootlessPackages = analyzerResultPackages
+                .filter { packageToRoot[it.pkg.id] == null }
+                .map {
                     val path = makeLostAndFoundPath(it.pkg.id)
                     addSignal(signalFromPkg(it.pkg), path)
                     addPackageRoot(it.pkg.id, path, Int.MAX_VALUE)
-                }
+                    it
+                }.size
+            if (numberOfRootlessPackages > 0) {
+                log.warn("There are $numberOfRootlessPackages packages that had no root")
             }
         }
 
@@ -466,6 +476,7 @@ class OpossumReporter : Reporter {
 
     fun generateOpossumInput(
         ortResult: OrtResult,
+        excludedScopes: Set<String>,
         maxDepth: Int = Int.MAX_VALUE
     ): OpossumInput {
         val opossumInput = OpossumInput()
@@ -484,9 +495,11 @@ class OpossumReporter : Reporter {
         val analyzerResultPackages = analyzerResult.packages
         analyzerResultProjects.forEachIndexed { index, project ->
             log.debug("analyzerResultProject ${index + 1} of ${analyzerResultProjects.size}")
-            opossumInput.addProject(project, analyzerResultPackages)
+            opossumInput.addProject(project, analyzerResultPackages, excludedScopes)
         }
-        opossumInput.addPackagesThatAreRootless(analyzerResultPackages)
+        if (excludedScopes.isEmpty()) {
+            opossumInput.addPackagesThatAreRootless(analyzerResultPackages)
+        }
 
         val scannerResults = ortResult.scanner?.results?.scanResults ?: return OpossumInput()
         scannerResults.entries.forEachIndexed { index, entry ->
@@ -507,14 +520,8 @@ class OpossumReporter : Reporter {
     ): List<File> {
 
         val maxDepth = options.getOrDefault( OPTION_SCANNER_MAXDEPTH, "3" ).toInt()
-        val opossumInput = generateOpossumInput(input.ortResult, maxDepth)
-
-        val numberOfRootlessPackages = opossumInput.packageToRoot.entries
-            .filter { it.value.any { it.toString().contains("lost+found/") } }
-            .size
-        if (numberOfRootlessPackages > 0) {
-            log.warn("There are $numberOfRootlessPackages packages that had no root")
-        }
+        val excludedScopes = options.getOrDefault( OPTION_EXCLUDED_SCOPES, "devDependencies,test" ).split(",").toSet()
+        val opossumInput = generateOpossumInput(input.ortResult, excludedScopes, maxDepth)
 
         val outputFile = outputDir.resolve("opossum.input.json.gz")
         writeReport(outputFile, opossumInput)

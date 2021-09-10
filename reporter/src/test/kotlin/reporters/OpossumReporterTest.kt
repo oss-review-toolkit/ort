@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -32,7 +33,6 @@ import org.ossreviewtoolkit.model.config.*
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.Environment
 
-import java.io.File
 import java.time.Instant
 
 class OpossumReporterTest : WordSpec({
@@ -70,7 +70,7 @@ class OpossumReporterTest : WordSpec({
 
     "generateOpossumInput()" should {
         val result = createOrtResult()
-        val opossumInput = OpossumReporter().generateOpossumInput(result)
+        val opossumInput = OpossumReporter().generateOpossumInput(result, emptySet())
 
         "should be somehow valid" {
             opossumInput shouldNot beNull()
@@ -92,9 +92,9 @@ class OpossumReporterTest : WordSpec({
         }
 
         "file list should contain files from other lists" {
-            opossumInput.pathToSignal.forEach { e -> fileList shouldContain e.key }
-            opossumInput.attributionBreakpoints.forEach { fileList shouldContain it }
-            opossumInput.packageToRoot.forEach { it.value.forEach { fileList shouldContain it.key } }
+            opossumInput.pathToSignal.forEach { e -> fileList shouldContain pathResolve(e.key) }
+            opossumInput.attributionBreakpoints.forEach { fileList shouldContain pathResolve(it) }
+            opossumInput.packageToRoot.forEach { it.value.forEach { fileList shouldContain pathResolve(it.key) } }
         }
 
         "every package should be found in a signal" {
@@ -150,6 +150,16 @@ class OpossumReporterTest : WordSpec({
 
         "filesWithChildren should work" {
             opossumInput.filesWithChildren shouldContain "/pom.xml/"
+        }
+    }
+
+    "generateOpossumInput() with excluded scopes" should {
+        val result = createOrtResult()
+        val opossumInputWithExcludedScopes = OpossumReporter().generateOpossumInput(result, sortedSetOf("devDependencies"))
+        val fileListWithExcludedScopes = opossumInputWithExcludedScopes.resources.toFileList()
+
+        "exclude of scopes should work" {
+            fileListWithExcludedScopes shouldNotContain "/npm-project/package.json/devDependencies/@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3"
         }
     }
 })
