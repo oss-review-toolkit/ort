@@ -23,6 +23,7 @@
 
     Archived license files and excluded projects and packages are ignored.
 --]
+[#assign noticeCategoryName = "include-in-notice-file"]
 [#-- Add the licenses of the projects. --]
 [#if projects?has_content]
 This project contains or depends on third-party software components pursuant to the following licenses:
@@ -39,10 +40,11 @@ This project contains or depends on third-party software components pursuant to 
     --]
     [#assign mergedLicenses = helper.filterForCategory(
         helper.mergeLicenses(projects + packages, LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED),
-        "include-in-notice-file"
+        noticeCategoryName
     )]
     [#list mergedLicenses as resolvedLicense]
-        [#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
+        [#assign licenseName = resolvedLicense.license.simpleLicense()]
+        [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!""]
         [#if licenseText?has_content]
             [#if isFirst]
                 [#assign isFirst = false]
@@ -58,7 +60,8 @@ ${copyright}
             [/#list]
 
 ${licenseText}
-            [#assign exceptionText = licenseTextProvider.getLicenseText(resolvedLicense.license.exception()!"")!""]
+            [#assign exceptionName = resolvedLicense.license.exception()!""]
+            [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!""]
             [#if exceptionText?has_content]
 ${exceptionText}
             [/#if]
