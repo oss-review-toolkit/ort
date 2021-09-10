@@ -48,13 +48,10 @@ The applicable license information is listed below:
   --
     [/#if]
     [#assign copyrights = resolvedLicense.getCopyrights()]
-    [#list copyrights as copyright]
-        [#if copyright?is_first]
+    [#if copyrights?has_content]
 
-        [/#if]
-${copyright}
-    [/#list]
-
+    [/#if]
+${copyrights?join("\n", "", "\n")}
 ${licenseText}
     [#assign exceptionName = resolvedLicense.license.exception()!]
     [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
@@ -86,9 +83,7 @@ ${licenseFile.readFile()}
         [#if copyrights?has_content]
 The following copyright holder information relates to the license(s) above:
 
-            [#list copyrights as copyright]
-${copyright}
-            [/#list]
+${copyrights?join("\n", "")}
         [/#if]
     [/#list]
     [#--
@@ -115,13 +110,10 @@ The following copyrights and licenses were found in the source code of this pack
   --
         [/#if]
         [#assign copyrights = resolvedLicense.getCopyrights()]
-        [#list copyrights as copyright]
-            [#if copyright?is_first]
+        [#if copyrights?has_content]
 
-            [/#if]
-${copyright}
-        [/#list]
-
+        [/#if]
+${copyrights?join("\n", "", "\n")}
 ${licenseText}
         [#assign exceptionName = resolvedLicense.license.exception()!]
         [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
