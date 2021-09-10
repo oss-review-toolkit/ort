@@ -25,7 +25,7 @@
     Excluded projects and packages are ignored.
 --]
 [#-- Add the licenses of the projects. --]
-[#assign isFirst = true]
+[#assign hasNoticeProjectLicenses = false]
 [#--
     Merge the licenses and copyrights of all projects into a single list. The default LicenseView.ALL is used because
     projects cannot have a concluded license (compare with the handling of packages below).
@@ -37,12 +37,12 @@
     [#assign licenseName = resolvedLicense.license.simpleLicense()]
     [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
     [#if licenseText?has_content]
-        [#if isFirst]
+        [#if !hasNoticeProjectLicenses]
 This software includes external packages and source code.
 The applicable license information is listed below:
 
 ----
-            [#assign isFirst = false]
+            [#assign hasNoticeProjectLicenses = true]
         [#else]
   --
         [/#if]
@@ -62,10 +62,12 @@ ${exceptionText}
         [/#if]
     [/#if]
 [/#list]
-[#-- Add the licenses of all dependencies. --]
+[#-- Add the licenses of all packages. --]
 [#if packages?has_content]
+    [#if hasNoticeProjectLicenses]
 ----
 
+    [/#if]
 This software depends on external packages and source code.
 The applicable license information is listed below:
 [/#if]
