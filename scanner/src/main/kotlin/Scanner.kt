@@ -24,6 +24,7 @@ import java.lang.IllegalArgumentException
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
@@ -44,11 +45,24 @@ const val TOOL_NAME = "scanner"
 
 /**
  * Use the [scanner] to scan the [Project]s and [Package]s specified in the [ortResult]. Scan results are stored in the
- * [outputDirectory].  If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
+ * [outputDirectory]. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
  * results as an [OrtResult].
  */
 fun scanOrtResult(
     scanner: Scanner,
+    ortResult: OrtResult,
+    outputDirectory: File,
+    skipExcluded: Boolean = false
+) = scanOrtResult(scanner, scanner, ortResult, outputDirectory, skipExcluded)
+
+/**
+ * Use the [scanner] and [projectScanner] to scan the [Project]s and [Package]s specified in the [ortResult],
+ * respectively. Scan results are stored in the [outputDirectory]. If [skipExcluded] is true, packages for which
+ * excludes are defined are not scanned. Return scan results as an [OrtResult].
+ */
+fun scanOrtResult(
+    scanner: Scanner,
+    projectScanner: Scanner,
     ortResult: OrtResult,
     outputDirectory: File,
     skipExcluded: Boolean = false
@@ -64,7 +78,7 @@ fun scanOrtResult(
         return ortResult
     }
 
-    // Add the projects as packages to scan.
+    // Determine the projects to scan as packages.
     val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
     val projectPackages = consolidatedProjects.keys
 
@@ -73,22 +87,41 @@ fun scanOrtResult(
         .filter { it.pkg.id !in projectPackageIds }
         .map { it.pkg }
 
-    val allPackages = projectPackages + packages
-
-    val packagesToScan = if (scanner.scannerConfig.skipConcluded) {
+    val filteredProjectPackages = projectPackages.takeUnless { scanner.scannerConfig.skipConcluded }
         // Remove all packages that have a concluded license and authors set.
-        allPackages.filterNot { it.concludedLicense != null && it.authors.isNotEmpty() }.also {
-            val concludedPackages = allPackages - it
-            if (concludedPackages.isNotEmpty()) {
-                scanner.log.debug { "Not scanning the following packages with concluded licenses: $concludedPackages" }
+        ?: projectPackages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+            if (skip.isNotEmpty()) {
+                projectScanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
             }
+
+            keep
         }
-    } else {
-        allPackages
-    }
+
+    val filteredPackages = packages.takeUnless { scanner.scannerConfig.skipConcluded }
+        // Remove all packages that have a concluded license and authors set.
+        ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+            if (skip.isNotEmpty()) {
+                scanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
+            }
+
+            keep
+        }
 
     val scanResults = runBlocking {
-        scanner.scanPackages(packagesToScan, outputDirectory).mapKeys { it.key.id }
+        // Scan the projects from the ORT result.
+        val deferredProjectScan = async {
+            projectScanner.scanPackages(filteredProjectPackages, outputDirectory).mapKeys { it.key.id }
+        }
+
+        // Scan the packages from the ORT result.
+        val deferredPackageScan = async {
+            scanner.scanPackages(filteredPackages, outputDirectory).mapKeys { it.key.id }
+        }
+
+        val projectResults = deferredProjectScan.await()
+        val packageResults = deferredPackageScan.await()
+
+        projectResults + packageResults
     }.toSortedMap()
 
     // Add scan results from de-duplicated project packages to result.

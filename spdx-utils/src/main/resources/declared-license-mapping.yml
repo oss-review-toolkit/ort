@@ -177,6 +177,7 @@
 "Eclipse Public License (EPL)": EPL-1.0
 "Eclipse Public License (EPL), Version 1.0": EPL-1.0
 "Eclipse Public License - Version 1.0": EPL-1.0
+"Eclipse Public License - Version 2.0": EPL-2.0
 "Eclipse Public License - v 1.0": EPL-1.0
 "Eclipse Public License - v 2.0": EPL-2.0
 "Eclipse Public License 1.0 (EPL-1.0)": EPL-1.0
@@ -407,6 +408,7 @@
 "The MIT License(MIT)": MIT
 "The MIT": MIT
 "The New BSD License": BSD-3-Clause
+"The OpenLDAP Public License, Version 2.8, 17 August 2003": OLDAP-2.8
 "The PostgreSQL License": PostgreSQL
 "The SAX License": SAX-PD
 "The W3C License": W3C

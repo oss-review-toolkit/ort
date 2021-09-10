@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.RawOption
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -44,8 +45,6 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -57,6 +56,13 @@ import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+
+private fun RawOption.convertToScanner() =
+    convert { scannerName ->
+        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
+        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
+            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
+    }
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(
@@ -99,11 +105,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
     private val scannerFactory by option(
         "--scanner", "-s",
         help = "The scanner to use, one of ${Scanner.ALL}."
-    ).convert { scannerName ->
-        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
-            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
-    }.default(ScanCode.Factory())
+    ).convertToScanner().default(ScanCode.Factory())
+
+    private val projectScannerFactory by option(
+        "--project-scanner",
+        help = "The scanner to use for scanning the source code of projects. By default, projects and packages are " +
+                "scanned with the same scanner as specified by '--scanner'."
+    ).convertToScanner()
 
     private val skipExcluded by option(
         "--skip-excluded",
@@ -111,32 +119,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
     ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
-
-    private fun configureScanner(
-        scannerConfig: ScannerConfiguration,
-        downloaderConfig: DownloaderConfiguration
-    ): Scanner {
-        ScanResultsStorage.configure(scannerConfig)
-
-        val scanner = scannerFactory.create(scannerConfig, downloaderConfig)
-
-        println("Using scanner '${scanner.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
-
-        val storage = ScanResultsStorage.storage
-        if (storage is FileBasedStorage) {
-            val backend = storage.backend
-            if (backend is LocalFileStorage) {
-                val transformedScanResultsFileName = backend.transformPath(SCAN_RESULTS_FILE_NAME)
-                val fileCount = backend.directory.walk().filter {
-                    it.isFile && it.name == transformedScanResultsFileName
-                }.count()
-
-                println("Local file storage has $fileCount scan results files.")
-            }
-        }
-
-        return scanner
-    }
 
     override fun run() {
         val nativeOutputDir = outputDir.resolve("native-scan-results")
@@ -157,22 +139,50 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
 
         val config = globalOptionsForSubcommands.config
-        val scanner = configureScanner(config.scanner, config.downloader)
 
+        // Configure the scan storage, which is common to all scanners.
+        ScanResultsStorage.configure(config.scanner)
+
+        val storage = ScanResultsStorage.storage
+        println("Using scan storage '${storage.name}'.")
+
+        if (storage is FileBasedStorage) {
+            val backend = storage.backend
+            if (backend is LocalFileStorage) {
+                val transformedScanResultsFileName = backend.transformPath(SCAN_RESULTS_FILE_NAME)
+                val fileCount = backend.directory.walk().filter {
+                    it.isFile && it.name == transformedScanResultsFileName
+                }.count()
+
+                println("Local file storage has $fileCount scan results file(s).")
+            }
+        }
+
+        // Configure the package and project scanners.
+        val scanner = scannerFactory.create(config.scanner, config.downloader).also {
+            println("Using scanner '${it.scannerName}'.")
+        }
+
+        val projectScanner = projectScannerFactory?.create(config.scanner, config.downloader)?.also {
+            println("Using project scanner '${it.scannerName}'.")
+        } ?: scanner
+
+        // Perform the scan.
         val ortResult = if (input.isFile) {
             val ortResult = readOrtResult(input)
-            scanOrtResult(scanner, ortResult, nativeOutputDir, skipExcluded)
+            scanOrtResult(scanner, projectScanner, ortResult, nativeOutputDir, skipExcluded)
         } else {
-            require(scanner is LocalScanner) {
-                "To scan local files the chosen scanner must be a local scanner."
+            require(projectScanner is LocalScanner) {
+                "To scan local files the chosen project scanner must be a local scanner."
             }
 
-            scanner.scanPath(
+            projectScanner.scanPath(
                 inputPath = input,
                 outputDirectory = nativeOutputDir
             )
         }.mergeLabels(labels)
 
+        // Write the result.
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "scan")
 

@@ -257,7 +257,7 @@ fun JsonNode?.textValueOrEmpty(): String = this?.textValue().orEmpty()
 
 /**
  * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
- * same key. Parameters passed to [operation] can be null if there is no entry for a key in one of the maps.
+ * same key. Arguments passed to [operation] can be null if there is no entry for a key in the respective map.
  */
 inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): Map<K, W> =
     (this.keys + other.keys).associateWith { key ->
@@ -266,11 +266,26 @@ inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): 
 
 /**
  * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
- * same key. If there is no entry for a key in one of the maps, [default] is used.
+ * same key. If there is no entry for a key in one of the maps, [default] is used as the value for that map.
  */
 inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, operation: (V, V) -> W): Map<K, W> =
     (this.keys + other.keys).associateWith { key ->
         operation(this[key] ?: default, other[key] ?: default)
+    }
+
+/**
+ * Merge two maps which have collections as values by creating the combined key set of both maps and merging the
+ * collections. If there is no entry for a key in one of the maps, the value from the other map is used.
+ */
+@Suppress("UNCHECKED_CAST")
+fun <K, V : Collection<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V> =
+    zip(other) { a, b ->
+        when {
+            // When iterating over the combined key set, not both values can be null.
+            a == null -> b!!
+            b == null -> a
+            else -> (a + b) as V
+        }
     }
 
 /**

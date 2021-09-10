@@ -37,7 +37,7 @@ WORKDIR /usr/local/src/ort
 
 # Gradle build.
 RUN --mount=type=cache,target=/tmp/.gradle/ \
-    ln -s /tmp/.gradle/ $HOME/.gradle && \
+    GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
@@ -59,7 +59,7 @@ ENV \
     PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
     SBT_VERSION=1.3.8 \
-    YARN_VERSION=1.22.4 \
+    YARN_VERSION=1.22.10 \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
     # Scanner versions.

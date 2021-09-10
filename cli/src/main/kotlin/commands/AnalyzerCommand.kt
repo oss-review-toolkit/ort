@@ -190,7 +190,10 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             inputDir, distinctPackageManagers, curationProvider, repositoryConfiguration
         ).mergeLabels(labels)
 
-        println("Found ${ortResult.getProjects().size} project(s) in total.")
+        val analyzedProjects = ortResult.getProjects()
+        val countPerType = analyzedProjects.groupingBy { it.id.type }.eachCount()
+        val projectCountDetails = countPerType.toSortedMap().map { (type, count) -> "$type ($count)" }.joinToString()
+        println("Found ${analyzedProjects.size} project(s): $projectCountDetails")
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")

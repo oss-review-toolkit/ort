@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -247,6 +248,38 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency("s", depLang)
                 .addDependency("s", depLog)
                 .build(checkReferences = false)
+        }
+    }
+
+    "breakCycles()" should {
+        "not break undirected cycles" {
+            val edges = listOf(
+                1 to 2,
+                2 to 3,
+                3 to 4,
+                1 to 4
+            )
+
+            breakCycles(edges) shouldContainExactlyInAnyOrder edges
+        }
+
+        "break a directed cycle with a single node" {
+            val edges = listOf(1 to 1)
+
+            breakCycles(edges) should beEmpty()
+        }
+
+        "break directed cycles involving multiple nodes" {
+            val edges = listOf(
+                1 to 2,
+                2 to 3,
+                3 to 4,
+                4 to 1
+            )
+
+            val result = breakCycles(edges)
+
+            result.intersect(edges) shouldHaveSize 3
         }
     }
 })

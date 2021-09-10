@@ -102,18 +102,11 @@ class Unmanaged(
             }
         }
 
-        val project = Project(
-            id = id,
-            definitionFilePath = "",
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
-            declaredLicenses = sortedSetOf(),
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = vcsInfo,
-            homepageUrl = "",
-            scopeDependencies = sortedSetOf()
+        return listOf(
+            ProjectAnalyzerResult(
+                project = Project.EMPTY.copy(id = id, vcsProcessed = vcsInfo),
+                packages = sortedSetOf()
+            )
         )
-
-        return listOf(ProjectAnalyzerResult(project, packages = sortedSetOf()))
     }
 }

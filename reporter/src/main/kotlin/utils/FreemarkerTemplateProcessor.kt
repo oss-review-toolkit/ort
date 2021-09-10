@@ -114,6 +114,7 @@ class FreemarkerTemplateProcessor(
             PackageModel(pkg.pkg.id, input)
         }
 
+        // Keep this in sync with "resources/templates/freemarker_implicit.ftl".
         val dataModel = mapOf(
             "projects" to projects,
             "packages" to packages,
@@ -235,7 +236,7 @@ class FreemarkerTemplateProcessor(
      */
     class TemplateHelper(private val input: ReporterInput) {
         /**
-         * Return [packages] that are a dependency of at least one of the provided [projects][projectIds].
+         * Return only those [packages] that are a dependency of at least one of the provided [projects][projectIds].
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterByProjects(
@@ -248,6 +249,10 @@ class FreemarkerTemplateProcessor(
             return packages.filter { pkg -> pkg.id in dependencies }
         }
 
+        /**
+         * Return only those [licenses] that are classified under the given [category], or that are not categorized at
+         * all.
+         */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForCategory(licenses: Collection<ResolvedLicense>, category: String): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->

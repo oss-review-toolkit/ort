@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model.licenses
 
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 
 import kotlin.io.path.createTempDirectory
 
@@ -50,8 +49,8 @@ class LicenseInfoResolver(
     val archiver: FileArchiver?,
     val licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT
 ) {
-    private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
-    private val resolvedLicenseFiles: ConcurrentMap<Identifier, ResolvedLicenseFileInfo> = ConcurrentHashMap()
+    private val resolvedLicenseInfo = ConcurrentHashMap<Identifier, ResolvedLicenseInfo>()
+    private val resolvedLicenseFiles = ConcurrentHashMap<Identifier, ResolvedLicenseFileInfo>()
     private val rootLicenseMatcher = RootLicenseMatcher(
         licenseFilenamePatterns = licenseFilenamePatterns.copy(rootLicenseFilenames = emptyList())
     )

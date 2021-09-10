@@ -189,7 +189,7 @@ ${copyright}
 [/#list]
 [/#if]
 
-${licenseFile.readFile()}
+${licenseFile.text}
 ++++
 <<<
 [/#list]

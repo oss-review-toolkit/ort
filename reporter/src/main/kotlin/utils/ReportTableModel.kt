@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.zipWithCollections
 import org.ossreviewtoolkit.utils.zipWithDefault
 
 fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
@@ -197,14 +198,13 @@ data class ReportTableModel(
             return SummaryRow(
                 id = id,
                 scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
-                    left.zipWithDefault(right, emptyList(), ::plus).toSortedMap()
+                    left.zipWithCollections(right).toSortedMap()
                 }.toSortedMap(),
                 concludedLicenses = (concludedLicenses + other.concludedLicenses),
                 declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
                 detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
-                analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), ::plus)
-                    .toSortedMap(),
-                scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), ::plus).toSortedMap()
+                analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
+                scanIssues = scanIssues.zipWithCollections(other.scanIssues).toSortedMap()
             )
         }
     }
@@ -245,13 +245,10 @@ data class ReportTableModel(
         val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
         fun merge(other: IssueRow): IssueRow {
-            val plus = { left: List<ResolvableIssue>, right: List<ResolvableIssue> -> left + right }
-
             return IssueRow(
                 id = id,
-                analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), plus)
-                    .toSortedMap(),
-                scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), plus).toSortedMap()
+                analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
+                scanIssues = scanIssues.zipWithCollections(other.scanIssues).toSortedMap()
             )
         }
     }

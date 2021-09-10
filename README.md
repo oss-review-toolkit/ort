@@ -375,11 +375,13 @@ This tool wraps underlying license / copyright scanners with a common API so all
 same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-i`), the
 _scanner_ will automatically download the sources of the dependencies via the _downloader_ and scan them afterwards.
 
-We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested:
+We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested (in
+alphabetical order):
 
+* [FossID](https://fossid.com/)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
-Additionally, the following reference implementations exist:
+Additionally, the following reference implementations exist (in alphabetical order):
 
 * [Askalono](https://github.com/amzn/askalono)
 * [lc](https://github.com/boyter/lc)
