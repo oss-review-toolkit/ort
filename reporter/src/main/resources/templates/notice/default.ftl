@@ -72,64 +72,62 @@ This software depends on external packages and source code.
 The applicable license information is listed below:
 [/#if]
 
-[#list packages as package]
-    [#if !package.excluded]
+[#list packages?filter(p -> !p.excluded) as package]
 ----
 
 Package: [#if package.id.namespace?has_content]${package.id.namespace}:[/#if]${package.id.name}:${package.id.version}
-        [#-- List the content of archived license files and associated copyrights. --]
-        [#list package.licenseFiles.files as licenseFile]
+    [#-- List the content of archived license files and associated copyrights. --]
+    [#list package.licenseFiles.files as licenseFile]
 
 This package contains the file ${licenseFile.path} with the following contents:
 
 ${licenseFile.readFile()}
-            [#assign copyrights = licenseFile.getCopyrights()]
-            [#if copyrights?has_content]
+        [#assign copyrights = licenseFile.getCopyrights()]
+        [#if copyrights?has_content]
 The following copyright holder information relates to the license(s) above:
 
-                [#list copyrights as copyright]
+            [#list copyrights as copyright]
 ${copyright}
-                [/#list]
-            [/#if]
-        [/#list]
-        [#--
-            Filter the licenses of the package using LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED. This is the default
-            view which ignores declared and detected licenses if a license conclusion for the package was made. If
-            copyrights were detected for a concluded license those statements are kept. Also filter all licenses that
-            are configured not to be included in notice files, and filter all licenses that are contained in the license
-            files already printed above.
-        --]
-        [#assign resolvedLicenses = helper.filterForCategory(
-            LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED.filter(package.licensesNotInLicenseFiles()),
-            "include-in-notice-file"
-        )]
-        [#assign isFirst = true]
-        [#list resolvedLicenses as resolvedLicense]
-            [#assign licenseName = resolvedLicense.license.simpleLicense()]
-            [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
-            [#if licenseText?has_content]
-                [#if isFirst]
+            [/#list]
+        [/#if]
+    [/#list]
+    [#--
+        Filter the licenses of the package using LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED. This is the default
+        view which ignores declared and detected licenses if a license conclusion for the package was made. If
+        copyrights were detected for a concluded license those statements are kept. Also filter all licenses that
+        are configured not to be included in notice files, and filter all licenses that are contained in the license
+        files already printed above.
+    --]
+    [#assign resolvedLicenses = helper.filterForCategory(
+        LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED.filter(package.licensesNotInLicenseFiles()),
+        "include-in-notice-file"
+    )]
+    [#assign isFirst = true]
+    [#list resolvedLicenses as resolvedLicense]
+        [#assign licenseName = resolvedLicense.license.simpleLicense()]
+        [#assign licenseText = licenseTextProvider.getLicenseText(licenseName)!]
+        [#if licenseText?has_content]
+            [#if isFirst]
 
 The following copyrights and licenses were found in the source code of this package:
-                    [#assign isFirst = false]
-                [#else]
+                [#assign isFirst = false]
+            [#else]
   --
-                [/#if]
-                [#assign copyrights = resolvedLicense.getCopyrights()]
-                [#list copyrights as copyright]
-                    [#if copyright?is_first]
+            [/#if]
+            [#assign copyrights = resolvedLicense.getCopyrights()]
+            [#list copyrights as copyright]
+                [#if copyright?is_first]
 
-                    [/#if]
+                [/#if]
 ${copyright}
-                [/#list]
+            [/#list]
 
 ${licenseText}
-                [#assign exceptionName = resolvedLicense.license.exception()!]
-                [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
-                [#if exceptionText?has_content]
+            [#assign exceptionName = resolvedLicense.license.exception()!]
+            [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
+            [#if exceptionText?has_content]
 ${exceptionText}
-                [/#if]
             [/#if]
-        [/#list]
-    [/#if]
+        [/#if]
+    [/#list]
 [/#list]
