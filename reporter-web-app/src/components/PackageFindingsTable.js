@@ -37,7 +37,7 @@ const PackageFindingsTable = (props) => {
     const columns = [];
     let expandable = null;
 
-    if (webAppPackage.hasDetectedExcludedLicenses()) {
+    if (webAppPackage.hasDetectedExcludedLicenses() || webAppPackage.hasExcludedFindings()) {
         columns.push({
             align: 'right',
             filters: (() => [

@@ -59,6 +59,10 @@ class WebAppPackage {
     #detectedLicensesIndexes = new Set();
 
     #detectedLicensesProcessed = new Set();
+    
+    #excludedFindings;
+
+    #excludedFindingsIndexes = [];
 
     #findings = [];
 
@@ -203,6 +207,10 @@ class WebAppPackage {
             if (obj.findings && webAppOrtResult) {
                 setTimeout(() => {
                     for (let i = 0, len = obj.findings.length; i < len; i++) {
+                        if (obj.findings[i]['path_excludes'] || obj.findings[i]['pathExcludes']) {
+                            this.#excludedFindingsIndexes.push(i);
+                        }
+
                         this.#findings.push(new WebAppFinding(obj.findings[i], webAppOrtResult));
                     }
                 }, 0);
@@ -375,6 +383,22 @@ class WebAppPackage {
         const { pathExcludeReasons, scopeExcludeReasons } = this;
 
         return new Set([...pathExcludeReasons, ...scopeExcludeReasons]);
+    }
+
+    get excludedFindings() {
+        if (!this.#excludedFindings) {
+            this.#excludedFindings = [];
+
+            this.#excludedFindingsIndexes.forEach((index) => {
+                this.#excludedFindings.push(this.#findings[index]);
+            });
+        }
+
+        return this.#excludedFindings;
+    }
+
+    get excludedFindingsIndexes() {
+        return this.#excludedFindingsIndexes;
     }
 
     get findings() {
@@ -613,6 +637,10 @@ class WebAppPackage {
 
     hasDetectedExcludedLicenses() {
         return this.#detectedExcludedLicenses.size !== 0;
+    }
+
+    hasExcludedFindings() {
+        return this.#excludedFindingsIndexes.length > 0;
     }
 
     hasFindings() {
