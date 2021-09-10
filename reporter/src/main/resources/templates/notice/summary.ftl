@@ -52,13 +52,10 @@ This project contains or depends on third-party software components pursuant to 
 ----
             [/#if]
             [#assign copyrights = resolvedLicense.getCopyrights()]
-            [#list copyrights as copyright]
-                [#if copyright?is_first]
+            [#if copyrights?has_content]
 
-                [/#if]
-${copyright}
-            [/#list]
-
+            [/#if]
+${copyrights?join("\n", "", "\n")}
 ${licenseText}
             [#assign exceptionName = resolvedLicense.license.exception()!]
             [#assign exceptionText = licenseTextProvider.getLicenseText(exceptionName)!]
