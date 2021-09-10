@@ -236,7 +236,7 @@ class FreemarkerTemplateProcessor(
      */
     class TemplateHelper(private val input: ReporterInput) {
         /**
-         * Return [packages] that are a dependency of at least one of the provided [projects][projectIds].
+         * Return only those [packages] that are a dependency of at least one of the provided [projects][projectIds].
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterByProjects(
