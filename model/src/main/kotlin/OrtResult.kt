@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -403,10 +404,30 @@ data class OrtResult(
     fun getAdvisorResultsForId(id: Identifier): List<AdvisorResult> = advisorResultsById[id].orEmpty()
 
     /**
-     * Return all [RuleViolation]s contained in this [OrtResult].
+     * Return all [RuleViolation]s contained in this [OrtResult]. Optionally exclude resolved violations with
+     * [omitResolved] and remove violations below the [minSeverity].
      */
     @JsonIgnore
-    fun getRuleViolations(): List<RuleViolation> = evaluator?.violations.orEmpty()
+    fun getRuleViolations(omitResolved: Boolean = false, minSeverity: Severity? = null): List<RuleViolation> {
+        val allViolations = evaluator?.violations.orEmpty()
+
+        val severeViolations = when (minSeverity) {
+            null -> allViolations
+            else -> allViolations.filter { it.severity >= minSeverity }
+        }
+
+        return if (omitResolved) {
+            val resolutions = getResolutions().ruleViolations
+
+            severeViolations.filter { violation ->
+                resolutions.none { resolution ->
+                    resolution.matches(violation)
+                }
+            }
+        } else {
+            severeViolations
+        }
+    }
 
     @JsonIgnore
     fun getExcludes(): Excludes = repository.config.excludes
