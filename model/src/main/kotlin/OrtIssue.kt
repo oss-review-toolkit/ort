@@ -73,8 +73,10 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
 inline fun <reified T : Any> T.createAndLogIssue(
     source: String,
     message: String,
-    severity: Severity = Severity.ERROR
+    severity: Severity? = null
 ): OrtIssue {
-    logOnce(severity.toLog4jLevel()) { message }
-    return OrtIssue(source = source, message = message, severity = severity)
+    val issue = severity?.let { OrtIssue(source = source, message = message, severity = it) }
+        ?: OrtIssue(source = source, message = message)
+    logOnce(issue.severity.toLog4jLevel()) { message }
+    return issue
 }
