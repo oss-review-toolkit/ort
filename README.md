@@ -329,23 +329,30 @@ supported:
   * [dep](https://golang.github.io/dep/)
   * [Glide](https://github.com/Masterminds/glide)
   * [Godep](https://github.com/tools/godep)
-  * [GoMod](https://github.com/golang/go/wiki/Modules)
+  * [GoMod](https://github.com/golang/go/wiki/Modules) (limitations:
+  [no `replace` directive](https://github.com/oss-review-toolkit/ort/issues/4445))
 * Haskell
   * [Stack](http://haskellstack.org/)
 * Java
   * [Gradle](https://gradle.org/)
-  * [Maven](http://maven.apache.org/)
+  * [Maven](http://maven.apache.org/) (limitations:
+  [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
 * JavaScript / Node.js
   * [Bower](http://bower.io/)
-  * [NPM](https://www.npmjs.com/)
+  * [NPM](https://www.npmjs.com/) (limitations:
+  [no scope-specific registries](https://github.com/oss-review-toolkit/ort/issues/3741),
+  [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
   * [Yarn](https://yarnpkg.com/)
 * .NET
   * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations:
-  [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))
+  [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
+  [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
   * [NuGet](https://www.nuget.org/) (limitations:
-  [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))
+  [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
+  [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
 * Objective-C / Swift
-  * [Carthage](https://github.com/Carthage/Carthage)
+  * [Carthage](https://github.com/Carthage/Carthage) (limitation:
+  [no `cartfile.private`](https://github.com/oss-review-toolkit/ort/issues/3774))
   * [CocoaPods](https://github.com/CocoaPods/CocoaPods) (limitations:
   [no custom source repositories](https://github.com/oss-review-toolkit/ort/issues/4188))
 * PHP
@@ -356,7 +363,8 @@ supported:
   * [Pipenv](https://pipenv.readthedocs.io/) (limitations:
   [Python 2.7 or 3.6 only](https://github.com/oss-review-toolkit/ort/issues/3671))
 * Ruby
-  * [Bundler](http://bundler.io/)
+  * [Bundler](http://bundler.io/) (limitations:
+  [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
 * Rust
   * [Cargo](https://doc.rust-lang.org/cargo/)
 * Scala
