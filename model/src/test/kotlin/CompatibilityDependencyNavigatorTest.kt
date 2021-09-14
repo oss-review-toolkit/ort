@@ -217,10 +217,18 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
  */
 private fun createOrtResult(vararg projects: Project): OrtResult {
     val graph = DependencyGraph(packages = emptyList(), scopeRoots = sortedSetOf(), scopes = emptyMap())
-    val analyzerResult =
-        AnalyzerResult(sortedSetOf(*projects), sortedSetOf(), dependencyGraphs = mapOf("test" to graph))
-    val analyzerRun =
-        AnalyzerRun(result = analyzerResult, environment = Environment(), config = AnalyzerConfiguration())
+
+    val analyzerResult = AnalyzerResult(
+        projects = sortedSetOf(*projects),
+        packages = sortedSetOf(),
+        dependencyGraphs = mapOf("test" to graph)
+    )
+
+    val analyzerRun = AnalyzerRun(
+        result = analyzerResult,
+        environment = Environment(),
+        config = AnalyzerConfiguration()
+    )
 
     return OrtResult.EMPTY.copy(analyzer = analyzerRun)
 }
