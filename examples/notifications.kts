@@ -23,6 +23,6 @@ if (issues.isNotEmpty()) {
     mailClient.sendMail(
         subject = "Issues found",
         message = "Number of issues found: ${issues.size}",
-        receivers = arrayOf("example1@ossreviewtoolkit.org", "example2@ossreviewtoolkit.org")
+        receivers = arrayOf("example1@oss-review-toolkit.org", "example2@oss-review-toolkit.org")
     )
 }
