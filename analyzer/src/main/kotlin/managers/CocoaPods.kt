@@ -111,7 +111,7 @@ class CocoaPods(
         // [3] https://blog.cocoapods.org/CocoaPods-1.7.2/
 
         return stashDirectories(File("~/.cocoapods/repos")).use {
-            run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org")
+            run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root")
 
             try {
                 resolveDependenciesInternal(definitionFile)
