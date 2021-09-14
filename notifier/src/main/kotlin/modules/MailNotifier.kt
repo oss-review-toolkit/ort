@@ -19,9 +19,10 @@
 
 package org.ossreviewtoolkit.notifier.modules
 
+import java.nio.charset.Charset
+
 import org.apache.commons.mail.DefaultAuthenticator
-import org.apache.commons.mail.Email
-import org.apache.commons.mail.SimpleEmail
+import org.apache.commons.mail.HtmlEmail
 
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
 
@@ -29,23 +30,30 @@ import org.ossreviewtoolkit.model.config.SendMailConfiguration
  * Notification module that provides a configured email client.
  */
 class MailNotifier(config: SendMailConfiguration) {
-    private val client: Email
+    private val client: HtmlEmail = HtmlEmail()
 
     init {
-        client = SimpleEmail()
-
-        client.setHostName(config.hostName)
+        client.hostName = config.hostName
         client.setSmtpPort(config.port)
         client.setAuthenticator(DefaultAuthenticator(config.username, config.password))
-        client.setSSLOnConnect(config.useSsl)
+        client.isSSLOnConnect = config.useSsl
         client.setFrom(config.fromAddress)
     }
 
     @Suppress("UNUSED") // This is intended to be used by notification script implementations.
-    fun sendMail(subject: String, message: String, vararg receivers: String) {
+    fun sendMail(
+        subject: String,
+        message: String,
+        htmlEmail: Boolean = false,
+        charset: Charset = Charsets.UTF_8,
+        vararg receivers: String
+    ) {
         client.subject = subject
         client.setMsg(message)
+        client.setCharset(charset.name())
         client.addTo(*receivers)
+
+        if (htmlEmail) client.setHtmlMsg(message) else client.setTextMsg(message)
 
         client.send()
     }
