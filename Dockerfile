@@ -21,24 +21,27 @@
 # License-Filename: LICENSE
 
 #------------------------------------------------------------------------
-# Build components
-FROM ubuntu:focal AS build
-
-# http://bugs.python.org/issue19846
-ENV LANG C.UTF-8
+# build base for main
+FROM ubuntu:focal AS base
 
 # Set shell for bash and default pipefail
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-#------------------------------------------------------------------------
 # Basic intro
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        bash \
         ca-certificates \
         curl \
         gnupg
+
+#------------------------------------------------------------------------
+# External repositories for SBT
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
+ENV KEYURL=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823
+RUN curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/scala_ubuntu.gpg" > /dev/null
+ARG SBT_VERSION=1.3.8
 
 #------------------------------------------------------------------------
 # Add git ppa for latest git
@@ -47,35 +50,68 @@ ENV KEYURL=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df1
 RUN curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/git-core_ubuntu_ppa.gpg"  > /dev/null
 
 #------------------------------------------------------------------------
+# Minimal set of packages for main docker
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        # Install general tools required by this Dockerfile.
+        bash \
+        cargo \
+        composer \
+        cvs \
+        git \
+        lib32stdc++6 \
+        libffi7 \
+        libgmp10 \
+        libgomp1 \
+        libxext6 \
+        libxi6 \
+        libxrender1 \
+        libxtst6 \
+        netbase \
+        openjdk-11-jre \
+        openssh-client \
+        sbt="$SBT_VERSION" \
+        subversion \
+        unzip \
+        xz-utils \
+        zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+#------------------------------------------------------------------------
+# Build components
+FROM base AS build
+
+#------------------------------------------------------------------------
 # Ubuntu build toolchain
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
         dirmngr \
-	    dpkg-dev \
+        dpkg-dev \
         git \
-	    libbluetooth-dev \
-	    libbz2-dev \
-	    libc6-dev \
-	    libexpat1-dev \
-	    libffi-dev \
+        libbluetooth-dev \
+        libbz2-dev \
+        libc6-dev \
+        libexpat1-dev \
+        libffi-dev \
         libgmp-dev \
-	    libgdbm-dev \
-	    liblzma-dev \
+        libgdbm-dev \
+        liblzma-dev \
         libmpdec-dev \
-	    libncursesw5-dev \
-	    libreadline-dev \
-	    libsqlite3-dev \
-	    libssl-dev \
-	    make \
+        libncursesw5-dev \
+        libreadline-dev \
+        libsqlite3-dev \
+        libssl-dev \
+        make \
         netbase \
         openjdk-11-jdk \
-	    tk-dev \
+        tk-dev \
         tzdata \
         unzip \
-	    uuid-dev \
-	    xz-utils \
-	    zlib1g-dev \
+        uuid-dev \
+        xz-utils \
+        zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the necessary bash resource to have paths
@@ -148,17 +184,6 @@ RUN rbenv install ${RUBY_VERSION} \
 COPY docker/ruby.sh /etc/ort/bash_modules
 
 #------------------------------------------------------------------------
-# ORT
-COPY . /usr/local/src/ort
-WORKDIR /usr/local/src/ort
-
-#------------------------------------------------------------------------
-# This can be set to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
-ARG CRT_FILES=""
-COPY "$CRT_FILES" /tmp/certificates/
-ARG ORT_VERSION="DOCKER-SNAPSHOT"
-
-#------------------------------------------------------------------------
 # Scancode from official releases
 ARG SCANCODE_VERSION=21.8.4
 ENV SCANCODE_URL "https://github.com/nexB/scancode-toolkit/releases/download/v${SCANCODE_VERSION}"
@@ -170,6 +195,17 @@ RUN pyver=$(python3 --version | sed -e "s/Python //" | tr -d '.' | cut -c1-2) \
     && PYTHON_EXE=python3 ./configure \
     # cleanup unneeded installed binaries
     && rm -rf /opt/scancode/thirdparty
+
+#------------------------------------------------------------------------
+# This can be set to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
+ARG CRT_FILES=""
+COPY "$CRT_FILES" /tmp/certificates/
+ARG ORT_VERSION="DOCKER-SNAPSHOT"
+
+#------------------------------------------------------------------------
+# ORT
+COPY . /usr/local/src/ort
+WORKDIR /usr/local/src/ort
 
 #------------------------------------------------------------------------
 # Gradle ORT build.
@@ -191,61 +227,7 @@ RUN scripts/import_proxy_certs.sh \
 
 #------------------------------------------------------------------------
 # Main ORT docker
-FROM ubuntu:focal
-
-# Set shell for bash and default pipefail
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-# Basic intro
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        gnupg
-
-#------------------------------------------------------------------------
-# External repositories for SBT
-RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
-RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
-ENV KEYURL=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823
-RUN curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/scala_ubuntu.gpg" > /dev/null
-ARG SBT_VERSION=1.3.8
-
-#------------------------------------------------------------------------
-# Add git ppa for latest git
-RUN echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" > /etc/apt/sources.list.d/git-core-ubuntu-ppa-focal.list
-ENV KEYURL=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df1f24
-RUN curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/git-core_ubuntu_ppa.gpg"  > /dev/null
-
-#------------------------------------------------------------------------
-# Minimal set of packages for main docker
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        # Install general tools required by this Dockerfile.
-        bash \
-        cargo \
-        composer \
-        cvs \
-        git \
-        lib32stdc++6 \
-        libffi7 \
-        libgmp10 \
-        libgomp1 \
-        libxext6 \
-        libxi6 \
-        libxrender1 \
-        libxtst6 \
-        netbase \
-        openjdk-11-jre \
-        openssh-client \
-        sbt="$SBT_VERSION" \
-        subversion \
-        unzip \
-        xz-utils \
-        zlib1g \
-    && rm -rf /var/lib/apt/lists/*
+FROM base
 
 #------------------------------------------------------------------------
 # Python from build
@@ -295,7 +277,7 @@ RUN . $NVM_DIR/nvm.sh \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION
 
 #------------------------------------------------------------------------
-# ORT
+# Scancode
 COPY --from=build /opt/scancode /opt/scancode
 RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
     && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
