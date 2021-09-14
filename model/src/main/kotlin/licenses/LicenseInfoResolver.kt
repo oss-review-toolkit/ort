@@ -44,8 +44,8 @@ import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.ORT_NAME
 
 class LicenseInfoResolver(
-    val provider: LicenseInfoProvider,
-    val copyrightGarbage: CopyrightGarbage,
+    private val provider: LicenseInfoProvider,
+    private val copyrightGarbage: CopyrightGarbage,
     val archiver: FileArchiver?,
     val licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT
 ) {
