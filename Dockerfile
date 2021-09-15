@@ -17,20 +17,21 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
-
-FROM adoptopenjdk/openjdk11:alpine-slim AS build
+FROM eclipse-temurin:11-jdk-focal AS build
 
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
 
 # Apk install commands.
-RUN apk add --no-cache \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
         # Required for Node.js to build the reporter-web-app.
-        libstdc++ \
+        libstdc++6 \
         # Required to allow to download via a proxy with a self-signed certificate.
         ca-certificates \
         coreutils \
-        openssl
-
+        openssl \
+    && \
+    rm -rf /var/lib/apt/lists/*
 COPY . /usr/local/src/ort
 
 WORKDIR /usr/local/src/ort
@@ -43,7 +44,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM adoptopenjdk:11-jre-hotspot-bionic
+FROM eclipse-temurin:11-jdk-focal
 
 ENV \
     # Package manager versions.
