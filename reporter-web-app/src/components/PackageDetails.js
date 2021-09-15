@@ -40,6 +40,18 @@ const PackageDetails = (props) => {
         vcsProcessed
     } = webAppPackage;
 
+    const {
+        path: vcsPath,
+        revision: vcsRevision = vcs.resolvedRevision,
+        url: vcsUrl,
+    } = vcs;
+
+    const {
+        path: vcsProcessedPath,
+        revision: vcsProcessedRevision = vcsProcessed.resolvedRevision,
+        url: vcsProcessedUrl
+    } = vcsProcessed;
+
     const renderAhref = (text, href) => (
         <a
             href={href || text}
@@ -104,24 +116,68 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                !!vcs.url
+                !!vcsUrl
                 && (
                     <Item
-                        label="Repository Declared"
+                        label="Declared Repository"
                         key="ort-package-vcs-url"
                     >
-                        {renderAhref(vcs.url)}
+                        {renderAhref(vcsUrl)}
                     </Item>
                 )
             }
             {
-                !!vcsProcessed.url
+                !!vcsRevision
                 && (
                     <Item
-                        label="Repository Processed"
+                        label="Declared Repository Revision"
+                        key="ort-package-vcs-revision"
+                    >
+                        {vcsRevision}
+                    </Item>
+                )
+            }
+            {
+                !!vcsPath
+                && (
+                    <Item
+                        label="Declared Repository Sources Path"
+                        key="ort-package-vcs-path"
+                    >
+                        {vcsPath}
+                    </Item>
+                )
+            }
+            {
+                !!vcsProcessedUrl
+                && (
+                    <Item
+                        label="Processed Repository"
                         key="ort-package-vcs-processed-url"
                     >
-                        {renderAhref(vcsProcessed.url)}
+                        {renderAhref(vcsProcessedUrl)}
+                    </Item>
+                )
+            }
+            {
+                !!vcsProcessedRevision
+                && (
+                    <Item
+                        label="Processed Repository Revision"
+                        key="ort-package-vcs-processed-resolved-revision"
+                    >
+                        {vcsProcessedRevision}
+                    </Item>
+                )
+            }
+            {
+                !!vcsProcessedPath
+                && (
+                    <Item
+                        label="Processed Repository Sources Path"
+                        key="ort-package-vcs-processed-path"
+                    >
+                        {vcsProcessedPath}
                     </Item>
                 )
             }
