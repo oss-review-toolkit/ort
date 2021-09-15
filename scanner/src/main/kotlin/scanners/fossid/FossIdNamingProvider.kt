@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.log
  * [namingScanPattern] and [namingProjectPattern] are patterns describing the name using variables, e.g. "$var1_$var2".
  * Variable values are given in the map [namingConventionVariables].
  *
- * There also are builtin variables. Builtin variables are are prefixed in the pattern with "#" e.g. "$var1_#builtin".
+ * There also are builtin variables. Builtin variables are prefixed in the pattern with "#" e.g. "$var1_#builtin".
  * Available builtin variables:
  * * **projectName**: The name of the project (i.e. the part of the URL before .git).
  * * **currentTimestamp**: The current time.
