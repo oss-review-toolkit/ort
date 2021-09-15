@@ -7,6 +7,10 @@ jobs:
     displayName: Enable Python 3.6
     inputs:
       versionSpec: 3.6
+  - task: UseRubyVersion@0
+    displayName: Enable Ruby 2.6
+    inputs:
+      versionSpec: 2.6
 
   # Install required tools.
   - bash: |
@@ -40,11 +44,10 @@ jobs:
       PATH=$HOME/go/bin:$PATH
       curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
 
-      # Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
-      curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | tar -zxC .
-      cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
-      gem build cocoapods.gemspec
-      sudo gem install cocoapods-1.10.1.gem
+      # Install 'CocoaPods'.
+      GEM_HOME=$(ruby -r rubygems -e 'puts Gem.user_dir')
+      PATH=$GEM_HOME/bin:$PATH
+      gem install --user-install cocoapods -v $COCOAPODS_VERSION
 
       # Set environment variables for next steps, see:
       # https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/logging-commands?view=azure-devops&tabs=bash#setvariable-initialize-or-modify-the-value-of-a-variable
