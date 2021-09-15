@@ -192,6 +192,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
 
     override fun run() {
+        val config = globalOptionsForSubcommands.config
         val failureMessages = mutableListOf<String>()
 
         when (input) {
@@ -220,7 +221,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     }
                 }
 
-                val includedLicenseCategories = globalOptionsForSubcommands.config.downloader.includedLicenseCategories
+                val includedLicenseCategories = config.downloader.includedLicenseCategories
 
                 val packageDownloadDirs =
                     if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
@@ -245,11 +246,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                 packageDownloadDirs.forEach { (pkg, dir) ->
                     try {
-                        Downloader(globalOptionsForSubcommands.config.downloader).download(
-                            pkg,
-                            dir,
-                            allowMovingRevisions
-                        )
+                        Downloader(config.downloader).download(pkg, dir, allowMovingRevisions)
 
                         if (archiveMode == ArchiveMode.ENTITY) {
                             val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
@@ -323,11 +320,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     // Always allow moving revisions when directly downloading a single project only. This is for
                     // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
                     // project needs to be downloaded.
-                    Downloader(globalOptionsForSubcommands.config.downloader).download(
-                        dummyPackage,
-                        outputDir,
-                        allowMovingRevisions = true
-                    )
+                    Downloader(config.downloader).download(dummyPackage, outputDir, allowMovingRevisions = true)
                 } catch (e: DownloadException) {
                     e.showStackTrace()
 
