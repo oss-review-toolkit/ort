@@ -57,11 +57,15 @@ fun OrtResult.collectDeclaredLicenses(omitExcluded: Boolean = false): Map<Identi
 fun OrtResult.createLicenseInfoResolver(
     packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+    addAuthorsToCopyrights: Boolean = false,
     archiver: FileArchiver? = null
-): LicenseInfoResolver {
-    val licenseInfoProvider = DefaultLicenseInfoProvider(this, packageConfigurationProvider)
-    return LicenseInfoResolver(licenseInfoProvider, copyrightGarbage, archiver, LicenseFilenamePatterns.getInstance())
-}
+) = LicenseInfoResolver(
+        DefaultLicenseInfoProvider(this, packageConfigurationProvider),
+        copyrightGarbage,
+        addAuthorsToCopyrights,
+        archiver,
+        LicenseFilenamePatterns.getInstance()
+    )
 
 /**
  * Copy this [OrtResult] and add all [labels] to the existing labels, overwriting existing labels on conflict.

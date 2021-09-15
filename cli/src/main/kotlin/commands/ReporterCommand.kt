@@ -219,10 +219,12 @@ class ReporterCommand : CliktCommand(
 
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
+        val config = globalOptionsForSubcommands.config
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner.archive.createFileArchiver(),
+            addAuthorsToCopyrights = config.addAuthorsToCopyrights,
+            archiver = config.scanner.archive.createFileArchiver(),
             licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )
 

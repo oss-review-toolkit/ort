@@ -228,6 +228,7 @@ internal data class ProcessedCopyrightStatement(
 internal fun OrtResult.processAllCopyrightStatements(
     omitExcluded: Boolean = true,
     copyrightGarbage: Set<String> = emptySet(),
+    addAuthorsToCopyrights: Boolean = false,
     packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
 ): List<ProcessedCopyrightStatement> {
     val result = mutableListOf<ProcessedCopyrightStatement>()
@@ -236,7 +237,8 @@ internal fun OrtResult.processAllCopyrightStatements(
 
     val licenseInfoResolver = createLicenseInfoResolver(
         packageConfigurationProvider = packageConfigurationProvider,
-        copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet())
+        copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet()),
+        addAuthorsToCopyrights = addAuthorsToCopyrights
     )
 
     getProjectAndPackageIds().forEach { id ->

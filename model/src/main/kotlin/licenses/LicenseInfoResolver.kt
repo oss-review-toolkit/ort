@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 class LicenseInfoResolver(
     private val provider: LicenseInfoProvider,
     private val copyrightGarbage: CopyrightGarbage,
+    val addAuthorsToCopyrights: Boolean,
     val archiver: FileArchiver?,
     val licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT
 ) {
@@ -98,7 +99,7 @@ class LicenseInfoResolver(
                     licenseInfo.declaredLicenseInfo.processed.mapped.filterValues { it == license }.keys
                 )
 
-                licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() }?.let {
+                if (addAuthorsToCopyrights && licenseInfo.declaredLicenseInfo.authors.isNotEmpty()) {
                     locations.add(ResolvedLicenseLocation(
                         provenance = UnknownProvenance,
                         location = UNDEFINED_TEXT_LOCATION,
