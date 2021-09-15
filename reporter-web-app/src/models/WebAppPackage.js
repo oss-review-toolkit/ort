@@ -595,16 +595,8 @@ class WebAppPackage {
         return this.#vcs;
     }
 
-    get vcsUrl() {
-        return this.#vcs.url;
-    }
-
     get vcsProcessed() {
         return this.#vcsProcessed;
-    }
-
-    get vcsProcessedUrl() {
-        return this.#vcsProcessed.url;
     }
 
     hasConcludedLicense() {
