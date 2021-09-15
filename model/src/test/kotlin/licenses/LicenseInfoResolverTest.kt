@@ -545,7 +545,7 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containNumberOfLocationsForLicense(bsdLicense, 4)
             }
 
-            "resolve copyrights from authors" {
+            "resolve copyrights from authors if enabled" {
                 val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
@@ -553,7 +553,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         declaredLicenses = declaredLicenses
                     )
                 )
-                val resolver = createResolver(licenseInfos)
+                val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = true)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
                 result should containCopyrightStatementsForLicenseExactly(
@@ -564,6 +564,21 @@ class LicenseInfoResolverTest : WordSpec() {
                     "LicenseRef-b",
                     "Copyright (C) The Author", "Copyright (C) The Other Author"
                 )
+            }
+
+            "not resolve copyrights from authors if disabled" {
+                val licenseInfos = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        authors = authors,
+                        declaredLicenses = declaredLicenses
+                    )
+                )
+                val resolver = createResolver(licenseInfos, addAuthorsToCopyrights = false)
+
+                val result = resolver.resolveLicenseInfo(pkgId)
+                result should containCopyrightStatementsForLicenseExactly("LicenseRef-a")
+                result should containCopyrightStatementsForLicenseExactly("LicenseRef-b")
             }
         }
 
@@ -635,11 +650,13 @@ class LicenseInfoResolverTest : WordSpec() {
     private fun createResolver(
         data: List<LicenseInfo>,
         copyrightGarbage: Set<String> = emptySet(),
+        addAuthorsToCopyrights: Boolean = false,
         archiver: FileArchiver = FileArchiver.createDefault()
     ) = LicenseInfoResolver(
-        SimpleLicenseInfoProvider(data),
-        CopyrightGarbage(copyrightGarbage.toSortedSet()),
-        archiver
+        provider = SimpleLicenseInfoProvider(data),
+        copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet()),
+        addAuthorsToCopyrights = addAuthorsToCopyrights,
+        archiver = archiver
     )
 
     private fun createLicenseInfo(

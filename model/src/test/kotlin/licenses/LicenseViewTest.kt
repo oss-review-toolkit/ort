@@ -40,9 +40,10 @@ import org.ossreviewtoolkit.utils.test.createDefault
 
 class LicenseViewTest : WordSpec() {
     private val licenseInfoResolver = LicenseInfoResolver(
-        DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider.EMPTY),
-        CopyrightGarbage(),
-        FileArchiver.createDefault()
+        provider = DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider.EMPTY),
+        copyrightGarbage = CopyrightGarbage(),
+        addAuthorsToCopyrights = false,
+        archiver = FileArchiver.createDefault()
     )
 
     private fun LicenseView.getLicensesWithSources(
