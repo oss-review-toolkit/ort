@@ -73,7 +73,6 @@ class TableView extends React.Component {
     }
 
     render() {
-        console.log('this.props', this.props);
         const {
             tableView: {
                 columns: {
