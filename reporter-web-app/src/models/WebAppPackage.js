@@ -20,7 +20,6 @@
 import RemoteArtifact from './RemoteArtifact';
 import VcsInfo from './VcsInfo';
 import WebAppFinding from './WebAppFinding';
-import WebAppScanResult from './WebAppScanResult';
 import { randomStringGenerator } from '../utils';
 
 class WebAppPackage {
@@ -92,7 +91,9 @@ class WebAppPackage {
 
     #purl;
 
-    #scanResults = [];
+    #scanResultsIndexes;
+
+    #scanResults;
 
     #scopeExcludes;
 
@@ -238,10 +239,7 @@ class WebAppPackage {
             }
 
             if (obj.scan_results || obj.scanResults) {
-                const scanResults = obj.scan_results || obj.scanResults;
-                for (let i = 0, len = scanResults.length; i < len; i++) {
-                    this.#scanResults.push(new WebAppScanResult(scanResults[i]));
-                }
+                this.#scanResultsIndexes = obj.scan_results || obj.scanResults;
             }
 
             if (obj.scope_excludes || obj.scopeExcludes) {
@@ -519,6 +517,14 @@ class WebAppPackage {
     }
 
     get scanResults() {
+        if (!this.#scanResults) {
+            this.#scanResults = [];
+
+            for (let i = 0, len = this.#scanResultsIndexes.length; i < len; i++) {
+                this.#scanResults.push(this.#webAppOrtResult.getScanResultByIndex(this.#scanResultsIndexes[i]));
+            }
+        }
+
         return this.#scanResults;
     }
 
