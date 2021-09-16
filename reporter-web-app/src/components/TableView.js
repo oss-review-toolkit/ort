@@ -123,15 +123,10 @@ class TableView extends React.Component {
                 filteredValue: filteredInfo.excludes || null,
                 key: 'excludes',
                 onFilter: (value, webAppPackage) => {
-                    if (value === 'excluded') {
-                        return webAppPackage.isExcluded;
-                    }
+                    const { isExcluded } = webAppPackage;
 
-                    if (value === 'included') {
-                        return !webAppPackage.isExcluded;
-                    }
+                    return (isExcluded && value === 'excluded') || (!isExcluded && value === 'included');
 
-                    return false;
                 },
                 render: (webAppPackage) => (
                     webAppPackage.isExcluded ? (
