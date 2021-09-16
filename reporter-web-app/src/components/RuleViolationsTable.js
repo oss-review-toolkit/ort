@@ -160,19 +160,11 @@ class RuleViolationsTable extends React.Component {
                 filteredValue: filteredInfo.excludes || null,
                 key: 'excludes',
                 onFilter: (value, webAppRuleViolation) => {
-                    const webAppPackage = webAppRuleViolation.package;
+                    if (!webAppRuleViolation.hasPackage()) return true;
 
-                    if (webAppPackage) {
-                        if (value === 'excluded') {
-                            return webAppPackage.isExcluded;
-                        }
+                    const { isExcluded } = webAppRuleViolation.package;
 
-                        if (value === 'included') {
-                            return !webAppPackage.isExcluded;
-                        }
-                    }
-
-                    return false;
+                    return (isExcluded && value === 'excluded') || (!isExcluded && value === 'included');
                 },
                 render: (webAppRuleViolation) => {
                     const webAppPackage = webAppRuleViolation.package;
