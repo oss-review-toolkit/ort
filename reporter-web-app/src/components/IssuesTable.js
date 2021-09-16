@@ -48,12 +48,11 @@ class IssuesTable extends React.Component {
             issues,
             onChange,
             showExcludesColumn,
-            state
+            state: {
+                filteredInfo = {},
+                sortedInfo =  {}
+            }
         } = this.props;
-        const {
-            filteredInfo = {},
-            sortedInfo =  {}
-        } = state;
 
         // If return null to prevent React render error
         if (!issues) {
