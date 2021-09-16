@@ -36,21 +36,17 @@ const PackageDetails = (props) => {
         homepageUrl,
         binaryArtifact,
         sourceArtifact,
-        vcs,
-        vcsProcessed
+        vcs: {
+            path: vcsPath,
+            revision: vcsRevision = webAppPackage.vcs.resolvedRevision,
+            url: vcsUrl,
+        },
+        vcsProcessed: {
+            path: vcsProcessedPath,
+            revision: vcsProcessedRevision = webAppPackage.vcsProcessed.resolvedRevision,
+            url: vcsProcessedUrl
+        }
     } = webAppPackage;
-
-    const {
-        path: vcsPath,
-        revision: vcsRevision = vcs.resolvedRevision,
-        url: vcsUrl,
-    } = vcs;
-
-    const {
-        path: vcsProcessedPath,
-        revision: vcsProcessedRevision = vcsProcessed.resolvedRevision,
-        url: vcsProcessedUrl
-    } = vcsProcessed;
 
     const renderAhref = (text, href) => (
         <a

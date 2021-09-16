@@ -26,15 +26,14 @@ import { FileTextOutlined } from '@ant-design/icons';
 const LicenseStatsTable = (props) => {
     const {
         emptyText,
-        filter,
+        filter: {
+            sortedInfo = {},
+            filteredInfo = {}
+        },
         licenses,
         licenseStats,
         onChange
     } = props;
-    const {
-        sortedInfo = {},
-        filteredInfo = {}
-    } = filter;
 
     const columns = [
         {
