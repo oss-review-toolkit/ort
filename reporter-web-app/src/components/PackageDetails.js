@@ -124,6 +124,7 @@ const PackageDetails = (props) => {
             }
             {
                 !!vcsRevision
+                && vcsRevision !== vcsProcessedRevision
                 && (
                     <Item
                         label="Declared Repository Revision"
