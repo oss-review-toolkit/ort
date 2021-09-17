@@ -154,7 +154,7 @@ class ReportTableModelMapper(
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,
                     detectedLicenses = detectedLicenses,
-                    effectiveLicense = resolvedLicenseInfo.effectiveLicense(
+                    effectiveLicense = resolvedLicenseInfo.filterExcluded().effectiveLicense(
                         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
                         ortResult.getPackageLicenseChoices(id),
                         ortResult.getRepositoryLicenseChoices()
