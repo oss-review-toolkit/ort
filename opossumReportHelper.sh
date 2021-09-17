@@ -11,7 +11,7 @@ buildDockerImg() (
     fi
 )
 
-analzyeDir() {
+reportAsOpossum() {
     inputFile="$(readlink -f $1)"
     inputDir="$(dirname "$inputFile")"
 
@@ -37,5 +37,5 @@ analzyeDir() {
 buildDockerImg
 
 for ortFile in "$@"; do
-    analzyeDir "$ortFile"
+    reportAsOpossum "$ortFile"
 done
