@@ -99,6 +99,8 @@ class OpossumReporter : Reporter {
                     "copyright" to copyright,
                     "licenseName" to license?.toString(),
 
+                    "url" to url,
+
                     "preSelected" to preselected,
 
                     "comment" to comment
