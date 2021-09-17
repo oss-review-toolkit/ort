@@ -250,11 +250,14 @@ class OpossumReporter : Reporter {
             filesWithChildren.add(convertToId(fileWithChildren, true))
         }
 
-        fun addPackageRoot(id: Identifier, path: String, level: Int = 0) {
+        fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo) {
             val mapOfId = packageToRoot.getOrPut(id) { sortedMapOf() }
             val oldLevel = mapOfId.getOrDefault(path, level)
             mapOfId[path] = min(level, oldLevel)
             resources.addResource(path)
+
+            // TODO: implement vcs to baseURL transformation
+            // TODO: attach baseURL to path
         }
 
         fun addSignal(signal: OpossumSignal, paths: SortedSet<String>) {
@@ -300,11 +303,12 @@ class OpossumReporter : Reporter {
             val dependencyId = dependency.id
             log.debug("$relRoot - $dependencyId - Dependency")
             val dependencyPath = pathResolve(listOf(relRoot, dependencyId.namespace, "${dependencyId.name}@${dependencyId.version}"))
-            addPackageRoot(dependencyId, dependencyPath, level)
 
             val dependencyPackage = curatedPackages
                 .find { curatedPackage -> curatedPackage.pkg.id == dependencyId }
                 ?.pkg ?: Package.EMPTY
+
+            addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
 
             this.addSignal(signalFromPkg(dependencyPackage, dependencyId), dependencyPath)
 
@@ -331,7 +335,7 @@ class OpossumReporter : Reporter {
             val projectId = project.id
             val definitionFilePath = pathResolve(relRoot, project.definitionFilePath)
             log.debug("$definitionFilePath - $projectId - Project")
-            addPackageRoot(projectId, relRoot)
+            addPackageRoot(projectId, relRoot, 0, project.toPackage().vcsProcessed)
             addFileWithChildren(definitionFilePath)
 
             val signalFromProject = OpossumSignal(
@@ -442,7 +446,7 @@ class OpossumReporter : Reporter {
                 .map {
                     val path = makeLostAndFoundPath(it.pkg.id)
                     addSignal(signalFromPkg(it.pkg), path)
-                    addPackageRoot(it.pkg.id, path, Int.MAX_VALUE)
+                    addPackageRoot(it.pkg.id, path, Int.MAX_VALUE, it.pkg.vcsProcessed)
                     it
                 }.size
             if (numberOfRootlessPackages > 0) {
