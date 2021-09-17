@@ -62,8 +62,8 @@ class ResolvedLicenseInfoTest : WordSpec() {
                         ResolvedLicense(
                             license = apache.toSpdx() as SpdxSingleLicenseExpression,
                             originalDeclaredLicenses = setOf("$apache OR $mit"),
-                            originalExpressions = mapOf(
-                                LicenseSource.DECLARED to setOf("$apache OR $mit OR $gpl".toSpdx())
+                            originalExpressions = setOf(
+                                ResolvedOriginalExpression("$apache OR $mit OR $gpl".toSpdx(), LicenseSource.DECLARED)
                             ),
                             locations = emptySet()
                         )
@@ -150,34 +150,34 @@ class ResolvedLicenseInfoTest : WordSpec() {
             ResolvedLicense(
                 license = apache.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = setOf("$apache OR $mit"),
-                originalExpressions = mapOf(
-                    LicenseSource.DECLARED to setOf("$apache OR $mit".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$apache OR $mit".toSpdx(), LicenseSource.DECLARED)
                 ),
                 locations = emptySet()
             ),
             ResolvedLicense(
                 license = mit.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = setOf("$apache OR $mit"),
-                originalExpressions = mapOf(
-                    LicenseSource.DECLARED to setOf("$apache OR $mit".toSpdx()),
-                    LicenseSource.DETECTED to setOf("$mit OR $gpl".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$apache OR $mit".toSpdx(), LicenseSource.DECLARED),
+                    ResolvedOriginalExpression("$mit OR $gpl".toSpdx(), LicenseSource.DETECTED)
                 ),
                 locations = emptySet()
             ),
             ResolvedLicense(
                 license = gpl.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = emptySet(),
-                originalExpressions = mapOf(
-                    LicenseSource.DETECTED to setOf("$mit OR $gpl".toSpdx()),
-                    LicenseSource.CONCLUDED to setOf("$bsd OR $gpl".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$mit OR $gpl".toSpdx(), LicenseSource.DETECTED),
+                    ResolvedOriginalExpression("$bsd OR $gpl".toSpdx(), LicenseSource.CONCLUDED)
                 ),
                 locations = emptySet()
             ),
             ResolvedLicense(
                 license = bsd.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = emptySet(),
-                originalExpressions = mapOf(
-                    LicenseSource.CONCLUDED to setOf("$bsd OR $gpl".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$bsd OR $gpl".toSpdx(), LicenseSource.CONCLUDED)
                 ),
                 locations = emptySet()
             )

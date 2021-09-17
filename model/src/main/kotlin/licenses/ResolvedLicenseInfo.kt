@@ -75,9 +75,9 @@ data class ResolvedLicenseInfo(
     fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<LicenseChoice>): SpdxExpression? {
         val resolvedLicenseInfo = filter(licenseView, filterSources = true)
 
-        return resolvedLicenseInfo.licenses.flatMap { it.originalExpressions.values }
-            .flatten()
-            .toSet()
+        return resolvedLicenseInfo.licenses.flatMap { resolvedLicense ->
+            resolvedLicense.originalExpressions.map { it.expression }
+        }.toSet()
             .reduceOrNull(SpdxExpression::and)
             ?.applyChoices(licenseChoices.asList().flatten())
             ?.validChoices()
@@ -153,9 +153,9 @@ data class ResolvedLicense(
     val originalDeclaredLicenses: Set<String>,
 
     /**
-     * The original SPDX expressions of this license grouped by [license source][LicenseSource].
+     * The original SPDX expressions of this license.
      */
-    val originalExpressions: Map<LicenseSource, Set<SpdxExpression>>,
+    val originalExpressions: Set<ResolvedOriginalExpression>,
 
     /**
      * All text locations where this license was found.
@@ -165,7 +165,7 @@ data class ResolvedLicense(
     /**
      * The sources where this license was found.
      */
-    val sources = originalExpressions.keys
+    val sources: Set<LicenseSource> = originalExpressions.mapTo(mutableSetOf()) { it.source }
 
     /**
      * True, if this license was [detected][LicenseSource.DETECTED] and all [locations] have matching path excludes.
@@ -282,6 +282,21 @@ data class ResolvedCopyrightFinding(
      * All [PathExclude]s matching this [location].
      */
     val matchingPathExcludes: List<PathExclude>
+)
+
+/**
+ * A resolved original expression.
+ */
+data class ResolvedOriginalExpression(
+    /**
+     * The license expression.
+     */
+    val expression: SpdxExpression,
+
+    /**
+     * The license source.
+     */
+    val source: LicenseSource,
 )
 
 /**
