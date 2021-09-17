@@ -27,6 +27,7 @@ import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -66,6 +67,7 @@ import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class LicenseInfoResolverTest : WordSpec() {
     init {
@@ -171,6 +173,13 @@ class LicenseInfoResolverTest : WordSpec() {
                     provenance = provenance,
                     location = TextLocation("LICENSE", 41)
                 )
+
+                result.licenses.find { it.license == "Apache-2.0 WITH LLVM-exception".toSpdx() } shouldNotBeNull {
+                    originalExpressions[LicenseSource.DETECTED] shouldContainExactlyInAnyOrder listOf(
+                        "Apache-2.0 WITH LLVM-exception",
+                        "MIT" // FIXME: The originalExpression must contain only license related to `it.license`.
+                    ).map { it.toSpdx() }
+                }
             }
 
             "resolve concluded licenses" {
