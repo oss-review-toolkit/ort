@@ -127,13 +127,16 @@ class LicenseInfoResolver(
 
         val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<CopyrightFinding>>()
         val resolvedLocations = resolveLocations(filteredDetectedLicenseInfo, unmatchedCopyrights)
+        val detectedLicenses = licenseInfo.detectedLicenseInfo.findings.flatMapTo(mutableSetOf()) { findings ->
+            findings.licenses.map { it.license }
+        }
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
                 resolvedLocations[license]?.let { locations.addAll(it) }
 
-                licenseInfo.detectedLicenseInfo.findings.forEach { findings ->
-                    originalExpressions[LicenseSource.DETECTED] = findings.licenses.mapTo(mutableSetOf()) { it.license }
+                originalExpressions[LicenseSource.DETECTED] = detectedLicenses.filterTo(mutableSetOf()) {
+                    license in it.decompose()
                 }
             }
         }
