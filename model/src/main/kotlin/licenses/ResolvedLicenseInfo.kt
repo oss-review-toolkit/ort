@@ -216,6 +216,20 @@ data class ResolvedLicense(
                 )
             }
         )
+
+    /**
+     * Filter all excluded original expressions. Detected license findings which have
+     * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes] are removed. If the resolved license
+     * becomes empty, then null is returned.
+     */
+    fun filterExcludedOriginalExpressions(): ResolvedLicense? {
+        if (LicenseSource.DETECTED !in sources) return this
+
+        val filteredOriginalExpressions = originalExpressions.filterNotTo(mutableSetOf()) { it.isDetectedExcluded }
+        if (filteredOriginalExpressions.isEmpty()) return null
+
+        return copy(originalExpressions = filteredOriginalExpressions)
+    }
 }
 
 /**
@@ -316,10 +330,11 @@ data class ResolvedOriginalExpression(
  * [detected][LicenseSource.DETECTED] and all [locations][ResolvedLicense.locations] have
  * [matching path excludes][ResolvedLicenseLocation.matchingPathExcludes]. Copyrights are removed if all
  * [findings][ResolvedCopyright.findings] have
- * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes].
+ * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes]. Original expressions are removed if all
+ * corresponding license findings have [matching path excludes][ResolvedLicenseLocation.matchingPathExcludes].
  */
 fun List<ResolvedLicense>.filterExcluded() =
-    filter { resolvedLicense ->
+    mapNotNull { it.filterExcludedOriginalExpressions() }.filter { resolvedLicense ->
         resolvedLicense.sources != setOf(LicenseSource.DETECTED) ||
                 resolvedLicense.locations.any { it.matchingPathExcludes.isEmpty() }
     }.map { it.filterExcludedCopyrights() }
