@@ -297,7 +297,19 @@ data class ResolvedOriginalExpression(
      * The license source.
      */
     val source: LicenseSource,
-)
+
+    /**
+     * Indicate whether all license findings corresponding to [expression] are excluded. Must be false if [source] does
+     * not equal [LicenseSource.DETECTED].
+     */
+    val isDetectedExcluded: Boolean = false
+) {
+    init {
+        require(!isDetectedExcluded || source == LicenseSource.DETECTED) {
+            "For license source '$source' the flag isDetectedExcluded must not be set."
+        }
+    }
+}
 
 /**
  * Filter all excluded licenses and copyrights. Licenses are removed if they are only

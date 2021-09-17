@@ -131,15 +131,23 @@ class LicenseInfoResolver(
                 findings.licenses,
                 findings.licenseFindingCurations,
                 findings.relativeFindingsPath
-            ).mapNotNull { it.curatedFinding?.license }
-        }
+            ).mapNotNull { curationResult ->
+                val licenseFinding = curationResult.curatedFinding ?: return@mapNotNull null
+
+                licenseFinding.license to findings.pathExcludes.any { pathExclude ->
+                    pathExclude.matches(licenseFinding.location.prependPath(findings.relativeFindingsPath))
+                }
+            }
+        }.groupBy(keySelector = { it.first }, valueTransform = { it.second }).mapValues { it.value.all { it } }
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
                 resolvedLocations[license]?.let { locations.addAll(it) }
 
-                originalExpressions += detectedLicenses.filterTo(mutableSetOf()) { license in it.decompose() }.map {
-                    ResolvedOriginalExpression(expression = it, source = LicenseSource.DETECTED)
+                originalExpressions += detectedLicenses.entries.filter { (expression, _) ->
+                    license in expression.decompose()
+                }.map { (expression, isDetectedExcluded) ->
+                    ResolvedOriginalExpression(expression, LicenseSource.DETECTED, isDetectedExcluded)
                 }
             }
         }
