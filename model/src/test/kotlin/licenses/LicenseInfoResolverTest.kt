@@ -176,8 +176,7 @@ class LicenseInfoResolverTest : WordSpec() {
 
                 result.licenses.find { it.license == "Apache-2.0 WITH LLVM-exception".toSpdx() } shouldNotBeNull {
                     originalExpressions[LicenseSource.DETECTED] shouldContainExactlyInAnyOrder listOf(
-                        "Apache-2.0 WITH LLVM-exception",
-                        "MIT" // FIXME: The originalExpression must contain only license related to `it.license`.
+                        "Apache-2.0 WITH LLVM-exception"
                     ).map { it.toSpdx() }
                 }
             }
