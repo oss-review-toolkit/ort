@@ -459,6 +459,9 @@ class LicenseInfoResolverTest : WordSpec() {
                         )
                     )
                 )
+                result.licenses.flatMap {
+                    it.originalExpressions[LicenseSource.DETECTED].orEmpty()
+                } shouldContainExactlyInAnyOrder listOf() // FIXME: Curation should be applied, so should contain 'MIT'.
             }
 
             "contain a list of the original license expressions" {
