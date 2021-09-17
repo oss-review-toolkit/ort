@@ -57,9 +57,9 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
+import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.spdx.toSpdx
@@ -170,7 +170,7 @@ private fun expectResolveLicenseInfo(
     resolverMock: LicenseInfoResolver,
     id: Identifier,
     license: String,
-    originalExpressions: Map<LicenseSource, Set<SpdxExpression>> = emptyMap()
+    originalExpressions: Set<ResolvedOriginalExpression> = emptySet()
 ) {
     val resolvedLicense = ResolvedLicense(
         license = license.toSpdx() as SpdxSingleLicenseExpression,
@@ -191,13 +191,13 @@ private fun expectResolveLicenseInfo(
     resolverMock: LicenseInfoResolver,
     id: Identifier,
     licenses: List<String>,
-    originalExpressions: Pair<LicenseSource, Set<SpdxExpression>>
+    originalExpressions: Set<ResolvedOriginalExpression> = emptySet()
 ) {
     val resolvedLicenses = licenses.map { license ->
         ResolvedLicense(
             license = license.toSpdx() as SpdxSingleLicenseExpression,
             originalDeclaredLicenses = emptySet(),
-            originalExpressions = mapOf(originalExpressions),
+            originalExpressions = originalExpressions,
             locations = emptySet()
         )
     }
@@ -252,19 +252,19 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[0].id,
                 "MIT",
-                mapOf(LicenseSource.DECLARED to setOf("MIT".toSpdx()))
+                setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
             )
             expectResolveLicenseInfo(
                 resolver,
                 projects[1].id,
                 "MIT",
-                mapOf(LicenseSource.DECLARED to setOf("GPL-2.0-only OR MIT".toSpdx()))
+                setOf(ResolvedOriginalExpression("GPL-2.0-only OR MIT".toSpdx(), LicenseSource.DECLARED))
             )
             expectResolveLicenseInfo(
                 resolver,
                 projects[2].id,
                 SpdxConstants.NOASSERTION,
-                mapOf(LicenseSource.DECLARED to setOf(SpdxConstants.NOASSERTION.toSpdx()))
+                setOf(ResolvedOriginalExpression(SpdxConstants.NOASSERTION.toSpdx(), LicenseSource.DECLARED))
             )
 
             val input = ReporterInput(ORT_RESULT, licenseInfoResolver = resolver)
@@ -277,7 +277,9 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             result should haveSize(2)
             with(result[0]) {
                 license.toString() shouldBe "MIT"
-                originalExpressions[LicenseSource.DECLARED] shouldBe setOf(
+                originalExpressions.filter {
+                    it.source == LicenseSource.DECLARED
+                }.map { it.expression } shouldContainExactlyInAnyOrder listOf(
                     "MIT".toSpdx(),
                     "GPL-2.0-only OR MIT".toSpdx()
                 )
@@ -294,7 +296,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[0].id,
                 "MIT",
-                mapOf(LicenseSource.DECLARED to setOf("MIT".toSpdx()))
+                setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
             )
 
             val mockResult = mockk<OrtResult>()
@@ -321,13 +323,13 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[0].id,
                 "MIT",
-                mapOf(LicenseSource.DECLARED to setOf("MIT".toSpdx()))
+                setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
             )
             expectResolveLicenseInfo(
                 resolver,
                 projects[1].id,
                 SpdxConstants.NOASSERTION,
-                mapOf(LicenseSource.DECLARED to setOf(SpdxConstants.NOASSERTION.toSpdx()))
+                setOf(ResolvedOriginalExpression(SpdxConstants.NOASSERTION.toSpdx(), LicenseSource.DECLARED))
             )
 
             val input = ReporterInput(ORT_RESULT, licenseInfoResolver = resolver)
@@ -349,7 +351,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[1].id,
                 listOf("MIT", "GPL-2.0-only", "Apache-2.0"),
-                LicenseSource.DECLARED to setOf("GPL-2.0-only OR MIT OR Apache-2.0".toSpdx())
+                setOf(ResolvedOriginalExpression("GPL-2.0-only OR MIT OR Apache-2.0".toSpdx(), LicenseSource.DECLARED))
             )
 
             val ortResult = ORT_RESULT.copy(
@@ -378,7 +380,11 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             result should haveSize(1)
             with(result[0]) {
                 license.toString() shouldBe "MIT"
-                originalExpressions[LicenseSource.DECLARED] shouldBe setOf("GPL-2.0-only OR MIT OR Apache-2.0".toSpdx())
+                originalExpressions.filter {
+                    it.source == LicenseSource.DECLARED
+                }.map { it.expression } shouldContainExactlyInAnyOrder listOf(
+                    "GPL-2.0-only OR MIT OR Apache-2.0".toSpdx()
+                )
             }
         }
     }

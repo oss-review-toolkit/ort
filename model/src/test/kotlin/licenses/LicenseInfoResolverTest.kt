@@ -175,9 +175,11 @@ class LicenseInfoResolverTest : WordSpec() {
                 )
 
                 result.licenses.find { it.license == "Apache-2.0 WITH LLVM-exception".toSpdx() } shouldNotBeNull {
-                    originalExpressions[LicenseSource.DETECTED] shouldContainExactlyInAnyOrder listOf(
-                        "Apache-2.0 WITH LLVM-exception"
-                    ).map { it.toSpdx() }
+                    originalExpressions.filter {
+                        it.source == LicenseSource.DETECTED
+                    }.map { it.expression } shouldContainExactlyInAnyOrder listOf(
+                        "Apache-2.0 WITH LLVM-exception".toSpdx()
+                    )
                 }
             }
 
@@ -460,7 +462,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
                 result.licenses.flatMap {
-                    it.originalExpressions[LicenseSource.DETECTED].orEmpty()
+                    it.originalExpressions.map { it.expression }
                 } shouldContainExactlyInAnyOrder listOf("MIT".toSpdx())
             }
 
@@ -778,10 +780,10 @@ fun containLicenseExpressionsExactlyBySource(
     vararg expressions: SpdxExpression?
 ): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { resolvedLicenseInfo ->
-        val actualExpressions = resolvedLicenseInfo.licenses
-            .mapNotNull { it.originalExpressions[source] }
-            .flatten()
-            .toSet()
+        val actualExpressions = resolvedLicenseInfo.licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
+            resolvedLicense.originalExpressions.filter { it.source == source }.map { it.expression }
+        }
+
         val expectedExpressions = expressions.toSet()
 
         MatcherResult(

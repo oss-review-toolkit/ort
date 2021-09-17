@@ -28,7 +28,6 @@ import java.io.File
 import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -50,7 +49,6 @@ import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
@@ -336,19 +334,12 @@ class FreemarkerTemplateProcessor(
 private fun List<ResolvedLicense>.merge(): ResolvedLicense {
     require(isNotEmpty()) { "Cannot merge an empty list." }
 
-    val mergedOriginalExpressions = mutableMapOf<LicenseSource, Set<SpdxExpression>>()
-    forEach { resolvedLicense ->
-        val expressions = resolvedLicense.originalExpressions
-
-        expressions.forEach { (source, originalExpressions) ->
-            mergedOriginalExpressions.merge(source, originalExpressions) { left, right -> left + right }
-        }
-    }
-
     return ResolvedLicense(
         license = first().license,
         originalDeclaredLicenses = flatMapTo(mutableSetOf()) { it.originalDeclaredLicenses },
-        originalExpressions = mergedOriginalExpressions,
+        originalExpressions = flatMap { it.originalExpressions }.groupBy { it.source }.flatMapTo(mutableSetOf()) {
+            it.value
+        },
         locations = flatMapTo(mutableSetOf()) { it.locations }
     )
 }

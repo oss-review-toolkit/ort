@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependPath
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.ORT_NAME
 
@@ -82,7 +81,7 @@ class LicenseInfoResolver(
         concludedLicenses.forEach { license ->
             license.builder().apply {
                 licenseInfo.concludedLicenseInfo.concludedLicense?.let {
-                    originalExpressions[LicenseSource.CONCLUDED] = setOf(it)
+                    originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.CONCLUDED)
                 }
             }
         }
@@ -91,7 +90,7 @@ class LicenseInfoResolver(
         declaredLicenses.forEach { license ->
             license.builder().apply {
                 licenseInfo.declaredLicenseInfo.processed.spdxExpression?.let {
-                    originalExpressions[LicenseSource.DECLARED] = setOf(it)
+                    originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.DECLARED)
                 }
 
                 originalDeclaredLicenses.addAll(
@@ -139,8 +138,8 @@ class LicenseInfoResolver(
             license.builder().apply {
                 resolvedLocations[license]?.let { locations.addAll(it) }
 
-                originalExpressions[LicenseSource.DETECTED] = detectedLicenses.filterTo(mutableSetOf()) {
-                    license in it.decompose()
+                originalExpressions += detectedLicenses.filterTo(mutableSetOf()) { license in it.decompose() }.map {
+                    ResolvedOriginalExpression(expression = it, source = LicenseSource.DETECTED)
                 }
             }
         }
@@ -276,7 +275,7 @@ class LicenseInfoResolver(
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
     var originalDeclaredLicenses = mutableSetOf<String>()
-    var originalExpressions = mutableMapOf<LicenseSource, Set<SpdxExpression>>()
+    var originalExpressions = mutableSetOf<ResolvedOriginalExpression>()
     var locations = mutableSetOf<ResolvedLicenseLocation>()
 
     fun build() = ResolvedLicense(license, originalDeclaredLicenses, originalExpressions, locations)
