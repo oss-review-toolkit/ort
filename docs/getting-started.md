@@ -1,12 +1,14 @@
 # Getting Started
 
-This tutorial gives a brief introduction to how the tools work together at the example of the
-[mime-types](https://www.npmjs.com/package/mime-types) NPM package. It will guide through the main steps for running
-ORT:
+This article introduces each of the tools that make up ORT and describes how they work together. It demonstrates how to run ORT on a software package, in
+this case the NPM package [mime-types](https://www.npmjs.com/package/mime-types).
 
-* Install ORT.
-* Analyze the dependencies of `mime-types` using the _analyzer_.
-* Scan the source code of `mime-types` and its dependencies using the `scanner`.
+The article covers:
+
+* ORT prerequisites
+* Installation
+* Analyzing the dependencies of `mime-types` (`analyzer`)
+* Scanning the `mime-types` source code and its dependencies (`scanner`).
 
 ## 1. Prerequisites
 
@@ -45,6 +47,8 @@ with the `--help` option:
 ```bash
 cli/build/install/ort/bin/ort --help
 ```
+
+For more information on installation and installation options, please see [Installation and Basic Usage](./installation-and-basic-usage.md).
 
 ## 3. Download the `mime-types` source code
 
