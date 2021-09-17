@@ -250,14 +250,18 @@ class OpossumReporter : Reporter {
             filesWithChildren.add(convertToId(fileWithChildren, true))
         }
 
-        fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo) {
+        fun addBaseURL(path: String, vcs: VcsInfo) {
+            // TODO: implement vcs to baseURL transformation
+            // TODO: attach baseURL to path
+        }
+
+        fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo = VcsInfo.EMPTY) {
             val mapOfId = packageToRoot.getOrPut(id) { sortedMapOf() }
             val oldLevel = mapOfId.getOrDefault(path, level)
             mapOfId[path] = min(level, oldLevel)
             resources.addResource(path)
 
-            // TODO: implement vcs to baseURL transformation
-            // TODO: attach baseURL to path
+            addBaseURL(path, vcs)
         }
 
         fun addSignal(signal: OpossumSignal, paths: SortedSet<String>) {
@@ -484,6 +488,8 @@ class OpossumReporter : Reporter {
         maxDepth: Int = Int.MAX_VALUE
     ): OpossumInput {
         val opossumInput = OpossumInput()
+
+        opossumInput.addBaseURL("/", ortResult.repository.vcs)
 
         SpdxLicense.values().forEach {
             val licenseText = getLicenseText(it.id)
