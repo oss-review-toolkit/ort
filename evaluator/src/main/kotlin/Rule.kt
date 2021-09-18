@@ -143,7 +143,7 @@ abstract class Rule(
      */
     fun issue(
         severity: Severity,
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,
@@ -164,7 +164,7 @@ abstract class Rule(
      * Add a [hint][Severity.HINT] to the list of [violations].
      */
     fun hint(
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,
@@ -176,7 +176,7 @@ abstract class Rule(
      * Add a [warning][Severity.WARNING] to the list of [violations].
      */
     fun warning(
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,
@@ -188,7 +188,7 @@ abstract class Rule(
      * Add an [error][Severity.ERROR] to the list of [violations].
      */
     fun error(
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,

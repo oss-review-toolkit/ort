@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.cli.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -30,6 +31,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
+import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortConfigDirectory
@@ -52,12 +54,19 @@ class NotifierCommand : CliktCommand(name = "notify", help = "Create notificatio
         .convert { it.absoluteFile.normalize() }
         .inputGroup()
 
+    private val labels by option(
+        "--label", "-l",
+        help = "Set a label in the ORT result passed to the notifier script, overwriting any existing label of the " +
+                "same name. Can be used multiple times. For example: --label distribution=external"
+    ).associate()
+
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
         val script = notificationsFile?.readText() ?: readDefaultNotificationsFile()
 
-        val ortResult = readOrtResult(ortFile)
+        val ortResult = readOrtResult(ortFile).mergeLabels(labels)
+
         val config = globalOptionsForSubcommands.config.notifier
 
         val notifier = Notifier(ortResult, config)

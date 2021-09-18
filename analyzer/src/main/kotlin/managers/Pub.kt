@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,9 +76,9 @@ private const val GRADLE_VERSION = "5.6.4"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
-private val pubCommand = if (Os.isWindows) "pub.bat" else "pub"
+private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 
-private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "v1.12.13+hotfix.9-stable"
+private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "2.2.3-stable"
 private val flutterInstallDir = "$ortToolsDirectory/flutter-$flutterVersion"
 
 private val flutterHome by lazy {
@@ -86,7 +87,6 @@ private val flutterHome by lazy {
 }
 
 private val flutterAbsolutePath = flutterHome.resolve("bin")
-private val pubAbsolutePath = flutterAbsolutePath.resolve("cache/dart-sdk/bin")
 
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
@@ -118,11 +118,12 @@ class Pub(
      */
     private class PubCacheReader {
         private val pubCacheRoot by lazy {
-            // TODO: Add support for the PUB_CACHE environment variable.
+            Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
+
             if (Os.isWindows) {
-                File(Os.env["APPDATA"], "Pub/Cache")
+                File(Os.env["LOCALAPPDATA"], "Pub/Cache")
             } else {
-                Os.userHomeDirectory.resolve(".pub-cache/")
+                Os.userHomeDirectory.resolve(".pub-cache")
             }
         }
 
@@ -192,9 +193,9 @@ class Pub(
     private val processedPackages = mutableListOf<String>()
     private val reader = PubCacheReader()
 
-    override fun transformVersion(output: String) = output.removePrefix("Pub ")
+    override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.2,)")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.10,)")
 
     override fun beforeResolution(definitionFiles: List<File>) {
         if (flutterAbsolutePath.resolve(flutterCommand).isFile) {
@@ -581,14 +582,16 @@ class Pub(
     }
 
     override fun command(workingDir: File?): String =
-        if (pubAbsolutePath.isDirectory) "$pubAbsolutePath${File.separator}$pubCommand" else pubCommand
+        if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$dartCommand" else dartCommand
+
+    private fun commandPub(): String = "${command()} pub"
 
     private fun commandFlutter(): String =
         if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$flutterCommand packages"
         else "$flutterCommand packages"
 
     override fun run(workingDir: File?, vararg args: String): ProcessCapture {
-        var result = ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args)
+        var result = ProcessCapture(workingDir, *commandPub().split(' ').toTypedArray(), *args)
         if (result.isError) {
             // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
             if (result.errorMessage.contains("Flutter users should run `flutter")) {

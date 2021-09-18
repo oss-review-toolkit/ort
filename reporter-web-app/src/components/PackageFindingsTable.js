@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ const PackageFindingsTable = (props) => {
     const columns = [];
     let expandable = null;
 
-    if (webAppPackage.hasDetectedExcludedLicenses()) {
+    if (webAppPackage.hasDetectedExcludedLicenses() || webAppPackage.hasExcludedFindings()) {
         columns.push({
             align: 'right',
             filters: (() => [

@@ -20,7 +20,6 @@
 import RemoteArtifact from './RemoteArtifact';
 import VcsInfo from './VcsInfo';
 import WebAppFinding from './WebAppFinding';
-import WebAppScanResult from './WebAppScanResult';
 import { randomStringGenerator } from '../utils';
 
 class WebAppPackage {
@@ -59,6 +58,10 @@ class WebAppPackage {
     #detectedLicensesIndexes = new Set();
 
     #detectedLicensesProcessed = new Set();
+    
+    #excludedFindings;
+
+    #excludedFindingsIndexes = [];
 
     #findings = [];
 
@@ -88,7 +91,9 @@ class WebAppPackage {
 
     #purl;
 
-    #scanResults = [];
+    #scanResultsIndexes;
+
+    #scanResults;
 
     #scopeExcludes;
 
@@ -203,6 +208,10 @@ class WebAppPackage {
             if (obj.findings && webAppOrtResult) {
                 setTimeout(() => {
                     for (let i = 0, len = obj.findings.length; i < len; i++) {
+                        if (obj.findings[i]['path_excludes'] || obj.findings[i]['pathExcludes']) {
+                            this.#excludedFindingsIndexes.push(i);
+                        }
+
                         this.#findings.push(new WebAppFinding(obj.findings[i], webAppOrtResult));
                     }
                 }, 0);
@@ -230,10 +239,7 @@ class WebAppPackage {
             }
 
             if (obj.scan_results || obj.scanResults) {
-                const scanResults = obj.scan_results || obj.scanResults;
-                for (let i = 0, len = scanResults.length; i < len; i++) {
-                    this.#scanResults.push(new WebAppScanResult(scanResults[i]));
-                }
+                this.#scanResultsIndexes = obj.scan_results || obj.scanResults;
             }
 
             if (obj.scope_excludes || obj.scopeExcludes) {
@@ -377,6 +383,22 @@ class WebAppPackage {
         return new Set([...pathExcludeReasons, ...scopeExcludeReasons]);
     }
 
+    get excludedFindings() {
+        if (!this.#excludedFindings) {
+            this.#excludedFindings = [];
+
+            this.#excludedFindingsIndexes.forEach((index) => {
+                this.#excludedFindings.push(this.#findings[index]);
+            });
+        }
+
+        return this.#excludedFindings;
+    }
+
+    get excludedFindingsIndexes() {
+        return this.#excludedFindingsIndexes;
+    }
+
     get findings() {
         return this.#findings;
     }
@@ -495,6 +517,14 @@ class WebAppPackage {
     }
 
     get scanResults() {
+        if (!this.#scanResults) {
+            this.#scanResults = [];
+
+            for (let i = 0, len = this.#scanResultsIndexes.length; i < len; i++) {
+                this.#scanResults.push(this.#webAppOrtResult.getScanResultByIndex(this.#scanResultsIndexes[i]));
+            }
+        }
+
         return this.#scanResults;
     }
 
@@ -571,16 +601,8 @@ class WebAppPackage {
         return this.#vcs;
     }
 
-    get vcsUrl() {
-        return this.#vcs.url;
-    }
-
     get vcsProcessed() {
         return this.#vcsProcessed;
-    }
-
-    get vcsProcessedUrl() {
-        return this.#vcsProcessed.url;
     }
 
     hasConcludedLicense() {
@@ -613,6 +635,10 @@ class WebAppPackage {
 
     hasDetectedExcludedLicenses() {
         return this.#detectedExcludedLicenses.size !== 0;
+    }
+
+    hasExcludedFindings() {
+        return this.#excludedFindingsIndexes.length > 0;
     }
 
     hasFindings() {

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
@@ -32,6 +34,10 @@ import io.kotest.matchers.types.beInstanceOf
 import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
 import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
@@ -157,6 +163,94 @@ class OrtResultTest : WordSpec({
             val ortResult = readOrtResult("src/test/assets/sbt-multi-project-example-graph.yml")
 
             ortResult.dependencyNavigator should beInstanceOf<DependencyGraphNavigator>()
+        }
+    }
+
+    "getRuleViolations" should {
+        "return unfiltered rule violations if omitResolved is false" {
+            val ortResult = OrtResult.EMPTY.copy(
+                repository = Repository.EMPTY.copy(
+                    config = RepositoryConfiguration(
+                        resolutions = Resolutions(
+                            ruleViolations = listOf(
+                                RuleViolationResolution(
+                                    "Rule violation message to resolve",
+                                    RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
+                                    "comment"
+                                )
+                            )
+                        )
+                    )
+                ),
+                evaluator = EvaluatorRun(
+                    violations = listOf(
+                        RuleViolation(
+                            rule = "rule id",
+                            pkg = Identifier("Maven", "org.ossreviewtoolkit", "resolved-violation", "0.8.15"),
+                            license = null,
+                            licenseSource = null,
+                            severity = Severity.HINT,
+                            message = "Rule violation message to resolve",
+                            howToFix = ""
+                        )
+                    )
+                )
+            )
+
+            ortResult.getRuleViolations(omitResolved = false, minSeverity = null).map { it.rule }
+                .shouldContainExactly("rule id")
+        }
+
+        "drop resolved rule violations if omitResolved is true" {
+            val ortResult = OrtResult.EMPTY.copy(
+                repository = Repository.EMPTY.copy(
+                    config = RepositoryConfiguration(
+                        resolutions = Resolutions(
+                            ruleViolations = listOf(
+                                RuleViolationResolution(
+                                    "Rule violation message to resolve",
+                                    RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
+                                    "comment"
+                                )
+                            )
+                        )
+                    )
+                ),
+                evaluator = EvaluatorRun(
+                    violations = listOf(
+                        RuleViolation(
+                            rule = "Resolved rule violation",
+                            pkg = Identifier("Maven", "org.ossreviewtoolkit", "resolved-violation", "0.8.15"),
+                            license = null,
+                            licenseSource = null,
+                            severity = Severity.ERROR,
+                            message = "Rule violation message to resolve",
+                            howToFix = ""
+                        ),
+                        RuleViolation(
+                            rule = "Rule violation without resolution",
+                            pkg = Identifier("Maven", "com.example", "package-without-resolution", "1.0.0"),
+                            license = null,
+                            licenseSource = null,
+                            severity = Severity.WARNING,
+                            message = "Message without any resolution",
+                            howToFix = ""
+                        ),
+                        RuleViolation(
+                            rule = "Rule violation below minSeverity",
+                            pkg = Identifier("Maven", "com.example", "violation-below-threshold", "3.14"),
+                            license = null,
+                            licenseSource = null,
+                            severity = Severity.HINT,
+                            message = "Message without any resolution",
+                            howToFix = ""
+                        )
+                    )
+                )
+            )
+
+            ortResult.getRuleViolations(omitResolved = true, minSeverity = Severity.WARNING).map { it.rule }
+                .shouldContainExactly("Rule violation without resolution")
         }
     }
 })

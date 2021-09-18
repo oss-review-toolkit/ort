@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,8 @@ class WebAppRuleViolation {
 
             if (Number.isInteger(obj.pkg)) {
                 this.#packageIndex = obj.pkg;
+            } else {
+                this.#packageIndex = -1;
             }
 
             if (obj.severity) {
@@ -208,6 +210,10 @@ class WebAppRuleViolation {
 
     hasHowToFix() {
         return !!this.#howToFix;
+    }
+
+    hasPackage() {
+        return !!this.#package;
     }
 }
 

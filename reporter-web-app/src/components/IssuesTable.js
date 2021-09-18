@@ -48,12 +48,11 @@ class IssuesTable extends React.Component {
             issues,
             onChange,
             showExcludesColumn,
-            state
+            state: {
+                filteredInfo = {},
+                sortedInfo =  {}
+            }
         } = this.props;
-        const {
-            filteredInfo = {},
-            sortedInfo
-        } = state;
 
         // If return null to prevent React render error
         if (!issues) {
@@ -64,52 +63,26 @@ class IssuesTable extends React.Component {
             {
                 align: 'center',
                 dataIndex: 'severityIndex',
-                defaultSortOrder: 'ascend',
-                filters: (() => [
-                    {
-                        text: (
-                            <span>
-                                <ExclamationCircleOutlined className="ort-error" />
-                                {' '}
-                                Errors
-                            </span>
-                        ),
+                filters: [
+                    { 
+                        text: 'Errors',
                         value: 0
                     },
                     {
-                        text: (
-                            <span>
-                                <WarningOutlined className="ort-warning" />
-                                {' '}
-                                Warnings
-                            </span>
-                        ),
+                        text: 'Warnings',
                         value: 1
                     },
                     {
-                        text: (
-                            <span>
-                                <InfoCircleOutlined className="ort-hint" />
-                                {' '}
-                                Hints
-                            </span>
-                        ),
+                        text: 'Hint',
                         value: 2
                     },
                     {
-                        text: (
-                            <span>
-                                <IssuesCloseOutlined className="ort-ok" />
-                                {' '}
-                                Resolved
-                            </span>
-                        ),
+                        text: 'Resolved',
                         value: 3
                     }
-                ])(),
+                ],
                 filteredValue: filteredInfo.severityIndex || null,
                 onFilter: (value, webAppOrtIssue) => webAppOrtIssue.severityIndex === Number(value),
-                sorter: (a, b) => a.severityIndex - b.severityIndex,
                 render: (text, webAppOrtIssue) => (
                     webAppOrtIssue.isResolved
                         ? (
@@ -150,6 +123,8 @@ class IssuesTable extends React.Component {
                             </span>
                         )
                 ),
+                sorter: (a, b) => a.severityIndex - b.severityIndex,
+                sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
                 width: '5em'
             }
         ];

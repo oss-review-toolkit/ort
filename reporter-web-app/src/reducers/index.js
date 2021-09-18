@@ -42,11 +42,17 @@ const initState = {
             },
             issues: {
                 filteredInfo: {},
-                sortedInfo: {}
+                sortedInfo: {
+                    order: 'ascend',
+                    field: 'severityIndex'
+                }
             },
             ruleViolations: {
                 filteredInfo: {},
-                sortedInfo: {}
+                sortedInfo: {
+                    order: 'ascend',
+                    field: 'severityIndex'
+                }
             }
         },
         shouldComponentUpdate: false
@@ -329,8 +335,14 @@ const states = (state = initState, action) => {
                 ...state.table,
                 columns: {
                     filteredInfo: {},
+                    filterData: [],
                     sortedInfo: {},
-                    filterData: []
+                    showKeys: [
+                        'declaredLicensesProcessed',
+                        'detectedLicensesProcessed',
+                        'levels',
+                        'scopeIndexes'
+                    ]
                 }
             }
         };

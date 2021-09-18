@@ -295,7 +295,7 @@ class StaticHtmlReporter : Reporter {
                 }
             }
             td { +ruleViolation.violation.rule }
-            td { +ruleViolation.violation.pkg.toCoordinates() }
+            td { +(ruleViolation.violation.pkg?.toCoordinates() ?: "-") }
             td {
                 +if (ruleViolation.violation.license != null) {
                     "${ruleViolation.violation.licenseSource}: ${ruleViolation.violation.license}"

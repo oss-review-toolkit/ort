@@ -41,6 +41,16 @@ class RuleSet(
     val violations = mutableSetOf<RuleViolation>()
 
     /**
+     * A DSL function to configure an [OrtResultRule]. The rule is applied once to [ortResult].
+     */
+    fun ortResultRule(name: String, configure: OrtResultRule.() -> Unit) {
+        OrtResultRule(this, name, ortResult).apply {
+            configure()
+            evaluate()
+        }
+    }
+
+    /**
      * A DSL function to configure a [PackageRule]. The rule is applied to each [Package] and [Project] contained in
      * [ortResult].
      */
