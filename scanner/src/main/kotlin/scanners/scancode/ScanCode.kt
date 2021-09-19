@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,10 +44,12 @@ import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.createOrtTempFile
 import org.ossreviewtoolkit.utils.isTrue
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpack
@@ -69,7 +72,7 @@ class ScanCode(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
-) : LocalScanner(name, scannerConfig, downloaderConfig) {
+) : LocalScanner(name, scannerConfig, downloaderConfig), LocalScannerWrapper {
     class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             ScanCode(scannerName, scannerConfig, downloaderConfig)
@@ -107,6 +110,8 @@ class ScanCode(
         }
     }
 
+    override val name = SCANNER_NAME
+    override val criteria by lazy { getScannerCriteria() }
     override val expectedVersion = BuildConfig.SCANCODE_VERSION
 
     override val configuration by lazy {
@@ -238,4 +243,6 @@ class ScanCode(
         }
 
     override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
+
+    override fun scanPath(path: File): ScanSummary = scanPathInternal(path, createOrtTempFile(name))
 }
