@@ -42,29 +42,32 @@ class OpossumReporterTest : WordSpec({
             pathResolve("/") shouldBe "/"
             pathResolve("/", "test") shouldBe "/test"
             pathResolve("/", "/test") shouldBe "/test"
-            pathResolve("/", "/test/") shouldBe "/test"
+            pathResolve("/", "/test/") shouldBe "/test/"
             pathResolve("/tost", "test") shouldBe "/tost/test"
             pathResolve("/tost", "/test") shouldBe "/tost/test"
-            pathResolve("/tost", "/test/") shouldBe "/tost/test"
+            pathResolve("/tost", "/test/") shouldBe "/tost/test/"
         }
 
         "work with lists" {
-            pathResolve(listOf("/", "test/to/path", "/something/else/")) shouldBe "/test/to/path/something/else"
+            pathResolve(listOf("/", "test/to/path", "/something/else/")) shouldBe "/test/to/path/something/else/"
         }
     }
     "convertToId()" should {
         "work" {
-            convertToId("path/to/thing") shouldBe "/path/to/thing"
-            convertToId("path/to/thing/") shouldBe "/path/to/thing/"
-            convertToId("/path/to/thing/") shouldBe "/path/to/thing/"
-            convertToId("path/to/thing/", true) shouldBe "/path/to/thing/"
-            convertToId("path/to/thing/", false) shouldBe "/path/to/thing"
-            convertToId("path/to/thing", true) shouldBe "/path/to/thing/"
-            convertToId("path/to/thing", false) shouldBe "/path/to/thing"
-            convertToId("/path/to/thing/", true) shouldBe "/path/to/thing/"
-            convertToId("/path/to/thing/", false) shouldBe "/path/to/thing"
-            convertToId("/path/to/thing", true) shouldBe "/path/to/thing/"
-            convertToId("/path/to/thing", false) shouldBe "/path/to/thing"
+            pathResolve("/") shouldBe "/"
+            pathResolve("/", is_dir_flag = true) shouldBe "/"
+            pathResolve("/", is_dir_flag = false) shouldBe "/"
+            pathResolve("path/to/thing") shouldBe "/path/to/thing"
+            pathResolve("path/to/thing/") shouldBe "/path/to/thing/"
+            pathResolve("/path/to/thing/") shouldBe "/path/to/thing/"
+            pathResolve("path/to/thing/", is_dir_flag = true) shouldBe "/path/to/thing/"
+            pathResolve("path/to/thing/", is_dir_flag = false) shouldBe "/path/to/thing"
+            pathResolve("path/to/thing", is_dir_flag = true) shouldBe "/path/to/thing/"
+            pathResolve("path/to/thing", is_dir_flag = false) shouldBe "/path/to/thing"
+            pathResolve("/path/to/thing/", is_dir_flag = true) shouldBe "/path/to/thing/"
+            pathResolve("/path/to/thing/", is_dir_flag = false) shouldBe "/path/to/thing"
+            pathResolve("/path/to/thing", is_dir_flag = true) shouldBe "/path/to/thing/"
+            pathResolve("/path/to/thing", is_dir_flag = false) shouldBe "/path/to/thing"
         }
     }
 
@@ -151,6 +154,11 @@ class OpossumReporterTest : WordSpec({
         "filesWithChildren should work" {
             opossumInput.filesWithChildren shouldContain "/pom.xml/"
         }
+
+        "baseUrlsForSources should exist and be valid" {
+            opossumInput.baseUrlsForSources["/"] shouldBe "https://github.com/path/first-project/tree/master/sub/path/{path}"
+            opossumInput.baseUrlsForSources["/pom.xml/compile/first-package-group/first-package@0.0.1/"] shouldBe "https://github.com/path/first-package-repo/tree/master/project-path/{path}"
+        }
     }
 
     "generateOpossumInput() with excluded scopes" should {
@@ -170,7 +178,7 @@ private fun createOrtResult(): OrtResult {
         type = VcsType.GIT,
         revision = "master",
         url = "https://github.com/path/first-project.git",
-        path = ""
+        path = "sub/path"
     )
 
     return OrtResult(
