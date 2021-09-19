@@ -43,19 +43,16 @@ import java.util.*
 import java.util.zip.Deflater
 import kotlin.math.min
 
-fun pathResolve(left: String, right: String = ""): String {
+fun pathResolve(left: String, right: String = "", is_dir_flag: Boolean? = null): String {
+    val isDir = is_dir_flag == true || (is_dir_flag == null && (if (right != "") {right} else {left}).last() == '/')
     return "/${left}/${right}"
+        .replace(Regex("/*$"), if (isDir) {"/"} else {""})
         .replace(Regex("/+"),"/")
-        .replace(Regex("/*$"),"")
         .ifEmpty { "/" }
 }
 
 fun pathResolve(pieces: List<String>): String {
     return pieces.reduce{ right, left -> pathResolve(right, left) }
-}
-
-fun convertToId(file: String, is_dir: Boolean? = null): String {
-    return pathResolve("/", file) + (if (is_dir == true || (is_dir == null && file.last() == '/')) {"/"} else {""})
 }
 
 /**
@@ -180,7 +177,7 @@ class OpossumReporter : Reporter {
         fun toFileList(): Set<String> {
             return tree.asSequence()
                 .flatMap { e -> e.value.toFileList()
-                    .map { pathResolve(e.key, it) }
+                    .map { pathResolve(e.key, it, is_dir_flag = false) }
                 }
                 .plus("/")
                 .toSet()
@@ -213,7 +210,8 @@ class OpossumReporter : Reporter {
         var packageToRoot: SortedMap<Identifier, SortedMap<String,Int>> = sortedMapOf(),
         var attributionBreakpoints: SortedSet<String> = sortedSetOf(),
         var filesWithChildren: SortedSet<String> = sortedSetOf(),
-        var frequentLicenses: SortedSet<OpossumFrequentLicense> = sortedSetOf()
+        var frequentLicenses: SortedSet<OpossumFrequentLicense> = sortedSetOf(),
+        var baseUrlsForSources: SortedMap<String,String> = sortedMapOf()
     ) {
         fun toJson(): Map<*, *> {
             return sortedMapOf(
@@ -233,7 +231,8 @@ class OpossumReporter : Reporter {
                 },
                 "attributionBreakpoints" to attributionBreakpoints,
                 "filesWithChildren" to filesWithChildren,
-                "frequentLicenses" to frequentLicenses.toList().map { it.toJson() }
+                "frequentLicenses" to frequentLicenses.toList().map { it.toJson() },
+                "baseUrlsForSources" to baseUrlsForSources
             )
         }
 
@@ -244,19 +243,39 @@ class OpossumReporter : Reporter {
         }
 
         fun addAttributionBreakpoint(breakpoint: String) {
-            attributionBreakpoints.add(convertToId(breakpoint, true))
+            attributionBreakpoints.add(pathResolve(breakpoint, is_dir_flag = true))
             resources.addResource(breakpoint)
         }
 
         fun addFileWithChildren(fileWithChildren: String) {
-            filesWithChildren.add(convertToId(fileWithChildren, true))
+            filesWithChildren.add(pathResolve(fileWithChildren, is_dir_flag =  true))
         }
 
-        fun addPackageRoot(id: Identifier, path: String, level: Int = 0) {
+        fun addBaseURL(path: String, vcs: VcsInfo) {
+            val idFromPath = pathResolve(path, is_dir_flag = true)
+
+            if (baseUrlsForSources.containsKey(idFromPath)) {
+                return
+            }
+
+            if (vcs.type == VcsType.GIT && (vcs.url.startsWith("https://github.com/") || vcs.url.startsWith("ssh://git@github.com/"))) {
+                val revision = if (vcs.revision != VcsInfo.EMPTY.revision) { vcs.revision } else { "HEAD" }
+                val baseUrl = vcs.url
+                    .replace("ssh://git@github.com/", "https://github.com/")
+                    .replace(Regex("\\.git$"),"")
+                    .plus("/tree/${revision}/${vcs.path}/{path}")
+                baseUrlsForSources[idFromPath] = baseUrl
+            }
+
+        }
+
+        fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo = VcsInfo.EMPTY) {
             val mapOfId = packageToRoot.getOrPut(id) { sortedMapOf() }
             val oldLevel = mapOfId.getOrDefault(path, level)
             mapOfId[path] = min(level, oldLevel)
             resources.addResource(path)
+
+            addBaseURL(path, vcs)
         }
 
         fun addSignal(signal: OpossumSignal, paths: SortedSet<String>) {
@@ -275,7 +294,7 @@ class OpossumReporter : Reporter {
             paths.forEach {
                 log.trace("add signal ${signal.id} of source ${signal.source} to ${it}")
                 resources.addResource(it)
-                val itAsID = convertToId(it)
+                val itAsID = pathResolve(it)
                 if (pathToSignal.containsKey(itAsID)) {
                     pathToSignal[itAsID]!!.add(uuidOfSignal)
                 } else {
@@ -302,11 +321,12 @@ class OpossumReporter : Reporter {
             val dependencyId = dependency.id
             log.debug("$relRoot - $dependencyId - Dependency")
             val dependencyPath = pathResolve(listOf(relRoot, dependencyId.namespace, "${dependencyId.name}@${dependencyId.version}"))
-            addPackageRoot(dependencyId, dependencyPath, level)
 
             val dependencyPackage = curatedPackages
                 .find { curatedPackage -> curatedPackage.pkg.id == dependencyId }
                 ?.pkg ?: Package.EMPTY
+
+            addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
 
             this.addSignal(signalFromPkg(dependencyPackage, dependencyId), dependencyPath)
 
@@ -329,11 +349,18 @@ class OpossumReporter : Reporter {
             }
         }
 
+        fun getRootForProject(project: Project, relRoot: String) : String {
+            val vcsPath = pathResolve(relRoot, project.vcs.path)
+            val definitionFilePath = pathResolve(relRoot, project.definitionFilePath)
+            return if (definitionFilePath.startsWith(vcsPath)) { vcsPath } else { relRoot }
+        }
+
         fun addProject(project: Project, curatedPackages: SortedSet<CuratedPackage>, excludedScopes: Set<String>, relRoot: String = "/") {
             val projectId = project.id
             val definitionFilePath = pathResolve(relRoot, project.definitionFilePath)
             log.debug("$definitionFilePath - $projectId - Project")
-            addPackageRoot(projectId, relRoot)
+            val projectRoot = getRootForProject(project, relRoot)
+            addPackageRoot(projectId, projectRoot, 0, project.toPackage().vcsProcessed)
             addFileWithChildren(definitionFilePath)
 
             val signalFromProject = OpossumSignal(
@@ -444,7 +471,7 @@ class OpossumReporter : Reporter {
                 .map {
                     val path = makeLostAndFoundPath(it.pkg.id)
                     addSignal(signalFromPkg(it.pkg), path)
-                    addPackageRoot(it.pkg.id, path, Int.MAX_VALUE)
+                    addPackageRoot(it.pkg.id, path, Int.MAX_VALUE, it.pkg.vcsProcessed)
                     it
                 }.size
             if (numberOfRootlessPackages > 0) {
@@ -482,6 +509,8 @@ class OpossumReporter : Reporter {
         maxDepth: Int = Int.MAX_VALUE
     ): OpossumInput {
         val opossumInput = OpossumInput()
+
+        opossumInput.addBaseURL("/", ortResult.repository.vcs)
 
         SpdxLicense.values().forEach {
             val licenseText = getLicenseText(it.id)

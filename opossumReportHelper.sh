@@ -4,12 +4,9 @@ set -euo pipefail
 
 tag=ort/with_opossum
 
-buildDockerImg() (
-    if [[ "$(docker images -q "${tag}:latest" 2> /dev/null)" == "" ]]; then
-        cd "$(dirname "$0")"
-        DOCKER_BUILDKIT=1 docker build . --tag $tag --network=host
-    fi
-)
+buildDockerImg() {
+    DOCKER_BUILDKIT=1 docker build "$(dirname "$0")" --tag $tag --network=host
+}
 
 reportAsOpossum() {
     inputFile="$(readlink -f $1)"
