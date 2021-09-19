@@ -98,7 +98,8 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     if (version.isBlank() || names.isEmpty()) return emptyList()
 
     // If there are full matches, return them right away.
-    names.filter { it.equals(version, ignoreCase = true) }.let { if (it.isNotEmpty()) return it }
+    val fullMatches = names.filter { it.equals(version, ignoreCase = true) }
+    if (fullMatches.isNotEmpty()) return fullMatches
 
     // The list of supported version separators.
     val versionSeparators = listOf('-', '_', '.')
