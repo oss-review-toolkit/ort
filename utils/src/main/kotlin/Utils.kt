@@ -112,8 +112,8 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     val versionVariants = mutableListOf(VersionVariant(versionLower, versionSeparators))
 
     val separatorRegex = Regex(versionSeparators.joinToString("", "[", "]"))
-    versionSeparators.forEach {
-        versionVariants += VersionVariant(versionLower.replace(separatorRegex, it.toString()), listOf(it))
+    versionSeparators.mapTo(versionVariants) {
+        VersionVariant(versionLower.replace(separatorRegex, it.toString()), listOf(it))
     }
 
     val filteredNames = names.filter {
