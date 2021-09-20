@@ -104,12 +104,22 @@ fun scanOrtResult(
     val scanResults = runBlocking {
         // Scan the projects from the ORT result.
         val deferredProjectScan = async {
-            projectScanner.scanPackages(filteredProjectPackages, outputDirectory).mapKeys { it.key.id }
+            if (filteredProjectPackages.isNotEmpty()) {
+                projectScanner.scanPackages(filteredProjectPackages, outputDirectory).mapKeys { it.key.id }
+            } else {
+                projectScanner.log.info { "No projects to scan." }
+                emptyMap()
+            }
         }
 
         // Scan the packages from the ORT result.
         val deferredPackageScan = async {
-            scanner.scanPackages(filteredPackages, outputDirectory).mapKeys { it.key.id }
+            if (filteredPackages.isNotEmpty()) {
+                scanner.scanPackages(filteredPackages, outputDirectory).mapKeys { it.key.id }
+            } else {
+                scanner.log.info { "No packages to scan." }
+                emptyMap()
+            }
         }
 
         val projectResults = deferredProjectScan.await()
