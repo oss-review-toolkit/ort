@@ -85,6 +85,8 @@ class OpossumReporter : Reporter {
         val copyright: String? = null,
         val comment: String? = null,
         val preselected: Boolean = false,
+        val followUp: Boolean = false,
+        val excludeFromNotice: Boolean = false,
         val uuid: UUID = UUID.randomUUID()
     ) {
         fun toJson(): Map<*, *> {
@@ -96,7 +98,6 @@ class OpossumReporter : Reporter {
                     ),
 
                     "attributionConfidence" to 80,
-                    "preSelected" to false,
 
                     "packageType" to id?.getPurlType(),
                     "packageNamespace" to id?.namespace,
@@ -109,6 +110,8 @@ class OpossumReporter : Reporter {
                     "url" to url,
 
                     "preSelected" to preselected,
+                    "followUp" to followUp,
+                    "excludeFromNotice" to excludeFromNotice,
 
                     "comment" to comment
                 )
@@ -493,10 +496,26 @@ class OpossumReporter : Reporter {
                 )
                 this.addSignal(rootSignal, rootsAboveMaxDepth.toSortedSet())
             }
+
+            addIssues(
+                result.summary.issues,
+                "ORT-Scanner-Issue-$scanner"
+            )
         }
 
         fun addScannerResults(id: Identifier, results: List<ScanResult>, maxDepth: Int) {
             results.forEach { this.addScannerResult(id, it, maxDepth) }
+        }
+
+        private fun addIssue(issue: OrtIssue, source: String) {
+            val signal = OpossumSignal(source, comment = issue.toString(), followUp = true, excludeFromNotice = true)
+            addSignal(signal, "/ortIssues/issues")
+        }
+
+        fun addIssues(issues: List<OrtIssue>, source: String) {
+            resources.addResource("/ortIssues/issues")
+            attributionBreakpoints.add("/ortIssues")
+            issues.forEach { addIssue(it, source) }
         }
 
         fun addPackagesThatAreRootless(analyzerResultPackages: SortedSet<CuratedPackage>) {
@@ -565,12 +584,14 @@ class OpossumReporter : Reporter {
         if (excludedScopes.isEmpty()) {
             opossumInput.addPackagesThatAreRootless(analyzerResultPackages)
         }
+        opossumInput.addIssues(analyzerResult.issues.values.flatten(), "ORT-Analyzer-Issues")
 
         val scannerResults = ortResult.scanner?.results?.scanResults ?: return OpossumInput()
         scannerResults.entries.forEachIndexed { index, entry ->
             log.debug("scannerResult ${index + 1} of ${scannerResults.entries.size}")
             opossumInput.addScannerResults(entry.key, entry.value, maxDepth)
         }
+
 
         // val advisorResult = ortResult.advisor?.result
         // val evaluatorResult = ortResult.evaluator?.result
