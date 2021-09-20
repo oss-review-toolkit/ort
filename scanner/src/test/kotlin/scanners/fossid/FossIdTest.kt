@@ -272,10 +272,10 @@ class FossIdTest : WordSpec({
 
             val summary = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).summary(pkgId)
 
-            val expectedIssues = listOf(
-                OrtIssue(timestamp = Instant.EPOCH, createPendingFile(4), "pending", Severity.HINT),
-                OrtIssue(timestamp = Instant.EPOCH, createPendingFile(5), "pending", Severity.HINT)
-            )
+            val expectedIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
+                OrtIssue(Instant.EPOCH, it, "Pending identification for '$it'.", Severity.HINT)
+            }
+
             summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe expectedIssues
         }
 
