@@ -74,7 +74,7 @@ internal class FossIdNamingProvider(
     private fun replaceNamingConventionVariables(
         namingConventionPattern: String, builtins: Map<String, String>, namingConventionVariables: Map<String, String>
     ): String {
-        log.info { "Parametrizing the name with naming=$namingConventionPattern." }
+        log.info { "Parameterizing the name with pattern '$namingConventionPattern'." }
         val currentTimestamp = FORMATTER.format(LocalDateTime.now())
 
         val allVariables =
