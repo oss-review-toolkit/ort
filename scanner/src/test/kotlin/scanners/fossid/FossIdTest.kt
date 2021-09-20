@@ -616,7 +616,7 @@ private const val SCAN_ID = "testScanId"
  * Create a new [FossId] instance with the specified [config].
  */
 private fun createFossId(config: FossIdConfig): FossId =
-    FossId("fossId", ScannerConfiguration(), DownloaderConfiguration(), config)
+    FossId("FossId", ScannerConfiguration(), DownloaderConfiguration(), config)
 
 /**
  * Create a standard [FossIdConfig] whose properties can be partly specified.
