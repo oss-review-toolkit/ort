@@ -678,7 +678,7 @@ class FossId internal constructor(
             copyrightFindings = copyrightFindings.toSortedSet(),
             // TODO: Maybe get issues from FossId (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
             issues = rawResults.listPendingFiles.map {
-                OrtIssue(source = it, message = "Pending identification for '$it'.", severity = Severity.HINT)
+                OrtIssue(source = scannerName, message = "Pending identification for '$it'.", severity = Severity.HINT)
             }
         )
 
