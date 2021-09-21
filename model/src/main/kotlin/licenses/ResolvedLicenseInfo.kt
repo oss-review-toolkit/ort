@@ -174,6 +174,12 @@ data class ResolvedLicense(
         LicenseSource.DETECTED in sources && locations.all { it.matchingPathExcludes.isNotEmpty() }
     }
 
+    init {
+        require(sources.isNotEmpty()) {
+            "A resolved license must have at least one license source."
+        }
+    }
+
     /**
      * Return all resolved copyrights for this license. Copyright findings that are excluded by [PathExclude]s are
      * [omitted][omitExcluded] by default. The copyrights are [processed][process] by default using the
