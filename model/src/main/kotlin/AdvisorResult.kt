@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,17 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
 /**
- * The result of a single vulnerability check of a single package.
+ * The result of a single advisor check of a single package.
  */
 data class AdvisorResult(
     /**
-     * The found vulnerabilities.
+     * The findings returned by the advisor.
      */
-    val vulnerabilities: List<Finding>,
+    @JsonAlias("vulnerabilities")
+    val findings: List<Finding>,
 
     /**
      * Details about the used advisor.

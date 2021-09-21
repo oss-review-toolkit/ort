@@ -67,7 +67,7 @@ data class AdvisorRecord(
      * from different advisors are merged if necessary.
      */
     fun getFindings(pkgId: Identifier): List<Finding> =
-        advisorResults[pkgId].orEmpty().flatMap { it.vulnerabilities }.mergeFindings()
+        advisorResults[pkgId].orEmpty().flatMap { it.findings }.mergeFindings()
 }
 
 /**

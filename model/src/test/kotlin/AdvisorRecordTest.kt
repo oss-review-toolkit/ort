@@ -43,7 +43,7 @@ class AdvisorRecordTest : WordSpec({
             ---
             advisor_results:
               type:namespace:name:version:
-              - vulnerabilities: []
+              - findings: []
                 advisor:
                   name: "advisor"
                 summary:

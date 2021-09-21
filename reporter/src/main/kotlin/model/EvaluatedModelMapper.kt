@@ -204,7 +204,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 val pkg = packages[id] ?: createEmptyPackage(id)
 
                 results.flatMap { result ->
-                    result.vulnerabilities.map { vulnerability ->
+                    result.findings.map { vulnerability ->
                         val resolutions = addResolutions(vulnerability)
                         vulnerabilities += EvaluatedVulnerability(
                             pkg = pkg,

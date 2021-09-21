@@ -223,7 +223,7 @@ val ortResult = OrtResult(
             advisorResults = sortedMapOf(
                 packageWithVulnerabilities.id to listOf(
                     AdvisorResult(
-                        vulnerabilities = listOf(
+                        findings = listOf(
                             Finding(
                                 id = "CVE-2021-critical",
                                 references = listOf(

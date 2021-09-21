@@ -110,7 +110,7 @@ class VulnerableCodeTest : WordSpec({
                 )
             )
 
-            langResults.flatMap { it.vulnerabilities } should containExactly(expLangFinding)
+            langResults.flatMap { it.findings } should containExactly(expLangFinding)
 
             val strutsResults = result.getValue(idStruts)
             strutsResults shouldHaveSize(1)
@@ -142,7 +142,7 @@ class VulnerableCodeTest : WordSpec({
                 )
             )
 
-            strutsResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expStrutsVulnerabilities)
+            strutsResults.flatMap { it.findings } should containExactlyInAnyOrder(expStrutsVulnerabilities)
         }
 
         "handle a failure response from the server" {
@@ -237,7 +237,7 @@ private fun expectErrorResult(wiremock: WireMockServer) {
             val pkgResults = getValue(pkg)
             pkgResults shouldHaveSize 1
             val pkgResult = pkgResults[0]
-            pkgResult.vulnerabilities should beEmpty()
+            pkgResult.findings should beEmpty()
             pkgResult.summary.issues shouldHaveSize 1
             val issue = pkgResult.summary.issues[0]
             issue.severity shouldBe Severity.ERROR
