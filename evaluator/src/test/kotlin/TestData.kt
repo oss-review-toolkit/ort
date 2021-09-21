@@ -31,6 +31,8 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.Finding
+import org.ossreviewtoolkit.model.FindingDetail
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
@@ -47,8 +49,6 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -224,20 +224,20 @@ val ortResult = OrtResult(
                 packageWithVulnerabilities.id to listOf(
                     AdvisorResult(
                         vulnerabilities = listOf(
-                            Vulnerability(
+                            Finding(
                                 id = "CVE-2021-critical",
                                 references = listOf(
-                                    VulnerabilityReference(
+                                    FindingDetail(
                                         url = URI("https://oss-review-toolkit.org"),
                                         scoringSystem = "CVSS3",
                                         severity = "9.0"
                                     )
                                 )
                             ),
-                            Vulnerability(
+                            Finding(
                                 id = "CVE-2021-trivial",
                                 references = listOf(
-                                    VulnerabilityReference(
+                                    FindingDetail(
                                         url = URI("https://oss-review-toolkit.org"),
                                         scoringSystem = "CVSS3",
                                         severity = "2.0"

@@ -29,9 +29,9 @@ import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
+import org.ossreviewtoolkit.model.Finding
+import org.ossreviewtoolkit.model.FindingDetail
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.NexusIqConfiguration
 import org.ossreviewtoolkit.model.utils.PurlType
@@ -110,20 +110,20 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
     }
 
     /**
-     * Construct a [Vulnerability] from the data stored in this issue. As a [VulnerabilityReference] requires a
+     * Construct a [Finding] from the data stored in this issue. As a [FindingDetail] requires a
      * non-null URI, issues without an URI yield *null* results. (This is rather a paranoia check, as issues are
      * expected to have a URI.)
      */
-    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability? {
-        val references = mutableListOf<VulnerabilityReference>()
+    private fun NexusIqService.SecurityIssue.toVulnerability(): Finding? {
+        val references = mutableListOf<FindingDetail>()
 
         val browseUrl = URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
-        val nexusIqReference = VulnerabilityReference(browseUrl, scoringSystem(), severity.toString())
+        val nexusIqReference = FindingDetail(browseUrl, scoringSystem(), severity.toString())
 
         references += nexusIqReference
         url.takeIf { it != browseUrl }?.let { references += nexusIqReference.copy(url = it) }
 
-        return Vulnerability(reference, references)
+        return Finding(reference, references)
     }
 
     /**

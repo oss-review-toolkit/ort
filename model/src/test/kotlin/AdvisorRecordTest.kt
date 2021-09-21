@@ -202,7 +202,7 @@ class AdvisorRecordTest : WordSpec({
             val vul1 = createVulnerability("CVE-2021-1")
             val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
             val vul3 = createVulnerability("CVE-2021-2")
-            val mergedVulnerability = Vulnerability(vul1.id, vul1.references + vul2.references)
+            val mergedFinding = Finding(vul1.id, vul1.references + vul2.references)
 
             val record = AdvisorRecord(
                 sortedMapOf(
@@ -213,7 +213,7 @@ class AdvisorRecordTest : WordSpec({
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(mergedVulnerability, vul3)
+            record.getVulnerabilities(queryId) should containExactly(mergedFinding, vul3)
         }
 
         "remove duplicate references when merging vulnerabilities" {
@@ -222,7 +222,7 @@ class AdvisorRecordTest : WordSpec({
             val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
             val vul3 = createVulnerability("CVE-2021-1")
             val vul4 = createVulnerability("CVE-2021-1", otherSource, "cvssv3", "5")
-            val mergedVulnerability = Vulnerability(vul1.id, vul1.references + vul2.references + vul4.references)
+            val mergedFinding = Finding(vul1.id, vul1.references + vul2.references + vul4.references)
 
             val record = AdvisorRecord(
                 sortedMapOf(
@@ -233,7 +233,7 @@ class AdvisorRecordTest : WordSpec({
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(mergedVulnerability)
+            record.getVulnerabilities(queryId) should containExactly(mergedFinding)
         }
     }
 })
@@ -252,7 +252,7 @@ private val langId = Identifier("Maven", "org.apache.commons", "commons-lang3", 
 private val queryId = Identifier("NPM", "", "jQuery", "2.1.4")
 
 /**
- * Construct a [Vulnerability] with the given [id] that has a single [VulnerabilityReference] pointing to a source
+ * Construct a [Finding] with the given [id] that has a single [FindingDetail] pointing to a source
  * URI derived from the given [uriPrefix] with the [scoringSystem] and [severity] provided.
  */
 private fun createVulnerability(
@@ -260,11 +260,11 @@ private fun createVulnerability(
     uriPrefix: String = SOURCE_URI_PREFIX,
     scoringSystem: String = SCORING_SYSTEM,
     severity: String = DEFAULT_SEVERITY
-): Vulnerability =
-    Vulnerability(
+): Finding =
+    Finding(
         id = id,
         references = listOf(
-            VulnerabilityReference(URI("$uriPrefix$id"), scoringSystem, severity)
+            FindingDetail(URI("$uriPrefix$id"), scoringSystem, severity)
         )
     )
 
@@ -275,7 +275,7 @@ private fun createVulnerability(
 private fun createResult(
     advisorIndex: Int,
     issues: List<OrtIssue> = emptyList(),
-    vulnerabilities: List<Vulnerability> = emptyList()
+    vulnerabilities: List<Finding> = emptyList()
 ): AdvisorResult {
     val details = AdvisorDetails("advisor$advisorIndex")
     val summary = AdvisorSummary(

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.SortedMap
 
 /**
- * A record of a single run of the advisor tool, containing the input and the [Vulnerability] for every checked package.
+ * A record of a single run of the advisor tool, containing the input and the [Finding] for every checked package.
  */
 @JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
 data class AdvisorRecord(
@@ -63,29 +63,29 @@ data class AdvisorRecord(
     }
 
     /**
-     * Return a list with all [Vulnerability] objects that have been found for the given [package][pkgId]. Results
+     * Return a list with all [Finding] objects that have been found for the given [package][pkgId]. Results
      * from different advisors are merged if necessary.
      */
-    fun getVulnerabilities(pkgId: Identifier): List<Vulnerability> =
+    fun getVulnerabilities(pkgId: Identifier): List<Finding> =
         advisorResults[pkgId].orEmpty().flatMap { it.vulnerabilities }.mergeVulnerabilities()
 }
 
 /**
- * Merge this list of [Vulnerability] objects by combining vulnerabilities with the same ID and merging their
+ * Merge this list of [Finding] objects by combining vulnerabilities with the same ID and merging their
  * references.
  */
-private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability> {
+private fun Collection<Finding>.mergeVulnerabilities(): List<Finding> {
     val vulnerabilitiesById = groupByTo(sortedMapOf()) { it.id }
     return vulnerabilitiesById.map { it.value.mergeReferences() }
 }
 
 /**
- * Merge this (non-empty) list of [Vulnerability] objects (which are expected to have the same ID) by to a single
- * [Vulnerability] that contains all the references from the source vulnerabilities (with duplicates removed).
+ * Merge this (non-empty) list of [Finding] objects (which are expected to have the same ID) by to a single
+ * [Finding] that contains all the references from the source vulnerabilities (with duplicates removed).
  */
-private fun Collection<Vulnerability>.mergeReferences(): Vulnerability {
+private fun Collection<Finding>.mergeReferences(): Finding {
     val references = flatMapTo(mutableSetOf()) { it.references }
-    return Vulnerability(first().id, references.toList())
+    return Finding(first().id, references.toList())
 }
 
 /**

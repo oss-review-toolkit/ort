@@ -44,12 +44,12 @@ import java.net.URI
 
 import kotlinx.coroutines.runBlocking
 
+import org.ossreviewtoolkit.model.Finding
+import org.ossreviewtoolkit.model.FindingDetail
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -89,20 +89,20 @@ class VulnerableCodeTest : WordSpec({
             val langResults = result.getValue(idLang)
             langResults shouldHaveSize(1)
             langResults[0].advisor.name shouldBe ADVISOR_NAME
-            val expLangVulnerability = Vulnerability(
+            val expLangFinding = Finding(
                 id = "CVE-2014-8242",
                 listOf(
-                    VulnerabilityReference(
+                    FindingDetail(
                         URI("https://nvd.nist.gov/vuln/detail/CVE-2014-8242"),
                         scoringSystem = null,
                         severity = null
                     ),
-                    VulnerabilityReference(
+                    FindingDetail(
                         URI("https://github.com/apache/commons-lang/security/advisories/GHSA-2cxf-6567-7pp6"),
                         scoringSystem = "cvssv3.1_qr",
                         severity = "LOW"
                     ),
-                    VulnerabilityReference(
+                    FindingDetail(
                         URI("https://github.com/advisories/GHSA-2cxf-6567-7pp6"),
                         scoringSystem = null,
                         severity = null
@@ -110,30 +110,30 @@ class VulnerableCodeTest : WordSpec({
                 )
             )
 
-            langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
+            langResults.flatMap { it.vulnerabilities } should containExactly(expLangFinding)
 
             val strutsResults = result.getValue(idStruts)
             strutsResults shouldHaveSize(1)
             val expStrutsVulnerabilities = listOf(
-                Vulnerability(
+                Finding(
                     id = "CVE-2009-1382",
                     listOf(
-                        VulnerabilityReference(
+                        FindingDetail(
                             URI("https://nvd.nist.gov/vuln/detail/CVE-2009-1382"),
                             scoringSystem = "cvssv2",
                             severity = "7"
                         )
                     )
                 ),
-                Vulnerability(
+                Finding(
                     id = "CVE-2019-CoV19",
                     listOf(
-                        VulnerabilityReference(
+                        FindingDetail(
                             URI("https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19"),
                             scoringSystem = "cvssv3",
                             severity = "10"
                         ),
-                        VulnerabilityReference(
+                        FindingDetail(
                             URI("https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19"),
                             scoringSystem = "cvssv3.1_qr",
                             severity = "HIGH"

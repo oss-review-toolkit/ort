@@ -22,31 +22,29 @@ package org.ossreviewtoolkit.model
 import java.net.URI
 
 /**
- * A data class representing detailed information about a vulnerability obtained from a specific source.
+ * A data class representing detailed information about an advisor finding obtained from a specific source.
  *
- * A single vulnerability can be listed by multiple sources using different scoring systems to denote its severity.
- * So when ORT queries different providers for vulnerability information it may well find multiple records for a single
- * vulnerability, which could even contain contradicting information. To model this, a [Vulnerability] is associated
- * with a list of references; each reference points to the source of the information and has some detailed information
+ * A single finding, such as a vulnerability, can be listed by multiple sources using different properties.
+ * So when ORT queries different providers for findings of a specific type it may well find multiple records for a
+ * single finding, which could even contain contradicting information. To model this, a [Finding] is associated
+ * with a list of details; each detail points to the source of the information and has some additional information
  * provided by this source.
  */
-data class VulnerabilityReference(
+data class FindingDetail(
     /**
-     * The URI pointing to details of this vulnerability. This can also be used to derive the source of this
-     * information.
+     * The URI pointing to the source of this finding.
      */
     val url: URI,
 
     /**
-     * The name of the scoring system to express the severity of this vulnerability if available.
+     * The name of the scoring system to express the severity of this finding if available.
      */
     val scoringSystem: String?,
 
     /**
-     * The severity assigned to the vulnerability by this reference. Note that this is a plain string, whose meaning
+     * The severity assigned to the finding by the referenced source. Note that this is a plain string, whose meaning
      * depends on the concrete scoring system. It could be a number, but also a constant like _LOW_ or _HIGH_. A
-     * *null* value is possible as well, meaning that this reference does not contain any information about the
-     * severity.
+     * *null* value is possible as well, meaning that this object does not contain any information about the severity.
      */
     val severity: String?
 ) {

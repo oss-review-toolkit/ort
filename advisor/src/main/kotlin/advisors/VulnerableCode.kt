@@ -29,9 +29,9 @@ import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.Package
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
+import org.ossreviewtoolkit.model.Finding
+import org.ossreviewtoolkit.model.FindingDetail
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -103,20 +103,20 @@ class VulnerableCode(
     }
 
     /**
-     * Convert this vulnerability from the VulnerableCode data model to a [Vulnerability].
+     * Convert this vulnerability from the VulnerableCode data model to a [Finding].
      */
-    private fun VulnerableCodeService.Vulnerability.toModel(): Vulnerability =
-        Vulnerability(vulnerabilityId, references.flatMap { it.toModel() })
+    private fun VulnerableCodeService.Vulnerability.toModel(): Finding =
+        Finding(vulnerabilityId, references.flatMap { it.toModel() })
 
     /**
-     * Convert this reference from the VulnerableCode data model to a list of [VulnerabilityReference] objects.
+     * Convert this reference from the VulnerableCode data model to a list of [FindingDetail] objects.
      * In the VulnerableCode model, the reference can be assigned multiple scores in different scoring systems.
-     * For each of these scores, a single [VulnerabilityReference] is created. If no score is available, return a
-     * list with a single [VulnerabilityReference] with limited data.
+     * For each of these scores, a single [FindingDetail] is created. If no score is available, return a
+     * list with a single [FindingDetail] with limited data.
      */
-    private fun VulnerableCodeService.VulnerabilityReference.toModel(): List<VulnerabilityReference> {
+    private fun VulnerableCodeService.VulnerabilityReference.toModel(): List<FindingDetail> {
         val sourceUri = URI(url)
-        if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
-        return scores.map { VulnerabilityReference(sourceUri, it.scoringSystem, it.value) }
+        if (scores.isEmpty()) return listOf(FindingDetail(sourceUri, null, null))
+        return scores.map { FindingDetail(sourceUri, it.scoringSystem, it.value) }
     }
 }

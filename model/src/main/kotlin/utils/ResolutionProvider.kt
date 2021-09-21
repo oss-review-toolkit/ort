@@ -20,17 +20,17 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import org.ossreviewtoolkit.model.Finding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 
 /**
- * An interface to provide resolutions for [OrtIssue]s, [RuleViolation]s and [Vulnerability]s .
+ * An interface to provide resolutions for [OrtIssue]s, [RuleViolation]s and [Finding]s .
  */
 interface ResolutionProvider {
     /**
@@ -44,9 +44,9 @@ interface ResolutionProvider {
     fun getRuleViolationResolutionsFor(violation: RuleViolation): List<RuleViolationResolution>
 
     /**
-     * Get all vulnerability resolutions that match [vulnerability].
+     * Get all vulnerability resolutions that match [finding].
      */
-    fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution>
+    fun getVulnerabilityResolutionsFor(finding: Finding): List<VulnerabilityResolution>
 
     /**
      * Get a [Resolutions] object that contains all resolutions which apply to [OrtIssue]s or [RuleViolation]s contained

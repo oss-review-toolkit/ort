@@ -27,6 +27,8 @@ import freemarker.template.TemplateExceptionHandler
 import java.io.File
 import java.util.SortedMap
 
+import org.ossreviewtoolkit.model.Finding
+import org.ossreviewtoolkit.model.FindingDetail
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
@@ -37,8 +39,6 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -123,7 +123,7 @@ class FreemarkerTemplateProcessor(
             "LicenseView" to LicenseView,
             "helper" to TemplateHelper(input),
             "projectsAsPackages" to projectsAsPackages,
-            "vulnerabilityReference" to VulnerabilityReference
+            "vulnerabilityReference" to FindingDetail
         )
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
@@ -325,10 +325,10 @@ class FreemarkerTemplateProcessor(
             } ?: false
 
         /**
-         * Return a list of [Vulnerability]s for which there is no [VulnerabilityResolution] is provided.
+         * Return a list of [Finding]s for which there is no [VulnerabilityResolution] is provided.
          */
         @Suppress("UNUSED") // This function is used in the templates.
-        fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
+        fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Finding>): List<Finding> =
                 vulnerabilities.filter { input.resolutionProvider.getVulnerabilityResolutionsFor(it).isEmpty() }
     }
 }

@@ -35,25 +35,25 @@ import java.time.Instant
 class AdvisorResultContainerTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
-    private val vulnerability11 = Vulnerability(
+    private val finding11 = Finding(
         "CVE-11",
-        listOf(VulnerabilityReference(URI("https://src1.example.org"), "score1", "5"))
+        listOf(FindingDetail(URI("https://src1.example.org"), "score1", "5"))
     )
-    private val vulnerability12 = Vulnerability(
+    private val finding12 = Finding(
         "CVE-12",
-        listOf(VulnerabilityReference(URI("https://src2.example.org"), "score1", "7"))
+        listOf(FindingDetail(URI("https://src2.example.org"), "score1", "7"))
     )
-    private val vulnerability21 = Vulnerability(
+    private val finding21 = Finding(
         "CVE-21",
-        listOf(VulnerabilityReference(URI("https://src3.example.org"), "score2", "medium"))
+        listOf(FindingDetail(URI("https://src3.example.org"), "score2", "medium"))
     )
-    private val vulnerability22 = Vulnerability(
+    private val finding22 = Finding(
         "CVE-22",
-        listOf(VulnerabilityReference(URI("https://src1.example.org"), "score2", "low"))
+        listOf(FindingDetail(URI("https://src1.example.org"), "score2", "low"))
     )
 
-    private val vulnerabilities1 = listOf(vulnerability11, vulnerability12)
-    private val vulnerabilities2 = listOf(vulnerability21, vulnerability22)
+    private val vulnerabilities1 = listOf(finding11, finding12)
+    private val vulnerabilities2 = listOf(finding21, finding22)
 
     private val advisorDetails1 = AdvisorDetails("name 1")
     private val advisorDetails2 = AdvisorDetails("name 2")

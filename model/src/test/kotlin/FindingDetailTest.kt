@@ -24,10 +24,10 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.VulnerabilityReference.Cvss2Rating
-import org.ossreviewtoolkit.model.VulnerabilityReference.Cvss3Rating
+import org.ossreviewtoolkit.model.FindingDetail.Cvss2Rating
+import org.ossreviewtoolkit.model.FindingDetail.Cvss3Rating
 
-class VulnerabilityTest : StringSpec({
+class FindingDetailTest : StringSpec({
     "The CVSS 2 rating should be correct for a given score" {
         Cvss2Rating.fromScore(-0.1f) should beNull()
 

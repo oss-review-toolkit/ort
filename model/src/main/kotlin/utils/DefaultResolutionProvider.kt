@@ -20,10 +20,10 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import org.ossreviewtoolkit.model.Finding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.Resolutions
 
 /**
@@ -42,8 +42,8 @@ class DefaultResolutionProvider : ResolutionProvider {
     override fun getRuleViolationResolutionsFor(violation: RuleViolation) =
         resolutions.ruleViolations.filter { it.matches(violation) }
 
-    override fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability) =
-        resolutions.vulnerabilities.filter { it.matches(vulnerability) }
+    override fun getVulnerabilityResolutionsFor(finding: Finding) =
+        resolutions.vulnerabilities.filter { it.matches(finding) }
 
     override fun getResolutionsFor(ortResult: OrtResult): Resolutions {
         val issueResolutions = ortResult.collectIssues().values.flatten().let { issues ->

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.reporter.model
 
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNode
+import org.ossreviewtoolkit.model.Finding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Project
@@ -31,7 +32,6 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -558,8 +558,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         return ruleViolationResolutions.addIfRequired(matchingResolutions)
     }
 
-    private fun addResolutions(vulnerability: Vulnerability): List<VulnerabilityResolution> {
-        val matchingResolutions = input.resolutionProvider.getVulnerabilityResolutionsFor(vulnerability)
+    private fun addResolutions(finding: Finding): List<VulnerabilityResolution> {
+        val matchingResolutions = input.resolutionProvider.getVulnerabilityResolutionsFor(finding)
 
         return vulnerabilitiesResolutions.addIfRequired(matchingResolutions)
     }
