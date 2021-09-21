@@ -13,7 +13,7 @@ ORT:
 ORT is tested to run on Linux, macOS, and Windows. This tutorial assumes that you are running on Linux, but it should be
 easy to adapt the commands to macOS or Windows.
 
-In addition to Java (version >= 8), for some of the supported package managers and Version Control Systems additional
+In addition to Java (version >= 11), for some of the supported package managers and Version Control Systems additional
 tools need to be installed. In the context of this tutorial the following tools are required:
 
 * Git (any recent version will do)
