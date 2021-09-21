@@ -40,7 +40,7 @@ class PackageRuleTest : WordSpec() {
             resolvedLicense = resolvedLicenseInfo[license] ?: ResolvedLicense(
                 license = license,
                 originalDeclaredLicenses = emptySet(),
-                originalExpressions = emptyMap(),
+                originalExpressions = mapOf(licenseSource to setOf(license)),
                 locations = emptySet()
             ),
             licenseSource = licenseSource
