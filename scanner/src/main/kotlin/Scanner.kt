@@ -87,7 +87,7 @@ fun scanOrtResult(
         .filter { it.pkg.id !in projectPackageIds }
         .map { it.pkg }
 
-    fun removeConcludedPackages(packages: Collection<Package>, scanner: Scanner): Collection<Package> =
+    fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): Set<Package> =
         packages.takeUnless { scanner.scannerConfig.skipConcluded }
             // Remove all packages that have a concluded license and authors set.
             ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
@@ -95,11 +95,11 @@ fun scanOrtResult(
                     scanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
                 }
 
-                keep
+                keep.toSet()
             }
 
     val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
-    val filteredPackages = removeConcludedPackages(packages, scanner)
+    val filteredPackages = removeConcludedPackages(packages.toSet(), scanner)
 
     val scanResults = runBlocking {
         // Scan the projects from the ORT result.
@@ -187,7 +187,7 @@ abstract class Scanner(
      * result for the specification of this scanner.
      */
     internal abstract suspend fun scanPackages(
-        packages: Collection<Package>,
+        packages: Set<Package>,
         outputDirectory: File
     ): Map<Package, List<ScanResult>>
 
