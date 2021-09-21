@@ -208,7 +208,7 @@ class FossId internal constructor(
         }
 
     override suspend fun scanPackages(
-        packages: Collection<Package>,
+        packages: Set<Package>,
         outputDirectory: File
     ): Map<Package, List<ScanResult>> {
         val (results, duration) = measureTimedValue {
