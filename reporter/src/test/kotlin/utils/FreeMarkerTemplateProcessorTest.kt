@@ -277,9 +277,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             result should haveSize(2)
             with(result[0]) {
                 license.toString() shouldBe "MIT"
-                originalExpressions.filter {
-                    it.source == LicenseSource.DECLARED
-                }.map { it.expression.toString() } shouldContainExactlyInAnyOrder listOf(
+                originalExpressions.map { it.expression.toString() } shouldContainExactlyInAnyOrder listOf(
                     "MIT",
                     "GPL-2.0-only OR MIT"
                 )
@@ -380,9 +378,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             result should haveSize(1)
             with(result[0]) {
                 license.toString() shouldBe "MIT"
-                originalExpressions.filter {
-                    it.source == LicenseSource.DECLARED
-                }.map { it.expression.toString() } shouldContainExactlyInAnyOrder listOf(
+                originalExpressions.map { it.expression.toString() } shouldContainExactlyInAnyOrder listOf(
                     "GPL-2.0-only OR MIT OR Apache-2.0"
                 )
             }
