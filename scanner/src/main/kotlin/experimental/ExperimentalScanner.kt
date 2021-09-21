@@ -366,10 +366,9 @@ class ExperimentalScanner(
  * matching the paths of findings with the paths in the source tree.
  */
 fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance): NestedProvenanceScanResult {
-    val provenanceByPath = listOf(
-        "" to nestedProvenance.root,
-        *nestedProvenance.subRepositories.toList().toTypedArray()
-    ).sortedByDescending { it.first.length }
+    val provenanceByPath = nestedProvenance.subRepositories.toList().toMutableList<Pair<String, KnownProvenance>>()
+        .also { it += ("" to nestedProvenance.root) }
+        .sortedByDescending { it.first.length }
 
     val copyrightFindingsByProvenance = summary.copyrightFindings.groupBy { copyrightFinding ->
         provenanceByPath.first { copyrightFinding.location.path.startsWith(it.first) }.second

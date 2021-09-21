@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +39,10 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
+import kotlinx.coroutines.runBlocking
+
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
@@ -45,11 +50,20 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.experimental.DefaultNestedProvenanceResolver
+import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolver
+import org.ossreviewtoolkit.scanner.experimental.DefaultProvenanceDownloader
+import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
 import org.ossreviewtoolkit.scanner.scanOrtResult
+import org.ossreviewtoolkit.scanner.scanners.Askalono
+import org.ossreviewtoolkit.scanner.scanners.BoyterLc
+import org.ossreviewtoolkit.scanner.scanners.Licensee
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
@@ -118,6 +132,14 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
     ).flag()
 
+    private val experimental by option(
+        "--experimental",
+        help = "Use a new experimental implementation of the scanner which scans by provenance instead of by " +
+                "package. This improves reuse of stored scan results and increases performance if multiple packages " +
+                "are coming from the same source code repository. The experimental scanner is work in progress and " +
+                "it is therefore not recommended to use it in production."
+    ).flag()
+
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
@@ -140,6 +162,28 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         val config = globalOptionsForSubcommands.config
 
+        val ortResult = if (experimental) {
+            runExperimental(config)
+        } else {
+            run(nativeOutputDir, config)
+        }.mergeLabels(labels)
+
+        // Write the result.
+        outputDir.safeMkdirs()
+        writeOrtResult(ortResult, outputFiles, "scan")
+
+        val scanResults = ortResult.scanner?.results
+
+        if (scanResults == null) {
+            println("There was an error creating the scan results.")
+            throw ProgramResult(1)
+        }
+
+        val counts = scanResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
+        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
+    }
+
+    private fun run(nativeOutputDir: File, config: OrtConfiguration): OrtResult {
         // Configure the scan storage, which is common to all scanners.
         ScanResultsStorage.configure(config.scanner)
 
@@ -168,7 +212,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         } ?: scanner
 
         // Perform the scan.
-        val ortResult = if (input.isFile) {
+        return if (input.isFile) {
             val ortResult = readOrtResult(input)
             scanOrtResult(scanner, projectScanner, ortResult, nativeOutputDir, skipExcluded)
         } else {
@@ -180,20 +224,39 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 inputPath = input,
                 outputDirectory = nativeOutputDir
             )
-        }.mergeLabels(labels)
+        }
+    }
 
-        // Write the result.
-        outputDir.safeMkdirs()
-        writeOrtResult(ortResult, outputFiles, "scan")
-
-        val scanResults = ortResult.scanner?.results
-
-        if (scanResults == null) {
-            println("There was an error creating the scan results.")
-            throw ProgramResult(1)
+    private fun runExperimental(config: OrtConfiguration): OrtResult {
+        // TODO: The experimental scanner supports using multiple scanner wrappers at once, for now use only one to stay
+        //       compatible with the existing scanner command. Once the experimental flag is removed this command can
+        //       support multiple scanners and use the proper ScannerWrapperFactories.
+        val scannerWrapper = when (scannerFactory.scannerName) {
+            "Askalono" -> Askalono.Factory().create(config.scanner, config.downloader)
+            "BoyterLc" -> BoyterLc.Factory().create(config.scanner, config.downloader)
+            "Licensee" -> Licensee.Factory().create(config.scanner, config.downloader)
+            "ScanCode" -> ScanCode.Factory().create(config.scanner, config.downloader)
+            else -> {
+                throw IllegalArgumentException(
+                    "The scanner ${scannerFactory.scannerName} is not supported by the experimental scanner."
+                )
+            }
         }
 
-        val counts = scanResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
+        val scanner = ExperimentalScanner(
+            scannerConfig = config.scanner,
+            downloaderConfig = config.downloader,
+            provenanceDownloader = DefaultProvenanceDownloader(config.downloader),
+            storageReaders = emptyList(),
+            storageWriters = emptyList(),
+            packageProvenanceResolver = DefaultPackageProvenanceResolver(),
+            nestedProvenanceResolver = DefaultNestedProvenanceResolver(),
+            scannerWrappers = listOf(scannerWrapper)
+        )
+
+        val ortResult = readOrtResult(input)
+        return runBlocking {
+            scanner.scan(ortResult)
+        }
     }
 }
