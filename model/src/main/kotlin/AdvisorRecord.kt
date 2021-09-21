@@ -66,24 +66,23 @@ data class AdvisorRecord(
      * Return a list with all [Finding] objects that have been found for the given [package][pkgId]. Results
      * from different advisors are merged if necessary.
      */
-    fun getVulnerabilities(pkgId: Identifier): List<Finding> =
-        advisorResults[pkgId].orEmpty().flatMap { it.vulnerabilities }.mergeVulnerabilities()
+    fun getFindings(pkgId: Identifier): List<Finding> =
+        advisorResults[pkgId].orEmpty().flatMap { it.vulnerabilities }.mergeFindings()
 }
 
 /**
- * Merge this list of [Finding] objects by combining vulnerabilities with the same ID and merging their
- * references.
+ * Merge this list of [Finding] objects by combining objects with the same ID and merging their details.
  */
-private fun Collection<Finding>.mergeVulnerabilities(): List<Finding> {
-    val vulnerabilitiesById = groupByTo(sortedMapOf()) { it.id }
-    return vulnerabilitiesById.map { it.value.mergeReferences() }
+private fun Collection<Finding>.mergeFindings(): List<Finding> {
+    val findingsById = groupByTo(sortedMapOf()) { it.id }
+    return findingsById.map { it.value.mergeDetails() }
 }
 
 /**
- * Merge this (non-empty) list of [Finding] objects (which are expected to have the same ID) by to a single
- * [Finding] that contains all the references from the source vulnerabilities (with duplicates removed).
+ * Merge this (non-empty) list of [Finding] objects (which are expected to have the same ID) to a single
+ * [Finding] that contains all the details from the source findings (with duplicates removed).
  */
-private fun Collection<Finding>.mergeReferences(): Finding {
+private fun Collection<Finding>.mergeDetails(): Finding {
     val references = flatMapTo(mutableSetOf()) { it.references }
     return Finding(first().id, references.toList())
 }

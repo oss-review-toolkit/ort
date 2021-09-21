@@ -79,7 +79,7 @@ open class PackageRule(
 
             override fun matches() = ruleSet.ortResult.advisor
                 ?.results
-                ?.getVulnerabilities(pkg.id)
+                ?.getFindings(pkg.id)
                 ?.isNotEmpty()
                 ?: false
         }
@@ -95,7 +95,7 @@ open class PackageRule(
 
             override fun matches() = ruleSet.ortResult.advisor
                 ?.results
-                ?.getVulnerabilities(pkg.id)
+                ?.getFindings(pkg.id)
                 ?.flatMap { it.references }
                 ?.filter { reference -> reference.scoringSystem == scoringSystem }
                 ?.mapNotNull { reference -> reference.severity }

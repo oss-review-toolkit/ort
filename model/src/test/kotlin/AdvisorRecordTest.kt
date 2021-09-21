@@ -86,12 +86,12 @@ class AdvisorRecordTest : WordSpec({
 
     "hasIssues" should {
         "return false given the record has no issues" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
                     langId to listOf(createResult(1)),
-                    queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2)))
+                    queryId to listOf(createResult(1, findings = listOf(vul1, vul2)))
                 )
             )
 
@@ -99,17 +99,17 @@ class AdvisorRecordTest : WordSpec({
         }
 
         "return true given the record has issues" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
                     langId to listOf(createResult(1)),
                     queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
+                        createResult(1, findings = listOf(vul1)),
                         createResult(
                             2,
                             issues = listOf(OrtIssue(source = "Advisor", message = "Failure")),
-                            vulnerabilities = listOf(vul2)
+                            findings = listOf(vul2)
                         )
                     )
                 )
@@ -121,12 +121,12 @@ class AdvisorRecordTest : WordSpec({
 
     "collectIssues" should {
         "return a map with empty sets if no issues are present" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
                     langId to listOf(createResult(1)),
-                    queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2)))
+                    queryId to listOf(createResult(1, findings = listOf(vul1, vul2)))
                 )
             )
 
@@ -140,15 +140,15 @@ class AdvisorRecordTest : WordSpec({
             val issue1 = OrtIssue(source = "Advisor", message = "Failure1")
             val issue2 = OrtIssue(source = "Advisor", message = "Failure2")
             val issue3 = OrtIssue(source = "Advisor", message = "Warning", severity = Severity.WARNING)
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
                     langId to listOf(createResult(1, issues = listOf(issue3))),
                     queryId to listOf(
                         createResult(
                             1,
-                            vulnerabilities = listOf(vul1, vul2),
+                            findings = listOf(vul1, vul2),
                             issues = listOf(issue1, issue2)
                         )
                     )
@@ -163,88 +163,88 @@ class AdvisorRecordTest : WordSpec({
         }
     }
 
-    "getVulnerabilities" should {
+    "getFindings" should {
         "return an empty list for an unknown package" {
             val record = AdvisorRecord(sortedMapOf())
 
-            record.getVulnerabilities(langId) should beEmpty()
+            record.getFindings(langId) should beEmpty()
         }
 
-        "return the vulnerabilities of a specific package" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
+        "return the findings of a specific package" {
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-2")
 
             val record = AdvisorRecord(
-                sortedMapOf(queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2))))
+                sortedMapOf(queryId to listOf(createResult(1, findings = listOf(vul1, vul2))))
             )
 
-            record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
+            record.getFindings(queryId) should containExactly(vul1, vul2)
         }
 
-        "combine the vulnerabilities of a specific package from multiple advisor results" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
+        "combine the findings of a specific package from multiple advisor results" {
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-2")
 
             val record = AdvisorRecord(
                 sortedMapOf(
                     queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
-                        createResult(2, vulnerabilities = listOf(vul2))
+                        createResult(1, findings = listOf(vul1)),
+                        createResult(2, findings = listOf(vul2))
                     )
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
+            record.getFindings(queryId) should containExactly(vul1, vul2)
         }
 
-        "merge the references of vulnerabilities" {
+        "merge the details of findings" {
             val otherSource = "https://vulnerabilities.example.org/"
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
-            val vul3 = createVulnerability("CVE-2021-2")
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-1", otherSource, "cvssv2", "7")
+            val vul3 = createFinding("CVE-2021-2")
             val mergedFinding = Finding(vul1.id, vul1.references + vul2.references)
 
             val record = AdvisorRecord(
                 sortedMapOf(
                     queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
-                        createResult(2, vulnerabilities = listOf(vul2, vul3))
+                        createResult(1, findings = listOf(vul1)),
+                        createResult(2, findings = listOf(vul2, vul3))
                     )
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(mergedFinding, vul3)
+            record.getFindings(queryId) should containExactly(mergedFinding, vul3)
         }
 
-        "remove duplicate references when merging vulnerabilities" {
+        "remove duplicate details when merging findings" {
             val otherSource = "https://vulnerabilities.example.org/"
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
-            val vul3 = createVulnerability("CVE-2021-1")
-            val vul4 = createVulnerability("CVE-2021-1", otherSource, "cvssv3", "5")
+            val vul1 = createFinding("CVE-2021-1")
+            val vul2 = createFinding("CVE-2021-1", otherSource, "cvssv2", "7")
+            val vul3 = createFinding("CVE-2021-1")
+            val vul4 = createFinding("CVE-2021-1", otherSource, "cvssv3", "5")
             val mergedFinding = Finding(vul1.id, vul1.references + vul2.references + vul4.references)
 
             val record = AdvisorRecord(
                 sortedMapOf(
                     queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
-                        createResult(2, vulnerabilities = listOf(vul2, vul3, vul4))
+                        createResult(1, findings = listOf(vul1)),
+                        createResult(2, findings = listOf(vul2, vul3, vul4))
                     )
                 )
             )
 
-            record.getVulnerabilities(queryId) should containExactly(mergedFinding)
+            record.getFindings(queryId) should containExactly(mergedFinding)
         }
     }
 })
 
-/** The prefix for URIs pointing to the source of vulnerabilities. */
+/** The prefix for URIs pointing to the source of findings. */
 private const val SOURCE_URI_PREFIX = "http://cve.mitre.org/cgi-bin/cvename.cgi?name="
 
-/** A scoring system used by vulnerabilities. */
+/** A scoring system used by findings. */
 private const val SCORING_SYSTEM = "cvssv3.1_qr"
 
-/** The default severity assigned to vulnerabilities. */
+/** The default severity assigned to findings. */
 private const val DEFAULT_SEVERITY = "MODERATE"
 
 /** Test package identifiers. */
@@ -255,7 +255,7 @@ private val queryId = Identifier("NPM", "", "jQuery", "2.1.4")
  * Construct a [Finding] with the given [id] that has a single [FindingDetail] pointing to a source
  * URI derived from the given [uriPrefix] with the [scoringSystem] and [severity] provided.
  */
-private fun createVulnerability(
+private fun createFinding(
     id: String,
     uriPrefix: String = SOURCE_URI_PREFIX,
     scoringSystem: String = SCORING_SYSTEM,
@@ -270,12 +270,12 @@ private fun createVulnerability(
 
 /**
  * Create an [AdvisorResult] for an advisor with the given [advisorIndex] with the passed in [issues] and
- * [vulnerabilities].
+ * [findings].
  */
 private fun createResult(
     advisorIndex: Int,
     issues: List<OrtIssue> = emptyList(),
-    vulnerabilities: List<Finding> = emptyList()
+    findings: List<Finding> = emptyList()
 ): AdvisorResult {
     val details = AdvisorDetails("advisor$advisorIndex")
     val summary = AdvisorSummary(
@@ -284,5 +284,5 @@ private fun createResult(
         issues = issues
     )
 
-    return AdvisorResult(vulnerabilities, details, summary)
+    return AdvisorResult(findings, details, summary)
 }
