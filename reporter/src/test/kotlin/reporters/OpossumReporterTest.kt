@@ -166,7 +166,7 @@ class OpossumReporterTest : WordSpec({
             issuesPath?.isFile() shouldBe true
             val issues = opossumInput.getSignalsForFile("/ortIssues/issues")
             issues.forEach {
-                it.followUp shouldBe true
+                it.followUp shouldBe "FOLLOW_UP"
                 it.excludeFromNotice shouldBe true
                 it.comment shouldContain Regex("Source-.*Message-")
             }
