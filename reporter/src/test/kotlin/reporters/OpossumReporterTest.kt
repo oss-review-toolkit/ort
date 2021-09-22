@@ -119,7 +119,8 @@ class OpossumReporterTest : WordSpec({
         }
 
         "some/file File added by SCANNER report should have signal with copyright" {
-            val signals = opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
+            val signals =
+                opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
             signals.size shouldBe 2
             val signal = signals
                 .find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
@@ -140,7 +141,7 @@ class OpossumReporterTest : WordSpec({
         val opossumInputJson = opossumInput.toJson()
         "opossumInput JSON should have expected top level entries" {
             opossumInputJson.keys shouldContain "metadata"
-            (opossumInputJson["metadata"] as Map<*,*>).keys shouldContain "projectId"
+            (opossumInputJson["metadata"] as Map<*, *>).keys shouldContain "projectId"
             opossumInputJson.keys shouldContain "resources"
             opossumInputJson.keys shouldContain "externalAttributions"
             opossumInputJson.keys shouldContain "resourcesToAttributions"
@@ -163,7 +164,8 @@ class OpossumReporterTest : WordSpec({
 
     "generateOpossumInput() with excluded scopes" should {
         val result = createOrtResult()
-        val opossumInputWithExcludedScopes = OpossumReporter().generateOpossumInput(result, sortedSetOf("devDependencies"))
+        val opossumInputWithExcludedScopes =
+            OpossumReporter().generateOpossumInput(result, sortedSetOf("devDependencies"))
         val fileListWithExcludedScopes = opossumInputWithExcludedScopes.resources.toFileList()
 
         "exclude of scopes should work" {
