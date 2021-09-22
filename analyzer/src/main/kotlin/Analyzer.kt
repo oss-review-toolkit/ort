@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.utils.log
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
 class Analyzer(private val config: AnalyzerConfiguration) {
+    @JvmOverloads
     fun analyze(
         absoluteProjectPath: File,
         packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
