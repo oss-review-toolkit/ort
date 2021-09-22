@@ -23,8 +23,8 @@ import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
-import org.ossreviewtoolkit.advisor.VulnerabilityProvider
+import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
+import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -47,8 +47,8 @@ private const val REQUEST_CHUNK_SIZE = 128
 /**
  * A wrapper for [Sonatype OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
-class OssIndex(name: String) : VulnerabilityProvider(name) {
-    class Factory : AbstractVulnerabilityProviderFactory<OssIndex>("OssIndex") {
+class OssIndex(name: String) : AdviceProvider(name) {
+    class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
         override fun create(config: AdvisorConfiguration) = OssIndex(providerName)
     }
 
@@ -59,7 +59,7 @@ class OssIndex(name: String) : VulnerabilityProvider(name) {
         )
     }
 
-    override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
         val components = packages.map { it.purl }
