@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,27 +26,27 @@ import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 
 /**
- * A common interface for use with [ServiceLoader] that all [AbstractVulnerabilityProviderFactory] classes need to
+ * A common interface for use with [ServiceLoader] that all [AbstractAdviceProviderFactory] classes need to
  * implement.
  */
-interface VulnerabilityProviderFactory {
+interface AdviceProviderFactory {
     /**
      * The name to use to refer to the provider.
      */
     val providerName: String
 
     /**
-     * Create a [VulnerabilityProvider] using the specified [config].
+     * Create an [AdviceProvider] using the specified [config].
      */
-    fun create(config: AdvisorConfiguration): VulnerabilityProvider
+    fun create(config: AdvisorConfiguration): AdviceProvider
 }
 
 /**
- * A generic factory class for a [VulnerabilityProvider].
+ * A generic factory class for an [AdviceProvider].
  */
-abstract class AbstractVulnerabilityProviderFactory<out T : VulnerabilityProvider>(
+abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
     override val providerName: String
-) : VulnerabilityProviderFactory {
+) : AdviceProviderFactory {
     abstract override fun create(config: AdvisorConfiguration): T
 
     protected fun <T : Any> AdvisorConfiguration.forProvider(select: AdvisorConfiguration.() -> T?): T =

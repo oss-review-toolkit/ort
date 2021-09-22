@@ -114,7 +114,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         val advisor = Advisor(distinctProviders, config.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
-        val ortResultOutput = advisor.retrieveVulnerabilityInformation(ortResultInput, skipExcluded).mergeLabels(labels)
+        val ortResultOutput = advisor.retrieveFindings(ortResultInput, skipExcluded).mergeLabels(labels)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResultOutput, outputFiles, "advisor")

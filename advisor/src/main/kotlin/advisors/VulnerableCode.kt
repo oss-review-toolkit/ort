@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.advisor.advisors
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
-import org.ossreviewtoolkit.advisor.VulnerabilityProvider
+import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
+import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -37,14 +37,14 @@ import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 
 /**
- * A [VulnerabilityProvider] implementation that obtains security vulnerability information from a
+ * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
  */
 class VulnerableCode(
     name: String,
     private val vulnerableCodeConfiguration: VulnerableCodeConfiguration
-) : VulnerabilityProvider(name) {
-    class Factory : AbstractVulnerabilityProviderFactory<VulnerableCode>("VulnerableCode") {
+) : AdviceProvider(name) {
+    class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
         override fun create(config: AdvisorConfiguration) =
             VulnerableCode(providerName, config.forProvider { vulnerableCode })
     }
@@ -67,7 +67,7 @@ class VulnerableCode(
         VulnerableCodeService.create(vulnerableCodeConfiguration.serverUrl, OkHttpClientHelper.buildClient())
     }
 
-    override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
         @Suppress("TooGenericExceptionCaught")
