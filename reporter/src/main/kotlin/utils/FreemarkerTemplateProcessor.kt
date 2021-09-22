@@ -28,7 +28,6 @@ import java.io.File
 import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.Finding
-import org.ossreviewtoolkit.model.FindingDetail
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
@@ -36,6 +35,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScoringSystems
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsType
@@ -123,7 +123,7 @@ class FreemarkerTemplateProcessor(
             "LicenseView" to LicenseView,
             "helper" to TemplateHelper(input),
             "projectsAsPackages" to projectsAsPackages,
-            "vulnerabilityReference" to FindingDetail
+            "vulnerabilityReference" to ScoringSystems
         )
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {

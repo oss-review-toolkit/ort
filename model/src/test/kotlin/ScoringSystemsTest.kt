@@ -1,0 +1,94 @@
+/*
+ * Copyright (C) 2021 Bosch.IO GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+package org.ossreviewtoolkit.model
+
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.model.ScoringSystems.Cvss2Rating
+import org.ossreviewtoolkit.model.ScoringSystems.Cvss3Rating
+
+class ScoringSystemsTest : WordSpec({
+    "The CVSS 2 rating" should {
+        "be correct for a given score" {
+            Cvss2Rating.fromScore(-0.1f) should beNull()
+
+            Cvss2Rating.fromScore(0.0f) shouldBe Cvss2Rating.LOW
+            Cvss2Rating.fromScore(3.9f) shouldBe Cvss2Rating.LOW
+
+            Cvss2Rating.fromScore(4.0f) shouldBe Cvss2Rating.MEDIUM
+            Cvss2Rating.fromScore(6.9f) shouldBe Cvss2Rating.MEDIUM
+
+            Cvss2Rating.fromScore(7.0f) shouldBe Cvss2Rating.HIGH
+            Cvss2Rating.fromScore(10.0f) shouldBe Cvss2Rating.HIGH
+
+            Cvss2Rating.fromScore(10.1f) should beNull()
+        }
+    }
+
+    "The CVSS 3 rating" should {
+        "be correct for a given score" {
+            Cvss3Rating.fromScore(-0.1f) should beNull()
+
+            Cvss3Rating.fromScore(0.0f) shouldBe Cvss3Rating.NONE
+
+            Cvss3Rating.fromScore(0.1f) shouldBe Cvss3Rating.LOW
+            Cvss3Rating.fromScore(3.9f) shouldBe Cvss3Rating.LOW
+
+            Cvss3Rating.fromScore(4.0f) shouldBe Cvss3Rating.MEDIUM
+            Cvss3Rating.fromScore(6.9f) shouldBe Cvss3Rating.MEDIUM
+
+            Cvss3Rating.fromScore(7.0f) shouldBe Cvss3Rating.HIGH
+            Cvss3Rating.fromScore(8.9f) shouldBe Cvss3Rating.HIGH
+
+            Cvss3Rating.fromScore(9.0f) shouldBe Cvss3Rating.CRITICAL
+            Cvss3Rating.fromScore(10.0f) shouldBe Cvss3Rating.CRITICAL
+
+            Cvss3Rating.fromScore(10.1f) should beNull()
+        }
+    }
+
+    "getSeverityString" should {
+        "recognize a value in CVSS2" {
+            ScoringSystems.getSeverityString("cvss2", "1.0") shouldBe "LOW"
+        }
+
+        "recognize a value in CVSSV2" {
+            ScoringSystems.getSeverityString("CVSSv2", "6.123") shouldBe "MEDIUM"
+        }
+
+        "recognize a value in CVSS3" {
+            ScoringSystems.getSeverityString("CVSS3", "7.5") shouldBe "HIGH"
+        }
+
+        "recognize a value in CVSSV3" {
+            ScoringSystems.getSeverityString("cvssV3", "9.1") shouldBe "CRITICAL"
+        }
+
+        "handle an unknown scoring system" {
+            ScoringSystems.getSeverityString("unknown", "1.0") shouldBe "UNKNOWN"
+        }
+
+        "handle a non float value" {
+            ScoringSystems.getSeverityString("cvssv3", "notAFloat") shouldBe "UNKNOWN"
+        }
+    }
+})
