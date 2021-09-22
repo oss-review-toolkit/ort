@@ -32,11 +32,13 @@ import io.kotest.matchers.string.shouldContain
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -73,6 +75,29 @@ class DependencyGraphBuilderTest : WordSpec({
 
             val scope2Dependencies = scopeDependencies(scopes, scope2)
             scope2Dependencies should containExactlyInAnyOrder(dep2, dep1)
+        }
+
+        "order the scopes, their dependencies, and packages" {
+            val scope1 = "compile"
+            val scope2 = "test"
+            val dep1 = createDependency("org.apache.commons", "commons-lang3", "3.11")
+            val dep2 = createDependency("org.apache.commons", "commons-collections4", "4.4")
+            val dep3 = createDependency("my-project", "my-module", "1.0")
+
+            val graph = createGraphBuilder()
+                .addDependency(scope2, dep1)
+                .addDependency(scope2, dep2)
+                .addDependency(scope1, dep3)
+                .addDependency(scope1, dep1)
+                .build()
+
+            graph.scopes.keys should containExactly("compile", "test")
+            graph.scopes.getValue("compile") should containExactly(
+                RootDependencyIndex(0),
+                RootDependencyIndex(2)
+            )
+
+            graph.packages should containExactly(dep3.id, dep2.id, dep1.id)
         }
 
         "collect information about packages" {
@@ -248,6 +273,34 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency("s", depLang)
                 .addDependency("s", depLog)
                 .build(checkReferences = false)
+        }
+
+        "collect information about scopes of projects" {
+            val projectId = Identifier("test", "test", "project1", "1.0")
+            val scope1 = DependencyGraph.qualifyScope(projectId, "test")
+            val scope2 = DependencyGraph.qualifyScope(projectId, "compile")
+            val builder = createGraphBuilder()
+
+            builder.addDependency(scope1, createDependency("org.apache.commons", "commons-lang3", "3.11"))
+                .addDependency(scope2, createDependency("org.apache.commons", "commons-collections4", "4.4"))
+                .addDependency(scope1, createDependency("g1", "a1", "1"))
+                .addDependency("anotherScope", createDependency("g2", "a2", "2"))
+
+            builder.scopesFor(projectId) should containExactly("compile", "test")
+        }
+
+        "collect information about qualified scopes of projects" {
+            val projectId = Identifier("test", "test", "project1", "1.0")
+            val scope1 = DependencyGraph.qualifyScope(projectId, "test")
+            val scope2 = DependencyGraph.qualifyScope(projectId, "compile")
+            val builder = createGraphBuilder()
+
+            builder.addDependency(scope1, createDependency("org.apache.commons", "commons-lang3", "3.11"))
+                .addDependency(scope2, createDependency("org.apache.commons", "commons-collections4", "4.4"))
+                .addDependency(scope1, createDependency("g1", "a1", "1"))
+                .addDependency("anotherScope", createDependency("g2", "a2", "2"))
+
+            builder.scopesFor(projectId, unqualify = false) should containExactly(scope2, scope1)
         }
     }
 

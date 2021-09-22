@@ -44,6 +44,7 @@ dependencies {
 
     implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.springframework:spring-core:$springCoreVersion")

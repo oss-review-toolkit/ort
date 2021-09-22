@@ -459,6 +459,9 @@ class LicenseInfoResolverTest : WordSpec() {
                         )
                     )
                 )
+                result.licenses.flatMap {
+                    it.originalExpressions[LicenseSource.DETECTED].orEmpty()
+                } shouldContainExactlyInAnyOrder listOf("MIT".toSpdx())
             }
 
             "contain a list of the original license expressions" {

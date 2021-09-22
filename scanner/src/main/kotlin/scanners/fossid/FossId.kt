@@ -208,7 +208,7 @@ class FossId internal constructor(
         }
 
     override suspend fun scanPackages(
-        packages: Collection<Package>,
+        packages: Set<Package>,
         outputDirectory: File
     ): Map<Package, List<ScanResult>> {
         val (results, duration) = measureTimedValue {
@@ -678,7 +678,7 @@ class FossId internal constructor(
             copyrightFindings = copyrightFindings.toSortedSet(),
             // TODO: Maybe get issues from FossId (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
             issues = rawResults.listPendingFiles.map {
-                OrtIssue(source = it, message = "pending", severity = Severity.HINT)
+                OrtIssue(source = scannerName, message = "Pending identification for '$it'.", severity = Severity.HINT)
             }
         )
 

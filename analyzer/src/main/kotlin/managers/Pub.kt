@@ -581,6 +581,12 @@ class Pub(
         return yamlMapper.readTree(definitionFile)
     }
 
+    override fun getVersion(workingDir: File?): String {
+        val result = ProcessCapture(workingDir, command(workingDir), getVersionArguments()).requireSuccess()
+
+        return transformVersion(result.stderr)
+    }
+
     override fun command(workingDir: File?): String =
         if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$dartCommand" else dartCommand
 

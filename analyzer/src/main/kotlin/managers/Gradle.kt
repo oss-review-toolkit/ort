@@ -257,7 +257,7 @@ class Gradle(
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",
-                    scopeNames = dependencyTreeModel.configurations.map { it.name }.toSortedSet()
+                    scopeNames = graphBuilder.scopesFor(projectId)
                 )
 
                 val issues = mutableListOf<OrtIssue>()
