@@ -209,7 +209,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                         vulnerabilities += EvaluatedVulnerability(
                             pkg = pkg,
                             id = vulnerability.id,
-                            references = vulnerability.references,
+                            references = vulnerability.details,
                             resolutions = resolutions
                         )
                     }

@@ -44,7 +44,7 @@ data class Finding(
     /**
      * A list with detailed information for this finding obtained from different sources.
      */
-    val references: List<FindingDetail>
+    val details: List<FindingDetail>
 )
 
 /**
@@ -56,16 +56,25 @@ private class FindingDeserializer : StdDeserializer<Finding>(Finding::class.java
         val findingNode = p.codec.readTree<JsonNode>(p)
         val id = findingNode["id"].textValue()
 
-        return if (findingNode["references"] != null) {
-            val references = jsonMapper.convertValue(
-                findingNode["references"], jacksonTypeRef<List<FindingDetail>>()
-            )
-            Finding(id, references)
-        } else {
-            val severity = findingNode["severity"].floatValue()
-            val uri = findingNode["url"].textValue()
-            val reference = FindingDetail(URI(uri), null, severity.toString())
-            Finding(id, listOf(reference))
-        }
+        val details = findingNode.readDetails("details")
+            ?: findingNode.readDetails("references")
+            ?: findingNode.readLegacyDetails()
+        return Finding(id, details)
     }
+}
+
+/**
+ * Return a list with [FindingDetail]s read from the child with name [fieldName] or *null* if this field is not
+ * present.
+ */
+private fun JsonNode.readDetails(fieldName: String): List<FindingDetail>? =
+    this[fieldName]?.let { jsonMapper.convertValue(it, jacksonTypeRef<List<FindingDetail>>()) }
+
+/**
+ * Return a list of [FindingDetail]s obtained from a legacy JSON representation.
+ */
+private fun JsonNode.readLegacyDetails(): List<FindingDetail> {
+    val severity = this["severity"].floatValue()
+    val uri = this["url"].textValue()
+    return listOf(FindingDetail(URI(uri), null, severity.toString()))
 }

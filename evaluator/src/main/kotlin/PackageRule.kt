@@ -96,7 +96,7 @@ open class PackageRule(
             override fun matches() = ruleSet.ortResult.advisor
                 ?.results
                 ?.getFindings(pkg.id)
-                ?.flatMap { it.references }
+                ?.flatMap { it.details }
                 ?.filter { reference -> reference.scoringSystem == scoringSystem }
                 ?.mapNotNull { reference -> reference.severity }
                 ?.map { severity -> severityComparator.compare(severity, threshold) }

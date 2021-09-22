@@ -202,7 +202,7 @@ class AdvisorRecordTest : WordSpec({
             val vul1 = createFinding("CVE-2021-1")
             val vul2 = createFinding("CVE-2021-1", otherSource, "cvssv2", "7")
             val vul3 = createFinding("CVE-2021-2")
-            val mergedFinding = Finding(vul1.id, vul1.references + vul2.references)
+            val mergedFinding = Finding(vul1.id, vul1.details + vul2.details)
 
             val record = AdvisorRecord(
                 sortedMapOf(
@@ -222,7 +222,7 @@ class AdvisorRecordTest : WordSpec({
             val vul2 = createFinding("CVE-2021-1", otherSource, "cvssv2", "7")
             val vul3 = createFinding("CVE-2021-1")
             val vul4 = createFinding("CVE-2021-1", otherSource, "cvssv3", "5")
-            val mergedFinding = Finding(vul1.id, vul1.references + vul2.references + vul4.references)
+            val mergedFinding = Finding(vul1.id, vul1.details + vul2.details + vul4.details)
 
             val record = AdvisorRecord(
                 sortedMapOf(
@@ -263,7 +263,7 @@ private fun createFinding(
 ): Finding =
     Finding(
         id = id,
-        references = listOf(
+        details = listOf(
             FindingDetail(URI("$uriPrefix$id"), scoringSystem, severity)
         )
     )

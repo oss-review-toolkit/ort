@@ -226,7 +226,7 @@ val ortResult = OrtResult(
                         findings = listOf(
                             Finding(
                                 id = "CVE-2021-critical",
-                                references = listOf(
+                                details = listOf(
                                     FindingDetail(
                                         url = URI("https://oss-review-toolkit.org"),
                                         scoringSystem = "CVSS3",
@@ -236,7 +236,7 @@ val ortResult = OrtResult(
                             ),
                             Finding(
                                 id = "CVE-2021-trivial",
-                                references = listOf(
+                                details = listOf(
                                     FindingDetail(
                                         url = URI("https://oss-review-toolkit.org"),
                                         scoringSystem = "CVSS3",

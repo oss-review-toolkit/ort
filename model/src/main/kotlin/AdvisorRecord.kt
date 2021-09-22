@@ -83,7 +83,7 @@ private fun Collection<Finding>.mergeFindings(): List<Finding> {
  * [Finding] that contains all the details from the source findings (with duplicates removed).
  */
 private fun Collection<Finding>.mergeDetails(): Finding {
-    val references = flatMapTo(mutableSetOf()) { it.references }
+    val references = flatMapTo(mutableSetOf()) { it.details }
     return Finding(first().id, references.toList())
 }
 
