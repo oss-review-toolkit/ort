@@ -81,7 +81,7 @@ class VulnerableCodeTest : WordSpec({
             val vulnerableCode = createVulnerableCode(wiremock)
             val packagesToAdvise = inputPackages()
 
-            val result = vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.shouldNotBeEmpty()
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
@@ -161,7 +161,7 @@ class VulnerableCodeTest : WordSpec({
             val vulnerableCode = createVulnerableCode(wiremock)
             val packagesToAdvise = inputPackages()
 
-            val result = vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.keys should containExactly(idStruts)
         }
@@ -171,7 +171,7 @@ class VulnerableCodeTest : WordSpec({
             val vulnerableCode = createVulnerableCode(wiremock)
             val packagesToAdvise = inputPackages()
 
-            val result = vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
         }
@@ -227,7 +227,7 @@ private fun expectErrorResult(wiremock: WireMockServer) {
     val packagesToAdvise = inputPackages()
 
     val result = runBlocking {
-        vulnerableCode.retrievePackageVulnerabilities(packagesToAdvise).mapKeys { it.key.id }
+        vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
     }
 
     result shouldNotBeNull {

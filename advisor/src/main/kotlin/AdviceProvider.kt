@@ -31,22 +31,23 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.showStackTrace
 
 /**
- * An abstract class that represents a service that can retrieve vulnerability information
- * for a list of given [Package]s.
+ * An abstract class that represents a service that can retrieve any kind of advice information
+ * for a list of given [Package]s. Examples of such information can be security vulnerabilities, known defects,
+ * or results of some code analysis.
  */
-abstract class VulnerabilityProvider(val providerName: String) {
+abstract class AdviceProvider(val providerName: String) {
     /**
-     * For a given list of [Package]s, retrieve vulnerability information and return a map
+     * For a given list of [Package]s, retrieve the provider-specific findings and return a map
      * that associates each package with a list of [AdvisorResult]s. Needs to be implemented
      * by child classes.
      */
-    abstract suspend fun retrievePackageVulnerabilities(
+    abstract suspend fun retrievePackageFindings(
         packages: List<Package>
     ): Map<Package, List<AdvisorResult>>
 
     /**
      * A generic method that creates a failed [AdvisorResult] for [Package]s if there was an issue
-     * during the retrieval of vulnerability information.
+     * during constructing of the provider-specific information.
      */
     protected fun createFailedResults(
         startTime: Instant,
@@ -67,7 +68,7 @@ abstract class VulnerabilityProvider(val providerName: String) {
                     issues = listOf(
                         createAndLogIssue(
                             source = providerName,
-                            message = "Failed to retrieve security vulnerabilities from $providerName: " +
+                            message = "Failed to retrieve findings from $providerName: " +
                                     t.collectMessagesAsString()
                         )
                     )

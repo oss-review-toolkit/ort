@@ -36,22 +36,23 @@ import org.ossreviewtoolkit.utils.Environment
 import org.ossreviewtoolkit.utils.log
 
 /**
- * The class to manage [VulnerabilityProvider]s that retrieve security advisories.
+ * The class to manage [AdviceProvider]s. It invokes the configured providers and adds their finding to the current
+ * [OrtResult].
  */
 class Advisor(
-    private val providerFactories: List<VulnerabilityProviderFactory>,
+    private val providerFactories: List<AdviceProviderFactory>,
     private val config: AdvisorConfiguration
 ) {
     companion object {
-        private val LOADER = ServiceLoader.load(VulnerabilityProviderFactory::class.java)!!
+        private val LOADER = ServiceLoader.load(AdviceProviderFactory::class.java)!!
 
         /**
-         * The list of all available [VulnerabilityProvider]s in the classpath.
+         * The list of all available [AdviceProvider]s in the classpath.
          */
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
     }
 
-    fun retrieveVulnerabilityInformation(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
+    fun retrieveFindings(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
 
         if (ortResult.analyzer == null) {
@@ -72,7 +73,7 @@ class Advisor(
         runBlocking {
             providers.map { provider ->
                 async {
-                    provider.retrievePackageVulnerabilities(packages)
+                    provider.retrievePackageFindings(packages)
                 }
             }.forEach { providerResults ->
                 providerResults.await().forEach { (pkg, advisorResults) ->

@@ -23,8 +23,8 @@ import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.advisor.AbstractVulnerabilityProviderFactory
-import org.ossreviewtoolkit.advisor.VulnerabilityProvider
+import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
+import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -50,8 +50,8 @@ private const val REQUEST_CHUNK_SIZE = 100
 /**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
-class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : VulnerabilityProvider(name) {
-    class Factory : AbstractVulnerabilityProviderFactory<NexusIq>("NexusIQ") {
+class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : AdviceProvider(name) {
+    class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
         override fun create(config: AdvisorConfiguration) = NexusIq(providerName, config.forProvider { nexusIq })
     }
 
@@ -64,7 +64,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
         )
     }
 
-    override suspend fun retrievePackageVulnerabilities(packages: List<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
         val components = packages.map { pkg ->
@@ -97,7 +97,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
                 componentDetails[pkg.id.toPurl()]?.let { details ->
                     pkg to listOf(
                         AdvisorResult(
-                            details.securityData.securityIssues.mapNotNull { it.toVulnerability() },
+                            details.securityData.securityIssues.mapNotNull { it.toFinding() },
                             AdvisorDetails(providerName),
                             AdvisorSummary(startTime, endTime)
                         )
@@ -114,7 +114,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
      * non-null URI, issues without an URI yield *null* results. (This is rather a paranoia check, as issues are
      * expected to have a URI.)
      */
-    private fun NexusIqService.SecurityIssue.toVulnerability(): Finding? {
+    private fun NexusIqService.SecurityIssue.toFinding(): Finding? {
         val references = mutableListOf<FindingDetail>()
 
         val browseUrl = URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
