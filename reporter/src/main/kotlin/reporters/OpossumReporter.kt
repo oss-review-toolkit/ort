@@ -590,7 +590,6 @@ class OpossumReporter : Reporter {
             issues.forEach { issue ->
                 opossumInput.addIssue(issue, identifier, "ORT-Analyzer-Issues")
             }
-
         }
 
         val scannerResults = ortResult.scanner?.results?.scanResults ?: return OpossumInput()
@@ -599,7 +598,7 @@ class OpossumReporter : Reporter {
             opossumInput.addScannerResults(entry.key, entry.value, maxDepth)
         }
 
-
+        // TODO: Also parse results from advisor and evaluator:
         // val advisorResult = ortResult.advisor?.result
         // val evaluatorResult = ortResult.evaluator?.result
 
