@@ -37,8 +37,12 @@ class PackageRuleTest : WordSpec() {
     private fun PackageRule.createLicenseRule(license: SpdxSingleLicenseExpression, licenseSource: LicenseSource) =
         LicenseRule(
             name = "test",
-            resolvedLicense = resolvedLicenseInfo[license]
-                ?: ResolvedLicense(license, emptySet(), emptyMap(), emptySet()),
+            resolvedLicense = resolvedLicenseInfo[license] ?: ResolvedLicense(
+                license = license,
+                originalDeclaredLicenses = emptySet(),
+                originalExpressions = emptyMap(),
+                locations = emptySet()
+            ),
             licenseSource = licenseSource
         )
 
