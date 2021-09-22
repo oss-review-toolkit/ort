@@ -40,7 +40,7 @@ interface Reporter {
         /**
          * The list of all available reporters in the classpath.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList() }
+        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.reporterName } }
     }
 
     /**
