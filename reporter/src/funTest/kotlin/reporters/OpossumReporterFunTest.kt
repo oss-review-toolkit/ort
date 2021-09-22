@@ -24,9 +24,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
 
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
@@ -51,7 +49,7 @@ class OpossumReporterFunTest : WordSpec({
             val reportTree = JsonMapper().readTree(reportStr)
             reportTree.isObject shouldBe true
             reportTree.get("metadata").get("projectId").asText() shouldBe "0"
-            reportTree.get("attributionBreakpoints").size() shouldBe 6
+            reportTree.get("attributionBreakpoints").size() shouldBe 5
             reportTree.get("resourcesToAttributions").fieldNames().asSequence().toList() shouldContain "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/testCompile/junit/junit@4.12/dependencies/com.foobar/foobar@1.0"
         }
     }

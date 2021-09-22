@@ -160,12 +160,19 @@ class OpossumReporterTest : WordSpec({
         }
 
         "ortIssues should exist and contain all issues" {
-            val ortIssuesPath = opossumInput.resources.tree.get("ortIssues")
-            ortIssuesPath?.isFile() shouldBe false
-            val issuesPath = ortIssuesPath?.tree?.get("issues")
-            issuesPath?.isFile() shouldBe true
-            val issues = opossumInput.getSignalsForFile("/ortIssues/issues")
-            issues.forEach {
+
+            val issuesFromFirstPackage =
+                opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1")
+                    .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
+            issuesFromFirstPackage.size shouldBe 4
+            issuesFromFirstPackage.forEach {
+                it.followUp shouldBe "FOLLOW_UP"
+                it.excludeFromNotice shouldBe true
+            }
+
+            val issuesAttachedToFallbackPath = opossumInput.getSignalsForFile("/")
+            issuesAttachedToFallbackPath.size shouldBe 1
+            issuesAttachedToFallbackPath.forEach {
                 it.followUp shouldBe "FOLLOW_UP"
                 it.excludeFromNotice shouldBe true
                 it.comment shouldContain Regex("Source-.*Message-")
@@ -385,7 +392,7 @@ private fun createOrtResult(): OrtResult {
                     }
                 ).toSortedSet(),
                 issues = sortedMapOf(
-                    Identifier("Analyzer-Issues-12") to listOf(
+                    Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
                         OrtIssue(
                             source = "Source-1",
                             message = "Message-1"
@@ -394,7 +401,7 @@ private fun createOrtResult(): OrtResult {
                             message = "Message-2"
                         )
                     ),
-                    Identifier("Analyzer-Issue-3") to listOf(
+                    Identifier("unknown-identifier") to listOf(
                         OrtIssue(
                             source = "Source-3",
                             message = "Message-3"
