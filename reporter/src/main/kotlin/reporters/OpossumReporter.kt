@@ -75,7 +75,6 @@ class OpossumReporter : Reporter {
     companion object {
         const val OPTION_SCANNER_MAXDEPTH = "scanner.maxDepth"
         const val OPTION_EXCLUDED_SCOPES = "scopes.excluded"
-        const val FOLLOW_UP = "FOLLOW_UP"
     }
 
     data class OpossumSignal(
@@ -86,7 +85,7 @@ class OpossumReporter : Reporter {
         val copyright: String? = null,
         val comment: String? = null,
         val preselected: Boolean = false,
-        val followUp: String? = null,
+        val followUp: Boolean = false,
         val excludeFromNotice: Boolean = false,
         val uuid: UUID = UUID.randomUUID()
     ) {
@@ -111,7 +110,7 @@ class OpossumReporter : Reporter {
                     "url" to url,
 
                     "preSelected" to preselected,
-                    "followUp" to followUp,
+                    "followUp" to if (followUp) "FOLLOW_UP" else null,
                     "excludeFromNotice" to excludeFromNotice,
 
                     "comment" to comment
@@ -514,7 +513,7 @@ class OpossumReporter : Reporter {
                 roots.keys
             }
             val signal =
-                OpossumSignal(source, comment = issue.toString(), followUp = FOLLOW_UP, excludeFromNotice = true)
+                OpossumSignal(source, comment = issue.toString(), followUp = true, excludeFromNotice = true)
             addSignal(signal, paths.map { pathResolve(it) }.toSortedSet())
         }
 

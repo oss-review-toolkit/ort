@@ -166,14 +166,14 @@ class OpossumReporterTest : WordSpec({
                     .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
             issuesFromFirstPackage.size shouldBe 4
             issuesFromFirstPackage.forEach {
-                it.followUp shouldBe "FOLLOW_UP"
+                it.followUp shouldBe true
                 it.excludeFromNotice shouldBe true
             }
 
             val issuesAttachedToFallbackPath = opossumInput.getSignalsForFile("/")
             issuesAttachedToFallbackPath.size shouldBe 1
             issuesAttachedToFallbackPath.forEach {
-                it.followUp shouldBe "FOLLOW_UP"
+                it.followUp shouldBe true
                 it.excludeFromNotice shouldBe true
                 it.comment shouldContain Regex("Source-.*Message-")
             }
