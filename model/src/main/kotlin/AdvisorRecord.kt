@@ -67,7 +67,21 @@ data class AdvisorRecord(
      * from different advisors are merged if necessary.
      */
     fun getVulnerabilities(pkgId: Identifier): List<Vulnerability> =
-        advisorResults[pkgId].orEmpty().flatMap { it.vulnerabilities }.mergeVulnerabilities()
+        getFindings(pkgId) { it.vulnerabilities }.mergeVulnerabilities()
+
+    /**
+     * Return a list with all [Defect] objects that have been found for the given [package][pkgId]. If there are
+     * results from different advisors, a union list is constructed. No merging is done, as it is expected that the
+     * results from different advisors cannot be combined.
+     */
+    fun getDefects(pkgId: Identifier): List<Defect> = getFindings(pkgId) { it.defects }
+
+    /**
+     * Helper function to obtain the findings of type [T] for the given [package][pkgId] using a [selector] function
+     * to extract the desired field.
+     */
+    private fun <T> getFindings(pkgId: Identifier, selector: (AdvisorResult) -> List<T>): List<T> =
+        advisorResults[pkgId].orEmpty().flatMap(selector)
 }
 
 /**

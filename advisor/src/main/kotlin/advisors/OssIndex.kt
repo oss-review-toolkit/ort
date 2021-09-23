@@ -81,9 +81,9 @@ class OssIndex(name: String) : VulnerabilityProvider(name) {
                 componentReports[pkg.id.toPurl()]?.let { report ->
                     pkg to listOf(
                         AdvisorResult(
-                            report.vulnerabilities.mapNotNull { it.toVulnerability() },
                             AdvisorDetails(providerName),
-                            AdvisorSummary(startTime, endTime)
+                            AdvisorSummary(startTime, endTime),
+                            vulnerabilities = report.vulnerabilities.mapNotNull { it.toVulnerability() }
                         )
                     )
                 }

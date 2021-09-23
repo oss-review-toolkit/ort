@@ -97,7 +97,7 @@ class VulnerableCode(
             packageMap[pv.purl]?.let { pkg ->
                 val vulnerabilities = pv.unresolvedVulnerabilities.map { it.toModel() }
                 val summary = AdvisorSummary(startTime, Instant.now())
-                pkg to listOf(AdvisorResult(vulnerabilities, details, summary))
+                pkg to listOf(AdvisorResult(details, summary, vulnerabilities = vulnerabilities))
             }
         }.toMap()
     }
