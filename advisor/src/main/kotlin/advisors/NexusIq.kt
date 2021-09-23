@@ -45,7 +45,7 @@ import retrofit2.HttpException
 /**
  * The number of packages to request from Nexus IQ in one request.
  */
-private const val REQUEST_CHUNK_SIZE = 100
+private const val REQUEST_CHUNK_SIZE = 128
 
 /**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
