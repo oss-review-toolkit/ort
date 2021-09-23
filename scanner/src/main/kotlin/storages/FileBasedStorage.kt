@@ -83,6 +83,15 @@ class FileBasedStorage(
             is Failure -> emptyList()
         }
 
+        if (existingScanResults.any { it.scanner == scanResult.scanner && it.provenance == scanResult.provenance }) {
+            val message = "Did not store scan result for '${id.toCoordinates()}' because a scan result for the same " +
+                    "scanner and provenance was already stored."
+
+            log.warn { message }
+
+            return Failure(message)
+        }
+
         val scanResults = existingScanResults + scanResult
 
         val path = storagePath(id)
