@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.Environment
@@ -533,11 +534,13 @@ abstract class LocalScanner(
      * [OrtResult] produced by this scanner.
      *
      * The time interval between a failing read from storage and the resulting scan with the following store operation
-     * can be relatively large. Thus this [LocalScanner] is prone to adding duplicate scan results if multiple instances
-     * of the scanner run in parallel. In particular the [PostgresStorage] allows adding duplicate tuples
-     * (identifier, provenance, scanner details) which should be made unique.
+     * can be relatively large. Thus, this [LocalScanner] is prone to adding duplicate scan results if multiple
+     * instances of the scanner run in parallel and the storage backends do not prevent adding duplicates. In particular
+     * the [FileBasedStorage] and [PostgresStorage] used to allow adding duplicate tuples (identifier, provenance,
+     * scanner details).
      *
-     * TODO: Implement a solution that prevents duplicate scan results in the storages.
+     * Note that both storages implementations were updated to prevent adding duplicates, but this function is kept for
+     * storages that were created before the fix was implemented.
      */
     private fun List<ScanResult>.deduplicateScanResults(): List<ScanResult> {
         // Use vcsInfo and sourceArtifact instead of provenance in order to ignore the download time and original VCS
