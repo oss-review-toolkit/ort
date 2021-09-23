@@ -138,7 +138,9 @@ class LicenseInfoResolver(
                     pathExclude.matches(licenseFinding.location.prependPath(findings.relativeFindingsPath))
                 }
             }
-        }.groupBy(keySelector = { it.first }, valueTransform = { it.second }).mapValues { it.value.all { it } }
+        }.groupBy(keySelector = { it.first }, valueTransform = { it.second }).mapValues { (_, excluded) ->
+            excluded.all { it }
+        }
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
