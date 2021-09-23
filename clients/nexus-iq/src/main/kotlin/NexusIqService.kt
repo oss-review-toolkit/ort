@@ -54,8 +54,8 @@ interface NexusIqService {
         val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
         /**
-         * Create a NexusIQ service instance for communicating with a server running at the given [url],
-         * optionally using a pre-built OkHttp [client].
+         * Create a NexusIQ service instance for communicating with a server running at the given [url], optionally
+         * using [user] and [password] for basic authentication, and / or a pre-built OkHttp [client].
          */
         fun create(
             url: String,
