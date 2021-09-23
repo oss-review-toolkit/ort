@@ -47,7 +47,7 @@ fun <T : Any> Transaction.execShow(statement: String, transform: (ResultSet) -> 
 
         override fun prepareSQL(transaction: Transaction): String = statement
 
-        override fun PreparedStatementApi.executeInternal(transaction: Transaction): T? =
+        override fun PreparedStatementApi.executeInternal(transaction: Transaction): T =
             executeQuery().use { transform(it) }
     })
 }
