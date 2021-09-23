@@ -19,14 +19,16 @@
 
 package org.ossreviewtoolkit.clients.ossindex
 
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 import okhttp3.Credentials
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -41,9 +43,9 @@ interface OssIndexService {
         const val DEFAULT_BASE_URL = "https://ossindex.sonatype.org/"
 
         /**
-         * The mapper for JSON (de-)serialization used by this service.
+         * The JSON (de-)serialization object used by this service.
          */
-        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+        val JSON = Json.Default
 
         /**
          * Create an OSS Index service instance for communicating with a server running at the given [url], optionally
@@ -68,10 +70,11 @@ interface OssIndexService {
                 }
                 .build()
 
+            val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .client(ossIndexClient)
                 .baseUrl(url)
-                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
+                .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
             return retrofit.create(OssIndexService::class.java)
@@ -79,11 +82,13 @@ interface OssIndexService {
     }
 
     // See https://ossindex.sonatype.org/rest#model-ComponentReportRequest.
+    @Serializable
     data class ComponentReportRequest(
         val coordinates: List<String>
     )
 
     // See https://ossindex.sonatype.org/rest#model-ComponentReport.
+    @Serializable
     data class ComponentReport(
         /** The Package URL coordinates. */
         val coordinates: String,
@@ -99,6 +104,7 @@ interface OssIndexService {
     )
 
     // See https://ossindex.sonatype.org/rest#model-ComponentReportVulnerability.
+    @Serializable
     data class Vulnerability(
         /** A UUID */
         val id: String,
@@ -119,19 +125,19 @@ interface OssIndexService {
         val cvssVector: String,
 
         /** A Common Vulnerabilities and Exposures value, if known. */
-        val cve: String?,
+        val cve: String? = null,
 
         /** A Common Weakness Enumeration value, if known. */
-        val cwe: String?,
+        val cwe: String? = null,
 
         /** The reference URL of the vulnerability on OSS Index itself. */
         val reference: String,
 
         /** An optional list of additional external references. */
-        val externalReferences: List<String>?,
+        val externalReferences: List<String>? = null,
 
         /** An optional list of affected version ranges. */
-        val versionRanges: List<String>?
+        val versionRanges: List<String>? = null
     )
 
     /**
