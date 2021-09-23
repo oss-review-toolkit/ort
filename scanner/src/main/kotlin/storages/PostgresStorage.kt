@@ -96,6 +96,7 @@ class PostgresStorage(
                         createMissingTablesAndColumns(ScanResults)
 
                         createIdentifierAndScannerVersionIndex()
+                        createScanResultUniqueIndex()
                     }
                 }
             }
@@ -110,6 +111,23 @@ class PostgresStorage(
                     identifier,
                     (scan_result->'scanner'->>'name'),
                     $VERSION_ARRAY
+                )
+                TABLESPACE pg_default
+            """.trimIndent()
+        )
+
+    /**
+     * Create an index that ensures that there is only one scan result for the same identifier, scanner, and provenance.
+     */
+    private fun Transaction.createScanResultUniqueIndex() =
+        exec(
+            """
+            CREATE UNIQUE INDEX scan_result_unique_index
+                ON $TABLE_NAME USING btree
+                (
+                    identifier,
+                    (scan_result->'provenance'),
+                    (scan_result->'scanner')
                 )
                 TABLESPACE pg_default
             """.trimIndent()

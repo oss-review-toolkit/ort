@@ -159,6 +159,24 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 readResult should beSuccess()
                 (readResult as Success).result should beEmpty()
             }
+
+            "not store a result for the same scanner and provenance twice" {
+                val summary1 = scanSummaryWithFiles
+                val summary2 = scanSummaryWithFiles.copy(packageVerificationCode = "anotherPackageVerificationCode")
+
+                val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, summary1)
+                val scanResult2 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, summary2)
+
+                val addResult1 = storage.add(id1, scanResult1)
+                val addResult2 = storage.add(id1, scanResult2)
+
+                addResult1 should beSuccess()
+                addResult2 should beFailure()
+
+                val readResult = storage.read(id1)
+                readResult should beSuccess()
+                (readResult as Success).result should containExactly(scanResult1)
+            }
         }
 
         "Reading a scan result" should {
