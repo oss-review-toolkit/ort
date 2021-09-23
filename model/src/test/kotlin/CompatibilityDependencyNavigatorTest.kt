@@ -107,7 +107,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
         "directDependencies" should {
             "return the dependencies of a dependency tree project" {
                 val scopeName = "someScope"
-                val dependencies = sequenceOf(mockk<DependencyNode>(), mockk<DependencyNode>())
+                val dependencies = sequenceOf(mockk<DependencyNode>(), mockk())
                 val treeNavigator = mockk<DependencyNavigator>()
                 val graphNavigator = mockk<DependencyNavigator>()
                 every { treeNavigator.directDependencies(treeProject, scopeName) } returns dependencies
@@ -119,7 +119,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 
             "return the dependencies of a dependency graph project" {
                 val scopeName = "someScope"
-                val dependencies = sequenceOf(mockk<DependencyNode>(), mockk<DependencyNode>())
+                val dependencies = sequenceOf(mockk<DependencyNode>(), mockk())
                 val graphNavigator = mockk<DependencyNavigator>()
                 val treeNavigator = mockk<DependencyNavigator>()
                 every { graphNavigator.directDependencies(graphProject, scopeName) } returns dependencies
