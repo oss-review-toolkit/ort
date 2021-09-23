@@ -55,6 +55,22 @@ class AdvisorResultContainerTest : WordSpec() {
     private val vulnerabilities1 = listOf(vulnerability11, vulnerability12)
     private val vulnerabilities2 = listOf(vulnerability21, vulnerability22)
 
+    private val defects = listOf(
+        Defect(
+            "defect1",
+            URI("https://defects.example.org/d1"),
+            "Some bug",
+            creationTime = Instant.parse("2021-09-23T11:28:33.123Z")
+        ),
+        Defect(
+            "defect2",
+            URI("https://defects.example.org/d2"),
+            "Another bug",
+            severity = "ugly",
+            labels = mapOf("backend" to "true", "expensive" to "true")
+        )
+    )
+
     private val advisorDetails1 = AdvisorDetails("name 1")
     private val advisorDetails2 = AdvisorDetails("name 2")
 
@@ -80,8 +96,8 @@ class AdvisorResultContainerTest : WordSpec() {
         mutableListOf(issue21, issue22)
     )
 
-    private val advisorResult1 = AdvisorResult(vulnerabilities1, advisorDetails1, advisorSummary1)
-    private val advisorResult2 = AdvisorResult(vulnerabilities2, advisorDetails2, advisorSummary2)
+    private val advisorResult1 = AdvisorResult(advisorDetails1, advisorSummary1, vulnerabilities = vulnerabilities1)
+    private val advisorResult2 = AdvisorResult(advisorDetails2, advisorSummary2, defects, vulnerabilities2)
 
     private val advisorResults = AdvisorResultContainer(id, listOf(advisorResult1, advisorResult2))
 

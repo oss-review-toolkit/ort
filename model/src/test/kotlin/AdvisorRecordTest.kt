@@ -236,6 +236,33 @@ class AdvisorRecordTest : WordSpec({
             record.getVulnerabilities(queryId) should containExactly(mergedVulnerability)
         }
     }
+
+    "getDefects" should {
+        "return an empty list for an unknown package" {
+            val record = AdvisorRecord(sortedMapOf())
+
+            record.getDefects(langId) should beEmpty()
+        }
+
+        "return the combined defects detected for a specific package" {
+            val defect1 = createDefect("d1")
+            val defect2 = createDefect("d2")
+            val defect3 = createDefect("d3")
+            val defect4 = createDefect("d4")
+            val defect5 = createDefect("d5")
+
+            val record = AdvisorRecord(
+                sortedMapOf(
+                    queryId to listOf(
+                        createResult(1, defects = listOf(defect1, defect2)),
+                        createResult(2, defects = listOf(defect3, defect4, defect5))
+                    )
+                )
+            )
+
+            record.getDefects(queryId) should containExactlyInAnyOrder(defect1, defect2, defect3, defect4, defect5)
+        }
+    }
 })
 
 /** The prefix for URIs pointing to the source of vulnerabilities. */
@@ -269,13 +296,20 @@ private fun createVulnerability(
     )
 
 /**
- * Create an [AdvisorResult] for an advisor with the given [advisorIndex] with the passed in [issues] and
- * [vulnerabilities].
+ * Construct a [Defect] based on the given [id].
+ */
+private fun createDefect(id: String): Defect =
+    Defect(id, URI("https://defects.example.org/$id"), "Defect $id")
+
+/**
+ * Create an [AdvisorResult] for an advisor with the given [advisorIndex] with the passed in [issues],
+ * [vulnerabilities], and [defects].
  */
 private fun createResult(
     advisorIndex: Int,
     issues: List<OrtIssue> = emptyList(),
-    vulnerabilities: List<Vulnerability> = emptyList()
+    vulnerabilities: List<Vulnerability> = emptyList(),
+    defects: List<Defect> = emptyList()
 ): AdvisorResult {
     val details = AdvisorDetails("advisor$advisorIndex")
     val summary = AdvisorSummary(
@@ -284,5 +318,5 @@ private fun createResult(
         issues = issues
     )
 
-    return AdvisorResult(vulnerabilities, details, summary)
+    return AdvisorResult(details, summary, defects, vulnerabilities)
 }

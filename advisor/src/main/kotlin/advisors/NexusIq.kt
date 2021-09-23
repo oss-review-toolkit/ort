@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,9 +97,9 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
                 componentDetails[pkg.id.toPurl()]?.let { details ->
                     pkg to listOf(
                         AdvisorResult(
-                            details.securityData.securityIssues.map { it.toVulnerability() },
                             AdvisorDetails(providerName),
-                            AdvisorSummary(startTime, endTime)
+                            AdvisorSummary(startTime, endTime),
+                            vulnerabilities = details.securityData.securityIssues.map { it.toVulnerability() }
                         )
                     )
                 }

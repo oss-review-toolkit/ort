@@ -223,6 +223,8 @@ val ortResult = OrtResult(
             advisorResults = sortedMapOf(
                 packageWithVulnerabilities.id to listOf(
                     AdvisorResult(
+                        advisor = AdvisorDetails.EMPTY,
+                        summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH),
                         vulnerabilities = listOf(
                             Vulnerability(
                                 id = "CVE-2021-critical",
@@ -244,9 +246,7 @@ val ortResult = OrtResult(
                                     )
                                 )
                             )
-                        ),
-                        advisor = AdvisorDetails.EMPTY,
-                        summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH)
+                        )
                     )
                 )
             )
