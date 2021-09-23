@@ -471,8 +471,8 @@ class LicenseInfoResolverTest : WordSpec() {
                         )
                     )
                 )
-                result.licenses.flatMap {
-                    it.originalExpressions.map { it.expression }
+                result.licenses.flatMap { resolvedLicense ->
+                    resolvedLicense.originalExpressions.map { it.expression }
                 } shouldContainExactlyInAnyOrder listOf("MIT".toSpdx())
             }
 
