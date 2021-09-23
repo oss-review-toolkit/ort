@@ -110,11 +110,9 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
     }
 
     /**
-     * Construct a [Vulnerability] from the data stored in this issue. As a [VulnerabilityReference] requires a
-     * non-null URI, issues without an URI yield *null* results. (This is rather a paranoia check, as issues are
-     * expected to have a URI.)
+     * Construct a [Vulnerability] from the data stored in this issue.
      */
-    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability? {
+    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability {
         val references = mutableListOf<VulnerabilityReference>()
 
         val browseUrl = URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
