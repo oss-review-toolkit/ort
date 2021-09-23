@@ -45,7 +45,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
     override fun getVersion() = getVersion(null)
 
-    override fun getDefaultBranchName(url: String) = null
+    override fun getDefaultBranchName(url: String): String? = null
 
     override fun transformVersion(output: String) =
         versionRegex.matcher(output.lineSequence().first()).let {
