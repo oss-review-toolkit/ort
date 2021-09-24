@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import java.util.LinkedList
-import java.util.SortedSet
 
 /**
  * Alias for a function that is used while navigating through the dependency graph to determine which dependencies
@@ -54,11 +53,11 @@ interface DependencyNavigator {
         }
 
         /**
-         * Return a sorted set with all the [Identifier]s contained in the given map of scope dependencies. This is
-         * useful if all dependencies are needed independent of the scope they belong to.
+         * Return a set with all the [Identifier]s contained in the given map of scope dependencies. This is useful if
+         * all dependencies are needed independent of the scope they belong to.
          */
-        private fun Map<String, Set<Identifier>>.collectDependencies(): SortedSet<Identifier> =
-            flatMapTo(sortedSetOf()) { it.value }
+        private fun Map<String, Set<Identifier>>.collectDependencies(): Set<Identifier> =
+            values.flatMapTo(mutableSetOf()) { it }
 
         /**
          * Return a map with all [OrtIssue]s found in the dependency graph spawned by [dependencies] grouped by their
@@ -150,7 +149,7 @@ interface DependencyNavigator {
     /**
      * Return the set of [Identifier]s that refer to sub-projects of the given [project].
      */
-    fun collectSubProjects(project: Project): SortedSet<Identifier> =
+    fun collectSubProjects(project: Project): Set<Identifier> =
         scopeDependencies(project, matcher = MATCH_SUB_PROJECTS).collectDependencies()
 
     /**
@@ -161,7 +160,7 @@ interface DependencyNavigator {
         project: Project,
         maxDepth: Int = -1,
         matcher: DependencyMatcher = MATCH_ALL
-    ): SortedSet<Identifier> =
+    ): Set<Identifier> =
         scopeDependencies(project, maxDepth, matcher).collectDependencies()
 
     /**
