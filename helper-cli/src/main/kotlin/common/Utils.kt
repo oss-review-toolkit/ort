@@ -239,7 +239,7 @@ internal fun OrtResult.processAllCopyrightStatements(
         copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet())
     )
 
-    getProjectAndPackageIds().forEach { id ->
+    collectProjectsAndPackages().forEach { id ->
         licenseInfoResolver.resolveLicenseInfo(id).forEach innerForEach@{ resolvedLicense ->
             if (omitExcluded && resolvedLicense.isDetectedExcluded) return@innerForEach
 
