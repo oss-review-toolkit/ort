@@ -209,13 +209,13 @@ data class OrtResult(
      * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
      * [includeSubProjects].
      */
-    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): SortedSet<Identifier> {
-        val projectsAndPackages = sortedSetOf<Identifier>()
+    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
+        val projectsAndPackages = mutableSetOf<Identifier>()
 
         getProjects().mapTo(projectsAndPackages) { it.id }
 
         if (!includeSubProjects) {
-            val allSubProjects = sortedSetOf<Identifier>()
+            val allSubProjects = mutableSetOf<Identifier>()
 
             getProjects().forEach {
                 allSubProjects += dependencyNavigator.collectSubProjects(it)
