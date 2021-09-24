@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
@@ -110,6 +111,22 @@ class FilePackageCurationProviderTest : StringSpec() {
             }
 
             curationsOutVersion should beEmpty()
+        }
+
+        "Provider throws an exception if the curations file is not de-serializable" {
+            val curationsFile = File("src/test/assets/package-curations-not-deserializable.yml")
+
+            shouldThrow<Exception> {
+                FilePackageCurationProvider(curationsFile)
+            }
+        }
+
+        "Provider throws an exception if the curations file does not exist" {
+            val curationsFile = File("src/test/assets/package-curations-not-existing.yml")
+
+            shouldThrow<Exception> {
+                FilePackageCurationProvider(curationsFile)
+            }
         }
     }
 }
