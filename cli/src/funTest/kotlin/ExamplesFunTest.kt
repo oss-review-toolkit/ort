@@ -147,7 +147,6 @@ class ExamplesFunTest : StringSpec() {
 
             val result = evaluator.run(script)
 
-            result.violations shouldHaveSize 5
             val failedRules = result.violations.map { it.rule }
             failedRules shouldContainExactlyInAnyOrder listOf(
                 "UNHANDLED_LICENSE",
