@@ -120,7 +120,7 @@ internal class StatisticsCalculator {
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver
     ): LicenseStatistics {
-        val ids = ortResult.getProjectAndPackageIds()
+        val ids = ortResult.collectProjectsAndPackages()
 
         fun countLicenses(view: LicenseView): SortedMap<String, Int> =
             ids.flatMap { id ->
