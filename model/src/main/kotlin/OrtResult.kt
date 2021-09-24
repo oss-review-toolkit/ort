@@ -211,13 +211,14 @@ data class OrtResult(
      */
     fun collectProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
         val projectsAndPackages = mutableSetOf<Identifier>()
+        val projects = getProjects()
 
-        getProjects().mapTo(projectsAndPackages) { it.id }
+        projects.mapTo(projectsAndPackages) { it.id }
 
         if (!includeSubProjects) {
             val allSubProjects = mutableSetOf<Identifier>()
 
-            getProjects().forEach {
+            projects.forEach {
                 allSubProjects += dependencyNavigator.collectSubProjects(it)
             }
 
