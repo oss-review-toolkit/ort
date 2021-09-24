@@ -450,16 +450,6 @@ data class OrtResult(
     fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
 
     /**
-     * Return the set of Identifiers of all [Package]s and [Project]s contained in this [OrtResult].
-     */
-    @JsonIgnore
-    fun getProjectAndPackageIds(): Set<Identifier> =
-        mutableSetOf<Identifier>().also { set ->
-            getPackages().mapTo(set) { it.pkg.id }
-            getProjects().mapTo(set) { it.id }
-        }
-
-    /**
      * Return the list of [ScanResult]s for the given [id].
      */
     fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
