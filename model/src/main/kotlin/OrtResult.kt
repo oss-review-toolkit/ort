@@ -216,10 +216,8 @@ data class OrtResult(
         projects.mapTo(projectsAndPackages) { it.id }
 
         if (!includeSubProjects) {
-            val allSubProjects = mutableSetOf<Identifier>()
-
-            projects.forEach {
-                allSubProjects += dependencyNavigator.collectSubProjects(it)
+            val allSubProjects = projects.flatMapTo(mutableSetOf()) {
+                dependencyNavigator.collectSubProjects(it)
             }
 
             projectsAndPackages -= allSubProjects
