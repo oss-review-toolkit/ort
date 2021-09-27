@@ -180,7 +180,7 @@ class VulnerableCodeTest : WordSpec({
 
 private const val ADVISOR_NAME = "VulnerableCodeTestAdvisor"
 private const val TEST_FILES_ROOT = "src/test/assets"
-private const val TEST_FILES_DIRECTORY = "vulnerablecode"
+private const val TEST_FILES_DIRECTORY = "vulnerable-code"
 private const val TEST_RESULT_NAME = "ort-analyzer-result.yml"
 
 private val idLang = Identifier("Maven:org.apache.commons:commons-lang3:3.5")
