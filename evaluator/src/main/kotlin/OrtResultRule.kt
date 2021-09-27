@@ -37,6 +37,24 @@ open class OrtResultRule(
 
     override fun issueSource() = "$name - ORT result"
 
+    fun hint(message: String, howToFix: String): Unit =
+        hint(
+            pkgId = null,
+            license = null,
+            licenseSource = null,
+            message = message,
+            howToFix = howToFix
+        )
+
+    fun warning(message: String, howToFix: String): Unit =
+        warning(
+            pkgId = null,
+            license = null,
+            licenseSource = null,
+            message = message,
+            howToFix = howToFix
+        )
+
     fun error(message: String, howToFix: String): Unit =
         error(
             pkgId = null,

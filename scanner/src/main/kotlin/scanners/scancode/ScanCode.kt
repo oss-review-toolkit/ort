@@ -61,6 +61,9 @@ import org.ossreviewtoolkit.utils.unpack
  *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
  *   considered in [configuration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
+ * * **"parseLicenseExpressions":** By default the license `key`, which can contain a single license id, is used for the
+ *   detected licenses. If this option is set to "true", the detected `license_expression` is used instead, which can
+ *   contain an SPDX expression.
  */
 class ScanCode(
     name: String,

@@ -2,6 +2,7 @@
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 Sonatype, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +52,7 @@ include(":cli")
 include(":clients:clearly-defined")
 include(":clients:fossid-webapp")
 include(":clients:nexus-iq")
+include(":clients:oss-index")
 include(":clients:vulnerable-code")
 include(":detekt-rules")
 include(":downloader")

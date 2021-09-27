@@ -247,6 +247,20 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
             )
         }
     }
+
+    ortResultRule("DEPRECATED_PATH_EXCLUDE_REASON_IN_ORT_YML") {
+        val pathExcludeReasons = ortResult.repository.config.excludes.paths.mapTo(mutableSetOf()) { it.reason }
+        val deprecatedPathExcludeReasons = setOf(PathExcludeReason.TEST_TOOL_OF)
+
+        pathExcludeReasons.intersect(deprecatedPathExcludeReasons).forEach { offendingReason ->
+            warning(
+                "The repository configuration is using the deprecated path exclude reason '$offendingReason'.",
+                "Please use only non-deprecated path exclude reasons, see " +
+                        "https://github.com/oss-review-toolkit/ort/blob/master/model/src/main/" +
+                        "kotlin/config/PathExcludeReason.kt."
+            )
+        }
+    }
 }
 
 // Populate the list of policy rule violations to return.

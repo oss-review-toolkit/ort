@@ -25,6 +25,7 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
+import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
@@ -37,8 +38,12 @@ class PackageRuleTest : WordSpec() {
     private fun PackageRule.createLicenseRule(license: SpdxSingleLicenseExpression, licenseSource: LicenseSource) =
         LicenseRule(
             name = "test",
-            resolvedLicense = resolvedLicenseInfo[license]
-                ?: ResolvedLicense(license, emptySet(), emptyMap(), emptySet()),
+            resolvedLicense = resolvedLicenseInfo[license] ?: ResolvedLicense(
+                license = license,
+                originalDeclaredLicenses = emptySet(),
+                originalExpressions = setOf(ResolvedOriginalExpression(license, licenseSource)),
+                locations = emptySet()
+            ),
             licenseSource = licenseSource
         )
 

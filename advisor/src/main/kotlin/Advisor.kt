@@ -48,7 +48,7 @@ class Advisor(
         /**
          * The list of all available [VulnerabilityProvider]s in the classpath.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList() }
+        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.providerName } }
     }
 
     fun retrieveVulnerabilityInformation(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {

@@ -147,13 +147,12 @@ class ExamplesFunTest : StringSpec() {
 
             val result = evaluator.run(script)
 
-            result.violations shouldHaveSize 4
-            val failedRules = result.violations.map { it.rule }
-            failedRules shouldContainExactlyInAnyOrder listOf(
+            result.violations.map { it.rule } shouldContainExactlyInAnyOrder listOf(
                 "UNHANDLED_LICENSE",
                 "COPYLEFT_LIMITED_IN_SOURCE",
                 "VULNERABILITY_IN_PACKAGE",
-                "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE"
+                "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE",
+                "DEPRECATED_PATH_EXCLUDE_REASON_IN_ORT_YML"
             )
         }
 

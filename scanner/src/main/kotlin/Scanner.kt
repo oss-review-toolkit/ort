@@ -178,7 +178,7 @@ abstract class Scanner(
         /**
          * The list of all available scanners in the classpath.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList() }
+        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.scannerName } }
     }
 
     /**

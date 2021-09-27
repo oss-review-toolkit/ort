@@ -69,7 +69,7 @@ abstract class PackageManager(
         /**
          * The list of all available package managers in the classpath.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList() }
+        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.managerName } }
 
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(
             // Ignore intermediate build system directories.

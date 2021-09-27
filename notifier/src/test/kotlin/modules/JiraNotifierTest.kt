@@ -73,7 +73,7 @@ class JiraNotifierTest : WordSpec({
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
-                            .withBodyFile("response_get_project.json")
+                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
             stubFor(
@@ -81,7 +81,7 @@ class JiraNotifierTest : WordSpec({
                     .withHeader("Content-Type", equalTo("application/json"))
                     .willReturn(
                         aResponse().withStatus(201)
-                            .withBodyFile("response_create_issue.json")
+                            .withBodyFile("$TEST_FILES_DIRECTORY/response_create_issue.json")
                     )
             )
 
@@ -112,7 +112,7 @@ class JiraNotifierTest : WordSpec({
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
-                            .withBodyFile("response_get_project.json")
+                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
             stubFor(
@@ -120,7 +120,7 @@ class JiraNotifierTest : WordSpec({
                     .withQueryParam("jql", matching("project.*summary.*"))
                     .willReturn(
                         aResponse().withStatus(201)
-                            .withBodyFile("response_search_jql.json")
+                            .withBodyFile("$TEST_FILES_DIRECTORY/response_search_jql.json")
                     )
             )
 
@@ -146,7 +146,7 @@ class JiraNotifierTest : WordSpec({
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
-                                .withBodyFile("response_get_project.json")
+                                .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
 
@@ -165,4 +165,5 @@ class JiraNotifierTest : WordSpec({
     }
 })
 
-private const val TEST_FILES_ROOT = "src/test/assets/"
+private const val TEST_FILES_ROOT = "src/test/assets"
+private const val TEST_FILES_DIRECTORY = "jira"

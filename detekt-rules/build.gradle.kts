@@ -17,6 +17,10 @@
  * License-Filename: LICENSE
  */
 
+import org.gradle.internal.logging.text.StyledTextOutput
+import org.gradle.internal.logging.text.StyledTextOutputFactory
+import org.gradle.kotlin.dsl.support.serviceOf
+
 val detektPluginVersion: String by project
 
 plugins {
@@ -26,4 +30,13 @@ plugins {
 
 dependencies {
     implementation("io.gitlab.arturbosch.detekt:detekt-api:$detektPluginVersion")
+}
+
+tasks.named<Jar>("jar").configure {
+    doLast {
+        val out = serviceOf<StyledTextOutputFactory>().create("detekt-rules")
+        val message = "The detekt-rules have changed. You need to stop the Gradle daemon to allow the detekt plugin " +
+                "to reload for the rule changes to take effect."
+        out.withStyle(StyledTextOutput.Style.Info).println(message)
+    }
 }

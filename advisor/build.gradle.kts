@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 Sonatype, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ plugins {
 
 dependencies {
     api(project(":clients:nexus-iq"))
+    api(project(":clients:oss-index"))
     api(project(":clients:vulnerable-code"))
     api(project(":model"))
 

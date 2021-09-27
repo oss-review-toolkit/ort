@@ -74,8 +74,11 @@ private const val VERSION = "0.1.8"
 private const val COMMIT = "02b7f3d06fcbbedb44563aaa88ab62db3669946e"
 private const val SCANCODE_VERSION = "3.2.2"
 
-/** The name of the file with the test results from ClearlyDefined. */
-private const val RESULT_FILE = "clearlydefined_scancode.json"
+private const val TEST_FILES_ROOT = "src/test/assets"
+private const val TEST_FILES_DIRECTORY = "clearlydefined"
+
+/** The name of the file with the test response from ClearlyDefined. */
+private const val RESPONSE_FILE = "scancode-$SCANCODE_VERSION.json"
 
 /** A delta for comparing timestamps against the current time. */
 private val MAX_TIME_DELTA = Duration.ofSeconds(30)
@@ -161,7 +164,7 @@ private fun stubHarvestToolResponse(wiremock: WireMockServer, coordinates: Coord
             .withQueryParam("form", equalTo("streamed"))
             .willReturn(
                 aResponse().withStatus(200)
-                    .withBodyFile(RESULT_FILE)
+                    .withBodyFile("$TEST_FILES_DIRECTORY/$RESPONSE_FILE")
             )
     )
 }
@@ -225,7 +228,7 @@ private fun assertCurrentTime(time: Instant) {
  * Read the template for a ClearlyDefines definitions request from the test file.
  */
 private fun readDefinitionsTemplate(): String {
-    val templateFile = File("src/test/assets/cd_definitions.json")
+    val templateFile = File("$TEST_FILES_ROOT/cd_definitions.json")
     return templateFile.readText()
 }
 
@@ -233,7 +236,7 @@ class ClearlyDefinedStorageTest : WordSpec({
     val wiremock = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/")
+            .usingFilesUnderDirectory(TEST_FILES_ROOT)
     )
 
     beforeSpec {
@@ -431,14 +434,14 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "return a failure if the connection to the server fails" {
-            // find a port on which no service is running
+            // Find a port on which no service is running.
             val port = ServerSocket(0).use { it.localPort }
             val serverUrl = "http://localhost:$port"
 
             val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration((serverUrl)))
 
             when (val result = storage.read(TEST_IDENTIFIER)) {
-                is Failure -> result.error shouldContain "ConnectException"
+                is Failure -> result.error shouldContain "Connection refused"
                 else -> fail("Unexpected result: $result")
             }
         }

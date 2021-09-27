@@ -48,12 +48,12 @@ class FilePackageCurationProvider(curationFiles: Collection<File>) : PackageCura
     }
 
     val packageCurations: Set<PackageCuration> = run {
-        val allCurations = curationFiles.mapNotNull { curationFile ->
+        val allCurations = curationFiles.map { curationFile ->
             runCatching {
                 curationFile.readValueOrDefault(emptyList<PackageCuration>())
             }.onFailure {
                 log.warn { "Failed parsing package curation from '${curationFile.absoluteFile}'." }
-            }.getOrNull()
+            }.getOrThrow()
         }.flatten()
 
         val duplicates = allCurations.getDuplicates()

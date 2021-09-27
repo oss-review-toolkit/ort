@@ -209,16 +209,15 @@ data class OrtResult(
      * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
      * [includeSubProjects].
      */
-    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): SortedSet<Identifier> {
-        val projectsAndPackages = sortedSetOf<Identifier>()
+    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
+        val projectsAndPackages = mutableSetOf<Identifier>()
+        val projects = getProjects()
 
-        getProjects().mapTo(projectsAndPackages) { it.id }
+        projects.mapTo(projectsAndPackages) { it.id }
 
         if (!includeSubProjects) {
-            val allSubProjects = sortedSetOf<Identifier>()
-
-            getProjects().forEach {
-                allSubProjects += dependencyNavigator.collectSubProjects(it)
+            val allSubProjects = projects.flatMapTo(mutableSetOf()) {
+                dependencyNavigator.collectSubProjects(it)
             }
 
             projectsAndPackages -= allSubProjects
@@ -447,16 +446,6 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
-
-    /**
-     * Return the set of Identifiers of all [Package]s and [Project]s contained in this [OrtResult].
-     */
-    @JsonIgnore
-    fun getProjectAndPackageIds(): Set<Identifier> =
-        mutableSetOf<Identifier>().also { set ->
-            getPackages().mapTo(set) { it.pkg.id }
-            getProjects().mapTo(set) { it.id }
-        }
 
     /**
      * Return the list of [ScanResult]s for the given [id].
