@@ -431,7 +431,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "return a failure if the connection to the server fails" {
-            // find a port on which no service is running
+            // Find a port on which no service is running.
             val port = ServerSocket(0).use { it.localPort }
             val serverUrl = "http://localhost:$port"
 
