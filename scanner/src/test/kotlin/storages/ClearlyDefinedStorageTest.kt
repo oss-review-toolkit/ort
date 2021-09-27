@@ -75,7 +75,7 @@ private const val COMMIT = "02b7f3d06fcbbedb44563aaa88ab62db3669946e"
 private const val SCANCODE_VERSION = "3.2.2"
 
 private const val TEST_FILES_ROOT = "src/test/assets"
-private const val TEST_FILES_DIRECTORY = "clearlydefined"
+private const val TEST_FILES_DIRECTORY = "clearly-defined"
 
 /** The name of the file with the test response from ClearlyDefined. */
 private const val RESPONSE_FILE = "scancode-$SCANCODE_VERSION.json"
