@@ -27,12 +27,10 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldContain
-
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.*
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.Environment
-
 import java.time.Instant
 
 class OpossumReporterTest : WordSpec({
@@ -119,7 +117,8 @@ class OpossumReporterTest : WordSpec({
         }
 
         "some/file File added by SCANNER report should have signal with copyright" {
-            val signals = opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
+            val signals =
+                opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
             signals.size shouldBe 2
             val signal = signals
                 .find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
@@ -140,7 +139,7 @@ class OpossumReporterTest : WordSpec({
         val opossumInputJson = opossumInput.toJson()
         "opossumInput JSON should have expected top level entries" {
             opossumInputJson.keys shouldContain "metadata"
-            (opossumInputJson["metadata"] as Map<*,*>).keys shouldContain "projectId"
+            (opossumInputJson["metadata"] as Map<*, *>).keys shouldContain "projectId"
             opossumInputJson.keys shouldContain "resources"
             opossumInputJson.keys shouldContain "externalAttributions"
             opossumInputJson.keys shouldContain "resourcesToAttributions"
@@ -159,11 +158,32 @@ class OpossumReporterTest : WordSpec({
             opossumInput.baseUrlsForSources["/"] shouldBe "https://github.com/path/first-project/tree/master/sub/path/{path}"
             opossumInput.baseUrlsForSources["/pom.xml/compile/first-package-group/first-package@0.0.1/"] shouldBe "https://github.com/path/first-package-repo/tree/master/project-path/{path}"
         }
+
+        "ortIssues should exist and contain all issues" {
+
+            val issuesFromFirstPackage =
+                opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1")
+                    .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
+            issuesFromFirstPackage.size shouldBe 4
+            issuesFromFirstPackage.forEach {
+                it.followUp shouldBe true
+                it.excludeFromNotice shouldBe true
+            }
+
+            val issuesAttachedToFallbackPath = opossumInput.getSignalsForFile("/")
+            issuesAttachedToFallbackPath.size shouldBe 1
+            issuesAttachedToFallbackPath.forEach {
+                it.followUp shouldBe true
+                it.excludeFromNotice shouldBe true
+                it.comment shouldContain Regex("Source-.*Message-")
+            }
+        }
     }
 
     "generateOpossumInput() with excluded scopes" should {
         val result = createOrtResult()
-        val opossumInputWithExcludedScopes = OpossumReporter().generateOpossumInput(result, sortedSetOf("devDependencies"))
+        val opossumInputWithExcludedScopes =
+            OpossumReporter().generateOpossumInput(result, sortedSetOf("devDependencies"))
         val fileListWithExcludedScopes = opossumInputWithExcludedScopes.resources.toFileList()
 
         "exclude of scopes should work" {
@@ -370,8 +390,25 @@ private fun createOrtResult(): OrtResult {
                             )
                         )
                     }
-                ).toSortedSet()
-            )
+                ).toSortedSet(),
+                issues = sortedMapOf(
+                    Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
+                        OrtIssue(
+                            source = "Source-1",
+                            message = "Message-1"
+                        ), OrtIssue(
+                            source = "Source-2",
+                            message = "Message-2"
+                        )
+                    ),
+                    Identifier("unknown-identifier") to listOf(
+                        OrtIssue(
+                            source = "Source-3",
+                            message = "Message-3"
+                        )
+                    )
+                ),
+            ),
         ),
         scanner = ScannerRun(
             environment = Environment(),
@@ -442,6 +479,15 @@ private fun createOrtResult(): OrtResult {
                                     CopyrightFinding(
                                         statement = "Copyright 2020 Some copyright holder in VCS",
                                         location = TextLocation("some/file", 1)
+                                    )
+                                ),
+                                issues = listOf(
+                                    OrtIssue(
+                                        source = "Source-4",
+                                        message = "Message-4"
+                                    ), OrtIssue(
+                                        source = "Source-5",
+                                        message = "Message-5"
                                     )
                                 )
                             )
