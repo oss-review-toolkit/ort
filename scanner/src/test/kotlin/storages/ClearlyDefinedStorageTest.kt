@@ -438,7 +438,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration((serverUrl)))
 
             when (val result = storage.read(TEST_IDENTIFIER)) {
-                is Failure -> result.error shouldContain "ConnectException"
+                is Failure -> result.error shouldContain "Connection refused"
                 else -> fail("Unexpected result: $result")
             }
         }
