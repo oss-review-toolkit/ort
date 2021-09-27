@@ -97,7 +97,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : V
                 componentDetails[pkg.id.toPurl()]?.let { details ->
                     pkg to listOf(
                         AdvisorResult(
-                            details.securityData.securityIssues.mapNotNull { it.toVulnerability() },
+                            details.securityData.securityIssues.map { it.toVulnerability() },
                             AdvisorDetails(providerName),
                             AdvisorSummary(startTime, endTime)
                         )
