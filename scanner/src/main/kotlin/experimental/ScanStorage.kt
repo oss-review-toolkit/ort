@@ -113,3 +113,17 @@ interface ProvenanceBasedScanStorageWriter : ScanStorageWriter {
      */
     fun write(scanResult: ScanResult)
 }
+
+/**
+ * A combination of the [PackageBasedScanStorageReader] and [PackageBasedScanStorageWriter]. This interface is usually
+ * implemented by actual storage implementations, because it is often convenient to implement both interfaces in a
+ * single class.
+ */
+interface PackageBasedScanStorage : PackageBasedScanStorageReader, PackageBasedScanStorageWriter
+
+/**
+ * A combination of the [ProvenanceBasedScanStorageReader] and [ProvenanceBasedScanStorageWriter]. This interface is
+ * usually implemented by actual storage implementations, because it is often convenient to implement both interfaces in
+ * a single class.
+ */
+interface ProvenanceBasedScanStorage : ProvenanceBasedScanStorageReader, ProvenanceBasedScanStorageWriter
