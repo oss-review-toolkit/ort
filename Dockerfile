@@ -44,6 +44,13 @@ RUN curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/scala_ubun
 ARG SBT_VERSION=1.3.8
 
 #------------------------------------------------------------------------
+# External repositories for Dart
+ENV REPOURL="https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list"
+RUN curl -ksS "$REPOURL" | tee "/etc/apt/sources.list.d/dart_stable.list" > /dev/null
+ENV KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub"
+RUN curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/dart_ubuntu.gpg" > /dev/null
+
+#------------------------------------------------------------------------
 # Add git ppa for latest git
 RUN echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" > /etc/apt/sources.list.d/git-core-ubuntu-ppa-focal.list
 ENV KEYURL=https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df1f24
@@ -59,6 +66,7 @@ RUN apt-get update \
         cargo \
         composer \
         cvs \
+        dart \
         git \
         lib32stdc++6 \
         libffi7 \
@@ -136,7 +144,7 @@ ENV PATH=/opt/python/shims:$PATH
 RUN pip install -U pip=="${PIP_VERSION}" \
     conan=="${CONAN_VERSION}" \
     Mercurial \
-    virtualenv=="${VIRTUALENV_VERSION}" \
+    virtualenv=="${VIRTUALENV_VERSION}" \   
     pipenv
 COPY docker/python.sh /etc/ort/bash_modules
 
@@ -167,7 +175,6 @@ ARG HASKELL_STACK_VERSION=2.1.3
 ENV DEST=/opt/haskell/bin/stack
 RUN curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | bash -s -- -d /usr/bin
 
-
 #------------------------------------------------------------------------
 # Ruby using rbenv
 ARG RUBY_VERSION=2.7.4
@@ -185,7 +192,7 @@ COPY docker/ruby.sh /etc/ort/bash_modules
 
 #------------------------------------------------------------------------
 # Scancode from official releases
-ARG SCANCODE_VERSION=21.8.4
+ARG SCANCODE_VERSION=30.1.0
 ENV SCANCODE_URL "https://github.com/nexB/scancode-toolkit/releases/download/v${SCANCODE_VERSION}"
 RUN pyver=$(python3 --version | sed -e "s/Python //" | tr -d '.' | cut -c1-2) \
     && echo "${SCANCODE_URL}/scancode-toolkit-${SCANCODE_VERSION}_py${pyver}-linux.tar.xz" \
