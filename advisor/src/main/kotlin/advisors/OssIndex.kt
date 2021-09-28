@@ -47,14 +47,14 @@ private const val REQUEST_CHUNK_SIZE = 128
 /**
  * A wrapper for [Sonatype OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
-class OssIndex(name: String) : AdviceProvider(name) {
+class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_URL) : AdviceProvider(name) {
     class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
         override fun create(config: AdvisorConfiguration) = OssIndex(providerName)
     }
 
     private val service by lazy {
         OssIndexService.create(
-            url = OssIndexService.DEFAULT_BASE_URL,
+            url = serverUrl,
             client = OkHttpClientHelper.buildClient()
         )
     }
