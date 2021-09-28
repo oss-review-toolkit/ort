@@ -34,11 +34,6 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SpdxDocumentFileFunTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Project dependencies are detected correctly" {
             val expectedResult = patchExpectedResult(
@@ -97,12 +92,17 @@ class SpdxDocumentFileFunTest : StringSpec() {
 
         // TODO: Test that we can read in files written by SpdxDocumentReporter.
     }
-
-    private fun createSpdxDocumentFile() =
-        SpdxDocumentFile(
-            "SpdxDocumentFile",
-            USER_DIR,
-            DEFAULT_ANALYZER_CONFIGURATION,
-            DEFAULT_REPOSITORY_CONFIGURATION
-        )
 }
+
+private val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
+private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+private val vcsUrl = vcsDir.getRemoteUrl()
+private val vcsRevision = vcsDir.getRevision()
+
+private fun createSpdxDocumentFile() =
+    SpdxDocumentFile(
+        "SpdxDocumentFile",
+        USER_DIR,
+        DEFAULT_ANALYZER_CONFIGURATION,
+        DEFAULT_REPOSITORY_CONFIGURATION
+    )
