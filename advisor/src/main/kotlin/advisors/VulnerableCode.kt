@@ -40,10 +40,7 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
  */
-class VulnerableCode(
-    name: String,
-    private val vulnerableCodeConfiguration: VulnerableCodeConfiguration
-) : AdviceProvider(name) {
+class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeConfiguration) : AdviceProvider(name) {
     class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
         override fun create(config: AdvisorConfiguration) =
             VulnerableCode(providerName, config.forProvider { vulnerableCode })
