@@ -83,7 +83,7 @@ class OssIndex(name: String) : AdviceProvider(name) {
                         AdvisorResult(
                             AdvisorDetails(providerName),
                             AdvisorSummary(startTime, endTime),
-                            vulnerabilities = report.vulnerabilities.mapNotNull { it.toVulnerability() }
+                            vulnerabilities = report.vulnerabilities.map { it.toVulnerability() }
                         )
                     )
                 }
@@ -97,7 +97,7 @@ class OssIndex(name: String) : AdviceProvider(name) {
      * Construct an [ORT Vulnerability][Vulnerability] from an [OssIndexService Vulnerability]
      * [OssIndexService.Vulnerability].
      */
-    private fun OssIndexService.Vulnerability.toVulnerability(): Vulnerability? {
+    private fun OssIndexService.Vulnerability.toVulnerability(): Vulnerability {
         val reference = VulnerabilityReference(
             url = URI(reference),
             scoringSystem = cvssVector.substringBefore('/'),
