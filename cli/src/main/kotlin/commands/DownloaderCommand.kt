@@ -331,11 +331,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 } catch (e: DownloadException) {
                     e.showStackTrace()
 
-                    val failureMessage = "Could not download '${dummyPackage.id.toCoordinates()}': " +
+                    failureMessages += "Could not download '${dummyPackage.id.toCoordinates()}': " +
                             e.collectMessagesAsString()
-                    failureMessages += failureMessage
-
-                    log.error { failureMessage }
                 }
             }
         }
