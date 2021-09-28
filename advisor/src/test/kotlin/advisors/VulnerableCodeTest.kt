@@ -42,8 +42,6 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.net.URI
 
-import kotlinx.coroutines.runBlocking
-
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -152,8 +150,24 @@ class VulnerableCodeTest : WordSpec({
                         aResponse().withStatus(500)
                     )
             )
+            val vulnerableCode = createVulnerableCode(wiremock)
+            val packagesToAdvise = inputPackages()
 
-            expectErrorResult(wiremock)
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            result shouldNotBeNull {
+                keys should containExactly(packageIdentifiers)
+
+                packageIdentifiers.forEach { pkg ->
+                    val pkgResults = getValue(pkg)
+                    pkgResults shouldHaveSize 1
+                    val pkgResult = pkgResults[0]
+                    pkgResult.vulnerabilities should beEmpty()
+                    pkgResult.summary.issues shouldHaveSize 1
+                    val issue = pkgResult.summary.issues[0]
+                    issue.severity shouldBe Severity.ERROR
+                }
+            }
         }
 
         "filter out packages without vulnerabilities" {
@@ -217,33 +231,6 @@ private fun WireMockServer.stubPackagesRequest(responseFile: String) {
                     .withBodyFile("$TEST_FILES_DIRECTORY/$responseFile")
             )
     )
-}
-
-/**
- * Run a test with the VulnerabilityCode provider against the given [test server][wiremock] and expect the
- * operation to fail. In this case, for all packages a result with an error issue should have been created.
- */
-private fun expectErrorResult(wiremock: WireMockServer) {
-    val vulnerableCode = createVulnerableCode(wiremock)
-    val packagesToAdvise = inputPackages()
-
-    val result = runBlocking {
-        vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
-    }
-
-    result shouldNotBeNull {
-        keys should containExactly(packageIdentifiers)
-
-        packageIdentifiers.forEach { pkg ->
-            val pkgResults = getValue(pkg)
-            pkgResults shouldHaveSize 1
-            val pkgResult = pkgResults[0]
-            pkgResult.vulnerabilities should beEmpty()
-            pkgResult.summary.issues shouldHaveSize 1
-            val issue = pkgResult.summary.issues[0]
-            issue.severity shouldBe Severity.ERROR
-        }
-    }
 }
 
 /**
