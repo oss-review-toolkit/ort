@@ -107,14 +107,9 @@ ignores declared and detected licenses if a license conclusion for the package w
 for a concluded license those statements are kept.
 --]
 [#assign
-resolvedLicenses =
-    LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
-      .filter(
-          package.licensesNotInLicenseFiles(
-            LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
-                .filter(package.license, package.licenseChoices).licenses
-          )
-      )
+resolvedLicenses = package.licensesNotInLicenseFiles(
+    LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED.filter(package.license, package.licenseChoices).licenses
+)
 ]
 [#if resolvedLicenses?has_content]
 
