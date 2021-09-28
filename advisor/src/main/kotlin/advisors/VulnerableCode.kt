@@ -37,6 +37,12 @@ import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 
 /**
+ * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the
+ * size of responses reasonably small.
+ */
+private const val BULK_FETCH_SIZE = 100
+
+/**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
  */
@@ -44,14 +50,6 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
     class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
         override fun create(config: AdvisorConfiguration) =
             VulnerableCode(providerName, config.forProvider { vulnerableCode })
-    }
-
-    companion object {
-        /**
-         * The number of elements to request at once in a bulk request. This value was chosen more or less
-         * randomly to keep the size of responses reasonably small.
-         */
-        private const val BULK_FETCH_SIZE = 100
     }
 
     /**
