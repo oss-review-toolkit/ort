@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -33,9 +33,9 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class SpdxDocumentFileFunTest : StringSpec() {
-    init {
-        "Project dependencies are detected correctly" {
+class SpdxDocumentFileFunTest : WordSpec({
+    "resolveDependencies()" should {
+        "succeed if a project is provided" {
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("spdx-project-expected-output.yml"),
                 url = vcsUrl,
@@ -49,7 +49,7 @@ class SpdxDocumentFileFunTest : StringSpec() {
             actualResult shouldBe expectedResult
         }
 
-        "Package dependencies are detected correctly, if no project is provided" {
+        "succeed if no project is provided" {
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("spdx-packages-expected-output.yml"),
                 url = vcsUrl,
@@ -67,8 +67,10 @@ class SpdxDocumentFileFunTest : StringSpec() {
 
             actualResult shouldBe expectedResult
         }
+    }
 
-        "mapDefinitionFiles() removes SPDX documents that do not describe a project if a project file is provided" {
+    "mapDefinitionFiles()" should {
+        "remove SPDX documents that do not describe a project if a project file is provided" {
             val projectFile = projectDir.resolve("project/project.spdx.yml")
             val packageFile = projectDir.resolve("package/libs/curl/package.spdx.yml")
 
@@ -79,7 +81,7 @@ class SpdxDocumentFileFunTest : StringSpec() {
             result should containExactly(projectFile)
         }
 
-        "mapDefinitionFiles() keeps SPDX documents that do not describe a project if no project file is provided" {
+        "keep SPDX documents that do not describe a project if no project file is provided" {
             val packageFileCurl = projectDir.resolve("package/libs/curl/package.spdx.yml")
             val packageFileZlib = projectDir.resolve("package/libs/zlib/package.spdx.yml")
 
@@ -92,7 +94,7 @@ class SpdxDocumentFileFunTest : StringSpec() {
 
         // TODO: Test that we can read in files written by SpdxDocumentReporter.
     }
-}
+})
 
 private val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
 private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
