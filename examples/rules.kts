@@ -249,10 +249,10 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
     }
 
     ortResultRule("DEPRECATED_PATH_EXCLUDE_REASON_IN_ORT_YML") {
-        val pathExcludeReasons = ortResult.repository.config.excludes.paths.mapTo(mutableSetOf()) { it.reason }
-        val deprecatedPathExcludeReasons = setOf(PathExcludeReason.TEST_TOOL_OF)
+        val reasons = ortResult.repository.config.excludes.paths.mapTo(mutableSetOf()) { it.reason }
+        val deprecatedReasons = setOf(PathExcludeReason.TEST_TOOL_OF)
 
-        pathExcludeReasons.intersect(deprecatedPathExcludeReasons).forEach { offendingReason ->
+        reasons.intersect(deprecatedReasons).forEach { offendingReason ->
             warning(
                 "The repository configuration is using the deprecated path exclude reason '$offendingReason'.",
                 "Please use only non-deprecated path exclude reasons, see " +
