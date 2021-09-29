@@ -111,7 +111,7 @@ class ExperimentalScanner(
                     "provenances."
         }
         val (storedResults, readDuration) = measureTimedValue {
-            getStoredResults(allKnownProvenances, packageProvenances)
+            getStoredResults(allKnownProvenances, nestedProvenances, packageProvenances)
         }
 
         log.info {
@@ -239,6 +239,7 @@ class ExperimentalScanner(
 
     private fun getStoredResults(
         provenances: Set<KnownProvenance>,
+        nestedProvenances: Map<Package, NestedProvenance>,
         packageProvenances: Map<Package, Provenance>
     ): Map<ScannerWrapper, MutableMap<KnownProvenance, List<ScanResult>>> {
         return scannerWrappers.associateWith { scanner ->
@@ -252,7 +253,8 @@ class ExperimentalScanner(
                     when (reader) {
                         is PackageBasedScanStorageReader -> {
                             packageProvenances.entries.find { it.value == provenance }?.key?.let { pkg ->
-                                reader.read(pkg, scannerCriteria).forEach { scanResult2 ->
+                                val nestedProvenance = nestedProvenances.getValue(pkg)
+                                reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult2 ->
                                     // TODO: Do not overwrite entries from other storages in result.
                                     // TODO: Map scan result to known source tree for package.
                                     result += scanResult2.scanResults
