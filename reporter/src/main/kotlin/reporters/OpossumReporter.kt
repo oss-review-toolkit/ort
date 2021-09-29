@@ -217,6 +217,11 @@ class OpossumReporter : Reporter {
             { it.defaultText })
     }
 
+    data class OpossumExternalAttributionSource(
+        var name: String,
+        var priority: Int,
+    ) {}
+
     data class OpossumInput(
         var resources: OpossumResources = OpossumResources(),
         var signals: MutableList<OpossumSignal> = mutableListOf(),
@@ -225,7 +230,8 @@ class OpossumReporter : Reporter {
         var attributionBreakpoints: SortedSet<String> = sortedSetOf(),
         var filesWithChildren: SortedSet<String> = sortedSetOf(),
         var frequentLicenses: SortedSet<OpossumFrequentLicense> = sortedSetOf(),
-        var baseUrlsForSources: SortedMap<String, String> = sortedMapOf()
+        var baseUrlsForSources: SortedMap<String, String> = sortedMapOf(),
+        var externalAttributionSources: SortedMap<String, OpossumExternalAttributionSource> = sortedMapOf()
     ) {
         fun toJson(): Map<*, *> {
             return sortedMapOf(
@@ -250,7 +256,8 @@ class OpossumReporter : Reporter {
                 "attributionBreakpoints" to attributionBreakpoints,
                 "filesWithChildren" to filesWithChildren,
                 "frequentLicenses" to frequentLicenses.toList().map { it.toJson() },
-                "baseUrlsForSources" to baseUrlsForSources
+                "baseUrlsForSources" to baseUrlsForSources,
+                "externalAttributionSources" to externalAttributionSources
             )
         }
 
@@ -289,6 +296,17 @@ class OpossumReporter : Reporter {
                 baseUrlsForSources[idFromPath] = baseUrl
             }
 
+        }
+
+        fun addExternalAttributionSources() {
+            externalAttributionSources["ORT-Package"] = OpossumExternalAttributionSource(
+                "Opensource Review Toolkit",
+                200,
+            )
+            externalAttributionSources["ORT-Scanner-ScanCode@3.2.1-rc2"] = OpossumExternalAttributionSource(
+                "Scan Code",
+                20,
+            )
         }
 
         fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo = VcsInfo.EMPTY) {
@@ -563,6 +581,7 @@ class OpossumReporter : Reporter {
         val opossumInput = OpossumInput()
 
         opossumInput.addBaseURL("/", ortResult.repository.vcs)
+        opossumInput.addExternalAttributionSources()
 
         SpdxLicense.values().forEach {
             val licenseText = getLicenseText(it.id)
