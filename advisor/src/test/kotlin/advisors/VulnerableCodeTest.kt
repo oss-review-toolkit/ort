@@ -21,8 +21,8 @@
 package org.ossreviewtoolkit.advisor.advisors
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.post
@@ -62,7 +62,7 @@ class VulnerableCodeTest : WordSpec({
 
     beforeSpec {
         wiremock.start()
-        WireMock.configureFor(wiremock.port())
+        configureFor(wiremock.port())
     }
 
     afterSpec {
