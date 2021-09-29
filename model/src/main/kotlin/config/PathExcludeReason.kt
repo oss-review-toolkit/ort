@@ -72,12 +72,5 @@ enum class PathExcludeReason {
      * The path only contains tools used for testing source code which are not included in distributed build
      * artifacts.
      */
-    @Deprecated(
-        message = "Use SPDX-2.2-style enum value instead.",
-        replaceWith = ReplaceWith(
-            expression = "PathExcludeReason.TEST_OF",
-            imports = ["org.ossreviewtoolkit.model.config.PathExcludeReason"]
-        )
-    )
     TEST_TOOL_OF
 }
