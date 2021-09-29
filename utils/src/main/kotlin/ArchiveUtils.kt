@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("MatchingDeclarationName")
+@file:Suppress("MatchingDeclarationName", "TooManyFunctions")
 
 package org.ossreviewtoolkit.utils
 
@@ -33,6 +34,8 @@ import java.util.zip.Deflater
 
 import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.compress.archivers.ArchiveInputStream
+import org.apache.commons.compress.archivers.ar.ArArchiveEntry
+import org.apache.commons.compress.archivers.ar.ArArchiveInputStream
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
@@ -52,6 +55,7 @@ enum class ArchiveType(vararg val extensions: String) {
     TAR_XZ(".tar.xz", ".txz"),
     ZIP(".aar", ".egg", ".jar", ".war", ".whl", ".zip"),
     SEVENZIP(".7z"),
+    DEB(".deb", ".udeb"),
     NONE("");
 
     companion object {
@@ -76,6 +80,8 @@ fun File.unpack(targetDirectory: File) =
         ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(inputStream()).unpackTar(targetDirectory)
         ArchiveType.TAR_GZIP -> GzipCompressorInputStream(inputStream()).unpackTar(targetDirectory)
         ArchiveType.TAR_XZ -> XZCompressorInputStream(inputStream()).unpackTar(targetDirectory)
+
+        ArchiveType.DEB -> unpackDeb(targetDirectory)
 
         ArchiveType.NONE -> {
             throw IOException("Unable to guess compression scheme from file name '$name'.")
@@ -111,6 +117,40 @@ fun File.unpack7Zip(targetDirectory: File) {
  * Unpack the [File] assuming it is a Zip archive.
  */
 fun File.unpackZip(targetDirectory: File) = ZipFile(this).unpack(targetDirectory)
+
+/**
+ * A list with file names that are expected to be contained in a Debian package archive file.
+ */
+internal val DEBIAN_PACKAGE_SUBARCHIVES = listOf("data.tar.xz", "control.tar.xz")
+
+/**
+ * Unpack the [File] assuming it is a Debian archive. A Debian archive is an ar archive, which in turn contains two tar
+ * files, metadata and the actual content of the package. The top-level archive is deflated into a temporary
+ * directory. Then the tar files are extracted to the provided [targetDirectory], in two sub folders named *data* and
+ * *control*.
+ */
+fun File.unpackDeb(targetDirectory: File) {
+    val tempDir = createOrtTempDir("unpackDeb")
+
+    try {
+        ArArchiveInputStream(inputStream()).unpack(
+            tempDir,
+            { entry -> entry.isDirectory || File(entry.name).isAbsolute },
+            { entry -> (entry as ArArchiveEntry).mode }
+        )
+
+        DEBIAN_PACKAGE_SUBARCHIVES.forEach { path ->
+            val subFolderName = path.substringBefore('.')
+            val subFolder = targetDirectory.resolve(subFolderName)
+            subFolder.safeMkdirs()
+
+            val file = tempDir.resolve(path)
+            file.unpack(subFolder)
+        }
+    } finally {
+        tempDir.safeDeleteRecursively(force = true)
+    }
+}
 
 /**
  * Unpack the [ByteArray] assuming it is a Zip archive.

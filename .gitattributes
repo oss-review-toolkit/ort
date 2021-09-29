@@ -31,3 +31,6 @@ reporter-web-app/public/index.html		linguist-generated=true
 spdx-utils/src/main/resources/exceptions/*	linguist-detectable=false
 spdx-utils/src/main/resources/licenserefs/*	linguist-detectable=false
 spdx-utils/src/main/resources/licenses/*	linguist-detectable=false
+
+# Use Unix line endings for the expected control file of a Debian package.
+utils/src/test/assets/control-expected.txt  text eol=lf

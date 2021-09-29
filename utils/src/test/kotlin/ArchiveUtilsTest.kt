@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +22,10 @@ package org.ossreviewtoolkit.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.file.aFile
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -75,6 +79,30 @@ class ArchiveUtilsTest : StringSpec() {
             fileA.readText() shouldBe "a\n"
             fileB.exists() shouldBe true
             fileB.readText() shouldBe "b\n"
+        }
+
+        "Debian deb archive can be unpacked" {
+            val tempDir = createTestTempDir(ORT_NAME)
+            val archiveDeb = File("src/test/assets/testpkg.deb")
+            val archiveUdepTemp = tempDir.resolve("testpkg.udeb")
+            val archiveUdep = archiveDeb.copyTo(archiveUdepTemp)
+
+            listOf(archiveDeb, archiveUdep).forAll { archive ->
+                archive.unpack(outputDir)
+
+                val extractedScriptFile = outputDir.resolve("data/usr/bin/test")
+                extractedScriptFile shouldBe aFile()
+
+                val extractedControlFile = outputDir.resolve("control/control")
+                extractedControlFile shouldBe aFile()
+                val expectedControl = File("src/test/assets/control-expected.txt").readText()
+                extractedControlFile.readText() shouldBe expectedControl
+
+                DEBIAN_PACKAGE_SUBARCHIVES.forEach { tarFileName ->
+                    val tarFile = outputDir.resolve(tarFileName)
+                    tarFile shouldNotBe aFile()
+                }
+            }
         }
     }
 }
