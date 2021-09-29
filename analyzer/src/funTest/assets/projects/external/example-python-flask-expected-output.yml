@@ -25,7 +25,7 @@ project:
         - id: "PyPI::importlib-metadata:4.8.1"
           dependencies:
           - id: "PyPI::typing-extensions:3.10.0.2"
-          - id: "PyPI::zipp:3.5.0"
+          - id: "PyPI::zipp:3.5.1"
       - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
@@ -371,8 +371,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::zipp:3.5.0"
-  purl: "pkg:pypi/zipp@3.5.0"
+- id: "PyPI::zipp:3.5.1"
+  purl: "pkg:pypi/zipp@3.5.1"
   authors:
   - "Jason R. Coombs"
   declared_licenses:
@@ -384,14 +384,14 @@ packages:
   description: "Backport of pathlib-compatible object wrapper for zip files"
   homepage_url: "https://github.com/jaraco/zipp"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/92/d9/89f433969fb8dc5b9cbdd4b4deb587720ec1aeb59a020cf15002b9593eef/zipp-3.5.0-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/6c/b3/0f6b1fef97055a75cebbcd5d4719145963f09cf9d62793201a769b1e3aaa/zipp-3.5.1-py3-none-any.whl"
     hash:
-      value: "0ec47fbf522751f6c5fa904cb33f1f59"
+      value: "b2f6ffc0d2055cf2eac6f3c35101a26e"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/3a/9f/1d4b62cbe8d222539a84089eeab603d8e45ee1f897803a0ae0860400d6e7/zipp-3.5.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/76/e4/b0f1010d29a61e3527667b214498da73299f747dd25ad0fd135705170716/zipp-3.5.1.tar.gz"
     hash:
-      value: "617efbf3edb707c57008ec00f408972f"
+      value: "31ba90daf8af0808d93748dfb64e8d09"
       algorithm: "MD5"
   vcs:
     type: ""
