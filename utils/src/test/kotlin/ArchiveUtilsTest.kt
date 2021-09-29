@@ -29,6 +29,8 @@ import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
+import org.apache.commons.compress.archivers.ArchiveEntry
+
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class ArchiveUtilsTest : WordSpec() {
@@ -53,6 +55,18 @@ class ArchiveUtilsTest : WordSpec() {
                 fileB shouldBe aFile()
                 fileB.readText() shouldBe "b\n"
             }
+
+            "unpack with a filter" {
+                val archive = File("src/test/assets/test.tar")
+
+                archive.unpack(outputDir, A_FILTER)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileB shouldNotBe aFile()
+            }
         }
 
         "Tar GZ archives" should {
@@ -68,6 +82,18 @@ class ArchiveUtilsTest : WordSpec() {
                 fileA.readText() shouldBe "a\n"
                 fileB shouldBe aFile()
                 fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack with a filter" {
+                val archive = File("src/test/assets/test.tar.gz")
+
+                archive.unpack(outputDir, A_FILTER)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileB shouldNotBe aFile()
             }
         }
 
@@ -85,6 +111,18 @@ class ArchiveUtilsTest : WordSpec() {
                 fileB shouldBe aFile()
                 fileB.readText() shouldBe "b\n"
             }
+
+            "unpack with a filter" {
+                val archive = File("src/test/assets/test.tar.bz2")
+
+                archive.unpack(outputDir, A_FILTER)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileB shouldNotBe aFile()
+            }
         }
 
         "Tar xz archives" should {
@@ -100,6 +138,18 @@ class ArchiveUtilsTest : WordSpec() {
                 fileA.readText() shouldBe "a\n"
                 fileB shouldBe aFile()
                 fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack with a filter" {
+                val archive = File("src/test/assets/test.tar.xz")
+
+                archive.unpack(outputDir, A_FILTER)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileB shouldNotBe aFile()
             }
         }
 
@@ -117,6 +167,18 @@ class ArchiveUtilsTest : WordSpec() {
                 fileB shouldBe aFile()
                 fileB.readText() shouldBe "b\n"
             }
+
+            "unpack with a filter" {
+                val archive = File("src/test/assets/test.zip")
+
+                archive.unpack(outputDir, A_FILTER)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileB shouldNotBe aFile()
+            }
         }
 
         "7z archives" should {
@@ -132,6 +194,18 @@ class ArchiveUtilsTest : WordSpec() {
                 fileA.readText() shouldBe "a\n"
                 fileB shouldBe aFile()
                 fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack with a filter" {
+                val archive = File("src/test/assets/test.7z")
+
+                archive.unpack(outputDir, A_FILTER)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileB shouldNotBe aFile()
             }
         }
 
@@ -159,6 +233,23 @@ class ArchiveUtilsTest : WordSpec() {
                     }
                 }
             }
+
+            "unpack with a filter" {
+                val archive = File("src/test/assets/testpkg.deb")
+
+                archive.unpack(outputDir) { it.name.endsWith("test") }
+
+                val extractedScriptFile = outputDir.resolve("data/usr/bin/test")
+                extractedScriptFile shouldBe aFile()
+
+                val extractedControlFile = outputDir.resolve("control/control")
+                extractedControlFile shouldNotBe aFile()
+            }
         }
     }
 }
+
+/**
+ * A filter for archive entries that filters only for a file named "a".
+ */
+private val A_FILTER: (ArchiveEntry) -> Boolean = { it.name == "a" }
