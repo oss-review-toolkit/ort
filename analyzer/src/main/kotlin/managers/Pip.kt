@@ -59,8 +59,8 @@ import org.ossreviewtoolkit.utils.resolveWindowsExecutable
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
-// The lowest version that supports "--prefer-binary".
-private const val PIP_VERSION = "18.0"
+// The lowest version that supports "--prefer-binary" and PEP 508 URL requirements to be used as dependencies.
+private const val PIP_VERSION = "18.1"
 
 private const val PIPDEPTREE_VERSION = "0.13.2"
 
