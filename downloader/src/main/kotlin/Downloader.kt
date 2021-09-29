@@ -87,8 +87,8 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Try to download the source code from VCS. Returns null if the download failed and sets the [exception] to the
-     * cause.
+     * Try to download the source code from VCS. Returns null if the download failed and adds the suppressed exception
+     * to [exception].
      */
     private fun handleVcsDownload(
         pkg: Package,
@@ -135,8 +135,8 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Try to download the source code from the sources artifact. Returns null if the download failed and sets the
-     * [exception] to the cause.
+     * Try to download the source code from the sources artifact. Returns null if the download failed adds the
+     * suppressed exception to [exception].
      */
     private fun handleSourceArtifactDownload(
         pkg: Package,
