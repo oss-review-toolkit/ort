@@ -248,16 +248,16 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         }
     }
 
-    ortResultRule("DEPRECATED_PATH_EXCLUDE_REASON_IN_ORT_YML") {
-        val reasons = ortResult.repository.config.excludes.paths.mapTo(mutableSetOf()) { it.reason }
-        val deprecatedReasons = setOf(PathExcludeReason.TEST_TOOL_OF)
+    ortResultRule("DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML") {
+        val reasons = ortResult.repository.config.excludes.scopes.mapTo(mutableSetOf()) { it.reason }
+        val deprecatedReasons = setOf(ScopeExcludeReason.TEST_TOOL_OF)
 
         reasons.intersect(deprecatedReasons).forEach { offendingReason ->
             warning(
-                "The repository configuration is using the deprecated path exclude reason '$offendingReason'.",
-                "Please use only non-deprecated path exclude reasons, see " +
+                "The repository configuration is using the deprecated scope exclude reason '$offendingReason'.",
+                "Please use only non-deprecated scope exclude reasons, see " +
                         "https://github.com/oss-review-toolkit/ort/blob/master/model/src/main/" +
-                        "kotlin/config/PathExcludeReason.kt."
+                        "kotlin/config/ScopeExcludeReason.kt."
             )
         }
     }

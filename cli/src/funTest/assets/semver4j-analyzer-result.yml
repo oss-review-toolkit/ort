@@ -12,8 +12,8 @@ repository:
     path: ""
   config:
     excludes:
-      paths:
-      - pattern: "src/test"
+      scopes:
+      - pattern: "testClasspath"
         reason: "TEST_TOOL_OF"
 analyzer:
   start_time: "2020-10-26T20:00:07.677878Z"
