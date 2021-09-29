@@ -69,19 +69,19 @@ enum class ArchiveType(vararg val extensions: String) {
 }
 
 /**
- * Unpack the [File] to [targetDirectory].
+ * Unpack the [File] to [targetDirectory] using [filter] to select only the entries of interest.
  */
-fun File.unpack(targetDirectory: File) =
+fun File.unpack(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
     when (ArchiveType.getType(name)) {
-        ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory)
-        ArchiveType.ZIP -> unpackZip(targetDirectory)
+        ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory, filter)
+        ArchiveType.ZIP -> unpackZip(targetDirectory, filter)
 
-        ArchiveType.TAR -> inputStream().unpackTar(targetDirectory)
-        ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(inputStream()).unpackTar(targetDirectory)
-        ArchiveType.TAR_GZIP -> GzipCompressorInputStream(inputStream()).unpackTar(targetDirectory)
-        ArchiveType.TAR_XZ -> XZCompressorInputStream(inputStream()).unpackTar(targetDirectory)
+        ArchiveType.TAR -> inputStream().unpackTar(targetDirectory, filter)
+        ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(inputStream()).unpackTar(targetDirectory, filter)
+        ArchiveType.TAR_GZIP -> GzipCompressorInputStream(inputStream()).unpackTar(targetDirectory, filter)
+        ArchiveType.TAR_XZ -> XZCompressorInputStream(inputStream()).unpackTar(targetDirectory, filter)
 
-        ArchiveType.DEB -> unpackDeb(targetDirectory)
+        ArchiveType.DEB -> unpackDeb(targetDirectory, filter)
 
         ArchiveType.NONE -> {
             throw IOException("Unable to guess compression scheme from file name '$name'.")
@@ -89,14 +89,16 @@ fun File.unpack(targetDirectory: File) =
     }
 
 /**
- * Unpack the [File] assuming it is a 7-Zip archive. This implementation ignores empty directories and symbolic links.
+ * Unpack the [File] assuming it is a 7-Zip archive. This implementation ignores empty directories and symbolic links
+ * and all entries not matched by the given [filter].
  */
-fun File.unpack7Zip(targetDirectory: File) {
+fun File.unpack7Zip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
     SevenZFile(this).use { zipFile ->
         while (true) {
             val entry = zipFile.nextEntry ?: break
 
-            if (entry.isDirectory || entry.isAntiItem || File(entry.name).isAbsolute) {
+            @Suppress("ComplexCondition")
+            if (entry.isDirectory || entry.isAntiItem || File(entry.name).isAbsolute || !filter(entry)) {
                 continue
             }
 
@@ -114,9 +116,10 @@ fun File.unpack7Zip(targetDirectory: File) {
 }
 
 /**
- * Unpack the [File] assuming it is a Zip archive.
+ * Unpack the [File] assuming it is a Zip archive ignoring all entries not matched by [filter].
  */
-fun File.unpackZip(targetDirectory: File) = ZipFile(this).unpack(targetDirectory)
+fun File.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
+    ZipFile(this).unpack(targetDirectory, filter)
 
 /**
  * A list with file names that are expected to be contained in a Debian package archive file.
@@ -127,9 +130,11 @@ internal val DEBIAN_PACKAGE_SUBARCHIVES = listOf("data.tar.xz", "control.tar.xz"
  * Unpack the [File] assuming it is a Debian archive. A Debian archive is an ar archive, which in turn contains two tar
  * files, metadata and the actual content of the package. The top-level archive is deflated into a temporary
  * directory. Then the tar files are extracted to the provided [targetDirectory], in two sub folders named *data* and
- * *control*.
+ * *control*, ignoring all entries not matched by [filter]. The [filter] function is invoked with the [ArchiveEntry]s
+ * from both tar archives. Note that there is no indication from which archive a single [ArchiveEntry] stems; but as
+ * there is no overlap in the files contained in the different archives, this should not be a problem.
  */
-fun File.unpackDeb(targetDirectory: File) {
+fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
     val tempDir = createOrtTempDir("unpackDeb")
 
     try {
@@ -145,7 +150,7 @@ fun File.unpackDeb(targetDirectory: File) {
             subFolder.safeMkdirs()
 
             val file = tempDir.resolve(path)
-            file.unpack(subFolder)
+            file.unpack(subFolder, filter)
         }
     } finally {
         tempDir.safeDeleteRecursively(force = true)
@@ -153,9 +158,10 @@ fun File.unpackDeb(targetDirectory: File) {
 }
 
 /**
- * Unpack the [ByteArray] assuming it is a Zip archive.
+ * Unpack the [ByteArray] assuming it is a Zip archive, ignoring entries not matched by [filter].
  */
-fun ByteArray.unpackZip(targetDirectory: File) = ZipFile(SeekableInMemoryByteChannel(this)).unpack(targetDirectory)
+fun ByteArray.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
+    ZipFile(SeekableInMemoryByteChannel(this)).unpack(targetDirectory, filter)
 
 /**
  * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
@@ -202,12 +208,12 @@ fun File.packZip(
 
 /**
  * Unpack the [InputStream] to [targetDirectory] assuming that it is a tape archive (TAR). This implementation ignores
- * empty directories and symbolic links.
+ * empty directories and symbolic links and all archive entries not accepted by [filter].
  */
-fun InputStream.unpackTar(targetDirectory: File) =
+fun InputStream.unpackTar(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
     TarArchiveInputStream(this).unpack(
         targetDirectory,
-        { entry -> !(entry as TarArchiveEntry).isFile || File(entry.name).isAbsolute },
+        { entry -> !(entry as TarArchiveEntry).isFile || File(entry.name).isAbsolute || !filter(entry) },
         { entry -> (entry as TarArchiveEntry).mode }
     )
 
@@ -269,14 +275,15 @@ private fun ArchiveInputStream.unpack(
  * Unpack the [ZipFile]. In contrast to [InputStream.unpackZip] this properly parses the ZIP's central directory, see
  * https://commons.apache.org/proper/commons-compress/zip.html#ZipArchiveInputStream_vs_ZipFile.
  */
-private fun ZipFile.unpack(targetDirectory: File) =
+private fun ZipFile.unpack(targetDirectory: File, filter: (ArchiveEntry) -> Boolean) =
     use { zipFile ->
         val entries = zipFile.entries
 
         while (entries.hasMoreElements()) {
             val entry = entries.nextElement()
 
-            if (entry.isDirectory || entry.isUnixSymlink || File(entry.name).isAbsolute) {
+            @Suppress("ComplexCondition")
+            if (entry.isDirectory || entry.isUnixSymlink || File(entry.name).isAbsolute || !filter(entry)) {
                 continue
             }
 
