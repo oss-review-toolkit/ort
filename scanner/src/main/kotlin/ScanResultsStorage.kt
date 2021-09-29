@@ -42,6 +42,11 @@ import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.scanner.experimental.NestedProvenance
+import org.ossreviewtoolkit.scanner.experimental.NestedProvenanceScanResult
+import org.ossreviewtoolkit.scanner.experimental.PackageBasedScanStorage
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
+import org.ossreviewtoolkit.scanner.experimental.toNestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortDataDirectory
@@ -53,7 +58,7 @@ import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
 /**
  * The abstract class that storage backends for scan results need to implement.
  */
-abstract class ScanResultsStorage {
+abstract class ScanResultsStorage : PackageBasedScanStorage {
     /**
      * A companion object that allow to configure the globally used storage backend.
      */
@@ -356,4 +361,32 @@ abstract class ScanResultsStorage {
      * Internal version of [add] that skips common sanity checks.
      */
     protected abstract fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
+
+    override fun read(pkg: Package, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
+        read(pkg.id).toNestedProvenanceScanResult(nestedProvenance)
+
+    override fun read(
+        pkg: Package,
+        nestedProvenance: NestedProvenance,
+        scannerCriteria: ScannerCriteria
+    ): List<NestedProvenanceScanResult> =
+        read(pkg, scannerCriteria).toNestedProvenanceScanResult(nestedProvenance)
+
+    private fun Result<List<ScanResult>>.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance) =
+        when (this) {
+            is Success -> {
+                result.filter { it.provenance == nestedProvenance.root }
+                    .map { it.toNestedProvenanceScanResult(nestedProvenance) }
+            }
+
+            is Failure -> throw ScanStorageException(error)
+        }
+
+    override fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
+        nestedProvenanceScanResult.merge().forEach { scanResult ->
+            val result = add(pkg.id, scanResult)
+
+            if (result is Failure) throw ScanStorageException(result.error)
+        }
+    }
 }
