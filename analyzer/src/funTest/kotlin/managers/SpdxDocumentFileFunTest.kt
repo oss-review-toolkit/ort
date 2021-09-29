@@ -21,12 +21,19 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -50,22 +57,54 @@ class SpdxDocumentFileFunTest : WordSpec({
         }
 
         "succeed if no project is provided" {
-            val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("spdx-packages-expected-output.yml"),
-                url = vcsUrl,
-                urlProcessed = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
-
             val packageFileCurl = projectDir.resolve("package/libs/curl/package.spdx.yml")
             val packageFileZlib = projectDir.resolve("package/libs/zlib/package.spdx.yml")
 
             val definitionFiles = listOf(packageFileCurl, packageFileZlib)
-            // Extracting projectResults to avoid depending on analyzer result specific items (e.g. dependency graph).
             val actualResult = createSpdxDocumentFile().resolveDependencies(definitionFiles)
-                .projectResults.flatMap { (_, projectResult) -> projectResult }.toYaml()
+                // Extract only ProjectAnalyzerResults to avoid depending on other analyzer result specific items (e.g.
+                // the dependency graph).
+                .projectResults.values.flatten().sortedBy { it.project.id }
 
-            actualResult shouldBe expectedResult
+            actualResult should haveSize(2)
+            actualResult.first() shouldBe ProjectAnalyzerResult(
+                Project(
+                    id = Identifier("SpdxDocumentFile::curl:7.70.0"),
+                    definitionFilePath = packageFileCurl.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
+                    declaredLicenses = sortedSetOf("curl"),
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = VcsInfo(
+                        type = VcsType.GIT,
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsDir.getPathToRoot(packageFileCurl.parentFile)
+                    ),
+                    homepageUrl = "https://curl.haxx.se/",
+                    scopeDependencies = sortedSetOf(
+                        Scope("default")
+                    )
+                ),
+                sortedSetOf()
+            )
+            actualResult.last() shouldBe ProjectAnalyzerResult(
+                Project(
+                    id = Identifier("SpdxDocumentFile::zlib:1.2.11"),
+                    definitionFilePath = packageFileZlib.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
+                    declaredLicenses = sortedSetOf("Zlib"),
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = VcsInfo(
+                        type = VcsType.GIT,
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsDir.getPathToRoot(packageFileZlib.parentFile)
+                    ),
+                    homepageUrl = "http://zlib.net",
+                    scopeDependencies = sortedSetOf(
+                        Scope("default")
+                    )
+                ),
+                sortedSetOf()
+            )
         }
     }
 
