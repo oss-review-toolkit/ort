@@ -348,7 +348,7 @@ class Pub(
 
                 // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
-                // projectRoot, but not the packages in the .pub-cache folder.
+                // projectRoot, but not the packages in the ".pub-cache" directory.
                 if (containsFlutter) {
                     scanAndroidPackages(pkgInfoFromLockFile).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
@@ -550,7 +550,7 @@ class Pub(
 
         // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod dependencies for
         // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
-        // the .pub-cache folder.
+        // the ".pub-cache" directory.
         if (containsFlutter) {
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains flutter, trigger Gradle manually for it.
