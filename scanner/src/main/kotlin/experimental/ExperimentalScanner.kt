@@ -117,7 +117,7 @@ class ExperimentalScanner(
         log.info {
             "Read stored scan results in ${readDuration}ms:"
         }
-        scanResults.entries.forEach { (scanner, results) ->
+        storedResults.entries.forEach { (scanner, results) ->
             log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
         }
 
