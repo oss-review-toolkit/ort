@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,7 +179,7 @@ class SpdxUtilsTest : WordSpec() {
         }
 
         "getLicenseText provided a custom dir" should {
-            fun getText(id: String) = getLicenseText(id, true, tempDir)
+            fun getText(id: String) = getLicenseText(id, true, listOf(tempDir))
 
             "return the custom license text for a license ID not known by ort but in custom dir" {
                 val id = "LicenseRef-ort-abc"
