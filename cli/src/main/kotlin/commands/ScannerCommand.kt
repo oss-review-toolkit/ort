@@ -290,7 +290,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
 private fun createDefaultStorage(): ScanStorage {
     val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
-    return FileBasedStorage(localFileStorage)
+    return ProvenanceBasedFileStorage(localFileStorage)
 }
 
 private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
