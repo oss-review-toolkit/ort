@@ -263,6 +263,25 @@ private fun String.isExternalDocumentReferenceId(): Boolean = startsWith(SpdxCon
 private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
 
 /**
+ * Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise.
+ */
+private fun String?.wrapPresentInSortedSet(): SortedSet<String> {
+    if (SpdxConstants.isPresent(this)) {
+        withoutPrefix(SpdxConstants.PERSON)?.let { persons ->
+            // In case of a person, allow a comma-separated list of persons.
+            return persons.split(',').mapTo(sortedSetOf()) { it.trim() }
+        }
+
+        // Do not split an organization like "Acme, Inc." by comma.
+        withoutPrefix(SpdxConstants.ORGANIZATION)?.let {
+            return sortedSetOf(it)
+        }
+    }
+
+    return sortedSetOf()
+}
+
+/**
  * Return the [PackageLinkage] between [dependency] and [dependant] as specified in [relationships]. If no
  * relationship is found, return [PackageLinkage.DYNAMIC].
  */
@@ -351,8 +370,7 @@ class SpdxDocumentFile(
         return Package(
             id = id,
             purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = originator.wrapPresentInSortedSet(),
             declaredLicenses = sortedSetOf(licenseDeclared),
             concludedLicense = getConcludedLicense(),
             description = packageDescription,
@@ -550,8 +568,7 @@ class SpdxDocumentFile(
         val project = Project(
             id = projectPackage.toIdentifier(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            // TODO: Find a way to track authors.
-            authors = sortedSetOf(),
+            authors = projectPackage.originator.wrapPresentInSortedSet(),
             declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, projectPackage.homepage),
