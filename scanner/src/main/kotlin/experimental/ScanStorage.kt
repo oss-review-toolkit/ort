@@ -119,15 +119,21 @@ interface ProvenanceBasedScanStorageWriter : ScanStorageWriter {
 }
 
 /**
+ * A combination of the [ScanStorageReader] and [ScanStorageWriter]. This is a markup interface used when it is not
+ * known or relevant which actual implementation a storage class provides.
+ */
+interface ScanStorage : ScanStorageReader, ScanStorageWriter
+
+/**
  * A combination of the [PackageBasedScanStorageReader] and [PackageBasedScanStorageWriter]. This interface is usually
  * implemented by actual storage implementations, because it is often convenient to implement both interfaces in a
  * single class.
  */
-interface PackageBasedScanStorage : PackageBasedScanStorageReader, PackageBasedScanStorageWriter
+interface PackageBasedScanStorage : ScanStorage, PackageBasedScanStorageReader, PackageBasedScanStorageWriter
 
 /**
  * A combination of the [ProvenanceBasedScanStorageReader] and [ProvenanceBasedScanStorageWriter]. This interface is
  * usually implemented by actual storage implementations, because it is often convenient to implement both interfaces in
  * a single class.
  */
-interface ProvenanceBasedScanStorage : ProvenanceBasedScanStorageReader, ProvenanceBasedScanStorageWriter
+interface ProvenanceBasedScanStorage : ScanStorage, ProvenanceBasedScanStorageReader, ProvenanceBasedScanStorageWriter
