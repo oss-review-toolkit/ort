@@ -213,6 +213,8 @@ class ReporterCommand : CliktCommand(
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
 
+        val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
+
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
@@ -240,7 +242,7 @@ class ReporterCommand : CliktCommand(
             globalOptionsForSubcommands.config,
             packageConfigurationProvider,
             resolutionProvider,
-            DefaultLicenseTextProvider(customLicenseTextsDir.takeIf { it.isDirectory }),
+            DefaultLicenseTextProvider(licenseTextDirectories),
             copyrightGarbage,
             licenseInfoResolver,
             licenseClassifications,

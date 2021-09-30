@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,25 +26,25 @@ import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.spdx.getLicenseTextReader
 import org.ossreviewtoolkit.utils.spdx.hasLicenseText
 
-class DefaultLicenseTextProvider(private val customLicenseTextsDir: File? = null) : LicenseTextProvider {
+class DefaultLicenseTextProvider(private val licenseTextDirectories: List<File> = emptyList()) : LicenseTextProvider {
     override fun getLicenseText(licenseId: String): String? =
         getLicenseText(
             id = licenseId,
             handleExceptions = true,
-            customLicenseTextsDir = customLicenseTextsDir
+            licenseTextDirectories = licenseTextDirectories
         )
 
     override fun getLicenseTextReader(licenseId: String): (() -> String)? =
         getLicenseTextReader(
             id = licenseId,
             handleExceptions = true,
-            customLicenseTextsDir = customLicenseTextsDir
+            licenseTextDirectories = licenseTextDirectories
         )
 
     override fun hasLicenseText(licenseId: String): Boolean =
         hasLicenseText(
             id = licenseId,
             handleExceptions = true,
-            customLicenseTextsDir = customLicenseTextsDir
+            licenseTextDirectories = licenseTextDirectories
         )
 }

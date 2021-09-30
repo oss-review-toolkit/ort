@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,27 +117,36 @@ fun calculatePackageVerificationCode(directory: File): String {
 
 /**
  * Retrieve the full text for the license with the provided SPDX [id], including "LicenseRefs". If [handleExceptions] is
- * enabled, the [id] may also refer to an exception instead of a license. If [customLicenseTextsDir] is provided the
- * license text is retrieved from that directory if and only if the license text is not known by ORT.
+ * enabled, the [id] may also refer to an exception instead of a license. If [licenseTextDirectories] is provided, the
+ * contained directories are searched in order for the license text if and only if the license text is not known by ORT.
  */
-fun getLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): String? =
-    getLicenseTextReader(id, handleExceptions, customLicenseTextsDir)?.invoke()
+fun getLicenseText(
+    id: String,
+    handleExceptions: Boolean = false,
+    licenseTextDirectories: List<File> = emptyList()
+): String? = getLicenseTextReader(id, handleExceptions, licenseTextDirectories)?.invoke()
 
-fun hasLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): Boolean =
-    getLicenseTextReader(id, handleExceptions, customLicenseTextsDir) != null
+fun hasLicenseText(
+    id: String,
+    handleExceptions: Boolean = false,
+    licenseTextDirectories: List<File> = emptyList()
+): Boolean = getLicenseTextReader(id, handleExceptions, licenseTextDirectories) != null
 
 fun getLicenseTextReader(
     id: String,
     handleExceptions: Boolean = false,
-    customLicenseTextsDir: File? = null
-): (() -> String)? =
-    if (id.startsWith(LICENSE_REF_PREFIX)) {
+    licenseTextDirectories: List<File> = emptyList()
+): (() -> String)? {
+    return if (id.startsWith(LICENSE_REF_PREFIX)) {
         getLicenseTextResource(id)?.let { { it.readText() } }
-            ?: customLicenseTextsDir?.let { getLicenseTextFile(id, it)?.let { file -> { file.readText() } } }
+            ?: licenseTextDirectories.asSequence().mapNotNull {
+                getLicenseTextFile(id, it)?.let { file -> { file.readText() } }
+            }.firstOrNull()
     } else {
         SpdxLicense.forId(id)?.let { { it.text } }
             ?: SpdxLicenseException.forId(id)?.takeIf { handleExceptions }?.let { { it.text } }
     }
+}
 
 private fun getLicenseTextResource(id: String): URL? =
     object {}.javaClass.getResource("/licenserefs/$id")
