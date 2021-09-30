@@ -211,7 +211,7 @@ class ArchiveUtilsTest : WordSpec() {
 
         "Debian deb archives" should {
             "unpack" {
-                val tempDir = createTestTempDir(ORT_NAME)
+                val tempDir = createTestTempDir()
                 val archiveDeb = File("src/test/assets/testpkg.deb")
                 val archiveUdepTemp = tempDir.resolve("testpkg.udeb")
                 val archiveUdep = archiveDeb.copyTo(archiveUdepTemp)
