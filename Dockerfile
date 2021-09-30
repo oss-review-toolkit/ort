@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1.2
 
 # Copyright (C) 2020 Bosch Software Innovations GmbH
+# Copyright (C) 2021 Bosch.IO GmbH
 # Copyright (C) 2021 Alliander N.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +52,7 @@ ENV \
     BUNDLER_VERSION=1.16.1-1 \
     CARGO_VERSION=0.52.0-0ubuntu1~18.04.1 \
     COMPOSER_VERSION=1.6.3-1 \
-    CONAN_VERSION=1.18.0 \
+    CONAN_VERSION=1.40.3 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.16.5 \
     HASKELL_STACK_VERSION=2.1.3 \
