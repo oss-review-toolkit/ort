@@ -516,9 +516,8 @@ class SpdxDocumentFile(
             // or a package-style SPDX document that describes a single (dependency-)package.
             spdxDocument.isProject()
         }.keys.toList().also { remainingFiles ->
-            if (remainingFiles.isEmpty()) {
-                return definitionFiles
-            }
+            if (remainingFiles.isEmpty()) return definitionFiles
+
             val discardedFiles = definitionFiles - remainingFiles
             if (discardedFiles.isNotEmpty()) {
                 log.info {

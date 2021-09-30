@@ -94,9 +94,7 @@ data class ScannerCriteria(
      * object.
      */
     fun matches(details: ScannerDetails): Boolean {
-        if (!nameRegex.matches(details.name)) {
-            return false
-        }
+        if (!nameRegex.matches(details.name)) return false
 
         val version = Semver(details.version)
         return minVersion <= version && maxVersion > version && configMatcher(details.configuration)

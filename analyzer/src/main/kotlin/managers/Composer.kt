@@ -111,9 +111,7 @@ class Composer(
     override fun beforeResolution(definitionFiles: List<File>) {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
-        if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) {
-            return
-        }
+        if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) return
 
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
         // fixed versions to be sure to get consistent results.

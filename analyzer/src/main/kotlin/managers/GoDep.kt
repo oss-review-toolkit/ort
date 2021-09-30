@@ -269,9 +269,7 @@ class GoDep(
                 "build constraints exclude all Go files in"
             )
 
-            if (!errorMessagesToIgnore.any { it in msg }) {
-                throw IOException(msg)
-            }
+            if (!errorMessagesToIgnore.any { it in msg }) throw IOException(msg)
         }
 
         val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()

@@ -105,9 +105,7 @@ fun File.realFile(): File = toPath().toRealPath().toFile()
  * Copy files recursively without following symbolic links (Unix) or junctions (Windows).
  */
 fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
-    if (!exists()) {
-        return
-    }
+    if (!exists()) return
 
     val sourcePath = absoluteFile.toPath()
     val targetPath = target.absoluteFile.toPath()

@@ -414,9 +414,7 @@ open class Npm(
     }
 
     private fun isValidNodeModulesDirectory(rootModulesDir: File, modulesDir: File?): Boolean {
-        if (modulesDir == null) {
-            return false
-        }
+        if (modulesDir == null) return false
 
         var currentDir: File = modulesDir
         while (currentDir != rootModulesDir) {

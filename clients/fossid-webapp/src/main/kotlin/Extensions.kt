@@ -56,9 +56,7 @@ suspend fun FossIdRestService.getFossIdVersion(): String? {
     getLoginPage().charStream().buffered().useLines { lines ->
         lines.forEach { line ->
             val matcher = regex.matchEntire(line)
-            if (matcher != null && matcher.groupValues.size == 2) {
-                return matcher.groupValues[1]
-            }
+            if (matcher != null && matcher.groupValues.size == 2) return matcher.groupValues[1]
         }
     }
 

@@ -182,9 +182,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             // want to be able to download such projects, so specify "--force-sync" to work around that issue.
             val syncArgs = mutableListOf("sync", "-c", "--force-sync")
 
-            if (recursive) {
-                syncArgs += "--fetch-submodules"
-            }
+            if (recursive) syncArgs += "--fetch-submodules"
 
             runRepo(workingTree.workingDir, *syncArgs.toTypedArray())
 

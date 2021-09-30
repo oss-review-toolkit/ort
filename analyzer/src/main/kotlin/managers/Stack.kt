@@ -283,9 +283,7 @@ class Stack(
 
                         // Within a multi-line value, lines with only a dot mark empty lines.
                         if (indentedLine == ".") {
-                            if (valueLines.isNotEmpty()) {
-                                valueLines += ""
-                            }
+                            if (valueLines.isNotEmpty()) valueLines += ""
                         } else {
                             valueLines += indentedLine
                         }
