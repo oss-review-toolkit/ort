@@ -21,7 +21,9 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.file.exist
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.io.File
 
@@ -84,7 +86,7 @@ class FileArchiverTest : StringSpec() {
 
             fun assertFileNotSaved(path: String) {
                 val file = storageDir.resolve("save/$path")
-                file.exists() shouldBe false
+                file shouldNot exist()
             }
 
             assertFileNotSaved("b")
