@@ -93,10 +93,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
 
         return buildString {
             append(id)
-
-            if (filteredCategories.isNotEmpty()) {
-                append(": [${filteredCategories.joinToString()}]")
-            }
+            if (filteredCategories.isNotEmpty()) append(": [${filteredCategories.joinToString()}]")
         }
     }
 

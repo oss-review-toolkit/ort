@@ -93,9 +93,7 @@ class Bower(
         private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
             sortedSetOf<String>().apply {
                 val license = node["pkgMeta"]["license"].textValueOrEmpty()
-                if (license.isNotEmpty()) {
-                    add(license)
-                }
+                if (license.isNotEmpty()) add(license)
             }
 
         /**

@@ -372,9 +372,7 @@ internal fun OrtResult.getProvenance(id: Identifier): Provenance? {
 
     scanner?.results?.scanResults?.forEach { (_, results) ->
         results.forEach { scanResult ->
-            if (scanResult.provenance.matches(pkg)) {
-                return scanResult.provenance
-            }
+            if (scanResult.provenance.matches(pkg)) return scanResult.provenance
         }
     }
 
@@ -579,16 +577,12 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
     val result: MutableMap<String, MutableMap<LicenseFindingCurationKey, LicenseFindingCuration>> = mutableMapOf()
 
     fun merge(repositoryUrl: String, curation: LicenseFindingCuration, updateOnlyUpdateExisting: Boolean = false) {
-        if (updateOnlyUpdateExisting && repositoryUrl !in result) {
-            return
-        }
+        if (updateOnlyUpdateExisting && repositoryUrl !in result) return
 
         val curations = result.getOrPut(repositoryUrl) { mutableMapOf() }
 
         val key = curation.key()
-        if (updateOnlyUpdateExisting && key !in curations) {
-            return
-        }
+        if (updateOnlyUpdateExisting && key !in curations) return
 
         curations[key] = curation
     }
@@ -633,14 +627,10 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
     val result: MutableMap<String, MutableMap<String, PathExclude>> = mutableMapOf()
 
     fun merge(repositoryUrl: String, pathExclude: PathExclude, updateOnlyUpdateExisting: Boolean = false) {
-        if (updateOnlyUpdateExisting && repositoryUrl !in result) {
-            return
-        }
+        if (updateOnlyUpdateExisting && repositoryUrl !in result) return
 
         val pathExcludes = result.getOrPut(repositoryUrl) { mutableMapOf() }
-        if (updateOnlyUpdateExisting && pathExclude.pattern !in result) {
-            return
-        }
+        if (updateOnlyUpdateExisting && pathExclude.pattern !in result) return
 
         pathExcludes[pathExclude.pattern] = pathExclude
     }
@@ -703,9 +693,7 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
     associateByTo(result) { it.key() }
 
     other.forEach {
-        if (!updateOnlyExisting || it.key() in result) {
-            result[it.key()] = it
-        }
+        if (!updateOnlyExisting || it.key() in result) result[it.key()] = it
     }
 
     return result.values.toList()
@@ -746,9 +734,7 @@ internal fun Collection<PathExclude>.mergePathExcludes(
     associateByTo(result) { it.pattern }
 
     other.forEach {
-        if (!updateOnlyExisting || it.pattern in result) {
-            result[it.pattern] = it
-        }
+        if (!updateOnlyExisting || it.pattern in result) result[it.pattern] = it
     }
 
     return result.values.toList()

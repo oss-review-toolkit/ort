@@ -60,9 +60,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
     override fun getWorkingTree(vcsDirectory: File) =
         object : WorkingTree(vcsDirectory, type) {
             override fun isValid(): Boolean {
-                if (!workingDir.isDirectory) {
-                    return false
-                }
+                if (!workingDir.isDirectory) return false
 
                 // Do not use runMercurialCommand() here as we do not require the command to succeed.
                 val hgRootPath = ProcessCapture(workingDir, "hg", "root")

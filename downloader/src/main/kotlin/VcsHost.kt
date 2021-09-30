@@ -185,13 +185,8 @@ enum class VcsHost(
             // Append the first two path components that denote the user and project to the base URL.
             val pathIterator = Paths.get(projectUrl.path).iterator()
 
-            if (pathIterator.hasNext()) {
-                url += "/${pathIterator.next()}"
-            }
-
-            if (pathIterator.hasNext()) {
-                url += "/${pathIterator.next()}"
-            }
+            if (pathIterator.hasNext()) url += "/${pathIterator.next()}"
+            if (pathIterator.hasNext()) url += "/${pathIterator.next()}"
 
             var revision = ""
             var path = ""
@@ -450,9 +445,7 @@ private fun gitProjectUrlToVcsInfo(projectUrl: URI, pathParser: (String, Iterato
     if (pathIterator.hasNext()) {
         baseUrl += "/${pathIterator.next()}"
 
-        if (!baseUrl.endsWith(".git")) {
-            baseUrl += ".git"
-        }
+        if (!baseUrl.endsWith(".git")) baseUrl += ".git"
     }
 
     return pathParser(baseUrl, pathIterator)

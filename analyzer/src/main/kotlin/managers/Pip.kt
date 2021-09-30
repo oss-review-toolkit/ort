@@ -541,9 +541,7 @@ class Pip(
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs to
         //       a test.
         with(pip) {
-            if (isError) {
-                log.error { errorMessage }
-            }
+            if (isError) log.error { errorMessage }
         }
 
         return pip

@@ -77,9 +77,7 @@ data class VcsInfo(
      * If in question, information in this instance has precedence over information in the other instance.
      */
     fun merge(other: VcsInfo): VcsInfo {
-        if (this == EMPTY) {
-            return other
-        }
+        if (this == EMPTY) return other
 
         return VcsInfo(
             type.takeUnless { it == EMPTY.type } ?: other.type,
