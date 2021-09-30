@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
+import org.ossreviewtoolkit.model.config.StorageType
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -67,6 +68,8 @@ import org.ossreviewtoolkit.scanner.experimental.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
+import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedFileStorage
+import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
 import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.scanner.scanners.Askalono
@@ -299,10 +302,20 @@ private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
     }
 
 private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
-    FileBasedStorage(config.backend.createFileStorage())
+    when (config.type) {
+        StorageType.PACKAGE_BASED -> FileBasedStorage(config.backend.createFileStorage())
+        StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
+    }
 
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =
-    PostgresStorage(DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME))
+    when (config.type) {
+        StorageType.PACKAGE_BASED -> PostgresStorage(
+            DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME)
+        )
+        StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
+            DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME)
+        )
+    }
 
 private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration) = ClearlyDefinedStorage(config)
 

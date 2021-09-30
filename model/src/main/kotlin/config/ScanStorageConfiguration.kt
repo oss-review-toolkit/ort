@@ -25,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.utils.storage.FileStorage
 
 /**
@@ -59,7 +61,12 @@ data class FileBasedStorageConfiguration(
     /**
      * The configuration of the [FileStorage] used to store the files.
      */
-    val backend: FileStorageConfiguration
+    val backend: FileStorageConfiguration,
+
+    /**
+     * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
+     */
+    val type: StorageType = StorageType.PACKAGE_BASED
 ) : ScanStorageConfiguration()
 
 /**
@@ -109,7 +116,12 @@ data class PostgresStorageConfiguration(
      * The full path of the root certificate file.
      * See: https://jdbc.postgresql.org/documentation/head/connect.html
      */
-    val sslrootcert: String? = null
+    val sslrootcert: String? = null,
+
+    /**
+     * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
+     */
+    val type: StorageType = StorageType.PACKAGE_BASED
 
     /**
      * TODO: Make additional parameters configurable, see:
@@ -160,3 +172,18 @@ data class Sw360StorageConfiguration(
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val token: String = ""
 ) : ScanStorageConfiguration()
+
+/**
+ * An enum to describe different types of storages.
+ */
+enum class StorageType {
+    /**
+     * A storage that stores scan results by [Package].
+     */
+    PACKAGE_BASED,
+
+    /**
+     * A storage that stores scan results by [Provenance].
+     */
+    PROVENANCE_BASED
+}
