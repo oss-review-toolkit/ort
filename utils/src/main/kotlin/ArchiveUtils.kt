@@ -142,12 +142,12 @@ fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
         )
 
         DEB_NESTED_ARCHIVES.forEach { name ->
-            val subFolderName = name.substringBefore('.')
-            val subFolder = targetDirectory.resolve(subFolderName)
-            subFolder.safeMkdirs()
+            val subDirectoryName = name.substringBefore('.')
+            val subDirectory = targetDirectory.resolve(subDirectoryName)
+            subDirectory.safeMkdirs()
 
             val file = tempDir.resolve(name)
-            file.unpack(subFolder, filter)
+            file.unpack(subDirectory, filter)
         }
     } finally {
         tempDir.safeDeleteRecursively(force = true)
