@@ -2,6 +2,8 @@
 project:
   id: "SpdxDocumentFile::xyz:0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/project.spdx.yml"
+  authors:
+  - "Thomas Steenbergen"
   declared_licenses:
   - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   declared_licenses_processed:
@@ -29,6 +31,8 @@ project:
 packages:
 - id: "SpdxDocumentFile::curl:7.70.0"
   purl: "pkg:spdxdocumentfile/curl@7.70.0"
+  authors:
+  - "Daniel Stenberg (daniel@haxx.se)"
   declared_licenses:
   - "curl"
   declared_licenses_processed:
@@ -60,6 +64,9 @@ packages:
     path: ""
 - id: "SpdxDocumentFile::zlib:1.2.11"
   purl: "pkg:spdxdocumentfile/zlib@1.2.11"
+  authors:
+  - "Jean-loup Gailly"
+  - "Mark Adler"
   declared_licenses:
   - "Zlib"
   declared_licenses_processed:
@@ -88,6 +95,8 @@ packages:
     path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
 - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
   purl: "pkg:a-name/openssl@1.1.1g"
+  authors:
+  - "OpenSSL Development Team"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:

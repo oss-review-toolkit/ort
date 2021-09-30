@@ -71,6 +71,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                 Project(
                     id = Identifier("SpdxDocumentFile::curl:7.70.0"),
                     definitionFilePath = packageFileCurl.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
+                    authors = sortedSetOf("Daniel Stenberg (daniel@haxx.se)"),
                     declaredLicenses = sortedSetOf("curl"),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = VcsInfo(
@@ -90,6 +91,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                 Project(
                     id = Identifier("SpdxDocumentFile::zlib:1.2.11"),
                     definitionFilePath = packageFileZlib.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
+                    authors = sortedSetOf("Jean-loup Gailly", "Mark Adler"),
                     declaredLicenses = sortedSetOf("Zlib"),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = VcsInfo(
