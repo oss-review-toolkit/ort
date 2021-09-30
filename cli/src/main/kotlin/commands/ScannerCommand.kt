@@ -51,25 +51,38 @@ import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
+import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
+import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
+import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
+import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.scanner.experimental.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
+import org.ossreviewtoolkit.scanner.experimental.ScanStorage
 import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.scanner.scanners.Askalono
 import org.ossreviewtoolkit.scanner.scanners.BoyterLc
 import org.ossreviewtoolkit.scanner.scanners.Licensee
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
+import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
+import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
+import org.ossreviewtoolkit.scanner.storages.Sw360Storage
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
 
 private fun RawOption.convertToScanner() =
     convert { scannerName ->
@@ -243,12 +256,23 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             }
         }
 
+        val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
+
+        fun resolve(name: String): ScanStorage = requireNotNull(storages[name]) { "Could not resolve storage '$name'." }
+
+        val defaultStorage = createDefaultStorage()
+
+        val readers = config.scanner.storageReaders.orEmpty().map { resolve(it) }
+            .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
+        val writers = config.scanner.storageWriters.orEmpty().map { resolve(it) }
+            .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
+
         val scanner = ExperimentalScanner(
             scannerConfig = config.scanner,
             downloaderConfig = config.downloader,
             provenanceDownloader = DefaultProvenanceDownloader(config.downloader),
-            storageReaders = emptyList(),
-            storageWriters = emptyList(),
+            storageReaders = readers,
+            storageWriters = writers,
             packageProvenanceResolver = DefaultPackageProvenanceResolver(),
             nestedProvenanceResolver = DefaultNestedProvenanceResolver(),
             scannerWrappers = listOf(scannerWrapper)
@@ -260,3 +284,26 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
     }
 }
+
+private fun createDefaultStorage(): ScanStorage {
+    val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
+    return FileBasedStorage(localFileStorage)
+}
+
+private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
+    when (config) {
+        is FileBasedStorageConfiguration -> createFileBasedStorage(config)
+        is PostgresStorageConfiguration -> createPostgresStorage(config)
+        is ClearlyDefinedStorageConfiguration -> createClearlyDefinedStorage(config)
+        is Sw360StorageConfiguration -> createSw360Storage(config)
+    }
+
+private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
+    FileBasedStorage(config.backend.createFileStorage())
+
+private fun createPostgresStorage(config: PostgresStorageConfiguration) =
+    PostgresStorage(DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME))
+
+private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration) = ClearlyDefinedStorage(config)
+
+private fun createSw360Storage(config: Sw360StorageConfiguration) = Sw360Storage(config)
