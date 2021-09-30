@@ -23,9 +23,12 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.file.aDirectory
+import io.kotest.matchers.file.exist
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.io.File
 import java.io.IOException
@@ -61,7 +64,7 @@ class ExtensionsTest : WordSpec({
 
         "return 'false' for non-existent files" {
             tempDir.resolve("non-existent").let { nonExistent ->
-                nonExistent.exists() shouldBe false
+                nonExistent shouldNot exist()
                 nonExistent.isSymbolicLink() shouldBe false
             }
         }
@@ -173,11 +176,11 @@ class ExtensionsTest : WordSpec({
             val nonExistingParent = File(parent, "parent1/parent2")
             val child = File(nonExistingParent, "/")
 
-            parent.isDirectory shouldBe true
-            nonExistingParent.exists() shouldBe false
-            child.exists() shouldBe false
+            parent shouldBe aDirectory()
+            nonExistingParent shouldNot exist()
+            child shouldNot exist()
             shouldNotThrow<IOException> { child.safeMkdirs() }
-            child.isDirectory shouldBe true
+            child shouldBe aDirectory()
         }
 
         "throw exception if file is not a directory" {
