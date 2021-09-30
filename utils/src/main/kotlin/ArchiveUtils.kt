@@ -127,12 +127,9 @@ fun File.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
 internal val DEB_NESTED_ARCHIVES = listOf("data.tar.xz", "control.tar.xz")
 
 /**
- * Unpack the [File] assuming it is a Debian archive. A Debian archive is an ar archive, which in turn contains two tar
- * files, metadata and the actual content of the package. The top-level archive is deflated into a temporary
- * directory. Then the tar files are extracted to the provided [targetDirectory], in two sub folders named *data* and
- * *control*, ignoring all entries not matched by [filter]. The [filter] function is invoked with the [ArchiveEntry]s
- * from both tar archives. Note that there is no indication from which archive a single [ArchiveEntry] stems; but as
- * there is no overlap in the files contained in the different archives, this should not be a problem.
+ * Unpack the [File] assuming it is a Debian archive. The nested top-level "data" and "control" TAR archives are
+ * unpacked to the provided [targetDirectory] into sub-directories of the respective names. The [filter] function is
+ * applied to the contents of the TAR archives so that [ArchiveEntry]s that do not match are ignored.
  */
 fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
     val tempDir = createOrtTempDir("unpackDeb")
