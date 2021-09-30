@@ -124,7 +124,7 @@ fun File.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
 /**
  * A list with file names that are expected to be contained in a Debian package archive file.
  */
-internal val DEBIAN_PACKAGE_SUBARCHIVES = listOf("data.tar.xz", "control.tar.xz")
+internal val DEB_NESTED_ARCHIVES = listOf("data.tar.xz", "control.tar.xz")
 
 /**
  * Unpack the [File] assuming it is a Debian archive. A Debian archive is an ar archive, which in turn contains two tar
@@ -144,7 +144,7 @@ fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
             { entry -> (entry as ArArchiveEntry).mode }
         )
 
-        DEBIAN_PACKAGE_SUBARCHIVES.forEach { path ->
+        DEB_NESTED_ARCHIVES.forEach { path ->
             val subFolderName = path.substringBefore('.')
             val subFolder = targetDirectory.resolve(subFolderName)
             subFolder.safeMkdirs()

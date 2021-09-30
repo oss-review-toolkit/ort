@@ -227,7 +227,7 @@ class ArchiveUtilsTest : WordSpec() {
                     val expectedControl = File("src/test/assets/control-expected.txt").readText()
                     extractedControlFile.readText() shouldBe expectedControl
 
-                    DEBIAN_PACKAGE_SUBARCHIVES.forEach { tarFileName ->
+                    DEB_NESTED_ARCHIVES.forEach { tarFileName ->
                         val tarFile = outputDir.resolve(tarFileName)
                         tarFile shouldNotBe aFile()
                     }
