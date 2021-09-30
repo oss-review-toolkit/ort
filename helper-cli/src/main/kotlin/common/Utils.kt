@@ -579,14 +579,14 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
     val result: MutableMap<String, MutableMap<LicenseFindingCurationKey, LicenseFindingCuration>> = mutableMapOf()
 
     fun merge(repositoryUrl: String, curation: LicenseFindingCuration, updateOnlyUpdateExisting: Boolean = false) {
-        if (updateOnlyUpdateExisting && !result.containsKey(repositoryUrl)) {
+        if (updateOnlyUpdateExisting && repositoryUrl !in result) {
             return
         }
 
         val curations = result.getOrPut(repositoryUrl) { mutableMapOf() }
 
         val key = curation.key()
-        if (updateOnlyUpdateExisting && !curations.containsKey(key)) {
+        if (updateOnlyUpdateExisting && key !in curations) {
             return
         }
 
@@ -633,12 +633,12 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
     val result: MutableMap<String, MutableMap<String, PathExclude>> = mutableMapOf()
 
     fun merge(repositoryUrl: String, pathExclude: PathExclude, updateOnlyUpdateExisting: Boolean = false) {
-        if (updateOnlyUpdateExisting && !result.containsKey(repositoryUrl)) {
+        if (updateOnlyUpdateExisting && repositoryUrl !in result) {
             return
         }
 
         val pathExcludes = result.getOrPut(repositoryUrl) { mutableMapOf() }
-        if (updateOnlyUpdateExisting && !result.containsKey(pathExclude.pattern)) {
+        if (updateOnlyUpdateExisting && pathExclude.pattern !in result) {
             return
         }
 
@@ -703,7 +703,7 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
     associateByTo(result) { it.key() }
 
     other.forEach {
-        if (!updateOnlyExisting || result.containsKey(it.key())) {
+        if (!updateOnlyExisting || it.key() in result) {
             result[it.key()] = it
         }
     }
@@ -746,7 +746,7 @@ internal fun Collection<PathExclude>.mergePathExcludes(
     associateByTo(result) { it.pattern }
 
     other.forEach {
-        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
+        if (!updateOnlyExisting || it.pattern in result) {
             result[it.pattern] = it
         }
     }
