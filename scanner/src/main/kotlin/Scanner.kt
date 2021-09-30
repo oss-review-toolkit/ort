@@ -186,7 +186,7 @@ abstract class Scanner(
      * [Package]. The map may contain multiple results for the same [Package] if the storage contains more than one
      * result for the specification of this scanner.
      */
-    internal abstract suspend fun scanPackages(
+    abstract suspend fun scanPackages(
         packages: Set<Package>,
         outputDirectory: File
     ): Map<Package, List<ScanResult>>
