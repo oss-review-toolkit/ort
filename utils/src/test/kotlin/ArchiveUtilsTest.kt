@@ -216,8 +216,8 @@ class ArchiveUtilsTest : WordSpec() {
                 val archiveUdepTemp = tempDir.resolve("testpkg.udeb")
                 val archiveUdep = archiveDeb.copyTo(archiveUdepTemp)
 
-            listOf(archiveDeb, archiveUdep).forAll { archive ->
-                archive.unpack(outputDir)
+                listOf(archiveDeb, archiveUdep).forAll { archive ->
+                    archive.unpack(outputDir)
 
                     val extractedScriptFile = outputDir.resolve("data/usr/bin/test")
                     extractedScriptFile shouldBe aFile()
