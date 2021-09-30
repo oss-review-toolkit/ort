@@ -78,6 +78,26 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 
                 navigator shouldBe DependencyTreeNavigator
             }
+
+            "return a DependencyTreeNavigator for a result that does not contain any dependency graphs" {
+                val project = createProject("dummy", scopeNames = sortedSetOf())
+
+                val analyzerResult = AnalyzerResult(
+                    projects = sortedSetOf(project),
+                    packages = sortedSetOf(),
+                    dependencyGraphs = mapOf()
+                )
+                val analyzerRun = AnalyzerRun(
+                    result = analyzerResult,
+                    environment = Environment(),
+                    config = AnalyzerConfiguration()
+                )
+                val result = OrtResult.EMPTY.copy(analyzer = analyzerRun)
+
+                val navigator = CompatibilityDependencyNavigator.create(result)
+
+                navigator shouldBe DependencyTreeNavigator
+            }
         }
 
         "scopeNames" should {

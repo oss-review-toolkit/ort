@@ -45,6 +45,10 @@ class CompatibilityDependencyNavigator internal constructor(
          * [CompatibilityDependencyNavigator].
          */
         fun create(ortResult: OrtResult): DependencyNavigator {
+            if (ortResult.analyzer?.result?.dependencyGraphs.orEmpty().isEmpty()) {
+                return DependencyTreeNavigator
+            }
+
             val (treeProjects, graphProjects) = ortResult.getProjects().partition(Project::usesTree)
 
             return when {
