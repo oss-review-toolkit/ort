@@ -71,12 +71,12 @@ object SpdxConstants {
     const val LICENSE_LIST_URL = "https://spdx.org/licenses/"
 
     /**
-     * Return true if and only if the given value equals [NONE] or [NOASSERTION].
+     * Return true if and only if the given value is null or equals [NONE] or [NOASSERTION].
      */
-    fun isNotPresent(value: String) = value in setOf(NONE, NOASSERTION)
+    fun isNotPresent(value: String?) = value in setOf(null, NONE, NOASSERTION)
 
     /**
-     * Return true if and only if the given value does not equal [NONE] or [NOASSERTION].
+     * Return true if and only if the given value is not null and does not equal [NONE] or [NOASSERTION].
      */
-    fun isPresent(value: String) = !isNotPresent(value)
+    fun isPresent(value: String?) = !isNotPresent(value)
 }
