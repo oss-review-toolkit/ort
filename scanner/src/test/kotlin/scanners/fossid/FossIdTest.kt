@@ -88,6 +88,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.scanOrtResult
+import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class FossIdTest : WordSpec({
@@ -100,6 +101,14 @@ class FossIdTest : WordSpec({
             val fossId = createFossId(createConfig())
 
             fossId.version shouldBe FOSSID_VERSION
+        }
+    }
+
+    "convertGitUrlToProjectName()" should {
+        "extract the repository name from the Git URL without the .git suffix" {
+            convertGitUrlToProjectName("https://github.com/jshttp/mime-types.git") shouldBe "mime-types"
+            convertGitUrlToProjectName("https://github.com/vdurmont/semver4j.git") shouldBe "semver4j"
+            convertGitUrlToProjectName("https://dev.azure.com/org/project/_git/repo") shouldBe "repo"
         }
     }
 
@@ -601,7 +610,7 @@ private const val USER = "fossIdTestUser"
 private const val API_KEY = "fossId-API-key"
 
 /** A test project name. */
-private const val PROJECT = "fossId-test-project.git"
+private const val PROJECT = "fossId-test-project"
 
 /** A test revision. */
 private const val REVISION = "test-revision"
@@ -717,7 +726,7 @@ private fun createVcsInfo(
     path: String = "",
     revision: String = REVISION
 ): VcsInfo =
-    VcsInfo(type = type, path = path, revision = revision, url = "https://github.com/test/$projectName")
+    VcsInfo(type = type, path = path, revision = revision, url = "https://github.com/test/$projectName.git")
 
 /**
  * Create a test [Identifier] with properties derived from the given [index].
