@@ -13,7 +13,7 @@ jobs:
   # Install required tools.
   - bash: |
       # Install apt packages.
-      sudo apt-get -qq install cvs
+      sudo apt-get -qq install ca-certificates cvs
 
       # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
       sudo apt-get -qq remove mono-devel
