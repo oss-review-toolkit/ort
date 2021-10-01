@@ -329,7 +329,8 @@ class SpdxDocumentFile(
     private fun SpdxPackage.toIdentifier() =
         Identifier(
             type = managerName,
-            namespace = originator?.withoutPrefix(SpdxConstants.ORGANIZATION).orEmpty(),
+            namespace = listOfNotNull(supplier, originator).firstOrNull()
+                ?.withoutPrefix(SpdxConstants.ORGANIZATION).orEmpty(),
             name = name,
             version = versionInfo
         )

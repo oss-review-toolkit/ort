@@ -49,6 +49,7 @@ packages:
   packageFileName: "./libs/openssl"
   name: "openssl"
   versionInfo: "1.1.1g"
+  supplier: "Organization: OpenSSL Development Team"
   originator: "Organization: OpenSSL Development Team"
 - SPDXID: "SPDXRef-Package-Saxon"
   checksums:
