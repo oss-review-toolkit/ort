@@ -319,8 +319,8 @@ private fun PackageManager.getProject(
         id = Identifier(
             type = managerName,
             namespace = "",
-            name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
-            version = ""
+            name = spec?.metadata?.id ?: definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
+            version = spec?.metadata?.version.orEmpty()
         ),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
         authors = parseAuthors(spec),

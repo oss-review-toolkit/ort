@@ -1,6 +1,6 @@
 ---
 project:
-  id: "DotNet::src/funTest/assets/projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj:"
+  id: "DotNet::MyPackage:0.8.15"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj"
   authors:
   - "Author1"
