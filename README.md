@@ -359,9 +359,9 @@ supported:
   * [Composer](https://getcomposer.org/)
 * Python
   * [PIP](https://pip.pypa.io/) (limitations:
-  [Python 2.7 or 3.6 only](https://github.com/oss-review-toolkit/ort/issues/3671))
+  [Python 2.7 or 3.6 and PIP 18.1 only](https://github.com/oss-review-toolkit/ort/issues/3671))
   * [Pipenv](https://pipenv.readthedocs.io/) (limitations:
-  [Python 2.7 or 3.6 only](https://github.com/oss-review-toolkit/ort/issues/3671))
+  [Python 2.7 or 3.6 and PIP 18.1 only](https://github.com/oss-review-toolkit/ort/issues/3671))
 * Ruby
   * [Bundler](http://bundler.io/) (limitations:
   [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
