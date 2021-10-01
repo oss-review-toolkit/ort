@@ -252,15 +252,6 @@ private fun SpdxPackage.locateExternalReference(type: SpdxExternalReference.Type
     externalRefs.find { it.referenceType == type }?.referenceLocator
 
 /**
- * Return the organization from an "originator", "supplier", or "annotator" string, or null if no organization is
- * specified.
- */
-private fun String.extractOrganization(): String? =
-    lineSequence().mapNotNull { line ->
-        line.withoutPrefix(SpdxConstants.ORGANIZATION)
-    }.firstOrNull()
-
-/**
  * Return whether the string has the format of an [SpdxExternalDocumentReference], with or without an additional
  * package id.
  */
@@ -338,7 +329,7 @@ class SpdxDocumentFile(
     private fun SpdxPackage.toIdentifier() =
         Identifier(
             type = managerName,
-            namespace = originator?.extractOrganization().orEmpty(),
+            namespace = originator?.withoutPrefix(SpdxConstants.ORGANIZATION).orEmpty(),
             name = name,
             version = versionInfo
         )
