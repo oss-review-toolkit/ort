@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -146,7 +147,7 @@ class Cargo(
             }
         }.toSortedSet()
 
-        val id = extractCargoId(node)
+        val id = parseCargoId(node)
         val pkg = packages.getValue(id)
         val linkage = if (isProjectDependency(id)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
 
@@ -166,8 +167,8 @@ class Cargo(
         val hashes = readHashes(resolveLockfile(metadata))
 
         val packages = metadata["packages"].associateBy(
-            { extractCargoId(it) },
-            { extractPackage(it, hashes) }
+            { parseCargoId(it) },
+            { parsePackage(it, hashes) }
         )
 
         val projectId = metadata["workspace_members"]
@@ -231,13 +232,13 @@ class Cargo(
 private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
 
 private fun checksumKeyOf(metadata: JsonNode): String {
-    val id = extractCargoId(metadata)
+    val id = parseCargoId(metadata)
     return "\"checksum $id\""
 }
 
-private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
+private fun parseCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
 
-private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
+private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> {
     val declaredLicenses = node["license"].textValueOrEmpty().split('/')
         .map { it.trim() }
         .filterTo(sortedSetOf()) { it.isNotEmpty() }
@@ -260,24 +261,24 @@ private fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLic
     // https://github.com/rust-lang/cargo/pull/4920
     DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
 
-private fun extractPackage(node: JsonNode, hashes: Map<String, String>): Package {
-    val declaredLicenses = extractDeclaredLicenses(node)
+private fun parsePackage(node: JsonNode, hashes: Map<String, String>): Package {
+    val declaredLicenses = parseDeclaredLicenses(node)
     val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
 
     return Package(
-        id = extractPackageId(node),
+        id = parsePackageId(node),
         authors = parseAuthors(node["authors"]),
         declaredLicenses = declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
         description = node["description"].textValueOrEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = extractSourceArtifact(node, hashes).orEmpty(),
+        sourceArtifact = parseSourceArtifact(node, hashes).orEmpty(),
         homepageUrl = "",
-        vcs = extractVcsInfo(node)
+        vcs = parseVcsInfo(node)
     )
 }
 
-private fun extractPackageId(node: JsonNode) =
+private fun parsePackageId(node: JsonNode) =
     Identifier(
         type = "Crate",
         // Note that Rust / Cargo do not support package namespaces, see:
@@ -287,9 +288,9 @@ private fun extractPackageId(node: JsonNode) =
         version = node["version"].textValueOrEmpty()
     )
 
-private fun extractRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
+private fun parseRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
 
-private fun extractSourceArtifact(
+private fun parseSourceArtifact(
     node: JsonNode,
     hashes: Map<String, String>
 ): RemoteArtifact? {
@@ -305,8 +306,8 @@ private fun extractSourceArtifact(
     return RemoteArtifact(url, hash)
 }
 
-private fun extractVcsInfo(node: JsonNode) =
-    VcsHost.toVcsInfo(extractRepositoryUrl(node))
+private fun parseVcsInfo(node: JsonNode) =
+    VcsHost.toVcsInfo(parseRepositoryUrl(node))
 
 private fun getResolvedVersion(
     parentName: String,
@@ -333,7 +334,7 @@ private fun getResolvedVersion(
 }
 
 /**
- * Extract information about authors from the given [node] with package metadata.
+ * Parse information about authors from the given [node] with package metadata.
  */
 private fun parseAuthors(node: JsonNode?): SortedSet<String> =
     node?.mapNotNullTo(sortedSetOf()) { parseAuthorString(it.textValue()) } ?: sortedSetOf()
