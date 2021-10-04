@@ -1,5 +1,5 @@
 [build_requires]
-libxml2/2.9.12
+libxslt/1.1.34
 
 [requires]
 libcurl/7.79.1
