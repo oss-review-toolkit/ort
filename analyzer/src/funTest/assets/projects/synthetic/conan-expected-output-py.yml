@@ -50,12 +50,12 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/conan-io/conan-center-index"
+    url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/conan-io/conan-center-index.git"
+    url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
 - id: "Conan::zlib:1.2.11"
@@ -78,12 +78,12 @@ packages:
       value: ""
       algorithm: ""
   vcs:
-    type: "Git"
-    url: "https://github.com/conan-io/conan-center-index"
+    type: ""
+    url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
-    url: "https://github.com/conan-io/conan-center-index.git"
+    type: ""
+    url: ""
     revision: ""
     path: ""
