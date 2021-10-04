@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -46,6 +47,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
@@ -178,7 +180,7 @@ class Conan(
             val dependenciesJson = run(workingDir, "info", ".", "-j").stdout
             val pkgInfos = jsonMapper.readTree(dependenciesJson)
             val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
-            val packages = parsePackages(packageList, workingDir)
+            val packages = parsePackages(packageList, workingDir, conanStoragePath)
 
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
@@ -254,26 +256,27 @@ class Conan(
     /**
      * Return the map of packages and their identifiers which are contained in [nodes].
      */
-    private fun parsePackages(nodes: List<JsonNode>, workingDir: File): Map<String, Package> =
+    private fun parsePackages(nodes: List<JsonNode>, workingDir: File, conanStoragePath: File): Map<String, Package> =
         nodes.associate { node ->
-            val pkg = parsePackage(node, workingDir)
+            val pkg = parsePackage(node, workingDir, conanStoragePath)
             "${pkg.id.name}:${pkg.id.version}" to pkg
         }
 
     /**
      * Return the [Package] parsed from the given [node].
      */
-    private fun parsePackage(node: JsonNode, workingDir: File): Package {
+    private fun parsePackage(node: JsonNode, workingDir: File, conanStoragePath: File): Package {
+        val id = parsePackageId(node, workingDir)
         val homepageUrl = node["homepage"].textValueOrEmpty()
 
         return Package(
-            id = parsePackageId(node, workingDir),
+            id = id,
             authors = parseAuthors(node),
             declaredLicenses = parseDeclaredLicenses(node),
             description = parsePackageField(node, workingDir, "description"),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
+            sourceArtifact = parseSourceArtifact(id, conanStoragePath),
             vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
         )
     }
@@ -337,6 +340,27 @@ class Conan(
      */
     private fun parsePackageField(node: JsonNode, workingDir: File, field: String): String =
         inspectField(node["display_name"].textValue(), workingDir, field)
+
+    /**
+     * Try to read the source artifact from the [conanStoragePath], if not possible return [RemoteArtifact.EMPTY].
+     */
+    private fun parseSourceArtifact(id: Identifier, conanStoragePath: File): RemoteArtifact {
+        val conanDataFile = conanStoragePath.resolve("${id.name}/${id.version}/_/_/export/conandata.yml")
+
+        return runCatching {
+            val conanData = yamlMapper.readTree(conanDataFile)
+            val artifactEntry = conanData["sources"][id.version]
+
+            val url = artifactEntry["url"].let { urlNode ->
+                (urlNode.takeIf { it.isTextual } ?: urlNode.first()).textValueOrEmpty()
+            }
+            val hash = Hash.create(artifactEntry["sha256"].textValueOrEmpty())
+
+            RemoteArtifact(url, hash)
+        }.getOrElse {
+            RemoteArtifact.EMPTY
+        }
+    }
 
     /**
      * Return a [Package] containing project-level information depending on which [definitionFile] was found:
