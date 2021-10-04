@@ -176,20 +176,20 @@ class Conan(
             installDependencies(workingDir)
 
             val dependenciesJson = run(workingDir, "info", ".", "-j").stdout
-            val rootNode = jsonMapper.readTree(dependenciesJson)
-            val packageList = removeProjectPackage(rootNode, definitionFile)
+            val pkgInfos = jsonMapper.readTree(dependenciesJson)
+            val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
             val packages = parsePackages(packageList, workingDir)
 
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
-                dependencies = parseDependencies(rootNode, SCOPE_NAME_DEPENDENCIES, workingDir)
+                dependencies = parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEPENDENCIES, workingDir)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies = parseDependencies(rootNode, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
+                dependencies = parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
             )
 
-            val projectPackage = parseProjectPackage(rootNode, definitionFile, workingDir)
+            val projectPackage = parseProjectPackage(pkgInfos, definitionFile, workingDir)
 
             return listOf(
                 ProjectAnalyzerResult(
@@ -214,37 +214,29 @@ class Conan(
     }
 
     /**
-     * Return the dependency tree starting from a [rootNode] for given [scopeName].
+     * Return the dependency tree for [pkg] for the given [scopeName].
      */
     private fun parseDependencyTree(
-        rootNode: JsonNode,
-        workingDir: File,
+        pkgInfos: JsonNode,
         pkg: JsonNode,
-        scopeName: String
+        scopeName: String,
+        workingDir: File
     ): SortedSet<PackageReference> {
         val result = mutableSetOf<PackageReference>()
 
-        pkg[scopeName]?.forEach {
-            val childRef = it.textValueOrEmpty()
-            rootNode.forEach { child ->
-                if (child["reference"].textValueOrEmpty() == childRef) {
-                    log.debug { "Found child '$childRef'." }
+        pkg[scopeName]?.forEach { childNode ->
+            val childRef = childNode.textValueOrEmpty()
+            pkgInfos.find { it["reference"].textValueOrEmpty() == childRef }?.let { pkgInfo ->
+                log.debug { "Found child '$childRef'." }
 
-                    val packageReference = PackageReference(
-                        id = parsePackageId(child, workingDir),
-                        dependencies = parseDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEPENDENCIES)
-                    )
-                    result += packageReference
+                val id = parsePackageId(pkgInfo, workingDir)
+                val dependencies = parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEPENDENCIES, workingDir) +
+                        parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
 
-                    val packageDevReference = PackageReference(
-                        id = parsePackageId(child, workingDir),
-                        dependencies = parseDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEV_DEPENDENCIES)
-                    )
-
-                    result += packageDevReference
-                }
+                result += PackageReference(id, dependencies = dependencies.toSortedSet())
             }
         }
+
         return result.toSortedSet()
     }
 
@@ -252,11 +244,12 @@ class Conan(
      * Run through each package and parse the list of its dependencies (also transitive ones).
      */
     private fun parseDependencies(
-        rootNode: JsonNode,
+        pkgInfos: JsonNode,
+        definitionFileName: String,
         scopeName: String,
         workingDir: File
-    ): SortedSet<PackageReference>  =
-        rootNode.flatMapTo(sortedSetOf()) { pkg -> parseDependencyTree(rootNode, workingDir, pkg, scopeName) }
+    ): SortedSet<PackageReference> =
+        parseDependencyTree(pkgInfos, findProjectNode(pkgInfos, definitionFileName), scopeName, workingDir)
 
     /**
      * Return the map of packages and their identifiers which are contained in [nodes].
@@ -293,15 +286,19 @@ class Conan(
         }.get(field).textValueOrEmpty()
 
     /**
+     * Find the node that represents the project defined in the definition file.
+     */
+    private fun findProjectNode(pkgInfos: JsonNode, definitionFileName: String): JsonNode =
+        pkgInfos.first {
+            // Use "in" because conanfile.py's reference string often includes other data.
+            definitionFileName in it["reference"].textValueOrEmpty()
+        }
+
+    /**
      * Return the full list of packages, excluding the project level information.
      */
-    private fun removeProjectPackage(rootNode: JsonNode, definitionFile: File): List<JsonNode> =
-        rootNode.find {
-            // Contains because conanfile.py's reference string often includes other data.
-            it["reference"].textValueOrEmpty().contains(definitionFile.name)
-        }?.let { projectPackage ->
-            rootNode.minusElement(projectPackage)
-        } ?: rootNode.toList<JsonNode>()
+    private fun removeProjectPackage(pkgInfos: JsonNode, definitionFileName: String): List<JsonNode> =
+        pkgInfos.minusElement(findProjectNode(pkgInfos, definitionFileName))
 
     /**
      * Return the set of declared licenses contained in [node].
@@ -346,10 +343,8 @@ class Conan(
      * TODO: The format of `conan info` output for a conanfile.txt file may be such that we can get project metadata
      *       from the `requires` field. Need to investigate whether this is a sure thing before implementing.
      */
-    private fun parseProjectPackage(rootNode: JsonNode, definitionFile: File, workingDir: File): Package {
-        val projectPackageJson = requireNotNull(rootNode.find {
-            it["reference"].textValue().contains(definitionFile.name)
-        })
+    private fun parseProjectPackage(pkgInfos: JsonNode, definitionFile: File, workingDir: File): Package {
+        val projectPackageJson = findProjectNode(pkgInfos, definitionFile.name)
 
         return if (definitionFile.name == "conanfile.py") {
             generateProjectPackageFromConanfilePy(projectPackageJson, definitionFile, workingDir)

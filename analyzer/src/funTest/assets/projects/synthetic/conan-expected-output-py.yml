@@ -28,7 +28,6 @@ project:
     - id: "Conan::openssl:3.0.0"
       dependencies:
       - id: "Conan::zlib:1.2.11"
-    - id: "Conan::zlib:1.2.11"
 packages:
 - id: "Conan::openssl:3.0.0"
   purl: "pkg:conan/openssl@3.0.0"
