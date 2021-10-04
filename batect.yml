@@ -43,6 +43,10 @@ containers:
   build:
     image: adoptopenjdk:11-jdk-hotspot-focal
     <<: *common-container-config
+  run:
+    build_directory: <{batect.project_directory}
+    build_target: run
+    <<: *common-container-config
 
 tasks:
   gradle:
@@ -64,3 +68,20 @@ tasks:
     run:
       container: build
       command: ./gradlew --stacktrace jar funTestClasses
+  requirements:
+    description: >-
+      A task to check ORT's requirements against the runtime container.
+    prerequisites:
+      - buildCli
+    run:
+      container: run
+      command: ./cli/build/install/ort/bin/ort requirements
+  funTest:
+    description: >-
+      A task to execute ORT's funtional tests in the runtime container. Can be limited to e.g. the "analyzer" project
+      like `./batect funTest -- -p analyzer`.
+    prerequisites:
+      - buildFunTest
+    run:
+      container: run
+      command: ./gradlew funTest
