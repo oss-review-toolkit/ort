@@ -49,7 +49,9 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.createOrtTempFile
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 import org.ossreviewtoolkit.utils.toUri
@@ -81,6 +83,8 @@ class Conan(
         ) = Conan(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val pkgInspectResults = mutableMapOf<String, JsonNode>()
+
     override fun command(workingDir: File?) = "conan"
 
     // TODO: Add support for Conan lock files.
@@ -98,7 +102,16 @@ class Conan(
     /**
      * Primary method for resolving dependencies from [definitionFile].
      */
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
+        try {
+            resolvedDependenciesInternal(definitionFile)
+        } finally {
+            // Clear the inspection result cache, because we call "conan config install" for each definition file which
+            // could overwrite the remotes and result in different metadata for packages with the same name and version.
+            pkgInspectResults.clear()
+        }
+
+    private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val conanHome = Os.userHomeDirectory.resolve(".conan")
 
         // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
@@ -272,8 +285,12 @@ class Conan(
     /**
      * Return the value `conan inspect` reports for the given [field].
      */
-    private fun runInspectRawField(pkgName: String, workingDir: File, field: String): String =
-        run(workingDir, "inspect", pkgName, "--raw", field).stdout
+    private fun inspectField(pkgName: String, workingDir: File, field: String): String =
+        pkgInspectResults.getOrPut(pkgName) {
+            val jsonFile = createOrtTempFile(managerName)
+            run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
+            jsonMapper.readTree(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively(force = true) }
+        }.get(field).textValueOrEmpty()
 
     /**
      * Return the full list of packages, excluding the project level information.
@@ -319,7 +336,7 @@ class Conan(
      * Return the value of [field] from the output of `conan inspect --raw` for the package in [node].
      */
     private fun parsePackageField(node: JsonNode, workingDir: File, field: String): String =
-        runInspectRawField(node["display_name"].textValue(), workingDir, field)
+        inspectField(node["display_name"].textValue(), workingDir, field)
 
     /**
      * Return a [Package] containing project-level information depending on which [definitionFile] was found:
@@ -350,12 +367,12 @@ class Conan(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = runInspectRawField(definitionFile.name, workingDir, "name"),
-                version = runInspectRawField(definitionFile.name, workingDir, "version")
+                name = inspectField(definitionFile.name, workingDir, "name"),
+                version = inspectField(definitionFile.name, workingDir, "version")
             ),
             authors = parseAuthors(node),
             declaredLicenses = parseDeclaredLicenses(node),
-            description = runInspectRawField(definitionFile.name, workingDir, "description"),
+            description = inspectField(definitionFile.name, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
