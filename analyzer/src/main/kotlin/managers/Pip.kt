@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.util.SortedSet
 
@@ -459,7 +458,7 @@ class Pip(
         log.info { "Trying to install dependencies using Python $projectPythonVersion..." }
 
         var virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
-        var install = installDependencies(workingDir, definitionFile, virtualEnvDir)
+        val install = installDependencies(workingDir, definitionFile, virtualEnvDir)
 
         if (install.isError) {
             log.debug {
@@ -478,12 +477,7 @@ class Pip(
             log.info { "Falling back to trying to install dependencies using Python $projectPythonVersion..." }
 
             virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
-            install = installDependencies(workingDir, definitionFile, virtualEnvDir)
-
-            if (install.isError) {
-                // pip writes the real error message to stdout instead of stderr.
-                throw IOException(install.stdout)
-            }
+            installDependencies(workingDir, definitionFile, virtualEnvDir).requireSuccess()
         }
 
         log.info {
