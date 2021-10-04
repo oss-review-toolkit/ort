@@ -257,11 +257,11 @@ class Conan(
     }
 
     /**
-     * Return the map of packages and their identifiers which are contained in [node].
+     * Return the map of packages and their identifiers which are contained in [nodes].
      */
-    private fun parsePackages(node: List<JsonNode>, workingDir: File): Map<String, Package> {
+    private fun parsePackages(nodes: List<JsonNode>, workingDir: File): Map<String, Package> {
         val result = mutableMapOf<String, Package>()
-        val stack = Stack<JsonNode>().apply { addAll(node) }
+        val stack = Stack<JsonNode>().apply { addAll(nodes) }
 
         while (!stack.empty()) {
             val currentNode = stack.pop()
