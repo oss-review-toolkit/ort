@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -290,7 +291,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         if (log.delegate.isErrorEnabled) {
             evaluatorRun.violations.forEach { violation ->
-                log.error { violation.toString() }
+                log.error { violation.format() }
             }
         }
 
@@ -306,3 +307,25 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         concludeSeverityStats(counts, config.severeIssueThreshold, 2)
     }
 }
+
+private fun RuleViolation.format() =
+    buildString {
+        append(severity)
+        append(": ")
+        append(rule)
+        append(" - ")
+        pkg?.let { id ->
+            append(id.toCoordinates())
+            append(" - ")
+        }
+        license?.let { license ->
+            append(license)
+            licenseSource?.let { source ->
+                append(" (")
+                append(source)
+                append(")")
+            }
+            append(" - ")
+        }
+        append(message)
+    }
