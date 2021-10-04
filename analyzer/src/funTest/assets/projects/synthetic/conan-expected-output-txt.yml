@@ -18,22 +18,27 @@ project:
   scopes:
   - name: "build_requires"
     dependencies:
-    - id: "Conan::protobuf:3.6.1"
-    - id: "Conan::protoc_installer:3.6.1"
+    - id: "Conan::libiconv:1.16"
+    - id: "Conan::libxml2:2.9.12"
+      dependencies:
+      - id: "Conan::zlib:1.2.11"
   - name: "requires"
     dependencies:
-    - id: "Conan::protobuf:3.6.1"
+    - id: "Conan::libcurl:7.79.1"
+      dependencies:
+      - id: "Conan::openssl:1.1.1l"
+      - id: "Conan::zlib:1.2.11"
+    - id: "Conan::openssl:1.1.1l"
+    - id: "Conan::zlib:1.2.11"
 packages:
-- id: "Conan::protobuf:3.6.1"
-  purl: "pkg:conan/protobuf@3.6.1"
-  authors:
-  - "Bincrafters"
+- id: "Conan::libcurl:7.79.1"
+  purl: "pkg:conan/libcurl@7.79.1"
   declared_licenses:
-  - "BSD-3-Clause"
+  - "MIT"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-  description: "Protocol Buffers - Google's data interchange format"
-  homepage_url: "https://github.com/protocolbuffers/protobuf"
+    spdx_expression: "MIT"
+  description: "command line tool and library for transferring data with URLs"
+  homepage_url: "https://curl.haxx.se"
   binary_artifact:
     url: ""
     hash:
@@ -46,24 +51,24 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf"
+    url: "https://github.com/conan-io/conan-center-index"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf.git"
+    url: "https://github.com/conan-io/conan-center-index.git"
     revision: ""
     path: ""
-- id: "Conan::protoc_installer:3.6.1"
-  purl: "pkg:conan/protoc_installer@3.6.1"
-  authors:
-  - "Bincrafters"
+- id: "Conan::libiconv:1.16"
+  purl: "pkg:conan/libiconv@1.16"
   declared_licenses:
-  - "BSD-3-Clause"
+  - "LGPL-2.1"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-  description: "Protocol Buffers - Google's data interchange format"
-  homepage_url: "https://github.com/protocolbuffers/protobuf"
+    spdx_expression: "LGPL-2.1-only"
+    mapped:
+      LGPL-2.1: "LGPL-2.1-only"
+  description: "Convert text to and from Unicode"
+  homepage_url: "https://www.gnu.org/software/libiconv/"
   binary_artifact:
     url: ""
     hash:
@@ -76,11 +81,97 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf"
+    url: "https://github.com/conan-io/conan-center-index"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf.git"
+    url: "https://github.com/conan-io/conan-center-index.git"
+    revision: ""
+    path: ""
+- id: "Conan::libxml2:2.9.12"
+  purl: "pkg:conan/libxml2@2.9.12"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "libxml2 is a software library for parsing XML documents"
+  homepage_url: "https://xmlsoft.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/conan-io/conan-center-index"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/conan-io/conan-center-index.git"
+    revision: ""
+    path: ""
+- id: "Conan::openssl:1.1.1l"
+  purl: "pkg:conan/openssl@1.1.1l"
+  declared_licenses:
+  - "OpenSSL"
+  declared_licenses_processed:
+    spdx_expression: "OpenSSL"
+  description: "A toolkit for the Transport Layer Security (TLS) and Secure Sockets\
+    \ Layer (SSL) protocols"
+  homepage_url: "https://github.com/openssl/openssl"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/conan-io/conan-center-index"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/conan-io/conan-center-index.git"
+    revision: ""
+    path: ""
+- id: "Conan::zlib:1.2.11"
+  purl: "pkg:conan/zlib@1.2.11"
+  declared_licenses:
+  - "Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Zlib"
+  description: "A Massively Spiffy Yet Delicately Unobtrusive Compression Library\
+    \ (Also Free, Not to Mention Unencumbered by Patents)"
+  homepage_url: "https://zlib.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/conan-io/conan-center-index"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/conan-io/conan-center-index.git"
     revision: ""
     path: ""
