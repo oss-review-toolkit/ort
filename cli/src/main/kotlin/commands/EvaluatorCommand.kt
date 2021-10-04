@@ -289,10 +289,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         log.perf { "Executed the evaluator in ${duration.inWholeMilliseconds}ms." }
 
-        if (log.delegate.isErrorEnabled) {
-            evaluatorRun.violations.forEach { violation ->
-                log.error { violation.format() }
-            }
+        evaluatorRun.violations.forEach { violation ->
+            println(violation.format())
         }
 
         outputDir?.let { absoluteOutputDir ->
