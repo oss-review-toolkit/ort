@@ -29,7 +29,6 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.net.Authenticator
 import java.util.SortedSet
-import java.util.Stack
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -243,34 +242,17 @@ class Conan(
         rootNode: JsonNode,
         scopeName: String,
         workingDir: File
-    ): SortedSet<PackageReference> {
-        val stack = Stack<JsonNode>().apply { addAll(rootNode) }
-        val dependencies = mutableSetOf<PackageReference>()
-
-        while (!stack.empty()) {
-            val pkg = stack.pop()
-            parseDependencyTree(rootNode, workingDir, pkg, scopeName).forEach {
-                dependencies += it
-            }
-        }
-        return dependencies.toSortedSet()
-    }
+    ): SortedSet<PackageReference>  =
+        rootNode.flatMapTo(sortedSetOf()) { pkg -> parseDependencyTree(rootNode, workingDir, pkg, scopeName) }
 
     /**
      * Return the map of packages and their identifiers which are contained in [nodes].
      */
-    private fun parsePackages(nodes: List<JsonNode>, workingDir: File): Map<String, Package> {
-        val result = mutableMapOf<String, Package>()
-        val stack = Stack<JsonNode>().apply { addAll(nodes) }
-
-        while (!stack.empty()) {
-            val currentNode = stack.pop()
-            val pkg = parsePackage(currentNode, workingDir)
-            result["${pkg.id.name}:${pkg.id.version}"] = pkg
+    private fun parsePackages(nodes: List<JsonNode>, workingDir: File): Map<String, Package> =
+        nodes.associate { node ->
+            val pkg = parsePackage(node, workingDir)
+            "${pkg.id.name}:${pkg.id.version}" to pkg
         }
-
-        return result
-    }
 
     /**
      * Return the [Package] parsed from the given [node].
