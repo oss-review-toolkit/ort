@@ -670,7 +670,23 @@ class Pip(
         }
 
         val declaredLicenses = sortedSetOf<String>()
-        getLicenseFromLicenseField(map["License"]?.single())?.let { declaredLicenses += it }
+
+        map["License"]?.let { licenseShortString ->
+            getLicenseFromLicenseField(licenseShortString.firstOrNull())?.let { declaredLicenses += it }
+
+            val moreLines = licenseShortString.drop(1)
+            if (moreLines.isNotEmpty()) {
+                log.warn {
+                    "The 'License' field is supposed to be a short string but contained the following additional " +
+                            "lines which will be ignored:"
+                }
+
+                moreLines.forEach { line ->
+                    log.warn { line }
+                }
+            }
+        }
+
         map["Classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it) }
 
         val authors = parseAuthorString(map["Author"]?.singleOrNull())
