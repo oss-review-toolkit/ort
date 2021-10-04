@@ -213,7 +213,7 @@ class Conan(
 
         pkg[scopeName]?.forEach {
             val childRef = it.textValueOrEmpty()
-            rootNode.iterator().forEach { child ->
+            rootNode.forEach { child ->
                 if (child["reference"].textValueOrEmpty() == childRef) {
                     log.debug { "Found child '$childRef'." }
 
