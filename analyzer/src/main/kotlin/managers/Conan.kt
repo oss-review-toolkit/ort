@@ -2,6 +2,7 @@
  * Copyright (C) 2019 HERE Europe B.V.
  * Copyright (C) 2019 Verifa Oy.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,18 +166,18 @@ class Conan(
             val dependenciesJson = run(workingDir, "info", ".", "-j").stdout
             val rootNode = jsonMapper.readTree(dependenciesJson)
             val packageList = removeProjectPackage(rootNode, definitionFile)
-            val packages = extractPackages(packageList, workingDir)
+            val packages = parsePackages(packageList, workingDir)
 
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
-                dependencies = extractDependencies(rootNode, SCOPE_NAME_DEPENDENCIES, workingDir)
+                dependencies = parseDependencies(rootNode, SCOPE_NAME_DEPENDENCIES, workingDir)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies = extractDependencies(rootNode, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
+                dependencies = parseDependencies(rootNode, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
             )
 
-            val projectPackage = extractProjectPackage(rootNode, definitionFile, workingDir)
+            val projectPackage = parseProjectPackage(rootNode, definitionFile, workingDir)
 
             return listOf(
                 ProjectAnalyzerResult(
@@ -203,7 +204,7 @@ class Conan(
     /**
      * Return the dependency tree starting from a [rootNode] for given [scopeName].
      */
-    private fun extractDependencyTree(
+    private fun parseDependencyTree(
         rootNode: JsonNode,
         workingDir: File,
         pkg: JsonNode,
@@ -218,14 +219,14 @@ class Conan(
                     log.debug { "Found child '$childRef'." }
 
                     val packageReference = PackageReference(
-                        id = extractPackageId(child, workingDir),
-                        dependencies = extractDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEPENDENCIES)
+                        id = parsePackageId(child, workingDir),
+                        dependencies = parseDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEPENDENCIES)
                     )
                     result += packageReference
 
                     val packageDevReference = PackageReference(
-                        id = extractPackageId(child, workingDir),
-                        dependencies = extractDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEV_DEPENDENCIES)
+                        id = parsePackageId(child, workingDir),
+                        dependencies = parseDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEV_DEPENDENCIES)
                     )
 
                     result += packageDevReference
@@ -236,9 +237,9 @@ class Conan(
     }
 
     /**
-     * Run through each package and extract list of its dependencies (also transitive ones).
+     * Run through each package and parse the list of its dependencies (also transitive ones).
      */
-    private fun extractDependencies(
+    private fun parseDependencies(
         rootNode: JsonNode,
         scopeName: String,
         workingDir: File
@@ -248,7 +249,7 @@ class Conan(
 
         while (!stack.empty()) {
             val pkg = stack.pop()
-            extractDependencyTree(rootNode, workingDir, pkg, scopeName).forEach {
+            parseDependencyTree(rootNode, workingDir, pkg, scopeName).forEach {
                 dependencies += it
             }
         }
@@ -258,13 +259,13 @@ class Conan(
     /**
      * Return the map of packages and their identifiers which are contained in [node].
      */
-    private fun extractPackages(node: List<JsonNode>, workingDir: File): Map<String, Package> {
+    private fun parsePackages(node: List<JsonNode>, workingDir: File): Map<String, Package> {
         val result = mutableMapOf<String, Package>()
         val stack = Stack<JsonNode>().apply { addAll(node) }
 
         while (!stack.empty()) {
             val currentNode = stack.pop()
-            val pkg = extractPackage(currentNode, workingDir)
+            val pkg = parsePackage(currentNode, workingDir)
             result["${pkg.id.name}:${pkg.id.version}"] = pkg
         }
 
@@ -272,18 +273,18 @@ class Conan(
     }
 
     /**
-     * Return the [Package] extracted from given [node].
+     * Return the [Package] parsed from the given [node].
      */
-    private fun extractPackage(node: JsonNode, workingDir: File) =
+    private fun parsePackage(node: JsonNode, workingDir: File) =
         Package(
-            id = extractPackageId(node, workingDir),
+            id = parsePackageId(node, workingDir),
             authors = parseAuthors(node),
-            declaredLicenses = extractDeclaredLicenses(node),
-            description = extractPackageField(node, workingDir, "description"),
+            declaredLicenses = parseDeclaredLicenses(node),
+            description = parsePackageField(node, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = extractVcsInfo(node)
+            vcs = parseVcsInfo(node)
         )
 
     /**
@@ -306,7 +307,7 @@ class Conan(
     /**
      * Return the set of declared licenses contained in [node].
      */
-    private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
+    private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> =
         sortedSetOf<String>().also { licenses ->
             node["license"]?.mapNotNullTo(licenses) { it.textValue() }
         }
@@ -314,18 +315,18 @@ class Conan(
     /**
      * Return the [Identifier] for the package contained in [node].
      */
-    private fun extractPackageId(node: JsonNode, workingDir: File) =
+    private fun parsePackageId(node: JsonNode, workingDir: File) =
         Identifier(
             type = "Conan",
             namespace = "",
-            name = extractPackageField(node, workingDir, "name"),
-            version = extractPackageField(node, workingDir, "version")
+            name = parsePackageField(node, workingDir, "name"),
+            version = parsePackageField(node, workingDir, "version")
         )
 
     /**
      * Return the [VcsInfo] contained in [node].
      */
-    private fun extractVcsInfo(node: JsonNode) =
+    private fun parseVcsInfo(node: JsonNode) =
         VcsInfo(
             type = VcsType.GIT,
             url = node["url"].textValueOrEmpty(),
@@ -335,18 +336,18 @@ class Conan(
     /**
      * Return the value of [field] from the output of `conan inspect --raw` for the package in [node].
      */
-    private fun extractPackageField(node: JsonNode, workingDir: File, field: String): String =
+    private fun parsePackageField(node: JsonNode, workingDir: File, field: String): String =
         runInspectRawField(node["display_name"].textValue(), workingDir, field)
 
     /**
      * Return a [Package] containing project-level information depending on which [definitionFile] was found:
      * - conanfile.txt: `conan inspect conanfile.txt` is not supported.
-     * - conanfile.py: `conan inspect conanfile.py` is supported and more useful project metadata is extracted.
+     * - conanfile.py: `conan inspect conanfile.py` is supported and more useful project metadata is parsed.
      *
      * TODO: The format of `conan info` output for a conanfile.txt file may be such that we can get project metadata
      *       from the `requires` field. Need to investigate whether this is a sure thing before implementing.
      */
-    private fun extractProjectPackage(rootNode: JsonNode, definitionFile: File, workingDir: File): Package {
+    private fun parseProjectPackage(rootNode: JsonNode, definitionFile: File, workingDir: File): Package {
         val projectPackageJson = requireNotNull(rootNode.find {
             it["reference"].textValue().contains(definitionFile.name)
         })
@@ -359,7 +360,7 @@ class Conan(
     }
 
     /**
-     * Return a [Package] containing project-level information extracted from [node] and [definitionFile] using the
+     * Return a [Package] containing project-level information parsed from [node] and [definitionFile] using the
      * `conan inspect` command.
      */
     private fun generateProjectPackageFromConanfilePy(node: JsonNode, definitionFile: File, workingDir: File): Package =
@@ -371,16 +372,16 @@ class Conan(
                 version = runInspectRawField(definitionFile.name, workingDir, "version")
             ),
             authors = parseAuthors(node),
-            declaredLicenses = extractDeclaredLicenses(node),
+            declaredLicenses = parseDeclaredLicenses(node),
             description = runInspectRawField(definitionFile.name, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = extractVcsInfo(node)
+            vcs = parseVcsInfo(node)
         )
 
     /**
-     * Return a [Package] containing project-level information extracted from [node].
+     * Return a [Package] containing project-level information parsed from [node].
      */
     private fun generateProjectPackageFromConanfileTxt(node: JsonNode): Package =
         Package(
@@ -391,12 +392,12 @@ class Conan(
                 version = ""
             ),
             authors = parseAuthors(node),
-            declaredLicenses = extractDeclaredLicenses(node),
+            declaredLicenses = parseDeclaredLicenses(node),
             description = "",
             homepageUrl = node["homepage"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = extractVcsInfo(node)
+            vcs = parseVcsInfo(node)
         )
 
     /**
