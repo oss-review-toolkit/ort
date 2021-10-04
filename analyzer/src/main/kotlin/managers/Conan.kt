@@ -263,17 +263,20 @@ class Conan(
     /**
      * Return the [Package] parsed from the given [node].
      */
-    private fun parsePackage(node: JsonNode, workingDir: File) =
-        Package(
+    private fun parsePackage(node: JsonNode, workingDir: File): Package {
+        val homepageUrl = node["homepage"].textValueOrEmpty()
+
+        return Package(
             id = parsePackageId(node, workingDir),
             authors = parseAuthors(node),
             declaredLicenses = parseDeclaredLicenses(node),
             description = parsePackageField(node, workingDir, "description"),
-            homepageUrl = node["homepage"].textValueOrEmpty(),
+            homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            vcs = parseVcsInfo(node)
+            vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
         )
+    }
 
     /**
      * Return the value `conan inspect` reports for the given [field].
