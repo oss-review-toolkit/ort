@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.github
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import com.github.tomakehurst.wiremock.client.WireMock.containing
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
@@ -32,15 +33,24 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.result.shouldBeFailureOfType
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.contain
+
+import io.ktor.client.features.ClientRequestException
 
 import java.io.File
+import java.net.ConnectException
+import java.net.ServerSocket
 import java.net.URI
 import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.clients.github.issuesquery.Issue
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class GitHubServiceTest : WordSpec({
     val wiremock = WireMockServer(
@@ -62,32 +72,86 @@ class GitHubServiceTest : WordSpec({
         wiremock.resetAll()
     }
 
+    "error handling" should {
+        "detect a failure response from the server" {
+            wiremock.stubFor(
+                post(anyUrl())
+                    .willReturn(aResponse().withStatus(403))
+            )
+
+            val service = createService(wiremock)
+
+            val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
+
+            issuesResult.shouldBeFailureOfType<ClientRequestException>()
+        }
+
+        "handle a connection error" {
+            // Find a port on which no service is running.
+            val port = ServerSocket(0).use { it.localPort }
+            val serverUrl = "http://localhost:$port"
+
+            val service = GitHubService.create(TOKEN, URI(serverUrl))
+
+            val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
+
+            issuesResult.shouldBeFailureOfType<ConnectException>()
+        }
+
+        "detect errors in the GraphQL result" {
+            wiremock.stubFor(
+                post(anyUrl())
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBodyFile("error_response.json")
+                    )
+            )
+
+            val service = createService(wiremock)
+
+            val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
+
+            issuesResult.shouldBeFailureOfType<QueryException>()
+            val exception = issuesResult.exceptionOrNull() as QueryException
+            exception.message should contain("'IssuesQuery' contains errors")
+            exception.errors shouldHaveSize 1
+            with(exception.errors.first()) {
+                message shouldBe
+                        "Requesting 101 records on the `issues` connection exceeds the `first` limit of 100 records."
+                path should containExactly("repository", "issues")
+            }
+        }
+    }
+
     "repositoryIssues" should {
         "return the issues of a repository" {
             wiremock.stubQuery("issues", repoVariablesRegex(), "issues_response.json")
 
             val service = createService(wiremock)
 
-            val issues = service.repositoryIssues(REPO_OWNER, REPO_NAME)
+            val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
 
-            val titles = issues.map(Issue::title)
+            issuesResult.check { issues ->
+                val titles = issues.map(Issue::title)
 
-            titles should containExactly(
-                "No license and copyright information in the files",
-                "Consider using a \"purl\" as the package identifier",
-                "downloader: Add Mercurial support"
-            )
+                titles should containExactly(
+                    "No license and copyright information in the files",
+                    "Consider using a \"purl\" as the package identifier",
+                    "downloader: Add Mercurial support"
+                )
 
-            val issue = issues[2]
-            issue.url shouldBe "https://github.com/oss-review-toolkit/ort/issues/85"
-            issue.bodyText shouldBe "Add support for Mercurial repositories to the downloader module."
-            issue.closed shouldBe true
-            issue.closedAt shouldBe "2017-12-03T18:06:57Z"
-            issue.createdAt shouldBe "2017-12-01T15:19:39Z"
-            issue.lastEditedAt should beNull()
+                with(issues[2]) {
+                    url shouldBe "https://github.com/oss-review-toolkit/ort/issues/85"
+                    bodyText shouldBe "Add support for Mercurial repositories to the downloader module."
+                    closed shouldBe true
+                    closedAt shouldBe "2017-12-03T18:06:57Z"
+                    createdAt shouldBe "2017-12-01T15:19:39Z"
+                    lastEditedAt should beNull()
 
-            val labels = issue.labels?.edges.orEmpty().mapNotNull { it?.node?.name }
-            labels should containExactlyInAnyOrder("enhancement", "downloader")
+                    val labels = labels?.edges.orEmpty().mapNotNull { it?.node?.name }
+                    labels should containExactlyInAnyOrder("enhancement", "downloader")
+                }
+            }
         }
     }
 })
@@ -168,4 +232,13 @@ private fun repoVariablesRegex(cursor: String? = null): String =
 private fun readExpectedQuery(name: String): String {
     val lines = File("src/main/assets/$name.graphql").readLines()
     return lines.joinToString("\\n")
+}
+
+/**
+ * Check whether this [Result] is successful and contains a non-null value. If so, invoke [block] on the value.
+ */
+private fun <T> Result<T>.check(block: (T) -> Unit) {
+    shouldBeSuccess { value ->
+        value.shouldNotBeNull { block(this) }
+    }
 }

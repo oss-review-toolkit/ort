@@ -20,6 +20,9 @@
 package org.ossreviewtoolkit.clients.github
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
+import com.expediagroup.graphql.client.types.GraphQLClientError
+import com.expediagroup.graphql.client.types.GraphQLClientRequest
+import com.expediagroup.graphql.client.types.GraphQLClientResponse
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -29,6 +32,19 @@ import io.ktor.client.request.header
 import java.net.URI
 
 import org.ossreviewtoolkit.clients.github.issuesquery.Issue
+
+/**
+ * An exception class to report a GraphQL query execution that yielded errors. From instance, details about the
+ * errors that occurred can be queried.
+ */
+class QueryException(
+    message: String,
+
+    /**
+     * A list with information about the errors that have been found in the query result.
+     */
+    val errors: List<GraphQLClientError>
+) : Exception(message)
 
 /**
  * A service class for accessing information from the GitHub GraphQL API.
@@ -66,10 +82,26 @@ class GitHubService private constructor(
      * Return a list with [Issue]s contained in [repository] owned by [owner]. If paging is used, with [cursor] the
      * start of the page can be determined.
      */
-    suspend fun repositoryIssues(owner: String, repository: String, cursor: String? = null): List<Issue> {
-        val query = IssuesQuery(IssuesQuery.Variables(owner, repository, cursor))
-        val result = client.execute(query)
+    suspend fun repositoryIssues(owner: String, repository: String, cursor: String? = null): Result<List<Issue>> =
+        runCatching {
+            val query = IssuesQuery(IssuesQuery.Variables(owner, repository, cursor))
+            val result = client.executeAndCheck(query)
 
-        return result.data?.repository?.issues?.edges.orEmpty().mapNotNull { it?.node }
+            result.data?.repository?.issues?.edges.orEmpty().mapNotNull { it?.node }
+        }
+}
+
+/**
+ * Execute the given [request] and check whether the result contains errors. If so, throw a [QueryException].
+ */
+private suspend fun <T : Any> GraphQLKtorClient.executeAndCheck(
+    request: GraphQLClientRequest<T>
+): GraphQLClientResponse<T> {
+    val result = execute(request)
+
+    result.errors?.let { errors ->
+        throw QueryException("Result of query '${request.operationName}' contains errors.", errors)
     }
+
+    return result
 }

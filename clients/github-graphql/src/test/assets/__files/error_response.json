@@ -1,0 +1,21 @@
+{
+  "data": {
+    "repository": null
+  },
+  "errors": [
+    {
+      "type": "EXCESSIVE_PAGINATION",
+      "path": [
+        "repository",
+        "issues"
+      ],
+      "locations": [
+        {
+          "line": 3,
+          "column": 9
+        }
+      ],
+      "message": "Requesting 101 records on the `issues` connection exceeds the `first` limit of 100 records."
+    }
+  ]
+}
