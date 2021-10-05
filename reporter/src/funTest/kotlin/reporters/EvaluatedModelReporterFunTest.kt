@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +60,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<String, String> = emptyMap()): String {
     val input = ReporterInput(
         ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions()),
+        resolutionProvider = DefaultResolutionProvider.create(ortResult),
         howToFixTextProvider = { "Some how to fix text." }
     )
 
