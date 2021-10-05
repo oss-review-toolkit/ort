@@ -22,7 +22,6 @@
 package org.ossreviewtoolkit.utils
 
 import java.io.File
-import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
 
@@ -331,38 +330,4 @@ fun <R> temporaryProperties(vararg properties: Pair<String, String?>, block: () 
             value?.also { System.setProperty(key, it) } ?: System.clearProperty(key)
         }
     }
-}
-
-/**
- * Trap a system exit call in [block]. This is useful e.g. when calling the Main class of a command line tool
- * programmatically. Return the exit code or null if no system exit call was trapped.
- */
-fun trapSystemExitCall(block: () -> Unit): Int? {
-    // Define a custom security exception which we can catch in order to ignore it.
-    class ExitTrappedException : SecurityException()
-
-    var exitCode: Int? = null
-    val originalSecurityManager = System.getSecurityManager()
-
-    System.setSecurityManager(object : SecurityManager() {
-        override fun checkPermission(perm: Permission) {
-            if (perm.name.startsWith("exitVM")) {
-                exitCode = perm.name.substringAfter('.').toIntOrNull()
-                throw ExitTrappedException()
-            }
-
-            originalSecurityManager?.checkPermission(perm)
-        }
-    })
-
-    @Suppress("SwallowedException")
-    try {
-        block()
-    } catch (e: ExitTrappedException) {
-        // Ignore our own custom security exception.
-    } finally {
-        System.setSecurityManager(originalSecurityManager)
-    }
-
-    return exitCode
 }
