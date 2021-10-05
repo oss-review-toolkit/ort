@@ -125,14 +125,14 @@ class GitHubServiceTest : WordSpec({
 
     "repositoryIssues" should {
         "return the issues of a repository" {
-            wiremock.stubQuery("issues", repoVariablesRegex(), "issues_response.json")
+            wiremock.stubQuery("issues", repoVariablesRegex(Paging.MAX_PAGE_SIZE), "issues_response.json")
 
             val service = createService(wiremock)
 
             val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
 
-            issuesResult.check { issues ->
-                val titles = issues.map(Issue::title)
+            issuesResult.check { pagedResult ->
+                val titles = pagedResult.items.map(Issue::title)
 
                 titles should containExactly(
                     "No license and copyright information in the files",
@@ -140,7 +140,7 @@ class GitHubServiceTest : WordSpec({
                     "downloader: Add Mercurial support"
                 )
 
-                with(issues[2]) {
+                with(pagedResult.items[2]) {
                     url shouldBe "https://github.com/oss-review-toolkit/ort/issues/85"
                     bodyText shouldBe "Add support for Mercurial repositories to the downloader module."
                     closed shouldBe true
@@ -151,6 +151,31 @@ class GitHubServiceTest : WordSpec({
                     val labels = labels?.edges.orEmpty().mapNotNull { it?.node?.name }
                     labels should containExactlyInAnyOrder("enhancement", "downloader")
                 }
+
+                pagedResult.pageSize shouldBe Paging.MAX_PAGE_SIZE
+                pagedResult.cursor should beNull()
+            }
+        }
+
+        "support paging" {
+            val paging = Paging(pageSize = PAGE_SIZE, cursor = "some-cursor")
+            wiremock.stubQuery("issues", repoVariablesRegex(cursor = paging.cursor), "issues_response_paged.json")
+
+            val service = createService(wiremock)
+
+            val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME, paging)
+
+            issuesResult.check { pagedResult ->
+                val titles = pagedResult.items.map(Issue::title)
+
+                titles should containExactly(
+                    "No license and copyright information in the files",
+                    "Consider using a \"purl\" as the package identifier",
+                    "downloader: Add Mercurial support"
+                )
+
+                pagedResult.pageSize shouldBe PAGE_SIZE
+                pagedResult.cursor shouldBe "Y3Vyc29yOnYyOpHOEJmL_w=="
             }
         }
     }
@@ -161,6 +186,7 @@ private const val TOKEN = "<test_oauth_token>"
 private const val ENDPOINT = "/graphql"
 private const val REPO_OWNER = "oss-review-toolkit"
 private const val REPO_NAME = "ort"
+private const val PAGE_SIZE = 32
 
 /**
  * Create a [GitHubService] instance that is configured to access the given mock [server].
@@ -204,9 +230,13 @@ private fun field(key: String, value: String) = "${key.q().p()}\\s*:\\s*$value"
 /**
  * Generate a regular expression that matches the given pairs of [variables].
  */
-private fun variablesRegex(variables: List<Pair<String, String>>): String {
-    val fields = variables.joinToString(separator = ",\\s*", prefix = "\\{\\s*", postfix = "\\s*}") { variable ->
-        field(variable.first, variable.second.q().p())
+private fun variablesRegex(variables: List<Pair<String, Any>>): String {
+    val fields = variables.joinToString(separator = ",\\s*", prefix = "\\{\\s*", postfix = "\\s*}") { (n, v) ->
+        val value = when (v) {
+            is String -> v.q().p()
+            else -> v.toString()
+        }
+        field(n, value)
     }
 
     val variableObj = field("variables", fields)
@@ -217,10 +247,11 @@ private fun variablesRegex(variables: List<Pair<String, String>>): String {
  * Generate a regular expression that matches the variables for a specific repository. Optionally, a [cursor]
  * variable can be provided.
  */
-private fun repoVariablesRegex(cursor: String? = null): String =
+private fun repoVariablesRegex(pageSize: Int = PAGE_SIZE, cursor: String? = null): String =
     variablesRegex(listOfNotNull(
         "repo_owner" to REPO_OWNER,
         "repo_name" to REPO_NAME,
+        "page_size" to pageSize,
         cursor?.let { "cursor" to it }
     ))
 

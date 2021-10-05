@@ -79,15 +79,21 @@ class GitHubService private constructor(
     }
 
     /**
-     * Return a list with [Issue]s contained in [repository] owned by [owner]. If paging is used, with [cursor] the
-     * start of the page can be determined.
+     * Return a list with [Issue]s contained in [repository] owned by [owner] using the specified [paging].
      */
-    suspend fun repositoryIssues(owner: String, repository: String, cursor: String? = null): Result<List<Issue>> =
+    suspend fun repositoryIssues(
+        owner: String,
+        repository: String,
+        paging: Paging = Paging.INITIAL
+    ): QueryResult<Issue> =
         runCatching {
-            val query = IssuesQuery(IssuesQuery.Variables(owner, repository, cursor))
+            val query = IssuesQuery(IssuesQuery.Variables(owner, repository, paging.pageSize, paging.cursor))
             val result = client.executeAndCheck(query)
 
-            result.data?.repository?.issues?.edges.orEmpty().mapNotNull { it?.node }
+            val issuesConnection = result.data?.repository?.issues
+            val pageInfo = issuesConnection?.pageInfo
+            val nextCursor = pageInfo?.endCursor?.takeIf { pageInfo.hasNextPage }
+            PagedResult(issuesConnection?.edges.orEmpty().mapNotNull { it?.node }, paging.pageSize, nextCursor)
         }
 }
 

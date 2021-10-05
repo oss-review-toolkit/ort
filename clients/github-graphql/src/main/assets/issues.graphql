@@ -1,8 +1,7 @@
-query IssuesQuery($repo_owner: String!, $repo_name: String!, $cursor:String) {
+query IssuesQuery($repo_owner: String!, $repo_name: String!, $page_size: Int!, $cursor: String) {
     repository(owner: $repo_owner, name: $repo_name) {
-        issues(first: 100, after: $cursor) {
+        issues(first: $page_size, after: $cursor) {
             edges {
-                cursor
                 node {
                     title
                     url
@@ -19,6 +18,10 @@ query IssuesQuery($repo_owner: String!, $repo_name: String!, $cursor:String) {
                         }
                     }
                 }
+            }
+            pageInfo {
+                endCursor
+                hasNextPage
             }
         }
     }
