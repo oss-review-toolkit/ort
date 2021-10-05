@@ -307,7 +307,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedIssues(threshold: Severity = input.ortConfig.severeIssueThreshold) =
             input.ortResult.collectIssues().values.flatten().any { issue ->
-                issue.severity >= threshold && input.resolutionProvider.getIssueResolutionsFor(issue).isEmpty()
+                issue.severity >= threshold && !input.resolutionProvider.isResolved(issue)
             }
 
         /**
@@ -318,8 +318,7 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeIssueThreshold) =
             input.ortResult.evaluator?.violations?.any { violation ->
-                violation.severity >= threshold && input.resolutionProvider.getRuleViolationResolutionsFor(violation)
-                    .isEmpty()
+                violation.severity >= threshold && !input.resolutionProvider.isResolved(violation)
             } ?: false
 
         /**
@@ -327,7 +326,7 @@ class FreemarkerTemplateProcessor(
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
-                vulnerabilities.filter { input.resolutionProvider.getVulnerabilityResolutionsFor(it).isEmpty() }
+                vulnerabilities.filterNot { input.resolutionProvider.isResolved(it) }
     }
 }
 

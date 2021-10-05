@@ -74,7 +74,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
         val timeoutIssues = ortResult
             .getScanIssues(omitExcluded)
             .filter {
-                it.message.startsWith("ERROR: Timeout") && resolutionProvider.getIssueResolutionsFor(it).isEmpty()
+                it.message.startsWith("ERROR: Timeout") && !resolutionProvider.isResolved(it)
             }
 
         val generatedResolutions = timeoutIssues.mapTo(mutableSetOf()) {
