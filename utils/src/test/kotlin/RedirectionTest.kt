@@ -21,11 +21,15 @@ package org.ossreviewtoolkit.utils
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.extensions.system.SpecSystemExitListener
+import io.kotest.extensions.system.SystemExitException
 import io.kotest.matchers.shouldBe
 
 import java.util.Scanner
 
 class RedirectionTest : WordSpec({
+    listener(SpecSystemExitListener)
+
     "Redirecting output" should {
         // Use a relatively large number of lines that results in more than 64k to be written to test against the pipe
         // buffer limit on Linux, see https://unix.stackexchange.com/a/11954/53328.
@@ -76,16 +80,16 @@ class RedirectionTest : WordSpec({
         }
 
         "work when trapping exit calls" {
-            var exitCode: Int? = null
+            var e: SystemExitException? = null
 
             val stdout = redirectStdout {
-                exitCode = trapSystemExitCall {
+                e = shouldThrow<SystemExitException> {
                     for (i in 1..numberOfLines) System.out.println("stdout: $i")
                     System.exit(42)
                 }
             }
 
-            exitCode shouldBe 42
+            e?.exitCode shouldBe 42
 
             // The last printed line has a newline, resulting in a trailing blank line.
             val stdoutLines = stdout.lines().dropLast(1)
