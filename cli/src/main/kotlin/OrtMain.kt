@@ -81,26 +81,44 @@ data class GlobalOptions(
  * Helper class to collect severity statistics.
  */
 internal class SeverityStats(
-    private val counts: Map<Severity, Int>
+    private val resolvedCounts: Map<Severity, Int>,
+    private val unresolvedCounts: Map<Severity, Int>
 ) {
     companion object {
-        fun createFromIssues(issues: Collection<OrtIssue>) =
-            SeverityStats(issues.groupingBy { it.severity }.eachCount())
+        fun createFromIssues(
+            resolvedIssues: Collection<OrtIssue>,
+            unresolvedIssues: Collection<OrtIssue>
+        ) =
+            SeverityStats(
+                resolvedCounts = resolvedIssues.groupingBy { it.severity }.eachCount(),
+                unresolvedCounts = unresolvedIssues.groupingBy { it.severity }.eachCount()
+            )
 
-        fun createFromRuleViolations(ruleViolations: Collection<RuleViolation>) =
-            SeverityStats(ruleViolations.groupingBy { it.severity }.eachCount())
+        fun createFromRuleViolations(
+            resolvedRuleViolations: Collection<RuleViolation>,
+            unresolvedRuleViolations: Collection<RuleViolation>
+        ) =
+            SeverityStats(
+                resolvedCounts = resolvedRuleViolations.groupingBy { it.severity }.eachCount(),
+                unresolvedCounts = unresolvedRuleViolations.groupingBy { it.severity }.eachCount()
+            )
     }
 
     /**
-     * Get the count for [severity].
+     * Get the resolved count for [severity].
      */
-    fun getSeverityCount(severity: Severity) = counts.getOrDefault(severity, 0)
+    fun getResolvedCount(severity: Severity) = resolvedCounts.getOrDefault(severity, 0)
 
     /**
-     * Count all severities above or equal to [threshold].
+     * Get the unresolved count for [severity].
      */
-    fun getSeverityCountWithThreshold(threshold: Severity) =
-        counts.entries.sumOf { (severity, count) -> if (severity >= threshold) count else 0 }
+    fun getUnresolvedCount(severity: Severity) = unresolvedCounts.getOrDefault(severity, 0)
+
+    /**
+     * Count all unresolved severities above or equal to [threshold].
+     */
+    fun getUnresolvedCountWithThreshold(threshold: Severity) =
+        unresolvedCounts.entries.sumOf { (severity, count) -> if (severity >= threshold) count else 0 }
 }
 
 /**
@@ -108,13 +126,25 @@ internal class SeverityStats(
  * [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
  */
 internal fun concludeSeverityStats(stats: SeverityStats, threshold: Severity, severeStatusCode: Int) {
-    val hintCount = stats.getSeverityCount(Severity.HINT)
-    val warningCount = stats.getSeverityCount(Severity.WARNING)
-    val errorCount = stats.getSeverityCount(Severity.ERROR)
+    val resolvedHintCount = stats.getResolvedCount(Severity.HINT)
+    val resolvedWarningCount = stats.getResolvedCount(Severity.WARNING)
+    val resolvedErrorCount = stats.getResolvedCount(Severity.ERROR)
 
-    println("Found $errorCount error(s), $warningCount warning(s), $hintCount hint(s).")
+    println(
+        "Found $resolvedErrorCount resolved error(s), $resolvedWarningCount resolved warning(s), " +
+                "$resolvedHintCount resolved hint(s)."
+    )
 
-    val severeIssueCount = stats.getSeverityCountWithThreshold(threshold)
+    val unresolvedHintCount = stats.getUnresolvedCount(Severity.HINT)
+    val unresolvedWarningCount = stats.getUnresolvedCount(Severity.WARNING)
+    val unresolvedErrorCount = stats.getUnresolvedCount(Severity.ERROR)
+
+    println(
+        "Found $unresolvedErrorCount unresolved error(s), $unresolvedWarningCount unresolved warning(s), " +
+                "$unresolvedHintCount unresolved hint(s)."
+    )
+
+    val severeIssueCount = stats.getUnresolvedCountWithThreshold(threshold)
 
     if (severeIssueCount > 0) {
         println(

@@ -52,10 +52,12 @@ import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValueOrNull
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -113,6 +115,15 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
+
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue and rule violation resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
         .configurationGroup()
 
     private val useClearlyDefinedCurations by option(
@@ -206,7 +217,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             throw ProgramResult(1)
         }
 
-        val severityStats = SeverityStats.createFromIssues(analyzerResult.collectIssues().flatMap { it.value })
+        val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
+        val (resolvedIssues, unresolvedIssues) =
+            analyzerResult.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
+        val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
+
         concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
     }
 }

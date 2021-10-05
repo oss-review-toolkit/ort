@@ -38,12 +38,16 @@ import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.SeverityStats
 import org.ossreviewtoolkit.cli.concludeSeverityStats
+import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
@@ -77,6 +81,15 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
                 "times. For example: --label distribution=external"
     ).associate()
+
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue and rule violation resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .configurationGroup()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -127,7 +140,11 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
             throw ProgramResult(1)
         }
 
-        val severityStats = SeverityStats.createFromIssues(advisorResults.collectIssues().flatMap { it.value })
+        val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
+        val (resolvedIssues, unresolvedIssues) =
+            advisorResults.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
+        val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
+
         concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
     }
 }
