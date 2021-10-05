@@ -148,8 +148,7 @@ class GitHubServiceTest : WordSpec({
                     createdAt shouldBe "2017-12-01T15:19:39Z"
                     lastEditedAt should beNull()
 
-                    val labels = labels?.edges.orEmpty().mapNotNull { it?.node?.name }
-                    labels should containExactlyInAnyOrder("enhancement", "downloader")
+                    labels() should containExactlyInAnyOrder("enhancement", "downloader")
                 }
 
                 pagedResult.pageSize shouldBe Paging.MAX_PAGE_SIZE

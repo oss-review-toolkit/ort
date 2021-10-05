@@ -98,6 +98,11 @@ class GitHubService private constructor(
 }
 
 /**
+ * Return a list with the names of the labels defined for this [Issue].
+ */
+fun Issue.labels(): List<String> = labels?.edges.orEmpty().mapNotNull { it?.node?.name }
+
+/**
  * Execute the given [request] and check whether the result contains errors. If so, throw a [QueryException].
  */
 private suspend fun <T : Any> GraphQLKtorClient.executeAndCheck(
