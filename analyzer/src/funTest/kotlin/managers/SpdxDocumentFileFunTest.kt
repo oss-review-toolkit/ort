@@ -73,8 +73,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                     definitionFilePath = packageFileCurl.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
                     authors = sortedSetOf("Daniel Stenberg (daniel@haxx.se)"),
                     declaredLicenses = sortedSetOf("curl"),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = VcsInfo(
+                    vcs = VcsInfo(
                         type = VcsType.GIT,
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
@@ -93,8 +92,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                     definitionFilePath = packageFileZlib.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
                     authors = sortedSetOf("Jean-loup Gailly", "Mark Adler"),
                     declaredLicenses = sortedSetOf("Zlib"),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = VcsInfo(
+                    vcs = VcsInfo(
                         type = VcsType.GIT,
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,

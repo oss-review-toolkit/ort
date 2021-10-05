@@ -9,15 +9,15 @@ project:
   declared_licenses_processed:
     spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   vcs:
-    type: ""
-    url: ""
-    revision: ""
+    type: "Git"
+    url: "ssh://gitlab.example.com:3389/products/xyz.git"
+    revision: "b2c358080011af6a366d2512a25a379fbe7b1f78"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project"
+    url: "ssh://gitlab.example.com:3389/products/xyz.git"
+    revision: "b2c358080011af6a366d2512a25a379fbe7b1f78"
+    path: ""
   homepage_url: "https://example.com/products/xyz"
   scopes:
   - name: "default"
