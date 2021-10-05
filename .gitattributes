@@ -34,3 +34,7 @@ spdx-utils/src/main/resources/licenses/*	linguist-detectable=false
 
 # Use Unix line endings for the expected control file of a Debian package.
 utils/src/test/assets/control-expected.txt  text eol=lf
+
+# Use Unix line endings for *.graphql files. This is mainly done to prevent that tests need to fiddle with
+# different platform-specific line endings.
+*.graphql     text eol=lf

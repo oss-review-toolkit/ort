@@ -1,0 +1,25 @@
+query IssuesQuery($repo_owner: String!, $repo_name: String!, $cursor:String) {
+    repository(owner: $repo_owner, name: $repo_name) {
+        issues(first: 100, after: $cursor) {
+            edges {
+                cursor
+                node {
+                    title
+                    url
+                    bodyText
+                    closed
+                    closedAt
+                    createdAt
+                    lastEditedAt
+                    labels(first: 100) {
+                        edges {
+                            node {
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -56,6 +56,10 @@ Files: reporter-web-app/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: clients/github-graphql/src/main/assets/*
+Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
 # Third-party files.
 
 Files: gradlew*
@@ -81,3 +85,7 @@ License: CC0-1.0
 Files: spdx-utils/src/test/resources/spdx-spec-examples/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC-BY-3.0
+
+Files: clients/github-graphql/src/main/assets/schema.docs.graphql
+Copyright: 2017 Gregor Martynus
+License: MIT
