@@ -36,6 +36,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.SeverityStats
 import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
@@ -126,7 +127,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
             throw ProgramResult(1)
         }
 
-        val counts = advisorResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
+        val severityStats = SeverityStats.createFromIssues(advisorResults.collectIssues().flatMap { it.value })
+        concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
     }
 }
