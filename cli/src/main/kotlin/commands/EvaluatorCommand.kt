@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
+import org.ossreviewtoolkit.cli.SeverityStats
 import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
@@ -301,8 +302,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             writeOrtResult(ortResultOutput, outputFiles, "evaluation")
         }
 
-        val counts = evaluatorRun.violations.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
+        val severityStats = SeverityStats.createFromRuleViolations(evaluatorRun.violations)
+        concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
     }
 }
 

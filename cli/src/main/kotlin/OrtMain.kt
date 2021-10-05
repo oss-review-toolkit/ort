@@ -43,6 +43,8 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.cli.commands.*
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -76,22 +78,43 @@ data class GlobalOptions(
 )
 
 /**
- * A helper function to print statistics about the [counts] of severities. If there are severities equal to or greater
- * than [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
+ * Helper class to collect severity statistics.
  */
-internal fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
-    var severeIssueCount = 0
+internal class SeverityStats(
+    private val counts: Map<Severity, Int>
+) {
+    companion object {
+        fun createFromIssues(issues: Collection<OrtIssue>) =
+            SeverityStats(issues.groupingBy { it.severity }.eachCount())
 
-    fun getSeverityCount(severity: Severity) =
-        counts.getOrDefault(severity, 0).also { count ->
-            if (severity >= threshold) severeIssueCount += count
-        }
+        fun createFromRuleViolations(ruleViolations: Collection<RuleViolation>) =
+            SeverityStats(ruleViolations.groupingBy { it.severity }.eachCount())
+    }
 
-    val hintCount = getSeverityCount(Severity.HINT)
-    val warningCount = getSeverityCount(Severity.WARNING)
-    val errorCount = getSeverityCount(Severity.ERROR)
+    /**
+     * Get the count for [severity].
+     */
+    fun getSeverityCount(severity: Severity) = counts.getOrDefault(severity, 0)
+
+    /**
+     * Count all severities above or equal to [threshold].
+     */
+    fun getSeverityCountWithThreshold(threshold: Severity) =
+        counts.entries.sumOf { (severity, count) -> if (severity >= threshold) count else 0 }
+}
+
+/**
+ * A helper function to print statistics about the severity [stats]. If there are severities equal to or greater than
+ * [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
+ */
+internal fun concludeSeverityStats(stats: SeverityStats, threshold: Severity, severeStatusCode: Int) {
+    val hintCount = stats.getSeverityCount(Severity.HINT)
+    val warningCount = stats.getSeverityCount(Severity.WARNING)
+    val errorCount = stats.getSeverityCount(Severity.ERROR)
 
     println("Found $errorCount error(s), $warningCount warning(s), $hintCount hint(s).")
+
+    val severeIssueCount = stats.getSeverityCountWithThreshold(threshold)
 
     if (severeIssueCount > 0) {
         println(

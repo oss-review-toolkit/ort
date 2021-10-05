@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.SeverityStats
 import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
@@ -205,7 +206,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             throw ProgramResult(1)
         }
 
-        val counts = analyzerResult.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
+        val severityStats = SeverityStats.createFromIssues(analyzerResult.collectIssues().flatMap { it.value })
+        concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
     }
 }

@@ -44,6 +44,7 @@ import java.io.File
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.SeverityStats
 import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.outputGroup
@@ -195,8 +196,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             throw ProgramResult(1)
         }
 
-        val counts = scanResults.collectIssues().flatMap { it.value }.groupingBy { it.severity }.eachCount()
-        concludeSeverityStats(counts, config.severeIssueThreshold, 2)
+        val severityStats = SeverityStats.createFromIssues(scanResults.collectIssues().flatMap { it.value })
+        concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
     }
 
     private fun run(nativeOutputDir: File, config: OrtConfiguration): OrtResult {
