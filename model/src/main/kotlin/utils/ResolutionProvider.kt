@@ -53,4 +53,19 @@ interface ResolutionProvider {
      * in [ortResult].
      */
     fun getResolutionsFor(ortResult: OrtResult): Resolutions
+
+    /**
+     * Return true if there is at least one issue resolution that matches [issue].
+     */
+    fun isResolved(issue: OrtIssue): Boolean = getIssueResolutionsFor(issue).isNotEmpty()
+
+    /**
+     * Return true if there is at least one rule violation resolution that matches [violation].
+     */
+    fun isResolved(violation: RuleViolation): Boolean = getRuleViolationResolutionsFor(violation).isNotEmpty()
+
+    /**
+     * Return true if there is at least one vulnerability resolution that matches [vulnerability].
+     */
+    fun isResolved(vulnerability: Vulnerability): Boolean = getVulnerabilityResolutionsFor(vulnerability).isNotEmpty()
 }

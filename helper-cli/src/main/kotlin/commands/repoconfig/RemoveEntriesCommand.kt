@@ -110,8 +110,8 @@ internal class RemoveEntriesCommand : CliktCommand(
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(resolutionsFile = resolutionsFile)
-        val notGloballyResolvedIssues = ortResult.collectIssues().values.flatten().filter {
-            resolutionProvider.getIssueResolutionsFor(it).isEmpty()
+        val notGloballyResolvedIssues = ortResult.collectIssues().values.flatten().filterNot {
+            resolutionProvider.isResolved(it)
         }
         val issueResolutions = ortResult.getResolutions().issues.filter { resolution ->
             notGloballyResolvedIssues.any { resolution.matches(it) }
