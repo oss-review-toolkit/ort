@@ -174,6 +174,10 @@ RUN tar xf /opt/ort.tar -C /opt/ort --strip-components 1 && \
     rm /opt/ort.tar && \
     /opt/ort/bin/ort requirements
 
+# Use the most recent version of Java 11 under '/usr/bin/java'. Note that '/opt/java/openjdk/bin' is outdated and leads
+# to issues with analyzing some SBT projects, see https://github.com/oss-review-toolkit/ort/issues/4543.
+RUN export PATH=$(echo PATH | sed 's/\/opt\/java\/openjdk\/bin/\/usr\/bin\/java/g')
+
 COPY --from=build /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
 COPY --from=build /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
 
