@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,17 +71,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     override fun run() {
         val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfigurationFile)
 
-        val resolutionProvider = DefaultResolutionProvider().apply {
-            var resolutions = Resolutions()
-
-            resolutionsFile?.let {
-                resolutions = resolutions.merge(it.readValue())
-            }
-
-            resolutions = resolutions.merge(ortResult.getResolutions())
-
-            add(resolutions)
-        }
+        val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
 
         val timeoutIssues = ortResult
             .getScanIssues(omitExcluded)
