@@ -68,11 +68,13 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
@@ -179,6 +181,15 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
+
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue and rule violation resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
         .configurationGroup()
 
     private val labels by option(
@@ -294,15 +305,19 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             println(violation.format())
         }
 
-        outputDir?.let { absoluteOutputDir ->
-            // Note: This overwrites any existing EvaluatorRun from the input file.
-            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).mergeLabels(labels)
+        // Note: This overwrites any existing EvaluatorRun from the input file.
+        val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).mergeLabels(labels)
 
+        outputDir?.let { absoluteOutputDir ->
             absoluteOutputDir.safeMkdirs()
             writeOrtResult(ortResultOutput, outputFiles, "evaluation")
         }
 
-        val severityStats = SeverityStats.createFromRuleViolations(evaluatorRun.violations)
+        val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
+        val (resolvedViolations, unresolvedViolations) =
+            evaluatorRun.violations.partition { resolutionProvider.isResolved(it) }
+        val severityStats = SeverityStats.createFromRuleViolations(resolvedViolations, unresolvedViolations)
+
         concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
     }
 }
