@@ -570,8 +570,8 @@ class SpdxDocumentFile(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.originator.wrapPresentInSortedSet(),
             declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, projectPackage.homepage),
+            vcs = projectPackage.getVcsInfo()
+                ?: processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, projectPackage.homepage),
             homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
             scopeDependencies = scopes
         )
