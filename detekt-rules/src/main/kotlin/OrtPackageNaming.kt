@@ -60,6 +60,7 @@ class OrtPackageNaming : Rule() {
             "clearly-defined" -> ".clients.clearlydefined"
             "detekt-rules" -> ".detekt"
             "fossid-webapp" -> ".clients.fossid"
+            "github-graphql" -> ".clients.github"
             "helper-cli" -> ".helper"
             "nexus-iq" -> ".clients.nexusiq"
             "oss-index" -> ".clients.ossindex"
