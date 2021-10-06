@@ -86,6 +86,7 @@ data class Environment(
             "http_proxy",
             "https_proxy",
             "JAVA_HOME",
+            "PATH",
             "ANDROID_HOME",
             "GOPATH"
         )
