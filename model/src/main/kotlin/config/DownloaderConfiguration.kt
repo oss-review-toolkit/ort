@@ -25,6 +25,11 @@ import org.ossreviewtoolkit.spdx.getDuplicates
 
 data class DownloaderConfiguration(
     /**
+     * Toggle whether to allow downloads using symbolic names that point to moving revisions, like Git branches.
+     */
+    val allowMovingRevisions: Boolean = false,
+
+    /**
      * The [categories][LicenseCategory] licenses of packages need to be part of in order to get included into the
      * download, or an empty list to include all packages.
      */

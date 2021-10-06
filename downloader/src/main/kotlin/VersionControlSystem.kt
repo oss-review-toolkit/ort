@@ -197,8 +197,8 @@ abstract class VersionControlSystem {
 
     /**
      * Download the source code as specified by the [pkg] information to [targetDir]. [allowMovingRevisions] toggles
-     * whether symbolic names, for which the revision they point to might change, are accepted or not. If [recursive] is
-     * `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too.
+     * whether to allow downloads using symbolic names that point to moving revisions, like Git branches. If [recursive]
+     * is `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too.
      *
      * @return An object describing the downloaded working tree.
      *
@@ -253,8 +253,8 @@ abstract class VersionControlSystem {
      * The provided [workingTree] must have been created from the [processed VCS information][Package.vcsProcessed] of
      * the [package][pkg] for the function to return correct results.
      *
-     * [allowMovingRevisions] toggles whether symbolic names, for which the revision they point to might change, are
-     * accepted or not.
+     * [allowMovingRevisions] toggles whether candidates with symbolic names that point to moving revisions, like Git
+     * branches, are accepted or not.
      *
      * Revision candidates are created from the [processed VCS information[Package.vcsProcessed] of the [package][pkg]
      * and from [guessing revisions][WorkingTree.guessRevisionName] based on the name and version of the [package][pkg].

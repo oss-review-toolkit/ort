@@ -29,7 +29,6 @@ import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
@@ -130,12 +129,6 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         .convert { it.absoluteFile.normalize() }
         .required()
         .outputGroup()
-
-    private val allowMovingRevisions by option(
-        "--allow-moving-revisions",
-        help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revisions " +
-                "are forbidden because they are not pointing to a fixed revision of the source code."
-    ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -246,7 +239,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                 packageDownloadDirs.forEach { (pkg, dir) ->
                     try {
-                        Downloader(config.downloader).download(pkg, dir, allowMovingRevisions)
+                        Downloader(config.downloader).download(pkg, dir)
 
                         if (archiveMode == ArchiveMode.ENTITY) {
                             val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
@@ -320,7 +313,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     // Always allow moving revisions when directly downloading a single project only. This is for
                     // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
                     // project needs to be downloaded.
-                    Downloader(config.downloader).download(dummyPackage, outputDir, allowMovingRevisions = true)
+                    Downloader(config.downloader.copy(allowMovingRevisions = true)).download(dummyPackage, outputDir)
                 } catch (e: DownloadException) {
                     e.showStackTrace()
 
