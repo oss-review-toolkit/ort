@@ -94,7 +94,7 @@ interface OssIndexService {
         val coordinates: String,
 
         /** The description of the component. */
-        val description: String,
+        val description: String? = null,
 
         /** The reference URL of the component on OSS Index itself. */
         val reference: String,
