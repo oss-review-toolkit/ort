@@ -19,6 +19,7 @@
  */
 
 val kotlinxCoroutinesVersion: String by project
+val mockkVersion: String by project
 val wiremockVersion: String by project
 
 plugins {
@@ -30,9 +31,11 @@ dependencies {
     api(project(":clients:nexus-iq"))
     api(project(":clients:oss-index"))
     api(project(":clients:vulnerable-code"))
+    api(project(":clients:github-graphql"))
     api(project(":model"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 
     testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
