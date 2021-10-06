@@ -178,6 +178,52 @@ class GitHubServiceTest : WordSpec({
             }
         }
     }
+
+    "repositoryReleases" should {
+        "return the releases of a repository" {
+            wiremock.stubQuery("releases", repoVariablesRegex(Paging.MAX_PAGE_SIZE), "releases_response.json")
+
+            val service = createService(wiremock)
+
+            val releasesResult = service.repositoryReleases(REPO_OWNER, REPO_NAME)
+
+            releasesResult.check { pagedResult ->
+                val names = pagedResult.items.mapNotNull { it.name }
+
+                names should containExactly(
+                    "Releasing 0.4.4",
+                    "Releasing 0.4.5 version",
+                    "Releasing 0.4.6 version",
+                    "Releasing 0.4.8 version",
+                    "Releasing 0.4.11"
+                )
+
+                with(pagedResult.items.first()) {
+                    publishedAt shouldBe "2018-04-12T18:47:35Z"
+                    tagName shouldBe "0.4.4"
+                    tagCommit?.commitUrl should contain("1ec03fce40b59e2559e3f3affde27042f1a9b644")
+                }
+
+                pagedResult.pageSize shouldBe Paging.MAX_PAGE_SIZE
+                pagedResult.cursor should beNull()
+            }
+        }
+
+        "support paging" {
+            val paging = Paging(pageSize = PAGE_SIZE, cursor = "some-cursor")
+            wiremock.stubQuery("releases", repoVariablesRegex(cursor = paging.cursor), "releases_response_paged.json")
+
+            val service = createService(wiremock)
+
+            val releasesResult = service.repositoryReleases(REPO_OWNER, REPO_NAME, paging)
+
+            releasesResult.check { pagedResult ->
+                pagedResult.items shouldHaveSize 2
+                pagedResult.pageSize shouldBe PAGE_SIZE
+                pagedResult.cursor shouldBe "Y3Vyc29yOnYyOpK5MjAyMC0wNi0yM1QxMzoyNzo1NiswMjowMM4BqJGR"
+            }
+        }
+    }
 })
 
 private const val TEST_FILES_ROOT = "src/test/assets"
