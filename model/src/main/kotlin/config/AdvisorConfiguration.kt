@@ -34,6 +34,7 @@ typealias AdviceProviderOptions = Map<String, String>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AdvisorConfiguration(
+    val gitHubDefects: GitHubDefectsConfiguration? = null,
     val nexusIq: NexusIqConfiguration? = null,
     val vulnerableCode: VulnerableCodeConfiguration? = null,
 
@@ -84,4 +85,22 @@ data class VulnerableCodeConfiguration(
      * The base URL of the VulnerableCode REST API.
      */
     val serverUrl: String
+)
+
+/**
+ * The configuration for the GitHub Defects advisor.
+ */
+data class GitHubDefectsConfiguration(
+    /**
+     * The access token to authenticate against the GitHub GraphQL endpoint.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val token: String?,
+
+    /**
+     * The URL of the GraphQL endpoint to be accessed by the service. If undefined, default is the endpoint of the
+     * official GitHub GraphQL API.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val endpointUrl: String? = null
 )
