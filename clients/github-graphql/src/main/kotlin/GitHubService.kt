@@ -32,6 +32,7 @@ import io.ktor.client.request.header
 import java.net.URI
 
 import org.ossreviewtoolkit.clients.github.issuesquery.Issue
+import org.ossreviewtoolkit.clients.github.releasesquery.Release
 
 /**
  * An exception class to report a GraphQL query execution that yielded errors. From instance, details about the
@@ -95,6 +96,23 @@ class GitHubService private constructor(
             val nextCursor = pageInfo?.endCursor?.takeIf { pageInfo.hasNextPage }
             PagedResult(issuesConnection?.edges.orEmpty().mapNotNull { it?.node }, paging.pageSize, nextCursor)
         }
+
+    /**
+     * Return a list with [Release]s contained in [repository] owned by [owner] using the specified [paging].
+     */
+    suspend fun repositoryReleases(
+        owner: String,
+        repository: String,
+        paging: Paging = Paging.INITIAL
+    ): QueryResult<Release> = runCatching {
+        val query = ReleasesQuery(ReleasesQuery.Variables(owner, repository, paging.pageSize, paging.cursor))
+        val result = client.executeAndCheck(query)
+
+        val releasesConnection = result.data?.repository?.releases
+        val pageInfo = releasesConnection?.pageInfo
+        val nextCursor = pageInfo?.endCursor?.takeIf { pageInfo.hasNextPage }
+        PagedResult(releasesConnection?.edges.orEmpty().mapNotNull { it?.node }, paging.pageSize, nextCursor)
+    }
 }
 
 /**
