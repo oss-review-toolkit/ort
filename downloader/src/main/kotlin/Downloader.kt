@@ -63,11 +63,10 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Download the source code of the [package][pkg] to the [outputDirectory]. The [allowMovingRevisions] parameter
-     * indicates whether VCS downloads accept symbolic names, like branches, instead of only fixed revisions. A
-     * [Provenance] is returned on success or a [DownloadException] is thrown in case of failure.
+     * Download the source code of the [package][pkg] to the [outputDirectory]. A [Provenance] is returned on success or
+     * a [DownloadException] is thrown in case of failure.
      */
-    fun download(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): Provenance {
+    fun download(pkg: Package, outputDirectory: File): Provenance {
         verifyOutputDirectory(outputDirectory)
 
         if (pkg.isMetaDataOnly) return UnknownProvenance
@@ -76,7 +75,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
         config.sourceCodeOrigins.forEach { origin ->
             val provenance = when (origin) {
-                SourceCodeOrigin.VCS -> handleVcsDownload(pkg, outputDirectory, allowMovingRevisions, exception)
+                SourceCodeOrigin.VCS -> handleVcsDownload(pkg, outputDirectory, exception)
                 SourceCodeOrigin.ARTIFACT -> handleSourceArtifactDownload(pkg, outputDirectory, exception)
             }
 
@@ -93,7 +92,6 @@ class Downloader(private val config: DownloaderConfiguration) {
     private fun handleVcsDownload(
         pkg: Package,
         outputDirectory: File,
-        allowMovingRevisions: Boolean,
         exception: DownloadException
     ): Provenance? {
         val vcsMark = TimeSource.Monotonic.markNow()
@@ -104,7 +102,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             val isCargoPackageWithSourceArtifact = pkg.id.type == "Cargo" && pkg.sourceArtifact != RemoteArtifact.EMPTY
 
             if (!isCargoPackageWithSourceArtifact) {
-                val result = downloadFromVcs(pkg, outputDirectory, allowMovingRevisions)
+                val result = downloadFromVcs(pkg, outputDirectory)
                 val vcsInfo = (result as RepositoryProvenance).vcsInfo
 
                 log.perf {
@@ -175,16 +173,13 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Download the source code of the [package][pkg] to the [outputDirectory] using its VCS information. The
-     * [allowMovingRevisions] parameter indicates whether the download accepts symbolic names, like branches, instead of
-     * only fixed revisions. If [recursive] is `true`, any nested repositories (like Git submodules or Mercurial
-     * subrepositories) are downloaded, too. A [Provenance] is returned on success or a [DownloadException] is thrown in
-     * case of failure.
+     * Download the source code of the [package][pkg] to the [outputDirectory] using its VCS information. If [recursive]
+     * is `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too. A
+     * [Provenance] is returned on success or a [DownloadException] is thrown in case of failure.
      */
     fun downloadFromVcs(
         pkg: Package,
         outputDirectory: File,
-        allowMovingRevisions: Boolean,
         recursive: Boolean = true
     ): Provenance {
         verifyOutputDirectory(outputDirectory)
@@ -246,7 +241,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         }
 
         val workingTree = try {
-            applicableVcs.download(pkg, outputDirectory, allowMovingRevisions, recursive)
+            applicableVcs.download(pkg, outputDirectory, config.allowMovingRevisions, recursive)
         } catch (e: DownloadException) {
             // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
             //       non-strict mode.
@@ -262,7 +257,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 outputDirectory.safeMkdirs()
 
                 val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
-                applicableVcs.download(fallbackPkg, outputDirectory, allowMovingRevisions, recursive)
+                applicableVcs.download(fallbackPkg, outputDirectory, config.allowMovingRevisions, recursive)
             } else {
                 throw e
             }

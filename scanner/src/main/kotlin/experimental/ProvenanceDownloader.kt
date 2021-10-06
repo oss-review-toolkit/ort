@@ -60,7 +60,7 @@ class DefaultProvenanceDownloader(config: DownloaderConfiguration) : ProvenanceD
                 val pkg = Package.EMPTY.copy(
                     vcsProcessed = provenance.vcsInfo.copy(revision = provenance.resolvedRevision)
                 )
-                downloader.downloadFromVcs(pkg, downloadDir, allowMovingRevisions = false, recursive = false)
+                downloader.downloadFromVcs(pkg, downloadDir, recursive = false)
             }
         }
     }
