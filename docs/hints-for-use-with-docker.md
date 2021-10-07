@@ -57,3 +57,19 @@ To authenticate with a private Git repository, ORT uses the (semi)standardized `
    ```
 
    **Important:** Ensure that the `.netrc` file has been created at `netrc_folder_path` before running the command, otherwise Docker will create a folder `.netrc` inside the container, instead of mounting a single file.
+
+It is also possible to use `git config` to setup access to private repositories.
+
+1. Configure your `.gitconfig` with your GitHub credentials
+
+    ```shell
+    [url "https://<username>:<password>@github.com"]
+	         insteadOf = https://github.com    
+    ```
+2. Mount the `.gitconfig` into the home directory of the ORT Docker container. By default that is the `/root` directory:
+
+    ```shell
+    docker run -v <workspace_path>:/project -v <gitconfig_path>:/root/.gitconfig ort --info scan (...)
+    ```
+
+   **Important:** Ensure that the `.gitconfig` file has been created at `gitconfig_path` before running the command, otherwise Docker will create a folder `.gitconfig` inside the container, instead of mounting a single file.
