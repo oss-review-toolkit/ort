@@ -192,8 +192,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         versionOption(
             version = env.ortVersion,
             names = setOf("--version", "-v"),
-            help = "Show version information and exit.",
-            message = ::getOrtHeader
+            help = "Show the version and exit.",
+            message = { it }
         )
     }
 
