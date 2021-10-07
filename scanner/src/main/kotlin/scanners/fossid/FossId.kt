@@ -370,7 +370,7 @@ class FossId internal constructor(
             when (response.data?.status) {
                 ScanStatus.FINISHED -> true
 
-                null, ScanStatus.NOT_STARTED, ScanStatus.INTERRUPTED, ScanStatus.NEW -> false
+                null, ScanStatus.NOT_STARTED, ScanStatus.INTERRUPTED, ScanStatus.NEW, ScanStatus.FAILED -> false
 
                 ScanStatus.STARTED, ScanStatus.STARTING, ScanStatus.RUNNING, ScanStatus.SCANNING, ScanStatus.AUTO_ID,
 

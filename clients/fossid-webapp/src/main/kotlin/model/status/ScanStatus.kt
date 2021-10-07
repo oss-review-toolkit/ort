@@ -32,6 +32,11 @@ enum class ScanStatus {
     AUTO_ID,
 
     /**
+     * The scan has failed.
+     */
+    FAILED,
+
+    /**
      * The scan has been completed.
      */
     FINISHED,
