@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -331,6 +332,8 @@ data class GemSpec(
 
             val vcs = if (json.hasNonNull("source_code_uri")) {
                 VcsHost.toVcsInfo(json["source_code_uri"].textValue())
+            } else if (json.hasNonNull("homepage_uri")) {
+                VcsHost.toVcsInfo(json["homepage_uri"].textValue())
             } else {
                 VcsInfo.EMPTY
             }
