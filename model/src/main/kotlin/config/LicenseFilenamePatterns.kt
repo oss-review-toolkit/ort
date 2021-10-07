@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.log
-
 data class LicenseFilenamePatterns(
     /**
      * A list of globs that match default license file names. The patterns are supposed to be used case-insensitively.
@@ -68,7 +66,6 @@ data class LicenseFilenamePatterns(
 
         @Synchronized
         fun configure(patterns: LicenseFilenamePatterns) {
-            log.info { "Configuring the license file patterns." }
             instance = patterns
         }
 
