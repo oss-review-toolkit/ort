@@ -184,7 +184,7 @@ class Bundler(
                 scriptFile.path,
                 workingDir = workingDir,
             )
-            return jsonMapper.readValue(scriptCmd.stdout)
+            return yamlMapper.readValue(scriptCmd.stdout)
         } finally {
             if (!scriptFile.delete()) {
                 log.warn { "Helper script file '$scriptFile' could not be deleted." }

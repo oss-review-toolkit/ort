@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 
 # Copyright (C) 2017-2019 HERE Europe B.V.
+# Copyright (C) 2021 Bosch.IO GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,14 +23,14 @@
 # But parsing the dot / svg output of 'bundle viz' seems to be overhead.
 
 require 'bundler'
-require 'json'
+require 'yaml'
 
 groups = {}
 
 Bundler.load.current_dependencies.each do |dep|
     dep.groups.each do |group|
-        (groups[group] ||= []) << dep.name
+        (groups[group.to_s] ||= []) << dep.name
     end
 end
 
-puts JSON.generate(groups)
+puts(YAML.dump(groups))
