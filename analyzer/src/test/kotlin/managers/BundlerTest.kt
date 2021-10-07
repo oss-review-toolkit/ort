@@ -29,12 +29,13 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.readValue
 
 class BundlerTest : StringSpec({
     "createFromJson() parses JSON metadata for a Gem correctly" {
         val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.json")
 
-        val gemspec = GemSpec.Factory.createFromJson(rspecGemJson.readText())
+        val gemspec = GemSpec.createFromGem(rspecGemJson.readValue())
 
         gemspec shouldBe GemSpec(
             name = "rspec",
