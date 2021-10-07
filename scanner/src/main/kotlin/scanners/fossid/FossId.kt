@@ -534,6 +534,10 @@ class FossId internal constructor(
         val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
             .checkResponse("check scan status", false)
 
+        if (response.data?.status == ScanStatus.FAILED) {
+            throw IllegalStateException("Triggered scan has failed.")
+        }
+
         if (response.data?.status in SCAN_STATE_FOR_TRIGGER) {
             log.info { "Triggering scan as it has not yet been started." }
 
