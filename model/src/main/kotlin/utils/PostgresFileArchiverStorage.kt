@@ -33,6 +33,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 
@@ -56,9 +57,7 @@ class PostgresFileArchiverStorage(
     dataSource: DataSource
 ) : FileArchiverStorage {
     /** Stores the database connection used by this object. */
-    val database = Database.connect(dataSource).apply {
-        defaultFetchSize(1000)
-
+    val database = Database.connect(dataSource, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
         transaction {
             withDataBaseLock {
                 if (!tableExists(FileArchiveTable.tableName)) {
