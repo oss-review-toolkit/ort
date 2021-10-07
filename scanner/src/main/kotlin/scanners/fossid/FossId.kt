@@ -605,17 +605,18 @@ class FossId internal constructor(
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check scan status", false)
 
-            response.data?.let {
-                if (it.status == ScanStatus.FINISHED) {
-                    true
-                } else {
+            when (response.data?.status) {
+                ScanStatus.FINISHED -> true
+                ScanStatus.FAILED -> throw IllegalStateException("Scan waited for has failed.")
+                null -> false
+                else -> {
                     FossId.log.info {
                         "Scan status for scan '$scanCode' is '${response.data?.status}'. Waiting..."
                     }
 
                     false
                 }
-            } ?: false
+            }
         }
 
         requireNotNull(result) { "Timeout while waiting for the scan to complete" }
