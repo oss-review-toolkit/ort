@@ -20,6 +20,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.vdurmont.semver4j.Requirement
@@ -205,7 +206,7 @@ class Bundler(
             // The metadata produced by the "bundler_dependencies_metadata.rb" script separates specs for packages with
             // the "\0" character as delimiter. Always drop the first "Fetching gem metadata from" entry.
             val gemSpecs = scriptCmd.stdout.split('\u0000').drop(1).map {
-                GemSpec.createFromYaml(it)
+                GemSpec.createFromMetadata(yamlMapper.readTree(it))
             }.associateByTo(mutableMapOf()) {
                 it.name
             }
@@ -267,7 +268,7 @@ class Bundler(
         val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.json"
 
         return OkHttpClientHelper.downloadText(url).mapCatching {
-            GemSpec.createFromJson(it)
+            GemSpec.createFromGem(jsonMapper.readTree(it))
         }.onFailure {
             val error = (it as? HttpDownloadError) ?: run {
                 log.warn { "Unable to retrieve metadata for gem '$name' from RubyGems: ${it.message}" }
@@ -317,51 +318,47 @@ data class GemSpec(
     val vcs: VcsInfo,
     val artifact: RemoteArtifact
 ) {
-    companion object Factory {
-        fun createFromYaml(spec: String): GemSpec {
-            val yaml = yamlMapper.readTree(spec)
-
-            val runtimeDependencies = yaml["dependencies"]?.asIterable()?.mapNotNull { dependency ->
+    companion object {
+        fun createFromMetadata(node: JsonNode): GemSpec {
+            val runtimeDependencies = node["dependencies"]?.asIterable()?.mapNotNull { dependency ->
                 dependency["name"]?.textValue()?.takeIf { dependency["type"]?.textValue() == ":runtime" }
             }?.toSet()
 
-            val homepage = yaml["homepage"].textValueOrEmpty()
+            val homepage = node["homepage"].textValueOrEmpty()
             return GemSpec(
-                yaml["name"].textValue(),
-                yaml["version"]["version"].textValue(),
+                node["name"].textValue(),
+                node["version"]["version"].textValue(),
                 homepage,
-                yaml["authors"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
-                yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
-                yaml["description"].textValueOrEmpty(),
+                node["authors"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
+                node["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
+                node["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
                 VcsHost.toVcsInfo(homepage),
                 RemoteArtifact.EMPTY
             )
         }
 
-        fun createFromJson(spec: String): GemSpec {
-            val json = jsonMapper.readTree(spec)
-
-            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { dependency ->
+        fun createFromGem(node: JsonNode): GemSpec {
+            val runtimeDependencies = node["dependencies"]?.get("runtime")?.mapNotNull { dependency ->
                 dependency["name"]?.textValue()
             }?.toSet()
 
-            val vcs = if (json.hasNonNull("source_code_uri")) {
-                VcsHost.toVcsInfo(json["source_code_uri"].textValue())
-            } else if (json.hasNonNull("homepage_uri")) {
-                VcsHost.toVcsInfo(json["homepage_uri"].textValue())
+            val vcs = if (node.hasNonNull("source_code_uri")) {
+                VcsHost.toVcsInfo(node["source_code_uri"].textValue())
+            } else if (node.hasNonNull("homepage_uri")) {
+                VcsHost.toVcsInfo(node["homepage_uri"].textValue())
             } else {
                 VcsInfo.EMPTY
             }
 
-            val artifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
-                val sha = json["sha"].textValue()
-                RemoteArtifact(json["gem_uri"].textValue(), Hash.create(sha))
+            val artifact = if (node.hasNonNull("gem_uri") && node.hasNonNull("sha")) {
+                val sha = node["sha"].textValue()
+                RemoteArtifact(node["gem_uri"].textValue(), Hash.create(sha))
             } else {
                 RemoteArtifact.EMPTY
             }
 
-            val authors = json["authors"]
+            val authors = node["authors"]
                 .textValueOrEmpty()
                 .split(',')
                 .mapNotNullTo(sortedSetOf()) { author ->
@@ -371,12 +368,12 @@ data class GemSpec(
                 }
 
             return GemSpec(
-                json["name"].textValue(),
-                json["version"].textValue(),
-                json["homepage_uri"].textValueOrEmpty(),
+                node["name"].textValue(),
+                node["version"].textValue(),
+                node["homepage_uri"].textValueOrEmpty(),
                 authors,
-                json["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
-                json["description"].textValueOrEmpty(),
+                node["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
+                node["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
                 vcs,
                 artifact
