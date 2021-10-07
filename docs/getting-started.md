@@ -7,6 +7,8 @@ ORT:
 * Install ORT.
 * Analyze the dependencies of `mime-types` using the _analyzer_.
 * Scan the source code of `mime-types` and its dependencies using the `scanner`.
+* Run the evaluator to find any rule violations.
+* Generate reports to show the results.
 
 ## 1. Prerequisites
 
