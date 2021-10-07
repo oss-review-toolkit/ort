@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.readValue
 
 class BundlerTest : StringSpec({
     "createFromJson() parses JSON metadata for a Gem correctly" {
-        val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.json")
+        val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.yaml")
 
         val gemspec = GemSpec.createFromGem(rspecGemJson.readValue())
 
