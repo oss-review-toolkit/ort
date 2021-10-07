@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
@@ -85,9 +86,7 @@ class PostgresStorage(
      * Setup the database.
      */
     private fun setupDatabase(): Database =
-        Database.connect(dataSource).apply {
-            defaultFetchSize(1000)
-
+        Database.connect(dataSource, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
             transaction {
                 withDataBaseLock {
                     if (!tableExists(TABLE_NAME)) {
