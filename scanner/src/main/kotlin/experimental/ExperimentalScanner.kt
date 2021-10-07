@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.Environment
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 
 class ExperimentalScanner(
@@ -320,10 +319,8 @@ class ExperimentalScanner(
         provenance: KnownProvenance,
         scanners: List<LocalScannerWrapper>
     ): Map<LocalScannerWrapper, ScanResult> {
-        val downloadDir = createOrtTempDir() // TODO: Use provided download dir instead.
-
-        try {
-            provenanceDownloader.download(provenance, downloadDir)
+        val downloadDir = try {
+            provenanceDownloader.download(provenance)
         } catch (e: DownloadException) {
             val message = "Could not download provenance $provenance: ${e.collectMessagesAsString()}"
             log.error { message }

@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.containExactly
 
 class ExperimentalScannerTest : WordSpec({
@@ -110,7 +111,7 @@ class ExperimentalScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact, pkgWithVcs))
 
-            verify(exactly = 0) { provenanceDownloader.download(any(), any()) }
+            verify(exactly = 0) { provenanceDownloader.download(any()) }
         }
     }
 
@@ -152,7 +153,7 @@ class ExperimentalScannerTest : WordSpec({
 
             scanner.scan(setOf(pkgWithArtifact, pkgWithVcs))
 
-            verify(exactly = 0) { provenanceDownloader.download(any(), any()) }
+            verify(exactly = 0) { provenanceDownloader.download(any()) }
         }
     }
 
@@ -194,8 +195,8 @@ class ExperimentalScannerTest : WordSpec({
             scanner.scan(setOf(pkgWithArtifact, pkgWithVcs))
 
             verify(exactly = 1) {
-                provenanceDownloader.download(pkgWithArtifact.artifactProvenance(), any())
-                provenanceDownloader.download(pkgWithVcs.repositoryProvenance(), any())
+                provenanceDownloader.download(pkgWithArtifact.artifactProvenance())
+                provenanceDownloader.download(pkgWithVcs.repositoryProvenance())
             }
         }
     }
@@ -601,10 +602,11 @@ private class FakeLocalScannerWrapper : LocalScannerWrapper {
  * provenance, instead of actually downloading the source code.
  */
 private class FakeProvenanceDownloader : ProvenanceDownloader {
-    override fun download(provenance: KnownProvenance, downloadDir: File) {
+    override fun download(provenance: KnownProvenance): File {
         // TODO: Should downloadDir be created if it does not exist?
-        val file = downloadDir.resolve("provenance.txt")
+        val file = createOrtTempDir().resolve("provenance.txt")
         file.writeText(yamlMapper.writeValueAsString(provenance))
+        return file.parentFile
     }
 }
 
