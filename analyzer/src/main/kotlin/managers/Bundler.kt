@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.HttpDownloadError
@@ -265,10 +264,10 @@ class Bundler(
 
     private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
         // See http://guides.rubygems.org/rubygems-org-api-v2/.
-        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.json"
+        val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml"
 
         return OkHttpClientHelper.downloadText(url).mapCatching {
-            GemSpec.createFromGem(jsonMapper.readTree(it))
+            GemSpec.createFromGem(yamlMapper.readTree(it))
         }.onFailure {
             val error = (it as? HttpDownloadError) ?: run {
                 log.warn { "Unable to retrieve metadata for gem '$name' from RubyGems: ${it.message}" }
