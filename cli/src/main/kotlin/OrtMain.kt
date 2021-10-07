@@ -158,7 +158,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
                 // initialized yet.)
                 val isRootCommand = currentContext.invokedSubcommand == null
                 if (isRootCommand && !headerShownBefore) {
-                    appendLine(getVersionHeader(env.ortVersion))
+                    appendLine(getOrtHeader(env.ortVersion))
                     headerShownBefore = true
                 }
 
@@ -193,7 +193,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
             version = env.ortVersion,
             names = setOf("--version", "-v"),
             help = "Show version information and exit.",
-            message = ::getVersionHeader
+            message = ::getOrtHeader
         )
     }
 
@@ -215,11 +215,11 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
                 println(it.getFormattedHelp())
             }
         } else {
-            println(getVersionHeader(env.ortVersion))
+            println(getOrtHeader(env.ortVersion))
         }
     }
 
-    private fun getVersionHeader(version: String): String {
+    private fun getOrtHeader(version: String): String {
         val variables = mutableListOf(
             "$ORT_CONFIG_DIR_ENV_NAME = $ortConfigDirectory",
             "$ORT_DATA_DIR_ENV_NAME = $ortDataDirectory"
