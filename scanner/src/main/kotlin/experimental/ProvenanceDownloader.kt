@@ -29,16 +29,19 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 
 /**
  * An interface that provides functionality to download source code.
  */
 interface ProvenanceDownloader {
     /**
-     * Download the source code specified by the provided [provenance] to the [downloadDir]. Throws a
-     * [DownloadException] if the download fails.
+     * Download the source code specified by the provided [provenance] and return the path to the directory that
+     * contains the downloaded source code.
+     *
+     * Throws a [DownloadException] if the download fails.
      */
-    fun download(provenance: KnownProvenance, downloadDir: File)
+    fun download(provenance: KnownProvenance): File
 }
 
 /**
@@ -48,7 +51,9 @@ interface ProvenanceDownloader {
 class DefaultProvenanceDownloader(config: DownloaderConfiguration) : ProvenanceDownloader {
     private val downloader = Downloader(config)
 
-    override fun download(provenance: KnownProvenance, downloadDir: File) {
+    override fun download(provenance: KnownProvenance): File {
+        val downloadDir = createOrtTempDir()
+
         when (provenance) {
             // TODO: Add dedicated download functions for VcsInfo and RemoteArtifact to the Downloader.
             is ArtifactProvenance -> {
@@ -63,5 +68,7 @@ class DefaultProvenanceDownloader(config: DownloaderConfiguration) : ProvenanceD
                 downloader.downloadFromVcs(pkg, downloadDir, recursive = false)
             }
         }
+
+        return downloadDir
     }
 }
