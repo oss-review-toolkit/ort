@@ -54,9 +54,9 @@ data class Paging(
          * provided [query] function is invoked for each page. The results produced by this function are then passed
          * to [aggregate], using [init] as the initial value of the aggregation.
          */
-        fun <T, A> fetchAll(
+        suspend fun <T, A> fetchAll(
             init: A,
-            query: (Paging) -> QueryResult<T>,
+            query: suspend (Paging) -> QueryResult<T>,
             aggregate: (A, PagedResult<T>) -> A,
             pageSize: Int = MAX_PAGE_SIZE
         ): Result<A> {
