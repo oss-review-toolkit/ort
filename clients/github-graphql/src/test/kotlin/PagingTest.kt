@@ -48,7 +48,7 @@ class PagingTest : WordSpec({
             val queryPageSize = 2
             val maxPage = 3
 
-            val queryFunc: (Paging) -> QueryResult<String> = { paging ->
+            val queryFunc: suspend (Paging) -> QueryResult<String> = { paging ->
                 val pageNo = paging.cursor?.toInt() ?: 0
                 val items = (1..(paging.pageSize)).map { "R${pageNo * paging.pageSize + it}" }
                 val nextCursor = if (pageNo < maxPage) (pageNo + 1).toString() else null
@@ -73,7 +73,7 @@ class PagingTest : WordSpec({
         "handle failures during iteration" {
             val errorPageNo = 5
             val exception = IllegalStateException("Error page")
-            val queryFunc: (Paging) -> QueryResult<String> = { paging ->
+            val queryFunc: suspend (Paging) -> QueryResult<String> = { paging ->
                 val nextCursor = paging.cursor.orEmpty() + "*"
                 nextCursor.takeIf { it.length < errorPageNo }?.let { cursor ->
                     Result.success(PagedResult(emptyList(), paging.pageSize, cursor))
