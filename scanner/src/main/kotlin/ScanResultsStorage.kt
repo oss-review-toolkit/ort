@@ -205,7 +205,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
             log.perf {
                 "Read ${result.result.size} scan results for '${id.toCoordinates()}' from " +
-                        "${javaClass.simpleName} in ${duration.inWholeMilliseconds}ms."
+                        "${javaClass.simpleName} in $duration."
             }
         }
 
@@ -233,7 +233,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
             log.perf {
                 "Read ${result.result.size} scan results for '${pkg.id.toCoordinates()}' from " +
-                        "${javaClass.simpleName} in ${duration.inWholeMilliseconds}ms."
+                        "${javaClass.simpleName} in $duration."
             }
         }
 
@@ -262,7 +262,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
             log.perf {
                 "Read ${result.result.values.sumOf { it.size }} scan results from ${javaClass.simpleName} in " +
-                        "${duration.inWholeMilliseconds}ms."
+                        "$duration."
             }
         }
 
@@ -289,8 +289,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         val (result, duration) = measureTimedValue { addInternal(id, scanResult) }
 
         log.perf {
-            "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in " +
-                    "${duration.inWholeMilliseconds}ms."
+            "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in $duration."
         }
 
         return result

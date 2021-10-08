@@ -86,14 +86,14 @@ class ExperimentalScanner(
         // TODO: Handle issues for packages where provenance cannot be resolved.
         val (packageProvenances, packageProvenanceDuration) = measureTimedValue { getPackageProvenances(packages) }
         log.info {
-            "Resolved provenance for ${packages.size} packages in ${packageProvenanceDuration.inWholeMilliseconds}ms."
+            "Resolved provenance for ${packages.size} packages in $packageProvenanceDuration."
         }
 
         log.info { "Resolving source trees for ${packages.size} packages." }
         val (nestedProvenances, nestedProvenanceDuration) =
             measureTimedValue { getNestedProvenances(packageProvenances) }
         log.info {
-            "Resolved source trees for ${packages.size} packages in ${nestedProvenanceDuration.inWholeMilliseconds}ms."
+            "Resolved source trees for ${packages.size} packages in $nestedProvenanceDuration."
         }
 
         val allKnownProvenances = (
@@ -115,7 +115,7 @@ class ExperimentalScanner(
         }
 
         log.info {
-            "Read stored scan results in ${readDuration}ms:"
+            "Read stored scan results in $readDuration:"
         }
         storedResults.entries.forEach { (scanner, results) ->
             log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
