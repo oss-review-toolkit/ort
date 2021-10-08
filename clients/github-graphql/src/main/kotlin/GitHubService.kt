@@ -31,6 +31,10 @@ import io.ktor.client.request.header
 
 import java.net.URI
 
+import kotlin.time.measureTimedValue
+
+import org.apache.logging.log4j.kotlin.cachedLoggerOf
+
 import org.ossreviewtoolkit.clients.github.issuesquery.Issue
 import org.ossreviewtoolkit.clients.github.releasesquery.Release
 
@@ -126,7 +130,10 @@ fun Issue.labels(): List<String> = labels?.edges.orEmpty().mapNotNull { it?.node
 private suspend fun <T : Any> GraphQLKtorClient.executeAndCheck(
     request: GraphQLClientRequest<T>
 ): GraphQLClientResponse<T> {
-    val result = execute(request)
+    val (result, duration) = measureTimedValue { execute(request) }
+
+    cachedLoggerOf(GitHubService::class.java)
+        .debug { "Executed query '${request.operationName}' in $duration." }
 
     result.errors?.let { errors ->
         throw QueryException("Result of query '${request.operationName}' contains errors.", errors)
