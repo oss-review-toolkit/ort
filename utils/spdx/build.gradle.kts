@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val antlrVersion: String by project
 val jacksonVersion: String by project
 val scancodeVersion: String by project
+val spdxLicenseListVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -76,9 +77,10 @@ val importSpdxLicenseTexts by tasks.registering(SvnExport::class) {
     description = "Imports license texts from the SPDX repository."
     group = "SPDX"
 
-    svnUrl = "https://github.com/spdx/license-list-data/trunk/text"
+    svnUrl = "https://github.com/spdx/license-list-data/tags/$spdxLicenseListVersion/text"
     targetDir = "$buildDir/SvnExport/licenses/spdx"
 
+    inputs.property("spdxLicenseListVersion", spdxLicenseListVersion)
     outputs.dir(targetDir)
 }
 
@@ -310,7 +312,7 @@ val generateSpdxLicenseEnum by tasks.registering {
         val ids = generateEnumClass(
             name,
             description,
-            "https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json",
+            "https://raw.githubusercontent.com/spdx/license-list-data/$spdxLicenseListVersion/json/licenses.json",
             "SpdxLicense",
             resourcePath
         ) { json ->
@@ -336,7 +338,7 @@ val generateSpdxLicenseExceptionEnum by tasks.registering {
         val ids = generateEnumClass(
             name,
             description,
-            "https://raw.githubusercontent.com/spdx/license-list-data/master/json/exceptions.json",
+            "https://raw.githubusercontent.com/spdx/license-list-data/$spdxLicenseListVersion/json/exceptions.json",
             "SpdxLicenseException",
             resourcePath
         ) { json ->
