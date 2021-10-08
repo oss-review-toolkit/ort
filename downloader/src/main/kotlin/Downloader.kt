@@ -106,8 +106,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 val vcsInfo = (result as RepositoryProvenance).vcsInfo
 
                 log.perf {
-                    "Downloaded source code for '${pkg.id.toCoordinates()}' from $vcsInfo in " +
-                            "${vcsMark.elapsedNow().inWholeMilliseconds}ms."
+                    "Downloaded source code for '${pkg.id.toCoordinates()}' from $vcsInfo in ${vcsMark.elapsedNow()}."
                 }
 
                 return result
@@ -119,7 +118,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
             log.perf {
                 "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.vcsProcessed} " +
-                        "took ${vcsMark.elapsedNow().inWholeMilliseconds}ms."
+                        "took ${vcsMark.elapsedNow()}."
             }
 
             // Clean up any left-over files (force to delete read-only files in ".git" directories on Windows).
@@ -148,7 +147,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
             log.perf {
                 "Downloaded source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} in " +
-                        "${sourceArtifactMark.elapsedNow().inWholeMilliseconds}ms."
+                        "${sourceArtifactMark.elapsedNow()}."
             }
 
             return result
@@ -159,7 +158,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
             log.perf {
                 "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} " +
-                        "took ${sourceArtifactMark.elapsedNow().inWholeMilliseconds}ms."
+                        "took ${sourceArtifactMark.elapsedNow()}."
             }
 
             // Clean up any left-over files.

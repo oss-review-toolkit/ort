@@ -136,7 +136,7 @@ abstract class LocalScanner(
                 }
 
                 log.perf {
-                    "Bootstrapped scanner '$scannerName' version $expectedVersion in ${duration.inWholeMilliseconds}ms."
+                    "Bootstrapped scanner '$scannerName' version $expectedVersion in $duration."
                 }
 
                 bootstrapDirectory
@@ -400,8 +400,7 @@ abstract class LocalScanner(
         }
 
         log.perf {
-            "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in " +
-                    "${scanDuration.inWholeMilliseconds}ms."
+            "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in $scanDuration."
         }
 
         val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
@@ -428,7 +427,7 @@ abstract class LocalScanner(
 
         val duration = measureTime { archiver.archive(directory, provenance) }
 
-        log.perf { "Archived files for '${id.toCoordinates()}' in ${duration.inWholeMilliseconds}ms." }
+        log.perf { "Archived files for '${id.toCoordinates()}' in $duration." }
     }
 
     /**
