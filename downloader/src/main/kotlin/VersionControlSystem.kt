@@ -219,10 +219,10 @@ abstract class VersionControlSystem {
         val revisionCandidates = getRevisionCandidates(workingTree, pkg, allowMovingRevisions)
         val results = mutableListOf<Result<String>>()
 
-        revisionCandidates.forEachIndexed { index, revision ->
+        for ((index, revision) in revisionCandidates.withIndex()) {
             log.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
             results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
-            if (results.last().isSuccess) return@forEachIndexed
+            if (results.last().isSuccess) break
         }
 
         val workingTreeRevision = results.last().getOrElse {
