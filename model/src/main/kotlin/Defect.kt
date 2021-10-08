@@ -80,6 +80,27 @@ data class Defect(
     val modificationTime: Instant? = null,
 
     /**
+     * Contains a time when this defect has been closed if it has been resolved already (and this information is
+     * available in the source system). For users of the component affected by this defect, this information can be of
+     * interest to find out whether a fix is available, maybe in a newer version.
+     */
+    val closingTime: Instant? = null,
+
+    /**
+     * Contains the version of the release, in which this defect was fixed if available. This is important information
+     * for consumers of the component affected by the defect, so they can upgrade to this version.
+     */
+    val fixReleaseVersion: String? = null,
+
+    /**
+     * A URL pointing to the release, in which this defect was fixed if available. Depending on the information
+     * provided by a source, this URL could point to a website with detail information about the release, to release
+     * notes, or something like that. This information is important for consumers of the component affected by this
+     * defect, so they can upgrade to this release.
+     */
+    val fixReleaseUrl: String? = null,
+
+    /**
      * A map with labels assigned to this defect. Labels provide a means frequently used by issue tracker systems to
      * classify defects based on defined criteria. The exact meaning of these labels is depending on the source system.
      */
