@@ -71,7 +71,6 @@ dependencies {
     implementation("com.vdurmont:semver4j:$semverVersion")
     implementation("org.apache.maven:maven-core:$mavenVersion")
     implementation("org.apache.maven:maven-compat:$mavenVersion")
-    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
@@ -80,6 +79,7 @@ dependencies {
     implementation("org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion")
     implementation("org.apache.maven.resolver:maven-resolver-transport-wagon:$mavenResolverVersion")
 
+    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 
