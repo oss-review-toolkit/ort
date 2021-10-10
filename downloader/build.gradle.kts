@@ -19,7 +19,7 @@
  */
 
 val jgitVersion: String by project
-val jSchAgentProxyVersion: String by project
+val jschAgentProxyVersion: String by project
 val mockkVersion: String by project
 val svnkitVersion: String by project
 
@@ -33,7 +33,7 @@ dependencies {
 
     implementation(project(":utils"))
 
-    implementation("com.jcraft:jsch.agentproxy.jsch:$jSchAgentProxyVersion")
+    implementation("com.jcraft:jsch.agentproxy.jsch:$jschAgentProxyVersion")
 
     // Force the generated Maven POM to use the same version of "jsch" Gradle resolves the version conflict to.
     implementation("com.jcraft:jsch") {
