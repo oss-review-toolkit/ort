@@ -59,13 +59,14 @@ interface FossIdRestService {
         /**
          * The mapper for JSON (de-)serialization used by this service.
          */
-        val JSON_MAPPER: ObjectMapper = JsonMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        val JSON_MAPPER: ObjectMapper = JsonMapper.builder()
+            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             // FossID has a bug in get_results/scan.
             // Sometimes the match_type is "ignored", sometimes it is "Ignored".
             .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-            .registerModule(kotlinModule()
+            .addModule(kotlinModule()
                 .addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer()))
+            .build()
 
         /**
          * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
