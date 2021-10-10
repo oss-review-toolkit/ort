@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -34,8 +35,6 @@ import java.io.IOException
 import java.util.SortedMap
 import java.util.SortedSet
 import java.util.concurrent.TimeUnit
-
-import javax.xml.bind.annotation.XmlRootElement
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -338,7 +337,7 @@ private fun PackageManager.getProject(
  */
 class NuGetConfigFileReader {
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @XmlRootElement(name = "configuration")
+    @JacksonXmlRootElement(localName = "configuration")
     private data class NuGetConfig(
         val packageSources: List<SortedMap<String, String>>
     )
