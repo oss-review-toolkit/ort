@@ -86,10 +86,9 @@ object VirtualEnv : CommandLineTool {
         // virtualenv 20.0.14 from /usr/local/lib/python2.7/dist-packages/virtualenv/__init__.pyc
         output.removePrefix("virtualenv ").substringBefore(' ')
 
-    // Allow to use versions that are known to work. Note that virtualenv bundles a version of pip. Exclude version 20.3
-    // for now as is comes with a new dependency resolver that we yet need to test, see
-    // http://pyfound.blogspot.com/2020/11/pip-20-3-new-resolver.html.
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,20.3[")
+    // Ensure a minimum version known to work. Note that virtualenv bundles a version of pip, and as of pip 20.3 a new
+    // dependency resolver is used, see http://pyfound.blogspot.com/2020/11/pip-20-3-new-resolver.html.
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,)")
 }
 
 object PythonVersion : CommandLineTool {
