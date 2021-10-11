@@ -3,6 +3,7 @@ org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
 org.ossreviewtoolkit.reporter.reporters.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.GitLabLicenseModelReporter
+org.ossreviewtoolkit.reporter.reporters.HtmlTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.NoticeTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.OpossumReporter
 org.ossreviewtoolkit.reporter.reporters.PdfTemplateReporter
