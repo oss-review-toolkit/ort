@@ -89,7 +89,7 @@ data class Hash(
             "Cannot verify algorithm '$algorithm'. Supported algorithms are ${HashAlgorithm.VERIFIABLE}."
         }
 
-        return algorithm.calculate(file) == value
+        return algorithm.calculate(file).equals(value, ignoreCase = true)
     }
 }
 
