@@ -1,5 +1,6 @@
 org.ossreviewtoolkit.reporter.reporters.AdocTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
+org.ossreviewtoolkit.reporter.reporters.DocBookTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.GitLabLicenseModelReporter
