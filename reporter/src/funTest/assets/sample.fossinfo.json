@@ -1,0 +1,168 @@
+{
+    "$schema": "https://github.com/boschrexroth/json-schema/blob/a84eab6/ctrlx-automation/ctrlx-core/apps/fossinfo/fossinfo.v1.schema.json",
+    "components": [
+        {
+            "name": "Apache Portable Runtime Utilities (APR-util)",
+            "version": "1.5.3",
+            "homepage": "http://apr.apache.org/docs/apr-util/1.2/index.html",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedDynamically",
+            "copyright": {
+                "text": "Apache Portable Runtime Utility Library Copyright (c) 2011 The Apache Software Foundation",
+                "notice": "\nApache Portable Runtime Utility Library\nCopyright (c) 2011 The Apache Software Foundation.\n\nThis product includes software developed by\nThe Apache Software Foundation (http://www.apache.org/).\n\nPortions of this software were developed at the National Center\nfor Supercomputing Applications (NCSA) at the University of\nIllinois at Urbana-Champaign.\n\nThis software contains code derived from the RSA Data Security\nInc. MD5 Message-Digest Algorithm, including various\nmodifications by Spyglass Inc., Carnegie Mellon University, and\nBell Communications Research, Inc (Bellcore).\n"
+            },
+            "licenses": [
+                {
+                    "name": "Apache License 2.0",
+                    "version": "2.0",
+                    "spdx": "Apache-2.0",
+                    "text": "\n                                 Apache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   This software\n * is provided ``as is\u0027\u0027 without express or implied warranty.\n */\n"
+                },
+                {
+                    "name": "RSA Data Security",
+                    "text": "Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All rights reserved.\r\n"
+                },
+                {
+                    "name": "Massachusetts Institute of Technology",
+                    "text": "Copyright 1991 by the Massachusetts Institute of Technology\r\n"
+                },
+                {
+                    "name": "MIT License",
+                    "spdx": "MIT",
+                    "text": "Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd and Clark Cooper\r\n"
+                }
+            ]
+        },
+        {
+            "name": "Apache Subversion",
+            "version": "1.8.8",
+            "homepage": "http://subversion.apache.org/",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedStatically",
+            "copyright": {
+                "text": "Apache Subversion Copyright 2013 The Apache Software Foundation",
+                "notice": "\n        Apache Subversion\n        Copyright 2013 The Apache Software Foundation\n\n                ## vim:fileencoding=utf8\n"
+            },
+            "licenses": [
+                {
+                    "name": "Apache License 2.0",
+                    "version": "2.0",
+                    "spdx": "Apache-2.0",
+                    "text": "\n\n                                 Apache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n"
+                }
+            ]
+        },
+        {
+            "name": "Apache-APR",
+            "version": "1.5.0",
+            "homepage": "http://apr.apache.org/",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedStatically",
+            "copyright": {
+                "text": "Apache Portable Runtime Copyright (c) 2011 The Apache Software Foundation.",
+                "notice": "\n        Apache Portable Runtime\n        Copyright (c) 2011 The Apache Software Foundation.\n\n        This product includes software developed by\n        The Apache Software Foundation (http://www.apache.org/).\n\n        Portions of this software were developed at the National Center\n        for Supercomputing Applications (NCSA) at the University of\n        Illinois at Urbana-Champaign.\n\n        This software contains code derived from the RSA Data Security\n        Inc. MD5 Message-Digest Algorithm.\n\n        This software contains code derived from UNIX V7, Copyright(C)\n        Caldera International Inc.\n"
+            },
+            "licenses": [
+                {
+                    "name": "Apache License 2.0",
+                    "version": "2.0",
+                    "spdx": "Apache-2.0",
+                    "text": "\n                                 Apache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n"
+                },
+                {
+                    "name": "Regents of University of California Berkeley License",
+                    "text": "Copyright (c) 1987, 1993, 1994 The Regents of the University of California. All rights reserved.\r\n\r\n\n\r\n"
+                },
+                {
+                    "name": "Caldera License",
+                    "spdx": "Caldera",
+                    "text": "Copyright(C) Caldera International Inc. 2001-2002. All rights reserved.\r\n\r\n\n\r\n"
+                }
+            ]
+        },
+        {
+            "name": "OpenSSL",
+            "version": "1.0.1f",
+            "homepage": "https://www.openssl.org/",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedStatically",
+            "copyright": {
+                "text": "Copyright (c) 1998-2011 The OpenSSL Project. All rights reserved. Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com). All rights reserved."
+            },
+            "licenses": [
+                {
+                    "name": "OpenSSL Combined License",
+                    "spdx": "OpenSSL",
+                    "text": "\n  LICENSE ISSUES\n  ==============\n\n  The OpenSSL toolkit stays under a dual license, i.e. both the conditions of\n  the OpenSSL License and the original SSLeay license apply to the toolkit.\n  See below for the actual license texts. Actually both licenses are BSD-style\n  Open Source licenses. In case of any license issues related to OpenSSL\n  please contact openssl-core@openssl.org.\n\n  OpenSSL License\n  ---------------\n"
+                }
+            ]
+        },
+        {
+            "name": "serf",
+            "version": "1.3.4",
+            "homepage": "https://code.google.com/archive/p/serf/",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedStatically",
+            "copyright": {
+                "text": "Copyright © 2017 The Apache Software Foundation",
+                "notice": "\n        This product includes software developed by\n        The Apache Software Foundation (http://www.apache.org/).\n"
+            },
+            "licenses": [
+                {
+                    "name": "Apache License 2.0",
+                    "version": "2.0",
+                    "spdx": "Apache-2.0",
+                    "text": "\n                                 Apache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n"
+                }
+            ]
+        },
+        {
+            "name": "SQLite",
+            "version": "3.7.17",
+            "homepage": "http://www.sqlite.org/",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedStatically",
+            "licenses": [
+                {
+                    "name": "Public Domain",
+                    "text": "\nCommercial use of SQLite is explicitly allowed, see https://www.sqlite.org/copyright.html.\n\nInternal reference: https://connect.bosch.com/wikis/home?lang=de-de#!/wiki/We02f74c5aa95_4f46_afbc_00d511e4a6d3/page/SQLite\n"
+                }
+            ]
+        },
+        {
+            "name": "The SharpSVN Project",
+            "version": "1.8",
+            "homepage": "http://sharpsvn.open.collab.net/",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedDynamically",
+            "copyright": {
+                "text": "Copyright (c) 2007-2012 The SharpSvn Project"
+            },
+            "licenses": [
+                {
+                    "name": "Apache License 2.0",
+                    "version": "2.0",
+                    "spdx": "Apache-2.0",
+                    "text": "\n   Copyright (c) 2007-2012 The SharpSvn Project\n\n   Licensed under the Apache License, Version 2.0 (the \"License\");\n   you may not use this file except in compliance with the License.\n   You may obtain a copy of the License at\n\n       http://www.apache.org/licenses/LICENSE-2.0\n\n   Unless required by applicable law or agreed to in writing, software\n   distributed under the License is distributed on an \"AS IS\" BASIS,\n   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n   See the License for the specific language governing permissions and\n   limitations under the License.\n\n\n----------------------------------------------------------------------------\n\n                                 Apache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n"
+                }
+            ]
+        },
+        {
+            "name": "zlib",
+            "version": "1.2.8",
+            "homepage": "http://www.zlib.net/",
+            "usage": "Modified",
+            "integrationMechanism": "LinkedStatically",
+            "copyright": {
+                "text": "(C) 1995-2013 Jean-loup Gailly and Mark Adler"
+            },
+            "licenses": [
+                {
+                    "name": "zlib License",
+                    "spdx": "Zlib",
+                    "text": "\nCopyright notice:\n\n (C) 1995-2013 Jean-loup Gailly and Mark Adler\n\n  This software is provided \u0027as-is\u0027, without any express or implied\n  warranty.  In no event will the authors be held liable for any damages\n  arising from the use of this software.\n\n  Permission is granted to anyone to use this software for any purpose,\n  including commercial applications, and to alter it and redistribute it\n  freely, subject to the following restrictions:\n\n  1. The origin of this software must not be misrepresented; you must not\n     claim that you wrote the original software. If you use this software\n     in a product, an acknowledgment in the product documentation would be\n     appreciated but is not required.\n  2. Altered source versions must be plainly marked as such, and must not be\n     misrepresented as being the original software.\n  3. This notice may not be removed or altered from any source distribution.\n\n  Jean-loup Gailly        Mark Adler\n  jloup@gzip.org          madler@alumni.caltech.edu\n"
+                }
+            ]
+        }
+    ]
+}

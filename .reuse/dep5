@@ -78,6 +78,10 @@ Files: clients/github-graphql/src/main/assets/schema.docs.graphql
 Copyright: 2017 Gregor Martynus
 License: MIT
 
+Files: reporter/src/funTest/assets/sample.fossinfo.json
+Copyright: 2020-2021 Bosch Rexroth AG
+License: MIT
+
 Files: utils/spdx/src/main/resources/exceptions/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC0-1.0
