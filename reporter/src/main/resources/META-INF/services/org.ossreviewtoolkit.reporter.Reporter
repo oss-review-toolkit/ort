@@ -10,3 +10,4 @@ org.ossreviewtoolkit.reporter.reporters.PdfTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter
 org.ossreviewtoolkit.reporter.reporters.StaticHtmlReporter
 org.ossreviewtoolkit.reporter.reporters.WebAppReporter
+org.ossreviewtoolkit.reporter.reporters.XHtmlTemplateReporter
