@@ -211,7 +211,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     }
 
                     if (DataEntity.PACKAGES in entities) {
-                        addAll(analyzerResult.packages.map { curatedPackage -> curatedPackage.pkg })
+                        addAll(analyzerResult.packages.map { it.pkg })
                     }
                 }
 
@@ -246,8 +246,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                             val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
 
                             log.info { "Archiving directory '$dir' to '$zipFile'." }
-                            val result = archive(dir, zipFile,
-                                "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
+                            val result = archive(
+                                dir,
+                                zipFile,
+                                "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
+                            )
 
                             result.exceptionOrNull()?.let {
                                 log.error { "Could not archive '$dir': ${it.collectMessagesAsString()}" }
