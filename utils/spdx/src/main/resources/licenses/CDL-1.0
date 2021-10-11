@@ -1,8 +1,6 @@
-Common Documentation License
-
 Version 1.0 - February 16, 2001
 
-Copyright © 2001 Apple Computer, Inc.
+Copyright (C) 2001 Apple Computer, Inc.
 
 Permission is granted to copy and distribute verbatim copies of this License, but changing or adding to it in any way is not permitted.
 
@@ -24,13 +22,13 @@ Please read this License carefully before downloading or using this material. By
 
 3. Derivative Works. All Derivative Works are subject to the terms of this License. You may copy and distribute a Derivative Work of the Document under the conditions of Section 2 above, provided that You release the Derivative Work under the exact, verbatim terms of this License (i.e., the Derivative Work is licensed as a "Document" under the terms of this License). In addition, Derivative Works of Documents must meet the following requirements:
 
-     (a) All copyright and license notices in the original Document must be preserved.
+    (a) All copyright and license notices in the original Document must be preserved.
 
-     (b) An appropriate copyright notice for your Derivative Work must be added adjacent to the other copyright notices.
+    (b) An appropriate copyright notice for your Derivative Work must be added adjacent to the other copyright notices.
 
-     (c) A statement briefly summarizing how your Derivative Work is different from the original Document must be included in the same place as your copyright notice.
+    (c) A statement briefly summarizing how your Derivative Work is different from the original Document must be included in the same place as your copyright notice.
 
-     (d) If it is not reasonably evident to a recipient of your Derivative Work that the Derivative Work is subject to the terms of this License, a statement indicating such fact must be included in the same place as your copyright notice.
+    (d) If it is not reasonably evident to a recipient of your Derivative Work that the Derivative Work is subject to the terms of this License, a statement indicating such fact must be included in the same place as your copyright notice.
 
 4. Compilation with Independent Works. You may compile or combine a Document or its Derivative Works with other separate and independent documents or works to create a compilation work ("Compilation"). If included in a Compilation, the Document or Derivative Work thereof must still be provided under the terms of this License, and the Compilation shall contain (a) a notice specifying the inclusion of the Document and/or Derivative Work and the fact that it is subject to the terms of this License, and (b) either a copy of the License or an incorporation by reference in proper form (as indicated in Exhibit A). Mere aggregation of a Document or Derivative Work with other documents or works on the same storage or distribution medium (e.g. a CD-ROM) will not cause this License to apply to those other works.
 
@@ -51,3 +49,5 @@ EXHIBIT A
 The proper form for an incorporation of this License by reference is as follows:
 
 "Copyright (c) [year] by [Copyright Holder's name]. This material has been released under and is subject to the terms of the Common Documentation License, v.1.0, the terms of which are hereby incorporated by reference. Please obtain a copy of the License at http://www.opensource.apple.com/cdl/ and read it before using this material. Your use of this material signifies your agreement to the terms of the License."
+
+Apple Common Documentation License v1.0
