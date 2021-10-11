@@ -191,8 +191,9 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         when (input) {
             is FileType -> {
                 val ortFile = (input as FileType).file
-                val ortResult = readOrtResult(ortFile)
+                println("Downloading $entities entities from ORT result file at '${ortFile.canonicalPath}'...")
 
+                val ortResult = readOrtResult(ortFile)
                 val analyzerResult = ortResult.analyzer?.result
 
                 if (analyzerResult == null) {
@@ -293,6 +294,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                 val dummyId = Identifier("Downloader::$projectName:")
                 val dummyPackage = if (archiveType != ArchiveType.NONE) {
+                    println("Downloading $archiveType artifact from $projectUrl...")
                     Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
                 } else {
                     val vcs = VersionControlSystem.forUrl(projectUrl)
@@ -306,6 +308,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                         path = vcsPath
                     )
 
+                    println("Downloading from $vcsType VCS at $projectUrl...")
                     Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
                 }
 
