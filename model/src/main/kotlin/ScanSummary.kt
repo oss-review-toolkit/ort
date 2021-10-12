@@ -55,13 +55,13 @@ data class ScanSummary(
     val packageVerificationCode: String,
 
     /**
-     * The license findings.
+     * The detected license findings.
      */
     @JsonProperty("licenses")
     val licenseFindings: SortedSet<LicenseFinding>,
 
     /**
-     * The copyright findings.
+     * The detected copyright findings.
      */
     @JsonProperty("copyrights")
     val copyrightFindings: SortedSet<CopyrightFinding>,
