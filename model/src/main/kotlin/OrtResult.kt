@@ -477,4 +477,11 @@ data class OrtResult(
      * format, in which dependency information is stored.
      */
     private fun createDependencyNavigator(): DependencyNavigator = CompatibilityDependencyNavigator.create(this)
+
+    /**
+     * Return the label values corresponding to the given [key] split at the delimiter ',', or an empty set if the label
+     * is absent.
+     */
+    fun getLabelValues(key: String): Set<String> =
+        labels[key]?.split(',').orEmpty().mapTo(mutableSetOf()) { it.trim() }
 }

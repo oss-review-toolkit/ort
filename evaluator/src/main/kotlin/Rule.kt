@@ -127,8 +127,7 @@ abstract class Rule(
         object : RuleMatcher {
             override val description = "labelContains($label, $value)"
 
-            override fun matches() =
-                ruleSet.ortResult.labels[label]?.split(',')?.map { it.trim() }?.contains(value) ?: false
+            override fun matches() = value in ruleSet.ortResult.getLabelValues(label)
         }
 
     /**
