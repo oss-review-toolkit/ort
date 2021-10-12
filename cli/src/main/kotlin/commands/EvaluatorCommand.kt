@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
 import org.ossreviewtoolkit.cli.SeverityStats
-import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
@@ -318,7 +317,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             evaluatorRun.violations.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromRuleViolations(resolvedViolations, unresolvedViolations)
 
-        concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
+        severityStats.printAndConclude(config.severeIssueThreshold, 2)
     }
 }
 

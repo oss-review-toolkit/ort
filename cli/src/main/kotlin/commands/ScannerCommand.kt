@@ -45,7 +45,6 @@ import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.SeverityStats
-import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
@@ -214,7 +213,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             scanResults.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
+        severityStats.printAndConclude(config.severeIssueThreshold, 2)
     }
 
     private fun run(nativeOutputDir: File, config: OrtConfiguration): OrtResult {

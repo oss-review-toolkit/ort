@@ -119,39 +119,53 @@ internal class SeverityStats(
      */
     fun getUnresolvedCountWithThreshold(threshold: Severity) =
         unresolvedCounts.entries.sumOf { (severity, count) -> if (severity >= threshold) count else 0 }
-}
 
-/**
- * A helper function to print statistics about the severity [stats]. If there are severities equal to or greater than
- * [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
- */
-internal fun concludeSeverityStats(stats: SeverityStats, threshold: Severity, severeStatusCode: Int) {
-    val resolvedHintCount = stats.getResolvedCount(Severity.HINT)
-    val resolvedWarningCount = stats.getResolvedCount(Severity.WARNING)
-    val resolvedErrorCount = stats.getResolvedCount(Severity.ERROR)
+    /**
+     * Print the stats to stdout.
+     */
+    fun printStats() {
+        val resolvedHintCount = getResolvedCount(Severity.HINT)
+        val resolvedWarningCount = getResolvedCount(Severity.WARNING)
+        val resolvedErrorCount = getResolvedCount(Severity.ERROR)
 
-    println(
-        "Found $resolvedErrorCount resolved error(s), $resolvedWarningCount resolved warning(s), " +
-                "$resolvedHintCount resolved hint(s)."
-    )
-
-    val unresolvedHintCount = stats.getUnresolvedCount(Severity.HINT)
-    val unresolvedWarningCount = stats.getUnresolvedCount(Severity.WARNING)
-    val unresolvedErrorCount = stats.getUnresolvedCount(Severity.ERROR)
-
-    println(
-        "Found $unresolvedErrorCount unresolved error(s), $unresolvedWarningCount unresolved warning(s), " +
-                "$unresolvedHintCount unresolved hint(s)."
-    )
-
-    val severeIssueCount = stats.getUnresolvedCountWithThreshold(threshold)
-
-    if (severeIssueCount > 0) {
         println(
-            "There are $severeIssueCount issue(s) with a severity equal to or greater than the $threshold threshold."
+            "Found $resolvedErrorCount resolved error(s), $resolvedWarningCount resolved warning(s), " +
+                    "$resolvedHintCount resolved hint(s)."
         )
 
-        throw ProgramResult(severeStatusCode)
+        val unresolvedHintCount = getUnresolvedCount(Severity.HINT)
+        val unresolvedWarningCount = getUnresolvedCount(Severity.WARNING)
+        val unresolvedErrorCount = getUnresolvedCount(Severity.ERROR)
+
+        println(
+            "Found $unresolvedErrorCount unresolved error(s), $unresolvedWarningCount unresolved warning(s), " +
+                    "$unresolvedHintCount unresolved hint(s)."
+        )
+    }
+
+    /**
+     * If there are severities equal to or greater than [threshold], print an according note and throw a [ProgramResult]
+     * exception with [severeStatusCode].
+     */
+    fun conclude(threshold: Severity, severeStatusCode: Int) {
+        val severeIssueCount = getUnresolvedCountWithThreshold(threshold)
+
+        if (severeIssueCount > 0) {
+            println(
+                "There are $severeIssueCount issue(s) with a severity equal to or greater than the $threshold " +
+                        "threshold."
+            )
+
+            throw ProgramResult(severeStatusCode)
+        }
+    }
+
+    /**
+     * A convenience function that calls [print] and [conclude].
+     */
+    fun printAndConclude(threshold: Severity, severeStatusCode: Int) {
+        printStats()
+        conclude(threshold, severeStatusCode)
     }
 }
 
