@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +79,7 @@ data class GlobalOptions(
  * A helper function to print statistics about the [counts] of severities. If there are severities equal to or greater
  * than [threshold], print an according note and throw a ProgramResult exception with [severeStatusCode].
  */
-fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
+internal fun concludeSeverityStats(counts: Map<Severity, Int>, threshold: Severity, severeStatusCode: Int) {
     var severeIssueCount = 0
 
     fun getSeverityCount(severity: Severity) =
