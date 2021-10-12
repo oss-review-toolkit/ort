@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,36 +36,15 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 /**
- * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
- * with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator.
- * For each Freemarker template provided using the options described below a separate intermediate file is created
- * that can be processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if
- * security vulnerability information is available also the "vulnerability_report" template.
- *
- * After the intermediate files are generated, they are processed by  AsciidoctorJ PDF.
- * A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or images displayed in the PDF can
- * be adjusted; see the [Theme Guide][5].
- * The path to this theme can be set in the options as described below.
- * Note that only one theme can be set that is used for all given templates. If no theme is given, a default built-in
- * theme of AsciidoctorJ PDF is used.
- *
- * This reporter supports the following options:
- * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently, the "disclosure_document" and
- *                  "vulnerability_report" templates are available.
- * - *template.path*: A comma-separated list of paths to template files provided by the user.
- * - *backend*: The name of the AsciiDoc backend to use, like "html". Defaults to "pdf". As a special case, the "adoc"
- *              fake backend is used to indicate that no backend should be used but the AsciiDoc files should be kept.
- * - *pdf.theme.file*: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
- * - *pdf.fonts.dir*: A path to a directory containing custom fonts. Only used with the "pdf" backend.
- * - *project-types-as-packages: A comma-separated list of project types to be handled as packages.
+ * An abstract [Reporter] that uses [Apache Freemarker][1] templates and [AsciiDoc][2] with [AsciidoctorJ][3] to create
+ * reports for the supported [AsciiDoc converters][4], using the specified Asciidoctor [backend].
  *
  * [1]: https://freemarker.apache.org
- * [2]: https://asciidoc.org/
+ * [2]: https://asciidoc.org
  * [3]: https://github.com/asciidoctor/asciidoctorj
- * [4]: https://github.com/asciidoctor/asciidoctorj-pdf
- * [5]: https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc
+ * [4]: https://docs.asciidoctor.org/asciidoctor/latest/convert/available
  */
-class AsciiDocTemplateReporter : Reporter {
+abstract class AsciiDocTemplateReporter(private val backend: String, override val reporterName: String) : Reporter {
     companion object {
         private const val ASCII_DOC_FILE_PREFIX = "AsciiDoc_"
         private const val ASCII_DOC_FILE_EXTENSION = "adoc"
@@ -73,47 +52,33 @@ class AsciiDocTemplateReporter : Reporter {
 
         private const val DISCLOSURE_TEMPLATE_ID = "disclosure_document"
         private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
-
-        private const val OPTION_BACKEND = "backend"
-        private const val OPTION_PDF_THEME_FILE = "pdf.theme.file"
-        private const val OPTION_PDF_FONTS_DIR = "pdf.fonts.dir"
-
-        private const val BACKEND_PDF = "pdf"
     }
 
-    private val templateProcessor = FreemarkerTemplateProcessor(
-        ASCII_DOC_FILE_PREFIX,
-        ASCII_DOC_FILE_EXTENSION,
-        ASCII_DOC_TEMPLATE_DIRECTORY
-    )
     private val asciidoctor = Asciidoctor.Factory.create()
 
-    override val reporterName = "AsciiDocTemplate"
-
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+        val asciiDocOutputDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
+        val asciiDocFiles = generateAsciiDocFiles(input, asciiDocOutputDir, options)
+
+        val reports = processAsciiDocFiles(outputDir, asciiDocFiles)
+
+        asciiDocOutputDir.safeDeleteRecursively()
+
+        return reports
+    }
+
+    /**
+     * Generate the AsciiDoc files from the templates defined in [options] in [outputDir].
+     */
+    protected fun generateAsciiDocFiles(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String> = emptyMap()
+    ): List<File> {
         val templateOptions = options.toMutableMap()
-        val attributesBuilder = Attributes.builder()
 
-        // Also see https://github.com/asciidoctor/asciidoctorj/issues/438 for supported backends.
-        val backend = templateOptions.remove(OPTION_BACKEND) ?: BACKEND_PDF
-
-        if (backend.equals(BACKEND_PDF, ignoreCase = true)) {
-            templateOptions.remove(OPTION_PDF_THEME_FILE)?.let {
-                val pdfThemeFile = File(it).absoluteFile
-
-                require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
-
-                attributesBuilder.attribute("pdf-theme", pdfThemeFile.toString())
-            }
-
-            templateOptions.remove(OPTION_PDF_FONTS_DIR)?.let {
-                val pdfFontsDir = File(it).absoluteFile
-
-                require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
-
-                attributesBuilder.attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
-            }
-        }
+        val templateProcessor =
+            FreemarkerTemplateProcessor(ASCII_DOC_FILE_PREFIX, ASCII_DOC_FILE_EXTENSION, ASCII_DOC_TEMPLATE_DIRECTORY)
 
         if (!templateOptions.contains(FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH)) {
             templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, buildString {
@@ -125,33 +90,32 @@ class AsciiDocTemplateReporter : Reporter {
             })
         }
 
-        val asciiDocTempDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
-        val asciiDocFiles = templateProcessor.processTemplates(input, asciiDocTempDir, templateOptions)
+        return templateProcessor.processTemplates(input, outputDir, templateOptions)
+    }
+
+    /**
+     * Generate the reports for the [asciiDocFiles] using Asciidoctor in [outputDir] applying the
+     * [asciidoctorAttributes].
+     */
+    protected open fun processAsciiDocFiles(
+        outputDir: File,
+        asciiDocFiles: List<File>,
+        asciidoctorAttributes: Attributes = Attributes.builder().build()
+    ): List<File> {
+        val optionsBuilder = Options.builder()
+            .attributes(asciidoctorAttributes)
+            .backend(backend)
+            .safe(SafeMode.UNSAFE)
 
         val outputFiles = mutableListOf<File>()
 
-        if (backend.equals(ASCII_DOC_FILE_EXTENSION, ignoreCase = true)) {
-            asciiDocFiles.forEach { file ->
-                val outputFile = outputDir.resolve(file.name)
-                file.copyTo(outputFile)
-            }
-        } else {
-            val asciidoctorAttributes = attributesBuilder.build()
-            val optionsBuilder = Options.builder()
-                .attributes(asciidoctorAttributes)
-                .backend(backend)
-                .safe(SafeMode.UNSAFE)
+        asciiDocFiles.forEach { file ->
+            val outputFile = outputDir.resolve("${file.nameWithoutExtension}.$backend")
 
-            asciiDocFiles.forEach { file ->
-                val outputFile = outputDir.resolve("${file.nameWithoutExtension}.$backend")
+            asciidoctor.convertFile(file, optionsBuilder.toFile(outputFile).build())
 
-                asciidoctor.convertFile(file, optionsBuilder.toFile(outputFile).build())
-
-                outputFiles += outputFile
-            }
+            outputFiles += outputFile
         }
-
-        asciiDocTempDir.safeDeleteRecursively()
 
         return outputFiles
     }
