@@ -43,10 +43,10 @@ import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
-import org.ossreviewtoolkit.cli.SeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.createProvider
 import org.ossreviewtoolkit.cli.utils.inputGroup

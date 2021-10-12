@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
-import org.ossreviewtoolkit.cli.SeverityStats
+import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
