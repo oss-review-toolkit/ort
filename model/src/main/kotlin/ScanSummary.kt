@@ -48,9 +48,9 @@ data class ScanSummary(
     val endTime: Instant,
 
     /**
-     * The [SPDX package verification code](https://spdx.dev/spdx_specification_2_0_html#h.2p2csry), calculated from
-     * all files in the package. Note that if the scanner is configured to ignore certain files they will still be
-     * included in the calculation of this code.
+     * The [SPDX package verification code](https://spdx.dev/spdx_specification_2_0_html#h.2p2csry), calculated from all
+     * files in the package. Note that if the scanner is configured to ignore certain files they will still be included
+     * in the calculation of this code.
      */
     val packageVerificationCode: String,
 
@@ -67,9 +67,9 @@ data class ScanSummary(
     val copyrightFindings: SortedSet<CopyrightFinding>,
 
     /**
-     * The list of issues that occurred during the scan.
-     * This property is not serialized if the list is empty to reduce the size of the result file. If there are no
-     * issues at all, [ScanRecord.hasIssues] already contains that information.
+     * The list of issues that occurred during the scan. This property is not serialized if the list is empty to reduce
+     * the size of the result file. If there are no issues at all, [ScanRecord.hasIssues] already contains that
+     * information.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
