@@ -655,8 +655,15 @@ following formats are supported (reporter names are case-insensitive):
 
 * [AsciiDoc Template](docs/reporters/AsciiDocTemplateReporter.md) (`-f AsciiDocTemplate`)
   * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
-  * Supports all AsciiDoc backends
   * PDF style customizable with Asciidoctor [PDF themes](https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc)
+  * Supports multiple AsciiDoc backends:
+    * PDF (`-f PdfTemplate`)
+    * HTML (`-f HtmlTemplate`)
+    * XHTML (`-f XHtmlTemplate`)
+    * DocBook (`-f DocBookTemplate`)
+    * Man page (`-f ManPageTemplate`)
+    * AsciiDoc (`-f AdocTemplate`): Does not convert the created AsciiDoc files but writes the generated files as
+      reports.
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
