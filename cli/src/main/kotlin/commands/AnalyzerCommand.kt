@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.SeverityStats
-import org.ossreviewtoolkit.cli.concludeSeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
@@ -222,6 +221,6 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             analyzerResult.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        concludeSeverityStats(severityStats, config.severeIssueThreshold, 2)
+        severityStats.printAndConclude(config.severeIssueThreshold, 2)
     }
 }
