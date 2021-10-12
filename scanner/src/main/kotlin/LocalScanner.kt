@@ -186,10 +186,10 @@ abstract class LocalScanner(
      * Return a [ScannerCriteria] object to be used when looking up existing scan results from a [ScanResultsStorage].
      * Per default, the properties of this object are initialized to match this scanner implementation. It is,
      * however, possible to override these defaults from the configuration, in the [ScannerConfiguration.options]
-     * property: Use properties of the form _scannerName.criteria.property_, where _scannerName_ is the name of
+     * property: Use properties of the form _scannerName.property_, where _scannerName_ is the name of
      * the scanner the configuration applies to, and _property_ is the name of a property of the [ScannerCriteria]
      * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
-     * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
+     * `options.ScanCode.minVersion=3.0.2`.
      */
     open fun getScannerCriteria(): ScannerCriteria {
         val options = scannerConfig.options?.get(scannerName).orEmpty()
