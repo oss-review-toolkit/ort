@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.reporters.AsciiDocTemplateReporter
+import org.ossreviewtoolkit.reporter.reporters.PdfTemplateReporter
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
@@ -161,7 +161,7 @@ class ExamplesFunTest : StringSpec() {
 
             takeExampleFile("asciidoctor-pdf-theme.yml")
 
-            val report = AsciiDocTemplateReporter().generateReport(
+            val report = PdfTemplateReporter().generateReport(
                 ReporterInput(OrtResult.EMPTY),
                 outputDir,
                 mapOf("pdf.theme.file" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path)

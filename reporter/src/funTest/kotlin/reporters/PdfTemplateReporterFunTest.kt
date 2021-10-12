@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,44 +20,38 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.should
 
-import java.io.File
-
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class AsciiDocTemplateReporterFunTest : StringSpec({
+class PdfTemplateReporterFunTest : StringSpec({
     "PDF output is created successfully from an existing result and default template" {
-        val report = generateReport(ORT_RESULT)
+        val report = PdfTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir())
 
         report.single().length() should beInRange(92000L..97000L)
     }
 
     "Report generation is aborted when path to non-existing pdf-them file is given" {
         shouldThrow<IllegalArgumentException> {
-            generateReport(ORT_RESULT, mapOf("pdf.theme.file" to "dummy.file"))
+            PdfTemplateReporter().generateReport(
+                ReporterInput(ORT_RESULT),
+                createTestTempDir(),
+                mapOf("pdf.theme.file" to "dummy.file")
+            )
         }
     }
 
     "PDF output is aborted when a non-existent PDF fonts directory is given" {
         shouldThrow<IllegalArgumentException> {
-            generateReport(ORT_RESULT, mapOf("pdf.fonts.dir" to "fake.path"))
+            PdfTemplateReporter().generateReport(
+                ReporterInput(ORT_RESULT),
+                createTestTempDir(),
+                mapOf("pdf.fonts.dir" to "fake.path")
+            )
         }
     }
 })
-
-private fun TestConfiguration.generateReport(
-    ortResult: OrtResult,
-    options: Map<String, String> = emptyMap()
-): List<File> {
-    val input = ReporterInput(ortResult)
-    val outputDir = createTestTempDir()
-
-    return AsciiDocTemplateReporter().generateReport(input, outputDir, options)
-}
