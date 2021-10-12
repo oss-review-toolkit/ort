@@ -44,8 +44,8 @@ import java.io.File
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
-import org.ossreviewtoolkit.cli.SeverityStats
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
+import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
