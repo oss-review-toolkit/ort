@@ -78,7 +78,7 @@ private const val PUB_LOCK_FILE = "pubspec.lock"
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 
-private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "2.2.3-stable"
+private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "2.5.2-stable"
 private val flutterInstallDir = "$ortToolsDirectory/flutter-$flutterVersion"
 
 private val flutterHome by lazy {
