@@ -31,12 +31,12 @@ class HashAlgorithmTest : StringSpec({
 
     "Calculating the SHA1 on a file should yield the correct result" {
         // The expected hash was calculated with "sha1sum".
-        HashAlgorithm.SHA1.calculate(file) shouldBe "92170cdc034b2ff819323ff670d3b7266c8bffcd"
+        HashAlgorithm.SHA1.calculate(file) shouldBe "c00ef43045659b53da5d71d49b8cd7e528c9d55b"
     }
 
     "Calculating the SHA1-GIT on a file should yield the correct result" {
         // The expected hash was calculated with "git ls-tree HEAD".
-        HashAlgorithm.SHA1_GIT.calculate(file) shouldBe "8dada3edaf50dbc082c9a125058f25def75e625a"
+        HashAlgorithm.SHA1_GIT.calculate(file) shouldBe "3f4d322ebd76de0f1bbb9c867e1f818f5202efd3"
     }
 
     "Calculating the SHA1-GIT on a resource should yield the correct result" {
