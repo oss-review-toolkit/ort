@@ -9,3 +9,4 @@
 /clients/fossid-webapp/ @oss-review-toolkit/kotlin-devs @nnobelis
 /reporter-web-app/ @tsteenbe
 /spdx-utils/src/main/ @oss-review-toolkit/core-devs
+/LICENSE @oss-review-toolkit/core-devs
