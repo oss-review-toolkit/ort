@@ -484,4 +484,9 @@ data class OrtResult(
      */
     fun getLabelValues(key: String): Set<String> =
         labels[key]?.split(',').orEmpty().mapTo(mutableSetOf()) { it.trim() }
+
+    /**
+     * Return true if and only if this [OrtResult] contains a label with the given [key].
+     */
+    fun hasLabel(key: String): Boolean = key in labels
 }
