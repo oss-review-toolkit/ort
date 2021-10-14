@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.HttpDownloadError
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.createOrtTempFile
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.textValueOrEmpty
@@ -176,7 +177,7 @@ class Bundler(
     }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
-        val scriptFile = File.createTempFile("bundler_dependencies", ".rb")
+        val scriptFile = createOrtTempFile("bundler_dependencies", ".rb")
         scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies.rb").readBytes())
 
         try {
@@ -193,7 +194,7 @@ class Bundler(
     }
 
     private fun resolveGemsMetadata(workingDir: File): MutableMap<String, GemSpec> {
-        val scriptFile = File.createTempFile("bundler_dependencies_metadata", ".rb")
+        val scriptFile = createOrtTempFile("bundler_dependencies_metadata", ".rb")
         scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies_metadata.rb").readBytes())
 
         try {
