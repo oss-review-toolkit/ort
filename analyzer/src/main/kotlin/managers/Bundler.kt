@@ -57,6 +57,9 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
+private const val ROOT_DEPENDENCIES_SCRIPT = "/scripts/bundler_root_dependencies.rb"
+private const val RESOLVE_DEPENDENCIES_SCRIPT = "/scripts/bundler_resolve_dependencies.rb"
+
 /**
  * The [Bundler](https://bundler.io/) package manager for Ruby. Also see
  * [Clarifying the Roles of the .gemspec and Gemfile][1].
@@ -177,8 +180,8 @@ class Bundler(
     }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
-        val scriptFile = createOrtTempFile("bundler_dependencies", ".rb")
-        scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies.rb").readBytes())
+        val scriptFile = createOrtTempFile(File(ROOT_DEPENDENCIES_SCRIPT).nameWithoutExtension, ".rb")
+        scriptFile.writeBytes(javaClass.getResource(ROOT_DEPENDENCIES_SCRIPT).readBytes())
 
         try {
             val scriptCmd = run(
@@ -194,8 +197,8 @@ class Bundler(
     }
 
     private fun resolveGemsMetadata(workingDir: File): MutableMap<String, GemSpec> {
-        val scriptFile = createOrtTempFile("bundler_dependencies_metadata", ".rb")
-        scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies_metadata.rb").readBytes())
+        val scriptFile = createOrtTempFile(File(RESOLVE_DEPENDENCIES_SCRIPT).nameWithoutExtension, ".rb")
+        scriptFile.writeBytes(javaClass.getResource(RESOLVE_DEPENDENCIES_SCRIPT).readBytes())
 
         try {
             val scriptCmd = run(
