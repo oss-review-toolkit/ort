@@ -28,7 +28,7 @@
 
 require 'bundler'
 
-definition = Bundler.definition()
+definition = Bundler.definition
 
 # This command tries to resolve dependencies that are specified in the Gemfile of the current working directory.
 # Explicitly enable resolution of remote `gem` or `git` dependencies. `path` dependencies are still resolved locally.
