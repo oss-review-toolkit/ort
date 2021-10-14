@@ -166,6 +166,8 @@ private fun generateScannerOptions(options: JsonNode?): String {
 private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): List<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
+    val header = result["headers"]?.singleOrNull()
+    val input = header?.get("options")?.get("input")?.singleOrNull()?.textValue()?.let { "$it/" }.orEmpty()
     val files = result["files"]?.asSequence().orEmpty().filter { it["type"].textValue() == "file" }
 
     files.flatMapTo(licenseFindings) { file ->
@@ -191,7 +193,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
             LicenseFinding(
                 license = spdxLicenseExpression,
                 location = TextLocation(
-                    path = file["path"].textValue(),
+                    path = file["path"].textValue().removePrefix(input),
                     startLine = licenseExpression.startLine,
                     endLine = licenseExpression.endLine
                 )
