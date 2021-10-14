@@ -166,7 +166,8 @@ private fun generateScannerOptions(options: JsonNode?): String {
 private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): List<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
-    val files = result["files"]?.asSequence().orEmpty()
+    val files = result["files"]?.asSequence().orEmpty().filter { it["type"].textValue() == "file" }
+
     files.flatMapTo(licenseFindings) { file ->
         val licenses = file["licenses"]?.asSequence().orEmpty()
 
