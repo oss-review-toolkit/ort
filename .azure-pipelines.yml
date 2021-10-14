@@ -16,7 +16,6 @@ variables:
   ORT_DATA_DIR: $(Pipeline.Workspace)/.ort
   # Tool versions.
   BOWER_VERSION: 1.8.8
-  BUNDLER_VERSION: 2.1.4
   COMPOSER_VERSION: 5.1.0 # The version refers to the installer, not to Composer.
   CONAN_VERSION: 1.40.3
   GO_DEP_VERSION: 0.5.4

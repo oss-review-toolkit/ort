@@ -49,7 +49,6 @@ FROM adoptopenjdk:11-jre-hotspot-bionic
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
-    BUNDLER_VERSION=1.16.1-1 \
     CARGO_VERSION=0.52.0-0ubuntu1~18.04.1 \
     COMPOSER_VERSION=1.6.3-1 \
     CONAN_VERSION=1.40.3 \
@@ -102,7 +101,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         mercurial \
         subversion \
         # Install package managers (in versions known to work).
-        bundler=$BUNDLER_VERSION \
         cargo=$CARGO_VERSION \
         composer=$COMPOSER_VERSION \
         nodejs \

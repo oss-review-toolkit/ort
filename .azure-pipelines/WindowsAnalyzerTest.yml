@@ -30,9 +30,6 @@ jobs:
       pip install --user conan==$env:CONAN_VERSION pipenv==$env:PYTHON_PIPENV_VERSION virtualenv==$env:VIRTUALENV_VERSION
       conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
 
-      # Install Ruby packages.
-      gem install bundler -v $env:BUNDLER_VERSION
-
       # Stop adb because it otherwise locks the working directory which fails the checkout step.
       Stop-Process -Name "adb"
 

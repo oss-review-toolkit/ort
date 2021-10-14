@@ -28,9 +28,6 @@ jobs:
         virtualenv==$VIRTUALENV_VERSION
       conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
 
-      # Install Ruby packages.
-      sudo gem install bundler -v $BUNDLER_VERSION
-
       # Downgrade Rust, because the CargoSubcrateTest fails with the pre-installed version.
       rustup default $RUST_VERSION
 
