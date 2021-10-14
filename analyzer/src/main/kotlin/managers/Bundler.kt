@@ -23,8 +23,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -57,7 +55,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.HttpDownloadError
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
@@ -96,7 +93,7 @@ class Bundler(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
@@ -107,16 +104,7 @@ class Bundler(
         ) = Bundler(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = "ruby"
-
-    override fun transformVersion(output: String) = output.removePrefix("ruby ").substringBefore("p")
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.5.1,)")
-
     override fun beforeResolution(definitionFiles: List<File>) {
-        // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
-        // fixed versions to be sure to get consistent results.
-        checkVersion(analyzerConfig.ignoreToolVersions)
-
         // Install the Gems the helper scripts depend on.
         val requiredGems = listOf("bundler")
 
