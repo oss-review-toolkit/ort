@@ -117,7 +117,7 @@ internal fun generateSummary(
  */
 internal fun generateScannerDetails(result: JsonNode) =
     result["headers"]?.let { headers ->
-        generateScannerDetails(headers.first(), "options", "tool_version")
+        generateScannerDetails(headers.single(), "options", "tool_version")
     } ?: generateScannerDetails(result, "scancode_options", "scancode_version")
 
 /**
