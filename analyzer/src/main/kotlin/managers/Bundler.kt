@@ -60,6 +60,20 @@ import org.ossreviewtoolkit.utils.textValueOrEmpty
 private const val ROOT_DEPENDENCIES_SCRIPT = "/scripts/bundler_root_dependencies.rb"
 private const val RESOLVE_DEPENDENCIES_SCRIPT = "/scripts/bundler_resolve_dependencies.rb"
 
+private fun Bundler.runScriptResource(resource: String, workingDir: File): String {
+    val scriptFile = createOrtTempFile(File(resource).nameWithoutExtension, ".rb")
+    scriptFile.writeBytes(javaClass.getResource(resource).readBytes())
+
+    try {
+        val scriptCmd = run(scriptFile.path, workingDir = workingDir)
+        return scriptCmd.stdout
+    } finally {
+        if (!scriptFile.delete()) {
+            log.warn { "Helper script file '$scriptFile' could not be deleted." }
+        }
+    }
+}
+
 /**
  * The [Bundler](https://bundler.io/) package manager for Ruby. Also see
  * [Clarifying the Roles of the .gemspec and Gemfile][1].
@@ -179,56 +193,30 @@ class Bundler(
         }
     }
 
-    private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
-        val scriptFile = createOrtTempFile(File(ROOT_DEPENDENCIES_SCRIPT).nameWithoutExtension, ".rb")
-        scriptFile.writeBytes(javaClass.getResource(ROOT_DEPENDENCIES_SCRIPT).readBytes())
-
-        try {
-            val scriptCmd = run(
-                scriptFile.path,
-                workingDir = workingDir,
-            )
-            return yamlMapper.readValue(scriptCmd.stdout)
-        } finally {
-            if (!scriptFile.delete()) {
-                log.warn { "Helper script file '$scriptFile' could not be deleted." }
-            }
-        }
-    }
+    private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
+        yamlMapper.readValue(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir))
 
     private fun resolveGemsMetadata(workingDir: File): MutableMap<String, GemSpec> {
-        val scriptFile = createOrtTempFile(File(RESOLVE_DEPENDENCIES_SCRIPT).nameWithoutExtension, ".rb")
-        scriptFile.writeBytes(javaClass.getResource(RESOLVE_DEPENDENCIES_SCRIPT).readBytes())
+        val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir)
 
-        try {
-            val scriptCmd = run(
-                scriptFile.path,
-                workingDir = workingDir,
-            )
+        // The metadata produced by the "bundler_dependencies_metadata.rb" script separates specs for packages with
+        // the "\0" character as delimiter. Always drop the first "Fetching gem metadata from" entry.
+        val gemSpecs = stdout.split('\u0000').drop(1).map {
+            GemSpec.createFromMetadata(yamlMapper.readTree(it))
+        }.associateByTo(mutableMapOf()) {
+            it.name
+        }
 
-            // The metadata produced by the "bundler_dependencies_metadata.rb" script separates specs for packages with
-            // the "\0" character as delimiter. Always drop the first "Fetching gem metadata from" entry.
-            val gemSpecs = scriptCmd.stdout.split('\u0000').drop(1).map {
-                GemSpec.createFromMetadata(yamlMapper.readTree(it))
-            }.associateByTo(mutableMapOf()) {
-                it.name
-            }
-
-            // Bundler itself always shows up as a dependency because the helper script requires it, but it should be
-            // removed unless it actually is a runtime dependency.
-            val isBundlerARuntimeDependency = gemSpecs.values.any { gemspec ->
-                gemspec.runtimeDependencies.any { name ->
-                    name.startsWith("bundler")
-                }
-            }
-            if (!isBundlerARuntimeDependency) gemSpecs.remove("bundler")
-
-            return gemSpecs
-        } finally {
-            if (!scriptFile.delete()) {
-                log.warn { "Helper script file '$scriptFile' could not be deleted." }
+        // Bundler itself always shows up as a dependency because the helper script requires it, but it should be
+        // removed unless it actually is a runtime dependency.
+        val isBundlerARuntimeDependency = gemSpecs.values.any { gemspec ->
+            gemspec.runtimeDependencies.any { name ->
+                name.startsWith("bundler")
             }
         }
+        if (!isBundlerARuntimeDependency) gemSpecs.remove("bundler")
+
+        return gemSpecs
     }
 
     private fun parseProject(workingDir: File, gemSpecs: MutableMap<String, GemSpec>) =
