@@ -21,6 +21,7 @@
 
 val digraphVersion: String by project
 val jacksonVersion: String by project
+val jrubyVersion: String by project
 val kotlinxCoroutinesVersion: String by project
 val mavenVersion: String by project
 val mavenResolverVersion: String by project
@@ -82,6 +83,7 @@ dependencies {
     implementation("org.eclipse.sw360:client:$sw360ClientVersion")
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    implementation("org.jruby:jruby-complete:$jrubyVersion")
 
     testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")

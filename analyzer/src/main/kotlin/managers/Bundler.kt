@@ -25,10 +25,19 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.vdurmont.semver4j.Requirement
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.io.PrintStream
 import java.net.HttpURLConnection
 import java.util.SortedSet
+
+import kotlin.time.measureTime
+
+import org.jruby.embed.LocalContextScope
+import org.jruby.embed.PathType
+import org.jruby.embed.ScriptingContainer
+import org.jruby.runtime.Constants
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -51,27 +60,29 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.HttpDownloadError
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.createOrtTempFile
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
-private const val ROOT_DEPENDENCIES_SCRIPT = "/scripts/bundler_root_dependencies.rb"
-private const val RESOLVE_DEPENDENCIES_SCRIPT = "/scripts/bundler_resolve_dependencies.rb"
+private const val ROOT_DEPENDENCIES_SCRIPT = "scripts/bundler_root_dependencies.rb"
+private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_dependencies.rb"
 
-private fun Bundler.runScriptResource(resource: String, workingDir: File): String {
-    val scriptFile = createOrtTempFile(File(resource).nameWithoutExtension, ".rb")
-    scriptFile.writeBytes(javaClass.getResource(resource).readBytes())
+private fun runScriptResource(resource: String, workingDir: File): String {
+    val bytes = ByteArrayOutputStream()
 
-    try {
-        val scriptCmd = run(scriptFile.path, workingDir = workingDir)
-        return scriptCmd.stdout
-    } finally {
-        if (!scriptFile.delete()) {
-            log.warn { "Helper script file '$scriptFile' could not be deleted." }
-        }
+    with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
+        output = PrintStream(bytes, /* autoFlush = */ true, "UTF-8")
+        currentDirectory = workingDir.path
+        runScriptlet(PathType.CLASSPATH, resource)
     }
+
+    val stdout = bytes.toString()
+    if (stdout.isEmpty()) throw IOException("Failed to run script '$resource'.")
+
+    return stdout
 }
 
 /**
@@ -101,10 +112,34 @@ class Bundler(
     override fun transformVersion(output: String) = output.removePrefix("ruby ").substringBefore("p")
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.5.1,)")
 
-    override fun beforeResolution(definitionFiles: List<File>) =
+    override fun beforeResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
         // fixed versions to be sure to get consistent results.
         checkVersion(analyzerConfig.ignoreToolVersions)
+
+        // Install the Gems the helper scripts depend on.
+        val requiredGems = listOf("bundler")
+
+        val gemHome = Os.env["GEM_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gem")
+        val jrubyGems = gemHome.resolve("jruby/${Constants.RUBY_MAJOR_VERSION}.0/gems")
+        val bundlerGems = jrubyGems.walk().maxDepth(1).filter {
+            it.isDirectory && it != jrubyGems
+        }.mapTo(mutableListOf()) {
+            it.name.substringBeforeLast('-')
+        }
+
+        if (bundlerGems.containsAll(requiredGems)) {
+            log.info { "Already installed the ${requiredGems.joinToString()} gem(s)." }
+        } else {
+            val duration = measureTime {
+                org.jruby.Main().run(
+                    arrayOf("-S", "gem", "install", "--no-document", "--user-install", *requiredGems.toTypedArray())
+                )
+            }
+
+            log.perf { "Installing the ${requiredGems.joinToString()} gem(s) took $duration." }
+        }
+    }
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile

@@ -28,6 +28,9 @@
 
 require 'bundler'
 
+# Resolve dependencies independently of the Ruby interpreter.
+Bundler.settings.set_global(:force_ruby_platform, true)
+
 definition = Bundler.definition
 
 # This command tries to resolve dependencies that are specified in the Gemfile of the current working directory.
