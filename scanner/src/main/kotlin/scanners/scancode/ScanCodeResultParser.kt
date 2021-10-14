@@ -160,7 +160,7 @@ private fun generateScannerOptions(options: JsonNode?): String {
 
 /**
  * Get the license findings from the given [result]. If [parseExpressions] is true and license expressions are contained
- * in the result, these are preferred over separate license findings. Otherwise only separate license findings are
+ * in the result, these are preferred over separate license findings. Otherwise, only separate license findings are
  * parsed.
  */
 private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): List<LicenseFinding> {
