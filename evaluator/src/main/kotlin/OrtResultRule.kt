@@ -37,7 +37,7 @@ open class OrtResultRule(
 
     override fun issueSource() = "$name - ORT result"
 
-    fun hint(message: String, howToFix: String): Unit =
+    fun hint(message: String, howToFix: String = ""): Unit =
         hint(
             pkgId = null,
             license = null,
@@ -46,7 +46,7 @@ open class OrtResultRule(
             howToFix = howToFix
         )
 
-    fun warning(message: String, howToFix: String): Unit =
+    fun warning(message: String, howToFix: String = ""): Unit =
         warning(
             pkgId = null,
             license = null,
@@ -55,7 +55,7 @@ open class OrtResultRule(
             howToFix = howToFix
         )
 
-    fun error(message: String, howToFix: String): Unit =
+    fun error(message: String, howToFix: String = ""): Unit =
         error(
             pkgId = null,
             license = null,
