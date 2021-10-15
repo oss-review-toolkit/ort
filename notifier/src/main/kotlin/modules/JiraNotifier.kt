@@ -91,12 +91,20 @@ class JiraNotifier(
                 //       An improvement has to be added here so that it can handle the case that the search returns more
                 //       than one issue.
                 if (searchResult.total == 1) {
-                    val issue = searchResult.issues.iterator().next()
+                    val issue = restClient.issueClient.getIssue(searchResult.issues.iterator().next().key).claim()
+                    val comment = "$summary\n$description"
+
+                    if (comment in issue.comments.mapNotNull { it.body }) {
+                        log.debug { "The comment for the issue '$summary' already exists," +
+                                " therefore no new one will be added." }
+
+                        return Success(issue)
+                    }
 
                     return try {
                         restClient.issueClient.addComment(
                             issue.commentsUri,
-                            Comment.valueOf("Duplicate of: $summary \n $description")
+                            Comment.valueOf(comment)
                         ).claim()
 
                         Success(issue)
