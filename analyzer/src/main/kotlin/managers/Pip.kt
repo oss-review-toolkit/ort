@@ -61,7 +61,7 @@ import org.ossreviewtoolkit.utils.textValueOrEmpty
 // The lowest version that supports "--prefer-binary" and PEP 508 URL requirements to be used as dependencies.
 private const val PIP_VERSION = "18.1"
 
-private const val PIPDEPTREE_VERSION = "0.13.2"
+private const val PIPDEPTREE_VERSION = "2.2.0"
 
 private val PHONY_DEPENDENCIES = mapOf(
     "pipdeptree" to "", // A dependency of pipdeptree itself.
