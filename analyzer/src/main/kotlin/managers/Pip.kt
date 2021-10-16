@@ -230,9 +230,9 @@ class Pip(
         // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
-        // Install pydep after running any other command but before looking at the dependencies because it
-        // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
-        // pydep is not on PyPI, install it from Git instead.
+        // Install pydep after running any other command but before looking at the dependencies because it downgrades
+        // pip to version 7.1.2. Use it to get meta-information about the project from setup.py. As pydep is not on
+        // PyPI, install it from Git instead.
         val pydepUrl = "git+https://github.com/oss-review-toolkit/pydep@$PYDEP_REVISION"
         val pip = if (Os.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
