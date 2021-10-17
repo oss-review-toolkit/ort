@@ -126,22 +126,22 @@ object PythonVersion : CommandLineTool {
     /**
      * Return the absolute path to the Python interpreter for the given [version]. This is helpful as esp. on Windows
      * different Python versions can by installed in arbitrary locations, and the Python executable is even usually
-     * called the same in those locations.
+     * called the same in those locations. Return `null` if no matching Python interpreter is available.
      */
-    fun getPythonInterpreter(version: Int): String =
+    fun getPythonInterpreter(version: Int): String? =
         if (Os.isWindows) {
-            val scriptFile = File.createTempFile("python_interpreter", ".py")
-            scriptFile.writeBytes(javaClass.getResource("/scripts/python_interpreter.py").readBytes())
+            // TODO: Make analysis compatible with Python 3.10 (not only on Windows).
+            val incompatibleVersions = listOf("3.10")
 
-            try {
-                run("-$version", scriptFile.path).stdout
-            } finally {
-                if (!scriptFile.delete()) {
-                    log.warn { "Helper script file '${scriptFile.path}' could not be deleted." }
-                }
+            val installedVersions = run("--list-paths").stdout
+            val versionAndPath = installedVersions.lines().find { line ->
+                line.startsWith(" -$version") && incompatibleVersions.none { it in line }
             }
+
+            // Parse a line like " -2.7-32        C:\Python27\python.exe".
+            versionAndPath?.split(' ', limit = 3)?.last()?.trimStart()
         } else {
-            getPathFromEnvironment("python$version")?.path.orEmpty()
+            getPathFromEnvironment("python$version")?.path
         }
 }
 
@@ -488,8 +488,10 @@ class Pip(
 
     private fun createVirtualEnv(workingDir: File, pythonVersion: Int): File {
         val virtualEnvDir = createTempDirectory("$ORT_NAME-${workingDir.name}-virtualenv").toFile()
+        val pythonInterpreter = requireNotNull(PythonVersion.getPythonInterpreter(pythonVersion)) {
+            "No Python interpreter found for version $pythonVersion."
+        }
 
-        val pythonInterpreter = PythonVersion.getPythonInterpreter(pythonVersion)
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()
 
         return virtualEnvDir
