@@ -565,14 +565,13 @@ class SpdxDocumentFile(
             dependencies = getDependencies(projectPackage, spdxDocument, definitionFile, packages)
         )
 
-        val homepage = projectPackage.homepage.mapNotPresentToEmpty()
         val project = Project(
             id = projectPackage.toIdentifier(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.originator.wrapPresentInSortedSet(),
             declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
-            vcs = projectPackage.getVcsInfo() ?: processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepage),
-            homepageUrl = homepage,
+            vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY),
+            homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
             scopeDependencies = scopes
         )
 
