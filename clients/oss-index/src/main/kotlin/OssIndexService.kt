@@ -122,7 +122,7 @@ interface OssIndexService {
         val cvssScore: Float,
 
         /** A CVSS vector string. */
-        val cvssVector: String,
+        val cvssVector: String? = null,
 
         /** A Common Vulnerabilities and Exposures value, if known. */
         val cve: String? = null,

@@ -100,7 +100,7 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
     private fun OssIndexService.Vulnerability.toVulnerability(): Vulnerability {
         val reference = VulnerabilityReference(
             url = URI(reference),
-            scoringSystem = cvssVector.substringBefore('/'),
+            scoringSystem = cvssVector?.substringBefore('/'),
             severity = cvssScore.toString()
         )
 
