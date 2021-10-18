@@ -29,13 +29,13 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class PdfTemplateReporterFunTest : StringSpec({
-    "PDF output is created successfully from an existing result and default template" {
+    "The report is created successfully from an existing result and default template" {
         val report = PdfTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir())
 
         report.single().length() should beInRange(92000L..97000L)
     }
 
-    "Report generation is aborted when path to non-existing pdf-them file is given" {
+    "Report generation is aborted when path to non-existing PDF theme file is given" {
         shouldThrow<IllegalArgumentException> {
             PdfTemplateReporter().generateReport(
                 ReporterInput(ORT_RESULT),
@@ -45,7 +45,7 @@ class PdfTemplateReporterFunTest : StringSpec({
         }
     }
 
-    "PDF output is aborted when a non-existent PDF fonts directory is given" {
+    "Report generation is aborted when a non-existent PDF fonts directory is given" {
         shouldThrow<IllegalArgumentException> {
             PdfTemplateReporter().generateReport(
                 ReporterInput(ORT_RESULT),
