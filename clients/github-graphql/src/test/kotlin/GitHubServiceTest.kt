@@ -199,6 +199,7 @@ class GitHubServiceTest : WordSpec({
                 )
 
                 with(pagedResult.items.first()) {
+                    url shouldBe "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.4"
                     publishedAt shouldBe "2018-04-12T18:47:35Z"
                     tagName shouldBe "0.4.4"
                     tagCommit?.commitUrl should contain("1ec03fce40b59e2559e3f3affde27042f1a9b644")
