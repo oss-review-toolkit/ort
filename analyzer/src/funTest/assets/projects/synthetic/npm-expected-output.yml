@@ -1069,6 +1069,36 @@ packages:
     url: "https://github.com/nodejs/string_decoder.git"
     revision: "6e0a9286ed4497badebd4ec6a9a7a4d37793aae8"
     path: ""
+- id: "NPM::tea:0.1.0"
+  purl: "pkg:npm/tea@0.1.0"
+  authors:
+  - "Jake Luer"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Common object utilities."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/tea/-/tea-0.1.0.tgz"
+    hash:
+      value: "6e6989689f8446fc07144c551b9a4fcf2f13352a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:logicalparadox/idris.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/logicalparadox/idris.git"
+    revision: ""
+    path: ""
 - id: "NPM::typechecker:4.7.0"
   purl: "pkg:npm/typechecker@4.7.0"
   authors:
@@ -1144,19 +1174,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://github.com/angular/web-animations-js/archive/release_pr208.tar.gz"
+    url: ""
     hash:
       value: ""
       algorithm: ""
   vcs:
     type: "Git"
     url: "https://github.com/web-animations/web-animations-js.git"
-    revision: "release_pr208"
+    revision: ""
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/web-animations/web-animations-js.git"
-    revision: "release_pr208"
+    revision: ""
     path: ""
 - id: "NPM:@types:node:12.6.8"
   purl: "pkg:npm/%40types/node@12.6.8"
