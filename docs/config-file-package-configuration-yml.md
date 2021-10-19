@@ -44,7 +44,7 @@ to fix incorrect scan results, for example if a wrong license was detected, or i
 
 The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file,
 see [excluding paths](config-file-ort-yml.md#excluding-paths) and
-[curating license findings](config-file-ort-yml.md#curating-license-findings) for details.
+[curating license findings](config-file-ort-yml.md#curating-project-license-findings) for details.
 
 ```yaml
   id: "Pip::example-package:0.0.1"
