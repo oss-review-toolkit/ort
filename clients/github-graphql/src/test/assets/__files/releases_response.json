@@ -5,6 +5,7 @@
         "edges": [
           {
             "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.4",
               "name": "Releasing 0.4.4",
               "publishedAt": "2018-04-12T18:47:35Z",
               "tagName": "0.4.4",
@@ -16,6 +17,7 @@
           },
           {
             "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.5",
               "name": "Releasing 0.4.5 version",
               "publishedAt": "2018-09-02T06:36:05Z",
               "tagName": "0.4.5",
@@ -27,6 +29,7 @@
           },
           {
             "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.6",
               "name": "Releasing 0.4.6 version",
               "publishedAt": "2018-10-18T12:06:11Z",
               "tagName": "0.4.6",
@@ -38,6 +41,7 @@
           },
           {
             "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.8",
               "name": "Releasing 0.4.8 version",
               "publishedAt": "2019-03-16T06:01:24Z",
               "tagName": "0.4.8",
@@ -49,6 +53,7 @@
           },
           {
             "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.9",
               "name": "Releasing 0.4.11",
               "publishedAt": "2020-06-23T11:32:43Z",
               "tagName": "0.4.11",
