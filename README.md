@@ -21,8 +21,8 @@
 [9]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg?branch=master
 [10]: https://jitpack.io/v/oss-review-toolkit/ort.svg
 [11]: https://jitpack.io/#oss-review-toolkit/ort
-[12]: https://codecov.io/gh/oss-review-toolkit/ort/branch/master/graph/badge.svg
-[13]: https://codecov.io/gh/oss-review-toolkit/ort/
+[12]: https://codecov.io/gh/oss-review-toolkit/ort/branch/master/graph/badge.svg?token=QD2tCSUTVN
+[13]: https://app.codecov.io/gh/oss-review-toolkit/ort
 [14]: https://badgen.net/https/api.tickgit.com/badgen/github.com/oss-review-toolkit/ort
 [15]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
 [16]: https://img.shields.io/lgtm/alerts/g/oss-review-toolkit/ort.svg?logo=lgtm&logoWidth=18
