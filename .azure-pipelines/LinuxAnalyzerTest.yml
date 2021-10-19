@@ -143,6 +143,9 @@ jobs:
   - bash: ./gradlew --stop
     displayName: Stop Gradle Daemon
 
-  - script: bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*';
+  - bash: |
+      curl -Os https://uploader.codecov.io/latest/linux/codecov
+      chmod +x codecov
+      ./codecov -X gcov -f '!*/src/*/assets/*';
     displayName: Upload to codecov.io
     condition: eq(variables['Build.Reason'], 'Schedule')
