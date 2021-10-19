@@ -54,4 +54,5 @@ jobs:
     - name: Check REUSE Compliance
       run: |
         pip install --user reuse
+        pip install --user --force-reinstall python-debian==0.1.40 # See https://github.com/fsfe/reuse-tool/issues/427.
         ~/.local/bin/reuse lint
