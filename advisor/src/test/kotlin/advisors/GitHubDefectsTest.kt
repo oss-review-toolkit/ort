@@ -267,6 +267,83 @@ class GitHubDefectsTest : WordSpec({
             }
         }
     }
+
+    "label filters" should {
+        "filter for specific labels" {
+            val pkg = createPackage()
+            val issues = listOf(createIssue(index = 1), createIssue(index = 2), createIssue(index = 3))
+
+            createGitHubServiceMock().configureResults(issues, emptyList())
+
+            val labelFilter = listOf("label1", "label3")
+            val advisor = createAdvisor(labelFilter = labelFilter)
+            val result = advisor.getSingleResult(pkg)
+
+            result.defects should containExactlyInAnyOrder(
+                createDefect(index = 1),
+                createDefect(index = 3)
+            )
+        }
+
+        "exclude specific labels" {
+            val pkg = createPackage()
+            val issues = listOf(createIssue(index = 1), createIssue(index = 2), createIssue(index = 3))
+
+            createGitHubServiceMock().configureResults(issues, emptyList())
+
+            val labelFilter = listOf("!label1", "-label3", "*")
+            val advisor = createAdvisor(labelFilter = labelFilter)
+            val result = advisor.getSingleResult(pkg)
+
+            result.defects should containExactlyInAnyOrder(createDefect(index = 2))
+        }
+
+        "do regex matches on label names" {
+            val pkg = createPackage()
+            val issues = listOf(createIssue(index = 1), createIssue(index = 22))
+
+            createGitHubServiceMock().configureResults(issues, emptyList())
+
+            val labelFilter = listOf("label*")
+            val advisor = createAdvisor(labelFilter = labelFilter)
+            val result = advisor.getSingleResult(pkg)
+
+            result.defects should containExactlyInAnyOrder(
+                createDefect(index = 1),
+                createDefect(index = 22)
+            )
+        }
+
+        "handle complex regex expressions on label names" {
+            val pkg = createPackage()
+            val label = LabelEdge(Label("someComplexExpression?!"))
+            val issue = createIssue(index = 1).copy(labels = LabelConnection(listOf(label)))
+
+            createGitHubServiceMock().configureResults(listOf(issue), emptyList())
+
+            val labelFilter = listOf("some*Expression?!")
+            val advisor = createAdvisor(labelFilter = labelFilter)
+            val result = advisor.getSingleResult(pkg)
+
+            result.defects shouldHaveSize 1
+        }
+
+        "do matches in a case-insensitive manner" {
+            val pkg = createPackage()
+            val issues = listOf(createIssue(index = 1), createIssue(index = 2), createIssue(index = 3))
+
+            createGitHubServiceMock().configureResults(issues, emptyList())
+
+            val labelFilter = listOf("LABEL1", "Label3")
+            val advisor = createAdvisor(labelFilter = labelFilter)
+            val result = advisor.getSingleResult(pkg)
+
+            result.defects should containExactlyInAnyOrder(
+                createDefect(index = 1),
+                createDefect(index = 3)
+            )
+        }
+    }
 })
 
 private const val GITHUB_TOKEN = "<github_access_token>"
@@ -292,10 +369,12 @@ private fun createGitHubServiceMock(url: URI = GitHubService.ENDPOINT): GitHubSe
 }
 
 /**
- * Create a test advisor instance using the factory with the configured endpoint [url].
+ * Create a test advisor instance using the factory with the configured endpoint [url]. Set [labelFilter] in the
+ * advisor's configuration.
  */
-private fun createAdvisor(url: String? = null): GitHubDefects {
+private fun createAdvisor(url: String? = null, labelFilter: List<String>? = null): GitHubDefects {
     val githubConfig = GitHubDefectsConfiguration(token = GITHUB_TOKEN, endpointUrl = url)
+        .run { labelFilter?.let { copy(labelFilter = it) } ?: this }
     val advisorConfig = AdvisorConfiguration(gitHubDefects = githubConfig)
 
     val factory = GitHubDefects.Factory()
