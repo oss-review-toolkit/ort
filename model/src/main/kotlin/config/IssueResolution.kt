@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.utils.sanitizeMessage
 
 /**
  * Defines the resolution of an [OrtIssue]. This can be used to silence false positives, or issues that have been
@@ -45,10 +46,10 @@ data class IssueResolution(
     val comment: String
 ) {
     @JsonIgnore
-    private val regex = Regex(message, RegexOption.DOT_MATCHES_ALL)
+    private val regex = Regex(message.sanitizeMessage(), RegexOption.DOT_MATCHES_ALL)
 
     /**
      * True if [message] matches the message of [issue].
      */
-    fun matches(issue: OrtIssue) = regex.matches(issue.message)
+    fun matches(issue: OrtIssue) = regex.matches(issue.message.sanitizeMessage())
 }

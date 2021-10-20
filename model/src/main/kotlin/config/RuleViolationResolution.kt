@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.utils.sanitizeMessage
 
 /**
  * Defines the resolution of a rule violation. This can be used to silence rule violations that have been identified
@@ -46,10 +47,10 @@ data class RuleViolationResolution(
     val comment: String
 ) {
     @JsonIgnore
-    private val regex = Regex(message, RegexOption.DOT_MATCHES_ALL)
+    private val regex = Regex(message.sanitizeMessage(), RegexOption.DOT_MATCHES_ALL)
 
     /**
      * True if [message] matches the message of [error].
      */
-    fun matches(violation: RuleViolation) = regex.matches(violation.message)
+    fun matches(violation: RuleViolation) = regex.matches(violation.message.sanitizeMessage())
 }
