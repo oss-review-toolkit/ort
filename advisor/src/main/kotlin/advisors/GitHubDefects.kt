@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.advisor.advisors
 
 import java.net.URI
 import java.time.Instant
+import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
@@ -60,8 +61,12 @@ import org.ossreviewtoolkit.utils.core.showStackTrace
  *
  * In general, the data model of GitHub issues is rather weak from a semantic point of view. There is no clear
  * distinction between defects, feature requests, or other types of issues. The information retrieved by this
- * implementation is therefore of limited value. Thus, this advisor is more a reference implementation for ORT's
- * defects model and not necessarily suitable for production usage.
+ * implementation is therefore of limited value. To ameliorate the situation, it is possible to define filters that
+ * match against labels assigned to issues in a rather generic way. However, as there are no standards for labels over
+ * different repositories, it is hard to come up with a reasonable set of filters.
+ *
+ * For these reasons, this advisor is more a reference implementation for ORT's defects model and not necessarily
+ * suitable for production usage.
  *
  * TODO: Run queries in parallel to improve performance.
  */
@@ -76,6 +81,9 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
      * created once beforehand.
      */
     private val details = AdvisorDetails(providerName)
+
+    /** The filters to be applied to issue labels. */
+    private val labelFilters = gitHubConfiguration.labelFilter.toLabelFilters()
 
     /** The service for accessing the GitHub GraphQL API. */
     private val service by lazy {
@@ -148,7 +156,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         log.debug { "Found ${issues.size} issues for package '${pkg.pkg.id.toCoordinates()}'." }
 
         val defects = if (ortIssues.isEmpty()) {
-            issuesForRelease(pkg, issues, releases, ortIssues).also {
+            issuesForRelease(pkg, issues.applyLabelFilters(), releases, ortIssues).also {
                 log.debug { "Found ${it.size} defects for package '${pkg.pkg.id.toCoordinates()}'." }
             }
         } else {
@@ -188,6 +196,14 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         log.debug { "Assuming release date $releaseDate for package '${pkg.pkg.id.toCoordinates()}'." }
         return issues.filter { it.closedAfter(releaseDate) }.map { it.toDefect(releases) }
     }
+
+    /**
+     * Return a filtered list of [Issue]s according to the label filters defined in the configuration.
+     */
+    private fun List<Issue>.applyLabelFilters(): List<Issue> = filter { issue ->
+        val labels = issue.labels()
+        labelFilters.find { it.matches(labels) }?.including ?: false
+    }
 }
 
 /**
@@ -204,8 +220,54 @@ private data class GitHubPackage(
     val repoName: String
 )
 
+/**
+ * A data class representing a filter to be applied to the labels of issues.
+ */
+private data class LabelFilter(
+    /** The expression to match against the label names. */
+    val expression: Regex,
+
+    /** Flag whether a match should include issues into the result set. */
+    val including: Boolean
+) {
+    /**
+     * Check whether this filter matches at least one of the given [labels].
+     */
+    fun matches(labels: List<String>): Boolean = labels.any(expression::matches)
+}
+
+/**
+ * Transform this list of label filter expressions to [LabelFilter]s.
+ */
+private fun List<String>.toLabelFilters(): List<LabelFilter> =
+    map { expression ->
+        if (expression.startsWith('!') || expression.startsWith('-')) {
+            LabelFilter(expression.substring(1).toFilterRegex(), including = false)
+        } else {
+            LabelFilter(expression.toFilterRegex(), including = true)
+        }
+    }
+
+/**
+ * Generate a [Regex] that corresponds to this filter expression string. Filter strings use a syntax slightly different
+ * from regular expressions; for instance "*" is used as wildcard. Other parts in the string need to be quoted.
+ */
+private fun String.toFilterRegex(): Regex {
+    val parts = split(REGEX_FILTER_WILDCARDS).filterNot(String::isEmpty)
+    val expression = parts.joinToString(separator = "", prefix = "(?i)^", postfix = "$") { part ->
+        part.takeUnless { part == "*" }?.let(Pattern::quote) ?: ".*"
+    }
+
+    return Regex(expression)
+}
+
 /** A regular expression to match for GitHub repository URLs. */
 private val REGEX_GITHUB = "https://github.com/(.+)/(.+).git".toRegex()
+
+/**
+ * A regular expression to split a filter string at wildcard characters. The wildcards are included in the result.
+ */
+private val REGEX_FILTER_WILDCARDS = "(?<=[*])|(?=[*])".toRegex()
 
 /**
  * Convert this [Issue] to a [Defect], using [releases] to determine the fix release.
