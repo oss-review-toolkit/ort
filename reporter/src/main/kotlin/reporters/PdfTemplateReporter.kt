@@ -21,14 +21,9 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.asciidoctor.Attributes
 
 import org.ossreviewtoolkit.reporter.Reporter
-import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 /**
  * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
@@ -64,11 +59,10 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
         private const val OPTION_PDF_FONTS_DIR = "pdf.fonts.dir"
     }
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val templateOptions = options.toMutableMap()
+    override fun processTemplateOptions(options: MutableMap<String, String>): Attributes {
         val attributesBuilder = Attributes.builder()
 
-        templateOptions.remove(OPTION_PDF_THEME_FILE)?.let {
+        options.remove(OPTION_PDF_THEME_FILE)?.let {
             val pdfThemeFile = File(it).absoluteFile
 
             require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
@@ -76,7 +70,7 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
             attributesBuilder.attribute("pdf-theme", pdfThemeFile.toString())
         }
 
-        templateOptions.remove(OPTION_PDF_FONTS_DIR)?.let {
+        options.remove(OPTION_PDF_FONTS_DIR)?.let {
             val pdfFontsDir = File(it).absoluteFile
 
             require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
@@ -84,18 +78,6 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
             attributesBuilder.attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
         }
 
-        val asciiDocOutputDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
-
-        val asciiDocFiles = generateAsciiDocFiles(input, asciiDocOutputDir, templateOptions)
-
-        val generateTemplateReports = processAsciiDocFiles(
-            outputDir,
-            asciiDocFiles,
-            attributesBuilder.build()
-        )
-
-        asciiDocOutputDir.safeDeleteRecursively()
-
-        return generateTemplateReports
+        return attributesBuilder.build()
     }
 }

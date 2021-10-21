@@ -61,11 +61,16 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
     )
     private val asciidoctor = Asciidoctor.Factory.create()
 
-    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val asciiDocOutputDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
-        val asciiDocFiles = generateAsciiDocFiles(input, asciiDocOutputDir, options)
+    protected open fun processTemplateOptions(options: MutableMap<String, String>): Attributes =
+        Attributes.builder().build()
 
-        val reports = processAsciiDocFiles(outputDir, asciiDocFiles)
+    final override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+        val asciiDocOutputDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
+
+        val templateOptions = options.toMutableMap()
+        val asciidoctorAttributes = processTemplateOptions(templateOptions)
+        val asciiDocFiles = generateAsciiDocFiles(input, asciiDocOutputDir, templateOptions)
+        val reports = processAsciiDocFiles(outputDir, asciiDocFiles, asciidoctorAttributes)
 
         asciiDocOutputDir.safeDeleteRecursively()
 
@@ -75,7 +80,7 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
     /**
      * Generate the AsciiDoc files from the templates defined in [options] in [outputDir].
      */
-    protected fun generateAsciiDocFiles(
+    private fun generateAsciiDocFiles(
         input: ReporterInput,
         outputDir: File,
         options: Map<String, String> = emptyMap()
@@ -102,7 +107,7 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
     protected open fun processAsciiDocFiles(
         outputDir: File,
         asciiDocFiles: List<File>,
-        asciidoctorAttributes: Attributes = Attributes.builder().build()
+        asciidoctorAttributes: Attributes
     ): List<File> {
         val optionsBuilder = Options.builder()
             .attributes(asciidoctorAttributes)
