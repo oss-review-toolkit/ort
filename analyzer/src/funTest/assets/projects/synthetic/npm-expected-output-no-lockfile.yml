@@ -22,6 +22,6 @@ issues:
   source: "NPM"
   message: "Resolving NPM dependencies for 'src/funTest/assets/projects/synthetic/npm/no-lockfile/package.json'\
     \ failed with: IllegalArgumentException: No lockfile found in 'src/funTest/assets/projects/synthetic/npm/no-lockfile'.\
-    \ This potentially results in unstable versions of dependencies. To allow this,\
-    \ enable support for dynamic versions."
+    \ This potentially results in unstable versions of dependencies. To support this,\
+    \ enable the 'allowDynamicVersions' option in 'ort.conf'."
   severity: "ERROR"

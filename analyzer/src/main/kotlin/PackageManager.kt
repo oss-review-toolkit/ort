@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.isSymbolicLink
 import org.ossreviewtoolkit.utils.core.log
@@ -288,7 +289,7 @@ abstract class PackageManager(
                 .takeUnless { it.isEmpty() } ?: "."
 
             "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
-                    "dependencies. To allow this, enable support for dynamic versions."
+                    "dependencies. To support this, enable the 'allowDynamicVersions' option in '$ORT_CONFIG_FILENAME'."
         }
     }
 }
