@@ -87,7 +87,7 @@ The following package managers are activated:
         Bower, Bundler, Cargo, Composer, DotNet, GoDep, Gradle, Maven, NPM, NuGet, PIP, SBT, Stack, Yarn
 Analyzing project path:
         [mime-types-dir]
-ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-dir]'. This potentially results in unstable versions of dependencies. To allow this, enable support for dynamic versions.
+ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-dir]'. This potentially results in unstable versions of dependencies. To support this, enable the 'allowDynamicVersions' option in 'ort.conf'.
 Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
 ```
 
