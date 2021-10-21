@@ -54,6 +54,11 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
         private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
     }
 
+    private val templateProcessor = FreemarkerTemplateProcessor(
+        ASCII_DOC_FILE_PREFIX,
+        ASCII_DOC_FILE_EXTENSION,
+        ASCII_DOC_TEMPLATE_DIRECTORY
+    )
     private val asciidoctor = Asciidoctor.Factory.create()
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
@@ -76,9 +81,6 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
         options: Map<String, String> = emptyMap()
     ): List<File> {
         val templateOptions = options.toMutableMap()
-
-        val templateProcessor =
-            FreemarkerTemplateProcessor(ASCII_DOC_FILE_PREFIX, ASCII_DOC_FILE_EXTENSION, ASCII_DOC_TEMPLATE_DIRECTORY)
 
         if (!templateOptions.contains(FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH)) {
             templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, buildString {
