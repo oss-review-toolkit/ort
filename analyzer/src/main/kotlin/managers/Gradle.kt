@@ -91,8 +91,7 @@ class Gradle(
         private val gradleCacheRoot = GRADLE_USER_HOME.resolve("caches/modules-2/files-2.1")
 
         override fun findArtifact(artifact: Artifact): File? {
-            val artifactRootDir = File(
-                gradleCacheRoot,
+            val artifactRootDir = gradleCacheRoot.resolve(
                 "${artifact.groupId}/${artifact.artifactId}/${artifact.version}"
             )
 
