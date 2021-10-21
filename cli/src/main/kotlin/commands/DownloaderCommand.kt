@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.core.ArchiveType
+import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.core.archive
 import org.ossreviewtoolkit.utils.core.collectMessagesAsString
@@ -114,7 +115,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     private val licenseClassificationsFile by option(
         "--license-classifications-file",
         help = "A file containing the license classifications that are used to limit downloads if the included " +
-                "categories are specified in the 'ort.conf' file. If not specified, all packages are downloaded."
+                "categories are specified in the '$ORT_CONFIG_FILENAME' file. If not specified, all packages are " +
+                "downloaded."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
