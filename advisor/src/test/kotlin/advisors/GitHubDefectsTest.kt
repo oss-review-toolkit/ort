@@ -199,6 +199,23 @@ class GitHubDefectsTest : WordSpec({
             result.shouldContainIssue(pkg, Severity.ERROR, "Test exception")
         }
 
+        "only retrieve the configured number of defects" {
+            val pkg = createPackage()
+            val release = Release("https://release", "r1", time(3, 1), GIT_TAG, Commit(commitUrl("0987654321")))
+
+            val maxDefectsCount = 10
+            val issueIndices = 1..30
+            val issues = issueIndices.map { index -> createIssue(index) }.reversed()
+            val expectedDefects = issueIndices.map { index -> createDefect(index) }.takeLast(maxDefectsCount)
+
+            createGitHubServiceMock().configureResults(issues, listOf(release))
+
+            val advisor = createAdvisor(maxDefectsCount = maxDefectsCount)
+            val result = advisor.getSingleResult(pkg)
+
+            result.defects should containExactlyInAnyOrder(expectedDefects)
+        }
+
         "handle paging in queries correctly" {
             val pkg = createPackage()
             val release1 = Release("https://release1", "r1.0", time(1, 1), "1.0", Commit(commitUrl("1234567890")))
@@ -223,6 +240,30 @@ class GitHubDefectsTest : WordSpec({
 
             result.summary.issues should beEmpty()
             result.defects should containExactlyInAnyOrder(createDefect(index = 1), createDefect(index = 2))
+        }
+
+        "only retrieve the configured number of defects in paged queries" {
+            val pkg = createPackage()
+
+            val service = createGitHubServiceMock()
+            coEvery {
+                service.repositoryIssues(REPO_OWNER, REPO)
+            } returns Result.success(PagedResult(listOf(createIssue(index = 4), createIssue(index = 3)), 100, "c1"))
+            coEvery {
+                service.repositoryIssues(REPO_OWNER, REPO, Paging(cursor = "c1"))
+            } returns Result.success(PagedResult(listOf(createIssue(index = 2), createIssue(index = 1)), 100, "c2"))
+            coEvery {
+                service.repositoryReleases(REPO_OWNER, REPO)
+            } returns Result.success(PagedResult(emptyList(), 100, null))
+
+            val advisor = createAdvisor(maxDefectsCount = 3)
+            val result = advisor.getSingleResult(pkg)
+
+            result.defects should containExactlyInAnyOrder(
+                createDefect(index = 2),
+                createDefect(index = 3),
+                createDefect(4)
+            )
         }
     }
 
@@ -369,12 +410,17 @@ private fun createGitHubServiceMock(url: URI = GitHubService.ENDPOINT): GitHubSe
 }
 
 /**
- * Create a test advisor instance using the factory with the configured endpoint [url]. Set [labelFilter] in the
- * advisor's configuration.
+ * Create a test advisor instance using the factory with the configured endpoint [url]. Set [labelFilter] and
+ * [the maximum number of defects to retrieve][maxDefectsCount] in the advisor's configuration.
  */
-private fun createAdvisor(url: String? = null, labelFilter: List<String>? = null): GitHubDefects {
+private fun createAdvisor(
+    url: String? = null,
+    labelFilter: List<String>? = null,
+    maxDefectsCount: Int? = null
+): GitHubDefects {
     val githubConfig = GitHubDefectsConfiguration(token = GITHUB_TOKEN, endpointUrl = url)
         .run { labelFilter?.let { copy(labelFilter = it) } ?: this }
+        .run { maxDefectsCount?.let { copy(maxNumberOfIssuesPerRepository = it) } ?: this }
     val advisorConfig = AdvisorConfiguration(gitHubDefects = githubConfig)
 
     val factory = GitHubDefects.Factory()

@@ -63,7 +63,8 @@ import org.ossreviewtoolkit.utils.core.showStackTrace
  * distinction between defects, feature requests, or other types of issues. The information retrieved by this
  * implementation is therefore of limited value. To ameliorate the situation, it is possible to define filters that
  * match against labels assigned to issues in a rather generic way. However, as there are no standards for labels over
- * different repositories, it is hard to come up with a reasonable set of filters.
+ * different repositories, it is hard to come up with a reasonable set of filters. In addition, it is possible to
+ * configure a maximum number of issues that are retrieved from a single repository.
  *
  * For these reasons, this advisor is more a reference implementation for ORT's defects model and not necessarily
  * suitable for production usage.
@@ -84,6 +85,9 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
 
     /** The filters to be applied to issue labels. */
     private val labelFilters = gitHubConfiguration.labelFilter.toLabelFilters()
+
+    /** The maximum number of defects to retrieve. */
+    private val maxDefects = gitHubConfiguration.maxNumberOfIssuesPerRepository ?: Int.MAX_VALUE
 
     /** The service for accessing the GitHub GraphQL API. */
     private val service by lazy {
@@ -149,7 +153,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         log.debug { "Found ${releases.size} releases for package '${pkg.pkg.id.toCoordinates()}'." }
 
         val issues = handleError(
-            fetchAll { service.repositoryIssues(pkg.repoOwner, pkg.repoName, it) },
+            fetchAll(maxDefects) { service.repositoryIssues(pkg.repoOwner, pkg.repoName, it) },
             "issues"
         )
 
@@ -294,17 +298,33 @@ private fun Issue.closedAfter(time: Instant): Boolean =
     !closed || closedAt == null || Instant.parse(closedAt).isAfter(time)
 
 /**
- * Implement paging logic to retrieve the items from all pages for the given [query].
+ * Implement paging logic to retrieve the items from all pages for the given [query]. Limit the result to [maxCount]
+ * items.
  */
-private suspend fun <T> fetchAll(query: suspend (Paging) -> QueryResult<T>): Result<List<T>> =
-    Paging.fetchAll(
-        mutableListOf(),
-        query,
+private suspend fun <T> fetchAll(
+    maxCount: Int = Int.MAX_VALUE,
+    query: suspend (Paging) -> QueryResult<T>
+): Result<List<T>> {
+    val resultList = mutableListOf<T>()
+
+    // A query function that stops paging when the maximum number of results is reached.
+    val wrappedQuery: suspend (Paging) -> QueryResult<T> = { paging ->
+        query(paging).map { pageResult ->
+            pageResult.takeIf { it.cursor == null || it.items.size + resultList.size <= maxCount }
+                ?: pageResult.copy(cursor = null)
+        }
+    }
+
+    return Paging.fetchAll(
+        resultList,
+        wrappedQuery,
         { list, result ->
-            list += result.items
+            val remainingCount = maxCount - list.size
+            list += result.items.take(remainingCount)
             list
         }
     )
+}
 
 /**
  * Return the first release in this sorted list that was published after the given [date]. This is used to determine
