@@ -125,5 +125,12 @@ data class GitHubDefectsConfiguration(
      * (see https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#about-default-labels)
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val labelFilter: List<String> = listOf("!duplicate", "!enhancement", "!invalid", "!question", "*")
+    val labelFilter: List<String> = listOf("!duplicate", "!enhancement", "!invalid", "!question", "*"),
+
+    /**
+     * The maximum number of defects that are retrieved from a single repository. If a repository contains more
+     * issues, only this number is returned (the newest ones). Popular libraries hosted on GitHub can really have a
+     * large number of issues; therefore, it makes sense to restrict the result set produced by this advisor.
+     */
+    val maxNumberOfIssuesPerRepository: Int? = null
 )
