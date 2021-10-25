@@ -21,7 +21,12 @@ package org.ossreviewtoolkit.advisor.advisors
 
 import java.net.URI
 import java.time.Instant
+import java.util.concurrent.Executors
 import java.util.regex.Pattern
+
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
@@ -68,13 +73,19 @@ import org.ossreviewtoolkit.utils.core.showStackTrace
  *
  * For these reasons, this advisor is more a reference implementation for ORT's defects model and not necessarily
  * suitable for production usage.
- *
- * TODO: Run queries in parallel to improve performance.
  */
 class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguration) : AdviceProvider(name) {
     class Factory : AbstractAdviceProviderFactory<GitHubDefects>("GitHubDefects") {
         override fun create(config: AdvisorConfiguration) =
             GitHubDefects(providerName, config.forProvider { gitHubDefects })
+    }
+
+    companion object {
+        /**
+         * The default number of parallel requests executed by this advisor implementation. This value is used if the
+         * corresponding property in the configuration is unspecified. It is chosen rather arbitrarily.
+         */
+        const val DEFAULT_PARALLEL_REQUESTS = 4
     }
 
     /**
@@ -89,6 +100,9 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
     /** The maximum number of defects to retrieve. */
     private val maxDefects = gitHubConfiguration.maxNumberOfIssuesPerRepository ?: Int.MAX_VALUE
 
+    /** The number of requests to be processed in parallel. */
+    private val parallelRequests = gitHubConfiguration.parallelRequests ?: DEFAULT_PARALLEL_REQUESTS
+
     /** The service for accessing the GitHub GraphQL API. */
     private val service by lazy {
         GitHubService.create(
@@ -98,7 +112,12 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
     }
 
     override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> =
-        packages.associateWith { findDefectsForPackage(it) }
+        Executors.newFixedThreadPool(parallelRequests).asCoroutineDispatcher().use { context ->
+            withContext(context) {
+                packages.associateWith { async { findDefectsForPackage(it) } }
+                    .mapValues { entry -> entry.value.await() }
+            }
+        }
 
     /**
      * Try to find the release in the given list of [releases] for the given [package][pkg]. As there is no direct
