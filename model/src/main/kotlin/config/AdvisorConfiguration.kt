@@ -132,5 +132,13 @@ data class GitHubDefectsConfiguration(
      * issues, only this number is returned (the newest ones). Popular libraries hosted on GitHub can really have a
      * large number of issues; therefore, it makes sense to restrict the result set produced by this advisor.
      */
-    val maxNumberOfIssuesPerRepository: Int? = null
+    val maxNumberOfIssuesPerRepository: Int? = null,
+
+    /**
+     * Determines the number of requests to the GitHub GraphQL API that are executed in parallel. Rather than querying
+     * each repository one after the other, fetching the data of multiple repositories concurrently can reduce the
+     * execution times for this advisor implementation. If unspecified, a default value for parallel executions as
+     * defined in the _GitHubDefects_ class is used.
+     */
+    val parallelRequests: Int? = null
 )
