@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -186,14 +186,14 @@ private fun stubDefinitions(wiremock: WireMockServer, coordinates: Coordinates =
 }
 
 /**
- * Check that the given [result] contains expected data.
+ * Check that this [Result] contains the expected data and return the first scan result from the list on success.
  */
-private fun assertValidResult(result: Result<List<ScanResult>>): ScanResult =
-    when (result) {
+private fun Result<List<ScanResult>>.shouldBeValid(): ScanResult =
+    when (this) {
         is Success -> {
-            result.result shouldHaveSize 1
+            result shouldHaveSize 1
 
-            val scanResult = result.result.first()
+            val scanResult = result.first()
             scanResult.summary.licenseFindings.find {
                 it.location.path == TEST_PATH && it.license.licenses().contains("Apache-2.0")
             } shouldNot beNull()
@@ -201,27 +201,26 @@ private fun assertValidResult(result: Result<List<ScanResult>>): ScanResult =
             scanResult
         }
 
-        is Failure -> fail("Expected success result, but got Failure(${result.error})")
+        is Failure -> fail("Expected success result, but got Failure($error)")
     }
 
 /**
- * Check that the given [result] does not contain any data.
+ * Check that this [Result] does not contain any data.
  */
-private fun assertEmptyResult(result: Result<List<ScanResult>>) {
-    when (result) {
-        is Success -> result.result should beEmpty()
-        is Failure -> fail("Unexpected result: $result")
+private fun Result<List<ScanResult>>.shouldBeEmpty() {
+    when (this) {
+        is Success -> result should beEmpty()
+        is Failure -> fail("Unexpected result: $this")
     }
 }
 
 /**
- * Check whether the given [time] is close to the current time. This is used to check whether correct
- * timestamps are set.
+ * Check whether this [Instant] is close to the current time. This is used to check whether correct timestamps are set.
  */
-private fun assertCurrentTime(time: Instant) {
-    val delta = Duration.between(time, Instant.now())
+private fun Instant.shouldBeCloseToCurrentTime(maxDelta: Duration = MAX_TIME_DELTA) {
+    val delta = Duration.between(this, Instant.now())
     delta.isNegative shouldBe false
-    delta.compareTo(MAX_TIME_DELTA) shouldBeLessThan 0
+    delta.compareTo(maxDelta) shouldBeLessThan 0
 }
 
 /**
@@ -263,7 +262,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(TEST_PACKAGE, SCANNER_CRITERIA))
+            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeValid()
         }
 
         "load existing scan results for an identifier from ClearlyDefined" {
@@ -276,7 +275,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(TEST_IDENTIFIER))
+            storage.read(TEST_IDENTIFIER).shouldBeValid()
         }
 
         "choose the correct tool URL if there are multiple" {
@@ -291,7 +290,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(TEST_PACKAGE, SCANNER_CRITERIA))
+            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeValid()
         }
 
         "set correct metadata in the package scan result" {
@@ -304,11 +303,11 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            val result = assertValidResult(storage.read(TEST_IDENTIFIER))
+            val result = storage.read(TEST_IDENTIFIER).shouldBeValid()
             result.scanner.name shouldBe "ScanCode"
             result.scanner.version shouldBe "3.0.2"
-            assertCurrentTime(result.summary.startTime)
-            assertCurrentTime(result.summary.endTime)
+            result.summary.startTime.shouldBeCloseToCurrentTime()
+            result.summary.endTime.shouldBeCloseToCurrentTime()
         }
 
         "return a failure if a ClearlyDefined request fails" {
@@ -331,7 +330,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertEmptyResult(storage.read(TEST_IDENTIFIER))
+            storage.read(TEST_IDENTIFIER).shouldBeEmpty()
         }
 
         "return an empty result if no result for the tool file is returned" {
@@ -344,7 +343,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertEmptyResult(storage.read(TEST_PACKAGE, SCANNER_CRITERIA))
+            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeEmpty()
         }
 
         "use GitHub VCS info if available" {
@@ -362,7 +361,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(pkg, SCANNER_CRITERIA))
+            storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
 
         "only use VCS info pointing to GitHub" {
@@ -375,7 +374,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(pkg, SCANNER_CRITERIA))
+            storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
 
         "use information from a source artifact if available" {
@@ -389,7 +388,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(pkg, SCANNER_CRITERIA))
+            storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
 
         "return an empty result if the coordinates are not supported by ClearlyDefined" {
@@ -397,7 +396,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertEmptyResult(storage.read(id))
+            storage.read(id).shouldBeEmpty()
         }
 
         "return a failure if a harvest tool request returns an unexpected result" {
@@ -430,7 +429,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertEmptyResult(storage.read(TEST_IDENTIFIER))
+            storage.read(TEST_IDENTIFIER).shouldBeEmpty()
         }
 
         "return a failure if the connection to the server fails" {
