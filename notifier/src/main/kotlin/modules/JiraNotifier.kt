@@ -115,9 +115,10 @@ class JiraNotifier(
                         Failure(e.collectMessagesAsString())
                     }
                 } else if (searchResult.total > 1) {
-                    log.debug { "There are more then 1 duplicate issues of '$summary', which is supported yet." }
+                    log.debug { "There are more than 1 duplicate issues of '$summary', which is not supported yet." }
 
-                    return Failure("There are more then 1 duplicate issues of '$summary', which is supported yet.")
+                    return Failure("There are more than 1 duplicate issues of '$summary'," +
+                            " which is not supported yet.")
                 }
             }
 
