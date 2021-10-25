@@ -4,6 +4,9 @@
             "pattern": "^https://fpchat-invite.herokuapp.com/$"
         },
         {
+            "pattern": "^https://pipenv.readthedocs.io/$"
+        },
+        {
             "pattern": "^https://source.android.com/setup/develop/repo$"
         }
     ]
