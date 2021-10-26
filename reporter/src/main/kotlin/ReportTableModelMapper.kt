@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.utils
+package org.ossreviewtoolkit.reporter
 
 import org.ossreviewtoolkit.model.DependencyNavigator
 import org.ossreviewtoolkit.model.Identifier
@@ -32,15 +32,14 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.reporter.HowToFixTextProvider
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueRow
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableIssue
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableViolation
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryRow
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.reporter.ReportTableModel.DependencyRow
+import org.ossreviewtoolkit.reporter.ReportTableModel.IssueRow
+import org.ossreviewtoolkit.reporter.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.reporter.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableViolation
+import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryRow
+import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryTable
 
 private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation> { it.isResolved }
     .thenByDescending { it.violation.severity }

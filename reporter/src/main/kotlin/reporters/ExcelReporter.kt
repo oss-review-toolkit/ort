@@ -45,15 +45,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.reporter.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.reporter.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_LIST_COMPARATOR
+import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_MAP_COMPARATOR
+import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
-import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
-import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_MAP_COMPARATOR
-import org.ossreviewtoolkit.reporter.utils.containsUnresolved
 import org.ossreviewtoolkit.utils.isValidUri
 
 private const val OPTION_EXTRA_COLUMNS = "extraColumns"
