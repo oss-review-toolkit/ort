@@ -1,7 +1,6 @@
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.OpossumReporter
-org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter
 org.ossreviewtoolkit.reporter.reporters.StaticHtmlReporter
 org.ossreviewtoolkit.reporter.reporters.WebAppReporter
 org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModelReporter
@@ -13,3 +12,4 @@ org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.ManPageTemplateRepor
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.XHtmlTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModelReporter
+org.ossreviewtoolkit.reporter.reporters.spdx.SpdxDocumentReporter

@@ -17,13 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.spdx
 
 import java.io.File
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.utils.SpdxDocumentModelMapper
 import org.ossreviewtoolkit.spdx.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 
