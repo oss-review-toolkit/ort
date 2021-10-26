@@ -217,6 +217,7 @@ subprojects {
     tasks.withType<KotlinCompile>().configureEach {
         val customCompilerArgs = listOf(
             "-Xallow-result-return-type",
+            "-Xopt-in=kotlin.contracts.ExperimentalContracts",
             "-Xopt-in=kotlin.io.path.ExperimentalPathApi",
             "-Xopt-in=kotlin.time.ExperimentalTime"
         )
