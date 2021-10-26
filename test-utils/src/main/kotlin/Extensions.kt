@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +20,21 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import io.kotest.assertions.withClue
 import io.kotest.core.TestConfiguration
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
+import io.kotest.matchers.types.beOfType
 
 import java.io.File
 import java.net.InetSocketAddress
 import java.net.Proxy
 
+import kotlin.contracts.contract
+
+import org.ossreviewtoolkit.model.Failure
+import org.ossreviewtoolkit.model.Result
+import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.createOrtTempDir
@@ -46,6 +55,28 @@ fun FileArchiver.Companion.createDefault(): FileArchiver =
         patterns = LicenseFilenamePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
         storage = LocalFileStorage(DEFAULT_ARCHIVE_DIR)
     )
+
+fun <T> Result<T>.shouldBeSuccess(): Result<T> {
+    contract {
+        returns() implies (this@shouldBeSuccess is Success<T>)
+    }
+
+    withClue(lazy { (this as Failure).error }) {
+        this should beOfType(Success::class)
+    }
+
+    return this
+}
+
+fun <T> Result<T>.shouldBeFailure(): Result<T> {
+    contract {
+        returns() implies (this@shouldBeFailure is Failure<T>)
+    }
+
+    this should beOfType(Failure::class)
+
+    return this
+}
 
 fun TestConfiguration.createSpecTempDir(vararg infixes: String): File {
     val dir = createOrtTempDir(*infixes)
