@@ -26,7 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.utils.patchAsciiDocTemplateResult
+import org.ossreviewtoolkit.reporter.patchAsciiDocTemplateResult
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class AdocTemplateReporterFunTest : StringSpec({

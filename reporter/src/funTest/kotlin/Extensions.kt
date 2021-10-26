@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.utils
+package org.ossreviewtoolkit.reporter
 
-import java.util.SortedMap
-
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.config.ScopeExclude
-
-internal val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
-    { it.value.isNotEmpty() }, { it.key }
-)
-
-internal val SCOPE_EXCLUDE_MAP_COMPARATOR = compareBy<Map.Entry<Identifier, SortedMap<String, List<ScopeExclude>>>>(
-    { it.value.values.isNotEmpty() }, { it.key }
-)
+fun String.patchAsciiDocTemplateResult() =
+    // Asciidoctor renders the line breaks platform dependant.
+    replace("\r\n", "\n")
+        .replace("""\d{4}-\d{2}-\d{2}""".toRegex(), "1970-01-01")
+        .replace("""\d{2}:\d{2}:\d{2}""".toRegex(), "00:00:00")
+        // Asciidoctor renders time zones differently depending on the platform.
+        // For macOS the time is rendered as `00:00:00 +0000` while for Linux it is `00:00:00 UTC`.
+        .replace("""[+-]\d{4}""".toRegex(), "UTC")
