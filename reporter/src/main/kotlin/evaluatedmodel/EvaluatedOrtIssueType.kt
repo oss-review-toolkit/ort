@@ -17,12 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 /**
- * Wrapper class for copyright statements. Allows Jackson to generate IDs for them when storing them in a separate list
- * for de-duplication.
+ * The possible types of an [EvaluatedOrtIssue].
  */
-data class CopyrightStatement(
-    val statement: String
-)
+enum class EvaluatedOrtIssueType {
+    ANALYZER, SCANNER
+}

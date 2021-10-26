@@ -26,7 +26,7 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.model.EvaluatedModel
+import org.ossreviewtoolkit.reporter.evaluatedmodel.EvaluatedModel
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 

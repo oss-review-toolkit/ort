@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +18,16 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
+
+import java.time.Instant
 
 /**
- * The possible types of an [EvaluatedOrtIssue].
+ * Metadata about the ORT run itself.
  */
-enum class EvaluatedOrtIssueType {
-    ANALYZER, SCANNER
-}
+data class MetaData(
+    /**
+     * The time the Analyzer started.
+     */
+    val analyzerStartTime: Instant
+)

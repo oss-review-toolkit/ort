@@ -17,11 +17,18 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
+
+import com.fasterxml.jackson.annotation.JsonInclude
+
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.config.ScopeExclude
 
 /**
- * The possible types of an [EvaluatedFinding].
+ * The evaluated form of a [Scope] used by the [EvaluatedModel].
  */
-enum class EvaluatedFindingType {
-    COPYRIGHT, LICENSE
-}
+data class EvaluatedScope(
+    val name: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val excludes: List<ScopeExclude>
+)
