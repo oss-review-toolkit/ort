@@ -23,7 +23,6 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.vdurmont.semver4j.Semver
 
-import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.collections.beEmpty
@@ -31,15 +30,11 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.beOfType
 
 import java.time.Duration
 import java.time.Instant
 
-import kotlin.contracts.contract
-
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -47,17 +42,17 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.test.shouldBeFailure
+import org.ossreviewtoolkit.utils.test.shouldBeSuccess
 
 private val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
 
@@ -529,26 +524,4 @@ abstract class AbstractStorageFunTest : WordSpec() {
             }
         }
     }
-}
-
-private fun <T> Result<T>.shouldBeSuccess(): Result<T> {
-    contract {
-        returns() implies (this@shouldBeSuccess is Success<T>)
-    }
-
-    withClue(lazy { (this as Failure).error }) {
-        this should beOfType(Success::class)
-    }
-
-    return this
-}
-
-private fun <T> Result<T>.shouldBeFailure(): Result<T> {
-    contract {
-        returns() implies (this@shouldBeFailure is Failure<T>)
-    }
-
-    this should beOfType(Failure::class)
-
-    return this
 }
