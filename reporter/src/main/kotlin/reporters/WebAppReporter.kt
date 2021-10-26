@@ -29,7 +29,7 @@ import org.apache.commons.compress.compressors.gzip.GzipParameters
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.model.EvaluatedModel
+import org.ossreviewtoolkit.reporter.evaluatedmodel.EvaluatedModel
 
 private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
 

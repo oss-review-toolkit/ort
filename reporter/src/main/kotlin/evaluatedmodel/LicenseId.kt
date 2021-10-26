@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
-import org.ossreviewtoolkit.model.VulnerabilityReference
-import org.ossreviewtoolkit.model.config.VulnerabilityResolution
-
-data class EvaluatedVulnerability(
-    val id: String,
-    val pkg: EvaluatedPackage,
-    val references: List<VulnerabilityReference>,
-    val resolutions: List<VulnerabilityResolution>
+/**
+ * Wrapper class for license identifiers. Allows Jackson to generate IDs for them when storing them in a separate list
+ * for de-duplication.
+ */
+data class LicenseId(
+    val id: String
 )

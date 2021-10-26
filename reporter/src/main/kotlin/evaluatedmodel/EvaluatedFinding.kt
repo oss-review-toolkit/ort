@@ -17,27 +17,26 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import java.time.Instant
-
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.config.PathExclude
 
 /**
- * The evaluated form of a [ScanSummary] used by the [EvaluatedModel]. The findings are stored directly in
- * [EvaluatedPackage].
+ * The evaluated form of a [LicenseFinding] used by the [EvaluatedModel].
  */
-data class EvaluatedScanResult(
-    val provenance: Provenance,
-    val scanner: ScannerDetails,
-    val startTime: Instant,
-    val endTime: Instant,
+data class EvaluatedFinding(
+    val type: EvaluatedFindingType,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val license: LicenseId?,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val copyright: CopyrightStatement?,
+    val path: String,
+    val startLine: Int,
+    val endLine: Int,
+    val scanResult: EvaluatedScanResult,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val packageVerificationCode: String,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<EvaluatedOrtIssue>
+    val pathExcludes: List<PathExclude>
 )

@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 /**
- * Wrapper class for license identifiers. Allows Jackson to generate IDs for them when storing them in a separate list
+ * Wrapper class for copyright statements. Allows Jackson to generate IDs for them when storing them in a separate list
  * for de-duplication.
  */
-data class LicenseId(
-    val id: String
+data class CopyrightStatement(
+    val statement: String
 )

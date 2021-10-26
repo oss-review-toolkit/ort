@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 import java.util.SortedMap
 import java.util.SortedSet

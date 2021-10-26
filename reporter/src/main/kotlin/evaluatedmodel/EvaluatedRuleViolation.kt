@@ -17,21 +17,31 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
 
 /**
- * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].
+ * The evaluated form of a [RuleViolation] used by the [EvaluatedModel].
  */
-data class EvaluatedProcessedDeclaredLicense(
+data class EvaluatedRuleViolation(
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val rule: String,
+    val pkg: EvaluatedPackage?,
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val spdxExpression: SpdxExpression?,
+    val license: LicenseId?,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val licenseSource: LicenseSource?,
+    val severity: Severity,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val mappedLicenses: List<LicenseId>,
+    val message: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val unmappedLicenses: List<LicenseId>
+    val howToFix: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val resolutions: List<RuleViolationResolution>
 )

@@ -17,15 +17,21 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
+package org.ossreviewtoolkit.reporter.evaluatedmodel
+
+import com.fasterxml.jackson.annotation.JsonInclude
+
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
- * The path to a [dependency][pkg] used by the [EvaluatedModel]. It is defined by the [project] and [scope] that contain
- * the dependency and the [list of parents][path] in the dependency tree.
+ * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].
  */
-data class EvaluatedPackagePath(
-    val pkg: EvaluatedPackage,
-    val project: EvaluatedPackage,
-    val scope: EvaluatedScope,
-    val path: List<EvaluatedPackage>
+data class EvaluatedProcessedDeclaredLicense(
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val spdxExpression: SpdxExpression?,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val mappedLicenses: List<LicenseId>,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val unmappedLicenses: List<LicenseId>
 )

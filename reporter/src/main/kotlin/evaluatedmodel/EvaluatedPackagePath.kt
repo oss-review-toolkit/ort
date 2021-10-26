@@ -17,18 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.model
-
-import com.fasterxml.jackson.annotation.JsonInclude
-
-import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.config.ScopeExclude
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 /**
- * The evaluated form of a [Scope] used by the [EvaluatedModel].
+ * The path to a [dependency][pkg] used by the [EvaluatedModel]. It is defined by the [project] and [scope] that contain
+ * the dependency and the [list of parents][path] in the dependency tree.
  */
-data class EvaluatedScope(
-    val name: String,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val excludes: List<ScopeExclude>
+data class EvaluatedPackagePath(
+    val pkg: EvaluatedPackage,
+    val project: EvaluatedPackage,
+    val scope: EvaluatedScope,
+    val path: List<EvaluatedPackage>
 )
