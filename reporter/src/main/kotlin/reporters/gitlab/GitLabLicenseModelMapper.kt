@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * Maps an [OrtResult] to a [GitLabLicenseModel].

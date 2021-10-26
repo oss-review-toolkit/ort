@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
 
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.

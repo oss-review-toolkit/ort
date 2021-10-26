@@ -63,7 +63,7 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.Environment
+import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
 private fun scanResults(

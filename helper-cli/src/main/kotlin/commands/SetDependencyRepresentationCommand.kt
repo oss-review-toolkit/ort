@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphConverter
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 /**
  * A command to convert the dependency representation in an ORT result file between the different supported formats.

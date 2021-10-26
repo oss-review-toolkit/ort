@@ -32,8 +32,8 @@ import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.JiraConfiguration
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.log
 
 class JiraNotifier(
     val config: JiraConfiguration,

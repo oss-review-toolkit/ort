@@ -30,7 +30,7 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.core.FileMatcher
 
 /**
  * A short summary of the scan results.

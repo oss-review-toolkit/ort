@@ -23,8 +23,8 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
-import org.ossreviewtoolkit.utils.FileMatcher
-import org.ossreviewtoolkit.utils.getAllAncestorDirectories
+import org.ossreviewtoolkit.utils.core.FileMatcher
+import org.ossreviewtoolkit.utils.core.getAllAncestorDirectories
 
 /**
  * A heuristic for determining which (root) license files apply to any file or directory.

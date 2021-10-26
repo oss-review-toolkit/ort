@@ -32,14 +32,14 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.createOrtTempDir
-import org.ossreviewtoolkit.utils.getCommonFileParent
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.suppressInput
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
+import org.ossreviewtoolkit.utils.core.getCommonFileParent
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.core.suppressInput
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.

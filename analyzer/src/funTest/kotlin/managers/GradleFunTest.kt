@@ -31,9 +31,9 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.ExpensiveTag

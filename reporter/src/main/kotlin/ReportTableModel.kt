@@ -35,8 +35,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.zipWithCollections
-import org.ossreviewtoolkit.utils.zipWithDefault
+import org.ossreviewtoolkit.utils.core.zipWithCollections
+import org.ossreviewtoolkit.utils.core.zipWithDefault
 
 fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
 

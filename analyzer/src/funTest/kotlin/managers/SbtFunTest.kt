@@ -31,8 +31,8 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.Ci
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.core.Ci
+import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResultObject
 import org.ossreviewtoolkit.utils.test.patchExpectedResult

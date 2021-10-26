@@ -65,12 +65,12 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.await
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.logOnce
-import org.ossreviewtoolkit.utils.searchUpwardsForFile
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.await
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.logOnce
+import org.ossreviewtoolkit.utils.core.searchUpwardsForFile
 
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"

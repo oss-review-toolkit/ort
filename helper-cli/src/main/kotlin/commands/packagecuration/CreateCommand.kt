@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class CreateCommand : CliktCommand(
     help = "Create a curation file for a package id using a hierarchical directory structure."

@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.core.ORT_NAME
 
 class LicenseInfoResolver(
     private val provider: LicenseInfoProvider,

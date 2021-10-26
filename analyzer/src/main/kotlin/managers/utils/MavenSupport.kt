@@ -82,17 +82,17 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.DiskCache
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.logOnce
-import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.withoutPrefix
+import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.core.DiskCache
+import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.logOnce
+import org.ossreviewtoolkit.utils.core.ortDataDirectory
+import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.withoutPrefix
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 

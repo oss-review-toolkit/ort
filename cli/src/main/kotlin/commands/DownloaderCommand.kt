@@ -61,16 +61,16 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
-import org.ossreviewtoolkit.utils.ArchiveType
-import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
-import org.ossreviewtoolkit.utils.archive
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.encodeOrUnknown
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.core.ArchiveType
+import org.ossreviewtoolkit.utils.core.ORT_LICENSE_CLASSIFICATIONS_FILENAME
+import org.ossreviewtoolkit.utils.core.archive
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.encodeOrUnknown
+import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.showStackTrace
 
 class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source code from a remote location.") {
     private val input by mutuallyExclusiveOptions(

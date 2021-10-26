@@ -43,13 +43,13 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.createOrtTempFile
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpackZip
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.createOrtTempFile
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.unpackZip
 
 class Askalono(
     name: String,

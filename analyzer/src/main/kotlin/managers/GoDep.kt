@@ -44,16 +44,16 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.realFile
-import org.ossreviewtoolkit.utils.safeCopyRecursively
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.toUri
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.realFile
+import org.ossreviewtoolkit.utils.core.safeCopyRecursively
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.toUri
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.

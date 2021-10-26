@@ -64,8 +64,8 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.getLicenseText
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 

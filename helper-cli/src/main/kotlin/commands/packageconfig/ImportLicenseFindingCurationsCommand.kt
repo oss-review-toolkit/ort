@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 class ImportLicenseFindingCurationsCommand : CliktCommand(
     help = "Import license finding curations from a license finding curations file and merge them into the given "

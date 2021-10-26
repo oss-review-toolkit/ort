@@ -120,7 +120,7 @@ dependencies {
     implementation(project(":notifier"))
     implementation(project(":reporter"))
     implementation(project(":scanner"))
-    implementation(project(":utils"))
+    implementation(project(":utils:core"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")

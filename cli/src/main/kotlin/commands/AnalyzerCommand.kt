@@ -53,13 +53,13 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.utils.ORT_PACKAGE_CURATIONS_DIRNAME
-import org.ossreviewtoolkit.utils.ORT_PACKAGE_CURATIONS_FILENAME
-import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CURATIONS_DIRNAME
+import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CURATIONS_FILENAME
+import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.core.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.core.safeMkdirs
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
     private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName }

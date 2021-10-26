@@ -32,8 +32,8 @@ import java.io.File
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.redirectStdout
+import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.core.redirectStdout
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult

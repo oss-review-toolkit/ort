@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
 
 /**
  * A description of the source code repository that was used as input for ORT.

@@ -44,8 +44,8 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * A PostgreSQL based storage for archive files.

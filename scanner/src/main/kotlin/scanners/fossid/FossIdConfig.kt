@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * A data class that holds the configuration options supported by the [FossId] scanner. An instance of this class is

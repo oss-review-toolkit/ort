@@ -48,9 +48,9 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 
 /**
  * The SW360 storage back-end uses the SW360-client library in order to read/add attachments from the configured

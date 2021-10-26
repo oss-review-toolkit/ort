@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.utils.storage.FileStorage
+import org.ossreviewtoolkit.utils.core.storage.FileStorage
 
 /**
  * Root of a class hierarchy for configuration classes for scan storage implementations.

@@ -30,8 +30,8 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
-import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.core.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 
 /**
  * Resolved license information about a package (or project).

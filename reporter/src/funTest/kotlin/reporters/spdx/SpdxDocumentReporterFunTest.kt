@@ -65,8 +65,8 @@ import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 

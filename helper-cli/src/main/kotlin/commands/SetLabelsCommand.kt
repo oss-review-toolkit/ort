@@ -30,7 +30,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.writeOrtResult
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class SetLabelsCommand : CliktCommand(
     help = "Set the labels in an ORT result file."

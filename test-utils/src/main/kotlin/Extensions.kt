@@ -37,10 +37,10 @@ import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.utils.createOrtTempDir
-import org.ossreviewtoolkit.utils.createOrtTempFile
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
+import org.ossreviewtoolkit.utils.core.createOrtTempFile
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }

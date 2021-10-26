@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.spdx.getDuplicates
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation files. Supports all file formats

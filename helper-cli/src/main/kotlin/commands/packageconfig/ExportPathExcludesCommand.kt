@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.helper.common.mergePathExcludes
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 class ExportPathExcludesCommand : CliktCommand(
     help = "Export the path excludes to a path excludes file which maps repository URLs to the path excludes for the " +

@@ -51,9 +51,9 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.temporaryProperties
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.temporaryProperties
 
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 

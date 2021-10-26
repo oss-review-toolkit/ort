@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import java.io.File
 import java.util.Base64
 
-import org.ossreviewtoolkit.utils.toHexString
+import org.ossreviewtoolkit.utils.core.toHexString
 
 /**
  * A class that bundles a hash algorithm with its hash value.

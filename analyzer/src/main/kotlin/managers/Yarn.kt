@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.hasYarnLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.core.Os
 
 /**
  * The [Yarn](https://www.yarnpkg.com/) package manager for JavaScript.

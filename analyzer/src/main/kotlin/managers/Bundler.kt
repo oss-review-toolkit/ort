@@ -55,14 +55,14 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.HttpDownloadError
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.HttpDownloadError
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.perf
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 
 private const val ROOT_DEPENDENCIES_SCRIPT = "scripts/bundler_root_dependencies.rb"
 private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_dependencies.rb"

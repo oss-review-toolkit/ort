@@ -42,9 +42,9 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.showStackTrace
 
 class ProvenanceBasedPostgresStorage(
     /**

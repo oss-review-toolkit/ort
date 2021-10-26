@@ -46,15 +46,15 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readJsonFile
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.stashDirectories
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.stashDirectories
+import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"

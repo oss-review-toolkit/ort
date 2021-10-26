@@ -58,19 +58,19 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.isSymbolicLink
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.ortToolsDirectory
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.textValueOrEmpty
-import org.ossreviewtoolkit.utils.unpack
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.core.isSymbolicLink
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.ortToolsDirectory
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.unpack
 
 private const val GRADLE_VERSION = "5.6.4"
 private const val PUB_LOCK_FILE = "pubspec.lock"

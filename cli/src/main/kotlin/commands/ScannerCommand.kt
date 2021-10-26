@@ -83,13 +83,13 @@ import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
-import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
+import org.ossreviewtoolkit.utils.core.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.core.ortDataDirectory
+import org.ossreviewtoolkit.utils.core.safeMkdirs
+import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.core.storage.XZCompressedLocalFileStorage
 
 private fun RawOption.convertToScanner() =
     convert { scannerName ->

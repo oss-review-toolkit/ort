@@ -57,18 +57,18 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.createOrtTempDir
-import org.ossreviewtoolkit.utils.fileSystemEncode
-import org.ossreviewtoolkit.utils.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
+import org.ossreviewtoolkit.utils.core.fileSystemEncode
+import org.ossreviewtoolkit.utils.core.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.perf
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.safeMkdirs
+import org.ossreviewtoolkit.utils.core.showStackTrace
 
 /**
  * Abstraction for a [Scanner] that operates locally. Scan results can be stored in a [ScanResultsStorage].

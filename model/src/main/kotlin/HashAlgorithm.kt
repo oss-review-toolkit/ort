@@ -26,7 +26,7 @@ import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
 
-import org.ossreviewtoolkit.utils.toHexString
+import org.ossreviewtoolkit.utils.core.toHexString
 
 /**
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first

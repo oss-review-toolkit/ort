@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 
 private data class LicenseExpression(
     val expression: String,

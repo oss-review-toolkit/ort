@@ -28,8 +28,8 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
 
 /**
  * A class describing a software project. A [Project] is very similar to a [Package] but contains some additional

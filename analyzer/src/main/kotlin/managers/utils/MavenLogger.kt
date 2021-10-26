@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Level
 import org.codehaus.plexus.logging.AbstractLogger
 import org.codehaus.plexus.logging.Logger
 
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * Map a Log4j2 Level to a Plexus Logger level.

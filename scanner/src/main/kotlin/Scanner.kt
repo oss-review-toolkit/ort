@@ -38,8 +38,8 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.utils.filterByProject
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.core.log
 
 const val TOOL_NAME = "scanner"
 

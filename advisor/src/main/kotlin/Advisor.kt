@@ -32,8 +32,8 @@ import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * The class to manage [AdviceProvider]s. It invokes the configured providers and adds their findings to the current

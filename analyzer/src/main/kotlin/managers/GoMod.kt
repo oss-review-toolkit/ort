@@ -40,11 +40,11 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.stashDirectories
-import org.ossreviewtoolkit.utils.withoutSuffix
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.stashDirectories
+import org.ossreviewtoolkit.utils.core.withoutSuffix
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.

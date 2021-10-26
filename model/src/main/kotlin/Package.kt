@@ -26,8 +26,8 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
 
 /**
  * A generic descriptor for a software package. It contains all relevant metadata about a package like the name,

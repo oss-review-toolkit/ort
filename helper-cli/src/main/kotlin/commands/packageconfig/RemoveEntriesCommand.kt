@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class RemoveEntriesCommand : CliktCommand(
     help = "Removes all path excludes and license finding curations which do not match any files or license findings."

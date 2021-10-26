@@ -60,8 +60,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.Environment
+import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.core.Environment
 
 val concludedLicense = "LicenseRef-a OR LicenseRef-b OR LicenseRef-c or LicenseRef-d".toSpdx()
 val declaredLicenses = sortedSetOf("Apache-2.0", "MIT")
