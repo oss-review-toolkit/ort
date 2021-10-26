@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.mapperConfig
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
-import org.ossreviewtoolkit.reporter.utils.IntIdModule
 
 /**
  * The [EvaluatedModel] represents the outcome of the evaluation of a [ReporterInput]. This means that all additional

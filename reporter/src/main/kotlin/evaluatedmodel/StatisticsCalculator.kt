@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.utils
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 import java.util.SortedMap
 
@@ -28,10 +28,6 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.reporter.evaluatedmodel.DependencyTreeStatistics
-import org.ossreviewtoolkit.reporter.evaluatedmodel.IssueStatistics
-import org.ossreviewtoolkit.reporter.evaluatedmodel.LicenseStatistics
-import org.ossreviewtoolkit.reporter.evaluatedmodel.Statistics
 
 /**
  * This class calculates [Statistics] for a given [OrtResult] and applicable [IssueResolution]s and applicable

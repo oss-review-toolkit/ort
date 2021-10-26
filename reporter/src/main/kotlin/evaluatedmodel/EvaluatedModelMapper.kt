@@ -43,8 +43,6 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.utils.MetaDataCalculator
-import org.ossreviewtoolkit.reporter.utils.StatisticsCalculator
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**

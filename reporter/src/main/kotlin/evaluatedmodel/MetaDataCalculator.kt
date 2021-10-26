@@ -18,12 +18,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.utils
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.reporter.evaluatedmodel.MetaData
 
 /**
  * This class calculates [MetaData] for a given [OrtResult].

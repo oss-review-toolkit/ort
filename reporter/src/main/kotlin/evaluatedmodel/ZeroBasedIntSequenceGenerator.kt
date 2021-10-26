@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.utils
+package org.ossreviewtoolkit.reporter.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerator
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
