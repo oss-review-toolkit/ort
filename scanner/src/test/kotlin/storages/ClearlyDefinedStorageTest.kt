@@ -34,7 +34,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import com.vdurmont.semver4j.Semver
 
-import io.kotest.assertions.fail
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
@@ -53,19 +52,19 @@ import java.time.Instant
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.test.shouldBeFailure
+import org.ossreviewtoolkit.utils.test.shouldBeSuccess
 
 private const val PACKAGE_TYPE = "Maven"
 private const val NAMESPACE = "someNamespace"
@@ -188,30 +187,24 @@ private fun stubDefinitions(wiremock: WireMockServer, coordinates: Coordinates =
 /**
  * Check that this [Result] contains the expected data and return the first scan result from the list on success.
  */
-private fun Result<List<ScanResult>>.shouldBeValid(): ScanResult =
-    when (this) {
-        is Success -> {
-            result shouldHaveSize 1
+private fun Result<List<ScanResult>>.shouldBeValid(): ScanResult {
+    shouldBeSuccess()
+    result shouldHaveSize 1
 
-            val scanResult = result.first()
-            scanResult.summary.licenseFindings.find {
-                it.location.path == TEST_PATH && it.license.licenses().contains("Apache-2.0")
-            } shouldNot beNull()
+    val scanResult = result.first()
+    scanResult.summary.licenseFindings.find {
+        it.location.path == TEST_PATH && it.license.licenses().contains("Apache-2.0")
+    } shouldNot beNull()
 
-            scanResult
-        }
-
-        is Failure -> fail("Expected success result, but got Failure($error)")
-    }
+    return scanResult
+}
 
 /**
  * Check that this [Result] does not contain any data.
  */
 private fun Result<List<ScanResult>>.shouldBeEmpty() {
-    when (this) {
-        is Success -> result should beEmpty()
-        is Failure -> fail("Unexpected result: $this")
-    }
+    shouldBeSuccess()
+    result should beEmpty()
 }
 
 /**
@@ -318,10 +311,10 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            when (val result = storage.read(TEST_IDENTIFIER)) {
-                is Success -> fail("Expected failure, but got $result")
-                is Failure -> result.error shouldContain "HttpException"
-            }
+            val result = storage.read(TEST_IDENTIFIER)
+
+            result.shouldBeFailure()
+            result.error shouldContain "HttpException"
         }
 
         "return an empty result if no results for the scancode tool are available" {
@@ -410,10 +403,10 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            when (val result = storage.read(TEST_IDENTIFIER)) {
-                is Failure -> result.error shouldContain "JsonParseException"
-                else -> fail("Unexpected result: $result")
-            }
+            val result = storage.read(TEST_IDENTIFIER)
+
+            result.shouldBeFailure()
+            result.error shouldContain "JsonParseException"
         }
 
         "return an empty result if a harvest tool file request returns an unexpected result" {
@@ -439,10 +432,10 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration((serverUrl)))
 
-            when (val result = storage.read(TEST_IDENTIFIER)) {
-                is Failure -> result.error shouldContain "Connection refused"
-                else -> fail("Unexpected result: $result")
-            }
+            val result = storage.read(TEST_IDENTIFIER)
+
+            result.shouldBeFailure()
+            result.error shouldContain "Connection refused"
         }
     }
 })
