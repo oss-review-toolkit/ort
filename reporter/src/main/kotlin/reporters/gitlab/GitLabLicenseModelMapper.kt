@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.gitlab
+package org.ossreviewtoolkit.reporter.reporters.gitlab
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.reporter.gitlab.GitLabLicenseModel.Dependency
-import org.ossreviewtoolkit.reporter.gitlab.GitLabLicenseModel.License
+import org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModel.Dependency
+import org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModel.License
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.SpdxLicenseWithExceptionExpression
