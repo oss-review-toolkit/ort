@@ -17,13 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.freemarker
 
 import java.io.File
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.utils.FreemarkerTemplateProcessor
 
 /**
  * A [Reporter] that creates notice files using [Apache Freemarker][1] templates. For each template provided using the

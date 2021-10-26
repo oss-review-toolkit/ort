@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -29,12 +29,12 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.patchAsciiDocTemplateResult
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class DocBookTemplateReporterFunTest : StringSpec({
-    "DocBook report is created from default template" {
-        val expectedText = File("src/funTest/assets/docbook-template-reporter-expected-result.xml").readText()
+class HtmlTemplateReporterFunTest : StringSpec({
+    "HTML report is created from default template" {
+        val expectedText = File("src/funTest/assets/html-template-reporter-expected-result.html").readText()
 
         val reportContent =
-            DocBookTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
+            HtmlTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
 
         reportContent.patchAsciiDocTemplateResult() shouldBe expectedText
     }

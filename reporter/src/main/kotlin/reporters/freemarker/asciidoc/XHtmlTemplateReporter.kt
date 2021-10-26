@@ -17,14 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 
 import org.ossreviewtoolkit.reporter.Reporter
 
 /**
- * A [Reporter] that creates [DocBook][1] files from [Apache Freemarker][2] templates.
+ * A [Reporter] that creates XHTML files from [Apache Freemarker][1] templates.
  *
- * [1]: https://docbook.org
- * [2]: https://freemarker.apache.org
+ * [1]: https://freemarker.apache.org
  */
-class DocBookTemplateReporter : AsciiDocTemplateReporter("docbook", "DocBookTemplate")
+class XHtmlTemplateReporter : AsciiDocTemplateReporter("xhtml", "XHtmlTemplate")
