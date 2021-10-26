@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 
 import org.ossreviewtoolkit.reporter.Reporter
 
 /**
- * A [Reporter] that creates man pages from [Apache Freemarker][1] templates.
+ * A [Reporter] that creates HTML files from [Apache Freemarker][1] templates.
  *
  * [1]: https://freemarker.apache.org
  */
-class ManPageTemplateReporter : AsciiDocTemplateReporter("manpage", "ManPageTemplate")
+class HtmlTemplateReporter : AsciiDocTemplateReporter("html", "HtmlTemplate")

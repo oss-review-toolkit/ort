@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec

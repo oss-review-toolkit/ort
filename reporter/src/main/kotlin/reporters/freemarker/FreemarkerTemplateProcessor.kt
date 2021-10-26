@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.utils
+package org.ossreviewtoolkit.reporter.reporters.freemarker
 
 import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration

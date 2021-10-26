@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.utils
+package org.ossreviewtoolkit.reporter.reporters.freemarker
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
