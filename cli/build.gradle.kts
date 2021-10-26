@@ -138,7 +138,7 @@ dependencies {
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("org.reflections:reflections:$reflectionsVersion")
 
-    testImplementation(project(":test-utils"))
+    testImplementation(project(":utils:test"))
 
     testImplementation("com.icegreen:greenmail:$greenMailVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
