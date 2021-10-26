@@ -31,17 +31,17 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.isSymbolicLink
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.realFile
-import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.withoutPrefix
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.core.isSymbolicLink
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.realFile
+import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.withoutPrefix
 
 /**
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.

@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class GenerateProjectExcludesCommand : CliktCommand(
     help = "Generates path excludes for all definition files which are not yet excluded. The output is written to " +

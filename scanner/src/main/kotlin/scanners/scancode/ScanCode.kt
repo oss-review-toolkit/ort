@@ -45,14 +45,14 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.createOrtTempFile
-import org.ossreviewtoolkit.utils.isTrue
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpack
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.createOrtTempFile
+import org.ossreviewtoolkit.utils.core.isTrue
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.unpack
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).

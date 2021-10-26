@@ -27,7 +27,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class FormatCommand : CliktCommand(
     help = "Applies the formatting used by all ort-helper commands and strips all YAML comments. The output is " +

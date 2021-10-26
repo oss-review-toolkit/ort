@@ -24,7 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.core.CopyrightStatementsProcessor
 
 /**
  * Information about license files of a package and the licenses detected in those files.

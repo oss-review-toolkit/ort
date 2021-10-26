@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class ListCopyrightsCommand : CliktCommand(
     help = "Lists the copyright findings."

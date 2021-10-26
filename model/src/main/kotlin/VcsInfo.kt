@@ -28,9 +28,9 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 
 import kotlin.reflect.full.memberProperties
 
-import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 
 /**
  * Bundles general Version Control System information.

@@ -27,7 +27,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.write
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 class ExtractRepositoryConfigurationCommand : CliktCommand(
     help = "Extract the repository configuration from the given ORT result file."

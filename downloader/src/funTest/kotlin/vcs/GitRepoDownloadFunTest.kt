@@ -31,8 +31,8 @@ import kotlin.io.path.createTempDirectory
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo"

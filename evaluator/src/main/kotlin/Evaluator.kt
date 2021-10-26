@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.ScriptRunner
+import org.ossreviewtoolkit.utils.core.ScriptRunner
 
 class Evaluator(
     ortResult: OrtResult = OrtResult.EMPTY,
@@ -41,7 +41,7 @@ class Evaluator(
             import org.ossreviewtoolkit.model.licenses.*
             import org.ossreviewtoolkit.model.utils.*
             import org.ossreviewtoolkit.spdx.*
-            import org.ossreviewtoolkit.utils.*
+            import org.ossreviewtoolkit.utils.core.*
 
             import java.util.*
 

@@ -60,10 +60,10 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.SpdxLicenseWithExceptionExpression
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.isValidUri
-import org.ossreviewtoolkit.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.core.isValidUri
+import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
 
 @Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {

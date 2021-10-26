@@ -29,13 +29,13 @@ import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
 import org.ossreviewtoolkit.model.readJsonFile
-import org.ossreviewtoolkit.utils.AuthenticatedProxy
-import org.ossreviewtoolkit.utils.ProtocolProxyMap
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.determineProxyFromURL
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.toUri
+import org.ossreviewtoolkit.utils.core.AuthenticatedProxy
+import org.ossreviewtoolkit.utils.core.ProtocolProxyMap
+import org.ossreviewtoolkit.utils.core.collectMessagesAsString
+import org.ossreviewtoolkit.utils.core.determineProxyFromURL
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.toUri
 
 /**
  * A dummy object to provide a logger for top-level functions.

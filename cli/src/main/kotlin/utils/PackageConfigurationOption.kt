@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.cli.utils
 
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
-import org.ossreviewtoolkit.utils.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
-import org.ossreviewtoolkit.utils.ortConfigDirectory
+import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
+import org.ossreviewtoolkit.utils.core.ortConfigDirectory
 
 internal sealed class PackageConfigurationOption {
     data class Dir(val value: java.io.File) : PackageConfigurationOption()

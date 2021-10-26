@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.reporter.reporters.OpossumReporter.OpossumInput
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.getLicenseText
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * A function that resolves, concatenates, and normalizes Unix style paths.

@@ -44,18 +44,18 @@ import org.apache.logging.log4j.core.config.Configurator
 import org.ossreviewtoolkit.cli.commands.*
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.ORT_CONFIG_DIR_ENV_NAME
-import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.PERFORMANCE
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.printStackTrace
+import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.core.ORT_CONFIG_DIR_ENV_NAME
+import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.core.ORT_DATA_DIR_ENV_NAME
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.PERFORMANCE
+import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.core.ortDataDirectory
+import org.ossreviewtoolkit.utils.core.printStackTrace
 
 /**
  * Helper class for mutually exclusive command line options of different types.

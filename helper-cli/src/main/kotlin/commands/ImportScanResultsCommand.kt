@@ -27,8 +27,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 
 internal class ImportScanResultsCommand : CliktCommand(
     help = "Import all scan results from the given ORT result file to the file based scan results storage directory."

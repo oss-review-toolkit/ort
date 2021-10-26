@@ -45,10 +45,10 @@ import org.ossreviewtoolkit.spdx.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.core.replaceCredentialsInUri
 
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.

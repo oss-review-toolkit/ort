@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     help = "Export the license finding curations to a file which maps repository URLs to the license finding " +

@@ -31,9 +31,9 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
+import org.ossreviewtoolkit.utils.core.formatSizeInMib
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.perf
 
 fun <T : GroupableOption> T.group(name: String): T = apply { groupName = name }
 

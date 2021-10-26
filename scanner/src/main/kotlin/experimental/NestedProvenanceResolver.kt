@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.utils.createOrtTempDir
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.

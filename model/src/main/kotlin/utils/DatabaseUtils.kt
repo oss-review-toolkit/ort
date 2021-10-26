@@ -30,8 +30,8 @@ import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionA
 import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.core.log
 
 object DatabaseUtils {
     /**

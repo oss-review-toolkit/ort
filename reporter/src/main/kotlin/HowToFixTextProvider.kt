@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.reporter
 
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.utils.ScriptRunner
+import org.ossreviewtoolkit.utils.core.ScriptRunner
 
 /**
  * Provides how-to-fix texts in Markdown format for any given [OrtIssue].

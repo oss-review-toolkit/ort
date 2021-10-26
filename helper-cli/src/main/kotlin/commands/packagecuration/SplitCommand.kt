@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.helper.common.formatComment
 import org.ossreviewtoolkit.helper.common.getSplitCurationFile
 import org.ossreviewtoolkit.helper.common.readPackageCurations
 import org.ossreviewtoolkit.helper.common.writeAsYaml
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class SplitCommand : CliktCommand(
     help = "Split a single curations file into a directory structure using the format '<type>/<namespace>/<name>.yml'."

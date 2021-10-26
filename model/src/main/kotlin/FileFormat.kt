@@ -25,7 +25,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 
-import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.core.safeMkdirs
 
 /**
  * An enumeration of supported file formats for (de-)serialization, their primary [fileExtension] and optional aliases

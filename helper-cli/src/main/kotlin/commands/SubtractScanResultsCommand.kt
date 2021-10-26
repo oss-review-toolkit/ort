@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class SubtractScanResultsCommand : CliktCommand(
     help = "Subtracts the given right-hand side scan results from the given left-hand side scan results. The output " +

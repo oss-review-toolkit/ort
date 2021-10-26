@@ -52,10 +52,10 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.hasNonNullProperty
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.core.hasNonNullProperty
+import org.ossreviewtoolkit.utils.core.log
 
 import retrofit2.HttpException
 

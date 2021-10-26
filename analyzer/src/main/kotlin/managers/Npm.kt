@@ -61,16 +61,16 @@ import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
-import org.ossreviewtoolkit.utils.isSymbolicLink
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.realFile
-import org.ossreviewtoolkit.utils.stashDirectories
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
+import org.ossreviewtoolkit.utils.core.isSymbolicLink
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.realFile
+import org.ossreviewtoolkit.utils.core.stashDirectories
+import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 
 const val PUBLIC_NPM_REGISTRY = "https://registry.npmjs.org"
 

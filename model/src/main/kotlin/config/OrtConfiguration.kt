@@ -32,7 +32,7 @@ import com.sksamuel.hoplite.parsers.toNode
 import java.io.File
 
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * The configuration model for all ORT components.

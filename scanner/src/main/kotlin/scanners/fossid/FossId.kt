@@ -62,10 +62,10 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
 import org.ossreviewtoolkit.spdx.enumSetOf
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.replaceCredentialsInUri
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.toUri
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.core.toUri
 
 /**
  * A wrapper for [FossID](https://fossid.com/).

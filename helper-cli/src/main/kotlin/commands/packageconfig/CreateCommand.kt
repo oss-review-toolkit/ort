@@ -39,9 +39,9 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.core.safeMkdirs
+import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 
 internal class CreateCommand : CliktCommand(
     help = "Creates one package configuration for the source artifact scan and one for the VCS scan, if " +

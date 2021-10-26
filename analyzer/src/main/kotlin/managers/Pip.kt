@@ -46,17 +46,17 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.resolveWindowsExecutable
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.CommandLineTool
+import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.core.ProcessCapture
+import org.ossreviewtoolkit.utils.core.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.core.resolveWindowsExecutable
+import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 
 // The lowest version that supports "--prefer-binary" and PEP 508 URL requirements to be used as dependencies.
 private const val PIP_VERSION = "18.1"

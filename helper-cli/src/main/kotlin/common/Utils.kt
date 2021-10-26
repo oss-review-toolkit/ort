@@ -70,13 +70,13 @@ import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
-import org.ossreviewtoolkit.utils.encodeOrUnknown
-import org.ossreviewtoolkit.utils.fileSystemEncode
-import org.ossreviewtoolkit.utils.isSymbolicLink
-import org.ossreviewtoolkit.utils.replaceCredentialsInUri
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.withoutPrefix
+import org.ossreviewtoolkit.utils.core.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.core.encodeOrUnknown
+import org.ossreviewtoolkit.utils.core.fileSystemEncode
+import org.ossreviewtoolkit.utils.core.isSymbolicLink
+import org.ossreviewtoolkit.utils.core.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.core.safeMkdirs
+import org.ossreviewtoolkit.utils.core.withoutPrefix
 
 const val ORTH_NAME = "orth"
 

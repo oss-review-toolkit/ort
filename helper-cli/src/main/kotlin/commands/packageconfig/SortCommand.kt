@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.helper.common.sortEntries
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.core.expandTilde
 
 internal class SortCommand : CliktCommand(
     help = "Sorts all exclude and curation entries of the given package configuration alphabetically. The output " +

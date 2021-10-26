@@ -9,7 +9,7 @@ gradlew						text eol=lf
 analyzer/src/funTest/assets/projects/synthetic/spdx/**/*.spdx.*	text eol=lf
 
 # Use Unix line endings for expected test results for consistency across platforms.
-*/src/*/assets/**/*expected*.yml		text eol=lf
+**/src/*/assets/**/*expected*.yml		text eol=lf
 reporter/src/funTest/assets/*-expected-*	text eol=lf
 
 # Use Unix line endings for Freemarker templates for consistency across platforms.
@@ -33,7 +33,7 @@ spdx-utils/src/main/resources/licenserefs/*	linguist-detectable=false
 spdx-utils/src/main/resources/licenses/*	linguist-detectable=false
 
 # Use Unix line endings for the expected control file of a Debian package.
-utils/src/test/assets/control-expected.txt  text eol=lf
+utils/core/src/test/assets/control-expected.txt  text eol=lf
 
 # Use Unix line endings for *.graphql files. This is mainly done to prevent that tests need to fiddle with
 # different platform-specific line endings.
