@@ -17,32 +17,31 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
 
 /**
- * A node for the dependency trees of the [EvaluatedModel].
+ * The evaluated form of a [RuleViolation] used by the [EvaluatedModel].
  */
-@JsonIdentityInfo(property = "key", generator = ZeroBasedIntSequenceGenerator::class, scope = DependencyTreeNode::class)
-data class DependencyTreeNode(
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val linkage: PackageLinkage?,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+data class EvaluatedRuleViolation(
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val rule: String,
     val pkg: EvaluatedPackage?,
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val scope: EvaluatedScope?,
+    val license: LicenseId?,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val licenseSource: LicenseSource?,
+    val severity: Severity,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val pathExcludes: List<PathExclude> = emptyList(),
+    val message: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val scopeExcludes: List<ScopeExclude> = emptyList(),
+    val howToFix: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<EvaluatedOrtIssue> = emptyList(),
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val children: List<DependencyTreeNode>
+    val resolutions: List<RuleViolationResolution>
 )

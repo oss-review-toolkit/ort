@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec

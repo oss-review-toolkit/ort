@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIdentityReference

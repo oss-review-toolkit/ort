@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import java.io.File
 
@@ -26,7 +26,6 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.evaluatedmodel.EvaluatedModel
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
 

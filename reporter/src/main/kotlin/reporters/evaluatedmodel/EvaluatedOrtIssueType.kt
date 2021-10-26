@@ -17,21 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
-
-import com.fasterxml.jackson.annotation.JsonInclude
-
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 /**
- * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].
+ * The possible types of an [EvaluatedOrtIssue].
  */
-data class EvaluatedProcessedDeclaredLicense(
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val spdxExpression: SpdxExpression?,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val mappedLicenses: List<LicenseId>,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val unmappedLicenses: List<LicenseId>
-)
+enum class EvaluatedOrtIssueType {
+    ANALYZER, SCANNER
+}

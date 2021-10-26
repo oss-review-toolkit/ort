@@ -18,16 +18,17 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.OrtResult
+
 /**
- * Metadata about the ORT run itself.
+ * This class calculates [MetaData] for a given [OrtResult].
  */
-data class MetaData(
-    /**
-     * The time the Analyzer started.
-     */
-    val analyzerStartTime: Instant
-)
+internal class MetaDataCalculator {
+    fun getMetaData(ortResult: OrtResult) = MetaData(
+        analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now()
+    )
+}

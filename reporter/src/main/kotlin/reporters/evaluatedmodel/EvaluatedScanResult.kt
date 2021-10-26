@@ -17,18 +17,27 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.config.ScopeExclude
+import java.time.Instant
+
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 
 /**
- * The evaluated form of a [Scope] used by the [EvaluatedModel].
+ * The evaluated form of a [ScanSummary] used by the [EvaluatedModel]. The findings are stored directly in
+ * [EvaluatedPackage].
  */
-data class EvaluatedScope(
-    val name: String,
+data class EvaluatedScanResult(
+    val provenance: Provenance,
+    val scanner: ScannerDetails,
+    val startTime: Instant,
+    val endTime: Instant,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val excludes: List<ScopeExclude>
+    val packageVerificationCode: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val issues: List<EvaluatedOrtIssue>
 )
