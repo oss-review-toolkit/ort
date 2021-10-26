@@ -17,11 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 /**
- * The possible types of an [EvaluatedFinding].
+ * The path to a [dependency][pkg] used by the [EvaluatedModel]. It is defined by the [project] and [scope] that contain
+ * the dependency and the [list of parents][path] in the dependency tree.
  */
-enum class EvaluatedFindingType {
-    COPYRIGHT, LICENSE
-}
+data class EvaluatedPackagePath(
+    val pkg: EvaluatedPackage,
+    val project: EvaluatedPackage,
+    val scope: EvaluatedScope,
+    val path: List<EvaluatedPackage>
+)

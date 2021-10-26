@@ -17,31 +17,26 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.model.LicenseSource
-import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.config.PathExclude
 
 /**
- * The evaluated form of a [RuleViolation] used by the [EvaluatedModel].
+ * The evaluated form of a [LicenseFinding] used by the [EvaluatedModel].
  */
-data class EvaluatedRuleViolation(
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val rule: String,
-    val pkg: EvaluatedPackage?,
+data class EvaluatedFinding(
+    val type: EvaluatedFindingType,
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val license: LicenseId?,
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val licenseSource: LicenseSource?,
-    val severity: Severity,
+    val copyright: CopyrightStatement?,
+    val path: String,
+    val startLine: Int,
+    val endLine: Int,
+    val scanResult: EvaluatedScanResult,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val message: String,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val howToFix: String,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val resolutions: List<RuleViolationResolution>
+    val pathExcludes: List<PathExclude>
 )

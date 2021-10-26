@@ -17,26 +17,21 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
- * The evaluated form of a [LicenseFinding] used by the [EvaluatedModel].
+ * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].
  */
-data class EvaluatedFinding(
-    val type: EvaluatedFindingType,
+data class EvaluatedProcessedDeclaredLicense(
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val license: LicenseId?,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val copyright: CopyrightStatement?,
-    val path: String,
-    val startLine: Int,
-    val endLine: Int,
-    val scanResult: EvaluatedScanResult,
+    val spdxExpression: SpdxExpression?,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val pathExcludes: List<PathExclude>
+    val mappedLicenses: List<LicenseId>,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val unmappedLicenses: List<LicenseId>
 )

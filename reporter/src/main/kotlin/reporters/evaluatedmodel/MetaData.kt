@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +18,16 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
+
+import java.time.Instant
 
 /**
- * Wrapper class for license identifiers. Allows Jackson to generate IDs for them when storing them in a separate list
- * for de-duplication.
+ * Metadata about the ORT run itself.
  */
-data class LicenseId(
-    val id: String
+data class MetaData(
+    /**
+     * The time the Analyzer started.
+     */
+    val analyzerStartTime: Instant
 )

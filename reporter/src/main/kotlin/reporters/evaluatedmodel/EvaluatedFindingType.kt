@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.evaluatedmodel
-
-import java.time.Instant
-
-import org.ossreviewtoolkit.model.OrtResult
+package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 /**
- * This class calculates [MetaData] for a given [OrtResult].
+ * The possible types of an [EvaluatedFinding].
  */
-internal class MetaDataCalculator {
-    fun getMetaData(ortResult: OrtResult) = MetaData(
-        analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now()
-    )
+enum class EvaluatedFindingType {
+    COPYRIGHT, LICENSE
 }

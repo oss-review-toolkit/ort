@@ -1,10 +1,10 @@
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
-org.ossreviewtoolkit.reporter.reporters.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.OpossumReporter
 org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter
 org.ossreviewtoolkit.reporter.reporters.StaticHtmlReporter
 org.ossreviewtoolkit.reporter.reporters.WebAppReporter
+org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.NoticeTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.AdocTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.DocBookTemplateReporter
