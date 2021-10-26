@@ -201,7 +201,8 @@ abstract class LocalScanner(
 
     override suspend fun scanPackages(
         packages: Set<Package>,
-        outputDirectory: File
+        outputDirectory: File,
+        labels: Map<String, String>
     ): Map<Package, List<ScanResult>> {
         val scannerCriteria = getScannerCriteria()
 

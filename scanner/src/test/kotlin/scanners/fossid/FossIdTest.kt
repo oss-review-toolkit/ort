@@ -388,7 +388,9 @@ class FossIdTest : WordSpec({
 
             shouldThrow<TimeoutCancellationException> {
                 withTimeout(1000) {
-                    fossId.scanPackages(setOf(createPackage(createIdentifier(index = 1), vcsInfo)), File("output"))
+                    fossId.scanPackages(
+                        setOf(createPackage(createIdentifier(index = 1), vcsInfo)), File("output"), emptyMap()
+                    )
                 }
             }
 

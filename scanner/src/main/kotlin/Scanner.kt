@@ -105,7 +105,8 @@ fun scanOrtResult(
         // Scan the projects from the ORT result.
         val deferredProjectScan = async {
             if (filteredProjectPackages.isNotEmpty()) {
-                projectScanner.scanPackages(filteredProjectPackages, outputDirectory).mapKeys { it.key.id }
+                projectScanner.scanPackages(filteredProjectPackages, outputDirectory, ortResult.labels)
+                    .mapKeys { it.key.id }
             } else {
                 projectScanner.log.info { "No projects to scan." }
                 emptyMap()
@@ -115,7 +116,7 @@ fun scanOrtResult(
         // Scan the packages from the ORT result.
         val deferredPackageScan = async {
             if (filteredPackages.isNotEmpty()) {
-                scanner.scanPackages(filteredPackages, outputDirectory).mapKeys { it.key.id }
+                scanner.scanPackages(filteredPackages, outputDirectory, ortResult.labels).mapKeys { it.key.id }
             } else {
                 scanner.log.info { "No packages to scan." }
                 emptyMap()
@@ -185,10 +186,13 @@ abstract class Scanner(
      * Scan the [packages] and store the scan results in [outputDirectory]. [ScanResult]s are returned associated by
      * [Package]. The map may contain multiple results for the same [Package] if the storage contains more than one
      * result for the specification of this scanner.
+     * [labels] are the labels present in [OrtResult.labels], created by previous invocations of ORT tools. They can be
+     * used by scanner implementations to decide if and how packages are scanned.
      */
     abstract suspend fun scanPackages(
         packages: Set<Package>,
-        outputDirectory: File
+        outputDirectory: File,
+        labels: Map<String, String>
     ): Map<Package, List<ScanResult>>
 
     /**
