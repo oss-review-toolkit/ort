@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.reporter.utils.ZeroBasedIntSequenceGenerator
 
 /**
  * A node for the dependency trees of the [EvaluatedModel].
