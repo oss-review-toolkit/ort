@@ -17,14 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters.gitlab
 
 import java.io.File
 
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.gitlab.GitLabLicenseModelMapper
 import org.ossreviewtoolkit.utils.isTrue
 
 /**
