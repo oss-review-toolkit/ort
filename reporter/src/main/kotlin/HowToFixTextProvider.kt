@@ -54,7 +54,7 @@ private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
             import org.ossreviewtoolkit.model.licenses.*
             import org.ossreviewtoolkit.model.utils.*
             import org.ossreviewtoolkit.reporter.HowToFixTextProvider
-            import org.ossreviewtoolkit.utils.*
+            import org.ossreviewtoolkit.utils.core.*
 
         """.trimIndent()
 
