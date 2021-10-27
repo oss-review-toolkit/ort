@@ -184,9 +184,10 @@ e.g.:
 curations:
   packages:
   - id: "Maven:com.example:dummy:0.0.1"
-    comment: "An explanation why the curation is needed."
-    source_artifact:
-      url: "https://example.com/sources.zip"
+    curations:
+      comment: "An explanation why the curation is needed."
+      source_artifact:
+        url: "https://example.com/sources.zip"
 ```
 
 For more information about package curations see
