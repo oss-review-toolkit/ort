@@ -40,7 +40,7 @@ dependencies {
     api("com.vdurmont:semver4j:$semverVersion")
     api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
-    implementation(project(":spdx-utils"))
+    implementation(project(":utils:spdx"))
 
     implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")

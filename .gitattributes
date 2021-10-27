@@ -22,15 +22,15 @@ scanner/src/test/assets/*.json			text eol=lf
 reporter-web-app/**/*.js			text eol=lf
 
 # Use Unix line endings for SPDX license texts for consistency across platforms.
-spdx-utils/src/main/resources/exceptions/*	text eol=lf
-spdx-utils/src/main/resources/licenserefs/*	text eol=lf
-spdx-utils/src/main/resources/licenses/*	text eol=lf
+utils/spdx/src/main/resources/exceptions/*	text eol=lf
+utils/spdx/src/main/resources/licenserefs/*	text eol=lf
+utils/spdx/src/main/resources/licenses/*	text eol=lf
 
 # Fix GitHub language statistics, see https://github.com/github/linguist#using-gitattributes.
 reporter-web-app/public/index.html		linguist-generated=true
-spdx-utils/src/main/resources/exceptions/*	linguist-detectable=false
-spdx-utils/src/main/resources/licenserefs/*	linguist-detectable=false
-spdx-utils/src/main/resources/licenses/*	linguist-detectable=false
+utils/spdx/src/main/resources/exceptions/*	linguist-detectable=false
+utils/spdx/src/main/resources/licenserefs/*	linguist-detectable=false
+utils/spdx/src/main/resources/licenses/*	linguist-detectable=false
 
 # Use Unix line endings for the expected control file of a Debian package.
 utils/core/src/test/assets/control-expected.txt  text eol=lf

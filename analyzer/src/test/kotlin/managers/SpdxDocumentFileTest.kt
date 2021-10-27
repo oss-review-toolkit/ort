@@ -33,12 +33,12 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxModelMapper
-import org.ossreviewtoolkit.spdx.model.SpdxChecksum
-import org.ossreviewtoolkit.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.spdx.model.SpdxExternalDocumentReference
-import org.ossreviewtoolkit.spdx.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
+import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
+import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /*

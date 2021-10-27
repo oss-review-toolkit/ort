@@ -59,14 +59,14 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.spdx.SpdxLicense
-import org.ossreviewtoolkit.spdx.SpdxModelMapper.FileFormat
-import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromJson
-import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromYaml
-import org.ossreviewtoolkit.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromJson
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromYaml
+import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 

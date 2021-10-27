@@ -81,7 +81,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.DiskCache
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
@@ -93,6 +92,7 @@ import org.ossreviewtoolkit.utils.core.ortDataDirectory
 import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.core.showStackTrace
 import org.ossreviewtoolkit.utils.core.withoutPrefix
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 

@@ -25,7 +25,7 @@ import java.nio.file.Paths
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
-import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
  * A class for matching and applying [LicenseFindingCuration]s to [LicenseFinding]s.

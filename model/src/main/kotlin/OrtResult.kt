@@ -33,10 +33,10 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
-import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.perf
 import org.ossreviewtoolkit.utils.core.zipWithCollections
+import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
 
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the

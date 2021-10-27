@@ -34,10 +34,10 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
-import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.core.textValueOrEmpty
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
+import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 private data class LicenseExpression(
     val expression: String,

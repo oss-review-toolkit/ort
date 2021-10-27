@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.model
 
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
  * A class representing a license finding. License findings can point to single licenses or to complex

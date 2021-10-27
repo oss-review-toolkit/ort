@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class LicenseeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag)) {

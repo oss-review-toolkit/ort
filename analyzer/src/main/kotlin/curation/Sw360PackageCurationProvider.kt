@@ -42,8 +42,8 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
  * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.

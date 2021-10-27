@@ -55,15 +55,15 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
-import org.ossreviewtoolkit.spdx.SpdxCompoundExpression
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.core.isValidUri
 import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 
 @Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {

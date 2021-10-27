@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class AskalonoScannerFunTest : AbstractScannerFunTest() {
     override val scanner = Askalono("Askalono", scannerConfig, downloaderConfig)

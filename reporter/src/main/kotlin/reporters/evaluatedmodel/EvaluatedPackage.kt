@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
  * The evaluated form of a [Package] used by the [EvaluatedModel].

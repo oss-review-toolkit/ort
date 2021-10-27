@@ -29,8 +29,8 @@ import io.mockk.every
 import io.mockk.spyk
 
 import org.ossreviewtoolkit.model.licenses.LicenseView
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class RuleSetTest : WordSpec() {
     private val errorMessage = "error message"

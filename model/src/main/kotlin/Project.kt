@@ -26,10 +26,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
  * A class describing a software project. A [Project] is very similar to a [Package] but contains some additional

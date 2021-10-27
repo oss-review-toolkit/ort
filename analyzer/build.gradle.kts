@@ -63,8 +63,8 @@ dependencies {
     api(project(":model"))
 
     implementation(project(":downloader"))
-    implementation(project(":spdx-utils"))
     implementation(project(":utils:core"))
+    implementation(project(":utils:spdx"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.moandjiezana.toml:toml4j:$toml4jVersion")

@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class NoticeTemplateReporterFunTest : WordSpec({

@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readJsonFile
-import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 @Suppress("LargeClass")
 class ScanCodeResultParserTest : WordSpec({

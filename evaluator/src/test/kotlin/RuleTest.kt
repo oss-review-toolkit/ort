@@ -27,7 +27,7 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 class RuleTest : WordSpec() {
     private val ruleSet = RuleSet(ortResult)

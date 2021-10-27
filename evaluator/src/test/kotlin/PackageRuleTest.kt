@@ -26,8 +26,8 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
-import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 class PackageRuleTest : WordSpec() {
     private val ruleSet = RuleSet(ortResult)

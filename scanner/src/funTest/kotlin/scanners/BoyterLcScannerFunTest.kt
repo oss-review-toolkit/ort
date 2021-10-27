@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class BoyterLcScannerFunTest : AbstractScannerFunTest() {
     override val scanner = BoyterLc("BoyterLc", scannerConfig, downloaderConfig)

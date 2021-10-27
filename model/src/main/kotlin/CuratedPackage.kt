@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
  * A [Package] including the [PackageCurationResult]s that were applied to it, in order to be able to trace back how the

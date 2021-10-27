@@ -30,10 +30,10 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxLicense
-import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.spdx.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 
 /**
  * A [Rule] to check a single [Package].

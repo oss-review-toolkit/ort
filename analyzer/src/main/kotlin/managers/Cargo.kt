@@ -47,12 +47,12 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.textValueOrEmpty
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
