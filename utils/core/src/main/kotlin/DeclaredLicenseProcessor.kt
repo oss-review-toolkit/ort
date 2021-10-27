@@ -22,13 +22,13 @@ package org.ossreviewtoolkit.utils.core
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.spdx.SpdxCompoundExpression
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
-import org.ossreviewtoolkit.spdx.SpdxException
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.utils.spdx.SpdxException
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 object DeclaredLicenseProcessor {
     private val urlPrefixesToRemove = listOf(

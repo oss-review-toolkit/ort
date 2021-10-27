@@ -31,7 +31,7 @@ import io.kotest.matchers.string.shouldNotContain
 
 import java.util.Collections.emptySortedSet
 
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class LicenseClassificationsTest : WordSpec({

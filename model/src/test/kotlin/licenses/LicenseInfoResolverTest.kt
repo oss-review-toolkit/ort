@@ -60,12 +60,12 @@ import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
 import org.ossreviewtoolkit.model.utils.getArchivePath
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.spdx.getLicenseText
-import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.getLicenseText
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 

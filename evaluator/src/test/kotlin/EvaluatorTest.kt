@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class EvaluatorTest : WordSpec() {
     private fun createEvaluator() = Evaluator(OrtResult.EMPTY, ortResult.createLicenseInfoResolver())

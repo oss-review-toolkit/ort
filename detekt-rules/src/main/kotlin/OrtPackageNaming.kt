@@ -65,7 +65,7 @@ class OrtPackageNaming : Rule() {
             "helper-cli" -> ".helper"
             "nexus-iq" -> ".clients.nexusiq"
             "oss-index" -> ".clients.ossindex"
-            "spdx-utils" -> ".spdx"
+            "spdx" -> ".utils.spdx"
             "test" -> ".utils.test"
             "vulnerable-code" -> ".clients.vulnerablecode"
             else -> ".$projectDir"

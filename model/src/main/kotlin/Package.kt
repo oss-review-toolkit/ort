@@ -24,10 +24,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
  * A generic descriptor for a software package. It contains all relevant metadata about a package like the name,

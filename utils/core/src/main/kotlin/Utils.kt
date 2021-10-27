@@ -25,7 +25,7 @@ import java.io.File
 
 import kotlin.reflect.full.memberProperties
 
-import org.ossreviewtoolkit.spdx.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.spdx.VCS_DIRECTORIES
 
 /**
  * The directory to store ORT (read-only) configuration in.

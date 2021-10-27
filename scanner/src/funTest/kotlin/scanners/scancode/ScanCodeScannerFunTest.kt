@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import org.ossreviewtoolkit.scanner.scanners.AbstractScannerFunTest
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.ScanCodeTag
 

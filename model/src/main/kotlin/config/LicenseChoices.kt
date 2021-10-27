@@ -23,8 +23,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.spdx.model.LicenseChoice
 import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
 
 /**
  * The license choices configured for a repository.

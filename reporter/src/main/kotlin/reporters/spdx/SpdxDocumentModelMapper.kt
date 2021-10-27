@@ -33,22 +33,22 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxConstants.REF_PREFIX
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxLicense
-import org.ossreviewtoolkit.spdx.SpdxLicenseException
-import org.ossreviewtoolkit.spdx.model.SpdxCreationInfo
-import org.ossreviewtoolkit.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.spdx.model.SpdxExternalReference
-import org.ossreviewtoolkit.spdx.model.SpdxExtractedLicenseInfo
-import org.ossreviewtoolkit.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.spdx.model.SpdxPackageVerificationCode
-import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.core.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants.REF_PREFIX
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
+import org.ossreviewtoolkit.utils.spdx.model.SpdxCreationInfo
+import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
+import org.ossreviewtoolkit.utils.spdx.model.SpdxExtractedLicenseInfo
+import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
+import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
 
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.

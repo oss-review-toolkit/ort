@@ -32,7 +32,7 @@ import io.kotest.matchers.string.shouldNotContain
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class RepositoryConfigurationTest : WordSpec({
     "RepositoryConfiguration" should {

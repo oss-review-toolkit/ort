@@ -25,8 +25,8 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
  * The base class for an evaluator rule. Rules use a set of matchers to determine if they apply, and create a list of

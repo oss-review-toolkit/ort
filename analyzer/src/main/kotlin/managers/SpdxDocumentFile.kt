@@ -45,20 +45,20 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxModelMapper
-import org.ossreviewtoolkit.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.spdx.model.SpdxExternalDocumentReference
-import org.ossreviewtoolkit.spdx.model.SpdxExternalReference
-import org.ossreviewtoolkit.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.spdx.model.SpdxRelationship
-import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.withoutPrefix
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
+import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
+import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 private const val MANAGER_NAME = "SpdxDocumentFile"
 private const val DEFAULT_SCOPE_NAME = "default"

@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.licenses
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
  * A class for configuring metadata for a specific license referred to by a SPDX license identifier.

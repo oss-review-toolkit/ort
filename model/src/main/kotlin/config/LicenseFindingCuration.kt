@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.util.StdConverter
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
  * A curation for a license finding. Use it to correct a license finding or to add a license that was not previously

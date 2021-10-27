@@ -41,11 +41,11 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.expandTilde
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 class GetPackageLicensesCommand : CliktCommand(
     help = "Shows the root license and the detected license for a package denoted by the given package identifier."

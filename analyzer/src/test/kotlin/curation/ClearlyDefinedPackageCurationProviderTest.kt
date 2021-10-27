@@ -27,7 +27,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class ClearlyDefinedPackageCurationProviderTest : WordSpec({
     "The production server" should {

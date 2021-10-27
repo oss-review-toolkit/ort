@@ -27,7 +27,7 @@ import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class PackageCurationTest : WordSpec({
     "Applying a single curation" should {

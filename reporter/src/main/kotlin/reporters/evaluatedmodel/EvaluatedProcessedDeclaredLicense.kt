@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
  * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].

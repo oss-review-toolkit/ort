@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 data class RuleViolation(
     /**

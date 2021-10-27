@@ -24,9 +24,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.spdx.getDuplicates
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.getDuplicates
 
 /**
  * Classifications for licenses which allow to assign metadata to licenses. This allows defining rather generic

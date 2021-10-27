@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
-import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
  * A [curated license finding][curatedFinding] created by applying [LicenseFindingCuration]s.

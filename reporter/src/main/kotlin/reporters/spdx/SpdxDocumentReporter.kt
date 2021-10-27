@@ -23,8 +23,8 @@ import java.io.File
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.spdx.SpdxModelMapper.FileFormat
-import org.ossreviewtoolkit.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
+import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 
 /**
  * Creates YAML and JSON SPDX documents mainly targeting the use case of sharing information about the dependencies

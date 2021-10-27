@@ -64,8 +64,8 @@ include(":notifier")
 include(":reporter")
 include(":reporter-web-app")
 include(":scanner")
-include(":spdx-utils")
 include(":utils:core")
+include(":utils:spdx")
 include(":utils:test")
 
 val buildCacheRetentionDays: String by settings

@@ -30,15 +30,15 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
-import org.ossreviewtoolkit.spdx.SpdxException
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxLicense
-import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.spdx.SpdxSimpleLicenseMapping
-import org.ossreviewtoolkit.spdx.toExpression
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.utils.spdx.SpdxException
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSimpleLicenseMapping
+import org.ossreviewtoolkit.utils.spdx.toExpression
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
