@@ -60,6 +60,10 @@ Files: clients/github-graphql/src/main/assets/*
 Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
 License: Apache-2.0
 
+Files: integrations/schemas/*
+Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
 # Third-party files.
 
 Files: gradlew*
