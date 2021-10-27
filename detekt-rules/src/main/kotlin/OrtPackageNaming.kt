@@ -52,10 +52,10 @@ class OrtPackageNaming : Rule() {
         val path = directive.containingKtFile.name
 
         if (!path.contains(pathPattern)) return
-        val (pathPrefix, pathSuffix) = path.split(pathPattern, 2)
+        val (pathPrefix, pathSuffix) = path.split(pathPattern, 2).map { File(it) }
 
         // Maintain a hard-coded mapping of exceptions to the general package naming rules.
-        val projectName = when (val projectDir = File(pathPrefix).name) {
+        val projectName = when (val projectDir = pathPrefix.name) {
             "buildSrc" -> ".gradle"
             "clearly-defined" -> ".clients.clearlydefined"
             "core" -> ".utils.core"
@@ -71,7 +71,7 @@ class OrtPackageNaming : Rule() {
             else -> ".$projectDir"
         }
 
-        val nestedPath = File(pathSuffix).parent?.replace(forwardOrBackwardSlashPattern, ".")?.let { ".$it" }.orEmpty()
+        val nestedPath = pathSuffix.parent?.replace(forwardOrBackwardSlashPattern, ".")?.let { ".$it" }.orEmpty()
         val expectedPackageName = ORT_PACKAGE_NAMESPACE + projectName + nestedPath
 
         if (directive.qualifiedName != expectedPackageName) {
