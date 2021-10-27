@@ -1,0 +1,433 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://oss-review-toolkit.org/.ort.yml",
+  "title": "ORT repository configuration",
+  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to configure exclusions, resolutions and more in a file called `.ort.yml`. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md.",
+  "type": "object",
+  "properties": {
+    "excludes": {
+      "type": "object",
+      "description": "Defines which parts of a repository should be excluded.",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "description": "A glob to match the path of the project definition file, relative to the root of the repository.",
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/pathExcludeReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "reason"
+            ]
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/scopeExcludeReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "reason"
+            ]
+          }
+        }
+      }
+    },
+    "resolutions": {
+      "type": "object",
+      "description": "Resolutions for issues and rule violations.",
+      "properties": {
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/issueResolutionReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "reason"
+            ]
+          }
+        },
+        "rule_violations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/ruleViolationResolutionReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "reason"
+            ]
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "issues"
+          ]
+        },
+        {
+          "required": [
+            "rule_violations"
+          ]
+        }
+      ]
+    },
+    "curations": {
+      "type": "object",
+      "description": "Curations for artifacts in a repository.",
+      "properties": {
+        "license_findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/licenseFindingCurations"
+          }
+        },
+        "packages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "curations": {
+                "type": "object",
+                "properties": {
+                  "comment": {
+                    "type": "string"
+                  },
+                  "authors": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "concluded_license": {
+                    "type": "string"
+                  },
+                  "declared_license_mapping": {
+                    "type": "object"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "homepage_url": {
+                    "type": "string"
+                  },
+                  "binary_artifact": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "hash": {
+                        "type": "string"
+                      },
+                      "hash_algorithm": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "hash",
+                      "hash_algorithm"
+                    ]
+                  },
+                  "source_artifact": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "hash": {
+                        "type": "string"
+                      },
+                      "hash_algorithm": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "hash",
+                      "hash_algorithm"
+                    ]
+                  },
+                  "vcs": {
+                    "$ref": "#/definitions/vcsMatcher"
+                  },
+                  "is_meta_data_only": {
+                    "type": "boolean"
+                  },
+                  "is_modified": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "required": [
+              "id",
+              "curations"
+            ]
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "license_findings"
+          ]
+        },
+        {
+          "required": [
+            "packages"
+          ]
+        }
+      ]
+    },
+    "package_configurations": {
+      "type": "array",
+      "description": "A configuration for a specific package and provenance.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source_artifact_url": {
+            "type": "string"
+          },
+          "vcs": {
+            "$ref": "#/definitions/vcsMatcher"
+          },
+          "license_finding_curations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/licenseFindingCurations"
+            }
+          },
+          "path_excludes": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/pathExcludeReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "reason"
+            ]
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    },
+    "license_choices": {
+      "type": "object",
+      "description": "A configuration to select a license from a multi-licensed package.",
+      "properties": {
+        "package_license_choices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "package_id": {
+                "type": "string"
+              },
+              "license_choices": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "given": {
+                      "type": "string"
+                    },
+                    "choice": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "choice"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "package_id",
+              "license_choices"
+            ]
+          }
+        },
+        "repository_license_choices": {
+          "type": "array",
+          "items": {
+            "given": {
+              "type": "string"
+            },
+            "choice": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "vcsMatcher": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "url",
+        "revision"
+      ]
+    },
+    "licenseFindingCurations": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "start_lines": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        },
+        "line_count": {
+          "type": "integer"
+        },
+        "detected_license": {
+          "type": "string"
+        },
+        "concluded_license": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/licenseFindingCurationReason"
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "concluded_license",
+        "reason"
+      ]
+    },
+    "pathExcludeReason": {
+      "enum": [
+        "BUILD_TOOL_OF",
+        "DATA_FILE_OF",
+        "DOCUMENTATION_OF",
+        "EXAMPLE_OF",
+        "OPTIONAL_COMPONENT_OF",
+        "OTHER",
+        "PROVIDED_BY",
+        "TEST_OF",
+        "TEST_TOOL_OF"
+      ]
+    },
+    "scopeExcludeReason": {
+      "enum": [
+        "BUILD_DEPENDENCY_OF",
+        "DEV_DEPENDENCY_OF",
+        "PROVIDED_DEPENDENCY_OF",
+        "TEST_DEPENDENCY_OF",
+        "RUNTIME_DEPENDENCY_OF"
+      ]
+    },
+    "issueResolutionReason": {
+      "enum": [
+        "BUILD_TOOL_ISSUE",
+        "CANT_FIX_ISSUE",
+        "SCANNER_ISSUE"
+      ]
+    },
+    "ruleViolationResolutionReason": {
+      "enum": [
+        "CANT_FIX_EXCEPTION",
+        "DYNAMIC_LINKAGE_EXCEPTION",
+        "EXAMPLE_OF_EXCEPTION",
+        "LICENSE_ACQUIRED_EXCEPTION",
+        "NOT_MODIFIED_EXCEPTION",
+        "PATENT_GRANT_EXCEPTION"
+      ]
+    },
+    "licenseFindingCurationReason": {
+      "enum": [
+        "CODE",
+        "DATA_OF",
+        "DOCUMENTATION_OF",
+        "INCORRECT",
+        "NOT_DETECTED",
+        "REFERENCE"
+      ]
+    }
+  }
+}
