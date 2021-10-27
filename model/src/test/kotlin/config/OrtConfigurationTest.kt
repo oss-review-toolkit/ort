@@ -61,6 +61,22 @@ class OrtConfigurationTest : WordSpec({
                 }
             }
 
+            with(ortConfig.advisor) {
+                nexusIq shouldNotBeNull {
+                    serverUrl shouldBe "https://rest-api-url-of-your-nexus-iq-server"
+                    username shouldBe "username"
+                    password shouldBe "password"
+                }
+
+                vulnerableCode shouldNotBeNull {
+                    serverUrl shouldBe "http://localhost:8000"
+                }
+
+                options shouldNotBeNull {
+                    this["CustomAdvisor"]?.get("apiKey") shouldBe "<some_api_key>"
+                }
+            }
+
             ortConfig.downloader shouldNotBeNull {
                 includedLicenseCategories should containExactly("category-a", "category-b")
                 sourceCodeOrigins should containExactly(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)

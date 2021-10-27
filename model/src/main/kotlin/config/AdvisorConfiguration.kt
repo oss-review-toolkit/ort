@@ -23,12 +23,26 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
+ * Type alias for a map with configuration options for a single _AdviceProvider_. In addition to the concrete
+ * configuration classes for the providers shipped with ORT, [AdvisorConfiguration] holds a map with generic options
+ * that can be used to configure external plugins via the ORT configuration.
+ */
+typealias AdviceProviderOptions = Map<String, String>
+
+/**
  * The base configuration model of the advisor.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AdvisorConfiguration(
     val nexusIq: NexusIqConfiguration? = null,
-    val vulnerableCode: VulnerableCodeConfiguration? = null
+    val vulnerableCode: VulnerableCodeConfiguration? = null,
+
+    /**
+     * A map with generic options for advice providers using the provider name as key. While the advice providers
+     * shipped with ORT can access their configuration in a type-safe way via the other properties in this class,
+     * this map offers a way for external advisor plugins to query configuration information.
+     */
+    val options: Map<String, AdviceProviderOptions>? = null
 )
 
 /**
