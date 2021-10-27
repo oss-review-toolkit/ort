@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.detekt
 
+import io.github.detekt.psi.toFilePath
+
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -48,31 +50,25 @@ class OrtPackageNaming : Rule() {
 
         if (directive.qualifiedName.isEmpty()) return
 
-        // This returns the absolute path with a system-dependent separator.
-        val path = directive.containingKtFile.name
-
+        val path = directive.containingKtFile.toFilePath().relativePath.toString()
         if (!path.contains(pathPattern)) return
+
         val (pathPrefix, pathSuffix) = path.split(pathPattern, 2).map { File(it) }
+        val projectDir = pathPrefix.name
+        val projectGroup = pathPrefix.parent?.let { ".$it" }.orEmpty()
 
         // Maintain a hard-coded mapping of exceptions to the general package naming rules.
-        val projectName = when (val projectDir = pathPrefix.name) {
+        val projectName = when (projectDir) {
             "buildSrc" -> ".gradle"
-            "clearly-defined" -> ".clients.clearlydefined"
-            "core" -> ".utils.core"
             "detekt-rules" -> ".detekt"
-            "fossid-webapp" -> ".clients.fossid"
-            "github-graphql" -> ".clients.github"
+            "fossid-webapp" -> ".fossid"
+            "github-graphql" -> ".github"
             "helper-cli" -> ".helper"
-            "nexus-iq" -> ".clients.nexusiq"
-            "oss-index" -> ".clients.ossindex"
-            "spdx" -> ".utils.spdx"
-            "test" -> ".utils.test"
-            "vulnerable-code" -> ".clients.vulnerablecode"
-            else -> ".$projectDir"
+            else -> ".${projectDir.replace("-", "")}"
         }
 
         val nestedPath = pathSuffix.parent?.replace(forwardOrBackwardSlashPattern, ".")?.let { ".$it" }.orEmpty()
-        val expectedPackageName = ORT_PACKAGE_NAMESPACE + projectName + nestedPath
+        val expectedPackageName = ORT_PACKAGE_NAMESPACE + projectGroup + projectName + nestedPath
 
         if (directive.qualifiedName != expectedPackageName) {
             val message = "'${directive.qualifiedName}' should be '$expectedPackageName'"
