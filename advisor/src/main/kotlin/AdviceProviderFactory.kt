@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.advisor
 
 import java.util.ServiceLoader
 
+import org.ossreviewtoolkit.model.config.AdviceProviderOptions
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
@@ -53,6 +54,13 @@ abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
         requireNotNull(select()) {
             "No configuration for '$providerName' found in '${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}'."
         }
+
+    /**
+     * Return a map with options for the [AdviceProvider] managed by this factory or an empty map if no options are
+     * available.
+     */
+    protected fun AdvisorConfiguration.providerOptions(): AdviceProviderOptions =
+        options.orEmpty()[providerName].orEmpty()
 
     /**
      * Return the provider's name here to allow Clikt to display something meaningful when listing the advisors which
