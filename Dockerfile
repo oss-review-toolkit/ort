@@ -95,6 +95,7 @@ FROM base AS build
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
+        ca-certificates \
         dirmngr \
         dpkg-dev \
         git \
@@ -114,6 +115,7 @@ RUN apt-get update \
         make \
         netbase \
         openjdk-11-jdk \
+        openssl \
         tk-dev \
         tzdata \
         unzip \
@@ -217,13 +219,9 @@ WORKDIR /usr/local/src/ort
 #------------------------------------------------------------------------
 # Gradle ORT build.
 RUN scripts/import_proxy_certs.sh \
-    && if [ -n "$CRT_FILES" ]; then \
-        /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
-       fi \
     && scripts/set_gradle_proxy.sh \
-    && . $NVM_DIR/nvm.sh \
-    && sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties \
     && GRADLE_USER_HOME=/tmp/.gradle/ \
+    && sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties \
     && ./gradlew \
         --no-daemon \
         --stacktrace \
@@ -307,4 +305,19 @@ RUN chmod -R a+r /etc/ort
 
 COPY docker/ort-wrapper.sh /usr/bin/ort
 RUN chmod 755 /usr/bin/ort
+
+#------------------------------------------------------------------------
+# Add arg user and run as a regular user
+ARG USER_ID=0
+ARG GROUP_ID=0
+
+RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
+    groupadd -g ${GROUP_ID} ort \
+    && useradd -l -u ${USER_ID} -g ort ort \
+    && install -d -m 0755 -o ort -g ort /home/ort; \
+    fi
+
+USER ort
+WORKDIR /home/ort
+
 ENTRYPOINT ["/usr/bin/ort"]
