@@ -40,6 +40,7 @@ class Evaluator(
             import org.ossreviewtoolkit.model.config.*
             import org.ossreviewtoolkit.model.licenses.*
             import org.ossreviewtoolkit.model.utils.*
+            import org.ossreviewtoolkit.utils.common.*
             import org.ossreviewtoolkit.utils.core.*
             import org.ossreviewtoolkit.utils.spdx.*
 

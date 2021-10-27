@@ -35,6 +35,8 @@ plugins {
 }
 
 dependencies {
+    api(project(":utils:common"))
+
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("com.squareup.okhttp3:okhttp:$okhttpVersion")
     api("com.vdurmont:semver4j:$semverVersion")

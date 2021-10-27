@@ -36,6 +36,7 @@ class Notifier(ortResult: OrtResult = OrtResult.EMPTY, config: NotifierConfigura
             import org.ossreviewtoolkit.model.licenses.*
             import org.ossreviewtoolkit.model.utils.*
             import org.ossreviewtoolkit.notifier.modules.*
+            import org.ossreviewtoolkit.utils.common.*
             import org.ossreviewtoolkit.utils.core.*
 
             import java.util.*
