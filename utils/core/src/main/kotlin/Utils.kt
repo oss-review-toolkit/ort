@@ -23,8 +23,6 @@ package org.ossreviewtoolkit.utils.core
 
 import java.io.File
 
-import kotlin.reflect.full.memberProperties
-
 private val mavenCentralUrlPattern = Regex("^https?://repo1?\\.maven(\\.apache)?\\.org(/.*)?$")
 
 /**
@@ -64,12 +62,6 @@ val ortDataDirectory by lazy {
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
  */
 var printStackTrace = false
-
-/**
- * Return whether [T] (usually an instance of a data class) has any non-null property.
- */
-inline fun <reified T : Any> T.hasNonNullProperty() =
-    T::class.memberProperties.asSequence().map { it.get(this) }.any { it != null }
 
 /**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
