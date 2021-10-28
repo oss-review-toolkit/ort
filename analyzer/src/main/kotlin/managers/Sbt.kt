@@ -32,8 +32,8 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.core.CommandLineTool
-import org.ossreviewtoolkit.utils.core.Os
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.getCommonFileParent
 import org.ossreviewtoolkit.utils.core.log

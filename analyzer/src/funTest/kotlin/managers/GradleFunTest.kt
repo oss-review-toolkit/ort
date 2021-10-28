@@ -31,7 +31,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
-import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.core.ProcessCapture
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION

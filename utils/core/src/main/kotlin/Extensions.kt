@@ -41,6 +41,8 @@ import java.util.Locale
 
 import kotlin.reflect.full.memberProperties
 
+import org.ossreviewtoolkit.utils.common.Os
+
 /**
  * Create a temporary directory with a name specific to ORT, and optional [infixes].
  */

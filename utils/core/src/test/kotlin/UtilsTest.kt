@@ -32,6 +32,7 @@ import io.kotest.matchers.shouldNot
 import java.io.File
 import java.nio.file.Paths
 
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class UtilsTest : WordSpec({

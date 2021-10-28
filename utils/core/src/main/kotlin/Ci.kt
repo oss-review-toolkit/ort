@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.core
 
+import org.ossreviewtoolkit.utils.common.Os
+
 /**
  * Continuous-Integration-specific utility functions.
  */

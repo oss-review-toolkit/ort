@@ -27,6 +27,8 @@ import java.net.ProxySelector
 
 import org.apache.logging.log4j.Level
 
+import org.ossreviewtoolkit.utils.common.Os
+
 /**
  * An authenticator for network connections established by ORT. For proxy authentication, the [OrtProxySelector] is
  * required to also be installed.

@@ -48,6 +48,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel
 
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.spdx.VCS_DIRECTORIES
 
 enum class ArchiveType(vararg val extensions: String) {

@@ -48,8 +48,8 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.core.CommandLineTool
-import org.ossreviewtoolkit.utils.core.Os
 import org.ossreviewtoolkit.utils.core.ProcessCapture
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
