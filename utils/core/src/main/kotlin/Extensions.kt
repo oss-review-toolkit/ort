@@ -39,6 +39,8 @@ import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.Locale
 
+import kotlin.reflect.full.memberProperties
+
 /**
  * Create a temporary directory with a name specific to ORT, and optional [infixes].
  */
@@ -66,6 +68,12 @@ fun createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
  */
 fun Any.createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
     kotlin.io.path.createTempFile(createOrtTempDir().toPath(), prefix, suffix).toFile()
+
+/**
+ * Return whether [T] (usually an instance of a data class) has any non-null property.
+ */
+inline fun <reified T : Any> T.hasNonNullProperty() =
+    T::class.memberProperties.asSequence().map { it.get(this) }.any { it != null }
 
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
