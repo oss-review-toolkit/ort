@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
 import org.ossreviewtoolkit.utils.core.Os
 import org.ossreviewtoolkit.utils.core.ProcessCapture
-import org.ossreviewtoolkit.utils.core.createOrtTempFile
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
@@ -139,5 +139,6 @@ class Licensee(
         )
     }
 
-    override fun scanPath(path: File): ScanSummary = scanPathInternal(path, createOrtTempFile(name))
+    override fun scanPath(path: File): ScanSummary =
+        scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
 }
