@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.Os
 import org.ossreviewtoolkit.utils.core.ProcessCapture
-import org.ossreviewtoolkit.utils.core.createOrtTempFile
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.isTrue
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.unpack
@@ -244,5 +244,6 @@ class ScanCode(
 
     override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 
-    override fun scanPath(path: File): ScanSummary = scanPathInternal(path, createOrtTempFile(name))
+    override fun scanPath(path: File): ScanSummary =
+        scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
 }
