@@ -48,6 +48,8 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel
 
+import org.ossreviewtoolkit.utils.spdx.VCS_DIRECTORIES
+
 enum class ArchiveType(vararg val extensions: String) {
     TAR(".gem", ".tar"),
     TAR_BZIP2(".tar.bz2", ".tbz2"),
@@ -65,6 +67,25 @@ enum class ArchiveType(vararg val extensions: String) {
                 type.extensions.any { lowerName.endsWith(it) }
             } ?: NONE
         }
+    }
+}
+
+/**
+ * Archive the contents of [inputDir], omitting common [VCS_DIRECTORIES], to [zipFile] where an optional [prefix] is
+ * added to each file. Return a [Result] wrapping the [zipFile] on success, or an exception of failure.
+ */
+fun archive(inputDir: File, zipFile: File, prefix: String = ""): Result<File> {
+    return runCatching {
+        inputDir.packZip(
+            zipFile,
+            prefix,
+            directoryFilter = { it.name !in VCS_DIRECTORIES },
+            fileFilter = { it != zipFile }
+        )
+
+        zipFile
+    }.onFailure {
+        it.showStackTrace()
     }
 }
 

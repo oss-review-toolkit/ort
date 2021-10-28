@@ -25,8 +25,6 @@ import java.io.File
 
 import kotlin.reflect.full.memberProperties
 
-import org.ossreviewtoolkit.utils.spdx.VCS_DIRECTORIES
-
 private val mavenCentralUrlPattern = Regex("^https?://repo1?\\.maven(\\.apache)?\\.org(/.*)?$")
 
 /**
@@ -66,25 +64,6 @@ val ortDataDirectory by lazy {
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
  */
 var printStackTrace = false
-
-/**
- * Archive the contents of [inputDir], omitting common [VCS_DIRECTORIES], to [zipFile] where an optional [prefix] is
- * added to each file. Return a [Result] wrapping the [zipFile] on success, or an exception of failure.
- */
-fun archive(inputDir: File, zipFile: File, prefix: String = ""): Result<File> {
-    return runCatching {
-        inputDir.packZip(
-            zipFile,
-            prefix,
-            directoryFilter = { it.name !in VCS_DIRECTORIES },
-            fileFilter = { it != zipFile }
-        )
-
-        zipFile
-    }.onFailure {
-        it.showStackTrace()
-    }
-}
 
 /**
  * Return whether [T] (usually an instance of a data class) has any non-null property.
