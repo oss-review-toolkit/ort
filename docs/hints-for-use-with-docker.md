@@ -6,10 +6,10 @@
 
 ```shell
 docker run \
-  -v $PWD/:/project  \ # Mount current working directory into /project to use as input.
-  ort --info analyze \
+  -v $PWD/:/project \ # Mount current working directory into /project to use as input.
+  ort --info \
   -c /project/ort/config.hocon \ # Use file from "<workingdirectory>/ort" as config.
-  analyze (...) # Insert further arguments for the command.
+  analyze [...] # Insert further arguments for the command.
 ```
 
 **Note:** The single forward slash `/` between the environment variable `$PWD` and the `:` is required for PowerShell compatibility, as PowerShell otherwise interprets `:` as part of the environment variable. 
