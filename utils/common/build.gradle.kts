@@ -17,7 +17,13 @@
  * License-Filename: LICENSE
  */
 
+val springCoreVersion: String by project
+
 plugins {
     // Apply core plugins.
     `java-library`
+}
+
+dependencies {
+    implementation("org.springframework:spring-core:$springCoreVersion")
 }
