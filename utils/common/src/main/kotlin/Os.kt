@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import java.io.File
 import java.lang.IllegalArgumentException
@@ -82,7 +82,6 @@ object Os {
             it.isNotBlank()
         } ?: throw IllegalArgumentException("Unable to determine a user home directory.")
 
-        log.warn { "Fixing up the user home directory from '$userHome' to '$fallbackUserHome'." }
         System.setProperty("user.home", fallbackUserHome)
 
         return fallbackUserHome

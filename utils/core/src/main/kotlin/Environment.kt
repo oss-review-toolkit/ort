@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.utils.core
 
 import java.lang.Runtime
 
+import org.ossreviewtoolkit.utils.common.Os
+
 /**
  * A description of the environment that ORT was executed in.
  */

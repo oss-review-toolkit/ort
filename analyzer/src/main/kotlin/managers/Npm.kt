@@ -60,9 +60,9 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.Os
 import org.ossreviewtoolkit.utils.core.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.core.isSymbolicLink

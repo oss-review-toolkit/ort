@@ -29,6 +29,8 @@ import java.net.URI
 
 import org.apache.logging.log4j.Level
 
+import org.ossreviewtoolkit.utils.common.Os
+
 typealias AuthenticatedProxy = Pair<Proxy, PasswordAuthentication?>
 typealias ProtocolProxyMap = Map<String, List<AuthenticatedProxy>>
 

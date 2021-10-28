@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.utils.core
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.utils.common.Os
+
 class ProcessCaptureTest : StringSpec({
     "Environment variables should be passed correctly" {
         val env = mapOf("PREFIX" to "This is some path: ", "SOME_PATH" to "/foo/bar")

@@ -34,6 +34,7 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.containExactly
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempDir

@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.core.Os
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.containExactly
 
 class DefaultNestedProvenanceResolverFunTest : WordSpec() {

@@ -23,6 +23,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintStream
 
+import org.ossreviewtoolkit.utils.common.Os
+
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
     val tempFile = createOrtTempFile("redirect")
     val fileStream = FileOutputStream(tempFile)

@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.utils.core
 
 import java.io.File
 
+import org.ossreviewtoolkit.utils.common.Os
+
 private val mavenCentralUrlPattern = Regex("^https?://repo1?\\.maven(\\.apache)?\\.org(/.*)?$")
 
 /**
