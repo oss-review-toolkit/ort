@@ -27,7 +27,7 @@ import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.utils.core.FileMatcher
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.log

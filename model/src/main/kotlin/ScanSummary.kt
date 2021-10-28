@@ -29,7 +29,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
-import org.ossreviewtoolkit.utils.core.FileMatcher
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
