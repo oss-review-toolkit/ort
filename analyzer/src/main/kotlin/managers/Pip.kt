@@ -670,6 +670,13 @@ class Pip(
             }
         }
 
+        val id = Identifier(
+            type = "PyPI",
+            namespace = "",
+            name = map.getValue("Name").single().normalizePackageName(),
+            version = map.getValue("Version").single()
+        )
+
         val declaredLicenses = sortedSetOf<String>()
 
         map["License"]?.let { licenseShortString ->
@@ -678,8 +685,8 @@ class Pip(
             val moreLines = licenseShortString.drop(1)
             if (moreLines.isNotEmpty()) {
                 log.warn {
-                    "The 'License' field is supposed to be a short string but contained the following additional " +
-                            "lines which will be ignored:"
+                    "The 'License' field of package '${id.toCoordinates()}' is supposed to be a short string but it " +
+                            "contains the following additional lines which will be ignored:"
                 }
 
                 moreLines.forEach { line ->
@@ -693,12 +700,7 @@ class Pip(
         val authors = parseAuthorString(map["Author"]?.singleOrNull())
 
         return Package(
-            id = Identifier(
-                type = "PyPI",
-                namespace = "",
-                name = map.getValue("Name").single().normalizePackageName(),
-                version = map.getValue("Version").single()
-            ),
+            id = id,
             description = map["Summary"]?.single().orEmpty(),
             homepageUrl = map["Home-page"]?.single().orEmpty(),
             authors = authors,
