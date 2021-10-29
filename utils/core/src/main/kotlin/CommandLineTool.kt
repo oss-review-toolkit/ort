@@ -42,7 +42,7 @@ interface CommandLineTool {
     fun command(workingDir: File? = null): String
 
     /**
-     * Get the arguments to pass to the command in order to gets its version.
+     * Get the arguments to pass to the command in order to get its version.
      */
     fun getVersionArguments() = "--version"
 
