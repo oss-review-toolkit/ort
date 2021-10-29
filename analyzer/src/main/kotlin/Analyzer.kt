@@ -43,15 +43,18 @@ import org.ossreviewtoolkit.utils.core.log
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
 class Analyzer(private val config: AnalyzerConfiguration) {
-    fun analyze(
+    data class ManagedFileInfo(
+        val absoluteProjectPath: File,
+        val managedFiles: Map<PackageManager, List<File>>,
+        val repositoryConfiguration: RepositoryConfiguration
+    )
+
+    fun findManagedFiles(
         absoluteProjectPath: File,
         packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
-        curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY,
         repositoryConfiguration: RepositoryConfiguration = RepositoryConfiguration()
-    ): OrtResult {
+    ): ManagedFileInfo {
         require(absoluteProjectPath.isAbsolute)
-
-        val startTime = Instant.now()
 
         log.debug { "Using the following configuration settings:\n$repositoryConfiguration" }
 
@@ -93,22 +96,31 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
-        // Resolve dependencies per package manager.
-        val analyzerResult = analyzeInParallel(managedFiles, curationProvider)
+        return ManagedFileInfo(absoluteProjectPath, managedFiles, repositoryConfiguration)
+    }
 
-        val workingTree = VersionControlSystem.forDirectory(absoluteProjectPath)
+    fun analyze(
+        info: ManagedFileInfo,
+        curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY
+    ): OrtResult {
+        val startTime = Instant.now()
+
+        // Resolve dependencies per package manager.
+        val analyzerResult = analyzeInParallel(info.managedFiles, curationProvider)
+
+        val workingTree = VersionControlSystem.forDirectory(info.absoluteProjectPath)
         val vcs = workingTree?.getInfo().orEmpty()
         val nestedVcs = workingTree?.getNested()?.filter { (path, _) ->
             // Only include nested VCS if they are part of the analyzed directory.
-            workingTree.getRootPath().resolve(path).startsWith(absoluteProjectPath)
+            workingTree.getRootPath().resolve(path).startsWith(info.absoluteProjectPath)
         }.orEmpty()
-        val repository = Repository(vcs = vcs, nestedRepositories = nestedVcs, config = repositoryConfiguration)
+        val repository = Repository(vcs = vcs, nestedRepositories = nestedVcs, config = info.repositoryConfiguration)
 
         val endTime = Instant.now()
 
         val toolVersions = mutableMapOf<String, String>()
 
-        managedFiles.keys.forEach { manager ->
+        info.managedFiles.keys.forEach { manager ->
             if (manager is CommandLineTool) {
                 toolVersions[manager.managerName] = manager.getVersion()
             }
