@@ -1,0 +1,25 @@
+curations:
+  license_findings:
+  - path: "src/**.cpp"
+    start_lines: "3,8"
+    line_count: 1
+    detected_license: "GPL-2.0-only"
+    reason: "CODE"
+    comment: "The scanner matches a variable named `gpl`."
+    concluded_license: "Apache-2.0"
+  packages:
+  - id: "Maven:com.example:dummy:0.0.1"
+    curations:
+      comment: "An explanation why the curation is needed."
+      homepage_url: "https://example.com"
+      is_modified: false
+      vcs:
+        type: "Git"
+        url: "https://example.com/package.git"
+        revision: "main"
+      authors:
+      - "Name of the author"
+      is_meta_data_only: false
+      concluded_license: "BSD-2-Clause"
+      declared_license_mapping:
+        The BSD License: "BSD-2-Clause"
