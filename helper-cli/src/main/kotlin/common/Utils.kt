@@ -29,9 +29,9 @@ import java.nio.file.Paths
 
 import kotlin.io.path.createTempDirectory
 
-import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -121,10 +120,11 @@ internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
 internal fun findRepositories(directory: File): Map<String, VcsInfo> {
     require(directory.isDirectory)
 
-    val analyzer = Analyzer(AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true))
-    val ortResult = analyzer.analyze(absoluteProjectPath = directory, packageManagers = emptyList())
-
-    return ortResult.repository.nestedRepositories
+    val workingTree = VersionControlSystem.forDirectory(directory)
+    return workingTree?.getNested()?.filter { (path, _) ->
+        // Only include nested VCS if they are part of the analyzed directory.
+        workingTree.getRootPath().resolve(path).startsWith(directory)
+    }.orEmpty()
 }
 
 /**
