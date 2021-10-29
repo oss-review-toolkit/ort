@@ -198,12 +198,23 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         )
 
         val info = analyzer.findManagedFiles(inputDir, distinctPackageManagers, repositoryConfiguration)
-        val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
+        if (info.managedFiles.isEmpty()) {
+            println("No project found.")
+        } else {
+            val filesPerManager = info.managedFiles.mapKeysTo(sortedMapOf()) { it.key.managerName }
 
-        val analyzedProjects = ortResult.getProjects()
-        val countPerType = analyzedProjects.groupingBy { it.id.type }.eachCount()
-        val projectCountDetails = countPerType.toSortedMap().map { (type, count) -> "$type ($count)" }.joinToString()
-        println("Found ${analyzedProjects.size} project(s): $projectCountDetails")
+            filesPerManager.forEach { (manager, files) ->
+                println("Found ${files.size} $manager project(s) at:")
+                files.forEach { file ->
+                    val relativePath = file.toRelativeString(inputDir).takeIf { it.isNotEmpty() } ?: "."
+                    println("\t$relativePath")
+                }
+            }
+
+            println("Found ${filesPerManager.size} project(s) in total.")
+        }
+
+        val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")

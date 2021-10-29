@@ -85,17 +85,6 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
-        if (log.delegate.isInfoEnabled) {
-            // Log the summary of projects found per package manager.
-            managedFiles.forEach { (manager, files) ->
-                // No need to use curly-braces-syntax for logging here as the log level check is already done above.
-                log.info { "${manager.managerName} project(s) found in:" }
-                files.forEach { file ->
-                    log.info { "\t${file.toRelativeString(absoluteProjectPath).takeIf { it.isNotEmpty() } ?: "."}" }
-                }
-            }
-        }
-
         return ManagedFileInfo(absoluteProjectPath, managedFiles, repositoryConfiguration)
     }
 
