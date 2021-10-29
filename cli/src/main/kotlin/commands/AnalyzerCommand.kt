@@ -197,9 +197,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             )
         )
 
-        val ortResult = analyzer.analyze(
-            inputDir, distinctPackageManagers, curationProvider, repositoryConfiguration
-        ).mergeLabels(labels)
+        val info = analyzer.findManagedFiles(inputDir, distinctPackageManagers, repositoryConfiguration)
+        val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
 
         val analyzedProjects = ortResult.getProjects()
         val countPerType = analyzedProjects.groupingBy { it.id.type }.eachCount()

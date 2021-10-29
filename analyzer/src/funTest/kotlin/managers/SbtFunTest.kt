@@ -49,7 +49,9 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
 
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
+        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+            analyze(findManagedFiles(projectDir, listOf(Sbt.Factory())))
+        }
 
         val expectedResult = readOrtResult(expectedOutputFile)
 
@@ -69,7 +71,9 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
 
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
+        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+            analyze(findManagedFiles(projectDir, listOf(Sbt.Factory())))
+        }
 
         val expectedResult = yamlMapper.readValue<OrtResult>(
             patchExpectedResult(
