@@ -21,6 +21,7 @@ forbid_telemetry: true
   run_as_current_user:
     enabled: true
     home_directory: /home/ort
+  privileged: true
   environment:
     GRADLE_OPTS: -Dorg.gradle.console=rich -Dorg.gradle.daemon=false
     GRADLE_RO_DEP_CACHE: /home/ort/.gradle-ro-dep-cache
