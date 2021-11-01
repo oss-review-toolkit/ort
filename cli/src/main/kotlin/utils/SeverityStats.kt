@@ -59,16 +59,6 @@ internal sealed class SeverityStats(
     }
 
     /**
-     * Get the resolved count for [severity].
-     */
-    private fun getResolvedCount(severity: Severity) = resolvedCounts.getOrDefault(severity, 0)
-
-    /**
-     * Get the unresolved count for [severity].
-     */
-    private fun getUnresolvedCount(severity: Severity) = unresolvedCounts.getOrDefault(severity, 0)
-
-    /**
      * Count all unresolved severities above or equal to [threshold].
      */
     private fun getUnresolvedCountWithThreshold(threshold: Severity) =
@@ -78,23 +68,24 @@ internal sealed class SeverityStats(
      * Print the stats to stdout.
      */
     fun print(): SeverityStats {
-        val resolvedHintCount = getResolvedCount(Severity.HINT)
-        val resolvedWarningCount = getResolvedCount(Severity.WARNING)
-        val resolvedErrorCount = getResolvedCount(Severity.ERROR)
+        fun p(count: Int, thing: String) = if (count == 1) "$count $thing" else "$count ${thing}s"
 
-        println(
-            "Found $resolvedErrorCount resolved error(s), $resolvedWarningCount resolved warning(s), " +
-                    "$resolvedHintCount resolved hint(s)."
-        )
+        val thing = when (this) {
+            is IssueSeverityStats -> "issues"
+            is RuleViolationsSeverityStats -> "rule violations"
+        }
 
-        val unresolvedHintCount = getUnresolvedCount(Severity.HINT)
-        val unresolvedWarningCount = getUnresolvedCount(Severity.WARNING)
-        val unresolvedErrorCount = getUnresolvedCount(Severity.ERROR)
+        val resolved = Severity.values().sortedArrayDescending().map {
+            p(resolvedCounts.getOrDefault(it, 0), it.name.lowercase())
+        }
 
-        println(
-            "Found $unresolvedErrorCount unresolved error(s), $unresolvedWarningCount unresolved warning(s), " +
-                    "$unresolvedHintCount unresolved hint(s)."
-        )
+        println("Resolved $thing: ${resolved.joinToString()}.")
+
+        val unresolved = Severity.values().sortedArrayDescending().map {
+            p(unresolvedCounts.getOrDefault(it, 0), it.name.lowercase())
+        }
+
+        println("Unresolved $thing: ${unresolved.joinToString()}.")
 
         return this
     }
