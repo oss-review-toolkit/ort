@@ -104,11 +104,18 @@ internal sealed class SeverityStats(
      * exception with [severeStatusCode].
      */
     fun conclude(threshold: Severity, severeStatusCode: Int): SeverityStats {
-        val severeIssueCount = getUnresolvedCountWithThreshold(threshold)
+        val severeCount = getUnresolvedCountWithThreshold(threshold)
 
-        if (severeIssueCount > 0) {
+        if (severeCount > 0) {
+            val (be, s) = if (severeCount == 1) "is" to "" else "are" to "s"
+
+            val thing = when (this) {
+                is IssueSeverityStats -> "issue$s"
+                is RuleViolationsSeverityStats -> "rule violation$s"
+            }
+
             println(
-                "There are $severeIssueCount issue(s) with a severity equal to or greater than the $threshold " +
+                "There $be $severeCount unresolved $thing with a severity equal to or greater than the $threshold " +
                         "threshold."
             )
 
