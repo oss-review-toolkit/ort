@@ -382,8 +382,8 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
 
     val provenances = nestedProvenance.getProvenances()
     val scanResultsByProvenance = provenances.associateWith { provenance ->
-        // TODO: Find a solution for the incorrect fileCount and packageVerificationCode and for how to associate issues
-        //       to the correct scan result.
+        // TODO: Find a solution for the incorrect packageVerificationCode and for how to associate issues to the
+        //       correct scan result.
         listOf(
             copy(
                 summary = summary.copy(
