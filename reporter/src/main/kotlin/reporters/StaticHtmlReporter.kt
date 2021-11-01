@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.core.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.core.isValidUri
 import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
@@ -714,8 +715,7 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
 
     (provenance as? ArtifactProvenance)?.let {
         if (it.sourceArtifact != RemoteArtifact.EMPTY) {
-            val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
-            if (it.sourceArtifact.url.matches(mavenCentralPattern)) {
+            if (isMavenCentralUrl(it.sourceArtifact.url)) {
                 // At least for source artifacts on Maven Central, use the "proxy" from Sonatype which has the
                 // Archive Browser plugin installed to link to the files with findings.
                 return with(id) {

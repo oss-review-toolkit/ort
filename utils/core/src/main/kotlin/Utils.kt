@@ -27,6 +27,8 @@ import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.utils.spdx.VCS_DIRECTORIES
 
+private val mavenCentralUrlPattern = Regex("^https?://repo1?\\.maven(\\.apache)?\\.org(/.*)?$")
+
 /**
  * The directory to store ORT (read-only) configuration in.
  */
@@ -222,6 +224,11 @@ fun installAuthenticatorAndProxySelector(): OrtProxySelector {
     OrtAuthenticator.install()
     return OrtProxySelector.install()
 }
+
+/**
+ * Return whether the given [url] points to Maven Central or not.
+ */
+fun isMavenCentralUrl(url: String) = url.matches(mavenCentralUrlPattern)
 
 /**
  * Return the concatenated [strings] separated by [separator] whereas blank strings are omitted.
