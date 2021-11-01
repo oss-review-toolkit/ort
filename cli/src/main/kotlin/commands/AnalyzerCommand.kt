@@ -231,6 +231,6 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             analyzerResult.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.printAndConclude(config.severeIssueThreshold, 2)
+        severityStats.print().conclude(config.severeIssueThreshold, 2)
     }
 }
