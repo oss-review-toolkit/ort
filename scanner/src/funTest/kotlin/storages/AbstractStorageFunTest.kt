@@ -170,12 +170,12 @@ abstract class AbstractStorageFunTest : WordSpec() {
                 val addResult1 = storage.add(id1, scanResult1)
                 val addResult2 = storage.add(id1, scanResult2)
 
-                addResult1 should beSuccess()
-                addResult2 should beFailure()
+                addResult1.shouldBeSuccess()
+                addResult2.shouldBeFailure()
 
                 val readResult = storage.read(id1)
-                readResult should beSuccess()
-                (readResult as Success).result should containExactly(scanResult1)
+                readResult.shouldBeSuccess()
+                readResult.result should containExactly(scanResult1)
             }
         }
 
