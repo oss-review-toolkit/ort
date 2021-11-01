@@ -28,16 +28,22 @@ import org.ossreviewtoolkit.model.Severity
 /**
  * Helper class to collect severity statistics.
  */
-internal class SeverityStats(
+internal sealed class SeverityStats(
     private val resolvedCounts: Map<Severity, Int>,
     private val unresolvedCounts: Map<Severity, Int>
 ) {
+    class IssueSeverityStats(resolvedCounts: Map<Severity, Int>, unresolvedCounts: Map<Severity, Int>) :
+        SeverityStats(resolvedCounts, unresolvedCounts)
+
+    class RuleViolationsSeverityStats(resolvedCounts: Map<Severity, Int>, unresolvedCounts: Map<Severity, Int>) :
+        SeverityStats(resolvedCounts, unresolvedCounts)
+
     companion object {
         fun createFromIssues(
             resolvedIssues: Collection<OrtIssue>,
             unresolvedIssues: Collection<OrtIssue>
         ) =
-            SeverityStats(
+            IssueSeverityStats(
                 resolvedCounts = resolvedIssues.groupingBy { it.severity }.eachCount(),
                 unresolvedCounts = unresolvedIssues.groupingBy { it.severity }.eachCount()
             )
@@ -46,7 +52,7 @@ internal class SeverityStats(
             resolvedRuleViolations: Collection<RuleViolation>,
             unresolvedRuleViolations: Collection<RuleViolation>
         ) =
-            SeverityStats(
+            RuleViolationsSeverityStats(
                 resolvedCounts = resolvedRuleViolations.groupingBy { it.severity }.eachCount(),
                 unresolvedCounts = unresolvedRuleViolations.groupingBy { it.severity }.eachCount()
             )
