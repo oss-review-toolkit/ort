@@ -55,17 +55,17 @@ internal class SeverityStats(
     /**
      * Get the resolved count for [severity].
      */
-    fun getResolvedCount(severity: Severity) = resolvedCounts.getOrDefault(severity, 0)
+    private fun getResolvedCount(severity: Severity) = resolvedCounts.getOrDefault(severity, 0)
 
     /**
      * Get the unresolved count for [severity].
      */
-    fun getUnresolvedCount(severity: Severity) = unresolvedCounts.getOrDefault(severity, 0)
+    private fun getUnresolvedCount(severity: Severity) = unresolvedCounts.getOrDefault(severity, 0)
 
     /**
      * Count all unresolved severities above or equal to [threshold].
      */
-    fun getUnresolvedCountWithThreshold(threshold: Severity) =
+    private fun getUnresolvedCountWithThreshold(threshold: Severity) =
         unresolvedCounts.entries.sumOf { (severity, count) -> if (severity >= threshold) count else 0 }
 
     /**
