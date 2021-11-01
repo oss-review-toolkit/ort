@@ -232,7 +232,6 @@ private fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationC
     )
 
 private fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTextProvider): SpdxDocument {
-
     val nonSpdxLicenses = packages.flatMapTo(mutableSetOf()) {
         // TODO: Also add detected non-SPDX licenses here.
         SpdxExpression.parse(it.licenseConcluded).licenses() + SpdxExpression.parse(it.licenseDeclared).licenses()
