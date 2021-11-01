@@ -255,6 +255,30 @@ class UtilsTest : WordSpec({
         }
     }
 
+    "isMavenCentralUrl()" should {
+        "return true for URLs that point to Maven Central" {
+            listOf(
+                "https://repo.maven.apache.org/maven2",
+                "https://repo.maven.apache.org",
+                "http://repo.maven.apache.org",
+                "https://repo1.maven.org/maven2",
+                "https://repo1.maven.org",
+                "http://repo1.maven.org"
+            ).forAll {
+                isMavenCentralUrl(it) shouldBe true
+            }
+        }
+
+        "return false for URLs that do not point to Maven Central" {
+            listOf(
+                "https://repo2.maven.org",
+                "https://github.com"
+            ).forAll {
+                isMavenCentralUrl(it) shouldBe false
+            }
+        }
+    }
+
     "normalizeVcsUrl" should {
         "do nothing for empty URLs" {
             normalizeVcsUrl("") shouldBe ""
