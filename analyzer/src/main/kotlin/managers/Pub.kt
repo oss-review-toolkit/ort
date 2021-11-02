@@ -73,6 +73,7 @@ import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.unpack
 
 private const val GRADLE_VERSION = "5.6.4"
+private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 
 private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
@@ -102,7 +103,7 @@ class Pub(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
-        override val globsForDefinitionFiles = listOf("pubspec.yaml")
+        override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
         override fun create(
             analysisRoot: File,
@@ -541,7 +542,7 @@ class Pub(
                     val packageVersion = pkgInfoFromLockFile["version"].textValueOrEmpty()
                     issues += createAndLogIssue(
                         source = managerName,
-                        message = "Failed to parse pubspec.yaml for package $packageName:$packageVersion: " +
+                        message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
                                 e.collectMessagesAsString()
                     )
                 }
@@ -577,7 +578,7 @@ class Pub(
     }
 
     private fun readPackageInfoFromCache(packageInfo: JsonNode): JsonNode {
-        val definitionFile = reader.findFile(packageInfo, "pubspec.yaml")
+        val definitionFile = reader.findFile(packageInfo, PUBSPEC_YAML)
         return yamlMapper.readTree(definitionFile)
     }
 
