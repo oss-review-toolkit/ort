@@ -83,9 +83,11 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.DiskCache
+import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
+import org.ossreviewtoolkit.utils.core.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.logOnce
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
@@ -257,6 +259,24 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
          * Trim the data from checksum files as it sometimes contains a path after the actual checksum.
          */
         private fun trimChecksumData(checksum: String) = checksum.trimStart().takeWhile { !it.isWhitespace() }
+
+        /**
+         * Return true if an artifact that has not been requested from Maven Central is also available on Maven Central
+         * but with a different hash, otherwise return false.
+         */
+        private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifact): Boolean {
+            if (remoteArtifact.url.isBlank() || isMavenCentralUrl(remoteArtifact.url)) return false
+
+            val mavenCentralUrl = with(artifact) {
+                val group = groupId.replace('.', '/')
+                val name = remoteArtifact.url.substringAfterLast('/')
+                val hash = remoteArtifact.hash.algorithm.name.lowercase()
+                "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$hash"
+            }
+
+            val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrNull() ?: return false
+            return !trimChecksumData(checksum).equals(remoteArtifact.hash.value, ignoreCase = true)
+        }
     }
 
     val container = createContainer()
@@ -620,6 +640,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             RemoteArtifact.EMPTY
         } ?: requestRemoteArtifact(artifact, repositories)
 
+        val isBinaryArtifactModified = isArtifactModified(artifact, binaryRemoteArtifact)
+
         val sourceRemoteArtifact = when {
             localProject != null -> RemoteArtifact.EMPTY
             artifact.extension == "pom" -> binaryRemoteArtifact
@@ -631,6 +653,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 requestRemoteArtifact(sourceArtifact, repositories)
             }
         }
+
+        val isSourceArtifactModified = isArtifactModified(artifact, sourceRemoteArtifact)
 
         val vcsFromPackage = parseVcsInfo(mavenProject)
         val localDirectory = localProject?.file?.parentFile?.let {
@@ -667,7 +691,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,
             vcsProcessed = vcsProcessed,
-            isMetaDataOnly = mavenProject.packaging == "pom"
+            isMetaDataOnly = mavenProject.packaging == "pom",
+            isModified = isBinaryArtifactModified || isSourceArtifactModified
         )
     }
 
