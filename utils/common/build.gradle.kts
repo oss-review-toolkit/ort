@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+val log4jApiKotlinVersion: String by project
 val springCoreVersion: String by project
 
 plugins {
@@ -25,5 +26,7 @@ plugins {
 }
 
 dependencies {
+    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
+
     implementation("org.springframework:spring-core:$springCoreVersion")
 }

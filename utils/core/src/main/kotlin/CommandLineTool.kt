@@ -24,6 +24,8 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+
 /**
  * An interface to implement by classes that are backed by a command line tool.
  */

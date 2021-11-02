@@ -32,8 +32,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.core.CommandLineTool
-import org.ossreviewtoolkit.utils.core.ProcessCapture
 import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.core.isSymbolicLink

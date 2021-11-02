@@ -17,12 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-
-import org.ossreviewtoolkit.utils.common.Os
 
 class ProcessCaptureTest : StringSpec({
     "Environment variables should be passed correctly" {
