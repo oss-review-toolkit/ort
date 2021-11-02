@@ -87,7 +87,7 @@ dependencies {
     implementation(project(":analyzer"))
     implementation(project(":downloader"))
     implementation(project(":scanner"))
-    implementation(project(":utils:core"))
+    implementation(project(":utils:core-utils"))
 
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
     implementation("com.schibsted.spt.data:jslt:$jsltVersion")

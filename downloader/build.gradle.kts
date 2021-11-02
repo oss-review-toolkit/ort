@@ -31,7 +31,7 @@ plugins {
 dependencies {
     api(project(":model"))
 
-    implementation(project(":utils:core"))
+    implementation(project(":utils:core-utils"))
 
     implementation("com.jcraft:jsch.agentproxy.jsch:$jschAgentProxyVersion")
 

@@ -42,7 +42,7 @@ repositories {
 dependencies {
     api(project(":model"))
 
-    implementation(project(":utils:core"))
+    implementation(project(":utils:core-utils"))
 
     implementation("com.atlassian.jira:jira-rest-java-client-api:$jiraRestApiVersion")
     implementation("com.atlassian.jira:jira-rest-java-client-app:$jiraRestApiVersion") {

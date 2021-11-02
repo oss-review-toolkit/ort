@@ -185,7 +185,7 @@ subprojects {
 
     plugins.withType<JavaLibraryPlugin> {
         dependencies {
-            "testImplementation"(project(":utils:test"))
+            "testImplementation"(project(":utils:test-utils"))
 
             "testImplementation"("io.kotest:kotest-runner-junit5:$kotestVersion")
             "testImplementation"("io.kotest:kotest-assertions-core:$kotestVersion")

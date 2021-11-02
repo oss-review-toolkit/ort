@@ -69,6 +69,11 @@ include(":utils:core")
 include(":utils:spdx")
 include(":utils:test")
 
+project(":utils:common").name = "common-utils"
+project(":utils:core").name = "core-utils"
+project(":utils:spdx").name = "spdx-utils"
+project(":utils:test").name = "test-utils"
+
 val buildCacheRetentionDays: String by settings
 
 buildCache {
