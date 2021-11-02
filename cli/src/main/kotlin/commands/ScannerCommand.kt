@@ -300,7 +300,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 storageReaders = readers,
                 storageWriters = writers,
                 packageProvenanceResolver = DefaultPackageProvenanceResolver(workingTreeCache),
-                nestedProvenanceResolver = DefaultNestedProvenanceResolver(),
+                nestedProvenanceResolver = DefaultNestedProvenanceResolver(workingTreeCache),
                 scannerWrappers = listOf(scannerWrapper)
             )
 

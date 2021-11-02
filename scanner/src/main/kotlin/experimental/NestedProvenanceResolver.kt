@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +20,12 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
-import java.io.IOException
+import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.
@@ -43,31 +42,29 @@ interface NestedProvenanceResolver {
 /**
  * The default implementation of [NestedProvenanceResolver].
  */
-class DefaultNestedProvenanceResolver : NestedProvenanceResolver {
+class DefaultNestedProvenanceResolver(private val workingTreeCache: WorkingTreeCache) : NestedProvenanceResolver {
     override fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance {
         return when (provenance) {
             is ArtifactProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())
-            is RepositoryProvenance -> resolveNestedRepository(provenance)
+            is RepositoryProvenance -> runBlocking { resolveNestedRepository(provenance) }
         }
     }
 
-    private fun resolveNestedRepository(provenance: RepositoryProvenance): NestedProvenance {
-        val vcs = VersionControlSystem.forType(provenance.vcsInfo.type)
-            ?: VersionControlSystem.forUrl(provenance.vcsInfo.url)
-            ?: throw IOException("Could not determine VCS type for ${provenance.vcsInfo}.")
+    private suspend fun resolveNestedRepository(provenance: RepositoryProvenance): NestedProvenance {
+        return workingTreeCache.use(provenance.vcsInfo) { vcs, workingTree ->
+            vcs.updateWorkingTree(
+                workingTree,
+                provenance.resolvedRevision,
+                path = provenance.vcsInfo.path,
+                recursive = true
+            ).onFailure { throw it }
 
-        val targetDir = createOrtTempDir()
-        val vcsInfo = provenance.vcsInfo.copy(revision = provenance.resolvedRevision)
-        val workingTree = vcs.initWorkingTree(targetDir, vcsInfo)
+            val subRepositories = workingTree.getNested().mapValues { (_, nestedVcs) ->
+                // TODO: Verify that the revision is always a resolved revision.
+                RepositoryProvenance(nestedVcs, nestedVcs.revision)
+            }
 
-        vcs.updateWorkingTree(workingTree, vcsInfo.revision, path = vcsInfo.path, recursive = true)
-            .onFailure { throw it }
-
-        val subRepositories = workingTree.getNested().mapValues { (_, nestedVcs) ->
-            // TODO: Verify that the revision is always a resolved revision.
-            RepositoryProvenance(nestedVcs, nestedVcs.revision)
+            NestedProvenance(root = provenance, subRepositories = subRepositories)
         }
-
-        return NestedProvenance(root = provenance, subRepositories = subRepositories)
     }
 }
