@@ -388,24 +388,6 @@ class ScanCodeResultParserTest : WordSpec({
             )
         }
 
-        "properly parse license expressions for ScanCode 3.2.1" {
-            val resultFile = File("src/test/assets/scancode-3.2.1_h2database-1.4.200.json")
-            val result = readJsonFile(resultFile)
-
-            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
-
-            summary.licenseFindings should containExactlyInAnyOrder(
-                LicenseFinding(
-                    license = "(MPL-2.0 OR EPL-1.0) AND LicenseRef-scancode-proprietary-license",
-                    location = TextLocation("h2/src/main/org/h2/table/Column.java", 2, 3)
-                ),
-                LicenseFinding(
-                    license = "LicenseRef-scancode-public-domain",
-                    location = TextLocation("h2/src/main/org/h2/table/Column.java", 317)
-                )
-            )
-        }
-
         "properly summarize the copyright findings for ScanCode 2.2.1" {
             // TODO: minimize this test case
             val resultFile = File("src/test/assets/scancode-2.2.1_esprima-2.7.3.json")
@@ -613,6 +595,24 @@ class ScanCodeResultParserTest : WordSpec({
                 "Copyright 2015-2017 Amazon.com, Inc.",
                 "Copyright 2016-2017 Amazon.com, Inc.",
                 "Portions copyright 2006-2009 James Murty."
+            )
+        }
+
+        "properly parse license expressions for ScanCode 3.2.1" {
+            val resultFile = File("src/test/assets/scancode-3.2.1_h2database-1.4.200.json")
+            val result = readJsonFile(resultFile)
+
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+
+            summary.licenseFindings should containExactlyInAnyOrder(
+                LicenseFinding(
+                    license = "(MPL-2.0 OR EPL-1.0) AND LicenseRef-scancode-proprietary-license",
+                    location = TextLocation("h2/src/main/org/h2/table/Column.java", 2, 3)
+                ),
+                LicenseFinding(
+                    license = "LicenseRef-scancode-public-domain",
+                    location = TextLocation("h2/src/main/org/h2/table/Column.java", 317)
+                )
             )
         }
     }
