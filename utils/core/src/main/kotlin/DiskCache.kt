@@ -26,6 +26,8 @@ import java.io.IOException
 
 import kotlin.math.pow
 
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+
 /**
  * Wrapper around [DiskLruCache] that adds a workaround for the 64 character key length limit.
  */

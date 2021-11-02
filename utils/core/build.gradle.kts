@@ -20,11 +20,9 @@
 
 val commonsCompressVersion: String by project
 val disklrucacheVersion: String by project
-val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
 val mockkVersion: String by project
 val okhttpVersion: String by project
-val semverVersion: String by project
 val xzVersion: String by project
 
 plugins {
@@ -35,15 +33,12 @@ plugins {
 dependencies {
     api(project(":utils:common-utils"))
 
-    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("com.squareup.okhttp3:okhttp:$okhttpVersion")
-    api("com.vdurmont:semver4j:$semverVersion")
 
     implementation(project(":utils:spdx-utils"))
 
     implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.tukaani:xz:$xzVersion")

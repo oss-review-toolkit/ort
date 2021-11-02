@@ -29,7 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 class ListLicenseCategoriesCommand : CliktCommand(
     help = "Lists the license categories."

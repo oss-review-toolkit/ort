@@ -28,10 +28,10 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.core.CommandLineTool
-import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.core.toHexString
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 

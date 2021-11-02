@@ -41,10 +41,10 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.stashDirectories
-import org.ossreviewtoolkit.utils.core.withoutSuffix
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.

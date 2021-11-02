@@ -41,8 +41,8 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression

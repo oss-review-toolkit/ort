@@ -34,7 +34,7 @@ import java.util.Locale
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ImportCopyrightGarbageCommand : CliktCommand(
     help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +

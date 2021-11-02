@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_MAP_COMPARATOR
 import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
-import org.ossreviewtoolkit.utils.core.isValidUri
+import org.ossreviewtoolkit.utils.common.isValidUri
 
 private const val OPTION_EXTRA_COLUMNS = "extraColumns"
 

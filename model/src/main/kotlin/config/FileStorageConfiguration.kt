@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.core.storage.FileStorage
 import org.ossreviewtoolkit.utils.core.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage

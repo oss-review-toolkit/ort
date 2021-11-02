@@ -50,13 +50,13 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.stashDirectories
-import org.ossreviewtoolkit.utils.core.textValueOrEmpty
-import org.ossreviewtoolkit.utils.core.toUri
 
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.

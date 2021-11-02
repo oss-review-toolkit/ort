@@ -24,7 +24,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 
 class ProvenanceTest : WordSpec({
     "UnknownProvenance" should {

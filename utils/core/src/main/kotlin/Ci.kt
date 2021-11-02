@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.core
 
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.isTrue
 
 /**
  * Continuous-Integration-specific utility functions.

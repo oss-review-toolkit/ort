@@ -61,10 +61,10 @@ import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.core.showStackTrace
-import org.ossreviewtoolkit.utils.core.toUri
 import org.ossreviewtoolkit.utils.spdx.enumSetOf
 
 /**

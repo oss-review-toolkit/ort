@@ -33,12 +33,12 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.getCommonFileParent
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.core.suppressInput
 
 /**

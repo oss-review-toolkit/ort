@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class GenerateScopeExcludesCommand : CliktCommand(
     help = "Generate scope excludes based on common default for the package managers. The output is written to the " +

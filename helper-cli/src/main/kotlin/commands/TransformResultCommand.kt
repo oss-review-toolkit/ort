@@ -29,7 +29,7 @@ import com.schibsted.spt.data.jslt.Parser
 
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.writeValue
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 /**
  * A command to transform an ORT result using a JSLT expression.

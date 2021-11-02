@@ -67,13 +67,13 @@ import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.common.encodeOrUnknown
+import org.ossreviewtoolkit.utils.common.fileSystemEncode
+import org.ossreviewtoolkit.utils.common.isSymbolicLink
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.CopyrightStatementsProcessor
-import org.ossreviewtoolkit.utils.core.encodeOrUnknown
-import org.ossreviewtoolkit.utils.core.fileSystemEncode
-import org.ossreviewtoolkit.utils.core.isSymbolicLink
-import org.ossreviewtoolkit.utils.core.replaceCredentialsInUri
-import org.ossreviewtoolkit.utils.core.safeMkdirs
-import org.ossreviewtoolkit.utils.core.withoutPrefix
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 

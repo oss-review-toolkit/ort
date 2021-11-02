@@ -24,7 +24,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
-import org.ossreviewtoolkit.utils.core.uppercaseFirstChar
+import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 
 private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
     "copying",

@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.core.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
  * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and

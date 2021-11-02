@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.helper.common.sortPathExcludes
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ImportPathExcludesCommand : CliktCommand(
     help = "Import path excludes by repository from a file into the given repository configuration."

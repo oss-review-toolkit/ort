@@ -37,9 +37,9 @@ import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
-import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 
 fun Proxy.toGenericString() =

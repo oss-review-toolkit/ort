@@ -33,15 +33,15 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.isSymbolicLink
+import org.ossreviewtoolkit.utils.common.realFile
+import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.CommandLineTool
-import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.core.isSymbolicLink
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.realFile
-import org.ossreviewtoolkit.utils.core.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.core.showStackTrace
-import org.ossreviewtoolkit.utils.core.withoutPrefix
 
 /**
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.

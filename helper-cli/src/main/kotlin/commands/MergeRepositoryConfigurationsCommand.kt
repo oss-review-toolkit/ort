@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.helper.common.merge
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class MergeRepositoryConfigurationsCommand : CliktCommand(
     help = "Merges the given list of input repository configuration files and writes the result to the given output " +

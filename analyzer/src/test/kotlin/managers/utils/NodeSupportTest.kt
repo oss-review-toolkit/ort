@@ -32,8 +32,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.ProtocolProxyMap
-import org.ossreviewtoolkit.utils.core.safeMkdirs
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.toGenericString

@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     help = "Generates resolutions for scanner timeout errors. The result is written to the standard output."

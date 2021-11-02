@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
-import org.ossreviewtoolkit.utils.core.encodeOr
+import org.ossreviewtoolkit.utils.common.encodeOr
 
 /**
  * A unique identifier for a software package.

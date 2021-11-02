@@ -60,16 +60,16 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.encodeOrUnknown
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.ArchiveType
 import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.core.archive
-import org.ossreviewtoolkit.utils.core.collectMessagesAsString
-import org.ossreviewtoolkit.utils.core.encodeOrUnknown
-import org.ossreviewtoolkit.utils.core.expandTilde
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
-import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
 

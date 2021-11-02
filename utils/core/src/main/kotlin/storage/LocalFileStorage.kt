@@ -23,8 +23,8 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.safeMkdirs
 
 /**
  * A [FileStorage] that stores files in a [directory] of the local file system. The [read] and [write] operations are

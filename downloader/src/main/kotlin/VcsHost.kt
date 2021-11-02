@@ -26,8 +26,8 @@ import java.nio.file.Paths
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.core.toUri
 
 /**
  * An enum to handle VCS-host-specific information.

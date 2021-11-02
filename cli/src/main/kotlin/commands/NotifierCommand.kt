@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
 
 class NotifierCommand : CliktCommand(name = "notify", help = "Create notifications based on an ORT result.") {
