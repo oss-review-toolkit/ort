@@ -17,12 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import java.io.File
 import java.io.IOException
 
 import kotlin.io.path.createTempDirectory
+
+import org.apache.logging.log4j.kotlin.cachedLoggerOf
+
+private val log = cachedLoggerOf(ProcessCapture::class.java)
 
 /**
  * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
@@ -56,7 +60,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         }
     }
 
-    private val tempDir = createTempDirectory("$ORT_NAME-process").toFile().apply { deleteOnExit() }
+    private val tempDir = createTempDirectory("$command-process").toFile().apply { deleteOnExit() }
     private val tempPrefix = command.first().substringAfterLast(File.separatorChar)
 
     val stdoutFile = tempDir.resolve("$tempPrefix.stdout").apply { deleteOnExit() }

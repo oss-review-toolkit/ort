@@ -22,7 +22,6 @@ val commonsCompressVersion: String by project
 val disklrucacheVersion: String by project
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
-val log4jApiKotlinVersion: String by project
 val mockkVersion: String by project
 val okhttpVersion: String by project
 val semverVersion: String by project
@@ -39,7 +38,6 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("com.squareup.okhttp3:okhttp:$okhttpVersion")
     api("com.vdurmont:semver4j:$semverVersion")
-    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
     implementation(project(":utils:spdx-utils"))
 
