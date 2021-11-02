@@ -69,6 +69,7 @@ import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.scanner.experimental.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultProvenanceDownloader
+import org.ossreviewtoolkit.scanner.experimental.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedFileStorage
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
@@ -289,20 +290,26 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val writers = config.scanner.storageWriters.orEmpty().map { resolve(it) }
             .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
 
-        val scanner = ExperimentalScanner(
-            scannerConfig = config.scanner,
-            downloaderConfig = config.downloader,
-            provenanceDownloader = DefaultProvenanceDownloader(config.downloader),
-            storageReaders = readers,
-            storageWriters = writers,
-            packageProvenanceResolver = DefaultPackageProvenanceResolver(),
-            nestedProvenanceResolver = DefaultNestedProvenanceResolver(),
-            scannerWrappers = listOf(scannerWrapper)
-        )
+        val workingTreeCache = DefaultWorkingTreeCache()
 
-        val ortResult = readOrtResult(input)
-        return runBlocking {
-            scanner.scan(ortResult)
+        try {
+            val scanner = ExperimentalScanner(
+                scannerConfig = config.scanner,
+                downloaderConfig = config.downloader,
+                provenanceDownloader = DefaultProvenanceDownloader(config.downloader),
+                storageReaders = readers,
+                storageWriters = writers,
+                packageProvenanceResolver = DefaultPackageProvenanceResolver(workingTreeCache),
+                nestedProvenanceResolver = DefaultNestedProvenanceResolver(),
+                scannerWrappers = listOf(scannerWrapper)
+            )
+
+            val ortResult = readOrtResult(input)
+            return runBlocking {
+                scanner.scan(ortResult)
+            }
+        } finally {
+            runBlocking { workingTreeCache.shutdown() }
         }
     }
 }

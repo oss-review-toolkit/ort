@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +20,11 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
+
+import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -34,11 +38,16 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class DefaultPackageProvenanceResolverFunTest : WordSpec() {
-    private val resolver = DefaultPackageProvenanceResolver()
+    private val workingTreeCache = DefaultWorkingTreeCache()
+    private val resolver = DefaultPackageProvenanceResolver(workingTreeCache)
 
     private val sourceArtifactUrl =
         "https://github.com/oss-review-toolkit/ort-test-data-npm/blob/test-1.0.0/README.md"
     private val repositoryUrl = "https://github.com/oss-review-toolkit/ort-test-data-npm"
+
+    override fun afterSpec(spec: Spec) {
+        runBlocking { workingTreeCache.shutdown() }
+    }
 
     init {
         "Resolving an artifact provenance" should {
