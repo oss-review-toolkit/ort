@@ -296,7 +296,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             val scanner = ExperimentalScanner(
                 scannerConfig = config.scanner,
                 downloaderConfig = config.downloader,
-                provenanceDownloader = DefaultProvenanceDownloader(config.downloader),
+                provenanceDownloader = DefaultProvenanceDownloader(config.downloader, workingTreeCache),
                 storageReaders = readers,
                 storageWriters = writers,
                 packageProvenanceResolver = DefaultPackageProvenanceResolver(workingTreeCache),
