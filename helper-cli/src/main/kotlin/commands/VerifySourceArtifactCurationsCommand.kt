@@ -29,11 +29,11 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
-import org.ossreviewtoolkit.utils.core.expandTilde
-import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 
 internal class VerifySourceArtifactCurationsCommand : CliktCommand(
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."

@@ -27,11 +27,11 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.core.ORT_NAME
-import org.ossreviewtoolkit.utils.core.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.storage.FileStorage
-import org.ossreviewtoolkit.utils.core.toHexString
 
 /**
  * A [FileStorage] based storage for archive files.

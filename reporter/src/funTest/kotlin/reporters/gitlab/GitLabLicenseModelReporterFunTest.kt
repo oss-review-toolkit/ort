@@ -43,8 +43,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.core.Environment
-import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class GitLabLicenseModelReporterFunTest : WordSpec({

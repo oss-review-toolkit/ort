@@ -24,7 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.core.isTrue
+import org.ossreviewtoolkit.utils.common.isTrue
 
 /**
  * Creates YAML documents according to the GitLab license model schema version 2.1, see

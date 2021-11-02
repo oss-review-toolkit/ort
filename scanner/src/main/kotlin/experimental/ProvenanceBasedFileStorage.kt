@@ -30,8 +30,8 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.core.collectMessagesAsString
-import org.ossreviewtoolkit.utils.core.fileSystemEncode
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 import org.ossreviewtoolkit.utils.core.storage.FileStorage

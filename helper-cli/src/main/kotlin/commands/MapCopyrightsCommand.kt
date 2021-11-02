@@ -28,7 +28,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class MapCopyrightsCommand : CliktCommand(
     help = "Reads processed copyright statements from the input file, maps them to unprocessed copyright statements " +

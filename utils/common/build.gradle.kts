@@ -18,6 +18,8 @@
  */
 
 val log4jApiKotlinVersion: String by project
+val jacksonVersion: String by project
+val semverVersion: String by project
 val springCoreVersion: String by project
 
 plugins {
@@ -26,7 +28,10 @@ plugins {
 }
 
 dependencies {
+    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+    api("com.vdurmont:semver4j:$semverVersion")
     api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework:spring-core:$springCoreVersion")
 }

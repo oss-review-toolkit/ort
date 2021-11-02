@@ -28,7 +28,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileNotFoundException
 
-import org.ossreviewtoolkit.utils.core.safeMkdirs
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 

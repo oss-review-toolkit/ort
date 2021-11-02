@@ -24,6 +24,8 @@ import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
 
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+
 /**
  * A class providing the framework to run Kotlin scripts.
  */

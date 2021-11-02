@@ -33,9 +33,9 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.perf
-import org.ossreviewtoolkit.utils.core.zipWithCollections
 import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
 
 /**

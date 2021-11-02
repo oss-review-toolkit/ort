@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.core.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 class ListPackagesCommand : CliktCommand(
     help = "Lists the packages and projects contained in the given ORT result file."

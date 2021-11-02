@@ -55,11 +55,11 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
+import org.ossreviewtoolkit.utils.common.isValidUri
+import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.core.isMavenCentralUrl
-import org.ossreviewtoolkit.utils.core.isValidUri
-import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression

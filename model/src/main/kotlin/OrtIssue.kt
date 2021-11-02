@@ -26,9 +26,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.logOnce
-import org.ossreviewtoolkit.utils.core.normalizeLineBreaks
 
 /**
  * An issue that occurred while executing ORT.

@@ -32,8 +32,8 @@ import org.asciidoctor.SafeMode
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.freemarker.FreemarkerTemplateProcessor
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.ORT_NAME
-import org.ossreviewtoolkit.utils.core.safeDeleteRecursively
 
 /**
  * An abstract [Reporter] that uses [Apache Freemarker][1] templates and [AsciiDoc][2] with [AsciidoctorJ][3] to create

@@ -53,10 +53,10 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.stashDirectories
-import org.ossreviewtoolkit.utils.core.textValueOrEmpty
 
 /**
  * The [CocoaPods](https://cocoapods.org/) package manager for Objective-C.

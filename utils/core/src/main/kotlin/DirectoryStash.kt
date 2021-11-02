@@ -27,6 +27,8 @@ import java.nio.file.StandardCopyOption
 
 import kotlin.io.path.createTempDirectory
 
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+
 /**
  * A convenience function that stashes directories using a [DirectoryStash] instance.
  */
