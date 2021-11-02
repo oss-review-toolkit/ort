@@ -617,7 +617,7 @@ class ScanCodeResultParserTest : WordSpec({
         }
     }
 
-    "generateDetails" should {
+    "generateDetails()" should {
         "parse a ScanCode 2.9.x result file" {
             val result = readJsonFile(File("src/test/assets/scancode-2.9.7_mime-types-2.1.18.json"))
 
