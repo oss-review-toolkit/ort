@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -579,6 +580,16 @@ class Pub(
 
     private fun readPackageInfoFromCache(packageInfo: JsonNode): JsonNode {
         val definitionFile = reader.findFile(packageInfo, PUBSPEC_YAML)
+        if (definitionFile == null) {
+            createAndLogIssue(
+                source = managerName,
+                message = "Could not find '$PUBSPEC_YAML' for '${packageInfo["name"].textValueOrEmpty()}'.",
+                severity = Severity.WARNING
+            )
+
+            return EMPTY_JSON_NODE
+        }
+
         return yamlMapper.readTree(definitionFile)
     }
 
