@@ -120,7 +120,7 @@ dependencies {
     implementation(project(":notifier"))
     implementation(project(":reporter"))
     implementation(project(":scanner"))
-    implementation(project(":utils:core"))
+    implementation(project(":utils:core-utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
@@ -138,7 +138,7 @@ dependencies {
     implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("org.reflections:reflections:$reflectionsVersion")
 
-    testImplementation(project(":utils:test"))
+    testImplementation(project(":utils:test-utils"))
 
     testImplementation("com.icegreen:greenmail:$greenMailVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")

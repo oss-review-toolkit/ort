@@ -53,7 +53,7 @@ dependencies {
     implementation(project(":clients:clearly-defined"))
     implementation(project(":clients:fossid-webapp"))
     implementation(project(":downloader"))
-    implementation(project(":utils:core"))
+    implementation(project(":utils:core-utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")

@@ -34,14 +34,14 @@ plugins {
 }
 
 dependencies {
-    api(project(":utils:common"))
+    api(project(":utils:common-utils"))
 
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("com.squareup.okhttp3:okhttp:$okhttpVersion")
     api("com.vdurmont:semver4j:$semverVersion")
     api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
-    implementation(project(":utils:spdx"))
+    implementation(project(":utils:spdx-utils"))
 
     implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
