@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +23,10 @@ package org.ossreviewtoolkit.scanner.experimental
 import java.io.IOException
 import java.net.HttpURLConnection
 
+import kotlinx.coroutines.runBlocking
+
 import okhttp3.Request
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
@@ -35,7 +37,6 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
@@ -53,7 +54,7 @@ interface PackageProvenanceResolver {
 /**
  * The default implementation of [PackageProvenanceResolver].
  */
-class DefaultPackageProvenanceResolver : PackageProvenanceResolver {
+class DefaultPackageProvenanceResolver(private val workingTreeCache: WorkingTreeCache) : PackageProvenanceResolver {
     /**
      * Resolve the [Provenance] of [pkg] based on the provided [sourceCodeOriginPriority]. For source artifacts it is
      * verified that the [RemoteArtifact] does exist. For a VCS it is verified that the revision exists. If the revision
@@ -72,7 +73,7 @@ class DefaultPackageProvenanceResolver : PackageProvenanceResolver {
 
                     SourceCodeOrigin.VCS -> {
                         if (pkg.vcsProcessed != VcsInfo.EMPTY) {
-                            return resolveVcs(pkg)
+                            return runBlocking { resolveVcs(pkg) }
                         }
                     }
                 }
@@ -99,46 +100,41 @@ class DefaultPackageProvenanceResolver : PackageProvenanceResolver {
         }
     }
 
-    private fun resolveVcs(pkg: Package): RepositoryProvenance {
-        val vcs = VersionControlSystem.forType(pkg.vcsProcessed.type)
-            ?: VersionControlSystem.forUrl(pkg.vcsProcessed.url)
-            ?: throw IOException("Could not determine VCS type for ${pkg.vcsProcessed}.")
-
+    private suspend fun resolveVcs(pkg: Package): RepositoryProvenance {
         // TODO: Currently the commit revision is resolved by checking out the provided revision. There are probably
         //       probably more efficient ways to do this depending on the VCS, especially for provides like GitHub
         //       or GitLab which provide an API. Another option to prevent downloading the same repository multiple
         //       times would be to improve the Downloader to manage the locations of already downloaded
         //       repositories.
-        val targetDir = createOrtTempDir()
-        val workingTree = vcs.initWorkingTree(targetDir, pkg.vcsProcessed)
+        return workingTreeCache.use(pkg.vcsProcessed) { vcs, workingTree ->
+            // TODO: If the provided revision is a fixed revision we could store the resolution result to prevent having
+            //       to perform the resolution again for the same package.
+            val revisionCandidates = vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = false)
 
-        // TODO: If the provided revision is a fixed revision we could store the resolution result to prevent having
-        //       to perform the resolution again for the same package.
-        val revisionCandidates = vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = false)
+            if (revisionCandidates.isEmpty()) {
+                throw IOException(
+                    "Could not find any revision candidates for package ${pkg.id.toCoordinates()} with VCS " +
+                            "${pkg.vcsProcessed}."
+                )
+            }
 
-        if (revisionCandidates.isEmpty()) {
+            revisionCandidates.forEachIndexed { index, revision ->
+                log.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})." }
+                val result = vcs.updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive = false)
+                if (result.isSuccess) {
+                    val resolvedRevision = workingTree.getRevision()
+                    log.info {
+                        "Resolved revision for package ${pkg.id.toCoordinates()} to $resolvedRevision based on " +
+                                "guessed revision $revision."
+                    }
+                    return@use RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
+                }
+            }
+
             throw IOException(
-                "Could not find any revision candidates for package ${pkg.id.toCoordinates()} with VCS " +
-                        "${pkg.vcsProcessed}."
+                "Could not resolve any of the revision candidates $revisionCandidates for package " +
+                        "${pkg.id.toCoordinates()} with VCS ${pkg.vcsProcessed}."
             )
         }
-
-        revisionCandidates.forEachIndexed { index, revision ->
-            log.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})." }
-            val result = vcs.updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive = false)
-            if (result.isSuccess) {
-                val resolvedRevision = workingTree.getRevision()
-                log.info {
-                    "Resolved revision for package ${pkg.id.toCoordinates()} to $resolvedRevision based on " +
-                            "guessed revision $revision."
-                }
-                return RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
-            }
-        }
-
-        throw IOException(
-            "Could not resolve any of the revision candidates $revisionCandidates for package " +
-                    "${pkg.id.toCoordinates()} with VCS ${pkg.vcsProcessed}."
-        )
     }
 }
