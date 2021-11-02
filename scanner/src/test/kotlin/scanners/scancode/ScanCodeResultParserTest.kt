@@ -24,9 +24,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldBeIn
+import io.kotest.matchers.file.beRelative
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -614,6 +617,20 @@ class ScanCodeResultParserTest : WordSpec({
                     location = TextLocation("h2/src/main/org/h2/table/Column.java", 317)
                 )
             )
+        }
+
+        "properly parse absolute paths" {
+            val resultFile = File("src/test/assets/scancode-3.2.1rc2_spring-javaformat-checkstyle-0.0.15.json")
+            val result = readJsonFile(resultFile)
+
+            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+            val fileExtensions = listOf("html", "java", "txt")
+
+            summary.licenseFindings.forAll {
+                val file = File(it.location.path)
+                file should beRelative()
+                file.extension shouldBeIn fileExtensions
+            }
         }
     }
 
