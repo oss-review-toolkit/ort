@@ -252,6 +252,11 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 }
             }
         }
+
+        /**
+         * Trim the data from checksum files as it sometimes contains a path after the actual checksum.
+         */
+        private fun trimChecksumData(checksum: String) = checksum.trimStart().takeWhile { !it.isWhitespace() }
     }
 
     val container = createContainer()
@@ -521,9 +526,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     val task = GetTask(checksum.location)
                     transporter.get(task)
 
-                    // Sometimes the checksum file contains a path after the actual checksum, so strip everything after
-                    // the first whitespace.
-                    task.dataString.trimStart().takeWhile { !it.isWhitespace() }
+                    trimChecksumData(task.dataString)
                 } catch (e: Exception) {
                     e.showStackTrace()
 
