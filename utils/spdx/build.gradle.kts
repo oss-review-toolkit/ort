@@ -53,6 +53,8 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     antlr("org.antlr:antlr4:$antlrVersion")
 
+    implementation(project(":utils:common-utils"))
+
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
