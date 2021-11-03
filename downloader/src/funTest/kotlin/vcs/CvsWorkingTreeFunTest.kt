@@ -29,9 +29,9 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.core.Ci
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
 import org.ossreviewtoolkit.utils.core.unpack
+import org.ossreviewtoolkit.utils.test.Ci
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class CvsWorkingTreeFunTest : StringSpec({
