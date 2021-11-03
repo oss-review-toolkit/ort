@@ -97,7 +97,7 @@ class CocoaPods(
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // CocoaPods originally used and may still use the Specs repository on GitHub [1] as package metadata database.
         // Using [1] requires an initial clone which is slow to do and consumes already more than 5 GB on disk, see
         // also [2]. (Final) CDN support has been added in version 1.7.2 [3] to speed things up.

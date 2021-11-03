@@ -129,7 +129,7 @@ class Bundler(
         }
     }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         requireLockfile(workingDir) { workingDir.resolve("Gemfile.lock").isFile }
 

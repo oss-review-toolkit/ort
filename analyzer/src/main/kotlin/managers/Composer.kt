@@ -118,7 +118,7 @@ class Composer(
         checkVersion(analyzerConfig.ignoreToolVersions)
     }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("vendor")).use {

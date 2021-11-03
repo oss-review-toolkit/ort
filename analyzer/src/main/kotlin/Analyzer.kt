@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.core.log
 /**
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
-class Analyzer(private val config: AnalyzerConfiguration) {
+class Analyzer(private val config: AnalyzerConfiguration, private val labels: Map<String, String> = emptyMap()) {
     data class ManagedFileInfo(
         val absoluteProjectPath: File,
         val managedFiles: Map<PackageManager, List<File>>,
@@ -129,7 +129,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         runBlocking(Dispatchers.IO) {
             managedFiles.map { (manager, files) ->
                 async {
-                    val results = manager.resolveDependencies(files)
+                    val results = manager.resolveDependencies(files, labels)
 
                     // By convention, project ids must be of the type of the respective package manager.
                     results.projectResults.forEach { (_, result) ->

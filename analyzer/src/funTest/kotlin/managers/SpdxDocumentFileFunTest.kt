@@ -61,7 +61,7 @@ class SpdxDocumentFileFunTest : WordSpec({
             val packageFileZlib = projectDir.resolve("package/libs/zlib/package.spdx.yml")
 
             val definitionFiles = listOf(packageFileCurl, packageFileZlib)
-            val actualResult = createSpdxDocumentFile().resolveDependencies(definitionFiles)
+            val actualResult = createSpdxDocumentFile().resolveDependencies(definitionFiles, emptyMap())
                 // Extract only ProjectAnalyzerResults to avoid depending on other analyzer result specific items (e.g.
                 // the dependency graph).
                 .projectResults.values.flatten().sortedBy { it.project.id }

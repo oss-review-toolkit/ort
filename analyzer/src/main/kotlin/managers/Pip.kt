@@ -214,7 +214,7 @@ class Pip(
         VirtualEnv.checkVersion(analyzerConfig.ignoreToolVersions)
 
     @Suppress("LongMethod")
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
         // 2. Get metadata about the local project via pydep (only for setup.py-based projects).
