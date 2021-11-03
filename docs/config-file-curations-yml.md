@@ -52,6 +52,7 @@ The structure of the curations file consist of one or more `id` entries:
 - id: "Maven:com.example.app:example:0.0.1"
   curations:
     comment: "An explanation why the curation is needed or the reasoning for a license conclusion"
+    purl: "pkg:Maven/com.example.app/example@0.0.1?arch=arm64-v8a#src/main"
     concluded_license: "Valid SPDX license expression to override the license findings."
     declared_license_mapping:
       "license a": "Apache-2.0"
