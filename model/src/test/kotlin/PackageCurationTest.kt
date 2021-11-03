@@ -90,7 +90,8 @@ class PackageCurationTest : WordSpec({
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe curation.data.binaryArtifact
                 sourceArtifact shouldBe curation.data.sourceArtifact
-                vcs.toCuration() shouldBe curation.data.vcs
+                vcs shouldBe pkg.vcs
+                vcsProcessed.toCuration() shouldBe curation.data.vcs
                 isMetaDataOnly shouldBe true
                 isModified shouldBe true
             }
@@ -197,7 +198,7 @@ class PackageCurationTest : WordSpec({
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.pkg.vcs shouldBe VcsInfo.EMPTY
+            curatedPkg.pkg.vcsProcessed shouldBe VcsInfo.EMPTY
         }
 
         "fail if identifiers do not match" {

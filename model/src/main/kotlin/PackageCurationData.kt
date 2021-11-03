@@ -105,15 +105,15 @@ data class PackageCurationData(
 private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: PackageCurationData): CuratedPackage {
     val base = targetPackage.pkg
 
-    val vcs = curation.vcs?.let {
+    val vcsProcessed = curation.vcs?.let {
         // Curation data for VCS information is handled specially so we can curate only individual properties.
         VcsInfo(
-            type = it.type ?: base.vcs.type,
-            url = it.url ?: base.vcs.url,
-            revision = it.revision ?: base.vcs.revision,
-            path = it.path ?: base.vcs.path
-        )
-    } ?: base.vcs
+            type = it.type ?: base.vcsProcessed.type,
+            url = it.url ?: base.vcsProcessed.url,
+            revision = it.revision ?: base.vcsProcessed.revision,
+            path = it.path ?: base.vcsProcessed.path
+        ).normalize()
+    } ?: base.vcsProcessed
 
     val authors = curation.authors ?: base.authors
     val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + curation.declaredLicenseMapping
@@ -129,7 +129,8 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
         homepageUrl = curation.homepageUrl ?: base.homepageUrl,
         binaryArtifact = curation.binaryArtifact ?: base.binaryArtifact,
         sourceArtifact = curation.sourceArtifact ?: base.sourceArtifact,
-        vcs = vcs,
+        vcs = base.vcs,
+        vcsProcessed = vcsProcessed,
         isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly,
         isModified = curation.isModified ?: base.isModified
     )

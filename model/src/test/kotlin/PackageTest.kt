@@ -77,7 +77,7 @@ class PackageTest : StringSpec({
         diff.authors shouldBe pkg.authors
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
-        diff.vcs shouldBe pkg.vcs.toCuration()
+        diff.vcs shouldBe pkg.vcsProcessed.toCuration()
         diff.isMetaDataOnly shouldBe pkg.isMetaDataOnly
     }
 

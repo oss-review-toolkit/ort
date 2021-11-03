@@ -104,7 +104,8 @@ data class Package(
 
     /**
      * Processed VCS-related information about the [Package] in normalized form. The information is either derived from
-     * [vcs], guessed from additional data as a fallback, or empty.
+     * [vcs], guessed from additional data as a fallback, or empty. On top of that [PackageCuration]s may have been
+     * applied.
      */
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
@@ -164,7 +165,7 @@ data class Package(
             homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
             sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
-            vcs = vcs.takeIf { it != other.vcs }?.toCuration(),
+            vcs = vcsProcessed.takeIf { it != other.vcsProcessed }?.toCuration(),
             isMetaDataOnly = isMetaDataOnly.takeIf { it != other.isMetaDataOnly }
         )
     }
