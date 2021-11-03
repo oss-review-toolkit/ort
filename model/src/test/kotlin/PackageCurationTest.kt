@@ -53,6 +53,7 @@ class PackageCurationTest : WordSpec({
             val curation = PackageCuration(
                 id = pkg.id,
                 data = PackageCurationData(
+                    purl = "pkg:maven/org.hamcrest/hamcrest-core@1.3#subpath=src/main/java/org/hamcrest/core",
                     authors = sortedSetOf("author 1", "author 2"),
                     declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx()),
                     concludedLicense = "license1 OR license2".toSpdx(),
@@ -81,6 +82,7 @@ class PackageCurationTest : WordSpec({
 
             with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
+                purl shouldBe curation.data.purl
                 authors shouldBe curation.data.authors
                 declaredLicenses shouldBe pkg.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
@@ -138,6 +140,7 @@ class PackageCurationTest : WordSpec({
 
             with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
+                purl shouldBe pkg.purl
                 authors shouldBe pkg.authors
                 declaredLicenses shouldBe pkg.declaredLicenses
                 concludedLicense shouldBe pkg.concludedLicense
