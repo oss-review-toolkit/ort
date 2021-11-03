@@ -29,6 +29,8 @@ import java.net.URL
 import java.security.MessageDigest
 import java.util.EnumSet
 
+import org.ossreviewtoolkit.utils.common.isSymbolicLink
+import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
 /**

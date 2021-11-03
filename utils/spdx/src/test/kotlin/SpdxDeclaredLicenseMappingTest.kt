@@ -29,6 +29,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.containADigit
 import io.kotest.matchers.string.shouldContain
 
+import org.ossreviewtoolkit.utils.common.titlecase
+
 class SpdxDeclaredLicenseMappingTest : WordSpec({
     "The list" should {
         "not contain any duplicate keys with respect to capitalization" {
