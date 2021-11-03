@@ -48,15 +48,15 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.common.resolveWindowsExecutable
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.CommandLineTool
 import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.resolveWindowsExecutable
 
 // The lowest version that supports "--prefer-binary" and PEP 508 URL requirements to be used as dependencies.
 private const val PIP_VERSION = "18.1"

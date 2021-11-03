@@ -25,6 +25,7 @@ import java.io.File
 import java.io.IOException
 
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.getPathFromEnvironment
 
 /**
  * An interface to implement by classes that are backed by a command line tool.
