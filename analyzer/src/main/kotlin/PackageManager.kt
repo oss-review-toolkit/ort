@@ -218,8 +218,10 @@ abstract class PackageManager(
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for all [definitionFiles] which were found by searching the [analysisRoot] directory. By convention, the
      * [definitionFiles] must be absolute.
+     * [labels] are the labels given as parameters to the [org.ossreviewtoolkit.cli.commands.AnalyzerCommand]. They can
+     * be used by package manager implementations to decide how dependencies are resolved.
      */
-    open fun resolveDependencies(definitionFiles: List<File>): PackageManagerResult {
+    open fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>): PackageManagerResult {
         definitionFiles.forEach { definitionFile ->
             requireNotNull(definitionFile.relativeToOrNull(analysisRoot)) {
                 "'$definitionFile' must be an absolute path below '$analysisRoot'."
@@ -238,7 +240,7 @@ abstract class PackageManager(
             val duration = measureTime {
                 @Suppress("TooGenericExceptionCaught")
                 try {
-                    result[definitionFile] = resolveDependencies(definitionFile)
+                    result[definitionFile] = resolveDependencies(definitionFile, labels)
                 } catch (e: Exception) {
                     e.showStackTrace()
 
@@ -280,8 +282,10 @@ abstract class PackageManager(
     /**
      * Resolve dependencies for a single absolute [definitionFile] and return a list of [ProjectAnalyzerResult]s, with
      * one result for each project found in the definition file.
+     * [labels] are the labels given as parameters to the [org.ossreviewtoolkit.cli.commands.AnalyzerCommand]. They can
+     * be used by package manager implementations to decide how dependencies are resolved.
      */
-    abstract fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult>
+    abstract fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult>
 
     protected fun requireLockfile(workingDir: File, condition: () -> Boolean) {
         require(analyzerConfig.allowDynamicVersions || condition()) {

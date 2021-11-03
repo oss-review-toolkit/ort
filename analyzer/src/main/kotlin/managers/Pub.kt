@@ -251,7 +251,7 @@ class Pub(
             .requireSuccess()
     }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val manifest = yamlMapper.readTree(definitionFile)
 
@@ -272,14 +272,14 @@ class Pub(
 
             log.info { "Successfully read lockfile." }
 
-            val parsePackagesResult = parseInstalledPackages(lockFile)
+            val parsePackagesResult = parseInstalledPackages(lockFile, labels)
             packages += parsePackagesResult.packages
             issues += parsePackagesResult.issues
 
             log.info { "Successfully parsed installed packages." }
 
-            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages)
-            scopes += parseScope("dev_dependencies", manifest, lockFile, parsePackagesResult.packages)
+            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages, labels)
+            scopes += parseScope("dev_dependencies", manifest, lockFile, parsePackagesResult.packages, labels)
         }
 
         log.info { "Reading ${definitionFile.name} file in $workingDir." }
@@ -293,14 +293,15 @@ class Pub(
         scopeName: String,
         manifest: JsonNode,
         lockFile: JsonNode,
-        packages: Map<Identifier, Package>
+        packages: Map<Identifier, Package>,
+        labels: Map<String, String>
     ): Scope {
         val packageName = manifest["name"].textValue()
 
         log.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
         val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence()?.toList() ?: listOf<String>()
-        val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages)
+        val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages, labels)
         return Scope(scopeName, dependencies)
     }
 
@@ -308,7 +309,8 @@ class Pub(
         dependencies: List<String>,
         manifest: JsonNode,
         lockFile: JsonNode,
-        packages: Map<Identifier, Package>
+        packages: Map<Identifier, Package>,
+        labels: Map<String, String>
     ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
         val nameOfCurrentPackage = manifest["name"].textValue()
@@ -346,13 +348,13 @@ class Pub(
                     dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
 
                 val transitiveDependencies =
-                    buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages)
+                    buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages, labels)
 
                 // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the ".pub-cache" directory.
                 if (containsFlutter) {
-                    scanAndroidPackages(pkgInfoFromLockFile).forEach { resultAndroid ->
+                    scanAndroidPackages(pkgInfoFromLockFile, labels).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
@@ -383,7 +385,7 @@ class Pub(
 
     private val analyzerResultCacheAndroid = mutableMapOf<String, List<ProjectAnalyzerResult>>()
 
-    private fun scanAndroidPackages(packageInfo: JsonNode): List<ProjectAnalyzerResult> {
+    private fun scanAndroidPackages(packageInfo: JsonNode, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
         // We cannot find packages without a valid name.
@@ -401,7 +403,7 @@ class Pub(
         return analyzerResultCacheAndroid.getOrPut(packageName) {
             // Use the latest 5.x Gradle version as Flutter / its Android Gradle plugin does not support Gradle 6 yet.
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
-                .resolveDependencies(listOf(packageFile)).run {
+                .resolveDependencies(listOf(packageFile), labels).run {
                     projectResults.getValue(packageFile).map { result ->
                         val project = result.project.withResolvedScopes(dependencyGraph)
                         result.copy(project = project, packages = sharedPackages.toSortedSet())
@@ -461,7 +463,7 @@ class Pub(
         )
     }
 
-    private fun parseInstalledPackages(lockFile: JsonNode): ParsePackagesResult {
+    private fun parseInstalledPackages(lockFile: JsonNode, labels: Map<String, String>): ParsePackagesResult {
         log.info { "Parsing installed Pub packages..." }
 
         val packages = mutableMapOf<Identifier, Package>()
@@ -556,7 +558,7 @@ class Pub(
         if (containsFlutter) {
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains flutter, trigger Gradle manually for it.
-                scanAndroidPackages(pkgInfoFromLockFile).forEach { result ->
+                scanAndroidPackages(pkgInfoFromLockFile, labels).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
                         packages[pkg.id] = pkg
                     }

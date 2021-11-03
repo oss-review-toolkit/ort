@@ -94,7 +94,7 @@ class GoDep(
     override fun transformVersion(output: String) =
         output.lineSequence().first { it.contains("version") }.substringAfter(':').trim().removePrefix("v")
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
         val gopath = createTempDirectory("$ORT_NAME-${projectDir.name}-gopath").toFile()

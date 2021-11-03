@@ -536,7 +536,7 @@ class SpdxDocumentFile(
             }
         }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For direct callers of this function mapDefinitionFiles() did not populate the map before, so add a fallback.
         val spdxDocument = spdxDocumentForFile.getOrPut(definitionFile) { SpdxModelMapper.read(definitionFile) }
 

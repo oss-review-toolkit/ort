@@ -65,7 +65,7 @@ class Carthage(
         ) = Carthage(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // Transitive dependencies are only supported if the dependency itself uses Carthage.
         // See: https://github.com/Carthage/Carthage#nested-dependencies
         val workingDir = definitionFile.parentFile

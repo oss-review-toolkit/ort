@@ -180,7 +180,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         println("Analyzing project path:\n\t$inputDir")
 
         val config = globalOptionsForSubcommands.config
-        val analyzer = Analyzer(config.analyzer)
+        val analyzer = Analyzer(config.analyzer, labels)
 
         val repositoryConfiguration = actualRepositoryConfigurationFile?.readValueOrNull() ?: RepositoryConfiguration()
 

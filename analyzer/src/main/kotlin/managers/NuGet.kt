@@ -59,7 +59,7 @@ class NuGet(
 
     private val reader = NuGetPackageFileReader()
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
         listOf(resolveNuGetDependencies(definitionFile, reader, NuGetSupport.create(definitionFile)))
 }
 

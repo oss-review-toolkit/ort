@@ -104,7 +104,7 @@ class Conan(
     /**
      * Primary method for resolving dependencies from [definitionFile].
      */
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
         try {
             resolvedDependenciesInternal(definitionFile)
         } finally {
