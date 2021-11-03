@@ -42,6 +42,11 @@ data class PackageCurationData(
     val comment: String? = null,
 
     /**
+     * An additional identifier in [package URL syntax](https://github.com/package-url/purl-spec).
+     */
+    val purl: String? = null,
+
+    /**
      * The list of authors of this package.
      */
     val authors: SortedSet<String>? = null,
@@ -121,6 +126,7 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
 
     val pkg = Package(
         id = base.id,
+        purl = curation.purl ?: base.purl,
         authors = authors,
         declaredLicenses = base.declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
