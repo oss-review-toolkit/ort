@@ -1,0 +1,11 @@
+# See https://help.sonatype.com/lift/configuration-reference.
+
+jdk11 = true
+
+ignoreRules = [ "SpreadOperator" ]
+ignoreFiles = """
+**/funTest/assets/
+**/funTest/resources/
+**/test/assets/
+**/test/resources/
+"""
