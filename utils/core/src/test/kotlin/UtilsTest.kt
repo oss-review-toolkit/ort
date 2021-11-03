@@ -22,18 +22,10 @@ package org.ossreviewtoolkit.utils.core
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.shouldBeIn
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 
-import java.io.File
 import java.nio.file.Paths
-
-import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class UtilsTest : WordSpec({
     "filterVersionNames" should {
@@ -212,50 +204,6 @@ class UtilsTest : WordSpec({
         }
     }
 
-    "getCommonFileParent" should {
-        "return null for an empty list" {
-            getCommonFileParent(emptyList()) should beNull()
-        }
-
-        "return null for files that have no directory in common".config(enabled = Os.isWindows) {
-            // On non-Windows, all files have the root directory in common.
-            getCommonFileParent(listOf(File("C:/foo"), File("D:/bar"))) should beNull()
-        }
-
-        "return the absolute common directory for relative files" {
-            getCommonFileParent(listOf(File("foo"), File("bar"))) shouldBe File(".").absoluteFile.normalize()
-        }
-
-        "return the absolute parent directory for a single file" {
-            getCommonFileParent(listOf(File("/foo/bar"))) shouldBe File("/foo").absoluteFile
-        }
-    }
-
-    "getPathFromEnvironment" should {
-        "find system executables on Windows".config(enabled = Os.isWindows) {
-            val winverPath = File(Os.env["SYSTEMROOT"], "system32/winver.exe")
-
-            getPathFromEnvironment("winver") shouldNot beNull()
-            getPathFromEnvironment("winver") shouldBe winverPath
-
-            getPathFromEnvironment("winver.exe") shouldNot beNull()
-            getPathFromEnvironment("winver.exe") shouldBe winverPath
-
-            getPathFromEnvironment("") should beNull()
-            getPathFromEnvironment("*") should beNull()
-            getPathFromEnvironment("nul") should beNull()
-        }
-
-        "find system executables on non-Windows".config(enabled = !Os.isWindows) {
-            getPathFromEnvironment("sh") shouldNotBeNull {
-                toString() shouldBeIn listOf("/bin/sh", "/usr/bin/sh")
-            }
-
-            getPathFromEnvironment("") should beNull()
-            getPathFromEnvironment("/") should beNull()
-        }
-    }
-
     "isMavenCentralUrl()" should {
         "return true for URLs that point to Maven Central" {
             listOf(
@@ -428,16 +376,6 @@ class UtilsTest : WordSpec({
             packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
-        }
-    }
-
-    "getAllAncestorDirectories" should {
-        "return all ancestor directories ordered along the path to root" {
-            getAllAncestorDirectories("/a/b/c") should containExactly(
-                "/a/b",
-                "/a",
-                "/"
-            )
         }
     }
 })

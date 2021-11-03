@@ -24,6 +24,7 @@ import io.kotest.matchers.shouldBe
 
 import java.net.URI
 
+import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.test.toGenericString
 
 class OrtProxySelectorTest : WordSpec({

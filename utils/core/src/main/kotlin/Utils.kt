@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.utils.core
 
 import java.io.File
@@ -136,64 +134,6 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 }
 
 /**
- * Return recursively all ancestor directories of the given absolute [file], ordered along the path from
- * the parent of [file] to the root.
- */
-fun getAllAncestorDirectories(file: String): List<String> {
-    val result = mutableListOf<String>()
-
-    var ancestorDir = File(file).parentFile
-    while (ancestorDir != null) {
-        result += ancestorDir.invariantSeparatorsPath
-        ancestorDir = ancestorDir.parentFile
-    }
-
-    return result
-}
-
-/**
- * Return the longest parent directory that is common to all [files], or null if they have no directory in common.
- */
-fun getCommonFileParent(files: Collection<File>): File? =
-    files.map {
-        it.normalize().absolutePath
-    }.reduceOrNull { prefix, path ->
-        prefix.commonPrefixWith(path)
-    }?.let {
-        val commonPrefix = File(it)
-        if (commonPrefix.isDirectory) commonPrefix else commonPrefix.parentFile
-    }
-
-/**
- * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
- */
-fun getPathFromEnvironment(executable: String): File? {
-    fun String.expandVariable(referencePattern: Regex, groupName: String): String =
-        replace(referencePattern) {
-            val variableName = it.groups[groupName]!!.value
-            Os.env[variableName] ?: variableName
-        }
-
-    val paths = Os.env["PATH"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
-
-    return if (Os.isWindows) {
-        val referencePattern = Regex("%(?<reference>\\w+)%")
-
-        paths.mapNotNull { path ->
-            val expandedPath = path.expandVariable(referencePattern, "reference")
-            resolveWindowsExecutable(File(expandedPath, executable))
-        }.firstOrNull()
-    } else {
-        val referencePattern = Regex("\\$\\{?(?<reference>\\w+)}?")
-
-        paths.map { path ->
-            val expandedPath = path.expandVariable(referencePattern, "reference")
-            File(expandedPath, executable)
-        }.find { it.isFile }
-    }
-}
-
-/**
  * Install both the [OrtAuthenticator] and the [OrtProxySelector] to handle proxy authentication. Return the
  * [OrtProxySelector] instance for further configuration.
  */
@@ -206,12 +146,6 @@ fun installAuthenticatorAndProxySelector(): OrtProxySelector {
  * Return whether the given [url] points to Maven Central or not.
  */
 fun isMavenCentralUrl(url: String) = url.matches(mavenCentralUrlPattern)
-
-/**
- * Return the concatenated [strings] separated by [separator] whereas blank strings are omitted.
- */
-fun joinNonBlank(vararg strings: String, separator: String = " - ") =
-    strings.filter { it.isNotBlank() }.joinToString(separator)
 
 /**
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
@@ -284,34 +218,4 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     }
 
     return url
-}
-
-/**
- * Resolve the Windows [executable] to its full name including the optional extension.
- */
-fun resolveWindowsExecutable(executable: File): File? {
-    val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
-    return extensions.map { File(executable.path + it.lowercase()) }.find { it.isFile }
-        ?: executable.takeIf { it.isFile }
-}
-
-/**
- * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
- * their original values restored and previously unset properties are cleared.
- */
-fun <R> temporaryProperties(vararg properties: Pair<String, String?>, block: () -> R): R {
-    val originalProperties = mutableListOf<Pair<String, String?>>()
-
-    properties.forEach { (key, value) ->
-        originalProperties += key to System.getProperty(key)
-        value?.also { System.setProperty(key, it) } ?: System.clearProperty(key)
-    }
-
-    return try {
-        block()
-    } finally {
-        originalProperties.forEach { (key, value) ->
-            value?.also { System.setProperty(key, it) } ?: System.clearProperty(key)
-        }
-    }
 }
