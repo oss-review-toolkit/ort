@@ -616,7 +616,8 @@ To enable this provider, pass `-a NexusIQ` on the command line.
 ## OSS Index
 
 This vulnerability provider does not require any further configuration as it uses the public service at
-https://ossindex.sonatype.org/.
+https://ossindex.sonatype.org/. Before using this provider, please ensure to comply with its
+[Terms of Service](https://ossindex.sonatype.org/tos).
 
 To enable this provider, pass `-a OssIndex` on the command line.
 
