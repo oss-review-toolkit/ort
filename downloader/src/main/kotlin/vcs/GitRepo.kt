@@ -151,11 +151,15 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             "Initializing git-repo from ${vcs.url} with revision '$manifestRevision' and manifest '$manifestPath'."
         }
 
-        // Clone all projects instead of only those in the "default" group until we support specifying groups.
         runRepo(
             targetDir,
-            "init", "--groups=all", "--no-repo-verify",
-            "--no-clone-bundle", "--repo-branch=$GIT_REPO_BRANCH",
+            "init",
+            // Configure cloning of all projects instead of only those in the "default" group (until specifying groups
+            // is supported in ORT).
+            "--groups=all",
+            "--no-repo-verify",
+            "--no-clone-bundle",
+            "--repo-branch=$GIT_REPO_BRANCH",
             "-b", manifestRevision,
             "-u", vcs.url,
             "-m", manifestPath
