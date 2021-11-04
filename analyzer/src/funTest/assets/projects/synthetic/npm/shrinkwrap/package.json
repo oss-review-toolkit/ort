@@ -21,9 +21,6 @@
   "devDependencies": {
     "cson": "~4.1.0"
   },
-  "peerDependencies": {
-    "tea": "0.x"
-  },
   "optionalDependencies": {
     "promise": "~7.3.1"
   }
