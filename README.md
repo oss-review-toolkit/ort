@@ -332,13 +332,13 @@ supported:
   * [GoMod](https://github.com/golang/go/wiki/Modules) (limitations:
   [no `replace` directive](https://github.com/oss-review-toolkit/ort/issues/4445))
 * Haskell
-  * [Stack](http://haskellstack.org/)
+  * [Stack](https://haskellstack.org/)
 * Java
   * [Gradle](https://gradle.org/)
-  * [Maven](http://maven.apache.org/) (limitations:
+  * [Maven](https://maven.apache.org/) (limitations:
   [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
 * JavaScript / Node.js
-  * [Bower](http://bower.io/)
+  * [Bower](https://bower.io/)
   * [NPM](https://www.npmjs.com/) (limitations:
   [no scope-specific registries](https://github.com/oss-review-toolkit/ort/issues/3741),
   [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
@@ -363,12 +363,12 @@ supported:
   * [Pipenv](https://pipenv.readthedocs.io/) (limitations:
   [Python 2.7 or 3.6 and PIP 18.1 only](https://github.com/oss-review-toolkit/ort/issues/3671))
 * Ruby
-  * [Bundler](http://bundler.io/) (limitations:
+  * [Bundler](https://bundler.io/) (limitations:
   [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
 * Rust
   * [Cargo](https://doc.rust-lang.org/cargo/)
 * Scala
-  * [SBT](http://www.scala-sbt.org/)
+  * [SBT](https://www.scala-sbt.org/)
 
 <a name="analyzer-for-spdx-documents"></a>
 
@@ -669,7 +669,7 @@ following formats are supported (reporter names are case-insensitive):
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
   * A nice tutorial video has been [published](https://youtu.be/dNmH_kYJ34g) by GitLab engineer @mokhan.
-* [NOTICE](http://www.apache.org/dev/licensing-howto.html) file in two variants
+* [NOTICE](https://infra.apache.org/licensing-howto.html) file in two variants
   * List license texts and copyrights by package (`-f NoticeTemplate`)
   * Summarize all license texts and copyrights (`-f NoticeTemplate -O NoticeTemplate=template.id=summary`)
   * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates
