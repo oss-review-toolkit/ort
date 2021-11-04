@@ -342,7 +342,8 @@ supported:
   * [NPM](https://www.npmjs.com/) (limitations:
   [no scope-specific registries](https://github.com/oss-review-toolkit/ort/issues/3741),
   [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
-  * [Yarn](https://yarnpkg.com/)
+  * [Yarn](https://yarnpkg.com/) (limitations:
+  [no Yarn 2 / 3 support](https://github.com/oss-review-toolkit/ort/issues/2283))
 * .NET
   * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations:
   [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
