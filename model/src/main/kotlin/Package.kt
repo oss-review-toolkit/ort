@@ -103,7 +103,8 @@ data class Package(
     val vcs: VcsInfo,
 
     /**
-     * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
+     * Processed VCS-related information about the [Package] in normalized form. The information is either derived from
+     * [vcs], guessed from additional data as a fallback, or empty.
      */
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
