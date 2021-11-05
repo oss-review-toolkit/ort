@@ -115,8 +115,14 @@ abstract class LocalScanner(
     private val scannerDir by lazy {
         val scannerExe = command()
 
-        Os.getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
-            getVersion(it) == expectedVersion
+        Os.getPathFromEnvironment(scannerExe)?.parentFile?.also {
+            val actualVersion = getVersion(it)
+            if (actualVersion != expectedVersion) {
+                log.info {
+                    "ORT is currently tested with $name version $expectedVersion, but you are using version " +
+                            "$actualVersion. This could lead to problems with parsing the $name output."
+                }
+            }
         } ?: run {
             if (scannerExe.isNotEmpty()) {
                 log.info {
