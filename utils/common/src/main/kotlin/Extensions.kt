@@ -53,6 +53,17 @@ inline fun <reified T : Any> T.hasNonNullProperty() =
 fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
 
 /**
+ * Return the duplicates as identified by [keySelector] of a collection.
+ */
+fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Set<K> =
+    if (this is Set) emptySet() else groupBy(keySelector).filter { it.value.size > 1 }.keys
+
+/**
+ * Return the duplicates of a collection.
+ */
+fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }
+
+/**
  * Format this [Double] as a string with the provided number of [decimalPlaces].
  */
 fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(this)

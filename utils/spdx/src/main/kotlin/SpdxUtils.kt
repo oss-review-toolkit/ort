@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.utils.spdx
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
@@ -27,22 +25,11 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
 import java.net.URL
 import java.security.MessageDigest
-import java.util.EnumSet
 
+import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
-
-/**
- * A list of directories used by version control systems to store metadata.
- */
-val VCS_DIRECTORIES = listOf(
-    ".git",
-    ".hg",
-    ".repo",
-    ".svn",
-    "CVS"
-)
 
 /**
  * A comparator that sorts parent paths before child paths.
@@ -126,12 +113,6 @@ fun calculatePackageVerificationCode(directory: File): String {
 
     return calculatePackageVerificationCode(filteredFiles, sortedExcludes)
 }
-
-/**
- * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
- */
-inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
-    EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
  * Retrieve the full text for the license with the provided SPDX [id], including "LicenseRefs". If [handleExceptions] is
