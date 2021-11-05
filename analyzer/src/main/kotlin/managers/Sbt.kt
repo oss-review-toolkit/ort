@@ -37,9 +37,9 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.getCommonFileParent
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.suppressInput
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.suppressInput
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
