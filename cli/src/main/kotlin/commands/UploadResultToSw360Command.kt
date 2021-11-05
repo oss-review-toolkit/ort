@@ -119,7 +119,7 @@ class UploadResultToSw360Command : CliktCommand(
 
                         val uploadResult = sw360ReleaseClient.uploadAttachments(
                             AttachmentUploadRequest.builder(release)
-                                .addAttachment(archiveResult.getOrThrow().toPath(), SW360AttachmentType.SOURCE)
+                                .addAttachment(archiveResult.toPath(), SW360AttachmentType.SOURCE)
                                 .build()
                         )
 
