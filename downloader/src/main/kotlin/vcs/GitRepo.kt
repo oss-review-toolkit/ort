@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
-import org.ossreviewtoolkit.utils.common.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
@@ -205,7 +204,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     private fun runRepo(targetDir: File, vararg args: String) =
         if (Os.isWindows) {
-            val repo = getPathFromEnvironment(command()) ?: throw IOException("'repo' not found in PATH.")
+            val repo = Os.getPathFromEnvironment(command()) ?: throw IOException("'repo' not found in PATH.")
 
             // On Windows, the script itself is not executable, so we need to explicitly specify Python as the
             // interpreter. As of repo version 2.4, Python 3.6 is required also on Windows.

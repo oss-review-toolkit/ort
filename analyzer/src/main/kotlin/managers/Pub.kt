@@ -63,7 +63,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
-import org.ossreviewtoolkit.utils.common.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
@@ -84,7 +83,7 @@ private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "2.2.3-stable"
 private val flutterInstallDir = "$ortToolsDirectory/flutter-$flutterVersion"
 
 private val flutterHome by lazy {
-    getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
+    Os.getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
         ?: File(Os.env["FLUTTER_HOME"] ?: "$flutterInstallDir/flutter")
 }
 

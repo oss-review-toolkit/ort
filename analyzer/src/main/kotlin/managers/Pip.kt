@@ -49,9 +49,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.common.resolveWindowsExecutable
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.ORT_NAME
@@ -141,7 +139,7 @@ object PythonVersion : CommandLineTool {
             // Parse a line like " -2.7-32        C:\Python27\python.exe".
             versionAndPath?.split(' ', limit = 3)?.last()?.trimStart()
         } else {
-            getPathFromEnvironment("python$version")?.path
+            Os.getPathFromEnvironment("python$version")?.path
         }
 }
 
@@ -201,7 +199,7 @@ class Pip(
     ): ProcessCapture {
         val binDir = if (Os.isWindows) "Scripts" else "bin"
         val command = virtualEnvDir.resolve(binDir).resolve(commandName)
-        val resolvedCommand = resolveWindowsExecutable(command)?.takeIf { Os.isWindows } ?: command
+        val resolvedCommand = Os.resolveWindowsExecutable(command)?.takeIf { Os.isWindows } ?: command
 
         // TODO: Maybe work around long shebang paths in generated scripts within a virtualenv by calling the Python
         //       executable in the virtualenv directly, see https://github.com/pypa/virtualenv/issues/997.

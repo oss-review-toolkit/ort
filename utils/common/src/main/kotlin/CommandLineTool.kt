@@ -59,7 +59,7 @@ interface CommandLineTool {
     /**
      * Return whether the executable for this command is available in the system PATH.
      */
-    fun isInPath() = getPathFromEnvironment(command()) != null
+    fun isInPath() = Os.getPathFromEnvironment(command()) != null
 
     /**
      * Run the command in the [workingDir] directory with arguments as specified by [args] and the given [environment].

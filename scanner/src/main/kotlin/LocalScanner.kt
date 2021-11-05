@@ -62,7 +62,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
-import org.ossreviewtoolkit.utils.common.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.Environment
@@ -116,7 +115,7 @@ abstract class LocalScanner(
     private val scannerDir by lazy {
         val scannerExe = command()
 
-        getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
+        Os.getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
             getVersion(it) == expectedVersion
         } ?: run {
             if (scannerExe.isNotEmpty()) {

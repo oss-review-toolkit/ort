@@ -86,4 +86,42 @@ object Os {
 
         return fallbackUserHome
     }
+
+    /**
+     * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
+     */
+    fun getPathFromEnvironment(executable: String): File? {
+        fun String.expandVariable(referencePattern: Regex, groupName: String): String =
+            replace(referencePattern) {
+                val variableName = it.groups[groupName]!!.value
+                env[variableName] ?: variableName
+            }
+
+        val paths = env["PATH"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
+
+        return if (isWindows) {
+            val referencePattern = Regex("%(?<reference>\\w+)%")
+
+            paths.mapNotNull { path ->
+                val expandedPath = path.expandVariable(referencePattern, "reference")
+                resolveWindowsExecutable(File(expandedPath, executable))
+            }.firstOrNull()
+        } else {
+            val referencePattern = Regex("\\$\\{?(?<reference>\\w+)}?")
+
+            paths.map { path ->
+                val expandedPath = path.expandVariable(referencePattern, "reference")
+                File(expandedPath, executable)
+            }.find { it.isFile }
+        }
+    }
+
+    /**
+     * Resolve the Windows [executable] to its full name including the optional extension.
+     */
+    fun resolveWindowsExecutable(executable: File): File? {
+        val extensions = env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
+        return extensions.map { File(executable.path + it.lowercase()) }.find { it.isFile }
+            ?: executable.takeIf { it.isFile }
+    }
 }

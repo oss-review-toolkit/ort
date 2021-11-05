@@ -69,48 +69,10 @@ fun getCommonFileParent(files: Collection<File>): File? =
     }
 
 /**
- * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
- */
-fun getPathFromEnvironment(executable: String): File? {
-    fun String.expandVariable(referencePattern: Regex, groupName: String): String =
-        replace(referencePattern) {
-            val variableName = it.groups[groupName]!!.value
-            Os.env[variableName] ?: variableName
-        }
-
-    val paths = Os.env["PATH"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
-
-    return if (Os.isWindows) {
-        val referencePattern = Regex("%(?<reference>\\w+)%")
-
-        paths.mapNotNull { path ->
-            val expandedPath = path.expandVariable(referencePattern, "reference")
-            resolveWindowsExecutable(File(expandedPath, executable))
-        }.firstOrNull()
-    } else {
-        val referencePattern = Regex("\\$\\{?(?<reference>\\w+)}?")
-
-        paths.map { path ->
-            val expandedPath = path.expandVariable(referencePattern, "reference")
-            File(expandedPath, executable)
-        }.find { it.isFile }
-    }
-}
-
-/**
  * Return the concatenated [strings] separated by [separator] whereas blank strings are omitted.
  */
 fun joinNonBlank(vararg strings: String, separator: String = " - ") =
     strings.filter { it.isNotBlank() }.joinToString(separator)
-
-/**
- * Resolve the Windows [executable] to its full name including the optional extension.
- */
-fun resolveWindowsExecutable(executable: File): File? {
-    val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
-    return extensions.map { File(executable.path + it.lowercase()) }.find { it.isFile }
-        ?: executable.takeIf { it.isFile }
-}
 
 /**
  * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
