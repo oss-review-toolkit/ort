@@ -36,7 +36,7 @@ import java.io.File
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class SpdxUtilsTest : WordSpec() {
+class UtilsTest : WordSpec() {
     private lateinit var tempDir: File
 
     override fun beforeTest(testCase: TestCase) {
