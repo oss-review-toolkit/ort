@@ -74,6 +74,10 @@ Files: gradle/*
 Copyright: 2007-2020 The original author or authors <info@gradle.com>
 License: Apache-2.0
 
+Files: clients/github-graphql/src/main/assets/schema.docs.graphql
+Copyright: 2017 Gregor Martynus
+License: MIT
+
 Files: utils/spdx/src/main/resources/exceptions/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC0-1.0
@@ -89,7 +93,3 @@ License: CC0-1.0
 Files: utils/spdx/src/test/resources/spdx-spec-examples/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC-BY-3.0
-
-Files: clients/github-graphql/src/main/assets/schema.docs.graphql
-Copyright: 2017 Gregor Martynus
-License: MIT
