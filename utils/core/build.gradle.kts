@@ -19,7 +19,6 @@
  */
 
 val commonsCompressVersion: String by project
-val disklrucacheVersion: String by project
 val kotlinxCoroutinesVersion: String by project
 val mockkVersion: String by project
 val okhttpVersion: String by project
@@ -37,7 +36,6 @@ dependencies {
 
     implementation(project(":utils:spdx-utils"))
 
-    implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")

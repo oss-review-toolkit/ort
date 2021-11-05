@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import com.jakewharton.disklrucache.DiskLruCache
 
@@ -26,7 +26,7 @@ import java.io.IOException
 
 import kotlin.math.pow
 
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * Wrapper around [DiskLruCache] that adds a workaround for the 64 character key length limit.
@@ -47,7 +47,7 @@ class DiskCache(
      */
     private val maxCacheEntryAgeInSeconds: Int
 ) {
-    companion object {
+    companion object : Logging {
         const val INDEX_FULL_KEY = 0
         const val INDEX_TIMESTAMP = 1
         const val INDEX_DATA = 2
@@ -122,9 +122,7 @@ class DiskCache(
             // Remove the expired entry after the snapshot was closed.
             diskLruCache.remove(diskKey)
         } catch (e: IOException) {
-            e.showStackTrace()
-
-            log.error { "Could not read cache entry for key '$diskKey': ${e.collectMessagesAsString()}" }
+            logger.error { "Could not read cache entry for key '$diskKey': ${e.collectMessagesAsString()}" }
         }
         return null
     }
@@ -140,9 +138,7 @@ class DiskCache(
             }
             return true
         } catch (e: IOException) {
-            e.showStackTrace()
-
-            log.error { "Could not write to disk cache for key '$diskKey': ${e.collectMessagesAsString()}" }
+            logger.error { "Could not write to disk cache for key '$diskKey': ${e.collectMessagesAsString()}" }
         }
         return false
     }
