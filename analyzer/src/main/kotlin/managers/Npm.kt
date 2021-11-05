@@ -65,11 +65,11 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
+import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.stashDirectories
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 const val PUBLIC_NPM_REGISTRY = "https://registry.npmjs.org"
