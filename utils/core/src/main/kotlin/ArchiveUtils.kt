@@ -32,6 +32,8 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.zip.Deflater
 
+import kotlin.io.path.createTempDirectory
+
 import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry
@@ -75,22 +77,17 @@ enum class ArchiveType(vararg val extensions: String) {
 
 /**
  * Archive the contents of [inputDir], omitting common [VCS_DIRECTORIES], to [zipFile] where an optional [prefix] is
- * added to each file. Return a [Result] wrapping the [zipFile] on success, or an exception of failure.
+ * added to each file. Return the [zipFile] on success, or throw an exception on failure.
  */
-fun archive(inputDir: File, zipFile: File, prefix: String = ""): Result<File> {
-    return runCatching {
+fun archive(inputDir: File, zipFile: File, prefix: String = ""): File =
+    zipFile.apply {
         inputDir.packZip(
-            zipFile,
+            this,
             prefix,
             directoryFilter = { it.name !in VCS_DIRECTORIES },
             fileFilter = { it != zipFile }
         )
-
-        zipFile
-    }.onFailure {
-        it.showStackTrace()
     }
-}
 
 /**
  * Unpack the [File] to [targetDirectory] using [filter] to select only the entries of interest.
@@ -156,7 +153,7 @@ internal val DEB_NESTED_ARCHIVES = listOf("data.tar.xz", "control.tar.xz")
  * applied to the contents of the TAR archives so that [ArchiveEntry]s that do not match are ignored.
  */
 fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
-    val tempDir = createOrtTempDir("unpackDeb")
+    val tempDir = createTempDirectory("unpackDeb").toFile()
 
     try {
         ArArchiveInputStream(inputStream()).unpack(
