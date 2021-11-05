@@ -29,7 +29,7 @@ import org.antlr.v4.runtime.CommonTokenStream
 
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.DOCUMENT_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * An SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1].
@@ -191,7 +191,7 @@ sealed class SpdxExpression {
     /**
      * Apply [licenseChoices] in the given order to [this][SpdxExpression].
      */
-    fun applyChoices(licenseChoices: List<LicenseChoice>): SpdxExpression {
+    fun applyChoices(licenseChoices: List<SpdxLicenseChoice>): SpdxExpression {
         if (validChoices().size == 1) return this
 
         var currentExpression = this

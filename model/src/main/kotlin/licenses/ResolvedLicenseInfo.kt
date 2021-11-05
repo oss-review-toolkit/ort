@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.core.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * Resolved license information about a package (or project).
@@ -72,7 +72,7 @@ data class ResolvedLicenseInfo(
      * can be used as a final license of this [ResolvedLicenseInfo]. [licenseChoices] will be applied in the order they
      * are given to the function.
      */
-    fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<LicenseChoice>): SpdxExpression? {
+    fun effectiveLicense(licenseView: LicenseView, vararg licenseChoices: List<SpdxLicenseChoice>): SpdxExpression? {
         val resolvedLicenseInfo = filter(licenseView, filterSources = true)
 
         return resolvedLicenseInfo.licenses.flatMap { resolvedLicense ->
@@ -119,7 +119,7 @@ data class ResolvedLicenseInfo(
      * Apply [licenseChoices] on the effective license of the [licenseView].
      */
     fun applyChoices(
-        licenseChoices: List<LicenseChoice>,
+        licenseChoices: List<SpdxLicenseChoice>,
         licenseView: LicenseView = LicenseView.ALL
     ): ResolvedLicenseInfo {
         val licenses = effectiveLicense(licenseView, licenseChoices)?.decompose().orEmpty()

@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
  *  -> result: A AND C
  * ```
  */
-data class LicenseChoice(
+data class SpdxLicenseChoice(
     val given: SpdxExpression?,
     val choice: SpdxExpression,
 ) {

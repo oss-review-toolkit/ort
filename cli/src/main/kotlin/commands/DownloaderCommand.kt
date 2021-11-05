@@ -71,7 +71,7 @@ import org.ossreviewtoolkit.utils.core.archive
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
 import org.ossreviewtoolkit.utils.core.showStackTrace
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source code from a remote location.") {
     private val input by mutuallyExclusiveOptions(
@@ -350,7 +350,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         pkg: Package,
         licenseCategorizations: List<LicenseCategorization>,
         licenseInfoResolver: LicenseInfoResolver,
-        vararg licenseChoices: List<LicenseChoice>
+        vararg licenseChoices: List<SpdxLicenseChoice>
     ): Set<String> {
         val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(pkg.id)
         val effectiveLicenses = resolvedLicenseInfo.effectiveLicense(
