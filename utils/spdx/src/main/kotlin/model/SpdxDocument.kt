@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.utils.spdx.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.REF_PREFIX
-import org.ossreviewtoolkit.utils.spdx.getDuplicates
 
 private const val SPDX_ID = "${REF_PREFIX}DOCUMENT"
 private const val SPDX_VERSION_MAJOR_MINOR = "SPDX-2.2"

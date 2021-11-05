@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.core
 
 import java.io.File
+import java.util.EnumSet
 
 /**
  * Create a temporary directory with a name specific to ORT, and optional [infixes].
@@ -48,6 +49,11 @@ fun createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
  */
 fun Any.createOrtTempFile(prefix: String? = null, suffix: String? = null): File =
     kotlin.io.path.createTempFile(createOrtTempDir().toPath(), prefix, suffix).toFile()
+
+/**
+ * Return an [EnumSet] that contains the elements of [this] and [other].
+ */
+operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
 
 /**
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.

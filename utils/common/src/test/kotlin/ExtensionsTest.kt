@@ -23,6 +23,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.nulls.beNull
@@ -32,6 +33,7 @@ import io.kotest.matchers.shouldNot
 
 import java.io.File
 import java.io.IOException
+import java.time.DayOfWeek
 import java.util.Locale
 
 import org.ossreviewtoolkit.utils.test.containExactly
@@ -44,6 +46,20 @@ class ExtensionsTest : WordSpec({
     "ByteArray.toHexString" should {
         "correctly convert a byte array to a string of hexadecimal digits" {
             byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).toHexString() shouldBe "deadbeef"
+        }
+    }
+
+    "EnumSet.plus" should {
+        "create an empty set if both summands are empty" {
+            val sum = enumSetOf<DayOfWeek>() + enumSetOf()
+
+            sum should beEmpty()
+        }
+
+        "create the correct sum of two sets" {
+            val sum = enumSetOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY) + enumSetOf(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY)
+
+            sum shouldBe enumSetOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY)
         }
     }
 

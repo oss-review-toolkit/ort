@@ -20,6 +20,24 @@
 package org.ossreviewtoolkit.utils.common
 
 import java.io.File
+import java.util.EnumSet
+
+/**
+ * A list of directories used by version control systems to store metadata.
+ */
+val VCS_DIRECTORIES = listOf(
+    ".git",
+    ".hg",
+    ".repo",
+    ".svn",
+    "CVS"
+)
+
+/**
+ * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
+ */
+inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
+    EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
  * Return recursively all ancestor directories of the given absolute [file], ordered along the path from

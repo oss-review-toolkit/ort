@@ -32,6 +32,7 @@ import io.kotest.matchers.string.startWith
 
 import java.io.File
 
+import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class SpdxUtilsTest : WordSpec() {

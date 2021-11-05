@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
-import org.ossreviewtoolkit.utils.spdx.getDuplicates
+import org.ossreviewtoolkit.utils.common.getDuplicates
 
 data class DownloaderConfiguration(
     /**

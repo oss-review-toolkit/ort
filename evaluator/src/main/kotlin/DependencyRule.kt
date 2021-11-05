@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
-import org.ossreviewtoolkit.utils.spdx.enumSetOf
+import org.ossreviewtoolkit.utils.common.enumSetOf
 
 /**
  * A [Rule] to check a single [dependency][DependencyNode].
