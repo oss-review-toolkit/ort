@@ -27,7 +27,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class XZCompressedLocalFileStorageTest : StringSpec() {
+class XZCompressedLocalFileStorageFunTest : StringSpec() {
     private fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
         val directory = createTestTempDir()
         val storage = XZCompressedLocalFileStorage(directory)

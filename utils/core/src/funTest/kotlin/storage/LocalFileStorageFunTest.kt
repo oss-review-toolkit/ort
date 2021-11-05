@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 
-class LocalFileStorageTest : WordSpec() {
+class LocalFileStorageFunTest : WordSpec() {
     private fun storage(block: (LocalFileStorage, File) -> Unit) {
         val directory = createTestTempDir()
         val storage = LocalFileStorage(directory)
