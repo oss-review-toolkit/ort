@@ -22,7 +22,7 @@
 
 #------------------------------------------------------------------------
 # build base for main
-FROM ubuntu:focal AS base
+FROM adoptopenjdk/openjdk11:ubuntu-slim AS base
 
 # Set shell for bash and default pipefail
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -77,7 +77,6 @@ RUN apt-get update \
         libxrender1 \
         libxtst6 \
         netbase \
-        openjdk-11-jre \
         openssh-client \
         sbt="$SBT_VERSION" \
         subversion \
@@ -114,7 +113,6 @@ RUN apt-get update \
         libssl-dev \
         make \
         netbase \
-        openjdk-11-jdk \
         openssl \
         tk-dev \
         tzdata \
