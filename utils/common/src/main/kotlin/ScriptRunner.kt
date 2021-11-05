@@ -17,19 +17,21 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import javax.script.Compilable
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
 
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * A class providing the framework to run Kotlin scripts.
  */
 open class ScriptRunner {
+    private companion object : Logging
+
     /**
      * The engine to run Kotlin scripts.
      */
@@ -59,7 +61,7 @@ open class ScriptRunner {
             engine.compile(completeScript(script))
             true
         } catch (e: ScriptException) {
-            log.error { "Could not compile Kotlin script: ${e.collectMessagesAsString()}" }
+            logger.error { "Could not compile Kotlin script: ${e.collectMessagesAsString()}" }
             false
         }
     }

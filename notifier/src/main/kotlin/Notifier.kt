@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
 import org.ossreviewtoolkit.notifier.modules.JiraNotifier
 import org.ossreviewtoolkit.notifier.modules.MailNotifier
-import org.ossreviewtoolkit.utils.core.ScriptRunner
+import org.ossreviewtoolkit.utils.common.ScriptRunner
 
 class Notifier(ortResult: OrtResult = OrtResult.EMPTY, config: NotifierConfiguration = NotifierConfiguration()) :
     ScriptRunner() {
