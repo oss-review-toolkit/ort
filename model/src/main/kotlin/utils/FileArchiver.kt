@@ -29,14 +29,14 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.packZip
+import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
-import org.ossreviewtoolkit.utils.core.packZip
 import org.ossreviewtoolkit.utils.core.perf
 import org.ossreviewtoolkit.utils.core.showStackTrace
 import org.ossreviewtoolkit.utils.core.storage.FileStorage
-import org.ossreviewtoolkit.utils.core.unpackZip
 
 /**
  * A class to archive files matched by provided patterns in a ZIP file that is stored in a [FileStorage][storage].

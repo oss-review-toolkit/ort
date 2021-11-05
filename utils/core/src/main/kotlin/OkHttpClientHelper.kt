@@ -41,6 +41,7 @@ import okhttp3.Response
 import okio.buffer
 import okio.sink
 
+import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 

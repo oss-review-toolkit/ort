@@ -48,11 +48,11 @@ import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.isTrue
+import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.unpack
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
