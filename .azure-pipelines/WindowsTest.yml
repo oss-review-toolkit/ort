@@ -15,6 +15,9 @@ jobs:
   - pwsh: |
       ## Install git-repo.
       Invoke-WebRequest -Uri "https://storage.googleapis.com/git-repo-downloads/repo" -OutFile "$env:PROGRAMFILES\Git\usr\bin\repo"
+
+      # Install ScanCode.
+      pip install --user scancode-toolkit==$env:SCANCODE_VERSION
     displayName: Install Required Tools
     errorActionPreference: continue
     failOnStderr: false
