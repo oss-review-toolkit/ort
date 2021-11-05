@@ -17,16 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintStream
 
-import org.ossreviewtoolkit.utils.common.Os
+import kotlin.io.path.createTempFile
 
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val tempFile = createOrtTempFile("redirect")
+    val tempFile = createTempFile("redirect").toFile()
     val fileStream = FileOutputStream(tempFile)
 
     try {
