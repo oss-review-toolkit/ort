@@ -42,9 +42,9 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.stashDirectories
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.

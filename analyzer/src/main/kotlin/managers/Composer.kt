@@ -51,10 +51,10 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
-import org.ossreviewtoolkit.utils.core.stashDirectories
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"

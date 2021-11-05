@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import java.io.Closeable
 import java.io.File
@@ -27,7 +27,7 @@ import java.nio.file.StandardCopyOption
 
 import kotlin.io.path.createTempDirectory
 
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * A convenience function that stashes directories using a [DirectoryStash] instance.
@@ -40,17 +40,19 @@ fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf
  * directory did not exist on initialization, it will also not exist on close.
  */
 private class DirectoryStash(directories: Set<File>) : Closeable {
+    private companion object : Logging
+
     private val stashedDirectories: Map<File, File?> = directories.associateWith { originalDir ->
         // We need to check this on each iteration instead of filtering beforehand to properly handle parent / child
         // directories.
         if (originalDir.isDirectory) {
             // Create a temporary directory to move directories as-is into.
-            val stashDir = createTempDirectory(originalDir.parentFile.toPath(), "$ORT_NAME-stash").toFile()
+            val stashDir = createTempDirectory(originalDir.parentFile.toPath(), "stash").toFile()
 
             // Use a non-existing directory as the target to ensure the directory can be moved atomically.
             val tempDir = stashDir.resolve(originalDir.name)
 
-            log.info {
+            logger.info {
                 "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'."
             }
 
@@ -68,7 +70,7 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
             originalDir.safeDeleteRecursively()
 
             stashedDirectories[originalDir]?.let { tempDir ->
-                log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
+                logger.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
 
                 Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
