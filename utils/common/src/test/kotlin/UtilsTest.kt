@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +22,11 @@ package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 
 import java.io.File
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class UtilsTest : WordSpec({
     "getCommonFileParent" should {
@@ -48,31 +45,6 @@ class UtilsTest : WordSpec({
 
         "return the absolute parent directory for a single file" {
             getCommonFileParent(listOf(File("/foo/bar"))) shouldBe File("/foo").absoluteFile
-        }
-    }
-
-    "getPathFromEnvironment" should {
-        "find system executables on Windows".config(enabled = Os.isWindows) {
-            val winverPath = File(Os.env["SYSTEMROOT"], "system32/winver.exe")
-
-            getPathFromEnvironment("winver") shouldNot beNull()
-            getPathFromEnvironment("winver") shouldBe winverPath
-
-            getPathFromEnvironment("winver.exe") shouldNot beNull()
-            getPathFromEnvironment("winver.exe") shouldBe winverPath
-
-            getPathFromEnvironment("") should beNull()
-            getPathFromEnvironment("*") should beNull()
-            getPathFromEnvironment("nul") should beNull()
-        }
-
-        "find system executables on non-Windows".config(enabled = !Os.isWindows) {
-            getPathFromEnvironment("sh") shouldNotBeNull {
-                toString() shouldBeIn listOf("/bin/sh", "/usr/bin/sh")
-            }
-
-            getPathFromEnvironment("") should beNull()
-            getPathFromEnvironment("/") should beNull()
         }
     }
 
