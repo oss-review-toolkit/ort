@@ -37,6 +37,7 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
+import java.util.EnumSet
 import java.util.Locale
 
 import kotlin.reflect.full.memberProperties
@@ -67,6 +68,11 @@ fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }
  * Format this [Double] as a string with the provided number of [decimalPlaces].
  */
 fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(this)
+
+/**
+ * Return an [EnumSet] that contains the elements of [this] and [other].
+ */
+operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
 
 /**
  * If the SHELL environment variable is set, return the absolute file with a leading "~" expanded to the current user's
