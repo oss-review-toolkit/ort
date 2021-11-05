@@ -17,15 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-
-import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.getPathFromEnvironment
 
 /**
  * An interface to implement by classes that are backed by a command line tool.
@@ -100,13 +97,8 @@ interface CommandLineTool {
         val actualVersion = getVersion(workingDir)
         val requiredVersion = getVersionRequirement()
 
-        if (!requiredVersion.isSatisfiedBy(actualVersion)) {
-            val message = "Unsupported ${command()} version $actualVersion does not fulfill $requiredVersion."
-            if (ignoreActualVersion) {
-                log.warn { "$message Still continuing because you chose to ignore the actual version." }
-            } else {
-                throw IOException(message)
-            }
+        if (!ignoreActualVersion && !requiredVersion.isSatisfiedBy(actualVersion)) {
+            throw IOException("Unsupported ${command()} version $actualVersion does not fulfill $requiredVersion.")
         }
     }
 }
