@@ -20,7 +20,7 @@
 
 @file:Suppress("MatchingDeclarationName", "TooManyFunctions")
 
-package org.ossreviewtoolkit.utils.core
+package org.ossreviewtoolkit.utils.common
 
 import java.io.File
 import java.io.IOException
@@ -49,11 +49,6 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel
-
-import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 enum class ArchiveType(vararg val extensions: String) {
     TAR(".gem", ".tar"),
