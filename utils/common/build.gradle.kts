@@ -18,6 +18,7 @@
  */
 
 val commonsCompressVersion: String by project
+val disklrucacheVersion: String by project
 val log4jApiKotlinVersion: String by project
 val jacksonVersion: String by project
 val semverVersion: String by project
@@ -33,6 +34,7 @@ dependencies {
     api("com.vdurmont:semver4j:$semverVersion")
     api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
+    implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework:spring-core:$springCoreVersion")
