@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.licenses
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * A [LicenseView] provides a custom view on the licenses that belong to a [Package]. It can be used to filter the
@@ -162,7 +162,7 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
     @JvmOverloads
     fun filter(
         resolvedLicenseInfo: ResolvedLicenseInfo,
-        licenseChoices: List<LicenseChoice>,
+        licenseChoices: List<SpdxLicenseChoice>,
         filterSources: Boolean = false
     ): ResolvedLicenseInfo {
         val filteredResolvedLicenseInfo = filter(resolvedLicenseInfo, filterSources)

@@ -60,7 +60,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.Environment
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 val concludedLicense = "LicenseRef-a OR LicenseRef-b OR LicenseRef-c or LicenseRef-d".toSpdx()
@@ -189,14 +189,14 @@ val ortResult = OrtResult(
                 repositoryLicenseChoices = listOf(
                     // This license choice will not be applied to "only-concluded-license" since the package license
                     // choice takes precedence.
-                    LicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-b".toSpdx()),
-                    LicenseChoice("LicenseRef-c OR LicenseRef-d".toSpdx(), "LicenseRef-d".toSpdx())
+                    SpdxLicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-b".toSpdx()),
+                    SpdxLicenseChoice("LicenseRef-c OR LicenseRef-d".toSpdx(), "LicenseRef-d".toSpdx())
                 ),
                 packageLicenseChoices = listOf(
                     PackageLicenseChoice(
                         packageId = Identifier("Maven:org.ossreviewtoolkit:package-with-only-concluded-license:1.0"),
                         licenseChoices = listOf(
-                            LicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-a".toSpdx())
+                            SpdxLicenseChoice("LicenseRef-a OR LicenseRef-b".toSpdx(), "LicenseRef-a".toSpdx())
                         )
                     )
                 )

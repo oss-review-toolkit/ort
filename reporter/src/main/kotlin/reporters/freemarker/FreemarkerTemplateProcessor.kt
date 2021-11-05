@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * A class to process [Apache Freemarker][1] templates, intended to be called by a [Reporter] that uses the generated
@@ -202,7 +202,7 @@ class FreemarkerTemplateProcessor(
         /**
          * The license choices that apply to this package.
          */
-        val licenseChoices: List<LicenseChoice> by lazy {
+        val licenseChoices: List<SpdxLicenseChoice> by lazy {
             listOf(
                 input.ortResult.getPackageLicenseChoices(id),
                 input.ortResult.getRepositoryLicenseChoices()

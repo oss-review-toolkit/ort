@@ -38,7 +38,7 @@ import io.kotest.matchers.shouldNotBe
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()
@@ -518,7 +518,7 @@ class SpdxExpressionTest : WordSpec() {
             "return the correct result if a single choice is applied" {
                 val expression = "a OR b OR c OR d".toSpdx()
 
-                val choices = listOf(LicenseChoice(expression, "a".toSpdx()))
+                val choices = listOf(SpdxLicenseChoice(expression, "a".toSpdx()))
 
                 val result = expression.applyChoices(choices)
 
@@ -529,8 +529,8 @@ class SpdxExpressionTest : WordSpec() {
                 val expression = "a OR b AND c OR d".toSpdx()
 
                 val choices = listOf(
-                    LicenseChoice("a OR b".toSpdx(), "a".toSpdx()),
-                    LicenseChoice("c OR d".toSpdx(), "c".toSpdx())
+                    SpdxLicenseChoice("a OR b".toSpdx(), "a".toSpdx()),
+                    SpdxLicenseChoice("c OR d".toSpdx(), "c".toSpdx())
                 )
 
                 val result = expression.applyChoices(choices)
@@ -542,8 +542,8 @@ class SpdxExpressionTest : WordSpec() {
                 val expression = "a OR b OR c OR d".toSpdx()
 
                 val choices = listOf(
-                    LicenseChoice("a OR b".toSpdx(), "b".toSpdx()), // b OR c OR d
-                    LicenseChoice("a OR c".toSpdx(), "a".toSpdx()) // not applied
+                    SpdxLicenseChoice("a OR b".toSpdx(), "b".toSpdx()), // b OR c OR d
+                    SpdxLicenseChoice("a OR c".toSpdx(), "a".toSpdx()) // not applied
                 )
 
                 val result = expression.applyChoices(choices)
@@ -555,8 +555,8 @@ class SpdxExpressionTest : WordSpec() {
                 val expression = "a OR b OR c OR d".toSpdx()
 
                 val choices = listOf(
-                    LicenseChoice("a OR b".toSpdx(), "b".toSpdx()), // b OR c OR d
-                    LicenseChoice("b OR c".toSpdx(), "b".toSpdx()) // b OR d
+                    SpdxLicenseChoice("a OR b".toSpdx(), "b".toSpdx()), // b OR c OR d
+                    SpdxLicenseChoice("b OR c".toSpdx(), "b".toSpdx()) // b OR d
                 )
 
                 val result = expression.applyChoices(choices)
@@ -568,8 +568,8 @@ class SpdxExpressionTest : WordSpec() {
                 val expression = "(a OR b) AND (c OR d) AND (a OR e)".toSpdx()
 
                 val choices = listOf(
-                    LicenseChoice("a OR b".toSpdx(), "a".toSpdx()),
-                    LicenseChoice("a OR e".toSpdx(), "a".toSpdx())
+                    SpdxLicenseChoice("a OR b".toSpdx(), "a".toSpdx()),
+                    SpdxLicenseChoice("a OR e".toSpdx(), "a".toSpdx())
                 )
 
                 val result = expression.applyChoices(choices)

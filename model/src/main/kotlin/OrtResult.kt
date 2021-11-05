@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.perf
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
@@ -385,16 +385,16 @@ data class OrtResult(
         }
 
     /**
-     * Return all [LicenseChoice]s for the [Package] with [id].
+     * Return all [SpdxLicenseChoice]s for the [Package] with [id].
      */
-    fun getPackageLicenseChoices(id: Identifier): List<LicenseChoice> =
+    fun getPackageLicenseChoices(id: Identifier): List<SpdxLicenseChoice> =
         repository.config.licenseChoices.packageLicenseChoices.find { it.packageId == id }?.licenseChoices.orEmpty()
 
     /**
-     * Return all [LicenseChoice]s applicable for the scope of the whole [repository].
+     * Return all [SpdxLicenseChoice]s applicable for the scope of the whole [repository].
      */
     @JsonIgnore
-    fun getRepositoryLicenseChoices(): List<LicenseChoice> =
+    fun getRepositoryLicenseChoices(): List<SpdxLicenseChoice> =
         repository.config.licenseChoices.repositoryLicenseChoices
 
     /**

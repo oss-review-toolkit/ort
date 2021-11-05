@@ -62,7 +62,7 @@ class RepositoryConfigurationTest : WordSpec({
                 yamlMapper.readValue<RepositoryConfiguration>(configuration)
             }
 
-            exception.message shouldContain "problem: LicenseChoices LicenseChoice(given=null, choice=MIT)"
+            exception.message shouldContain "problem: LicenseChoices SpdxLicenseChoice(given=null, choice=MIT)"
             exception.message shouldNotContain "GPL-2.0-only"
         }
 

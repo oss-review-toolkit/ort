@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class ResolvedLicenseInfoTest : WordSpec() {
@@ -43,9 +43,9 @@ class ResolvedLicenseInfoTest : WordSpec() {
             "apply choices for LicenseView.ALL on all resolved licenses" {
                 // All: (Apache-2.0 WITH LLVM-exception OR MIT) AND (MIT OR GPL-2.0-only) AND (0BSD OR GPL-2.0-only)
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(LicenseView.ALL, choices)
@@ -73,7 +73,7 @@ class ResolvedLicenseInfoTest : WordSpec() {
                 )
 
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
                 )
 
                 val effectiveLicense = resolvedLicenseInfo.effectiveLicense(LicenseView.ONLY_DECLARED, choices)
@@ -84,7 +84,7 @@ class ResolvedLicenseInfoTest : WordSpec() {
             "apply choices for LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED" {
                 // Concluded: 0BSD OR GPL-2.0-only
                 val choices = listOf(
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(
@@ -98,7 +98,7 @@ class ResolvedLicenseInfoTest : WordSpec() {
             "apply choices for LicenseView.ONLY_DECLARED" {
                 // Declared: Apache-2.0 WITH LLVM-exception OR MIT
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(
@@ -111,11 +111,11 @@ class ResolvedLicenseInfoTest : WordSpec() {
 
             "apply package and repository license choice for LicenseView.ONLY_CONCLUDED in the correct order" {
                 val repositoryChoices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
                 val packageChoices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), apache.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), apache.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(
@@ -133,9 +133,9 @@ class ResolvedLicenseInfoTest : WordSpec() {
                 val resolvedLicenseInfo = createResolvedLicenseInfo()
 
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
 
                 val filteredResolvedLicenseInfo = resolvedLicenseInfo.applyChoices(choices)

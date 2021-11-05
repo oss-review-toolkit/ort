@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.spdx.model.LicenseChoice
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
@@ -357,12 +357,12 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                     config = RepositoryConfiguration(
                         licenseChoices = LicenseChoices(
                             repositoryLicenseChoices = listOf(
-                                LicenseChoice("GPL-2.0-only OR MIT".toSpdx(), "MIT".toSpdx())
+                                SpdxLicenseChoice("GPL-2.0-only OR MIT".toSpdx(), "MIT".toSpdx())
                             ),
                             packageLicenseChoices = listOf(
                                 PackageLicenseChoice(
                                     projects[1].id,
-                                    listOf(LicenseChoice("MIT OR Apache-2.0".toSpdx(), "MIT".toSpdx()))
+                                    listOf(SpdxLicenseChoice("MIT OR Apache-2.0".toSpdx(), "MIT".toSpdx()))
                                 )
                             )
                         )
