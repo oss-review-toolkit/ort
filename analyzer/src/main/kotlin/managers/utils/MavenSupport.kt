@@ -83,13 +83,13 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
-import org.ossreviewtoolkit.utils.core.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.logOnce
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
