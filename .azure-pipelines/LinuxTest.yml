@@ -23,6 +23,9 @@ jobs:
       curl https://storage.googleapis.com/git-repo-downloads/repo > $HOME/.local/bin/repo
       chmod a+x $HOME/.local/bin/repo
 
+      # Install ScanCode.
+      pip install --user scancode-toolkit==$SCANCODE_VERSION
+
       # Update PATH for next steps, see:
       # https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/logging-commands?view=azure-devops&tabs=bash#prependpath-prepend-a-path-to-the--path-environment-variable
       echo "##vso[task.prependpath]$HOME/.local/bin"
