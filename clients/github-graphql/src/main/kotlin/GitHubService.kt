@@ -33,7 +33,7 @@ import java.net.URI
 
 import kotlin.time.measureTimedValue
 
-import org.apache.logging.log4j.kotlin.cachedLoggerOf
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.github.issuesquery.Issue
 import org.ossreviewtoolkit.clients.github.releasesquery.Release
@@ -62,7 +62,7 @@ class QueryException(
 class GitHubService private constructor(
     val client: GraphQLKtorClient
 ) {
-    companion object {
+    companion object : Logging {
         /**
          * The default endpoint URL for accessing the GitHub GraphQL API.
          */
@@ -132,8 +132,7 @@ private suspend fun <T : Any> GraphQLKtorClient.executeAndCheck(
 ): GraphQLClientResponse<T> {
     val (result, duration) = measureTimedValue { execute(request) }
 
-    cachedLoggerOf(GitHubService::class.java)
-        .debug { "Executed query '${request.operationName}' in $duration." }
+    GitHubService.logger.debug { "Executed query '${request.operationName}' in $duration." }
 
     result.errors?.let { errors ->
         throw QueryException("Result of query '${request.operationName}' contains errors.", errors)

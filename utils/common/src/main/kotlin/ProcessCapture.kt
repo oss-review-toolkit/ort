@@ -24,9 +24,7 @@ import java.io.IOException
 
 import kotlin.io.path.createTempDirectory
 
-import org.apache.logging.log4j.kotlin.cachedLoggerOf
-
-private val log = cachedLoggerOf(ProcessCapture::class.java)
+import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
@@ -38,7 +36,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     // vararg parameters, see https://stackoverflow.com/a/46456379/1127485.
     constructor(workingDir: File?, vararg command: String) : this(*command, workingDir = workingDir)
 
-    companion object {
+    companion object : Logging {
         private const val MAX_OUTPUT_LINES = 20
         private const val MAX_OUTPUT_FOOTER =
             "(Above output is limited to each $MAX_OUTPUT_LINES heading and tailing lines.)"
@@ -126,21 +124,21 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         }
 
     init {
-        log.info {
+        logger.info {
             "Running '$commandLine' in '$usedWorkingDir'..."
         }
 
         process.waitFor()
 
-        if (log.delegate.isDebugEnabled) {
+        if (logger.delegate.isDebugEnabled) {
             // No need to use curly-braces-syntax for logging below as the log level check is already done above.
 
             if (stdoutFile.length() > 0L) {
-                limitOutputLines(stdout).lines().forEach { log.debug(it) }
+                limitOutputLines(stdout).lines().forEach { logger.debug(it) }
             }
 
             if (stderrFile.length() > 0L) {
-                limitOutputLines(stderr).lines().forEach { log.debug(it) }
+                limitOutputLines(stderr).lines().forEach { logger.debug(it) }
             }
         }
     }
