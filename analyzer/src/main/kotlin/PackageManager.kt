@@ -235,7 +235,7 @@ abstract class PackageManager(
         definitionFiles.forEach { definitionFile ->
             val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
 
-            log.info { "Resolving $managerName dependencies for '$relativePath'..." }
+            PackageManager.log.info { "Resolving $managerName dependencies for '$relativePath'..." }
 
             val duration = measureTime {
                 @Suppress("TooGenericExceptionCaught")
@@ -271,7 +271,9 @@ abstract class PackageManager(
                 }
             }
 
-            log.info { "Resolving $managerName dependencies for '$relativePath' took ${duration.inWholeSeconds}s." }
+            PackageManager.log.info {
+                "Resolving $managerName dependencies for '$relativePath' took ${duration.inWholeSeconds}s."
+            }
         }
 
         afterResolution(definitionFiles)
