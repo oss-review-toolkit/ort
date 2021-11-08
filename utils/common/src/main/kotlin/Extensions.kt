@@ -284,6 +284,22 @@ fun <K, V : Collection<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Ma
     }
 
 /**
+ * Merge two maps which have sets as values by creating the combined key set of both maps and merging the sets. If there
+ * is no entry for a key in one of the maps, the value from the other map is used.
+ */
+@JvmName("zipWithSets")
+@Suppress("UNCHECKED_CAST")
+fun <K, V : Set<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V> =
+    zip(other) { a, b ->
+        when {
+            // When iterating over the combined key set, not both values can be null.
+            a == null -> b!!
+            b == null -> a
+            else -> (a + b) as V
+        }
+    }
+
+/**
  * Converts this [Number] from bytes to mebibytes (MiB).
  */
 fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)

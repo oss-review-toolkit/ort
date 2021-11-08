@@ -392,6 +392,27 @@ class ExtensionsTest : WordSpec({
                 "4" to listOf(4)
             )
         }
+
+        "correctly merge maps with set values" {
+            val map = mapOf(
+                "1" to setOf(1),
+                "2" to setOf(2),
+                "3" to setOf(3)
+            )
+            val other = mapOf(
+                "3" to setOf(3),
+                "4" to setOf(4)
+            )
+
+            val result = map.zipWithCollections(other)
+            result.values.forAll { it should beInstanceOf<Set<Int>>() }
+            result shouldBe mapOf(
+                "1" to setOf(1),
+                "2" to setOf(2),
+                "3" to setOf(3),
+                "4" to setOf(4)
+            )
+        }
     }
 
     "String.isValidUri" should {
