@@ -316,7 +316,7 @@ class FreemarkerTemplateProcessor(
          */
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
-        fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeIssueThreshold) =
+        fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeRuleViolationThreshold) =
             input.ortResult.evaluator?.violations?.any { violation ->
                 violation.severity >= threshold && !input.resolutionProvider.isResolved(violation)
             } ?: false
