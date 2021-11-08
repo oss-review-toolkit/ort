@@ -54,6 +54,11 @@ data class OrtConfiguration(
     val severeIssueThreshold: Severity = Severity.WARNING,
 
     /**
+     * The threshold from which on rule violations count as severe.
+     */
+    val severeRuleViolationThreshold: Severity = Severity.WARNING,
+
+    /**
      * The configuration of the analyzer.
      */
     val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),
