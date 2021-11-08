@@ -23,6 +23,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.exist
@@ -30,6 +31,7 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.types.beInstanceOf
 
 import java.io.File
 import java.io.IOException
@@ -370,7 +372,7 @@ class ExtensionsTest : WordSpec({
     }
 
     "Map.zipWithCollections" should {
-        "correctly merge maps" {
+        "correctly merge maps with list values" {
             val map = mapOf(
                 "1" to listOf(1),
                 "2" to listOf(2),
@@ -381,7 +383,9 @@ class ExtensionsTest : WordSpec({
                 "4" to listOf(4)
             )
 
-            map.zipWithCollections(other) shouldBe mapOf(
+            val result = map.zipWithCollections(other)
+            result.values.forAll { it should beInstanceOf<List<Int>>() }
+            result shouldBe mapOf(
                 "1" to listOf(1),
                 "2" to listOf(2),
                 "3" to listOf(3, 3),
