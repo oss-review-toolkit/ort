@@ -300,14 +300,19 @@ class FreemarkerTemplateProcessor(
         fun isLicensePresent(license: ResolvedLicense): Boolean = SpdxConstants.isPresent(license.license.toString())
 
         /**
-         * Return `true` if there are any unresolved [OrtIssue]s whose severity is equal to or greater than the
-         * [threshold], or `false` otherwise.
+         * Return `true` if there are any unresolved and non-excluded [OrtIssue]s whose severity is equal to or greater
+         * than the [threshold], or `false` otherwise.
          */
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedIssues(threshold: Severity = input.ortConfig.severeIssueThreshold) =
-            input.ortResult.collectIssues().values.flatten().any { issue ->
-                issue.severity >= threshold && !input.resolutionProvider.isResolved(issue)
+            input.ortResult.collectIssues().any { (identifier, issues) ->
+                issues.any { issue ->
+                    val isResolved = input.resolutionProvider.isResolved(issue)
+                    val isExcluded = input.ortResult.isExcluded(identifier)
+
+                    issue.severity >= threshold && !isResolved && !isExcluded
+                }
             }
 
         /**
