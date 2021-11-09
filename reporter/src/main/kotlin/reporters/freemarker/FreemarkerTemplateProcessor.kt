@@ -316,14 +316,17 @@ class FreemarkerTemplateProcessor(
             }
 
         /**
-         * Return `true` if there are any unresolved [RuleViolation]s whose severity is equal to or greater than the
-         * [threshold], or `false` otherwise.
+         * Return `true` if there are any unresolved and non-excluded [RuleViolation]s whose severity is equal to or
+         * greater than the [threshold], or `false` otherwise.
          */
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedRuleViolations(threshold: Severity = input.ortConfig.severeRuleViolationThreshold) =
             input.ortResult.evaluator?.violations?.any { violation ->
-                violation.severity >= threshold && !input.resolutionProvider.isResolved(violation)
+                val isResolved = input.resolutionProvider.isResolved(violation)
+                val isExcluded = violation.pkg?.let { input.ortResult.isExcluded(it) } ?: false
+
+                violation.severity >= threshold && !isResolved && !isExcluded
             } ?: false
 
         /**
