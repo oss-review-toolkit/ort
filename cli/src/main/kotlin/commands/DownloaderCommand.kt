@@ -133,8 +133,6 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         .required()
         .outputGroup()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
-
     /**
      * The mode to use for archiving downloaded source code.
      */
@@ -171,6 +169,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         help = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified, all " +
                 "data entities are downloaded."
     ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
+
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
         val config = globalOptionsForSubcommands.config
