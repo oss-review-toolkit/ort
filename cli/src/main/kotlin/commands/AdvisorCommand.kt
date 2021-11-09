@@ -90,8 +90,6 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
         .configurationGroup()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
-
     private val providerFactories by option(
         "--advisors", "-a",
         help = "The comma-separated advisors to use, any of ${allVulnerabilityProvidersByName.keys}."
@@ -106,6 +104,8 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         "--skip-excluded",
         help = "Do not check excluded projects or packages."
     ).flag()
+
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
