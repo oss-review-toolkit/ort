@@ -69,8 +69,9 @@ fun scanOrtResult(
 
 /**
  * Use the [packageScanner] and [projectScanner] to scan the [Package]s and [Project]s specified in the [ortResult],
- * respectively. Scan results are stored in the [outputDirectory]. If [skipExcluded] is true, packages for which
- * excludes are defined are not scanned. Return scan results as an [OrtResult].
+ * respectively. Both scanners are expected to refer to the same global scanner configuration. Scan results are stored
+ * in the [outputDirectory]. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return
+ * scan results as an [OrtResult].
  */
 @JvmOverloads
 fun scanOrtResult(
@@ -152,17 +153,34 @@ fun scanOrtResult(
 
     val endTime = Instant.now()
 
-    val filteredScannerOptions = packageScanner.scannerConfig.options?.let { options ->
-        options[packageScanner.scannerName]?.let { scannerOptions ->
-            val filteredScannerOptions = packageScanner.filterOptionsForResult(scannerOptions)
-            options.toMutableMap().apply { put(packageScanner.scannerName, filteredScannerOptions) }
-        }
-    } ?: packageScanner.scannerConfig.options
+    // Note: Currently, each scanner gets its own reference to the whole scanner configuration, which includes the
+    // options for all scanners.
+    check(packageScanner.scannerConfig === projectScanner.scannerConfig) {
+        "The package and project scanners need to refer to the same global scanner configuration."
+    }
 
-    val configWithFilteredOptions = packageScanner.scannerConfig.copy(options = filteredScannerOptions)
-    val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
+    val filteredScannerOptions = mutableMapOf<String, ScannerOptions>()
+
+    packageScanner.scannerConfig.options?.get(packageScanner.scannerName)?.let { packageScannerOptions ->
+        val filteredPackageScannerOptions = packageScanner.filterOptionsForResult(packageScannerOptions)
+        filteredScannerOptions[packageScanner.scannerName] = filteredPackageScannerOptions
+    }
+
+    if (projectScanner != packageScanner) {
+        projectScanner.scannerConfig.options?.get(projectScanner.scannerName)?.let { projectScannerOptions ->
+            val filteredProjectScannerOptions = projectScanner.filterOptionsForResult(projectScannerOptions)
+            filteredScannerOptions[projectScanner.scannerName] = filteredProjectScannerOptions
+        }
+    }
+
+    // Arbitrarily choose the package scanner to copy from, as the project scanner has the same configuration, and only
+    // include options of used scanners into the scanner run.
+    val configWithFilteredOptions = packageScanner.scannerConfig.copy(
+        options = filteredScannerOptions.takeUnless { it.isEmpty() }
+    )
 
     // Note: This overwrites any existing ScannerRun from the input file.
+    val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
     return ortResult.copy(scanner = scannerRun)
 }
 
