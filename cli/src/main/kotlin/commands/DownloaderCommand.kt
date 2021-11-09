@@ -36,6 +36,7 @@ import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.cli.DataEntity
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
@@ -164,21 +165,6 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     "if '--project-url' is also specified."
         ).switch("--archive-all" to ArchiveMode.BUNDLE)
     ).single().default(ArchiveMode.NONE)
-
-    /**
-     * The choice of data entities to download.
-     */
-    enum class DataEntity {
-        /**
-         * Identifier for package entities.
-         */
-        PACKAGES,
-
-        /**
-         * Identifier for project entities.
-         */
-        PROJECTS
-    }
 
     private val entities by option(
         "--entities", "-e",
