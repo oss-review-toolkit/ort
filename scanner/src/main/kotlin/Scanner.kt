@@ -43,6 +43,17 @@ import org.ossreviewtoolkit.utils.core.log
 
 const val TOOL_NAME = "scanner"
 
+private fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): Set<Package> =
+    packages.takeUnless { scanner.scannerConfig.skipConcluded }
+        // Remove all packages that have a concluded license and authors set.
+        ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+            if (skip.isNotEmpty()) {
+                scanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
+            }
+
+            keep.toSet()
+        }
+
 /**
  * Use the [scanner] to scan the [Project]s and [Package]s specified in the [ortResult]. Scan results are stored in the
  * [outputDirectory]. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
@@ -88,17 +99,6 @@ fun scanOrtResult(
     val packages = ortResult.getPackages(skipExcluded)
         .filter { it.pkg.id !in projectPackageIds }
         .map { it.pkg }
-
-    fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): Set<Package> =
-        packages.takeUnless { scanner.scannerConfig.skipConcluded }
-            // Remove all packages that have a concluded license and authors set.
-            ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
-                if (skip.isNotEmpty()) {
-                    scanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
-                }
-
-                keep.toSet()
-            }
 
     val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
     val filteredPackages = removeConcludedPackages(packages.toSet(), packageScanner)
