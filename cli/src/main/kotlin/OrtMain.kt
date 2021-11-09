@@ -58,6 +58,21 @@ import org.ossreviewtoolkit.utils.core.ortDataDirectory
 import org.ossreviewtoolkit.utils.core.printStackTrace
 
 /**
+ * The choice of data entities to process.
+ */
+enum class DataEntity {
+    /**
+     * Identifier for package entities.
+     */
+    PACKAGES,
+
+    /**
+     * Identifier for project entities.
+     */
+    PROJECTS
+}
+
+/**
  * Helper class for mutually exclusive command line options of different types.
  */
 sealed class GroupTypes {
