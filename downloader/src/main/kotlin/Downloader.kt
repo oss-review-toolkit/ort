@@ -176,6 +176,7 @@ class Downloader(private val config: DownloaderConfiguration) {
      * is `true`, any nested repositories (like Git submodules or Mercurial subrepositories) are downloaded, too. A
      * [Provenance] is returned on success or a [DownloadException] is thrown in case of failure.
      */
+    @JvmOverloads
     fun downloadFromVcs(
         pkg: Package,
         outputDirectory: File,

@@ -48,6 +48,7 @@ const val TOOL_NAME = "scanner"
  * [outputDirectory]. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
  * results as an [OrtResult].
  */
+@JvmOverloads
 fun scanOrtResult(
     scanner: Scanner,
     ortResult: OrtResult,
@@ -60,6 +61,7 @@ fun scanOrtResult(
  * respectively. Scan results are stored in the [outputDirectory]. If [skipExcluded] is true, packages for which
  * excludes are defined are not scanned. Return scan results as an [OrtResult].
  */
+@JvmOverloads
 fun scanOrtResult(
     scanner: Scanner,
     projectScanner: Scanner,

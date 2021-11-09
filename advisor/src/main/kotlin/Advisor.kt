@@ -52,6 +52,7 @@ class Advisor(
         val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.providerName } }
     }
 
+    @JvmOverloads
     fun retrieveFindings(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
 
