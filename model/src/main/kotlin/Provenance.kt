@@ -75,9 +75,9 @@ data class RepositoryProvenance(
     }
 
     /**
-     * Return true if this provenance matches the VCS information of the [package][pkg].
+     * Return true if this provenance matches the processed VCS information of the [package][pkg].
      */
-    override fun matches(pkg: Package): Boolean = vcsInfo == pkg.vcs || vcsInfo == pkg.vcsProcessed
+    override fun matches(pkg: Package): Boolean = vcsInfo == pkg.vcsProcessed
 }
 
 /**
