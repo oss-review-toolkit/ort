@@ -48,7 +48,9 @@ class OrtPackageNaming : Rule() {
     override fun visitPackageDirective(directive: KtPackageDirective) {
         super.visitPackageDirective(directive)
 
-        if (directive.qualifiedName.isEmpty()) return
+        // Exclusion of packages starting with "test." is required for OrtLogTestExtension used by LoggerTest, which
+        // simulates an ORT extension class in a different package.
+        if (directive.qualifiedName.isEmpty() || directive.qualifiedName.startsWith("test.")) return
 
         val path = directive.containingKtFile.toFilePath().relativePath.toString()
         if (!path.contains(pathPattern)) return
