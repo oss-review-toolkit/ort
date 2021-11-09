@@ -49,6 +49,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val repositoryConfiguration: RepositoryConfiguration
     )
 
+    @JvmOverloads
     fun findManagedFiles(
         absoluteProjectPath: File,
         packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
@@ -88,6 +89,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         return ManagedFileInfo(absoluteProjectPath, managedFiles, repositoryConfiguration)
     }
 
+    @JvmOverloads
     fun analyze(
         info: ManagedFileInfo,
         curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY
