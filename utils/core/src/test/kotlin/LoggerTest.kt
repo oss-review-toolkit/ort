@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.core
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 
@@ -29,6 +30,8 @@ import io.mockk.verify
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.kotlin.KotlinLogger
+
+import test.other.OrtLogTestExtension
 
 private class DummyClass
 private class OtherClass
@@ -55,6 +58,12 @@ class LoggerTest : WordSpec({
             shouldThrow<IllegalArgumentException> {
                 String().log.info { "Hello from a String." }
             }
+        }
+
+        "be available in non-ORT classes extending ORT base classes" {
+            val command = OrtLogTestExtension()
+
+            command.command() shouldBe "success"
         }
     }
 

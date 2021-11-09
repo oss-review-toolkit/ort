@@ -41,12 +41,26 @@ val loggerOfClass = ConcurrentHashMap<Any, KotlinLogger>()
 val Any.log: KotlinLogger
     inline get() = loggerOfClass.getOrPut(this::class.java) {
         this::class.qualifiedName?.let { name ->
-            require(name.startsWith("org.ossreviewtoolkit.")) {
+            require(isOrtClass(this::class.java)) {
                 "Logging is only allowed on ORT classes, but '$name' is used."
             }
         }
 
         loggerOf(this::class.java)
+    }
+
+/** The base package of ORT. This is used to determine whether a specific class belongs to ORT. */
+const val ORT_PACKAGE = "org.ossreviewtoolkit."
+
+/**
+ * Check whether [cls] represents a class or interface that belongs to ORT. This is the case if [cls] belongs to a
+ * package in the ORT namespace (as defined by [ORT_PACKAGE]) or extends an ORT class or interface.
+ */
+fun isOrtClass(cls: Class<*>?): Boolean =
+    when {
+        cls == null -> false
+        cls.name.startsWith(ORT_PACKAGE) -> true
+        else -> cls.interfaces.any { it.name.startsWith(ORT_PACKAGE) } || isOrtClass(cls.superclass)
     }
 
 val KotlinLogger.statements by lazy { mutableSetOf<Triple<Any, Level, String>>() }
