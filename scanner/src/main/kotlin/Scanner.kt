@@ -68,23 +68,28 @@ fun scanOrtResult(
 ) = scanOrtResult(scanner, scanner, ortResult, outputDirectory, skipExcluded)
 
 /**
- * Use the [packageScanner] and [projectScanner] to scan the [Package]s and [Project]s specified in the [ortResult],
- * respectively. Both scanners are expected to refer to the same global scanner configuration. Scan results are stored
- * in the [outputDirectory]. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return
- * scan results as an [OrtResult].
+ * Use the [packageScanner] and / or [projectScanner] to scan the [Package]s and [Project]s specified in the
+ * [ortResult]. If specified, scanners are expected to refer to the same global scanner configuration. If a scanner is
+ * null, scanning of the respective entities is skipped. Scan results are stored in the [outputDirectory]. If
+ * [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan results as an
+ * [OrtResult].
  */
 @JvmOverloads
 fun scanOrtResult(
-    packageScanner: Scanner,
-    projectScanner: Scanner,
+    packageScanner: Scanner?,
+    projectScanner: Scanner?,
     ortResult: OrtResult,
     outputDirectory: File,
     skipExcluded: Boolean = false
 ): OrtResult {
+    require(packageScanner != null || projectScanner != null) {
+        "At least one scanner must be specified."
+    }
+
     val startTime = Instant.now()
 
     if (ortResult.analyzer == null) {
-        packageScanner.log.warn {
+        Scanner.log.warn {
             "Cannot run the scanner as the provided ORT result does not contain an analyzer result. " +
                     "No result will be added."
         }
@@ -101,28 +106,28 @@ fun scanOrtResult(
         .filter { it.pkg.id !in projectPackageIds }
         .map { it.pkg }
 
-    val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
-    val filteredPackages = removeConcludedPackages(packages.toSet(), packageScanner)
-
     val scanResults = runBlocking {
-        // Scan the projects from the ORT result.
         val deferredProjectScan = async {
-            if (filteredProjectPackages.isNotEmpty()) {
-                projectScanner.scanPackages(filteredProjectPackages, outputDirectory, ortResult.labels)
+            if (projectScanner == null) emptyMap()
+            else {
+                // Scan the projects from the ORT result.
+                val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
+
+                if (filteredProjectPackages.isEmpty()) emptyMap()
+                else projectScanner.scanPackages(filteredProjectPackages, outputDirectory, ortResult.labels)
                     .mapKeys { it.key.id }
-            } else {
-                projectScanner.log.info { "No projects to scan." }
-                emptyMap()
             }
         }
 
-        // Scan the packages from the ORT result.
         val deferredPackageScan = async {
-            if (filteredPackages.isNotEmpty()) {
-                packageScanner.scanPackages(filteredPackages, outputDirectory, ortResult.labels).mapKeys { it.key.id }
-            } else {
-                packageScanner.log.info { "No packages to scan." }
-                emptyMap()
+            if (packageScanner == null) emptyMap()
+            else {
+                // Scan the packages from the ORT result.
+                val filteredPackages = removeConcludedPackages(packages.toSet(), packageScanner)
+
+                if (filteredPackages.isEmpty()) emptyMap()
+                else packageScanner.scanPackages(filteredPackages, outputDirectory, ortResult.labels)
+                    .mapKeys { it.key.id }
             }
         }
 
@@ -155,27 +160,29 @@ fun scanOrtResult(
 
     // Note: Currently, each scanner gets its own reference to the whole scanner configuration, which includes the
     // options for all scanners.
-    check(packageScanner.scannerConfig === projectScanner.scannerConfig) {
+    check(packageScanner?.scannerConfig === projectScanner?.scannerConfig) {
         "The package and project scanners need to refer to the same global scanner configuration."
     }
 
     val filteredScannerOptions = mutableMapOf<String, ScannerOptions>()
 
-    packageScanner.scannerConfig.options?.get(packageScanner.scannerName)?.let { packageScannerOptions ->
+    packageScanner?.scannerConfig?.options?.get(packageScanner.scannerName)?.let { packageScannerOptions ->
         val filteredPackageScannerOptions = packageScanner.filterOptionsForResult(packageScannerOptions)
         filteredScannerOptions[packageScanner.scannerName] = filteredPackageScannerOptions
     }
 
     if (projectScanner != packageScanner) {
-        projectScanner.scannerConfig.options?.get(projectScanner.scannerName)?.let { projectScannerOptions ->
+        projectScanner?.scannerConfig?.options?.get(projectScanner.scannerName)?.let { projectScannerOptions ->
             val filteredProjectScannerOptions = projectScanner.filterOptionsForResult(projectScannerOptions)
             filteredScannerOptions[projectScanner.scannerName] = filteredProjectScannerOptions
         }
     }
 
-    // Arbitrarily choose the package scanner to copy from, as the project scanner has the same configuration, and only
-    // include options of used scanners into the scanner run.
-    val configWithFilteredOptions = packageScanner.scannerConfig.copy(
+    // Only include options of used scanners into the scanner run.
+    val scannerConfig = packageScanner?.scannerConfig ?: packageScanner?.scannerConfig
+    checkNotNull(scannerConfig)
+
+    val configWithFilteredOptions = scannerConfig.copy(
         options = filteredScannerOptions.takeUnless { it.isEmpty() }
     )
 

@@ -43,6 +43,7 @@ import java.io.File
 
 import kotlinx.coroutines.runBlocking
 
+import org.ossreviewtoolkit.cli.DataEntity
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.SeverityStats
@@ -148,6 +149,12 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 "scanned with the same scanner as specified by '--scanner'."
     ).convertToScanner()
 
+    private val entities by option(
+        "--entities", "-e",
+        help = "The data entities from the ORT file's analyzer result to limit scans to. If not specified, all data " +
+                "entities are scanned."
+    ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
+
     private val skipExcluded by option(
         "--skip-excluded",
         help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
@@ -237,20 +244,31 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
 
         // Configure the package and project scanners.
-        val scanner = scannerFactory.create(config.scanner, config.downloader)
-        val projectScanner = projectScannerFactory?.create(config.scanner, config.downloader) ?: scanner
+        val defaultScanner = scannerFactory.create(config.scanner, config.downloader)
+        val packageScanner = defaultScanner.takeIf { DataEntity.PACKAGES in entities }
+        val projectScanner = (projectScannerFactory?.create(config.scanner, config.downloader) ?: defaultScanner)
+            .takeIf { DataEntity.PROJECTS in entities }
 
-        if (projectScanner != scanner) {
-            println("Using project scanner '${projectScanner.scannerName}'.")
-            println("Using package scanner '${scanner.scannerName}'.")
+        if (projectScanner != packageScanner) {
+            if (projectScanner != null) {
+                println("Using project scanner '${projectScanner.scannerName}'.")
+            } else {
+                println("Projects will not be scanned.")
+            }
+
+            if (packageScanner != null) {
+                println("Using package scanner '${packageScanner.scannerName}'.")
+            } else {
+                println("Packages will not be scanned.")
+            }
         } else {
-            println("Using scanner '${scanner.scannerName}'.")
+            println("Using scanner '${defaultScanner.scannerName}'.")
         }
 
         // Perform the scan.
         return if (input.isFile) {
             val ortResult = readOrtResult(input)
-            scanOrtResult(scanner, projectScanner, ortResult, nativeOutputDir, skipExcluded)
+            scanOrtResult(packageScanner, projectScanner, ortResult, nativeOutputDir, skipExcluded)
         } else {
             require(projectScanner is LocalScanner) {
                 "To scan local files the chosen project scanner must be a local scanner."
