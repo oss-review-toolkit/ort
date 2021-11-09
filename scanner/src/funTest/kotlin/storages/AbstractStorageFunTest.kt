@@ -70,15 +70,15 @@ abstract class AbstractStorageFunTest : WordSpec() {
     private val pkg1 = Package.EMPTY.copy(
         id = id1,
         sourceArtifact = sourceArtifact1,
-        vcs = vcs1,
-        vcsProcessed = vcs1.normalize()
+        vcs = VcsInfo.EMPTY,
+        vcsProcessed = vcs1
     )
 
     private val pkg2 = Package.EMPTY.copy(
         id = id2,
         sourceArtifact = sourceArtifact2,
-        vcs = vcs2,
-        vcsProcessed = vcs2.normalize()
+        vcs = VcsInfo.EMPTY,
+        vcsProcessed = vcs2
     )
 
     private val pkgWithoutRevision = pkg1.copy(vcs = vcsWithoutRevision, vcsProcessed = vcsWithoutRevision.normalize())
@@ -312,6 +312,23 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
                 readResult.shouldBeSuccess()
                 readResult.result should containExactly(scanResult)
+            }
+
+            "not find a scan result if vcs matches (but not vcsProcessed)" {
+                val pkg = Package.EMPTY.copy(
+                    id = id1,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = vcs1,
+                    vcsProcessed = VcsInfo.EMPTY
+                )
+                val scanResult = ScanResult(provenanceWithVcsInfo1, scannerDetails1, scanSummaryWithFiles)
+
+                storage.add(id1, scanResult).shouldBeSuccess()
+
+                val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
+
+                readResult.shouldBeSuccess()
+                readResult.result should beEmpty()
             }
         }
 
