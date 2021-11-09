@@ -22,7 +22,7 @@ project:
       dependencies:
       - id: "PyPI::click:8.0.3"
         dependencies:
-        - id: "PyPI::importlib-metadata:4.8.1"
+        - id: "PyPI::importlib-metadata:4.8.2"
           dependencies:
           - id: "PyPI::typing-extensions:3.10.0.2"
           - id: "PyPI::zipp:3.6.0"
@@ -170,8 +170,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::importlib-metadata:4.8.1"
-  purl: "pkg:pypi/importlib-metadata@4.8.1"
+- id: "PyPI::importlib-metadata:4.8.2"
+  purl: "pkg:pypi/importlib-metadata@4.8.2"
   authors:
   - "Jason R. Coombs"
   declared_licenses:
@@ -183,14 +183,14 @@ packages:
   description: "Read metadata from Python packages"
   homepage_url: "https://github.com/python/importlib_metadata"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/71/c2/cb1855f0b2a0ae9ccc9b69f150a7aebd4a8d815bd951e74621c4154c52a8/importlib_metadata-4.8.1-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/c4/1f/e2238896149df09953efcc53bdcc7d23597d6c53e428c30e572eda5ec6eb/importlib_metadata-4.8.2-py3-none-any.whl"
     hash:
-      value: "542a9a2b61f9f61122b95d1dac782ba2"
+      value: "001461d2d00d0bee10593ffb53a373c0"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/f0/70/ca3dd67cdd368b957e73a8156f7e1a10339f9813e314cb8b4549526070da/importlib_metadata-4.8.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/2e/6d/4508b1922b1610f6646fd95681fa1b0c092df35ec14018218f4638b7342a/importlib_metadata-4.8.2.tar.gz"
     hash:
-      value: "5b944bce3fccaf848f0cba7a07f850a1"
+      value: "a605ba6ec315bc1324fd6b7210fe7c12"
       algorithm: "MD5"
   vcs:
     type: ""
