@@ -236,13 +236,15 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
 
         // Configure the package and project scanners.
-        val scanner = scannerFactory.create(config.scanner, config.downloader).also {
-            println("Using scanner '${it.scannerName}'.")
-        }
+        val scanner = scannerFactory.create(config.scanner, config.downloader)
+        val projectScanner = projectScannerFactory?.create(config.scanner, config.downloader) ?: scanner
 
-        val projectScanner = projectScannerFactory?.create(config.scanner, config.downloader)?.also {
-            println("Using project scanner '${it.scannerName}'.")
-        } ?: scanner
+        if (projectScanner != scanner) {
+            println("Using project scanner '${projectScanner.scannerName}'.")
+            println("Using package scanner '${scanner.scannerName}'.")
+        } else {
+            println("Using scanner '${scanner.scannerName}'.")
+        }
 
         // Perform the scan.
         return if (input.isFile) {
