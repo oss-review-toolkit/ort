@@ -57,13 +57,13 @@ fun scanOrtResult(
 ) = scanOrtResult(scanner, scanner, ortResult, outputDirectory, skipExcluded)
 
 /**
- * Use the [scanner] and [projectScanner] to scan the [Project]s and [Package]s specified in the [ortResult],
+ * Use the [packageScanner] and [projectScanner] to scan the [Package]s and [Project]s specified in the [ortResult],
  * respectively. Scan results are stored in the [outputDirectory]. If [skipExcluded] is true, packages for which
  * excludes are defined are not scanned. Return scan results as an [OrtResult].
  */
 @JvmOverloads
 fun scanOrtResult(
-    scanner: Scanner,
+    packageScanner: Scanner,
     projectScanner: Scanner,
     ortResult: OrtResult,
     outputDirectory: File,
@@ -72,7 +72,7 @@ fun scanOrtResult(
     val startTime = Instant.now()
 
     if (ortResult.analyzer == null) {
-        scanner.log.warn {
+        packageScanner.log.warn {
             "Cannot run the scanner as the provided ORT result does not contain an analyzer result. " +
                     "No result will be added."
         }
@@ -101,7 +101,7 @@ fun scanOrtResult(
             }
 
     val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
-    val filteredPackages = removeConcludedPackages(packages.toSet(), scanner)
+    val filteredPackages = removeConcludedPackages(packages.toSet(), packageScanner)
 
     val scanResults = runBlocking {
         // Scan the projects from the ORT result.
@@ -118,9 +118,9 @@ fun scanOrtResult(
         // Scan the packages from the ORT result.
         val deferredPackageScan = async {
             if (filteredPackages.isNotEmpty()) {
-                scanner.scanPackages(filteredPackages, outputDirectory, ortResult.labels).mapKeys { it.key.id }
+                packageScanner.scanPackages(filteredPackages, outputDirectory, ortResult.labels).mapKeys { it.key.id }
             } else {
-                scanner.log.info { "No packages to scan." }
+                packageScanner.log.info { "No packages to scan." }
                 emptyMap()
             }
         }
@@ -152,14 +152,14 @@ fun scanOrtResult(
 
     val endTime = Instant.now()
 
-    val filteredScannerOptions = scanner.scannerConfig.options?.let { options ->
-        options[scanner.scannerName]?.let { scannerOptions ->
-            val filteredScannerOptions = scanner.filterOptionsForResult(scannerOptions)
-            options.toMutableMap().apply { put(scanner.scannerName, filteredScannerOptions) }
+    val filteredScannerOptions = packageScanner.scannerConfig.options?.let { options ->
+        options[packageScanner.scannerName]?.let { scannerOptions ->
+            val filteredScannerOptions = packageScanner.filterOptionsForResult(scannerOptions)
+            options.toMutableMap().apply { put(packageScanner.scannerName, filteredScannerOptions) }
         }
-    } ?: scanner.scannerConfig.options
+    } ?: packageScanner.scannerConfig.options
 
-    val configWithFilteredOptions = scanner.scannerConfig.copy(options = filteredScannerOptions)
+    val configWithFilteredOptions = packageScanner.scannerConfig.copy(options = filteredScannerOptions)
     val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
 
     // Note: This overwrites any existing ScannerRun from the input file.
