@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.utils.spdx
+package org.ossreviewtoolkit.utils.spdx.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException
@@ -27,7 +27,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 
 private fun format(value: String, mapper: ObjectMapper): String =
     mapper.readTree(value).let { node ->
@@ -39,7 +39,7 @@ private fun formatYaml(yaml: String): String = format(yaml, SpdxModelMapper.yaml
 private fun formatJson(json: String): String = format(json, SpdxModelMapper.jsonMapper)
 
 private fun readResourceAsText(resourceFile: String): String =
-    SpdxDocumentModelTest::class.java.getResource(resourceFile).readText()
+    SpdxDocumentTest::class.java.getResource(resourceFile).readText()
 
 /**
  * This test uses the following test assets copied from the SPDX 2.2.1 specification examples.
@@ -50,7 +50,7 @@ private fun readResourceAsText(resourceFile: String): String =
  * The "*-no-ranges.spdx.*" resource files have the "ranges" property removed, which is actually broken in the
  * specification and impossible to implement.
  */
-class SpdxDocumentModelTest : WordSpec({
+class SpdxDocumentTest : WordSpec({
     "The official YAML example from the SPDX specification version 2.2" should {
         "be deserializable" {
             val yaml = readResourceAsText("/spdx-spec-examples/SPDXYAMLExample-2.2.spdx.yaml")
