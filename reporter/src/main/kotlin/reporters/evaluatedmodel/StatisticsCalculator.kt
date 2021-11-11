@@ -42,6 +42,7 @@ internal class StatisticsCalculator {
         resolutionProvider: ResolutionProvider,
         licenseInfoResolver: LicenseInfoResolver
     ) = Statistics(
+        repositoryConfiguration = getRepositoryConfigurationStatistics(ortResult),
         openIssues = getOpenIssues(ortResult, resolutionProvider),
         openRuleViolations = getOpenRuleViolations(ortResult, resolutionProvider),
         dependencyTree = DependencyTreeStatistics(
@@ -129,6 +130,21 @@ internal class StatisticsCalculator {
         return LicenseStatistics(
             declared = declaredLicenses,
             detected = detectedLicenses
+        )
+    }
+
+    private fun getRepositoryConfigurationStatistics(ortResult: OrtResult): RepositoryConfigurationStatistics {
+        val config = ortResult.repository.config
+
+        return RepositoryConfigurationStatistics(
+            pathExcludes = config.excludes.paths.size,
+            scopeExclude = config.excludes.scopes.size,
+            licenseChoices = config.licenseChoices.let {
+                it.packageLicenseChoices.size + it.repositoryLicenseChoices.size
+            },
+            licenseFindingCurations = config.curations.licenseFindings.size,
+            ruleViolationResolutions = config.resolutions.ruleViolations.size,
+            issueResolutions = config.resolutions.issues.size
         )
     }
 }
