@@ -94,9 +94,6 @@ class FossId internal constructor(
         @JvmStatic
         private val WAIT_INTERVAL_MS = 10000L
 
-        @JvmStatic
-        private val WAIT_REPETITION = 360
-
         /**
          * The scan states for which a scan can be triggered.
          */
@@ -572,7 +569,7 @@ class FossId internal constructor(
      * Wait until the repository of a scan with [scanCode] has been downloaded.
      */
     private suspend fun waitDownloadComplete(scanCode: String) {
-        val result = wait(WAIT_INTERVAL_MS * WAIT_REPETITION, WAIT_INTERVAL_MS) {
+        val result = wait(config.timeout * 60000L, WAIT_INTERVAL_MS) {
             FossId.log.info { "Checking download status for scan '$scanCode'." }
 
             val response = service.checkDownloadStatus(config.user, config.apiKey, scanCode)
@@ -600,7 +597,7 @@ class FossId internal constructor(
      * Wait until a scan with [scanCode] has completed.
      */
     private suspend fun waitScanComplete(scanCode: String) {
-        val result = wait(WAIT_INTERVAL_MS * WAIT_REPETITION, WAIT_INTERVAL_MS) {
+        val result = wait(config.timeout * 60000L, WAIT_INTERVAL_MS) {
             FossId.log.info { "Waiting for scan '$scanCode' to complete." }
 
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)

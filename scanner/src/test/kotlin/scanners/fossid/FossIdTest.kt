@@ -642,7 +642,7 @@ private fun createConfig(
     val config = FossIdConfig(
         "https://www.example.org/fossid",
         API_KEY, USER, waitForResult, packageNamespaceFilter, packageAuthorsFilter, addAuthenticationToUrl = false,
-        deltaScans, deltaScanLimit, emptyMap()
+        deltaScans, deltaScanLimit, 60, emptyMap()
     )
 
     val service = createServiceMock()
