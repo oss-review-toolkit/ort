@@ -80,6 +80,9 @@ internal data class FossIdConfig(
     /** A maximum number of delta scans to keep for a single repository. */
     val deltaScanLimit: Int,
 
+    /** Timeout in minutes for communication with FossID. */
+    val timeout: Int,
+
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
 ) {
@@ -117,10 +120,19 @@ internal data class FossIdConfig(
         /** Name of the configuration property that limits the number of delta scans. */
         private const val DELTA_SCAN_LIMIT_PROPERTY = "deltaScanLimit"
 
+        /** Name of the configuration property defining the timeout in minutes for communication with FossID. */
+        private const val TIMEOUT = "timeout"
+
         /**
          * The scanner options beginning with this prefix will be used to parametrize project and scan names.
          */
         private const val NAMING_CONVENTION_VARIABLE_PREFIX = "namingVariable"
+
+        /**
+         * Default timeout in minutes for communication with FossID.
+         */
+        @JvmStatic
+        private val DEFAULT_TIMEOUT = 60
 
         fun create(scannerConfig: ScannerConfiguration): FossIdConfig {
             val fossIdScannerOptions = scannerConfig.options?.get("FossId")
@@ -140,6 +152,9 @@ internal data class FossIdConfig(
             val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
 
             val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
+
+            val timeout = fossIdScannerOptions[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
+
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
             }
@@ -156,6 +171,7 @@ internal data class FossIdConfig(
                 addAuthenticationToUrl,
                 deltaScans,
                 deltaScanLimit,
+                timeout,
                 fossIdScannerOptions
             )
         }

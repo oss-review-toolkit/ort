@@ -52,6 +52,7 @@ class FossIdConfigTest : WordSpec({
                 "waitForResult" to "false",
                 "deltaScans" to "true",
                 "deltaScanLimit" to "42",
+                "timeout" to "300",
                 "addAuthenticationToUrl" to "false"
             )
             val scannerConfig = options.toScannerConfig()
@@ -68,6 +69,7 @@ class FossIdConfigTest : WordSpec({
                 deltaScans = true,
                 deltaScanLimit = 42,
                 addAuthenticationToUrl = false,
+                timeout = 300,
                 options = options
             )
         }
@@ -92,6 +94,7 @@ class FossIdConfigTest : WordSpec({
                 deltaScans = false,
                 deltaScanLimit = Int.MAX_VALUE,
                 addAuthenticationToUrl = false,
+                timeout = 60,
                 options = options
             )
         }
