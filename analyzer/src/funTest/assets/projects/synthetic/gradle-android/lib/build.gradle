@@ -45,3 +45,5 @@ configurations {
     // a lot of transitive dependencies and is not required to test the variant-aware dependency resolution.
     lintClassPath.exclude module: 'lint-gradle'
 }
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])

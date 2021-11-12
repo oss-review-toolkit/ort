@@ -14,3 +14,5 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.7.2"))
     testImplementation("org.junit.platform:junit-platform-commons")
 }
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])

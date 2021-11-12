@@ -18,3 +18,5 @@ allprojects {
         mavenCentral()
     }
 }
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])
