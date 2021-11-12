@@ -130,7 +130,6 @@ class Gradle(
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val gradleSystemProperties = mutableListOf<Pair<String, String>>()
         val gradleProperties = mutableListOf<Pair<String, String>>()
 
         val projectDir = definitionFile.parentFile
@@ -143,36 +142,14 @@ class Gradle(
         // Do not reset the root project directory for subprojects.
         if (isRootProject || isIndependentProject) rootProjectDir = projectDir
 
-        // Usually, the Gradle wrapper's Java code handles applying system properties defined in a Gradle properties
-        // file. But as we use the Gradle Tooling API instead of the wrapper to start the build, we need to manually
-        // load any system properties from a Gradle properties file and set them in the process that uses the Tooling
-        // API. A typical use case for this is to apply proxy settings so that the Gradle distribution used by the build
-        // can be downloaded behind a proxy, see https://github.com/gradle/gradle/issues/6825#issuecomment-502720562.
-        // For simplicity, limit the search for system properties to the current user's Gradle properties file for now.
         val userPropertiesFile = GRADLE_USER_HOME.resolve("gradle.properties")
         if (userPropertiesFile.isFile) {
             userPropertiesFile.inputStream().use {
                 val properties = Properties().apply { load(it) }
 
-                properties.mapNotNullTo(gradleSystemProperties) { (key, value) ->
-                    val systemPropKey = (key as String).removePrefix("systemProp.")
-                    (systemPropKey to (value as String)).takeIf { systemPropKey != key }
-                }
-
                 properties.mapNotNullTo(gradleProperties) { (key, value) ->
                     ((key as String) to (value as String)).takeUnless { key.startsWith("systemProp.") }
                 }
-            }
-
-            log.debug {
-                "Will apply the following system properties defined in file '$userPropertiesFile':" +
-                        gradleSystemProperties.joinToString(separator = "\n\t", prefix = "\n\t") {
-                            "${it.first} = ${it.second}"
-                        }
-            }
-        } else {
-            log.debug {
-                "Not applying any system properties as no '$userPropertiesFile' file was found."
             }
         }
 
@@ -201,7 +178,7 @@ class Gradle(
 
         val gradleConnection = gradleConnector.forProjectDirectory(projectDir).connect()
 
-        return temporaryProperties("user.dir" to rootProjectDir.path, *gradleSystemProperties.toTypedArray()) {
+        return temporaryProperties("user.dir" to rootProjectDir.path) {
             gradleConnection.use { connection ->
                 val initScriptFile = File.createTempFile("init", ".gradle")
                 initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
