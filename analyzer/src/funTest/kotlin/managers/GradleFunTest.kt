@@ -50,8 +50,8 @@ class GradleFunTest : StringSpec() {
     private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 
     override fun afterSpec(spec: Spec) {
-        // Reset the Gradle version in the test project to clean up after the tests.
-        Git().run(projectDir, "checkout", ".")
+        // Reset the Gradle wrapper files to the committed state.
+        Git().run(projectDir, "checkout", "gradle/", "gradlew*")
     }
 
     init {
