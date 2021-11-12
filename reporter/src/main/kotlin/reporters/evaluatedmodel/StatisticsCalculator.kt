@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 
 /**
- * This class calculates [Statistics] for a given [OrtResult] and applicable [IssueResolution]s and applicable
+ * This class calculates [Statistics] for a given [OrtResult] and the applicable [IssueResolution]s and
  * [RuleViolationResolution]s.
  */
 internal class StatisticsCalculator {
