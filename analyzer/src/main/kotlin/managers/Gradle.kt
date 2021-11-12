@@ -123,12 +123,25 @@ class Gradle(
     private val dependencyHandler = GradleDependencyHandler(managerName, maven)
     private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
+    // The path to the root project. In a single-project, just points to the project path.
+    private lateinit var rootProjectDir: File
+
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val gradleSystemProperties = mutableListOf<Pair<String, String>>()
         val gradleProperties = mutableListOf<Pair<String, String>>()
+
+        val projectDir = definitionFile.parentFile
+        val isRootProject = GRADLE_SETTINGS_FILES.any { projectDir.resolve(it).isFile }
+
+        // TODO: Improve the logic to work for independent projects that are stored in a directory below another
+        //       independent project.
+        val isIndependentProject = !this::rootProjectDir.isInitialized || !projectDir.startsWith(rootProjectDir)
+
+        // Do not reset the root project directory for subprojects.
+        if (isRootProject || isIndependentProject) rootProjectDir = projectDir
 
         // Usually, the Gradle wrapper's Java code handles applying system properties defined in a Gradle properties
         // file. But as we use the Gradle Tooling API instead of the wrapper to start the build, we need to manually
@@ -186,10 +199,9 @@ class Gradle(
             jvmArgs += "$JAVA_MAX_HEAP_SIZE_OPTION$JAVA_MAX_HEAP_SIZE_VALUE"
         }
 
-        val projectDir = definitionFile.parentFile
         val gradleConnection = gradleConnector.forProjectDirectory(projectDir).connect()
 
-        return temporaryProperties(*gradleSystemProperties.toTypedArray()) {
+        return temporaryProperties("user.dir" to rootProjectDir.path, *gradleSystemProperties.toTypedArray()) {
             gradleConnection.use { connection ->
                 val initScriptFile = File.createTempFile("init", ".gradle")
                 initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
