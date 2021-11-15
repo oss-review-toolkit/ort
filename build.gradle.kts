@@ -282,6 +282,7 @@ subprojects {
             val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
 
             listOf(
+                "java.io.tmpdir",
                 "kotest.assertions.multi-line-diff",
                 "kotest.tags.include",
                 "kotest.tags.exclude"
