@@ -57,6 +57,9 @@ import org.ossreviewtoolkit.utils.core.log
 
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 
+private val GRADLE_BUILD_FILES = listOf("build.gradle", "build.gradle.kts")
+private val GRADLE_SETTINGS_FILES = listOf("settings.gradle", "settings.gradle.kts")
+
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
  */
@@ -71,10 +74,7 @@ class Gradle(
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
         // "build" file.
-        override val globsForDefinitionFiles = listOf(
-            "build.gradle", "build.gradle.kts",
-            "settings.gradle", "settings.gradle.kts"
-        )
+        override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
         override fun create(
             analysisRoot: File,
