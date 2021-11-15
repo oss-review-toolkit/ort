@@ -133,9 +133,9 @@ class Gradle(
         // API. A typical use case for this is to apply proxy settings so that the Gradle distribution used by the build
         // can be downloaded behind a proxy, see https://github.com/gradle/gradle/issues/6825#issuecomment-502720562.
         // For simplicity, limit the search for system properties to the current user's Gradle properties file for now.
-        val gradlePropertiesFile = GRADLE_USER_HOME.resolve("gradle.properties")
-        if (gradlePropertiesFile.isFile) {
-            gradlePropertiesFile.inputStream().use {
+        val userPropertiesFile = GRADLE_USER_HOME.resolve("gradle.properties")
+        if (userPropertiesFile.isFile) {
+            userPropertiesFile.inputStream().use {
                 val properties = Properties().apply { load(it) }
 
                 properties.mapNotNullTo(gradleSystemProperties) { (key, value) ->
@@ -149,14 +149,14 @@ class Gradle(
             }
 
             log.debug {
-                "Will apply the following system properties defined in file '$gradlePropertiesFile':" +
+                "Will apply the following system properties defined in file '$userPropertiesFile':" +
                         gradleSystemProperties.joinToString(separator = "\n\t", prefix = "\n\t") {
                             "${it.first} = ${it.second}"
                         }
             }
         } else {
             log.debug {
-                "Not applying any system properties as no '$gradlePropertiesFile' file was found."
+                "Not applying any system properties as no '$userPropertiesFile' file was found."
             }
         }
 
