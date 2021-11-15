@@ -24,7 +24,7 @@ project:
         dependencies:
         - id: "PyPI::importlib-metadata:4.8.2"
           dependencies:
-          - id: "PyPI::typing-extensions:3.10.0.2"
+          - id: "PyPI::typing-extensions:4.0.0"
           - id: "PyPI::zipp:3.6.0"
       - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
@@ -304,40 +304,36 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::typing-extensions:3.10.0.2"
-  purl: "pkg:pypi/typing-extensions@3.10.0.2"
-  authors:
-  - "Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee"
+- id: "PyPI::typing-extensions:4.0.0"
+  purl: "pkg:pypi/typing-extensions@4.0.0"
   declared_licenses:
-  - "PSF"
   - "Python Software Foundation License"
   declared_licenses_processed:
     spdx_expression: "PSF-2.0"
     mapped:
-      PSF: "PSF-2.0"
       Python Software Foundation License: "PSF-2.0"
-  description: "Backported and Experimental Type Hints for Python 3.5+"
-  homepage_url: "https://github.com/python/typing/blob/master/typing_extensions/README.rst"
+  description: "Backported and Experimental Type Hints for Python 3.6+"
+  homepage_url: "None"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/cc/1e/0310dee9d86a41f003c519ce263f3b931c54852fcb15ec780137b2e53d4e/typing_extensions-3.10.0.2-py2-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/17/61/32c3ab8951142e061587d957226b5683d1387fb22d95b4f69186d92616d1/typing_extensions-4.0.0-py3-none-any.whl"
     hash:
-      value: "96296851ac46115ff8ae00bf2f4f574d"
+      value: "33a3059e2a2bee4359600b1ed3bd57e0"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/ed/12/c5079a15cf5c01d7f4252b473b00f7e68ee711be605b9f001528f0298b98/typing_extensions-3.10.0.2.tar.gz"
+    url: ""
     hash:
-      value: "ed80ecc8eac5cb15840535ca54eb43f3"
-      algorithm: "MD5"
+      value: ""
+      algorithm: ""
   vcs:
     type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
-    url: "https://github.com/python/typing.git"
-    revision: "master"
-    path: "typing_extensions/README.rst"
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
 - id: "PyPI::werkzeug:2.0.2"
   purl: "pkg:pypi/werkzeug@2.0.2"
   authors:
