@@ -27,7 +27,7 @@ fun PackageRule.LicenseRule.isGpl() =
     object : RuleMatcher {
         override val description = "isGpl($license)"
 
-        override fun matches() = license.toString().contains("GPL")
+        override fun matches() = "GPL" in license.toString()
     }
 
 // Define the rule set.

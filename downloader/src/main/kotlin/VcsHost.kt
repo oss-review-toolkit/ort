@@ -281,7 +281,7 @@ enum class VcsHost(
                     revision = ""
                 )
 
-                projectUrl.contains(".git/") -> {
+                ".git/" in projectUrl -> {
                     val url = normalizeVcsUrl(projectUrl.substringBefore(".git/"))
                     val path = projectUrl.substringAfter(".git/")
 
@@ -293,7 +293,7 @@ enum class VcsHost(
                     )
                 }
 
-                projectUrl.contains(".git#") || GIT_REVISION_FRAGMENT.matches(projectUrl) -> {
+                ".git#" in projectUrl || GIT_REVISION_FRAGMENT.matches(projectUrl) -> {
                     val url = normalizeVcsUrl(projectUrl.substringBeforeLast('#'))
                     val revision = projectUrl.substringAfterLast('#')
 

@@ -172,7 +172,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 
             "return the dependencies of a specific scope with filter criteria" {
                 val akkaDependencies = navigator.dependenciesForScope(testProject, "compile") { node ->
-                    node.id.namespace.contains("akka")
+                    "akka" in node.id.namespace
                 }
 
                 akkaDependencies.shouldContainExactlyInAnyOrder(

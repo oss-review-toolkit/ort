@@ -230,7 +230,7 @@ fun determineProxyFromURL(url: String?): AuthenticatedProxy? {
 
     val uri = runCatching {
         // Assume http if no protocol is specified to be able to create an URI.
-        URI(url.takeIf { it.contains("://") } ?: "http://$url")
+        URI(url.takeIf { "://" in it } ?: "http://$url")
     }.getOrElse {
         return null
     }

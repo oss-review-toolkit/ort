@@ -80,12 +80,11 @@ class GoMod(
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
         definitionFiles.filterNot { definitionFile ->
-            definitionFile
+            "vendor" in definitionFile
                 .parentFile
                 .relativeTo(analysisRoot)
                 .invariantSeparatorsPath
                 .split('/')
-                .contains("vendor")
         }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {

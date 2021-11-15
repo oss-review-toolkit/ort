@@ -58,7 +58,7 @@ class NoticeTemplateReporter : Reporter {
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val templateOptions = options.toMutableMap()
 
-        if (!templateOptions.contains(FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH)) {
+        if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in templateOptions) {
             templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, DEFAULT_TEMPLATE_ID)
         }
 

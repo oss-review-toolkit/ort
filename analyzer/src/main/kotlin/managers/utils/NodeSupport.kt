@@ -175,7 +175,7 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
             isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
             hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
             hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
-            isYarnWorkspaceSubmodule = yarnWorkspaceSubmodules.contains(definitionFile)
+            isYarnWorkspaceSubmodule = definitionFile in yarnWorkspaceSubmodules
         )
     }
 }

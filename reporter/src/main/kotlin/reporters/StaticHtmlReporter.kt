@@ -675,7 +675,7 @@ class StaticHtmlReporter : Reporter {
 private fun getLicenseResourcePath(license: String): String =
     when {
         license.startsWith(SpdxConstants.LICENSE_REF_PREFIX) -> "/licenserefs/$license"
-        license.contains("exception") -> "/exceptions/$license"
+        "exception" in license -> "/exceptions/$license"
         else -> "/licenses/$license"
     }
 

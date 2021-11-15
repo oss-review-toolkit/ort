@@ -339,7 +339,7 @@ class SpdxCompoundExpression(
         val subExpressionString = subExpression.toString()
         val choiceString = choice.toString()
 
-        return if (expressionString.contains(subExpressionString)) {
+        return if (subExpressionString in expressionString) {
             expressionString.replace(subExpressionString, choiceString).toSpdx()
         } else {
             val dismissedLicense = subExpression.validChoices().first { it != choice }
@@ -359,8 +359,7 @@ class SpdxCompoundExpression(
         val expressionString = toString()
         val subExpressionString = subExpression.toString()
 
-        return validChoices().containsAll(subExpression.validChoices()) ||
-                expressionString.contains(subExpressionString)
+        return validChoices().containsAll(subExpression.validChoices()) || subExpressionString in expressionString
     }
 
     override fun equals(other: Any?): Boolean {
@@ -369,7 +368,7 @@ class SpdxCompoundExpression(
         val validChoices = validChoices().map { it.decompose() }
         val otherValidChoices = other.validChoices().map { it.decompose() }
 
-        return validChoices.size == otherValidChoices.size && validChoices.all { otherValidChoices.contains(it) }
+        return validChoices.size == otherValidChoices.size && validChoices.all { it in otherValidChoices }
     }
 
     override fun hashCode() = decompose().sumOf { it.hashCode() }
@@ -596,7 +595,7 @@ data class SpdxLicenseReferenceExpression(
 
     override fun validate(strictness: Strictness) {
         val isLicenseRef = id.startsWith(LICENSE_REF_PREFIX)
-        val isDocumentRefToLicenseRef = id.startsWith(DOCUMENT_REF_PREFIX) && id.contains(":$LICENSE_REF_PREFIX")
+        val isDocumentRefToLicenseRef = id.startsWith(DOCUMENT_REF_PREFIX) && ":$LICENSE_REF_PREFIX" in id
         if (!isLicenseRef && !isDocumentRefToLicenseRef) throw SpdxException("'$id' is not an SPDX license reference.")
     }
 

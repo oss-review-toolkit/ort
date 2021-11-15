@@ -77,7 +77,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 
     // The list of supported version separators.
     val versionSeparators = listOf('-', '_', '.')
-    val versionHasSeparator = versionSeparators.any { version.contains(it) }
+    val versionHasSeparator = versionSeparators.any { it in version }
 
     // Create variants of the version string to recognize.
     data class VersionVariant(val name: String, val separators: List<Char>)

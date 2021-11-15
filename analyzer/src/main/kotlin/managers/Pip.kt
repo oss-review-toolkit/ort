@@ -278,7 +278,7 @@ class Pip(
 
         // Try to get additional information from any "requirements.txt" file.
         val (requirementsName, requirementsVersion, requirementsSuffix) = if (definitionFile.name != "setup.py") {
-            val pythonVersionLines = definitionFile.readLines().filter { it.contains("python_version") }
+            val pythonVersionLines = definitionFile.readLines().filter { "python_version" in it }
             if (pythonVersionLines.isNotEmpty()) {
                 log.debug {
                     "Some dependencies have Python version requirements:\n$pythonVersionLines"
