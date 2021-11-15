@@ -22,13 +22,14 @@ package org.ossreviewtoolkit.utils.common
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.IOException
+
+import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * An interface to implement by classes that are backed by a command line tool.
  */
 interface CommandLineTool {
-    companion object {
+    companion object : Logging {
         /**
          * A convenience property to require any version.
          */
@@ -98,7 +99,10 @@ interface CommandLineTool {
         val requiredVersion = getVersionRequirement()
 
         if (!ignoreActualVersion && !requiredVersion.isSatisfiedBy(actualVersion)) {
-            throw IOException("Unsupported ${command()} version $actualVersion does not fulfill $requiredVersion.")
+            logger.warn {
+                "The command is required in version $requiredVersion, but you are using version $actualVersion. This " +
+                        "could lead to problems."
+            }
         }
     }
 }
