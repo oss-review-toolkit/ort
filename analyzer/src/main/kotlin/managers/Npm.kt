@@ -649,7 +649,7 @@ open class Npm(
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {
-            run(workingDir, "ci")
+            run(workingDir, "ci", *installParameters)
         } else {
             run(workingDir, "install", *installParameters)
         }
