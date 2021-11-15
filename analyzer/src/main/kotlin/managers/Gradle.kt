@@ -60,6 +60,8 @@ private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: O
 private val GRADLE_BUILD_FILES = listOf("build.gradle", "build.gradle.kts")
 private val GRADLE_SETTINGS_FILES = listOf("settings.gradle", "settings.gradle.kts")
 
+private const val JAVA_MAX_HEAP_SIZE_OPTION = "-Xmx"
+
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
  */
@@ -179,8 +181,8 @@ class Gradle(
             key == "org.gradle.jvmargs"
         }?.second?.split(' ').orEmpty().toMutableList()
 
-        if (jvmArgs.none { it.contains("-xmx", ignoreCase = true) }) {
-            jvmArgs += "-Xmx8g"
+        if (jvmArgs.none { it.contains(JAVA_MAX_HEAP_SIZE_OPTION, ignoreCase = true) }) {
+            jvmArgs += "${JAVA_MAX_HEAP_SIZE_OPTION}8g"
         }
 
         val projectDir = definitionFile.parentFile
