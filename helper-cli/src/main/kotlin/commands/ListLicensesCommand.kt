@@ -185,7 +185,7 @@ internal class ListLicensesCommand : CliktCommand(
             )
             .mapValues { (provenance, locationsByLicense) ->
                 locationsByLicense.filter { (license, _) ->
-                    !offendingOnly || violatedRulesByLicense.contains(license)
+                    !offendingOnly || license in violatedRulesByLicense
                 }.mapValues { (license, locations) ->
                     locations.filter { location ->
                         (fileAllowList.isEmpty() || fileAllowList.any { it.matches(Paths.get(location.path)) }) &&

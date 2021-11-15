@@ -313,7 +313,7 @@ class Pub(
     ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
         val nameOfCurrentPackage = manifest["name"].textValue()
-        val containsFlutter = dependencies.contains("flutter")
+        val containsFlutter = "flutter" in dependencies
 
         log.info { "buildDependencyTree for package $nameOfCurrentPackage " }
 
@@ -613,7 +613,7 @@ class Pub(
         var result = ProcessCapture(workingDir, *commandPub().split(' ').toTypedArray(), *args)
         if (result.isError) {
             // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
-            if (result.errorMessage.contains("Flutter users should run `flutter")) {
+            if ("Flutter users should run `flutter" in result.errorMessage) {
                 result = ProcessCapture(workingDir, *commandFlutter().split(' ').toTypedArray(), *args).requireSuccess()
             } else {
                 throw IOException(result.errorMessage)

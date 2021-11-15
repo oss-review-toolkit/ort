@@ -87,7 +87,7 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
     ): List<File> {
         val templateOptions = options.toMutableMap()
 
-        if (!templateOptions.contains(FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH)) {
+        if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in templateOptions) {
             templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, buildString {
                 append(DISCLOSURE_TEMPLATE_ID)
 

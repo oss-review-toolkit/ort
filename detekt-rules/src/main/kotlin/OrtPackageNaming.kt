@@ -53,7 +53,7 @@ class OrtPackageNaming : Rule() {
         if (directive.qualifiedName.isEmpty() || directive.qualifiedName.startsWith("test.")) return
 
         val path = directive.containingKtFile.toFilePath().relativePath.toString()
-        if (!path.contains(pathPattern)) return
+        if (pathPattern !in path) return
 
         val (pathPrefix, pathSuffix) = path.split(pathPattern, 2).map { File(it) }
         val projectDir = pathPrefix.name

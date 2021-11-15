@@ -182,7 +182,7 @@ class Sbt(
             it.isFile && it.name == "build.properties"
         }
 
-        if (!propertiesFiles.contains(rootPropertiesFile)) {
+        if (rootPropertiesFile !in propertiesFiles) {
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
             // https://stackoverflow.com/a/20337575/1127485.
             checkVersion(analyzerConfig.ignoreToolVersions, workingDir)

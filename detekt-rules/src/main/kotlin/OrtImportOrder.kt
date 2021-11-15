@@ -83,7 +83,7 @@ class OrtImportOrder : Rule() {
 
         val (importPathsWithDot, importPathsWithoutDot) = importPaths.filter(String::isNotEmpty)
             .sorted()
-            .partition { it.contains('.') }
+            .partition { '.' in it }
 
         val sortedImportPathsWithDotAndBlankLines = createImportListWithBlankLines(importPathsWithDot)
 

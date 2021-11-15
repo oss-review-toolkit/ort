@@ -193,7 +193,7 @@ private fun Result<List<ScanResult>>.shouldBeValid(): ScanResult {
 
     val scanResult = result.first()
     scanResult.summary.licenseFindings.find {
-        it.location.path == TEST_PATH && it.license.licenses().contains("Apache-2.0")
+        it.location.path == TEST_PATH && "Apache-2.0" in it.license.licenses()
     } shouldNot beNull()
 
     return scanResult
