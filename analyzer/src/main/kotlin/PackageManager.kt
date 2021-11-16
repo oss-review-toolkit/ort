@@ -89,7 +89,8 @@ abstract class PackageManager(
         }
 
         /**
-         * Recursively search the [directory] for files managed by any of the [packageManagers].
+         * Recursively search the [directory] for files managed by any of the [packageManagers]. The search is performed
+         * depth-first so that root project files are found before any subproject files for a specific manager.
          */
         fun findManagedFiles(directory: File, packageManagers: List<PackageManagerFactory> = ALL):
                 ManagedProjectFiles {
