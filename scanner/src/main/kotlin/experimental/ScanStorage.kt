@@ -122,7 +122,7 @@ interface ProvenanceBasedScanStorageWriter : ScanStorageWriter {
  * A combination of the [ScanStorageReader] and [ScanStorageWriter]. This is a markup interface used when it is not
  * known or relevant which actual implementation a storage class provides.
  */
-interface ScanStorage : ScanStorageReader, ScanStorageWriter
+sealed interface ScanStorage : ScanStorageReader, ScanStorageWriter
 
 /**
  * A combination of the [PackageBasedScanStorageReader] and [PackageBasedScanStorageWriter]. This interface is usually
