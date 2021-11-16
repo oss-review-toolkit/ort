@@ -320,10 +320,10 @@ packages:
       value: "33a3059e2a2bee4359600b1ed3bd57e0"
       algorithm: "MD5"
   source_artifact:
-    url: ""
+    url: "https://files.pythonhosted.org/packages/1a/23/748b0c9a5578110b31580c8d2643319adcb3ec91f601b50a955051b51f1d/typing_extensions-4.0.0.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "80c0839d184acb59e00b72ccfbbdafa7"
+      algorithm: "MD5"
   vcs:
     type: ""
     url: ""
