@@ -61,6 +61,7 @@ private val GRADLE_BUILD_FILES = listOf("build.gradle", "build.gradle.kts")
 private val GRADLE_SETTINGS_FILES = listOf("settings.gradle", "settings.gradle.kts")
 
 private const val JAVA_MAX_HEAP_SIZE_OPTION = "-Xmx"
+private const val JAVA_MAX_HEAP_SIZE_VALUE = "8g"
 
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
@@ -182,7 +183,7 @@ class Gradle(
         }?.second?.split(' ').orEmpty().toMutableList()
 
         if (jvmArgs.none { it.contains(JAVA_MAX_HEAP_SIZE_OPTION, ignoreCase = true) }) {
-            jvmArgs += "${JAVA_MAX_HEAP_SIZE_OPTION}8g"
+            jvmArgs += "$JAVA_MAX_HEAP_SIZE_OPTION$JAVA_MAX_HEAP_SIZE_VALUE"
         }
 
         val projectDir = definitionFile.parentFile
