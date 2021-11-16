@@ -342,7 +342,7 @@ supported:
   * [NPM](https://www.npmjs.com/) (limitations:
   [no scope-specific registries](https://github.com/oss-review-toolkit/ort/issues/3741),
   [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
-  * [Yarn](https://yarnpkg.com/) (limitations:
+  * [Yarn](https://classic.yarnpkg.com/) (limitations:
   [no Yarn 2 / 3 support](https://github.com/oss-review-toolkit/ort/issues/2283))
 * .NET
   * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations:

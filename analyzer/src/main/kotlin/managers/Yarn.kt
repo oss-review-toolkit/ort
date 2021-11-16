@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 
 /**
- * The [Yarn](https://www.yarnpkg.com/) package manager for JavaScript.
+ * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
  */
 class Yarn(
     name: String,
