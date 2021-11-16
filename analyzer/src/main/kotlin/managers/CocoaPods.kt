@@ -95,7 +95,7 @@ class CocoaPods(
 
     override fun getVersionArguments() = "--version --allow-root"
 
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // CocoaPods originally used and may still use the Specs repository on GitHub [1] as package metadata database.

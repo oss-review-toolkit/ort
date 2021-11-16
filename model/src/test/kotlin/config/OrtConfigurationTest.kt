@@ -47,7 +47,6 @@ class OrtConfigurationTest : WordSpec({
             val ortConfig = OrtConfiguration.load(file = refConfig)
 
             with(ortConfig.analyzer) {
-                ignoreToolVersions shouldBe true
                 allowDynamicVersions shouldBe true
 
                 sw360Configuration shouldNotBeNull {

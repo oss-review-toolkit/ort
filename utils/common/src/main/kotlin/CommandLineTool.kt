@@ -94,11 +94,11 @@ interface CommandLineTool {
     /**
      * Run a [command] to check its version against the [required version][getVersionRequirement].
      */
-    fun checkVersion(ignoreActualVersion: Boolean = false, workingDir: File? = null) {
+    fun checkVersion(workingDir: File? = null) {
         val actualVersion = getVersion(workingDir)
         val requiredVersion = getVersionRequirement()
 
-        if (!ignoreActualVersion && !requiredVersion.isSatisfiedBy(actualVersion)) {
+        if (!requiredVersion.isSatisfiedBy(actualVersion)) {
             logger.warn {
                 "The command is required in version $requiredVersion, but you are using version $actualVersion. This " +
                         "could lead to problems."

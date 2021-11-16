@@ -25,13 +25,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AnalyzerConfiguration(
     /**
-     * If set to true, ignore the versions of used command line tools. Note that this might lead to erroneous
-     * results if the tools have changed in usage or behavior. If set to false, check the versions to match the
-     * expected versions and fail the analysis on a mismatch. Defaults to false.
-     */
-    val ignoreToolVersions: Boolean = false,
-
-    /**
      * Enable the analysis of projects that use version ranges to declare their dependencies. If set to true,
      * dependencies of exactly the same project might change with another scan done at a later time if any of the
      * (transitive) dependencies are declared using version ranges and a new version of such a dependency was

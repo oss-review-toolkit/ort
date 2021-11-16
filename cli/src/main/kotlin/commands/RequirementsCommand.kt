@@ -68,7 +68,7 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                         ).newInstance(
                             "",
                             File(""),
-                            AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
+                            AnalyzerConfiguration(allowDynamicVersions = false),
                             RepositoryConfiguration()
                         )
                     }

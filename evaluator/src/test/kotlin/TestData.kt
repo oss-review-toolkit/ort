@@ -205,7 +205,7 @@ val ortResult = OrtResult(
     ),
     analyzer = AnalyzerRun(
         environment = Environment(),
-        config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+        config = AnalyzerConfiguration(allowDynamicVersions = true),
         result = AnalyzerResult(
             projects = sortedSetOf(
                 projectExcluded,

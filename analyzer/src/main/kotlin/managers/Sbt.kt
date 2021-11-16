@@ -185,7 +185,7 @@ class Sbt(
         if (rootPropertiesFile !in propertiesFiles) {
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
             // https://stackoverflow.com/a/20337575/1127485.
-            checkVersion(analyzerConfig.ignoreToolVersions, workingDir)
+            checkVersion(workingDir)
         } else {
             val versions = mutableListOf<Semver>()
 
