@@ -249,6 +249,7 @@ class ExperimentalScanner(
                 if (result[provenance] != null) return@forEach
 
                 storageReaders.forEach { reader ->
+                    @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
                     when (reader) {
                         is PackageBasedScanStorageReader -> {
                             packageProvenances.entries.find { it.value == provenance }?.key?.let { pkg ->
