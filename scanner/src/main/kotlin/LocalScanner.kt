@@ -118,7 +118,7 @@ abstract class LocalScanner(
         Os.getPathFromEnvironment(scannerExe)?.parentFile?.also {
             val actualVersion = getVersion(it)
             if (actualVersion != expectedVersion) {
-                log.info {
+                log.warn {
                     "ORT is currently tested with $name version $expectedVersion, but you are using version " +
                             "$actualVersion. This could lead to problems with parsing the $name output."
                 }
