@@ -222,7 +222,7 @@ subprojects {
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = "11"
-            apiVersion = "1.5"
+            apiVersion = "1.6"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
         }
     }
