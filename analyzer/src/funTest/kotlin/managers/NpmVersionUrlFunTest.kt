@@ -43,7 +43,7 @@ class NpmVersionUrlFunTest : WordSpec() {
             "resolve dependencies with URLs as versions correctly" {
                 val packageFile = projectDir.resolve("package.json")
 
-                val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
+                val config = AnalyzerConfiguration(allowDynamicVersions = true)
                 val result = createNPM(config).resolveSingleProject(packageFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(

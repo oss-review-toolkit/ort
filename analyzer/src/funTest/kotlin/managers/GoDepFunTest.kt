@@ -87,7 +87,7 @@ class GoDepFunTest : WordSpec() {
                 enabled = !Ci.isAzureWindows
             ) {
                 val manifestFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
-                val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
+                val config = AnalyzerConfiguration(allowDynamicVersions = true)
                 val result = createGoDep(config).resolveSingleProject(manifestFile)
 
                 with(result) {

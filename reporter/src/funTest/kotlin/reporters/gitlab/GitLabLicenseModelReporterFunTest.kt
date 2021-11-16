@@ -92,7 +92,7 @@ private fun createOrtResult(): OrtResult {
         ),
         analyzer = AnalyzerRun(
             environment = Environment(),
-            config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+            config = AnalyzerConfiguration(allowDynamicVersions = true),
             result = AnalyzerResult(
                 projects = sortedSetOf(
                     Project.EMPTY.copy(

@@ -34,7 +34,6 @@ class AnalyzerRunTest : StringSpec({
               os: "Linux"
               tool_versions: {}
             config:
-              ignore_tool_versions: false
               allow_dynamic_versions: false
             result:
               projects: []
@@ -57,7 +56,6 @@ class AnalyzerRunTest : StringSpec({
               os: "Linux"
               tool_versions: {}
             config:
-              ignore_tool_versions: false
               allow_dynamic_versions: false
             result:
               projects: []

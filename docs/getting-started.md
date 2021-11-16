@@ -163,7 +163,6 @@ analyzer:
     tool_versions: {}
   # Configuration options of the analyzer.
   config:
-    ignore_tool_versions: false
     allow_dynamic_versions: true
   # The result of the dependency analysis.
   result:

@@ -129,7 +129,7 @@ class PubFunTest : WordSpec() {
         Pub("Pub", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 
     private fun createPubForExternal(): Pub {
-        val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
+        val config = AnalyzerConfiguration(allowDynamicVersions = true)
         return Pub("Pub", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
     }
 }

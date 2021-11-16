@@ -99,7 +99,7 @@ class Conan(
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.18.0,)")
 
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 
     /**
      * Primary method for resolving dependencies from [definitionFile].
