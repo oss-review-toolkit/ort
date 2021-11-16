@@ -2,7 +2,8 @@
 
 jdk11 = true
 
-ignoreRules = [ "SpreadOperator" ]
+disableTools = [ "detekt" ]
+
 ignoreFiles = """
 **/funTest/assets/
 **/funTest/resources/
