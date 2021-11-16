@@ -54,7 +54,10 @@ interface PackageProvenanceResolver {
 /**
  * The default implementation of [PackageProvenanceResolver].
  */
-class DefaultPackageProvenanceResolver(private val workingTreeCache: WorkingTreeCache) : PackageProvenanceResolver {
+class DefaultPackageProvenanceResolver(
+    private val storage: PackageProvenanceStorage,
+    private val workingTreeCache: WorkingTreeCache
+) : PackageProvenanceResolver {
     /**
      * Resolve the [Provenance] of [pkg] based on the provided [sourceCodeOriginPriority]. For source artifacts it is
      * verified that the [RemoteArtifact] does exist. For a VCS it is verified that the revision exists. If the revision
@@ -67,7 +70,7 @@ class DefaultPackageProvenanceResolver(private val workingTreeCache: WorkingTree
                 when (sourceCodeOrigin) {
                     SourceCodeOrigin.ARTIFACT -> {
                         if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
-                            return resolveSourceArtifact(pkg.sourceArtifact)
+                            return resolveSourceArtifact(pkg)
                         }
                     }
 
@@ -89,14 +92,42 @@ class DefaultPackageProvenanceResolver(private val workingTreeCache: WorkingTree
         return UnknownProvenance
     }
 
-    private fun resolveSourceArtifact(sourceArtifact: RemoteArtifact): ArtifactProvenance {
-        val request = Request.Builder().head().url(sourceArtifact.url).build()
-        OkHttpClientHelper.execute(request).use { response ->
-            if (response.code == HttpURLConnection.HTTP_OK) {
-                return ArtifactProvenance(sourceArtifact)
+    private fun resolveSourceArtifact(pkg: Package): ArtifactProvenance {
+        when (val storedResult = storage.readProvenance(pkg.id, pkg.sourceArtifact)) {
+            is ResolvedArtifactProvenance -> {
+                log.info {
+                    "Found a stored artifact resolution for package ${pkg.id.toCoordinates()}."
+                }
+
+                return storedResult.provenance
             }
 
-            throw IOException("Could not verify existence of source artifact at ${sourceArtifact.url}.")
+            is UnresolvedPackageProvenance -> {
+                log.info {
+                    "Found a stored artifact resolution for package ${pkg.id.toCoordinates()} which failed " +
+                            "previously. Not attempting resolution again. The error was: ${storedResult.message}"
+                }
+
+                throw IOException(storedResult.message)
+            }
+
+            else -> {
+                log.info {
+                    "Could not find a stored artifact resolution result for package ${pkg.id.toCoordinates()}," +
+                            "attempting resolution."
+                }
+            }
+        }
+
+        val request = Request.Builder().head().url(pkg.sourceArtifact.url).build()
+        OkHttpClientHelper.execute(request).use { response ->
+            if (response.code == HttpURLConnection.HTTP_OK) {
+                val artifactProvenance = ArtifactProvenance(pkg.sourceArtifact)
+                storage.putProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
+                return artifactProvenance
+            }
+
+            throw IOException("Could not verify existence of source artifact at ${pkg.sourceArtifact.url}.")
         }
     }
 
@@ -106,16 +137,56 @@ class DefaultPackageProvenanceResolver(private val workingTreeCache: WorkingTree
         //       or GitLab which provide an API. Another option to prevent downloading the same repository multiple
         //       times would be to improve the Downloader to manage the locations of already downloaded
         //       repositories.
+
+        when (val storedResult = storage.readProvenance(pkg.id, pkg.vcsProcessed)) {
+            is ResolvedRepositoryProvenance -> {
+                if (storedResult.isFixedRevision) {
+                    log.info {
+                        "Found a stored repository resolution for package ${pkg.id.toCoordinates()} with the fixed " +
+                                "revision ${storedResult.clonedRevision} which was resolved to " +
+                                "${storedResult.provenance.resolvedRevision}."
+                    }
+
+                    return storedResult.provenance
+                } else {
+                    log.info {
+                        "Found a stored repository resolution result for package ${pkg.id.toCoordinates()} with the " +
+                                "non-fixed revision ${storedResult.clonedRevision} which was resolved to " +
+                                "${storedResult.provenance.resolvedRevision}. Restarting resolution of the " +
+                                "non-fixed revision."
+                    }
+                }
+            }
+
+            is UnresolvedPackageProvenance -> {
+                log.info {
+                    "Found a stored repository resolution result for package ${pkg.id.toCoordinates()} which failed " +
+                            "previously. Not attempting resolution again. The error was: ${storedResult.message}"
+                }
+
+                throw IOException(storedResult.message)
+            }
+
+            else -> {
+                log.info {
+                    "Could not find a stored repository resolution result for package ${pkg.id.toCoordinates()}," +
+                            "attempting resolution."
+                }
+            }
+        }
+
         return workingTreeCache.use(pkg.vcsProcessed) { vcs, workingTree ->
-            // TODO: If the provided revision is a fixed revision we could store the resolution result to prevent having
-            //       to perform the resolution again for the same package.
-            val revisionCandidates = vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = false)
+            val revisionCandidates = runCatching {
+                vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true)
+            }.getOrDefault(emptySet())
 
             if (revisionCandidates.isEmpty()) {
-                throw IOException(
-                    "Could not find any revision candidates for package ${pkg.id.toCoordinates()} with VCS " +
-                            "${pkg.vcsProcessed}."
-                )
+                val message = "Could not find any revision candidates for package ${pkg.id.toCoordinates()} with VCS " +
+                        "${pkg.vcsProcessed}."
+
+                storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
+
+                throw IOException(message)
             }
 
             revisionCandidates.forEachIndexed { index, revision ->
@@ -123,18 +194,32 @@ class DefaultPackageProvenanceResolver(private val workingTreeCache: WorkingTree
                 val result = vcs.updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive = false)
                 if (result.isSuccess) {
                     val resolvedRevision = workingTree.getRevision()
+
                     log.info {
                         "Resolved revision for package ${pkg.id.toCoordinates()} to $resolvedRevision based on " +
                                 "guessed revision $revision."
                     }
-                    return@use RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
+
+                    val repositoryProvenance = RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
+
+                    storage.putProvenance(
+                        pkg.id,
+                        pkg.vcsProcessed,
+                        ResolvedRepositoryProvenance(
+                            repositoryProvenance, revision, vcs.isFixedRevision(workingTree, revision)
+                        )
+                    )
+
+                    return@use repositoryProvenance
                 }
             }
 
-            throw IOException(
-                "Could not resolve any of the revision candidates $revisionCandidates for package " +
-                        "${pkg.id.toCoordinates()} with VCS ${pkg.vcsProcessed}."
-            )
+            val message = "Could not resolve any of the revision candidates $revisionCandidates for package " +
+                    "${pkg.id.toCoordinates()} with VCS ${pkg.vcsProcessed}."
+
+            storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
+
+            throw IOException(message)
         }
     }
 }

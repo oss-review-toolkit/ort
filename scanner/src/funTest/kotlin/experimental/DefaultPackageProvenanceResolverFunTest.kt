@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.VcsType
 
 class DefaultPackageProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
-    private val resolver = DefaultPackageProvenanceResolver(workingTreeCache)
+    private val resolver = DefaultPackageProvenanceResolver(DummyProvenanceStorage(), workingTreeCache)
 
     private val sourceArtifactUrl =
         "https://github.com/oss-review-toolkit/ort-test-data-npm/blob/test-1.0.0/README.md"
@@ -175,4 +175,19 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
             }
         }
     }
+}
+
+private class DummyProvenanceStorage : PackageProvenanceStorage {
+    override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =
+        null
+
+    override fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult? = null
+
+    override fun putProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) { /** no-op */ }
+
+    override fun putProvenance(
+        id: Identifier,
+        sourceArtifact: RemoteArtifact,
+        result: PackageProvenanceResolutionResult
+    ) { /** no-op */ }
 }
