@@ -47,8 +47,7 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
         classes.filterNot {
             Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
         }.sortedBy { it.simpleName }.forEach {
-            @Suppress("TooGenericExceptionCaught")
-            try {
+            runCatching {
                 val kotlinObject = it.kotlin.objectInstance
 
                 var category = "Other tool"
@@ -99,7 +98,7 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                 if (instance.command().isNotEmpty()) {
                     allTools.getOrPut(category) { mutableListOf() } += instance
                 }
-            } catch (e: Exception) {
+            }.onFailure { e ->
                 log.error { "There was an error instantiating $it: $e." }
                 throw ProgramResult(1)
             }

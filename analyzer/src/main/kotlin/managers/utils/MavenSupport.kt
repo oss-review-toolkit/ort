@@ -541,16 +541,15 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
 
-                @Suppress("TooGenericExceptionCaught")
-                val actualChecksum = try {
+                val actualChecksum = runCatching {
                     val task = GetTask(checksum.location)
                     transporter.get(task)
 
                     trimChecksumData(task.dataString)
-                } catch (e: Exception) {
-                    e.showStackTrace()
+                }.getOrElse {
+                    it.showStackTrace()
 
-                    log.warn { "Could not get checksum for '$artifact': ${e.collectMessagesAsString()}" }
+                    log.warn { "Could not get checksum for '$artifact': ${it.collectMessagesAsString()}" }
 
                     // Fall back to an empty checksum string.
                     ""

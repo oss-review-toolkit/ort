@@ -65,15 +65,14 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
     override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
-        @Suppress("TooGenericExceptionCaught")
-        return try {
+        return runCatching {
             mutableMapOf<Package, List<AdvisorResult>>().also {
                 packages.chunked(BULK_FETCH_SIZE).forEach { pkg ->
                     it += loadVulnerabilities(pkg, startTime)
                 }
             }
-        } catch (e: Exception) {
-            createFailedResults(startTime, packages, e)
+        }.getOrElse {
+            createFailedResults(startTime, packages, it)
         }
     }
 
