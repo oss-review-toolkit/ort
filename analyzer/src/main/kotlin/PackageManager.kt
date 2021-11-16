@@ -238,15 +238,14 @@ abstract class PackageManager(
             log.info { "Resolving $managerName dependencies for '$relativePath'..." }
 
             val duration = measureTime {
-                @Suppress("TooGenericExceptionCaught")
-                try {
+                runCatching {
                     result[definitionFile] = resolveDependencies(definitionFile, labels)
-                } catch (e: Exception) {
-                    e.showStackTrace()
+                }.onFailure {
+                    it.showStackTrace()
 
                     // In case of Maven we might be able to do better than inferring the name from the path.
-                    val id = if (e is ProjectBuildingException && e.projectId?.isEmpty() == false) {
-                        Identifier("Maven:${e.projectId}")
+                    val id = if (it is ProjectBuildingException && it.projectId?.isEmpty() == false) {
+                        Identifier("Maven:${it.projectId}")
                     } else {
                         Identifier.EMPTY.copy(type = managerName, name = relativePath)
                     }
@@ -263,7 +262,7 @@ abstract class PackageManager(
                         createAndLogIssue(
                             source = managerName,
                             message = "Resolving $managerName dependencies for '$relativePath' failed with: " +
-                                    e.collectMessagesAsString()
+                                    it.collectMessagesAsString()
                         )
                     )
 

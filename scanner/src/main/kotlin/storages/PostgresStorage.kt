@@ -133,26 +133,25 @@ class PostgresStorage(
         )
 
     override fun readInternal(id: Identifier): Result<List<ScanResult>> {
-        @Suppress("TooGenericExceptionCaught")
-        return try {
+        return runCatching {
             database.transaction {
                 val scanResults =
                     ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
 
                 Success(scanResults)
             }
-        } catch (e: Exception) {
-            when (e) {
+        }.getOrElse {
+            when (it) {
                 is JsonProcessingException, is SQLException -> {
-                    e.showStackTrace()
+                    it.showStackTrace()
 
                     val message = "Could not read scan results for ${id.toCoordinates()} from database: " +
-                            e.collectMessagesAsString()
+                            it.collectMessagesAsString()
 
                     log.info { message }
                     Failure(message)
                 }
-                else -> throw e
+                else -> throw it
             }
         }
     }
@@ -161,8 +160,7 @@ class PostgresStorage(
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
         val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
 
-        @Suppress("TooGenericExceptionCaught")
-        return try {
+        return runCatching {
             database.transaction {
                 val scanResults = ScanResultDao.find {
                     (ScanResults.identifier eq pkg.id.toCoordinates()) and
@@ -179,18 +177,18 @@ class PostgresStorage(
 
                 Success(scanResults)
             }
-        } catch (e: Exception) {
-            when (e) {
+        }.getOrElse {
+            when (it) {
                 is JsonProcessingException, is SQLException -> {
-                    e.showStackTrace()
+                    it.showStackTrace()
 
                     val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
-                            "$scannerCriteria from database: ${e.collectMessagesAsString()}"
+                            "$scannerCriteria from database: ${it.collectMessagesAsString()}"
 
                     log.info { message }
                     Failure(message)
                 }
-                else -> throw e
+                else -> throw it
             }
         }
     }
@@ -204,8 +202,7 @@ class PostgresStorage(
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
         val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
 
-        @Suppress("TooGenericExceptionCaught")
-        return try {
+        return runCatching {
             val scanResults = runBlocking(Dispatchers.IO) {
                 packages.chunked(max(packages.size / LocalScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
                     database.transactionAsync {
@@ -234,18 +231,18 @@ class PostgresStorage(
             }
 
             Success(scanResults)
-        } catch (e: Exception) {
-            when (e) {
+        }.getOrElse {
+            when (it) {
                 is JsonProcessingException, is SQLException -> {
-                    e.showStackTrace()
+                    it.showStackTrace()
 
                     val message = "Could not read scan results with $scannerCriteria from database: " +
-                            e.collectMessagesAsString()
+                            it.collectMessagesAsString()
 
                     log.info { message }
                     Failure(message)
                 }
-                else -> throw e
+                else -> throw it
             }
         }
     }

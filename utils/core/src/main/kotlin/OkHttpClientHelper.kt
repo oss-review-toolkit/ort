@@ -85,8 +85,7 @@ object OkHttpClientHelper {
         return OkHttpClient.Builder()
             .addNetworkInterceptor { chain ->
                 val request = chain.request()
-                @Suppress("TooGenericExceptionCaught")
-                try {
+                runCatching {
                     chain.proceed(
                         if (request.header("User-Agent") == null) {
                             request.newBuilder().header("User-Agent", Environment.ORT_USER_AGENT).build()
@@ -94,13 +93,13 @@ object OkHttpClientHelper {
                             request
                         }
                     )
-                } catch (e: Exception) {
-                    e.showStackTrace()
+                }.getOrElse {
+                    it.showStackTrace()
                     log.error {
-                        "HTTP request to '${request.url}' failed with an exception: ${e.collectMessagesAsString()}"
+                        "HTTP request to '${request.url}' failed with an exception: ${it.collectMessagesAsString()}"
                     }
 
-                    throw e
+                    throw it
                 }
             }
             .cache(cache)
