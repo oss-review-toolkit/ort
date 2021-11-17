@@ -578,7 +578,7 @@ class FossId internal constructor(
 
             if (response.data == DownloadStatus.FINISHED) return@wait true
 
-            // There is a bug with the FossId server version < 20.2: Sometimes the download is complete, but it stays in
+            // There is a bug with the FossID server version < 20.2: Sometimes the download is complete, but it stays in
             // state "NOT FINISHED". Therefore, we check the output of the Git fetch to find out whether the download is
             // actually done.
             val message = response.message
@@ -665,7 +665,7 @@ class FossId internal constructor(
     }
 
     /**
-     * Construct the [ScanSummary] for this FossId scan.
+     * Construct the [ScanSummary] for this FossID scan.
      */
     private fun createResultSummary(startTime: Instant, provenance: Provenance, rawResults: RawResults): ScanResult {
         val associate = rawResults.listIgnoredFiles.associateBy { it.path }
@@ -680,7 +680,7 @@ class FossId internal constructor(
             packageVerificationCode = "",
             licenseFindings = licenseFindings.toSortedSet(),
             copyrightFindings = copyrightFindings.toSortedSet(),
-            // TODO: Maybe get issues from FossId (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
+            // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
             issues = rawResults.listPendingFiles.map {
                 OrtIssue(source = scannerName, message = "Pending identification for '$it'.", severity = Severity.HINT)
             }

@@ -137,14 +137,14 @@ internal data class FossIdConfig(
         fun create(scannerConfig: ScannerConfiguration): FossIdConfig {
             val fossIdScannerOptions = scannerConfig.options?.get("FossId")
 
-            requireNotNull(fossIdScannerOptions) { "No FossId Scanner configuration found." }
+            requireNotNull(fossIdScannerOptions) { "No FossID Scanner configuration found." }
 
             val serverUrl = fossIdScannerOptions[SERVER_URL_PROPERTY]
-                ?: throw IllegalArgumentException("No FossId server URL configuration found.")
+                ?: throw IllegalArgumentException("No FossID server URL configuration found.")
             val apiKey = fossIdScannerOptions[API_KEY_PROPERTY]
-                ?: throw IllegalArgumentException("No FossId API Key configuration found.")
+                ?: throw IllegalArgumentException("No FossID API Key configuration found.")
             val user = fossIdScannerOptions[USER_PROPERTY]
-                ?: throw IllegalArgumentException("No FossId User configuration found.")
+                ?: throw IllegalArgumentException("No FossID User configuration found.")
             val packageNamespaceFilter = fossIdScannerOptions[NAMESPACE_FILTER_PROPERTY].orEmpty()
             val packageAuthorsFilter = fossIdScannerOptions[AUTHORS_FILTER_PROPERTY].orEmpty()
             val addAuthenticationToUrl = fossIdScannerOptions[CREDENTIALS_IN_URL_PROPERTY]?.toBoolean() ?: false
