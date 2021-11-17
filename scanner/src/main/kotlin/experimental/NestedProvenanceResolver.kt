@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.
@@ -42,7 +43,10 @@ interface NestedProvenanceResolver {
 /**
  * The default implementation of [NestedProvenanceResolver].
  */
-class DefaultNestedProvenanceResolver(private val workingTreeCache: WorkingTreeCache) : NestedProvenanceResolver {
+class DefaultNestedProvenanceResolver(
+    private val storage: NestedProvenanceStorage,
+    private val workingTreeCache: WorkingTreeCache
+) : NestedProvenanceResolver {
     override fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance {
         return when (provenance) {
             is ArtifactProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())
@@ -51,6 +55,27 @@ class DefaultNestedProvenanceResolver(private val workingTreeCache: WorkingTreeC
     }
 
     private suspend fun resolveNestedRepository(provenance: RepositoryProvenance): NestedProvenance {
+        val storedResult = storage.readNestedProvenance(provenance)
+
+        if (storedResult != null) {
+            if (storedResult.hasOnlyFixedRevisions) {
+                log.info {
+                    "Found a stored nested provenance for $provenance with only fixed revisions, skipping resolution."
+                }
+
+                return storedResult.nestedProvenance
+            } else {
+                log.info {
+                    "Found a stored nested provenance for $provenance with at least one non-fixed revision, " +
+                            "restarting resolution."
+                }
+            }
+        } else {
+            log.info {
+                "Could not find a stored nested provenance for $provenance, attempting resolution."
+            }
+        }
+
         return workingTreeCache.use(provenance.vcsInfo) { vcs, workingTree ->
             vcs.updateWorkingTree(
                 workingTree,
@@ -64,7 +89,15 @@ class DefaultNestedProvenanceResolver(private val workingTreeCache: WorkingTreeC
                 RepositoryProvenance(nestedVcs, nestedVcs.revision)
             }
 
-            NestedProvenance(root = provenance, subRepositories = subRepositories)
+            NestedProvenance(root = provenance, subRepositories = subRepositories).also { nestedProvenance ->
+                // TODO: Find a way to figure out if the nested repository is configured with a fixed revision to
+                //       correctly set `hasOnlyFixedRevisions`. For now always assume that they are fixed because that
+                //       should be correct for most cases and otherwise the storage would have no effect.
+                storage.putNestedProvenance(
+                    provenance,
+                    NestedProvenanceResolutionResult(nestedProvenance, hasOnlyFixedRevisions = true)
+                )
+            }
         }
     }
 }

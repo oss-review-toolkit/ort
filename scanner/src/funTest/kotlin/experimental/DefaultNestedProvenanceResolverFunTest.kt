@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.test.containExactly
 
 class DefaultNestedProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
-    private val resolver = DefaultNestedProvenanceResolver(workingTreeCache)
+    private val resolver = DefaultNestedProvenanceResolver(DummyNestedProvenanceStorage(), workingTreeCache)
 
     override fun afterSpec(spec: Spec) {
         runBlocking { workingTreeCache.shutdown() }
@@ -207,5 +207,12 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 }
             }
         }
+    }
+}
+
+private class DummyNestedProvenanceStorage : NestedProvenanceStorage {
+    override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? = null
+    override fun putNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
+        /** no-op */
     }
 }
