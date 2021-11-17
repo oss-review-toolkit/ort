@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
+import org.ossreviewtoolkit.helper.common.getRepositoryPaths
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceLicenseFindingCurations
@@ -119,16 +120,6 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
 
         return result
     }
-}
-
-private fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
-    val result = mutableMapOf<String, MutableSet<String>>()
-
-    repository.nestedRepositories.mapValues { (path, vcsInfo) ->
-        result.getOrPut(vcsInfo.url) { mutableSetOf() } += path
-    }
-
-    return result
 }
 
 private fun OrtResult.getLicenseFindingsForAllProjects(): Set<LicenseFinding> {
