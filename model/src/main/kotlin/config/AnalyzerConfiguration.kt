@@ -20,8 +20,10 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
+@JsonIgnoreProperties(value = ["ignore_tool_versions"]) // Backwards compatibility.
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AnalyzerConfiguration(
     /**
