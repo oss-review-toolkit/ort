@@ -21,6 +21,13 @@
  */
 
 pluginManagement {
+    repositories {
+        gradlePluginPortal()
+
+        // For Dokka, see https://github.com/Kotlin/dokka/issues/1918.
+        mavenCentral()
+    }
+
     resolutionStrategy {
         eachPlugin {
             // Work around https://github.com/gradle/gradle/issues/1697.
