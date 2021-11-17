@@ -862,9 +862,13 @@ private fun createBlockYamlMapper(): ObjectMapper =
         .disable(YAMLGenerator.Feature.SPLIT_LINES)
         .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
 
-internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): List<PathExclude> {
-    println("Analyzing $sourceCodeDir...")
-    val repositoryPaths = findRepositoryPaths(sourceCodeDir)
+internal fun importPathExcludes(ortResult: OrtResult, pathExcludesFile: File): List<PathExclude> =
+    importPathExcludes(ortResult.getRepositoryPaths(), pathExcludesFile)
+
+internal fun importPathExcludes(sourceCodeDir: File, pathExcludesFile: File): List<PathExclude> =
+    importPathExcludes(findRepositoryPaths(sourceCodeDir), pathExcludesFile)
+
+private fun importPathExcludes(repositoryPaths: Map<String, Set<String>>, pathExcludesFile: File): List<PathExclude> {
     println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
 
     println("Loading $pathExcludesFile...")
