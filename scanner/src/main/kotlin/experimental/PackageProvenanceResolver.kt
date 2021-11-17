@@ -133,10 +133,8 @@ class DefaultPackageProvenanceResolver(
 
     private suspend fun resolveVcs(pkg: Package): RepositoryProvenance {
         // TODO: Currently the commit revision is resolved by checking out the provided revision. There are probably
-        //       probably more efficient ways to do this depending on the VCS, especially for provides like GitHub
-        //       or GitLab which provide an API. Another option to prevent downloading the same repository multiple
-        //       times would be to improve the Downloader to manage the locations of already downloaded
-        //       repositories.
+        //       probably more efficient ways to do this depending on the VCS, especially for providers like GitHub
+        //       or GitLab which provide an API.
 
         when (val storedResult = storage.readProvenance(pkg.id, pkg.vcsProcessed)) {
             is ResolvedRepositoryProvenance -> {
