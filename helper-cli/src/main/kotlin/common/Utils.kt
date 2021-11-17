@@ -931,3 +931,17 @@ internal fun readOrtResult(ortFile: File): OrtResult = ortFile.readValue<OrtResu
  * Write the [ortResult] to [file].
  */
 internal fun writeOrtResult(ortResult: OrtResult, file: File): Unit = file.writeValue(ortResult)
+
+/**
+ * Return the URLs of the analyzed repository and its nested repository associated with their path(s) in the source
+ * tree.
+ */
+internal fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
+    val result = mutableMapOf<String, MutableSet<String>>()
+
+    repository.nestedRepositories.mapValues { (path, vcsInfo) ->
+        result.getOrPut(vcsInfo.url) { mutableSetOf() } += path
+    }
+
+    return result
+}
