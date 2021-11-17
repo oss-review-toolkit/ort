@@ -937,7 +937,7 @@ internal fun writeOrtResult(ortResult: OrtResult, file: File): Unit = file.write
  * tree.
  */
 internal fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
-    val result = mutableMapOf<String, MutableSet<String>>()
+    val result = mutableMapOf(repository.vcsProcessed.url to mutableSetOf(""))
 
     repository.nestedRepositories.mapValues { (path, vcsInfo) ->
         result.getOrPut(vcsInfo.url) { mutableSetOf() } += path
