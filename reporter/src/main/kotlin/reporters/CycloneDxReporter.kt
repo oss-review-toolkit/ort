@@ -80,7 +80,7 @@ class CycloneDxReporter : Reporter {
         addExternalReference(ExternalReference().also { ref ->
             ref.type = type
             ref.url = url
-            if (!comment.isNullOrBlank()) ref.comment = comment
+            ref.comment = comment?.takeUnless { it.isBlank() }
         })
     }
 
