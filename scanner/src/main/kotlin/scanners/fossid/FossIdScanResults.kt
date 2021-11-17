@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 
 /**
- * A simple data class to hold FossId raw results.
+ * A data class to hold FossId raw results.
  */
 internal data class RawResults(
     val identifiedFiles: List<IdentifiedFile>,
@@ -38,7 +38,7 @@ internal data class RawResults(
 )
 
 /**
- * A simple Triple data class to hold FossId mapped results.
+ * A data class to hold FossId mapped results.
  */
 internal data class FindingsContainer(
     val licenseFindings: MutableList<LicenseFinding>,
