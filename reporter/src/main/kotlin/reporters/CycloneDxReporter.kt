@@ -84,6 +84,16 @@ class CycloneDxReporter : Reporter {
         })
     }
 
+    private fun Component.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
+        if (url.isBlank()) return
+
+        addExternalReference(ExternalReference().also { ref ->
+            ref.type = type
+            ref.url = url
+            ref.comment = comment?.takeUnless { it.isBlank() }
+        })
+    }
+
     private fun mapHash(hash: org.ossreviewtoolkit.model.Hash): Hash? =
         enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
 
@@ -253,6 +263,8 @@ class CycloneDxReporter : Reporter {
 
             extensibleTypes = listOf(ExtensibleType(ORT_NAME, "dependencyType", dependencyType))
         }
+
+        component.addExternalReference(ExternalReference.Type.WEBSITE, pkg.homepageUrl)
 
         bom.addComponent(component)
     }
