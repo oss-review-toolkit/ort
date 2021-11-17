@@ -72,6 +72,7 @@ import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolve
 import org.ossreviewtoolkit.scanner.experimental.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.experimental.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
+import org.ossreviewtoolkit.scanner.experimental.FileBasedNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.experimental.FileBasedPackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedFileStorage
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
@@ -312,6 +313,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val packageProvenanceStorage = FileBasedPackageProvenanceStorage(
             LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/package_provenance"))
         )
+        val nestedProvenanceStorage = FileBasedNestedProvenanceStorage(
+            LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/nested_provenance"))
+        )
         val workingTreeCache = DefaultWorkingTreeCache()
 
         try {
@@ -325,7 +329,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                     packageProvenanceStorage,
                     workingTreeCache
                 ),
-                nestedProvenanceResolver = DefaultNestedProvenanceResolver(workingTreeCache),
+                nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache),
                 scannerWrappers = listOf(scannerWrapper)
             )
 
