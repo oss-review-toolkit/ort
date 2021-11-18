@@ -24,6 +24,9 @@ import java.io.IOException
 import java.net.Authenticator
 import java.time.Instant
 
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.delay
@@ -92,7 +95,7 @@ class FossId internal constructor(
         private val GIT_FETCH_DONE_REGEX = Regex("-> FETCH_HEAD(?: Already up to date.)*$")
 
         @JvmStatic
-        private val WAIT_INTERVAL_MS = 10000L
+        private val WAIT_DELAY = 10.seconds
 
         /**
          * The scan states for which a scan can be triggered.
@@ -553,15 +556,13 @@ class FossId internal constructor(
     }
 
     /**
-     * Wait for the lambda [waitLoop] to return true, waiting [loopDelay] between each invocation.
-     * [waitLoop] should return true if the wait must be interrupted, false otherwise.
-     *
-     * A [timeout] will be honored and null will be returned if the timeout has been reached.
+     * Loop for the lambda [condition] to return true, with the given [delay] between loop iterations. If the [timeout]
+     * has been reached, return in any case.
      */
-    private suspend fun wait(timeout: Long, loopDelay: Long, waitLoop: suspend () -> Boolean) =
+    private suspend fun wait(timeout: Duration, delay: Duration, condition: suspend () -> Boolean) =
         withTimeoutOrNull(timeout) {
-            while (!waitLoop()) {
-                delay(loopDelay)
+            while (!condition()) {
+                delay(delay)
             }
         }
 
@@ -569,7 +570,7 @@ class FossId internal constructor(
      * Wait until the repository of a scan with [scanCode] has been downloaded.
      */
     private suspend fun waitDownloadComplete(scanCode: String) {
-        val result = wait(config.timeout * 60000L, WAIT_INTERVAL_MS) {
+        val result = wait(config.timeout.minutes, WAIT_DELAY) {
             FossId.log.info { "Checking download status for scan '$scanCode'." }
 
             val response = service.checkDownloadStatus(config.user, config.apiKey, scanCode)
@@ -597,7 +598,7 @@ class FossId internal constructor(
      * Wait until a scan with [scanCode] has completed.
      */
     private suspend fun waitScanComplete(scanCode: String) {
-        val result = wait(config.timeout * 60000L, WAIT_INTERVAL_MS) {
+        val result = wait(config.timeout.minutes, WAIT_DELAY) {
             FossId.log.info { "Waiting for scan '$scanCode' to complete." }
 
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
