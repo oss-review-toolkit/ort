@@ -750,7 +750,8 @@ private fun filePath(index: Int): String = "/path/to/file$index.kt"
 /**
  * Create a [TextLocation] that references a test file without any line information.
  */
-private fun textLocation(fileIndex: Int): TextLocation = TextLocation(filePath(fileIndex), -1, -1)
+private fun textLocation(fileIndex: Int): TextLocation =
+    TextLocation(filePath(fileIndex), TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
 /**
  * Create an [IdentifiedFile] based on the given [index].
