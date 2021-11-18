@@ -577,8 +577,8 @@ class FossId internal constructor(
 
             if (response.data == DownloadStatus.FINISHED) return@wait true
 
-            // There is a bug with the FossId server version < 20.2: Sometimes the download is complete but it stays in
-            // state "NOT FINISHED". Therefore we check the output of the Git fetch to find out whether the download is
+            // There is a bug with the FossId server version < 20.2: Sometimes the download is complete, but it stays in
+            // state "NOT FINISHED". Therefore, we check the output of the Git fetch to find out whether the download is
             // actually done.
             val message = response.message
             if (message == null || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)) return@wait false
