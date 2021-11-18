@@ -55,7 +55,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, Ign
     val files = filterNot { it.getFileName() in ignoredFiles }
     files.forEach { summarizable ->
         val summary = summarizable.toSummary()
-        val location = TextLocation(summary.path, -1, -1)
+        val location = TextLocation(summary.path, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
         summary.licences.forEach {
             val finding = LicenseFinding(it.identifier, location)
