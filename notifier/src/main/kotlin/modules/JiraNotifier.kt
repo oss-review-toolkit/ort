@@ -46,10 +46,7 @@ class JiraNotifier(
     fun projectIssueBuilder(projectKey: String): ProjectIssueBuilder =
         ProjectIssueBuilder(projectKey, restClient)
 
-    class ProjectIssueBuilder(
-        private val projectKey: String,
-        private val restClient: JiraRestClient
-        ) {
+    class ProjectIssueBuilder(private val projectKey: String, private val restClient: JiraRestClient) {
         private val issueTypes = restClient.projectClient.getProject(projectKey).claim()
             .issueTypes.associateBy { it.name }
 
@@ -102,10 +99,7 @@ class JiraNotifier(
                     }
 
                     return try {
-                        restClient.issueClient.addComment(
-                            issue.commentsUri,
-                            Comment.valueOf(comment)
-                        ).claim()
+                        restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
 
                         Success(issue)
                     } catch (e: RestClientException) {
