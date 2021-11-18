@@ -307,8 +307,8 @@
       "integrity": "sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8="
     },
     "web-animations-js": {
-      "version": "github:angular/web-animations-js#96635c1a82a730fc71cc5d6cabe5dfe7c8349ec5",
-      "from": "github:angular/web-animations-js#release_pr208"
+      "version": "github:web-animations/web-animations-js#64d83730282fdbce733460d44be52c132d6c04e9",
+      "from": "github:web-animations/web-animations-js#2.3.2"
     }
   }
 }
