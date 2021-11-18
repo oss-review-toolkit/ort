@@ -12,7 +12,7 @@
   "dependencies": {
     "long": "^3.2.0",
     "cheerio": "1.0.0-rc.1",
-    "web-animations-js": "github:angular/web-animations-js#release_pr208"
+    "web-animations-js": "github:web-animations/web-animations-js#2.3.2"
   },
   "devDependencies": {
     "cson": "~4.1.0"
