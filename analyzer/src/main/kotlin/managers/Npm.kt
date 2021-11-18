@@ -238,24 +238,22 @@ open class Npm(
             } else {
                 log.debug { "Resolving the package info for '$identifier' via NPM registry." }
 
-                OkHttpClientHelper.downloadText("$npmRegistry/$encodedName").onSuccess {
-                    val packageInfo = jsonMapper.readTree(it)
+                OkHttpClientHelper.downloadText("$npmRegistry/$encodedName/$version").onSuccess {
+                    val versionInfo = jsonMapper.readTree(it)
 
-                    packageInfo["versions"]?.get(version)?.let { versionInfo ->
-                        description = versionInfo["description"].textValueOrEmpty()
-                        homepageUrl = versionInfo["homepage"].textValueOrEmpty()
+                    description = versionInfo["description"].textValueOrEmpty()
+                    homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
-                        versionInfo["dist"]?.let { dist ->
-                            downloadUrl = dist["tarball"].textValueOrEmpty()
-                                // Work around the issue described at
-                                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
+                    versionInfo["dist"]?.let { dist ->
+                        downloadUrl = dist["tarball"].textValueOrEmpty()
+                            // Work around the issue described at
+                            // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                            .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
 
-                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
-                        }
-
-                        vcsFromPackage = parseVcsInfo(versionInfo)
+                        hash = Hash.create(dist["shasum"].textValueOrEmpty())
                     }
+
+                    vcsFromPackage = parseVcsInfo(versionInfo)
                 }.onFailure {
                     log.info {
                         "Could not retrieve package information for '$encodedName' from NPM registry $npmRegistry: " +
