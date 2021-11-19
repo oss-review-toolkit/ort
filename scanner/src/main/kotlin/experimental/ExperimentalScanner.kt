@@ -88,11 +88,11 @@ class ExperimentalScanner(
             "Resolved provenance for ${packages.size} packages in $packageProvenanceDuration."
         }
 
-        log.info { "Resolving source trees for ${packages.size} packages." }
+        log.info { "Resolving nested provenances for ${packages.size} packages." }
         val (nestedProvenances, nestedProvenanceDuration) =
             measureTimedValue { getNestedProvenances(packageProvenances) }
         log.info {
-            "Resolved source trees for ${packages.size} packages in $nestedProvenanceDuration."
+            "Resolved nested provenances for ${packages.size} packages in $nestedProvenanceDuration."
         }
 
         val allKnownProvenances = (
@@ -256,7 +256,7 @@ class ExperimentalScanner(
                                 val nestedProvenance = nestedProvenances.getValue(pkg)
                                 reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult2 ->
                                     // TODO: Do not overwrite entries from other storages in result.
-                                    // TODO: Map scan result to known source tree for package.
+                                    // TODO: Map scan result to known nested provenance for package.
                                     result += scanResult2.scanResults
                                 }
                             }
@@ -363,7 +363,7 @@ class ExperimentalScanner(
 
 /**
  * Split this [ScanResult] into separate results for each [KnownProvenance] contained in the [nestedProvenance] by
- * matching the paths of findings with the paths in the source tree.
+ * matching the paths of findings with the paths in the nested provenance.
  */
 fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance): NestedProvenanceScanResult {
     val provenanceByPath = nestedProvenance.subRepositories.toList().toMutableList<Pair<String, KnownProvenance>>()
