@@ -19,9 +19,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-FROM adoptopenjdk/openjdk11:alpine-slim AS build
-
+# Set this to the version ORT should report.
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
+
+# Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
+ARG CRT_FILES=""
+
+FROM adoptopenjdk/openjdk11:alpine-slim AS build
 
 # Apk install commands.
 RUN apk add --no-cache \
@@ -37,6 +41,7 @@ COPY . /usr/local/src/ort
 WORKDIR /usr/local/src/ort
 
 # Gradle build.
+ARG ORT_VERSION
 RUN --mount=type=cache,target=/tmp/.gradle/ \
     GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/import_proxy_certs.sh && \
@@ -117,8 +122,7 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
 
 COPY --from=build /usr/local/src/ort/scripts/*.sh /opt/ort/bin/
 
-# This can be set to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
-ARG CRT_FILES=""
+ARG CRT_FILES
 COPY "$CRT_FILES" /tmp/certificates/
 
 # Custom install commands.
