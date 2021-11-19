@@ -354,7 +354,7 @@ class ExperimentalScanner(
             log.info { "Scanning $provenance with local scanner ${scanner.name}." }
 
             val summary = scanner.scanPath(downloadDir)
-            log.info { "Scan of $provenance with provenance based remote scanner ${scanner.name} finished." }
+            log.info { "Scan of $provenance with local scanner ${scanner.name} finished." }
 
             ScanResult(provenance, scanner.details, summary)
         }
