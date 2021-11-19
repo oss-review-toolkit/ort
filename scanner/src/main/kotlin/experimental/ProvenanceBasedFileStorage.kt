@@ -57,10 +57,10 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                     emptyList()
                 }
                 else -> {
-                    val message = "Could not read scan results for '$provenance' from path '$path': " +
-                            it.collectMessagesAsString()
-
-                    log.info { message }
+                    log.info {
+                        "Could not read scan results for '$provenance' from path '$path': " +
+                                it.collectMessagesAsString()
+                    }
 
                     // TODO: Propagate error.
                     emptyList()
@@ -100,9 +100,9 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                 is IllegalArgumentException, is IOException -> {
                     it.showStackTrace()
 
-                    val message = "Could not store scan result for '$provenance' at path '$path': " +
-                            it.collectMessagesAsString()
-                    log.warn { message }
+                    log.warn {
+                        "Could not store scan result for '$provenance' at path '$path': ${it.collectMessagesAsString()}"
+                    }
                 }
                 else -> throw it
             }
