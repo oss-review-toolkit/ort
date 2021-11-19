@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -42,6 +44,7 @@ data class NestedProvenance(
     /**
      * Return a set of all contained [KnownProvenance]s.
      */
+    @JsonIgnore
     fun getProvenances(): Set<KnownProvenance> =
         subRepositories.values.toMutableSet<KnownProvenance>().also { it += root }
 }
