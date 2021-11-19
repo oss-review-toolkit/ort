@@ -78,7 +78,7 @@ object Os {
         val fallbackUserHome = listOfNotNull(
             env["HOME"],
             env["USERPROFILE"]
-        ).firstOrNull {
+        ).find {
             it.isNotBlank()
         } ?: throw IllegalArgumentException("Unable to determine a user home directory.")
 
