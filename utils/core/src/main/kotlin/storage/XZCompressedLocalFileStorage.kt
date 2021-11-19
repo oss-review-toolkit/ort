@@ -25,8 +25,6 @@ import java.io.FileNotFoundException
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 
-import org.ossreviewtoolkit.utils.core.showStackTrace
-
 /**
  * A [FileStorage] that stores compressed files in a [directory] of the local file system.
  */
@@ -42,14 +40,10 @@ class XZCompressedLocalFileStorage(
         try {
             XZCompressorInputStream(super.read(transformPath(path)))
         } catch (compressedFileNotFoundException: FileNotFoundException) {
-            compressedFileNotFoundException.showStackTrace()
-
             // Fall back to try reading the uncompressed file.
             try {
                 super.read(path)
             } catch (uncompressedFileNotFoundException: FileNotFoundException) {
-                uncompressedFileNotFoundException.showStackTrace()
-
                 throw uncompressedFileNotFoundException.initCause(compressedFileNotFoundException)
             }
         }
