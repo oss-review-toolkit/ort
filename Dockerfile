@@ -25,6 +25,9 @@ ARG ORT_VERSION="DOCKER-SNAPSHOT"
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
 ARG CRT_FILES=""
 
+# Set this to the ScanCode version to use.
+ARG SCANCODE_VERSION="3.2.1rc2"
+
 FROM adoptopenjdk/openjdk11:alpine-slim AS build
 
 # Apk install commands.
@@ -67,8 +70,6 @@ ENV \
     YARN_VERSION=1.22.10 \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
-    # Scanner versions.
-    SCANCODE_VERSION=3.2.1rc2 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
     GOPATH=$HOME/go
@@ -126,6 +127,7 @@ ARG CRT_FILES
 COPY "$CRT_FILES" /tmp/certificates/
 
 # Custom install commands.
+ARG SCANCODE_VERSION
 RUN /opt/ort/bin/import_proxy_certs.sh && \
     if [ -n "$CRT_FILES" ]; then \
       /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
