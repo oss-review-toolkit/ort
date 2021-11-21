@@ -63,7 +63,7 @@ class Askalono(
 
     override val name = "Askalono"
     override val criteria by lazy { getScannerCriteria() }
-    override val expectedVersion = "0.4.3"
+    override val expectedVersion = "0.4.4"
     override val configuration = ""
     override val resultFileExt = "txt"
 
