@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 # Copyright (C) 2020 Bosch.IO GmbH
+# Copyright (C) 2021 BMW CarIT GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,17 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty)
+# Docker from ORT uses BuildKit feature
+DOCKER_BUILDKIT=1
+export DOCKER_BUILDKIT
 
-echo "Setting ORT_VERSION to $GIT_REVISION."
-DOCKER_BUILDKIT=1 docker build -f $GIT_ROOT/Dockerfile -t ort --build-arg ORT_VERSION=$GIT_REVISION $GIT_ROOT
+GIT_ROOT=$(git rev-parse --show-toplevel)
+GIT_VERSION=$(git describe --abbrev=7 --always --tags --dirty)
+ORT_DOCKER=${ORT_DOCKER:-ort}
+
+echo "Setting ORT_VERSION to $GIT_VERSION."
+docker build -f "$GIT_ROOT"/Dockerfile \
+    -t "$ORT_DOCKER" \
+    --build-arg ORT_VERSION="$GIT_VERSION" \
+    "$@" \
+    "$GIT_ROOT"

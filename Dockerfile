@@ -3,6 +3,7 @@
 # Copyright (C) 2020 Bosch Software Innovations GmbH
 # Copyright (C) 2021-2022 Bosch.IO GmbH
 # Copyright (C) 2021 Alliander N.V.
+# Copyright (C) 2021 BMW CarIT GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,41 +20,112 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-# Set this to the version ORT should report.
-ARG ORT_VERSION="DOCKER-SNAPSHOT"
+#------------------------------------------------------------------------
+# Use OpenJDK Eclipe Temurin Ubuntu LTS
+FROM eclipse-temurin:11-jdk AS build
+
+# Prepare build environment to use ort scripts from here
+COPY scripts /etc/scripts
 
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
 ARG CRT_FILES=""
+COPY "$CRT_FILES" /tmp/certificates/
+RUN /etc/scripts/import_proxy_certs.sh \
+    && if [ -n "$CRT_FILES" ]; then \
+        /etc/scripts/import_certificates.sh /tmp/certificates/; \
+       fi
 
-# Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="30.1.0"
+#------------------------------------------------------------------------
+# Ubuntu build toolchain
+RUN --mount=type=cache,target=/var/cache/apt apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        dirmngr \
+        clang-9 \
+        clang++-9 \
+        dpkg-dev \
+        git \
+        gnupg \
+        libbluetooth-dev \
+        libbz2-dev \
+        libc6-dev \
+        libexpat1-dev \
+        libffi-dev \
+        libgmp-dev \
+        libgdbm-dev \
+        liblzma-dev \
+        libmpdec-dev \
+        libncursesw5-dev \
+        libreadline-dev \
+        libsqlite3-dev \
+        libssl-dev \
+        make \
+        netbase \
+        openssl \
+        python-dev \
+        python-setuptools \
+        python3-dev \
+        python3-pip \
+        python3-setuptools \
+        ruby-dev \
+        tk-dev \
+        tzdata \
+        unzip \
+        uuid-dev \
+        unzip \
+        xz-utils \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set this to the Python Inspector version to use.
-ARG PYTHON_INSPECTOR_VERSION="0.6.5"
+#------------------------------------------------------------------------
+# Build ort as a separate component
 
-FROM eclipse-temurin:11-jdk-jammy AS build
+FROM build as ortbuild
+
+# Set this to the version ORT should report.
+ARG ORT_VERSION="DOCKER-SNAPSHOT"
 
 COPY . /usr/local/src/ort
-
 WORKDIR /usr/local/src/ort
 
-# Gradle build.
-ARG ORT_VERSION
+# Prepare Gradle
 RUN --mount=type=cache,target=/tmp/.gradle/ \
     export GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM eclipse-temurin:11-jdk-jammy AS run
+RUN mkdir -p /opt/ort \
+    && tar xf /usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar -C /opt/ort --strip-components 1 \
+    && cp -a /usr/local/src/ort/scripts/*.sh /opt/ort/bin/ \
+    && cp -a /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
+    && cp -a /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
+
+#------------------------------------------------------------------------
+# Main container
+FROM eclipse-temurin:11-jre
+
+RUN --mount=type=cache,target=/var/cache/apt apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        git \
+        gnupg \
+        libarchive-tools \
+        openssl \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+#------------------------------------------------------------------------
+# ORT
+COPY --from=ortbuild /opt/ort /opt/ort
 
 ENV \
     # Package manager versions.
-    BOWER_VERSION=1.8.12 \
-    CARGO_VERSION=0.60.0ubuntu1-0ubuntu1~22.04.1 \
-    COCOAPODS_VERSION=1.11.2 \
-    COMPOSER_VERSION=2.2.6-2ubuntu4 \
-    CONAN_VERSION=1.52.0 \
+    BOWER_VERSION=1.8.8 \
+    COMPOSER_VERSION=1.10.1-1 \
+    CONAN_VERSION=1.48.1 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.18.3 \
     HASKELL_STACK_VERSION=2.7.5 \
@@ -67,8 +139,8 @@ ENV \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
     # Installation directories.
-    ANDROID_HOME=/opt/android-sdk \
-    GOPATH=/tmp/go
+    ANDROID_HOME=/opt/android-sDockerfiledk \
+    GOPATH=$HOME/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PATH="$PATH:$GOPATH/bin:/opt/go/bin:/opt/ort/bin"
@@ -83,46 +155,24 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
     add-apt-repository -y ppa:git-core/ppa && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        # Install general tools required by this Dockerfile.
-        lib32stdc++6 \
-        libffi-dev \
-        libgmp-dev \
-        libxext6 \
-        libxi6 \
-        libxrender1 \
-        libxtst6 \
-        make \
-        netbase \
-        openssh-client \
-        unzip \
-        xz-utils \
-        zlib1g-dev \
         # Install VCS tools (no specific versions required here).
         cvs \
         git \
         mercurial \
         subversion \
-        # Install package managers (in versions known to work).
-        cargo=$CARGO_VERSION \
+        cargo \
         composer=$COMPOSER_VERSION \
         nodejs \
-        python-is-python3 \
-        python-setuptools \
-        python2-dev \
-        python3-dev \
-        python3-pip \
-        python3-setuptools \
-        ruby-dev \
         sbt=$SBT_VERSION \
     && \
     rm -rf /var/lib/apt/lists/*
 
-COPY scripts/*.sh /opt/ort/bin/
-
-ARG CRT_FILES
+# Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
+ARG CRT_FILES=""
 COPY "$CRT_FILES" /tmp/certificates/
 
 # Custom install commands.
+ARG SCANCODE_VERSION="3.2.1rc2"
 RUN /opt/ort/bin/import_proxy_certs.sh && \
     if [ -n "$CRT_FILES" ]; then \
       /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
@@ -131,9 +181,9 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
-    npm install --location=global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION && \
-    pip install --no-cache-dir wheel && \
-    pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
+    npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION && \
+    pip3 install --no-cache-dir wheel && \
+    pip3 install --no-cache-dir conan==$CONAN_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
     curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
@@ -161,17 +211,5 @@ RUN curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_
     pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION && \
     rm requirements.txt
 
-ARG PYTHON_INSPECTOR_VERSION
-RUN pip install --no-cache-dir python-inspector==$PYTHON_INSPECTOR_VERSION
-
-FROM run AS dist
-
-ARG ORT_VERSION
-RUN --mount=type=bind,from=build,source=/usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar,target=/opt/ort.tar \
-    tar xf /opt/ort.tar -C /opt/ort --exclude="*.bat" --strip-components 1 && \
-    /opt/ort/bin/ort requirements
-
-COPY --from=build /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
-COPY --from=build /usr/local/src/ort/helper-cli/build/libs/helper-cli-$ORT_VERSION.jar /opt/ort/lib/
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
