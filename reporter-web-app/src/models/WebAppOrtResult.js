@@ -33,6 +33,7 @@ import WebAppScopeExclude from './WebAppScopeExclude';
 import WebAppTreeNode from './WebAppTreeNode';
 import WebAppRuleViolation from './WebAppRuleViolation';
 import WebAppResolution from './WebAppResolution';
+import WebAppVulnerability from './WebAppVulnerability';
 
 class WebAppOrtResult {
     #concludedLicensePackages = [];
@@ -98,6 +99,12 @@ class WebAppOrtResult {
     #ruleViolationsByPackageIndexMap = new Map();
 
     #ruleViolationResolutions = [];
+
+    #vulnerabilities = [];
+
+    #vulnerabilitiesByPackageIndexMap = new Map();
+
+    #vulnerabilityResolutions = [];
 
     constructor(obj) {
         if (obj instanceof Object) {
@@ -285,6 +292,32 @@ class WebAppOrtResult {
                 }
             }
 
+            if (obj.vulnerabilities) {
+                const vulnerabilities = obj.vulnerabilities;
+                this.#vulnerabilitiesByPackageIndexMap.clear();
+
+                for (let i = 0, len = vulnerabilities.length; i < len; i++) {
+                    const webAppVulnerability = new WebAppVulnerability(vulnerabilities[i], this);
+                    const { packageIndex } = webAppVulnerability;
+                    this.#vulnerabilities.push(webAppVulnerability);
+
+                    if (!this.#vulnerabilitiesByPackageIndexMap.has(packageIndex)) {
+                        this.#vulnerabilitiesByPackageIndexMap.set(packageIndex, [webAppVulnerability]);
+                    } else {
+                        this.#vulnerabilitiesByPackageIndexMap.get(packageIndex).push(webAppVulnerability);
+                    }
+                }
+            }
+
+            if (obj.vulnerabilities_resolutions || obj.vulnerabilitiesResolutions) {
+                const vulnerabilityResolutions = obj.vulnerabilities_resolutions
+                    || obj.vulnerabilitiesResolutions;
+
+                for (let i = 0, len = vulnerabilityResolutions.length; i < len; i++) {
+                    this.#vulnerabilityResolutions.push(new WebAppResolution(vulnerabilityResolutions[i]));
+                }
+            }
+
             if (obj.dependency_trees || obj.dependencyTrees) {
                 const dependencyTrees = obj.dependency_trees || obj.dependencyTrees;
                 const treeNodesByPackageIndexMap = new Map();
@@ -435,6 +468,14 @@ class WebAppOrtResult {
         return this.#statistics;
     }
 
+    get vulnerabilities() {
+        return this.#vulnerabilities;
+    }
+
+    get vulnerabilityResolutions() {
+        return this.#ruleViolationResolutions;
+    }
+
     getCopyrightByIndex(val) {
         return this.#copyrights[val] || null;
     }
@@ -497,6 +538,14 @@ class WebAppOrtResult {
 
     getRuleViolationsForPackageIndex(val) {
         return this.#ruleViolationsByPackageIndexMap.get(val) || [];
+    }
+
+    getVulnerabilitiesForPackageIndex(val) {
+        return this.#vulnerabilitiesByPackageIndexMap.get(val) || [];
+    }
+
+    getVulnerabilityResolutionByIndex(val) {
+        return this.#vulnerabilityResolutions[val] || null;
     }
 
     hasConcludedLicenses() {
@@ -587,6 +636,10 @@ class WebAppOrtResult {
 
     hasScopeExcludes() {
         return this.#scopeExcludes.length > 0;
+    }
+
+    hasVulnerabilities() {
+        return this.#vulnerabilities.length > 0;
     }
 }
 
