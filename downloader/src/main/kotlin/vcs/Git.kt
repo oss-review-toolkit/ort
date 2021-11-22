@@ -248,7 +248,8 @@ private object AuthenticatorCredentialsProvider : CredentialsProvider() {
         }
 
     override fun get(uri: URIish, vararg items: CredentialItem): Boolean {
-        log.debug { "JGit queries credentials for ${uri.host}." }
+        log.debug { "JGit queries credentials for '${uri.host}'." }
+
         val auth = Authenticator.requestPasswordAuthentication(
             /* host = */ uri.host,
             /* addr = */ null,
@@ -258,7 +259,7 @@ private object AuthenticatorCredentialsProvider : CredentialsProvider() {
             /* scheme = */ null
         ) ?: return false
 
-        log.debug { "Passing credentials for ${uri.host} to JGit." }
+        log.debug { "Passing credentials for '${uri.host}' to JGit." }
 
         items.forEach { item ->
             when (item) {
