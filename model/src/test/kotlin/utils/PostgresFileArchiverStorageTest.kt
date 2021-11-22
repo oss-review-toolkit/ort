@@ -19,14 +19,11 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres
-
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.time.Duration
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -34,10 +31,9 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.test.PostgresListener
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
-
-private val PG_STARTUP_WAIT = Duration.ofSeconds(20)
 
 private val SOURCE_ARTIFACT_PROVENANCE = ArtifactProvenance(sourceArtifact = RemoteArtifact("url", Hash.create("hash")))
 private val VCS_PROVENANCE = RepositoryProvenance(
@@ -62,25 +58,13 @@ private fun TestConfiguration.createTempFile(content: String): File =
     }
 
 class PostgresFileArchiverStorageTest : WordSpec({
-    lateinit var postgres: EmbeddedPostgres
+    val postgresListener = PostgresListener()
     lateinit var storage: PostgresFileArchiverStorage
 
-    beforeSpec {
-        postgres = EmbeddedPostgres.builder().setPGStartupWait(PG_STARTUP_WAIT).start()
-    }
+    listener(postgresListener)
 
     beforeTest {
-        postgres.postgresDatabase.connection.use { c ->
-            val s = c.createStatement()
-            s.execute("DROP SCHEMA public CASCADE")
-            s.execute("CREATE SCHEMA public")
-        }
-
-        storage = PostgresFileArchiverStorage(postgres.postgresDatabase)
-    }
-
-    afterSpec {
-        postgres.close()
+        storage = PostgresFileArchiverStorage(postgresListener.dataSource)
     }
 
     "hasArchive()" should {

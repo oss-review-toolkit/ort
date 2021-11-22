@@ -19,35 +19,14 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import com.opentable.db.postgres.embedded.EmbeddedPostgres
-
-import io.kotest.core.spec.Spec
-import io.kotest.core.test.TestCase
-
-import java.time.Duration
-
-private val PG_STARTUP_WAIT = Duration.ofSeconds(20)
+import org.ossreviewtoolkit.utils.test.PostgresListener
 
 class PostgresStorageFunTest : AbstractStorageFunTest() {
-    private lateinit var postgres: EmbeddedPostgres
+    private val postgresListener = PostgresListener()
 
-    override fun beforeSpec(spec: Spec) {
-        postgres = EmbeddedPostgres.builder().setPGStartupWait(PG_STARTUP_WAIT).start()
+    init {
+        listener(postgresListener)
     }
 
-    override fun beforeTest(testCase: TestCase) {
-        postgres.postgresDatabase.connection.use { c ->
-            val s = c.createStatement()
-            s.execute("DROP SCHEMA public CASCADE")
-            s.execute("CREATE SCHEMA public")
-        }
-
-        super.beforeTest(testCase)
-    }
-
-    override fun afterSpec(spec: Spec) {
-        postgres.close()
-    }
-
-    override fun createStorage() = PostgresStorage(postgres.postgresDatabase)
+    override fun createStorage() = PostgresStorage(postgresListener.dataSource)
 }

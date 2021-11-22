@@ -23,7 +23,6 @@ val hikariVersion: String by project
 val hopliteVersion: String by project
 val jacksonVersion: String by project
 val jsonSchemaValidatorVersion: String by project
-val postgresEmbeddedVersion: String by project
 val postgresVersion: String by project
 val mockkVersion: String by project
 val semverVersion: String by project
@@ -56,6 +55,5 @@ dependencies {
     implementation("org.postgresql:postgresql:$postgresVersion")
 
     testImplementation("com.networknt:json-schema-validator:$jsonSchemaValidatorVersion")
-    testImplementation("com.opentable.components:otj-pg-embedded:$postgresEmbeddedVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
