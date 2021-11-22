@@ -122,7 +122,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
  * Parse the [contents] of a [.netrc](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html)
  * file for a login / password matching [machine].
  */
-fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentication? {
+internal fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentication? {
     val lines = contents.lines().mapNotNull { line ->
         line.trim().takeUnless { it.startsWith('#') }
     }
