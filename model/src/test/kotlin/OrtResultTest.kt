@@ -34,6 +34,11 @@ import io.kotest.matchers.types.beInstanceOf
 import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.IssueResolutionReason
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
@@ -147,6 +152,127 @@ class OrtResultTest : WordSpec({
             }
 
             e.message shouldMatch "The .* of project .* cannot be found in .*"
+        }
+    }
+
+    "getOpenIssues" should {
+        "omit resolved issues" {
+            val ortResult = OrtResult.EMPTY.copy(
+                repository = Repository.EMPTY.copy(
+                    config = RepositoryConfiguration(
+                        resolutions = Resolutions(
+                            issues = listOf(
+                                IssueResolution(
+                                    "Issue message to resolve",
+                                    IssueResolutionReason.CANT_FIX_ISSUE,
+                                    "comment"
+                                )
+                            )
+                        )
+                    )
+                ),
+                analyzer = AnalyzerRun(
+                    environment = Environment(),
+                    config = AnalyzerConfiguration(),
+                    result = AnalyzerResult(
+                        projects = sortedSetOf(),
+                        packages = sortedSetOf(),
+                        issues = sortedMapOf(
+                            Identifier("Maven:org.oss-review-toolkit:example:1.0") to
+                                    listOf(
+                                        OrtIssue(message = "Issue message to resolve", source = ""),
+                                        OrtIssue(message = "Non-resolved issue", source = "")
+                                    )
+                        )
+                    )
+                )
+            )
+
+            val openIssues = ortResult.getOpenIssues(Severity.WARNING)
+
+            openIssues should haveSize(1)
+            with(openIssues[0]) {
+                message shouldBe "Non-resolved issue"
+            }
+        }
+
+        "omit issues with violation below threshold" {
+            val ortResult = OrtResult.EMPTY.copy(
+                analyzer = AnalyzerRun(
+                    environment = Environment(),
+                    config = AnalyzerConfiguration(),
+                    result = AnalyzerResult(
+                        projects = sortedSetOf(),
+                        packages = sortedSetOf(),
+                        issues = sortedMapOf(
+                            Identifier("Maven:org.oss-review-toolkit:example:1.0") to
+                                    listOf(
+                                        OrtIssue(
+                                            message = "Issue with severity 'warning'",
+                                            source = "",
+                                            severity = Severity.WARNING
+                                        ),
+                                        OrtIssue(
+                                            message = "Issue with severity 'hint'.",
+                                            source = "",
+                                            severity = Severity.HINT
+                                        )
+                                    )
+                        )
+                    )
+                )
+            )
+
+            val openIssues = ortResult.getOpenIssues(Severity.WARNING)
+
+            openIssues should haveSize(1)
+            with(openIssues[0]) {
+                message shouldBe "Issue with severity 'warning'"
+            }
+        }
+
+        "omit excluded issues" {
+            val ortResult = OrtResult.EMPTY.copy(
+                repository = Repository.EMPTY.copy(
+                    config = RepositoryConfiguration(
+                        excludes = Excludes(
+                            paths = listOf(
+                                PathExclude(
+                                    pattern = "excluded/pom.xml",
+                                    reason = PathExcludeReason.TEST_OF
+                                )
+                            )
+                        )
+                    )
+                ),
+                analyzer = AnalyzerRun(
+                    environment = Environment(),
+                    config = AnalyzerConfiguration(),
+                    result = AnalyzerResult(
+                        projects = sortedSetOf(
+                            Project.EMPTY.copy(
+                                id = Identifier("Maven:org.oss-review-toolkit:excluded:1.0"),
+                                definitionFilePath = "excluded/pom.xml",
+                                declaredLicenses = sortedSetOf()
+                            )
+                        ),
+                        packages = sortedSetOf(),
+                        issues = sortedMapOf(
+                            Identifier("Maven:org.oss-review-toolkit:excluded:1.0") to
+                                    listOf(OrtIssue(message = "Excluded issue", source = "")),
+                            Identifier("Maven:org.oss-review-toolkit:included:1.0") to
+                                    listOf(OrtIssue(message = "Included issue", source = ""))
+                        )
+                    )
+                )
+            )
+
+            val openIssues = ortResult.getOpenIssues()
+
+            openIssues should haveSize(1)
+            with(openIssues[0]) {
+                message shouldBe "Included issue"
+            }
         }
     }
 
