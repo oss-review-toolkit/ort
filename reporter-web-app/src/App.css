@@ -88,16 +88,16 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     width: 1.2em;
 }
 .ort-control > svg:hover {
-    color: #1890FF;
+    color: #1890ff;
 }
 
 /* Colors of exclude, error, hint, success and warning icons */
 .ort-error {
-    color: #F5222D;
+    color: #f5222d;
 }
 
 .ort-excluded {
-    color: #B0C4DE;
+    color: #b0c4de;
 }
 
 .ort-hint {
@@ -105,7 +105,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }
 
 .ort-ok {
-    color: #52C41A;
+    color: #52c41a;
 }
 
 .ort-warning {
@@ -131,7 +131,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 /* === Styling for PackageCollapse === */
 
 .ort-package-collapse {
-    background-color: #FFF;
+    background-color: #fff;
     font-weight: 400;
 }
 
