@@ -63,7 +63,6 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update \
         libssl-dev \
         make \
         netbase \
-        ruby-dev \
         tk-dev \
         tzdata \
         uuid-dev \
@@ -127,6 +126,34 @@ RUN pip install -U \
 COPY docker/python.sh /etc/ort/bash_modules
 
 #------------------------------------------------------------------------
+# RUBY - Build Ruby as a separate component with rbenv
+FROM build as rubybuild
+
+ARG RUBY_VERSION=2.7.4
+ENV RBENV_ROOT=/opt/rbenv
+ENV PATH=${RBENV_ROOT}/bin:${RBENV_ROOT}/shims/:${RBENV_ROOT}/plugins/ruby-build/bin:$PATH
+
+RUN git clone --depth 1 https://github.com/rbenv/rbenv.git ${RBENV_ROOT}
+RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+WORKDIR ${RBENV_ROOT}
+RUN src/configure \
+    && make -C src
+RUN rbenv install ${RUBY_VERSION} \
+    && rbenv global ${RUBY_VERSION} \
+    && gem install bundler cocoapods
+
+# Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
+RUN curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | \
+    tar -zxC . \
+    && (cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b \
+        && gem build cocoapods.gemspec \
+        && gem install cocoapods-1.10.1.gem \
+        ) \
+    && rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
+
+COPY docker/ruby.sh /etc/ort/bash_modules
+
+#------------------------------------------------------------------------
 # Main container
 FROM eclipse-temurin:11-jre
 
@@ -152,6 +179,10 @@ RUN chmod 755 /usr/bin/ort
 COPY --from=pythonbuild /opt/python /opt/python
 COPY --from=pythonbuild /etc/ort/bash_modules/python.sh /etc/ort/bash_modules/
 
+# Ruby
+COPY --from=rubybuild /opt/rbenv /opt/rbenv
+COPY --from=rubybuild /etc/ort/bash_modules/ruby.sh /etc/ort/bash_modules/
+
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
@@ -170,7 +201,7 @@ ENV \
     GOPATH=$HOME/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH="$PATH:$GOPATH/bin:/opt/go/bin:/opt/ort/bin"
+    PATH="$PATH:$HOME/.local/bin:$GOPATH/bin:/opt/go/bin"
 
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
@@ -227,15 +258,14 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi && \
     yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
-    chmod -R o+w $ANDROID_HOME && \
-    # Install 'CocoaPods'.
-    gem install cocoapods -v $COCOAPODS_VERSION
-
-# Add scanners (in versions known to work).
-ARG SCANCODE_VERSION
-RUN curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt && \
-    pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION && \
-    rm requirements.txt
+    # Add scanners (in versions known to work).
+    curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
+        tar -zxC /usr/local && \
+        # Trigger ScanCode configuration for Python 3 and reindex licenses initially.
+        cd /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
+        PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --reindex-licenses && \
+        chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
+        ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
 
 
 ENTRYPOINT ["/usr/bin/ort"]
