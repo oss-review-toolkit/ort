@@ -43,7 +43,7 @@ internal class StatisticsCalculator {
         licenseInfoResolver: LicenseInfoResolver
     ) = Statistics(
         repositoryConfiguration = getRepositoryConfigurationStatistics(ortResult),
-        openIssues = getOpenIssues(ortResult, resolutionProvider),
+        openIssues = getOpenIssues(ortResult),
         openRuleViolations = getOpenRuleViolations(ortResult, resolutionProvider),
         dependencyTree = DependencyTreeStatistics(
             includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
@@ -70,13 +70,8 @@ internal class StatisticsCalculator {
         )
     }
 
-    private fun getOpenIssues(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
-        val openIssues = ortResult
-            .collectIssues()
-            .filterNot { (id, _) -> ortResult.isExcluded(id) }
-            .values
-            .flatten()
-            .filterNot { resolutionProvider.isResolved(it) }
+    private fun getOpenIssues(ortResult: OrtResult): IssueStatistics {
+        val openIssues = ortResult.getOpenIssues(Severity.HINT)
 
         return IssueStatistics(
             errors = openIssues.count { it.severity == Severity.ERROR },
