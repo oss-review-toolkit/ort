@@ -21,6 +21,7 @@
 val jacksonVersion: String by project
 val kotestVersion: String by project
 val log4jCoreVersion: String by project
+val postgresEmbeddedVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -35,6 +36,7 @@ dependencies {
     api("io.kotest:kotest-framework-api:$kotestVersion")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.opentable.components:otj-pg-embedded:$postgresEmbeddedVersion")
     implementation("io.kotest:kotest-extensions-junitxml:$kotestVersion")
     implementation("io.kotest:kotest-framework-engine:$kotestVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
