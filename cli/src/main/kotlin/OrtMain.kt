@@ -187,7 +187,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     override fun run() {
         Configurator.setRootLevel(logLevel)
 
-        log.debug { "Used command line arguments: ${currentContext.originalArgv.joinToString()}" }
+        log.debug { "Used command line arguments: ${currentContext.originalArgv}" }
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
