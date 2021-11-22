@@ -92,7 +92,11 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }
 
 /* Colors of exclude, error, hint, success and warning icons */
-.ort-error {
+.ort-critical {
+    color: #c61b10;
+}
+
+.ort-error, .ort-high {
     color: #f5222d;
 }
 
@@ -100,16 +104,20 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     color: #b0c4de;
 }
 
-.ort-hint {
+.ort-hint, .ort-unknown {
     color: #84b6eb;
 }
 
-.ort-ok {
+.ort-low, .ort-ok {
     color: #52c41a;
 }
 
 .ort-warning {
     color: #ef8f1c;
+}
+
+.ort-medium {
+    color: #d5c920;
 }
 
 .ort-about-logo {
