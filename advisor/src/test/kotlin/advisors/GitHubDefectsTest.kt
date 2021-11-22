@@ -47,6 +47,8 @@ import org.ossreviewtoolkit.clients.github.issuesquery.LabelConnection
 import org.ossreviewtoolkit.clients.github.issuesquery.LabelEdge
 import org.ossreviewtoolkit.clients.github.releasesquery.Commit
 import org.ossreviewtoolkit.clients.github.releasesquery.Release
+import org.ossreviewtoolkit.model.AdvisorCapability
+import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Defect
 import org.ossreviewtoolkit.model.Identifier
@@ -56,6 +58,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.GitHubDefectsConfiguration
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class GitHubDefectsTest : WordSpec({
@@ -385,6 +388,14 @@ class GitHubDefectsTest : WordSpec({
             )
         }
     }
+
+    "details" should {
+        "contain correct advisor details" {
+            val advisor = createAdvisor()
+
+            advisor.details shouldBe AdvisorDetails("GitHubDefects", enumSetOf(AdvisorCapability.DEFECTS))
+        }
+    }
 })
 
 private const val GITHUB_TOKEN = "<github_access_token>"
@@ -436,6 +447,7 @@ private suspend fun GitHubDefects.getSingleResult(pkg: Package): AdvisorResult {
     results.keys should containExactly(pkg)
     val result = results.getValue(pkg).single()
     result.advisor.name shouldBe "GitHubDefects"
+    result.advisor.capabilities shouldBe enumSetOf(AdvisorCapability.DEFECTS)
 
     return result
 }

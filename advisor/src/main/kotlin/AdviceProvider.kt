@@ -45,6 +45,11 @@ abstract class AdviceProvider(val providerName: String) {
     ): Map<Package, List<AdvisorResult>>
 
     /**
+     * An object with detail information about this [AdviceProvider].
+     */
+    abstract val details: AdvisorDetails
+
+    /**
      * A generic method that creates a failed [AdvisorResult] for [Package]s if there was an issue
      * constructing the provider-specific information.
      */
@@ -60,7 +65,7 @@ abstract class AdviceProvider(val providerName: String) {
         val failedResults = listOf(
             AdvisorResult(
                 vulnerabilities = emptyList(),
-                advisor = AdvisorDetails(providerName),
+                advisor = details,
                 summary = AdvisorSummary(
                     startTime = startTime,
                     endTime = endTime,

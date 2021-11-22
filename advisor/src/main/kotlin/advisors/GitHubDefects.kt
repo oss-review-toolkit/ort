@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.clients.github.QueryResult
 import org.ossreviewtoolkit.clients.github.issuesquery.Issue
 import org.ossreviewtoolkit.clients.github.labels
 import org.ossreviewtoolkit.clients.github.releasesquery.Release
+import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -48,6 +49,7 @@ import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.GitHubDefectsConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.core.filterVersionNames
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
@@ -92,7 +94,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
      * The details returned with each [AdvisorResult] produced by this instance. As this is constant, it can be
      * created once beforehand.
      */
-    private val details = AdvisorDetails(providerName)
+    override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.DEFECTS))
 
     /** The filters to be applied to issue labels. */
     private val labelFilters = gitHubConfiguration.labelFilter.toLabelFilters()
