@@ -29,12 +29,14 @@ import {
     CheckCircleOutlined,
     ExclamationCircleOutlined,
     ExceptionOutlined,
+    SecurityScanOutlined,
     TagsOutlined
 } from '@ant-design/icons';
 import IssuesTable from './IssuesTable';
 import LicenseChart from './LicenseChart';
 import LicenseStatsTable from './LicenseStatsTable';
 import RuleViolationsTable from './RuleViolationsTable';
+import VulnerabilitiesTable from './VulnerabilitiesTable';
 import {
     getOrtResult,
     getSummaryCharts,
@@ -110,6 +112,20 @@ class SummaryView extends React.Component {
         });
     }
 
+    static onChangeVulnerabilitiesTable(pagination, filters, sorter) {
+        store.dispatch({
+            type: 'SUMMARY::CHANGE_VULNERABILITIES_TABLE',
+            payload: {
+                columns: {
+                    vulnerabilities: {
+                        filteredInfo: filters,
+                        sortedInfo: sorter
+                    }
+                }
+            }
+        });
+    }
+
     shouldComponentUpdate() {
         const { shouldComponentUpdate } = this.props;
         return shouldComponentUpdate;
@@ -133,7 +149,8 @@ class SummaryView extends React.Component {
             repository: { vcsProcessed },
             ruleViolations,
             scopes,
-            statistics
+            statistics,
+            vulnerabilities
         } = webAppOrtResult;
 
         const {
@@ -348,6 +365,7 @@ class SummaryView extends React.Component {
                 {
                     (webAppOrtResult.hasIssues()
                     || webAppOrtResult.hasRuleViolations()
+                    || webAppOrtResult.hasVulnerabilities()
                     || webAppOrtResult.hasDeclaredLicenses()
                     || webAppOrtResult.hasDetectedLicenses())
                     && (
@@ -370,7 +388,7 @@ class SummaryView extends React.Component {
                                                         )
                                                     </span>
                                                 )}
-                                                key="1"
+                                                key="ort-summary-rule-violations-table"
                                             >
                                                 <RuleViolationsTable
                                                     onChange={
@@ -399,7 +417,7 @@ class SummaryView extends React.Component {
                                                         )
                                                     </span>
                                                 )}
-                                                key="2"
+                                                key="ort-summary-issues-table"
                                             >
                                                 <IssuesTable
                                                     issues={webAppOrtResult.issues}
@@ -408,6 +426,31 @@ class SummaryView extends React.Component {
                                                     }
                                                     showExcludesColumn={webAppOrtResult.hasExcludes()}
                                                     state={columns.issues}
+                                                />
+                                            </TabPane>
+                                        )
+                                    }
+                                    {
+                                        webAppOrtResult.hasVulnerabilities()
+                                        && (
+                                            <TabPane
+                                                tab={(
+                                                    <span>
+                                                        <SecurityScanOutlined />
+                                                        Vulnerabilities (
+                                                        {vulnerabilities.length}
+                                                        )
+                                                    </span>
+                                                )}
+                                                key="ort-summary-vulnerabilities-table"
+                                            >
+                                                <VulnerabilitiesTable
+                                                    onChange={
+                                                        SummaryView.onChangeVulnerabilitiesTable
+                                                    }
+                                                    vulnerabilities={webAppOrtResult.vulnerabilities}
+                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                    state={columns.vulnerabilities}
                                                 />
                                             </TabPane>
                                         )
