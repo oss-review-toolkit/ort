@@ -148,30 +148,6 @@ class WebAppRuleViolation {
         return this.#package ? this.#package.id : '';
     }
 
-    get severity() {
-        return this.#severity;
-    }
-
-    get severityIndex() {
-        if (this.isResolved) {
-            return 3;
-        }
-
-        if (this.#severity === 'ERROR') {
-            return 0;
-        }
-
-        if (this.#severity === 'WARNING') {
-            return 1;
-        }
-
-        if (this.#severity === 'HINT') {
-            return 2;
-        }
-
-        return -1;
-    }
-
     get resolutionIndexes() {
         return this.#resolutionIndexes;
     }
@@ -206,6 +182,30 @@ class WebAppRuleViolation {
 
     get rule() {
         return this.#rule;
+    }
+
+    get severity() {
+        return this.#severity;
+    }
+
+    get severityIndex() {
+        if (this.isResolved) {
+            return 3;
+        }
+
+        if (this.#severity === 'ERROR') {
+            return 0;
+        }
+
+        if (this.#severity === 'WARNING') {
+            return 1;
+        }
+
+        if (this.#severity === 'HINT') {
+            return 2;
+        }
+
+        return -1;
     }
 
     hasHowToFix() {
