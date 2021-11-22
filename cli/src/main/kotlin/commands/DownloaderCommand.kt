@@ -345,7 +345,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
             // project needs to be downloaded.
             val config = globalOptionsForSubcommands.config.downloader.copy(allowMovingRevisions = true)
-            Downloader(config).download(dummyPackage, outputDir)
+            val provenance = Downloader(config).download(dummyPackage, outputDir)
+            println("Successfully downloaded $provenance.")
         } catch (e: DownloadException) {
             e.showStackTrace()
 
