@@ -127,11 +127,13 @@ data class EvaluatedModel(
             EvaluatedRuleViolation::class.java,
             EvaluatedScanResult::class.java,
             EvaluatedScope::class.java,
+            EvaluatedVulnerability::class.java,
             IssueResolution::class.java,
             LicenseId::class.java,
             PathExclude::class.java,
             RuleViolationResolution::class.java,
-            ScopeExclude::class.java
+            ScopeExclude::class.java,
+            VulnerabilityResolution::class.java
         )
 
         private val JSON_MAPPER by lazy {
