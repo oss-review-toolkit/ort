@@ -24,9 +24,9 @@ import LicenseStatistics from './LicenseStatistics';
 class Statistics {
     #dependencyTree;
 
-    #openIssues = 0;
+    #openIssues;
 
-    #openRuleViolations = 0;
+    #openRuleViolations;
 
     #licenses;
 
