@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
+import java.util.EnumSet
+
+import org.ossreviewtoolkit.utils.common.enumSetOf
+
 /**
  * Details about the used provider of vulnerability information.
  */
@@ -26,7 +30,13 @@ data class AdvisorDetails(
     /**
      * The name of the used advisor.
      */
-    val name: String
+    val name: String,
+
+    /**
+     * The capabilities of the used advisor. This property indicates, which kind of findings are retrieved by the
+     * advisor.
+     */
+    val capabilities: EnumSet<AdvisorCapability> = enumSetOf()
 ) {
     companion object {
         val EMPTY = AdvisorDetails(
