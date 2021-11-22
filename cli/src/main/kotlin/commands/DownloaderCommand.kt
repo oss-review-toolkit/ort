@@ -36,6 +36,8 @@ import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import org.ossreviewtoolkit.cli.DataEntity
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
@@ -173,150 +175,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        val config = globalOptionsForSubcommands.config
         val failureMessages = mutableListOf<String>()
 
         when (input) {
-            is FileType -> {
-                val ortFile = (input as FileType).file
-                println("Downloading $entities entities from ORT result file at '${ortFile.canonicalPath}'...")
-
-                val ortResult = readOrtResult(ortFile)
-                val analyzerResult = ortResult.analyzer?.result
-
-                if (analyzerResult == null) {
-                    log.warn {
-                        "Cannot run the downloader as the provided ORT result file '${ortFile.canonicalPath}' does " +
-                                "not contain an analyzer result. Nothing will be downloaded."
-                    }
-
-                    throw ProgramResult(0)
-                }
-
-                val packages = mutableListOf<Package>().apply {
-                    if (DataEntity.PROJECTS in entities) {
-                        addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
-                    }
-
-                    if (DataEntity.PACKAGES in entities) {
-                        addAll(analyzerResult.packages.map { it.pkg })
-                    }
-                }
-
-                val includedLicenseCategories = config.downloader.includedLicenseCategories
-
-                val packageDownloadDirs =
-                    if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
-                        val licenseCategorizations =
-                            licenseClassificationsFile.readValue<LicenseClassifications>().categorizations
-                        val licenseInfoResolver = ortResult.createLicenseInfoResolver()
-
-                        packages.filter { pkg ->
-                            // A package is only downloaded if its license is part of a category that is part of the
-                            // DownloaderConfiguration's includedLicenseCategories.
-                            getLicenseCategoriesForPackage(
-                                pkg,
-                                licenseCategorizations,
-                                licenseInfoResolver,
-                                ortResult.getRepositoryLicenseChoices(),
-                                ortResult.getPackageLicenseChoices(pkg.id)
-                            ).any { it in includedLicenseCategories }
-                        }
-                    } else {
-                        packages
-                    }.associateWith { outputDir.resolve(it.id.toPath()) }
-
-                packageDownloadDirs.forEach { (pkg, dir) ->
-                    try {
-                        Downloader(config.downloader).download(pkg, dir)
-
-                        if (archiveMode == ArchiveMode.ENTITY) {
-                            val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
-
-                            log.info { "Archiving directory '$dir' to '$zipFile'." }
-                            val result = runCatching {
-                                archive(
-                                    dir,
-                                    zipFile,
-                                    "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
-                                )
-                            }
-
-                            result.exceptionOrNull()?.let {
-                                log.error { "Could not archive '$dir': ${it.collectMessagesAsString()}" }
-                            }
-
-                            dir.safeDeleteRecursively(baseDirectory = outputDir)
-                        }
-                    } catch (e: DownloadException) {
-                        e.showStackTrace()
-
-                        val failureMessage = "Could not download '${pkg.id.toCoordinates()}': " +
-                                e.collectMessagesAsString()
-                        failureMessages += failureMessage
-
-                        log.error { failureMessage }
-                    }
-                }
-
-                if (archiveMode == ArchiveMode.BUNDLE) {
-                    val zipFile = outputDir.resolve("archive.zip")
-
-                    log.info { "Archiving directory '$outputDir' to '$zipFile'." }
-                    val result = runCatching { archive(outputDir, zipFile) }
-
-                    result.exceptionOrNull()?.let {
-                        log.error { "Could not archive '$outputDir': ${it.collectMessagesAsString()}" }
-                    }
-
-                    packageDownloadDirs.forEach { (_, dir) ->
-                        dir.safeDeleteRecursively(baseDirectory = outputDir)
-                    }
-                }
-            }
-
-            is StringType -> {
-                val projectUrl = (input as StringType).string
-
-                val archiveType = ArchiveType.getType(projectUrl)
-                val projectNameFromUrl = projectUrl.substringAfterLast('/')
-
-                val projectName = projectNameOption ?: archiveType.extensions.fold(projectNameFromUrl) { name, ext ->
-                    name.removeSuffix(ext)
-                }
-
-                val dummyId = Identifier("Downloader::$projectName:")
-                val dummyPackage = if (archiveType != ArchiveType.NONE) {
-                    println("Downloading $archiveType artifact from $projectUrl...")
-                    Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
-                } else {
-                    val vcs = VersionControlSystem.forUrl(projectUrl)
-                    val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
-                    val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()
-
-                    val vcsInfo = VcsInfo(
-                        type = vcsType,
-                        url = projectUrl,
-                        revision = vcsRevision,
-                        path = vcsPath
-                    )
-
-                    println("Downloading from $vcsType VCS at $projectUrl...")
-                    Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
-                }
-
-                try {
-                    // Always allow moving revisions when directly downloading a single project only. This is for
-                    // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
-                    // project needs to be downloaded.
-                    Downloader(config.downloader.copy(allowMovingRevisions = true)).download(dummyPackage, outputDir)
-                } catch (e: DownloadException) {
-                    e.showStackTrace()
-
-                    failureMessages += "Could not download '${dummyPackage.id.toCoordinates()}': " +
-                            e.collectMessagesAsString()
-                }
-            }
+            is FileType -> downloadFromOrtResult((input as FileType).file, failureMessages)
+            is StringType -> downloadFromProjectUrl((input as StringType).string, failureMessages)
         }
 
         if (failureMessages.isNotEmpty()) {
@@ -327,6 +190,103 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             }
 
             throw ProgramResult(1)
+        }
+    }
+
+    private fun downloadFromOrtResult(ortFile: File, failureMessages: MutableList<String>) {
+        println("Downloading $entities entities from ORT result file at '${ortFile.canonicalPath}'...")
+
+        val ortResult = readOrtResult(ortFile)
+        val analyzerResult = ortResult.analyzer?.result
+
+        if (analyzerResult == null) {
+            log.warn {
+                "Cannot run the downloader as the provided ORT result file '${ortFile.canonicalPath}' does " +
+                        "not contain an analyzer result. Nothing will be downloaded."
+            }
+
+            throw ProgramResult(0)
+        }
+
+        val packages = mutableListOf<Package>().apply {
+            if (DataEntity.PROJECTS in entities) {
+                addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
+            }
+
+            if (DataEntity.PACKAGES in entities) {
+                addAll(analyzerResult.packages.map { it.pkg })
+            }
+        }
+
+        val includedLicenseCategories = globalOptionsForSubcommands.config.downloader.includedLicenseCategories
+
+        val packageDownloadDirs =
+            if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
+                val licenseCategorizations =
+                    licenseClassificationsFile.readValue<LicenseClassifications>().categorizations
+                val licenseInfoResolver = ortResult.createLicenseInfoResolver()
+
+                packages.filter { pkg ->
+                    // A package is only downloaded if its license is part of a category that is part of the
+                    // DownloaderConfiguration's includedLicenseCategories.
+                    getLicenseCategoriesForPackage(
+                        pkg,
+                        licenseCategorizations,
+                        licenseInfoResolver,
+                        ortResult.getRepositoryLicenseChoices(),
+                        ortResult.getPackageLicenseChoices(pkg.id)
+                    ).any { it in includedLicenseCategories }
+                }
+            } else {
+                packages
+            }.associateWith { outputDir.resolve(it.id.toPath()) }
+
+        packageDownloadDirs.forEach { (pkg, dir) ->
+            try {
+                Downloader(globalOptionsForSubcommands.config.downloader).download(pkg, dir)
+
+                if (archiveMode == ArchiveMode.ENTITY) {
+                    val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
+
+                    log.info { "Archiving directory '$dir' to '$zipFile'." }
+                    val result = runCatching {
+                        archive(
+                            dir,
+                            zipFile,
+                            "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
+                        )
+                    }
+
+                    result.exceptionOrNull()?.let {
+                        log.error { "Could not archive '$dir': ${it.collectMessagesAsString()}" }
+                    }
+
+                    dir.safeDeleteRecursively(baseDirectory = outputDir)
+                }
+            } catch (e: DownloadException) {
+                e.showStackTrace()
+
+                val failureMessage = "Could not download '${pkg.id.toCoordinates()}': " +
+                        e.collectMessagesAsString()
+                failureMessages += failureMessage
+
+                log.error { failureMessage }
+            }
+        }
+
+        if (archiveMode == ArchiveMode.BUNDLE) {
+            val zipFile = outputDir.resolve("archive.zip")
+
+            log.info { "Archiving directory '$outputDir' to '$zipFile'." }
+            val result = runCatching { archive(outputDir, zipFile) }
+
+            result.exceptionOrNull()?.let {
+                log.error { "Could not archive '$outputDir': ${it.collectMessagesAsString()}" }
+            }
+
+            packageDownloadDirs.forEach { (_, dir) ->
+                dir.safeDeleteRecursively(baseDirectory = outputDir)
+            }
         }
     }
 
@@ -350,5 +310,46 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             .filter { it.id in effectiveLicenses }
             .flatMap { it.categories }
             .toSet()
+    }
+
+    private fun downloadFromProjectUrl(projectUrl: String, failureMessages: MutableList<String>) {
+        val archiveType = ArchiveType.getType(projectUrl)
+        val projectNameFromUrl = projectUrl.substringAfterLast('/')
+
+        val projectName = projectNameOption ?: archiveType.extensions.fold(projectNameFromUrl) { name, ext ->
+            name.removeSuffix(ext)
+        }
+
+        val dummyId = Identifier("Downloader::$projectName:")
+        val dummyPackage = if (archiveType != ArchiveType.NONE) {
+            println("Downloading $archiveType artifact from $projectUrl...")
+            Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
+        } else {
+            val vcs = VersionControlSystem.forUrl(projectUrl)
+            val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
+            val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()
+
+            val vcsInfo = VcsInfo(
+                type = vcsType,
+                url = projectUrl,
+                revision = vcsRevision,
+                path = vcsPath
+            )
+
+            println("Downloading from $vcsType VCS at $projectUrl...")
+            Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
+        }
+
+        try {
+            // Always allow moving revisions when directly downloading a single project only. This is for
+            // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
+            // project needs to be downloaded.
+            val config = globalOptionsForSubcommands.config.downloader.copy(allowMovingRevisions = true)
+            Downloader(config).download(dummyPackage, outputDir)
+        } catch (e: DownloadException) {
+            e.showStackTrace()
+
+            failureMessages += "Could not download '${dummyPackage.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+        }
     }
 }
