@@ -40,12 +40,15 @@ import io.kotest.matchers.shouldNot
 
 import java.net.URI
 
+import org.ossreviewtoolkit.model.AdvisorCapability
+import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OssIndexTest : WordSpec({
@@ -81,7 +84,7 @@ class OssIndexTest : WordSpec({
             result[ID_JUNIT] shouldNotBeNull {
                 this should haveSize(1)
                 with(single()) {
-                    advisor.name shouldBe ADVISOR_NAME
+                    advisor shouldBe ossIndex.details
                     vulnerabilities should containExactlyInAnyOrder(
                         Vulnerability(
                             id = "CVE-2020-15250",
@@ -127,12 +130,19 @@ class OssIndexTest : WordSpec({
                     val pkgResults = getValue(pkg)
                     pkgResults shouldHaveSize 1
                     val pkgResult = pkgResults[0]
+                    pkgResult.advisor shouldBe ossIndex.details
                     pkgResult.vulnerabilities should io.kotest.matchers.collections.beEmpty()
                     pkgResult.summary.issues shouldHaveSize 1
                     val issue = pkgResult.summary.issues[0]
                     issue.severity shouldBe Severity.ERROR
                 }
             }
+        }
+
+        "provide correct details" {
+            val ossIndex = OssIndex(ADVISOR_NAME, "http://localhost:${server.port()}")
+
+            ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME, enumSetOf(AdvisorCapability.VULNERABILITIES))
         }
     }
 })

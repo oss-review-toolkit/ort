@@ -42,6 +42,8 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 import java.net.URI
 
+import org.ossreviewtoolkit.model.AdvisorCapability
+import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -51,6 +53,7 @@ import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class VulnerableCodeTest : WordSpec({
@@ -86,7 +89,7 @@ class VulnerableCodeTest : WordSpec({
 
             val langResults = result.getValue(idLang)
             langResults shouldHaveSize(1)
-            langResults[0].advisor.name shouldBe ADVISOR_NAME
+            langResults[0].advisor shouldBe vulnerableCode.details
             val expLangVulnerability = Vulnerability(
                 id = "CVE-2014-8242",
                 listOf(
@@ -162,6 +165,7 @@ class VulnerableCodeTest : WordSpec({
                     val pkgResults = getValue(pkg)
                     pkgResults shouldHaveSize 1
                     val pkgResult = pkgResults[0]
+                    pkgResult.advisor shouldBe vulnerableCode.details
                     pkgResult.vulnerabilities should beEmpty()
                     pkgResult.summary.issues shouldHaveSize 1
                     val issue = pkgResult.summary.issues[0]
@@ -188,6 +192,15 @@ class VulnerableCodeTest : WordSpec({
             val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
+        }
+
+        "provide correct AdvisorDetails" {
+            val vulnerableCode = createVulnerableCode(wiremock)
+
+            vulnerableCode.details shouldBe AdvisorDetails(
+                ADVISOR_NAME,
+                enumSetOf(AdvisorCapability.VULNERABILITIES)
+            )
         }
     }
 })
