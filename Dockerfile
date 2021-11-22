@@ -78,6 +78,9 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Prepare build components to install their modules
+RUN mkdir -p /etc/ort/bash_modules
+
 #------------------------------------------------------------------------
 # Build ort as a separate component
 
@@ -120,6 +123,10 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update \
 #------------------------------------------------------------------------
 # ORT
 COPY --from=ortbuild /opt/ort /opt/ort
+COPY docker/bash_bootstrap.sh /etc/ort/bash_bootstrap.sh
+COPY docker/ort-wrapper.sh /usr/bin/ort
+COPY docker/ort-wrapper.sh /usr/bin/orth
+RUN chmod 755 /usr/bin/ort
 
 ENV \
     # Package manager versions.
@@ -212,4 +219,4 @@ RUN curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_
     rm requirements.txt
 
 
-ENTRYPOINT ["/opt/ort/bin/ort"]
+ENTRYPOINT ["/usr/bin/ort"]
