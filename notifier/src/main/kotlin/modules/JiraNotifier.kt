@@ -41,6 +41,16 @@ class JiraNotifier(
         .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
 ) {
     /**
+     * Create a [comment] within the issue specified by the [issueKey].
+     */
+    @Suppress("UNUSED") // This is intended to be used via scripting.
+    fun createComment(issueKey: String, comment: String) {
+        val issue = restClient.issueClient.getIssue(issueKey).claim()
+
+        restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
+    }
+
+    /**
      * Returns a [ProjectIssueBuilder] object, which can be used to do operations for the given [projectKey].
      */
     fun projectIssueBuilder(projectKey: String): ProjectIssueBuilder =
