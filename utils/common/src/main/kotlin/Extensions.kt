@@ -232,6 +232,11 @@ fun File.toSafeUri(): URI {
     return URI("file", "", fileUri.path, fileUri.query, fileUri.fragment)
 }
 
+/**
+ * Return the next value in the iteration, or null if there is no next value.
+ */
+fun <T> Iterator<T>.nextOrNull() = if (hasNext()) next() else null
+
 /*
  * Convenience function for [JsonNode] that returns an empty iterator if [JsonNode.fieldNames] is called on a null
  * object, or the field names otherwise.
