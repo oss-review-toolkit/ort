@@ -31,6 +31,7 @@ project:
 packages:
 - id: "SpdxDocumentFile::curl:7.70.0"
   purl: "pkg:spdxdocumentfile/curl@7.70.0"
+  cpe: "cpe:2.3:a:http:curl:7.70.0:*:*:*:*:*:*:*"
   authors:
   - "Daniel Stenberg (daniel@haxx.se)"
   declared_licenses:
@@ -53,15 +54,15 @@ packages:
       value: ""
       algorithm: ""
   vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl"
   vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl"
 - id: "SpdxDocumentFile::zlib:1.2.11"
   purl: "pkg:spdxdocumentfile/zlib@1.2.11"
   cpe: "cpe:/a:compress:zlib:1.2.11:::en-us"
