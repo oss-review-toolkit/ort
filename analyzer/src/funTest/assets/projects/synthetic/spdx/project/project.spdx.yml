@@ -16,7 +16,7 @@ externalDocumentRefs:
   checksum:
     algorithm: "SHA1"
     checksumValue: "d884ee4774abb0540a9eab31c422645ffcd43b19"
-  spdxDocument: "https://raw.githubusercontent.com/oss-review-toolkit/ort/master/analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl/package.spdx.yml"
+  spdxDocument: "../package/libs/curl/package.spdx.yml"
 - externalDocumentId: "DocumentRef-zlib-1.2.11"
   checksum:
     algorithm: "SHA1"
