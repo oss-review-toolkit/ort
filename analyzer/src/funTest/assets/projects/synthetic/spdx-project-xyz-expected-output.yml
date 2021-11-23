@@ -1,7 +1,7 @@
 ---
 project:
   id: "SpdxDocumentFile::xyz:0.1.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/project.spdx.yml"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   authors:
   - "Thomas Steenbergen"
   declared_licenses:
@@ -12,12 +12,12 @@ project:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx"
   homepage_url: "https://example.com/products/xyz"
   scopes:
   - name: "default"
@@ -57,12 +57,12 @@ packages:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/libs/curl"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/libs/curl"
 - id: "SpdxDocumentFile::zlib:1.2.11"
   purl: "pkg:spdxdocumentfile/zlib@1.2.11"
   cpe: "cpe:/a:compress:zlib:1.2.11:::en-us"
@@ -89,12 +89,12 @@ packages:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/libs/zlib"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/libs/zlib"
 - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
   purl: "pkg:a-name/openssl@1.1.1g"
   cpe: "cpe:2.3:a:a-name:openssl:1.1.1g:*:*:*:*:*:*:*"
@@ -123,9 +123,9 @@ packages:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/libs/openssl"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/project/libs/openssl"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/libs/openssl"
