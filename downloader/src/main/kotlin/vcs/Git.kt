@@ -248,7 +248,7 @@ private object AuthenticatorCredentialsProvider : CredentialsProvider() {
         }
 
     override fun get(uri: URIish, vararg items: CredentialItem): Boolean {
-        log.debug { "JGit queries credentials $items for '${uri.host}'." }
+        log.debug { "JGit queries credentials ${items.map { it.javaClass.simpleName }} for '${uri.host}'." }
 
         val auth = Authenticator.requestPasswordAuthentication(
             /* host = */ uri.host,
@@ -265,7 +265,7 @@ private object AuthenticatorCredentialsProvider : CredentialsProvider() {
             when (item) {
                 is CredentialItem.Username -> item.value = auth.userName
                 is CredentialItem.Password -> item.value = auth.password
-                else -> throw UnsupportedCredentialItem(uri, "${item.javaClass.name}: ${item.promptText}")
+                else -> throw UnsupportedCredentialItem(uri, "${item.javaClass.simpleName}: ${item.promptText}")
             }
         }
 
