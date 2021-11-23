@@ -87,9 +87,14 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
                 "-P ort.scanner.storages.postgres.schema=testSchema"
     ).associate()
 
+    private val scancodeVersion by option(
+        "--scancode-version",
+        help = "The ScanCode version to match for in the scan results."
+    )
+
     override fun run() {
         val ids = packageIdsFile.readLines().filterNot { it.isBlank() }.map { Identifier(it.trim()) }
-        val packages = openDatabaseConnection().use { getScannedPackages(it, ids) }.filterMaxByDate()
+        val packages = openDatabaseConnection().use { getScannedPackages(it, ids, scancodeVersion) }.filterMaxByDate()
         val ortResult = createAnalyzerResult(packages)
 
         println("Writing analyzer result with ${packages.size} packages to '${ortFile.absolutePath}'.")
@@ -115,7 +120,16 @@ private data class ScannedPackage(
     val scanTime: Instant
 )
 
-private fun getScannedPackages(connection: Connection, ids: Collection<Identifier>): List<ScannedPackage> {
+private fun getScannedPackages(
+    connection: Connection,
+    ids: Collection<Identifier>,
+    scanCodeVersion: String?
+): List<ScannedPackage> {
+    val whereClause = listOfNotNull(
+        "s.identifier = ANY(?)",
+        scanCodeVersion?.let { "s.scan_result->'scanner'->>'version' = '$it'" }
+    ).joinToString(" AND ")
+
     val query = """
         SELECT 
             s.identifier as id,
@@ -123,8 +137,8 @@ private fun getScannedPackages(connection: Connection, ids: Collection<Identifie
             (s.scan_result->'summary'->>'start_time')::timestamp as start_time
         FROM 
             scan_results s 
-        WHERE 
-            s.identifier = ANY(?);
+        WHERE
+            $whereClause;
         """.trimMargin()
 
     val resultSet = connection.prepareStatement(query).apply {
