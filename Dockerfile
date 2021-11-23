@@ -154,6 +154,23 @@ RUN curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df
 COPY docker/ruby.sh /etc/ort/bash_modules
 
 #------------------------------------------------------------------------
+# SCANCODE - Build scancode as a separate component
+FROM pythonbuild AS scancodebuild
+
+ARG SCANCODE_VERSION="3.2.1rc2"
+ENV SCANCODE_URL "https://github.com/nexB/scancode-toolkit/archive/refs/tags/"
+ENV PATH=/opt/python/shims:$PATH
+
+RUN mkdir -p /opt/scancode \
+    && curl -ksSL ${SCANCODE_URL}/v${SCANCODE_VERSION}.tar.gz | tar -C /opt/scancode -xz --strip-components=1 \
+    && cd /opt/scancode \
+    && PYTHON_EXE=python3 ./configure \
+    # Clean up unneeded installed binaries
+    && rm -rf /opt/scancode/thirdparty \
+    # Run scancode once to generate indexes as superuser
+    && /opt/scancode/bin/scancode --version
+
+#------------------------------------------------------------------------
 # Main container
 FROM eclipse-temurin:11-jre
 
@@ -182,6 +199,12 @@ COPY --from=pythonbuild /etc/ort/bash_modules/python.sh /etc/ort/bash_modules/
 # Ruby
 COPY --from=rubybuild /opt/rbenv /opt/rbenv
 COPY --from=rubybuild /etc/ort/bash_modules/ruby.sh /etc/ort/bash_modules/
+
+# Scancode
+COPY --from=scancodebuild /opt/scancode /opt/scancode
+RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
+    && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
+    && ln -s /opt/scancode/bin/extractcode /usr/bin/extractcode
 
 ENV \
     # Package manager versions.
@@ -231,7 +254,6 @@ ARG CRT_FILES=""
 COPY "$CRT_FILES" /tmp/certificates/
 
 # Custom install commands.
-ARG SCANCODE_VERSION="3.2.1rc2"
 RUN /opt/ort/bin/import_proxy_certs.sh && \
     if [ -n "$CRT_FILES" ]; then \
       /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
@@ -257,15 +279,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi && \
-    yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
-    # Add scanners (in versions known to work).
-    curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
-        tar -zxC /usr/local && \
-        # Trigger ScanCode configuration for Python 3 and reindex licenses initially.
-        cd /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
-        PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --reindex-licenses && \
-        chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
-        ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
-
+    yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools"
 
 ENTRYPOINT ["/usr/bin/ort"]
+
