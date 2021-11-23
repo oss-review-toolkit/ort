@@ -1,0 +1,54 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2020-07-23T18:30:22Z"
+  creators:
+  - "Organization: Example Inc."
+  - "Person: Thomas Steenbergen"
+  licenseListVersion: "3.9"
+name: "xyz-0.1.0"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-xyz"
+documentDescribes:
+- "SPDXRef-Package-xyz"
+externalDocumentRefs:
+- externalDocumentId: "DocumentRef-curl-7.70.0"
+  spdxDocument: "./libs/curl/package.spdx.yml"
+  checksum:
+    algorithm: "SHA1"
+    checksumValue: "73d64ad650d6e1fa418b70985f24d937d1151186"
+- externalDocumentId: "DocumentRef-openssl-1.1.1g"
+  spdxDocument: "./libs/openssl/package.spdx.yml"
+  checksum:
+    algorithm: "SHA1"
+    checksumValue: "3d38c716b5d7f75c893b8b2720b7c85aca7776ae"
+- externalDocumentId: "DocumentRef-zlib-1.2.11"
+  spdxDocument: "./libs/zlib/package.spdx.yml"
+  checksum:
+    algorithm: "SHA1"
+    checksumValue: "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"
+packages:
+- SPDXID: "SPDXRef-Package-xyz"
+  description: "Awesome product created by Example Inc."
+  copyrightText: "Copyright (C) 2020 Example Inc."
+  downloadLocation: "git+ssh://gitlab.example.com:3389/products/xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
+  filesAnalyzed: false
+  homepage: "https://example.com/products/xyz"
+  licenseConcluded:  "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  name: "xyz"
+  versionInfo: "0.1.0"
+  originator: "Person: Thomas Steenbergen"
+relationships:
+- spdxElementId: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
+  relationshipType: "TEST_DEPENDENCY_OF"
+  relatedSpdxElement: "SPDXRef-Package-xyz"
+- spdxElementId: "SPDXRef-Package-xyz"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "DocumentRef-openssl-1.1.1g:SPDXRef-Package-openssl"
+- spdxElementId: "SPDXRef-Package-xyz"
+  relationshipType: "DYNAMIC_LINK"
+  relatedSpdxElement: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
+- spdxElementId: "SPDXRef-Package-xyz"
+  relationshipType: "STATIC_LINK"
+  relatedSpdxElement: "DocumentRef-zlib-1.2.11:SPDXRef-Package-zlib"

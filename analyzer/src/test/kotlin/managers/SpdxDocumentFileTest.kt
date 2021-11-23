@@ -72,21 +72,9 @@ private val pkgForVcs = SpdxPackage(
     name = "Dummy"
 )
 
-private fun createSpdxDocument(keepExternalDocumentRefs: Boolean = true, packages: List<SpdxPackage>? = null): SpdxDocument {
-    val spdxDocument = createSpdxDocument()
-
-    val spdxPackages = packages ?: spdxDocument.packages
-
-    return if (keepExternalDocumentRefs) {
-        spdxDocument.copy(packages = spdxPackages)
-    } else {
-        spdxDocument.copy(packages = spdxPackages, externalDocumentRefs = emptyList())
-    }
-}
-
-private fun createSpdxDocument(): SpdxDocument {
+private fun createSpdxDocument(filename: String): SpdxDocument {
     val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
-    val definitionFile = projectDir.resolve("project/project.spdx.yml")
+    val definitionFile = projectDir.resolve(filename)
     return SpdxModelMapper.read(definitionFile)
 }
 
@@ -111,24 +99,21 @@ class SpdxDocumentFileTest : WordSpec({
 
     "projectPackage()" should {
         "return project package when list of packages is given" {
-            val spdxDocument = createSpdxDocument(keepExternalDocumentRefs = false)
-            val projectPackage = spdxDocument.packages.find { it.spdxId == "SPDXRef-Package-xyz" }
+            val spdxDocument = createSpdxDocument("project-xyz-with-inline-packages.spdx.yml")
 
-            spdxDocument.projectPackage() shouldBe projectPackage
+            spdxDocument.projectPackage()?.spdxId shouldBe "SPDXRef-Package-xyz"
         }
 
         "return project package when only one package in list, but external document references exist" {
-            val projectPackage = createSpdxDocument().packages.find { it.spdxId == "SPDXRef-Package-xyz" }
-            val spdxDocument = createSpdxDocument(keepExternalDocumentRefs = true, listOf(projectPackage!!))
+            val spdxDocument = createSpdxDocument("project-xyz-with-package-references.spdx.yml")
 
-            spdxDocument.projectPackage() shouldBe projectPackage
+            spdxDocument.projectPackage()?.spdxId shouldBe "SPDXRef-Package-xyz"
         }
 
         "return no project package when just one package in list" {
-            val projectPackage = createSpdxDocument().packages.find { it.spdxId == "SPDXRef-Package-xyz" }
-            val spdxDocument = createSpdxDocument(keepExternalDocumentRefs = false, listOf(projectPackage!!))
+            val spdxDocument = createSpdxDocument("libs/curl/package.spdx.yml")
 
-            spdxDocument.projectPackage() shouldBe null
+            spdxDocument.projectPackage() should beNull()
         }
     }
 
@@ -138,7 +123,7 @@ class SpdxDocumentFileTest : WordSpec({
         "throw if an external package id does not match relationship id" {
             val externalDocumentReference = SpdxExternalDocumentReference(
                 "DocumentRef-zlib-1.2.11",
-                "../package/libs/zlib/package.spdx.yml",
+                "../libs/zlib/package.spdx.yml",
                 SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee")
             )
             val issues = mutableListOf<OrtIssue>()
@@ -152,8 +137,8 @@ class SpdxDocumentFileTest : WordSpec({
         "return the correct SPDX package" {
             val externalDocumentReference = SpdxExternalDocumentReference(
                 "DocumentRef-zlib-1.2.11",
-                "../package/libs/zlib/package.spdx.yml",
-                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "9ffefb62ce14b40f675345a05b45846900740689")
+                "../libs/zlib/package.spdx.yml",
+                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee")
             )
 
             val spdxPackageId = "SPDXRef-Package-zlib"
