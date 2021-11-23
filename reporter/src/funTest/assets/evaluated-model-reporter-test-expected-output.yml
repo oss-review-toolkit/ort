@@ -758,12 +758,14 @@ rule_violations:
     \ that overflow:scroll is working as expected.\n```"
 vulnerabilities_resolutions: []
 vulnerabilities:
-- id: "VULCOID-VULNERABILITY_ID"
+- _id: 0
+  id: "VULCOID-VULNERABILITY_ID"
   pkg: 2
   references:
   - url: "https://registry.vulnerability-url/"
     scoring_system: "SCORING_SYSTEM_NAME"
     severity: "ERROR"
+    severity_mapped: "UNKNOWN"
   resolutions: []
 statistics:
   repository_configuration:

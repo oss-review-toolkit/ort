@@ -833,12 +833,14 @@
   } ],
   "vulnerabilities_resolutions" : [ ],
   "vulnerabilities" : [ {
+    "_id" : 0,
     "id" : "VULCOID-VULNERABILITY_ID",
     "pkg" : 2,
     "references" : [ {
       "url" : "https://registry.vulnerability-url/",
       "scoring_system" : "SCORING_SYSTEM_NAME",
-      "severity" : "ERROR"
+      "severity" : "ERROR",
+      "severity_mapped" : "UNKNOWN"
     } ],
     "resolutions" : [ ]
   } ],
