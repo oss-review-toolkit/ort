@@ -29,9 +29,6 @@ class ProjectConfig : AbstractProjectConfig() {
     override val specExecutionOrder = SpecExecutionOrder.Annotated
 
     init {
-        val isRunningFromIdea = "idea_rt.jar" in System.getProperty("java.class.path")
-        if (isRunningFromIdea) System.setProperty("kotest.assertions.multi-line-diff", "simple")
-
         OrtProxySelector.install()
     }
 
