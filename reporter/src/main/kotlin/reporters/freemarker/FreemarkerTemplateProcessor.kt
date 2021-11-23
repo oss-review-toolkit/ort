@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.reporter.reporters.freemarker
 
 import freemarker.cache.ClassTemplateLoader
+import freemarker.ext.beans.BeansWrapperBuilder
 import freemarker.template.Configuration
 import freemarker.template.DefaultObjectWrapper
 import freemarker.template.TemplateExceptionHandler
@@ -27,6 +28,7 @@ import freemarker.template.TemplateExceptionHandler
 import java.io.File
 import java.util.SortedMap
 
+import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -122,7 +124,7 @@ class FreemarkerTemplateProcessor(
             "helper" to TemplateHelper(input),
             "projectsAsPackages" to projectsAsPackages,
             "vulnerabilityReference" to VulnerabilityReference
-        )
+        ) + enumModel()
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
             defaultEncoding = "UTF-8"
@@ -177,6 +179,18 @@ class FreemarkerTemplateProcessor(
         }
 
         return outputFiles
+    }
+
+    /**
+     * Return a map with wrapper beans for the enum classes that are relevant for templates.These enums can then be
+     * referenced directly by templates.
+     * See https://freemarker.apache.org/docs/pgui_misc_beanwrapper.html#jdk_15_enums.
+     */
+    private fun enumModel(): Map<String, Any> {
+        val beansWrapper = BeansWrapperBuilder(Configuration.VERSION_2_3_30).build()
+        val enumModels = beansWrapper.enumModels
+
+        return ENUM_CLASSES.associate { it.simpleName to enumModels.get(it.name) }
     }
 
     /**
@@ -334,9 +348,29 @@ class FreemarkerTemplateProcessor(
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
-                vulnerabilities.filterNot { input.resolutionProvider.isResolved(it) }
+            vulnerabilities.filterNot { input.resolutionProvider.isResolved(it) }
+
+        /**
+         * Return a flag indicating that issues have been encountered during the run of an advisor with the given
+         * [capability] with at least the given [severity]. This typically means that the report is incomplete;
+         * therefore, it should contain a corresponding warning.
+         */
+        fun hasAdvisorIssues(capability: AdvisorCapability, severity: Severity): Boolean =
+            input.ortResult.advisor?.results?.advisorResults.orEmpty()
+                .values
+                .flatten()
+                .filter { capability in it.advisor.capabilities }
+                .any { result -> result.summary.issues.any { it.severity >= severity } }
     }
 }
+
+/**
+ * A list of the enum classes that are made available to templates.
+ */
+private val ENUM_CLASSES = listOf(
+    AdvisorCapability::class.java,
+    Severity::class.java
+)
 
 private fun List<ResolvedLicense>.merge(): ResolvedLicense {
     require(isNotEmpty()) { "Cannot merge an empty list." }

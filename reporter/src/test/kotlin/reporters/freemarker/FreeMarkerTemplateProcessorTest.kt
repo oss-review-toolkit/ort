@@ -30,14 +30,22 @@ import io.mockk.every
 import io.mockk.mockk
 
 import java.time.Instant
+import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.AdvisorCapability
+import org.ossreviewtoolkit.model.AdvisorDetails
+import org.ossreviewtoolkit.model.AdvisorRecord
+import org.ossreviewtoolkit.model.AdvisorResult
+import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
@@ -47,9 +55,12 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -59,6 +70,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
@@ -101,6 +113,10 @@ private val NESTED_VCS_INFO = VcsInfo(
     revision = "0000000000000000000000000000000000000000"
 )
 
+private val idRootProject = Identifier("NPM:@ort:project-in-root-dir:1.0")
+private val idSubProject = Identifier("SpdxDocumentFile:@ort:project-in-sub-dir:1.0")
+private val idNestedProject = Identifier("SpdxDocumentFile:@ort:project-in-nested-vcs:1.0")
+
 private val ORT_RESULT = OrtResult(
     repository = Repository(
         vcs = PROJECT_VCS_INFO,
@@ -113,17 +129,17 @@ private val ORT_RESULT = OrtResult(
         result = AnalyzerResult.EMPTY.copy(
             projects = sortedSetOf(
                 Project.EMPTY.copy(
-                    id = Identifier("NPM:@ort:project-in-root-dir:1.0"),
+                    id = idRootProject,
                     definitionFilePath = "package.json",
                     vcsProcessed = PROJECT_VCS_INFO
                 ),
                 Project.EMPTY.copy(
-                    id = Identifier("SpdxDocumentFile:@ort:project-in-sub-dir:1.0"),
+                    id = idSubProject,
                     definitionFilePath = "sub-dir/project.spdx.yml",
                     vcsProcessed = PROJECT_VCS_INFO
                 ),
                 Project.EMPTY.copy(
-                    id = Identifier("SpdxDocumentFile:@ort:project-in-nested-vcs:1.0"),
+                    id = idNestedProject,
                     definitionFilePath = "nested-vcs-dir/project.spdx.yml",
                     vcsProcessed = NESTED_VCS_INFO
                 )
@@ -135,7 +151,7 @@ private val ORT_RESULT = OrtResult(
         config = ScannerConfiguration(),
         results = ScanRecord(
             scanResults = sortedMapOf(
-                Identifier("NPM:@ort:project-in-root-dir:1.0") to scanResults(
+                idRootProject to scanResults(
                     vcsInfo = PROJECT_VCS_INFO,
                     findingsPaths = listOf(
                         "src/main.js",
@@ -143,13 +159,13 @@ private val ORT_RESULT = OrtResult(
                         "nested-vcs-dir/src/main.cpp"
                     )
                 ),
-                Identifier("SpdxDocumentFile:@ort:project-in-sub-dir:1.0") to scanResults(
+                idSubProject to scanResults(
                     vcsInfo = PROJECT_VCS_INFO,
                     findingsPaths = listOf(
                         "sub-dir/src/main.cpp"
                     )
                 ),
-                Identifier("SpdxDocumentFile:@ort:project-in-nested-vcs:1.0") to scanResults(
+                idNestedProject to scanResults(
                     vcsInfo = NESTED_VCS_INFO,
                     findingsPaths = listOf(
                         "src/main.cpp"
@@ -160,6 +176,8 @@ private val ORT_RESULT = OrtResult(
         )
     )
 )
+
+private val ADVISOR_DETAILS = AdvisorDetails("testAdvisor", enumSetOf(AdvisorCapability.VULNERABILITIES))
 
 /**
  * Prepare the given [mock for a LicenseInfoResolver][resolverMock] to return a [ResolvedLicenseInfo] for the given
@@ -213,11 +231,41 @@ private fun expectResolveLicenseInfo(
  */
 private fun testProjects() = ORT_RESULT.getProjects().toList()
 
+/**
+ * Create an [AdvisorRun] with the given [results].
+ */
+private fun advisorRun(results: SortedMap<Identifier, List<AdvisorResult>>): AdvisorRun =
+    AdvisorRun(
+        startTime = Instant.now(),
+        endTime = Instant.now(),
+        environment = Environment(),
+        config = AdvisorConfiguration(),
+        results = AdvisorRecord(results)
+    )
+
+/**
+ * Create an [AdvisorResult] with the given [details], [issues], and [vulnerabilities].
+ */
+private fun advisorResult(
+    details: AdvisorDetails = ADVISOR_DETAILS,
+    issues: List<OrtIssue> = emptyList(),
+    vulnerabilities: List<Vulnerability> = emptyList()
+): AdvisorResult =
+    AdvisorResult(
+        advisor = details,
+        summary = AdvisorSummary(
+            startTime = Instant.now(),
+            endTime = Instant.now(),
+            issues = issues
+        ),
+        vulnerabilities = vulnerabilities
+    )
+
 class FreeMarkerTemplateProcessorTest : WordSpec({
     "deduplicateProjectScanResults" should {
         val targetProjects = setOf(
-            Identifier("SpdxDocumentFile:@ort:project-in-sub-dir:1.0"),
-            Identifier("SpdxDocumentFile:@ort:project-in-nested-vcs:1.0")
+            idSubProject,
+            idNestedProject
         )
 
         val ortResult = ORT_RESULT.deduplicateProjectScanResults(targetProjects)
@@ -229,7 +277,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
         }
 
         "remove the findings of all target projects from the root project" {
-            val scanResult = ortResult.getScanResultsForId(Identifier("NPM:@ort:project-in-root-dir:1.0")).single()
+            val scanResult = ortResult.getScanResultsForId(idRootProject).single()
 
             with(scanResult.summary) {
                 copyrightFindings.map { it.location.path } shouldContainExactlyInAnyOrder listOf(
@@ -382,6 +430,61 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                     "GPL-2.0-only OR MIT OR Apache-2.0"
                 )
             }
+        }
+    }
+
+    "hasAdvisorIssues" should {
+        "return false if there is no advisor result" {
+            val input = ReporterInput(ORT_RESULT)
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            helper.hasAdvisorIssues(AdvisorCapability.VULNERABILITIES, Severity.ERROR) shouldBe false
+        }
+
+        "return true if there are issues for an advisor with the provided capability" {
+            val issue = OrtIssue(source = ADVISOR_DETAILS.name, message = "An error occurred")
+            val advisorResult = advisorResult(issues = listOf(issue))
+
+            val advisorRun = advisorRun(sortedMapOf(idSubProject to listOf(advisorResult)))
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            helper.hasAdvisorIssues(AdvisorCapability.VULNERABILITIES, Severity.WARNING) shouldBe true
+        }
+
+        "ignore advisor results with other capabilities" {
+            val vulnerability = mockk<Vulnerability>()
+            val advisorResult1 = advisorResult(vulnerabilities = listOf(vulnerability))
+
+            val details2 = AdvisorDetails("anotherAdvisor", enumSetOf(AdvisorCapability.DEFECTS))
+            val issue = OrtIssue(source = details2.name, message = "Error when loading defects")
+            val advisorResult2 = advisorResult(details = details2, issues = listOf(issue))
+
+            val advisorRun = advisorRun(
+                sortedMapOf(idSubProject to listOf(advisorResult1), idNestedProject to listOf(advisorResult2))
+            )
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            helper.hasAdvisorIssues(AdvisorCapability.VULNERABILITIES, Severity.ERROR) shouldBe false
+        }
+
+        "ignore issues with a lower severity" {
+            val issue =
+                OrtIssue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
+            val advisorResult = advisorResult(issues = listOf(issue))
+
+            val advisorRun = advisorRun(sortedMapOf(idSubProject to listOf(advisorResult)))
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            helper.hasAdvisorIssues(AdvisorCapability.VULNERABILITIES, Severity.ERROR) shouldBe false
         }
     }
 })
