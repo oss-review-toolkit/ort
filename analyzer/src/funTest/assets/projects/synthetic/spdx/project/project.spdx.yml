@@ -15,7 +15,7 @@ externalDocumentRefs:
 - externalDocumentId: "DocumentRef-curl-7.70.0"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "16d30153862a3f6684ecba4dd38dd3c108188f7c"
+    checksumValue: "73d64ad650d6e1fa418b70985f24d937d1151186"
   spdxDocument: "../package/libs/curl/package.spdx.yml"
 - externalDocumentId: "DocumentRef-zlib-1.2.11"
   checksum:

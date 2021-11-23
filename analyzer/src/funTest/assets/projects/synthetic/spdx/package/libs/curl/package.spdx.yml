@@ -14,8 +14,8 @@ documentDescribes:
 packages:
 - SPDXID: "SPDXRef-Package-curl"
   description: "A command line tool and library for transferring data with URL syntax, supporting \
-     HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, MQTT, FILE, \
-     IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad of powerful features."
+    HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, MQTT, FILE, \
+    IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad of powerful features."
   copyrightText: "Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
     contributors, see the THANKS file."
   downloadLocation: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
