@@ -114,7 +114,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P ort.scanner.storages.postgresStorage.schema=testSchema"
+                "-P ort.scanner.storages.postgres.schema=testSchema"
     ).associate()
 
     private val forceOverwrite by option(

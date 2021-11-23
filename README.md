@@ -202,13 +202,13 @@ customize the configuration to a specific environment. The following options are
 
 * Properties can be defined via environment variables by using the full property path as the variable name.
   For instance, one can override the Postgres schema by setting 
-  `ort.scanner.storages.postgresStorage.schema=test_schema`. The variable's name is case sensitive.
+  `ort.scanner.storages.postgres.schema=test_schema`. The variable's name is case sensitive.
   Some programs like Bash do not support dots in variable names. For this case, the dots can be
   replaced by double underscores, i.e., the above example is turned into 
-  `ort__scanner__storages__postgresStorage__schema=test_schema`.
+  `ort__scanner__storages__postgres__schema=test_schema`.
 * In addition to that, one can override the values of properties on the command line using the `-P` option. The option expects a
   key-value pair. Again, the key must define the full path to the property to be overridden, e.g.
-  `-P ort.scanner.storages.postgresStorage.schema=test_schema`. The `-P` option can be repeated on the command
+  `-P ort.scanner.storages.postgres.schema=test_schema`. The `-P` option can be repeated on the command
   line to override multiple properties.
 * Properties in the configuration file can reference environment variables using the syntax `${VAR}`.
   This is especially useful to reference dynamic or sensitive data. As an example, the credentials for the

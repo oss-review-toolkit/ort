@@ -61,7 +61,7 @@ class GetPackageLicensesCommand : CliktCommand(
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P scanner.postgresStorage.schema=testSchema"
+                "-P ort.scanner.storages.postgres.schema=testSchema"
     ).associate()
 
     private val packageId by option(
