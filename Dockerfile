@@ -171,6 +171,28 @@ RUN . $NVM_DIR/nvm.sh \
 COPY docker/nodejs.sh /etc/ort/bash_modules
 
 #------------------------------------------------------------------------
+# REPO / ANDROID SDK
+FROM build AS androidbuild
+
+ARG ANDROID_CMD_VERSION=7583922
+ENV ANDROID_HOME=/opt/android-sdk
+
+RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo \
+    && chmod a+x /usr/bin/repo
+
+RUN curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
+    && unzip -q commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip -d $ANDROID_HOME \
+    && rm commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
+    && PROXY_HOST_AND_PORT=${https_proxy#*://} \
+    && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
+       # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+       SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+    fi \
+    && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS \
+       --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
+COPY docker/android.sh /etc/ort/bash_modules
+
+#------------------------------------------------------------------------
 # SCANCODE - Build scancode as a separate component
 FROM pythonbuild AS scancodebuild
 
@@ -210,6 +232,13 @@ COPY --from=rubybuild /etc/ort/bash_modules/ruby.sh /etc/ort/bash_modules/
 COPY --from=nodebuild /opt/nodejs /opt/nodejs
 COPY --from=nodebuild /etc/ort/bash_modules/nodejs.sh /etc/ort/bash_modules/
 
+# Repo and Android
+ENV ANDROID_HOME=/opt/android-sdk
+ENV ANDROID_API_LEVEL=29
+COPY --from=androidbuild /usr/bin/repo /usr/bin/
+COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
+COPY --from=androidbuild /etc/ort/bash_modules/android.sh /etc/ort/bash_modules/
+
 # Scancode
 COPY --from=scancodebuild /opt/scancode /opt/scancode
 RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
@@ -244,10 +273,6 @@ ENV COMPOSER_VERSION=1.10.1-1 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.18.3 \
     HASKELL_STACK_VERSION=2.1.3 \
-    # SDK versions.
-    ANDROID_SDK_VERSION=6858069 \
-    # Installation directories.
-    ANDROID_HOME=/opt/android-sdk \
     GOPATH=$HOME/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -274,26 +299,13 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     if [ -n "$CRT_FILES" ]; then \
       /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
     fi && \
-    # Install VCS tools (no specific versions required here).
-    curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
-    chmod a+x /usr/local/bin/repo && \
     # Install golang in order to have `go mod` as package manager.
-    curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
+    curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     rm go$GO_VERSION.linux-amd64.tar.gz && \
     export GOBIN=/opt/go/bin && \
     curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh && \
-    curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
-    # Install SDKs required for analysis.
-    curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
-    unzip -q commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip -d $ANDROID_HOME && \
-    rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
-    PROXY_HOST_AND_PORT=${https_proxy#*://} && \
-    if [ -n "$PROXY_HOST_AND_PORT" ]; then \
-        # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
-        SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
-    fi && \
-    yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools"
+    curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh
 
 ENTRYPOINT ["/usr/bin/ort"]
 
