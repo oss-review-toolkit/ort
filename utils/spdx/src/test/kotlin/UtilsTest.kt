@@ -26,7 +26,6 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
-import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.beBlank
 import io.kotest.matchers.string.endWith
 import io.kotest.matchers.string.startWith
@@ -196,7 +195,6 @@ class UtilsTest : WordSpec() {
 
                 setupTempFile(id, text)
 
-                getText(id) shouldNotBe text
                 getText(id) shouldBe getLicenseText(id, true)
             }
 
