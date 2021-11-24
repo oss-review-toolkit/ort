@@ -213,7 +213,7 @@ RUN curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${A
 COPY docker/android.sh /etc/ort/bash_modules
 
 #------------------------------------------------------------------------
-# SCANCODE - Build scancode as a separate component
+# SCANCODE - Build ScanCode as a separate component
 FROM pythonbuild AS scancodebuild
 
 ARG SCANCODE_VERSION="3.2.1rc2"
@@ -266,7 +266,7 @@ COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 COPY --from=androidbuild /etc/ort/bash_modules/android.sh /etc/ort/bash_modules/
 
-# Scancode
+# ScanCode
 COPY --from=scancodebuild /opt/scancode /opt/scancode
 RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
     && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
