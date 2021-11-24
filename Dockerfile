@@ -184,6 +184,13 @@ RUN curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/inst
 RUN echo "add_local_path /opt/go/bin:$PATH" > /etc/ort/bash_modules/go.sh
 
 #------------------------------------------------------------------------
+# HASKELL STACK
+FROM build AS haskellbuild
+
+ARG HASKELL_STACK_VERSION=2.1.3
+RUN curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | bash -s -- -d /usr/bin
+
+#------------------------------------------------------------------------
 # REPO / ANDROID SDK
 FROM build AS androidbuild
 
@@ -249,6 +256,9 @@ COPY --from=nodebuild /etc/ort/bash_modules/nodejs.sh /etc/ort/bash_modules/
 COPY --from=gobuild /opt/go /opt/go/
 COPY --from=gobuild  /etc/ort/bash_modules/go.sh /etc/ort/bash_modules/
 
+# Haskell
+COPY --from=haskellbuild /usr/bin/stack /usr/bin
+
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_API_LEVEL=29
@@ -286,8 +296,7 @@ RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df
     && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/git-core_ubuntu_ppa.gpg"  > /dev/null
 
 ENV COMPOSER_VERSION=1.10.1-1 \
-    CONAN_VERSION=1.43.2 \
-    HASKELL_STACK_VERSION=2.1.3
+    CONAN_VERSION=1.43.2
 
 ENV PATH="$PATH:$HOME/.local/bin"
 
@@ -302,17 +311,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         sbt=$SBT_VERSION \
         subversion \
     && rm -rf /var/lib/apt/lists/*
-
-# Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
-ARG CRT_FILES=""
-COPY "$CRT_FILES" /tmp/certificates/
-
-# Custom install commands.
-RUN /opt/ort/bin/import_proxy_certs.sh && \
-    if [ -n "$CRT_FILES" ]; then \
-      /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
-    fi && \
-    curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh
 
 ENTRYPOINT ["/usr/bin/ort"]
 
