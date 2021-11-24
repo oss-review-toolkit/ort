@@ -51,6 +51,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.6
+        cache: pip
     - name: Check REUSE Compliance
       run: |
         pip install --user reuse
