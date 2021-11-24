@@ -64,6 +64,8 @@ abstract class VersionControlSystem {
          */
         @Synchronized
         fun forUrl(vcsUrl: String) =
+            // Do not use getOrPut() here as it cannot handle null values, also see
+            // https://youtrack.jetbrains.com/issue/KT-21392.
             if (vcsUrl in urlToVcsMap) {
                 urlToVcsMap[vcsUrl]
             } else {
