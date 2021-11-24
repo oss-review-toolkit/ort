@@ -154,6 +154,23 @@ RUN curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df
 COPY docker/ruby.sh /etc/ort/bash_modules
 
 #------------------------------------------------------------------------
+# NODEJS - Build NodeJS as a separate component with nvm
+FROM build AS nodebuild
+
+ARG BOWER_VERSION=1.8.8
+ARG NODEJS_VERSION="--lts"
+ARG NPM_VERSION=7.20.6
+ARG YARN_VERSION=1.22.10
+
+ENV NVM_DIR=/opt/nodejs
+
+RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git /opt/nodejs
+RUN . $NVM_DIR/nvm.sh && nvm install "${NODEJS_VERSION}"
+RUN . $NVM_DIR/nvm.sh \
+    && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION
+COPY docker/nodejs.sh /etc/ort/bash_modules
+
+#------------------------------------------------------------------------
 # SCANCODE - Build scancode as a separate component
 FROM pythonbuild AS scancodebuild
 
@@ -200,23 +217,22 @@ COPY --from=pythonbuild /etc/ort/bash_modules/python.sh /etc/ort/bash_modules/
 COPY --from=rubybuild /opt/rbenv /opt/rbenv
 COPY --from=rubybuild /etc/ort/bash_modules/ruby.sh /etc/ort/bash_modules/
 
+# NodeJS
+COPY --from=nodebuild /opt/nodejs /opt/nodejs
+COPY --from=nodebuild /etc/ort/bash_modules/nodejs.sh /etc/ort/bash_modules/
+
 # Scancode
 COPY --from=scancodebuild /opt/scancode /opt/scancode
 RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
     && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
     && ln -s /opt/scancode/bin/extractcode /usr/bin/extractcode
 
-ENV \
-    # Package manager versions.
-    BOWER_VERSION=1.8.8 \
-    COMPOSER_VERSION=1.10.1-1 \
-    CONAN_VERSION=1.48.1 \
+ENV COMPOSER_VERSION=1.10.1-1 \
+    CONAN_VERSION=1.43.2 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.18.3 \
     HASKELL_STACK_VERSION=2.1.3 \
-    NPM_VERSION=7.20.6 \
     SBT_VERSION=1.3.8 \
-    YARN_VERSION=1.22.10 \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
     # Installation directories.
@@ -232,7 +248,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
     apt-get install -y --no-install-recommends ca-certificates gnupg software-properties-common && \
     echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee -a /etc/apt/sources.list.d/sbt.list && \
     curl -ksS "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key adv --import - && \
-    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     add-apt-repository -y ppa:git-core/ppa && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -243,7 +258,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         subversion \
         cargo \
         composer=$COMPOSER_VERSION \
-        nodejs \
         openssl \
         sbt=$SBT_VERSION \
     && \
@@ -261,8 +275,6 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     # Install VCS tools (no specific versions required here).
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
-    # Install package managers (in versions known to work).
-    npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION && \
     # Install golang in order to have `go mod` as package manager.
     curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
