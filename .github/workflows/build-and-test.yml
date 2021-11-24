@@ -1,0 +1,93 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+        cache: gradle
+    - name: Build all classes
+      uses: burrunan/gradle-cache-action@v1
+      with:
+        arguments: --stacktrace classes -x :reporter-web-app:yarnBuild
+  build-reporter-web-app:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+        cache: gradle
+    - name: Build the reporter-web-app
+      uses: burrunan/gradle-cache-action@v1
+      with:
+        arguments: --stacktrace :reporter-web-app:yarnBuild
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+        cache: gradle
+    - name: Run unit tests
+      uses: burrunan/gradle-cache-action@v1
+      with:
+        arguments: test -x :reporter-web-app:yarnBuild
+  funTest:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+        cache: gradle
+    - name: Run functional tests
+      uses: burrunan/gradle-cache-action@v1
+      with:
+        arguments: funTest -x :reporter-web-app:yarnBuild -x :analyzer:funTest
+  funTest-analyzer:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+        cache: gradle
+    - name: Run functional tests
+      uses: burrunan/gradle-cache-action@v1
+      with:
+        arguments: :analyzer:funTest -x :reporter-web-app:yarnBuild
