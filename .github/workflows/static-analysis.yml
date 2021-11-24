@@ -25,7 +25,7 @@ jobs:
     - name: Check for Detekt Issues
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: --no-daemon --stacktrace detekt
+        arguments: --stacktrace detekt
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@v1
       if: ${{ always() }} # Upload even if the previous step failed.
