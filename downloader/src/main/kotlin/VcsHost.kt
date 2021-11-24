@@ -300,7 +300,7 @@ enum class VcsHost(
                     VcsInfo(
                         type = VcsType.GIT,
                         url = url,
-                        revision = revision,
+                        revision = revision
                     )
                 }
 
