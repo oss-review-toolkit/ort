@@ -158,50 +158,25 @@ class UtilsTest : WordSpec() {
                 }
             }
 
-            "return the full license text for the HERE proprietary license" {
-                val text = getLicenseText("LicenseRef-scancode-here-proprietary")?.trim()
-
-                text should startWith("This software and other materials contain proprietary information")
-                text should endWith("allowed.")
-            }
-
-            "return the full license text for a known SPDX LicenseRef" {
-                val text = getLicenseText("LicenseRef-scancode-indiana-extreme")?.trim()
-
-                text should startWith("Indiana University Extreme! Lab Software License Version 1.1.1")
-                text should endWith("EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.")
-            }
-
             "return null for an unknown SPDX LicenseRef" {
                 getLicenseText("LicenseRef-foo-bar") should beNull()
             }
         }
 
         "getLicenseText provided a custom dir" should {
-            fun getText(id: String) = getLicenseText(id, true, listOf(tempDir))
-
             "return the custom license text for a license ID not known by ort but in custom dir" {
                 val id = "LicenseRef-ort-abc"
                 val text = "a\nb\nc\n"
 
                 setupTempFile(id, text)
 
-                getText(id) shouldBe text
-            }
-
-            "return the ort license text for a license ID known by ort and also in custom dir" {
-                val id = "LicenseRef-scancode-here-proprietary"
-                val text = "x\ny\n"
-
-                setupTempFile(id, text)
-
-                getText(id) shouldBe getLicenseText(id, true)
+                getLicenseText(id, handleExceptions = true, listOf(tempDir)) shouldBe text
             }
 
             "return null if license text is not known by ort and also not in custom dir" {
                 setupTempFile("LicenseRef-ort-abc", "abc")
 
-                getText("LicenseRef-not-present") should beNull()
+                getLicenseText("LicenseRef-not-present", handleExceptions = true, listOf(tempDir)) should beNull()
             }
         }
     }

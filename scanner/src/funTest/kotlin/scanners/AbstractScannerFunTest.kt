@@ -46,7 +46,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     private val commonlyDetectedFiles = listOf("LICENSE", "LICENCE", "COPYING")
 
     private lateinit var inputDir: File
-    private lateinit var outputDir: File
+    protected lateinit var outputDir: File
 
     abstract val scanner: LocalScanner
     abstract val expectedFileLicenses: Set<SpdxExpression>
