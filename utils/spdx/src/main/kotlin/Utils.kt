@@ -58,6 +58,7 @@ private val scanCodeLicenseTextDir by lazy {
 
     sequenceOf(
         "src/licensedcode/data/licenses",
+        "../src/licensedcode/data/licenses",
         "../site-packages/licensedcode/data/licenses",
         "../lib/site-packages/licensedcode/data/licenses",
         *candidates.toTypedArray()
