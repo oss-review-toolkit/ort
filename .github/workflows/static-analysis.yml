@@ -19,9 +19,9 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: 'adopt'
+        distribution: adopt
         java-version: 11
-        cache: 'gradle'
+        cache: gradle
     - name: Check for Detekt Issues
       uses: burrunan/gradle-cache-action@v1
       with:
