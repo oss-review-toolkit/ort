@@ -70,7 +70,7 @@ class PostgresNestedProvenanceStorage(
                 table.vcsType eq root.vcsInfo.type.toString() and
                         (table.vcsUrl eq root.vcsInfo.url) and
                         (table.vcsRevision eq root.resolvedRevision)
-            }.map { it[table.result] }.firstOrNull { it.nestedProvenance.root == root }
+            }.map { it[table.result] }.find { it.nestedProvenance.root == root }
         }
 
     override fun putNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
