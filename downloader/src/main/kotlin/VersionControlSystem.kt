@@ -69,8 +69,15 @@ abstract class VersionControlSystem {
             if (vcsUrl in urlToVcsMap) {
                 urlToVcsMap[vcsUrl]
             } else {
-                ALL.find {
-                    it.isAvailable() && it.isApplicableUrl(vcsUrl)
+                // First try to determine the VCS type statically...
+                when (val type = VcsHost.toVcsInfo(vcsUrl).type) {
+                    VcsType.UNKNOWN -> {
+                        // ...then eventually try to determine the type also dynamically.
+                        ALL.find {
+                            it.isAvailable() && it.isApplicableUrl(vcsUrl)
+                        }
+                    }
+                    else -> forType(type)
                 }.also {
                     urlToVcsMap[vcsUrl] = it
                 }
