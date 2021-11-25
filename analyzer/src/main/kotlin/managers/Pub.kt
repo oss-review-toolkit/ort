@@ -27,17 +27,7 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
-import java.nio.file.Files.createDirectories
 import java.util.SortedSet
-
-import kotlin.io.path.Path
-import kotlin.io.path.createTempFile
-
-import okhttp3.Request
-
-import okio.buffer
-import okio.sink
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -64,9 +54,9 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
-import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortToolsDirectory
@@ -80,11 +70,11 @@ private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
 private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 
 private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "2.2.3-stable"
-private val flutterInstallDir = "$ortToolsDirectory/flutter-$flutterVersion"
+private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
 
 private val flutterHome by lazy {
     Os.getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
-        ?: File(Os.env["FLUTTER_HOME"] ?: "$flutterInstallDir/flutter")
+        ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir.resolve("flutter")
 }
 
 private val flutterAbsolutePath = flutterHome.resolve("bin")
@@ -215,35 +205,14 @@ class Pub(
         val url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/$archive"
 
         log.info { "Downloading flutter-$flutterVersion from $url... " }
+        flutterInstallDir.safeMkdirs()
+        val flutterArchive = OkHttpClientHelper.downloadFile(url, flutterInstallDir).getOrThrow()
 
-        val request = Request.Builder().get().url(url).build()
+        log.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'... " }
+        flutterArchive.unpack(flutterInstallDir)
 
-        OkHttpClientHelper.execute(request).use { response ->
-            val body = response.body
-
-            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download flutter from $url.")
-            }
-
-            if (response.cacheResponse != null) {
-                log.info { "Retrieved flutter from local cache." }
-            }
-
-            val flutterArchive = createTempFile(
-                ORT_NAME,
-                "flutter-$flutterVersion-${url.substringAfterLast("/")}"
-            ).toFile()
-
-            flutterArchive.sink().buffer().use { it.writeAll(body.source()) }
-
-            val unpackDir = createDirectories(Path(flutterInstallDir)).toFile()
-
-            log.info { "Unpacking '$flutterArchive' to '$unpackDir'... " }
-            flutterArchive.unpack(unpackDir)
-
-            if (!flutterArchive.delete()) {
-                log.warn { "Unable to delete temporary file '$flutterArchive'." }
-            }
+        if (!flutterArchive.delete()) {
+            log.warn { "Unable to delete temporary file '$flutterArchive'." }
         }
 
         ProcessCapture("$flutterAbsolutePath${File.separator}$flutterCommand", "config", "--no-analytics")
