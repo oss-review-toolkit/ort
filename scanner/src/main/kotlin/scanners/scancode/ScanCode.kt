@@ -21,18 +21,9 @@
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 import java.time.Instant
 
-import kotlin.io.path.createTempDirectory
-import kotlin.io.path.createTempFile
 import kotlin.math.max
-
-import okhttp3.Request
-
-import okio.buffer
-import okio.sink
 
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -49,7 +40,6 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.isTrue
 import org.ossreviewtoolkit.utils.common.unpack
-import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -162,37 +152,17 @@ class ScanCode(
         val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
+        val unpackDir = createOrtTempDir(expectedVersion).apply { deleteOnExit() }
+        val scannerArchive = OkHttpClientHelper.downloadFile(url, unpackDir).getOrThrow()
 
-        val request = Request.Builder().get().url(url).build()
+        log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
+        scannerArchive.unpack(unpackDir)
 
-        return OkHttpClientHelper.execute(request).use { response ->
-            val body = response.body
-
-            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $scannerName from $url.")
-            }
-
-            if (response.cacheResponse != null) {
-                log.info { "Retrieved $scannerName from local cache." }
-            }
-
-            val scannerArchive = createTempFile(ORT_NAME, "$scannerName-${url.substringAfterLast("/")}").toFile()
-            scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
-
-            val unpackDir = createTempDirectory("$ORT_NAME-$scannerName-$expectedVersion").toFile().apply {
-                deleteOnExit()
-            }
-
-            log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
-            scannerArchive.unpack(unpackDir)
-            if (!scannerArchive.delete()) {
-                log.warn { "Unable to delete temporary file '$scannerArchive'." }
-            }
-
-            val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHyphen")
-
-            scannerDir
+        if (!scannerArchive.delete()) {
+            log.warn { "Unable to delete temporary file '$scannerArchive'." }
         }
+
+        return unpackDir.resolve("scancode-toolkit-$versionWithoutHyphen")
     }
 
     override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
