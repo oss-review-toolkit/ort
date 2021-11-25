@@ -23,13 +23,7 @@ package org.ossreviewtoolkit.scanner.scanners
 import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 import java.time.Instant
-
-import kotlin.io.path.createTempDirectory
-
-import okhttp3.Request
 
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -45,7 +39,6 @@ import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.unpackZip
-import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -86,29 +79,14 @@ class Askalono(
         val url = "https://github.com/amzn/askalono/releases/download/$expectedVersion/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
+        val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
 
-        val request = Request.Builder().get().url(url).build()
+        val unpackDir = createOrtTempDir(expectedVersion).apply { deleteOnExit() }
 
-        return OkHttpClientHelper.execute(request).use { response ->
-            val body = response.body
+        log.info { "Unpacking '$archive' to '$unpackDir'... " }
+        body.bytes().unpackZip(unpackDir)
 
-            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $scannerName from $url.")
-            }
-
-            if (response.cacheResponse != null) {
-                log.info { "Retrieved $scannerName from local cache." }
-            }
-
-            val unpackDir = createTempDirectory("$ORT_NAME-$scannerName-$expectedVersion").toFile().apply {
-                deleteOnExit()
-            }
-
-            log.info { "Unpacking '$archive' to '$unpackDir'... " }
-            body.bytes().unpackZip(unpackDir)
-
-            unpackDir
-        }
+        return unpackDir
     }
 
     override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
