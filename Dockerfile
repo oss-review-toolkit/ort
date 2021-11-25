@@ -71,9 +71,6 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Prepare build components to install their modules
-RUN mkdir -p /etc/ort/bash_modules
-
 #------------------------------------------------------------------------
 # Build ort as a separate component
 
@@ -123,7 +120,7 @@ RUN pip install -U \
     virtualenv=="${PYTHON_VIRTUALENV_VERSION}" \
     wheel
 
-COPY docker/python.sh /etc/ort/bash_modules
+COPY docker/python.sh /etc/profile.d
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
@@ -151,7 +148,7 @@ RUN curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df
         ) \
     && rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
 
-COPY docker/ruby.sh /etc/ort/bash_modules
+COPY docker/ruby.sh /etc/profile.d
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
@@ -168,7 +165,7 @@ RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git /opt/nodejs
 RUN . $NVM_DIR/nvm.sh && nvm install "${NODEJS_VERSION}"
 RUN . $NVM_DIR/nvm.sh \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION
-COPY docker/nodejs.sh /etc/ort/bash_modules
+COPY docker/nodejs.sh /etc/profile.d
 
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
@@ -181,7 +178,7 @@ RUN curl -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | tar -C
 ENV PATH=/opt/go/bin:$PATH
 RUN go version
 RUN curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | bash
-RUN echo "add_local_path /opt/go/bin:$PATH" > /etc/ort/bash_modules/go.sh
+RUN echo "add_local_path /opt/go/bin:\$PATH" > /etc/profile.d/go.sh
 
 #------------------------------------------------------------------------
 # HASKELL STACK
@@ -210,7 +207,7 @@ RUN curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${A
     fi \
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS \
        --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
-COPY docker/android.sh /etc/ort/bash_modules
+COPY docker/android.sh /etc/profile.d
 
 #------------------------------------------------------------------------
 # SCANCODE - Build ScanCode as a separate component
@@ -233,28 +230,23 @@ RUN mkdir -p /opt/scancode \
 # Main container
 FROM eclipse-temurin:11-jre
 
-# ORT
-COPY --from=ortbuild /opt/ort /opt/ort
-COPY docker/bash_bootstrap.sh /etc/ort/bash_bootstrap.sh
-COPY docker/ort-wrapper.sh /usr/bin/ort
-COPY docker/ort-wrapper.sh /usr/bin/orth
-RUN chmod 755 /usr/bin/ort
+COPY docker/00-add_local_path.sh /etc/profile.d/
 
 # Python
 COPY --from=pythonbuild /opt/python /opt/python
-COPY --from=pythonbuild /etc/ort/bash_modules/python.sh /etc/ort/bash_modules/
+COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
 
 # Ruby
 COPY --from=rubybuild /opt/rbenv /opt/rbenv
-COPY --from=rubybuild /etc/ort/bash_modules/ruby.sh /etc/ort/bash_modules/
+COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
 
 # NodeJS
 COPY --from=nodebuild /opt/nodejs /opt/nodejs
-COPY --from=nodebuild /etc/ort/bash_modules/nodejs.sh /etc/ort/bash_modules/
+COPY --from=nodebuild /etc/profile.d/nodejs.sh /etc/profile.d/
 
 # Golang
 COPY --from=gobuild /opt/go /opt/go/
-COPY --from=gobuild  /etc/ort/bash_modules/go.sh /etc/ort/bash_modules/
+COPY --from=gobuild  /etc/profile.d/go.sh /etc/profile.d/
 
 # Haskell
 COPY --from=haskellbuild /usr/bin/stack /usr/bin
@@ -264,7 +256,7 @@ ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
-COPY --from=androidbuild /etc/ort/bash_modules/android.sh /etc/ort/bash_modules/
+COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
 
 # ScanCode
 COPY --from=scancodebuild /opt/scancode /opt/scancode
@@ -308,6 +300,12 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update \
         sbt=$SBT_VERSION \
         subversion \
     && rm -rf /var/lib/apt/lists/*
+
+# ORT
+COPY --from=ortbuild /opt/ort /opt/ort
+COPY docker/ort-wrapper.sh /usr/bin/ort
+COPY docker/ort-wrapper.sh /usr/bin/orth
+RUN chmod 755 /usr/bin/ort
 
 ENTRYPOINT ["/usr/bin/ort"]
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # Copyright (C) 2021 BMW CarIT GmbH
 #
@@ -17,11 +17,4 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-set -e
-
-script=$(basename "$0")
-
-# shellcheck disable=SC1091
-source /etc/ort/bash_bootstrap.sh
-
-exec /opt/ort/bin/"$script" "$@"
+exec /opt/ort/bin/"$(basename "$0")" "$@"

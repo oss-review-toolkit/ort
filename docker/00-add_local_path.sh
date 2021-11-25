@@ -17,9 +17,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-# We will parse the necessary shells modules for each language
-# independently
-
 set -e
 
 # Global functions
@@ -30,11 +27,5 @@ add_local_path () {
     esac;
 }
 
-[ -z "$(ls -A /etc/ort/bash_modules)" ] && return
-
-# Source all resources
-for resource in /etc/ort/bash_modules/*.sh; do
-    # shellcheck disable=SC1090
-    source "${resource}"
-done
+export -f add_local_path
 
