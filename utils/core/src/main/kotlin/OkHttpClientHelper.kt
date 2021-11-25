@@ -37,6 +37,7 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.ResponseBody
 
 import okio.buffer
 import okio.sink
@@ -141,42 +142,46 @@ object OkHttpClientHelper {
         buildClient(block).newCall(request).await()
 
     /**
+     * Download from [url] with optional [acceptEncoding] and return a [Result] with the [Response] and non-nullable
+     * [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on
+     * failure.
+     */
+    fun download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> {
+        val request = Request.Builder()
+            .apply { acceptEncoding?.also { header("Accept-Encoding", it) } }
+            .get()
+            .url(url)
+            .build()
+
+        return runCatching { execute(request) }.mapCatching { response ->
+            val body = response.body
+
+            if (!response.isSuccessful || body == null) {
+                throw HttpDownloadError(response.code, response.message)
+            }
+
+            response to body
+        }
+    }
+
+    /**
      * Download from [url] and return a [Result] with a string representing the response body content on success, or a
      * [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
      */
-    fun downloadText(url: String): Result<String> {
-        val request = Request.Builder().get().url(url).build()
-        val response = runCatching { execute(request) }.getOrElse { return Result.failure(it) }
-
-        return if (response.isSuccessful) {
-            val text = response.body?.use { it.string() }.orEmpty()
-            Result.success(text)
-        } else {
-            Result.failure(HttpDownloadError(response.code, response.message))
+    fun downloadText(url: String): Result<String> =
+        download(url).map { (_, body) ->
+            body.use { it.string() }
         }
-    }
 
     /**
      * Download from [url] and return a [Result] with a file inside [directory] that holds the response body content on
      * success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
      */
     fun downloadFile(url: String, directory: File): Result<File> {
-        val request = Request.Builder()
-            // Disable transparent gzip compression, as otherwise we might end up writing a tar file to disk while
-            // expecting to find a tar.gz file, and fail to unpack the archive. See
-            // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
-            .header("Accept-Encoding", "identity")
-            .get()
-            .url(url)
-            .build()
-
-        val response = runCatching { execute(request) }.getOrElse { return Result.failure(it) }
-
-        val body = response.body
-
-        if (!response.isSuccessful || body == null) {
-            return Result.failure(HttpDownloadError(response.code, response.message))
-        }
+        // Disable transparent gzip compression, as otherwise we might end up writing a tar file to disk while
+        // expecting to find a tar.gz file, and fail to unpack the archive. See
+        // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
+        val (response, body) = download(url, acceptEncoding = "identity").getOrElse { return Result.failure(it) }
 
         // Depending on the server, we may only get a useful target file name when looking at the response
         // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
@@ -198,8 +203,8 @@ object OkHttpClientHelper {
             filenames.firstOrNull()?.removeSurrounding("\"")
         }
 
-        listOf(response.request.url, request.url).mapTo(candidateNames) {
-            it.pathSegments.last()
+        listOf(response.request.url.toString(), url).mapTo(candidateNames) {
+            it.substringAfterLast('/')
         }
 
         check(candidateNames.isNotEmpty())
