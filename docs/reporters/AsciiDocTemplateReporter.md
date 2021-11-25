@@ -1,6 +1,6 @@
-# AsciiDocTemplateReporter
+# AsciiDoc template reporters
 
-The AsciiDocTemplateReporter creates reports using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
+The AsciiDoc template reporters create reports using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
 with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator for the [PDF Template Reporter](#PdfTemplate).
 For each Freemarker template provided using the options described below a separate intermediate file is created that can be
 processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if security
@@ -16,15 +16,15 @@ vulnerability information is available also the "vulnerability_report" template.
 
 ### AsciiDoc
 
-To use the _AsciiDocTemplateReporter_ report format with a Freemarker template, pass it as the template.id via the
---report-option (or -O) option to the _report_ command:
+Use the _AdocTemplateReporter_ to create AsciiDoc files from a Freemarker template. This template can be passed to the
+_report_ command using --report-option (or -O) with the `template.id` option.
 
 ```bash
 cli/build/install/ort/bin/ort report
   -i [scanner-output-dir]/scanner-result.yml
   -o [reporter-output-dir]
   -f AdocTemplate
-  --report-option AsciiDocTemplate=template.id=[template-id]
+  --report-option AdocTemplate=template.id=[template-id]
 ```
 
 ### PDF
@@ -41,14 +41,14 @@ cli/build/install/ort/bin/ort report
   -i [scanner-output-dir]/scanner-result.yml
   -o [reporter-output-dir]
   -f PdfTemplate
-  --report-option AsciiDocTemplate=template.id=[template-id]
+  --report-option PdfTemplate=template.id=[template-id]
   --report-option PdfTemplate=pdf.theme.file=pdf-theme.yml
 ```
 
 If you want to add your own custom fonts in the AsciiDoc PDF theme file using a [relative path][6],
 you need to add the directory in which the fonts are located as a report-specific option like
 
-    --report-option AsciiDocTemplate=pdf.fonts.dir=path/to/fonts/
+    --report-option PdfTemplate=pdf.fonts.dir=path/to/fonts/
 
 where `path/to/fonts` is the relative path to the font directory from the base execution directory.
 
