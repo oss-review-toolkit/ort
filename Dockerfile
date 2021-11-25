@@ -272,13 +272,15 @@ RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
     && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
     && ln -s /opt/scancode/bin/extractcode /usr/bin/extractcode
 
-RUN  --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get update \
+RUN  --mount=type=cache,target=/var/cache/apt apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates \
         cvs \
         curl \
         gnupg \
         libarchive-tools \
+        netbase \
+        openssh-client \
         openssl \
         unzip \
     && rm -rf /var/lib/apt/lists/*
@@ -295,19 +297,14 @@ RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df
     && echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu bionic main" > /etc/apt/sources.list.d/git-core-ubuntu-ppa-bionic.list \
     && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/git-core_ubuntu_ppa.gpg"  > /dev/null
 
-ENV COMPOSER_VERSION=1.10.1-1 \
-    CONAN_VERSION=1.43.2
-
-ENV PATH="$PATH:$HOME/.local/bin"
+ARG COMPOSER_VERSION=1.10.1-1
 
 # Apt install commands.
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt apt-get update \
-    && DEBIAN_FRONTEND=noninteractive  apt-get install -y --no-install-recommends \
+RUN --mount=type=cache,target=/var/cache/apt apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         cargo \
         composer=$COMPOSER_VERSION \
-        cvs \
         git \
-        gnupg \
         sbt=$SBT_VERSION \
         subversion \
     && rm -rf /var/lib/apt/lists/*
