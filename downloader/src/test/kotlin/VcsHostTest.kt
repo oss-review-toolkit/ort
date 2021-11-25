@@ -271,6 +271,30 @@ class VcsHostTest : WordSpec({
             actual shouldBe expected
         }
 
+        "recognize Git repositories on Team Foundation Server" {
+            val actual = listOf(
+                "https://ibm-alm-server/tfs/org/project/_git/repo?version=GBmaster",
+                "https://hosted.visualstudio.com/org/project/_git/repo?foo=bar&version=GBmain"
+            ).map { VcsHost.toVcsInfo(it) }
+
+            val expected = listOf(
+                VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://ibm-alm-server/tfs/org/project/_git/repo",
+                    revision = "master",
+                    path = ""
+                ),
+                VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://hosted.visualstudio.com/org/project/_git/repo",
+                    revision = "main",
+                    path = ""
+                )
+            )
+
+            actual shouldBe expected
+        }
+
         "separate an SVN branch into the revision" {
             val actual = VcsHost.toVcsInfo(
                 "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x"
