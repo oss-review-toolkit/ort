@@ -3,7 +3,7 @@ name: Validate Gradle Wrapper
 on: pull_request
 
 jobs:
-  validation:
+  wrapper-validation:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
