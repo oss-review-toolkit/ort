@@ -308,7 +308,7 @@ enum class VcsHost(
                 ("/tfs/" in projectUri.path || ".visualstudio.com" in projectUri.host) &&
                         "/_git/" in projectUri.path -> {
                     val url = "${projectUri.scheme}://${projectUri.authority}${projectUri.path}"
-                    val query = projectUri.query.split('&')
+                    val query = projectUri.query.orEmpty().split('&')
                         .associate { it.substringBefore('=') to it.substringAfter('=') }
                     val revision = query["version"].orEmpty().substringAfter("GB")
 
