@@ -254,7 +254,8 @@ enum class VcsHost(
          * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
          */
         fun toVcsInfo(projectUrl: String): VcsInfo {
-            val vcsInfoFromHost = projectUrl.toUri { toVcsHost(it)?.toVcsInfoInternal(it) }.getOrNull()
+            val unknownVcs = VcsInfo(type = VcsType.UNKNOWN, url = projectUrl, revision = "")
+            val projectUri = projectUrl.toUri().getOrNull() ?: return unknownVcs
 
             // Fall back to generic URL detection for unknown VCS hosts.
             val svnBranchOrTagMatch = SVN_BRANCH_OR_TAG_PATTERN.matchEntire(projectUrl)
@@ -304,13 +305,10 @@ enum class VcsHost(
                     )
                 }
 
-                else -> VcsInfo(
-                    type = VcsType.UNKNOWN,
-                    url = projectUrl,
-                    revision = ""
-                )
+                else -> unknownVcs
             }
 
+            val vcsInfoFromHost = toVcsHost(projectUri)?.toVcsInfoInternal(projectUri)
             return vcsInfoFromHost?.merge(vcsInfoFromUrl) ?: vcsInfoFromUrl
         }
 
