@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  detekt:
+  detekt-issues:
     runs-on: ubuntu-latest
     env:
       GRADLE_OPTS: -Dorg.gradle.daemon=false
@@ -31,7 +31,7 @@ jobs:
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
-  markdown:
+  markdown-links:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
@@ -42,7 +42,7 @@ jobs:
         check-modified-files-only: yes
         max-depth: 2
         use-quiet-mode: yes
-  reuse:
+  reuse-tool:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
