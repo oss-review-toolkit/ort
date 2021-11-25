@@ -123,7 +123,15 @@ object OkHttpClientHelper {
      * Execute a [request] using the client for the specified [builder configuration][block].
      */
     fun execute(request: Request, block: BuilderConfiguration? = null): Response =
-        buildClient(block).newCall(request).execute()
+        buildClient(block).newCall(request).execute().also { response ->
+            log.debug {
+                if (response.cacheResponse != null) {
+                    "Retrieved ${response.request.url} from local cache."
+                } else {
+                    "Downloaded from ${response.request.url} via network."
+                }
+            }
+        }
 
     /**
      * Asynchronously enqueue a [request] using the client for the specified [builder configuration][block] and await
@@ -139,14 +147,6 @@ object OkHttpClientHelper {
     fun downloadText(url: String): Result<String> {
         val request = Request.Builder().get().url(url).build()
         val response = runCatching { execute(request) }.getOrElse { return Result.failure(it) }
-
-        log.debug {
-            if (response.cacheResponse != null) {
-                "Retrieved $url from local cache."
-            } else {
-                "Downloaded from $url via network."
-            }
-        }
 
         return if (response.isSuccessful) {
             val text = response.body?.use { it.string() }.orEmpty()
@@ -171,14 +171,6 @@ object OkHttpClientHelper {
             .build()
 
         val response = runCatching { execute(request) }.getOrElse { return Result.failure(it) }
-
-        log.debug {
-            if (response.cacheResponse != null) {
-                "Retrieved $url from local cache."
-            } else {
-                "Downloaded from $url via network."
-            }
-        }
 
         val body = response.body
 
