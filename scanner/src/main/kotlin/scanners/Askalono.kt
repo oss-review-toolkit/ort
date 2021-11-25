@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Askalono(
@@ -68,6 +69,13 @@ class Askalono(
         output.removePrefix("askalono ")
 
     override fun bootstrap(): File {
+        val unpackDir = ortToolsDirectory.resolve(name).resolve(expectedVersion)
+
+        if (unpackDir.resolve(command()).isFile) {
+            log.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
+            return unpackDir
+        }
+
         val platform = when {
             Os.isLinux -> "Linux"
             Os.isMac -> "macOS"
@@ -80,8 +88,6 @@ class Askalono(
 
         log.info { "Downloading $scannerName from $url... " }
         val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
-
-        val unpackDir = createOrtTempDir(expectedVersion).apply { deleteOnExit() }
 
         log.info { "Unpacking '$archive' to '$unpackDir'... " }
         body.bytes().unpackZip(unpackDir)

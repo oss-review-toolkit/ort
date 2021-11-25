@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.ortToolsDirectory
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
@@ -139,6 +140,13 @@ class ScanCode(
 
     override fun bootstrap(): File {
         val versionWithoutHyphen = expectedVersion.replace("-", "")
+        val unpackDir = ortToolsDirectory.resolve(name).resolve(expectedVersion)
+        val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHyphen")
+
+        if (scannerDir.resolve(command()).isFile) {
+            log.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
+            return scannerDir
+        }
 
         val archive = when {
             // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
@@ -152,7 +160,6 @@ class ScanCode(
         val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
-        val unpackDir = createOrtTempDir(expectedVersion).apply { deleteOnExit() }
         val scannerArchive = OkHttpClientHelper.downloadFile(url, unpackDir).getOrThrow()
 
         log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
@@ -162,7 +169,7 @@ class ScanCode(
             log.warn { "Unable to delete temporary file '$scannerArchive'." }
         }
 
-        return unpackDir.resolve("scancode-toolkit-$versionWithoutHyphen")
+        return scannerDir
     }
 
     override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
