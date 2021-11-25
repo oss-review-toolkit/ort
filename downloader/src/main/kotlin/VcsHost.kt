@@ -255,7 +255,7 @@ enum class VcsHost(
          */
         fun toVcsInfo(projectUrl: String): VcsInfo {
             val unknownVcs = VcsInfo(type = VcsType.UNKNOWN, url = projectUrl, revision = "")
-            val projectUri = projectUrl.toUri().getOrNull() ?: return unknownVcs
+            val projectUri = projectUrl.takeUnless { it.isBlank() }?.toUri()?.getOrNull() ?: return unknownVcs
 
             // Fall back to generic URL detection for unknown VCS hosts.
             val svnBranchOrTagMatch = SVN_BRANCH_OR_TAG_PATTERN.matchEntire(projectUrl)
