@@ -180,7 +180,7 @@ enum class VcsHost(
                 else -> VcsType.UNKNOWN
             }
 
-            var url = projectUrl.scheme + "://" + projectUrl.authority
+            var url = "${projectUrl.scheme}://${projectUrl.authority}"
 
             // Append the first two path components that denote the user and project to the base URL.
             val pathIterator = Paths.get(projectUrl.path).iterator()
@@ -445,7 +445,7 @@ private fun projectUrlToUserOrOrgAndProject(projectUrl: URI): Pair<String, Strin
 }
 
 private fun gitProjectUrlToVcsInfo(projectUrl: URI, pathParser: (String, Iterator<Path>) -> VcsInfo): VcsInfo {
-    var baseUrl = projectUrl.scheme + "://" + projectUrl.authority
+    var baseUrl = "${projectUrl.scheme}://${projectUrl.authority}"
 
     // Append the first two path components that denote the user and project to the base URL.
     val pathIterator = Paths.get(projectUrl.path).iterator()
