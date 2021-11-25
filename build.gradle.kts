@@ -63,6 +63,7 @@ buildscript {
     }
 }
 
+// Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
     version = org.eclipse.jgit.api.Git.open(rootDir).use { git ->
         // Make the output exactly match "git describe --abbrev=7 --always --tags --dirty", which is what is used in
@@ -185,6 +186,8 @@ allprojects {
 }
 
 subprojects {
+    version = rootProject.version
+
     if (name == "reporter-web-app") return@subprojects
 
     // Apply core plugins.
@@ -364,6 +367,10 @@ subprojects {
     tasks.withType<Jar>().configureEach {
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
+
+        manifest {
+            attributes["Implementation-Version"] = project.version
+        }
     }
 
     tasks.register<Jar>("sourcesJar").configure {
