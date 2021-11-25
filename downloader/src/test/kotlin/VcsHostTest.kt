@@ -274,7 +274,8 @@ class VcsHostTest : WordSpec({
         "recognize Git repositories on Team Foundation Server" {
             val actual = listOf(
                 "https://ibm-alm-server/tfs/org/project/_git/repo?version=GBmaster",
-                "https://hosted.visualstudio.com/org/project/_git/repo?foo=bar&version=GBmain"
+                "https://hosted.visualstudio.com/org/project/_git/repo?foo=bar&version=GBmain",
+                "https://hosted.visualstudio.com/tfs/project/_git/repo"
             ).map { VcsHost.toVcsInfo(it) }
 
             val expected = listOf(
@@ -288,6 +289,12 @@ class VcsHostTest : WordSpec({
                     type = VcsType.GIT,
                     url = "https://hosted.visualstudio.com/org/project/_git/repo",
                     revision = "main",
+                    path = ""
+                ),
+                VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://hosted.visualstudio.com/tfs/project/_git/repo",
+                    revision = "",
                     path = ""
                 )
             )
