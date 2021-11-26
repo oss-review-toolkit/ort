@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
+import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
@@ -63,7 +64,7 @@ class BoyterLc(
 
     override val name = "BoyterLc"
     override val criteria by lazy { getScannerCriteria() }
-    override val expectedVersion = "1.3.1"
+    override val expectedVersion = BuildConfig.BOYTER_LC_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
     override val resultFileExt = "json"
 
