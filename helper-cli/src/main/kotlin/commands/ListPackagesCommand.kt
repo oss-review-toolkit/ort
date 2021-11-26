@@ -25,16 +25,20 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.readOrtResult
+import org.ossreviewtoolkit.model.DataEntity
+import org.ossreviewtoolkit.model.DataEntity.PACKAGES
+import org.ossreviewtoolkit.model.DataEntity.PROJECTS
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 class ListPackagesCommand : CliktCommand(
-    help = "Lists the packages and projects contained in the given ORT result file."
+    help = "Lists the packages and optionally also projects contained in the given ORT result file."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",
@@ -49,6 +53,11 @@ class ListPackagesCommand : CliktCommand(
         help = "Omit all packages not matching all licenses given by this comma separated list of license identifiers."
     ).split(",").default(emptyList())
 
+    private val type by option(
+        "--type",
+        help = "Filter the output by type which can be either 'projects' or 'packages'."
+    ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
+
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
@@ -59,12 +68,11 @@ class ListPackagesCommand : CliktCommand(
                 .filter(LicenseView.ONLY_DETECTED)
                 .map { it.license.toString() }
 
-        val packages = ortResult
-            .collectProjectsAndPackages()
-            .filter {
+        val packages = ortResult.collectProjectsAndPackages().filter { id ->
+                (ortResult.isPackage(id) && PACKAGES in type) || (ortResult.isProject(id) && PROJECTS in type)
+            }.filter {
                 matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(it)).isEmpty()
-            }
-            .sortedBy { it }
+            }.sortedBy { it }
 
         val result = buildString {
             packages.forEach {
