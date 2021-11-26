@@ -25,9 +25,13 @@ val kotlinxCoroutinesVersion: String by project
 val mockkVersion: String by project
 val postgresVersion: String by project
 val retrofitVersion: String by project
-val scancodeVersion: String by project
 val sw360ClientVersion: String by project
 val wiremockVersion: String by project
+
+val askalonoVersion: String by project
+val boyterLcVersion: String by project
+val licenseeVersion: String by project
+val scancodeVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -72,5 +76,8 @@ dependencies {
 buildConfig {
     packageName("org.ossreviewtoolkit.scanner")
 
+    buildConfigField("String", "ASKALONO_VERSION", "\"$askalonoVersion\"")
+    buildConfigField("String", "BOYTER_LC_VERSION", "\"$boyterLcVersion\"")
+    buildConfigField("String", "LICENSEE_VERSION", "\"$licenseeVersion\"")
     buildConfigField("String", "SCANCODE_VERSION", "\"$scancodeVersion\"")
 }

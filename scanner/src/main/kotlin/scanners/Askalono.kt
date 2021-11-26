@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
+import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
@@ -57,7 +58,7 @@ class Askalono(
 
     override val name = "Askalono"
     override val criteria by lazy { getScannerCriteria() }
-    override val expectedVersion = "0.4.4"
+    override val expectedVersion = BuildConfig.ASKALONO_VERSION
     override val configuration = ""
     override val resultFileExt = "txt"
 
