@@ -77,6 +77,7 @@ abstract class PackageManager(
             ".gradle",
             "node_modules",
             // Ignore resources in a standard Maven / Gradle project layout.
+            "META-INF/maven",
             "src/main/resources",
             "src/test/resources",
             // Ignore virtual environments in Python.
