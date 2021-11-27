@@ -22,11 +22,9 @@ package org.ossreviewtoolkit.advisor.advisors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -65,7 +63,6 @@ class VulnerableCodeTest : WordSpec({
 
     beforeSpec {
         server.start()
-        configureFor(server.port())
     }
 
     afterSpec {
@@ -147,7 +144,7 @@ class VulnerableCodeTest : WordSpec({
         }
 
         "handle a failure response from the server" {
-            stubFor(
+            server.stubFor(
                 post(urlPathEqualTo("/api/packages/bulk_search/"))
                     .willReturn(
                         aResponse().withStatus(500)

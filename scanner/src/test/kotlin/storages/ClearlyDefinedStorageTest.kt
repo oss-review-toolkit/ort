@@ -21,14 +21,12 @@
 package org.ossreviewtoolkit.scanner.storages
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -233,7 +231,6 @@ class ClearlyDefinedStorageTest : WordSpec({
 
     beforeSpec {
         server.start()
-        WireMock.configureFor(server.port())
     }
 
     afterSpec {
@@ -304,7 +301,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "return a failure if a ClearlyDefined request fails" {
-            stubFor(
+            server.stubFor(
                 get(anyUrl())
                     .willReturn(aResponse().withStatus(500))
             )
@@ -329,7 +326,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         "return an empty result if no result for the tool file is returned" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             stubHarvestTools(server, COORDINATES, listOf(scanCodeUrl))
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/harvest/$scanCodeUrl"))
                     .willReturn(aResponse().withStatus(200))
             )
@@ -393,7 +390,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         }
 
         "return a failure if a harvest tool request returns an unexpected result" {
-            stubFor(
+            server.stubFor(
                 get(anyUrl())
                     .willReturn(
                         aResponse().withStatus(200)
@@ -412,7 +409,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         "return an empty result if a harvest tool file request returns an unexpected result" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             stubHarvestTools(server, COORDINATES, listOf(scanCodeUrl))
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/harvest/$scanCodeUrl"))
                     .willReturn(
                         aResponse().withStatus(200)
