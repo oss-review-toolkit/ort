@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
@@ -48,7 +47,6 @@ class ClearlyDefinedPackageCurationProviderMockTest : WordSpec({
 
     beforeSpec {
         server.start()
-        WireMock.configureFor(server.port())
     }
 
     afterSpec {

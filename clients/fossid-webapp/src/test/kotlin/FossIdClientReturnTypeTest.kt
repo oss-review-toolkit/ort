@@ -18,7 +18,6 @@
  */
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
@@ -65,7 +64,6 @@ class FossIdClientReturnTypeTest : StringSpec({
 
     beforeSpec {
         server.start()
-        WireMock.configureFor(server.port())
         service = FossIdRestService.create("http://localhost:${server.port()}")
     }
 

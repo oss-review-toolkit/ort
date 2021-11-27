@@ -23,17 +23,14 @@ import com.atlassian.jira.rest.client.api.domain.Issue
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.exactly
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.matching
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
-import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
-import com.github.tomakehurst.wiremock.client.WireMock.verify
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.WordSpec
@@ -58,7 +55,6 @@ class JiraNotifierTest : WordSpec({
 
     beforeSpec {
         server.start()
-        configureFor(server.port())
     }
 
     afterSpec {
@@ -76,14 +72,14 @@ class JiraNotifierTest : WordSpec({
                 JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
                             .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
-            stubFor(
+            server.stubFor(
                 post(urlPathEqualTo("/rest/api/latest/issue"))
                     .withHeader("Content-Type", equalTo("application/json"))
                     .willReturn(
@@ -115,14 +111,14 @@ class JiraNotifierTest : WordSpec({
                 JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
                             .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/search"))
                     .withQueryParam("jql", matching("project.*summary.*"))
                     .willReturn(
@@ -152,14 +148,14 @@ class JiraNotifierTest : WordSpec({
             val resultFile = File("$TEST_FILES_ROOT/__files/jira/response_get_issue_without_comments.json").readText()
             val replaced = resultFile.replace("\$port", server.port().toString())
 
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
                             .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/search"))
                     .withQueryParam("jql", matching("project.*summary.*"))
                     .willReturn(
@@ -167,7 +163,7 @@ class JiraNotifierTest : WordSpec({
                             .withBodyFile("$TEST_FILES_DIRECTORY/response_search_jql_with_one_issue.json")
                     )
             )
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/issue/$issueKey"))
                     .withQueryParam("expand", equalTo("schema,names,transitions"))
                     .willReturn(
@@ -175,14 +171,14 @@ class JiraNotifierTest : WordSpec({
                             .withBody(replaced)
                     )
             )
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/serverInfo"))
                     .willReturn(
                         aResponse().withStatus(200)
                             .withBodyFile("$TEST_FILES_DIRECTORY/response_serverInfo.json")
                     )
             )
-            stubFor(
+            server.stubFor(
                 post(urlPathEqualTo("/rest/api/latest/issue/$issueId/comment"))
                     .willReturn(
                         aResponse().withStatus(201)
@@ -199,7 +195,7 @@ class JiraNotifierTest : WordSpec({
                 true
             )
 
-            verify(
+            server.verify(
                 exactly(1),
                 postRequestedFor(urlEqualTo("/rest/api/latest/issue/$issueId/comment"))
                     .withRequestBody(matching(".*"))
@@ -214,14 +210,14 @@ class JiraNotifierTest : WordSpec({
                 JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
                             .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/search"))
                     .withQueryParam("jql", matching("project.*summary.*"))
                     .willReturn(
@@ -229,7 +225,7 @@ class JiraNotifierTest : WordSpec({
                             .withBodyFile("$TEST_FILES_DIRECTORY/response_search_jql_with_one_issue.json")
                     )
             )
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/issue/$issueKey"))
                     .withQueryParam("expand", equalTo("schema,names,transitions"))
                     .willReturn(
@@ -260,7 +256,7 @@ class JiraNotifierTest : WordSpec({
                 JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
-            stubFor(
+            server.stubFor(
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)

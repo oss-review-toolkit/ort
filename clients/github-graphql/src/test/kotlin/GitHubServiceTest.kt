@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.clients.github
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
-import com.github.tomakehurst.wiremock.client.WireMock.configureFor
 import com.github.tomakehurst.wiremock.client.WireMock.containing
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.matching
@@ -61,7 +60,6 @@ class GitHubServiceTest : WordSpec({
 
     beforeSpec {
         server.start()
-        configureFor(server.port())
     }
 
     afterSpec {
