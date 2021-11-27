@@ -28,7 +28,7 @@ import io.kotest.matchers.shouldBe
 import java.util.Scanner
 
 class RedirectionTest : WordSpec({
-    listener(SpecSystemExitListener)
+    register(SpecSystemExitListener)
 
     "Redirecting output" should {
         // Use a relatively large number of lines that results in more than 64k to be written to test against the pipe

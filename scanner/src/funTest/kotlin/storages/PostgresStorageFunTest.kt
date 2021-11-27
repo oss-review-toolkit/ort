@@ -25,7 +25,7 @@ class PostgresStorageFunTest : AbstractStorageFunTest() {
     private val postgresListener = PostgresListener()
 
     init {
-        listener(postgresListener)
+        register(postgresListener)
     }
 
     override fun createStorage() = PostgresStorage(postgresListener.dataSource)

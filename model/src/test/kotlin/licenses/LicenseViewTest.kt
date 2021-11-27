@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import io.kotest.assertions.show.show
+import io.kotest.assertions.print.print
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
@@ -65,9 +65,11 @@ class LicenseViewTest : WordSpec() {
             } else {
                 MatcherResult(
                     false,
-                    "List should contain exactly licenses ${expectedLicenses.show().value}, but has " +
-                            actualLicenses.show().value,
-                    "List should not contain exactly licenses ${expectedLicenses.show().value}"
+                    {
+                        "List should contain exactly licenses ${expectedLicenses.print().value}, but has " +
+                                actualLicenses.print().value
+                    },
+                    { "List should not contain exactly licenses ${expectedLicenses.print().value}" }
                 )
             }
         }

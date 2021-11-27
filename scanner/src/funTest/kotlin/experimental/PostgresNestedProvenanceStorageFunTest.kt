@@ -25,7 +25,7 @@ class PostgresNestedProvenanceStorageFunTest : AbstractNestedProvenanceStorageFu
     private val postgresListener = PostgresListener()
 
     init {
-        listener(postgresListener)
+        register(postgresListener)
     }
 
     override fun createStorage() = PostgresNestedProvenanceStorage(postgresListener.dataSource)
