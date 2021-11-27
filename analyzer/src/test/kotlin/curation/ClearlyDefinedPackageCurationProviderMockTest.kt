@@ -61,8 +61,10 @@ class ClearlyDefinedPackageCurationProviderMockTest : WordSpec({
 
     "ClearlyDefinedPackageCurationProvider" should {
         "handle a SocketTimeoutException" {
-            wiremock.stubFor(get(anyUrl())
-                .willReturn(aResponse().withFixedDelay(2000)))
+            wiremock.stubFor(
+                get(anyUrl())
+                    .willReturn(aResponse().withFixedDelay(2000))
+            )
             val client = OkHttpClientHelper.buildClient {
                 readTimeout(Duration.ofSeconds(1))
             }
