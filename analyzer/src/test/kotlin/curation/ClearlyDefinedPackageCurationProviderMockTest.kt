@@ -40,28 +40,28 @@ import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
  * error conditions.
  */
 class ClearlyDefinedPackageCurationProviderMockTest : WordSpec({
-    val wiremock = WireMockServer(
+    val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
             .usingFilesUnderDirectory("src/test/assets/")
     )
 
     beforeSpec {
-        wiremock.start()
-        WireMock.configureFor(wiremock.port())
+        server.start()
+        WireMock.configureFor(server.port())
     }
 
     afterSpec {
-        wiremock.stop()
+        server.stop()
     }
 
     beforeTest {
-        wiremock.resetAll()
+        server.resetAll()
     }
 
     "ClearlyDefinedPackageCurationProvider" should {
         "handle a SocketTimeoutException" {
-            wiremock.stubFor(
+            server.stubFor(
                 get(anyUrl())
                     .willReturn(aResponse().withFixedDelay(2000))
             )
@@ -69,7 +69,7 @@ class ClearlyDefinedPackageCurationProviderMockTest : WordSpec({
                 readTimeout(Duration.ofSeconds(1))
             }
 
-            val provider = ClearlyDefinedPackageCurationProvider("http://localhost:${wiremock.port()}", client)
+            val provider = ClearlyDefinedPackageCurationProvider("http://localhost:${server.port()}", client)
 
             provider.getCurationsFor(Identifier("Maven:some-ns:some-component:1.2.3")) should beEmpty()
         }

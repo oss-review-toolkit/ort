@@ -56,7 +56,7 @@ private const val SCAN_CODE_2 = "${PROJECT_CODE_2}_20201203_090342"
  * [FossIdRestService.JSON_MAPPER].
  */
 class FossIdClientReturnTypeTest : StringSpec({
-    val wiremock = WireMockServer(
+    val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
             .usingFilesUnderDirectory("src/test/assets/return-type")
@@ -64,17 +64,17 @@ class FossIdClientReturnTypeTest : StringSpec({
     lateinit var service: FossIdRestService
 
     beforeSpec {
-        wiremock.start()
-        WireMock.configureFor(wiremock.port())
-        service = FossIdRestService.create("http://localhost:${wiremock.port()}")
+        server.start()
+        WireMock.configureFor(server.port())
+        service = FossIdRestService.create("http://localhost:${server.port()}")
     }
 
     afterSpec {
-        wiremock.stop()
+        server.stop()
     }
 
     beforeTest {
-        wiremock.resetAll()
+        server.resetAll()
     }
 
     "Scans for project can be listed when there is none" {
