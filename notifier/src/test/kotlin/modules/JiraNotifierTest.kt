@@ -50,30 +50,30 @@ import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.JiraConfiguration
 
 class JiraNotifierTest : WordSpec({
-    val wiremock = WireMockServer(
+    val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
             .usingFilesUnderDirectory(TEST_FILES_ROOT)
     )
 
     beforeSpec {
-        wiremock.start()
-        configureFor(wiremock.port())
+        server.start()
+        configureFor(server.port())
     }
 
     afterSpec {
-        wiremock.stop()
+        server.stop()
     }
 
     beforeTest {
-        wiremock.resetAll()
+        server.resetAll()
     }
 
     "JiraNotifier" should {
         "create a Jira ticket" {
             val projectKey = "TEST"
             val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${wiremock.port()}", "testuser", "testpassword")
+                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
             stubFor(
@@ -112,7 +112,7 @@ class JiraNotifierTest : WordSpec({
         "not create an issue when there are more than one duplicate" {
             val projectKey = "TEST"
             val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${wiremock.port()}", "testuser", "testpassword")
+                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
             stubFor(
@@ -147,10 +147,10 @@ class JiraNotifierTest : WordSpec({
             val issueId = "2457255"
             val issueKey = "TEST-505"
             val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${wiremock.port()}", "testuser", "testpassword")
+                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
             val resultFile = File("$TEST_FILES_ROOT/__files/jira/response_get_issue_without_comments.json").readText()
-            val replaced = resultFile.replace("\$port", wiremock.port().toString())
+            val replaced = resultFile.replace("\$port", server.port().toString())
 
             stubFor(
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
@@ -211,7 +211,7 @@ class JiraNotifierTest : WordSpec({
             val projectKey = "TEST"
             val issueKey = "TEST-505"
             val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${wiremock.port()}", "testuser", "testpassword")
+                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
             stubFor(
@@ -257,7 +257,7 @@ class JiraNotifierTest : WordSpec({
             val projectKey = "TEST"
             val issueType = "unknownType"
             val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${wiremock.port()}", "testuser", "testpassword")
+                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
             )
 
             stubFor(

@@ -58,7 +58,7 @@ private const val SCAN_CODE = "${PROJECT_CODE}_20201203_090342"
  * This client test creates a new project, triggers the download and the scan and gets the scan results.
  */
 class FossIdClientNewProjectTest : StringSpec({
-    val wiremock = WireMockServer(
+    val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
             .usingFilesUnderDirectory("src/test/assets/new-project")
@@ -66,17 +66,17 @@ class FossIdClientNewProjectTest : StringSpec({
     lateinit var service: FossIdServiceWithVersion
 
     beforeSpec {
-        wiremock.start()
-        WireMock.configureFor(wiremock.port())
-        service = FossIdServiceWithVersion.instance(FossIdRestService.create("http://localhost:${wiremock.port()}"))
+        server.start()
+        WireMock.configureFor(server.port())
+        service = FossIdServiceWithVersion.instance(FossIdRestService.create("http://localhost:${server.port()}"))
     }
 
     afterSpec {
-        wiremock.stop()
+        server.stop()
     }
 
     beforeTest {
-        wiremock.resetAll()
+        server.resetAll()
     }
 
     "Version can be parsed of login page" {

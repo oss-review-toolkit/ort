@@ -53,33 +53,33 @@ import org.ossreviewtoolkit.clients.github.issuesquery.Issue
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class GitHubServiceTest : WordSpec({
-    val wiremock = WireMockServer(
+    val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
             .usingFilesUnderDirectory(TEST_FILES_ROOT)
     )
 
     beforeSpec {
-        wiremock.start()
-        configureFor(wiremock.port())
+        server.start()
+        configureFor(server.port())
     }
 
     afterSpec {
-        wiremock.stop()
+        server.stop()
     }
 
     beforeTest {
-        wiremock.resetAll()
+        server.resetAll()
     }
 
     "error handling" should {
         "detect a failure response from the server" {
-            wiremock.stubFor(
+            server.stubFor(
                 post(anyUrl())
                     .willReturn(aResponse().withStatus(403))
             )
 
-            val service = createService(wiremock)
+            val service = createService(server)
 
             val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
 
@@ -99,7 +99,7 @@ class GitHubServiceTest : WordSpec({
         }
 
         "detect errors in the GraphQL result" {
-            wiremock.stubFor(
+            server.stubFor(
                 post(anyUrl())
                     .willReturn(
                         aResponse().withStatus(200)
@@ -107,7 +107,7 @@ class GitHubServiceTest : WordSpec({
                     )
             )
 
-            val service = createService(wiremock)
+            val service = createService(server)
 
             val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
 
@@ -125,9 +125,9 @@ class GitHubServiceTest : WordSpec({
 
     "repositoryIssues" should {
         "return the issues of a repository" {
-            wiremock.stubQuery("issues", repoVariablesRegex(Paging.MAX_PAGE_SIZE), "issues_response.json")
+            server.stubQuery("issues", repoVariablesRegex(Paging.MAX_PAGE_SIZE), "issues_response.json")
 
-            val service = createService(wiremock)
+            val service = createService(server)
 
             val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
 
@@ -158,9 +158,9 @@ class GitHubServiceTest : WordSpec({
 
         "support paging" {
             val paging = Paging(pageSize = PAGE_SIZE, cursor = "some-cursor")
-            wiremock.stubQuery("issues", repoVariablesRegex(cursor = paging.cursor), "issues_response_paged.json")
+            server.stubQuery("issues", repoVariablesRegex(cursor = paging.cursor), "issues_response_paged.json")
 
-            val service = createService(wiremock)
+            val service = createService(server)
 
             val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME, paging)
 
@@ -181,9 +181,9 @@ class GitHubServiceTest : WordSpec({
 
     "repositoryReleases" should {
         "return the releases of a repository" {
-            wiremock.stubQuery("releases", repoVariablesRegex(Paging.MAX_PAGE_SIZE), "releases_response.json")
+            server.stubQuery("releases", repoVariablesRegex(Paging.MAX_PAGE_SIZE), "releases_response.json")
 
-            val service = createService(wiremock)
+            val service = createService(server)
 
             val releasesResult = service.repositoryReleases(REPO_OWNER, REPO_NAME)
 
@@ -212,9 +212,9 @@ class GitHubServiceTest : WordSpec({
 
         "support paging" {
             val paging = Paging(pageSize = PAGE_SIZE, cursor = "some-cursor")
-            wiremock.stubQuery("releases", repoVariablesRegex(cursor = paging.cursor), "releases_response_paged.json")
+            server.stubQuery("releases", repoVariablesRegex(cursor = paging.cursor), "releases_response_paged.json")
 
-            val service = createService(wiremock)
+            val service = createService(server)
 
             val releasesResult = service.repositoryReleases(REPO_OWNER, REPO_NAME, paging)
 

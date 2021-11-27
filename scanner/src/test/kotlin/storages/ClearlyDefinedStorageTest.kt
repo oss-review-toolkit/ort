@@ -137,13 +137,13 @@ private fun toolUrl(coordinates: Coordinates, toolName: String, toolVersion: Str
     "$coordinates/$toolName/$toolVersion"
 
 /**
- * Stub a request for the available harvest tools on the [wiremock] server for the package with the given [coordinates]
+ * Stub a request for the available harvest tools on the [server] server for the package with the given [coordinates]
  * to return the specified [tools].
  */
-private fun stubHarvestTools(wiremock: WireMockServer, coordinates: Coordinates, tools: List<String>) {
+private fun stubHarvestTools(server: WireMockServer, coordinates: Coordinates, tools: List<String>) {
     val urlPath = "/harvest/$coordinates"
     val response = tools.joinToString(separator = ",", prefix = "[", postfix = "]") { "\"$it\"" }
-    wiremock.stubFor(
+    server.stubFor(
         get(urlPathEqualTo(urlPath))
             .withQueryParam("form", equalTo("list"))
             .willReturn(
@@ -154,11 +154,11 @@ private fun stubHarvestTools(wiremock: WireMockServer, coordinates: Coordinates,
 }
 
 /**
- * Stub a request for the harvested data from ScanCode for the given [coordinates] on the [wiremock] server.
+ * Stub a request for the harvested data from ScanCode for the given [coordinates] on the [server] server.
  */
-private fun stubHarvestToolResponse(wiremock: WireMockServer, coordinates: Coordinates) {
+private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordinates) {
     val urlPath = "/harvest/${toolUrl(coordinates, "scancode", SCANCODE_VERSION)}"
-    wiremock.stubFor(
+    server.stubFor(
         get(urlPathEqualTo(urlPath))
             .withQueryParam("form", equalTo("streamed"))
             .willReturn(
@@ -169,12 +169,12 @@ private fun stubHarvestToolResponse(wiremock: WireMockServer, coordinates: Coord
 }
 
 /**
- * Stub a request for the definitions endpoint for the given [coordinates] on the [wiremock] server.
+ * Stub a request for the definitions endpoint for the given [coordinates] on the [server] server.
  */
-private fun stubDefinitions(wiremock: WireMockServer, coordinates: Coordinates = COORDINATES) {
+private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
     val coordinatesList = listOf(coordinates)
     val expectedBody = jsonMapper.writeValueAsString(coordinatesList)
-    wiremock.stubFor(
+    server.stubFor(
         post(urlPathEqualTo("/definitions"))
             .withRequestBody(equalToJson(expectedBody))
             .willReturn(
@@ -225,48 +225,48 @@ private fun readDefinitionsTemplate(): String {
 }
 
 class ClearlyDefinedStorageTest : WordSpec({
-    val wiremock = WireMockServer(
+    val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
             .usingFilesUnderDirectory(TEST_FILES_ROOT)
     )
 
     beforeSpec {
-        wiremock.start()
-        WireMock.configureFor(wiremock.port())
+        server.start()
+        WireMock.configureFor(server.port())
     }
 
     afterSpec {
-        wiremock.stop()
+        server.stop()
     }
 
     beforeTest {
-        wiremock.resetAll()
+        server.resetAll()
     }
 
     "ClearlyDefinedStorage" should {
         "load existing scan results for a package from ClearlyDefined" {
             stubHarvestTools(
-                wiremock, COORDINATES,
+                server, COORDINATES,
                 listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
             )
-            stubHarvestToolResponse(wiremock, COORDINATES)
-            stubDefinitions(wiremock)
+            stubHarvestToolResponse(server, COORDINATES)
+            stubDefinitions(server)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeValid()
         }
 
         "load existing scan results for an identifier from ClearlyDefined" {
             stubHarvestTools(
-                wiremock, COORDINATES,
+                server, COORDINATES,
                 listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
             )
-            stubHarvestToolResponse(wiremock, COORDINATES)
-            stubDefinitions(wiremock)
+            stubHarvestToolResponse(server, COORDINATES)
+            stubDefinitions(server)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(TEST_IDENTIFIER).shouldBeValid()
         }
@@ -277,24 +277,24 @@ class ClearlyDefinedStorageTest : WordSpec({
                 "a-completely-different-tool",
                 toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             )
-            stubHarvestTools(wiremock, COORDINATES, tools)
-            stubHarvestToolResponse(wiremock, COORDINATES)
-            stubDefinitions(wiremock)
+            stubHarvestTools(server, COORDINATES, tools)
+            stubHarvestToolResponse(server, COORDINATES)
+            stubDefinitions(server)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeValid()
         }
 
         "set correct metadata in the package scan result" {
             stubHarvestTools(
-                wiremock, COORDINATES,
+                server, COORDINATES,
                 listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
             )
-            stubHarvestToolResponse(wiremock, COORDINATES)
-            stubDefinitions(wiremock)
+            stubHarvestToolResponse(server, COORDINATES)
+            stubDefinitions(server)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             val result = storage.read(TEST_IDENTIFIER).shouldBeValid()
             result.scanner.name shouldBe "ScanCode"
@@ -309,7 +309,7 @@ class ClearlyDefinedStorageTest : WordSpec({
                     .willReturn(aResponse().withStatus(500))
             )
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             val result = storage.read(TEST_IDENTIFIER)
 
@@ -319,22 +319,22 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "return an empty result if no results for the scancode tool are available" {
             val tools = listOf(toolUrl(COORDINATES, "unknownTool", "unknownVersion"), "differentTool")
-            stubHarvestTools(wiremock, COORDINATES, tools)
+            stubHarvestTools(server, COORDINATES, tools)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(TEST_IDENTIFIER).shouldBeEmpty()
         }
 
         "return an empty result if no result for the tool file is returned" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
-            stubHarvestTools(wiremock, COORDINATES, listOf(scanCodeUrl))
+            stubHarvestTools(server, COORDINATES, listOf(scanCodeUrl))
             stubFor(
                 get(urlPathEqualTo("/harvest/$scanCodeUrl"))
                     .willReturn(aResponse().withStatus(200))
             )
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeEmpty()
         }
@@ -348,11 +348,11 @@ class ClearlyDefinedStorageTest : WordSpec({
             )
             val pkg = TEST_PACKAGE.copy(vcs = vcsGit)
             val tools = listOf(toolUrl(gitUrl, "scancode", SCANCODE_VERSION))
-            stubHarvestTools(wiremock, gitUrl, tools)
-            stubHarvestToolResponse(wiremock, gitUrl)
-            stubDefinitions(wiremock, gitUrl)
+            stubHarvestTools(server, gitUrl, tools)
+            stubHarvestToolResponse(server, gitUrl)
+            stubDefinitions(server, gitUrl)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
@@ -361,11 +361,11 @@ class ClearlyDefinedStorageTest : WordSpec({
             val vcs = VcsInfo(VcsType.GIT, "https://gitlab.com/foo/bar.git", COMMIT)
             val pkg = TEST_PACKAGE.copy(vcs = vcs)
             val tools = listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
-            stubHarvestTools(wiremock, COORDINATES, tools)
-            stubHarvestToolResponse(wiremock, COORDINATES)
-            stubDefinitions(wiremock)
+            stubHarvestTools(server, COORDINATES, tools)
+            stubHarvestToolResponse(server, COORDINATES)
+            stubDefinitions(server)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
@@ -375,11 +375,11 @@ class ClearlyDefinedStorageTest : WordSpec({
             val expUrl = COORDINATES.copy(type = ComponentType.SOURCE_ARCHIVE)
             val pkg = TEST_PACKAGE.copy(sourceArtifact = sourceArtifact)
             val tools = listOf(toolUrl(expUrl, "scancode", SCANCODE_VERSION))
-            stubHarvestTools(wiremock, expUrl, tools)
-            stubHarvestToolResponse(wiremock, expUrl)
-            stubDefinitions(wiremock, expUrl)
+            stubHarvestTools(server, expUrl, tools)
+            stubHarvestToolResponse(server, expUrl)
+            stubDefinitions(server, expUrl)
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
@@ -387,7 +387,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         "return an empty result if the coordinates are not supported by ClearlyDefined" {
             val id = TEST_IDENTIFIER.copy(type = "unknown")
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(id).shouldBeEmpty()
         }
@@ -401,7 +401,7 @@ class ClearlyDefinedStorageTest : WordSpec({
                     )
             )
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             val result = storage.read(TEST_IDENTIFIER)
 
@@ -411,7 +411,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "return an empty result if a harvest tool file request returns an unexpected result" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
-            stubHarvestTools(wiremock, COORDINATES, listOf(scanCodeUrl))
+            stubHarvestTools(server, COORDINATES, listOf(scanCodeUrl))
             stubFor(
                 get(urlPathEqualTo("/harvest/$scanCodeUrl"))
                     .willReturn(
@@ -420,7 +420,7 @@ class ClearlyDefinedStorageTest : WordSpec({
                     )
             )
 
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             storage.read(TEST_IDENTIFIER).shouldBeEmpty()
         }

@@ -179,18 +179,19 @@ class FossIdConfigTest : WordSpec({
     "createService" should {
         "create a correctly configured FossIdRestService" {
             val loginPage = "Welcome to FossID"
-            val wiremock = WireMockServer(WireMockConfiguration.options().dynamicPort())
-            wiremock.start()
+            val server = WireMockServer(WireMockConfiguration.options().dynamicPort())
+
+            server.start()
 
             try {
-                val serverUrl = "http://localhost:${wiremock.port()}"
+                val serverUrl = "http://localhost:${server.port()}"
                 val scannerConfig = mapOf(
                     "serverUrl" to serverUrl,
                     "apiKey" to API_KEY,
                     "user" to USER
                 ).toScannerConfig()
 
-                wiremock.stubFor(
+                server.stubFor(
                     get(urlPathEqualTo("/index.php"))
                         .withQueryParam("form", equalTo("login"))
                         .willReturn(
@@ -204,7 +205,7 @@ class FossIdConfigTest : WordSpec({
 
                 service.getLoginPage().string() shouldBe loginPage
             } finally {
-                wiremock.stop()
+                server.stop()
             }
         }
     }
