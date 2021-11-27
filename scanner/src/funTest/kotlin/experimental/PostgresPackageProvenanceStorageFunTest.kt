@@ -25,7 +25,7 @@ class PostgresPackageProvenanceStorageFunTest : AbstractPackageProvenanceStorage
     private val postgresListener = PostgresListener()
 
     init {
-        listener(postgresListener)
+        register(postgresListener)
     }
 
     override fun createStorage() = PostgresPackageProvenanceStorage(postgresListener.dataSource)

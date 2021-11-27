@@ -61,7 +61,7 @@ class PostgresFileArchiverStorageTest : WordSpec({
     val postgresListener = PostgresListener()
     lateinit var storage: PostgresFileArchiverStorage
 
-    listener(postgresListener)
+    register(postgresListener)
 
     beforeEach {
         storage = PostgresFileArchiverStorage(postgresListener.dataSource)

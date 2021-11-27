@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import io.kotest.assertions.show.show
+import io.kotest.assertions.print.print
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
@@ -702,8 +702,8 @@ fun containNoLicenseLocations(): Matcher<ResolvedLicenseInfo?> =
 
         MatcherResult(
             locations.isEmpty(),
-            "ResolvedLicenseInfo should not contain license locations, but has ${locations.show().value}",
-            "ResolvedLicenseInfo should contain license locations, but has none"
+            { "ResolvedLicenseInfo should not contain license locations, but has ${locations.print().value}" },
+            { "ResolvedLicenseInfo should contain license locations, but has none" }
         )
     }
 
@@ -713,8 +713,8 @@ fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
 
         MatcherResult(
             copyrights.isEmpty(),
-            "ResolvedLicenseInfo should not contain copyrights, but has ${copyrights.show().value}",
-            "ResolvedLicenseInfo should contain copyrights, but has none"
+            { "ResolvedLicenseInfo should not contain copyrights, but has ${copyrights.print().value}" },
+            { "ResolvedLicenseInfo should contain copyrights, but has none" }
         )
     }
 
@@ -729,9 +729,11 @@ fun containCopyrightsExactly(vararg copyrights: String): Matcher<Iterable<Resolv
 
         MatcherResult(
             expected == actual,
-            "Resolved license info should contain exactly copyrights ${expected.show().value}, but has " +
-                    actual.show().value,
-            "Resolved license info should not contain exactly copyrights ${copyrights.show().value}"
+            {
+                "Resolved license info should contain exactly copyrights ${expected.print().value}, but has " +
+                        actual.print().value
+            },
+            { "Resolved license info should not contain exactly copyrights ${copyrights.print().value}" }
         )
     }
 
@@ -749,10 +751,14 @@ fun containFindingsForCopyrightExactly(
 
         MatcherResult(
             expected == actual,
-            "Resolved license info should contain exactly findings ${expected.show().value} for copyright " +
-                    "$copyright, but has ${actual.show().value}",
-            "Resolved license info should not contain exactly findings ${expected.show().value} for copyright " +
-                    copyright
+            {
+                "Resolved license info should contain exactly findings ${expected.print().value} for copyright " +
+                        "$copyright, but has ${actual.print().value}"
+            },
+            {
+                "Resolved license info should not contain exactly findings ${expected.print().value} for copyright " +
+                        copyright
+            }
         )
     }
 
@@ -766,10 +772,14 @@ fun containCopyrightGarbageForProvenanceExactly(
 
         MatcherResult(
             expected == actual,
-            "Resolved license info should contain exactly copyright garbage ${expected.show().value} for provenance " +
-                    "${provenance.show().value}, but has ${actual.show().value}",
-            "Resolved license info should not contain exactly copyright garbage ${expected.show().value} for " +
-                    "provenance ${provenance.show().value}"
+            {
+                "Resolved license info should contain exactly copyright garbage ${expected.print().value} for " +
+                        "provenance ${provenance.print().value}, but has ${actual.print().value}"
+            },
+            {
+                "Resolved license info should not contain exactly copyright garbage ${expected.print().value} for " +
+                        "provenance ${provenance.print().value}"
+            }
         )
     }
 
@@ -783,9 +793,14 @@ fun containCopyrightStatementsForLicenseExactly(
 
         MatcherResult(
             expected == actual,
-            "Resolved license info should contain exactly copyrights ${expected.show().value} for license $license, " +
-                    "but has ${actual.show().value}",
-            "Resolved license info should not contain exactly copyrights ${expected.show().value} for license $license"
+            {
+                "Resolved license info should contain exactly copyrights ${expected.print().value} for license " +
+                        "$license, but has ${actual.print().value}"
+            },
+            {
+                "Resolved license info should not contain exactly copyrights ${expected.print().value} for license " +
+                        license
+            }
         )
     }
 
@@ -796,9 +811,11 @@ fun containOnlyLicenseSources(vararg licenseSources: LicenseSource): Matcher<Res
 
         MatcherResult(
             expected == actual,
-            "ResolvedLicenseInfo should contain only license sources ${expected.show().value}, but has " +
-                    actual.show().value,
-            "ResolvedLicenseInfo should not only contain license source ${expected.show().value}"
+            {
+                "ResolvedLicenseInfo should contain only license sources ${expected.print().value}, but has " +
+                        actual.print().value
+            },
+            { "ResolvedLicenseInfo should not only contain license source ${expected.print().value}" }
         )
     }
 
@@ -815,10 +832,14 @@ fun containLicenseExpressionsExactlyBySource(
 
         MatcherResult(
             expectedExpressions == actualExpressions,
-            "ResolvedLicenseInfo for original ${source.show().value} license expressions should " +
-                    "contain exactly ${expectedExpressions.show().value}, but has ${actualExpressions.show().value}",
-            "ResolvedLicenseInfo for original ${source.show().value} license expressions " +
-                    "should not contain exactly ${expectedExpressions.show().value}"
+            {
+                "ResolvedLicenseInfo for original ${source.print().value} license expressions should contain exactly " +
+                        "${expectedExpressions.print().value}, but has ${actualExpressions.print().value}"
+            },
+            {
+                "ResolvedLicenseInfo for original ${source.print().value} license expressions should not contain " +
+                        "exactly ${expectedExpressions.print().value}"
+            }
         )
     }
 
@@ -828,8 +849,8 @@ fun containNumberOfLocationsForLicense(license: String, count: Int): Matcher<Res
 
         MatcherResult(
             count == actualCount,
-            "ResolvedLicenseInfo should contain $count locations for $license, but has $actualCount",
-            "ResolvedLicenseInfo should not contain $count locations for $license"
+            { "ResolvedLicenseInfo should contain $count locations for $license, but has $actualCount" },
+            { "ResolvedLicenseInfo should not contain $count locations for $license" }
         )
     }
 
@@ -857,8 +878,8 @@ fun containLocationForLicense(
 
         MatcherResult(
             contained,
-            "ResolvedLicenseInfo should contain location ${expectedLocation.show().value} for $license",
-            "ResolvedLicenseInfo should not contain location ${expectedLocation.show().value} for $license"
+            { "ResolvedLicenseInfo should contain location ${expectedLocation.print().value} for $license" },
+            { "ResolvedLicenseInfo should not contain location ${expectedLocation.print().value} for $license" }
         )
     }
 

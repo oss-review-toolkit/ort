@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import io.kotest.assertions.show.show
+import io.kotest.assertions.print.print
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.neverNullMatcher
@@ -35,9 +35,11 @@ object TestUtils {
 
             MatcherResult(
                 expected == actual,
-                "ResolvedLicenseInfo should contain exactly licenses ${expected.show().value}, but has " +
-                        actual.show().value,
-                "ResolvedLicenseInfo should not contain exactly ${expected.show().value}"
+                {
+                    "ResolvedLicenseInfo should contain exactly licenses ${expected.print().value}, but has " +
+                            actual.print().value
+                },
+                { "ResolvedLicenseInfo should not contain exactly ${expected.print().value}" }
             )
         }
 }

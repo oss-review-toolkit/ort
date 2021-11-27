@@ -24,7 +24,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.assertions.assertSoftly
-import io.kotest.assertions.show.show
+import io.kotest.assertions.print.print
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
@@ -619,7 +619,7 @@ private fun beString(expected: String): Matcher<SpdxExpression> =
     neverNullMatcher { spdxExpression ->
         MatcherResult(
             spdxExpression.toString() == expected,
-            "SPDX expression ${spdxExpression.show().value} should be $expected",
-            "SPDX expression ${spdxExpression.show().value} should not be $expected"
+            { "SPDX expression ${spdxExpression.print().value} should be $expected" },
+            { "SPDX expression ${spdxExpression.print().value} should not be $expected" }
         )
     }
