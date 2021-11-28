@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
 abstract class AbstractProvenanceBasedStorageFunTest : WordSpec() {
     private lateinit var storage: ProvenanceBasedScanStorage
 
-    override fun beforeTest(testCase: TestCase) {
+    override fun beforeEach(testCase: TestCase) {
         storage = createStorage()
     }
 

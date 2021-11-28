@@ -116,7 +116,7 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
     private lateinit var storage: ScanResultsStorage
 
-    override fun beforeTest(testCase: TestCase) {
+    override fun beforeEach(testCase: TestCase) {
         storage = createStorage()
     }
 

@@ -69,7 +69,7 @@ class VulnerableCodeTest : WordSpec({
         server.stop()
     }
 
-    beforeTest {
+    beforeEach {
         server.resetAll()
     }
 

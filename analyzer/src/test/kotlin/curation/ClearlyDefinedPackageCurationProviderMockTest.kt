@@ -53,7 +53,7 @@ class ClearlyDefinedPackageCurationProviderMockTest : WordSpec({
         server.stop()
     }
 
-    beforeTest {
+    beforeEach {
         server.resetAll()
     }
 
