@@ -76,7 +76,7 @@ class HttpFileStorageFunTest : WordSpec() {
 
     private val storage = HttpFileStorage("http://${loopback.hostAddress}:$port")
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override fun afterEach(testCase: TestCase, result: TestResult) {
         handler.requests.clear()
     }
 

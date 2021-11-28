@@ -61,7 +61,7 @@ class JiraNotifierTest : WordSpec({
         server.stop()
     }
 
-    beforeTest {
+    beforeEach {
         server.resetAll()
     }
 

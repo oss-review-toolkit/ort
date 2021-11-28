@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.VcsType
 abstract class AbstractNestedProvenanceStorageFunTest : WordSpec() {
     private lateinit var storage: NestedProvenanceStorage
 
-    override fun beforeTest(testCase: TestCase) {
+    override fun beforeEach(testCase: TestCase) {
         storage = createStorage()
     }
 

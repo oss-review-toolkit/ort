@@ -63,7 +63,7 @@ class PostgresFileArchiverStorageTest : WordSpec({
 
     listener(postgresListener)
 
-    beforeTest {
+    beforeEach {
         storage = PostgresFileArchiverStorage(postgresListener.dataSource)
     }
 

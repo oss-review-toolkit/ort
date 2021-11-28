@@ -42,7 +42,7 @@ class PostgresListener(private val startupWait: Duration = Duration.ofSeconds(20
         postgres = EmbeddedPostgres.builder().setPGStartupWait(startupWait).start()
     }
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeEach(testCase: TestCase) {
         postgres.postgresDatabase.connection.use { c ->
             val s = c.createStatement()
             s.execute("DROP SCHEMA public CASCADE")

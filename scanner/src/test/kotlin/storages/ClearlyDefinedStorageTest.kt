@@ -237,7 +237,7 @@ class ClearlyDefinedStorageTest : WordSpec({
         server.stop()
     }
 
-    beforeTest {
+    beforeEach {
         server.resetAll()
     }
 
