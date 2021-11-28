@@ -53,7 +53,6 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     abstract val expectedDirectoryLicenses: Set<SpdxExpression>
 
     override fun beforeSpec(spec: Spec) {
-        super.beforeSpec(spec)
         inputDir = createSpecTempDir()
 
         // Copy our own root license under different names to a temporary directory so we have something to operate on.
@@ -62,7 +61,6 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     }
 
     override fun beforeTest(testCase: TestCase) {
-        super.beforeTest(testCase)
         outputDir = createTestTempDir()
     }
 
