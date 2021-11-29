@@ -194,7 +194,7 @@ fun Identifier.toPurl() =
     }
 
 /**
- * Return a list of [ScanResult]s where all results contains only findings from the same directory as the [project]'s
+ * Return a list of [ScanResult]s where all results contain only findings from the same directory as the [project]'s
  * definition file.
  */
 fun List<ScanResult>.filterByProject(project: Project): List<ScanResult> {
