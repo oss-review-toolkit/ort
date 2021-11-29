@@ -95,7 +95,7 @@ object SpdxDocumentModelMapper {
                 homepage = pkg.homepageUrl.nullOrBlankToSpdxNone(),
                 licenseConcluded = pkg.concludedLicense.nullOrBlankToSpdxNoassertionOrNone(),
                 licenseDeclared = pkg.declaredLicensesProcessed.toSpdxDeclaredLicense(),
-                name = pkg.id.toSpdxPackageName(),
+                name = pkg.id.name,
                 summary = pkg.description.nullOrBlankToSpdxNone(),
                 versionInfo = pkg.id.version
             )
@@ -200,8 +200,6 @@ private fun getSpdxCopyrightText(
         SpdxConstants.NONE
     }
 }
-
-private fun Identifier.toSpdxPackageName(): String = "$type:$namespace:$name"
 
 private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
     if (purl.isEmpty()) return emptyList()

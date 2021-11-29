@@ -51,7 +51,7 @@ packages:
   homepage: "first package's homepage URL"
   licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
   licenseDeclared: "BSD-3-Clause AND (MIT OR GPL-2.0-only)"
-  name: "Maven:first-package-group:first-package"
+  name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
     \ a user name, and with a scan result containing two copyright finding matched\
     \ to a license finding."
@@ -69,7 +69,7 @@ packages:
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NOASSERTION"
-  name: "Maven:first-package-group:first-package"
+  name: "first-package"
   packageVerificationCode:
     packageVerificationCodeValue: "0000000000000000000000000000000000000000"
   summary: "A package with all supported attributes set, with a VCS URL containing\
@@ -89,7 +89,7 @@ packages:
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NOASSERTION"
-  name: "Maven:first-package-group:first-package"
+  name: "first-package"
   packageVerificationCode:
     packageVerificationCodeValue: "0000000000000000000000000000000000000000"
   summary: "A package with all supported attributes set, with a VCS URL containing\
@@ -107,7 +107,7 @@ packages:
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "MIT"
-  name: "Maven:fourth-package-group:fourth-package"
+  name: "fourth-package"
   summary: "A package with partially mapped declared license."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-5-second-package"
@@ -121,7 +121,7 @@ packages:
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NOASSERTION"
-  name: "Maven:second-package-group:second-package"
+  name: "second-package"
   summary: "A package with minimal attributes set."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-6-sixth-package"
@@ -135,7 +135,7 @@ packages:
   homepage: "NONE"
   licenseConcluded: "LicenseRef-scancode-srgb"
   licenseDeclared: "LicenseRef-scancode-asmus"
-  name: "Maven:sixth-package-group:sixth-package"
+  name: "sixth-package"
   summary: "A package with non-SPDX license IDs in the declared and concluded license."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-7-third-package"
@@ -149,7 +149,7 @@ packages:
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NOASSERTION"
-  name: "Maven:third-package-group:third-package"
+  name: "third-package"
   summary: "A package with only unmapped declared license."
   versionInfo: "0.0.1"
 relationships:
