@@ -31,6 +31,12 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 class CtrlXAutomationReporter : Reporter {
     companion object {
         const val REPORT_FILENAME = "fossinfo.json"
+
+        private val LICENSE_NOASSERTION = License(
+            name = SpdxConstants.NOASSERTION,
+            spdx = SpdxConstants.NOASSERTION.toSpdx(),
+            text = ""
+        )
     }
 
     override val reporterName = "CtrlXAutomation"
@@ -65,13 +71,7 @@ class CtrlXAutomationReporter : Reporter {
             }
 
             // The specification requires at least one license.
-            val componentLicenses = licenses.takeUnless { it.isNullOrEmpty() } ?: listOf(
-                License(
-                    name = SpdxConstants.NOASSERTION,
-                    spdx = SpdxConstants.NOASSERTION.toSpdx(),
-                    text = ""
-                )
-            )
+            val componentLicenses = licenses.takeUnless { it.isNullOrEmpty() } ?: listOf(LICENSE_NOASSERTION)
 
             Component(
                 name = qualifiedName,
