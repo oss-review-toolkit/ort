@@ -21,12 +21,8 @@ package org.ossreviewtoolkit.scanner.experimental
 
 import org.ossreviewtoolkit.utils.test.PostgresListener
 
-class PostgresPackageProvenanceStorageFunTest : AbstractPackageProvenanceStorageFunTest() {
-    private val postgresListener = PostgresListener()
+private val postgresListener = PostgresListener()
 
-    init {
-        register(postgresListener)
-    }
-
+class PostgresPackageProvenanceStorageFunTest : AbstractPackageProvenanceStorageFunTest(postgresListener) {
     override fun createStorage() = PostgresPackageProvenanceStorage(postgresListener.dataSource)
 }

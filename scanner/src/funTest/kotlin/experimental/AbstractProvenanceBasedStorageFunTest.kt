@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.scanner.experimental
 import com.vdurmont.semver4j.Semver
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.core.test.TestCase
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
@@ -47,16 +47,18 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
-abstract class AbstractProvenanceBasedStorageFunTest : WordSpec() {
+abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private lateinit var storage: ProvenanceBasedScanStorage
-
-    override fun beforeEach(testCase: TestCase) {
-        storage = createStorage()
-    }
 
     protected abstract fun createStorage(): ProvenanceBasedScanStorage
 
     init {
+        register(*listeners)
+
+        beforeEach {
+            storage = createStorage()
+        }
+
         "Adding a scan result" should {
             "succeed for a valid scan result" {
                 val scanResult = createScanResult()
