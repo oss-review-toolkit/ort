@@ -594,9 +594,25 @@ class Pub(
     private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { workingDir.resolve(PUB_LOCK_FILE).isFile }
 
-        // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
-        // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.
-        run(workingDir, "get")
+        if (containsFlutterSdk(workingDir)) {
+            // For Flutter projects it is not enough to run `dart pub get`. Instead, use `flutter pub get` which
+            // installs the required dependencies and also creates the `local.properties` file which is required for
+            // the Android analysis.
+            ProcessCapture(workingDir, *commandFlutter().split(' ').toTypedArray(), "get").requireSuccess()
+        } else {
+            // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
+            // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.
+            run(workingDir, "get")
+        }
+    }
+
+    /**
+     * Check the [PUBSPEC_YAML] within [workingDir] if the project contains the Flutter SDK.
+     */
+    private fun containsFlutterSdk(workingDir: File): Boolean {
+        val specFile = yamlMapper.readTree(workingDir.resolve(PUBSPEC_YAML))
+
+        return specFile?.get("dependencies")?.get("flutter")?.get("sdk")?.textValue() == "flutter"
     }
 }
 
