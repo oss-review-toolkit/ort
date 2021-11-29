@@ -263,6 +263,12 @@ private fun String.isExternalDocumentReferenceId(): Boolean = startsWith(SpdxCon
 private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()
 
 /**
+ * Sanitize a string for use as an [Identifier] property where colons are not supported by replacing them with spaces,
+ * and finally collapsing multiple consecutive spaces.
+ */
+private fun String.sanitize(): String = replace(':', ' ').replace(Regex("\\s{2,}"), " ")
+
+/**
  * Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise.
  */
 private fun String?.wrapPresentInSortedSet(): SortedSet<String> {
@@ -349,9 +355,9 @@ class SpdxDocumentFile(
         Identifier(
             type = managerName,
             namespace = listOfNotNull(supplier, originator).firstOrNull()
-                ?.withoutPrefix(SpdxConstants.ORGANIZATION).orEmpty(),
-            name = name,
-            version = versionInfo
+                ?.withoutPrefix(SpdxConstants.ORGANIZATION).orEmpty().sanitize(),
+            name = name.sanitize(),
+            version = versionInfo.sanitize()
         )
 
     /**
