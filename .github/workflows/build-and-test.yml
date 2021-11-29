@@ -60,6 +60,7 @@ jobs:
       with:
         arguments: test -x :reporter-web-app:yarnBuild
   funTest:
+    if: ${{ false }}
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -76,6 +77,7 @@ jobs:
       with:
         arguments: funTest -x :reporter-web-app:yarnBuild -x :analyzer:funTest
   funTest-analyzer:
+    if: ${{ false }}
     needs: build
     runs-on: ubuntu-latest
     steps:
