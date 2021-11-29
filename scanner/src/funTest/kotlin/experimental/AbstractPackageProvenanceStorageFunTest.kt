@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -32,16 +32,18 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
-abstract class AbstractPackageProvenanceStorageFunTest : WordSpec() {
+abstract class AbstractPackageProvenanceStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private lateinit var storage: PackageProvenanceStorage
-
-    override fun beforeEach(testCase: TestCase) {
-        storage = createStorage()
-    }
 
     protected abstract fun createStorage(): PackageProvenanceStorage
 
     init {
+        register(*listeners)
+
+        beforeEach {
+            storage = createStorage()
+        }
+
         "Adding a result" should {
             "succeed for an artifact result" {
                 val id = createIdentifier()

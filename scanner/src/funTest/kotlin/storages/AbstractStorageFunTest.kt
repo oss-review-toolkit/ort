@@ -23,8 +23,8 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.vdurmont.semver4j.Semver
 
+import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.core.test.TestCase
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.utils.test.shouldBeSuccess
 
 private val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
 
-abstract class AbstractStorageFunTest : WordSpec() {
+abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private val id1 = Identifier("type", "namespace", "name1", "version")
     private val id2 = Identifier("type", "namespace", "name2", "version")
 
@@ -116,10 +116,6 @@ abstract class AbstractStorageFunTest : WordSpec() {
 
     private lateinit var storage: ScanResultsStorage
 
-    override fun beforeEach(testCase: TestCase) {
-        storage = createStorage()
-    }
-
     abstract fun createStorage(): ScanResultsStorage
 
     /**
@@ -134,6 +130,12 @@ abstract class AbstractStorageFunTest : WordSpec() {
         )
 
     init {
+        register(*listeners)
+
+        beforeEach {
+            storage = createStorage()
+        }
+
         "Adding a scan result" should {
             "succeed for a valid scan result" {
                 val scanResult = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, scanSummaryWithFiles)

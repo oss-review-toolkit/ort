@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -28,16 +28,18 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
-abstract class AbstractNestedProvenanceStorageFunTest : WordSpec() {
+abstract class AbstractNestedProvenanceStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private lateinit var storage: NestedProvenanceStorage
-
-    override fun beforeEach(testCase: TestCase) {
-        storage = createStorage()
-    }
 
     protected abstract fun createStorage(): NestedProvenanceStorage
 
     init {
+        register(*listeners)
+
+        beforeEach {
+            storage = createStorage()
+        }
+
         "Adding a result" should {
             "succeed" {
                 val root = createRepositoryProvenance()
