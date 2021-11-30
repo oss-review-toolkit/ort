@@ -133,7 +133,7 @@ enum class PurlType(private val value: String) {
     CONAN("conan"),
     CONDA("conda"),
     CRAN("cran"),
-    DEBIAN("debian"),
+    DEBIAN("deb"),
     DRUPAL("drupal"),
     GEM("gem"),
     GOLANG("golang"),
