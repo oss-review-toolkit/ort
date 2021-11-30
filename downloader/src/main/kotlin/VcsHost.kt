@@ -257,6 +257,9 @@ enum class VcsHost(
             val unknownVcs = VcsInfo(type = VcsType.UNKNOWN, url = projectUrl, revision = "")
             val projectUri = projectUrl.takeUnless { it.isBlank() }?.toUri()?.getOrNull() ?: return unknownVcs
 
+            fun URI.isTfsGitUrl() = path != null && host != null &&
+                    ("/tfs/" in path || ".visualstudio.com" in host) && "/_git/" in path
+
             // Fall back to generic URL detection for unknown VCS hosts.
             val svnBranchOrTagMatch = SVN_BRANCH_OR_TAG_PATTERN.matchEntire(projectUrl)
             val svnTrunkMatch = SVN_TRUNK_PATTERN.matchEntire(projectUrl)
@@ -305,8 +308,7 @@ enum class VcsHost(
                     )
                 }
 
-                ("/tfs/" in projectUri.path || ".visualstudio.com" in projectUri.host) &&
-                        "/_git/" in projectUri.path -> {
+                projectUri.isTfsGitUrl() -> {
                     val url = "${projectUri.scheme}://${projectUri.authority}${projectUri.path}"
                     val query = projectUri.query.orEmpty().split('&')
                         .associate { it.substringBefore('=') to it.substringAfter('=') }
