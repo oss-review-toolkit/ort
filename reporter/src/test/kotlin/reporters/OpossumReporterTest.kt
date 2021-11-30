@@ -137,7 +137,11 @@ class OpossumReporterTest : WordSpec({
             opossumInput.attributionBreakpoints
                 .map { it.replace(Regex("/$"), "") }
                 .forEach { fileList shouldContain resolvePath(it) }
-            opossumInput.packageToRoot.forEach { it.value.forEach { fileList shouldContain resolvePath(it.key) } }
+            opossumInput.packageToRoot.values.forEach { levelForPath ->
+                levelForPath.keys.forEach { path ->
+                    fileList shouldContain resolvePath(path)
+                }
+            }
         }
 
         "create a result that contains all packages in its signals" {
