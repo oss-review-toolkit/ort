@@ -357,12 +357,10 @@ data class GemSpec(
                 dependency["name"]?.textValue()
             }?.toSet()
 
-            val vcs = if (node.hasNonNull("source_code_uri")) {
-                VcsHost.toVcsInfo(node["source_code_uri"].textValue())
-            } else if (node.hasNonNull("homepage_uri")) {
-                VcsHost.toVcsInfo(node["homepage_uri"].textValue())
-            } else {
-                VcsInfo.EMPTY
+            val vcs = when {
+                node.hasNonNull("source_code_uri") -> VcsHost.toVcsInfo(node["source_code_uri"].textValue())
+                node.hasNonNull("homepage_uri") -> VcsHost.toVcsInfo(node["homepage_uri"].textValue())
+                else -> VcsInfo.EMPTY
             }
 
             val artifact = if (node.hasNonNull("gem_uri") && node.hasNonNull("sha")) {
