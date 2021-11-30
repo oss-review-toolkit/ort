@@ -52,7 +52,7 @@ private fun File.readTextAndDelete(): String {
     return text
 }
 
-private fun TestConfiguration.createTempFile(content: String): File =
+private fun TestConfiguration.writeTempFile(content: String): File =
     createTestTempFile().apply {
         writeText(content)
     }
@@ -73,7 +73,7 @@ class PostgresFileArchiverStorageTest : WordSpec({
         }
 
         "return true when an archive for the given provenance has been added" {
-            storage.addArchive(VCS_PROVENANCE, createTempFile("content"))
+            storage.addArchive(VCS_PROVENANCE, writeTempFile("content"))
 
             storage.hasArchive(VCS_PROVENANCE) shouldBe true
         }
@@ -81,8 +81,8 @@ class PostgresFileArchiverStorageTest : WordSpec({
 
     "getArchive()" should {
         "return the archives corresponding to the given provenance given such archive has been added" {
-            storage.addArchive(VCS_PROVENANCE, createTempFile("VCS"))
-            storage.addArchive(SOURCE_ARTIFACT_PROVENANCE, createTempFile("source artifact"))
+            storage.addArchive(VCS_PROVENANCE, writeTempFile("VCS"))
+            storage.addArchive(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
 
             storage.getArchive(VCS_PROVENANCE) shouldNotBeNull { readTextAndDelete() shouldBe "VCS" }
             storage.getArchive(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
