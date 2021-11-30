@@ -28,8 +28,6 @@ import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.SortedSet
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -52,8 +50,9 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
+import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
 
 // The lowest version that supports "--prefer-binary" and PEP 508 URL requirements to be used as dependencies.
@@ -102,7 +101,7 @@ object PythonVersion : CommandLineTool {
      * returned.
      */
     fun getPythonVersion(workingDir: File): Int {
-        val scriptFile = File.createTempFile("python_compatibility", ".py")
+        val scriptFile = createOrtTempFile("python_compatibility", ".py")
         scriptFile.writeBytes(javaClass.getResource("/scripts/python_compatibility.py").readBytes())
 
         try {
@@ -484,7 +483,7 @@ class Pip(
     }
 
     private fun createVirtualEnv(workingDir: File, pythonVersion: Int): File {
-        val virtualEnvDir = createTempDirectory("$ORT_NAME-${workingDir.name}-virtualenv").toFile()
+        val virtualEnvDir = createOrtTempDir("${workingDir.name}-virtualenv")
         val pythonInterpreter = requireNotNull(PythonVersion.getPythonInterpreter(pythonVersion)) {
             "No Python interpreter found for version $pythonVersion."
         }

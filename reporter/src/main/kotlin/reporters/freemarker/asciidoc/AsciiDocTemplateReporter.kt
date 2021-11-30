@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.asciidoctor.Asciidoctor
 import org.asciidoctor.Attributes
 import org.asciidoctor.Options
@@ -33,7 +31,7 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.freemarker.FreemarkerTemplateProcessor
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 
 /**
  * An abstract [Reporter] that uses [Apache Freemarker][1] templates and [AsciiDoc][2] with [AsciidoctorJ][3] to create
@@ -65,7 +63,7 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
         Attributes.builder().build()
 
     final override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val asciiDocOutputDir = createTempDirectory("$ORT_NAME-asciidoc").toFile()
+        val asciiDocOutputDir = createOrtTempDir("asciidoc")
 
         val templateOptions = options.toMutableMap()
         val asciidoctorAttributes = processTemplateOptions(templateOptions)

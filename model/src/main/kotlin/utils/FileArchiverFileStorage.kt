@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.toHexString
-import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.storage.FileStorage
 
@@ -55,7 +55,7 @@ class FileArchiverFileStorage(
     override fun getArchive(provenance: KnownProvenance): File? {
         val archivePath = getArchivePath(provenance)
 
-        val zipFile = kotlin.io.path.createTempFile(ORT_NAME, ".zip").toFile()
+        val zipFile = createOrtTempFile(suffix = ".zip")
 
         return try {
             storage.read(archivePath).use { inputStream ->
