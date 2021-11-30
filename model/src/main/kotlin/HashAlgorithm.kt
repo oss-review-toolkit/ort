@@ -26,6 +26,7 @@ import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
 
+import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.common.toHexString
 
 /**
@@ -138,20 +139,8 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
      * Return the hexadecimal digest of this hash for the given [inputStream] and [size]. The caller is responsible for
      * closing the stream.
      */
-    fun calculate(inputStream: InputStream, size: Long): String {
-        // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
-        // lot of memory at the same time, also considering that this function could potentially be run on multiple
-        // threads in parallel.
-        val buffer = ByteArray(4 * 1024 * 1024)
-        val digest = getMessageDigest(size)
-
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-            digest.update(buffer, 0, length)
-        }
-
-        return digest.digest().toHexString()
-    }
+    fun calculate(inputStream: InputStream, size: Long): String =
+        calculateHash(inputStream, getMessageDigest(size)).toHexString()
 
     protected open fun getMessageDigest(size: Long): MessageDigest =
         // Disregard the size in the standard case.
