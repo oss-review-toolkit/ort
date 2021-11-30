@@ -45,6 +45,12 @@ data class Project(
     val id: Identifier,
 
     /**
+     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val cpe: String? = null,
+
+    /**
      * The path to the definition file of this project, relative to the root of the repository described in [vcs]
      * and [vcsProcessed].
      */
