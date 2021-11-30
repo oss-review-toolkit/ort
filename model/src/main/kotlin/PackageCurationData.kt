@@ -47,6 +47,11 @@ data class PackageCurationData(
     val purl: String? = null,
 
     /**
+     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
+     */
+    val cpe: String? = null,
+
+    /**
      * The list of authors of this package.
      */
     val authors: SortedSet<String>? = null,
@@ -127,6 +132,7 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
     val pkg = Package(
         id = base.id,
         purl = curation.purl ?: base.purl,
+        cpe = curation.cpe ?: base.cpe,
         authors = authors,
         declaredLicenses = base.declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
