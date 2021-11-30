@@ -67,6 +67,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OpossumReporterTest : WordSpec({
     "resolvePath()" should {
@@ -111,12 +112,13 @@ class OpossumReporterTest : WordSpec({
         val opossumInput = OpossumReporter().generateOpossumInput(result, emptySet())
 
         "create input that is somehow valid" {
-            opossumInput shouldNot beNull()
-            opossumInput.resources shouldNot beNull()
-            opossumInput.signals shouldNot beNull()
-            opossumInput.pathToSignal shouldNot beNull()
-            opossumInput.packageToRoot shouldNot beNull()
-            opossumInput.attributionBreakpoints shouldNot beNull()
+            opossumInput shouldNotBeNull {
+                resources shouldNot beNull()
+                signals shouldNot beNull()
+                pathToSignal shouldNot beNull()
+                packageToRoot shouldNot beNull()
+                attributionBreakpoints shouldNot beNull()
+            }
         }
 
         val fileList = opossumInput.resources.toFileList()
@@ -159,19 +161,19 @@ class OpossumReporterTest : WordSpec({
                 "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
             )
             signals.size shouldBe 2
-            val signal = signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
-            signal shouldNot beNull()
-            signal!!.license.toString() shouldBe "Apache-2.0"
+            signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
+                license.toString() shouldBe "Apache-2.0"
+            }
         }
 
         "create a signal with copyright if some file is added by SCANNER report" {
             val signals =
                 opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
             signals.size shouldBe 2
-            val signal = signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
-            signal shouldNot beNull()
-            signal!!.copyright shouldContain "Copyright 2020 Some copyright holder in source artifact"
-            signal.copyright shouldContain "Copyright 2020 Some other copyright holder in source artifact"
+            signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
+                copyright shouldContain "Copyright 2020 Some copyright holder in source artifact"
+                copyright shouldContain "Copyright 2020 Some other copyright holder in source artifact"
+            }
         }
 
         "create signals with all uuids being assigned" {
