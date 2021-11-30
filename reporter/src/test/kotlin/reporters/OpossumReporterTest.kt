@@ -135,9 +135,9 @@ class OpossumReporterTest : WordSpec({
         "create a file list that contains files from other lists" {
             opossumInput.pathToSignal.keys.forEach { path -> fileList shouldContain resolvePath(path) }
 
-            opossumInput.attributionBreakpoints
-                .map { it.replace(Regex("/$"), "") }
-                .forEach { fileList shouldContain resolvePath(it) }
+            opossumInput.attributionBreakpoints.map { it.replace(Regex("/$"), "") }.forEach { path ->
+                fileList shouldContain resolvePath(path)
+            }
 
             opossumInput.packageToRoot.values.forEach { levelForPath ->
                 levelForPath.keys.forEach { path ->
