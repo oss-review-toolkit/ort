@@ -21,6 +21,7 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotContain
@@ -133,21 +134,21 @@ class OpossumReporterTest : WordSpec({
         }
 
         "create a file list that contains files from other lists" {
-            opossumInput.pathToSignal.keys.forEach { path -> fileList shouldContain resolvePath(path) }
+            opossumInput.pathToSignal.keys.forAll { path -> fileList shouldContain resolvePath(path) }
 
-            opossumInput.attributionBreakpoints.map { it.replace(Regex("/$"), "") }.forEach { path ->
+            opossumInput.attributionBreakpoints.map { it.replace(Regex("/$"), "") }.forAll { path ->
                 fileList shouldContain resolvePath(path)
             }
 
-            opossumInput.packageToRoot.values.forEach { levelForPath ->
-                levelForPath.keys.forEach { path ->
+            opossumInput.packageToRoot.values.forAll { levelForPath ->
+                levelForPath.keys.forAll { path ->
                     fileList shouldContain resolvePath(path)
                 }
             }
         }
 
         "create a result that contains all packages in its signals" {
-            result.analyzer!!.result.packages.forEach { pkg ->
+            result.analyzer!!.result.packages.forAll { pkg ->
                 val id = pkg.pkg.id
                 opossumInput.signals.find { it.id == id } shouldNot beNull()
             }
@@ -176,8 +177,8 @@ class OpossumReporterTest : WordSpec({
         }
 
         "create signals with all uuids being assigned" {
-            opossumInput.pathToSignal.values.forEach { signal ->
-                signal.forEach { uuid ->
+            opossumInput.pathToSignal.values.forAll { signal ->
+                signal.forAll { uuid ->
                     opossumInput.signals.find { it.uuid == uuid } shouldNot beNull()
                 }
             }
@@ -219,14 +220,14 @@ class OpossumReporterTest : WordSpec({
                 opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1")
                     .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
             issuesFromFirstPackage.size shouldBe 4
-            issuesFromFirstPackage.forEach {
+            issuesFromFirstPackage.forAll {
                 it.followUp shouldBe true
                 it.excludeFromNotice shouldBe true
             }
 
             val issuesAttachedToFallbackPath = opossumInput.getSignalsForFile("/")
             issuesAttachedToFallbackPath.size shouldBe 1
-            issuesAttachedToFallbackPath.forEach {
+            issuesAttachedToFallbackPath.forAll {
                 it.followUp shouldBe true
                 it.excludeFromNotice shouldBe true
                 it.comment shouldContain Regex("Source-.*Message-")
