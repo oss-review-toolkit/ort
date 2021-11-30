@@ -43,8 +43,6 @@ class GitRepoDownloadFunTest : StringSpec() {
     private lateinit var outputDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        // Do not use the class name as a suffix here to shorten the path. Otherwise the path will get too long for
-        // Windows to handle.
         outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
     }
 
