@@ -51,6 +51,12 @@ data class Package(
     val purl: String = id.toPurl(),
 
     /**
+     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val cpe: String? = null,
+
+    /**
      * The list of authors declared for this package.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
