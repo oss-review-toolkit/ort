@@ -28,8 +28,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
-import kotlin.io.path.createTempDirectory
-
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
@@ -37,14 +35,14 @@ import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.apache.poi.ss.util.CellReference
 
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class ExcelReporterFunTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet" {
             // TODO: Find out why Apache POI seems to prevent immediate deletion of the written XLSX file on Windows.
-            val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
+            val outputDir = createOrtTempDir().apply { deleteOnExit() }
             val ortResult = readOrtResult(
                 "../scanner/src/funTest/assets/dummy-expected-output-for-analyzer-result.yml"
             )

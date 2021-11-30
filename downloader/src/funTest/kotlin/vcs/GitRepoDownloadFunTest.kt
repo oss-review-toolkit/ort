@@ -21,19 +21,15 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
@@ -43,11 +39,7 @@ class GitRepoDownloadFunTest : StringSpec() {
     private lateinit var outputDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
-    }
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        outputDir.safeDeleteRecursively(force = true)
+        outputDir = createTestTempDir()
     }
 
     init {

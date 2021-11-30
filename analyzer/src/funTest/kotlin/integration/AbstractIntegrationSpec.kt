@@ -29,8 +29,6 @@ import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.analyzer.ManagedProjectFiles
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
@@ -39,12 +37,11 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 abstract class AbstractIntegrationSpec : StringSpec() {
@@ -75,14 +72,8 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     protected lateinit var provenance: Provenance
 
     override fun beforeSpec(spec: Spec) {
-        // Do not use the usual simple class name as the suffix here to shorten the path which otherwise gets too long
-        // on Windows for SimpleFormIntegrationTest.
-        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
+        outputDir = createSpecTempDir()
         provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
-    }
-
-    override fun afterSpec(spec: Spec) {
-        outputDir.safeDeleteRecursively(force = true)
     }
 
     init {

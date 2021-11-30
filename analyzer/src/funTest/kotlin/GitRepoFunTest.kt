@@ -48,8 +48,7 @@ class GitRepoFunTest : StringSpec() {
     private lateinit var outputDir: File
 
     override fun beforeSpec(spec: Spec) {
-        // Do not use the class name as a suffix here to shorten the path. Otherwise the path will get too long for
-        // Windows to handle.
+        // Do not use createSpecTempDir() here, as otherwise the path will get too long for Windows to handle.
         outputDir = createTempDirectory(ORT_NAME).toFile()
 
         val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)

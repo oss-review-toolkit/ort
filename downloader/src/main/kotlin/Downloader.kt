@@ -24,7 +24,6 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 
-import kotlin.io.path.createTempDirectory
 import kotlin.time.TimeSource
 
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
@@ -44,7 +43,6 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
-import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -315,7 +313,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         try {
             if (sourceArchive.extension == "gem") {
                 // Unpack the nested data archive for Ruby Gems.
-                val gemDirectory = createTempDirectory("$ORT_NAME-gem").toFile()
+                val gemDirectory = createOrtTempDir("gem")
                 val dataFile = gemDirectory.resolve("data.tar.gz")
 
                 try {

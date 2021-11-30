@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model.utils
 import java.io.File
 import java.io.IOException
 
-import kotlin.io.path.createTempFile
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
@@ -31,7 +30,7 @@ import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.unpackZip
-import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
 import org.ossreviewtoolkit.utils.core.perf
@@ -84,7 +83,7 @@ class FileArchiver(
      * Archive all files in [directory] matching any of the configured patterns in the [storage].
      */
     fun archive(directory: File, provenance: KnownProvenance) {
-        val zipFile = createTempFile(ORT_NAME, ".zip").toFile()
+        val zipFile = createOrtTempFile(suffix = ".zip")
 
         val zipDuration = measureTime {
             directory.packZip(zipFile, overwrite = true) { file ->

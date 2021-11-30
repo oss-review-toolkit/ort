@@ -25,8 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import java.nio.file.Path
 
-import kotlin.io.path.createTempDirectory
-
 import org.eclipse.sw360.clients.adapter.AttachmentUploadRequest
 import org.eclipse.sw360.clients.adapter.SW360Connection
 import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
@@ -50,6 +48,7 @@ import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 
 /**
@@ -164,6 +163,5 @@ private fun createAttachmentOfScanResult(release: SW360Release, cachedScanResult
         .build()
 
 private fun createTempFileForUpload(id: Identifier) =
-    createTempDirectory(id.toCoordinates())
+    createOrtTempDir(id.toCoordinates())
         .resolve(SCAN_RESULTS_FILE_NAME)
-        .toFile()

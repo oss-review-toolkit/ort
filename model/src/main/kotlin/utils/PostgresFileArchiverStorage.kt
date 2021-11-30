@@ -24,8 +24,6 @@ import java.io.IOException
 
 import javax.sql.DataSource
 
-import kotlin.io.path.createTempFile
-
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -44,7 +42,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
-import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
 
 /**
@@ -97,7 +95,7 @@ class PostgresFileArchiverStorage(
             queryFileArchive(provenance)
         } ?: return null
 
-        val file = createTempFile(ORT_NAME, ".zip").toFile()
+        val file = createOrtTempFile(suffix = ".zip")
 
         try {
             file.writeBytes(fileArchive.zipData)

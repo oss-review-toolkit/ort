@@ -26,8 +26,6 @@ import java.io.IOException
 import java.net.URI
 import java.nio.file.Paths
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -51,7 +49,7 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeCopyRecursively
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.core.ORT_NAME
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
@@ -97,7 +95,7 @@ class GoDep(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
-        val gopath = createTempDirectory("$ORT_NAME-${projectDir.name}-gopath").toFile()
+        val gopath = createOrtTempDir("${projectDir.name}-gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
         GO_LEGACY_MANIFESTS[definitionFile.name]?.let { lockfileName ->
