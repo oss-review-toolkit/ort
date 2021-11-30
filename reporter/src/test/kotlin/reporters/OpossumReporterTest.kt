@@ -176,8 +176,8 @@ class OpossumReporterTest : WordSpec({
         }
 
         "create signals with all uuids being assigned" {
-            opossumInput.pathToSignal.forEach { e ->
-                e.value.forEach { uuid ->
+            opossumInput.pathToSignal.values.forEach { signal ->
+                signal.forEach { uuid ->
                     opossumInput.signals.find { it.uuid == uuid } shouldNot beNull()
                 }
             }
