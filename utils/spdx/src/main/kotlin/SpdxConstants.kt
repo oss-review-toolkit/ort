@@ -71,6 +71,11 @@ object SpdxConstants {
     const val LICENSE_LIST_URL = "https://spdx.org/licenses/"
 
     /**
+     * The package verification code for no input.
+     */
+    const val EMPTY_PACKAGE_VERIFICATION_CODE = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+
+    /**
      * Return true if and only if the given value is null or equals [NONE] or [NOASSERTION].
      */
     fun isNotPresent(value: String?) = value in setOf(null, NONE, NOASSERTION)
