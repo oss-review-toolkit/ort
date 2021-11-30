@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
+import org.ossreviewtoolkit.model.config.ProvenanceStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
 import org.ossreviewtoolkit.model.config.StorageType
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
@@ -74,6 +75,10 @@ import org.ossreviewtoolkit.scanner.experimental.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
 import org.ossreviewtoolkit.scanner.experimental.FileBasedNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.experimental.FileBasedPackageProvenanceStorage
+import org.ossreviewtoolkit.scanner.experimental.NestedProvenanceStorage
+import org.ossreviewtoolkit.scanner.experimental.PackageProvenanceStorage
+import org.ossreviewtoolkit.scanner.experimental.PostgresNestedProvenanceStorage
+import org.ossreviewtoolkit.scanner.experimental.PostgresPackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedFileStorage
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
@@ -310,12 +315,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val writers = config.scanner.storageWriters.orEmpty().map { resolve(it) }
             .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
 
-        val packageProvenanceStorage = FileBasedPackageProvenanceStorage(
-            LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/package_provenance"))
-        )
-        val nestedProvenanceStorage = FileBasedNestedProvenanceStorage(
-            LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/nested_provenance"))
-        )
+        val packageProvenanceStorage = createPackageProvenanceStorage(config.scanner.provenanceStorage)
+        val nestedProvenanceStorage = createNestedProvenanceStorage(config.scanner.provenanceStorage)
         val workingTreeCache = DefaultWorkingTreeCache()
 
         try {
@@ -375,3 +376,31 @@ private fun createPostgresStorage(config: PostgresStorageConfiguration) =
 private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration) = ClearlyDefinedStorage(config)
 
 private fun createSw360Storage(config: Sw360StorageConfiguration) = Sw360Storage(config)
+
+private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguration?): PackageProvenanceStorage {
+    config?.fileStorage?.let { fileStorageConfiguration ->
+        return FileBasedPackageProvenanceStorage(fileStorageConfiguration.createFileStorage())
+    }
+
+    config?.postgresStorage?.let { postgresStorageConfiguration ->
+        return PostgresPackageProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
+    }
+
+    return FileBasedPackageProvenanceStorage(
+        LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/package_provenance"))
+    )
+}
+
+private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration?): NestedProvenanceStorage {
+    config?.fileStorage?.let { fileStorageConfiguration ->
+        return FileBasedNestedProvenanceStorage(fileStorageConfiguration.createFileStorage())
+    }
+
+    config?.postgresStorage?.let { postgresStorageConfiguration ->
+        return PostgresNestedProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
+    }
+
+    return FileBasedNestedProvenanceStorage(
+        LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/nested_provenance"))
+    )
+}
