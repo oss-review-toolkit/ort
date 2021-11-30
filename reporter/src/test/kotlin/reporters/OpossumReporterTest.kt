@@ -151,8 +151,7 @@ class OpossumReporterTest : WordSpec({
 
         "create a result that contains all packages in its signals" {
             result.analyzer!!.result.packages.forAll { pkg ->
-                val id = pkg.pkg.id
-                opossumInput.signals.find { it.id == id } shouldNot beNull()
+                opossumInput.signals.find { it.id == pkg.pkg.id } shouldNot beNull()
             }
         }
 
