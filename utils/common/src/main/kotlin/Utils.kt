@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.utils.common
 
 import java.io.File
+import java.io.InputStream
+import java.security.MessageDigest
 import java.util.EnumSet
 
 /**
@@ -32,6 +34,29 @@ val VCS_DIRECTORIES = listOf(
     ".svn",
     "CVS"
 )
+
+/**
+ * Calculate the [digest] on the data from the given [inputStream]. The caller is responsible for closing the stream.
+ */
+fun calculateHash(inputStream: InputStream, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray {
+    // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
+    // lot of memory at the same time, also considering that this function could potentially be run on multiple
+    // threads in parallel.
+    val buffer = ByteArray(4 * 1024 * 1024)
+
+    var length: Int
+    while (inputStream.read(buffer).also { length = it } > 0) {
+        digest.update(buffer, 0, length)
+    }
+
+    return digest.digest()
+}
+
+/**
+ * Calculate the [digest] on the data from the given [file].
+ */
+fun calculateHash(file: File, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray =
+    file.inputStream().use { calculateHash(it, digest) }
 
 /**
  * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().

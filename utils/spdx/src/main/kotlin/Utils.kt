@@ -29,6 +29,7 @@ import java.security.MessageDigest
 
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.toHexString
@@ -92,26 +93,7 @@ fun calculatePackageVerificationCode(sha1sums: Sequence<String>, excludes: Seque
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
 fun calculatePackageVerificationCode(files: Sequence<File>, excludes: Sequence<String> = emptySequence()): String =
-    calculatePackageVerificationCode(files.map { sha1sum(it) }, excludes)
-
-/**
- * Return the SHA-1 sum of the given file as hex string.
- */
-private fun sha1sum(file: File): String =
-    file.inputStream().use { inputStream ->
-        // 4MB has been chosen rather arbitrary hoping that it provides a good enough performance while not consuming
-        // a lot of memory at the same time, also considering that this function could potentially be run on multiple
-        // threads in parallel.
-        val buffer = ByteArray(4 * 1024 * 1024)
-        val digest = MessageDigest.getInstance("SHA-1")
-
-        var length: Int
-        while (inputStream.read(buffer).also { length = it } > 0) {
-            digest.update(buffer, 0, length)
-        }
-
-        digest.digest().toHexString()
-    }
+    calculatePackageVerificationCode(files.map { calculateHash(it).toHexString() }, excludes)
 
 /**
  * Calculate the [SPDX package verification code][1] for all files in a [directory]. If [directory] points to a file
