@@ -87,7 +87,7 @@ data class SpdxPackage(
     val externalRefs: List<SpdxExternalReference> = emptyList(),
 
     /**
-     * Indicates whether the files contents of the package have been used for the creation of the associated
+     * Indicates whether the file contents of the package have been used for the creation of the associated
      * [SpdxDocument].
      */
     val filesAnalyzed: Boolean = true,
