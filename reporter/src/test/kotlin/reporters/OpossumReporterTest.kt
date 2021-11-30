@@ -159,8 +159,7 @@ class OpossumReporterTest : WordSpec({
                 "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
             )
             signals.size shouldBe 2
-            val signal = signals
-                .find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
+            val signal = signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
             signal shouldNot beNull()
             signal!!.license.toString() shouldBe "Apache-2.0"
         }
@@ -169,8 +168,7 @@ class OpossumReporterTest : WordSpec({
             val signals =
                 opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
             signals.size shouldBe 2
-            val signal = signals
-                .find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
+            val signal = signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" }
             signal shouldNot beNull()
             signal!!.copyright shouldContain "Copyright 2020 Some copyright holder in source artifact"
             signal.copyright shouldContain "Copyright 2020 Some other copyright holder in source artifact"
