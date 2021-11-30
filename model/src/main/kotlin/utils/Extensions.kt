@@ -140,7 +140,6 @@ enum class PurlType(private val value: String) {
     MAVEN("maven"),
     NPM("npm"),
     NUGET("nuget"),
-    PECOFF("pecoff"),
     PYPI("pypi"),
     RPM("rpm");
 
