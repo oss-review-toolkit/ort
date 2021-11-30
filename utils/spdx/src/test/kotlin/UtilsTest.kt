@@ -33,6 +33,7 @@ import io.kotest.matchers.string.startWith
 import java.io.File
 
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants.EMPTY_PACKAGE_VERIFICATION_CODE
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class UtilsTest : WordSpec() {
@@ -47,6 +48,10 @@ class UtilsTest : WordSpec() {
 
     init {
         "calculatePackageVerificationCode" should {
+            "return the SHA1 for an empty string on no input" {
+                calculatePackageVerificationCode(emptySequence<String>()) shouldBe EMPTY_PACKAGE_VERIFICATION_CODE
+            }
+
             "work for given SHA1s and excludes" {
                 val sha1sums = sequenceOf(
                     "0811bcab4e7a186f4d0d08d44cc5f06d721e7f6d",
