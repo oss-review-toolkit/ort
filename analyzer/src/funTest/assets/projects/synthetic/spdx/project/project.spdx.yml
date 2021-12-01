@@ -20,7 +20,7 @@ externalDocumentRefs:
 - externalDocumentId: "DocumentRef-zlib-1.2.11"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "9ffefb62ce14b40f675345a05b45846900740689"
+    checksumValue: "31ac790fa33d3e54d1bd98390ab94a212f52d63e"
   spdxDocument: "../package/libs/zlib/package.spdx.yml"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
@@ -42,6 +42,9 @@ packages:
   - referenceCategory: "PACKAGE_MANAGER"
     referenceLocator: "pkg:a-name/openssl@1.1.1g"
     referenceType: "purl"
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:2.3:a:a-name:openssl:1.1.1g:*:*:*:*:*:*:*"
+    referenceType: "cpe23Type"
   filesAnalyzed: false
   homepage: "https://www.openssl.org/"
   licenseConcluded: "NOASSERTION"

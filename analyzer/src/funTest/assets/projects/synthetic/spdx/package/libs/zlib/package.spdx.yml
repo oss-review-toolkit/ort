@@ -14,6 +14,10 @@ packages:
   description: "zlib 1.2.11 is a general purpose data compression library."
   copyrightText: "(C) 1995-2017 Jean-loup Gailly and Mark Adler"
   downloadLocation: "http://zlib.net/zlib-1.2.11.tar.gz"
+  externalRefs:
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:/a:compress:zlib:1.2.11:::en-us"
+    referenceType: "cpe22Type"
   filesAnalyzed: true
   homepage: "http://zlib.net"
   licenseConcluded: "NOASSERTION"

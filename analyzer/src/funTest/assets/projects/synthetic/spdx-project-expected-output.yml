@@ -64,6 +64,7 @@ packages:
     path: ""
 - id: "SpdxDocumentFile::zlib:1.2.11"
   purl: "pkg:spdxdocumentfile/zlib@1.2.11"
+  cpe: "cpe:/a:compress:zlib:1.2.11:::en-us"
   authors:
   - "Jean-loup Gailly"
   - "Mark Adler"
@@ -95,6 +96,7 @@ packages:
     path: "analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/zlib"
 - id: "SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g"
   purl: "pkg:a-name/openssl@1.1.1g"
+  cpe: "cpe:2.3:a:a-name:openssl:1.1.1g:*:*:*:*:*:*:*"
   authors:
   - "OpenSSL Development Team"
   declared_licenses:

@@ -70,6 +70,7 @@ class SpdxDocumentFileFunTest : WordSpec({
             actualResult.first() shouldBe ProjectAnalyzerResult(
                 Project(
                     id = Identifier("SpdxDocumentFile::curl:7.70.0"),
+                    cpe = "cpe:2.3:a:http:curl:7.70.0:*:*:*:*:*:*:*",
                     definitionFilePath = packageFileCurl.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
                     authors = sortedSetOf("Daniel Stenberg (daniel@haxx.se)"),
                     declaredLicenses = sortedSetOf("curl"),
@@ -89,6 +90,7 @@ class SpdxDocumentFileFunTest : WordSpec({
             actualResult.last() shouldBe ProjectAnalyzerResult(
                 Project(
                     id = Identifier("SpdxDocumentFile::zlib:1.2.11"),
+                    cpe = "cpe:/a:compress:zlib:1.2.11:::en-us",
                     definitionFilePath = packageFileZlib.relativeTo(vcsDir.getRootPath()).invariantSeparatorsPath,
                     authors = sortedSetOf("Jean-loup Gailly", "Mark Adler"),
                     declaredLicenses = sortedSetOf("Zlib"),
