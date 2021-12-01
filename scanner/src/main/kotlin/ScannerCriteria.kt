@@ -97,6 +97,6 @@ data class ScannerCriteria(
         if (!nameRegex.matches(details.name)) return false
 
         val version = Semver(details.version)
-        return minVersion <= version && maxVersion > version && configMatcher(details.configuration)
+        return minVersion <= version && version < maxVersion && configMatcher(details.configuration)
     }
 }
