@@ -179,7 +179,7 @@ fun scanOrtResult(
     }
 
     // Only include options of used scanners into the scanner run.
-    val scannerConfig = packageScanner?.scannerConfig ?: packageScanner?.scannerConfig
+    val scannerConfig = packageScanner?.scannerConfig ?: projectScanner?.scannerConfig
     checkNotNull(scannerConfig)
 
     val configWithFilteredOptions = scannerConfig.copy(
