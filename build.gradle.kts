@@ -161,21 +161,21 @@ allprojects {
         buildUponDefaultConfig = true
         config = files("$rootDir/.detekt.yml")
 
-        input = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
+        source = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
             "src/funTest/kotlin")
 
         basePath = rootProject.projectDir.path
-
-        reports {
-            html.enabled = false
-            sarif.enabled = true
-            txt.enabled = false
-            xml.enabled = false
-        }
     }
 
     tasks.withType<Detekt> detekt@{
         dependsOn(":detekt-rules:assemble")
+
+        reports {
+            html.required.set(false)
+            sarif.required.set(true)
+            txt.required.set(false)
+            xml.required.set(false)
+        }
 
         finalizedBy(mergeDetektReports)
 
