@@ -172,26 +172,51 @@ fun Identifier.getPurlType() =
  * [in the documentation](https://github.com/package-url/purl-spec/blob/master/README.rst#purl).
  * E.g. 'maven' for Gradle projects.
  */
-fun Identifier.toPurl() =
-    if (this == Identifier.EMPTY) {
-        ""
-    } else {
-        buildString {
-            append("pkg:")
-            append(getPurlType())
+fun Identifier.toPurl() = if (this == Identifier.EMPTY) "" else createPurl(getPurlType(), namespace, name, version)
 
-            if (namespace.isNotEmpty()) {
-                append('/')
-                append(namespace.percentEncode())
-            }
+/**
+ * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on given properties:
+ * [type] (which must be a String representation of a [PurlType] instance, [namespace], [name] and [version].
+ * Optional [qualifiers] may be given and will be appended to the purl as query parameters e.g.
+ * pkg:deb/debian/curl@7.50.3-1?arch=i386&distro=jessie
+ * Optional [subpath] may be given and will be appended to the purl e.g.
+ * pkg:golang/google.golang.org/genproto#googleapis/api/annotations
+ *
+ */
+fun createPurl(
+    type: String,
+    namespace: String,
+    name: String,
+    version: String,
+    qualifiers: Map<String, String> = emptyMap(),
+    subpath: String = ""
+): String = buildString {
+    append("pkg:")
+    append(type)
 
-            append('/')
-            append(name.percentEncode())
-
-            append('@')
-            append(version.percentEncode())
-        }
+    if (namespace.isNotEmpty()) {
+        append('/')
+        append(namespace.percentEncode())
     }
+
+    append('/')
+    append(name.percentEncode())
+
+    append('@')
+    append(version.percentEncode())
+
+    qualifiers.onEachIndexed { index, entry ->
+        if (index == 0) append("?") else append("&")
+        append(entry.key.percentEncode())
+        append("=")
+        append(entry.value.percentEncode())
+    }
+
+    if (subpath.isNotEmpty()) {
+        val value = subpath.split('/').joinToString("/", prefix = "#") { it.percentEncode() }
+        append(value)
+    }
+}
 
 /**
  * Return a list of [ScanResult]s where all results contains only findings from the same directory as the [project]'s
