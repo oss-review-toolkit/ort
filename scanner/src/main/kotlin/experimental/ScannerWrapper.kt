@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 /**
@@ -56,6 +57,11 @@ sealed interface ScannerWrapper {
      * If this property is null it means that the results of this [ScannerWrapper] cannot be stored in a scan storage.
      */
     val criteria: ScannerCriteria?
+
+    /**
+     * Filter the scanner specific options to remove any secrets, like credentials.
+     */
+    fun filterSecretOptions(options: ScannerOptions) = options
 }
 
 /**

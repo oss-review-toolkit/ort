@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.log
@@ -75,8 +76,16 @@ class ExperimentalScanner(
             storageStats = AccessStatistics() // TODO: Record access statistics.
         )
 
-        // TODO: Filter scanner options to obfuscate credentials, see Scanner.filterOptionsForResult().
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), scannerConfig, scanRecord)
+        val filteredScannerOptions = mutableMapOf<String, ScannerOptions>()
+
+        scannerWrappers.forEach { scannerWrapper ->
+            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
+                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
+            }
+        }
+
+        val filteredScannerConfig = scannerConfig.copy(options = filteredScannerOptions)
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), filteredScannerConfig, scanRecord)
 
         return ortResult.copy(scanner = scannerRun)
     }
