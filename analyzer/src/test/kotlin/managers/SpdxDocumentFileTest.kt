@@ -28,9 +28,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.OrtIssue
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -93,38 +91,6 @@ private fun createSpdxDocument(): SpdxDocument {
 }
 
 class SpdxDocumentFileTest : WordSpec({
-    "getBinaryArtifact()" should {
-        "return a RemoteArtifact for a downloadLocation that points to a binary artifact" {
-            pkgForBinaryArtifact.getBinaryArtifact() shouldBe RemoteArtifact(
-                url = "https://repo1.maven.org/maven2/junit/junit/4.11/junit-4.11.jar",
-                hash = Hash.NONE
-            )
-        }
-
-        "return null for a downloadLocation that does not point to a binary artifact" {
-            pkgForBinaryArtifact.copy(downloadLocation = SpdxConstants.NONE).getBinaryArtifact() should beNull()
-            pkgForBinaryArtifact.copy(downloadLocation = SpdxConstants.NOASSERTION).getBinaryArtifact() should beNull()
-            pkgForSourceArtifact.getBinaryArtifact() should beNull()
-            pkgForVcs.getBinaryArtifact() should beNull()
-        }
-    }
-
-    "getSourceArtifact()" should {
-        "return a RemoteArtifact for a downloadLocation that points to a source artifact" {
-            pkgForSourceArtifact.getSourceArtifact() shouldBe RemoteArtifact(
-                url = "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
-                hash = Hash.NONE
-            )
-        }
-
-        "return null for a downloadLocation that does not point to a source artifact" {
-            pkgForSourceArtifact.copy(downloadLocation = SpdxConstants.NONE).getSourceArtifact() should beNull()
-            pkgForSourceArtifact.copy(downloadLocation = SpdxConstants.NOASSERTION).getSourceArtifact() should beNull()
-            pkgForBinaryArtifact.getSourceArtifact() should beNull()
-            pkgForVcs.getSourceArtifact() should beNull()
-        }
-    }
-
     "getVcsInfo()" should {
         "return the VcsInfo for a downloadLocation that points to a VCS" {
             pkgForVcs.getVcsInfo() shouldBe VcsInfo(

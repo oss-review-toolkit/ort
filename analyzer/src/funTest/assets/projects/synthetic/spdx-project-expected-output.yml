@@ -44,12 +44,12 @@ packages:
     \ of powerful features."
   homepage_url: "https://curl.haxx.se/"
   binary_artifact:
-    url: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
+    url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
     hash:
       value: ""
       algorithm: ""
