@@ -96,24 +96,34 @@ class PackageManagerTest : WordSpec({
                 managedFilesByName["Carthage"] should containExactlyInAnyOrder("carthage/Cartfile.resolved")
                 managedFilesByName["CocoaPods"] should containExactlyInAnyOrder("cocoapods/Podfile")
                 managedFilesByName["Composer"] should containExactlyInAnyOrder("composer/composer.json")
-                managedFilesByName["Conan"] should containExactlyInAnyOrder("conan-py/conanfile.py",
-                    "conan-txt/conanfile.txt")
+                managedFilesByName["Conan"] should containExactlyInAnyOrder(
+                    "conan-py/conanfile.py",
+                    "conan-txt/conanfile.txt"
+                )
                 managedFilesByName["DotNet"] should containExactlyInAnyOrder("dotnet/dotnet.csproj")
-                managedFilesByName["GoDep"] should containExactlyInAnyOrder("glide/glide.yaml",
-                    "godep/Gopkg.toml", "godeps/Godeps.json")
+                managedFilesByName["GoDep"] should containExactlyInAnyOrder(
+                    "glide/glide.yaml",
+                    "godep/Gopkg.toml", "godeps/Godeps.json"
+                )
                 managedFilesByName["GoMod"] should containExactlyInAnyOrder("gomod/go.mod")
-                managedFilesByName["Gradle"] should containExactlyInAnyOrder("gradle-groovy/build.gradle",
-                    "gradle-kotlin/build.gradle.kts")
+                managedFilesByName["Gradle"] should containExactlyInAnyOrder(
+                    "gradle-groovy/build.gradle",
+                    "gradle-kotlin/build.gradle.kts"
+                )
                 managedFilesByName["Maven"] should containExactlyInAnyOrder("maven/pom.xml")
                 managedFilesByName["NPM"] should containExactlyInAnyOrder("npm-and-yarn/package.json")
                 managedFilesByName["NuGet"] should containExactlyInAnyOrder("nuget/packages.config")
-                managedFilesByName["PIP"] should containExactlyInAnyOrder("pip-requirements/requirements.txt",
-                    "pip-setup/setup.py")
+                managedFilesByName["PIP"] should containExactlyInAnyOrder(
+                    "pip-requirements/requirements.txt",
+                    "pip-setup/setup.py"
+                )
                 managedFilesByName["Pipenv"] should containExactlyInAnyOrder("pipenv/Pipfile.lock")
                 managedFilesByName["Pub"] should containExactlyInAnyOrder("pub/pubspec.yaml")
                 managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
-                managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder("spdx-package/package.spdx.yml",
-                    "spdx-project/project.spdx.yml")
+                managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder(
+                    "spdx-package/package.spdx.yml",
+                    "spdx-project/project.spdx.yml"
+                )
                 managedFilesByName["Stack"] should containExactlyInAnyOrder("stack/stack.yaml")
                 managedFilesByName["Yarn"] should containExactlyInAnyOrder("npm-and-yarn/package.json")
             }
@@ -133,10 +143,14 @@ class PackageManagerTest : WordSpec({
                 manager.managerName to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
             }.toMap()
 
-            managedFilesByName["Gradle"] should containExactlyInAnyOrder("gradle-groovy/build.gradle",
-                "gradle-kotlin/build.gradle.kts")
-            managedFilesByName["PIP"] should containExactlyInAnyOrder("pip-requirements/requirements.txt",
-                "pip-setup/setup.py")
+            managedFilesByName["Gradle"] should containExactlyInAnyOrder(
+                "gradle-groovy/build.gradle",
+                "gradle-kotlin/build.gradle.kts"
+            )
+            managedFilesByName["PIP"] should containExactlyInAnyOrder(
+                "pip-requirements/requirements.txt",
+                "pip-setup/setup.py"
+            )
             managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
         }
 
