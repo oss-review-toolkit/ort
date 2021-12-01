@@ -41,6 +41,7 @@ class XZCompressedLocalFileStorage(
             XZCompressorInputStream(super.read(transformPath(path)))
         } catch (compressedFileNotFoundException: FileNotFoundException) {
             // Fall back to try reading the uncompressed file.
+            @Suppress("SwallowedException")
             try {
                 super.read(path)
             } catch (uncompressedFileNotFoundException: FileNotFoundException) {

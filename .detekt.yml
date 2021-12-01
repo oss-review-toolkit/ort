@@ -29,6 +29,10 @@ formatting:
     active: false
   FinalNewline:
     active: false
+  ImportOrdering:
+    active: false
+  Indentation:
+    active: false
   MaximumLineLength:
     active: false
   NoUnusedImports:
