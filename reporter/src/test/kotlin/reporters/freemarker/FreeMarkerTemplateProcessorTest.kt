@@ -21,8 +21,11 @@ package org.ossreviewtoolkit.reporter.reporters.freemarker
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -42,6 +45,7 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Defect
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
@@ -249,7 +253,8 @@ private fun advisorRun(results: SortedMap<Identifier, List<AdvisorResult>>): Adv
 private fun advisorResult(
     details: AdvisorDetails = ADVISOR_DETAILS,
     issues: List<OrtIssue> = emptyList(),
-    vulnerabilities: List<Vulnerability> = emptyList()
+    vulnerabilities: List<Vulnerability> = emptyList(),
+    defects: List<Defect> = emptyList()
 ): AdvisorResult =
     AdvisorResult(
         advisor = details,
@@ -258,7 +263,8 @@ private fun advisorResult(
             endTime = Instant.now(),
             issues = issues
         ),
-        vulnerabilities = vulnerabilities
+        vulnerabilities = vulnerabilities,
+        defects = defects
     )
 
 class FreeMarkerTemplateProcessorTest : WordSpec({
@@ -485,6 +491,141 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
 
             helper.hasAdvisorIssues(AdvisorCapability.VULNERABILITIES, Severity.ERROR) shouldBe false
+        }
+    }
+
+    "advisorResultsWithIssues" should {
+        "return the correct results" {
+            val issue = OrtIssue(source = ADVISOR_DETAILS.name, message = "An error occurred")
+            val advisorResult = advisorResult(issues = listOf(issue))
+
+            val advisorRun = advisorRun(
+                sortedMapOf(
+                    idSubProject to listOf(advisorResult),
+                    idRootProject to listOf(advisorResult())
+                )
+            )
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            val results = helper.advisorResultsWithIssues(AdvisorCapability.VULNERABILITIES, Severity.WARNING)
+
+            results.keys should containExactly(idSubProject)
+            results.getValue(idSubProject) should containExactly(advisorResult)
+        }
+
+        "ignore advisor results with other capabilities" {
+            val details2 = AdvisorDetails("anotherAdvisor", enumSetOf(AdvisorCapability.DEFECTS))
+            val issue = OrtIssue(source = details2.name, message = "Error when loading defects")
+
+            val vulnerability = mockk<Vulnerability>()
+            val advisorResult1 = advisorResult(vulnerabilities = listOf(vulnerability), issues = listOf(issue))
+            val advisorResult2 = advisorResult(details = details2, issues = listOf(issue))
+
+            val advisorRun = advisorRun(
+                sortedMapOf(idSubProject to listOf(advisorResult1), idNestedProject to listOf(advisorResult2))
+            )
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            val results = helper.advisorResultsWithIssues(AdvisorCapability.DEFECTS, Severity.ERROR)
+
+            results.keys should containExactly(idNestedProject)
+            results.getValue(idNestedProject) should containExactly(advisorResult2)
+        }
+
+        "ignore issues with a lower severity" {
+            val issue =
+                OrtIssue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
+            val advisorResult = advisorResult(issues = listOf(issue))
+
+            val advisorRun = advisorRun(sortedMapOf(idSubProject to listOf(advisorResult)))
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            helper.advisorResultsWithIssues(AdvisorCapability.VULNERABILITIES, Severity.ERROR) should beEmpty()
+        }
+    }
+
+    "advisorResultsWithVulnerabilities" should {
+        "return the correct results" {
+            val resultWithVulnerabilities1 = advisorResult(vulnerabilities = listOf(mockk()))
+            val resultWithVulnerabilities2 = advisorResult(
+                details = AdvisorDetails("otherVulnerabilityProvider"),
+                vulnerabilities = listOf(mockk())
+            )
+            val otherResult = advisorResult()
+
+            val advisorRun = advisorRun(
+                sortedMapOf(
+                    idRootProject to emptyList(),
+                    idNestedProject to listOf(resultWithVulnerabilities1, otherResult),
+                    idSubProject to listOf(resultWithVulnerabilities2)
+                )
+            )
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            val results = helper.advisorResultsWithVulnerabilities()
+
+            results.keys should containExactlyInAnyOrder(idNestedProject, idSubProject)
+            results.getValue(idNestedProject) should containExactly(resultWithVulnerabilities1)
+            results.getValue(idSubProject) should containExactly(resultWithVulnerabilities2)
+        }
+
+        "return an empty map if there is no advisor result" {
+            val input = ReporterInput(ORT_RESULT)
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            val results = helper.advisorResultsWithVulnerabilities()
+
+            results should beEmpty()
+        }
+    }
+
+    "advisorResultsWithDefects" should {
+        "return the correct results" {
+            val resultWithDefects1 = advisorResult(defects = listOf(mockk()))
+            val resultWithDefects2 = advisorResult(
+                details = AdvisorDetails("otherDefectProvider"),
+                defects = listOf(mockk())
+            )
+            val otherResult = advisorResult()
+
+            val advisorRun = advisorRun(
+                sortedMapOf(
+                    idRootProject to emptyList(),
+                    idNestedProject to listOf(resultWithDefects1, otherResult),
+                    idSubProject to listOf(resultWithDefects2)
+                )
+            )
+            val ortResult = ORT_RESULT.copy(advisor = advisorRun)
+            val input = ReporterInput(ortResult)
+
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            val results = helper.advisorResultsWithDefects()
+
+            results.keys should containExactlyInAnyOrder(idNestedProject, idSubProject)
+            results.getValue(idNestedProject) should containExactly(resultWithDefects1)
+            results.getValue(idSubProject) should containExactly(resultWithDefects2)
+        }
+
+        "return an empty map if there is no advisor result" {
+            val input = ReporterInput(ORT_RESULT)
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            val results = helper.advisorResultsWithDefects()
+
+            results should beEmpty()
         }
     }
 })
