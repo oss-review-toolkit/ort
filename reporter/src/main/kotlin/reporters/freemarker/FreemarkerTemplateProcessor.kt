@@ -30,6 +30,8 @@ import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorRecord
+import org.ossreviewtoolkit.model.AdvisorResult
+import org.ossreviewtoolkit.model.AdvisorResultFilter
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -363,6 +365,34 @@ class FreemarkerTemplateProcessor(
                     minSeverity = severity
                 )
             )?.isNotEmpty() ?: false
+
+        /**
+         * Return the subset of the available advisor results produced by an advisor with the given [capability] that
+         * have an issue with at least the given [severity]. With this function packages can be identified whose
+         * results may be incomplete.
+         */
+        fun advisorResultsWithIssues(
+            capability: AdvisorCapability,
+            severity: Severity
+        ): Map<Identifier, List<AdvisorResult>> =
+            input.filteredAdvisorResults(
+                AdvisorRecord.resultsWithIssues(
+                    capability = capability,
+                    minSeverity = severity
+                )
+            )
+
+        /**
+         * Return the subset of the available advisor results that contain vulnerabilities.
+         */
+        fun advisorResultsWithVulnerabilities(): Map<Identifier, List<AdvisorResult>> =
+            input.filteredAdvisorResults(AdvisorRecord.RESULTS_WITH_VULNERABILITIES)
+
+        /**
+         * Return the subset of the available advisor results that contain defects.
+         */
+        fun advisorResultsWithDefects(): Map<Identifier, List<AdvisorResult>> =
+            input.filteredAdvisorResults(AdvisorRecord.RESULTS_WITH_DEFECTS)
     }
 }
 
@@ -490,3 +520,10 @@ private fun ReporterInput.replaceOrtResult(ortResult: OrtResult): ReporterInput 
             licenseFilenamePatterns = licenseInfoResolver.licenseFilenamePatterns
         )
     )
+
+/**
+ * Apply the given [filter] to the advisor results stored in this [ReporterInput]. Return an empty map if no advisor
+ * results are available.
+ */
+private fun ReporterInput.filteredAdvisorResults(filter: AdvisorResultFilter): Map<Identifier, List<AdvisorResult>> =
+    ortResult.advisor?.results?.filterResults(filter).orEmpty()
