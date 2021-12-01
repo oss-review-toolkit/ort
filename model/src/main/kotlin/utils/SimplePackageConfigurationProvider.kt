@@ -40,6 +40,7 @@ class SimplePackageConfigurationProvider(
         /**
          * A provider without any package configurations.
          */
+        @JvmField
         val EMPTY = SimplePackageConfigurationProvider(emptyList())
 
         /**

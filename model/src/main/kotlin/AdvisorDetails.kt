@@ -39,6 +39,7 @@ data class AdvisorDetails(
     val capabilities: EnumSet<AdvisorCapability> = enumSetOf()
 ) {
     companion object {
+        @JvmField
         val EMPTY = AdvisorDetails(
             name = ""
         )

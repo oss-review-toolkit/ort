@@ -30,6 +30,7 @@ fun interface PackageCurationProvider {
         /**
          * A provider that does not provide any curations.
          */
+        @JvmField
         val EMPTY = PackageCurationProvider { emptyList() }
     }
 
