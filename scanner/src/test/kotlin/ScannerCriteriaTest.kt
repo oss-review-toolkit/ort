@@ -43,7 +43,7 @@ class ScannerCriteriaTest : WordSpec({
         }
     }
 
-    "ScannerCriteria.isCompatible()" should {
+    "ScannerCriteria.matches()" should {
         "accept matching details" {
             matchingCriteria.matches(testDetails) shouldBe true
         }
