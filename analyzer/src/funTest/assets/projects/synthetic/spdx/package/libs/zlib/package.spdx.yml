@@ -18,7 +18,7 @@ packages:
   - referenceCategory: "SECURITY"
     referenceLocator: "cpe:/a:compress:zlib:1.2.11:::en-us"
     referenceType: "cpe22Type"
-  filesAnalyzed: true
+  filesAnalyzed: false
   homepage: "http://zlib.net"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "Zlib"

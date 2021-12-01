@@ -20,7 +20,7 @@ externalDocumentRefs:
 - externalDocumentId: "DocumentRef-zlib-1.2.11"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "31ac790fa33d3e54d1bd98390ab94a212f52d63e"
+    checksumValue: "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"
   spdxDocument: "../package/libs/zlib/package.spdx.yml"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
