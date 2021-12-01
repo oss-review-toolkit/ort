@@ -133,7 +133,7 @@ abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListe
 
             "fail if the provenance contains a VCS path" {
                 val provenance = createRepositoryProvenance(vcsInfo = VcsInfo.valid().copy(path = "path"))
-                val criteria = createScannerDetails().toCriteria()
+                val criteria = ScannerCriteria.forDetails(createScannerDetails())
 
                 shouldThrow<ScanStorageException> { storage.read(provenance) }
                 shouldThrow<ScanStorageException> { storage.read(provenance, criteria) }
@@ -146,8 +146,10 @@ abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListe
                 storage.write(scanResult1)
                 storage.write(scanResult2)
 
-                val readResult =
-                    storage.read(scanResult1.provenance as KnownProvenance, scanResult1.scanner.toCriteria())
+                val readResult = storage.read(
+                    scanResult1.provenance as KnownProvenance,
+                    ScannerCriteria.forDetails(scanResult1.scanner)
+                )
 
                 readResult should containExactlyInAnyOrder(scanResult1)
             }
@@ -156,7 +158,7 @@ abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListe
                 val scanResult1 = createScanResult(scannerDetails = createScannerDetails(name = "name1"))
                 val scanResult2 = createScanResult(scannerDetails = createScannerDetails(name = "name2"))
                 val scanResult3 = createScanResult(scannerDetails = createScannerDetails(name = "other name"))
-                val criteria = scanResult1.scanner.toCriteria().copy(regScannerName = "name.+")
+                val criteria = ScannerCriteria.forDetails(scanResult1.scanner).copy(regScannerName = "name.+")
 
                 storage.write(scanResult1)
                 storage.write(scanResult2)
@@ -173,7 +175,7 @@ abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListe
                 val scanResultCompatible2 =
                     createScanResult(scannerDetails = createScannerDetails(version = "1.0.1-alpha.1"))
                 val scanResultIncompatible = createScanResult(scannerDetails = createScannerDetails(version = "2.0.0"))
-                val criteria = scanResult.scanner.toCriteria().let { it.copy(maxVersion = it.minVersion.nextMinor()) }
+                val criteria = ScannerCriteria.forDetails(scanResult.scanner, Semver.VersionDiff.PATCH)
 
                 storage.write(scanResult)
                 storage.write(scanResultCompatible1)
@@ -187,14 +189,6 @@ abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListe
         }
     }
 }
-
-private fun ScannerDetails.toCriteria() =
-    ScannerCriteria(
-        regScannerName = name,
-        minVersion = Semver(version),
-        maxVersion = Semver(version).nextPatch(),
-        configMatcher = { true }
-    )
 
 private fun RemoteArtifact.Companion.valid() =
     RemoteArtifact(

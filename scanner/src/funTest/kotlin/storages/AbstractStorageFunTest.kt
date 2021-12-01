@@ -99,6 +99,8 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
     private val scannerDetailsCompatibleVersion2 = ScannerDetails("name 1", "1.0.1-alpha.1", "config 1")
     private val scannerDetailsIncompatibleVersion = ScannerDetails("name 1", "1.1.0", "config 1")
 
+    private val scannerCriteriaForDetails1 = ScannerCriteria.forDetails(scannerDetails1, Semver.VersionDiff.PATCH)
+
     private val scanSummaryWithFiles = ScanSummary(
         startTime = Instant.EPOCH + Duration.ofMinutes(1),
         endTime = Instant.EPOCH + Duration.ofMinutes(2),
@@ -117,17 +119,6 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
     private lateinit var storage: ScanResultsStorage
 
     abstract fun createStorage(): ScanResultsStorage
-
-    /**
-     * Generate a [ScannerCriteria] object that is compatible with the given [details].
-     */
-    private fun criteriaForDetails(details: ScannerDetails): ScannerCriteria =
-        ScannerCriteria(
-            regScannerName = details.name,
-            minVersion = Semver(details.version),
-            maxVersion = Semver(details.version).nextMinor(),
-            configMatcher = ScannerCriteria.exactConfigMatcher(details.configuration)
-        )
 
     init {
         register(*listeners)
@@ -202,7 +193,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 storage.add(id1, scanResult1).shouldBeSuccess()
                 storage.add(id1, scanResult2).shouldBeSuccess()
                 storage.add(id1, scanResult3).shouldBeSuccess()
-                val readResult = storage.read(pkg1, criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(pkg1, scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result should containExactlyInAnyOrder(scanResult1, scanResult2)
@@ -216,7 +207,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                     ScanResult(provenanceWithSourceArtifact1, detailsCompatibleOtherScanner, scanSummaryWithFiles)
                 val scanResult3 =
                     ScanResult(provenanceWithSourceArtifact1, detailsIncompatibleOtherScanner, scanSummaryWithFiles)
-                val criteria = criteriaForDetails(scannerDetails1).copy(regScannerName = "name.+")
+                val criteria = scannerCriteriaForDetails1.copy(regScannerName = "name.+")
 
                 storage.add(id1, scanResult1).shouldBeSuccess()
                 storage.add(id1, scanResult2).shouldBeSuccess()
@@ -240,7 +231,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 storage.add(id1, scanResultCompatible1).shouldBeSuccess()
                 storage.add(id1, scanResultCompatible2).shouldBeSuccess()
                 storage.add(id1, scanResultIncompatible).shouldBeSuccess()
-                val readResult = storage.read(pkg1, criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(pkg1, scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result should containExactlyInAnyOrder(
@@ -258,7 +249,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                     ScanResult(provenanceWithSourceArtifact1, scannerDetailsCompatibleVersion2, scanSummaryWithFiles)
                 val scanResultIncompatible =
                     ScanResult(provenanceWithSourceArtifact1, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
-                val criteria = criteriaForDetails(scannerDetails1).copy(maxVersion = Semver("1.5.0"))
+                val criteria = scannerCriteriaForDetails1.copy(maxVersion = Semver("1.5.0"))
 
                 storage.add(id1, scanResult).shouldBeSuccess()
                 storage.add(id1, scanResultCompatible1).shouldBeSuccess()
@@ -297,7 +288,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 storage.add(id1, scanResultVcsMatching).shouldBeSuccess()
                 storage.add(id1, scanResultSourceArtifactNonMatching).shouldBeSuccess()
                 storage.add(id1, scanResultVcsNonMatching).shouldBeSuccess()
-                val readResult = storage.read(pkg1, criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(pkg1, scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result should containExactlyInAnyOrder(
@@ -310,7 +301,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 val scanResult = ScanResult(provenanceWithoutRevision, scannerDetails1, scanSummaryWithFiles)
 
                 storage.add(id1, scanResult).shouldBeSuccess()
-                val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(pkgWithoutRevision, scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result should containExactly(scanResult)
@@ -327,7 +318,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
                 storage.add(id1, scanResult).shouldBeSuccess()
 
-                val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(pkg, scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result should beEmpty()
@@ -349,7 +340,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 storage.add(id2, scanResult4).shouldBeSuccess()
                 storage.add(id2, scanResult5).shouldBeSuccess()
                 storage.add(id2, scanResult6).shouldBeSuccess()
-                val readResult = storage.read(listOf(pkg1, pkg2), criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(listOf(pkg1, pkg2), scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result.let { result ->
@@ -372,7 +363,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                     ScanResult(provenanceWithSourceArtifact2, detailsCompatibleOtherScanner, scanSummaryWithFiles)
                 val scanResult6 =
                     ScanResult(provenanceWithSourceArtifact2, detailsIncompatibleOtherScanner, scanSummaryWithFiles)
-                val criteria = criteriaForDetails(scannerDetails1).copy(regScannerName = "name.+")
+                val criteria = scannerCriteriaForDetails1.copy(regScannerName = "name.+")
 
                 storage.add(id1, scanResult1).shouldBeSuccess()
                 storage.add(id1, scanResult2).shouldBeSuccess()
@@ -417,7 +408,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 storage.add(id2, scanResult2Compatible2).shouldBeSuccess()
                 storage.add(id2, scanResult2Incompatible).shouldBeSuccess()
 
-                val readResult = storage.read(listOf(pkg1, pkg2), criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(listOf(pkg1, pkg2), scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result.let { result ->
@@ -452,7 +443,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 val scanResult2Incompatible =
                     ScanResult(provenanceWithSourceArtifact2, scannerDetailsIncompatibleVersion, scanSummaryWithFiles)
 
-                val criteria = criteriaForDetails(scannerDetails1).copy(maxVersion = Semver("1.5.0"))
+                val criteria = scannerCriteriaForDetails1.copy(maxVersion = Semver("1.5.0"))
 
                 storage.add(id1, scanResult1).shouldBeSuccess()
                 storage.add(id1, scanResult1Compatible1).shouldBeSuccess()
@@ -529,7 +520,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 storage.add(id2, scanResultSourceArtifactNonMatching2).shouldBeSuccess()
                 storage.add(id2, scanResultVcsNonMatching2).shouldBeSuccess()
 
-                val readResult = storage.read(listOf(pkg1, pkg2), criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(listOf(pkg1, pkg2), scannerCriteriaForDetails1)
 
                 readResult.shouldBeSuccess()
                 readResult.result.let { result ->
@@ -549,7 +540,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 val scanResult = ScanResult(provenanceWithoutRevision, scannerDetails1, scanSummaryWithFiles)
 
                 val addResult = storage.add(id1, scanResult)
-                val readResult = storage.read(listOf(pkgWithoutRevision), criteriaForDetails(scannerDetails1))
+                val readResult = storage.read(listOf(pkgWithoutRevision), scannerCriteriaForDetails1)
 
                 addResult.shouldBeSuccess()
                 readResult.shouldBeSuccess()

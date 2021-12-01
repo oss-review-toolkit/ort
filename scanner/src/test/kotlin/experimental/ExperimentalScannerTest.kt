@@ -20,8 +20,6 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
-import com.vdurmont.semver4j.Semver
-
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
@@ -562,7 +560,7 @@ private class FakePackageBasedRemoteScannerWrapper(
 ) : PackageBasedRemoteScannerWrapper {
     override val details = ScannerDetails("fake", "1.0.0", "config")
     override val name = details.name
-    override val criteria = details.toCriteria()
+    override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanPackage(pkg: Package): ScanResult =
         createRemoteScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)
@@ -574,7 +572,7 @@ private class FakePackageBasedRemoteScannerWrapper(
 private class FakeProvenanceBasedRemoteScannerWrapper : ProvenanceBasedRemoteScannerWrapper {
     override val details = ScannerDetails("fake", "1.0.0", "config")
     override val name = details.name
-    override val criteria = details.toCriteria()
+    override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanProvenance(provenance: KnownProvenance): ScanResult =
         createRemoteScanResult(provenance, details)
@@ -586,7 +584,7 @@ private class FakeProvenanceBasedRemoteScannerWrapper : ProvenanceBasedRemoteSca
 private class FakeLocalScannerWrapper : LocalScannerWrapper {
     override val details = ScannerDetails("fake", "1.0.0", "config")
     override val name = details.name
-    override val criteria = details.toCriteria()
+    override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanPath(path: File): ScanSummary {
         val licenseFindings = path.walk().filter { it.isFile }.map { file ->
@@ -702,14 +700,6 @@ private fun createScanner(
         packageProvenanceResolver,
         nestedProvenanceResolver,
         scannerWrappers
-    )
-
-private fun ScannerDetails.toCriteria() =
-    ScannerCriteria(
-        regScannerName = name,
-        minVersion = Semver(version),
-        maxVersion = Semver(version).nextPatch(),
-        configMatcher = { true }
     )
 
 private fun Package.Companion.new(type: String = "", group: String = "", id: String = "", version: String = "") =
