@@ -63,7 +63,7 @@ class ScannerCriteriaTest : WordSpec({
         "detect a scanner version that is too old" {
             val criteria = matchingCriteria.copy(
                 minVersion = matchingCriteria.maxVersion,
-                maxVersion = Semver("2.0.0")
+                maxVersion = Semver("4.0.0")
             )
 
             criteria.matches(testDetails) shouldBe false
@@ -89,7 +89,7 @@ class ScannerCriteriaTest : WordSpec({
 })
 
 /** Test details to match against. */
-private val testDetails = ScannerDetails("ScannerCriteriaTest", "1.2.3.beta-47", "a b c")
+private val testDetails = ScannerDetails("ScannerCriteriaTest", "3.2.1-rc2", "--command-line-option")
 
 /** A test instance which should accept the test details. */
 private val matchingCriteria = ScannerCriteria(
