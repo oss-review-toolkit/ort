@@ -31,6 +31,11 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.SortedMap
 
 /**
+ * Type alias for a function that allows filtering of [AdvisorResult]s.
+ */
+typealias AdvisorResultFilter = (AdvisorResult) -> Boolean
+
+/**
  * A record of a single run of the advisor tool, containing the input and the [Vulnerability] for every checked package.
  */
 @JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
@@ -41,6 +46,32 @@ data class AdvisorRecord(
     @JsonDeserialize(using = AdvisorResultsDeserializer::class)
     val advisorResults: SortedMap<Identifier, List<AdvisorResult>>
 ) {
+    companion object {
+        /**
+         * A filter for [AdvisorResult]s that matches only results that contain vulnerabilities.
+         */
+        val RESULTS_WITH_VULNERABILITIES: AdvisorResultFilter = { it.vulnerabilities.isNotEmpty() }
+
+        /**
+         * A filter for [AdvisorResult]s that matches only results that contain defects.
+         */
+        val RESULTS_WITH_DEFECTS: AdvisorResultFilter = { it.defects.isNotEmpty() }
+
+        /**
+         * Return a filter for [AdvisorResult]s that contain issues. Match only results with an issue whose severity
+         * is greater or equal than [minSeverity]. Often, issues are only relevant for certain types of advisors. For
+         * instance, when processing vulnerability information, it is not of interest if an advisor for defects had
+         * encountered problems. Therefore, support an optional filter for a [capability] of the advisor that produced
+         * a result.
+         */
+        fun resultsWithIssues(minSeverity: Severity = Severity.HINT, capability: AdvisorCapability? = null):
+                    AdvisorResultFilter =
+            { result ->
+                (capability == null || capability in result.advisor.capabilities) &&
+                        result.summary.issues.any { it.severity >= minSeverity }
+            }
+    }
+
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
@@ -75,6 +106,17 @@ data class AdvisorRecord(
      * results from different advisors cannot be combined.
      */
     fun getDefects(pkgId: Identifier): List<Defect> = getFindings(pkgId) { it.defects }
+
+    /**
+     * Apply the given [filter] to the results stored in this record and return a map with the results that pass the
+     * filter. When processing advisor results, often specific criteria are relevant, e.g. whether security
+     * vulnerabilities were found or certain issues were detected. Using this function, it is easy to filter out only
+     * those results matching such criteria.
+     */
+    fun filterResults(filter: AdvisorResultFilter): Map<Identifier, List<AdvisorResult>> =
+        advisorResults.mapNotNull { (id, results) ->
+            results.filter(filter).takeIf { it.isNotEmpty() }?.let { id to it }
+        }.toMap()
 
     /**
      * Helper function to obtain the findings of type [T] for the given [package][pkgId] using a [selector] function

@@ -36,6 +36,8 @@ import io.kotest.matchers.shouldBe
 import java.net.URI
 import java.time.Instant
 
+import org.ossreviewtoolkit.utils.common.enumSetOf
+
 class AdvisorRecordTest : WordSpec({
     "Deserialization" should {
         "work for a map of advisor results" {
@@ -263,6 +265,114 @@ class AdvisorRecordTest : WordSpec({
             record.getDefects(queryId) should containExactlyInAnyOrder(defect1, defect2, defect3, defect4, defect5)
         }
     }
+
+    "filterResults" should {
+        "return only results matching a filter" {
+            val matchingResult = createResult(
+                1,
+                vulnerabilities = listOf(createVulnerability("CVE-1")),
+                defects = listOf(createDefect("bug1"))
+            )
+
+            val record = AdvisorRecord(
+                sortedMapOf(
+                    queryId to listOf(createResult(1), createResult(2)),
+                    langId to listOf(matchingResult, createResult(2))
+                )
+            )
+
+            val filteredResults = record.filterResults { it == matchingResult }
+
+            filteredResults.keys should containExactly(langId)
+            filteredResults.getValue(langId) should containExactly(matchingResult)
+        }
+
+        "provide a predefined filter for results with vulnerabilities" {
+            val result1 = createResult(1, vulnerabilities = listOf(createVulnerability("CVE-1")))
+            val result2 = createResult(2, defects = listOf(createDefect("BUG-1")))
+            val result3 = createResult(3)
+            val result4 = createResult(4, vulnerabilities = listOf(createVulnerability("CVE-2")))
+
+            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1, result2, result3, result4)))
+
+            val filteredResults = record.filterResults(AdvisorRecord.RESULTS_WITH_VULNERABILITIES)
+
+            filteredResults.keys should containExactly(queryId)
+            filteredResults.getValue(queryId) should containExactlyInAnyOrder(result1, result4)
+        }
+
+        "provide a predefined filter for results with defects" {
+            val result1 = createResult(1, vulnerabilities = listOf(createVulnerability("CVE-1")))
+            val result2 = createResult(2, defects = listOf(createDefect("BUG-1")))
+            val result3 = createResult(3)
+            val result4 = createResult(4, vulnerabilities = listOf(createVulnerability("CVE-2")))
+
+            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1, result2, result3, result4)))
+
+            val filteredResults = record.filterResults(AdvisorRecord.RESULTS_WITH_DEFECTS)
+
+            filteredResults.keys should containExactly(queryId)
+            filteredResults.getValue(queryId) should containExactly(result2)
+        }
+
+        "provide a predefined filter for results with issues" {
+            val result1 = createResult(
+                1,
+                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.HINT))
+            )
+            val result2 = createResult(2)
+
+            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1), langId to listOf(result2)))
+
+            val filteredResults = record.filterResults(AdvisorRecord.resultsWithIssues())
+
+            filteredResults.keys should containExactly(queryId)
+            filteredResults.getValue(queryId) should containExactly(result1)
+        }
+
+        "provide a predefined filter for results with issues that have a minimum severity" {
+            val result1 = createResult(
+                1,
+                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.ERROR))
+            )
+            val result2 = createResult(
+                2,
+                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.WARNING)),
+                capability = AdvisorCapability.DEFECTS
+            )
+
+            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1), langId to listOf(result2)))
+
+            val filteredResults = record.filterResults(AdvisorRecord.resultsWithIssues(minSeverity = Severity.ERROR))
+
+            filteredResults.keys should containExactly(queryId)
+            filteredResults.getValue(queryId) should containExactly(result1)
+        }
+
+        "provide a predefined filter for results with issues for a given advisor capability" {
+            val result1 = createResult(
+                1,
+                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.ERROR))
+            )
+            val result2 = createResult(
+                2,
+                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.WARNING)),
+                capability = AdvisorCapability.DEFECTS
+            )
+
+            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1), langId to listOf(result2)))
+
+            val filteredResults = record.filterResults(
+                AdvisorRecord.resultsWithIssues(
+                    minSeverity = Severity.WARNING,
+                    capability = AdvisorCapability.VULNERABILITIES
+                )
+            )
+
+            filteredResults.keys should containExactly(queryId)
+            filteredResults.getValue(queryId) should containExactly(result1)
+        }
+    }
 })
 
 /** The prefix for URIs pointing to the source of vulnerabilities. */
@@ -302,16 +412,17 @@ private fun createDefect(id: String): Defect =
     Defect(id, URI("https://defects.example.org/$id"), "Defect $id")
 
 /**
- * Create an [AdvisorResult] for an advisor with the given [advisorIndex] with the passed in [issues],
- * [vulnerabilities], and [defects].
+ * Create an [AdvisorResult] for an advisor with the given [advisorIndex] which has the given [capability], with the
+ * passed in [issues], [vulnerabilities], and [defects].
  */
 private fun createResult(
     advisorIndex: Int,
     issues: List<OrtIssue> = emptyList(),
     vulnerabilities: List<Vulnerability> = emptyList(),
-    defects: List<Defect> = emptyList()
+    defects: List<Defect> = emptyList(),
+    capability: AdvisorCapability = AdvisorCapability.VULNERABILITIES
 ): AdvisorResult {
-    val details = AdvisorDetails("advisor$advisorIndex")
+    val details = AdvisorDetails("advisor$advisorIndex", enumSetOf(capability))
     val summary = AdvisorSummary(
         startTime = Instant.parse("2021-04-06T13:26:05.123Z"),
         endTime = Instant.parse("2021-04-06T13:26:47.456Z"),
