@@ -252,6 +252,13 @@ private fun SpdxPackage.locateExternalReference(type: SpdxExternalReference.Type
     externalRefs.find { it.referenceType == type }?.referenceLocator
 
 /**
+ * Return a CPE identifier for this package if present. Search for all CPE versions.
+ */
+private fun SpdxPackage.locateCpe(): String? =
+    locateExternalReference(SpdxExternalReference.Type.Cpe23Type)
+        ?: locateExternalReference(SpdxExternalReference.Type.Cpe22Type)
+
+/**
  * Return whether the string has the format of an [SpdxExternalDocumentReference], with or without an additional
  * package id.
  */
@@ -370,6 +377,7 @@ class SpdxDocumentFile(
         return Package(
             id = id,
             purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
+            cpe = locateCpe(),
             authors = originator.wrapPresentInSortedSet(),
             declaredLicenses = sortedSetOf(licenseDeclared),
             concludedLicense = getConcludedLicense(),
@@ -567,6 +575,7 @@ class SpdxDocumentFile(
 
         val project = Project(
             id = projectPackage.toIdentifier(),
+            cpe = projectPackage.locateCpe(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.originator.wrapPresentInSortedSet(),
             declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
