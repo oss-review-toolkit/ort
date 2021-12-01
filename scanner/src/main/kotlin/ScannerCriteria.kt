@@ -83,6 +83,31 @@ data class ScannerCriteria(
          * function can be used by scanners that are extremely sensitive about their configuration.
          */
         fun exactConfigMatcher(originalConfig: String): ScannerConfigMatcher = { config -> originalConfig == config }
+
+        /**
+         * Generate a [ScannerCriteria] object that is compatible with the given [details] and versions that differ only
+         * in the provided [versionDiff].
+         */
+        fun forDetails(
+            details: ScannerDetails,
+            versionDiff: Semver.VersionDiff = Semver.VersionDiff.NONE
+        ): ScannerCriteria {
+            val minVersion = Semver(details.version)
+
+            val maxVersion = when (versionDiff) {
+                Semver.VersionDiff.NONE, Semver.VersionDiff.SUFFIX, Semver.VersionDiff.BUILD -> minVersion.nextPatch()
+                Semver.VersionDiff.PATCH -> minVersion.nextMinor()
+                Semver.VersionDiff.MINOR -> minVersion.nextMajor()
+                else -> throw IllegalArgumentException("Invalid version difference $versionDiff")
+            }
+
+            return ScannerCriteria(
+                regScannerName = details.name,
+                minVersion = minVersion,
+                maxVersion = maxVersion,
+                configMatcher = exactConfigMatcher(details.configuration)
+            )
+        }
     }
 
     /** The regular expression to match for the scanner name. */
