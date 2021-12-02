@@ -90,6 +90,7 @@ tasks {
 
         dependsOn("yarnInstall")
 
+        inputs.files(".rescriptsrc.js")
         inputs.dir("node_modules")
         inputs.dir("public")
         inputs.dir("src")
