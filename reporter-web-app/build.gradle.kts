@@ -63,12 +63,18 @@ tasks.addRule("Pattern: yarn<Command>") {
 
 tasks {
     kotlinNodeJsSetup {
+        outputs.upToDateWhen { nodeExecutable.isFile }
+        outputs.cacheIf { true }
+
         doFirst {
             logger.quiet("Setting up Node.js / NPM in '$nodeDir'...")
         }
     }
 
     kotlinYarnSetup {
+        outputs.upToDateWhen { yarnJs.isFile }
+        outputs.cacheIf { true }
+
         doFirst {
             logger.quiet("Setting up Yarn in '$yarnDir'...")
         }
