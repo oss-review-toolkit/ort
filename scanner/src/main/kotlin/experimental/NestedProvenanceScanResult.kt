@@ -56,6 +56,15 @@ data class NestedProvenanceScanResult(
     fun isComplete(): Boolean = getProvenances().all { scanResults[it]?.isNotEmpty() == true }
 
     /**
+     * Filter the contained [ScanResult]s using the [predicate].
+     */
+    fun filter(predicate: (ScanResult) -> Boolean): NestedProvenanceScanResult =
+        NestedProvenanceScanResult(
+            nestedProvenance,
+            scanResults.mapValues { it.value.filter(predicate) }
+        )
+
+    /**
      * Merge the nested [ScanResult]s into one [ScanResult] per used scanner, using the root of the [nestedProvenance]
      * as provenance. This is used to transform this class into the format currently used by [OrtResult].
      * When merging multiple [ScanSummary]s the earliest start time will be used as the new start time, and the latest
