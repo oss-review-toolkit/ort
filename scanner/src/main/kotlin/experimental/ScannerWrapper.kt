@@ -68,14 +68,14 @@ sealed interface RemoteScannerWrapper : ScannerWrapper
  * A wrapper interface for remote scanners that operate on [Package]s.
  */
 interface PackageBasedRemoteScannerWrapper : RemoteScannerWrapper {
-    fun scanPackage(pkg: Package): ScanResult
+    fun scanPackage(pkg: Package, context: ScanContext): ScanResult
 }
 
 /**
  * A wrapper interface for remote scanners that operate on [Provenance]s.
  */
 interface ProvenanceBasedRemoteScannerWrapper : RemoteScannerWrapper {
-    fun scanProvenance(provenance: KnownProvenance): ScanResult
+    fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult
 }
 
 /**
@@ -83,5 +83,5 @@ interface ProvenanceBasedRemoteScannerWrapper : RemoteScannerWrapper {
  * files on the local filesystem.
  */
 interface LocalScannerWrapper : ScannerWrapper {
-    fun scanPath(path: File): ScanSummary
+    fun scanPath(path: File, context: ScanContext): ScanSummary
 }

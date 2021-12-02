@@ -62,7 +62,8 @@ class ExperimentalScanner(
         val startTime = Instant.now()
 
         val result = scan(
-            (ortResult.getProjects().map { it.toPackage() } + ortResult.getPackages().map { it.pkg }).toSet()
+            (ortResult.getProjects().map { it.toPackage() } + ortResult.getPackages().map { it.pkg }).toSet(),
+            ScanContext(ortResult.labels)
         )
 
         val endTime = Instant.now()
@@ -80,7 +81,7 @@ class ExperimentalScanner(
         return ortResult.copy(scanner = scannerRun)
     }
 
-    suspend fun scan(packages: Set<Package>): Map<Package, NestedProvenanceScanResult> {
+    suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Package, NestedProvenanceScanResult> {
         log.info { "Resolving provenance for ${packages.size} packages." }
         // TODO: Handle issues for packages where provenance cannot be resolved.
         val (packageProvenances, packageProvenanceDuration) = measureTimedValue { getPackageProvenances(packages) }
@@ -140,7 +141,7 @@ class ExperimentalScanner(
 
                 // Scan whole package with remote scanner.
                 // TODO: Use coroutines to execute scanners in parallel.
-                val scanResult = scanner.scanPackage(pkg)
+                val scanResult = scanner.scanPackage(pkg, context)
 
                 log.info {
                     "Scan of ${pkg.id.toCoordinates()} with package based remote scanner ${scanner.name} finished."
@@ -182,7 +183,7 @@ class ExperimentalScanner(
                 log.info { "Scanning $provenance with provenance based remote scanner ${scanner.name}." }
 
                 // TODO: Use coroutines to execute scanners in parallel.
-                val scanResult = scanner.scanProvenance(provenance)
+                val scanResult = scanner.scanProvenance(provenance, context)
 
                 log.info {
                     "Scan of $provenance with provenance based remote scanner ${scanner.name} finished."
@@ -201,7 +202,7 @@ class ExperimentalScanner(
             // Scan provenances with local scanners.
             val localScanners = scanners.filterIsInstance<LocalScannerWrapper>()
             if (localScanners.isNotEmpty()) {
-                val localScanResults = scanLocal(provenance, localScanners)
+                val localScanResults = scanLocal(provenance, localScanners, context)
 
                 localScanResults.forEach { (scanner, scanResult) ->
                     val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
@@ -331,7 +332,8 @@ class ExperimentalScanner(
 
     private fun scanLocal(
         provenance: KnownProvenance,
-        scanners: List<LocalScannerWrapper>
+        scanners: List<LocalScannerWrapper>,
+        context: ScanContext
     ): Map<LocalScannerWrapper, ScanResult> {
         val downloadDir = try {
             provenanceDownloader.download(provenance)
@@ -366,7 +368,7 @@ class ExperimentalScanner(
         return scanners.associateWith { scanner ->
             log.info { "Scanning $provenance with local scanner ${scanner.name}." }
 
-            val summary = scanner.scanPath(downloadDir)
+            val summary = scanner.scanPath(downloadDir, context)
             log.info { "Scan of $provenance with local scanner ${scanner.name} finished." }
 
             ScanResult(provenance, scanner.details, summary)
