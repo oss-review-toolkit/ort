@@ -560,9 +560,9 @@ private class FakePackageBasedRemoteScannerWrapper(
     val packageProvenanceResolver: PackageProvenanceResolver = FakePackageProvenanceResolver(),
     val sourceCodeOriginPriority: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
 ) : PackageBasedRemoteScannerWrapper {
-    override val details: ScannerDetails = ScannerDetails("fake", "1.0.0", "config")
-    override val name: String = details.name
-    override val criteria: ScannerCriteria = details.toCriteria()
+    override val details = ScannerDetails("fake", "1.0.0", "config")
+    override val name = details.name
+    override val criteria = details.toCriteria()
 
     override fun scanPackage(pkg: Package): ScanResult =
         createRemoteScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)
@@ -572,9 +572,9 @@ private class FakePackageBasedRemoteScannerWrapper(
  * An implementation of [ProvenanceBasedRemoteScannerWrapper] that creates empty scan results.
  */
 private class FakeProvenanceBasedRemoteScannerWrapper : ProvenanceBasedRemoteScannerWrapper {
-    override val details: ScannerDetails = ScannerDetails("fake", "1.0.0", "config")
-    override val name: String = details.name
-    override val criteria: ScannerCriteria = details.toCriteria()
+    override val details = ScannerDetails("fake", "1.0.0", "config")
+    override val name = details.name
+    override val criteria = details.toCriteria()
 
     override fun scanProvenance(provenance: KnownProvenance): ScanResult =
         createRemoteScanResult(provenance, details)
@@ -584,9 +584,9 @@ private class FakeProvenanceBasedRemoteScannerWrapper : ProvenanceBasedRemoteSca
  * An implementation of [LocalScannerWrapper] that creates scan results with one license finding for each file.
  */
 private class FakeLocalScannerWrapper : LocalScannerWrapper {
-    override val details: ScannerDetails = ScannerDetails("fake", "1.0.0", "config")
-    override val name: String = details.name
-    override val criteria: ScannerCriteria = details.toCriteria()
+    override val details = ScannerDetails("fake", "1.0.0", "config")
+    override val name = details.name
+    override val criteria = details.toCriteria()
 
     override fun scanPath(path: File): ScanSummary {
         val licenseFindings = path.walk().filter { it.isFile }.map { file ->
