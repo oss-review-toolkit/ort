@@ -708,7 +708,7 @@ private fun ScannerDetails.toCriteria() =
     ScannerCriteria(
         regScannerName = name,
         minVersion = Semver(version),
-        maxVersion = Semver(version),
+        maxVersion = Semver(version).nextPatch(),
         configMatcher = { true }
     )
 
