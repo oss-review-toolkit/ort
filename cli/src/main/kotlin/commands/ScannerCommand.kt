@@ -82,6 +82,7 @@ import org.ossreviewtoolkit.scanner.experimental.PostgresPackageProvenanceStorag
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedFileStorage
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
+import org.ossreviewtoolkit.scanner.experimental.ScannerWrapper
 import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.scanner.scanners.Askalono
 import org.ossreviewtoolkit.scanner.scanners.BoyterLc
@@ -289,20 +290,27 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
     }
 
     private fun runExperimental(config: OrtConfiguration): OrtResult {
-        // TODO: The experimental scanner supports using multiple scanner wrappers at once, for now use only one to stay
-        //       compatible with the existing scanner command. Once the experimental flag is removed this command can
-        //       support multiple scanners and use the proper ScannerWrapperFactories.
-        val scannerWrapper = when (scannerFactory.scannerName) {
-            "Askalono" -> Askalono.Factory().create(config.scanner, config.downloader)
-            "BoyterLc" -> BoyterLc.Factory().create(config.scanner, config.downloader)
-            "Licensee" -> Licensee.Factory().create(config.scanner, config.downloader)
-            "ScanCode" -> ScanCode.Factory().create(config.scanner, config.downloader)
-            else -> {
-                throw IllegalArgumentException(
-                    "The scanner ${scannerFactory.scannerName} is not supported by the experimental scanner."
-                )
+        // TODO: The experimental scanner supports using multiple scanner wrappers for projects and packages at once,
+        //       for now use only one for each to stay compatible with the existing scanner command. Once the
+        //       experimental flag is removed this command can support multiple scanners and use the proper
+        //       ScannerWrapperFactories.
+        fun createScannerWrapper(name: String): ScannerWrapper =
+            when (name) {
+                "Askalono" -> Askalono.Factory().create(config.scanner, config.downloader)
+                "BoyterLc" -> BoyterLc.Factory().create(config.scanner, config.downloader)
+                "Licensee" -> Licensee.Factory().create(config.scanner, config.downloader)
+                "ScanCode" -> ScanCode.Factory().create(config.scanner, config.downloader)
+                else -> {
+                    throw IllegalArgumentException(
+                        "The scanner ${scannerFactory.scannerName} is not supported by the experimental scanner."
+                    )
+                }
             }
-        }
+
+        val packageScannerWrapper =
+            scannerFactory.scannerName.takeIf { DataEntity.PACKAGES in entities }?.let { createScannerWrapper(it) }
+        val projectScannerWrapper = (projectScannerFactory?.scannerName ?: scannerFactory.scannerName)
+            .takeIf { DataEntity.PROJECTS in entities }?.let { createScannerWrapper(it) }
 
         val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
 
@@ -331,7 +339,10 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                     workingTreeCache
                 ),
                 nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache),
-                scannerWrappers = listOf(scannerWrapper)
+                scannerWrappers = mapOf(
+                    DataEntity.PACKAGES to listOfNotNull(packageScannerWrapper),
+                    DataEntity.PROJECTS to listOfNotNull(projectScannerWrapper)
+                )
             )
 
             val ortResult = readOrtResult(input)

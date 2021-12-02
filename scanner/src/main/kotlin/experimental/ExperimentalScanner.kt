@@ -26,6 +26,7 @@ import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.DataEntity
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -51,10 +52,10 @@ class ExperimentalScanner(
     val storageWriters: List<ScanStorageWriter>,
     val packageProvenanceResolver: PackageProvenanceResolver,
     val nestedProvenanceResolver: NestedProvenanceResolver,
-    val scannerWrappers: List<ScannerWrapper>
+    val scannerWrappers: Map<DataEntity, List<ScannerWrapper>>
 ) {
     init {
-        require(scannerWrappers.isNotEmpty()) {
+        require(scannerWrappers.isNotEmpty() && scannerWrappers.any { it.value.isNotEmpty() }) {
             "At least one ScannerWrapper must be provided."
         }
     }
@@ -62,14 +63,38 @@ class ExperimentalScanner(
     suspend fun scan(ortResult: OrtResult): OrtResult {
         val startTime = Instant.now()
 
-        val result = scan(
-            (ortResult.getProjects().map { it.toPackage() } + ortResult.getPackages().map { it.pkg }).toSet(),
-            ScanContext(ortResult.labels)
-        )
+        val projectScannerWrappers = scannerWrappers[DataEntity.PROJECTS].orEmpty()
+        val packageScannerWrappers = scannerWrappers[DataEntity.PACKAGES].orEmpty()
+
+        val projectResults = if (projectScannerWrappers.isNotEmpty()) {
+            val packages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
+
+            log.info { "Scanning ${packages.size} projects with ${projectScannerWrappers.size} scanners." }
+
+            scan(packages, ScanContext(ortResult.labels, DataEntity.PROJECTS))
+        } else {
+            log.info { "Skipping scan of projects because no project scanner is configured." }
+
+            emptyMap()
+        }
+
+        val packageResults = if (packageScannerWrappers.isNotEmpty()) {
+            val packages = ortResult.getPackages().mapTo(mutableSetOf()) { it.pkg }
+
+            log.info { "Scanning ${packages.size} packages with ${packageScannerWrappers.size} scanners." }
+
+            scan(packages, ScanContext(ortResult.labels, DataEntity.PACKAGES))
+        } else {
+            log.info { "Skipping scan of packages because no package scanner is configured." }
+
+            emptyMap()
+        }
+
+        val results = projectResults + packageResults
 
         val endTime = Instant.now()
 
-        val scanResults = result.entries.associateTo(sortedMapOf()) { it.key.id to it.value.merge() }
+        val scanResults = results.entries.associateTo(sortedMapOf()) { it.key.id to it.value.merge() }
 
         val scanRecord = ScanRecord(
             scanResults = scanResults,
@@ -78,7 +103,13 @@ class ExperimentalScanner(
 
         val filteredScannerOptions = mutableMapOf<String, ScannerOptions>()
 
-        scannerWrappers.forEach { scannerWrapper ->
+        projectScannerWrappers.forEach { scannerWrapper ->
+            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
+                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
+            }
+        }
+
+        packageScannerWrappers.forEach { scannerWrapper ->
             scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
                 filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
             }
@@ -91,6 +122,10 @@ class ExperimentalScanner(
     }
 
     suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Package, NestedProvenanceScanResult> {
+        val scanners = scannerWrappers[context.packageType].orEmpty()
+
+        if (scanners.isEmpty()) return emptyMap()
+
         log.info { "Resolving provenance for ${packages.size} packages." }
         // TODO: Handle issues for packages where provenance cannot be resolved.
         val (packageProvenances, packageProvenanceDuration) = measureTimedValue { getPackageProvenances(packages) }
@@ -120,7 +155,7 @@ class ExperimentalScanner(
                     "provenances."
         }
         val (storedResults, readDuration) = measureTimedValue {
-            getStoredResults(allKnownProvenances, nestedProvenances, packageProvenances)
+            getStoredResults(scanners, allKnownProvenances, nestedProvenances, packageProvenances)
         }
 
         log.info {
@@ -134,7 +169,7 @@ class ExperimentalScanner(
 
         // Check which packages have incomplete scan results.
         val packagesWithIncompleteScanResult =
-            getPackagesWithIncompleteResults(packages, packageProvenances, nestedProvenances, scanResults)
+            getPackagesWithIncompleteResults(scanners, packages, packageProvenances, nestedProvenances, scanResults)
 
         log.info { "${packagesWithIncompleteScanResult.size} packages have incomplete scan results." }
 
@@ -179,7 +214,7 @@ class ExperimentalScanner(
 
         // Check which provenances have incomplete scan results.
         val provenancesWithIncompleteScanResults =
-            getProvenancesWithIncompleteScanResults(allKnownProvenances, scanResults)
+            getProvenancesWithIncompleteScanResults(scanners, allKnownProvenances, scanResults)
 
         log.info { "${provenancesWithIncompleteScanResults.size} provenances have incomplete scan results." }
 
@@ -232,7 +267,7 @@ class ExperimentalScanner(
             storageWriters.filterIsInstance<PackageBasedScanStorageWriter>().forEach { writer ->
                 nestedProvenanceScanResults[pkg]?.let { nestedProvenanceScanResult ->
                     val filteredScanResult = nestedProvenanceScanResult.filter { scanResult ->
-                        scannerWrappers.find { it.name == scanResult.scanner.name }?.criteria != null
+                        scanners.find { it.name == scanResult.scanner.name }?.criteria != null
                     }
 
                     if (filteredScanResult.isComplete()) {
@@ -259,6 +294,7 @@ class ExperimentalScanner(
         }.toMap()
 
     private fun getStoredResults(
+        scannerWrappers: List<ScannerWrapper>,
         provenances: Set<KnownProvenance>,
         nestedProvenances: Map<Package, NestedProvenance>,
         packageProvenances: Map<Package, Provenance>
@@ -298,6 +334,7 @@ class ExperimentalScanner(
     }
 
     private fun getPackagesWithIncompleteResults(
+        scannerWrappers: List<ScannerWrapper>,
         packages: Set<Package>,
         packageProvenances: Map<Package, Provenance>,
         nestedProvenances: Map<Package, NestedProvenance>,
@@ -318,6 +355,7 @@ class ExperimentalScanner(
         }.filterValues { it.isNotEmpty() }
 
     private fun getProvenancesWithIncompleteScanResults(
+        scannerWrappers: List<ScannerWrapper>,
         provenances: Set<KnownProvenance>,
         scanResults: Map<ScannerWrapper, Map<KnownProvenance, List<ScanResult>>>
     ): Map<KnownProvenance, List<ScannerWrapper>> =
