@@ -30,6 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
@@ -64,9 +65,13 @@ import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.RemoteScanner
+import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.experimental.PackageBasedRemoteScannerWrapper
+import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.toUri
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
@@ -81,7 +86,7 @@ class FossId internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration,
     private val config: FossIdConfig
-) : RemoteScanner(name, scannerConfig, downloaderConfig) {
+) : RemoteScanner(name, scannerConfig, downloaderConfig), PackageBasedRemoteScannerWrapper {
     class Factory : AbstractScannerFactory<FossId>("FossId") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
@@ -181,6 +186,8 @@ class FossId internal constructor(
 
     private val service = config.createService()
 
+    override val criteria: ScannerCriteria? = null
+    override val name: String = "FossId"
     override val version: String = service.version
 
     override val configuration = ""
@@ -688,4 +695,11 @@ class FossId internal constructor(
 
         return ScanResult(provenance, details, summary)
     }
+
+    override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
+        runBlocking {
+            scanPackages(setOf(pkg), createOrtTempDir(), context.labels).getValue(pkg).first()
+        }
+
+    override fun filterSecretOptions(options: ScannerOptions): ScannerOptions = filterOptionsForResult(options)
 }
