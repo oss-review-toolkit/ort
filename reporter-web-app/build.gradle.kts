@@ -80,7 +80,7 @@ tasks {
 
         dependsOn(kotlinYarnSetup)
 
-        inputs.files(listOf("package.json", "yarn.lock"))
+        inputs.files(".yarnrc", "package.json", "yarn.lock")
         outputs.dir("node_modules")
     }
 
