@@ -39,6 +39,7 @@ import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
 import org.ossreviewtoolkit.clients.fossid.model.Project
+import org.ossreviewtoolkit.clients.fossid.model.Project2021dot2dot3
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
@@ -129,6 +130,9 @@ interface FossIdRestService {
 
     @POST("api.php")
     suspend fun getProject(@Body body: PostRequestBody): EntityResponseBody<Project>
+
+    @POST("api.php")
+    suspend fun getProject2021dot2dot3(@Body body: PostRequestBody): EntityResponseBody<Project2021dot2dot3>
 
     @POST("api.php")
     suspend fun listScansForProject(@Body body: PostRequestBody): PolymorphicResponseBody<Scan>
