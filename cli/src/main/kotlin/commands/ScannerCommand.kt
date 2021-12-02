@@ -87,6 +87,7 @@ import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.scanner.scanners.Askalono
 import org.ossreviewtoolkit.scanner.scanners.BoyterLc
 import org.ossreviewtoolkit.scanner.scanners.Licensee
+import org.ossreviewtoolkit.scanner.scanners.fossid.FossId
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
@@ -298,6 +299,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             when (name) {
                 "Askalono" -> Askalono.Factory().create(config.scanner, config.downloader)
                 "BoyterLc" -> BoyterLc.Factory().create(config.scanner, config.downloader)
+                "FossId" -> FossId.Factory().create(config.scanner, config.downloader)
                 "Licensee" -> Licensee.Factory().create(config.scanner, config.downloader)
                 "ScanCode" -> ScanCode.Factory().create(config.scanner, config.downloader)
                 else -> {
