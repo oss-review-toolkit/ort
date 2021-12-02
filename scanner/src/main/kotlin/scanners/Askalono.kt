@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
+import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.unpackZip
@@ -158,6 +159,6 @@ class Askalono(
         )
     }
 
-    override fun scanPath(path: File): ScanSummary =
+    override fun scanPath(path: File, context: ScanContext): ScanSummary =
         scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
 }
