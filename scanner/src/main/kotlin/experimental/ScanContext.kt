@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import org.ossreviewtoolkit.model.DataEntity
 import org.ossreviewtoolkit.model.OrtResult
 
 /**
@@ -28,5 +29,10 @@ data class ScanContext(
     /**
      * A map of key-value pairs, usually from [OrtResult.labels].
      */
-    val labels: Map<String, String>
+    val labels: Map<String, String>,
+
+    /**
+     * The [type][DataEntity] of the packages to scan.
+     */
+    val packageType: DataEntity
 )
