@@ -19,6 +19,7 @@ variables:
   COMPOSER_VERSION: 5.1.0 # The version refers to the installer, not to Composer.
   CONAN_VERSION: 1.40.3
   GO_DEP_VERSION: 0.5.4
+  NPM_VERSION: 7.20.6
   PYTHON_PIPENV_VERSION: 2018.11.26
   RUST_VERSION: 1.35.0
   SCANCODE_VERSION: 3.2.1rc2

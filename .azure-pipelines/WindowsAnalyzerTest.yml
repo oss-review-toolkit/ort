@@ -24,7 +24,7 @@ jobs:
       #$env:PATH += ";C:\msys64\usr\bin"
 
       # Install NPM packages.
-      npm install -g bower@$env:BOWER_VERSION
+      npm install -g npm@$env:NPM_VERSION bower@$env:BOWER_VERSION
 
       # Install Python packages.
       pip install --user conan==$env:CONAN_VERSION pipenv==$env:PYTHON_PIPENV_VERSION virtualenv==$env:VIRTUALENV_VERSION

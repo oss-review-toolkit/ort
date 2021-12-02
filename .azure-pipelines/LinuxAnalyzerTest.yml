@@ -19,7 +19,7 @@ jobs:
       sudo apt-get -qq remove mono-devel
 
       # Install NPM packages.
-      sudo npm install -g bower@$BOWER_VERSION
+      sudo npm install -g npm@$NPM_VERSION bower@$BOWER_VERSION
 
       # Install Python packages.
       pip install --user \
