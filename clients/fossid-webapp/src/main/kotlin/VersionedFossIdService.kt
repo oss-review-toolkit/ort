@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
+import org.ossreviewtoolkit.clients.fossid.model.UnversionedProject
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
 
 /**
@@ -35,4 +36,13 @@ open class VersionedFossIdService(
     ): EntityResponseBody<out UnversionedScanDescription> = delegate.checkScanStatus(
         PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
     )
+
+    override suspend fun getProject(
+        user: String,
+        apiKey: String,
+        projectCode: String
+    ): EntityResponseBody<out UnversionedProject> =
+        delegate.getProject(
+            PostRequestBody("get_information", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
+        )
 }

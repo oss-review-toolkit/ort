@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,17 @@
 
 package org.ossreviewtoolkit.clients.fossid.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+/**
+ * An interface abstracting a Project, regardless of the version of the FossID server.
+ */
+interface UnversionedProject {
+    /**
+     * The id of the project.
+     */
+    val id: Int
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class Project(
-    override val id: Int,
-
-    val created: String,
-    val updated: String?,
-    val creator: String,
-
-    override val projectCode: String,
-    val projectName: String,
-
-    val limitDate: String?,
-
-    val productCode: String,
-    val productName: String,
-
-    val description: String,
-    val comment: String,
-
-    val isArchived: Int,
-    val jiraProjectKey: String,
-    val creationDate: String,
-    val dateLimitDate: String?
-) : UnversionedProject
+    /**
+     * The code of the project.
+     */
+    val projectCode: String
+}

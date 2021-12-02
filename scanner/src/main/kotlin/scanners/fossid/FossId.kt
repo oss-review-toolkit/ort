@@ -39,14 +39,13 @@ import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
-import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
-import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.UnversionedProject
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
@@ -197,7 +196,7 @@ class FossId internal constructor(
             v.takeUnless { k in secretKeys }.orEmpty()
         }
 
-    private suspend fun getProject(projectCode: String): Project? =
+    private suspend fun getProject(projectCode: String): UnversionedProject? =
         service.getProject(config.user, config.apiKey, projectCode).run {
             when {
                 error == null && data != null -> {

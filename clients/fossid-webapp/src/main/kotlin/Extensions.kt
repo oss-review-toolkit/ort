@@ -22,7 +22,7 @@
 package org.ossreviewtoolkit.clients.fossid
 
 internal const val SCAN_GROUP = "scans"
-private const val PROJECT_GROUP = "projects"
+internal const val PROJECT_GROUP = "projects"
 
 /**
  * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.

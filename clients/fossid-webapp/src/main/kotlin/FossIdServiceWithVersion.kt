@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.fossid
 
 import kotlinx.coroutines.runBlocking
 
+import org.ossreviewtoolkit.clients.fossid.model.UnversionedProject
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
 
 abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService {
@@ -49,4 +50,13 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
         apiKey: String,
         scanCode: String
     ): EntityResponseBody<out UnversionedScanDescription>
+
+    /**
+     * Get the project status for the given [projectCode].
+     *
+     * The HTTP request is sent with [user] and [apiKey] as credentials.
+     */
+    abstract suspend fun getProject(
+        user: String, apiKey: String, projectCode: String
+    ): EntityResponseBody<out UnversionedProject>
 }
