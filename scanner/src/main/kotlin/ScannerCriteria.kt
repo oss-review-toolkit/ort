@@ -88,6 +88,12 @@ data class ScannerCriteria(
     /** The regular expression to match for the scanner name. */
     private val nameRegex: Regex by lazy { Regex(regScannerName) }
 
+    init {
+        require(minVersion < maxVersion) {
+            "The `maxVersion` is exclusive and must be greater than the `minVersion`."
+        }
+    }
+
     /**
      * Check whether the [details] specified match the criteria stored in this object. Return true if and only if
      * the result described by the [details] fulfills all the requirements expressed by the properties of this
