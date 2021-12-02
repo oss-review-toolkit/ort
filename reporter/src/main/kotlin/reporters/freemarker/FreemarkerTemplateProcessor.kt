@@ -29,6 +29,7 @@ import java.io.File
 import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.AdvisorCapability
+import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -356,11 +357,12 @@ class FreemarkerTemplateProcessor(
          * therefore, it should contain a corresponding warning.
          */
         fun hasAdvisorIssues(capability: AdvisorCapability, severity: Severity): Boolean =
-            input.ortResult.advisor?.results?.advisorResults.orEmpty()
-                .values
-                .flatten()
-                .filter { capability in it.advisor.capabilities }
-                .any { result -> result.summary.issues.any { it.severity >= severity } }
+            input.ortResult.advisor?.results?.filterResults(
+                AdvisorRecord.resultsWithIssues(
+                    capability = capability,
+                    minSeverity = severity
+                )
+            )?.isNotEmpty() ?: false
     }
 }
 
