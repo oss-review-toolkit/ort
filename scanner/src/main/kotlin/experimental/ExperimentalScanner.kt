@@ -154,11 +154,13 @@ class ExperimentalScanner(
                     scanResultsForScanner[provenance] =
                         scanResultsForScanner[provenance].orEmpty() + scanResultsForProvenance
 
-                    storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                        scanResultsForProvenance.forEach { scanResult ->
-                            // TODO: Only store new scan results, for nested provenance some of them could have a stored
-                            //       result already.
-                            writer.write(scanResult)
+                    if (scanner.criteria != null) {
+                        storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
+                            scanResultsForProvenance.forEach { scanResult ->
+                                // TODO: Only store new scan results, for nested provenance some of them could have a
+                                //       stored result already.
+                                writer.write(scanResult)
+                            }
                         }
                     }
                 }
@@ -189,8 +191,10 @@ class ExperimentalScanner(
                 val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
                 scanResultsForScanner[provenance] = scanResultsForScanner[provenance].orEmpty() + scanResult
 
-                storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                    writer.write(scanResult)
+                if (scanner.criteria != null) {
+                    storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
+                        writer.write(scanResult)
+                    }
                 }
             }
 
@@ -203,8 +207,10 @@ class ExperimentalScanner(
                     val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
                     scanResultsForScanner[provenance] = scanResultsForScanner[provenance].orEmpty() + scanResult
 
-                    storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                        writer.write(scanResult)
+                    if (scanner.criteria != null) {
+                        storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
+                            writer.write(scanResult)
+                        }
                     }
                 }
             }
@@ -215,8 +221,14 @@ class ExperimentalScanner(
         packagesWithIncompleteScanResult.forEach { (pkg, _) ->
             storageWriters.filterIsInstance<PackageBasedScanStorageWriter>().forEach { writer ->
                 nestedProvenanceScanResults[pkg]?.let { nestedProvenanceScanResult ->
-                    // TODO: Save only results for scanners which did not have a stored result.
-                    writer.write(pkg, nestedProvenanceScanResult)
+                    val filteredScanResult = nestedProvenanceScanResult.filter { scanResult ->
+                        scannerWrappers.find { it.name == scanResult.scanner.name }?.criteria != null
+                    }
+
+                    if (filteredScanResult.isComplete()) {
+                        // TODO: Save only results for scanners which did not have a stored result.
+                        writer.write(pkg, filteredScanResult)
+                    }
                 }
             }
         }
@@ -242,7 +254,8 @@ class ExperimentalScanner(
         packageProvenances: Map<Package, Provenance>
     ): Map<ScannerWrapper, MutableMap<KnownProvenance, List<ScanResult>>> {
         return scannerWrappers.associateWith { scanner ->
-            val scannerCriteria = scanner.criteria
+            val scannerCriteria = scanner.criteria ?: return@associateWith mutableMapOf()
+
             val result = mutableMapOf<KnownProvenance, List<ScanResult>>()
 
             provenances.forEach { provenance ->

@@ -542,6 +542,28 @@ class ExperimentalScannerTest : WordSpec({
         }
     }
 
+    "scanning with a scanner that does not provide criteria" should {
+        "not store the scan results" {
+            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val scannerWrapper = spyk(FakePackageBasedRemoteScannerWrapper())
+
+            every { scannerWrapper.criteria } returns null
+
+            val writer = spyk(FakeProvenanceBasedStorageWriter())
+
+            val scanner = createScanner(
+                storageWriters = listOf(writer),
+                scannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(setOf(pkgWithArtifact))
+
+            verify(exactly = 0) {
+                writer.write(any())
+            }
+        }
+    }
+
     // TODO: Add tests for combinations of different types of storage readers and writers.
     // TODO: Add tests for using multiple types of scanner wrappers at once.
     // TODO: Add tests for a complex example with multiple types of scanner wrappers and storages.
@@ -560,7 +582,7 @@ private class FakePackageBasedRemoteScannerWrapper(
 ) : PackageBasedRemoteScannerWrapper {
     override val details = ScannerDetails("fake", "1.0.0", "config")
     override val name = details.name
-    override val criteria = ScannerCriteria.forDetails(details)
+    override val criteria: ScannerCriteria? = ScannerCriteria.forDetails(details)
 
     override fun scanPackage(pkg: Package): ScanResult =
         createRemoteScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)

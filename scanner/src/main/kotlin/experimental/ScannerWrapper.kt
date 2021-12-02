@@ -52,8 +52,10 @@ sealed interface ScannerWrapper {
      * where _scannerName_ is the name of the scanner and _property_ is the name of a property of the [ScannerCriteria]
      * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
      * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
+     *
+     * If this property is null it means that the results of this [ScannerWrapper] cannot be stored in a scan storage.
      */
-    val criteria: ScannerCriteria
+    val criteria: ScannerCriteria?
 }
 
 /**
