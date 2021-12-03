@@ -200,7 +200,7 @@ abstract class LocalScanner(
     open fun getScannerCriteria(): ScannerCriteria {
         val options = scannerConfig.options?.get(scannerName).orEmpty()
         val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(expectedVersion))
-        val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
+        val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion
         val name = options[PROP_CRITERIA_NAME] ?: scannerName
         return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(configuration))
     }

@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.vdurmont.semver4j.Semver
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
@@ -39,7 +37,7 @@ class LocalScannerTest : WordSpec({
 
             criteria.regScannerName shouldBe SCANNER_NAME
             criteria.minVersion.originalValue shouldBe SCANNER_VERSION
-            criteria.maxVersion shouldBe Semver(SCANNER_VERSION).nextMinor()
+            criteria.maxVersion.originalValue shouldBe SCANNER_VERSION
         }
 
         "obtain values from the configuration" {
