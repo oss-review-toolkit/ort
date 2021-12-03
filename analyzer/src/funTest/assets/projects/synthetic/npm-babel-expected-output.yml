@@ -37,7 +37,7 @@ project:
               dependencies:
               - id: "NPM::ansi-regex:2.1.1"
             - id: "NPM::supports-color:2.0.0"
-          - id: "NPM::esutils:2.0.2"
+          - id: "NPM::esutils:2.0.3"
           - id: "NPM::js-tokens:3.0.2"
         - id: "NPM::babel-generator:6.26.1"
           dependencies:
@@ -45,43 +45,41 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
-            - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::detect-indent:4.0.0"
             dependencies:
             - id: "NPM::repeating:2.0.1"
               dependencies:
-              - id: "NPM::is-finite:1.0.2"
-                dependencies:
-                - id: "NPM::number-is-nan:1.0.1"
+              - id: "NPM::is-finite:1.1.0"
           - id: "NPM::jsesc:1.3.0"
-          - id: "NPM::lodash:4.17.15"
+          - id: "NPM::lodash:4.17.21"
           - id: "NPM::source-map:0.5.7"
           - id: "NPM::trim-right:1.0.1"
         - id: "NPM::babel-helpers:6.24.1"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-template:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-traverse:6.26.0"
               dependencies:
@@ -98,26 +96,26 @@ project:
                     dependencies:
                     - id: "NPM::ansi-regex:2.1.1"
                   - id: "NPM::supports-color:2.0.0"
-                - id: "NPM::esutils:2.0.2"
+                - id: "NPM::esutils:2.0.3"
                 - id: "NPM::js-tokens:3.0.2"
               - id: "NPM::babel-messages:6.23.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.6.9"
+                  - id: "NPM::core-js:2.6.12"
                   - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::babel-types:6.26.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.6.9"
+                  - id: "NPM::core-js:2.6.12"
                   - id: "NPM::regenerator-runtime:0.11.1"
-                - id: "NPM::esutils:2.0.2"
-                - id: "NPM::lodash:4.17.15"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::lodash:4.17.21"
                 - id: "NPM::to-fast-properties:1.0.3"
               - id: "NPM::babylon:6.18.0"
               - id: "NPM::debug:2.6.9"
@@ -129,51 +127,51 @@ project:
                 - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::lodash:4.17.21"
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
-              - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::lodash:4.17.21"
         - id: "NPM::babel-messages:6.23.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
         - id: "NPM::babel-register:6.26.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
-          - id: "NPM::core-js:2.6.9"
+          - id: "NPM::core-js:2.6.12"
           - id: "NPM::home-or-tmp:2.0.0"
             dependencies:
             - id: "NPM::os-homedir:1.0.2"
             - id: "NPM::os-tmpdir:1.0.2"
-          - id: "NPM::lodash:4.17.15"
-          - id: "NPM::mkdirp:0.5.1"
+          - id: "NPM::lodash:4.17.21"
+          - id: "NPM::mkdirp:0.5.5"
             dependencies:
-            - id: "NPM::minimist:0.0.8"
+            - id: "NPM::minimist:1.2.5"
           - id: "NPM::source-map-support:0.4.18"
             dependencies:
             - id: "NPM::source-map:0.5.7"
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - id: "NPM::core-js:2.6.9"
+          - id: "NPM::core-js:2.6.12"
           - id: "NPM::regenerator-runtime:0.11.1"
         - id: "NPM::babel-template:6.26.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-traverse:6.26.0"
             dependencies:
@@ -190,26 +188,26 @@ project:
                   dependencies:
                   - id: "NPM::ansi-regex:2.1.1"
                 - id: "NPM::supports-color:2.0.0"
-              - id: "NPM::esutils:2.0.2"
+              - id: "NPM::esutils:2.0.3"
               - id: "NPM::js-tokens:3.0.2"
             - id: "NPM::babel-messages:6.23.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
-              - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
             - id: "NPM::debug:2.6.9"
@@ -221,18 +219,18 @@ project:
               - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::lodash:4.17.21"
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
-            - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::babylon:6.18.0"
-          - id: "NPM::lodash:4.17.15"
+          - id: "NPM::lodash:4.17.21"
         - id: "NPM::babel-traverse:6.26.0"
           dependencies:
           - id: "NPM::babel-code-frame:6.26.0"
@@ -248,26 +246,26 @@ project:
                 dependencies:
                 - id: "NPM::ansi-regex:2.1.1"
               - id: "NPM::supports-color:2.0.0"
-            - id: "NPM::esutils:2.0.2"
+            - id: "NPM::esutils:2.0.3"
             - id: "NPM::js-tokens:3.0.2"
           - id: "NPM::babel-messages:6.23.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
-            - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::babylon:6.18.0"
           - id: "NPM::debug:2.6.9"
@@ -279,30 +277,30 @@ project:
             - id: "NPM::loose-envify:1.4.0"
               dependencies:
               - id: "NPM::js-tokens:3.0.2"
-          - id: "NPM::lodash:4.17.15"
+          - id: "NPM::lodash:4.17.21"
         - id: "NPM::babel-types:6.26.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
-          - id: "NPM::esutils:2.0.2"
-          - id: "NPM::lodash:4.17.15"
+          - id: "NPM::esutils:2.0.3"
+          - id: "NPM::lodash:4.17.21"
           - id: "NPM::to-fast-properties:1.0.3"
         - id: "NPM::babylon:6.18.0"
-        - id: "NPM::convert-source-map:1.6.0"
+        - id: "NPM::convert-source-map:1.8.0"
           dependencies:
           - id: "NPM::safe-buffer:5.1.2"
         - id: "NPM::debug:2.6.9"
           dependencies:
           - id: "NPM::ms:2.0.0"
         - id: "NPM::json5:0.5.1"
-        - id: "NPM::lodash:4.17.15"
+        - id: "NPM::lodash:4.17.21"
         - id: "NPM::minimatch:3.0.4"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
             dependencies:
-            - id: "NPM::balanced-match:1.0.0"
+            - id: "NPM::balanced-match:1.0.2"
             - id: "NPM::concat-map:0.0.1"
         - id: "NPM::path-is-absolute:1.0.1"
         - id: "NPM::private:0.1.8"
@@ -312,9 +310,9 @@ project:
         dependencies:
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - id: "NPM::core-js:2.6.9"
+          - id: "NPM::core-js:2.6.12"
           - id: "NPM::regenerator-runtime:0.11.1"
-        - id: "NPM::core-js:2.6.9"
+        - id: "NPM::core-js:2.6.12"
         - id: "NPM::regenerator-runtime:0.10.5"
       - id: "NPM::babel-register:6.26.0"
         dependencies:
@@ -333,7 +331,7 @@ project:
                 dependencies:
                 - id: "NPM::ansi-regex:2.1.1"
               - id: "NPM::supports-color:2.0.0"
-            - id: "NPM::esutils:2.0.2"
+            - id: "NPM::esutils:2.0.3"
             - id: "NPM::js-tokens:3.0.2"
           - id: "NPM::babel-generator:6.26.1"
             dependencies:
@@ -341,43 +339,41 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
-              - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::detect-indent:4.0.0"
               dependencies:
               - id: "NPM::repeating:2.0.1"
                 dependencies:
-                - id: "NPM::is-finite:1.0.2"
-                  dependencies:
-                  - id: "NPM::number-is-nan:1.0.1"
+                - id: "NPM::is-finite:1.1.0"
             - id: "NPM::jsesc:1.3.0"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::lodash:4.17.21"
             - id: "NPM::source-map:0.5.7"
             - id: "NPM::trim-right:1.0.1"
           - id: "NPM::babel-helpers:6.24.1"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-template:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::babel-traverse:6.26.0"
                 dependencies:
@@ -394,26 +390,26 @@ project:
                       dependencies:
                       - id: "NPM::ansi-regex:2.1.1"
                     - id: "NPM::supports-color:2.0.0"
-                  - id: "NPM::esutils:2.0.2"
+                  - id: "NPM::esutils:2.0.3"
                   - id: "NPM::js-tokens:3.0.2"
                 - id: "NPM::babel-messages:6.23.0"
                   dependencies:
                   - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
-                    - id: "NPM::core-js:2.6.9"
+                    - id: "NPM::core-js:2.6.12"
                     - id: "NPM::regenerator-runtime:0.11.1"
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.6.9"
+                  - id: "NPM::core-js:2.6.12"
                   - id: "NPM::regenerator-runtime:0.11.1"
                 - id: "NPM::babel-types:6.26.0"
                   dependencies:
                   - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
-                    - id: "NPM::core-js:2.6.9"
+                    - id: "NPM::core-js:2.6.12"
                     - id: "NPM::regenerator-runtime:0.11.1"
-                  - id: "NPM::esutils:2.0.2"
-                  - id: "NPM::lodash:4.17.15"
+                  - id: "NPM::esutils:2.0.3"
+                  - id: "NPM::lodash:4.17.21"
                   - id: "NPM::to-fast-properties:1.0.3"
                 - id: "NPM::babylon:6.18.0"
                 - id: "NPM::debug:2.6.9"
@@ -425,33 +421,33 @@ project:
                   - id: "NPM::loose-envify:1.4.0"
                     dependencies:
                     - id: "NPM::js-tokens:3.0.2"
-                - id: "NPM::lodash:4.17.15"
+                - id: "NPM::lodash:4.17.21"
               - id: "NPM::babel-types:6.26.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.6.9"
+                  - id: "NPM::core-js:2.6.12"
                   - id: "NPM::regenerator-runtime:0.11.1"
-                - id: "NPM::esutils:2.0.2"
-                - id: "NPM::lodash:4.17.15"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::lodash:4.17.21"
                 - id: "NPM::to-fast-properties:1.0.3"
               - id: "NPM::babylon:6.18.0"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::lodash:4.17.21"
           - id: "NPM::babel-messages:6.23.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.6.9"
+            - id: "NPM::core-js:2.6.12"
             - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::babel-template:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-traverse:6.26.0"
               dependencies:
@@ -468,26 +464,26 @@ project:
                     dependencies:
                     - id: "NPM::ansi-regex:2.1.1"
                   - id: "NPM::supports-color:2.0.0"
-                - id: "NPM::esutils:2.0.2"
+                - id: "NPM::esutils:2.0.3"
                 - id: "NPM::js-tokens:3.0.2"
               - id: "NPM::babel-messages:6.23.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.6.9"
+                  - id: "NPM::core-js:2.6.12"
                   - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::babel-types:6.26.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.6.9"
+                  - id: "NPM::core-js:2.6.12"
                   - id: "NPM::regenerator-runtime:0.11.1"
-                - id: "NPM::esutils:2.0.2"
-                - id: "NPM::lodash:4.17.15"
+                - id: "NPM::esutils:2.0.3"
+                - id: "NPM::lodash:4.17.21"
                 - id: "NPM::to-fast-properties:1.0.3"
               - id: "NPM::babylon:6.18.0"
               - id: "NPM::debug:2.6.9"
@@ -499,18 +495,18 @@ project:
                 - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::lodash:4.17.21"
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
-              - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::lodash:4.17.21"
           - id: "NPM::babel-traverse:6.26.0"
             dependencies:
             - id: "NPM::babel-code-frame:6.26.0"
@@ -526,26 +522,26 @@ project:
                   dependencies:
                   - id: "NPM::ansi-regex:2.1.1"
                 - id: "NPM::supports-color:2.0.0"
-              - id: "NPM::esutils:2.0.2"
+              - id: "NPM::esutils:2.0.3"
               - id: "NPM::js-tokens:3.0.2"
             - id: "NPM::babel-messages:6.23.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.6.9"
+                - id: "NPM::core-js:2.6.12"
                 - id: "NPM::regenerator-runtime:0.11.1"
-              - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.15"
+              - id: "NPM::esutils:2.0.3"
+              - id: "NPM::lodash:4.17.21"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
             - id: "NPM::debug:2.6.9"
@@ -557,30 +553,30 @@ project:
               - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::lodash:4.17.21"
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.6.9"
+              - id: "NPM::core-js:2.6.12"
               - id: "NPM::regenerator-runtime:0.11.1"
-            - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.15"
+            - id: "NPM::esutils:2.0.3"
+            - id: "NPM::lodash:4.17.21"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::babylon:6.18.0"
-          - id: "NPM::convert-source-map:1.6.0"
+          - id: "NPM::convert-source-map:1.8.0"
             dependencies:
             - id: "NPM::safe-buffer:5.1.2"
           - id: "NPM::debug:2.6.9"
             dependencies:
             - id: "NPM::ms:2.0.0"
           - id: "NPM::json5:0.5.1"
-          - id: "NPM::lodash:4.17.15"
+          - id: "NPM::lodash:4.17.21"
           - id: "NPM::minimatch:3.0.4"
             dependencies:
             - id: "NPM::brace-expansion:1.1.11"
               dependencies:
-              - id: "NPM::balanced-match:1.0.0"
+              - id: "NPM::balanced-match:1.0.2"
               - id: "NPM::concat-map:0.0.1"
           - id: "NPM::path-is-absolute:1.0.1"
           - id: "NPM::private:0.1.8"
@@ -588,23 +584,23 @@ project:
           - id: "NPM::source-map:0.5.7"
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - id: "NPM::core-js:2.6.9"
+          - id: "NPM::core-js:2.6.12"
           - id: "NPM::regenerator-runtime:0.11.1"
-        - id: "NPM::core-js:2.6.9"
+        - id: "NPM::core-js:2.6.12"
         - id: "NPM::home-or-tmp:2.0.0"
           dependencies:
           - id: "NPM::os-homedir:1.0.2"
           - id: "NPM::os-tmpdir:1.0.2"
-        - id: "NPM::lodash:4.17.15"
-        - id: "NPM::mkdirp:0.5.1"
+        - id: "NPM::lodash:4.17.21"
+        - id: "NPM::mkdirp:0.5.5"
           dependencies:
-          - id: "NPM::minimist:0.0.8"
+          - id: "NPM::minimist:1.2.5"
         - id: "NPM::source-map-support:0.4.18"
           dependencies:
           - id: "NPM::source-map:0.5.7"
       - id: "NPM::babel-runtime:6.26.0"
         dependencies:
-        - id: "NPM::core-js:2.6.9"
+        - id: "NPM::core-js:2.6.12"
         - id: "NPM::regenerator-runtime:0.11.1"
       - id: "NPM::chokidar:1.7.0"
         dependencies:
@@ -633,12 +629,12 @@ project:
                   - id: "NPM::randomatic:3.1.1"
                     dependencies:
                     - id: "NPM::is-number:4.0.0"
-                    - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::math-random:1.0.4"
-                  - id: "NPM::repeat-element:1.1.3"
+                  - id: "NPM::repeat-element:1.1.4"
                   - id: "NPM::repeat-string:1.6.1"
               - id: "NPM::preserve:0.2.0"
-              - id: "NPM::repeat-element:1.1.3"
+              - id: "NPM::repeat-element:1.1.4"
             - id: "NPM::expand-brackets:0.1.5"
               dependencies:
               - id: "NPM::is-posix-bracket:0.1.1"
@@ -688,143 +684,6 @@ project:
             dependencies:
             - id: "NPM::remove-trailing-separator:1.1.0"
         - id: "NPM::async-each:1.0.3"
-        - id: "NPM::fsevents:1.2.9"
-          dependencies:
-          - id: "NPM::nan:2.14.0"
-          - id: "NPM::node-pre-gyp:0.12.0"
-            dependencies:
-            - id: "NPM::detect-libc:1.0.3"
-            - id: "NPM::mkdirp:0.5.1"
-              dependencies:
-              - id: "NPM::minimist:0.0.8"
-            - id: "NPM::needle:2.3.0"
-              dependencies:
-              - id: "NPM::debug:4.1.1"
-                dependencies:
-                - id: "NPM::ms:2.1.1"
-              - id: "NPM::iconv-lite:0.4.24"
-                dependencies:
-                - id: "NPM::safer-buffer:2.1.2"
-              - id: "NPM::sax:1.2.4"
-            - id: "NPM::nopt:4.0.1"
-              dependencies:
-              - id: "NPM::abbrev:1.1.1"
-              - id: "NPM::osenv:0.1.5"
-                dependencies:
-                - id: "NPM::os-homedir:1.0.2"
-                - id: "NPM::os-tmpdir:1.0.2"
-            - id: "NPM::npm-packlist:1.4.1"
-              dependencies:
-              - id: "NPM::ignore-walk:3.0.1"
-                dependencies:
-                - id: "NPM::minimatch:3.0.4"
-                  dependencies:
-                  - id: "NPM::brace-expansion:1.1.11"
-                    dependencies:
-                    - id: "NPM::balanced-match:1.0.0"
-                    - id: "NPM::concat-map:0.0.1"
-              - id: "NPM::npm-bundled:1.0.6"
-            - id: "NPM::npmlog:4.1.2"
-              dependencies:
-              - id: "NPM::are-we-there-yet:1.1.5"
-                dependencies:
-                - id: "NPM::delegates:1.0.0"
-                - id: "NPM::readable-stream:2.3.6"
-                  dependencies:
-                  - id: "NPM::core-util-is:1.0.2"
-                  - id: "NPM::inherits:2.0.3"
-                  - id: "NPM::isarray:1.0.0"
-                  - id: "NPM::process-nextick-args:2.0.0"
-                  - id: "NPM::safe-buffer:5.1.2"
-                  - id: "NPM::string_decoder:1.1.1"
-                    dependencies:
-                    - id: "NPM::safe-buffer:5.1.2"
-                  - id: "NPM::util-deprecate:1.0.2"
-              - id: "NPM::console-control-strings:1.1.0"
-              - id: "NPM::gauge:2.7.4"
-                dependencies:
-                - id: "NPM::aproba:1.2.0"
-                - id: "NPM::console-control-strings:1.1.0"
-                - id: "NPM::has-unicode:2.0.1"
-                - id: "NPM::object-assign:4.1.1"
-                - id: "NPM::signal-exit:3.0.2"
-                - id: "NPM::string-width:1.0.2"
-                  dependencies:
-                  - id: "NPM::code-point-at:1.1.0"
-                  - id: "NPM::is-fullwidth-code-point:1.0.0"
-                    dependencies:
-                    - id: "NPM::number-is-nan:1.0.1"
-                  - id: "NPM::strip-ansi:3.0.1"
-                    dependencies:
-                    - id: "NPM::ansi-regex:2.1.1"
-                - id: "NPM::strip-ansi:3.0.1"
-                  dependencies:
-                  - id: "NPM::ansi-regex:2.1.1"
-                - id: "NPM::wide-align:1.1.3"
-                  dependencies:
-                  - id: "NPM::string-width:1.0.2"
-                    dependencies:
-                    - id: "NPM::code-point-at:1.1.0"
-                    - id: "NPM::is-fullwidth-code-point:1.0.0"
-                      dependencies:
-                      - id: "NPM::number-is-nan:1.0.1"
-                    - id: "NPM::strip-ansi:3.0.1"
-                      dependencies:
-                      - id: "NPM::ansi-regex:2.1.1"
-              - id: "NPM::set-blocking:2.0.0"
-            - id: "NPM::rc:1.2.8"
-              dependencies:
-              - id: "NPM::deep-extend:0.6.0"
-              - id: "NPM::ini:1.3.5"
-              - id: "NPM::minimist:1.2.0"
-              - id: "NPM::strip-json-comments:2.0.1"
-            - id: "NPM::rimraf:2.6.3"
-              dependencies:
-              - id: "NPM::glob:7.1.3"
-                dependencies:
-                - id: "NPM::fs.realpath:1.0.0"
-                - id: "NPM::inflight:1.0.6"
-                  dependencies:
-                  - id: "NPM::once:1.4.0"
-                    dependencies:
-                    - id: "NPM::wrappy:1.0.2"
-                  - id: "NPM::wrappy:1.0.2"
-                - id: "NPM::inherits:2.0.3"
-                - id: "NPM::minimatch:3.0.4"
-                  dependencies:
-                  - id: "NPM::brace-expansion:1.1.11"
-                    dependencies:
-                    - id: "NPM::balanced-match:1.0.0"
-                    - id: "NPM::concat-map:0.0.1"
-                - id: "NPM::once:1.4.0"
-                  dependencies:
-                  - id: "NPM::wrappy:1.0.2"
-                - id: "NPM::path-is-absolute:1.0.1"
-            - id: "NPM::semver:5.7.0"
-            - id: "NPM::tar:4.4.8"
-              dependencies:
-              - id: "NPM::chownr:1.1.1"
-              - id: "NPM::fs-minipass:1.2.5"
-                dependencies:
-                - id: "NPM::minipass:2.3.5"
-                  dependencies:
-                  - id: "NPM::safe-buffer:5.1.2"
-                  - id: "NPM::yallist:3.0.3"
-              - id: "NPM::minipass:2.3.5"
-                dependencies:
-                - id: "NPM::safe-buffer:5.1.2"
-                - id: "NPM::yallist:3.0.3"
-              - id: "NPM::minizlib:1.2.1"
-                dependencies:
-                - id: "NPM::minipass:2.3.5"
-                  dependencies:
-                  - id: "NPM::safe-buffer:5.1.2"
-                  - id: "NPM::yallist:3.0.3"
-              - id: "NPM::mkdirp:0.5.1"
-                dependencies:
-                - id: "NPM::minimist:0.0.8"
-              - id: "NPM::safe-buffer:5.1.2"
-              - id: "NPM::yallist:3.0.3"
         - id: "NPM::glob-parent:2.0.0"
           dependencies:
           - id: "NPM::is-glob:2.0.1"
@@ -840,7 +699,7 @@ project:
         - id: "NPM::path-is-absolute:1.0.1"
         - id: "NPM::readdirp:2.2.1"
           dependencies:
-          - id: "NPM::graceful-fs:4.2.0"
+          - id: "NPM::graceful-fs:4.2.8"
           - id: "NPM::micromatch:3.1.10"
             dependencies:
             - id: "NPM::arr-diff:4.0.0"
@@ -872,7 +731,7 @@ project:
                       - id: "NPM::is-buffer:1.1.6"
                   - id: "NPM::repeat-string:1.6.1"
               - id: "NPM::isobject:3.0.1"
-              - id: "NPM::repeat-element:1.1.3"
+              - id: "NPM::repeat-element:1.1.4"
               - id: "NPM::snapdragon:0.8.2"
                 dependencies:
                 - id: "NPM::base:0.11.2"
@@ -1028,11 +887,11 @@ project:
                       dependencies:
                       - id: "NPM::is-accessor-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
                       - id: "NPM::is-data-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
-                      - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::isobject:3.0.1"
                   - id: "NPM::mixin-deep:1.3.2"
                     dependencies:
@@ -1066,12 +925,12 @@ project:
                   - id: "NPM::is-extendable:0.1.1"
                 - id: "NPM::map-cache:0.2.2"
                 - id: "NPM::source-map:0.5.7"
-                - id: "NPM::source-map-resolve:0.5.2"
+                - id: "NPM::source-map-resolve:0.5.3"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
                   - id: "NPM::decode-uri-component:0.2.0"
                   - id: "NPM::resolve-url:0.2.1"
-                  - id: "NPM::source-map-url:0.4.0"
+                  - id: "NPM::source-map-url:0.4.1"
                   - id: "NPM::urix:0.1.0"
                 - id: "NPM::use:3.1.1"
               - id: "NPM::snapdragon-node:2.1.1"
@@ -1082,11 +941,11 @@ project:
                     dependencies:
                     - id: "NPM::is-accessor-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::is-data-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
-                    - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::kind-of:6.0.3"
                 - id: "NPM::isobject:3.0.1"
                 - id: "NPM::snapdragon-util:3.0.1"
                   dependencies:
@@ -1111,11 +970,11 @@ project:
                     dependencies:
                     - id: "NPM::is-accessor-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::is-data-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
-                    - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::isobject:3.0.1"
                 - id: "NPM::extend-shallow:3.0.2"
                   dependencies:
@@ -1147,11 +1006,11 @@ project:
                 dependencies:
                 - id: "NPM::is-accessor-descriptor:1.0.0"
                   dependencies:
-                  - id: "NPM::kind-of:6.0.2"
+                  - id: "NPM::kind-of:6.0.3"
                 - id: "NPM::is-data-descriptor:1.0.0"
                   dependencies:
-                  - id: "NPM::kind-of:6.0.2"
-                - id: "NPM::kind-of:6.0.2"
+                  - id: "NPM::kind-of:6.0.3"
+                - id: "NPM::kind-of:6.0.3"
               - id: "NPM::isobject:3.0.1"
             - id: "NPM::extend-shallow:3.0.2"
               dependencies:
@@ -1170,11 +1029,11 @@ project:
                   dependencies:
                   - id: "NPM::is-accessor-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::is-data-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
-                  - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
+                  - id: "NPM::kind-of:6.0.3"
               - id: "NPM::expand-brackets:2.1.4"
                 dependencies:
                 - id: "NPM::debug:2.6.9"
@@ -1367,11 +1226,11 @@ project:
                         dependencies:
                         - id: "NPM::is-accessor-descriptor:1.0.0"
                           dependencies:
-                          - id: "NPM::kind-of:6.0.2"
+                          - id: "NPM::kind-of:6.0.3"
                         - id: "NPM::is-data-descriptor:1.0.0"
                           dependencies:
-                          - id: "NPM::kind-of:6.0.2"
-                        - id: "NPM::kind-of:6.0.2"
+                          - id: "NPM::kind-of:6.0.3"
+                        - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::isobject:3.0.1"
                     - id: "NPM::mixin-deep:1.3.2"
                       dependencies:
@@ -1405,12 +1264,12 @@ project:
                     - id: "NPM::is-extendable:0.1.1"
                   - id: "NPM::map-cache:0.2.2"
                   - id: "NPM::source-map:0.5.7"
-                  - id: "NPM::source-map-resolve:0.5.2"
+                  - id: "NPM::source-map-resolve:0.5.3"
                     dependencies:
                     - id: "NPM::atob:2.1.2"
                     - id: "NPM::decode-uri-component:0.2.0"
                     - id: "NPM::resolve-url:0.2.1"
-                    - id: "NPM::source-map-url:0.4.0"
+                    - id: "NPM::source-map-url:0.4.1"
                     - id: "NPM::urix:0.1.0"
                   - id: "NPM::use:3.1.1"
                 - id: "NPM::to-regex:3.0.2"
@@ -1421,11 +1280,11 @@ project:
                       dependencies:
                       - id: "NPM::is-accessor-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
                       - id: "NPM::is-data-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
-                      - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::isobject:3.0.1"
                   - id: "NPM::extend-shallow:3.0.2"
                     dependencies:
@@ -1625,11 +1484,11 @@ project:
                       dependencies:
                       - id: "NPM::is-accessor-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
                       - id: "NPM::is-data-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
-                      - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::isobject:3.0.1"
                   - id: "NPM::mixin-deep:1.3.2"
                     dependencies:
@@ -1663,12 +1522,12 @@ project:
                   - id: "NPM::is-extendable:0.1.1"
                 - id: "NPM::map-cache:0.2.2"
                 - id: "NPM::source-map:0.5.7"
-                - id: "NPM::source-map-resolve:0.5.2"
+                - id: "NPM::source-map-resolve:0.5.3"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
                   - id: "NPM::decode-uri-component:0.2.0"
                   - id: "NPM::resolve-url:0.2.1"
-                  - id: "NPM::source-map-url:0.4.0"
+                  - id: "NPM::source-map-url:0.4.1"
                   - id: "NPM::urix:0.1.0"
                 - id: "NPM::use:3.1.1"
               - id: "NPM::to-regex:3.0.2"
@@ -1679,11 +1538,11 @@ project:
                     dependencies:
                     - id: "NPM::is-accessor-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::is-data-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
-                    - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::isobject:3.0.1"
                 - id: "NPM::extend-shallow:3.0.2"
                   dependencies:
@@ -1712,7 +1571,7 @@ project:
             - id: "NPM::fragment-cache:0.2.1"
               dependencies:
               - id: "NPM::map-cache:0.2.2"
-            - id: "NPM::kind-of:6.0.2"
+            - id: "NPM::kind-of:6.0.3"
             - id: "NPM::nanomatch:1.2.13"
               dependencies:
               - id: "NPM::arr-diff:4.0.0"
@@ -1723,11 +1582,11 @@ project:
                   dependencies:
                   - id: "NPM::is-accessor-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::is-data-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
-                  - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
+                  - id: "NPM::kind-of:6.0.3"
                 - id: "NPM::isobject:3.0.1"
               - id: "NPM::extend-shallow:3.0.2"
                 dependencies:
@@ -1741,7 +1600,7 @@ project:
                 dependencies:
                 - id: "NPM::map-cache:0.2.2"
               - id: "NPM::is-windows:1.0.2"
-              - id: "NPM::kind-of:6.0.2"
+              - id: "NPM::kind-of:6.0.3"
               - id: "NPM::object.pick:1.3.0"
                 dependencies:
                 - id: "NPM::isobject:3.0.1"
@@ -1913,11 +1772,11 @@ project:
                       dependencies:
                       - id: "NPM::is-accessor-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
                       - id: "NPM::is-data-descriptor:1.0.0"
                         dependencies:
-                        - id: "NPM::kind-of:6.0.2"
-                      - id: "NPM::kind-of:6.0.2"
+                        - id: "NPM::kind-of:6.0.3"
+                      - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::isobject:3.0.1"
                   - id: "NPM::mixin-deep:1.3.2"
                     dependencies:
@@ -1951,12 +1810,12 @@ project:
                   - id: "NPM::is-extendable:0.1.1"
                 - id: "NPM::map-cache:0.2.2"
                 - id: "NPM::source-map:0.5.7"
-                - id: "NPM::source-map-resolve:0.5.2"
+                - id: "NPM::source-map-resolve:0.5.3"
                   dependencies:
                   - id: "NPM::atob:2.1.2"
                   - id: "NPM::decode-uri-component:0.2.0"
                   - id: "NPM::resolve-url:0.2.1"
-                  - id: "NPM::source-map-url:0.4.0"
+                  - id: "NPM::source-map-url:0.4.1"
                   - id: "NPM::urix:0.1.0"
                 - id: "NPM::use:3.1.1"
               - id: "NPM::to-regex:3.0.2"
@@ -1967,11 +1826,11 @@ project:
                     dependencies:
                     - id: "NPM::is-accessor-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::is-data-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
-                    - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::isobject:3.0.1"
                 - id: "NPM::extend-shallow:3.0.2"
                   dependencies:
@@ -2168,11 +2027,11 @@ project:
                     dependencies:
                     - id: "NPM::is-accessor-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
                     - id: "NPM::is-data-descriptor:1.0.0"
                       dependencies:
-                      - id: "NPM::kind-of:6.0.2"
-                    - id: "NPM::kind-of:6.0.2"
+                      - id: "NPM::kind-of:6.0.3"
+                    - id: "NPM::kind-of:6.0.3"
                 - id: "NPM::isobject:3.0.1"
                 - id: "NPM::mixin-deep:1.3.2"
                   dependencies:
@@ -2206,12 +2065,12 @@ project:
                 - id: "NPM::is-extendable:0.1.1"
               - id: "NPM::map-cache:0.2.2"
               - id: "NPM::source-map:0.5.7"
-              - id: "NPM::source-map-resolve:0.5.2"
+              - id: "NPM::source-map-resolve:0.5.3"
                 dependencies:
                 - id: "NPM::atob:2.1.2"
                 - id: "NPM::decode-uri-component:0.2.0"
                 - id: "NPM::resolve-url:0.2.1"
-                - id: "NPM::source-map-url:0.4.0"
+                - id: "NPM::source-map-url:0.4.1"
                 - id: "NPM::urix:0.1.0"
               - id: "NPM::use:3.1.1"
             - id: "NPM::to-regex:3.0.2"
@@ -2222,11 +2081,11 @@ project:
                   dependencies:
                   - id: "NPM::is-accessor-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::is-data-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
-                  - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
+                  - id: "NPM::kind-of:6.0.3"
                 - id: "NPM::isobject:3.0.1"
               - id: "NPM::extend-shallow:3.0.2"
                 dependencies:
@@ -2252,9 +2111,9 @@ project:
               - id: "NPM::safe-regex:1.1.0"
                 dependencies:
                 - id: "NPM::ret:0.1.15"
-          - id: "NPM::readable-stream:2.3.6"
+          - id: "NPM::readable-stream:2.3.7"
             dependencies:
-            - id: "NPM::core-util-is:1.0.2"
+            - id: "NPM::core-util-is:1.0.3"
             - id: "NPM::inherits:2.0.4"
             - id: "NPM::isarray:1.0.0"
             - id: "NPM::process-nextick-args:2.0.1"
@@ -2263,12 +2122,12 @@ project:
               dependencies:
               - id: "NPM::safe-buffer:5.1.2"
             - id: "NPM::util-deprecate:1.0.2"
-      - id: "NPM::commander:2.20.0"
-      - id: "NPM::convert-source-map:1.6.0"
+      - id: "NPM::commander:2.20.3"
+      - id: "NPM::convert-source-map:1.8.0"
         dependencies:
         - id: "NPM::safe-buffer:5.1.2"
       - id: "NPM::fs-readdir-recursive:1.1.0"
-      - id: "NPM::glob:7.1.4"
+      - id: "NPM::glob:7.2.0"
         dependencies:
         - id: "NPM::fs.realpath:1.0.0"
         - id: "NPM::inflight:1.0.6"
@@ -2282,19 +2141,19 @@ project:
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
             dependencies:
-            - id: "NPM::balanced-match:1.0.0"
+            - id: "NPM::balanced-match:1.0.2"
             - id: "NPM::concat-map:0.0.1"
         - id: "NPM::once:1.4.0"
           dependencies:
           - id: "NPM::wrappy:1.0.2"
         - id: "NPM::path-is-absolute:1.0.1"
-      - id: "NPM::lodash:4.17.15"
+      - id: "NPM::lodash:4.17.21"
       - id: "NPM::output-file-sync:1.1.2"
         dependencies:
-        - id: "NPM::graceful-fs:4.2.0"
-        - id: "NPM::mkdirp:0.5.1"
+        - id: "NPM::graceful-fs:4.2.8"
+        - id: "NPM::mkdirp:0.5.5"
           dependencies:
-          - id: "NPM::minimist:0.0.8"
+          - id: "NPM::minimist:1.2.5"
         - id: "NPM::object-assign:4.1.1"
       - id: "NPM::path-is-absolute:1.0.1"
       - id: "NPM::slash:1.0.0"
@@ -2303,36 +2162,6 @@ project:
         dependencies:
         - id: "NPM::user-home:1.1.1"
 packages:
-- id: "NPM::abbrev:1.1.1"
-  purl: "pkg:npm/abbrev@1.1.1"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Like ruby's abbrev module, but in js"
-  homepage_url: "https://github.com/isaacs/abbrev-js#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz"
-    hash:
-      value: "f8f2c887ad10bf67f634f005b6987fed3179aac8"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
-    revision: "a9ee72ebc8fe3975f1b0c7aeb3a8f2a806a432eb"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "ssh://git@github.com/isaacs/abbrev-js.git"
-    revision: "a9ee72ebc8fe3975f1b0c7aeb3a8f2a806a432eb"
-    path: ""
 - id: "NPM::ansi-regex:2.1.1"
   purl: "pkg:npm/ansi-regex@2.1.1"
   authors:
@@ -2423,66 +2252,6 @@ packages:
     type: "Git"
     url: "https://github.com/es128/anymatch.git"
     revision: "a16f5bd07f1e36c4eef08c1291c6c119d1663639"
-    path: ""
-- id: "NPM::aproba:1.2.0"
-  purl: "pkg:npm/aproba@1.2.0"
-  authors:
-  - "Rebecca Turner"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "A ridiculously light-weight argument validator (now browser friendly)"
-  homepage_url: "https://github.com/iarna/aproba"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/aproba/-/aproba-1.2.0.tgz"
-    hash:
-      value: "6802e6264efd18c790a1b0d517f0f2627bf2c94a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/iarna/aproba.git"
-    revision: "ee43ce68c9992e8f9d0d925dc2b1f2e1e5c976de"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/iarna/aproba.git"
-    revision: "ee43ce68c9992e8f9d0d925dc2b1f2e1e5c976de"
-    path: ""
-- id: "NPM::are-we-there-yet:1.1.5"
-  purl: "pkg:npm/are-we-there-yet@1.1.5"
-  authors:
-  - "Rebecca Turner"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Keep track of the overall completion of many disparate processes"
-  homepage_url: "https://github.com/iarna/are-we-there-yet"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/are-we-there-yet/-/are-we-there-yet-1.1.5.tgz"
-    hash:
-      value: "4b35c2944f062a8bfcda66410760350fe9ddfc21"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/iarna/are-we-there-yet.git"
-    revision: "b4d023b8b754b9d2d540c9db21cc7edf2962ea63"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/iarna/are-we-there-yet.git"
-    revision: "b4d023b8b754b9d2d540c9db21cc7edf2962ea63"
     path: ""
 - id: "NPM::arr-diff:2.0.0"
   purl: "pkg:npm/arr-diff@2.0.0"
@@ -3152,8 +2921,8 @@ packages:
     url: "https://github.com/babel/babylon.git"
     revision: "da66d3f65b0d305c0bb042873d57f26f0c0b0538"
     path: ""
-- id: "NPM::balanced-match:1.0.0"
-  purl: "pkg:npm/balanced-match@1.0.0"
+- id: "NPM::balanced-match:1.0.2"
+  purl: "pkg:npm/balanced-match@1.0.2"
   authors:
   - "Julian Gruber"
   declared_licenses:
@@ -3168,19 +2937,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.0.tgz"
+    url: "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
     hash:
-      value: "89b4d199ab2bee49de164ea02b89ce462d71b767"
+      value: "e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/juliangruber/balanced-match.git"
-    revision: "d701a549a7653a874eebce7eca25d3577dc868ac"
+    revision: "c7412e09b95d6ad97fd1e2996f6adca7626a9ae8"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/juliangruber/balanced-match.git"
-    revision: "d701a549a7653a874eebce7eca25d3577dc868ac"
+    revision: "c7412e09b95d6ad97fd1e2996f6adca7626a9ae8"
     path: ""
 - id: "NPM::base:0.11.2"
   purl: "pkg:npm/base@0.11.2"
@@ -3426,36 +3195,6 @@ packages:
     url: "https://github.com/paulmillr/chokidar.git"
     revision: "3b1071a6dd82397842f4f7dc63b72c703bd06275"
     path: ""
-- id: "NPM::chownr:1.1.1"
-  purl: "pkg:npm/chownr@1.1.1"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "like `chown -R`"
-  homepage_url: "https://github.com/isaacs/chownr#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/chownr/-/chownr-1.1.1.tgz"
-    hash:
-      value: "54726b8b8fff4df053c42187e801fb4412df1494"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/isaacs/chownr.git"
-    revision: "7a5c3d57c3691eebb9c66fa00fa6003d02ef9440"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/chownr.git"
-    revision: "7a5c3d57c3691eebb9c66fa00fa6003d02ef9440"
-    path: ""
 - id: "NPM::class-utils:0.3.6"
   purl: "pkg:npm/class-utils@0.3.6"
   authors:
@@ -3485,36 +3224,6 @@ packages:
     type: "Git"
     url: "https://github.com/jonschlinkert/class-utils.git"
     revision: "0ad9e639d6a63d6dc04043ac5931df85fb898e06"
-    path: ""
-- id: "NPM::code-point-at:1.1.0"
-  purl: "pkg:npm/code-point-at@1.1.0"
-  authors:
-  - "Sindre Sorhus"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "ES2015 `String#codePointAt()` ponyfill"
-  homepage_url: "https://github.com/sindresorhus/code-point-at#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/code-point-at/-/code-point-at-1.1.0.tgz"
-    hash:
-      value: "0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/sindresorhus/code-point-at.git"
-    revision: "f8f21c8df2d40248fef1b36ca9076e59c0c34791"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/sindresorhus/code-point-at.git"
-    revision: "f8f21c8df2d40248fef1b36ca9076e59c0c34791"
     path: ""
 - id: "NPM::collection-visit:1.0.0"
   purl: "pkg:npm/collection-visit@1.0.0"
@@ -3547,8 +3256,8 @@ packages:
     url: "https://github.com/jonschlinkert/collection-visit.git"
     revision: "39c229dceb7e124cb821b59668df5da1d5c81a6c"
     path: ""
-- id: "NPM::commander:2.20.0"
-  purl: "pkg:npm/commander@2.20.0"
+- id: "NPM::commander:2.20.3"
+  purl: "pkg:npm/commander@2.20.3"
   authors:
   - "TJ Holowaychuk"
   declared_licenses:
@@ -3563,19 +3272,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/commander/-/commander-2.20.0.tgz"
+    url: "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
     hash:
-      value: "d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
+      value: "fd485e84c03eb4881c20722ba48035e8531aeb33"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/tj/commander.js.git"
-    revision: "3e8bf54b9b2fb3960fc2320a4174aa79efca90fa"
+    revision: "6b8499b24f4f6498ad630c50c8a00c9579a8536b"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/tj/commander.js.git"
-    revision: "3e8bf54b9b2fb3960fc2320a4174aa79efca90fa"
+    revision: "6b8499b24f4f6498ad630c50c8a00c9579a8536b"
     path: ""
 - id: "NPM::component-emitter:1.3.0"
   purl: "pkg:npm/component-emitter@1.3.0"
@@ -3635,41 +3344,8 @@ packages:
     url: "https://github.com/substack/node-concat-map.git"
     revision: ""
     path: ""
-- id: "NPM::console-control-strings:1.1.0"
-  purl: "pkg:npm/console-control-strings@1.1.0"
-  authors:
-  - "Rebecca Turner"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "A library of cross-platform tested terminal/console command strings\
-    \ for doing things like color and cursor positioning.  This is a subset of both\
-    \ ansi and vt100.  All control codes included work on both Windows & Unix-like\
-    \ OSes, except where noted."
-  homepage_url: "https://github.com/iarna/console-control-strings#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/console-control-strings/-/console-control-strings-1.1.0.tgz"
-    hash:
-      value: "3d7cf4464db6446ea644bf4b39507f9851008e8e"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/iarna/console-control-strings.git"
-    revision: "722439b4998d2964ac3d3f9ec175c008aa9b7b4b"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/iarna/console-control-strings.git"
-    revision: "722439b4998d2964ac3d3f9ec175c008aa9b7b4b"
-    path: ""
-- id: "NPM::convert-source-map:1.6.0"
-  purl: "pkg:npm/convert-source-map@1.6.0"
+- id: "NPM::convert-source-map:1.8.0"
+  purl: "pkg:npm/convert-source-map@1.8.0"
   authors:
   - "Thorsten Lorenz"
   declared_licenses:
@@ -3685,19 +3361,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.6.0.tgz"
+    url: "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.8.0.tgz"
     hash:
-      value: "51b537a8c43e0f04dec1993bffcdd504e758ac20"
+      value: "f3373c32d21b4d780dd8004514684fb791ca4369"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/thlorenz/convert-source-map.git"
-    revision: "ad25a3e4373c641a2241cf1470b81ae123e4c23d"
+    revision: "df4deb60fcdc20ec2dcaff7fc284bfb139d1b2fc"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/thlorenz/convert-source-map.git"
-    revision: "ad25a3e4373c641a2241cf1470b81ae123e4c23d"
+    revision: "df4deb60fcdc20ec2dcaff7fc284bfb139d1b2fc"
     path: ""
 - id: "NPM::copy-descriptor:0.1.1"
   purl: "pkg:npm/copy-descriptor@0.1.1"
@@ -3729,8 +3405,8 @@ packages:
     url: "https://github.com/jonschlinkert/copy-descriptor.git"
     revision: "572c31416d4538b7ba5f52e2bb0765ac237f79e2"
     path: ""
-- id: "NPM::core-js:2.6.9"
-  purl: "pkg:npm/core-js@2.6.9"
+- id: "NPM::core-js:2.6.12"
+  purl: "pkg:npm/core-js@2.6.12"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -3743,22 +3419,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/core-js/-/core-js-2.6.9.tgz"
+    url: "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
     hash:
-      value: "6b4b214620c834152e179323727fc19741b084f2"
+      value: "d9333dfa7b065e347cc5682219d6f690859cc2ec"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/zloirock/core-js.git"
-    revision: "6a3fe85136aaae0e3b099c96a05a5ceb1f515a50"
+    revision: "ffb783b746849c2b14258e6bef6106f1dcab2a66"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/zloirock/core-js.git"
-    revision: "6a3fe85136aaae0e3b099c96a05a5ceb1f515a50"
+    revision: "ffb783b746849c2b14258e6bef6106f1dcab2a66"
     path: ""
-- id: "NPM::core-util-is:1.0.2"
-  purl: "pkg:npm/core-util-is@1.0.2"
+- id: "NPM::core-util-is:1.0.3"
+  purl: "pkg:npm/core-util-is@1.0.3"
   authors:
   - "Isaac Z. Schlueter"
   declared_licenses:
@@ -3773,19 +3449,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
+    url: "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.3.tgz"
     hash:
-      value: "b5fd54220aa2bc5ab57aab7140c940754503c1a7"
+      value: "a6042d3634c2b27e9328f837b965fac83808db85"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/core-util-is.git"
-    revision: "a177da234df5638b363ddc15fa324619a38577c8"
+    revision: "85f4620829d1b6079fd7b351f040b6ea7e184970"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/core-util-is.git"
-    revision: "a177da234df5638b363ddc15fa324619a38577c8"
+    revision: "85f4620829d1b6079fd7b351f040b6ea7e184970"
     path: ""
 - id: "NPM::debug:2.6.9"
   purl: "pkg:npm/debug@2.6.9"
@@ -3817,36 +3493,6 @@ packages:
     url: "https://github.com/visionmedia/debug.git"
     revision: "13abeae468fea297d0dccc50bc55590809241083"
     path: ""
-- id: "NPM::debug:4.1.1"
-  purl: "pkg:npm/debug@4.1.1"
-  authors:
-  - "TJ Holowaychuk"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "small debugging utility"
-  homepage_url: "https://github.com/visionmedia/debug#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/debug/-/debug-4.1.1.tgz"
-    hash:
-      value: "3b72260255109c6b589cee050f1d516139664791"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/visionmedia/debug.git"
-    revision: "68b4dc8d8549d3924673c38fccc5d594f0a38da1"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/visionmedia/debug.git"
-    revision: "68b4dc8d8549d3924673c38fccc5d594f0a38da1"
-    path: ""
 - id: "NPM::decode-uri-component:0.2.0"
   purl: "pkg:npm/decode-uri-component@0.2.0"
   authors:
@@ -3876,36 +3522,6 @@ packages:
     type: "Git"
     url: "https://github.com/samverschueren/decode-uri-component.git"
     revision: "52782a347527a6a05fed02434ffcf8f2ba1b19a3"
-    path: ""
-- id: "NPM::deep-extend:0.6.0"
-  purl: "pkg:npm/deep-extend@0.6.0"
-  authors:
-  - "Viacheslav Lotsmanov"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Recursive object extending"
-  homepage_url: "https://github.com/unclechu/node-deep-extend"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/deep-extend/-/deep-extend-0.6.0.tgz"
-    hash:
-      value: "c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/unclechu/node-deep-extend.git"
-    revision: "f3f2b4f30fffe8abc9a99a7d6469fb354ca206e9"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/unclechu/node-deep-extend.git"
-    revision: "f3f2b4f30fffe8abc9a99a7d6469fb354ca206e9"
     path: ""
 - id: "NPM::define-property:0.2.5"
   purl: "pkg:npm/define-property@0.2.5"
@@ -3998,34 +3614,6 @@ packages:
     url: "https://github.com/jonschlinkert/define-property.git"
     revision: "04717307be822f2ca2544778b92e5d2cbe300c55"
     path: ""
-- id: "NPM::delegates:1.0.0"
-  purl: "pkg:npm/delegates@1.0.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "delegate methods and accessors to another property"
-  homepage_url: "https://github.com/visionmedia/node-delegates#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/delegates/-/delegates-1.0.0.tgz"
-    hash:
-      value: "84c6e159b81904fdca59a0ef44cd870d31250f9a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/visionmedia/node-delegates.git"
-    revision: "c4dc07ef1ed51c2b2a63f3585e5ef949ee577a49"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/visionmedia/node-delegates.git"
-    revision: "c4dc07ef1ed51c2b2a63f3585e5ef949ee577a49"
-    path: ""
 - id: "NPM::detect-indent:4.0.0"
   purl: "pkg:npm/detect-indent@4.0.0"
   authors:
@@ -4055,37 +3643,6 @@ packages:
     type: "Git"
     url: "https://github.com/sindresorhus/detect-indent.git"
     revision: "dbbc78fcb37907116eb120a8324070a1df0e8d86"
-    path: ""
-- id: "NPM::detect-libc:1.0.3"
-  purl: "pkg:npm/detect-libc@1.0.3"
-  authors:
-  - "Lovell Fuller"
-  declared_licenses:
-  - "Apache-2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-  description: "Node.js module to detect the C standard library (libc) implementation\
-    \ family and version"
-  homepage_url: "https://github.com/lovell/detect-libc#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/detect-libc/-/detect-libc-1.0.3.tgz"
-    hash:
-      value: "fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/lovell/detect-libc.git"
-    revision: "88df1a5950bf3cd9bffa1e0137ab6471c4546118"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/lovell/detect-libc.git"
-    revision: "88df1a5950bf3cd9bffa1e0137ab6471c4546118"
     path: ""
 - id: "NPM::escape-string-regexp:1.0.5"
   purl: "pkg:npm/escape-string-regexp@1.0.5"
@@ -4117,14 +3674,12 @@ packages:
     url: "https://github.com/sindresorhus/escape-string-regexp.git"
     revision: "db124a3e1aae9d692c4899e42a5c6c3e329eaa20"
     path: ""
-- id: "NPM::esutils:2.0.2"
-  purl: "pkg:npm/esutils@2.0.2"
+- id: "NPM::esutils:2.0.3"
+  purl: "pkg:npm/esutils@2.0.3"
   declared_licenses:
-  - "BSD"
+  - "BSD-2-Clause"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
+    spdx_expression: "BSD-2-Clause"
   description: "utility box for ECMAScript language tools"
   homepage_url: "https://github.com/estools/esutils"
   binary_artifact:
@@ -4133,19 +3688,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/esutils/-/esutils-2.0.2.tgz"
+    url: "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz"
     hash:
-      value: "0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
+      value: "74d2eb4de0b8da1293711910d50775b9b710ef64"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
-    url: "http://github.com/estools/esutils.git"
-    revision: "3ffd1c403f3f29db9e8a9574b1895682e57b6a7f"
+    url: "git+ssh://git@github.com/estools/esutils.git"
+    revision: "8c2741c0154723fb92da137a0c97845b03b0943a"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/estools/esutils.git"
-    revision: "3ffd1c403f3f29db9e8a9574b1895682e57b6a7f"
+    url: "ssh://git@github.com/estools/esutils.git"
+    revision: "8c2741c0154723fb92da137a0c97845b03b0943a"
     path: ""
 - id: "NPM::expand-brackets:0.1.5"
   purl: "pkg:npm/expand-brackets@0.1.5"
@@ -4548,36 +4103,6 @@ packages:
     url: "https://github.com/jonschlinkert/fragment-cache.git"
     revision: "33583b03f505c67479ddbc66f825b0e653704207"
     path: ""
-- id: "NPM::fs-minipass:1.2.5"
-  purl: "pkg:npm/fs-minipass@1.2.5"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "fs read and write streams based on minipass"
-  homepage_url: "https://github.com/npm/fs-minipass#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/fs-minipass/-/fs-minipass-1.2.5.tgz"
-    hash:
-      value: "06c277218454ec288df77ada54a03b8702aacb9d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/fs-minipass.git"
-    revision: "fceb43535c348c9cd1ad08edb6c188e04850c245"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/fs-minipass.git"
-    revision: "fceb43535c348c9cd1ad08edb6c188e04850c245"
-    path: ""
 - id: "NPM::fs-readdir-recursive:1.1.0"
   purl: "pkg:npm/fs-readdir-recursive@1.1.0"
   authors:
@@ -4639,66 +4164,6 @@ packages:
     url: "https://github.com/isaacs/fs.realpath.git"
     revision: "03e7c884431fe185dfebbc9b771aeca339c1807a"
     path: ""
-- id: "NPM::fsevents:1.2.9"
-  purl: "pkg:npm/fsevents@1.2.9"
-  authors:
-  - "Philipp Dunkel"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Native Access to Mac OS-X FSEvents"
-  homepage_url: "https://github.com/strongloop/fsevents"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/fsevents/-/fsevents-1.2.9.tgz"
-    hash:
-      value: "3f5ed66583ccd6f400b5a00db6f7e861363e388f"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/strongloop/fsevents.git"
-    revision: "0a052f6c0adb5b066cd1c1c2fcfb04e22ccb0fbc"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/strongloop/fsevents.git"
-    revision: "0a052f6c0adb5b066cd1c1c2fcfb04e22ccb0fbc"
-    path: ""
-- id: "NPM::gauge:2.7.4"
-  purl: "pkg:npm/gauge@2.7.4"
-  authors:
-  - "Rebecca Turner"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "A terminal based horizontal guage"
-  homepage_url: "https://github.com/iarna/gauge"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/gauge/-/gauge-2.7.4.tgz"
-    hash:
-      value: "2c03405c7538c39d7eb37b317022e325fb018bf7"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/iarna/gauge.git"
-    revision: "1011abf6c2cb7ae89a3ee76fb447d3182d4e8d3a"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/iarna/gauge.git"
-    revision: "1011abf6c2cb7ae89a3ee76fb447d3182d4e8d3a"
-    path: ""
 - id: "NPM::get-value:2.0.6"
   purl: "pkg:npm/get-value@2.0.6"
   authors:
@@ -4729,8 +4194,8 @@ packages:
     url: "https://github.com/jonschlinkert/get-value.git"
     revision: "5dc7466a65eec37e3b9e3d94f274b7aba193ea60"
     path: ""
-- id: "NPM::glob:7.1.3"
-  purl: "pkg:npm/glob@7.1.3"
+- id: "NPM::glob:7.2.0"
+  purl: "pkg:npm/glob@7.2.0"
   authors:
   - "Isaac Z. Schlueter"
   declared_licenses:
@@ -4745,49 +4210,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/glob/-/glob-7.1.3.tgz"
+    url: "https://registry.npmjs.org/glob/-/glob-7.2.0.tgz"
     hash:
-      value: "3960832d3f1574108342dafd3a67b332c0969df1"
+      value: "d15535af7732e02e948f4c41628bd910293f6023"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/node-glob.git"
-    revision: "8882c8fccabbe459465e73cc2581e121a5fdd25b"
+    revision: "3bfec21dd180ddf4672880176ad33af6296a167e"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/node-glob.git"
-    revision: "8882c8fccabbe459465e73cc2581e121a5fdd25b"
-    path: ""
-- id: "NPM::glob:7.1.4"
-  purl: "pkg:npm/glob@7.1.4"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "a little globber"
-  homepage_url: "https://github.com/isaacs/node-glob#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/glob/-/glob-7.1.4.tgz"
-    hash:
-      value: "aa608a2f6c577ad357e1ae5a5c26d9a8d1969255"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/isaacs/node-glob.git"
-    revision: "2da9af3ed730811d0fe743bec1281e169374428e"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/node-glob.git"
-    revision: "2da9af3ed730811d0fe743bec1281e169374428e"
+    revision: "3bfec21dd180ddf4672880176ad33af6296a167e"
     path: ""
 - id: "NPM::glob-base:0.3.0"
   purl: "pkg:npm/glob-base@0.3.0"
@@ -4879,8 +4314,8 @@ packages:
     url: "https://github.com/sindresorhus/globals.git"
     revision: "09ba8754235e5953507b8d0543d65098bc7bb78d"
     path: ""
-- id: "NPM::graceful-fs:4.2.0"
-  purl: "pkg:npm/graceful-fs@4.2.0"
+- id: "NPM::graceful-fs:4.2.8"
+  purl: "pkg:npm/graceful-fs@4.2.8"
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
@@ -4893,19 +4328,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.0.tgz"
+    url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.8.tgz"
     hash:
-      value: "8d8fdc73977cb04104721cb53666c1ca64cd328b"
+      value: "e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/isaacs/node-graceful-fs.git"
-    revision: "585df780323740a2b562677caa08a80de1f56c62"
+    revision: "9ec3413c8eb1c073c42262bf5a2a8cdf556f68a7"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/isaacs/node-graceful-fs.git"
-    revision: "585df780323740a2b562677caa08a80de1f56c62"
+    revision: "9ec3413c8eb1c073c42262bf5a2a8cdf556f68a7"
     path: ""
 - id: "NPM::has-ansi:2.0.0"
   purl: "pkg:npm/has-ansi@2.0.0"
@@ -4936,36 +4371,6 @@ packages:
     type: "Git"
     url: "https://github.com/sindresorhus/has-ansi.git"
     revision: "0722275e1bef139fcd09137da6e5550c3cd368b9"
-    path: ""
-- id: "NPM::has-unicode:2.0.1"
-  purl: "pkg:npm/has-unicode@2.0.1"
-  authors:
-  - "Rebecca Turner"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Try to guess if your terminal supports unicode"
-  homepage_url: "https://github.com/iarna/has-unicode"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/has-unicode/-/has-unicode-2.0.1.tgz"
-    hash:
-      value: "e0e6fe6a28cf51138855e086d1691e771de2a8b9"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/iarna/has-unicode.git"
-    revision: "0a05df154e8d89a7fb9798da60b68c78c2df6646"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/iarna/has-unicode.git"
-    revision: "0a05df154e8d89a7fb9798da60b68c78c2df6646"
     path: ""
 - id: "NPM::has-value:0.3.1"
   purl: "pkg:npm/has-value@0.3.1"
@@ -5121,66 +4526,6 @@ packages:
     url: "https://github.com/sindresorhus/home-or-tmp.git"
     revision: "dd1411a0b2531a4e2c592ae733fd45dd0f9c7163"
     path: ""
-- id: "NPM::iconv-lite:0.4.24"
-  purl: "pkg:npm/iconv-lite@0.4.24"
-  authors:
-  - "Alexander Shtuchkin"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Convert character encodings in pure javascript."
-  homepage_url: "https://github.com/ashtuchkin/iconv-lite"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz"
-    hash:
-      value: "2022b4b25fbddc21d2f524974a474aafe733908b"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/ashtuchkin/iconv-lite.git"
-    revision: "efbbb0937ca8dda1c14e0b69958b9d6f20771f7a"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/ashtuchkin/iconv-lite.git"
-    revision: "efbbb0937ca8dda1c14e0b69958b9d6f20771f7a"
-    path: ""
-- id: "NPM::ignore-walk:3.0.1"
-  purl: "pkg:npm/ignore-walk@3.0.1"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Nested/recursive `.gitignore`/`.npmignore` parsing and filtering."
-  homepage_url: "https://github.com/isaacs/ignore-walk#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/ignore-walk/-/ignore-walk-3.0.1.tgz"
-    hash:
-      value: "a83e62e7d272ac0e3b551aaa82831a19b69f82f8"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/isaacs/ignore-walk.git"
-    revision: "2b610fce2c19a5555d4bd74859950d086938c70e"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/ignore-walk.git"
-    revision: "2b610fce2c19a5555d4bd74859950d086938c70e"
-    path: ""
 - id: "NPM::inflight:1.0.6"
   purl: "pkg:npm/inflight@1.0.6"
   authors:
@@ -5211,35 +4556,6 @@ packages:
     url: "https://github.com/npm/inflight.git"
     revision: "a547881738c8f57b27795e584071d67cf6ac1a57"
     path: ""
-- id: "NPM::inherits:2.0.3"
-  purl: "pkg:npm/inherits@2.0.3"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Browser-friendly inheritance fully compatible with standard node.js\
-    \ inherits()"
-  homepage_url: "https://github.com/isaacs/inherits#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz"
-    hash:
-      value: "633c2c83e3da42a502f52466022480f4208261de"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/isaacs/inherits.git"
-    revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/inherits.git"
-    revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
-    path: ""
 - id: "NPM::inherits:2.0.4"
   purl: "pkg:npm/inherits@2.0.4"
   declared_licenses:
@@ -5268,36 +4584,6 @@ packages:
     type: "Git"
     url: "https://github.com/isaacs/inherits.git"
     revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
-    path: ""
-- id: "NPM::ini:1.3.5"
-  purl: "pkg:npm/ini@1.3.5"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "An ini encoder/decoder for node"
-  homepage_url: "https://github.com/isaacs/ini#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/ini/-/ini-1.3.5.tgz"
-    hash:
-      value: "eee25f56db1c9ec6085e0c22778083f596abf927"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/isaacs/ini.git"
-    revision: "738eca59d77d8cfdddf5c477c17a0d8f8fbfe0fd"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/ini.git"
-    revision: "738eca59d77d8cfdddf5c477c17a0d8f8fbfe0fd"
     path: ""
 - id: "NPM::invariant:2.2.4"
   purl: "pkg:npm/invariant@2.2.4"
@@ -5729,8 +5015,8 @@ packages:
     url: "https://github.com/jonschlinkert/is-extglob.git"
     revision: ""
     path: ""
-- id: "NPM::is-finite:1.0.2"
-  purl: "pkg:npm/is-finite@1.0.2"
+- id: "NPM::is-finite:1.1.0"
+  purl: "pkg:npm/is-finite@1.1.0"
   authors:
   - "Sindre Sorhus"
   declared_licenses:
@@ -5745,50 +5031,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/is-finite/-/is-finite-1.0.2.tgz"
+    url: "https://registry.npmjs.org/is-finite/-/is-finite-1.1.0.tgz"
     hash:
-      value: "cc6677695602be550ef11e8b4aa6305342b6d0aa"
+      value: "904135c77fb42c0641d6aa1bcdbc4daa8da082f3"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/sindresorhus/is-finite.git"
-    revision: "43f8bb814834d8573d11ba4a631d19006d0c8897"
+    revision: "1001187ed027a76051c066408358e769fb61786e"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/sindresorhus/is-finite.git"
-    revision: "43f8bb814834d8573d11ba4a631d19006d0c8897"
-    path: ""
-- id: "NPM::is-fullwidth-code-point:1.0.0"
-  purl: "pkg:npm/is-fullwidth-code-point@1.0.0"
-  authors:
-  - "Sindre Sorhus"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Check if the character represented by a given Unicode code point is\
-    \ fullwidth"
-  homepage_url: "https://github.com/sindresorhus/is-fullwidth-code-point"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/is-fullwidth-code-point/-/is-fullwidth-code-point-1.0.0.tgz"
-    hash:
-      value: "ef9e31386f031a7f0d643af82fde50c457ef00cb"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/sindresorhus/is-fullwidth-code-point"
-    revision: "f2152d357f41f82785436d428e4f8ede143b7548"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/sindresorhus/is-fullwidth-code-point.git"
-    revision: "f2152d357f41f82785436d428e4f8ede143b7548"
+    revision: "1001187ed027a76051c066408358e769fb61786e"
     path: ""
 - id: "NPM::is-glob:2.0.1"
   purl: "pkg:npm/is-glob@2.0.1"
@@ -6306,8 +5561,8 @@ packages:
     url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "ed479b6ee194dc1edff852f17095ae1de40bafbc"
     path: ""
-- id: "NPM::kind-of:6.0.2"
-  purl: "pkg:npm/kind-of@6.0.2"
+- id: "NPM::kind-of:6.0.3"
+  purl: "pkg:npm/kind-of@6.0.3"
   authors:
   - "Jon Schlinkert"
   declared_licenses:
@@ -6322,22 +5577,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/kind-of/-/kind-of-6.0.2.tgz"
+    url: "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
     hash:
-      value: "01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
+      value: "07c05034a6c349fa06e24fa35aa76db4580ce4dd"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/kind-of.git"
-    revision: "1491da72e8d276479f5f6198a9e79c1379c5d0c7"
+    revision: "abab085d65f7ee978011da8f135291892fcd97db"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/jonschlinkert/kind-of.git"
-    revision: "1491da72e8d276479f5f6198a9e79c1379c5d0c7"
+    revision: "abab085d65f7ee978011da8f135291892fcd97db"
     path: ""
-- id: "NPM::lodash:4.17.15"
-  purl: "pkg:npm/lodash@4.17.15"
+- id: "NPM::lodash:4.17.21"
+  purl: "pkg:npm/lodash@4.17.21"
   authors:
   - "John-David Dalton"
   declared_licenses:
@@ -6352,19 +5607,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/lodash/-/lodash-4.17.15.tgz"
+    url: "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
     hash:
-      value: "b447f6670a0455bbfeedd11392eff330ea097548"
+      value: "679591c564c3bffaae8454cf0b3df370c3d6911c"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/lodash/lodash.git"
-    revision: ""
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/lodash/lodash.git"
-    revision: ""
+    revision: "c6e281b878b315c7a10d90f9c2af4cdb112d9625"
     path: ""
 - id: "NPM::loose-envify:1.4.0"
   purl: "pkg:npm/loose-envify@1.4.0"
@@ -6581,8 +5836,8 @@ packages:
     url: "https://github.com/isaacs/minimatch.git"
     revision: "e46989a323d5f0aa4781eff5e2e6e7aafa223321"
     path: ""
-- id: "NPM::minimist:0.0.8"
-  purl: "pkg:npm/minimist@0.0.8"
+- id: "NPM::minimist:1.2.5"
+  purl: "pkg:npm/minimist@1.2.5"
   authors:
   - "James Halliday"
   declared_licenses:
@@ -6597,110 +5852,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
+    url: "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
     hash:
-      value: "857fcabfc3397d2625b8228262e86aa7a011b05d"
+      value: "67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/substack/minimist.git"
-    revision: ""
+    revision: "aeb3e27dae0412de5c0494e9563a5f10c82cc7a9"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/substack/minimist.git"
-    revision: ""
-    path: ""
-- id: "NPM::minimist:1.2.0"
-  purl: "pkg:npm/minimist@1.2.0"
-  authors:
-  - "James Halliday"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "parse argument options"
-  homepage_url: "https://github.com/substack/minimist"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
-    hash:
-      value: "a35008b20f41383eec1fb914f4cd5df79a264284"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/substack/minimist.git"
-    revision: "dc624482fcfec5bc669c68cdb861f00573ed4e64"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/substack/minimist.git"
-    revision: "dc624482fcfec5bc669c68cdb861f00573ed4e64"
-    path: ""
-- id: "NPM::minipass:2.3.5"
-  purl: "pkg:npm/minipass@2.3.5"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "minimal implementation of a PassThrough stream"
-  homepage_url: "https://github.com/isaacs/minipass#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/minipass/-/minipass-2.3.5.tgz"
-    hash:
-      value: "cacebe492022497f656b0f0f51e2682a9ed2d848"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/isaacs/minipass.git"
-    revision: "d362cb255c2b2ad24b0b6bf8cef35c522ba29019"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/minipass.git"
-    revision: "d362cb255c2b2ad24b0b6bf8cef35c522ba29019"
-    path: ""
-- id: "NPM::minizlib:1.2.1"
-  purl: "pkg:npm/minizlib@1.2.1"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "A small fast zlib stream built on [minipass](http://npm.im/minipass)\
-    \ and Node.js's zlib binding."
-  homepage_url: "https://github.com/isaacs/minizlib#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/minizlib/-/minizlib-1.2.1.tgz"
-    hash:
-      value: "dd27ea6136243c7c880684e8672bb3a45fd9b614"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/isaacs/minizlib.git"
-    revision: "ad2e969851c3573eff84a5ddfe906344c814581b"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/minizlib.git"
-    revision: "ad2e969851c3573eff84a5ddfe906344c814581b"
+    revision: "aeb3e27dae0412de5c0494e9563a5f10c82cc7a9"
     path: ""
 - id: "NPM::mixin-deep:1.3.2"
   purl: "pkg:npm/mixin-deep@1.3.2"
@@ -6733,8 +5897,8 @@ packages:
     url: "https://github.com/jonschlinkert/mixin-deep.git"
     revision: "754f0c20e1bc13ea5a21a64fbc7d6ba5f7b359b9"
     path: ""
-- id: "NPM::mkdirp:0.5.1"
-  purl: "pkg:npm/mkdirp@0.5.1"
+- id: "NPM::mkdirp:0.5.5"
+  purl: "pkg:npm/mkdirp@0.5.5"
   authors:
   - "James Halliday"
   declared_licenses:
@@ -6749,19 +5913,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
+    url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.5.tgz"
     hash:
-      value: "30057438eac6cf7f8c4767f38648d6697d75c903"
+      value: "d91cefd62d1436ca0f41620e251288d420099def"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/substack/node-mkdirp.git"
-    revision: "d4eff0f06093aed4f387e88e9fc301cb76beedc7"
+    revision: "049cf185c9e91727bc505b796a2d16a4fe70d64d"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/substack/node-mkdirp.git"
-    revision: "d4eff0f06093aed4f387e88e9fc301cb76beedc7"
+    revision: "049cf185c9e91727bc505b796a2d16a4fe70d64d"
     path: ""
 - id: "NPM::ms:2.0.0"
   purl: "pkg:npm/ms@2.0.0"
@@ -6790,62 +5954,6 @@ packages:
     type: "Git"
     url: "https://github.com/zeit/ms.git"
     revision: "9b88d1568a52ec9bb67ecc8d2aa224fa38fd41f4"
-    path: ""
-- id: "NPM::ms:2.1.1"
-  purl: "pkg:npm/ms@2.1.1"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Tiny millisecond conversion utility"
-  homepage_url: "https://github.com/zeit/ms#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/ms/-/ms-2.1.1.tgz"
-    hash:
-      value: "30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/zeit/ms.git"
-    revision: "fe0bae301a6c41f68a01595658a4f4f0dcba0e84"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/zeit/ms.git"
-    revision: "fe0bae301a6c41f68a01595658a4f4f0dcba0e84"
-    path: ""
-- id: "NPM::nan:2.14.0"
-  purl: "pkg:npm/nan@2.14.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Native Abstractions for Node.js: C++ header for Node 0.8 -> 11 compatibility"
-  homepage_url: "https://github.com/nodejs/nan#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/nan/-/nan-2.14.0.tgz"
-    hash:
-      value: "7818f722027b2459a86f0295d434d1fc2336c52c"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/nodejs/nan.git"
-    revision: "1dcc61bd06d84e389bfd5311b2b1492a14c74201"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/nodejs/nan.git"
-    revision: "1dcc61bd06d84e389bfd5311b2b1492a14c74201"
     path: ""
 - id: "NPM::nanomatch:1.2.13"
   purl: "pkg:npm/nanomatch@1.2.13"
@@ -6879,97 +5987,6 @@ packages:
     url: "https://github.com/micromatch/nanomatch.git"
     revision: "d2af1083ae338c6c9a5834ee85ae40679be60a46"
     path: ""
-- id: "NPM::needle:2.3.0"
-  purl: "pkg:npm/needle@2.3.0"
-  authors:
-  - "Tomás Pollak"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "The leanest and most handsome HTTP client in the Nodelands."
-  homepage_url: "https://github.com/tomas/needle#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/needle/-/needle-2.3.0.tgz"
-    hash:
-      value: "ce3fea21197267bacb310705a7bbe24f2a3a3492"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/tomas/needle.git"
-    revision: "0cec93fb08ae9f9ec541b9c4170d748b8f4b80f2"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/tomas/needle.git"
-    revision: "0cec93fb08ae9f9ec541b9c4170d748b8f4b80f2"
-    path: ""
-- id: "NPM::node-pre-gyp:0.12.0"
-  purl: "pkg:npm/node-pre-gyp@0.12.0"
-  authors:
-  - "Dane Springmeyer"
-  declared_licenses:
-  - "BSD-3-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-  description: "Node.js native addon binary install tool"
-  homepage_url: "https://github.com/mapbox/node-pre-gyp#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/node-pre-gyp/-/node-pre-gyp-0.12.0.tgz"
-    hash:
-      value: "39ba4bb1439da030295f899e3b520b7785766149"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/mapbox/node-pre-gyp.git"
-    revision: "ff9e93e969d2e385c22901a3c16cb8877dd1d01c"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/mapbox/node-pre-gyp.git"
-    revision: "ff9e93e969d2e385c22901a3c16cb8877dd1d01c"
-    path: ""
-- id: "NPM::nopt:4.0.1"
-  purl: "pkg:npm/nopt@4.0.1"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Option parsing for Node, supporting types, shorthands, etc. Used by\
-    \ npm."
-  homepage_url: "https://github.com/npm/nopt#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/nopt/-/nopt-4.0.1.tgz"
-    hash:
-      value: "d0d4685afd5415193c8c7505602d0d17cd64474d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/nopt.git"
-    revision: "24921187dc52825d628042c9708bbd8e8734698c"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/nopt.git"
-    revision: "24921187dc52825d628042c9708bbd8e8734698c"
-    path: ""
 - id: "NPM::normalize-path:2.1.1"
   purl: "pkg:npm/normalize-path@2.1.1"
   authors:
@@ -7001,127 +6018,6 @@ packages:
     type: "Git"
     url: "https://github.com/jonschlinkert/normalize-path.git"
     revision: "da1a45e7a514910ce39875b5327b1d0fa9be3d3e"
-    path: ""
-- id: "NPM::npm-bundled:1.0.6"
-  purl: "pkg:npm/npm-bundled@1.0.6"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "list things in node_modules that are bundledDependencies, or transitive\
-    \ dependencies thereof"
-  homepage_url: "https://github.com/npm/npm-bundled#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/npm-bundled/-/npm-bundled-1.0.6.tgz"
-    hash:
-      value: "e7ba9aadcef962bb61248f91721cd932b3fe6bdd"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/npm-bundled.git"
-    revision: "59c71778359f7801b8fe5070f2c87a5a31974304"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/npm-bundled.git"
-    revision: "59c71778359f7801b8fe5070f2c87a5a31974304"
-    path: ""
-- id: "NPM::npm-packlist:1.4.1"
-  purl: "pkg:npm/npm-packlist@1.4.1"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Get a list of the files to add from a folder into an npm package"
-  homepage_url: "https://www.npmjs.com/package/npm-packlist"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/npm-packlist/-/npm-packlist-1.4.1.tgz"
-    hash:
-      value: "19064cdf988da80ea3cee45533879d90192bbfbc"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/npm-packlist.git"
-    revision: "1a4c8bfe712f8b2804c0ae48fb2a9dd99c78ef99"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/npm-packlist.git"
-    revision: "1a4c8bfe712f8b2804c0ae48fb2a9dd99c78ef99"
-    path: ""
-- id: "NPM::npmlog:4.1.2"
-  purl: "pkg:npm/npmlog@4.1.2"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "logger for npm"
-  homepage_url: "https://github.com/npm/npmlog#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/npmlog/-/npmlog-4.1.2.tgz"
-    hash:
-      value: "08a7f2a8bf734604779a9efa4ad5cc717abb954b"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/npmlog.git"
-    revision: "f7f9516d35b873c4e45b1aaeb78cff4e43b72c31"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/npmlog.git"
-    revision: "f7f9516d35b873c4e45b1aaeb78cff4e43b72c31"
-    path: ""
-- id: "NPM::number-is-nan:1.0.1"
-  purl: "pkg:npm/number-is-nan@1.0.1"
-  authors:
-  - "Sindre Sorhus"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "ES2015 Number.isNaN() ponyfill"
-  homepage_url: "https://github.com/sindresorhus/number-is-nan#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/number-is-nan/-/number-is-nan-1.0.1.tgz"
-    hash:
-      value: "097b602b53422a522c1afb8790318336941a011d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/sindresorhus/number-is-nan.git"
-    revision: "ed9cdac3f428cc929b61bb230da42c87477af4b9"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/sindresorhus/number-is-nan.git"
-    revision: "ed9cdac3f428cc929b61bb230da42c87477af4b9"
     path: ""
 - id: "NPM::object-assign:4.1.1"
   purl: "pkg:npm/object-assign@4.1.1"
@@ -7366,36 +6262,6 @@ packages:
     url: "https://github.com/sindresorhus/os-tmpdir.git"
     revision: "1abf9cf5611b4be7377060ea67054b45cbf6813c"
     path: ""
-- id: "NPM::osenv:0.1.5"
-  purl: "pkg:npm/osenv@0.1.5"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Look up environment settings specific to different operating systems"
-  homepage_url: "https://github.com/npm/osenv#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/osenv/-/osenv-0.1.5.tgz"
-    hash:
-      value: "85cdfafaeb28e8677f416e287592b5f3f49ea410"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/osenv.git"
-    revision: "1c642b8f5ddb1f99671a300a466bf42ffb9f5ea2"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/osenv.git"
-    revision: "1c642b8f5ddb1f99671a300a466bf42ffb9f5ea2"
-    path: ""
 - id: "NPM::output-file-sync:1.1.2"
   purl: "pkg:npm/output-file-sync@1.1.2"
   authors:
@@ -7608,34 +6474,6 @@ packages:
     url: "https://github.com/benjamn/private.git"
     revision: "8fde2c4c9f760c0ae17f3ff375c02d6498472fbc"
     path: ""
-- id: "NPM::process-nextick-args:2.0.0"
-  purl: "pkg:npm/process-nextick-args@2.0.0"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "process.nextTick but always with args"
-  homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.0.tgz"
-    hash:
-      value: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
-    revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/calvinmetcalf/process-nextick-args.git"
-    revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
-    path: ""
 - id: "NPM::process-nextick-args:2.0.1"
   purl: "pkg:npm/process-nextick-args@2.0.1"
   declared_licenses:
@@ -7695,38 +6533,8 @@ packages:
     url: "https://github.com/jonschlinkert/randomatic.git"
     revision: "b7451f4dac44a9920790f76a4d8a1dd081c37a5a"
     path: ""
-- id: "NPM::rc:1.2.8"
-  purl: "pkg:npm/rc@1.2.8"
-  authors:
-  - "Dominic Tarr"
-  declared_licenses:
-  - "(BSD-2-Clause OR MIT OR Apache-2.0)"
-  declared_licenses_processed:
-    spdx_expression: "BSD-2-Clause OR MIT OR Apache-2.0"
-  description: "hardwired configuration loader"
-  homepage_url: "https://github.com/dominictarr/rc#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/rc/-/rc-1.2.8.tgz"
-    hash:
-      value: "cd924bf5200a075b83c188cd6b9e211b7fc0d3ed"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/dominictarr/rc.git"
-    revision: "a97f6adcc37ee1cad06ab7dc9b0bd842bbc5c664"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/dominictarr/rc.git"
-    revision: "a97f6adcc37ee1cad06ab7dc9b0bd842bbc5c664"
-    path: ""
-- id: "NPM::readable-stream:2.3.6"
-  purl: "pkg:npm/readable-stream@2.3.6"
+- id: "NPM::readable-stream:2.3.7"
+  purl: "pkg:npm/readable-stream@2.3.7"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
@@ -7739,19 +6547,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
+    url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
     hash:
-      value: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
+      value: "1eca1cf711aef814c04f62252a36a62f6cb23b57"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git://github.com/nodejs/readable-stream.git"
-    revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
+    revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/nodejs/readable-stream.git"
-    revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
+    revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
     path: ""
 - id: "NPM::readdirp:2.2.1"
   purl: "pkg:npm/readdirp@2.2.1"
@@ -7936,8 +6744,8 @@ packages:
     url: "https://github.com/darsain/remove-trailing-separator.git"
     revision: "f4e8acca09106efeef5a5164f1ad2192fe97fd69"
     path: ""
-- id: "NPM::repeat-element:1.1.3"
-  purl: "pkg:npm/repeat-element@1.1.3"
+- id: "NPM::repeat-element:1.1.4"
+  purl: "pkg:npm/repeat-element@1.1.4"
   authors:
   - "Jon Schlinkert"
   declared_licenses:
@@ -7952,19 +6760,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.3.tgz"
+    url: "https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.4.tgz"
     hash:
-      value: "782e0d825c0c5a3bb39731f84efee6b742e6b1ce"
+      value: "be681520847ab58c7568ac75fbfad28ed42d39e9"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/repeat-element.git"
-    revision: "32af174b4218263952a77d881f37d6e545b7cfd0"
+    revision: "874e2b3843fb0ae342cb41f40e387f4908ee048d"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/jonschlinkert/repeat-element.git"
-    revision: "32af174b4218263952a77d881f37d6e545b7cfd0"
+    revision: "874e2b3843fb0ae342cb41f40e387f4908ee048d"
     path: ""
 - id: "NPM::repeat-string:1.6.1"
   purl: "pkg:npm/repeat-string@1.6.1"
@@ -8087,36 +6895,6 @@ packages:
     url: "https://github.com/fent/ret.js.git"
     revision: "7f7c436e2a85fbc068e6d94e2611ce78b3e9ad10"
     path: ""
-- id: "NPM::rimraf:2.6.3"
-  purl: "pkg:npm/rimraf@2.6.3"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "A deep deletion module for node (like `rm -rf`)"
-  homepage_url: "https://github.com/isaacs/rimraf#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/rimraf/-/rimraf-2.6.3.tgz"
-    hash:
-      value: "b2d104fe0d8fb27cf9e0a1cda8262dd3833c6cab"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/isaacs/rimraf.git"
-    revision: "9442819908e52f2c32620e8fa609d7a5d472cc2c"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/rimraf.git"
-    revision: "9442819908e52f2c32620e8fa609d7a5d472cc2c"
-    path: ""
 - id: "NPM::safe-buffer:5.1.2"
   purl: "pkg:npm/safe-buffer@5.1.2"
   authors:
@@ -8177,125 +6955,6 @@ packages:
     url: "https://github.com/substack/safe-regex.git"
     revision: "d2570f31bd9d779515015917bb8297c753e46572"
     path: ""
-- id: "NPM::safer-buffer:2.1.2"
-  purl: "pkg:npm/safer-buffer@2.1.2"
-  authors:
-  - "Nikita Skovoroda"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Modern Buffer API polyfill without footguns"
-  homepage_url: "https://github.com/ChALkeR/safer-buffer#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
-    hash:
-      value: "44fa161b0187b9549dd84bb91802f9bd8385cd6a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/ChALkeR/safer-buffer.git"
-    revision: "e8ac214944eda30e1e6c6b7d7e7f6a21cf7dce7c"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/ChALkeR/safer-buffer.git"
-    revision: "e8ac214944eda30e1e6c6b7d7e7f6a21cf7dce7c"
-    path: ""
-- id: "NPM::sax:1.2.4"
-  purl: "pkg:npm/sax@1.2.4"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "An evented streaming XML parser in JavaScript"
-  homepage_url: "https://github.com/isaacs/sax-js#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/sax/-/sax-1.2.4.tgz"
-    hash:
-      value: "2816234e2378bddc4e5354fab5caa895df7100d9"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/isaacs/sax-js.git"
-    revision: "5aee2163d55cff24b817bbf550bac44841f9df45"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/sax-js.git"
-    revision: "5aee2163d55cff24b817bbf550bac44841f9df45"
-    path: ""
-- id: "NPM::semver:5.7.0"
-  purl: "pkg:npm/semver@5.7.0"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "The semantic version parser used by npm."
-  homepage_url: "https://github.com/npm/node-semver#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/semver/-/semver-5.7.0.tgz"
-    hash:
-      value: "790a7cf6fea5459bac96110b29b60412dc8ff96b"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/node-semver.git"
-    revision: "8055dda0aee91372e3bfc47754a62f40e8a63b98"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/node-semver.git"
-    revision: "8055dda0aee91372e3bfc47754a62f40e8a63b98"
-    path: ""
-- id: "NPM::set-blocking:2.0.0"
-  purl: "pkg:npm/set-blocking@2.0.0"
-  authors:
-  - "Ben Coe"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "set blocking stdio and stderr ensuring that terminal output does not\
-    \ truncate"
-  homepage_url: "https://github.com/yargs/set-blocking#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/set-blocking/-/set-blocking-2.0.0.tgz"
-    hash:
-      value: "045f9782d011ae9a6803ddd382b24392b3d890f7"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/yargs/set-blocking.git"
-    revision: "7eec10577b5fff264de477ba3b9d07f404946eff"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/yargs/set-blocking.git"
-    revision: "7eec10577b5fff264de477ba3b9d07f404946eff"
-    path: ""
 - id: "NPM::set-value:2.0.1"
   purl: "pkg:npm/set-value@2.0.1"
   authors:
@@ -8326,36 +6985,6 @@ packages:
     type: "Git"
     url: "https://github.com/jonschlinkert/set-value.git"
     revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
-    path: ""
-- id: "NPM::signal-exit:3.0.2"
-  purl: "pkg:npm/signal-exit@3.0.2"
-  authors:
-  - "Ben Coe"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "when you want to fire an event no matter how a process exits."
-  homepage_url: "https://github.com/tapjs/signal-exit"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.2.tgz"
-    hash:
-      value: "b5fdc08f1287ea1178628e415e25132b73646c6d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/tapjs/signal-exit.git"
-    revision: "9c5ad9809fe6135ef22e2623989deaffe2a4fa8a"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/tapjs/signal-exit.git"
-    revision: "9c5ad9809fe6135ef22e2623989deaffe2a4fa8a"
     path: ""
 - id: "NPM::slash:1.0.0"
   purl: "pkg:npm/slash@1.0.0"
@@ -8508,8 +7137,8 @@ packages:
     url: "ssh://git@github.com/mozilla/source-map.git"
     revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
-- id: "NPM::source-map-resolve:0.5.2"
-  purl: "pkg:npm/source-map-resolve@0.5.2"
+- id: "NPM::source-map-resolve:0.5.3"
+  purl: "pkg:npm/source-map-resolve@0.5.3"
   authors:
   - "Simon Lydell"
   declared_licenses:
@@ -8524,19 +7153,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/source-map-resolve/-/source-map-resolve-0.5.2.tgz"
+    url: "https://registry.npmjs.org/source-map-resolve/-/source-map-resolve-0.5.3.tgz"
     hash:
-      value: "72e2cc34095543e43b2c62b2c4c10d4a9054f259"
+      value: "190866bece7553e1f8f267a2ee82c606b5509a1a"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/lydell/source-map-resolve.git"
-    revision: "858cd9e2ecce25427761b8be616cabf704c69316"
+    revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/lydell/source-map-resolve.git"
-    revision: "858cd9e2ecce25427761b8be616cabf704c69316"
+    revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
     path: ""
 - id: "NPM::source-map-support:0.4.18"
   purl: "pkg:npm/source-map-support@0.4.18"
@@ -8566,8 +7195,8 @@ packages:
     url: "https://github.com/evanw/node-source-map-support.git"
     revision: "b9b5a5576272916237a253393220770c858685d6"
     path: ""
-- id: "NPM::source-map-url:0.4.0"
-  purl: "pkg:npm/source-map-url@0.4.0"
+- id: "NPM::source-map-url:0.4.1"
+  purl: "pkg:npm/source-map-url@0.4.1"
   authors:
   - "Simon Lydell"
   declared_licenses:
@@ -8582,19 +7211,19 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://registry.npmjs.org/source-map-url/-/source-map-url-0.4.0.tgz"
+    url: "https://registry.npmjs.org/source-map-url/-/source-map-url-0.4.1.tgz"
     hash:
-      value: "3e935d7ddd73631b97659956d55128e87b5084a3"
+      value: "0af66605a745a5a2f91cf1bbf8a7afbc283dec56"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
     url: "git+https://github.com/lydell/source-map-url.git"
-    revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
+    revision: "b16c43ca630067c43a05cad7b6841d25e1248fb9"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/lydell/source-map-url.git"
-    revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
+    revision: "b16c43ca630067c43a05cad7b6841d25e1248fb9"
     path: ""
 - id: "NPM::split-string:3.1.0"
   purl: "pkg:npm/split-string@3.1.0"
@@ -8658,37 +7287,6 @@ packages:
     url: "https://github.com/jonschlinkert/static-extend.git"
     revision: "ce41369391163eb9403848a1b4daf00be981c56b"
     path: ""
-- id: "NPM::string-width:1.0.2"
-  purl: "pkg:npm/string-width@1.0.2"
-  authors:
-  - "Sindre Sorhus"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Get the visual width of a string - the number of columns required\
-    \ to display it"
-  homepage_url: "https://github.com/sindresorhus/string-width#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/string-width/-/string-width-1.0.2.tgz"
-    hash:
-      value: "118bdf5b8cdc51a2a7e70d211e07e2b0b9b107d3"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/sindresorhus/string-width.git"
-    revision: "282cf3d53918a92cc3ee0778dcf938039bcbc47b"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/sindresorhus/string-width.git"
-    revision: "282cf3d53918a92cc3ee0778dcf938039bcbc47b"
-    path: ""
 - id: "NPM::string_decoder:1.1.1"
   purl: "pkg:npm/string_decoder@1.1.1"
   declared_licenses:
@@ -8747,36 +7345,6 @@ packages:
     url: "https://github.com/chalk/strip-ansi.git"
     revision: "8270705c704956da865623e564eba4875c3ea17f"
     path: ""
-- id: "NPM::strip-json-comments:2.0.1"
-  purl: "pkg:npm/strip-json-comments@2.0.1"
-  authors:
-  - "Sindre Sorhus"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Strip comments from JSON. Lets you use comments in your JSON files!"
-  homepage_url: "https://github.com/sindresorhus/strip-json-comments#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz"
-    hash:
-      value: "3c531942e908c2697c0ec344858c286c7ca0a60a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/sindresorhus/strip-json-comments.git"
-    revision: "1aef99eaa70d07981156e8aaa722e750c3b4eaf9"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/sindresorhus/strip-json-comments.git"
-    revision: "1aef99eaa70d07981156e8aaa722e750c3b4eaf9"
-    path: ""
 - id: "NPM::supports-color:2.0.0"
   purl: "pkg:npm/supports-color@2.0.0"
   authors:
@@ -8806,36 +7374,6 @@ packages:
     type: "Git"
     url: "https://github.com/chalk/supports-color.git"
     revision: "8400d98ade32b2adffd50902c06d9e725a5c6588"
-    path: ""
-- id: "NPM::tar:4.4.8"
-  purl: "pkg:npm/tar@4.4.8"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "tar for node"
-  homepage_url: "https://github.com/npm/node-tar#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/tar/-/tar-4.4.8.tgz"
-    hash:
-      value: "b19eec3fde2a96e64666df9fdb40c5ca1bc3747d"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/npm/node-tar.git"
-    revision: "074c89b1e639485468706af3c141a68ef8826728"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/npm/node-tar.git"
-    revision: "074c89b1e639485468706af3c141a68ef8826728"
     path: ""
 - id: "NPM::to-fast-properties:1.0.3"
   purl: "pkg:npm/to-fast-properties@1.0.3"
@@ -9199,37 +7737,6 @@ packages:
     url: "https://github.com/tkellen/node-v8flags.git"
     revision: "4c628146efa7eda11df0e10c73b3d8687873569e"
     path: ""
-- id: "NPM::wide-align:1.1.3"
-  purl: "pkg:npm/wide-align@1.1.3"
-  authors:
-  - "Rebecca Turner"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "A wide-character aware text alignment function for use on the console\
-    \ or with fixed width fonts."
-  homepage_url: "https://github.com/iarna/wide-align#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/wide-align/-/wide-align-1.1.3.tgz"
-    hash:
-      value: "ae074e6bdc0c14a431e804e624549c633b000457"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/iarna/wide-align.git"
-    revision: "6b766c9874a1e5157eda2ac75b90ccc01b313620"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/iarna/wide-align.git"
-    revision: "6b766c9874a1e5157eda2ac75b90ccc01b313620"
-    path: ""
 - id: "NPM::wrappy:1.0.2"
   purl: "pkg:npm/wrappy@1.0.2"
   authors:
@@ -9259,34 +7766,4 @@ packages:
     type: "Git"
     url: "https://github.com/npm/wrappy.git"
     revision: "71d91b6dc5bdeac37e218c2cf03f9ab55b60d214"
-    path: ""
-- id: "NPM::yallist:3.0.3"
-  purl: "pkg:npm/yallist@3.0.3"
-  authors:
-  - "Isaac Z. Schlueter"
-  declared_licenses:
-  - "ISC"
-  declared_licenses_processed:
-    spdx_expression: "ISC"
-  description: "Yet Another Linked List"
-  homepage_url: "https://github.com/isaacs/yallist#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/yallist/-/yallist-3.0.3.tgz"
-    hash:
-      value: "b4b049e314be545e3ce802236d6cd22cd91c3de9"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/isaacs/yallist.git"
-    revision: "47ab1ce288032985c90ee568681b35ad8978be41"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/isaacs/yallist.git"
-    revision: "47ab1ce288032985c90ee568681b35ad8978be41"
     path: ""
