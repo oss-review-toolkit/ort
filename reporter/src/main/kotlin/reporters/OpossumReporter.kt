@@ -470,10 +470,10 @@ class OpossumReporter : Reporter {
             results.forEach { addScannerResult(id, it, maxDepth) }
         }
 
-        fun addIssue(issue: OrtIssue, relatedId: Identifier, source: String) {
-            val roots = packageToRoot[relatedId]
+        fun addIssue(issue: OrtIssue, id: Identifier, source: String) {
+            val roots = packageToRoot[id]
             val paths = if (roots.isNullOrEmpty()) {
-                log.info("No root for $relatedId")
+                log.info("No root for $id")
                 mutableSetOf("/")
             } else {
                 roots.keys
