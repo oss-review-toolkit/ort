@@ -204,7 +204,7 @@ object OkHttpClientHelper {
         }
 
         listOf(response.request.url.toString(), url).mapTo(candidateNames) {
-            it.substringAfterLast('/')
+            it.substringAfterLast('/').substringBefore('?')
         }
 
         check(candidateNames.isNotEmpty())
