@@ -26,9 +26,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.VcsUrlMapping
 import org.ossreviewtoolkit.helper.common.getRepositoryPaths
 import org.ossreviewtoolkit.helper.common.importPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
+import org.ossreviewtoolkit.helper.common.orEmpty
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replacePathExcludes
 import org.ossreviewtoolkit.helper.common.sortPathExcludes
@@ -71,9 +73,18 @@ internal class ImportPathExcludesCommand : CliktCommand(
         help = "If enabled, only entries are imported for which an entry with the same pattern already exists."
     ).flag()
 
+    private val vcsUrlMappingFile by option(
+        "--vcs-url-mapping-file",
+        help = "A YAML or JSON file containing a mapping of VCS URLs to other VCS URLs which will be replaced during " +
+                "the import."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
+
     override fun run() {
         val ortResult = readOrtResult(ortFile)
         val allFiles = ortResult.getProjectFindingFiles()
+        val vcsUrlMapping = vcsUrlMappingFile?.readValue<VcsUrlMapping>().orEmpty()
 
         val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
             repositoryConfigurationFile.readValue()
@@ -83,9 +94,8 @@ internal class ImportPathExcludesCommand : CliktCommand(
 
         val existingPathExcludes = repositoryConfiguration.excludes.paths
         val repositoryPaths = ortResult.getRepositoryPaths()
-        val importedPathExcludes = importPathExcludes(repositoryPaths, pathExcludesFile).filter { pathExclude ->
-            allFiles.any { pathExclude.matches(it) }
-        }
+        val importedPathExcludes = importPathExcludes(repositoryPaths, pathExcludesFile, vcsUrlMapping)
+            .filter { pathExclude -> allFiles.any { pathExclude.matches(it) } }
 
         val pathExcludes = existingPathExcludes.mergePathExcludes(importedPathExcludes, updateOnlyExisting)
 

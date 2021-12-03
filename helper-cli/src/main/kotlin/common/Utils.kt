@@ -875,7 +875,11 @@ private fun createBlockYamlMapper(): ObjectMapper =
         .disable(YAMLGenerator.Feature.SPLIT_LINES)
         .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
 
-internal fun importPathExcludes(repositoryPaths: Map<String, Set<String>>, pathExcludesFile: File): List<PathExclude> {
+internal fun importPathExcludes(
+    repositoryPaths: Map<String, Set<String>>,
+    pathExcludesFile: File,
+    vcsUrlMapping: VcsUrlMapping
+): List<PathExclude> {
     println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
 
     println("Loading $pathExcludesFile...")
@@ -884,7 +888,7 @@ internal fun importPathExcludes(repositoryPaths: Map<String, Set<String>>, pathE
 
     val result = mutableListOf<PathExclude>()
 
-    repositoryPaths.forEach { (vcsUrl, relativePaths) ->
+    repositoryPaths.mapKeys { vcsUrlMapping.map(it.key) }.forEach { (vcsUrl, relativePaths) ->
         pathExcludes[vcsUrl]?.let { pathExcludesForRepository ->
             pathExcludesForRepository.forEach { pathExclude ->
                 relativePaths.forEach { path ->
