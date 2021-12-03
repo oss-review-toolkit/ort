@@ -81,8 +81,8 @@ class ExperimentalScannerTest : WordSpec({
                 projectScannerWrappers = listOf(projectScannerWrapper)
             )
 
-            val packageContext = createContext(type = PackageType.PACKAGES)
-            val projectContext = createContext(type = PackageType.PROJECTS)
+            val packageContext = createContext(type = PackageType.PACKAGE)
+            val projectContext = createContext(type = PackageType.PROJECT)
 
             scanner.scan(setOf(pkgWithArtifact), packageContext)[pkgWithArtifact] shouldNotBeNull {
                 scanResults shouldNot beEmpty()
@@ -103,7 +103,7 @@ class ExperimentalScannerTest : WordSpec({
                 projectScannerWrappers = emptyList()
             )
 
-            scanner.scan(setOf(pkgWithArtifact), createContext(type = PackageType.PROJECTS)) should beEmpty()
+            scanner.scan(setOf(pkgWithArtifact), createContext(type = PackageType.PROJECT)) should beEmpty()
         }
 
         "Not scan packages if no scanner wrapper for packages is configured" {
@@ -757,7 +757,7 @@ private class FakeProvenanceBasedStorageWriter : ProvenanceBasedScanStorageWrite
 
 private fun createContext(
     labels: Map<String, String> = emptyMap(),
-    type: PackageType = PackageType.PACKAGES
+    type: PackageType = PackageType.PACKAGE
 ) = ScanContext(labels, type)
 
 @Suppress("LongParameterList")
@@ -781,8 +781,8 @@ private fun createScanner(
         packageProvenanceResolver,
         nestedProvenanceResolver,
         mapOf(
-            PackageType.PROJECTS to projectScannerWrappers,
-            PackageType.PACKAGES to packageScannerWrappers
+            PackageType.PROJECT to projectScannerWrappers,
+            PackageType.PACKAGE to packageScannerWrappers
         )
     )
 
