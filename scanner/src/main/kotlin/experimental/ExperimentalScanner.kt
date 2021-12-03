@@ -20,8 +20,12 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import java.io.File
+import java.nio.file.StandardCopyOption
 import java.time.Instant
 
+import kotlin.io.path.moveTo
+import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -40,7 +44,9 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
+import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.log
 
@@ -278,6 +284,8 @@ class ExperimentalScanner(
             }
         }
 
+        createFileArchives(nestedProvenances)
+
         return nestedProvenanceScanResults
     }
 
@@ -420,6 +428,48 @@ class ExperimentalScanner(
 
             ScanResult(provenance, scanner.details, summary)
         }
+    }
+
+    private fun createFileArchives(nestedProvenances: Map<Package, NestedProvenance>) {
+        // TODO: The archives are currently created in a way compatible with the existing implementation in the
+        //       LocalScanner. This allows to keep using existing file archives without changing the logic used to
+        //       access those archives in the reporter. To achieve this nested provenances are downloaded recursively,
+        //       so that the created archives contain also files from nested repositories.
+        //       This could be replaced with creating file archives for each provenance separately and building the
+        //       final result on demand, to reduce duplication in the file archives.
+
+        val archiver = scannerConfig.archive.createFileArchiver()
+
+        val provenancesWithMissingArchives = nestedProvenances.filterNot { (_, nestedProvenance) ->
+            archiver.hasArchive(nestedProvenance.root)
+        }
+
+        log.info { "Creating file archives for ${provenancesWithMissingArchives.size} packages." }
+
+        val duration = measureTime {
+            provenancesWithMissingArchives.forEach { (_, nestedProvenance) ->
+                val dir = downloadRecursively(nestedProvenance)
+                archiver.archive(dir, nestedProvenance.root)
+                dir.safeDeleteRecursively(force = true)
+            }
+        }
+
+        log.info { "Created file archives for ${provenancesWithMissingArchives.size} packages in $duration." }
+    }
+
+    private fun downloadRecursively(nestedProvenance: NestedProvenance): File {
+        // Use the provenanceDownloader to download each provenance from nestedProvenance separately, because they are
+        // likely already cached if a local scanner wrapper is used.
+
+        val root = provenanceDownloader.download(nestedProvenance.root)
+
+        nestedProvenance.subRepositories.forEach { (path, provenance) ->
+            val tempDir = provenanceDownloader.download(provenance)
+            val targetDir = root.resolve(path)
+            tempDir.toPath().moveTo(targetDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+        }
+
+        return root
     }
 }
 
