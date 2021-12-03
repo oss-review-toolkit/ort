@@ -26,11 +26,11 @@ import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
-import org.ossreviewtoolkit.model.DataEntity
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
@@ -52,7 +52,7 @@ class ExperimentalScanner(
     val storageWriters: List<ScanStorageWriter>,
     val packageProvenanceResolver: PackageProvenanceResolver,
     val nestedProvenanceResolver: NestedProvenanceResolver,
-    val scannerWrappers: Map<DataEntity, List<ScannerWrapper>>
+    val scannerWrappers: Map<PackageType, List<ScannerWrapper>>
 ) {
     init {
         require(scannerWrappers.isNotEmpty() && scannerWrappers.any { it.value.isNotEmpty() }) {
@@ -63,15 +63,15 @@ class ExperimentalScanner(
     suspend fun scan(ortResult: OrtResult): OrtResult {
         val startTime = Instant.now()
 
-        val projectScannerWrappers = scannerWrappers[DataEntity.PROJECTS].orEmpty()
-        val packageScannerWrappers = scannerWrappers[DataEntity.PACKAGES].orEmpty()
+        val projectScannerWrappers = scannerWrappers[PackageType.PROJECTS].orEmpty()
+        val packageScannerWrappers = scannerWrappers[PackageType.PACKAGES].orEmpty()
 
         val projectResults = if (projectScannerWrappers.isNotEmpty()) {
             val packages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
 
             log.info { "Scanning ${packages.size} projects with ${projectScannerWrappers.size} scanners." }
 
-            scan(packages, ScanContext(ortResult.labels, DataEntity.PROJECTS))
+            scan(packages, ScanContext(ortResult.labels, PackageType.PROJECTS))
         } else {
             log.info { "Skipping scan of projects because no project scanner is configured." }
 
@@ -83,7 +83,7 @@ class ExperimentalScanner(
 
             log.info { "Scanning ${packages.size} packages with ${packageScannerWrappers.size} scanners." }
 
-            scan(packages, ScanContext(ortResult.labels, DataEntity.PACKAGES))
+            scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGES))
         } else {
             log.info { "Skipping scan of packages because no package scanner is configured." }
 

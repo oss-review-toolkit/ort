@@ -50,9 +50,9 @@ import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
-import org.ossreviewtoolkit.model.DataEntity
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -158,11 +158,12 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 "scanned with the same scanner as specified by '--scanner'."
     ).convertToScanner()
 
-    private val entities by option(
-        "--entities", "-e",
-        help = "The data entities from the ORT file's analyzer result to limit scans to. If not specified, all data " +
-                "entities are scanned."
-    ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
+    private val packageTypes by option(
+        "--package-types",
+        help = "A comma-separated list of the package types from the ORT file's analyzer result to limit scans to. " +
+                "If not specified, all package types are scanned. Possible values are: " +
+                PackageType.values().joinToString { it.name }
+    ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     private val skipExcluded by option(
         "--skip-excluded",
@@ -254,9 +255,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         // Configure the package and project scanners.
         val defaultScanner = scannerFactory.create(config.scanner, config.downloader)
-        val packageScanner = defaultScanner.takeIf { DataEntity.PACKAGES in entities }
+        val packageScanner = defaultScanner.takeIf { PackageType.PACKAGES in packageTypes }
         val projectScanner = (projectScannerFactory?.create(config.scanner, config.downloader) ?: defaultScanner)
-            .takeIf { DataEntity.PROJECTS in entities }
+            .takeIf { PackageType.PROJECTS in packageTypes }
 
         if (projectScanner != packageScanner) {
             if (projectScanner != null) {
@@ -310,9 +311,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             }
 
         val packageScannerWrapper =
-            scannerFactory.scannerName.takeIf { DataEntity.PACKAGES in entities }?.let { createScannerWrapper(it) }
+            scannerFactory.scannerName.takeIf { PackageType.PACKAGES in packageTypes }?.let { createScannerWrapper(it) }
         val projectScannerWrapper = (projectScannerFactory?.scannerName ?: scannerFactory.scannerName)
-            .takeIf { DataEntity.PROJECTS in entities }?.let { createScannerWrapper(it) }
+            .takeIf { PackageType.PROJECTS in packageTypes }?.let { createScannerWrapper(it) }
 
         val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
 
@@ -342,8 +343,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 ),
                 nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache),
                 scannerWrappers = mapOf(
-                    DataEntity.PACKAGES to listOfNotNull(packageScannerWrapper),
-                    DataEntity.PROJECTS to listOfNotNull(projectScannerWrapper)
+                    PackageType.PACKAGES to listOfNotNull(packageScannerWrapper),
+                    PackageType.PROJECTS to listOfNotNull(projectScannerWrapper)
                 )
             )
 

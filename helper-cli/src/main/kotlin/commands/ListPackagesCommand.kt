@@ -29,10 +29,10 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.readOrtResult
-import org.ossreviewtoolkit.model.DataEntity
-import org.ossreviewtoolkit.model.DataEntity.PACKAGES
-import org.ossreviewtoolkit.model.DataEntity.PROJECTS
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.PackageType.PACKAGES
+import org.ossreviewtoolkit.model.PackageType.PROJECTS
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -56,7 +56,7 @@ class ListPackagesCommand : CliktCommand(
     private val type by option(
         "--type",
         help = "Filter the output by type which can be either 'projects' or 'packages'."
-    ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
+    ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     override fun run() {
         val ortResult = readOrtResult(ortFile)
