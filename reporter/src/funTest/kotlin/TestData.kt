@@ -19,9 +19,16 @@
 
 package org.ossreviewtoolkit.reporter
 
+import java.net.URI
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.AdvisorCapability
+import org.ossreviewtoolkit.model.AdvisorDetails
+import org.ossreviewtoolkit.model.AdvisorRecord
+import org.ossreviewtoolkit.model.AdvisorResult
+import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -46,11 +53,15 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.VulnerabilityReference
+import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -423,3 +434,30 @@ val ORT_RESULT = OrtResult(
         )
     )
 )
+
+val VULNERABILITY = Vulnerability(
+    "CVE-2021-1234",
+    listOf(
+        VulnerabilityReference(URI("https://cves.example.org/cve1"), "Cvss2", "MEDIUM")
+    )
+)
+
+val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
+    startTime = Instant.now(),
+    endTime = Instant.now(),
+    environment = Environment(),
+    config = AdvisorConfiguration(),
+    results = AdvisorRecord(
+        sortedMapOf(
+            Identifier("NPM:@ort:declared-license:1.0") to listOf(
+                AdvisorResult(
+                    advisor = AdvisorDetails("VulnerableCode", enumSetOf(AdvisorCapability.VULNERABILITIES)),
+                    summary = AdvisorSummary(Instant.now(), Instant.now()),
+                    vulnerabilities = listOf(VULNERABILITY)
+                )
+            )
+        )
+    )
+)
+
+val ORT_RESULT_WITH_VULNERABILITIES = ORT_RESULT.copy(advisor = ADVISOR_WITH_VULNERABILITIES)

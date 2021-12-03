@@ -21,10 +21,12 @@ package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.contain
 import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
+import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
@@ -53,5 +55,14 @@ class PdfTemplateReporterFunTest : StringSpec({
                 mapOf("pdf.fonts.dir" to "fake.path")
             )
         }
+    }
+
+    "Advisor reports are generated if the result contains an advisor section" {
+        val reports =
+            PdfTemplateReporter().generateReport(ReporterInput(ORT_RESULT_WITH_VULNERABILITIES), createTestTempDir())
+
+        val reportFileNames = reports.map { it.name }
+        reportFileNames should contain("AsciiDoc_vulnerability_report.pdf")
+        reportFileNames should contain("AsciiDoc_defect_report.pdf")
     }
 })
