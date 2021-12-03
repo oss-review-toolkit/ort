@@ -85,7 +85,7 @@ internal fun resolvePath(pieces: List<String>) = pieces.reduce { right, left -> 
  */
 class OpossumReporter : Reporter {
     companion object {
-        const val OPTION_SCANNER_MAXDEPTH = "scanner.maxDepth"
+        const val OPTION_SCANNER_MAX_DEPTH = "scanner.maxDepth"
         const val OPTION_EXCLUDED_SCOPES = "scopes.excluded"
     }
 
@@ -562,7 +562,7 @@ class OpossumReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val maxDepth = options.getOrDefault(OPTION_SCANNER_MAXDEPTH, "3").toInt()
+        val maxDepth = options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
         val excludedScopes = options.getOrDefault(OPTION_EXCLUDED_SCOPES, "devDependencies,test").split(",").toSet()
         val opossumInput = generateOpossumInput(input.ortResult, excludedScopes, maxDepth)
 
