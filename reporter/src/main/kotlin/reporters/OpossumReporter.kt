@@ -101,34 +101,32 @@ class OpossumReporter : Reporter {
         val excludeFromNotice: Boolean = false,
         val uuid: UUID = UUID.randomUUID()
     ) {
-        fun toJson(): Map<*, *> {
-            return sortedMapOf(
-                uuid.toString() to sortedMapOf(
-                    "source" to sortedMapOf(
-                        "name" to source,
-                        "documentConfidence" to 80
-                    ),
+        fun toJson(): Map<*, *> = sortedMapOf(
+            uuid.toString() to sortedMapOf(
+                "source" to sortedMapOf(
+                    "name" to source,
+                    "documentConfidence" to 80
+                ),
 
-                    "attributionConfidence" to 80,
+                "attributionConfidence" to 80,
 
-                    "packageType" to id?.getPurlType(),
-                    "packageNamespace" to id?.namespace,
-                    "packageName" to id?.name,
-                    "packageVersion" to id?.version,
+                "packageType" to id?.getPurlType(),
+                "packageNamespace" to id?.namespace,
+                "packageName" to id?.name,
+                "packageVersion" to id?.version,
 
-                    "copyright" to copyright,
-                    "licenseName" to license?.toString(),
+                "copyright" to copyright,
+                "licenseName" to license?.toString(),
 
-                    "url" to url,
+                "url" to url,
 
-                    "preSelected" to preselected,
-                    "followUp" to "FOLLOW_UP".takeIf { followUp },
-                    "excludeFromNotice" to excludeFromNotice,
+                "preSelected" to preselected,
+                "followUp" to "FOLLOW_UP".takeIf { followUp },
+                "excludeFromNotice" to excludeFromNotice,
 
-                    "comment" to comment
-                )
+                "comment" to comment
             )
-        }
+        )
 
         fun matches(other: OpossumSignal): Boolean =
             source == other.source
