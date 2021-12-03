@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.findFilesRecursive
+import org.ossreviewtoolkit.helper.common.findRepositoryPaths
 import org.ossreviewtoolkit.helper.common.importPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
 import org.ossreviewtoolkit.helper.common.sortPathExcludes
@@ -69,11 +70,11 @@ class ImportPathExcludesCommand : CliktCommand(
 
     override fun run() {
         val allFiles = findFilesRecursive(sourceCodeDir)
-
         val packageConfiguration = packageConfigurationFile.readValue<PackageConfiguration>()
 
         val existingPathExcludes = packageConfiguration.pathExcludes
-        val importedPathExcludes = importPathExcludes(sourceCodeDir, pathExcludesFile).filter { pathExclude ->
+        val repositoryPaths = findRepositoryPaths(sourceCodeDir)
+        val importedPathExcludes = importPathExcludes(repositoryPaths, pathExcludesFile).filter { pathExclude ->
             allFiles.any { pathExclude.matches(it) }
         }
 
