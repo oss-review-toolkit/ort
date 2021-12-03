@@ -50,6 +50,7 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
 
         private const val DISCLOSURE_TEMPLATE_ID = "disclosure_document"
         private const val VULNERABILITY_TEMPLATE_ID = "vulnerability_report"
+        private const val DEFECT_TEMPLATE_ID = "defect_report"
     }
 
     private val templateProcessor = FreemarkerTemplateProcessor(
@@ -90,7 +91,7 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
                 append(DISCLOSURE_TEMPLATE_ID)
 
                 if (input.ortResult.getAdvisorResults().isNotEmpty()) {
-                    append(",$VULNERABILITY_TEMPLATE_ID")
+                    append(",$VULNERABILITY_TEMPLATE_ID,$DEFECT_TEMPLATE_ID")
                 }
             })
         }
