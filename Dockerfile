@@ -128,7 +128,6 @@ ARG CRT_FILES
 COPY "$CRT_FILES" /tmp/certificates/
 
 # Custom install commands.
-ARG SCANCODE_VERSION
 RUN /opt/ort/bin/import_proxy_certs.sh && \
     if [ -n "$CRT_FILES" ]; then \
       /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
@@ -164,9 +163,11 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
             gem build cocoapods.gemspec && \
             gem install cocoapods-1.10.1.gem \
         ) && \
-        rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
-    # Add scanners (in versions known to work).
-    curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
+        rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
+
+# Add scanners (in versions known to work).
+ARG SCANCODE_VERSION
+RUN curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
         # Trigger ScanCode configuration for Python 3 and reindex licenses initially.
         cd /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
