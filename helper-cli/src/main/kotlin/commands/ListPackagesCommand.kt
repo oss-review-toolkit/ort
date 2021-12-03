@@ -31,8 +31,8 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageType
-import org.ossreviewtoolkit.model.PackageType.PACKAGES
-import org.ossreviewtoolkit.model.PackageType.PROJECTS
+import org.ossreviewtoolkit.model.PackageType.PACKAGE
+import org.ossreviewtoolkit.model.PackageType.PROJECT
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -55,7 +55,7 @@ class ListPackagesCommand : CliktCommand(
 
     private val type by option(
         "--type",
-        help = "Filter the output by type which can be either 'projects' or 'packages'."
+        help = "Filter the output by type which can be either 'project' or 'package'."
     ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     override fun run() {
@@ -69,7 +69,7 @@ class ListPackagesCommand : CliktCommand(
                 .map { it.license.toString() }
 
         val packages = ortResult.collectProjectsAndPackages().filter { id ->
-                (ortResult.isPackage(id) && PACKAGES in type) || (ortResult.isProject(id) && PROJECTS in type)
+                (ortResult.isPackage(id) && PACKAGE in type) || (ortResult.isProject(id) && PROJECT in type)
             }.filter {
                 matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(it)).isEmpty()
             }.sortedBy { it }

@@ -63,15 +63,15 @@ class ExperimentalScanner(
     suspend fun scan(ortResult: OrtResult): OrtResult {
         val startTime = Instant.now()
 
-        val projectScannerWrappers = scannerWrappers[PackageType.PROJECTS].orEmpty()
-        val packageScannerWrappers = scannerWrappers[PackageType.PACKAGES].orEmpty()
+        val projectScannerWrappers = scannerWrappers[PackageType.PROJECT].orEmpty()
+        val packageScannerWrappers = scannerWrappers[PackageType.PACKAGE].orEmpty()
 
         val projectResults = if (projectScannerWrappers.isNotEmpty()) {
             val packages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
 
             log.info { "Scanning ${packages.size} projects with ${projectScannerWrappers.size} scanners." }
 
-            scan(packages, ScanContext(ortResult.labels, PackageType.PROJECTS))
+            scan(packages, ScanContext(ortResult.labels, PackageType.PROJECT))
         } else {
             log.info { "Skipping scan of projects because no project scanner is configured." }
 
@@ -83,7 +83,7 @@ class ExperimentalScanner(
 
             log.info { "Scanning ${packages.size} packages with ${packageScannerWrappers.size} scanners." }
 
-            scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGES))
+            scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGE))
         } else {
             log.info { "Skipping scan of packages because no package scanner is configured." }
 

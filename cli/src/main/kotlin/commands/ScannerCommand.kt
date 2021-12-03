@@ -255,9 +255,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         // Configure the package and project scanners.
         val defaultScanner = scannerFactory.create(config.scanner, config.downloader)
-        val packageScanner = defaultScanner.takeIf { PackageType.PACKAGES in packageTypes }
+        val packageScanner = defaultScanner.takeIf { PackageType.PACKAGE in packageTypes }
         val projectScanner = (projectScannerFactory?.create(config.scanner, config.downloader) ?: defaultScanner)
-            .takeIf { PackageType.PROJECTS in packageTypes }
+            .takeIf { PackageType.PROJECT in packageTypes }
 
         if (projectScanner != packageScanner) {
             if (projectScanner != null) {
@@ -311,9 +311,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             }
 
         val packageScannerWrapper =
-            scannerFactory.scannerName.takeIf { PackageType.PACKAGES in packageTypes }?.let { createScannerWrapper(it) }
+            scannerFactory.scannerName.takeIf { PackageType.PACKAGE in packageTypes }?.let { createScannerWrapper(it) }
         val projectScannerWrapper = (projectScannerFactory?.scannerName ?: scannerFactory.scannerName)
-            .takeIf { PackageType.PROJECTS in packageTypes }?.let { createScannerWrapper(it) }
+            .takeIf { PackageType.PROJECT in packageTypes }?.let { createScannerWrapper(it) }
 
         val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
 
@@ -343,8 +343,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 ),
                 nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache),
                 scannerWrappers = mapOf(
-                    PackageType.PACKAGES to listOfNotNull(packageScannerWrapper),
-                    PackageType.PROJECTS to listOfNotNull(projectScannerWrapper)
+                    PackageType.PACKAGE to listOfNotNull(packageScannerWrapper),
+                    PackageType.PROJECT to listOfNotNull(projectScannerWrapper)
                 )
             )
 

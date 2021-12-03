@@ -196,7 +196,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
     private fun downloadFromOrtResult(ortFile: File, failureMessages: MutableList<String>) {
         println(
-            "Downloading ${packageTypes.joinToString(" and ")} from ORT result file at " +
+            "Downloading ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
                     "'${ortFile.canonicalPath}'..."
         )
 
@@ -213,11 +213,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         }
 
         val packages = mutableListOf<Package>().apply {
-            if (PackageType.PROJECTS in packageTypes) {
+            if (PackageType.PROJECT in packageTypes) {
                 addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
             }
 
-            if (PackageType.PACKAGES in packageTypes) {
+            if (PackageType.PACKAGE in packageTypes) {
                 addAll(analyzerResult.packages.map { it.pkg })
             }
         }

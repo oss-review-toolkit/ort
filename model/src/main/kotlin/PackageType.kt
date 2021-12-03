@@ -27,10 +27,10 @@ enum class PackageType {
     /**
      * A package that represents a dependency of a [Project] and is not a [Project] itself.
      */
-    PACKAGES,
+    PACKAGE,
 
     /**
      * A package that was created from a [Project].
      */
-    PROJECTS
+    PROJECT
 }
