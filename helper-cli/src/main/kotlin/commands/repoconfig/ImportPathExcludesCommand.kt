@@ -82,7 +82,8 @@ internal class ImportPathExcludesCommand : CliktCommand(
         }
 
         val existingPathExcludes = repositoryConfiguration.excludes.paths
-        val importedPathExcludes = importPathExcludes(ortResult, pathExcludesFile).filter { pathExclude ->
+        val repositoryPaths = ortResult.getRepositoryPaths()
+        val importedPathExcludes = importPathExcludes(repositoryPaths, pathExcludesFile).filter { pathExclude ->
             allFiles.any { pathExclude.matches(it) }
         }
 
