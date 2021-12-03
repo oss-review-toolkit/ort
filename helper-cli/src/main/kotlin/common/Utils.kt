@@ -880,13 +880,11 @@ internal fun importPathExcludes(
     pathExcludesFile: File,
     vcsUrlMapping: VcsUrlMapping
 ): List<PathExclude> {
-    println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
-
-    println("Loading $pathExcludesFile...")
-    val pathExcludes = pathExcludesFile.readValue<RepositoryPathExcludes>()
-    println("Found ${pathExcludes.values.sumOf { it.size }} excludes for ${pathExcludes.size} repositories.")
-
     val result = mutableListOf<PathExclude>()
+    val pathExcludes = pathExcludesFile.readValue<RepositoryPathExcludes>()
+
+    println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
+    println("Found ${pathExcludes.values.sumOf { it.size }} excludes for ${pathExcludes.size} repositories.")
 
     repositoryPaths.mapKeys { vcsUrlMapping.map(it.key) }.forEach { (vcsUrl, relativePaths) ->
         pathExcludes[vcsUrl]?.let { pathExcludesForRepository ->
