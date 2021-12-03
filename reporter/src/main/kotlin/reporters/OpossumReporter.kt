@@ -500,7 +500,7 @@ class OpossumReporter : Reporter {
 
     override val reporterName = "Opossum"
 
-    fun writeReport(outputFile: File, opossumInput: OpossumInput) {
+    private fun writeReport(outputFile: File, opossumInput: OpossumInput) {
         FileOutputStream(outputFile, /* append = */ false).use { outputStream ->
             val gzipParameters = GzipParameters().apply {
                 compressionLevel = Deflater.BEST_COMPRESSION
