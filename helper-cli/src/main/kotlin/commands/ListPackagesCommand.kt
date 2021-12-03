@@ -54,8 +54,9 @@ class ListPackagesCommand : CliktCommand(
     ).split(",").default(emptyList())
 
     private val type by option(
-        "--type",
-        help = "Filter the output by type which can be either 'project' or 'package'."
+        "--package-type",
+        help = "Filter the output by package type. Possible values are: " +
+                PackageType.values().joinToString { it.name }
     ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     override fun run() {
