@@ -149,6 +149,9 @@
                   "concluded_license": {
                     "type": "string"
                   },
+                  "cpe": {
+                    "type": "string"
+                  },
                   "declared_license_mapping": {
                     "type": "object"
                   },
@@ -156,6 +159,9 @@
                     "type": "string"
                   },
                   "homepage_url": {
+                    "type": "string"
+                  },
+                  "purl": {
                     "type": "string"
                   },
                   "binary_artifact": {
