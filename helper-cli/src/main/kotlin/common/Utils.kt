@@ -665,6 +665,19 @@ internal fun RepositoryPathExcludes.write(targetFile: File) {
 }
 
 /**
+ * Apply the [vcsUrlMapping] to this [RepositoryPathExcludes].
+ */
+internal fun RepositoryPathExcludes.mapVcsUrls(vcsUrlMapping: VcsUrlMapping): RepositoryPathExcludes {
+    val result = mutableMapOf<String, MutableList<PathExclude>>()
+
+    forEach { (vcsUrl, pathExcludes) ->
+        result.getOrPut(vcsUrlMapping.map(vcsUrl)) { mutableListOf() } += pathExcludes
+    }
+
+    return result.mapValues { (_, pathExcludes) -> pathExcludes.distinct() }
+}
+
+/**
  * Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message].
  */
 internal fun Collection<IssueResolution>.mergeIssueResolutions(
