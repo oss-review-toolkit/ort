@@ -50,9 +50,9 @@ import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
-import org.ossreviewtoolkit.model.DataEntity
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -166,11 +166,12 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         ).switch("--archive-all" to ArchiveMode.BUNDLE)
     ).single().default(ArchiveMode.NONE)
 
-    private val entities by option(
-        "--entities", "-e",
-        help = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified, all " +
-                "data entities are downloaded."
-    ).enum<DataEntity>().split(",").default(enumValues<DataEntity>().asList())
+    private val packageTypes by option(
+        "--package-types",
+        help = "A comma-separated list of the package types from the ORT file's analyzer result to limit downloads " +
+                "to. If not specified, all package types are downloaded. Possible values are: " +
+                PackageType.values().joinToString { it.name }
+    ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -194,7 +195,10 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     }
 
     private fun downloadFromOrtResult(ortFile: File, failureMessages: MutableList<String>) {
-        println("Downloading $entities entities from ORT result file at '${ortFile.canonicalPath}'...")
+        println(
+            "Downloading ${packageTypes.joinToString(" and ")} from ORT result file at " +
+                    "'${ortFile.canonicalPath}'..."
+        )
 
         val ortResult = readOrtResult(ortFile)
         val analyzerResult = ortResult.analyzer?.result
@@ -209,11 +213,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         }
 
         val packages = mutableListOf<Package>().apply {
-            if (DataEntity.PROJECTS in entities) {
+            if (PackageType.PROJECTS in packageTypes) {
                 addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
             }
 
-            if (DataEntity.PACKAGES in entities) {
+            if (PackageType.PACKAGES in packageTypes) {
                 addAll(analyzerResult.packages.map { it.pkg })
             }
         }

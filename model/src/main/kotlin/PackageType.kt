@@ -21,16 +21,16 @@
 package org.ossreviewtoolkit.model
 
 /**
- * The choice of data entities to process.
+ * An enum to describe the different types of [Package]s.
  */
-enum class DataEntity {
+enum class PackageType {
     /**
-     * Identifier for package entities.
+     * A package that represents a dependency of a [Project] and is not a [Project] itself.
      */
     PACKAGES,
 
     /**
-     * Identifier for project entities.
+     * A package that was created from a [Project].
      */
     PROJECTS
 }

@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
-import org.ossreviewtoolkit.model.DataEntity
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageType
 
 /**
  * Additional context information that can be used by a [ScannerWrapper] to alter its behavior.
@@ -32,7 +32,7 @@ data class ScanContext(
     val labels: Map<String, String>,
 
     /**
-     * The [type][DataEntity] of the packages to scan.
+     * The [type][PackageType] of the packages to scan.
      */
-    val packageType: DataEntity
+    val packageType: PackageType
 )

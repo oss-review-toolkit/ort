@@ -36,13 +36,13 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.DataEntity
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -81,8 +81,8 @@ class ExperimentalScannerTest : WordSpec({
                 projectScannerWrappers = listOf(projectScannerWrapper)
             )
 
-            val packageContext = createContext(type = DataEntity.PACKAGES)
-            val projectContext = createContext(type = DataEntity.PROJECTS)
+            val packageContext = createContext(type = PackageType.PACKAGES)
+            val projectContext = createContext(type = PackageType.PROJECTS)
 
             scanner.scan(setOf(pkgWithArtifact), packageContext)[pkgWithArtifact] shouldNotBeNull {
                 scanResults shouldNot beEmpty()
@@ -103,7 +103,7 @@ class ExperimentalScannerTest : WordSpec({
                 projectScannerWrappers = emptyList()
             )
 
-            scanner.scan(setOf(pkgWithArtifact), createContext(type = DataEntity.PROJECTS)) should beEmpty()
+            scanner.scan(setOf(pkgWithArtifact), createContext(type = PackageType.PROJECTS)) should beEmpty()
         }
 
         "Not scan packages if no scanner wrapper for packages is configured" {
@@ -757,7 +757,7 @@ private class FakeProvenanceBasedStorageWriter : ProvenanceBasedScanStorageWrite
 
 private fun createContext(
     labels: Map<String, String> = emptyMap(),
-    type: DataEntity = DataEntity.PACKAGES
+    type: PackageType = PackageType.PACKAGES
 ) = ScanContext(labels, type)
 
 @Suppress("LongParameterList")
@@ -781,8 +781,8 @@ private fun createScanner(
         packageProvenanceResolver,
         nestedProvenanceResolver,
         mapOf(
-            DataEntity.PROJECTS to projectScannerWrappers,
-            DataEntity.PACKAGES to packageScannerWrappers
+            PackageType.PROJECTS to projectScannerWrappers,
+            PackageType.PACKAGES to packageScannerWrappers
         )
     )
 
