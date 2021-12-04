@@ -28,6 +28,7 @@ jobs:
       with:
         arguments: --stacktrace classes -x :reporter-web-app:yarnBuild
   build-reporter-web-app:
+    if: ${{ false }}
     needs: build
     runs-on: ubuntu-latest
     steps:
