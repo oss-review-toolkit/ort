@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
 /**
- * A HTTP-specific download error that enriches an [IOException] with an additional HTTP error code.
+ * An HTTP-specific download error that enriches an [IOException] with an additional HTTP error code.
  */
 class HttpDownloadError(val code: Int, message: String) : IOException("$message (HTTP code $code)")
 
