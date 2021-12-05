@@ -57,6 +57,11 @@ class HttpDownloadError(val code: Int, message: String) : IOException("$message 
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
 object OkHttpClientHelper {
+    /**
+     * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
+     */
+    const val HTTP_TOO_MANY_REQUESTS = 429
+
     private const val CACHE_DIRECTORY = "cache/http"
     private const val MAX_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
     private const val READ_TIMEOUT_IN_SECONDS = 30L
@@ -67,11 +72,6 @@ object OkHttpClientHelper {
     }
 
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
-
-    /**
-     * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
-     */
-    const val HTTP_TOO_MANY_REQUESTS = 429
 
     private fun buildClient(): OkHttpClient {
         val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
