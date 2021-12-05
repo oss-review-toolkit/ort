@@ -91,14 +91,13 @@ object OkHttpClientHelper {
 
                 runCatching {
                     chain.proceed(requestWithUserAgent)
-                }.getOrElse {
+                }.onFailure {
                     it.showStackTrace()
+
                     log.error {
                         "HTTP request to '${request.url}' failed with an exception: ${it.collectMessagesAsString()}"
                     }
-
-                    throw it
-                }
+                }.getOrThrow()
             }
             .cache(cache)
             .connectionSpecs(specs)
