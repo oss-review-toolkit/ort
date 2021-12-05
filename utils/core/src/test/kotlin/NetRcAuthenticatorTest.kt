@@ -26,7 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
-class OrtAuthenticatorTest : WordSpec({
+class NetRcAuthenticatorTest : WordSpec({
     "getNetrcAuthentication()" should {
         "correctly parse single-line contents" {
             val authentication = getNetrcAuthentication("""
