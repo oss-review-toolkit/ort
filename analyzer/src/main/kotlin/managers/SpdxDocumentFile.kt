@@ -22,6 +22,7 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
+import java.net.Authenticator
 import java.net.URI
 import java.util.SortedSet
 
@@ -48,7 +49,9 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.core.addBasicAuthorization
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
+import org.ossreviewtoolkit.utils.core.downloadFile
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -158,7 +161,24 @@ private fun SpdxExternalDocumentReference.resolve(definitionFile: File, issues: 
         }
     } else {
         tempDir = createOrtTempDir()
-        OkHttpClientHelper.downloadFile(uri.toString(), tempDir).getOrNull() ?: run {
+
+        val client = OkHttpClientHelper.buildClient {
+            // Use the authenticator also to request preemptive authentication.
+            val auth = Authenticator.requestPasswordAuthentication(
+                /* host = */ uri.host,
+                /* addr = */ null,
+                /* port = */ uri.port,
+                /* protocol = */ uri.scheme,
+                /* prompt = */ null,
+                /* scheme = */ null
+            )
+
+            if (auth != null) {
+                addBasicAuthorization(auth.userName, String(auth.password))
+            }
+        }
+
+        client.downloadFile(uri.toString(), tempDir).getOrNull() ?: run {
             tempDir.safeDeleteRecursively(force = true)
             issues += createAndLogIssue(
                 source = MANAGER_NAME,

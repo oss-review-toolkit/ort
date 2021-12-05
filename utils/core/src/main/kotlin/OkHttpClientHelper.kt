@@ -34,6 +34,7 @@ import okhttp3.Cache
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.ConnectionSpec
+import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -144,6 +145,18 @@ object OkHttpClientHelper {
      */
     fun downloadFile(url: String, directory: File): Result<File> = defaultClient.downloadFile(url, directory)
 }
+
+/**
+ * Add a request interceptor that injects basic authorization using the [username] and [password] into the client
+ * builder.
+ */
+fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: String): OkHttpClient.Builder =
+    addInterceptor { chain ->
+        val requestBuilder = chain.request().newBuilder()
+            .header("Authorization", Credentials.basic(username, password))
+
+        chain.proceed(requestBuilder.build())
+    }
 
 /**
  * Download from [url] and return a [Result] with a file inside [directory] that holds the response body content on
