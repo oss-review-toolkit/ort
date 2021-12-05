@@ -86,14 +86,11 @@ object OkHttpClientHelper {
         return OkHttpClient.Builder()
             .addNetworkInterceptor { chain ->
                 val request = chain.request()
+                val requestWithUserAgent = request.takeUnless { it.header("User-Agent") == null }
+                    ?: request.newBuilder().header("User-Agent", Environment.ORT_USER_AGENT).build()
+
                 runCatching {
-                    chain.proceed(
-                        if (request.header("User-Agent") == null) {
-                            request.newBuilder().header("User-Agent", Environment.ORT_USER_AGENT).build()
-                        } else {
-                            request
-                        }
-                    )
+                    chain.proceed(requestWithUserAgent)
                 }.getOrElse {
                     it.showStackTrace()
                     log.error {
