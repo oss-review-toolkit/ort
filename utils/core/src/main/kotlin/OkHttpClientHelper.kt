@@ -66,14 +66,11 @@ object OkHttpClientHelper {
     private const val MAX_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
     private const val READ_TIMEOUT_IN_SECONDS = 30L
 
-    private val client by lazy {
-        installAuthenticatorAndProxySelector()
-        buildClient()
-    }
-
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
 
-    private fun buildClient(): OkHttpClient {
+    private val defaultClient by lazy {
+        installAuthenticatorAndProxySelector()
+
         val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
         val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
         val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
@@ -83,7 +80,7 @@ object OkHttpClientHelper {
         // authentication, but most often "preemptive" authentication via headers is required. For proxy authentication,
         // OkHttp emulates preemptive authentication by sending a fake "OkHttp-Preemptive" response to the reactive
         // proxy authenticator.
-        return OkHttpClient.Builder()
+        OkHttpClient.Builder()
             .addNetworkInterceptor { chain ->
                 val request = chain.request()
                 val requestWithUserAgent = request.takeUnless { it.header("User-Agent") == null }
@@ -113,8 +110,8 @@ object OkHttpClientHelper {
      */
     fun buildClient(block: BuilderConfiguration? = null): OkHttpClient =
         block?.let {
-            clients.getOrPut(it) { client.newBuilder().apply(block).build() }
-        } ?: client
+            clients.getOrPut(it) { defaultClient.newBuilder().apply(block).build() }
+        } ?: defaultClient
 
     /**
      * Execute a [request] using the client for the specified [builder configuration][block].
