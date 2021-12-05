@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,8 @@ import java.net.ProxySelector
 
 import org.apache.logging.log4j.Level
 
-import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.nextOrNull
-
 /**
- * An authenticator for network connections established by ORT. For proxy authentication, the [OrtProxySelector] is
+ * A caching authenticator that chains other authenticators. For proxy authentication, the [OrtProxySelector] is
  * required to also be installed.
  */
 class OrtAuthenticator(private val original: Authenticator? = null) : Authenticator() {
@@ -71,9 +68,9 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
         }
     }
 
-    // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not call the
-    //       Git CLI anymore which only supports ".netrc" (and "_netrc") files.
-    private val netrcFileNames = listOf(".netrc", "_netrc")
+    // First look for (potentially machine-specific) credentials in a netrc-style file, then look for generic
+    // credentials passed as environment variables.
+    private val delegateAuthenticators = listOf(NetRcAuthenticator(), EnvVarAuthenticator())
 
     private val serverAuthentication = mutableMapOf<String, PasswordAuthentication>()
 
@@ -91,24 +88,20 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
             RequestorType.SERVER -> {
                 serverAuthentication[requestingHost]?.let { return it }
 
-                // First look for (potentially machine-specific) credentials in a netrc-style file.
-                netrcFileNames.forEach { name ->
-                    val netrcFile = Os.userHomeDirectory.resolve(name)
-                    if (netrcFile.isFile) {
-                        log.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
-
-                        getNetrcAuthentication(netrcFile.readText(), requestingHost)?.let {
-                            serverAuthentication[requestingHost] = it
-                            return it
-                        }
+                delegateAuthenticators.forEach { authenticator ->
+                    authenticator.requestPasswordAuthenticationInstance(
+                        requestingHost,
+                        requestingSite,
+                        requestingPort,
+                        requestingProtocol,
+                        requestingPrompt,
+                        requestingScheme,
+                        requestingURL,
+                        requestorType
+                    )?.let {
+                        serverAuthentication[requestingHost] = it
+                        return it
                     }
-                }
-
-                // Then look for generic credentials passed as environment variables.
-                val usernameFromEnv = Os.env["ORT_HTTP_USERNAME"]
-                val passwordFromEnv = Os.env["ORT_HTTP_PASSWORD"]
-                if (usernameFromEnv != null && passwordFromEnv != null) {
-                    return PasswordAuthentication(usernameFromEnv, passwordFromEnv.toCharArray())
                 }
             }
 
@@ -117,36 +110,4 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
 
         return super.getPasswordAuthentication()
     }
-}
-
-/**
- * Parse the [contents] of a [.netrc](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html)
- * file for a login / password matching [machine].
- */
-internal fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentication? {
-    val lines = contents.lines().mapNotNull { line ->
-        line.trim().takeUnless { it.startsWith('#') }
-    }
-
-    val iterator = lines.joinToString(" ").split(Regex("\\s+")).iterator()
-
-    var machineFound: String? = null
-    var login: String? = null
-    var password: String? = null
-
-    while (iterator.hasNext()) {
-        when (val token = iterator.next()) {
-            "machine" -> machineFound = token.takeIf { iterator.nextOrNull() == machine }
-            "login" -> login = machineFound?.let { iterator.nextOrNull() }
-            "password" -> password = machineFound?.let { iterator.nextOrNull() }
-            "default" -> machineFound = token
-        }
-
-        if (login != null && password != null) {
-            OrtAuthenticator.log.debug { "Found a '$machineFound' entry for '$machine'." }
-            return PasswordAuthentication(login, password.toCharArray())
-        }
-    }
-
-    return null
 }
