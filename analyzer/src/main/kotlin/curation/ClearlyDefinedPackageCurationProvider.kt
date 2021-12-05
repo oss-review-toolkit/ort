@@ -103,7 +103,7 @@ class ClearlyDefinedPackageCurationProvider(
         }.onFailure { e ->
             when (e) {
                 is HttpException -> {
-                    // A "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a
+                    // An "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a
                     // failure.
                     if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
                         e.showStackTrace()
