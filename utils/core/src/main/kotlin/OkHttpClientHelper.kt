@@ -114,106 +114,137 @@ object OkHttpClientHelper {
         } ?: defaultClient
 
     /**
-     * Execute a [request] using the client.
+     * Execute a [request] using the default client.
      */
-    fun execute(request: Request): Response =
-        buildClient().newCall(request).execute().also { response ->
-            log.debug {
-                if (response.cacheResponse != null) {
-                    "Retrieved ${response.request.url} from local cache."
-                } else {
-                    "Downloaded from ${response.request.url} via network."
-                }
-            }
-        }
+    fun execute(request: Request): Response = defaultClient.execute(request)
 
     /**
-     * Asynchronously enqueue a [request] using the client and await its response.
+     * Asynchronously enqueue a [request] using the default client and await its response.
      */
-    suspend fun await(request: Request): Response =
-        buildClient().newCall(request).await()
+    suspend fun await(request: Request): Response = defaultClient.await(request)
 
     /**
-     * Download from [url] with optional [acceptEncoding] and return a [Result] with the [Response] and non-nullable
-     * [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on
-     * failure.
+     * Download from [url] using the default client with optional [acceptEncoding] and return a [Result] with the
+     * [Response] and non-nullable [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a
+     * [HttpDownloadError]) on failure.
      */
-    fun download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> {
-        val request = Request.Builder()
-            .apply { acceptEncoding?.also { header("Accept-Encoding", it) } }
-            .get()
-            .url(url)
-            .build()
+    fun download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> =
+        defaultClient.download(url, acceptEncoding)
 
-        return runCatching { execute(request) }.mapCatching { response ->
-            val body = response.body
+    /**
+     * Download from [url] using the default client and return a [Result] with a string representing the response body
+     * content on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
+     */
+    fun downloadText(url: String): Result<String> = defaultClient.downloadText(url)
 
-            if (!response.isSuccessful || body == null) {
-                throw HttpDownloadError(response.code, response.message)
-            }
+    /**
+     * Download from [url] using the default client and return a [Result] with a file inside [directory] that holds the
+     * response body content on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError])
+     * on failure.
+     */
+    fun downloadFile(url: String, directory: File): Result<File> = defaultClient.downloadFile(url, directory)
+}
 
-            response to body
-        }
+/**
+ * Download from [url] and return a [Result] with a file inside [directory] that holds the response body content on
+ * success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
+ */
+fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
+    // Disable transparent gzip compression, as otherwise we might end up writing a tar file to disk while
+    // expecting to find a tar.gz file, and fail to unpack the archive. See
+    // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
+    val (response, body) = download(url, acceptEncoding = "identity").getOrElse { return Result.failure(it) }
+
+    // Depending on the server, we may only get a useful target file name when looking at the response
+    // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
+    //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
+    // to
+    //     https://static.crates.io/crates/cfg-if/cfg-if-0.1.9.crate
+    //
+    // On the other hand, e.g. for GitHub exactly the opposite is the case, as there a get-request for URL
+    //     https://github.com/microsoft/tslib/archive/1.10.0.zip
+    // resolves to the less meaningful
+    //     https://codeload.github.com/microsoft/tslib/zip/1.10.0
+    //
+    // So first look for a dedicated header in the response, but then also try both redirected and
+    // original URLs to find a name which has a recognized archive type extension.
+    val candidateNames = mutableSetOf<String>()
+
+    response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
+        val filenames = value.split(';').mapNotNull { it.trim().withoutPrefix("filename=") }
+        filenames.firstOrNull()?.removeSurrounding("\"")
     }
 
-    /**
-     * Download from [url] and return a [Result] with a string representing the response body content on success, or a
-     * [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
-     */
-    fun downloadText(url: String): Result<String> =
-        download(url).map { (_, body) ->
-            body.use { it.string() }
+    listOf(response.request.url.toString(), url).mapTo(candidateNames) {
+        it.substringAfterLast('/').substringBefore('?')
+    }
+
+    check(candidateNames.isNotEmpty())
+
+    val filename = candidateNames.find {
+        ArchiveType.getType(it) != ArchiveType.NONE
+    } ?: candidateNames.first()
+
+    val file = directory.resolve(filename)
+
+    file.sink().buffer().use { target ->
+        body.use { target.writeAll(it.source()) }
+    }
+
+    return Result.success(file)
+}
+
+/**
+ * Download from [url] and return a [Result] with a string representing the response body content on success, or a
+ * [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
+ */
+fun OkHttpClient.downloadText(url: String): Result<String> =
+    download(url).map { (_, body) ->
+        body.use { it.string() }
+    }
+
+/**
+ * Download from [url] with optional [acceptEncoding] and return a [Result] with the [Response] and non-nullable
+ * [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on
+ * failure.
+ */
+fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> {
+    val request = Request.Builder()
+        .apply { acceptEncoding?.also { header("Accept-Encoding", it) } }
+        .get()
+        .url(url)
+        .build()
+
+    return runCatching { execute(request) }.mapCatching { response ->
+        val body = response.body
+
+        if (!response.isSuccessful || body == null) {
+            throw HttpDownloadError(response.code, response.message)
         }
 
-    /**
-     * Download from [url] and return a [Result] with a file inside [directory] that holds the response body content on
-     * success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
-     */
-    fun downloadFile(url: String, directory: File): Result<File> {
-        // Disable transparent gzip compression, as otherwise we might end up writing a tar file to disk while
-        // expecting to find a tar.gz file, and fail to unpack the archive. See
-        // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
-        val (response, body) = download(url, acceptEncoding = "identity").getOrElse { return Result.failure(it) }
-
-        // Depending on the server, we may only get a useful target file name when looking at the response
-        // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
-        //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
-        // to
-        //     https://static.crates.io/crates/cfg-if/cfg-if-0.1.9.crate
-        //
-        // On the other hand, e.g. for GitHub exactly the opposite is the case, as there a get-request for URL
-        //     https://github.com/microsoft/tslib/archive/1.10.0.zip
-        // resolves to the less meaningful
-        //     https://codeload.github.com/microsoft/tslib/zip/1.10.0
-        //
-        // So first look for a dedicated header in the response, but then also try both redirected and
-        // original URLs to find a name which has a recognized archive type extension.
-        val candidateNames = mutableSetOf<String>()
-
-        response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
-            val filenames = value.split(';').mapNotNull { it.trim().withoutPrefix("filename=") }
-            filenames.firstOrNull()?.removeSurrounding("\"")
-        }
-
-        listOf(response.request.url.toString(), url).mapTo(candidateNames) {
-            it.substringAfterLast('/').substringBefore('?')
-        }
-
-        check(candidateNames.isNotEmpty())
-
-        val filename = candidateNames.find {
-            ArchiveType.getType(it) != ArchiveType.NONE
-        } ?: candidateNames.first()
-
-        val file = directory.resolve(filename)
-
-        file.sink().buffer().use { target ->
-            body.use { target.writeAll(it.source()) }
-        }
-
-        return Result.success(file)
+        response to body
     }
 }
+
+/**
+ * Execute a [request] using the client.
+ */
+fun OkHttpClient.execute(request: Request): Response =
+    newCall(request).execute().also { response ->
+        OkHttpClientHelper.log.debug {
+            if (response.cacheResponse != null) {
+                "Retrieved ${response.request.url} from local cache."
+            } else {
+                "Downloaded from ${response.request.url} via network."
+            }
+        }
+    }
+
+/**
+ * Asynchronously enqueue a [request] using the client and await its response.
+ */
+suspend fun OkHttpClient.await(request: Request): Response =
+    newCall(request).await()
 
 /**
  * Asynchronously enqueue the [Call]'s request and await its [Response].
