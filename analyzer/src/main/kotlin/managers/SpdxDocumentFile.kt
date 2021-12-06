@@ -414,7 +414,7 @@ class SpdxDocumentFile(
         } ?: run {
             issues += createAndLogIssue(
                 source = MANAGER_NAME,
-                message = "$identifier could neither be resolved to a package nor to an externalDocumentRef."
+                message = "'$identifier' could neither be resolved to a 'package' nor to an 'externalDocumentRef'."
             )
             return null
         }
