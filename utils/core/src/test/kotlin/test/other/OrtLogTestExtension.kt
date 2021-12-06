@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+// Note that this deliberately is not an ORT package name.
 package test.other
 
 import java.io.File
