@@ -900,11 +900,9 @@ internal fun importPathExcludes(
 }
 
 internal fun importLicenseFindingCurations(
-    sourceCodeDir: File,
+    repositoryPaths: Map<String, Set<String>>,
     licenseFindingCurationsFile: File
 ): List<LicenseFindingCuration> {
-    println("Analyzing $sourceCodeDir...")
-    val repositoryPaths = findRepositoryPaths(sourceCodeDir)
     println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
 
     println("Loading $licenseFindingCurationsFile...")
