@@ -556,7 +556,8 @@ class SpdxDocumentFile(
             val discardedFiles = definitionFiles - remainingFiles
             if (discardedFiles.isNotEmpty()) {
                 log.info {
-                    "Discarded the following non-project SPDX files: ${discardedFiles.joinToString { "'$it'" }}"
+                    "Discarded the following ${discardedFiles.size} non-project SPDX files: " +
+                            discardedFiles.joinToString { "'$it'" }
                 }
             }
         }.toList()
