@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.VcsUrlMapping
+import org.ossreviewtoolkit.helper.common.getRepositoryPath
 import org.ossreviewtoolkit.helper.common.getRepositoryPaths
 import org.ossreviewtoolkit.helper.common.importPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
@@ -36,7 +37,6 @@ import org.ossreviewtoolkit.helper.common.replacePathExcludes
 import org.ossreviewtoolkit.helper.common.sortPathExcludes
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -108,17 +108,14 @@ internal class ImportPathExcludesCommand : CliktCommand(
 
 private fun OrtResult.getProjectFindingFiles(): Set<String> {
     val result = mutableSetOf<String>()
-    val repositoryPaths = getRepositoryPaths()
 
     getProjects().forEach { project ->
         getScanResultsForId(project.id).forEach { scanResult ->
-            val vcsUrl = (scanResult.provenance as RepositoryProvenance).vcsInfo.url
+            val repositoryPath = project.getRepositoryPath(this)
 
-            repositoryPaths.getValue(vcsUrl).forEach { repositoryPath ->
-                with(scanResult.summary) {
-                    licenseFindings.mapTo(result) { "$repositoryPath/${it.location.path}" }
-                    copyrightFindings.mapTo(result) { "$repositoryPath/${it.location.path}" }
-                }
+            with(scanResult.summary) {
+                licenseFindings.mapTo(result) { "$repositoryPath/${it.location.path}" }
+                copyrightFindings.mapTo(result) { "$repositoryPath/${it.location.path}" }
             }
         }
     }
