@@ -54,8 +54,10 @@ object Os {
     /**
      * The currently set environment variables. Keys are case-insensitive on Windows.
      */
-    val env = System.getenv().let { env ->
-        if (isWindows) env.toSortedMap(String.CASE_INSENSITIVE_ORDER) else env.toSortedMap()
+    val env by lazy {
+        System.getenv().let { env ->
+            if (isWindows) env.toSortedMap(String.CASE_INSENSITIVE_ORDER) else env.toSortedMap()
+        }
     }
 
     /**
