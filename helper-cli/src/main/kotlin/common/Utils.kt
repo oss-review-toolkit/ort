@@ -667,7 +667,7 @@ internal fun RepositoryPathExcludes.write(targetFile: File) {
 /**
  * Apply the [vcsUrlMapping] to this [RepositoryPathExcludes].
  */
-internal fun RepositoryPathExcludes.mapVcsUrls(vcsUrlMapping: VcsUrlMapping): RepositoryPathExcludes {
+internal fun RepositoryPathExcludes.mapPathExcludesVcsUrls(vcsUrlMapping: VcsUrlMapping): RepositoryPathExcludes {
     val result = mutableMapOf<String, MutableList<PathExclude>>()
 
     forEach { (vcsUrl, pathExcludes) ->

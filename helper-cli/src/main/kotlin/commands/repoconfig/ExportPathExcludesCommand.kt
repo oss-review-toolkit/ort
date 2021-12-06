@@ -29,7 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.VcsUrlMapping
 import org.ossreviewtoolkit.helper.common.getRepositoryPathExcludes
-import org.ossreviewtoolkit.helper.common.mapVcsUrls
+import org.ossreviewtoolkit.helper.common.mapPathExcludesVcsUrls
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
 import org.ossreviewtoolkit.helper.common.orEmpty
 import org.ossreviewtoolkit.helper.common.readOrtResult
@@ -84,13 +84,13 @@ internal class ExportPathExcludesCommand : CliktCommand(
         val localPathExcludes = readOrtResult(ortFile)
             .replaceConfig(repositoryConfigurationFile)
             .getRepositoryPathExcludes()
-            .mapVcsUrls(vcsUrlMapping)
+            .mapPathExcludesVcsUrls(vcsUrlMapping)
 
         val globalPathExcludes = if (pathExcludesFile.isFile) {
             pathExcludesFile.readValue<RepositoryPathExcludes>()
         } else {
             mapOf()
-        }.mapVcsUrls(vcsUrlMapping)
+        }.mapPathExcludesVcsUrls(vcsUrlMapping)
 
         globalPathExcludes
             .mergePathExcludes(localPathExcludes, updateOnlyExisting = updateOnlyExisting)

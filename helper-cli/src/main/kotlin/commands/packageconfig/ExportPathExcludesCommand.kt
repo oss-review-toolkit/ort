@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.VcsUrlMapping
 import org.ossreviewtoolkit.helper.common.findRepositories
 import org.ossreviewtoolkit.helper.common.getPathExcludesByRepository
-import org.ossreviewtoolkit.helper.common.mapVcsUrls
+import org.ossreviewtoolkit.helper.common.mapPathExcludesVcsUrls
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
 import org.ossreviewtoolkit.helper.common.orEmpty
 import org.ossreviewtoolkit.helper.common.write
@@ -85,12 +85,12 @@ class ExportPathExcludesCommand : CliktCommand(
             pathExcludesFile.readValue<RepositoryPathExcludes>()
         } else {
             mapOf()
-        }.mapVcsUrls(vcsUrlMapping)
+        }.mapPathExcludesVcsUrls(vcsUrlMapping)
 
         val localPathExcludes = getPathExcludesByRepository(
             pathExcludes = packageConfigurationFile.readValue<PackageConfiguration>().pathExcludes,
             nestedRepositories = findRepositories(sourceCodeDir)
-        ).mapVcsUrls(vcsUrlMapping)
+        ).mapPathExcludesVcsUrls(vcsUrlMapping)
 
         globalPathExcludes
             .mergePathExcludes(localPathExcludes, updateOnlyExisting = updateOnlyExisting)
