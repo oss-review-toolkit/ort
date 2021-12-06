@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -188,7 +189,8 @@ private fun SpdxExternalDocumentReference.resolve(definitionFile: File, issues: 
         val referencedFile = tempDir?.let { uri } ?: spdxFile
         issues += createAndLogIssue(
             source = MANAGER_NAME,
-            message = "The file '$referencedFile' referred from '$definitionFile' does not match the expected $hash."
+            message = "The file '$referencedFile' referred from '$definitionFile' does not match the expected $hash.",
+            severity = Severity.WARNING
         )
     }
 
