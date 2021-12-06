@@ -44,17 +44,17 @@ data class SpdxExternalReference(
     val referenceCategory: Category,
 
     /**
-     *  The unique string with no spaces necessary to access the package-specific information, metadata, or content
-     *  within the target location. The format of the locator is subject to constraints defined by the [referenceType].
-     */
-    val referenceLocator: String,
-
-    /**
      * The references type as specified by
      * https://github.com/spdx/spdx-spec/blob/master/chapters/appendix-VI-external-repository-identifiers.md.
      */
     @JsonDeserialize(using = ReferenceTypeDeserializer::class)
-    val referenceType: Type
+    val referenceType: Type,
+
+    /**
+     *  The unique string with no spaces necessary to access the package-specific information, metadata, or content
+     *  within the target location. The format of the locator is subject to constraints defined by the [referenceType].
+     */
+    val referenceLocator: String
 ) {
     enum class Category {
         SECURITY,
@@ -94,8 +94,8 @@ data class SpdxExternalReference(
     constructor(referenceType: Type, referenceLocator: String, comment: String = "") : this(
         comment,
         referenceType.category,
-        referenceLocator,
-        referenceType
+        referenceType,
+        referenceLocator
     )
 }
 
