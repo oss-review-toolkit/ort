@@ -92,6 +92,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
                     findingCurationMatcher.matches(finding, curation)
                 }
             }
+        
         val existingCurations = repositoryConfiguration.curations.licenseFindings
         val curations = existingCurations.mergeLicenseFindingCurations(importedCurations, updateOnlyExisting)
 
