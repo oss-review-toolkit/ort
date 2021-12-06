@@ -115,16 +115,19 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(
 ): SpdxPackage? {
     val externalSpdxDocument = resolve(definitionFile, issues) ?: return null
 
+    val spdxDocumentPath = URI(spdxDocument).path
+    val spdxDocumentFile = definitionFile.resolveSibling(spdxDocumentPath).normalize()
+
     val spdxPackage = externalSpdxDocument.packages.find { it.spdxId == packageId } ?: run {
         issues += createAndLogIssue(
             source = MANAGER_NAME,
-            message = "$packageId can not be found in external document $externalDocumentId."
+            message = "Cannot find '$packageId' in '$spdxDocumentFile' referred to by '$definitionFile' as " +
+                    "'$externalDocumentId'."
         )
         return null
     }
 
-    val spdxDocumentPath = URI(spdxDocument).path
-    return spdxPackage.copy(packageFilename = definitionFile.resolveSibling(spdxDocumentPath).parentFile.absolutePath)
+    return spdxPackage.copy(packageFilename = spdxDocumentFile.parent)
 }
 
 /**
@@ -134,7 +137,8 @@ private fun SpdxExternalDocumentReference.resolve(definitionFile: File, issues: 
     val uri = runCatching { URI(spdxDocument) }.getOrElse {
         issues += createAndLogIssue(
             source = MANAGER_NAME,
-            message = "'$spdxDocument' identified by $externalDocumentId is not a valid URI. }"
+            message = "'$spdxDocument' defined in '$definitionFile' as part of '$externalDocumentId' is not a valid " +
+                    "URI."
         )
         return null
     }
@@ -424,7 +428,7 @@ class SpdxDocumentFile(
         } ?: run {
             issues += createAndLogIssue(
                 source = MANAGER_NAME,
-                message = "ID '$identifier' could neither be resolved to a package nor to an externalDocumentRef."
+                message = "$identifier could neither be resolved to a package nor to an externalDocumentRef."
             )
             return null
         }
