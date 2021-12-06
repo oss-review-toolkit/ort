@@ -118,10 +118,10 @@ object OkHttpClientHelper {
         } ?: defaultClient
 
     /**
-     * Execute a [request] using the client for the specified [builder configuration][block].
+     * Execute a [request] using the client.
      */
-    fun execute(request: Request, block: BuilderConfiguration? = null): Response =
-        buildClient(block).newCall(request).execute().also { response ->
+    fun execute(request: Request): Response =
+        buildClient().newCall(request).execute().also { response ->
             log.debug {
                 if (response.cacheResponse != null) {
                     "Retrieved ${response.request.url} from local cache."
@@ -132,11 +132,10 @@ object OkHttpClientHelper {
         }
 
     /**
-     * Asynchronously enqueue a [request] using the client for the specified [builder configuration][block] and await
-     * its response.
+     * Asynchronously enqueue a [request] using the client and await its response.
      */
-    suspend fun await(request: Request, block: BuilderConfiguration? = null): Response =
-        buildClient(block).newCall(request).await()
+    suspend fun await(request: Request): Response =
+        buildClient().newCall(request).await()
 
     /**
      * Download from [url] with optional [acceptEncoding] and return a [Result] with the [Response] and non-nullable
