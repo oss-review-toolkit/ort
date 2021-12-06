@@ -26,8 +26,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.getRepositoryPaths
+import org.ossreviewtoolkit.helper.common.importLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceLicenseFindingCurations
@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.helper.common.sortLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.write
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
@@ -86,8 +85,8 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         }
 
         val allLicenseFindings = ortResult.getLicenseFindingsForAllProjects()
-
-        val importedCurations = importLicenseFindingCurations(ortResult)
+        val repositoryPaths = ortResult.getRepositoryPaths()
+        val importedCurations = importLicenseFindingCurations(repositoryPaths, licenseFindingCurationsFile)
             .filter { curation ->
                 allLicenseFindings.any { finding ->
                     findingCurationMatcher.matches(finding, curation)
@@ -100,25 +99,6 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
             .replaceLicenseFindingCurations(curations)
             .sortLicenseFindingCurations()
             .write(repositoryConfigurationFile)
-    }
-
-    private fun importLicenseFindingCurations(ortResult: OrtResult): Set<LicenseFindingCuration> {
-        val repositoryPaths = ortResult.getRepositoryPaths()
-        val licenseFindingCurations = licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>()
-
-        val result = mutableSetOf<LicenseFindingCuration>()
-
-        repositoryPaths.forEach { (vcsUrl, relativePaths) ->
-            licenseFindingCurations[vcsUrl]?.let { curationsForRepository ->
-                curationsForRepository.forEach { curation ->
-                    relativePaths.forEach { path ->
-                        result += curation.copy(path = path + '/' + curation.path)
-                    }
-                }
-            }
-        }
-
-        return result
     }
 }
 

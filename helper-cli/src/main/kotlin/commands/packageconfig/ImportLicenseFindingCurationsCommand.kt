@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.findRepositoryPaths
 import org.ossreviewtoolkit.helper.common.getScanResultFor
 import org.ossreviewtoolkit.helper.common.importLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
@@ -86,8 +87,8 @@ class ImportLicenseFindingCurationsCommand : CliktCommand(
         val packageConfiguration = packageConfigurationFile.readValue<PackageConfiguration>()
 
         val allLicenseFindings = ortResult.getScanResultFor(packageConfiguration)?.summary?.licenseFindings.orEmpty()
-
-        val importedCurations = importLicenseFindingCurations(sourceCodeDir, licenseFindingCurationsFile)
+        val repositoryPaths = findRepositoryPaths(sourceCodeDir)
+        val importedCurations = importLicenseFindingCurations(repositoryPaths, licenseFindingCurationsFile)
             .filter { curation ->
                 allLicenseFindings.any { finding ->
                     findingCurationMatcher.matches(finding, curation)
