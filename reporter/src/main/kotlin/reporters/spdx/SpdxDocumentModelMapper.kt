@@ -102,8 +102,8 @@ object SpdxDocumentModelMapper {
 
             val binaryPackageRelationship = SpdxRelationship(
                 spdxElementId = binaryPackage.spdxId,
-                relatedSpdxElement = rootPackage.spdxId,
-                relationshipType = SpdxRelationship.Type.DEPENDENCY_OF
+                relationshipType = SpdxRelationship.Type.DEPENDENCY_OF,
+                relatedSpdxElement = rootPackage.spdxId
             )
 
             packages += binaryPackage
@@ -126,8 +126,8 @@ object SpdxDocumentModelMapper {
 
                 val vcsPackageRelationShip = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
-                    relatedSpdxElement = vcsPackage.spdxId,
-                    relationshipType = SpdxRelationship.Type.GENERATED_FROM
+                    relationshipType = SpdxRelationship.Type.GENERATED_FROM,
+                    relatedSpdxElement = vcsPackage.spdxId
                 )
 
                 packages += vcsPackage
@@ -150,8 +150,8 @@ object SpdxDocumentModelMapper {
 
                 val sourceArtifactPackageRelationship = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
-                    relatedSpdxElement = sourceArtifactPackage.spdxId,
-                    relationshipType = SpdxRelationship.Type.GENERATED_FROM
+                    relationshipType = SpdxRelationship.Type.GENERATED_FROM,
+                    relatedSpdxElement = sourceArtifactPackage.spdxId
                 )
 
                 packages += sourceArtifactPackage
