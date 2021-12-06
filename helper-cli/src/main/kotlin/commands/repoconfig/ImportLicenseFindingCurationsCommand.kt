@@ -26,9 +26,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.common.VcsUrlMapping
 import org.ossreviewtoolkit.helper.common.getRepositoryPaths
 import org.ossreviewtoolkit.helper.common.importLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
+import org.ossreviewtoolkit.helper.common.orEmpty
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.sortLicenseFindingCurations
@@ -74,6 +76,14 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
                 "of its concluded license, comment or reason."
     ).flag()
 
+    private val vcsUrlMappingFile by option(
+        "--vcs-url-mapping-file",
+        help = "A YAML or JSON file containing a mapping of VCS URLs to other VCS URLs which will be replaced during " +
+                "the import."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
+
     private val findingCurationMatcher = FindingCurationMatcher()
 
     override fun run() {
@@ -83,16 +93,18 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         } else {
             RepositoryConfiguration()
         }
+        val vcsUrlMapping = vcsUrlMappingFile?.readValue<VcsUrlMapping>().orEmpty()
 
         val allLicenseFindings = ortResult.getLicenseFindingsForAllProjects()
         val repositoryPaths = ortResult.getRepositoryPaths()
-        val importedCurations = importLicenseFindingCurations(repositoryPaths, licenseFindingCurationsFile)
-            .filter { curation ->
-                allLicenseFindings.any { finding ->
-                    findingCurationMatcher.matches(finding, curation)
-                }
-            }
-        
+        val importedCurations = importLicenseFindingCurations(
+            repositoryPaths,
+            licenseFindingCurationsFile,
+            vcsUrlMapping
+        ).filter { curation ->
+            allLicenseFindings.any { finding -> findingCurationMatcher.matches(finding, curation) }
+        }
+
         val existingCurations = repositoryConfiguration.curations.licenseFindings
         val curations = existingCurations.mergeLicenseFindingCurations(importedCurations, updateOnlyExisting)
 
