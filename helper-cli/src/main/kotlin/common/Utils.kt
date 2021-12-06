@@ -901,7 +901,8 @@ internal fun importPathExcludes(
 
 internal fun importLicenseFindingCurations(
     repositoryPaths: Map<String, Set<String>>,
-    licenseFindingCurationsFile: File
+    licenseFindingCurationsFile: File,
+    vcsUrlMapping: VcsUrlMapping
 ): List<LicenseFindingCuration> {
     println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
 
@@ -911,7 +912,7 @@ internal fun importLicenseFindingCurations(
 
     val result = mutableListOf<LicenseFindingCuration>()
 
-    repositoryPaths.forEach { (vcsUrl, relativePaths) ->
+    repositoryPaths.mapKeys { vcsUrlMapping.map(it.key) }.forEach { (vcsUrl, relativePaths) ->
         curations[vcsUrl]?.let { curationsForRepository ->
             curationsForRepository.forEach { curation ->
                 relativePaths.forEach { path ->
