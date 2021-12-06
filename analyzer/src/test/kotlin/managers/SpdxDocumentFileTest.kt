@@ -138,8 +138,8 @@ class SpdxDocumentFileTest : WordSpec({
         "throw if an external package id does not match relationship id" {
             val externalDocumentReference = SpdxExternalDocumentReference(
                 "DocumentRef-zlib-1.2.11",
-                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"),
-                "../package/libs/zlib/package.spdx.yml"
+                "../package/libs/zlib/package.spdx.yml",
+                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee")
             )
             val issues = mutableListOf<OrtIssue>()
 
@@ -152,8 +152,8 @@ class SpdxDocumentFileTest : WordSpec({
         "return the correct SPDX package" {
             val externalDocumentReference = SpdxExternalDocumentReference(
                 "DocumentRef-zlib-1.2.11",
-                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "9ffefb62ce14b40f675345a05b45846900740689"),
-                "../package/libs/zlib/package.spdx.yml"
+                "../package/libs/zlib/package.spdx.yml",
+                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "9ffefb62ce14b40f675345a05b45846900740689")
             )
 
             val spdxPackageId = "SPDXRef-Package-zlib"

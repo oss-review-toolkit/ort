@@ -30,14 +30,14 @@ data class SpdxExternalDocumentReference(
     val externalDocumentId: String,
 
     /**
-     * The checksum corresponding to the external [SpdxDocument] referenced by this [SpdxExternalDocumentReference].
-     */
-    val checksum: SpdxChecksum,
-
-    /**
      * The SPDX Document URI of the external [SpdxDocument] referenced by this [SpdxExternalDocumentReference].
      */
-    val spdxDocument: String
+    val spdxDocument: String,
+
+    /**
+     * The checksum corresponding to the external [SpdxDocument] referenced by this [SpdxExternalDocumentReference].
+     */
+    val checksum: SpdxChecksum
 ) {
     init {
         require(externalDocumentId.isNotBlank()) { "The external document Id must not be blank." }
