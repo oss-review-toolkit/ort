@@ -115,15 +115,6 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(
 ): SpdxPackage? {
     val externalSpdxDocument = resolve(definitionFile, issues) ?: return null
 
-    if (externalSpdxDocument.isProject()) {
-        issues += createAndLogIssue(
-            source = MANAGER_NAME,
-            message = "$externalDocumentId refers to a file that contains more than a single package. This is " +
-                    "currently not supported."
-        )
-        return null
-    }
-
     val spdxPackage = externalSpdxDocument.packages.find { it.spdxId == packageId } ?: run {
         issues += createAndLogIssue(
             source = MANAGER_NAME,
