@@ -550,7 +550,7 @@ class SpdxDocumentFile(
             // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies,
             // or a package-style SPDX document that describes a single (dependency-)package.
             spdxDocument.isProject()
-        }.keys.toList().also { remainingFiles ->
+        }.keys.also { remainingFiles ->
             if (remainingFiles.isEmpty()) return definitionFiles
 
             val discardedFiles = definitionFiles - remainingFiles
@@ -559,7 +559,7 @@ class SpdxDocumentFile(
                     "Discarded the following non-project SPDX files: ${discardedFiles.joinToString { "'$it'" }}"
                 }
             }
-        }
+        }.toList()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For direct callers of this function mapDefinitionFiles() did not populate the map before, so add a fallback.
