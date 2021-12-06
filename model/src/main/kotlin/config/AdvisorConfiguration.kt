@@ -43,6 +43,7 @@ data class AdvisorConfiguration(
      * shipped with ORT can access their configuration in a type-safe way via the other properties in this class,
      * this map offers a way for external advisor plugins to query configuration information.
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val options: Map<String, AdviceProviderOptions>? = null
 )
 

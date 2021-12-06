@@ -82,6 +82,12 @@ class AdvisorConfigurationTest : WordSpec({
             rereadConfig.token.shouldBeNull()
         }
     }
+
+    "generic advisor options" should {
+        "not be serialized as they might contain sensitive information" {
+            rereadAdvisorConfig(loadAdvisorConfig()).options.shouldBeNull()
+        }
+    }
 })
 
 /**
