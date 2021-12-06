@@ -29,14 +29,14 @@ data class SpdxRelationship(
     val spdxElementId: String,
 
     /**
-     * The target element of this directed relationship.
-     */
-    val relatedSpdxElement: String,
-
-    /**
      * The type of this relationship.
      */
-    val relationshipType: Type
+    val relationshipType: Type,
+
+    /**
+     * The target element of this directed relationship.
+     */
+    val relatedSpdxElement: String
 ) {
     enum class Type {
         /**
