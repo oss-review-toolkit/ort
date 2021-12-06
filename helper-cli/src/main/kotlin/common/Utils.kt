@@ -904,13 +904,11 @@ internal fun importLicenseFindingCurations(
     licenseFindingCurationsFile: File,
     vcsUrlMapping: VcsUrlMapping
 ): List<LicenseFindingCuration> {
-    println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
-
-    println("Loading $licenseFindingCurationsFile...")
     val curations = licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>()
-    println("Found ${curations.values.sumOf { it.size }} curations for ${curations.size} repositories.")
-
     val result = mutableListOf<LicenseFindingCuration>()
+
+    println("Found ${repositoryPaths.size} repositories in ${repositoryPaths.values.sumOf { it.size }} locations.")
+    println("Found ${curations.values.sumOf { it.size }} curations for ${curations.size} repositories.")
 
     repositoryPaths.mapKeys { vcsUrlMapping.map(it.key) }.forEach { (vcsUrl, relativePaths) ->
         curations[vcsUrl]?.let { curationsForRepository ->
