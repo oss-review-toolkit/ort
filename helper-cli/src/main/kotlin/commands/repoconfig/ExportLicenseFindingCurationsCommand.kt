@@ -27,8 +27,11 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
+import org.ossreviewtoolkit.helper.common.VcsUrlMapping
 import org.ossreviewtoolkit.helper.common.getLicenseFindingCurationsByRepository
+import org.ossreviewtoolkit.helper.common.mapLicenseFindingCurationsVcsUrls
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
+import org.ossreviewtoolkit.helper.common.orEmpty
 import org.ossreviewtoolkit.helper.common.readOrtResult
 import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.helper.common.write
@@ -67,19 +70,28 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
                 "of its concluded license, comment or reason."
     ).flag()
 
+    private val vcsUrlMappingFile by option(
+        "--vcs-url-mapping-file",
+        help = "A YAML or JSON file containing a mapping of VCS URLs to other VCS URLs which will be replaced during " +
+                "the export."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
+
     override fun run() {
         val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfigurationFile)
+        val vcsUrlMapping = vcsUrlMappingFile?.readValue<VcsUrlMapping>().orEmpty()
 
         val localLicenseFindingCurations = getLicenseFindingCurationsByRepository(
             curations = ortResult.repository.config.curations.licenseFindings,
             nestedRepositories = ortResult.repository.nestedRepositories
-        )
+        ).mapLicenseFindingCurationsVcsUrls(vcsUrlMapping)
 
         val globalLicenseFindingCurations = if (licenseFindingCurationsFile.isFile) {
             licenseFindingCurationsFile.readValue<RepositoryLicenseFindingCurations>()
         } else {
             mapOf()
-        }
+        }.mapLicenseFindingCurationsVcsUrls(vcsUrlMapping)
 
         globalLicenseFindingCurations
             .mergeLicenseFindingCurations(localLicenseFindingCurations, updateOnlyExisting = updateOnlyExisting)

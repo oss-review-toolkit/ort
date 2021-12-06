@@ -678,6 +678,21 @@ internal fun RepositoryPathExcludes.mapPathExcludesVcsUrls(vcsUrlMapping: VcsUrl
 }
 
 /**
+ * Apply the [vcsUrlMapping] to this [RepositoryLicenseFindingCurations].
+ */
+internal fun RepositoryLicenseFindingCurations.mapLicenseFindingCurationsVcsUrls(
+    vcsUrlMapping: VcsUrlMapping
+): RepositoryLicenseFindingCurations {
+    val result = mutableMapOf<String, MutableList<LicenseFindingCuration>>()
+
+    forEach { (vcsUrl, curations) ->
+        result.getOrPut(vcsUrlMapping.map(vcsUrl)) { mutableListOf() } += curations
+    }
+
+    return result.mapValues { (_, pathExcludes) -> pathExcludes.distinct() }
+}
+
+/**
  * Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message].
  */
 internal fun Collection<IssueResolution>.mergeIssueResolutions(
