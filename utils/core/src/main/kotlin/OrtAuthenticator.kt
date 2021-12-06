@@ -24,6 +24,7 @@ import java.net.InetSocketAddress
 import java.net.PasswordAuthentication
 import java.net.Proxy
 import java.net.ProxySelector
+import java.util.concurrent.ConcurrentHashMap
 
 import org.apache.logging.log4j.Level
 
@@ -72,7 +73,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
     // credentials passed as environment variables.
     private val delegateAuthenticators = listOf(NetRcAuthenticator(), EnvVarAuthenticator())
 
-    private val serverAuthentication = mutableMapOf<String, PasswordAuthentication>()
+    private val serverAuthentication: ConcurrentHashMap<String, PasswordAuthentication> = ConcurrentHashMap()
 
     override fun getPasswordAuthentication(): PasswordAuthentication? {
         when (requestorType) {
