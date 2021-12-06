@@ -959,12 +959,16 @@ internal fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
     // For some Git-repo projects `OrtResult.repository.nestedRepositories´ misses some nested repositories for Git
     // submodules. FIXME: Ensure that the OrtResult holds all nested repositories and remove below workaround.
     getProjects().forEach { project ->
-        val vcs = project.vcsProcessed
-        val projectPath = getDefinitionFilePathRelativeToAnalyzerRoot(project).substringBeforeLast("/")
-        val path = projectPath.removeSuffix("/${vcs.path}")
-
-        result.getOrPut(vcs.url) { mutableSetOf() } += path
+        result.getOrPut(project.vcsProcessed.url) { mutableSetOf() } += project.getRepositoryPath(this)
     }
 
     return result
+}
+
+/**
+ * Return the path of the repository of this [Project] relative to the analyzer root.
+ */
+internal fun Project.getRepositoryPath(ortResult: OrtResult): String {
+    val projectPath = ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(this).substringBeforeLast("/")
+    return projectPath.removeSuffix("/${vcsProcessed.path}")
 }
