@@ -161,6 +161,8 @@ class ScanCode(
         // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
         val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
+        // Download ScanCode to a file instead of unpacking directly from the response body as doing so on the > 200 MiB
+        // archive causes issues.
         log.info { "Downloading $scannerName from $url... " }
         unpackDir.safeMkdirs()
         val scannerArchive = OkHttpClientHelper.downloadFile(url, unpackDir).getOrThrow()
