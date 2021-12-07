@@ -57,21 +57,6 @@ packages:
   versionInfo: "1.1.1g"
   supplier: "Organization: OpenSSL Development Team"
   originator: "Organization: OpenSSL Development Team"
-- SPDXID: "SPDXRef-Package-Saxon"
-  checksums:
-    - algorithm: "SHA1"
-      checksumValue: "85ed0817af83a24ad8da68c2b5094de69833983c"
-  copyrightText: "Copyright Saxonica Ltd"
-  description: "The Saxon package is a collection of tools for processing XML documents."
-  downloadLocation: "https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download"
-  filesAnalyzed: false
-  homepage: "http://saxon.sourceforge.net/"
-  licenseComments: "Other versions available for a commercial license"
-  licenseConcluded: "MPL-1.0"
-  licenseDeclared: "MPL-1.0"
-  name: "Saxon"
-  packageFileName: "saxonB-8.8.zip"
-  versionInfo: "8.8"
 relationships:
 - spdxElementId: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
   relatedSpdxElement: "SPDXRef-Package-xyz"
