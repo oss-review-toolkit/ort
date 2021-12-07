@@ -45,12 +45,14 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Defect
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -626,6 +628,32 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val results = helper.advisorResultsWithDefects()
 
             results should beEmpty()
+        }
+    }
+
+    "getPackage" should {
+        "return the correct package for the given ID" {
+            val id = Identifier.EMPTY.copy(name = "test-package", version = "1.0.1")
+            val pkg = Package.EMPTY.copy(
+                id = id,
+                cpe = "cpe:2.3:a:test:${id.name}:${id.version}:-:-:-:-:-:-:-"
+            )
+            val analyzerResult = ORT_RESULT.analyzer!!.result.copy(packages = sortedSetOf(CuratedPackage(pkg)))
+            val analyzerRun = ORT_RESULT.analyzer!!.copy(result = analyzerResult)
+
+            val input = ReporterInput(ORT_RESULT.copy(analyzer = analyzerRun))
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            helper.getPackage(id) shouldBe pkg
+        }
+
+        "return the empty package for an unknown ID" {
+            val id = Identifier.EMPTY.copy(name = "unknown-package")
+
+            val input = ReporterInput(ORT_RESULT)
+            val helper = FreemarkerTemplateProcessor.TemplateHelper(input)
+
+            helper.getPackage(id) shouldBe Package.EMPTY
         }
     }
 })
