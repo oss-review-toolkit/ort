@@ -79,7 +79,7 @@ data class SpdxExternalReference(
 
         object SoftwareHeritage : Type("swh", Category.PERSISTENT_ID)
 
-        class Other(typeName: String) : Type(typeName, Category.OTHER)
+        data class Other(private val typeName: String) : Type(typeName, Category.OTHER)
     }
 
     init {
