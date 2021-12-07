@@ -94,6 +94,6 @@ Files: utils/spdx/src/main/resources/licenserefs/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC0-1.0
 
-Files: utils/spdx/src/test/resources/spdx-spec-examples/*
+Files: utils/spdx/src/test/assets/spdx-spec-examples/*
 Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC-BY-3.0
