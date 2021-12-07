@@ -37,7 +37,7 @@ RUN /etc/scripts/import_proxy_certs.sh \
 
 #------------------------------------------------------------------------
 # Ubuntu build toolchain
-RUN --mount=type=cache,target=/var/cache/apt apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
         clang-9 \
@@ -113,12 +113,13 @@ RUN CC=clang-9 CXX=clang++9 pyenv install "${PYTHON_VERSION}"
 RUN pyenv global "${PYTHON_VERSION}"
 ENV PATH=/opt/python/shims:$PATH
 RUN pip install -U \
-    conan=="${CONAN_VERSION}" \
     pip=="${PIPTOOL_VERSION}" \
+    wheel
+RUN pip install -U \
+    conan=="${CONAN_VERSION}" \
     pipenv \
     Mercurial \
-    virtualenv=="${PYTHON_VIRTUALENV_VERSION}" \
-    wheel
+    virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
 
 COPY docker/python.sh /etc/profile.d
 
@@ -264,7 +265,7 @@ RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
     && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
     && ln -s /opt/scancode/bin/extractcode /usr/bin/extractcode
 
-RUN  --mount=type=cache,target=/var/cache/apt apt-get update \
+RUN  --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates \
         cvs \
@@ -292,7 +293,7 @@ RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df
 ARG COMPOSER_VERSION=1.10.1-1
 
 # Apt install commands.
-RUN --mount=type=cache,target=/var/cache/apt apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         cargo \
         composer=$COMPOSER_VERSION \
