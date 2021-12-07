@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.AdvisorResultFilter
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
@@ -393,6 +394,15 @@ class FreemarkerTemplateProcessor(
          */
         fun advisorResultsWithDefects(): Map<Identifier, List<AdvisorResult>> =
             input.filteredAdvisorResults(AdvisorRecord.RESULTS_WITH_DEFECTS)
+
+        /**
+         * Return the package from the current [OrtResult] with the given [id] or the empty package if the ID cannot be
+         * resolved. This function is useful for templates rendering advisor results, which contain only the
+         * identifiers of affected packages, but not the packages themselves.
+         */
+        fun getPackage(id: Identifier): Package =
+            input.ortResult.getPackage(id)?.pkg
+                ?: Package.EMPTY.also { log.warn { "Could not resolve package '${id.toCoordinates()}'." } }
     }
 }
 
