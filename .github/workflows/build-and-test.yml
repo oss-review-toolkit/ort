@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - master
-  push:
-    branches:
-      - master
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
