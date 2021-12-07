@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
@@ -40,6 +41,12 @@ class AdvisorConfigurationTest : WordSpec({
 
             actualNexusIqConfiguration.serverUrl shouldBe expectedNexusIqConfig.serverUrl
             actualNexusIqConfiguration.username shouldBe expectedNexusIqConfig.username
+        }
+
+        "not serialize credentials" {
+            val rereadConfig = rereadAdvisorConfig(loadAdvisorConfig()).nexusIq.shouldNotBeNull()
+
+            rereadConfig.password.shouldBeNull()
         }
     }
 
@@ -67,6 +74,12 @@ class AdvisorConfigurationTest : WordSpec({
             actualGHConfig.labelFilter shouldBe expectedGHConfig.labelFilter
             actualGHConfig.maxNumberOfIssuesPerRepository shouldBe expectedGHConfig.maxNumberOfIssuesPerRepository
             actualGHConfig.parallelRequests shouldBe expectedGHConfig.parallelRequests
+        }
+
+        "not serialize credentials" {
+            val rereadConfig = rereadAdvisorConfig(loadAdvisorConfig()).gitHubDefects.shouldNotBeNull()
+
+            rereadConfig.token.shouldBeNull()
         }
     }
 })
