@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.isTrue
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
@@ -161,6 +162,7 @@ class ScanCode(
         val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
+        unpackDir.safeMkdirs()
         val scannerArchive = OkHttpClientHelper.downloadFile(url, unpackDir).getOrThrow()
 
         log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
