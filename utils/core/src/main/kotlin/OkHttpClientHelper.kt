@@ -221,14 +221,16 @@ fun OkHttpClient.downloadText(url: String): Result<String> =
  * [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on
  * failure.
  */
-fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> {
-    val request = Request.Builder()
-        .apply { acceptEncoding?.also { header("Accept-Encoding", it) } }
-        .get()
-        .url(url)
-        .build()
+fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> =
+    runCatching {
+        val request = Request.Builder()
+            .apply { acceptEncoding?.also { header("Accept-Encoding", it) } }
+            .get()
+            .url(url)
+            .build()
 
-    return runCatching { execute(request) }.mapCatching { response ->
+        execute(request)
+    }.mapCatching { response ->
         val body = response.body
 
         if (!response.isSuccessful || body == null) {
@@ -237,7 +239,6 @@ fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<P
 
         response to body
     }
-}
 
 /**
  * Execute a [request] using the client.
