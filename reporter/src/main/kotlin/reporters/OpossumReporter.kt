@@ -141,7 +141,7 @@ class OpossumReporter : Reporter {
     data class OpossumResources(
         val tree: MutableMap<String, OpossumResources> = mutableMapOf()
     ) {
-        fun addResource(pathPieces: List<String>) {
+        private fun addResource(pathPieces: List<String>) {
             if (pathPieces.isEmpty()) return
 
             val head = pathPieces.first()
@@ -245,11 +245,11 @@ class OpossumReporter : Reporter {
                 ?.mapNotNull { uuid -> signals.find { it.uuid == uuid } }
                 .orEmpty()
 
-        fun addAttributionBreakpoint(breakpoint: String) {
+        private fun addAttributionBreakpoint(breakpoint: String) {
             attributionBreakpoints += resolvePath(breakpoint, isDirectory = true)
         }
 
-        fun addFileWithChildren(fileWithChildren: String) {
+        private fun addFileWithChildren(fileWithChildren: String) {
             filesWithChildren += resolvePath(fileWithChildren, isDirectory = true)
         }
 
@@ -275,7 +275,7 @@ class OpossumReporter : Reporter {
             return key
         }
 
-        fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo = VcsInfo.EMPTY) {
+        private fun addPackageRoot(id: Identifier, path: String, level: Int = 0, vcs: VcsInfo = VcsInfo.EMPTY) {
             val mapOfId = packageToRoot.getOrPut(id) { sortedMapOf() }
             val oldLevel = mapOfId.getOrDefault(path, level)
             mapOfId[path] = min(level, oldLevel)
@@ -284,7 +284,7 @@ class OpossumReporter : Reporter {
             addBaseURL(path, vcs)
         }
 
-        fun addSignal(signal: OpossumSignal, paths: SortedSet<String>) {
+        private fun addSignal(signal: OpossumSignal, paths: SortedSet<String>) {
             if (paths.isEmpty()) return
 
             val matchingSignal = signals.find { it.matches(signal) }
@@ -302,7 +302,7 @@ class OpossumReporter : Reporter {
             }
         }
 
-        fun signalFromPkg(pkg: Package, id: Identifier = pkg.id): OpossumSignal {
+        private fun signalFromPkg(pkg: Package, id: Identifier = pkg.id): OpossumSignal {
             val source = addExternalAttributionSource("ORT-Package", "ORT-Package", 180)
             return OpossumSignal(
                 source,
@@ -313,7 +313,7 @@ class OpossumReporter : Reporter {
             )
         }
 
-        fun addDependency(
+        private fun addDependency(
             dependency: PackageReference,
             curatedPackages: SortedSet<CuratedPackage>,
             relRoot: String,
@@ -339,7 +339,11 @@ class OpossumReporter : Reporter {
             }
         }
 
-        fun addDependencyScope(scope: Scope, curatedPackages: SortedSet<CuratedPackage>, relRoot: String = "/") {
+        private fun addDependencyScope(
+            scope: Scope,
+            curatedPackages: SortedSet<CuratedPackage>,
+            relRoot: String = "/"
+        ) {
             val name = scope.name
             log.debug("$relRoot - $name - DependencyScope")
 
@@ -351,7 +355,7 @@ class OpossumReporter : Reporter {
             }
         }
 
-        fun getRootForProject(project: Project, relRoot: String): String {
+        private fun getRootForProject(project: Project, relRoot: String): String {
             val vcsPath = resolvePath(relRoot, project.vcs.path)
             val definitionFilePath = resolvePath(relRoot, project.definitionFilePath)
             return if (definitionFilePath.startsWith(vcsPath)) {
@@ -394,7 +398,7 @@ class OpossumReporter : Reporter {
                 }
         }
 
-        fun addScannerResult(id: Identifier, result: ScanResult, maxDepth: Int) {
+        private fun addScannerResult(id: Identifier, result: ScanResult, maxDepth: Int) {
             val scanner = "${result.scanner.name}@${result.scanner.version}"
             val roots = packageToRoot[id]
             if (roots == null) {
