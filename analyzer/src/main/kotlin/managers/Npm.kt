@@ -356,43 +356,47 @@ open class Npm(
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("node_modules")).use {
-            // Actually installing the dependencies is the easiest way to get the metadata of all transitive
-            // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
-            // dependency is only ever downloaded once.
-            installDependencies(workingDir)
-
-            // Create packages for all modules found in the workspace and add them to the graph builder. They are
-            // reused when they are referenced by scope dependencies.
-            val packages = parseInstalledModules(workingDir)
-            graphBuilder.addPackages(packages.values)
-
-            val project = parseProject(definitionFile)
-
-            val scopeNames = listOfNotNull(
-                // Optional dependencies are just like regular dependencies except that NPM ignores failures when
-                // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
-                // not a separate scope in our semantics.
-                buildDependencyGraphForScopes(
-                    project,
-                    workingDir,
-                    setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
-                    DEPENDENCIES_SCOPE
-                ),
-
-                buildDependencyGraphForScopes(
-                    project,
-                    workingDir,
-                    setOf(DEV_DEPENDENCIES_SCOPE),
-                    DEV_DEPENDENCIES_SCOPE
-                )
-            )
-
-            // TODO: add support for peerDependencies and bundledDependencies.
-
-            return listOf(
-                ProjectAnalyzerResult(project.copy(scopeNames = scopeNames.toSortedSet()), sortedSetOf())
-            )
+            return resolveDependenciesInternal(definitionFile)
         }
+    }
+
+    private fun resolveDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
+        val workingDir = definitionFile.parentFile
+
+        // Actually installing the dependencies is the easiest way to get the metadata of all transitive
+        // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
+        // dependency is only ever downloaded once.
+        installDependencies(workingDir)
+
+        // Create packages for all modules found in the workspace and add them to the graph builder. They are
+        // reused when they are referenced by scope dependencies.
+        val packages = parseInstalledModules(workingDir)
+        graphBuilder.addPackages(packages.values)
+
+        val project = parseProject(definitionFile)
+
+        val scopeNames = listOfNotNull(
+            // Optional dependencies are just like regular dependencies except that NPM ignores failures when
+            // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
+            // not a separate scope in our semantics.
+            buildDependencyGraphForScopes(
+                project,
+                workingDir,
+                setOf(DEPENDENCIES_SCOPE, OPTIONAL_DEPENDENCIES_SCOPE),
+                DEPENDENCIES_SCOPE
+            ),
+
+            buildDependencyGraphForScopes(
+                project,
+                workingDir,
+                setOf(DEV_DEPENDENCIES_SCOPE),
+                DEV_DEPENDENCIES_SCOPE
+            )
+        )
+
+        // TODO: add support for peerDependencies and bundledDependencies.
+
+        return listOf(ProjectAnalyzerResult(project.copy(scopeNames = scopeNames.toSortedSet()), sortedSetOf()))
     }
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
