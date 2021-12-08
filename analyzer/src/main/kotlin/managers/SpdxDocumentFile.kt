@@ -56,7 +56,6 @@ import org.ossreviewtoolkit.utils.core.downloadFile
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
@@ -106,15 +105,16 @@ internal fun SpdxDocument.projectPackage(): SpdxPackage? =
         ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
 
 /**
- * Get the [SpdxPackage] from the [SpdxExternalDocumentReference] that the [packageId] refers to, where [definitionFile]
- * is used to resolve local relative URIs to files.
+ * Get the [SpdxPackage] from the [SpdxExternalDocumentReference] using [loader] that the [packageId] refers to, where
+ * [definitionFile] is used to resolve local relative URIs to files.
  */
 internal fun SpdxExternalDocumentReference.getSpdxPackage(
+    loader: SpdxDocumentCache,
     packageId: String,
     definitionFile: File,
     issues: MutableList<OrtIssue>
 ): SpdxPackage? {
-    val externalSpdxDocument = resolve(definitionFile, issues) ?: return null
+    val externalSpdxDocument = resolve(loader, definitionFile, issues) ?: return null
 
     val spdxDocumentPath = URI(spdxDocument).path
     val spdxDocumentFile = definitionFile.resolveSibling(spdxDocumentPath).normalize()
@@ -134,7 +134,11 @@ internal fun SpdxExternalDocumentReference.getSpdxPackage(
 /**
  * Return the [SpdxDocument] this [SpdxExternalDocumentReference]'s [SpdxDocument] refers to.
  */
-private fun SpdxExternalDocumentReference.resolve(definitionFile: File, issues: MutableList<OrtIssue>): SpdxDocument? {
+private fun SpdxExternalDocumentReference.resolve(
+    loader: SpdxDocumentCache,
+    definitionFile: File,
+    issues: MutableList<OrtIssue>
+): SpdxDocument? {
     val uri = runCatching { URI(spdxDocument) }.getOrElse {
         issues += createAndLogIssue(
             source = MANAGER_NAME,
@@ -189,12 +193,13 @@ private fun SpdxExternalDocumentReference.resolve(definitionFile: File, issues: 
         val referencedFile = tempDir?.let { uri } ?: spdxFile
         issues += createAndLogIssue(
             source = MANAGER_NAME,
-            message = "The file '$referencedFile' referred from '$definitionFile' does not match the expected $hash.",
+            message = "The file '$referencedFile' referred from '$definitionFile' does not match the expected " +
+                    "$checksum.",
             severity = Severity.WARNING
         )
     }
 
-    return SpdxModelMapper.read<SpdxDocument>(spdxFile).also { tempDir?.safeDeleteRecursively(force = true) }
+    return loader.load(spdxFile).also { tempDir?.safeDeleteRecursively(force = true) }
 }
 
 /**
@@ -336,7 +341,7 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
-    private val spdxDocumentForFile = mutableMapOf<File, SpdxDocument>()
+    private val spdxDocumentCache = SpdxDocumentCache()
     private val packageForExternalDocumentId = mutableMapOf<String, SpdxPackage>()
 
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>(MANAGER_NAME) {
@@ -421,8 +426,12 @@ class SpdxDocumentFile(
         }
 
         return packageForExternalDocumentId.getOrPut(externalDocumentReference.externalDocumentId) {
-            externalDocumentReference.getSpdxPackage(identifier.substringAfter(":"), definitionFile, issues)
-                ?: return null
+            externalDocumentReference.getSpdxPackage(
+                spdxDocumentCache,
+                identifier.substringAfter(":"),
+                definitionFile,
+                issues
+            ) ?: return null
         }
     }
 
@@ -535,9 +544,7 @@ class SpdxDocumentFile(
         }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
-        definitionFiles.associateWith {
-            SpdxModelMapper.read<SpdxDocument>(it)
-        }.filterTo(spdxDocumentForFile) { (_, spdxDocument) ->
+        definitionFiles.associateWith(spdxDocumentCache::load).filter { (_, spdxDocument) ->
             // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies,
             // or a package-style SPDX document that describes a single (dependency-)package.
             spdxDocument.isProject()
@@ -555,7 +562,7 @@ class SpdxDocumentFile(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For direct callers of this function mapDefinitionFiles() did not populate the map before, so add a fallback.
-        val spdxDocument = spdxDocumentForFile.getOrPut(definitionFile) { SpdxModelMapper.read(definitionFile) }
+        val spdxDocument = spdxDocumentCache.load(definitionFile)
 
         val packages = mutableSetOf<Package>()
         val scopes = sortedSetOf<Scope>()
