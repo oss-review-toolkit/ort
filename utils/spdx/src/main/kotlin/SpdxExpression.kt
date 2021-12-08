@@ -58,7 +58,13 @@ sealed class SpdxExpression {
          * Only current SPDX license identifier strings and LicenseRefs are allowed. This excludes deprecated SPDX
          * license identifier strings and arbitrary license identifier strings.
          */
-        ALLOW_CURRENT
+        ALLOW_CURRENT,
+
+        /**
+         * This is the same as [ALLOW_CURRENT], but additionally allows LicenseRefs that contain the "exception" string
+         * to be used as license exceptions after the [WITH] operator.
+         */
+        ALLOW_LICENSEREF_EXCEPTIONS
     }
 
     companion object {
@@ -433,6 +439,8 @@ class SpdxLicenseWithExceptionExpression(
     val exception: String
 ) : SpdxSingleLicenseExpression() {
     companion object {
+        private val EXCEPTION_STRING_PATTERN = Regex("\\bexception\\b", RegexOption.IGNORE_CASE)
+
         /**
          * Parse a string into an [SpdxLicenseWithExceptionExpression]. Throws an [SpdxException] if the string cannot
          * be parsed. Throws a [ClassCastException] if the string is not an [SpdxLicenseWithExceptionExpression].
@@ -475,12 +483,22 @@ class SpdxLicenseWithExceptionExpression(
     override fun validate(strictness: Strictness) {
         license.validate(strictness)
 
-        val spdxException = SpdxLicenseException.forId(exception)
-        when (strictness) {
-            Strictness.ALLOW_ANY -> exception // Return something non-null.
-            Strictness.ALLOW_DEPRECATED -> spdxException
-            Strictness.ALLOW_CURRENT -> spdxException?.takeUnless { spdxException.deprecated }
-        } ?: throw SpdxException("'$exception' is not a valid SPDX license exception id.")
+        // Return early without any further checks on the exception in lenient mode.
+        if (strictness == Strictness.ALLOW_ANY) return
+
+        val spdxLicenseException = SpdxLicenseException.forId(exception)
+        if (strictness == Strictness.ALLOW_DEPRECATED && spdxLicenseException != null) return
+
+        val isCurrentLicenseException = spdxLicenseException?.deprecated == false
+        if (strictness == Strictness.ALLOW_CURRENT && isCurrentLicenseException) return
+
+        if (strictness == Strictness.ALLOW_LICENSEREF_EXCEPTIONS) {
+            val isValidLicenseRef = SpdxLicenseReferenceExpression(exception).isValid(strictness)
+            val isExceptionString = exception.contains(EXCEPTION_STRING_PATTERN)
+            if (isCurrentLicenseException || (isValidLicenseRef && isExceptionString)) return
+        }
+
+        throw SpdxException("'$exception' is not a valid SPDX license exception string.")
     }
 
     override fun equals(other: Any?) =
@@ -544,7 +562,7 @@ class SpdxLicenseIdExpression(
         val isValid = SpdxConstants.isNotPresent(id) || when (strictness) {
             Strictness.ALLOW_ANY -> true
             Strictness.ALLOW_DEPRECATED -> spdxLicense != null
-            Strictness.ALLOW_CURRENT -> spdxLicense?.deprecated == false
+            Strictness.ALLOW_CURRENT, Strictness.ALLOW_LICENSEREF_EXCEPTIONS -> spdxLicense?.deprecated == false
         }
 
         if (!isValid) throw SpdxException("'$this' is not a valid SPDX license id.")

@@ -175,6 +175,63 @@ class SpdxExpressionTest : WordSpec() {
             }
         }
 
+        "An SpdxExpression with a LicenseRef exception" should {
+            val licenseRefWithLicenseRefException = "LicenseRef-ort-license WITH LicenseRef-ort-exception"
+            val licenseRefWithLicenseRefException2 = "LicenseRef-ort-license WITH LicenseRef-ort-exception-2.0"
+            val licenseRefWithLicenseRef = "LicenseRef-ort-license WITH LicenseRef-ort-license"
+
+            "be valid in lenient mode" {
+                assertSoftly {
+                    licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_ANY)
+                    licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_ANY)
+                    licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_ANY)
+                }
+            }
+
+            "be invalid in deprecated mode" {
+                assertSoftly {
+                    shouldThrow<SpdxException> {
+                        licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_DEPRECATED)
+                    }
+
+                    shouldThrow<SpdxException> {
+                        licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_DEPRECATED)
+                    }
+
+                    shouldThrow<SpdxException> {
+                        licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_DEPRECATED)
+                    }
+                }
+            }
+
+            "be invalid in strict mode" {
+                assertSoftly {
+                    shouldThrow<SpdxException> {
+                        licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_CURRENT)
+                    }
+
+                    shouldThrow<SpdxException> {
+                        licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_CURRENT)
+                    }
+
+                    shouldThrow<SpdxException> {
+                        licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_CURRENT)
+                    }
+                }
+            }
+
+            "be valid when allowing LicenseRef exceptions" {
+                assertSoftly {
+                    licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS)
+                    licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS)
+
+                    shouldThrow<SpdxException> {
+                        licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS)
+                    }
+                }
+            }
+        }
+
         "The expression parser" should {
             "work for deprecated license identifiers" {
                 assertSoftly {
