@@ -296,7 +296,7 @@ class OpossumReporter : Reporter {
             }
 
             paths.forEach { path ->
-                log.trace { "add signal ${signal.id} of source ${signal.source} to $path" }
+                log.debug { "add signal ${signal.id} of source ${signal.source} to $path" }
                 resources.addResource(path)
                 pathToSignal.getOrPut(resolvePath(path)) { sortedSetOf() } += uuidOfSignal
             }
