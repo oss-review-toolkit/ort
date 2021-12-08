@@ -43,17 +43,20 @@ sealed class SpdxExpression {
      */
     enum class Strictness {
         /**
-         * Any license identifier string is leniently allowed.
+         * Any license identifier string is leniently allowed. The expression is not limited to SPDX license identifier
+         * strings or LicenseRefs.
          */
         ALLOW_ANY,
 
         /**
-         * All SPDX license identifier strings are allowed, including deprecated ones.
+         * All SPDX license identifier strings, including deprecated ones, and LicenseRefs are allowed. Arbitrary
+         * license identifier strings are not allowed.
          */
         ALLOW_DEPRECATED,
 
         /**
-         * Only current SPDX license identifier strings are allowed, excluding deprecated ones.
+         * Only current SPDX license identifier strings and LicenseRefs are allowed. This excludes deprecated SPDX
+         * license identifier strings and arbitrary license identifier strings.
          */
         ALLOW_CURRENT
     }
