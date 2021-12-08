@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -231,6 +232,7 @@ class Pub(
         val packages = mutableMapOf<Identifier, Package>()
         val scopes = sortedSetOf<Scope>()
         val issues = mutableListOf<OrtIssue>()
+        val projectAnalyzerResults = mutableListOf<ProjectAnalyzerResult>()
 
         if (hasDependencies) {
             installDependencies(workingDir)
@@ -242,6 +244,50 @@ class Pub(
             log.info { "Successfully read lockfile." }
 
             val parsePackagesResult = parseInstalledPackages(lockFile, labels)
+
+            if (containsFlutterSdk(workingDir)) {
+                // Run Gradle dependency resolution. This is required because for Flutter projects, Pub needs to run
+                // first to generate the local.properties file by using `flutter pub get`.
+                val gradleFactory = Gradle.Factory()
+                val gradleDefinitionFiles =
+                    findManagedFiles(analysisRoot, listOf(gradleFactory)).getOrDefault(gradleFactory, emptyList())
+
+                if (gradleDefinitionFiles.isNotEmpty()) {
+                    log.info { "Found ${gradleDefinitionFiles.size} ${gradleFactory.managerName} project(s) at:" }
+
+                    gradleDefinitionFiles.forEach { gradleDefinitionFile ->
+                        val relativePath =
+                            gradleDefinitionFile.toRelativeString(workingDir).takeIf { it.isNotEmpty() } ?: "."
+
+                        log.info { "\t$relativePath" }
+                    }
+                }
+
+                log.info { "Running Gradle analysis for Flutter project." }
+
+                val gradleAnalyzerResult = gradleFactory.create(analysisRoot, analyzerConfig, repoConfig)
+                    .resolveDependencies(gradleDefinitionFiles, labels)
+
+                val androidScope = Scope("android", sortedSetOf())
+                gradleAnalyzerResult.projectResults.values.flatten().forEach { projectAnalyzerResult ->
+                    val project = projectAnalyzerResult.project.withResolvedScopes(gradleAnalyzerResult.dependencyGraph)
+
+                    androidScope.dependencies += PackageReference(id = project.id,
+                        linkage = PackageLinkage.PROJECT_STATIC,
+                        dependencies = project.scopes.find { it.name == "releaseCompileClasspath" }
+                            ?.dependencies ?: sortedSetOf())
+
+                    projectAnalyzerResults += ProjectAnalyzerResult(
+                        project,
+                        projectAnalyzerResult.packages,
+                        projectAnalyzerResult.issues
+                    )
+                }
+
+                scopes += androidScope
+                packages += gradleAnalyzerResult.sharedPackages.associateBy { it.id }
+            }
+
             packages += parsePackagesResult.packages
             issues += parsePackagesResult.issues
 
@@ -255,7 +301,9 @@ class Pub(
 
         val project = parseProject(definitionFile, manifest, scopes)
 
-        return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues))
+        projectAnalyzerResults += ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues)
+
+        return projectAnalyzerResults
     }
 
     private fun parseScope(
