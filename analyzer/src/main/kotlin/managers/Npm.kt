@@ -355,8 +355,12 @@ open class Npm(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        stashDirectories(workingDir.resolve("node_modules")).use {
-            return resolveDependenciesInternal(definitionFile)
+        return try {
+            stashDirectories(workingDir.resolve("node_modules")).use {
+                resolveDependenciesInternal(definitionFile)
+            }
+        } finally {
+            rawModuleInfoCache.clear()
         }
     }
 
@@ -560,36 +564,40 @@ open class Npm(
         val packageJson: File
     )
 
-    private fun parsePackageJson(moduleDir: File, scopes: Set<String>): RawModuleInfo {
-        val packageJsonFile = moduleDir.resolve("package.json")
-        val json = readJsonFile(packageJsonFile)
+    private val rawModuleInfoCache = mutableMapOf<Pair<File, Set<String>>, RawModuleInfo>()
 
-        val name = json["name"].textValueOrEmpty()
-        if (name.isBlank()) {
-            log.warn {
-                "The '$packageJsonFile' does not set a name, which is only allowed for unpublished packages."
+    private fun parsePackageJson(moduleDir: File, scopes: Set<String>): RawModuleInfo =
+        rawModuleInfoCache.getOrPut(moduleDir to scopes) {
+            val packageJsonFile = moduleDir.resolve("package.json")
+            log.debug { "Parsing module info from '${packageJsonFile.absolutePath}'." }
+            val json = readJsonFile(packageJsonFile)
+
+            val name = json["name"].textValueOrEmpty()
+            if (name.isBlank()) {
+                log.warn {
+                    "The '$packageJsonFile' does not set a name, which is only allowed for unpublished packages."
+                }
             }
-        }
 
-        val version = json["version"].textValueOrEmpty()
-        if (version.isBlank()) {
-            log.warn {
-                "The '$packageJsonFile' does not set a version, which is only allowed for unpublished packages."
+            val version = json["version"].textValueOrEmpty()
+            if (version.isBlank()) {
+                log.warn {
+                    "The '$packageJsonFile' does not set a version, which is only allowed for unpublished packages."
+                }
             }
-        }
 
-        val dependencyNames = scopes.flatMapTo(mutableSetOf()) { scope ->
-            // Yarn ignores "//" keys in the dependencies to allow comments, therefore ignore them here as well.
-            json[scope].fieldNamesOrEmpty().asSequence().filterNot { it == "//" }
-        }
+            val dependencyNames = scopes.flatMapTo(mutableSetOf()) { scope ->
+                // Yarn ignores "//" keys in the dependencies to allow comments, therefore ignore them here as well.
+                json[scope].fieldNamesOrEmpty().asSequence().filterNot { it == "//" }
+            }
 
-        return RawModuleInfo(
-            name = name,
-            version = version,
-            dependencyNames = dependencyNames,
-            packageJson = packageJsonFile
-        )
-    }
+            RawModuleInfo(
+                name = name,
+                version = version,
+                dependencyNames = dependencyNames,
+                packageJson = packageJsonFile
+            )
+        }
 
     private fun findDependencyModuleDir(dependencyName: String, searchModuleDirs: List<File>): List<File> {
         searchModuleDirs.forEachIndexed { index, moduleDir ->
