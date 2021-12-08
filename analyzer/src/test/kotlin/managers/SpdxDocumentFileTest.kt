@@ -128,7 +128,12 @@ class SpdxDocumentFileTest : WordSpec({
             )
             val issues = mutableListOf<OrtIssue>()
 
-            externalDocumentReference.getSpdxPackage("SPDXRef-Package_wrong_id", spdxProjectFile, issues)
+            externalDocumentReference.getSpdxPackage(
+                SpdxDocumentCache(),
+                "SPDXRef-Package_wrong_id",
+                spdxProjectFile,
+                issues
+            )
 
             issues shouldHaveSize 1
             issues shouldHaveSingleElement { externalDocumentReference.externalDocumentId in it.message }
@@ -142,7 +147,12 @@ class SpdxDocumentFileTest : WordSpec({
             )
 
             val spdxPackageId = "SPDXRef-Package-zlib"
-            val spdxPackage = externalDocumentReference.getSpdxPackage(spdxPackageId, spdxProjectFile, mutableListOf())
+            val spdxPackage = externalDocumentReference.getSpdxPackage(
+                SpdxDocumentCache(),
+                spdxPackageId,
+                spdxProjectFile,
+                mutableListOf()
+            )
 
             spdxPackage shouldNotBeNull {
                 spdxId shouldBe spdxPackageId
