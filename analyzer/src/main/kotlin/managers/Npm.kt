@@ -519,15 +519,12 @@ open class Npm(
             return null
         }
 
-        log.debug { "Building dependency tree for '${moduleInfo.name}' from directory '$moduleDir'." }
-
         val pathToRoot = listOf(moduleDir) + ancestorModuleDirs
         moduleInfo.dependencyNames.forEach { dependencyName ->
             val dependencyModuleDirPath = findDependencyModuleDir(dependencyName, pathToRoot)
 
             if (dependencyModuleDirPath.isNotEmpty()) {
                 val dependencyModuleDir = dependencyModuleDirPath.first()
-                log.debug { "Found module dir for '$dependencyName' at '$dependencyModuleDir'." }
 
                 getModuleInfo(
                     moduleDir = dependencyModuleDir,
