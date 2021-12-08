@@ -72,12 +72,12 @@ private val pkgForVcs = SpdxPackage(
     name = "Dummy"
 )
 
-private fun createSpdxDocument(packages: List<SpdxPackage>?, hasExternalDocumentRefs: Boolean = true): SpdxDocument {
+private fun createSpdxDocument(keepExternalDocumentRefs: Boolean = true, packages: List<SpdxPackage>? = null): SpdxDocument {
     val spdxDocument = createSpdxDocument()
 
     val spdxPackages = packages ?: spdxDocument.packages
 
-    return if (hasExternalDocumentRefs) {
+    return if (keepExternalDocumentRefs) {
         spdxDocument.copy(packages = spdxPackages)
     } else {
         spdxDocument.copy(packages = spdxPackages, externalDocumentRefs = emptyList())
@@ -111,7 +111,7 @@ class SpdxDocumentFileTest : WordSpec({
 
     "projectPackage()" should {
         "return project package when list of packages is given" {
-            val spdxDocument = createSpdxDocument(null, false)
+            val spdxDocument = createSpdxDocument(keepExternalDocumentRefs = false)
             val projectPackage = spdxDocument.packages.find { it.spdxId == "SPDXRef-Package-xyz" }
 
             spdxDocument.projectPackage() shouldBe projectPackage
@@ -119,14 +119,14 @@ class SpdxDocumentFileTest : WordSpec({
 
         "return project package when only one package in list, but external document references exist" {
             val projectPackage = createSpdxDocument().packages.find { it.spdxId == "SPDXRef-Package-xyz" }
-            val spdxDocument = createSpdxDocument(listOf(projectPackage!!), true)
+            val spdxDocument = createSpdxDocument(keepExternalDocumentRefs = true, listOf(projectPackage!!))
 
             spdxDocument.projectPackage() shouldBe projectPackage
         }
 
         "return no project package when just one package in list" {
             val projectPackage = createSpdxDocument().packages.find { it.spdxId == "SPDXRef-Package-xyz" }
-            val spdxDocument = createSpdxDocument(listOf(projectPackage!!), false)
+            val spdxDocument = createSpdxDocument(keepExternalDocumentRefs = false, listOf(projectPackage!!))
 
             spdxDocument.projectPackage() shouldBe null
         }
