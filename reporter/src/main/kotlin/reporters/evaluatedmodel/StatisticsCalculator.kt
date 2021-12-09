@@ -59,9 +59,7 @@ internal class StatisticsCalculator {
     )
 
     private fun getOpenRuleViolations(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
-        val openPolicyViolations = ortResult
-            .getRuleViolations()
-            .filterNot { policyViolation -> resolutionProvider.isResolved(policyViolation) }
+        val openPolicyViolations = ortResult.getRuleViolations().filterNot { resolutionProvider.isResolved(it) }
 
         return IssueStatistics(
             errors = openPolicyViolations.count { it.severity == Severity.ERROR },
