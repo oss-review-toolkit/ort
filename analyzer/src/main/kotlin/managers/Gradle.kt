@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
@@ -133,6 +134,17 @@ class Gradle(
 
     // The path to the root project. In a single-project, just points to the project path.
     private lateinit var rootProjectDir: File
+
+    // Filter Gradle projects that are managed via Flutter / Pub. These projects are analyzed from within Pub.
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+        val pubFactory = Pub.Factory()
+
+        return definitionFiles.filter { gradleDefinitionFile ->
+            pubFactory.globsForDefinitionFiles.none { pubDefinitionFile ->
+                gradleDefinitionFile.parentFile.searchUpwardsForFile(pubDefinitionFile) != null
+            }
+        }
+    }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
