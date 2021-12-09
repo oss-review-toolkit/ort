@@ -24,9 +24,10 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.Properties
+
+import kotlin.io.path.moveTo
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -223,7 +224,7 @@ private fun moveGeneratedPom(pomFile: File): File {
     val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
     val targetFile = targetDirParent.resolve(targetFilename)
 
-    if (runCatching { Files.move(pomFile.toPath(), targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
+    if (runCatching { pomFile.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
         Sbt.log.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
         return pomFile
     }
