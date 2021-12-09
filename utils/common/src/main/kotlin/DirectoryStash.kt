@@ -22,10 +22,10 @@ package org.ossreviewtoolkit.utils.common
 import java.io.Closeable
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
 import kotlin.io.path.createTempDirectory
+import kotlin.io.path.moveTo
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -56,7 +56,7 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
                 "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'."
             }
 
-            Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+            originalDir.toPath().moveTo(tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
             tempDir
         } else {
@@ -72,7 +72,7 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
             stashedDirectories[originalDir]?.let { tempDir ->
                 logger.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
 
-                Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                tempDir.toPath().moveTo(originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
                 // Delete the top-level temporary directory which should be empty now.
                 if (!tempDir.parentFile.delete()) {
