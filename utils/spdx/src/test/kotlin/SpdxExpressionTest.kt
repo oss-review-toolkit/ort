@@ -141,6 +141,7 @@ class SpdxExpressionTest : WordSpec() {
                     shouldThrow<SpdxException> {
                         deprecatedExpression.toSpdx(Strictness.ALLOW_CURRENT)
                     }
+
                     shouldThrow<SpdxException> {
                         deprecatedExpressionWithException.toSpdx(Strictness.ALLOW_CURRENT)
                     }
