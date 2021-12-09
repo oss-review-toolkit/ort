@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +27,11 @@ import io.kotest.matchers.string.haveSubstring
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -89,6 +94,28 @@ class PubFunTest : WordSpec() {
                 result.toYaml() shouldBe expectedResult
             }
 
+            "resolve dependencies for a project with Flutter, Android and Cocoapods" {
+                val workingDir = projectsDir.resolve("flutter-project-with-android-and-cocoapods")
+                val expectedResultFile =
+                    projectsDir.parentFile.resolve("pub-expected-output-with-flutter-android-and-cocoapods.yml")
+
+                val analyzer = Analyzer(DEFAULT_ANALYZER_CONFIGURATION)
+                val managedFiles = analyzer.findManagedFiles(workingDir)
+
+                val analyzerResult = analyzer.analyze(managedFiles).patchAapt2Result()
+
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                    expectedResultFile,
+                    url = vcsUrl,
+                    urlProcessed = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
+
+                patchActualResult(analyzerResult, true) shouldBe expectedResult
+            }
+
             "show an error if no lockfile is present" {
                 val workingDir = projectsDir.resolve("no-lockfile")
                 val packageFile = workingDir.resolve("pubspec.yaml")
@@ -112,5 +139,39 @@ class PubFunTest : WordSpec() {
     private fun createPubForExternal(): Pub {
         val config = AnalyzerConfiguration(allowDynamicVersions = true)
         return Pub("Pub", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
+    }
+
+    /**
+     * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
+     */
+    private fun OrtResult.patchAapt2Result(): OrtResult {
+        val packages = analyzer?.result?.packages?.toMutableSet()
+        val aapt2Package =
+            packages?.find {
+                it.pkg.id.type == "Maven" &&
+                        it.pkg.id.namespace == "com.android.tools.build" &&
+                        it.pkg.id.name == "aapt2"
+            }
+
+        val patchedPackages = packages?.map { pkg ->
+            if (pkg == aapt2Package) {
+                aapt2Package?.copy(
+                    pkg = aapt2Package.pkg.copy(
+                        binaryArtifact = aapt2Package.pkg.binaryArtifact.copy(
+                            url = "***",
+                            hash = Hash("***", HashAlgorithm.SHA1)
+                        )
+                    )
+                ) ?: pkg
+            } else pkg
+        }?.toSortedSet() ?: sortedSetOf()
+
+        return copy(
+            analyzer = analyzer?.result?.copy(packages = patchedPackages)?.let { analyzerResult ->
+                analyzer?.copy(
+                    result = analyzerResult
+                )
+            }
+        )
     }
 }
