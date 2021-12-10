@@ -91,10 +91,8 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use {
-            val fullGraph = getDependencyGraph(projectDir)
-            val projectId = fullGraph.projectId()
-
-            val graph = fullGraph.subgraph(getUsedPackages(fullGraph, projectDir, projectId))
+            val graph = getDependencyGraph(projectDir)
+            val projectId = graph.projectId()
             val vendorModules = getVendorModules(projectDir)
 
             val packageIds = graph.nodes() - projectId
@@ -171,7 +169,7 @@ class GoMod(
             graph.addEdge(parent, child)
         }
 
-        return graph
+        return graph.subgraph(getUsedPackages(graph, projectDir, graph.projectId()))
     }
 
     /**
