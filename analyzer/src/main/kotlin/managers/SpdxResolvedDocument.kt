@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
@@ -36,6 +38,7 @@ import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
+import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
 
 /**
  * A data class storing information about a root SPDX document and all the documents referenced by it.
@@ -60,6 +63,12 @@ internal data class SpdxResolvedDocument(
      * the external reference objects as keys.
      */
     val referencedDocuments: Map<SpdxExternalDocumentReference, SpdxDocument>,
+
+    /**
+     * Holds a list with the accumulated [SpdxRelationship]s from all documents referenced directly or indirectly from
+     * the root document.
+     */
+    val relationships: List<SpdxRelationship>,
 
     /**
      * A map allowing direct access to the packages declared in one of the contained documents. For the packages of the
@@ -93,7 +102,8 @@ internal data class SpdxResolvedDocument(
             // Note: The identifiers from packages defined in external documents are qualified with the relation name,
             // while package identifiers from the root document are not qualified. Thus, there can be no clash.
             val packages = collectPackages(references) + rootDocument.getPackages()
-            return SpdxResolvedDocument(rootDocument, managerName, references, packages, issues)
+            val relations = collectAndQualifyRelations(references) + rootDocument.relationships
+            return SpdxResolvedDocument(rootDocument, managerName, references, relations, packages, issues)
         }
     }
 
@@ -167,6 +177,17 @@ private fun collectPackages(
 
     return allPackages
 }
+
+/**
+ * Return a list with all [SpdxRelationship]s found in the given [references]. Qualify the identifiers used in these
+ * relationships, so that they are compatible with the keys used to access the aggregated packages.
+ */
+private fun collectAndQualifyRelations(
+    references: MutableMap<SpdxExternalDocumentReference, SpdxDocument>
+): List<SpdxRelationship> =
+    references.flatMap { (reference, document) ->
+        document.relationships.map { it.qualify(reference) }
+    }
 
 /**
  * A data class to hold the result of an operation to resolve an [SpdxDocument] from an external reference. Resolving
@@ -317,3 +338,23 @@ private fun SpdxDocument.resolveReferences(cache: SpdxDocumentCache, documentUri
  */
 private fun SpdxDocument.getPackages(idPrefix: String? = null): Map<String, SpdxPackage> =
     packages.associateBy { pkg -> idPrefix?.let { "$it${pkg.spdxId}" } ?: pkg.spdxId }
+
+/**
+ * Transform the identifiers of the packages referenced by this relation to qualified identifiers if necessary. When
+ * combining the relationships from multiple SPDX documents, packages must always be referenced with qualified
+ * identifiers (including the ID of the [reference] that points to the document), so that they can be resolved
+ * correctly.
+ */
+private fun SpdxRelationship.qualify(reference: SpdxExternalDocumentReference): SpdxRelationship {
+    val qualifiedElementId = ensureQualified(spdxElementId, reference)
+    val qualifiedRelatedId = ensureQualified(relatedSpdxElement, reference)
+
+    return takeIf { spdxElementId == qualifiedElementId && relatedSpdxElement == qualifiedRelatedId }
+        ?: copy(spdxElementId = qualifiedElementId, relatedSpdxElement = qualifiedRelatedId)
+}
+
+/**
+ * Transform the given [spdxId] to a qualified identifier based on [reference] unless it is already qualified.
+ */
+private fun ensureQualified(spdxId: String, reference: SpdxExternalDocumentReference): String =
+    spdxId.takeIf { ':' in it } ?: "${reference.externalDocumentId}:$spdxId"
