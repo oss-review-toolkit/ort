@@ -342,6 +342,146 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 }
             }
         }
+
+        "relationships" should {
+            "contain the relations from the root document if there are no external references" {
+                val relations = listOf(
+                    SpdxRelationship(packageId(1), SpdxRelationship.Type.DEPENDS_ON, packageId(2)),
+                    SpdxRelationship(packageId(1), SpdxRelationship.Type.DEPENDS_ON, packageId(3)),
+                    SpdxRelationship(packageId(4), SpdxRelationship.Type.DEPENDENCY_OF, packageId(3))
+                )
+                val packages = (1..5).map(::createPackage)
+                val rootDoc = createSpdxDocument(1, packages, relations = relations)
+
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+
+                resolvedDoc.relationships should containExactly(relations)
+            }
+
+            "contain the aggregated and qualified relations from all referenced documents" {
+                val pkg30 = createPackage(30)
+                val pkg31 = createPackage(31)
+                val relation31 = SpdxRelationship(pkg30.spdxId, SpdxRelationship.Type.DEPENDS_ON, pkg31.spdxId)
+                val doc3 = createSpdxDocument(3, listOf(pkg31, pkg30), relations = listOf(relation31))
+                val ref30 = doc3.toExternalReference(30)
+
+                val pkg20 = createPackage(20)
+                val pkg21 = createPackage(21)
+                val relation21 = SpdxRelationship(pkg21.spdxId, SpdxRelationship.Type.DEPENDENCY_OF, pkg20.spdxId)
+                val relation22 = SpdxRelationship(
+                    pkg21.spdxId,
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    packageId(31, referenceIndex = 30)
+                )
+                val doc2 = createSpdxDocument(
+                    2,
+                    listOf(pkg20, pkg21),
+                    relations = listOf(relation21, relation22),
+                    references = listOf(ref30)
+                )
+                val ref20 = doc2.toExternalReference(20)
+
+                val pkg1 = createPackage(1)
+                val pkg2 = createPackage(2)
+                val relation1 = SpdxRelationship(
+                    pkg1.spdxId,
+                    SpdxRelationship.Type.COPY_OF,
+                    packageId(20, referenceIndex = 20)
+                )
+                val relation2 = SpdxRelationship(
+                    pkg1.spdxId,
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    packageId(21, referenceIndex = 20)
+                )
+                val relation3 = SpdxRelationship(pkg2.spdxId, SpdxRelationship.Type.DATA_FILE_OF, pkg1.spdxId)
+                val doc1 = createSpdxDocument(
+                    1,
+                    listOf(pkg1, pkg2),
+                    relations = listOf(relation1, relation2, relation3),
+                    references = listOf(ref20)
+                )
+
+                val expectedRelations = listOf(
+                    relation1,
+                    relation2,
+                    relation3,
+                    SpdxRelationship(
+                        packageId(21, referenceIndex = 20),
+                        relation21.relationshipType,
+                        packageId(20, referenceIndex = 20)
+                    ),
+                    relation22.copy(spdxElementId = packageId(21, referenceIndex = 20)),
+                    SpdxRelationship(
+                        packageId(30, referenceIndex = 30),
+                        relation31.relationshipType,
+                        packageId(31, referenceIndex = 30)
+                    )
+                )
+
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc1, MANAGER_NAME)
+
+                resolvedDoc.relationships should containExactlyInAnyOrder(expectedRelations)
+            }
+
+            "contain only resolvable packages" {
+                val pkg30 = createPackage(30)
+                val pkg31 = createPackage(31)
+                val relation31 = SpdxRelationship(pkg30.spdxId, SpdxRelationship.Type.DEPENDS_ON, pkg31.spdxId)
+                val doc3 = createSpdxDocument(3, listOf(pkg31, pkg30), relations = listOf(relation31))
+                val ref30 = doc3.toExternalReference(30)
+
+                val pkg20 = createPackage(20)
+                val pkg21 = createPackage(21)
+                val relation21 = SpdxRelationship(pkg21.spdxId, SpdxRelationship.Type.DEPENDENCY_OF, pkg20.spdxId)
+                val relation22 = SpdxRelationship(
+                    pkg21.spdxId,
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    packageId(31, referenceIndex = 30)
+                )
+                val doc2 = createSpdxDocument(
+                    2,
+                    listOf(pkg20, pkg21),
+                    relations = listOf(relation21, relation22),
+                    references = listOf(ref30)
+                )
+                val ref20 = doc2.toExternalReference(20)
+
+                val pkg1 = createPackage(1)
+                val pkg2 = createPackage(2)
+                val relation1 = SpdxRelationship(
+                    pkg1.spdxId,
+                    SpdxRelationship.Type.COPY_OF,
+                    packageId(20, referenceIndex = 20)
+                )
+                val relation2 = SpdxRelationship(
+                    pkg1.spdxId,
+                    SpdxRelationship.Type.DEPENDS_ON,
+                    packageId(21, referenceIndex = 20)
+                )
+                val relation3 = SpdxRelationship(pkg2.spdxId, SpdxRelationship.Type.DATA_FILE_OF, pkg1.spdxId)
+                val doc1 = createSpdxDocument(
+                    1,
+                    listOf(pkg1, pkg2),
+                    relations = listOf(relation1, relation2, relation3),
+                    references = listOf(ref20)
+                )
+
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc1, MANAGER_NAME)
+
+                val issues = mutableListOf<OrtIssue>()
+                resolvedDoc.relationships.forEach { relation ->
+                    resolvedDoc.getSpdxPackageForId(relation.spdxElementId, issues) shouldNotBeNull {
+                        spdxId shouldBe relation.spdxElementId.substringAfter(':')
+                    }
+
+                    resolvedDoc.getSpdxPackageForId(relation.relatedSpdxElement, issues) shouldNotBeNull {
+                        spdxId shouldBe relation.relatedSpdxElement.substringAfter(':')
+                    }
+                }
+
+                issues should beEmpty()
+            }
+        }
     }
 
     /**
@@ -398,9 +538,11 @@ private fun createPackage(index: Int): SpdxPackage =
     )
 
 /**
- * Generate the ID of a test package based on the given [index].
+ * Generate the ID of a test package based on the given [index]. If a [referenceIndex] is provided, generate an ID
+ * that is qualified with the ID of this reference.
  */
-private fun packageId(index: Int): String = "$SPDX_REF-$index"
+private fun packageId(index: Int, referenceIndex: Int? = null): String =
+    referenceIndex?.let { "${referenceId(it)}:" }.orEmpty() + "$SPDX_REF-$index"
 
 /**
  * Generate the ID of a test document reference based on the given [index].
