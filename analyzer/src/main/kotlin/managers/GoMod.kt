@@ -321,6 +321,7 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
 }
 
 // See https://golang.org/ref/mod#pseudo-versions.
+// Format for no known base version, e.g. v0.0.0-20191109021931-daa7c04131f5:
 private val PSEUDO_VERSION_REGEX = "^v0\\.0\\.0-[\\d]{14}-(?<sha1>[0-9a-f]+)$".toRegex()
 
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
