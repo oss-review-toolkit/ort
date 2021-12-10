@@ -149,8 +149,6 @@ class GoMod(
             .toSet()
 
     private fun getDependencyGraph(projectDir: File): Graph {
-        val graph = run("mod", "graph", workingDir = projectDir).requireSuccess().stdout
-
         fun parsePackageEntry(entry: String) =
             Identifier(
                 type = managerName,
@@ -160,7 +158,8 @@ class GoMod(
             )
 
         val result = Graph()
-        for (line in graph.lines()) {
+
+        for (line in run("mod", "graph", workingDir = projectDir).requireSuccess().stdout.lines()) {
             if (line.isBlank()) continue
 
             val columns = line.split(' ')
