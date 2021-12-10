@@ -320,14 +320,16 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
     private fun dependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
 
+private const val DATE_REVISION_PATTERN = "[\\d]{14}-(?<sha1>[0-9a-f]+)"
+
 // See https://golang.org/ref/mod#pseudo-versions.
 private val PSEUDO_VERSION_REGEXES = listOf(
     // Format for no known base version, e.g. v0.0.0-20191109021931-daa7c04131f5.
-    "^v0\\.0\\.0-[\\d]{14}-(?<sha1>[0-9a-f]+)$".toRegex(),
+    "^v0\\.0\\.0-$DATE_REVISION_PATTERN$".toRegex(),
     // Format for base version is a release version, e.g. v1.2.4-0.20191109021931-daa7c04131f5.
-    "^v[0-9]+\\.[0-9]+\\.[0-9]+-0\\.[\\d]{14}-(?<sha1>[0-9a-f]+)$".toRegex(),
+    "^v[0-9]+\\.[0-9]+\\.[0-9]+-0\\.$DATE_REVISION_PATTERN$".toRegex(),
     // base version is a pre-release version, e.g. v1.2.4-pre.0.20191109021931-daa7c04131f5.
-    "^v[0-9]+\\.[0-9]+\\.[0-9]+-pre.0\\.[\\d]{14}-(?<sha1>[0-9a-f]+)$".toRegex(),
+    "^v[0-9]+\\.[0-9]+\\.[0-9]+-pre.0\\.$DATE_REVISION_PATTERN$".toRegex(),
 )
 
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
