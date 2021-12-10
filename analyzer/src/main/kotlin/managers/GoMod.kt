@@ -321,8 +321,12 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
 }
 
 // See https://golang.org/ref/mod#pseudo-versions.
-// Format for no known base version, e.g. v0.0.0-20191109021931-daa7c04131f5:
-private val PSEUDO_VERSION_REGEX = "^v0\\.0\\.0-[\\d]{14}-(?<sha1>[0-9a-f]+)$".toRegex()
+private val PSEUDO_VERSION_REGEXES = listOf(
+    // Format for no known base version, e.g. v0.0.0-20191109021931-daa7c04131f5.
+    "^v0\\.0\\.0-[\\d]{14}-(?<sha1>[0-9a-f]+)$".toRegex(),
+    // Format for base version is a release version, e.g. v1.2.4-0.20191109021931-daa7c04131f5.
+    "^v[0-9]+\\.[0-9]+\\.[0-9]+-0\\.[\\d]{14}-(?<sha1>[0-9a-f]+)$".toRegex(),
+)
 
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
 private const val PACKAGE_SEPARATOR = "# "
@@ -336,8 +340,10 @@ private const val WHY_CHUNK_SIZE = 32
 private fun getRevision(version: String): String {
     version.withoutSuffix("+incompatible")?.let { return getRevision(it) }
 
-    PSEUDO_VERSION_REGEX.find(version)?.let { matchResult ->
-        return matchResult.groups["sha1"]!!.value
+    PSEUDO_VERSION_REGEXES.forEach { regex ->
+        regex.find(version)?.let { matchResult ->
+            return matchResult.groups["sha1"]!!.value
+        }
     }
 
     return version

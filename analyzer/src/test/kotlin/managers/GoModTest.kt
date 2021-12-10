@@ -67,6 +67,15 @@ class GoModTest : WordSpec({
             id.toVcsInfo().revision shouldBe "daa7c04131f5"
         }
 
+        "return the SHA1 from a 'pseudo version', when base version is a release version" {
+            // See https://golang.org/ref/mod#pseudo-versions.
+            val id = Identifier(
+                "GoMod::github.com/example/project:v0.8.1-0.20171018195549-f15c970de5b7"
+            )
+
+            id.toVcsInfo().revision shouldBe "f15c970de5b7"
+        }
+
         "return the SHA1 for a version with a '+incompatible' suffix" {
             val id = Identifier("GoMod::github.com/example/project:v43.3.0+incompatible")
 
