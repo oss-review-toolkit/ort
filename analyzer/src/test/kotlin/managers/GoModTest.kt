@@ -60,7 +60,7 @@ class GoModTest : WordSpec({
             }
         }
 
-        "return the SHA1 from a 'pseudo version'" {
+        "return the SHA1 from a 'pseudo version', when there is no known base version" {
             // See https://golang.org/ref/mod#pseudo-versions.
             val id = Identifier("GoMod::github.com/Azure/go-autorest/autorest/date:v0.0.0-20191109021931-daa7c04131f5")
 
