@@ -157,7 +157,7 @@ class GoMod(
                 version = entry.substringAfter('@', "")
             )
 
-        val result = Graph()
+        val graph = Graph()
 
         for (line in run("mod", "graph", workingDir = projectDir).requireSuccess().stdout.lines()) {
             if (line.isBlank()) continue
@@ -168,10 +168,10 @@ class GoMod(
             val parent = parsePackageEntry(columns[0])
             val child = parsePackageEntry(columns[1])
 
-            result.addEdge(parent, child)
+            graph.addEdge(parent, child)
         }
 
-        return result
+        return graph
     }
 
     /**
