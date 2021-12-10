@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -469,6 +470,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         val remoteRepositories = allRepositories.filterNot {
             // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
             it.url.startsWith("file:/")
+        }.map { repository ->
+            val proxy = repositorySystemSession.proxySelector.getProxy(repository)
+            RemoteRepository.Builder(repository).setProxy(proxy).build()
         }
 
         if (log.delegate.isDebugEnabled) {
