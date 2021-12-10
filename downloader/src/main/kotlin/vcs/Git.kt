@@ -39,9 +39,9 @@ import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.lib.SymbolicRef
 import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
-import org.eclipse.jgit.transport.JschConfigSessionFactory
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
+import org.eclipse.jgit.transport.ssh.jsch.JschConfigSessionFactory
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
