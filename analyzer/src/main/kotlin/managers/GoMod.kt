@@ -155,7 +155,7 @@ class GoMod(
                 version = entry.substringAfter('@', "")
             )
 
-        val graph = Graph()
+        var graph = Graph()
 
         for (line in run("mod", "graph", workingDir = projectDir).requireSuccess().stdout.lines()) {
             if (line.isBlank()) continue
@@ -169,7 +169,14 @@ class GoMod(
             graph.addEdge(parent, child)
         }
 
-        return graph.subgraph(getUsedPackages(graph, projectDir, graph.projectId()))
+        val usedPackages = getUsedPackages(graph, projectDir, graph.projectId())
+        if (usedPackages.size < graph.size()) {
+            log.debug { "Removing ${graph.size() - usedPackages.size} unused packages from the dependency graph." }
+
+            graph = graph.subgraph(usedPackages)
+        }
+
+        return graph
     }
 
     /**
@@ -185,12 +192,7 @@ class GoMod(
                 parseWhyOutput(run(projectDir, "mod", "why", *pkgNames).requireSuccess().stdout)
         }
 
-        val usedPackages = graph.nodes().filter { it.name in usedPackageNames }
-        if (usedPackages.size < graph.size()) {
-            log.debug { "Removing ${graph.size() - usedPackages.size} unused packages from the dependency graph." }
-        }
-
-        return usedPackages.toSet()
+        return graph.nodes().filterTo(mutableSetOf()) { it.name in usedPackageNames }
     }
 
     private fun createPackage(id: Identifier): Package {
