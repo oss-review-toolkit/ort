@@ -83,7 +83,7 @@ class RedirectionTest : WordSpec({
             var e: SystemExitException? = null
 
             val stdout = redirectStdout {
-                e = shouldThrow<SystemExitException> {
+                e = shouldThrow {
                     for (i in 1..numberOfLines) System.out.println("stdout: $i")
                     System.exit(42)
                 }
