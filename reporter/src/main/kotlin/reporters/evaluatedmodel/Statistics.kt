@@ -158,7 +158,7 @@ data class RepositoryConfigurationStatistics(
     /**
      * The number of [ScopeExclude]s.
      */
-    val scopeExclude: Int,
+    val scopeExcludes: Int,
 
     /**
      * The number of [LicenseChoices].

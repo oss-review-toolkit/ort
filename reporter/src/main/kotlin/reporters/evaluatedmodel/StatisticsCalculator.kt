@@ -131,7 +131,7 @@ internal class StatisticsCalculator {
 
         return RepositoryConfigurationStatistics(
             pathExcludes = config.excludes.paths.size,
-            scopeExclude = config.excludes.scopes.size,
+            scopeExcludes = config.excludes.scopes.size,
             licenseChoices = config.licenseChoices.let {
                 it.packageLicenseChoices.size + it.repositoryLicenseChoices.size
             },
