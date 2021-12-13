@@ -25,8 +25,8 @@ import java.net.PasswordAuthentication
 import org.ossreviewtoolkit.utils.common.Os
 
 /**
- * A simple non-caching authenticator that reads credentials from the [ORT_HTTP_USERNAME_ENV_NAME] and
- * [ORT_HTTP_PASSWORD_ENV_NAME] [environment variables][env].
+ * A simple non-caching authenticator that reads credentials from given environment variables with the names
+ * [ORT_HTTP_USERNAME_ENV_NAME] and [ORT_HTTP_PASSWORD_ENV_NAME].
  */
 class EnvVarAuthenticator(env: Map<String, String> = Os.env) : Authenticator() {
     companion object {
