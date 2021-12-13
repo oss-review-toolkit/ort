@@ -36,7 +36,7 @@ internal data class VcsUrlMapping(
      * Applies the mapping defined by this [VcsUrlMapping].
      */
     fun map(vcsUrl: String): String {
-        var uri = URI(vcsUrl)
+        val uri = URI(vcsUrl)
 
         return hostnames[uri.host]?.let { uri.replaceHost(it) } ?: vcsUrl
     }
