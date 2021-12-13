@@ -192,10 +192,8 @@ data class ReportTableModel(
          */
         val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
-        fun merge(other: SummaryRow): SummaryRow {
-            fun <T> plus(left: List<T>, right: List<T>) = left + right
-
-            return SummaryRow(
+        fun merge(other: SummaryRow) =
+            SummaryRow(
                 id = id,
                 scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
                     left.zipWithCollections(right).toSortedMap()
@@ -206,7 +204,6 @@ data class ReportTableModel(
                 analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
                 scanIssues = scanIssues.zipWithCollections(other.scanIssues).toSortedMap()
             )
-        }
     }
 
     data class IssueTable(
