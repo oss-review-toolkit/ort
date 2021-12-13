@@ -847,7 +847,7 @@
   "statistics" : {
     "repository_configuration" : {
       "path_excludes" : 2,
-      "scope_exclude" : 1,
+      "scope_excludes" : 1,
       "license_choices" : 2,
       "license_finding_curations" : 0,
       "rule_violation_resolutions" : 1,
