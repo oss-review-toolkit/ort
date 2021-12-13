@@ -241,13 +241,12 @@ data class ReportTableModel(
          */
         val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
-        fun merge(other: IssueRow): IssueRow {
-            return IssueRow(
+        fun merge(other: IssueRow): IssueRow =
+            IssueRow(
                 id = id,
                 analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
                 scanIssues = scanIssues.zipWithCollections(other.scanIssues).toSortedMap()
             )
-        }
     }
 
     data class ResolvableIssue(
