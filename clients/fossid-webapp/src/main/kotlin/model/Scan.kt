@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Scan(
-    val id: String?,
+    val id: Int,
     val created: String?,
     val updated: String?,
 
