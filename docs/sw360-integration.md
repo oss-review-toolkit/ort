@@ -60,7 +60,7 @@ If you prefer to use the SW360 web frontend to correct package metadata instead 
 
 Note:
 
-1. Currently only the SW360 fields `concludedLicenses`, `homepageUrl`, `binaryArtifact` and `sourceArtifact` are used for curations, all
+1. Currently, only the SW360 fields `concludedLicenses`, `homepageUrl`, `binaryArtifact` and `sourceArtifact` are used for curations, all
    other SW360 fields are ignored as there are no corresponding fields for them in ORT.
 2. A release in SW360 needs to be in the approved clearing state, otherwise the curated data will not be used.
 
