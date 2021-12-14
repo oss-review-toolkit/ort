@@ -22,8 +22,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
-import java.net.Authenticator
-import java.net.URI
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -39,7 +37,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -47,12 +44,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.addBasicAuthorization
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
-import org.ossreviewtoolkit.utils.core.downloadFile
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -103,104 +95,6 @@ internal fun SpdxDocument.projectPackage(): SpdxPackage? =
         // The package that describes a project must have an "empty" package filename (as the "filename" is the project
         // directory itself).
         ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
-
-/**
- * Get the [SpdxPackage] from the [SpdxExternalDocumentReference] using [loader] that the [packageId] refers to, where
- * [definitionFile] is used to resolve local relative URIs to files.
- */
-internal fun SpdxExternalDocumentReference.getSpdxPackage(
-    loader: SpdxDocumentCache,
-    packageId: String,
-    definitionFile: File,
-    issues: MutableList<OrtIssue>
-): SpdxPackage? {
-    val externalSpdxDocument = resolve(loader, definitionFile, issues) ?: return null
-
-    val spdxDocumentPath = URI(spdxDocument).path
-    val spdxDocumentFile = definitionFile.resolveSibling(spdxDocumentPath).normalize()
-
-    val spdxPackage = externalSpdxDocument.packages.find { it.spdxId == packageId } ?: run {
-        issues += createAndLogIssue(
-            source = MANAGER_NAME,
-            message = "Cannot find '$packageId' in '$spdxDocumentFile' referred to by '$definitionFile' as " +
-                    "'$externalDocumentId'."
-        )
-        return null
-    }
-
-    return spdxPackage.copy(packageFilename = spdxDocumentFile.parent)
-}
-
-/**
- * Return the [SpdxDocument] this [SpdxExternalDocumentReference]'s [SpdxDocument] refers to.
- */
-private fun SpdxExternalDocumentReference.resolve(
-    loader: SpdxDocumentCache,
-    definitionFile: File,
-    issues: MutableList<OrtIssue>
-): SpdxDocument? {
-    val uri = runCatching { URI(spdxDocument) }.getOrElse {
-        issues += createAndLogIssue(
-            source = MANAGER_NAME,
-            message = "'$spdxDocument' defined in '$definitionFile' as part of '$externalDocumentId' is not a valid " +
-                    "URI."
-        )
-        return null
-    }
-
-    var tempDir: File? = null
-
-    val spdxFile = if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
-        val referencedFile = definitionFile.resolveSibling(uri.path).absoluteFile.normalize()
-        referencedFile.takeIf { it.isFile } ?: run {
-            issues += createAndLogIssue(
-                source = MANAGER_NAME,
-                message = "The file '$referencedFile' pointed to by URI '$uri' does not exist."
-            )
-            return null
-        }
-    } else {
-        tempDir = createOrtTempDir()
-
-        val client = OkHttpClientHelper.buildClient {
-            // Use the authenticator also to request preemptive authentication.
-            val auth = Authenticator.requestPasswordAuthentication(
-                /* host = */ uri.host,
-                /* addr = */ null,
-                /* port = */ uri.port,
-                /* protocol = */ uri.scheme,
-                /* prompt = */ null,
-                /* scheme = */ null
-            )
-
-            if (auth != null) {
-                addBasicAuthorization(auth.userName, String(auth.password))
-            }
-        }
-
-        client.downloadFile(uri.toString(), tempDir).getOrNull() ?: run {
-            tempDir.safeDeleteRecursively(force = true)
-            issues += createAndLogIssue(
-                source = MANAGER_NAME,
-                message = "Failed to download '$spdxDocument' from $uri."
-            )
-            return null
-        }
-    }
-
-    val hash = Hash.create(checksum.checksumValue, checksum.algorithm.name)
-    if (!hash.verify(spdxFile)) {
-        val referencedFile = tempDir?.let { uri } ?: spdxFile
-        issues += createAndLogIssue(
-            source = MANAGER_NAME,
-            message = "The file '$referencedFile' referred from '$definitionFile' does not match the expected " +
-                    "$checksum.",
-            severity = Severity.WARNING
-        )
-    }
-
-    return loader.load(spdxFile).also { tempDir?.safeDeleteRecursively(force = true) }
-}
 
 /**
  * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead

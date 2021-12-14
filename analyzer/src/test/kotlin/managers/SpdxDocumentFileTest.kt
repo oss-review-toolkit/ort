@@ -20,24 +20,18 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldHaveSingleElement
-import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
-import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
-import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /*
  * The below package data is based on example data taken from the SPDX specification.
@@ -114,49 +108,6 @@ class SpdxDocumentFileTest : WordSpec({
             val spdxDocument = createSpdxDocument("libs/curl/package.spdx.yml")
 
             spdxDocument.projectPackage() should beNull()
-        }
-    }
-
-    "getSpdxPackage()" should {
-        val spdxProjectFile = File("src/funTest/assets/projects/synthetic/spdx/project/project.spdx.yml")
-
-        "throw if an external package id does not match relationship id" {
-            val externalDocumentReference = SpdxExternalDocumentReference(
-                "DocumentRef-zlib-1.2.11",
-                "../libs/zlib/package.spdx.yml",
-                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee")
-            )
-            val issues = mutableListOf<OrtIssue>()
-
-            externalDocumentReference.getSpdxPackage(
-                SpdxDocumentCache(),
-                "SPDXRef-Package_wrong_id",
-                spdxProjectFile,
-                issues
-            )
-
-            issues shouldHaveSize 1
-            issues shouldHaveSingleElement { externalDocumentReference.externalDocumentId in it.message }
-        }
-
-        "return the correct SPDX package" {
-            val externalDocumentReference = SpdxExternalDocumentReference(
-                "DocumentRef-zlib-1.2.11",
-                "../libs/zlib/package.spdx.yml",
-                SpdxChecksum(SpdxChecksum.Algorithm.SHA1, "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee")
-            )
-
-            val spdxPackageId = "SPDXRef-Package-zlib"
-            val spdxPackage = externalDocumentReference.getSpdxPackage(
-                SpdxDocumentCache(),
-                spdxPackageId,
-                spdxProjectFile,
-                mutableListOf()
-            )
-
-            spdxPackage shouldNotBeNull {
-                spdxId shouldBe spdxPackageId
-            }
         }
     }
 })
