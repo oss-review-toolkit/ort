@@ -359,8 +359,8 @@ class ExperimentalScanner(
                             packageProvenances.entries.find { it.value == provenance }?.key?.let { pkg ->
                                 val nestedProvenance = nestedProvenances.getValue(pkg)
                                 try {
-                                    reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult2 ->
-                                        scanResult2.scanResults.forEach { (provenance, scanResults) ->
+                                    reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult ->
+                                        scanResult.scanResults.forEach { (provenance, scanResults) ->
                                             result.getOrPut(provenance) { mutableListOf() } += scanResults
                                         }
                                     }
