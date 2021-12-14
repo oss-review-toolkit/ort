@@ -41,7 +41,7 @@ __5. How can one separate code dependencies from build/test ones in pnpm?__
 
 Npmne.com has same scopes as `npm` and `yarn` - `dependencies` amd `devDependencies` 
 
-__6. Can you provide you provide some pnpm projects to test implementation?__
+__6. Can you provide some pnpm projects to test implementation?__
 
 > https://github.com/zkochan/packages/tree/2cb8e0072168869e86d8a81206330352455746cd/rename-overwrite
 
