@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.core.showStackTrace
 
 class ExperimentalScanner(
     val scannerConfig: ScannerConfiguration,
@@ -210,7 +211,16 @@ class ExperimentalScanner(
                             scanResultsForProvenance.forEach { scanResult ->
                                 // TODO: Only store new scan results, for nested provenance some of them could have a
                                 //       stored result already.
-                                writer.write(scanResult)
+                                try {
+                                    writer.write(scanResult)
+                                } catch (e: ScanStorageException) {
+                                    e.showStackTrace()
+
+                                    log.warn {
+                                        "Could not write scan result for ${scanResult.provenance} to " +
+                                                "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                                    }
+                                }
                             }
                         }
                     }
@@ -244,7 +254,16 @@ class ExperimentalScanner(
 
                 if (scanner.criteria != null) {
                     storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                        writer.write(scanResult)
+                        try {
+                            writer.write(scanResult)
+                        } catch (e: ScanStorageException) {
+                            e.showStackTrace()
+
+                            log.warn {
+                                "Could not write scan result for ${scanResult.provenance} to " +
+                                        "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                            }
+                        }
                     }
                 }
             }
@@ -260,7 +279,16 @@ class ExperimentalScanner(
 
                     if (scanner.criteria != null) {
                         storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                            writer.write(scanResult)
+                            try {
+                                writer.write(scanResult)
+                            } catch (e: ScanStorageException) {
+                                e.showStackTrace()
+
+                                log.warn {
+                                    "Could not write scan result for ${scanResult.provenance} to " +
+                                            "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                                }
+                            }
                         }
                     }
                 }
@@ -277,8 +305,17 @@ class ExperimentalScanner(
                     }
 
                     if (filteredScanResult.isComplete()) {
-                        // TODO: Save only results for scanners which did not have a stored result.
-                        writer.write(pkg, filteredScanResult)
+                        try {
+                            // TODO: Save only results for scanners which did not have a stored result.
+                            writer.write(pkg, filteredScanResult)
+                        } catch (e: ScanStorageException) {
+                            e.showStackTrace()
+
+                            log.warn {
+                                "Could not write scan result for ${pkg.id.toCoordinates()} to " +
+                                        "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                            }
+                        }
                     }
                 }
             }
@@ -321,17 +358,35 @@ class ExperimentalScanner(
                         is PackageBasedScanStorageReader -> {
                             packageProvenances.entries.find { it.value == provenance }?.key?.let { pkg ->
                                 val nestedProvenance = nestedProvenances.getValue(pkg)
-                                reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult2 ->
-                                    // TODO: Do not overwrite entries from other storages in result.
-                                    // TODO: Map scan result to known nested provenance for package.
-                                    result += scanResult2.scanResults
+                                try {
+                                    reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult2 ->
+                                        // TODO: Do not overwrite entries from other storages in result.
+                                        // TODO: Map scan result to known nested provenance for package.
+                                        result += scanResult2.scanResults
+                                    }
+                                } catch (e: ScanStorageException) {
+                                    e.showStackTrace()
+
+                                    log.warn {
+                                        "Could not read scan result for ${pkg.id.toCoordinates()} from " +
+                                                "${reader.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                                    }
                                 }
                             }
                         }
 
                         is ProvenanceBasedScanStorageReader -> {
-                            // TODO: Do not overwrite entries from other storages in result.
-                            result[provenance] = reader.read(provenance, scannerCriteria)
+                            try {
+                                // TODO: Do not overwrite entries from other storages in result.
+                                result[provenance] = reader.read(provenance, scannerCriteria)
+                            } catch (e: ScanStorageException) {
+                                e.showStackTrace()
+
+                                log.warn {
+                                    "Could not read scan result for $provenance from ${reader.javaClass.simpleName}: " +
+                                            e.collectMessagesAsString()
+                                }
+                            }
                         }
                     }
                 }
