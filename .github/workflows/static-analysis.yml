@@ -27,7 +27,7 @@ jobs:
       uses: github/codeql-action/upload-sarif@v1
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
-        sarif_file: build/reports/detekt/merged.sarif
+        sarif_file: build/reports/detekt/detekt.sarif
   markdown-links:
     runs-on: ubuntu-latest
     steps:

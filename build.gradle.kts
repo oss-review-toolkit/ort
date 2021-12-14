@@ -21,7 +21,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 import java.net.URL
 
@@ -127,10 +126,6 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     }
 }
 
-val mergeDetektReports by tasks.registering(ReportMergeTask::class) {
-    output.set(rootProject.buildDir.resolve("reports/detekt/merged.sarif"))
-}
-
 allprojects {
     buildscript {
         repositories {
@@ -175,12 +170,6 @@ allprojects {
             sarif.required.set(true)
             txt.required.set(false)
             xml.required.set(false)
-        }
-
-        finalizedBy(mergeDetektReports)
-
-        mergeDetektReports {
-            input.from(this@detekt.sarifReportFile)
         }
     }
 }
