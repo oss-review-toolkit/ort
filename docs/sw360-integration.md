@@ -41,7 +41,7 @@ For a complete example of the `ort.conf` file see [reference.conf](../model/src/
 
 ### Command Line
 
-Uploading to SW360 is a stand-alone ORT command](../cli/src/main/kotlin/commands/UploadResultToSw360Command.kt), which:
+Uploading to SW360 is a stand-alone [ORT command](../cli/src/main/kotlin/commands/UploadResultToSw360Command.kt), which:
 
 1. Takes an _analyzer_ result file as an input,
 2. Creates components/releases in SW360 for the packages and ...
