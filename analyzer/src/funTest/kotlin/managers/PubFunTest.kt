@@ -70,25 +70,6 @@ class PubFunTest : WordSpec() {
                 }
             }
 
-            "resolve dependencies for a project with flutter correctly" {
-                val workingDir = projectsDir.resolve("project-with-flutter")
-                val packageFile = workingDir.resolve("pubspec.yaml")
-                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-project-with-flutter.yml")
-
-                val result = createPub().resolveSingleProject(packageFile)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    expectedResultFile,
-                    custom = mapOf("pub-project" to "pub-${workingDir.name}"),
-                    definitionFilePath = "$vcsPath/pubspec.yaml",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
-
-                patchActualResult(result.toYaml()) shouldBe expectedResult
-            }
-
             "resolve dependencies for a project with dependencies without a static version" {
                 val workingDir = projectsDir.resolve("any-version")
                 val packageFile = workingDir.resolve("pubspec.yaml")
