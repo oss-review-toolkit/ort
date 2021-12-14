@@ -58,7 +58,7 @@ To authenticate with a private Git repository, ORT uses the (semi)standardized `
 
    **Important:** Ensure that the `.netrc` file has been created at `netrc_folder_path` before running the command, otherwise Docker will create a folder `.netrc` inside the container, instead of mounting a single file.
 
-It is also possible to use `git config` to setup access to private repositories.
+It is also possible to use `git config` to set up access to private repositories.
 
 1. Configure your `.gitconfig` with your GitHub credentials
 
