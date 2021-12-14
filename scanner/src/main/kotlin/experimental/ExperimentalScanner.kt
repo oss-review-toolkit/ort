@@ -347,7 +347,7 @@ class ExperimentalScanner(
         return scannerWrappers.associateWith { scanner ->
             val scannerCriteria = scanner.criteria ?: return@associateWith mutableMapOf()
 
-            val result = mutableMapOf<KnownProvenance, List<ScanResult>>()
+            val result = mutableMapOf<KnownProvenance, MutableList<ScanResult>>()
 
             provenances.forEach { provenance ->
                 if (result[provenance] != null) return@forEach
@@ -360,9 +360,9 @@ class ExperimentalScanner(
                                 val nestedProvenance = nestedProvenances.getValue(pkg)
                                 try {
                                     reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult2 ->
-                                        // TODO: Do not overwrite entries from other storages in result.
-                                        // TODO: Map scan result to known nested provenance for package.
-                                        result += scanResult2.scanResults
+                                        scanResult2.scanResults.forEach { (provenance, scanResults) ->
+                                            result.getOrPut(provenance) { mutableListOf() } += scanResults
+                                        }
                                     }
                                 } catch (e: ScanStorageException) {
                                     e.showStackTrace()
@@ -377,8 +377,8 @@ class ExperimentalScanner(
 
                         is ProvenanceBasedScanStorageReader -> {
                             try {
-                                // TODO: Do not overwrite entries from other storages in result.
-                                result[provenance] = reader.read(provenance, scannerCriteria)
+                                result.getOrPut(provenance) { mutableListOf() } +=
+                                    reader.read(provenance, scannerCriteria)
                             } catch (e: ScanStorageException) {
                                 e.showStackTrace()
 
@@ -392,7 +392,7 @@ class ExperimentalScanner(
                 }
             }
 
-            result
+            result.mapValuesTo(mutableMapOf()) { it.value.toList() }
         }
     }
 
