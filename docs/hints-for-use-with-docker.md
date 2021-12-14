@@ -50,7 +50,7 @@ To authenticate with a private Git repository, ORT uses the (semi)standardized `
 
    **Note:** If you receive any authentication errors, double-check this file. The format often shared online with the properties separated by newlines does **not** work with Docker images for ORT, as not all included third-party tools support this format.
 
-2. Mount the `.netrc` into the home directory of the ORT Docker container. By default that is the `/root` directory: 
+2. Mount the `.netrc` into the home directory of the ORT Docker container. By default, that is the `/root` directory: 
    
    ```shell
    docker run -v <workspace_path>:/project -v <netrc_folder_path>/.netrc:/root/.netrc ort --info scan (...)
