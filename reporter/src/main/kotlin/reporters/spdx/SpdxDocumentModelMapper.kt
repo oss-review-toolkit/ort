@@ -114,14 +114,21 @@ object SpdxDocumentModelMapper {
                     ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is RepositoryProvenance }
                 val provenance = vcsScanResult?.provenance as? RepositoryProvenance
 
+                val (filesAnalyzed, packageVerificationCode) =
+                    if (vcsScanResult?.summary?.packageVerificationCode?.isNotEmpty() == true) {
+                        true to vcsScanResult.toSpdxPackageVerificationCode()
+                    } else {
+                        false to null
+                    }
+
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = binaryPackage.copy(
                     spdxId = spdxPackageIdGenerator.nextId("${pkg.id.name}-vcs"),
-                    filesAnalyzed = vcsScanResult != null,
+                    filesAnalyzed = filesAnalyzed,
                     downloadLocation = pkg.vcsProcessed.toSpdxDownloadLocation(provenance?.resolvedRevision),
                     licenseConcluded = SpdxConstants.NOASSERTION,
                     licenseDeclared = SpdxConstants.NOASSERTION,
-                    packageVerificationCode = vcsScanResult?.toSpdxPackageVerificationCode()
+                    packageVerificationCode = packageVerificationCode
                 )
 
                 val vcsPackageRelationShip = SpdxRelationship(
@@ -138,14 +145,21 @@ object SpdxDocumentModelMapper {
                 val sourceArtifactScanResult =
                     ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is ArtifactProvenance }
 
+                val (filesAnalyzed, packageVerificationCode) =
+                    if (sourceArtifactScanResult?.summary?.packageVerificationCode?.isNotEmpty() == true) {
+                        true to sourceArtifactScanResult.toSpdxPackageVerificationCode()
+                    } else {
+                        false to null
+                    }
+
                 // TODO: The copyright text contains copyrights from all scan results.
                 val sourceArtifactPackage = binaryPackage.copy(
                     spdxId = spdxPackageIdGenerator.nextId("${curatedPackage.pkg.id.name}-source-artifact"),
-                    filesAnalyzed = sourceArtifactScanResult != null,
+                    filesAnalyzed = filesAnalyzed,
                     downloadLocation = curatedPackage.pkg.sourceArtifact.url.nullOrBlankToSpdxNone(),
                     licenseConcluded = SpdxConstants.NOASSERTION,
                     licenseDeclared = SpdxConstants.NOASSERTION,
-                    packageVerificationCode = sourceArtifactScanResult?.toSpdxPackageVerificationCode()
+                    packageVerificationCode = packageVerificationCode
                 )
 
                 val sourceArtifactPackageRelationship = SpdxRelationship(
