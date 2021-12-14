@@ -342,7 +342,6 @@ class SpdxDocumentFile(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
     private val spdxDocumentCache = SpdxDocumentCache()
-    private val packageForExternalDocumentId = mutableMapOf<String, SpdxPackage>()
 
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>(MANAGER_NAME) {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
@@ -369,13 +368,13 @@ class SpdxDocumentFile(
     /**
      * Create a [Package] out of this [SpdxPackage].
      */
-    private fun SpdxPackage.toPackage(definitionFile: File, doc: SpdxDocument): Package {
+    private fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocument): Package {
         val packageDescription = description.takeUnless { it.isEmpty() } ?: summary
 
         // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
         // from the download location.
-        val packageDir = definitionFile.resolveSibling(packageFilename)
-        val vcs = VersionControlSystem.forDirectory(packageDir)?.getInfo() ?: getVcsInfo().orEmpty()
+        val packageDir = definitionFile?.resolveSibling(packageFilename)
+        val vcs = packageDir?.let { VersionControlSystem.forDirectory(it)?.getInfo() } ?: getVcsInfo().orEmpty()
 
         val generatedFromRelations = doc.relationships.filter {
             it.relationshipType == SpdxRelationship.Type.GENERATED_FROM
@@ -403,72 +402,37 @@ class SpdxDocumentFile(
     }
 
     /**
-     * Get the [SpdxPackage] for the given [identifier] by resolving against packages or external document references
-     * contained in [doc].
-     */
-    private fun getSpdxPackageForId(
-        doc: SpdxDocument,
-        identifier: String,
-        definitionFile: File,
-        issues: MutableList<OrtIssue>
-    ): SpdxPackage? {
-        doc.packages.find { it.spdxId == identifier }?.let { return it }
-
-        val documentRef = identifier.substringBefore(":")
-        val externalDocumentReference = doc.externalDocumentRefs.find {
-            it.externalDocumentId == documentRef
-        } ?: run {
-            issues += createAndLogIssue(
-                source = MANAGER_NAME,
-                message = "'$identifier' could neither be resolved to a 'package' nor to an 'externalDocumentRef'."
-            )
-            return null
-        }
-
-        return packageForExternalDocumentId.getOrPut(externalDocumentReference.externalDocumentId) {
-            externalDocumentReference.getSpdxPackage(
-                spdxDocumentCache,
-                identifier.substringAfter(":"),
-                definitionFile,
-                issues
-            ) ?: return null
-        }
-    }
-
-    /**
-     * Return the dependencies of [pkg] defined in [doc] of the [SpdxRelationship.Type.DEPENDENCY_OF] type. Identified
-     * dependencies are mapped to ORT [Package]s by taking the [definitionFile] into account for the [VcsInfo], and then
+     * Return the dependencies of the package with the given [pkgId] defined in [doc] of the
+     * [SpdxRelationship.Type.DEPENDENCY_OF] type. Identified dependencies are mapped to ORT [Package]s and then
      * added to [packages].
      */
     private fun getDependencies(
-        pkg: SpdxPackage,
-        doc: SpdxDocument,
-        definitionFile: File,
+        pkgId: String,
+        doc: SpdxResolvedDocument,
         packages: MutableSet<Package>
     ): SortedSet<PackageReference> =
-        getDependencies(pkg, doc, definitionFile, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
+        getDependencies(pkgId, doc, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
             val issues = mutableListOf<OrtIssue>()
-            getSpdxPackageForId(doc, target, definitionFile, issues)?.let { dependency ->
-                packages += dependency.toPackage(definitionFile, doc)
+            doc.getSpdxPackageForId(target, issues)?.let { dependency ->
+                packages += dependency.toPackage(doc.getDefinitionFile(target), doc)
 
                 PackageReference(
                     id = dependency.toIdentifier(),
-                    dependencies = getDependencies(dependency, doc, definitionFile, packages),
-                    linkage = getLinkageForDependency(dependency, pkg.spdxId, doc.relationships),
+                    dependencies = getDependencies(target, doc, packages),
+                    linkage = getLinkageForDependency(dependency, pkgId, doc.relationships),
                     issues = issues
                 )
             }
         }
 
     /**
-     * Return the dependencies of [pkg] defined in [doc] of the given [dependencyOfRelation] type. Optionally, the
-     * [SpdxRelationship.Type.DEPENDS_ON] type is handled by [dependsOnCase]. Identified dependencies are mapped to
-     * ORT [Package]s by taking the [definitionFile] into account for the [VcsInfo], and then added to [packages].
+     * Return the dependencies of the package with the given [pkgId] defined in [doc] of the given
+     * [dependencyOfRelation] type. Optionally, the [SpdxRelationship.Type.DEPENDS_ON] type is handled by
+     * [dependsOnCase]. Identified dependencies are mapped to ORT [Package]s and then added to [packages].
      */
     private fun getDependencies(
-        pkg: SpdxPackage,
-        doc: SpdxDocument,
-        definitionFile: File,
+        pkgId: String,
+        doc: SpdxResolvedDocument,
         packages: MutableSet<Package>,
         dependencyOfRelation: SpdxRelationship.Type,
         dependsOnCase: (String) -> PackageReference? = { null }
@@ -478,22 +442,21 @@ class SpdxDocumentFile(
 
             when {
                 // Dependencies can either be defined on the target...
-                pkg.spdxId.equals(target, ignoreCase = true) && relation == dependencyOfRelation -> {
-                    if (pkg.spdxId != target) {
+                pkgId.equals(target, ignoreCase = true) && relation == dependencyOfRelation -> {
+                    if (pkgId != target) {
                         issues += createAndLogIssue(
                             source = managerName,
-                            message = "Source '${pkg.spdxId}' has to match target '$target' case-sensitively."
+                            message = "Source '$pkgId' has to match target '$target' case-sensitively."
                         )
                     }
 
-                    getSpdxPackageForId(doc, source, definitionFile, issues)?.let { dependency ->
-                        packages += dependency.toPackage(definitionFile, doc)
+                    doc.getSpdxPackageForId(source, issues)?.let { dependency ->
+                        packages += dependency.toPackage(doc.getDefinitionFile(source), doc)
                         PackageReference(
                             id = dependency.toIdentifier(),
                             dependencies = getDependencies(
-                                dependency,
+                                source,
                                 doc,
-                                definitionFile,
                                 packages,
                                 SpdxRelationship.Type.DEPENDENCY_OF,
                                 dependsOnCase
@@ -505,12 +468,12 @@ class SpdxDocumentFile(
                 }
 
                 // ...or on the source.
-                pkg.spdxId.equals(source, ignoreCase = true) && (relation == SpdxRelationship.Type.DEPENDS_ON
+                pkgId.equals(source, ignoreCase = true) && (relation == SpdxRelationship.Type.DEPENDS_ON
                         || hasDefaultScopeLinkage(source, target, relation, doc.relationships)) -> {
-                    if (pkg.spdxId != source) {
+                    if (pkgId != source) {
                         issues += createAndLogIssue(
                             source = managerName,
-                            message = "Source '$source' has to match target '${pkg.spdxId}' case-sensitively."
+                            message = "Source '$source' has to match target '$pkgId' case-sensitively."
                         )
                     }
 
@@ -523,18 +486,17 @@ class SpdxDocumentFile(
         }
 
     /**
-     * Return a [Scope] created from the given type of [relation] for [projectPackage] in [spdxDocument], or `null` if
-     * there are no such relations. Identified dependencies are mapped to ORT [Package]s by taking the [definitionFile]
-     * into account for the [VcsInfo], and then added to [packages].
+     * Return a [Scope] created from the given type of [relation] for the [projectPackage][projectPackageId] in
+     * [spdxDocument], or `null` if there are no such relations. Identified dependencies are mapped to ORT [Package]s
+     * and then added to [packages].
      */
     private fun createScope(
-        spdxDocument: SpdxDocument,
-        projectPackage: SpdxPackage,
+        spdxDocument: SpdxResolvedDocument,
+        projectPackageId: String,
         relation: SpdxRelationship.Type,
-        definitionFile: File,
         packages: MutableSet<Package>
     ): Scope? =
-        getDependencies(projectPackage, spdxDocument, definitionFile, packages, relation).takeUnless {
+        getDependencies(projectPackageId, spdxDocument, packages, relation).takeUnless {
             it.isEmpty()
         }?.let {
             Scope(
@@ -561,8 +523,8 @@ class SpdxDocumentFile(
         }.toList()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        // For direct callers of this function mapDefinitionFiles() did not populate the map before, so add a fallback.
-        val spdxDocument = spdxDocumentCache.load(definitionFile)
+        val transitiveDocument = SpdxResolvedDocument.load(spdxDocumentCache, definitionFile, managerName)
+        val spdxDocument = transitiveDocument.rootDocument.document
 
         val packages = mutableSetOf<Package>()
         val scopes = sortedSetOf<Scope>()
@@ -581,12 +543,12 @@ class SpdxDocumentFile(
         }
 
         scopes += SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
-            createScope(spdxDocument, projectPackage, type, definitionFile, packages)
+            createScope(transitiveDocument, projectPackage.spdxId, type, packages)
         }
 
         scopes += Scope(
             name = DEFAULT_SCOPE_NAME,
-            dependencies = getDependencies(projectPackage, spdxDocument, definitionFile, packages)
+            dependencies = getDependencies(projectPackage.spdxId, transitiveDocument, packages)
         )
 
         val project = Project(
