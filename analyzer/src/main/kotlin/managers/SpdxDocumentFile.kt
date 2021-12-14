@@ -309,12 +309,13 @@ private fun getLinkageForDependency(
     }.takeUnless { it.isEmpty() }?.single() ?: PackageLinkage.DYNAMIC
 
 /**
- * Return true if the [relation] as defined in [relationships] describes that the [source] depends on the [target].
+ * Return true if the [relation] as defined in [relationships] describes an [SPDX_LINKAGE_RELATIONSHIPS] in the
+ * [DEFAULT_SCOPE_NAME] so that the [source] depends on the [target].
  */
-private fun hasDependsOnRelationship(
+private fun hasDefaultScopeLinkage(
     source: String, target: String, relation: SpdxRelationship.Type, relationships: List<SpdxRelationship>
 ): Boolean {
-    if (relation == SpdxRelationship.Type.DEPENDS_ON) return true
+    if (relation !in SPDX_LINKAGE_RELATIONSHIPS) return false
 
     val hasScopeRelationship = relationships.any {
         it.relationshipType in SPDX_SCOPE_RELATIONSHIPS
@@ -322,7 +323,7 @@ private fun hasDependsOnRelationship(
                 && it.relatedSpdxElement == source && it.spdxElementId == target
     }
 
-    return relation in SPDX_LINKAGE_RELATIONSHIPS && !hasScopeRelationship
+    return !hasScopeRelationship
 }
 
 /**
@@ -495,8 +496,8 @@ class SpdxDocumentFile(
                 }
 
                 // ...or on the source.
-                pkg.spdxId.equals(source, ignoreCase = true)
-                        && hasDependsOnRelationship(source, target, relation, doc.relationships) -> {
+                pkg.spdxId.equals(source, ignoreCase = true) && (relation == SpdxRelationship.Type.DEPENDS_ON
+                        || hasDefaultScopeLinkage(source, target, relation, doc.relationships)) -> {
                     if (pkg.spdxId != source) {
                         issues += createAndLogIssue(
                             source = managerName,
