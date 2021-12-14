@@ -109,7 +109,7 @@ If you prefer to use the SW360 to store the ORT _scanner_ results instead of the
 
 In order to be able to store ORT _scanner_ results SW360, first set the connection parameters to your SW360 instance.
 You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `ort.conf` file
-(e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option) as shown below.
+(e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```
 ort {
