@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
-import org.ossreviewtoolkit.scanner.RemoteScanner
+import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.PackageBasedRemoteScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
@@ -86,7 +86,7 @@ class FossId internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration,
     private val config: FossIdConfig
-) : RemoteScanner(name, scannerConfig, downloaderConfig), PackageBasedRemoteScannerWrapper {
+) : Scanner(name, scannerConfig, downloaderConfig), PackageBasedRemoteScannerWrapper {
     class Factory : AbstractScannerFactory<FossId>("FossId") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
