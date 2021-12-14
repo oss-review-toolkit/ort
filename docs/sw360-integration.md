@@ -17,7 +17,7 @@ To add packages found by ORT to projects and releases in SW360.
 ### Prerequisites
 
 In order to be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
-You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `ort.conf` file (e.g. in `${HOME}/.ort/conf`)or pass it to the ORT command with the `--config` option) as shown below.
+You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `ort.conf` file (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```
 ort {
