@@ -50,7 +50,7 @@ internal data class SpdxResolvedDocument(
     /**
      * The root document. This is the starting point, from which all external references have been traversed.
      */
-    val rootDocument: SpdxDocument,
+    val rootDocument: ResolvedSpdxDocument,
 
     /**
      * The name of the package manager that uses this document. This is mainly used to fill the source in generated
@@ -59,10 +59,10 @@ internal data class SpdxResolvedDocument(
     val managerName: String,
 
     /**
-     * Holds a map with all [SpdxDocument]s that are referenced directly or indirectly from the root document, using
-     * the external reference objects as keys.
+     * Holds a map with all [ResolvedSpdxDocument]s that are referenced directly or indirectly from the root document,
+     * using the external reference objects as keys.
      */
-    val referencedDocuments: Map<SpdxExternalDocumentReference, SpdxDocument>,
+    val referencedDocuments: Map<SpdxExternalDocumentReference, ResolvedSpdxDocument>,
 
     /**
      * Holds a list with the accumulated [SpdxRelationship]s from all documents referenced directly or indirectly from
@@ -87,7 +87,7 @@ internal data class SpdxResolvedDocument(
         fun load(cache: SpdxDocumentCache, rootDocumentFile: File, managerName: String): SpdxResolvedDocument {
             val rootDocument = cache.load(rootDocumentFile)
 
-            val references = mutableMapOf<SpdxExternalDocumentReference, SpdxDocument>()
+            val references = mutableMapOf<SpdxExternalDocumentReference, ResolvedSpdxDocument>()
             val issues = mutableMapOf<String, OrtIssue>()
             resolveAllReferences(
                 cache,
@@ -99,11 +99,13 @@ internal data class SpdxResolvedDocument(
                 mutableSetOf()
             )
 
+            val resolvedRootDocument = ResolvedSpdxDocument(rootDocument, rootDocumentFile.toURI())
+
             // Note: The identifiers from packages defined in external documents are qualified with the relation name,
             // while package identifiers from the root document are not qualified. Thus, there can be no clash.
             val packages = collectPackages(references) + rootDocument.getPackages()
             val relations = collectAndQualifyRelations(references) + rootDocument.relationships
-            return SpdxResolvedDocument(rootDocument, managerName, references, relations, packages, issues)
+            return SpdxResolvedDocument(resolvedRootDocument, managerName, references, relations, packages, issues)
         }
     }
 
@@ -126,6 +128,38 @@ internal data class SpdxResolvedDocument(
 
         return pkg
     }
+
+    /**
+     * Return the local definition file in which the package with the given [identifier] is declared. If the package
+     * cannot be resolved or if it has not been declared in a local file, return *null*.
+     */
+    fun getDefinitionFile(identifier: String): File? {
+        if (identifier !in packagesById) return null
+
+        val reference = identifier.substringBefore(':', "")
+            .takeUnless { it.isEmpty() }
+            ?.let { refId -> referencedDocuments.entries.find { it.key.externalDocumentId == refId } }
+
+        return reference?.value?.definitionFile() ?: rootDocument.definitionFile()
+    }
+}
+
+/**
+ * A data class storing information about an SPDX document and the URL from which it was loaded. The latter is
+ * required to generate the VCS information in the analyzer result.
+ */
+internal data class ResolvedSpdxDocument(
+    /** The actual SPDX document. */
+    val document: SpdxDocument,
+
+    /** The URL from which this document was loaded. */
+    val url: URI
+) {
+    /**
+     * Return the local definition file from which this document was loaded if there is one. Return *null* if this
+     * document was loaded from the internet.
+     */
+    fun definitionFile(): File? = url.toDefinitionFile()
 }
 
 /**
@@ -139,13 +173,13 @@ private fun resolveAllReferences(
     managerName: String,
     document: SpdxDocument,
     baseUri: URI,
-    references: MutableMap<SpdxExternalDocumentReference, SpdxDocument>,
+    references: MutableMap<SpdxExternalDocumentReference, ResolvedSpdxDocument>,
     issues: MutableMap<String, OrtIssue>,
     knownUris: MutableSet<URI>
 ) {
     document.resolveReferences(cache, baseUri, managerName).forEach { (ref, resolvedDoc) ->
         resolvedDoc.document?.let { document ->
-            references += ref to document
+            references += ref to ResolvedSpdxDocument(document, resolvedDoc.uri)
             if (knownUris.add(resolvedDoc.uri)) {
                 resolveAllReferences(
                     cache,
@@ -167,12 +201,12 @@ private fun resolveAllReferences(
  * Return a map with all [SpdxPackage]s found in one of the given [references] using qualified identifiers as keys.
  */
 private fun collectPackages(
-    references: MutableMap<SpdxExternalDocumentReference, SpdxDocument>
+    references: MutableMap<SpdxExternalDocumentReference, ResolvedSpdxDocument>
 ): Map<String, SpdxPackage> {
     val allPackages = mutableMapOf<String, SpdxPackage>()
 
-    references.forEach { (reference, document) ->
-        allPackages += document.getPackages("${reference.externalDocumentId}:")
+    references.forEach { (reference, resolvedDocument) ->
+        allPackages += resolvedDocument.document.getPackages("${reference.externalDocumentId}:")
     }
 
     return allPackages
@@ -183,10 +217,10 @@ private fun collectPackages(
  * relationships, so that they are compatible with the keys used to access the aggregated packages.
  */
 private fun collectAndQualifyRelations(
-    references: MutableMap<SpdxExternalDocumentReference, SpdxDocument>
+    references: MutableMap<SpdxExternalDocumentReference, ResolvedSpdxDocument>
 ): List<SpdxRelationship> =
-    references.flatMap { (reference, document) ->
-        document.relationships.map { it.qualify(reference) }
+    references.flatMap { (reference, resolvedSpdxDocument) ->
+        resolvedSpdxDocument.document.relationships.map { it.qualify(reference) }
     }
 
 /**
@@ -210,6 +244,17 @@ private data class ResolutionResult(
 )
 
 /**
+ * Return a flag whether this URI points to a local definition file.
+ */
+private fun URI.isLocalDefinitionFile(): Boolean = scheme.equals("file", ignoreCase = true) || !isAbsolute
+
+/**
+ * Convert this URI to a local definition file if possible. Otherwise, return *null*.
+ */
+private fun URI.toDefinitionFile(): File? =
+    takeIf { isLocalDefinitionFile() }?.let { File(it.path).absoluteFile.normalize() }?.takeIf { it.isFile }
+
+/**
  * Return the [SpdxDocument] this [SpdxExternalDocumentReference]'s [SpdxDocument] refers to. Use [cache] to parse
  * the document, and [baseUri] to resolve relative references.
  */
@@ -230,7 +275,7 @@ private fun SpdxExternalDocumentReference.resolve(
         )
     }
 
-    return if (uri.scheme.equals("file", ignoreCase = true) || !uri.isAbsolute) {
+    return if (uri.isLocalDefinitionFile()) {
         resolveFromFile(uri, cache, baseUri, managerName)
     } else {
         resolveFromDownload(uri, cache, baseUri, managerName)
@@ -248,16 +293,14 @@ private fun SpdxExternalDocumentReference.resolveFromFile(
     baseUri: URI,
     managerName: String
 ): ResolutionResult {
-    val spdxFile = File(uri).absoluteFile.normalize()
-
-    return spdxFile.takeIf { it.isFile }?.let {
+    return uri.toDefinitionFile()?.let {
         ResolutionResult(cache.load(it), uri, verifyChecksum(it, baseUri, managerName))
     } ?: ResolutionResult(
         null,
         baseUri,
         createAndLogIssue(
             source = managerName,
-            message = "The file '$spdxFile' pointed to by '$uri' in reference '$externalDocumentId' does not exist."
+            message = "The file pointed to by '$uri' in reference '$externalDocumentId' does not exist."
         )
     )
 }

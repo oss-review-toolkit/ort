@@ -39,6 +39,7 @@ import io.kotest.matchers.string.contain
 import io.kotest.matchers.types.beTheSameInstanceAs
 
 import java.io.File
+import java.net.URI
 
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Severity
@@ -85,7 +86,8 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(loader, BASE_DOCUMENT_FILE, MANAGER_NAME)
 
-                resolvedDoc.rootDocument should beTheSameInstanceAs(root)
+                resolvedDoc.rootDocument.document should beTheSameInstanceAs(root)
+                resolvedDoc.rootDocument.url shouldBe BASE_DOCUMENT_FILE.toURI()
             }
 
             "load a root document without external references" {
@@ -113,7 +115,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 resolvedDoc.referencedDocuments.keys should containExactlyInAnyOrder(ref1, ref2)
 
                 resolvedDoc.referencedDocuments[ref1] shouldNotBeNull {
-                    packages should containExactly(extPackage10, extPackage11)
+                    document.packages should containExactly(extPackage10, extPackage11)
                 }
             }
 
@@ -134,7 +136,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 resolvedDoc.referencedDocuments.keys should containExactlyInAnyOrder(ref1, ref2, refTrans)
 
                 resolvedDoc.referencedDocuments[refTrans] shouldNotBeNull {
-                    packages should containExactly(extPackage)
+                    document.packages should containExactly(extPackage)
                 }
             }
 
@@ -480,6 +482,89 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 }
 
                 issues should beEmpty()
+            }
+        }
+
+        "getDefinitionFile" should {
+            "return the root document for a package declared there" {
+                val pkg = createPackage(1)
+                val doc = createSpdxDocument(1, listOf(pkg, createPackage(2)))
+
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc, MANAGER_NAME)
+
+                resolvedDoc.getDefinitionFile(pkg.spdxId) shouldBe doc
+            }
+
+            "return the definition file for a package declared in a referenced document" {
+                val pkg = createPackage(11)
+                val refDoc = createSpdxDocument(10, listOf(createPackage(10), pkg))
+                val ref = refDoc.toExternalReference(1)
+                val rootDoc = createSpdxDocument(1, listOf(createPackage(1)), references = listOf(ref))
+
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
+
+                resolvedDoc.getDefinitionFile("${ref.externalDocumentId}:${pkg.spdxId}") shouldBe refDoc
+            }
+
+            "return null if the identifier refers to a non-existing reference" {
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
+
+                resolvedDoc.getDefinitionFile("nonExistingReference:somePackage") should beNull()
+            }
+
+            "return null if the identifier refers to a non-existing package in the root document" {
+                val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
+
+                resolvedDoc.getDefinitionFile("nonExistingPackage") should beNull()
+            }
+        }
+
+        "ResolvedSpdxDocument" should {
+            "return null for the definition file if it was resolved via an URI" {
+                val resolvedDocument = ResolvedSpdxDocument(
+                    SpdxDocumentCache().load(BASE_DOCUMENT_FILE),
+                    URI("https://www.example.org/spdx/package.spdx.yml")
+                )
+
+                resolvedDocument.definitionFile() should beNull()
+            }
+
+            "return the definition file if available" {
+                val resolvedDocument = ResolvedSpdxDocument(
+                    SpdxDocumentCache().load(BASE_DOCUMENT_FILE),
+                    BASE_DOCUMENT_FILE.toURI()
+                )
+
+                resolvedDocument.definitionFile() shouldBe BASE_DOCUMENT_FILE.absoluteFile
+            }
+
+            "return the definition file for a relative URI" {
+                val resolvedDocument = ResolvedSpdxDocument(
+                    SpdxDocumentCache().load(BASE_DOCUMENT_FILE),
+                    URI("src/funTest/assets/projects/synthetic/spdx/project-xyz-with-inline-packages.spdx.yml")
+                )
+
+                resolvedDocument.definitionFile() shouldBe BASE_DOCUMENT_FILE.absoluteFile
+            }
+
+            "return a normalized definition file" {
+                val resolvedDocument = ResolvedSpdxDocument(
+                    SpdxDocumentCache().load(BASE_DOCUMENT_FILE),
+                    URI("../analyzer/src/funTest/assets/projects/synthetic/spdx/" +
+                            "project-xyz-with-inline-packages.spdx.yml")
+                )
+
+                resolvedDocument.definitionFile() shouldBe BASE_DOCUMENT_FILE.absoluteFile
+            }
+
+            "return null if the file does not exist" {
+                val nonExistingFile = File("non/existing/file.spdx.yml")
+                val resolvedDocument = ResolvedSpdxDocument(
+                    SpdxDocumentCache().load(BASE_DOCUMENT_FILE),
+                    nonExistingFile.toURI()
+                )
+
+                resolvedDocument.definitionFile() should beNull()
             }
         }
     }
