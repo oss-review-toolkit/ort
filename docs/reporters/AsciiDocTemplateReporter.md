@@ -33,7 +33,7 @@ After the intermediate AsciiDoc files are generated, they are processed by Ascii
 implementation AsciidoctorJ PDF. A PDF theme can be handed over to AsciidoctorJ PDF in which properties like fonts or
 images displayed in the PDF can be adjusted; see the [Theme Guide][5].
 The path to this theme can be set in the options as described below.
-Note that only one theme can be set that is used for all given templates. If no theme is given or the given path to
+Note that only one theme can be set that is used for all given templates. If no theme is given, or the given path to
 the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 
 ```bash
