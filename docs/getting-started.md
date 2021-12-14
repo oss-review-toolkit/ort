@@ -332,7 +332,7 @@ Note that detailed documentation for writing custom rules is not yet available.
 The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports and open
 source notices. 
 
-For example, to generate a static HTML report, WebApp report and an open source notice by package, use:
+For example, to generate a static HTML report, WebApp report, and an open source notice by package, use:
 
 ```bash
 cli/build/install/ort/bin/ort report
