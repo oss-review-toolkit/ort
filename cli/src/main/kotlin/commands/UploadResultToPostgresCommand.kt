@@ -86,7 +86,17 @@ class UploadResultToPostgresCommand : CliktCommand(
         val ortResult = readOrtResult(ortFile)
 
         val postgresConfig = globalOptionsForSubcommands.config.scanner.storages?.values
-            ?.filterIsInstance<PostgresStorageConfiguration>()?.singleOrNull()
+            ?.filterIsInstance<PostgresStorageConfiguration>()?.let { configs ->
+                if (configs.size > 1) {
+                    val config = configs.first()
+                    println(
+                        "Multiple PostgreSQL storages are configured, using the first one which points to schema " +
+                                "${config.schema} at ${config.url}."
+                    )
+                }
+
+                configs.firstOrNull()
+            }
 
         requireNotNull(postgresConfig) {
             "No PostgreSQL storage is configured for the scanner."
