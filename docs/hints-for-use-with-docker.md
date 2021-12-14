@@ -66,7 +66,7 @@ It is also possible to use `git config` to set up access to private repositories
     [url "https://<username>:<password>@github.com"]
 	         insteadOf = https://github.com    
     ```
-2. Mount the `.gitconfig` into the home directory of the ORT Docker container. By default that is the `/root` directory:
+2. Mount the `.gitconfig` into the home directory of the ORT Docker container. By default, that is the `/root` directory:
 
     ```shell
     docker run -v <workspace_path>:/project -v <gitconfig_path>:/root/.gitconfig ort --info scan (...)
