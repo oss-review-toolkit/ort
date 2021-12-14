@@ -475,13 +475,17 @@ class ExperimentalScanner(
             }
         }
 
-        return scanners.associateWith { scanner ->
-            log.info { "Scanning $provenance with local scanner ${scanner.name}." }
+        return try {
+            scanners.associateWith { scanner ->
+                log.info { "Scanning $provenance with local scanner ${scanner.name}." }
 
-            val summary = scanner.scanPath(downloadDir, context)
-            log.info { "Scan of $provenance with local scanner ${scanner.name} finished." }
+                val summary = scanner.scanPath(downloadDir, context)
+                log.info { "Scan of $provenance with local scanner ${scanner.name} finished." }
 
-            ScanResult(provenance, scanner.details, summary)
+                ScanResult(provenance, scanner.details, summary)
+            }
+        } finally {
+            downloadDir.safeDeleteRecursively(force = true)
         }
     }
 
