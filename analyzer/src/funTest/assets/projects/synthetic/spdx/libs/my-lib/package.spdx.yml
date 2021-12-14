@@ -1,0 +1,55 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2021-12-10T14:25:11Z"
+  creators:
+  - "Organization: Example Inc."
+  - "Person: Harry Hirsch"
+  licenseListVersion: "3.9"
+name: "my-lib-8.88.8"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-my-lib"
+documentDescribes:
+- "SPDXRef-Package-my-lib"
+externalDocumentRefs:
+  - externalDocumentId: "DocumentRef-curl-7.70.0"
+    spdxDocument: "../curl/package.spdx.yml"
+    checksum:
+      algorithm: "SHA1"
+      checksumValue: "73d64ad650d6e1fa418b70985f24d937d1151186"
+  - externalDocumentId: "DocumentRef-openssl-1.1.1g"
+    spdxDocument: "../openssl/package.spdx.yml"
+    checksum:
+      algorithm: "SHA1"
+      checksumValue: "3d38c716b5d7f75c893b8b2720b7c85aca7776ae"
+  - externalDocumentId: "DocumentRef-zlib-1.2.11"
+    spdxDocument: "../zlib/package.spdx.yml"
+    checksum:
+      algorithm: "SHA1"
+      checksumValue: "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"
+packages:
+- SPDXID: "SPDXRef-Package-my-lib"
+  description: "A custom library that does nothing, but depend on other packages"
+  copyrightText: "Copyright (c) 2021, The ORT developers"
+  downloadLocation: "https://example.org/libs/my-lib/releases/download/my-lib-8_88_8/my-lib-8.88.8.tar.gz"
+  externalRefs:
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:2.3:a:test:my-lib:8.88.8:*:*:*:*:*:*:*"
+    referenceType: "cpe23Type"
+  filesAnalyzed: false
+  homepage: "https://www.example.org/my-lib"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "my-lib"
+  name: "my-lib"
+  versionInfo: "8.88.8"
+  originator: "Person: Harry Hirsch (hirsch@forest.org)"
+relationships:
+- spdxElementId: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"
+  relationshipType: "DEPENDENCY_OF"
+  relatedSpdxElement: "SPDXRef-Package-my-lib"
+- spdxElementId: "DocumentRef-openssl-1.1.1g:SPDXRef-Package-openssl"
+  relationshipType: "DEPENDENCY_OF"
+  relatedSpdxElement: "SPDXRef-Package-my-lib"
+- spdxElementId: "SPDXRef-Package-my-lib"
+  relationshipType: "DYNAMIC_LINK"
+  relatedSpdxElement: "DocumentRef-curl-7.70.0:SPDXRef-Package-curl"

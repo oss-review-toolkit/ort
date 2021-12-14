@@ -1,0 +1,43 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2020-07-23T18:30:22Z"
+  creators:
+  - "Organization: Example Inc."
+  - "Person: Thomas Steenbergen"
+  licenseListVersion: "3.9"
+name: "xyz-0.1.0"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-xyz"
+documentDescribes:
+- "SPDXRef-Package-xyz"
+externalDocumentRefs:
+- externalDocumentId: "DocumentRef-my-lib-8.88.8"
+  spdxDocument: "./libs/my-lib/package.spdx.yml"
+  checksum:
+    algorithm: "SHA1"
+    checksumValue: "2fb02799a2486623af054418736f6a30957e2fd1"
+- externalDocumentId: "DocumentRef-zlib-1.2.11"
+  spdxDocument: "./libs/zlib/package.spdx.yml"
+  checksum:
+    algorithm: "SHA1"
+    checksumValue: "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"
+packages:
+- SPDXID: "SPDXRef-Package-xyz"
+  description: "Awesome product created by Example Inc."
+  copyrightText: "Copyright (C) 2020 Example Inc."
+  downloadLocation: "git+ssh://gitlab.example.com:3389/products/xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
+  filesAnalyzed: false
+  homepage: "https://example.com/products/xyz"
+  licenseConcluded:  "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  name: "xyz"
+  versionInfo: "0.1.0"
+  originator: "Person: Thomas Steenbergen"
+relationships:
+- spdxElementId: "DocumentRef-my-lib-8.88.8:SPDXRef-Package-my-lib"
+  relationshipType: "RUNTIME_DEPENDENCY_OF"
+  relatedSpdxElement: "SPDXRef-Package-xyz"
+- spdxElementId: "SPDXRef-Package-xyz"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "DocumentRef-zlib-1.2.11:SPDXRef-Package-zlib"

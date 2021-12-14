@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -39,6 +41,7 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class SpdxDocumentFileFunTest : WordSpec({
     "resolveDependencies()" should {
@@ -152,6 +155,35 @@ class SpdxDocumentFileFunTest : WordSpec({
                 ),
                 sortedSetOf()
             )
+        }
+
+        "retrieve transitive dependencies" {
+            val idCurl = Identifier("SpdxDocumentFile::curl:7.70.0")
+            val idOpenSsl = Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
+            val idZlib = Identifier("SpdxDocumentFile::zlib:1.2.11")
+            val idMyLib = Identifier("SpdxDocumentFile::my-lib:8.88.8")
+
+            val projectFile = projectDir.resolve("project-xyz-with-transitive-dependencies.spdx.yml")
+            val definitionFiles = listOf(projectFile)
+
+            val result = createSpdxDocumentFile().resolveDependencies(definitionFiles, emptyMap())
+
+            result.projectResults[projectFile] shouldNotBeNull {
+                with(single()) {
+                    val resolvedProject = project.withResolvedScopes(result.dependencyGraph)
+                    resolvedProject.scopes.map { it.name } should containExactlyInAnyOrder("runtime", "default")
+
+                    resolvedProject.scopes.first { it.name == "runtime" } shouldNotBeNull {
+                        dependencies shouldHaveSize 1
+
+                        val myLibRef = dependencies.first()
+                        myLibRef.id shouldBe idMyLib
+                        myLibRef.dependencies.map { it.id } should containExactlyInAnyOrder(idCurl, idOpenSsl)
+                    }
+
+                    packages.map { it.id } should containExactlyInAnyOrder(idZlib, idMyLib, idCurl, idOpenSsl)
+                }
+            }
         }
     }
 
