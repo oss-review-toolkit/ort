@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.advisor
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beTheSameInstanceAs
@@ -50,6 +51,23 @@ class AdvisorTest : WordSpec({
             val advisor = createAdvisor(listOf(provider))
 
             advisor.retrieveFindings(OrtResult.EMPTY) should beTheSameInstanceAs(OrtResult.EMPTY)
+
+            coVerify(exactly = 0) {
+                provider.retrievePackageFindings(any())
+            }
+        }
+
+        "return an ORT result with an empty advisor run if there are no packages" {
+            val provider = mockk<AdviceProvider>()
+            val originResult = createOrtResultWithPackages(emptyList())
+
+            val advisor = createAdvisor(listOf(provider))
+
+            val result = advisor.retrieveFindings(originResult)
+
+            result.advisor shouldNotBeNull {
+                results.advisorResults should beEmpty()
+            }
 
             coVerify(exactly = 0) {
                 provider.retrievePackageFindings(any())

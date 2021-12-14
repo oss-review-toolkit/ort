@@ -65,21 +65,25 @@ class Advisor(
             return ortResult
         }
 
-        val providers = providerFactories.map { it.create(config) }
-
         val results = sortedMapOf<Identifier, List<AdvisorResult>>()
 
         val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
+        if (packages.isEmpty()) {
+            log.info { "There are no packages to give advice for." }
+        } else {
 
-        runBlocking {
-            providers.map { provider ->
-                async {
-                    provider.retrievePackageFindings(packages)
-                }
-            }.forEach { providerResults ->
-                providerResults.await().forEach { (pkg, advisorResults) ->
-                    results.merge(pkg.id, advisorResults) { oldResults, newResults ->
-                        oldResults + newResults
+            val providers = providerFactories.map { it.create(config) }
+
+            runBlocking {
+                providers.map { provider ->
+                    async {
+                        provider.retrievePackageFindings(packages)
+                    }
+                }.forEach { providerResults ->
+                    providerResults.await().forEach { (pkg, advisorResults) ->
+                        results.merge(pkg.id, advisorResults) { oldResults, newResults ->
+                            oldResults + newResults
+                        }
                     }
                 }
             }
