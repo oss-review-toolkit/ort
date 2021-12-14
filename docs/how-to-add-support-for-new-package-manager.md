@@ -26,7 +26,7 @@ You can't say the same for `package.json` as there are multiple package managers
 
 __2. How can you get the declared license for a pnpm package?__
 
-The pnpm package manager is part of Node.js ecosystem so it has package.json and
+The pnpm package manager is part of Node.js ecosystem, so it has package.json and
 uses npmjs.com as its central package repository.
 
 __3. How can one get the dependency tree including package names, versions?__
