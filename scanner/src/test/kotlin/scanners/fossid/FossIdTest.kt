@@ -556,15 +556,20 @@ class FossIdTest : WordSpec({
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
             val config = createConfig(deltaScanLimit = deltaScanLimit)
             val vcsInfo = createVcsInfo()
-            val originScan = createScan(vcsInfo.url, vcsInfo.revision, originCode, scanId = "${SCAN_ID}0")
-            val otherScan1 = createScan(vcsInfo.url, "${vcsInfo.revision}_other", "anotherCode")
-            val otherScan2 = createScan("someURL", "someRevision", "someCode", scanId = "zzz")
+            val originScan = createScan(vcsInfo.url, vcsInfo.revision, originCode, scanId = SCAN_ID)
+            val otherScan1 = createScan(
+                vcsInfo.url,
+                "${vcsInfo.revision}_other",
+                "anotherCode",
+                scanId = 0
+            )
+            val otherScan2 = createScan("someURL", "someRevision", "someCode", scanId = 999)
             val deltaScans = (1..numberOfDeltaScans).map {
                 createScan(
                     vcsInfo.url,
                     vcsInfo.revision,
                     scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA, it),
-                    "$SCAN_ID$it"
+                    SCAN_ID + it
                 )
             }
 
@@ -621,7 +626,7 @@ private const val REVISION = "test-revision"
 private const val FOSSID_VERSION = "2021.2.2"
 
 /** A test scan ID that is returned by default when mocking the creation of a scan. */
-private const val SCAN_ID = "testScanId"
+private const val SCAN_ID = 1
 
 /**
  * Create a new [FossId] instance with the specified [config].
@@ -709,7 +714,7 @@ private fun createScanDescription(state: ScanStatus): UnversionedScanDescription
 /**
  * Create a mock [Scan] with the given properties.
  */
-private fun createScan(url: String, revision: String, scanCode: String, scanId: String = SCAN_ID): Scan {
+private fun createScan(url: String, revision: String, scanCode: String, scanId: Int = SCAN_ID): Scan {
     val scan = mockk<Scan>()
     every { scan.gitRepoUrl } returns url
     every { scan.gitBranch } returns revision
@@ -887,7 +892,7 @@ private fun FossIdServiceWithVersion.expectCreateScan(
 ): FossIdServiceWithVersion {
     coEvery {
         createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
-    } returns MapResponseBody(status = 1, data = mapOf("scan_id" to SCAN_ID))
+    } returns MapResponseBody(status = 1, data = mapOf("scan_id" to SCAN_ID.toString()))
     return this
 }
 
