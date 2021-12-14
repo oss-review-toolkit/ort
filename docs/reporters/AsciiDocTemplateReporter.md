@@ -59,7 +59,7 @@ where `path/to/fonts` is the relative path to the font directory from the base e
 
 ### HTML
 
-Create a HTML report from the Freemarker template using [Asciidoctor's HTML converter][7].
+Create an HTML report from the Freemarker template using [Asciidoctor's HTML converter][7].
 
 ```bash
 cli/build/install/ort/bin/ort report
@@ -71,7 +71,7 @@ cli/build/install/ort/bin/ort report
 
 ### XHTML
 
-Create a XHTML report from the Freemarker template using [Asciidoctor's XTML converter][8].
+Create an XHTML report from the Freemarker template using [Asciidoctor's XTML converter][8].
 
 ```bash
 cli/build/install/ort/bin/ort report
