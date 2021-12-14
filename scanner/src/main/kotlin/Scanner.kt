@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -208,6 +209,22 @@ abstract class Scanner(
          */
         val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.scannerName } }
     }
+
+    /**
+     * The version of the scanner, or an empty string if not applicable.
+     */
+    abstract val version: String
+
+    /**
+     * The configuration used by the scanner (this could be anything from command line options to a URL with query
+     * parameters), or an empty string if not applicable.
+     */
+    abstract val configuration: String
+
+    /**
+     * Return the [ScannerDetails] of this scanner.
+     */
+    val details by lazy { ScannerDetails(scannerName, version, configuration) }
 
     /**
      * Scan the [packages] and store the scan results in [outputDirectory]. [ScanResult]s are returned associated by

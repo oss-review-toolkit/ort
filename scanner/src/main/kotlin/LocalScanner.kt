@@ -167,17 +167,7 @@ abstract class LocalScanner(
     /**
      * The actual version of the scanner, or an empty string in case of failure.
      */
-    open val version by lazy { getVersion(scannerDir) }
-
-    /**
-     * The configuration of this [LocalScanner].
-     */
-    abstract val configuration: String
-
-    /**
-     * The [ScannerDetails] of this [LocalScanner].
-     */
-    val details by lazy { ScannerDetails(scannerName, version, configuration) }
+    override val version by lazy { getVersion(scannerDir) }
 
     override fun getVersionRequirement(): Requirement = Requirement.buildLoose(expectedVersion)
 
