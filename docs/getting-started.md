@@ -27,7 +27,7 @@ For the full list of supported package managers and Version Control Systems see 
 
 ## 2. Download & Install ORT
 
-In future we will provide binaries of the ORT tools, but currently you have to build the tools on your own. First
+In the future, we will provide binaries of the ORT tools, but currently you have to build the tools on your own. First
 download the source code (including Git submodules) from GitHub:
 
 ```bash
