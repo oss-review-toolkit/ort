@@ -38,7 +38,8 @@ data class SpdxPackageVerificationCode(
 ) {
     init {
         require(packageVerificationCodeValue.matches(SpdxChecksum.HEX_SYMBOLS_REGEX)) {
-            "The checksum value must only contain lower case hexadecimal digits."
+            "The package verification code must only contain lower case hexadecimal digits but was " +
+                    "'$packageVerificationCodeValue'."
         }
 
         require(SpdxChecksum.Algorithm.SHA1.checksumHexDigits == packageVerificationCodeValue.length) {
