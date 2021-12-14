@@ -295,7 +295,7 @@ Writing scan result to '[scanner-output-dir]/scan-result.yml'.
 
 The `scanner` writes a new ORT result file to `[scanner-output-dir]/scan-result.yml` containing the scan results in
 addition to the analyzer result from the input. This way belonging results are stored in the same place for
-traceability. If the input file already contained scan results they are replaced by the new scan results in the output.
+traceability. If the input file already contained scan results, they are replaced by the new scan results in the output.
 
 As you can see when checking the `scan-result.yml` file, the licenses detected by `ScanCode` match the licenses declared
 by the packages. This is because we scanned a small and well-maintained package in this example, but if you run the scan
