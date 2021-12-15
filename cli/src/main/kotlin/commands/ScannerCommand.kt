@@ -350,7 +350,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
             val ortResult = readOrtResult(input)
             return runBlocking {
-                scanner.scan(ortResult)
+                scanner.scan(ortResult, skipExcluded)
             }
         } finally {
             runBlocking { workingTreeCache.shutdown() }

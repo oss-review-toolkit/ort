@@ -67,14 +67,14 @@ class ExperimentalScanner(
         }
     }
 
-    suspend fun scan(ortResult: OrtResult): OrtResult {
+    suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean): OrtResult {
         val startTime = Instant.now()
 
         val projectScannerWrappers = scannerWrappers[PackageType.PROJECT].orEmpty()
         val packageScannerWrappers = scannerWrappers[PackageType.PACKAGE].orEmpty()
 
         val projectResults = if (projectScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getProjects().mapTo(mutableSetOf()) { it.toPackage() }
+            val packages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
 
             log.info { "Scanning ${packages.size} projects with ${projectScannerWrappers.size} scanners." }
 
@@ -86,7 +86,7 @@ class ExperimentalScanner(
         }
 
         val packageResults = if (packageScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getPackages().map { it.pkg }.filterNotConcluded().toSet()
+            val packages = ortResult.getPackages(skipExcluded).map { it.pkg }.filterNotConcluded().toSet()
 
             log.info { "Scanning ${packages.size} packages with ${packageScannerWrappers.size} scanners." }
 
