@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.scanOrtResult
@@ -70,11 +69,6 @@ class ScannerIntegrationFunTest : StringSpec() {
         scannerConfig: ScannerConfiguration,
         downloaderConfig: DownloaderConfiguration
     ) : PathScanner(name, scannerConfig, downloaderConfig) {
-        class Factory : AbstractScannerFactory<DummyScanner>("Dummy") {
-            override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-                DummyScanner(scannerName, scannerConfig, downloaderConfig)
-        }
-
         override val resultFileExt = "json"
         override val expectedVersion = "1.0"
         override val version = expectedVersion
