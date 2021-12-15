@@ -72,30 +72,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 #------------------------------------------------------------------------
-# Build ort as a separate component
-
-FROM build as ortbuild
-
-# Set this to the version ORT should report.
-ARG ORT_VERSION="DOCKER-SNAPSHOT"
-
-COPY . /usr/local/src/ort
-WORKDIR /usr/local/src/ort
-
-# Prepare Gradle
-RUN --mount=type=cache,target=/tmp/.gradle/ \
-    export GRADLE_USER_HOME=/tmp/.gradle/ && \
-    scripts/import_proxy_certs.sh && \
-    scripts/set_gradle_proxy.sh && \
-    ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
-
-RUN mkdir -p /opt/ort \
-    && tar xf /usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar -C /opt/ort --strip-components 1 \
-    && cp -a /usr/local/src/ort/scripts/*.sh /opt/ort/bin/ \
-    && cp -a /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
-    && cp -a /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
-
-#------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
@@ -226,6 +202,34 @@ RUN mkdir -p /opt/scancode \
     && rm -rf /opt/scancode/thirdparty \
     # Run scancode once to generate indexes as superuser
     && /opt/scancode/bin/scancode --version
+
+#------------------------------------------------------------------------
+# ORT
+FROM nodebuild as ortbuild
+
+# Set this to the version ORT should report.
+ARG ORT_VERSION="DOCKER-SNAPSHOT"
+
+COPY . /usr/local/src/ort
+WORKDIR /usr/local/src/ort
+
+# Prepare Gradle
+RUN --mount=type=cache,target=/tmp/.gradle/ \
+    . /opt/nodejs/nvm.sh \
+    && scripts/import_proxy_certs.sh \
+    && scripts/set_gradle_proxy.sh \
+    && GRADLE_USER_HOME=/tmp/.gradle/ \
+    && sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties \
+    && sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties \
+    && ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
+
+RUN mkdir -p /opt/ort \
+    && tar xf /usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar -C /opt/ort --strip-components 1 \
+    && cp -a /usr/local/src/ort/scripts/*.sh /opt/ort/bin/ \
+    && cp -a /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
+    && cp -a /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/ \
+    && cd \
+    && rm -rf /usr/local/src
 
 #------------------------------------------------------------------------
 # Main container
