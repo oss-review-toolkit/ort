@@ -20,18 +20,14 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.PathScanner
@@ -112,36 +108,26 @@ class Askalono(
             if (isError) throw ScanException(errorMessage)
 
             stdoutFile.copyTo(resultsFile)
-            val result = getRawResult(resultsFile)
-            generateSummary(startTime, endTime, path, result)
+            generateSummary(startTime, endTime, path, stdoutFile)
         }
     }
 
-    override fun getRawResult(resultsFile: File): JsonNode {
-        if (!resultsFile.isFile || resultsFile.length() == 0L) return EMPTY_JSON_NODE
-
-        val yamlNodes = resultsFile.readLines().chunked(3) { (path, license, score) ->
-            val licenseNoOriginalText = license.substringBeforeLast(" (original text)")
-            val yamlString = listOf("Path: $path", licenseNoOriginalText, score).joinToString("\n")
-            yamlMapper.readTree(yamlString)
-        }
-
-        return yamlMapper.createArrayNode().apply { addAll(yamlNodes) }
-    }
-
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
 
-        result.mapTo(licenseFindings) {
-            val filePath = File(it["Path"].textValue())
-            LicenseFinding(
-                license = it["License"].textValue(),
+        resultFile.readLines().chunked(3) { (path, license, score) ->
+            val licenseFinding = LicenseFinding(
+                license = license.removePrefix("License: ").removeSuffix(" (original text)"),
                 location = TextLocation(
                     // Turn absolute paths in the native result into relative paths to not expose any information.
-                    relativizePath(scanPath, filePath),
+                    relativizePath(scanPath, File(path)),
                     TextLocation.UNKNOWN_LINE
                 )
             )
+
+            log.info { "Found $licenseFinding with $score." }
+
+            licenseFindings += licenseFinding
         }
 
         return ScanSummary(

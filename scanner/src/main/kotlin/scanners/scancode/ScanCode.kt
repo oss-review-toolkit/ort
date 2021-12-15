@@ -190,7 +190,7 @@ class ScanCode(
 
         val endTime = Instant.now()
 
-        val result = getRawResult(resultsFile)
+        val result = readJsonFile(resultsFile)
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
         val summary = generateSummary(startTime, endTime, path, result, parseLicenseExpressions)
 
@@ -218,8 +218,6 @@ class ScanCode(
                 it
             }
         }
-
-    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary =
         scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
