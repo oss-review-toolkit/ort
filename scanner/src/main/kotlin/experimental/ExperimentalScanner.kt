@@ -86,7 +86,7 @@ class ExperimentalScanner(
         }
 
         val packageResults = if (packageScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getPackages().mapTo(mutableSetOf()) { it.pkg }
+            val packages = ortResult.getPackages().map { it.pkg }.filterNotConcluded().toSet()
 
             log.info { "Scanning ${packages.size} packages with ${packageScannerWrappers.size} scanners." }
 
@@ -325,6 +325,16 @@ class ExperimentalScanner(
 
         return nestedProvenanceScanResults
     }
+
+    private fun Collection<Package>.filterNotConcluded(): Collection<Package> =
+        takeUnless { scannerConfig.skipConcluded }
+            ?: partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+                if (skip.isNotEmpty()) {
+                    log.debug { "Not scanning the following packages with concluded licenses: $skip" }
+                }
+
+                keep
+            }
 
     private fun getPackageProvenances(packages: Set<Package>): Map<Package, Provenance> =
         packages.associateWith { pkg ->
