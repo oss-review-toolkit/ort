@@ -98,18 +98,13 @@ class Licensee(
 
         val endTime = Instant.now()
 
-        if (process.stderr.isNotBlank()) {
-            log.debug { process.stderr }
-        }
+        return with(process) {
+            if (stderr.isNotBlank()) log.debug { stderr }
+            if (isError) throw ScanException(errorMessage)
 
-        with(process) {
-            if (isSuccess) {
-                stdoutFile.copyTo(resultsFile)
-                val result = getRawResult(resultsFile)
-                return generateSummary(startTime, endTime, path, result)
-            } else {
-                throw ScanException(errorMessage)
-            }
+            stdoutFile.copyTo(resultsFile)
+            val result = getRawResult(resultsFile)
+            generateSummary(startTime, endTime, path, result)
         }
     }
 
