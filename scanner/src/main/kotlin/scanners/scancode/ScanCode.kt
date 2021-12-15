@@ -190,10 +190,6 @@ class ScanCode(
 
         val endTime = Instant.now()
 
-        if (process.stderr.isNotBlank()) {
-            log.debug { process.stderr }
-        }
-
         val result = getRawResult(resultsFile)
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
         val summary = generateSummary(startTime, endTime, path, result, parseLicenseExpressions)
@@ -203,12 +199,11 @@ class ScanCode(
         val hasOnlyMemoryErrors = mapUnknownIssues(issues)
         val hasOnlyTimeoutErrors = mapTimeoutErrors(issues)
 
-        with(process) {
-            if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return summary.copy(issues = issues)
-            } else {
-                throw ScanException(errorMessage)
-            }
+        return with(process) {
+            if (stderr.isNotBlank()) log.debug { stderr }
+            if (isError && !(hasOnlyMemoryErrors || hasOnlyTimeoutErrors)) throw ScanException(errorMessage)
+
+            summary.copy(issues = issues)
         }
     }
 
