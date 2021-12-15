@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
@@ -59,7 +58,6 @@ class Licensee(
     override val criteria by lazy { getScannerCriteria() }
     override val expectedVersion = BuildConfig.LICENSEE_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
-    override val resultFileExt = "json"
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)
@@ -84,7 +82,7 @@ class Licensee(
         return File(userDir, "bin")
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
+    override fun scanPathInternal(path: File): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -100,7 +98,6 @@ class Licensee(
             if (stderr.isNotBlank()) log.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            stdoutFile.copyTo(resultsFile)
             generateSummary(startTime, endTime, path, stdoutFile)
         }
     }
@@ -133,6 +130,5 @@ class Licensee(
         )
     }
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary =
-        scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
+    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }

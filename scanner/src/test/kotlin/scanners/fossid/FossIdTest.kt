@@ -389,7 +389,7 @@ class FossIdTest : WordSpec({
             shouldThrow<TimeoutCancellationException> {
                 withTimeout(1000) {
                     fossId.scanPackages(
-                        setOf(createPackage(createIdentifier(index = 1), vcsInfo)), File("output"), emptyMap()
+                        setOf(createPackage(createIdentifier(index = 1), vcsInfo)), emptyMap()
                     )
                 }
             }
@@ -956,7 +956,7 @@ private fun FossId.scan(packages: List<Package>): ScannerRun {
     every { mockResult.getPackages(any()) } returns curatedPackages
     every { mockResult.getProjects(any()) } returns emptySet()
 
-    val newResult = runBlocking { scanOrtResult(this@scan, mockResult, File("irrelevant")) }
+    val newResult = runBlocking { scanOrtResult(this@scan, mockResult) }
 
     return newResult.scanner!!
 }

@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
@@ -58,7 +57,6 @@ class Askalono(
     override val criteria by lazy { getScannerCriteria() }
     override val expectedVersion = BuildConfig.ASKALONO_VERSION
     override val configuration = ""
-    override val resultFileExt = "txt"
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
@@ -94,7 +92,7 @@ class Askalono(
         return unpackDir
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
+    override fun scanPathInternal(path: File): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -109,7 +107,6 @@ class Askalono(
             if (stderr.isNotBlank()) log.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            stdoutFile.copyTo(resultsFile)
             generateSummary(startTime, endTime, path, stdoutFile)
         }
     }
@@ -145,6 +142,5 @@ class Askalono(
         )
     }
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary =
-        scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
+    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }

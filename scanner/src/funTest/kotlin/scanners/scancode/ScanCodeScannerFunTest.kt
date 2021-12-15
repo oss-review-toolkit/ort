@@ -25,6 +25,7 @@ import io.kotest.matchers.string.endWith
 import io.kotest.matchers.string.startWith
 
 import org.ossreviewtoolkit.scanner.scanners.AbstractScannerFunTest
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
@@ -34,9 +35,6 @@ class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCo
     override val scanner = ScanCode("ScanCode", scannerConfig, downloaderConfig)
     override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
     override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())
-
-    private fun setupTempFile(filename: String, content: String) =
-        outputDir.resolve(filename).apply { writeText(content) }
 
     init {
         "return the full license text for the HERE proprietary license" {
@@ -57,7 +55,7 @@ class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCo
             val id = "LicenseRef-scancode-here-proprietary"
             val text = "x\ny\n"
 
-            setupTempFile(id, text)
+            val outputDir = createOrtTempDir().apply { resolve(id).apply { writeText(text) } }
 
             getLicenseText(id, true, listOf(outputDir)) shouldBe getLicenseText(id, true)
         }

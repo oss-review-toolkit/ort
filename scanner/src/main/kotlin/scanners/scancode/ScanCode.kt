@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.isTrue
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
@@ -114,8 +115,6 @@ class ScanCode(
         }.joinToString(" ")
     }
 
-    override val resultFileExt = "json"
-
     private val scanCodeConfiguration = scannerConfig.options?.get("ScanCode").orEmpty()
 
     private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(' ')
@@ -177,20 +176,24 @@ class ScanCode(
         return scannerDir
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
+    override fun scanPathInternal(path: File): ScanSummary {
         val startTime = Instant.now()
 
+        val resultFile = createOrtTempDir().resolve("result.json")
         val process = ProcessCapture(
             scannerPath.absolutePath,
             *commandLineOptions.toTypedArray(),
             path.absolutePath,
             OUTPUT_FORMAT_OPTION,
-            resultsFile.absolutePath
+            resultFile.absolutePath
         )
 
         val endTime = Instant.now()
 
-        val result = readJsonFile(resultsFile)
+        val result = readJsonFile(resultFile).also {
+            resultFile.parentFile.safeDeleteRecursively(force = true)
+        }
+
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
         val summary = generateSummary(startTime, endTime, path, result, parseLicenseExpressions)
 
@@ -219,6 +222,5 @@ class ScanCode(
             }
         }
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary =
-        scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
+    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }

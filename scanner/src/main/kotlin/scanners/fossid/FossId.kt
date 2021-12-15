@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
-import java.io.File
 import java.io.IOException
 import java.net.Authenticator
 import java.time.Instant
@@ -71,7 +70,6 @@ import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
@@ -216,7 +214,6 @@ class FossId internal constructor(
 
     override suspend fun scanPackages(
         packages: Set<Package>,
-        outputDirectory: File,
         labels: Map<String, String>
     ): Map<Package, List<ScanResult>> {
         val (results, duration) = measureTimedValue {
@@ -698,7 +695,7 @@ class FossId internal constructor(
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
         runBlocking {
-            scanPackages(setOf(pkg), createOrtTempDir(), context.labels).getValue(pkg).first()
+            scanPackages(setOf(pkg), context.labels).getValue(pkg).first()
         }
 
     override fun filterSecretOptions(options: ScannerOptions): ScannerOptions = filterOptionsForResult(options)
