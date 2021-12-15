@@ -180,22 +180,22 @@ class ExperimentalScanner(
 
         log.info { "${packagesWithIncompleteScanResult.size} packages have incomplete scan results." }
 
-        log.info { "Starting scan of missing packages if any package based scanners are configured." }
+        log.info { "Starting scan of missing packages if any package scanners are configured." }
 
         // Scan packages with incomplete scan results.
         packagesWithIncompleteScanResult.forEach { (pkg, scanners) ->
             // TODO: Move to function.
             // TODO: Verify that there are still missing scan results for the package, previous scan of another package
             //       from the same repository could have fixed that already.
-            scanners.filterIsInstance<PackageBasedRemoteScannerWrapper>().forEach { scanner ->
-                log.info { "Scanning ${pkg.id.toCoordinates()} with package based remote scanner ${scanner.name}." }
+            scanners.filterIsInstance<PackageScannerWrapper>().forEach { scanner ->
+                log.info { "Scanning ${pkg.id.toCoordinates()} with package scanner ${scanner.name}." }
 
-                // Scan whole package with remote scanner.
+                // Scan whole package with package scanner.
                 // TODO: Use coroutines to execute scanners in parallel.
                 val scanResult = scanner.scanPackage(pkg, context)
 
                 log.info {
-                    "Scan of ${pkg.id.toCoordinates()} with package based remote scanner ${scanner.name} finished."
+                    "Scan of ${pkg.id.toCoordinates()} with package scanner ${scanner.name} finished."
                 }
 
                 // Split scan results by provenance and add them to the map of scan results.
@@ -234,19 +234,19 @@ class ExperimentalScanner(
 
         log.info { "${provenancesWithIncompleteScanResults.size} provenances have incomplete scan results." }
 
-        log.info { "Starting scan of missing provenances if any provenance based scanners are configured." }
+        log.info { "Starting scan of missing provenances if any provenance scanners are configured." }
 
         provenancesWithIncompleteScanResults.forEach { (provenance, scanners) ->
-            // Scan provenances with remote scanners.
+            // Scan provenances with provenance scanners.
             // TODO: Move to function.
-            scanners.filterIsInstance<ProvenanceBasedRemoteScannerWrapper>().forEach { scanner ->
-                log.info { "Scanning $provenance with provenance based remote scanner ${scanner.name}." }
+            scanners.filterIsInstance<ProvenanceScannerWrapper>().forEach { scanner ->
+                log.info { "Scanning $provenance with provenance scanner ${scanner.name}." }
 
                 // TODO: Use coroutines to execute scanners in parallel.
                 val scanResult = scanner.scanProvenance(provenance, context)
 
                 log.info {
-                    "Scan of $provenance with provenance based remote scanner ${scanner.name} finished."
+                    "Scan of $provenance with provenance scanner ${scanner.name} finished."
                 }
 
                 val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
@@ -268,12 +268,12 @@ class ExperimentalScanner(
                 }
             }
 
-            // Scan provenances with local scanners.
-            val localScanners = scanners.filterIsInstance<LocalScannerWrapper>()
-            if (localScanners.isNotEmpty()) {
-                val localScanResults = scanLocal(provenance, localScanners, context)
+            // Scan provenances with path scanners.
+            val pathScanners = scanners.filterIsInstance<PathScannerWrapper>()
+            if (pathScanners.isNotEmpty()) {
+                val pathScanResults = scanPath(provenance, pathScanners, context)
 
-                localScanResults.forEach { (scanner, scanResult) ->
+                pathScanResults.forEach { (scanner, scanResult) ->
                     val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
                     scanResultsForScanner[provenance] = scanResultsForScanner[provenance].orEmpty() + scanResult
 
@@ -450,11 +450,11 @@ class ExperimentalScanner(
             NestedProvenanceScanResult(nestedProvenance, scanResultsByProvenance)
         }
 
-    private fun scanLocal(
+    private fun scanPath(
         provenance: KnownProvenance,
-        scanners: List<LocalScannerWrapper>,
+        scanners: List<PathScannerWrapper>,
         context: ScanContext
-    ): Map<LocalScannerWrapper, ScanResult> {
+    ): Map<PathScannerWrapper, ScanResult> {
         val downloadDir = try {
             provenanceDownloader.download(provenance)
         } catch (e: DownloadException) {
@@ -487,10 +487,10 @@ class ExperimentalScanner(
 
         return try {
             scanners.associateWith { scanner ->
-                log.info { "Scanning $provenance with local scanner ${scanner.name}." }
+                log.info { "Scanning $provenance with path scanner ${scanner.name}." }
 
                 val summary = scanner.scanPath(downloadDir, context)
-                log.info { "Scan of $provenance with local scanner ${scanner.name} finished." }
+                log.info { "Scan of $provenance with path scanner ${scanner.name} finished." }
 
                 ScanResult(provenance, scanner.details, summary)
             }
@@ -528,7 +528,7 @@ class ExperimentalScanner(
 
     private fun downloadRecursively(nestedProvenance: NestedProvenance): File {
         // Use the provenanceDownloader to download each provenance from nestedProvenance separately, because they are
-        // likely already cached if a local scanner wrapper is used.
+        // likely already cached if a path scanner wrapper is used.
 
         val root = provenanceDownloader.download(nestedProvenance.root)
 
