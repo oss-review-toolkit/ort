@@ -28,33 +28,27 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class ScannerIntegrationFunTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")
 
-    private lateinit var outputDir: File
-
     init {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
-            outputDir = createTestTempDir()
-
             val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
             val expectedResult = patchExpectedResult(
                 assetsDir.resolve("dummy-expected-output-for-analyzer-result.yml")
             )
 
             val scanner = DummyScanner("Dummy", ScannerConfiguration(), DownloaderConfiguration())
-            val ortResult = scanOrtResult(scanner, analyzerResultFile.readValue(), outputDir)
+            val ortResult = scanOrtResult(scanner, analyzerResultFile.readValue())
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
@@ -68,21 +62,18 @@ class ScannerIntegrationFunTest : StringSpec() {
         scannerConfig: ScannerConfiguration,
         downloaderConfig: DownloaderConfiguration
     ) : PathScanner(name, scannerConfig, downloaderConfig) {
-        override val resultFileExt = "json"
         override val expectedVersion = "1.0"
         override val version = expectedVersion
         override val configuration = ""
 
         override fun command(workingDir: File?) = ""
 
-        override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
-            val startTime = Instant.now()
-            resultsFile.writeText(jsonMapper.writeValueAsString("Dummy"))
-            val endTime = Instant.now()
+        override fun scanPathInternal(path: File): ScanSummary {
+            val time = Instant.now()
 
             return ScanSummary(
-                startTime = startTime,
-                endTime = endTime,
+                startTime = time,
+                endTime = time,
                 packageVerificationCode = calculatePackageVerificationCode(path),
                 licenseFindings = sortedSetOf(),
                 copyrightFindings = sortedSetOf(),

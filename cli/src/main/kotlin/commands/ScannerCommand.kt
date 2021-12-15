@@ -39,8 +39,6 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
@@ -190,8 +188,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        val nativeOutputDir = outputDir.resolve("native-scan-results")
-
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("scan-result.${format.fileExtension}")
         }
@@ -201,10 +197,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             if (existingOutputFiles.isNotEmpty()) {
                 throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
             }
-
-            if (nativeOutputDir.exists() && nativeOutputDir.list().isNotEmpty()) {
-                throw UsageError("The directory '$nativeOutputDir' must not contain any files yet.", statusCode = 2)
-            }
         }
 
         val config = globalOptionsForSubcommands.config
@@ -212,7 +204,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val ortResult = if (experimental) {
             runExperimental(config)
         } else {
-            run(nativeOutputDir, config)
+            run(config)
         }.mergeLabels(labels)
 
         // Write the result.
@@ -234,7 +226,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         severityStats.print().conclude(config.severeIssueThreshold, 2)
     }
 
-    private fun run(nativeOutputDir: File, config: OrtConfiguration): OrtResult {
+    private fun run(config: OrtConfiguration): OrtResult {
         // Configure the scan storage, which is common to all scanners.
         ScanResultsStorage.configure(config.scanner)
 
@@ -278,16 +270,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         // Perform the scan.
         return if (input.isFile) {
             val ortResult = readOrtResult(input)
-            scanOrtResult(packageScanner, projectScanner, ortResult, nativeOutputDir, skipExcluded)
+            scanOrtResult(packageScanner, projectScanner, ortResult, skipExcluded)
         } else {
             require(projectScanner is PathScanner) {
                 "For scanning paths the chosen project scanner must be a PathScanner."
             }
 
-            projectScanner.scanPath(
-                inputPath = input,
-                outputDirectory = nativeOutputDir
-            )
+            projectScanner.scanPath(input)
         }
     }
 

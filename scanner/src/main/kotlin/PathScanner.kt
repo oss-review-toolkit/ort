@@ -61,7 +61,6 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -102,11 +101,6 @@ abstract class PathScanner(
     private val archiver by lazy {
         scannerConfig.archive.createFileArchiver()
     }
-
-    /**
-     * A property containing the file name extension of the scanner's native output format, without the dot.
-     */
-    abstract val resultFileExt: String
 
     /**
      * The directory the scanner was bootstrapped to, if so.
@@ -196,7 +190,6 @@ abstract class PathScanner(
 
     override suspend fun scanPackages(
         packages: Set<Package>,
-        outputDirectory: File,
         labels: Map<String, String>
     ): Map<Package, List<ScanResult>> {
         val scannerCriteria = getScannerCriteria()
@@ -224,7 +217,7 @@ abstract class PathScanner(
         val downloadDirectory = createOrtTempDir()
 
         val resultsFromScanner = try {
-            remainingPackages.scan(outputDirectory, downloadDirectory)
+            remainingPackages.scan(downloadDirectory)
         } finally {
             downloadDirectory.safeDeleteRecursively(force = true)
         }
@@ -246,10 +239,7 @@ abstract class PathScanner(
                 scanResults.map { it.filterByVcsPath().filterByIgnorePatterns(scannerConfig.ignorePatterns) }
             }
 
-    private fun Collection<Package>.scan(
-        outputDirectory: File,
-        downloadDirectory: File
-    ): Map<Package, List<ScanResult>> {
+    private fun Collection<Package>.scan(downloadDirectory: File): Map<Package, List<ScanResult>> {
         var index = 0
 
         return associateWith { pkg ->
@@ -262,7 +252,7 @@ abstract class PathScanner(
             }
 
             val scanResult = try {
-                scanPackage(details, pkg, outputDirectory, downloadDirectory).also {
+                scanPackage(details, pkg, downloadDirectory).also {
                     PathScanner.log.info {
                         "Finished scanning ${pkg.id.toCoordinates()} in thread '${Thread.currentThread().name}' " +
                                 "$packageIndex."
@@ -330,29 +320,10 @@ abstract class PathScanner(
     }
 
     /**
-     * Return the result file inside [outputDirectory]. The name of the file is derived from [pkg] and
-     * [scannerDetails].
+     * Scan the provided [pkg] for license information and return a [ScanResult]. The package's source code is
+     * downloaded to [downloadDirectory] for scanning. If the package could not be scanned a [ScanException] is thrown.
      */
-    private fun getResultsFile(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): File {
-        val scanResultsForPackageDirectory = outputDirectory.resolve(pkg.id.toPath()).apply { safeMkdirs() }
-        return scanResultsForPackageDirectory.resolve("scan-results_${scannerDetails.name}.$resultFileExt")
-    }
-
-    /**
-     * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
-     * native file format.
-     *
-     * The package's source code is downloaded to [downloadDirectory] and scanned afterwards.
-     *
-     * Return the [ScanResult], if the package could not be scanned a [ScanException] is thrown.
-     */
-    fun scanPackage(
-        scannerDetails: ScannerDetails,
-        pkg: Package,
-        outputDirectory: File,
-        downloadDirectory: File
-    ): ScanResult {
-        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
+    fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, downloadDirectory: File): ScanResult {
         val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
         val provenance = try {
@@ -392,7 +363,7 @@ abstract class PathScanner(
             val vcsPath = (provenance as? RepositoryProvenance)?.vcsInfo?.takeUnless {
                 it.type == VcsType.GIT_REPO
             }?.path.orEmpty()
-            scanPathInternal(pkgDownloadDirectory, resultsFile).filterByPath(vcsPath)
+            scanPathInternal(pkgDownloadDirectory).filterByPath(vcsPath)
         }
 
         log.perf {
@@ -427,40 +398,28 @@ abstract class PathScanner(
     }
 
     /**
-     * Scan the provided [path] for license information and write the results to [resultsFile] using the scanner's
-     * native file format.
-     *
-     * No scan results storage is used by this function.
-     *
-     * The return value is a [ScanSummary]. If the path could not be scanned, a [ScanException] is thrown.
+     * Scan the provided [path] for license information and return a [ScanSummary]. If the path could not be scanned, a
+     * [ScanException] is thrown.
      */
-    protected abstract fun scanPathInternal(path: File, resultsFile: File): ScanSummary
+    protected abstract fun scanPathInternal(path: File): ScanSummary
 
     /**
-     * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
-     * scanner's native file format. The results file name is derived from [inputPath] and [details].
-     *
-     * No scan results storage is used by this function.
-     *
-     * The return value is an [OrtResult]. If the path could not be scanned, a [ScanException] is thrown.
+     * Scan the provided [path] for license information and return an [OrtResult]. If the path could not be scanned, a
+     * [ScanException] is thrown.
      */
-    fun scanPath(inputPath: File, outputDirectory: File): OrtResult {
+    fun scanPath(path: File): OrtResult {
         val startTime = Instant.now()
 
-        val absoluteInputPath = inputPath.absoluteFile
+        val absoluteInputPath = path.absoluteFile
 
-        require(inputPath.exists()) {
+        require(absoluteInputPath.exists()) {
             "Specified path '$absoluteInputPath' does not exist."
         }
 
         log.info { "Scanning path '$absoluteInputPath' with $details..." }
 
         val summary = try {
-            val resultsFile = File(
-                outputDirectory.apply { safeMkdirs() },
-                "${inputPath.nameWithoutExtension}_${details.name}.$resultFileExt"
-            )
-            scanPathInternal(inputPath, resultsFile).also {
+            scanPathInternal(path).also {
                 log.info {
                     "Detected licenses for path '$absoluteInputPath': ${it.licenses.joinToString()}"
                 }
@@ -487,7 +446,7 @@ abstract class PathScanner(
         // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
         val id = Identifier(
             Os.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
-            inputPath.name.fileSystemEncode(), ""
+            path.name.fileSystemEncode(), ""
         )
 
         val scanResult = ScanResult(UnknownProvenance, details, summary)
@@ -496,7 +455,7 @@ abstract class PathScanner(
         val endTime = Instant.now()
         val scannerRun = ScannerRun(startTime, endTime, Environment(), scannerConfig, scanRecord)
 
-        val repository = Repository(VersionControlSystem.getCloneInfo(inputPath))
+        val repository = Repository(VersionControlSystem.getCloneInfo(path))
         return OrtResult(repository, scanner = scannerRun)
     }
 

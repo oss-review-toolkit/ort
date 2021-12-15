@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.scanner.scanners
 import io.kotest.core.Tag
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.test.TestCase
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.file.shouldNotStartWithPath
 import io.kotest.matchers.shouldBe
@@ -34,7 +33,6 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
-import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
@@ -46,7 +44,6 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     private val commonlyDetectedFiles = listOf("LICENSE", "LICENCE", "COPYING")
 
     private lateinit var inputDir: File
-    protected lateinit var outputDir: File
 
     abstract val scanner: PathScanner
     abstract val expectedFileLicenses: Set<SpdxExpression>
@@ -60,13 +57,9 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
         commonlyDetectedFiles.forEach { ortLicense.copyTo(inputDir.resolve(it), overwrite = true) }
     }
 
-    override fun beforeTest(testCase: TestCase) {
-        outputDir = createTestTempDir()
-    }
-
     init {
         "Scanning a single file succeeds".config(tags = testTags) {
-            val result = scanner.scanPath(inputDir.resolve("LICENSE"), outputDir)
+            val result = scanner.scanPath(inputDir.resolve("LICENSE"))
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
             summary shouldNotBeNull {
@@ -78,7 +71,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
         }
 
         "Scanning a directory succeeds".config(tags = testTags) {
-            val result = scanner.scanPath(inputDir, outputDir)
+            val result = scanner.scanPath(inputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
             summary shouldNotBeNull {

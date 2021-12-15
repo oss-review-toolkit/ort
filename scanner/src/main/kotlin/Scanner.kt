@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import java.io.File
 import java.lang.IllegalArgumentException
 import java.time.Instant
 import java.util.ServiceLoader
@@ -56,31 +55,27 @@ private fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): S
         }
 
 /**
- * Use the [scanner] to scan the [Project]s and [Package]s specified in the [ortResult]. Scan results are stored in the
- * [outputDirectory]. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
- * results as an [OrtResult].
+ * Use the [scanner] to scan the [Project]s and [Package]s specified in the [ortResult].  If [skipExcluded] is true,
+ * packages for which excludes are defined are not scanned. Return scan results as an [OrtResult].
  */
 @JvmOverloads
 fun scanOrtResult(
     scanner: Scanner,
     ortResult: OrtResult,
-    outputDirectory: File,
     skipExcluded: Boolean = false
-) = scanOrtResult(scanner, scanner, ortResult, outputDirectory, skipExcluded)
+) = scanOrtResult(scanner, scanner, ortResult, skipExcluded)
 
 /**
  * Use the [packageScanner] and / or [projectScanner] to scan the [Package]s and [Project]s specified in the
  * [ortResult]. If specified, scanners are expected to refer to the same global scanner configuration. If a scanner is
- * null, scanning of the respective entities is skipped. Scan results are stored in the [outputDirectory]. If
- * [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan results as an
- * [OrtResult].
+ * null, scanning of the respective entities is skipped. If [skipExcluded] is true, packages for which excludes are
+ * defined are not scanned. Return scan results as an [OrtResult].
  */
 @JvmOverloads
 fun scanOrtResult(
     packageScanner: Scanner?,
     projectScanner: Scanner?,
     ortResult: OrtResult,
-    outputDirectory: File,
     skipExcluded: Boolean = false
 ): OrtResult {
     require(packageScanner != null || projectScanner != null) {
@@ -115,8 +110,7 @@ fun scanOrtResult(
                 val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
 
                 if (filteredProjectPackages.isEmpty()) emptyMap()
-                else projectScanner.scanPackages(filteredProjectPackages, outputDirectory, ortResult.labels)
-                    .mapKeys { it.key.id }
+                else projectScanner.scanPackages(filteredProjectPackages, ortResult.labels).mapKeys { it.key.id }
             }
         }
 
@@ -127,8 +121,7 @@ fun scanOrtResult(
                 val filteredPackages = removeConcludedPackages(packages.toSet(), packageScanner)
 
                 if (filteredPackages.isEmpty()) emptyMap()
-                else packageScanner.scanPackages(filteredPackages, outputDirectory, ortResult.labels)
-                    .mapKeys { it.key.id }
+                else packageScanner.scanPackages(filteredPackages, ortResult.labels).mapKeys { it.key.id }
             }
         }
 
@@ -227,15 +220,13 @@ abstract class Scanner(
     val details by lazy { ScannerDetails(scannerName, version, configuration) }
 
     /**
-     * Scan the [packages] and store the scan results in [outputDirectory]. [ScanResult]s are returned associated by
-     * [Package]. The map may contain multiple results for the same [Package] if the storage contains more than one
-     * result for the specification of this scanner.
-     * [labels] are the labels present in [OrtResult.labels], created by previous invocations of ORT tools. They can be
-     * used by scanner implementations to decide if and how packages are scanned.
+     * Scan the [packages] and return a map of [ScanResult]s associated by their [Package]. The map may contain multiple
+     * results for the same [Package] if the storage contains more than one result for the specification of this
+     * scanner. [labels] are the labels present in [OrtResult.labels], created by previous invocations of ORT tools.
+     * They can be used by scanner implementations to decide if and how packages are scanned.
      */
     abstract suspend fun scanPackages(
         packages: Set<Package>,
-        outputDirectory: File,
         labels: Map<String, String>
     ): Map<Package, List<ScanResult>>
 

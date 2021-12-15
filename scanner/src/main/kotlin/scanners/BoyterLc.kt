@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
@@ -65,7 +66,6 @@ class BoyterLc(
     override val criteria by lazy { getScannerCriteria() }
     override val expectedVersion = BuildConfig.BOYTER_LC_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
-    override val resultFileExt = "json"
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
@@ -101,13 +101,14 @@ class BoyterLc(
         return unpackDir
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
+    override fun scanPathInternal(path: File): ScanSummary {
         val startTime = Instant.now()
 
+        val resultFile = createOrtTempDir().resolve("result.json")
         val process = ProcessCapture(
             scannerPath.absolutePath,
             *CONFIGURATION_OPTIONS.toTypedArray(),
-            "--output", resultsFile.absolutePath,
+            "--output", resultFile.absolutePath,
             path.absolutePath
         )
 
@@ -117,7 +118,9 @@ class BoyterLc(
             if (stderr.isNotBlank()) log.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, path, resultsFile)
+            generateSummary(startTime, endTime, path, resultFile).also {
+                resultFile.parentFile.safeDeleteRecursively(force = true)
+            }
         }
     }
 
@@ -149,6 +152,5 @@ class BoyterLc(
         )
     }
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary =
-        scanPathInternal(path, createOrtTempDir(name).resolve("result.$resultFileExt"))
+    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }
