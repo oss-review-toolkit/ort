@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.PathScanner
@@ -98,6 +99,7 @@ class Askalono(
 
         val process = ProcessCapture(
             scannerPath.absolutePath,
+            "--format", "json",
             "crawl", path.absolutePath
         )
 
@@ -115,19 +117,22 @@ class Askalono(
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
 
-        resultFile.readLines().chunked(3) { (path, license, score) ->
-            val licenseFinding = LicenseFinding(
-                license = license.removePrefix("License: ").removeSuffix(" (original text)"),
-                location = TextLocation(
-                    // Turn absolute paths in the native result into relative paths to not expose any information.
-                    relativizePath(scanPath, File(path)),
-                    TextLocation.UNKNOWN_LINE
+        resultFile.readLines().forEach { line ->
+            val root = jsonMapper.readTree(line)
+            root["result"]?.let { result ->
+                val licenseFinding = LicenseFinding(
+                    license = result["license"]["name"].textValue(),
+                    location = TextLocation(
+                        // Turn absolute paths in the native result into relative paths to not expose any information.
+                        relativizePath(scanPath, File(root["path"].textValue())),
+                        TextLocation.UNKNOWN_LINE
+                    )
                 )
-            )
 
-            log.info { "Found $licenseFinding with $score." }
+                log.info { "Found $licenseFinding with score ${result["score"].floatValue()}." }
 
-            licenseFindings += licenseFinding
+                licenseFindings += licenseFinding
+            }
         }
 
         return ScanSummary(
