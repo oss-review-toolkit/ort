@@ -99,17 +99,24 @@ class Gradle(
                 "${artifact.groupId}/${artifact.artifactId}/${artifact.version}"
             )
 
-            val artifactFile = artifactRootDir.walk().find {
+            val artifactFiles = artifactRootDir.walk().filter {
                 val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"
                 it.isFile && it.name == "${artifact.artifactId}-$classifier${artifact.version}.${artifact.extension}"
+            }.sortedByDescending {
+                it.lastModified()
+            }.toList()
+
+            val artifactCoordinate = "${artifact.identifier()}:${artifact.classifier}:${artifact.extension}"
+
+            if (artifactFiles.size > 1) {
+                log.debug { "Multiple Gradle cache entries matching '$artifactCoordinate' found: $artifactFiles" }
             }
 
-            log.debug {
-                "Gradle cache result for '${artifact.identifier()}:${artifact.classifier}:${artifact.extension}': " +
-                        artifactFile?.invariantSeparatorsPath
+            // Return the most recent file, if any, as that is most likely the correct one, e.g. in case of a silent
+            // update of an already published artifact.
+            return artifactFiles.firstOrNull()?.also { artifactFile ->
+                log.debug { "Using Gradle cache entry at '$artifactFile' for artifact '$artifactCoordinate'." }
             }
-
-            return artifactFile
         }
 
         override fun findVersions(artifact: Artifact) =
