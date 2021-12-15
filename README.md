@@ -78,11 +78,21 @@ by running `git submodule update --init --recursive`.
 Install the following basic prerequisites:
 
 * Docker 18.09 or later (and ensure its daemon is running).
-* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for 
-  Docker.
 
-Change into the directory with ORT's source code and run `docker build -t ort .`. Alternatively, use the script at
-`scripts/docker_build.sh` which also sets the ORT version from the Git revision.
+Change into the directory with ORT's source code and run
+```sh
+scripts/docker_build.sh
+```
+
+You can pass build args for tool versions:
+```sh
+scripts/docker_build.sh --build-arg=SCANCODE_VERSION=30.1.0 --build-arg=PYTHON_VERSION=3.9.9
+```
+
+For legacy original Docker container build do, run
+```sh
+DOCKER_BUILDKIT=1 docker build . -t ort -f docker/legacy/Dockerfile
+```
 
 ### Build natively
 
