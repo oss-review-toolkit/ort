@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.transactionAsync
 import org.ossreviewtoolkit.model.utils.arrayParam
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
-import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
@@ -204,7 +204,7 @@ class PostgresStorage(
 
         return runCatching {
             val scanResults = runBlocking(Dispatchers.IO) {
-                packages.chunked(max(packages.size / LocalScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
+                packages.chunked(max(packages.size / PathScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
                     database.transactionAsync {
                         @Suppress("MaxLineLength")
                         ScanResultDao.find {

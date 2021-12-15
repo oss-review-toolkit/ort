@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 
-class LocalScannerTest : WordSpec({
+class PathScannerTest : WordSpec({
     "getScannerCriteria()" should {
         "obtain default values from the scanner" {
             val scanner = createScanner(createScannerConfig(emptyMap()), DownloaderConfiguration())
@@ -44,9 +44,9 @@ class LocalScannerTest : WordSpec({
 
         "obtain values from the configuration" {
             val config = mapOf(
-                LocalScanner.PROP_CRITERIA_NAME to "foo",
-                LocalScanner.PROP_CRITERIA_MIN_VERSION to "1.2.3",
-                LocalScanner.PROP_CRITERIA_MAX_VERSION to "4.5.6"
+                PathScanner.PROP_CRITERIA_NAME to "foo",
+                PathScanner.PROP_CRITERIA_MIN_VERSION to "1.2.3",
+                PathScanner.PROP_CRITERIA_MAX_VERSION to "4.5.6"
             )
             val scanner = createScanner(createScannerConfig(config), DownloaderConfiguration())
 
@@ -59,8 +59,8 @@ class LocalScannerTest : WordSpec({
 
         "parse versions in a lenient way" {
             val config = mapOf(
-                LocalScanner.PROP_CRITERIA_MIN_VERSION to "1",
-                LocalScanner.PROP_CRITERIA_MAX_VERSION to "3.7"
+                PathScanner.PROP_CRITERIA_MIN_VERSION to "1",
+                PathScanner.PROP_CRITERIA_MAX_VERSION to "3.7"
             )
             val scanner = createScanner(createScannerConfig(config), DownloaderConfiguration())
 
@@ -93,13 +93,13 @@ private fun createScannerConfig(properties: ScannerOptions): ScannerConfiguratio
 }
 
 /**
- * Create a test instance of [LocalScanner].
+ * Create a test instance of [PathScanner].
  */
 private fun createScanner(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
-): LocalScanner =
-    object : LocalScanner(SCANNER_NAME, scannerConfig, downloaderConfig) {
+): PathScanner =
+    object : PathScanner(SCANNER_NAME, scannerConfig, downloaderConfig) {
         override val configuration = "someConfig"
 
         override val resultFileExt: String

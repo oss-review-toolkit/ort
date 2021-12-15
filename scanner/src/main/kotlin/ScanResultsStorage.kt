@@ -152,7 +152,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 config = config,
                 applicationNameSuffix = TOOL_NAME,
                 // Use a value slightly higher than the number of threads accessing the storage.
-                maxPoolSize = LocalScanner.NUM_STORAGE_THREADS + 3
+                maxPoolSize = PathScanner.NUM_STORAGE_THREADS + 3
             )
 
             log.info {
