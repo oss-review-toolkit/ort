@@ -290,6 +290,13 @@ RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df
     && echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu bionic main" > /etc/apt/sources.list.d/git-core-ubuntu-ppa-bionic.list \
     && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/git-core_ubuntu_ppa.gpg"  > /dev/null
 
+# External repository for Dart
+RUN KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub" \
+    && LISTURL="https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list" \
+    && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/dart.gpg" > /dev/null \
+    && curl -ksS "$LISTURL" > /etc/apt/sources.list.d/dart.list \
+    && echo "add_local_path /usr/lib/dart/bin:\$PATH" > /etc/profile.d/dart.sh
+
 ARG COMPOSER_VERSION=1.10.1-1
 
 # Apt install commands.
@@ -297,6 +304,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         cargo \
         composer=$COMPOSER_VERSION \
+        dart \
         git \
         sbt=$SBT_VERSION \
         subversion \
