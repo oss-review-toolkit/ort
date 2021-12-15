@@ -110,7 +110,5 @@ private fun createScanner(
 
         override fun scanPathInternal(path: File, resultsFile: File) = throw NotImplementedError()
 
-        override fun getRawResult(resultsFile: File) = throw NotImplementedError()
-
         override fun command(workingDir: File?) = throw NotImplementedError()
     }

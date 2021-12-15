@@ -20,8 +20,6 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.time.Instant
 
@@ -103,16 +101,15 @@ class Licensee(
             if (isError) throw ScanException(errorMessage)
 
             stdoutFile.copyTo(resultsFile)
-            val result = getRawResult(resultsFile)
-            generateSummary(startTime, endTime, path, result)
+            generateSummary(startTime, endTime, path, stdoutFile)
         }
     }
 
-    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
-
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
-        val matchedFiles = result["matched_files"]
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
+
+        val result = readJsonFile(resultFile)
+        val matchedFiles = result["matched_files"]
 
         matchedFiles.mapTo(licenseFindings) {
             val filePath = File(it["filename"].textValue())

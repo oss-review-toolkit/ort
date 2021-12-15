@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
@@ -501,11 +499,6 @@ abstract class PathScanner(
         val repository = Repository(VersionControlSystem.getCloneInfo(inputPath))
         return OrtResult(repository, scanner = scannerRun)
     }
-
-    /**
-     * Return the scanner's raw result in a JSON representation.
-     */
-    abstract fun getRawResult(resultsFile: File): JsonNode
 
     /**
      * Return the invariant relative path of the [scanned file][scannedFilename] with respect to the

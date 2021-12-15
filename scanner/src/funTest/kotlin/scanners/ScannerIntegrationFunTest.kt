@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.PathScanner
@@ -90,7 +89,5 @@ class ScannerIntegrationFunTest : StringSpec() {
                 issues = mutableListOf()
             )
         }
-
-        override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
     }
 }

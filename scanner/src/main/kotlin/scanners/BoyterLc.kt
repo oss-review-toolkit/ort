@@ -20,8 +20,6 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.time.Instant
 
@@ -119,15 +117,13 @@ class BoyterLc(
             if (stderr.isNotBlank()) log.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            val result = getRawResult(resultsFile)
-            generateSummary(startTime, endTime, path, result)
+            generateSummary(startTime, endTime, path, resultsFile)
         }
     }
 
-    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
-
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
+        val result = readJsonFile(resultFile)
 
         result.flatMapTo(licenseFindings) { file ->
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
