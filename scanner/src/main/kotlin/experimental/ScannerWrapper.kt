@@ -65,23 +65,22 @@ sealed interface ScannerWrapper {
 }
 
 /**
- * A wrapper interface for remote scanners that operate on [Package]s.
+ * A wrapper interface for scanners that operate on [Package]s and download the package source code themselves.
  */
-interface PackageBasedRemoteScannerWrapper : ScannerWrapper {
+interface PackageScannerWrapper : ScannerWrapper {
     fun scanPackage(pkg: Package, context: ScanContext): ScanResult
 }
 
 /**
- * A wrapper interface for remote scanners that operate on [Provenance]s.
+ * A wrapper interface for scanners that operate on [Provenance]s and download the source code themselves.
  */
-interface ProvenanceBasedRemoteScannerWrapper : ScannerWrapper {
+interface ProvenanceScannerWrapper : ScannerWrapper {
     fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult
 }
 
 /**
- * A wrapper interface for local scanners. A local scanner is a scanner that is running on the same machine and scanning
- * files on the local filesystem.
+ * A wrapper interface for scanners that scan the source code in a path on the local filesystem.
  */
-interface LocalScannerWrapper : ScannerWrapper {
+interface PathScannerWrapper : ScannerWrapper {
     fun scanPath(path: File, context: ScanContext): ScanSummary
 }
