@@ -65,22 +65,16 @@ sealed interface ScannerWrapper {
 }
 
 /**
- * A wrapper interface for remote scanners. A remote scanner is a scanner that is not executed locally but is running on
- * a different machine and can be accessed via a remote interface.
- */
-sealed interface RemoteScannerWrapper : ScannerWrapper
-
-/**
  * A wrapper interface for remote scanners that operate on [Package]s.
  */
-interface PackageBasedRemoteScannerWrapper : RemoteScannerWrapper {
+interface PackageBasedRemoteScannerWrapper : ScannerWrapper {
     fun scanPackage(pkg: Package, context: ScanContext): ScanResult
 }
 
 /**
  * A wrapper interface for remote scanners that operate on [Provenance]s.
  */
-interface ProvenanceBasedRemoteScannerWrapper : RemoteScannerWrapper {
+interface ProvenanceBasedRemoteScannerWrapper : ScannerWrapper {
     fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult
 }
 
