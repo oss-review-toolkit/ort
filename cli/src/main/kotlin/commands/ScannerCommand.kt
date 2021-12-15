@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.TOOL_NAME
@@ -280,8 +280,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             val ortResult = readOrtResult(input)
             scanOrtResult(packageScanner, projectScanner, ortResult, nativeOutputDir, skipExcluded)
         } else {
-            require(projectScanner is LocalScanner) {
-                "To scan local files the chosen project scanner must be a local scanner."
+            require(projectScanner is PathScanner) {
+                "For scanning paths the chosen project scanner must be a PathScanner."
             }
 
             projectScanner.scanPath(

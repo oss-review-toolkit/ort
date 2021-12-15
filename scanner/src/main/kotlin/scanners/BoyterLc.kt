@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
-import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.experimental.LocalScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
@@ -50,7 +50,7 @@ class BoyterLc(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
-) : LocalScanner(name, scannerConfig, downloaderConfig), LocalScannerWrapper {
+) : PathScanner(name, scannerConfig, downloaderConfig), LocalScannerWrapper {
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             BoyterLc(scannerName, scannerConfig, downloaderConfig)

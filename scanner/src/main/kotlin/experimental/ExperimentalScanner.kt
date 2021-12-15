@@ -491,7 +491,7 @@ class ExperimentalScanner(
 
     private fun createFileArchives(nestedProvenances: Map<Package, NestedProvenance>) {
         // TODO: The archives are currently created in a way compatible with the existing implementation in the
-        //       LocalScanner. This allows to keep using existing file archives without changing the logic used to
+        //       PathScanner. This allows to keep using existing file archives without changing the logic used to
         //       access those archives in the reporter. To achieve this nested provenances are downloaded recursively,
         //       so that the created archives contain also files from nested repositories.
         //       This could be replaced with creating file archives for each provenance separately and building the

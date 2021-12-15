@@ -31,7 +31,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -48,7 +48,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     private lateinit var inputDir: File
     protected lateinit var outputDir: File
 
-    abstract val scanner: LocalScanner
+    abstract val scanner: PathScanner
     abstract val expectedFileLicenses: Set<SpdxExpression>
     abstract val expectedDirectoryLicenses: Set<SpdxExpression>
 

@@ -71,9 +71,10 @@ import org.ossreviewtoolkit.utils.core.perf
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
 /**
- * Abstraction for a [Scanner] that operates locally. Scan results can be stored in a [ScanResultsStorage].
+ * A [Scanner] that operates on a path. For scanning [Package]s, it leverages the [Downloader] to make the source code
+ * available locally. Scan results are stored in the configured [ScanResultsStorage].
  */
-abstract class LocalScanner(
+abstract class PathScanner(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
@@ -206,7 +207,7 @@ abstract class LocalScanner(
 
         val remainingPackages = packages.filterTo(mutableListOf()) { pkg ->
             !pkg.isMetaDataOnly.also {
-                if (it) LocalScanner.log.info { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
+                if (it) PathScanner.log.info { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
             }
         }
 
@@ -258,13 +259,13 @@ abstract class LocalScanner(
 
             val packageIndex = "($index of $size)"
 
-            LocalScanner.log.info {
+            PathScanner.log.info {
                 "Scanning ${pkg.id.toCoordinates()}' in thread '${Thread.currentThread().name}' $packageIndex"
             }
 
             val scanResult = try {
                 scanPackage(details, pkg, outputDirectory, downloadDirectory).also {
-                    LocalScanner.log.info {
+                    PathScanner.log.info {
                         "Finished scanning ${pkg.id.toCoordinates()} in thread '${Thread.currentThread().name}' " +
                                 "$packageIndex."
                     }
@@ -529,7 +530,7 @@ abstract class LocalScanner(
      * [OrtResult] produced by this scanner.
      *
      * The time interval between a failing read from storage and the resulting scan with the following store operation
-     * can be relatively large. Thus, this [LocalScanner] is prone to adding duplicate scan results if multiple
+     * can be relatively large. Thus, this [PathScanner] is prone to adding duplicate scan results if multiple
      * instances of the scanner run in parallel and the storage backends do not prevent adding duplicates. In particular
      * the [FileBasedStorage] and [PostgresStorage] used to allow adding duplicate tuples (identifier, provenance,
      * scanner details).
@@ -551,7 +552,7 @@ abstract class LocalScanner(
 
         val duplicatesCount = size - deduplicatedResults.size
         if (duplicatesCount > 0) {
-            LocalScanner.log.info { "Removed $duplicatesCount duplicates out of $size scan results." }
+            PathScanner.log.info { "Removed $duplicatesCount duplicates out of $size scan results." }
         }
 
         return deduplicatedResults
