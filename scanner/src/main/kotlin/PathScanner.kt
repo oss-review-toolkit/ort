@@ -182,7 +182,7 @@ abstract class PathScanner(
      */
     open fun getScannerCriteria(): ScannerCriteria {
         val options = scannerConfig.options?.get(scannerName).orEmpty()
-        val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(expectedVersion))
+        val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(version))
         val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
         val name = options[PROP_CRITERIA_NAME] ?: scannerName
         return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(configuration))
