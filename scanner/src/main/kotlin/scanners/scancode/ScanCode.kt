@@ -190,9 +190,8 @@ class ScanCode(
 
         val endTime = Instant.now()
 
-        val result = readJsonFile(resultFile).also {
-            resultFile.parentFile.safeDeleteRecursively(force = true)
-        }
+        val result = readJsonFile(resultFile)
+        resultFile.parentFile.safeDeleteRecursively(force = true)
 
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
         val summary = generateSummary(startTime, endTime, path, result, parseLicenseExpressions)
