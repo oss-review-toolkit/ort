@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
-import org.ossreviewtoolkit.scanner.PathScanner
+import org.ossreviewtoolkit.scanner.CommandLineScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
@@ -47,7 +47,7 @@ class Askalono(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
-) : PathScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             Askalono(scannerName, scannerConfig, downloaderConfig)
