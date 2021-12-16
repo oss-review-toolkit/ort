@@ -57,7 +57,7 @@ private fun TestConfiguration.writeTempFile(content: String): File =
         writeText(content)
     }
 
-class PostgresFileArchiverStorageTest : WordSpec({
+class PostgresFileArchiverStorageFunTest : WordSpec({
     val postgresListener = PostgresListener()
     lateinit var storage: PostgresFileArchiverStorage
 
