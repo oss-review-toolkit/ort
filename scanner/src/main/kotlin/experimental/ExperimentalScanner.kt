@@ -86,7 +86,8 @@ class ExperimentalScanner(
         }
 
         val packageResults = if (packageScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getPackages(skipExcluded).map { it.pkg }.filterNotConcluded().toSet()
+            val packages = ortResult.getPackages(skipExcluded).map { it.pkg }.filterNotConcluded()
+                .filterNotMetaDataOnly().toSet()
 
             log.info { "Scanning ${packages.size} packages with ${packageScannerWrappers.size} scanners." }
 
@@ -335,6 +336,15 @@ class ExperimentalScanner(
 
                 keep
             }
+
+    private fun Collection<Package>.filterNotMetaDataOnly(): List<Package> =
+        partition { it.isMetaDataOnly }.let { (skip, keep) ->
+            if (skip.isNotEmpty()) {
+                log.debug { "Not scanning the following packages which are metadata only: $skip" }
+            }
+
+            keep
+        }
 
     private fun getPackageProvenances(packages: Set<Package>): Map<Package, Provenance> =
         packages.associateWith { pkg ->
