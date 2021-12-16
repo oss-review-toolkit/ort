@@ -696,7 +696,7 @@ private fun Map<String, List<TextLocation>>.toFindingsSet(): Set<LicenseFinding>
         locations.map { LicenseFinding(license, it) }
     }.toSet()
 
-fun containNoLicenseLocations(): Matcher<ResolvedLicenseInfo?> =
+private fun containNoLicenseLocations(): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val locations = value.flatMap { it.locations }
 
@@ -707,7 +707,7 @@ fun containNoLicenseLocations(): Matcher<ResolvedLicenseInfo?> =
         )
     }
 
-fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
+private fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val copyrights = value.flatMap { license -> license.locations.flatMap { it.copyrights } }
 
@@ -718,7 +718,7 @@ fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
         )
     }
 
-fun containCopyrightsExactly(vararg copyrights: String): Matcher<Iterable<ResolvedLicense>?> =
+private fun containCopyrightsExactly(vararg copyrights: String): Matcher<Iterable<ResolvedLicense>?> =
     neverNullMatcher { value ->
         val expected = copyrights.toSet()
         val actual = value.flatMapTo(mutableSetOf()) { license ->
@@ -737,7 +737,7 @@ fun containCopyrightsExactly(vararg copyrights: String): Matcher<Iterable<Resolv
         )
     }
 
-fun containFindingsForCopyrightExactly(
+private fun containFindingsForCopyrightExactly(
     copyright: String,
     vararg findings: TextLocation
 ): Matcher<Iterable<ResolvedLicense>?> =
@@ -762,7 +762,7 @@ fun containFindingsForCopyrightExactly(
         )
     }
 
-fun containCopyrightGarbageForProvenanceExactly(
+private fun containCopyrightGarbageForProvenanceExactly(
     provenance: Provenance,
     vararg findings: Pair<String, TextLocation>
 ): Matcher<ResolvedLicenseInfo?> =
@@ -783,7 +783,7 @@ fun containCopyrightGarbageForProvenanceExactly(
         )
     }
 
-fun containCopyrightStatementsForLicenseExactly(
+private fun containCopyrightStatementsForLicenseExactly(
     license: String,
     vararg copyrights: String
 ): Matcher<ResolvedLicenseInfo?> =
@@ -804,7 +804,7 @@ fun containCopyrightStatementsForLicenseExactly(
         )
     }
 
-fun containOnlyLicenseSources(vararg licenseSources: LicenseSource): Matcher<ResolvedLicenseInfo?> =
+private fun containOnlyLicenseSources(vararg licenseSources: LicenseSource): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val expected = licenseSources.toSet()
         val actual = value.flatMap { it.sources }.toSet()
@@ -819,7 +819,7 @@ fun containOnlyLicenseSources(vararg licenseSources: LicenseSource): Matcher<Res
         )
     }
 
-fun containLicenseExpressionsExactlyBySource(
+private fun containLicenseExpressionsExactlyBySource(
     source: LicenseSource,
     vararg expressions: SpdxExpression?
 ): Matcher<ResolvedLicenseInfo?> =
@@ -843,7 +843,7 @@ fun containLicenseExpressionsExactlyBySource(
         )
     }
 
-fun containNumberOfLocationsForLicense(license: String, count: Int): Matcher<ResolvedLicenseInfo?> =
+private fun containNumberOfLocationsForLicense(license: String, count: Int): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val actualCount = value[SpdxSingleLicenseExpression.parse(license)]?.locations?.size ?: 0
 
@@ -854,7 +854,7 @@ fun containNumberOfLocationsForLicense(license: String, count: Int): Matcher<Res
         )
     }
 
-fun containLocationForLicense(
+private fun containLocationForLicense(
     license: String,
     provenance: Provenance,
     location: TextLocation,
@@ -883,14 +883,22 @@ fun containLocationForLicense(
         )
     }
 
-fun ResolvedLicenseInfo.pathExcludesForLicense(license: String, provenance: Provenance, location: TextLocation) =
+private fun ResolvedLicenseInfo.pathExcludesForLicense(
+    license: String,
+    provenance: Provenance,
+    location: TextLocation
+) =
     find { it.license == SpdxSingleLicenseExpression.parse(license) }
         ?.locations
         ?.find { it.provenance == provenance && it.location == location }
         ?.matchingPathExcludes
         ?.toSet().orEmpty()
 
-fun ResolvedLicenseInfo.pathExcludesForCopyright(copyright: String, provenance: Provenance, location: TextLocation) =
+private fun ResolvedLicenseInfo.pathExcludesForCopyright(
+    copyright: String,
+    provenance: Provenance,
+    location: TextLocation
+) =
     flatMap { license -> license.locations.filter { it.provenance == provenance } }
         .flatMap { it.copyrights }
         .find { it.statement == copyright && it.location == location }
