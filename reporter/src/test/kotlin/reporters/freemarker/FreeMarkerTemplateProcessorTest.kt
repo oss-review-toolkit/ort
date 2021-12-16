@@ -188,18 +188,18 @@ private val ADVISOR_DETAILS = AdvisorDetails("testAdvisor", enumSetOf(AdvisorCap
 /**
  * Prepare the given [mock for a LicenseInfoResolver][resolverMock] to return a [ResolvedLicenseInfo] for the given
  * [id]. The [ResolvedLicenseInfo] contains a single [ResolvedLicense], which is constructed based on the provided
- * [license] and [originalExpressions] map.
+ * [license] and [originalExpression].
  */
 private fun expectResolvedLicenseInfo(
     resolverMock: LicenseInfoResolver,
     id: Identifier,
     license: String,
-    originalExpressions: Set<ResolvedOriginalExpression> = emptySet()
+    originalExpression: ResolvedOriginalExpression
 ) {
     val resolvedLicense = ResolvedLicense(
         license = license.toSpdx() as SpdxSingleLicenseExpression,
         originalDeclaredLicenses = emptySet(),
-        originalExpressions = originalExpressions,
+        originalExpressions = setOf(originalExpression),
         locations = emptySet()
     )
 
@@ -215,13 +215,13 @@ private fun expectResolvedLicenseInfo(
     resolverMock: LicenseInfoResolver,
     id: Identifier,
     licenses: List<String>,
-    originalExpressions: Set<ResolvedOriginalExpression> = emptySet()
+    originalExpression: ResolvedOriginalExpression
 ) {
     val resolvedLicenses = licenses.map { license ->
         ResolvedLicense(
             license = license.toSpdx() as SpdxSingleLicenseExpression,
             originalDeclaredLicenses = emptySet(),
-            originalExpressions = originalExpressions,
+            originalExpressions = setOf(originalExpression),
             locations = emptySet()
         )
     }
@@ -308,19 +308,19 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[0].id,
                 "MIT",
-                setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
+                ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED)
             )
             expectResolvedLicenseInfo(
                 resolver,
                 projects[1].id,
                 "MIT",
-                setOf(ResolvedOriginalExpression("GPL-2.0-only OR MIT".toSpdx(), LicenseSource.DECLARED))
+                ResolvedOriginalExpression("GPL-2.0-only OR MIT".toSpdx(), LicenseSource.DECLARED)
             )
             expectResolvedLicenseInfo(
                 resolver,
                 projects[2].id,
                 SpdxConstants.NOASSERTION,
-                setOf(ResolvedOriginalExpression(SpdxConstants.NOASSERTION.toSpdx(), LicenseSource.DECLARED))
+                ResolvedOriginalExpression(SpdxConstants.NOASSERTION.toSpdx(), LicenseSource.DECLARED)
             )
 
             val input = ReporterInput(ORT_RESULT, licenseInfoResolver = resolver)
@@ -350,7 +350,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[0].id,
                 "MIT",
-                setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
+                ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             val mockResult = mockk<OrtResult>()
@@ -377,13 +377,13 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[0].id,
                 "MIT",
-                setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
+                ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED)
             )
             expectResolvedLicenseInfo(
                 resolver,
                 projects[1].id,
                 SpdxConstants.NOASSERTION,
-                setOf(ResolvedOriginalExpression(SpdxConstants.NOASSERTION.toSpdx(), LicenseSource.DECLARED))
+                ResolvedOriginalExpression(SpdxConstants.NOASSERTION.toSpdx(), LicenseSource.DECLARED)
             )
 
             val input = ReporterInput(ORT_RESULT, licenseInfoResolver = resolver)
@@ -405,7 +405,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 resolver,
                 projects[1].id,
                 listOf("MIT", "GPL-2.0-only", "Apache-2.0"),
-                setOf(ResolvedOriginalExpression("GPL-2.0-only OR MIT OR Apache-2.0".toSpdx(), LicenseSource.DECLARED))
+                ResolvedOriginalExpression("GPL-2.0-only OR MIT OR Apache-2.0".toSpdx(), LicenseSource.DECLARED)
             )
 
             val ortResult = ORT_RESULT.copy(
