@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,12 +100,8 @@ private fun createScanner(
     downloaderConfig: DownloaderConfiguration
 ): PathScanner =
     object : PathScanner(SCANNER_NAME, scannerConfig, downloaderConfig) {
+        override val version = SCANNER_VERSION
         override val configuration = "someConfig"
 
-        override val expectedVersion: String
-            get() = SCANNER_VERSION
-
         override fun scanPathInternal(path: File) = throw NotImplementedError()
-
-        override fun command(workingDir: File?) = throw NotImplementedError()
     }
