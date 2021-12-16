@@ -190,7 +190,7 @@ private val ADVISOR_DETAILS = AdvisorDetails("testAdvisor", enumSetOf(AdvisorCap
  * [id]. The [ResolvedLicenseInfo] contains a single [ResolvedLicense], which is constructed based on the provided
  * [license] and [originalExpressions] map.
  */
-private fun expectResolveLicenseInfo(
+private fun expectResolvedLicenseInfo(
     resolverMock: LicenseInfoResolver,
     id: Identifier,
     license: String,
@@ -209,9 +209,9 @@ private fun expectResolveLicenseInfo(
 }
 
 /**
- * Like [expectResolveLicenseInfo] with multiple licenses that have same originalExpression.
+ * Like [expectResolvedLicenseInfo] with multiple licenses that have same originalExpression.
  */
-private fun expectResolveLicenseInfo(
+private fun expectResolvedLicenseInfo(
     resolverMock: LicenseInfoResolver,
     id: Identifier,
     licenses: List<String>,
@@ -304,19 +304,19 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val projects = testProjects()
             val resolver = mockk<LicenseInfoResolver>()
 
-            expectResolveLicenseInfo(
+            expectResolvedLicenseInfo(
                 resolver,
                 projects[0].id,
                 "MIT",
                 setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
             )
-            expectResolveLicenseInfo(
+            expectResolvedLicenseInfo(
                 resolver,
                 projects[1].id,
                 "MIT",
                 setOf(ResolvedOriginalExpression("GPL-2.0-only OR MIT".toSpdx(), LicenseSource.DECLARED))
             )
-            expectResolveLicenseInfo(
+            expectResolvedLicenseInfo(
                 resolver,
                 projects[2].id,
                 SpdxConstants.NOASSERTION,
@@ -346,7 +346,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val projects = testProjects()
             val resolver = mockk<LicenseInfoResolver>()
 
-            expectResolveLicenseInfo(
+            expectResolvedLicenseInfo(
                 resolver,
                 projects[0].id,
                 "MIT",
@@ -373,13 +373,13 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val projects = testProjects()
             val resolver = mockk<LicenseInfoResolver>()
 
-            expectResolveLicenseInfo(
+            expectResolvedLicenseInfo(
                 resolver,
                 projects[0].id,
                 "MIT",
                 setOf(ResolvedOriginalExpression("MIT".toSpdx(), LicenseSource.DECLARED))
             )
-            expectResolveLicenseInfo(
+            expectResolvedLicenseInfo(
                 resolver,
                 projects[1].id,
                 SpdxConstants.NOASSERTION,
@@ -401,7 +401,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val projects = testProjects()
             val resolver = mockk<LicenseInfoResolver>()
 
-            expectResolveLicenseInfo(
+            expectResolvedLicenseInfo(
                 resolver,
                 projects[1].id,
                 listOf("MIT", "GPL-2.0-only", "Apache-2.0"),
