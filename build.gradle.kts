@@ -325,7 +325,7 @@ subprojects {
     tasks.named<JacocoReport>("jacocoTestReport").configure {
         reports {
             // Enable XML in addition to HTML for CI integration.
-            xml.isEnabled = true
+            xml.required.set(true)
         }
     }
 
@@ -338,7 +338,7 @@ subprojects {
 
         reports {
             // Enable XML in addition to HTML for CI integration.
-            xml.isEnabled = true
+            xml.required.set(true)
         }
     }
 
