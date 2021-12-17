@@ -256,22 +256,25 @@
             }
           },
           "path_excludes": {
-            "type": "object",
-            "properties": {
-              "pattern": {
-                "type": "string"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "pattern": {
+                  "type": "string"
+                },
+                "reason": {
+                  "$ref": "#/definitions/pathExcludeReason"
+                },
+                "comment": {
+                  "type": "string"
+                }
               },
-              "reason": {
-                "$ref": "#/definitions/pathExcludeReason"
-              },
-              "comment": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "pattern",
-              "reason"
-            ]
+              "required": [
+                "pattern",
+                "reason"
+              ]
+            }
           }
         },
         "required": [
