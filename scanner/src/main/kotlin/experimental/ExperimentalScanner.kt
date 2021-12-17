@@ -331,7 +331,9 @@ class ExperimentalScanner(
         takeUnless { scannerConfig.skipConcluded }
             ?: partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
                 if (skip.isNotEmpty()) {
-                    log.debug { "Not scanning the following packages with concluded licenses: $skip" }
+                    this@ExperimentalScanner.log.debug {
+                        "Not scanning the following packages with concluded licenses: $skip"
+                    }
                 }
 
                 keep
@@ -340,7 +342,9 @@ class ExperimentalScanner(
     private fun Collection<Package>.filterNotMetaDataOnly(): List<Package> =
         partition { it.isMetaDataOnly }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
-                log.debug { "Not scanning the following packages which are metadata only: $skip" }
+                this@ExperimentalScanner.log.debug {
+                    "Not scanning the following packages which are metadata only: $skip"
+                }
             }
 
             keep
