@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.scanner.scanners.scanoss
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
 import java.io.File
@@ -34,31 +36,43 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 class ScanOssResultParserTest : WordSpec({
     "generateSummary()" should {
-        "properly summarize pigz.c findings" {
-            val resultFile = File("src/test/assets/pigz-c-scanoss.json")
+        "properly summarize JUnit 4.12 findings" {
+            val resultFile = File("src/test/assets/scanoss-junit-4.12.json")
             val result = readJsonFile(resultFile)
 
-            val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+            val time = Instant.now()
+            val summary = generateSummary(time, time, SpdxConstants.NONE, result)
 
-            summary.licenseFindings should containExactlyInAnyOrder(
-                    LicenseFinding(
-                            license = "Zlib",
-                            location = TextLocation(
-                                path = "pigz-2.4/pigz.c",
-                                startLine = TextLocation.UNKNOWN_LINE,
-                                endLine = TextLocation.UNKNOWN_LINE
-                            )
-                    )
+            summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
+                "Apache-2.0",
+                "EPL-1.0",
+                "MIT",
+                "LicenseRef-scancode-free-unknown",
+                "LicenseRef-scanoss-SSPL"
             )
-            summary.copyrightFindings should containExactlyInAnyOrder(
-                    CopyrightFinding(
-                            statement = "Copyright (C) 2007-2017 Mark Adler",
-                            location = TextLocation(
-                                path = "pigz-2.4/pigz.c",
-                                startLine = TextLocation.UNKNOWN_LINE,
-                                endLine = TextLocation.UNKNOWN_LINE
-                            )
+
+            summary.licenseFindings should haveSize(201)
+            summary.licenseFindings should containAll(
+                LicenseFinding(
+                    license = "Apache-2.0",
+                    location = TextLocation(
+                        path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
+                        startLine = TextLocation.UNKNOWN_LINE,
+                        endLine = TextLocation.UNKNOWN_LINE
                     )
+                )
+            )
+
+            summary.copyrightFindings should haveSize(7)
+            summary.copyrightFindings should containAll(
+                CopyrightFinding(
+                    statement = "Copyright 2013 LinkedIn Corp.",
+                    location = TextLocation(
+                        path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
+                        startLine = TextLocation.UNKNOWN_LINE,
+                        endLine = TextLocation.UNKNOWN_LINE
+                    )
+                )
             )
         }
     }
