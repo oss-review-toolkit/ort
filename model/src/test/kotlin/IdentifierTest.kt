@@ -220,6 +220,7 @@ class IdentifierTest : WordSpec({
                     .isFromOrg("ossreviewtoolkit") shouldBe true
                 Identifier("Maven:org.apache:name:version").isFromOrg("apache") shouldBe true
                 Identifier("NPM:@scope:name:version").isFromOrg("scope") shouldBe true
+                Identifier("Maven:example:name:version").isFromOrg("example") shouldBe true
 
                 Identifier("").isFromOrg("ossreviewtoolkit") shouldBe false
                 Identifier("type:namespace:name:version").isFromOrg("ossreviewtoolkit") shouldBe false
