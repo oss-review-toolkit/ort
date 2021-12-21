@@ -18,7 +18,7 @@
  */
 
 /*******************************************************
- * Example OSS Review Toolkit (ORT) rules.kts file     *
+ * Example OSS Review Toolkit (ORT) .rules.kts file    *
  *                                                     *
  * Note this file only contains example how to write   *
  * rules. It's recommended you consult your own legal  *

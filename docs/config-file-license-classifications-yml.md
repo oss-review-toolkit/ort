@@ -26,7 +26,7 @@ The information from the `license-classifications.yml` is evaluated by the follo
   generated notice file.
 
 The [license-classifications.yml example] demonstrates the intended use cases. It defines some categories that specify
-whether licenses are applicable to development projects. The [rules.kts example] checks ORT results against these
+whether licenses are applicable to development projects. The [example.rules.kts] checks ORT results against these
 categories and generates issues if the rules detect a misuse.
 
 In addition, there are some other categories to be evaluated by the templates for the notice file: The
@@ -50,7 +50,7 @@ cli/build/install/ort/bin/ort evaluate
   --output-formats YAML
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
-  --rules-file $ORT_CONFIG_DIR/rules.kts
+  --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
 [license-classifications.yml example]: ../examples/license-classifications.yml
@@ -59,4 +59,4 @@ cli/build/install/ort/bin/ort evaluate
 [Rules]: file-rules-kts.md
 [Notice templates]: notice-templates.md
 [license-classifications.yml example]: ../examples/license-classifications.yml
-[rules.kts example]: ../examples/rules.kts
+[example.rules.kts]: ../examples/example.rules.kts

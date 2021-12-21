@@ -299,9 +299,9 @@ can be used to populate a directory with template package configuration files.
 
 The file containing any policy rule implementations to be used with the _evaluator_.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| Kotlin script (DSL) | Evaluator | `$ORT_CONFIG_DIR/rules.kts` | Empty (n/a) |
+| Format | Scope | Default location                | Default value |
+| ------ | ----- |---------------------------------| ------------- |
+| Kotlin script (DSL) | Evaluator | `$ORT_CONFIG_DIR/evaluator.rules.kts` | Empty (n/a) |
 
 # Details on the tools
 
@@ -649,7 +649,7 @@ To enable this provider, pass `-a VulnerableCode` on the command line.
 
 The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are
 implemented as scripts (currently Kotlin scripts, with a dedicated DSL, but support for other scripting can be added as
-well. See [rules.kts](./examples/rules.kts) for an example file.
+well. See [example.rules.kts](./examples/example.rules.kts) for an example file.
 
 <a name="reporter">&nbsp;</a>
 
