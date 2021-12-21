@@ -48,7 +48,7 @@ class NotifierCommand : CliktCommand(name = "notify", help = "Create notificatio
 
     private val notificationsFile by option(
         "--notifications-file", "-n",
-        help = "The name of a kotlin script file containing notification rules."
+        help = "The name of a Kotlin script file containing notification rules."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
