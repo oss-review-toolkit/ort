@@ -37,7 +37,6 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.tukaani:xz:$xzVersion")
 
