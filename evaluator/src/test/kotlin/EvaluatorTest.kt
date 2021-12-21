@@ -38,7 +38,7 @@ class EvaluatorTest : WordSpec() {
     init {
         "checkSyntax" should {
             "succeed if the script can be compiled" {
-                val script = javaClass.getResource("/rules/no_gpl_declared.kts").readText()
+                val script = javaClass.getResource("/rules/no_gpl.rules.kts").readText()
 
                 val result = createEvaluator().checkSyntax(script)
 

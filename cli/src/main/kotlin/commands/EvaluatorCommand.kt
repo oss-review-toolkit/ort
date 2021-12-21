@@ -240,7 +240,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             }
 
             null -> {
-                val rulesFile = ortConfigDirectory.resolve("rules.kts")
+                val rulesFile = ortConfigDirectory.resolve("evaluator.rules.kts")
 
                 if (!rulesFile.isFile) {
                     throw UsageError("No rule option specified and no default rule found at '$rulesFile'.")

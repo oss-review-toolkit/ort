@@ -133,7 +133,7 @@ class ExamplesFunTest : StringSpec() {
             howToFixText shouldContain "Manually verify that the file does not contain any license information."
         }
 
-        "rules.kts can be compiled and executed" {
+        "example.rules.kts can be compiled and executed" {
             val resultFile = File("src/funTest/assets/semver4j-analyzer-result.yml")
             val licenseFile = File("../examples/license-classifications.yml")
             val ortResult = resultFile.readValue<OrtResult>()
@@ -143,7 +143,7 @@ class ExamplesFunTest : StringSpec() {
                 licenseClassifications = licenseFile.readValue()
             )
 
-            val script = takeExampleFile("rules.kts").readText()
+            val script = takeExampleFile("example.rules.kts").readText()
 
             val result = evaluator.run(script)
 
