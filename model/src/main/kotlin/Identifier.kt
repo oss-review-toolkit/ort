@@ -102,7 +102,7 @@ data class Identifier(
             val lowerName = name.lowercase()
             val vendorNamespace = when (type) {
                 "NPM" -> "@$lowerName"
-                "Gradle", "Maven", "SBT" -> "(com|io|net|org)\\.$lowerName(\\..+)?"
+                "Gradle", "Maven", "SBT" -> "((com|io|net|org)\\.)?$lowerName(\\..+)?"
                 else -> ""
             }
 
