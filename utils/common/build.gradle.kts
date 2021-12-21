@@ -36,5 +36,6 @@ dependencies {
 
     implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation("org.springframework:spring-core:$springCoreVersion")
 }
