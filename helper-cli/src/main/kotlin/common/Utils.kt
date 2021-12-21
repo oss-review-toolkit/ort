@@ -365,19 +365,9 @@ internal fun OrtResult.getPackageOrProject(id: Identifier): Package? =
     getProject(id)?.toPackage() ?: getPackage(id)?.pkg
 
 /**
- * Return the first [Provenance] matching the given [id] or null if there is no match.
+ * Return the [Provenance] of the first scan result matching the given [id] or null if there is no match.
  */
-internal fun OrtResult.getProvenance(id: Identifier): Provenance? {
-    val pkg = getPackageOrProject(id)!!
-
-    scanner?.results?.scanResults?.forEach { (_, results) ->
-        results.forEach { scanResult ->
-            if (scanResult.provenance.matches(pkg)) return scanResult.provenance
-        }
-    }
-
-    return null
-}
+internal fun OrtResult.getProvenance(id: Identifier): Provenance? = getScanResultsForId(id).firstOrNull()?.provenance
 
 /**
  * Return all issues from scan results. Issues for excludes [Project]s or [Package]s are not returned if and only if
