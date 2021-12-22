@@ -21,55 +21,36 @@ package org.ossreviewtoolkit.evaluator
 
 import java.time.Instant
 
+import kotlin.script.experimental.api.ResultValue
+import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.scriptsInstancesSharing
+import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
+
 import org.ossreviewtoolkit.model.EvaluatorRun
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.common.ScriptRunner
+import org.ossreviewtoolkit.utils.scripting.RulesScriptTemplate
+import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Evaluator(
     ortResult: OrtResult = OrtResult.EMPTY,
     licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
     licenseClassifications: LicenseClassifications = LicenseClassifications()
 ) : ScriptRunner() {
-    override val preface = """
-            import org.ossreviewtoolkit.evaluator.*
-            import org.ossreviewtoolkit.model.*
-            import org.ossreviewtoolkit.model.config.*
-            import org.ossreviewtoolkit.model.licenses.*
-            import org.ossreviewtoolkit.model.utils.*
-            import org.ossreviewtoolkit.utils.common.*
-            import org.ossreviewtoolkit.utils.core.*
-            import org.ossreviewtoolkit.utils.spdx.*
-
-            import java.util.*
-
-            // Output:
-            val ruleViolations = mutableListOf<RuleViolation>()
-
-        """.trimIndent()
-
-    override val postface = """
-
-            ruleViolations
-        """.trimIndent()
-
-    init {
-        engine.put("ortResult", ortResult)
-        engine.put("licenseInfoResolver", licenseInfoResolver)
-        engine.put("licenseClassifications", licenseClassifications)
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
+    override val evalConfig = ScriptEvaluationConfiguration {
+        constructorArgs(ortResult, licenseInfoResolver, licenseClassifications)
+        scriptsInstancesSharing(true)
     }
 
     override fun run(script: String): EvaluatorRun {
         val startTime = Instant.now()
-
-        @Suppress("UNCHECKED_CAST")
-        val violations = super.run(script) as List<RuleViolation>
-
+        val scriptInstance = (super.run(script) as ResultValue).scriptInstance as RulesScriptTemplate
         val endTime = Instant.now()
 
-        return EvaluatorRun(startTime, endTime, violations)
+        return EvaluatorRun(startTime, endTime, scriptInstance.ruleViolations)
     }
 }
