@@ -161,13 +161,13 @@ fun scanOrtResult(
     val filteredScannerOptions = mutableMapOf<String, ScannerOptions>()
 
     packageScanner?.scannerConfig?.options?.get(packageScanner.scannerName)?.let { packageScannerOptions ->
-        val filteredPackageScannerOptions = packageScanner.filterOptionsForResult(packageScannerOptions)
+        val filteredPackageScannerOptions = packageScanner.filterSecretOptions(packageScannerOptions)
         filteredScannerOptions[packageScanner.scannerName] = filteredPackageScannerOptions
     }
 
     if (projectScanner != packageScanner) {
         projectScanner?.scannerConfig?.options?.get(projectScanner.scannerName)?.let { projectScannerOptions ->
-            val filteredProjectScannerOptions = projectScanner.filterOptionsForResult(projectScannerOptions)
+            val filteredProjectScannerOptions = projectScanner.filterSecretOptions(projectScannerOptions)
             filteredScannerOptions[projectScanner.scannerName] = filteredProjectScannerOptions
         }
     }
@@ -231,8 +231,7 @@ abstract class Scanner(
     ): Map<Package, List<ScanResult>>
 
     /**
-     * Filter the options specific to this scanner that will be included into the result, e.g. to perform obfuscation of
-     * credentials.
+     * Filter the scanner-specific options to remove / obfuscate any secrets, like credentials.
      */
-    open fun filterOptionsForResult(options: ScannerOptions) = options
+    open fun filterSecretOptions(options: ScannerOptions) = options
 }

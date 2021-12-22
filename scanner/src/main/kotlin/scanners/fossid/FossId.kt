@@ -190,7 +190,7 @@ class FossId internal constructor(
 
     override val configuration = ""
 
-    override fun filterOptionsForResult(options: ScannerOptions) =
+    override fun filterSecretOptions(options: ScannerOptions) =
         options.mapValues { (k, v) ->
             v.takeUnless { k in secretKeys }.orEmpty()
         }
@@ -697,6 +697,4 @@ class FossId internal constructor(
         runBlocking {
             scanPackages(setOf(pkg), context.labels).getValue(pkg).first()
         }
-
-    override fun filterSecretOptions(options: ScannerOptions): ScannerOptions = filterOptionsForResult(options)
 }
