@@ -29,7 +29,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-import org.cyclonedx.CycloneDxSchema
 import org.cyclonedx.parsers.JsonParser
 import org.cyclonedx.parsers.XmlParser
 
@@ -38,26 +37,27 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class CycloneDxReporterFunTest : WordSpec({
+    val defaultSchemaVersion = CycloneDxReporter.DEFAULT_SCHEMA_VERSION.versionString
     val options = mapOf("single.bom" to "true")
     val outputDir = createSpecTempDir()
 
     "A generated BOM" should {
-        "be valid XML according to schema version 1.2" {
+        "be valid XML according to schema version $defaultSchemaVersion" {
             val xmlOptions = options + mapOf("output.file.formats" to "xml")
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).single()
 
             bomFile shouldBe aFile()
             bomFile shouldNotBe emptyFile()
-            XmlParser().validate(bomFile, CycloneDxSchema.Version.VERSION_12) should beEmpty()
+            XmlParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
         }
 
-        "be valid JSON according to schema version 1.2" {
+        "be valid JSON according to schema version $defaultSchemaVersion" {
             val jsonOptions = options + mapOf("output.file.formats" to "json")
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).single()
 
             bomFile shouldBe aFile()
             bomFile shouldNotBe emptyFile()
-            JsonParser().validate(bomFile, CycloneDxSchema.Version.VERSION_12) should beEmpty()
+            JsonParser().validate(bomFile, CycloneDxReporter.DEFAULT_SCHEMA_VERSION) should beEmpty()
         }
     }
 })

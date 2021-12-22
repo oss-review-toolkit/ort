@@ -61,8 +61,11 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  */
 class CycloneDxReporter : Reporter {
     companion object {
+        val DEFAULT_SCHEMA_VERSION = CycloneDxSchema.Version.VERSION_12
+
         const val REPORT_BASE_FILENAME = "bom.cyclonedx"
 
+        const val OPTION_SCHEMA_VERSION = "schema.version"
         const val OPTION_SINGLE_BOM = "single.bom"
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
     }
@@ -128,7 +131,13 @@ class CycloneDxReporter : Reporter {
     ): List<File> {
         val outputFiles = mutableListOf<File>()
         val projects = input.ortResult.getProjects(omitExcluded = true)
+
+        val schemaVersion = enumValues<CycloneDxSchema.Version>().find {
+            it.versionString == options[OPTION_SCHEMA_VERSION]
+        } ?: DEFAULT_SCHEMA_VERSION
+
         val createSingleBom = !options[OPTION_SINGLE_BOM].isFalse()
+
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(",")
             ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
@@ -165,7 +174,7 @@ class CycloneDxReporter : Reporter {
                 addPackageToBom(input, pkg, bom, dependencyType)
             }
 
-            outputFiles += writeBom(bom, outputDir, REPORT_BASE_FILENAME, outputFileFormats)
+            outputFiles += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileFormats)
         } else {
             projects.forEach { project ->
                 val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
@@ -205,7 +214,7 @@ class CycloneDxReporter : Reporter {
                 }
 
                 val reportName = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}"
-                outputFiles += writeBom(bom, outputDir, reportName, outputFileFormats)
+                outputFiles += writeBom(bom, schemaVersion, outputDir, reportName, outputFileFormats)
             }
         }
 
@@ -271,6 +280,7 @@ class CycloneDxReporter : Reporter {
 
     private fun writeBom(
         bom: Bom,
+        schemaVersion: CycloneDxSchema.Version,
         outputDir: File,
         outputName: String,
         requestedOutputFileFormats: Set<FileFormat>
@@ -283,7 +293,7 @@ class CycloneDxReporter : Reporter {
 
             val bomGenerator = when (fileFormat) {
                 // Note that the BomXmlGenerator and BomJsonGenerator interfaces do not share a common base interface.
-                FileFormat.XML -> BomGeneratorFactory.createXml(CycloneDxSchema.Version.VERSION_12, bom) as Any
+                FileFormat.XML -> BomGeneratorFactory.createXml(schemaVersion, bom) as Any
                 FileFormat.JSON -> {
                     // JSON output cannot handle extensible types (see [1]), so simply remove them. As JSON output is
                     // guaranteed to be the last format serialized, it is okay to modify the BOM here without doing a
@@ -299,7 +309,7 @@ class CycloneDxReporter : Reporter {
                         }
                     }
 
-                    BomGeneratorFactory.createJson(CycloneDxSchema.Version.VERSION_12, bomWithoutExtensibleTypes) as Any
+                    BomGeneratorFactory.createJson(schemaVersion, bomWithoutExtensibleTypes) as Any
                 }
                 else -> throw IllegalArgumentException("Unsupported CycloneDX file format '$fileFormat'.")
             }
