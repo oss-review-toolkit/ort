@@ -629,6 +629,7 @@ class ExperimentalScannerTest : WordSpec({
 /**
  * An implementation of [PackageScannerWrapper] that creates empty scan results.
  */
+@Suppress("RedundantNullableReturnType")
 private class FakePackageScannerWrapper(
     val packageProvenanceResolver: PackageProvenanceResolver = FakePackageProvenanceResolver(),
     val sourceCodeOriginPriority: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT),
