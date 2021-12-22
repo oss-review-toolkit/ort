@@ -27,8 +27,12 @@ plugins {
 
 dependencies {
     api(project(":model"))
+    api(project(":utils:scripting-utils"))
 
     implementation(project(":utils:core-utils"))
+
+    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
