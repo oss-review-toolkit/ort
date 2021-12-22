@@ -71,6 +71,12 @@ class Conan(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
+        private val DUMMY_COMPILER_SETTINGS = arrayOf(
+            "-s", "compiler=gcc",
+            "-s", "compiler.libcxx=libstdc++",
+            "-s", "compiler.version=11.1"
+        )
+
         private const val SCOPE_NAME_DEPENDENCIES = "requires"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
     }
@@ -178,7 +184,7 @@ class Conan(
             installDependencies(workingDir)
 
             val jsonFile = createOrtTempDir().resolve("info.json")
-            run(workingDir, "info", ".", "--json", jsonFile.absolutePath).requireSuccess()
+            run(workingDir, "info", ".", "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS).requireSuccess()
 
             val pkgInfos = jsonMapper.readTree(jsonFile)
             jsonFile.parentFile.safeDeleteRecursively(force = true)
