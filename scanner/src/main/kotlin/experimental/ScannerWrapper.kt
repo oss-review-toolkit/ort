@@ -59,9 +59,9 @@ sealed interface ScannerWrapper {
     val criteria: ScannerCriteria?
 
     /**
-     * Filter the scanner specific options to remove any secrets, like credentials.
+     * Filter the scanner-specific options to remove / obfuscate any secrets, like credentials.
      */
-    fun filterSecretOptions(options: ScannerOptions) = options
+    fun filterSecretOptions(options: ScannerOptions): ScannerOptions
 }
 
 /**
