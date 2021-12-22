@@ -177,8 +177,12 @@ class Conan(
 
             installDependencies(workingDir)
 
-            val dependenciesJson = run(workingDir, "info", ".", "-j").stdout
-            val pkgInfos = jsonMapper.readTree(dependenciesJson)
+            val jsonFile = createOrtTempDir().resolve("info.json")
+            run(workingDir, "info", ".", "--json", jsonFile.absolutePath).requireSuccess()
+
+            val pkgInfos = jsonMapper.readTree(jsonFile)
+            jsonFile.parentFile.safeDeleteRecursively(force = true)
+
             val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
             val packages = parsePackages(packageList, workingDir, conanStoragePath)
 
