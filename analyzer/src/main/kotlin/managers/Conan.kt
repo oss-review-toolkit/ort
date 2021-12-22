@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.core.createOrtTempFile
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 
 /**
@@ -286,7 +286,7 @@ class Conan(
      */
     private fun inspectField(pkgName: String, workingDir: File, field: String): String =
         pkgInspectResults.getOrPut(pkgName) {
-            val jsonFile = createOrtTempFile(managerName)
+            val jsonFile = createOrtTempDir().resolve("inspect.json")
             run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
             jsonMapper.readTree(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively(force = true) }
         }.get(field).textValueOrEmpty()
