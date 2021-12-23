@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS ort_result CASCADE;
+DROP TABLE IF EXISTS package CASCADE;
+DROP TABLE IF EXISTS ort_result_label CASCADE;
+DROP TABLE IF EXISTS ort_result_has_package CASCADE;
+DROP TABLE IF EXISTS ort_result_nested_repository CASCADE;

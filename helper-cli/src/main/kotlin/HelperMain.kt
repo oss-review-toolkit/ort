@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.helper.commands.TransformResultCommand
 import org.ossreviewtoolkit.helper.commands.VerifySourceArtifactCurationsCommand
 import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsCommand
+import org.ossreviewtoolkit.helper.commands.packagecuration.ScanDbCommand
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
@@ -92,6 +93,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             PackageConfigurationCommand(),
             PackageCurationsCommand(),
             RepositoryConfigurationCommand(),
+            ScanDbCommand(),
             ScanStorageCommand(),
             SetDependencyRepresentationCommand(),
             SetLabelsCommand(),
