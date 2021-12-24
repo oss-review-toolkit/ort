@@ -142,6 +142,9 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
     fun calculate(inputStream: InputStream, size: Long): String =
         calculateHash(inputStream, getMessageDigest(size)).toHexString()
 
+    /**
+     * Return the message digest to use for this [HashAlgorithm], which might depend on the [size].
+     */
     protected open fun getMessageDigest(size: Long): MessageDigest =
         // Disregard the size in the standard case.
         MessageDigest.getInstance(toString())
