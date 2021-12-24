@@ -27,6 +27,7 @@ plugins {
 dependencies {
     api(project(":model"))
 
+    implementation(project(":utils:common-utils"))
     implementation(project(":utils:core-utils"))
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
