@@ -36,6 +36,12 @@ val VCS_DIRECTORIES = listOf(
 )
 
 /**
+ * Calculate the [digest] on the data from the given [file].
+ */
+fun calculateHash(file: File, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray =
+    file.inputStream().use { calculateHash(it, digest) }
+
+/**
  * Calculate the [digest] on the data from the given [inputStream]. The caller is responsible for closing the stream.
  */
 fun calculateHash(inputStream: InputStream, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray {
@@ -51,12 +57,6 @@ fun calculateHash(inputStream: InputStream, digest: MessageDigest = MessageDiges
 
     return digest.digest()
 }
-
-/**
- * Calculate the [digest] on the data from the given [file].
- */
-fun calculateHash(file: File, digest: MessageDigest = MessageDigest.getInstance("SHA-1")): ByteArray =
-    file.inputStream().use { calculateHash(it, digest) }
 
 /**
  * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
