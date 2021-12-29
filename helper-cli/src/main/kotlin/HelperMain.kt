@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.helper.commands.ListPackagesCommand
 import org.ossreviewtoolkit.helper.commands.ListStoredScanResultsCommand
 import org.ossreviewtoolkit.helper.commands.MapCopyrightsCommand
 import org.ossreviewtoolkit.helper.commands.MergeRepositoryConfigurationsCommand
+import org.ossreviewtoolkit.helper.commands.SaveResultWithResolvedScopesCommand
 import org.ossreviewtoolkit.helper.commands.SetDependencyRepresentationCommand
 import org.ossreviewtoolkit.helper.commands.SetLabelsCommand
 import org.ossreviewtoolkit.helper.commands.SubtractScanResultsCommand
@@ -92,6 +93,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             PackageConfigurationCommand(),
             PackageCurationsCommand(),
             RepositoryConfigurationCommand(),
+            SaveResultWithResolvedScopesCommand(),
             ScanStorageCommand(),
             SetDependencyRepresentationCommand(),
             SetLabelsCommand(),
