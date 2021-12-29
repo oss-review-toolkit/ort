@@ -152,10 +152,6 @@ for documentation of the required Jenkins plugins. The job accepts various param
 line arguments. Additionally, one can trigger a downstream job which e.g. further processes scan results. Note that it
 is the downstream job's responsibility to copy any artifacts it needs from the upstream job.
 
-A demo instance of a Jenkins pipeline for ORT will soon be
-
-![Fosshost Logo](./logos/fosshost.png)
-
 ## Getting started
 
 Please see [Getting Started](./docs/getting-started.md) for an introduction to the individual tools.
