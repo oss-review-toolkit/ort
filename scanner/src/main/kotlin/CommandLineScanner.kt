@@ -20,8 +20,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.io.IOException
 
@@ -101,8 +99,6 @@ abstract class CommandLineScanner(
      * The actual version of the scanner, or an empty string in case of failure.
      */
     override val version by lazy { getVersion(scannerDir) }
-
-    override fun getVersionRequirement(): Requirement = Requirement.buildLoose(expectedVersion)
 
     /**
      * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.
