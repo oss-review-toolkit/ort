@@ -53,13 +53,13 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM adoptopenjdk:11-jre-hotspot-bionic
+FROM adoptopenjdk:11-jre-hotspot-focal
 
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
-    CARGO_VERSION=0.54.0-0ubuntu1~18.04.1 \
-    COMPOSER_VERSION=1.6.3-1 \
+    CARGO_VERSION=0.54.0-0ubuntu1~20.04.1 \
+    COMPOSER_VERSION=1.10.1-1 \
     CONAN_VERSION=1.43.2 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.16.5 \
@@ -112,7 +112,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         composer=$COMPOSER_VERSION \
         nodejs \
         python-dev \
-        python-pip \
         python-setuptools \
         python3-dev \
         python3-pip \
