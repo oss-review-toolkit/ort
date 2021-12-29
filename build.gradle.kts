@@ -290,6 +290,28 @@ subprojects {
         testClassesDirs = sourceSets["funTest"].output.classesDirs
     }
 
+    tasks.withType<Test>().configureEach {
+        val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
+
+        listOf(
+            "java.io.tmpdir",
+            "kotest.assertions.multi-line-diff",
+            "kotest.tags.include",
+            "kotest.tags.exclude"
+        ).mapNotNullTo(testSystemProperties) { key ->
+            System.getProperty(key)?.let { key to it }
+        }
+
+        systemProperties = testSystemProperties.toMap()
+
+        testLogging {
+            events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+            exceptionFormat = TestExceptionFormat.FULL
+        }
+
+        useJUnitPlatform()
+    }
+
     // Enable JaCoCo only if a JacocoReport task is in the graph as JaCoCo
     // is using "append = true" which disables Gradle's build cache.
     gradle.taskGraph.whenReady {
@@ -299,26 +321,6 @@ subprojects {
             extensions.configure(JacocoTaskExtension::class) {
                 isEnabled = enabled
             }
-
-            val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
-
-            listOf(
-                "java.io.tmpdir",
-                "kotest.assertions.multi-line-diff",
-                "kotest.tags.include",
-                "kotest.tags.exclude"
-            ).mapNotNullTo(testSystemProperties) { key ->
-                System.getProperty(key)?.let { key to it }
-            }
-
-            systemProperties = testSystemProperties.toMap()
-
-            testLogging {
-                events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-                exceptionFormat = TestExceptionFormat.FULL
-            }
-
-            useJUnitPlatform()
         }
     }
 
