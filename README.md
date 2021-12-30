@@ -53,6 +53,8 @@ use):
   classifications.
 * [_Reporter_](#reporter) - presents results in various formats such as visual reports, Open Source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
+* [_Notifier_](./notifier) - sends result notifications via different channels (like
+  [emails](./examples/notifications.kts) and / or JIRA tickets).
 
 # Installation
 
