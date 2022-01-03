@@ -17,8 +17,9 @@
  * License-Filename: LICENSE
  */
 
-val jacksonVersion: String by project
+val kotlinxSerializationVersion: String by project
 val retrofitVersion: String by project
+val retrofitKotlinxSerializationConverterVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -28,6 +29,17 @@ plugins {
 dependencies {
     api("com.squareup.retrofit2:retrofit:$retrofitVersion")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
+            retrofitKotlinxSerializationConverterVersion)
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    val customCompilerArgs = listOf(
+        "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+    }
 }
