@@ -94,3 +94,8 @@ const val ORT_REPO_CONFIG_FILENAME = ".ort.yml"
  * The name of the ORT resolutions configuration file.
  */
 const val ORT_RESOLUTIONS_FILENAME = "resolutions.yml"
+
+/**
+ * The name of the ORT evaluator rules script.
+ */
+const val ORT_EVALUATOR_RULES_FILENAME = "evaluator.rules.kts"

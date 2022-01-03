@@ -73,6 +73,7 @@ import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.ORT_COPYRIGHT_GARBAGE_FILENAME
+import org.ossreviewtoolkit.utils.core.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_RESOLUTIONS_FILENAME
@@ -240,7 +241,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             }
 
             null -> {
-                val rulesFile = ortConfigDirectory.resolve("evaluator.rules.kts")
+                val rulesFile = ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)
 
                 if (!rulesFile.isFile) {
                     throw UsageError("No rule option specified and no default rule found at '$rulesFile'.")
