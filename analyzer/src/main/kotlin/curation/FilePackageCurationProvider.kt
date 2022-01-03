@@ -59,7 +59,7 @@ class FilePackageCurationProvider(curationFiles: Collection<File>) : PackageCura
         val duplicates = allCurations.getDuplicates()
 
         if (duplicates.isNotEmpty()) {
-            throw DuplicatedCurationException("Duplicated curation for $duplicates found.")
+            throw DuplicatedCurationException("Duplicate curations found: $duplicates")
         }
 
         allCurations.toSet()
