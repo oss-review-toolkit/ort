@@ -19,18 +19,19 @@
 
 package org.ossreviewtoolkit.clients.nexusiq
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 import java.net.URI
 import java.util.UUID
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
 import okhttp3.Credentials
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -49,9 +50,9 @@ interface NexusIqService {
         const val CVSS3_SCORE = "CVSS3"
 
         /**
-         * The mapper for JSON (de-)serialization used by this service.
+         * The JSON (de-)serialization object used by this service.
          */
-        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+        val JSON = Json { ignoreUnknownKeys = true }
 
         /**
          * Create a NexusIQ service instance for communicating with a server running at the given [url], optionally
@@ -79,31 +80,34 @@ interface NexusIqService {
                 }
                 .build()
 
+            val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .client(nexusIqClient)
                 .baseUrl(url)
-                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
+                .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
             return retrofit.create(NexusIqService::class.java)
         }
     }
 
+    @Serializable
     data class ComponentDetailsWrapper(
         val componentDetails: List<ComponentDetails>
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class ComponentDetails(
         val component: Component,
         val securityData: SecurityData
     )
 
+    @Serializable
     data class SecurityData(
         val securityIssues: List<SecurityIssue>
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class SecurityIssue(
         val source: String,
         val reference: String,
@@ -120,25 +124,29 @@ interface NexusIqService {
         fun scoringSystem(): String = if (source in cvss3Sources) CVSS3_SCORE else CVSS2_SCORE
     }
 
+    @Serializable
     data class ComponentsWrapper(
         val components: List<Component>
     )
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Component(
         val packageUrl: String
     )
 
+    @Serializable
     data class Organizations(
         val organizations: List<Organization>
     )
 
+    @Serializable
     data class Organization(
         val id: String,
         val name: String,
         val tags: List<Tag>
     )
 
+    @Serializable
     data class Tag(
         val id: String,
         val name: String,
@@ -146,15 +154,18 @@ interface NexusIqService {
         val color: String
     )
 
+    @Serializable
     data class MemberMappings(
         val memberMappings: List<MemberMapping>
     )
 
+    @Serializable
     data class MemberMapping(
         val roleId: String,
         val members: List<Member>
     )
 
+    @Serializable
     data class Member(
         val ownerId: String,
         val ownerType: String,
