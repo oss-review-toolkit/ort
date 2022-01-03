@@ -207,6 +207,9 @@ scanner:
     create_missing_archives: false
     ignore_patterns:
     - "**/*.ort.yml"
+    - "**/*.spdx.yml"
+    - "**/*.spdx.yaml"
+    - "**/*.spdx.json"
     - "**/META-INF/DEPENDENCIES"
   results:
     scan_results:
