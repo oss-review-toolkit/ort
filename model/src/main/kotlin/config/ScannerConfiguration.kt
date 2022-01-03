@@ -82,6 +82,9 @@ data class ScannerConfiguration(
      */
     val ignorePatterns: List<String> = listOf(
         "**/*.ort.yml",
+        "**/*.spdx.yml",
+        "**/*.spdx.yaml",
+        "**/*.spdx.json",
         "**/META-INF/DEPENDENCIES"
     ),
 
