@@ -21,12 +21,23 @@ package org.ossreviewtoolkit.analyzer.curation
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.PackageCuration
 
 /**
  * A curation provider that does not provide any curations on its own, but searches the given list of [providers] for
  * the first matching curation, and falls back to the next provider in the list if there is no match.
  */
 class FallbackPackageCurationProvider(private val providers: List<PackageCurationProvider>) : PackageCurationProvider {
-    override fun getCurationsFor(pkgId: Identifier) =
-        providers.asSequence().map { it.getCurationsFor(pkgId) }.find { it.isNotEmpty() }.orEmpty()
+    override fun getCurationsFor(pkgIds: Collection<Identifier>): Map<Identifier, List<PackageCuration>> {
+        val curations = mutableMapOf<Identifier, List<PackageCuration>>()
+        val remainingPkgIds = pkgIds.toMutableSet()
+
+        for (provider in providers) {
+            if (remainingPkgIds.isEmpty()) break
+            curations += provider.getCurationsFor(remainingPkgIds)
+            remainingPkgIds -= curations.keys
+        }
+
+        return curations
+    }
 }

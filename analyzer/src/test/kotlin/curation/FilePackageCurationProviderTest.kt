@@ -50,7 +50,7 @@ class FilePackageCurationProviderTest : StringSpec() {
             )
 
             idsWithExistingCurations.forEach {
-                val curations = provider.getCurationsFor(it)
+                val curations = provider.getCurationsFor(listOf(it)).values.flatten()
 
                 curations should haveSize(1)
             }
@@ -68,7 +68,7 @@ class FilePackageCurationProviderTest : StringSpec() {
             )
 
             idsWithExistingCurations.forEach {
-                val curations = provider.getCurationsFor(it)
+                val curations = provider.getCurationsFor(listOf(it)).values.flatten()
 
                 curations should haveSize(1)
             }
@@ -78,7 +78,7 @@ class FilePackageCurationProviderTest : StringSpec() {
             val provider = FilePackageCurationProvider(curationsFile)
 
             val identifier = Identifier("maven", "org.hamcrest", "hamcrest-core", "1.3")
-            val curations = provider.getCurationsFor(identifier)
+            val curations = provider.getCurationsFor(listOf(identifier)).values.flatten()
 
             curations should haveSize(4)
             curations.forEach {
@@ -96,9 +96,9 @@ class FilePackageCurationProviderTest : StringSpec() {
             val idMaxVersion = Identifier("npm", "", "ramda", "0.25.0")
             val idOutVersion = Identifier("npm", "", "ramda", "0.26.0")
 
-            val curationsMinVersion = provider.getCurationsFor(idMinVersion)
-            val curationsMaxVersion = provider.getCurationsFor(idMaxVersion)
-            val curationsOutVersion = provider.getCurationsFor(idOutVersion)
+            val curationsMinVersion = provider.getCurationsFor(listOf(idMinVersion)).values.flatten()
+            val curationsMaxVersion = provider.getCurationsFor(listOf(idMaxVersion)).values.flatten()
+            val curationsOutVersion = provider.getCurationsFor(listOf(idOutVersion)).values.flatten()
 
             curationsMinVersion should haveSize(1)
             (provider.packageCurations - curationsMinVersion).forEach {
