@@ -193,7 +193,7 @@ subprojects {
 
     // Associate the "funTest" compilation with the "main" compilation to be able to access "internal" objects from
     // functional tests.
-    kotlin.target.compilations.run {
+    kotlin.target.compilations.apply {
         getByName("funTest").associateWith(getByName(KotlinCompilation.MAIN_COMPILATION_NAME))
     }
 
