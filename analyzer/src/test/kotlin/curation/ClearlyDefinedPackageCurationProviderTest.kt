@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -35,10 +35,10 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
             val provider = ClearlyDefinedPackageCurationProvider()
 
             val identifier = Identifier("Maven:javax.servlet:javax.servlet-api:3.1.0")
-            val curations = provider.getCurationsFor(identifier)
+            val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should haveSize(1)
-            curations.first().data.concludedLicense shouldBe
+            curations.values.flatten().first().data.concludedLicense shouldBe
                     "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
         }
 
@@ -46,7 +46,7 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
             val provider = ClearlyDefinedPackageCurationProvider()
 
             val identifier = Identifier("NPM:@scope:name:1.2.3")
-            val curations = provider.getCurationsFor(identifier)
+            val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should beEmpty()
         }
@@ -57,17 +57,20 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
             val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
 
             val identifier = Identifier("NPM:@nestjs:platform-express:6.2.3")
-            val curations = provider.getCurationsFor(identifier)
+            val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should haveSize(1)
-            curations.first().data.concludedLicense shouldBe "Apache-1.0".toSpdx()
+
+            // Note: The ClearlyDefined service returns "Apache-1.0" here for a GET (single) request, but "Apache-2.0"
+            // for a POST (bulk) request, see https://github.com/clearlydefined/service/issues/901.
+            curations.values.flatten().first().data.concludedLicense shouldBe "Apache-2.0".toSpdx()
         }
 
         "return no curation for a non-existing dummy Maven package" {
             val provider = ClearlyDefinedPackageCurationProvider()
 
             val identifier = Identifier("Maven:group:name:1.2.3")
-            val curations = provider.getCurationsFor(identifier)
+            val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should beEmpty()
         }

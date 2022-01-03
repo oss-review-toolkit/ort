@@ -26,7 +26,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 
 import java.time.Duration
@@ -68,8 +68,9 @@ class ClearlyDefinedPackageCurationProviderMockTest : WordSpec({
             }
 
             val provider = ClearlyDefinedPackageCurationProvider("http://localhost:${server.port()}", client)
+            val ids = listOf(Identifier("Maven:some-ns:some-component:1.2.3"))
 
-            provider.getCurationsFor(Identifier("Maven:some-ns:some-component:1.2.3")) should beEmpty()
+            provider.getCurationsFor(ids) should beEmpty()
         }
     }
 })

@@ -54,7 +54,12 @@ class Sw360PackageCurationProvider(sw360Configuration: Sw360StorageConfiguration
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     )
 
-    override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
+    override fun getCurationsFor(pkgIds: Collection<Identifier>) =
+        pkgIds.mapNotNull { pkgId ->
+            getCurationsFor(pkgId).takeUnless { it.isEmpty() }?.let { pkgId to it }
+        }.toMap()
+
+    private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val name = listOfNotNull(pkgId.namespace, pkgId.name).joinToString("/")
         val sw360ReleaseClient = sw360Connection.releaseAdapter
 

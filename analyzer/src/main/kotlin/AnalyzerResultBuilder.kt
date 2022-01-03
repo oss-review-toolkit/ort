@@ -83,22 +83,19 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
      * independently of a [ProjectAnalyzerResult].
      */
     fun addPackages(packageSet: Set<Package>): AnalyzerResultBuilder {
-        val (curatedPackages, duration) = measureTimedValue {
-            packageSet.map { pkg ->
-                val curations = curationProvider.getCurationsFor(pkg.id)
-                curations.fold(pkg.toCuratedPackage()) { cur, packageCuration ->
-                    log.debug {
-                        "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
-                    }
-
-                    packageCuration.apply(cur)
-                }
-            }
-        }
-
-        packages += curatedPackages
+        val (curations, duration) = measureTimedValue { curationProvider.getCurationsFor(packageSet.map { it.id }) }
 
         log.perf { "Getting package curations took $duration." }
+
+        packages += packageSet.map { pkg ->
+            curations[pkg.id].orEmpty().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
+                log.debug {
+                    "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
+                }
+
+                packageCuration.apply(cur)
+            }
+        }
 
         return this
     }
