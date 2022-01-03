@@ -193,10 +193,6 @@ subprojects {
 
     // Associate the "funTest" compilation with the "main" compilation to be able to access "internal" objects from
     // functional tests.
-    // TODO: The feature to access "internal" objects from functional tests is not actually used yet because the IDE
-    //       would still highlight such access as an error. Still keep this code around until that bug in the IDE (see
-    //       https://youtrack.jetbrains.com/issue/KT-34102) is fixed as the correct syntax for this code was not easy to
-    //       determine.
     kotlin.target.compilations.run {
         getByName("funTest").associateWith(getByName(KotlinCompilation.MAIN_COMPILATION_NAME))
     }
