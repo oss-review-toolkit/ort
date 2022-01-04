@@ -242,8 +242,8 @@ internal fun OrtResult.processAllCopyrightStatements(
     )
 
     collectProjectsAndPackages().forEach { id ->
-        licenseInfoResolver.resolveLicenseInfo(id).forEach innerForEach@{ resolvedLicense ->
-            if (omitExcluded && resolvedLicense.isDetectedExcluded) return@innerForEach
+        licenseInfoResolver.resolveLicenseInfo(id).forEach inner@{ resolvedLicense ->
+            if (omitExcluded && resolvedLicense.isDetectedExcluded) return@inner
 
             val copyrights = resolvedLicense.getResolvedCopyrights(
                 process = false,
