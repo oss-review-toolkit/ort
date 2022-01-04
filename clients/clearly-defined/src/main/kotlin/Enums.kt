@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 /**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L18-L33.
+ * See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L32-L48.
  */
 enum class ComponentType(val value: String) {
     NPM("npm"),
@@ -33,6 +33,7 @@ enum class ComponentType(val value: String) {
     COMPOSER("composer"),
     NUGET("nuget"),
     GEM("gem"),
+    GO("go"),
     POD("pod"),
     PYPI("pypi"),
     SOURCE_ARCHIVE("sourcearchive"),
@@ -51,15 +52,18 @@ enum class ComponentType(val value: String) {
 }
 
 /**
- * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L34-L47.
+ * See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L49-L65.
  */
 enum class Provider(val value: String) {
     NPM_JS("npmjs"),
     COCOAPODS("cocoapods"),
     CRATES_IO("cratesio"),
     GITHUB("github"),
+    GITLAB("gitlab"),
     PACKAGIST("packagist"),
+    GOLANG("golang"),
     MAVEN_CENTRAL("mavencentral"),
+    MAVEN_GOOGLE("mavengoogle"),
     NUGET("nuget"),
     RUBYGEMS("rubygems"),
     PYPI("pypi"),
