@@ -24,6 +24,9 @@ val retrofitKotlinxSerializationConverterVersion: String by project
 plugins {
     // Apply core plugins.
     `java-library`
+
+    // Apply third-party plugins.
+    kotlin("plugin.serialization")
 }
 
 dependencies {
