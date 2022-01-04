@@ -30,6 +30,7 @@ import okhttp3.OkHttpClient
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributedCurations
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
@@ -50,6 +51,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 import retrofit2.HttpException
+
+/**
+ * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the
+ * size of responses reasonably small.
+ */
+private const val BULK_REQUEST_SIZE = 100
 
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
@@ -102,9 +109,13 @@ class ClearlyDefinedPackageCurationProvider(
         }.toMap()
 
         val contributedCurations = runCatching {
-            // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
-            //       classes could deal with coroutines more easily.
-            runBlocking(Dispatchers.IO) { service.getCurations(coordinatesToIds.keys) }
+            mutableMapOf<Coordinates, ContributedCurations>().also {
+                coordinatesToIds.keys.chunked(BULK_REQUEST_SIZE).forEach { coordinates ->
+                    // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
+                    //       classes could deal with coroutines more easily.
+                    it += runBlocking(Dispatchers.IO) { service.getCurations(coordinates) }
+                }
+            }
         }.onFailure { e ->
             when (e) {
                 is HttpException -> {
