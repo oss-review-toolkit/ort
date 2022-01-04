@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
  * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the
  * size of responses reasonably small.
  */
-private const val BULK_FETCH_SIZE = 100
+private const val BULK_REQUEST_SIZE = 100
 
 /**
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
@@ -69,7 +69,7 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
 
         return runCatching {
             mutableMapOf<Package, List<AdvisorResult>>().also {
-                packages.chunked(BULK_FETCH_SIZE).forEach { pkg ->
+                packages.chunked(BULK_REQUEST_SIZE).forEach { pkg ->
                     it += loadVulnerabilities(pkg, startTime)
                 }
             }

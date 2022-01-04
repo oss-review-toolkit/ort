@@ -44,7 +44,7 @@ import retrofit2.HttpException
 /**
  * The number of packages to request from Sonatype OSS Index in one request.
  */
-private const val REQUEST_CHUNK_SIZE = 128
+private const val BULK_REQUEST_SIZE = 128
 
 /**
  * A wrapper for [Sonatype OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
@@ -71,7 +71,7 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
         return try {
             val componentReports = mutableMapOf<String, OssIndexService.ComponentReport>()
 
-            components.chunked(REQUEST_CHUNK_SIZE).forEach { chunk ->
+            components.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
                 val requestResults = getComponentReport(service, chunk).associateBy {
                     it.coordinates
                 }
