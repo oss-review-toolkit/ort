@@ -50,6 +50,6 @@ dependencies {
     }
     implementation("org.apache.commons:commons-email:$apacheCommonsEmailVersion")
 
-    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 }

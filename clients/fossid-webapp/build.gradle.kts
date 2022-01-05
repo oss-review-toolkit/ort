@@ -34,5 +34,5 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 
-    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
 }
