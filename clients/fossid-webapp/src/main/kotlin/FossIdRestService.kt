@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
+import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanDescription
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanDescription2021dot2
@@ -172,6 +173,9 @@ interface FossIdRestService {
 
     @POST("api.php")
     suspend fun listPendingFiles(@Body body: PostRequestBody): PolymorphicResponseBody<String>
+
+    @POST("api.php")
+    suspend fun listIgnoreRules(@Body body: PostRequestBody): PolymorphicResponseBody<IgnoreRule>
 
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
