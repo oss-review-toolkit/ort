@@ -64,7 +64,9 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExamplesFunTest : StringSpec() {
     private val examplesDir = File("../examples")
-    private val exampleFiles = examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.extension != "md" }
+    private val exampleFiles = examplesDir.walk().maxDepth(1).filterTo(mutableListOf()) {
+        it.isFile && it.extension != "md"
+    }
 
     private fun takeExampleFile(name: String) = exampleFiles.single { it.name == name }.also { exampleFiles.remove(it) }
 
@@ -143,7 +145,7 @@ class ExamplesFunTest : StringSpec() {
                 licenseClassifications = licenseFile.readValue()
             )
 
-            val script = takeExampleFile("example.rules.kts").readText()
+            val script = examplesDir.resolve("evaluator-rules/src/main/resources/example.rules.kts").readText()
 
             val result = evaluator.run(script)
 
