@@ -158,16 +158,19 @@ class ClearlyDefinedPackageCurationProvider(
 
                 val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
 
-                curations.getOrPut(pkgId) { mutableListOf() } += PackageCuration(
-                    id = pkgId,
-                    data = PackageCurationData(
-                        concludedLicense = declaredLicenseParsed,
-                        homepageUrl = curation.described?.projectWebsite?.toString(),
-                        sourceArtifact = sourceLocation as? RemoteArtifact,
-                        vcs = sourceLocation as? VcsInfoCurationData,
-                        comment = "Provided by ClearlyDefined."
-                    )
+                val data = PackageCurationData(
+                    concludedLicense = declaredLicenseParsed,
+                    homepageUrl = curation.described?.projectWebsite?.toString(),
+                    sourceArtifact = sourceLocation as? RemoteArtifact,
+                    vcs = sourceLocation as? VcsInfoCurationData
                 )
+
+                if (data != PackageCurationData()) {
+                    curations.getOrPut(pkgId) { mutableListOf() } += PackageCuration(
+                        id = pkgId,
+                        data = data.copy(comment = "Provided by ClearlyDefined.")
+                    )
+                }
             }
         }
 
