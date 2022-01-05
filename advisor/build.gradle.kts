@@ -36,6 +36,6 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 
-    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 }

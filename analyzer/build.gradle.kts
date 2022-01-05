@@ -85,6 +85,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.jruby:jruby-complete:$jrubyVersion")
 
-    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
