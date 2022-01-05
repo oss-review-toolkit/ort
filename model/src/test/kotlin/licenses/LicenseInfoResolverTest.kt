@@ -19,13 +19,14 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import io.kotest.assertions.print.print
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
-import io.kotest.matchers.MatcherResult
+import io.kotest.matchers.be
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.neverNullMatcher
@@ -68,6 +69,8 @@ import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
+import org.ossreviewtoolkit.utils.test.transformingCollectionEmptyMatcher
+import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class LicenseInfoResolverTest : WordSpec() {
     init {
@@ -697,161 +700,87 @@ private fun Map<String, List<TextLocation>>.toFindingsSet(): Set<LicenseFinding>
     }.toSet()
 
 private fun containNoLicenseLocations(): Matcher<ResolvedLicenseInfo?> =
-    neverNullMatcher { value ->
-        val locations = value.flatMap { it.locations }
-
-        MatcherResult(
-            locations.isEmpty(),
-            { "ResolvedLicenseInfo should not contain license locations, but has ${locations.print().value}" },
-            { "ResolvedLicenseInfo should contain license locations, but has none" }
-        )
+    transformingCollectionEmptyMatcher { resolvedLicenseInfo ->
+        resolvedLicenseInfo.flatMap { it.locations }
     }
 
 private fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
-    neverNullMatcher { value ->
-        val copyrights = value.flatMap { license -> license.locations.flatMap { it.copyrights } }
-
-        MatcherResult(
-            copyrights.isEmpty(),
-            { "ResolvedLicenseInfo should not contain copyrights, but has ${copyrights.print().value}" },
-            { "ResolvedLicenseInfo should contain copyrights, but has none" }
-        )
+    transformingCollectionEmptyMatcher { resolvedLicenseInfo ->
+        resolvedLicenseInfo.flatMap { it.locations.flatMap { it.copyrights } }
     }
 
 private fun containCopyrightsExactly(vararg copyrights: String): Matcher<Iterable<ResolvedLicense>?> =
-    neverNullMatcher { value ->
-        val expected = copyrights.toSet()
-        val actual = value.flatMapTo(mutableSetOf()) { license ->
+    transformingCollectionMatcher(
+        expected = copyrights.toSet(),
+        matcher = ::containExactlyInAnyOrder
+    ) { resolvedLicenses ->
+        resolvedLicenses.flatMapTo(mutableSetOf()) { license ->
             license.locations.flatMap { location ->
                 location.copyrights.map { it.statement }
             }
         }
-
-        MatcherResult(
-            expected == actual,
-            {
-                "Resolved license info should contain exactly copyrights ${expected.print().value}, but has " +
-                        actual.print().value
-            },
-            { "Resolved license info should not contain exactly copyrights ${copyrights.print().value}" }
-        )
     }
 
 private fun containFindingsForCopyrightExactly(
     copyright: String,
     vararg findings: TextLocation
 ): Matcher<Iterable<ResolvedLicense>?> =
-    neverNullMatcher { value ->
-        val expected = findings.toSet()
-        val actual = value.flatMapTo(mutableSetOf()) { license ->
+    transformingCollectionMatcher(
+        expected = findings.toSet(),
+        matcher = ::containExactlyInAnyOrder
+    ) { resolvedLicenses ->
+        resolvedLicenses.flatMapTo(mutableSetOf()) { license ->
             license.locations.flatMap { licenseLocations ->
                 licenseLocations.copyrights.filter { it.statement == copyright }.map { it.location }
             }
         }
-
-        MatcherResult(
-            expected == actual,
-            {
-                "Resolved license info should contain exactly findings ${expected.print().value} for copyright " +
-                        "$copyright, but has ${actual.print().value}"
-            },
-            {
-                "Resolved license info should not contain exactly findings ${expected.print().value} for copyright " +
-                        copyright
-            }
-        )
     }
 
 private fun containCopyrightGarbageForProvenanceExactly(
     provenance: Provenance,
     vararg findings: Pair<String, TextLocation>
 ): Matcher<ResolvedLicenseInfo?> =
-    neverNullMatcher { value ->
-        val expected = findings.toSet()
-        val actual = value.copyrightGarbage[provenance].orEmpty().map { Pair(it.statement, it.location) }.toSet()
-
-        MatcherResult(
-            expected == actual,
-            {
-                "Resolved license info should contain exactly copyright garbage ${expected.print().value} for " +
-                        "provenance ${provenance.print().value}, but has ${actual.print().value}"
-            },
-            {
-                "Resolved license info should not contain exactly copyright garbage ${expected.print().value} for " +
-                        "provenance ${provenance.print().value}"
-            }
-        )
+    transformingCollectionMatcher(
+        expected = findings.toList(),
+        matcher = ::containExactlyInAnyOrder
+    ) { resolvedLicenseInfo ->
+        resolvedLicenseInfo.copyrightGarbage[provenance].orEmpty().map { Pair(it.statement, it.location) }
     }
 
 private fun containCopyrightStatementsForLicenseExactly(
     license: String,
     vararg copyrights: String
 ): Matcher<ResolvedLicenseInfo?> =
-    neverNullMatcher { value ->
-        val expected = copyrights.toSet()
-        val actual = value[SpdxSingleLicenseExpression.parse(license)]?.getCopyrights(process = false).orEmpty()
-
-        MatcherResult(
-            expected == actual,
-            {
-                "Resolved license info should contain exactly copyrights ${expected.print().value} for license " +
-                        "$license, but has ${actual.print().value}"
-            },
-            {
-                "Resolved license info should not contain exactly copyrights ${expected.print().value} for license " +
-                        license
-            }
-        )
+    transformingCollectionMatcher(
+        expected = copyrights.toList(),
+        matcher = ::containExactlyInAnyOrder
+    ) { resolvedLicenseInfo ->
+        resolvedLicenseInfo[SpdxSingleLicenseExpression.parse(license)]?.getCopyrights(process = false).orEmpty()
     }
 
 private fun containOnlyLicenseSources(vararg licenseSources: LicenseSource): Matcher<ResolvedLicenseInfo?> =
-    neverNullMatcher { value ->
-        val expected = licenseSources.toSet()
-        val actual = value.flatMap { it.sources }.toSet()
-
-        MatcherResult(
-            expected == actual,
-            {
-                "ResolvedLicenseInfo should contain only license sources ${expected.print().value}, but has " +
-                        actual.print().value
-            },
-            { "ResolvedLicenseInfo should not only contain license source ${expected.print().value}" }
-        )
-    }
+    transformingCollectionMatcher(
+        expected = licenseSources.toSet(),
+        matcher = ::containExactlyInAnyOrder
+    ) { resolvedLicenseInfo -> resolvedLicenseInfo.flatMap { it.sources }.toSet() }
 
 private fun containLicenseExpressionsExactlyBySource(
     source: LicenseSource,
     vararg expressions: SpdxExpression?
 ): Matcher<ResolvedLicenseInfo?> =
-    neverNullMatcher { resolvedLicenseInfo ->
-        val actualExpressions = resolvedLicenseInfo.licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
+    transformingCollectionMatcher(
+        expected = expressions.toSet(),
+        matcher = ::containExactlyInAnyOrder
+    ) { resolvedLicenseInfo ->
+        resolvedLicenseInfo.licenses.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.originalExpressions.filter { it.source == source }.map { it.expression }
         }
-
-        val expectedExpressions = expressions.toSet()
-
-        MatcherResult(
-            expectedExpressions == actualExpressions,
-            {
-                "ResolvedLicenseInfo for original ${source.print().value} license expressions should contain exactly " +
-                        "${expectedExpressions.print().value}, but has ${actualExpressions.print().value}"
-            },
-            {
-                "ResolvedLicenseInfo for original ${source.print().value} license expressions should not contain " +
-                        "exactly ${expectedExpressions.print().value}"
-            }
-        )
     }
 
 private fun containNumberOfLocationsForLicense(license: String, count: Int): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val actualCount = value[SpdxSingleLicenseExpression.parse(license)]?.locations?.size ?: 0
-
-        MatcherResult(
-            count == actualCount,
-            { "ResolvedLicenseInfo should contain $count locations for $license, but has $actualCount" },
-            { "ResolvedLicenseInfo should not contain $count locations for $license" }
-        )
+        be(count).test(actualCount)
     }
 
 private fun containLocationForLicense(
@@ -874,13 +803,7 @@ private fun containLocationForLicense(
 
         val locations = value.find { it.license == SpdxSingleLicenseExpression.parse(license) }?.locations.orEmpty()
 
-        val contained = expectedLocation in locations
-
-        MatcherResult(
-            contained,
-            { "ResolvedLicenseInfo should contain location ${expectedLocation.print().value} for $license" },
-            { "ResolvedLicenseInfo should not contain location ${expectedLocation.print().value} for $license" }
-        )
+        contain(expectedLocation).test(locations)
     }
 
 private fun ResolvedLicenseInfo.pathExcludesForLicense(

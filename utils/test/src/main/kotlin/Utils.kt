@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils.test
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.matchers.Matcher
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.maps.MapContainsMatcher
 import io.kotest.matchers.neverNullMatcher
 
@@ -110,3 +111,10 @@ fun <T, U> transformingCollectionMatcher(
     matcher: (Collection<U>) -> Matcher<Collection<U>>,
     transform: (T) -> Collection<U>
 ): Matcher<T?> = neverNullMatcher { value -> matcher(expected).test(transform(value)) }
+
+/**
+ * A helper function to create custom matchers that assert that the collection obtained by [transform] is empty.
+ */
+fun <T, U> transformingCollectionEmptyMatcher(
+    transform: (T) -> Collection<U>
+): Matcher<T?> = neverNullMatcher { value -> beEmpty<U>().test(transform(value)) }
