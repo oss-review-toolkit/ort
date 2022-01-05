@@ -75,7 +75,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
-ARG CONAN_VERSION=1.40.3
+ARG CONAN_VERSION=1.43.2
 ARG PYTHON_VERSION=3.6.15
 ARG PYTHON_VIRTUALENV_VERSION=15.1.0
 ARG PIPTOOL_VERSION=21.3.1
