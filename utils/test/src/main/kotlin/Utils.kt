@@ -23,6 +23,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.maps.MapContainsMatcher
+import io.kotest.matchers.neverNullMatcher
 
 import java.io.File
 import java.time.Instant
@@ -99,3 +100,13 @@ fun patchActualResultObject(result: OrtResult, patchStartAndEndTime: Boolean = f
 fun readOrtResult(file: String) = readOrtResult(File(file))
 
 fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
+
+/**
+ * A helper function to create a custom matcher that compares an [expected] collection to a collection obtained by
+ * [transform] using the provided [matcher].
+ */
+fun <T, U> transformingCollectionMatcher(
+    expected: Collection<U>,
+    matcher: (Collection<U>) -> Matcher<Collection<U>>,
+    transform: (T) -> Collection<U>
+): Matcher<T?> = neverNullMatcher { value -> matcher(expected).test(transform(value)) }

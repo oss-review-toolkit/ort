@@ -31,7 +31,6 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.file.beRelative
-import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -44,6 +43,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 @Suppress("LargeClass")
 class ScanCodeResultParserTest : WordSpec({
@@ -524,9 +524,3 @@ private fun containCopyrightsExactly(vararg copyrights: Pair<String, List<TextLo
         summary.copyrightFindings.groupBy { it.statement }.entries
             .map { (key, value) -> key to value.map { it.location } }
     }
-
-private fun <T, U> transformingCollectionMatcher(
-    expected: Collection<U>,
-    matcher: (Collection<U>) -> Matcher<Collection<U>>,
-    transform: (T) -> Collection<U>
-): Matcher<T?> = neverNullMatcher { value -> matcher(expected).test(transform(value)) }
