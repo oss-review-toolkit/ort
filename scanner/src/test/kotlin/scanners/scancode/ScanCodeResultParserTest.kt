@@ -259,7 +259,7 @@ class ScanCodeResultParserTest : WordSpec({
             val result = readJsonFile(resultFile)
 
             val actualFindings = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
-                    .licenseFindings
+                .licenseFindings
 
             actualFindings.distinctBy { it.license } should haveSize(1)
             actualFindings should haveSize(517)
@@ -282,7 +282,7 @@ class ScanCodeResultParserTest : WordSpec({
             val result = readJsonFile(resultFile)
 
             val actualFindings = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
-                    .copyrightFindings
+                .copyrightFindings
 
             actualFindings.mapTo(mutableSetOf()) { it.statement } should containExactlyInAnyOrder(
                 "Copyright (c) 2016 Amazon.com, Inc.",
@@ -444,8 +444,9 @@ class ScanCodeResultParserTest : WordSpec({
         }
 
         "return false for scan results with other unknown errors" {
-            val resultFile = File("src/test/assets/scancode-2.2.1.post277.4d68f9377_" +
-                    "kotlin-annotation-processing-gradle-1.2.21.json")
+            val resultFile = File(
+                "src/test/assets/scancode-2.2.1.post277.4d68f9377_kotlin-annotation-processing-gradle-1.2.21.json"
+            )
             val result = readJsonFile(resultFile)
 
             val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
