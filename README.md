@@ -644,8 +644,9 @@ To enable this provider, pass `-a VulnerableCode` on the command line.
 [![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
 
 The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are
-implemented as Kotlin scripts with a dedicated DSL. See [example.rules.kts](./examples/example.rules.kts) for an example
-file.
+implemented as Kotlin scripts with a dedicated DSL. See
+[example.rules.kts](./examples/evaluator-rules/src/main/resources/example.rules.kts) for an example rules script. The
+script is wrapped into a minimal [evaluator-rules](./examples/evaluator-rules) project which enables auto-completion.
 
 <a name="reporter">&nbsp;</a>
 
