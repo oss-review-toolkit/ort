@@ -26,7 +26,7 @@ ARG ORT_VERSION="DOCKER-SNAPSHOT"
 ARG CRT_FILES=""
 
 # Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="3.2.1rc2"
+ARG SCANCODE_VERSION="30.1.0"
 
 FROM adoptopenjdk/openjdk11:alpine-slim AS build
 
