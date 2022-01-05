@@ -261,3 +261,15 @@ suspend fun FossIdRestService.listPendingFiles(user: String, apiKey: String, sca
             "get_pending_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
         )
     )
+
+/**
+ * List ignore rules for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.listIgnoreRules(user: String, apiKey: String, scanCode: String) =
+    listIgnoreRules(
+        PostRequestBody(
+            "ignore_rules_show", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+        )
+    )
