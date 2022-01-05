@@ -24,11 +24,10 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.assertions.assertSoftly
-import io.kotest.assertions.print.print
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
-import io.kotest.matchers.MatcherResult
+import io.kotest.matchers.be
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
@@ -674,10 +673,4 @@ class SpdxExpressionTest : WordSpec() {
 }
 
 private fun beString(expected: String): Matcher<SpdxExpression> =
-    neverNullMatcher { spdxExpression ->
-        MatcherResult(
-            spdxExpression.toString() == expected,
-            { "SPDX expression ${spdxExpression.print().value} should be $expected" },
-            { "SPDX expression ${spdxExpression.print().value} should not be $expected" }
-        )
-    }
+    neverNullMatcher { spdxExpression -> be(expected).test(spdxExpression.toString()) }
