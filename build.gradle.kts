@@ -24,6 +24,9 @@ import io.gitlab.arturbosch.detekt.Detekt
 
 import java.net.URL
 
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.AbbreviatedObjectId
+
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.plugins.ide.idea.model.IdeaProject
@@ -64,13 +67,22 @@ buildscript {
 
 // Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
-    version = org.eclipse.jgit.api.Git.open(rootDir).use { git ->
-        // Make the output exactly match "git describe --abbrev=7 --always --tags --dirty", which is what is used in
-        // "scripts/docker_build.sh".
+    version = Git.open(rootDir).use { git ->
+        // Make the output exactly match "git describe --abbrev=10 --always --tags --dirty", which is what is used in
+        // "scripts/docker_build.sh", to make the hash match what JitPack uses.
+        val abbrevLength = 10
         val description = git.describe().setAlways(true).setTags(true).call()
-        val isDirty = git.status().call().hasUncommittedChanges()
 
-        if (isDirty) "$description-dirty" else description
+        // Manually resolve an abbreviated hash to the custom length until
+        // https://bugs.eclipse.org/bugs/show_bug.cgi?id=537883 is implemented.
+        val customDescription = runCatching {
+            val abbrevObject = AbbreviatedObjectId.fromString(description)
+            val objects = git.repository.objectDatabase.newReader().use { it.resolve(abbrevObject) }
+            objects.single().name.take(abbrevLength)
+        }.getOrDefault(description)
+
+        val isDirty = git.status().call().hasUncommittedChanges()
+        if (isDirty) "$customDescription-dirty" else customDescription
     }
 }
 
