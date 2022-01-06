@@ -64,14 +64,12 @@ class RulesCompilationConfiguration : ScriptCompilationConfiguration({
     }
 
     defaultImports(
-        "org.ossreviewtoolkit.evaluator.*",
         "org.ossreviewtoolkit.model.*",
         "org.ossreviewtoolkit.model.config.*",
         "org.ossreviewtoolkit.model.licenses.*",
         "org.ossreviewtoolkit.model.utils.*",
         "org.ossreviewtoolkit.utils.common.*",
         "org.ossreviewtoolkit.utils.core.*",
-        "org.ossreviewtoolkit.utils.spdx.*",
         "java.util.*"
     )
 

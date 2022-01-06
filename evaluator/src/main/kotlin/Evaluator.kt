@@ -24,6 +24,7 @@ import java.time.Instant
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
 import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.defaultImports
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 
@@ -40,7 +41,13 @@ class Evaluator(
     licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
     licenseClassifications: LicenseClassifications = LicenseClassifications()
 ) : ScriptRunner() {
-    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate> {
+        defaultImports(
+            "org.ossreviewtoolkit.evaluator.*",
+            "org.ossreviewtoolkit.utils.spdx.*"
+        )
+    }
+
     override val evalConfig = ScriptEvaluationConfiguration {
         constructorArgs(ortResult, licenseInfoResolver, licenseClassifications)
         scriptsInstancesSharing(true)
