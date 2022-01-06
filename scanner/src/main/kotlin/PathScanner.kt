@@ -319,7 +319,7 @@ abstract class PathScanner(
     }
 
     private fun archiveFiles(directory: File, id: Identifier, provenance: KnownProvenance) {
-        log.info { "Archiving files for ${id.toCoordinates()}." }
+        log.info { "Archiving files for '${id.toCoordinates()}'." }
 
         val duration = measureTime { archiver.archive(directory, provenance) }
 
