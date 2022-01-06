@@ -22,10 +22,12 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.vdurmont.semver4j.Semver
 
-import io.kotest.assertions.fail
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 import io.mockk.every
 import io.mockk.mockk
@@ -34,7 +36,6 @@ import io.mockk.verify
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
@@ -42,11 +43,12 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private val ID = Identifier(type = "Gradle", namespace = "testNS", name = "test", version = "1.0.9")
 
@@ -110,20 +112,21 @@ class CompositeStorageTest : WordSpec({
         "return an empty result if no readers are configured when asked for an identifier" {
             val storage = CompositeStorage(emptyList(), listOf(mockk()))
 
-            when (val result = storage.read(ID)) {
-                is Success -> result.result.isEmpty() shouldBe true
-                is Failure -> fail("Unexpected failure result: ${result.error}")
+            storage.read(ID).shouldBeSuccess {
+                it.shouldNotBeNull {
+                    this should beEmpty()
+                }
             }
         }
 
         "return the first non-empty, success result from a reader when asked for an identifier" {
-            val result = Success(listOf(createScanResult(1)))
+            val result = Result.success(listOf(createScanResult(1)))
             val readerErr = storageMock("r1")
             val readerEmptyContainer = storageMock("r2")
             val readerResult = storageMock("r3")
             val readerUnused = storageMock("r4")
-            every { readerErr.read(ID) } returns Failure("an error")
-            every { readerEmptyContainer.read(ID) } returns Success(emptyList())
+            every { readerErr.read(ID) } returns Result.failure(ScanStorageException("an error"))
+            every { readerEmptyContainer.read(ID) } returns Result.success(emptyList())
             every { readerResult.read(ID) } returns result
 
             val storage = CompositeStorage(
@@ -136,7 +139,7 @@ class CompositeStorageTest : WordSpec({
         }
 
         "detect a non-empty scan result even if the container contains empty results" {
-            val result = Success(listOf(createScanResult(0), createScanResult(1)))
+            val result = Result.success(listOf(createScanResult(0), createScanResult(1)))
             val reader = storageMock("reader")
             every { reader.read(ID) } returns result
 
@@ -149,20 +152,21 @@ class CompositeStorageTest : WordSpec({
         "return an empty result if no readers are configured when asked for a package" {
             val storage = CompositeStorage(emptyList(), listOf(mockk()))
 
-            when (val result = storage.read(PACKAGE, CRITERIA)) {
-                is Success -> result.result.isEmpty() shouldBe true
-                is Failure -> fail("Unexpected failure result: ${result.error}")
+            storage.read(PACKAGE, CRITERIA).shouldBeSuccess {
+                it.shouldNotBeNull {
+                    this should beEmpty()
+                }
             }
         }
 
         "return the first non-empty, success result from a reader when asked for a package" {
-            val result = Success(listOf(createScanResult(1)))
+            val result = Result.success(listOf(createScanResult(1)))
             val readerErr = storageMock("r1")
             val readerEmptyContainer = storageMock("r2")
             val readerResult = storageMock("r3")
             val readerUnused = storageMock("r4")
-            every { readerErr.read(PACKAGE, CRITERIA) } returns Failure("an error")
-            every { readerEmptyContainer.read(PACKAGE, CRITERIA) } returns Success(emptyList())
+            every { readerErr.read(PACKAGE, CRITERIA) } returns Result.failure(ScanStorageException("an error"))
+            every { readerEmptyContainer.read(PACKAGE, CRITERIA) } returns Result.success(emptyList())
             every { readerResult.read(PACKAGE, CRITERIA) } returns result
 
             val storage = CompositeStorage(
@@ -177,13 +181,14 @@ class CompositeStorageTest : WordSpec({
         "return a failure result if all readers produce failures" {
             val reader1 = storageMock("r1")
             val reader2 = storageMock("r2")
-            every { reader1.read(ID) } returns Failure("error1")
-            every { reader2.read(ID) } returns Failure("error2")
+            every { reader1.read(ID) } returns Result.failure(ScanStorageException("error1"))
+            every { reader2.read(ID) } returns Result.failure(ScanStorageException("error2"))
             val storage = CompositeStorage(listOf(reader1, reader2), emptyList())
 
-            when (val result = storage.read(ID)) {
-                is Failure -> result.error shouldBe "error1, error2"
-                else -> fail("Unexpected result: $result.")
+            storage.read(ID).shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldBe "error1, error2"
+                }
             }
         }
 
@@ -192,20 +197,20 @@ class CompositeStorageTest : WordSpec({
 
             val result = storage.add(ID, createScanResult(2))
 
-            result.shouldBeInstanceOf<Success<Unit>>()
+            result.shouldBeSuccess()
         }
 
         "delegate to all writers to store a scan result" {
             val result = createScanResult(3)
             val writer1 = storageMock("w1")
             val writer2 = storageMock("w2")
-            every { writer1.add(ID, result) } returns Success(Unit)
-            every { writer2.add(ID, result) } returns Success(Unit)
+            every { writer1.add(ID, result) } returns Result.success(Unit)
+            every { writer2.add(ID, result) } returns Result.success(Unit)
             val storage = CompositeStorage(emptyList(), listOf(writer1, writer2))
 
             val storageResult = storage.add(ID, result)
 
-            storageResult.shouldBeInstanceOf<Success<Unit>>()
+            storageResult.shouldBeSuccess()
             verify {
                 writer1.add(ID, result)
                 writer2.add(ID, result)
@@ -216,13 +221,14 @@ class CompositeStorageTest : WordSpec({
             val result = createScanResult(2)
             val writer1 = storageMock("w1")
             val writer2 = storageMock("w2")
-            every { writer1.add(ID, result) } returns Failure("failed")
-            every { writer2.add(ID, result) } returns Success(Unit)
+            every { writer1.add(ID, result) } returns Result.failure(ScanStorageException("failed"))
+            every { writer2.add(ID, result) } returns Result.success(Unit)
             val storage = CompositeStorage(emptyList(), listOf(writer1, writer2))
 
-            when (val storageResult = storage.add(ID, result)) {
-                is Failure -> storageResult.error shouldBe "failed"
-                else -> fail("Unexpected result: $result.")
+            storage.add(ID, result).shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldBe "failed"
+                }
             }
         }
 
@@ -230,13 +236,14 @@ class CompositeStorageTest : WordSpec({
             val result = createScanResult(1)
             val writer1 = storageMock("w1")
             val writer2 = storageMock("w2")
-            every { writer1.add(ID, result) } returns Failure("boom1")
-            every { writer2.add(ID, result) } returns Failure("boom2")
+            every { writer1.add(ID, result) } returns Result.failure(ScanStorageException("boom1"))
+            every { writer2.add(ID, result) } returns Result.failure(ScanStorageException("boom2"))
             val storage = CompositeStorage(emptyList(), listOf(writer1, writer2))
 
-            when (val storageResult = storage.add(ID, result)) {
-                is Failure -> storageResult.error shouldBe "boom1, boom2"
-                else -> fail("Unexpected result: $result.")
+            storage.add(ID, result).shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldBe "boom1, boom2"
+                }
             }
         }
     }

@@ -32,20 +32,17 @@ import org.eclipse.sw360.clients.config.SW360ClientConfig
 import org.eclipse.sw360.clients.rest.resource.attachments.SW360AttachmentType
 import org.eclipse.sw360.clients.rest.resource.attachments.SW360SparseAttachment
 import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
-import org.eclipse.sw360.clients.utils.SW360ClientException
 import org.eclipse.sw360.http.HttpClientFactoryImpl
 import org.eclipse.sw360.http.config.HttpClientConfig
 
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
@@ -90,28 +87,31 @@ class Sw360Storage(
     override fun readInternal(id: Identifier): Result<List<ScanResult>> {
         val tempScanResultFile = createTempFileForUpload(id)
 
-        return try {
-            val scanResults = releaseClient.getSparseReleaseByNameAndVersion(createReleaseName(id), id.version)
+        val result = runCatching {
+            releaseClient.getSparseReleaseByNameAndVersion(createReleaseName(id), id.version)
                 .flatMap { releaseClient.getReleaseById(it.releaseId) }
                 .map { getScanResultOfRelease(it, tempScanResultFile.toPath()) }
                 .orElse(emptyList())
                 .map { path ->
                     path.toFile().readValue<ScanResult>()
                 }
-            Success(scanResults)
-        } catch (e: SW360ClientException) {
-            val message = "Could not read scan results for ${id.toCoordinates()} in SW360: ${e.message}"
+        }.recoverCatching {
+            val message = "Could not read scan results for ${id.toCoordinates()} in SW360: ${it.message}"
+
             log.info { message }
-            Failure(message)
-        } finally {
-            tempScanResultFile.safeDeleteRecursively(force = true)
+
+            throw ScanStorageException(message)
         }
+
+        tempScanResultFile.safeDeleteRecursively(force = true)
+
+        return result
     }
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val tempScanResultFile = createTempFileForUpload(id)
 
-        return try {
+        val result = runCatching {
             tempScanResultFile.writeValue(scanResult)
 
             val uploadResult = releaseClient.getSparseReleaseByNameAndVersion(createReleaseName(id), id.version)
@@ -122,18 +122,21 @@ class Sw360Storage(
 
             if (uploadResult.isPresent && uploadResult.get().isSuccess) {
                 log.debug { "Stored scan result for '${id.toCoordinates()}' in SW360." }
-                Success(Unit)
             } else {
-                Failure("Failed to add scan results for '${id.toCoordinates()}' in SW360.")
+                throw ScanStorageException("Failed to upload scan results for '${id.toCoordinates()}' to SW360.")
             }
-        } catch (e: SW360ClientException) {
-            val message = "Failed to add scan results for '${id.toCoordinates()}' in SW360: " +
-                    e.collectMessagesAsString()
+        }.recoverCatching {
+            val message = "Failed to add scan results for '${id.toCoordinates()}' to SW360: " +
+                    it.collectMessagesAsString()
+
             log.info { message }
-            Failure(message)
-        } finally {
-            tempScanResultFile.safeDeleteRecursively(force = true)
+
+            throw ScanStorageException(message)
         }
+
+        tempScanResultFile.safeDeleteRecursively(force = true)
+
+        return result
     }
 
     private fun deleteScanResultAttachment(release: SW360Release?) =

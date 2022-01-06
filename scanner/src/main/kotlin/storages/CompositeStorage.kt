@@ -20,14 +20,12 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 
 /**
  * A [ScanResultsStorage] implementation that manages multiple concrete storages for reading and writing scan results.
@@ -71,28 +69,29 @@ class CompositeStorage(
         packages: Collection<Package>,
         scannerCriteria: ScannerCriteria
     ): Result<Map<Identifier, List<ScanResult>>> {
-        if (readers.isEmpty()) return Success(emptyMap())
+        if (readers.isEmpty()) return Result.success(emptyMap())
 
         val remainingPackages = packages.toMutableList()
-        val result = mutableMapOf<Identifier, List<ScanResult>>()
-        val failures = mutableListOf<String>()
+        val results = mutableMapOf<Identifier, List<ScanResult>>()
+        val failures = mutableListOf<Throwable>()
 
         readers.forEach { reader ->
             if (remainingPackages.isEmpty()) return@forEach
 
-            when (val readerResult = reader.read(remainingPackages, scannerCriteria)) {
-                is Success -> {
-                    remainingPackages.filter { it.id !in readerResult.result.keys }
-                    result += readerResult.result
+            reader.read(remainingPackages, scannerCriteria)
+                .onSuccess {
+                    remainingPackages.filter { pkg -> pkg.id !in it.keys }
+                    results += it
                 }
-                is Failure -> failures += readerResult.error
-            }
+                .onFailure {
+                    failures += it
+                }
         }
 
         return if (failures.size < readers.size) {
-            Success(result)
+            Result.success(results)
         } else {
-            Failure(failures.joinToString())
+            Result.failure(ScanStorageException(failures.mapNotNull { it.message }.joinToString()))
         }
     }
 
@@ -102,11 +101,11 @@ class CompositeStorage(
      */
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val writeResults = writers.map { it.add(id, scanResult) }
-        val errors = writeResults.filterIsInstance<Failure<Unit>>()
-        return if (errors.isEmpty()) {
-            Success(Unit)
+        val failures = writeResults.mapNotNull { it.exceptionOrNull()?.message }
+        return if (failures.isEmpty()) {
+            Result.success(Unit)
         } else {
-            Failure(errors.joinToString { it.error })
+            Result.failure(ScanStorageException(failures.joinToString()))
         }
     }
 
@@ -118,23 +117,21 @@ class CompositeStorage(
     private fun fetchReadResult(readFunc: ScanResultsStorage.() -> Result<List<ScanResult>>): Result<List<ScanResult>> {
         if (readers.isEmpty()) return EMPTY_RESULT
 
-        val failures = mutableListOf<String>()
+        val failures = mutableListOf<Throwable>()
         readers.forEach { reader ->
-            when (val result = reader.readFunc()) {
-                is Success -> if (result.result.isNotEmpty()) return result
-                is Failure -> failures += result.error
-            }
+            reader.readFunc()
+                .onSuccess {
+                    if (it.isNotEmpty()) return Result.success(it)
+                }
+                .onFailure {
+                    failures += it
+                }
         }
 
         return if (failures.size < readers.size) {
             EMPTY_RESULT
         } else {
-            Failure(failures.joinToString())
+            Result.failure(ScanStorageException(failures.mapNotNull { it.message }.joinToString()))
         }
     }
 }
-
-/**
- * A [Success] result with an empty list of [ScanResult]s.
- */
-private val EMPTY_RESULT = Success<List<ScanResult>>(emptyList())

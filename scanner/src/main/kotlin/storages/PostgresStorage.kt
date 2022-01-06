@@ -37,12 +37,9 @@ import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
 
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
@@ -53,6 +50,7 @@ import org.ossreviewtoolkit.model.utils.tilde
 import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
@@ -132,29 +130,23 @@ class PostgresStorage(
             """.trimIndent()
         )
 
-    override fun readInternal(id: Identifier): Result<List<ScanResult>> {
-        return runCatching {
+    override fun readInternal(id: Identifier): Result<List<ScanResult>> =
+        runCatching {
             database.transaction {
-                val scanResults =
-                    ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
-
-                Success(scanResults)
+                ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
             }
-        }.getOrElse {
-            when (it) {
-                is JsonProcessingException, is SQLException -> {
-                    it.showStackTrace()
+        }.onFailure {
+            if (it is JsonProcessingException || it is SQLException) {
+                it.showStackTrace()
 
-                    val message = "Could not read scan results for ${id.toCoordinates()} from database: " +
-                            it.collectMessagesAsString()
+                val message = "Could not read scan results for ${id.toCoordinates()} from database: " +
+                        it.collectMessagesAsString()
 
-                    log.info { message }
-                    Failure(message)
-                }
-                else -> throw it
+                log.info { message }
+
+                return Result.failure(ScanStorageException(message))
             }
         }
-    }
 
     override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
@@ -162,7 +154,7 @@ class PostgresStorage(
 
         return runCatching {
             database.transaction {
-                val scanResults = ScanResultDao.find {
+                ScanResultDao.find {
                     (ScanResults.identifier eq pkg.id.toCoordinates()) and
                             (rawParam("scan_result->'scanner'->>'name'") tilde scannerCriteria.regScannerName) and
                             (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(minVersionArray)) and
@@ -174,21 +166,17 @@ class PostgresStorage(
                     // The scanner compatibility is already checked in the query, but filter here again to be on the
                     // safe side.
                     .filter { scannerCriteria.matches(it.scanner) }
-
-                Success(scanResults)
             }
-        }.getOrElse {
-            when (it) {
-                is JsonProcessingException, is SQLException -> {
-                    it.showStackTrace()
+        }.onFailure {
+            if (it is JsonProcessingException || it is SQLException) {
+                it.showStackTrace()
 
-                    val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
-                            "$scannerCriteria from database: ${it.collectMessagesAsString()}"
+                val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
+                        "$scannerCriteria from database: ${it.collectMessagesAsString()}"
 
-                    log.info { message }
-                    Failure(message)
-                }
-                else -> throw it
+                log.info { message }
+
+                return Result.failure(ScanStorageException(message))
             }
         }
     }
@@ -197,13 +185,13 @@ class PostgresStorage(
         packages: Collection<Package>,
         scannerCriteria: ScannerCriteria
     ): Result<Map<Identifier, List<ScanResult>>> {
-        if (packages.isEmpty()) return Success(emptyMap())
+        if (packages.isEmpty()) return Result.success(emptyMap())
 
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
         val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
 
         return runCatching {
-            val scanResults = runBlocking(Dispatchers.IO) {
+            runBlocking(Dispatchers.IO) {
                 packages.chunked(max(packages.size / PathScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
                     database.transactionAsync {
                         @Suppress("MaxLineLength")
@@ -229,20 +217,16 @@ class PostgresStorage(
                             .filter { scannerCriteria.matches(it.scanner) }
                     }
             }
+        }.onFailure {
+            if (it is JsonProcessingException || it is SQLException) {
+                it.showStackTrace()
 
-            Success(scanResults)
-        }.getOrElse {
-            when (it) {
-                is JsonProcessingException, is SQLException -> {
-                    it.showStackTrace()
+                val message = "Could not read scan results with $scannerCriteria from database: " +
+                        it.collectMessagesAsString()
 
-                    val message = "Could not read scan results with $scannerCriteria from database: " +
-                            it.collectMessagesAsString()
+                log.info { message }
 
-                    log.info { message }
-                    Failure(message)
-                }
-                else -> throw it
+                return Result.failure(ScanStorageException(message))
             }
         }
     }
@@ -252,22 +236,21 @@ class PostgresStorage(
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
 
-        try {
+        return runCatching {
             database.transaction {
                 ScanResultDao.new {
                     identifier = id
                     this.scanResult = scanResult
                 }
             }
-        } catch (e: SQLException) {
-            e.showStackTrace()
+        }.recoverCatching {
+            it.showStackTrace()
 
-            val message = "Could not store scan result for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
+            val message = "Could not store scan result for '${id.toCoordinates()}': ${it.collectMessagesAsString()}"
+
             log.warn { message }
 
-            return Failure(message)
-        }
-
-        return Success(Unit)
+            throw ScanStorageException(message)
+        }.map { /* Unit */ }
     }
 }

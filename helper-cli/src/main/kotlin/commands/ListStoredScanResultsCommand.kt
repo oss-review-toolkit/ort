@@ -28,9 +28,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -68,12 +66,9 @@ internal class ListStoredScanResultsCommand : CliktCommand(
 
         println("Searching for scan results of '${packageId.toCoordinates()}' in ${ScanResultsStorage.storage.name}.")
 
-        val scanResults = when (val readResult = ScanResultsStorage.storage.read(packageId)) {
-            is Success -> readResult.result
-            is Failure -> {
-                log.error { "Could not read scan results: ${readResult.error}" }
-                throw ProgramResult(1)
-            }
+        val scanResults = ScanResultsStorage.storage.read(packageId).getOrElse {
+            log.error { "Could not read scan results: ${it.message}" }
+            throw ProgramResult(1)
         }
 
         println("Found ${scanResults.size} scan results:")
