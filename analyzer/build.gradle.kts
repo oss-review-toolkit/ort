@@ -66,6 +66,7 @@ dependencies {
     implementation(project(":utils:core-utils"))
     implementation(project(":utils:spdx-utils"))
 
+    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.moandjiezana.toml:toml4j:$toml4jVersion")
     implementation("com.paypal.digraph:digraph-parser:$digraphVersion")

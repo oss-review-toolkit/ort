@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 
 import okhttp3.OkHttpClient
@@ -59,13 +59,15 @@ interface FossIdRestService {
         /**
          * The mapper for JSON (de-)serialization used by this service.
          */
-        val JSON_MAPPER: ObjectMapper = JsonMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        val JSON_MAPPER: ObjectMapper = jsonMapper {
+            propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             // FossID has a bug in get_results/scan.
             // Sometimes the match_type is "ignored", sometimes it is "Ignored".
-            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-            .registerModule(kotlinModule()
-                .addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer()))
+            enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+            addModule(
+                kotlinModule().addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer())
+            )
+        }
 
         /**
          * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses

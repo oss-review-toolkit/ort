@@ -88,11 +88,11 @@ private class ProvenanceDeserializer : StdDeserializer<Provenance>(Provenance::c
         val node = p.codec.readTree<JsonNode>(p)
         return when {
             node.has("source_artifact") -> {
-                val sourceArtifact = jsonMapper.treeToValue<RemoteArtifact>(node["source_artifact"])!!
+                val sourceArtifact = jsonMapper.treeToValue<RemoteArtifact>(node["source_artifact"])
                 ArtifactProvenance(sourceArtifact)
             }
             node.has("vcs_info") -> {
-                val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs_info"])!!
+                val vcsInfo = jsonMapper.treeToValue<VcsInfo>(node["vcs_info"])
                 // For backward compatibility, if there is no resolved_revision use the revision from vcsInfo.
                 val resolvedRevision = node["resolved_revision"]?.textValue() ?: vcsInfo.revision
                 RepositoryProvenance(vcsInfo, resolvedRevision)
