@@ -160,17 +160,18 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
                 +isCopyleftLimited()
             }
 
+            val licenseSourceName = licenseSource.name.lowercase()
             val message = if (licenseSource == LicenseSource.DETECTED) {
                 if (pkg.id.type == "Unmanaged") {
-                    "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.lowercase()} " +
-                            "in package ${pkg.id.toCoordinates()}."
+                    "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
+                            "${pkg.id.toCoordinates()}."
                 } else {
-                    "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.lowercase()} " +
-                            "in package ${pkg.id.toCoordinates()}."
+                    "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
+                            "${pkg.id.toCoordinates()}."
                 }
             } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.lowercase()} ScanCode " +
-                        "copyleft-limited categorized license $license."
+                "The package ${pkg.id.toCoordinates()} has the $licenseSourceName ScanCode copyleft-limited " +
+                        "categorized license $license."
             }
 
             error(message, howToFixDefault())
