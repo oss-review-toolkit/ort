@@ -28,9 +28,6 @@ import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientF
 
 import java.net.URI
 
-import org.ossreviewtoolkit.model.Failure
-import org.ossreviewtoolkit.model.Result
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.log
@@ -76,8 +73,8 @@ class JiraNotifier(
             avoidDuplicates: Boolean = true
         ): Result<BasicIssue> {
             if (issueType !in issueTypes) {
-                return Failure("The issue type '$issueType' is not valid. Use a valid issue type, specified in " +
-                        "your project '$projectKey'")
+                return Result.failure(IllegalArgumentException("The issue type '$issueType' is not valid. Use a " +
+                        "valid issue type, specified in your project '$projectKey'"))
             }
 
             val issueInputBuilder = IssueInputBuilder()
@@ -105,24 +102,24 @@ class JiraNotifier(
                         log.debug { "The comment for the issue '$summary' already exists," +
                                 " therefore no new one will be added." }
 
-                        return Success(issue)
+                        return Result.success(issue)
                     }
 
                     return try {
                         restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
 
-                        Success(issue)
+                        Result.success(issue)
                     } catch (e: RestClientException) {
                         log.error { "The comment for the issue '${issue.key} could not be added: " +
                                 e.collectMessagesAsString() }
 
-                        Failure(e.collectMessagesAsString())
+                        Result.failure(e)
                     }
                 } else if (searchResult.total > 1) {
                     log.debug { "There are more than 1 duplicate issues of '$summary', which is not supported yet." }
 
-                    return Failure("There are more than 1 duplicate issues of '$summary'," +
-                            " which is not supported yet.")
+                    return Result.failure(IllegalArgumentException("There are more than 1 duplicate issues of " +
+                            "'$summary', which is not supported yet."))
                 }
             }
 
@@ -131,12 +128,12 @@ class JiraNotifier(
 
                 log.info { "Issue ${resultIssue.key} created." }
 
-                Success(resultIssue)
+                Result.success(resultIssue)
             } catch (e: RestClientException) {
                 log.error { "The issue for the project '$projectKey' could not be created: " +
                         e.collectMessagesAsString() }
 
-                Failure(e.collectMessagesAsString())
+                Result.failure(e)
             }
         }
     }

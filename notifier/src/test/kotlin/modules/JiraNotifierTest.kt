@@ -34,17 +34,17 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.should
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.types.beOfType
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 import java.net.URI
 
-import org.ossreviewtoolkit.model.Failure
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.JiraConfiguration
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class JiraNotifierTest : WordSpec({
     val server = WireMockServer(
@@ -97,11 +97,12 @@ class JiraNotifierTest : WordSpec({
                 false
             )
 
-            resultIssue should beOfType(Success::class)
-            (resultIssue as Success).result.let { issue ->
-                issue.id shouldBe 2457237
-                issue.key shouldBe "PROJECT-1"
-                issue.self shouldBe URI("https://jira.oss-review-toolkit.org/rest/api/2/issue/2457237")
+            resultIssue.shouldBeSuccess {
+                it.shouldNotBeNull {
+                    id shouldBe 2457237
+                    key shouldBe "PROJECT-1"
+                    self shouldBe URI("https://jira.oss-review-toolkit.org/rest/api/2/issue/2457237")
+                }
             }
         }
 
@@ -134,8 +135,11 @@ class JiraNotifierTest : WordSpec({
                 "Bug"
             )
 
-            resultIssue should beOfType(Failure::class)
-            (resultIssue as Failure).error shouldContain("more than 1 duplicate issues")
+            resultIssue.shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldContain "more than 1 duplicate issues"
+                }
+            }
         }
 
         "add a comment when there is a duplicate issue without the comments" {
@@ -243,9 +247,9 @@ class JiraNotifierTest : WordSpec({
                 true
             )
 
-            resultIssue should beOfType(Success::class)
-            (resultIssue as Success).result.let { issue ->
-                (issue as Issue).comments.count() shouldBe 2
+            resultIssue.shouldBeSuccess {
+                it.shouldBeTypeOf<Issue>()
+                it.comments.count() shouldBe 2
             }
         }
 
@@ -273,8 +277,11 @@ class JiraNotifierTest : WordSpec({
                 false
             )
 
-            result should beOfType(Failure::class)
-            (result as Failure).error shouldContain("'$issueType' is not valid")
+            result.shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldContain "'$issueType' is not valid"
+                }
+            }
         }
     }
 })
