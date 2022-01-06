@@ -18,7 +18,7 @@
 # License-Filename: LICENSE
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_VERSION=$(git describe --abbrev=7 --always --tags --dirty)
+GIT_VERSION=$(git describe --abbrev=10 --always --tags --dirty)
 
 echo "Setting ORT_VERSION to $GIT_VERSION."
 docker build -f $GIT_ROOT/Dockerfile -t ort --build-arg ORT_VERSION=$GIT_VERSION $GIT_ROOT
