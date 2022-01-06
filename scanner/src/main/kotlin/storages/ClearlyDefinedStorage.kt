@@ -30,15 +30,12 @@ import kotlinx.coroutines.runBlocking
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsInfoCurationData
@@ -49,6 +46,7 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
@@ -97,11 +95,6 @@ private fun findScanCodeVersion(tools: List<String>, coordinates: ClearlyDefined
 }
 
 /**
- * A [Success] result with an empty list of [ScanResult]s.
- */
-private val EMPTY_RESULT = Success<List<ScanResult>>(emptyList())
-
-/**
  * A storage implementation that tries to download ScanCode results from ClearlyDefined.
  *
  * This storage implementation maps the requested package to coordinates used by ClearlyDefined. It then tries
@@ -123,7 +116,7 @@ class ClearlyDefinedStorage(
         readPackageFromClearlyDefined(pkg.id, pkg.vcs, pkg.sourceArtifact.takeIf { it.url.isNotEmpty() })
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> =
-        Failure("Adding scan results directly to ClearlyDefined is not supported.")
+        Result.failure(ScanStorageException("Adding scan results directly to ClearlyDefined is not supported."))
 
     /**
      * Try to obtain a [ScanResult] produced by ScanCode from ClearlyDefined for the package with the given [id].
@@ -192,7 +185,7 @@ class ClearlyDefinedStorage(
 
         log.error { message }
 
-        return Failure(message)
+        return Result.failure(ScanStorageException(message))
     }
 
     /**
@@ -243,7 +236,7 @@ class ClearlyDefinedStorage(
                 val summary = generateSummary(startTime, Instant.now(), "", result)
                 val details = generateScannerDetails(result)
 
-                Success(listOf(ScanResult(provenance, details, summary)))
+                Result.success(listOf(ScanResult(provenance, details, summary)))
             } ?: EMPTY_RESULT
         }
     }

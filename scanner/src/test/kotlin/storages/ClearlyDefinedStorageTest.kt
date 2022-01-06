@@ -37,6 +37,8 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -54,15 +56,13 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
-import org.ossreviewtoolkit.utils.test.shouldBeFailure
-import org.ossreviewtoolkit.utils.test.shouldBeSuccess
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private const val PACKAGE_TYPE = "Maven"
 private const val NAMESPACE = "someNamespace"
@@ -185,24 +185,30 @@ private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = C
 /**
  * Check that this [Result] contains the expected data and return the first scan result from the list on success.
  */
-private fun Result<List<ScanResult>>.shouldBeValid(): ScanResult {
-    shouldBeSuccess()
-    result shouldHaveSize 1
+private fun Result<List<ScanResult>>.shouldBeValid(block: (ScanResult.() -> Unit)? = null) {
+    shouldBeSuccess {
+        it.shouldNotBeNull {
+            this shouldHaveSize 1
 
-    val scanResult = result.first()
-    scanResult.summary.licenseFindings.find {
-        it.location.path == TEST_PATH && "Apache-2.0" in it.license.licenses()
-    } shouldNot beNull()
+            val scanResult = first()
+            scanResult.summary.licenseFindings.find { finding ->
+                finding.location.path == TEST_PATH && "Apache-2.0" in finding.license.licenses()
+            } shouldNot beNull()
 
-    return scanResult
+            if (block != null) scanResult.block()
+        }
+    }
 }
 
 /**
  * Check that this [Result] does not contain any data.
  */
 private fun Result<List<ScanResult>>.shouldBeEmpty() {
-    shouldBeSuccess()
-    result should beEmpty()
+    shouldBeSuccess {
+        it.shouldNotBeNull {
+            this should beEmpty()
+        }
+    }
 }
 
 /**
@@ -293,11 +299,12 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            val result = storage.read(TEST_IDENTIFIER).shouldBeValid()
-            result.scanner.name shouldBe "ScanCode"
-            result.scanner.version shouldBe "3.0.2"
-            result.summary.startTime.shouldBeCloseToCurrentTime()
-            result.summary.endTime.shouldBeCloseToCurrentTime()
+            storage.read(TEST_IDENTIFIER).shouldBeValid {
+                scanner.name shouldBe "ScanCode"
+                scanner.version shouldBe "3.0.2"
+                summary.startTime.shouldBeCloseToCurrentTime()
+                summary.endTime.shouldBeCloseToCurrentTime()
+            }
         }
 
         "return a failure if a ClearlyDefined request fails" {
@@ -310,8 +317,11 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val result = storage.read(TEST_IDENTIFIER)
 
-            result.shouldBeFailure()
-            result.error shouldContain "HttpException"
+            result.shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldContain "HttpException"
+                }
+            }
         }
 
         "return an empty result if no results for the scancode tool are available" {
@@ -402,8 +412,11 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val result = storage.read(TEST_IDENTIFIER)
 
-            result.shouldBeFailure()
-            result.error shouldContain "JsonParseException"
+            result.shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldContain "JsonParseException"
+                }
+            }
         }
 
         "return an empty result if a harvest tool file request returns an unexpected result" {
@@ -431,8 +444,11 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val result = storage.read(TEST_IDENTIFIER)
 
-            result.shouldBeFailure()
-            result.error shouldContain "Connection refused"
+            result.shouldBeFailure {
+                it.shouldNotBeNull {
+                    message shouldContain "Connection refused"
+                }
+            }
         }
     }
 })

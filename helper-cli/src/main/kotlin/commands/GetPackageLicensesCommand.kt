@@ -31,11 +31,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.common.createProvider
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
@@ -87,7 +84,7 @@ class GetPackageLicensesCommand : CliktCommand(
     ).single()
 
     override fun run() {
-        val scanResults = getScanResultStorage().getScanResults(packageId)
+        val scanResults = getScanResultStorage().read(packageId).getOrDefault(emptyList())
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val result = scanResults.firstOrNull()?.let { scanResult ->
@@ -129,12 +126,6 @@ private fun Collection<LicenseFinding>.toSpdxExpression(): String =
         SpdxConstants.NONE
     } else {
         asSequence().map { it.license }.distinct().reduce(SpdxExpression::and).sort().toString()
-    }
-
-private fun ScanResultsStorage.getScanResults(id: Identifier): List<ScanResult> =
-    when (val status = read(id)) {
-        is Success -> status.result
-        is Failure -> emptyList()
     }
 
 private data class Result(

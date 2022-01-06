@@ -31,7 +31,6 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
@@ -46,7 +45,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -155,10 +153,8 @@ abstract class PathScanner(
     }
 
     private fun readResultsFromStorage(packages: Collection<Package>, scannerCriteria: ScannerCriteria) =
-        when (val results = ScanResultsStorage.storage.read(packages, scannerCriteria)) {
-            is Success -> results.result
-            is Failure -> emptyMap()
-        }.filter { it.value.isNotEmpty() }
+        ScanResultsStorage.storage.read(packages, scannerCriteria).getOrDefault(emptyMap())
+            .filter { it.value.isNotEmpty() }
             .mapKeys { (id, _) -> packages.single { it.id == id } }
             .mapValues { it.value.deduplicateScanResults() }
             .mapValues { (_, scanResults) ->
@@ -303,18 +299,15 @@ abstract class PathScanner(
         val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
         val filteredResult = scanResult.filterByIgnorePatterns(scannerConfig.ignorePatterns)
 
-        return when (storageResult) {
-            is Success -> filteredResult
-            is Failure -> {
-                val issue = OrtIssue(
-                    source = ScanResultsStorage.storage.name,
-                    message = storageResult.error,
-                    severity = Severity.WARNING
-                )
-                val issues = scanSummary.issues + issue
-                val summary = scanSummary.copy(issues = issues)
-                filteredResult.copy(summary = summary)
-            }
+        return storageResult.map { filteredResult }.getOrElse {
+            val issue = OrtIssue(
+                source = ScanResultsStorage.storage.name,
+                message = it.message.orEmpty(),
+                severity = Severity.WARNING
+            )
+            val issues = scanSummary.issues + issue
+            val summary = scanSummary.copy(issues = issues)
+            filteredResult.copy(summary = summary)
         }
     }
 
