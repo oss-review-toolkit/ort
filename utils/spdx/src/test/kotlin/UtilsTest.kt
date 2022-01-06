@@ -166,6 +166,13 @@ class UtilsTest : WordSpec() {
             "return null for an unknown SPDX LicenseRef" {
                 getLicenseText("LicenseRef-foo-bar") should beNull()
             }
+
+            "return the full license text for a LicenseRef-ort license" {
+                val text = getLicenseText("LicenseRef-ort-oracle-futc")?.trim()
+
+                text should startWith("Oracle Free Use Terms and Conditions")
+                text should endWith("Last updated: 9 October 2018")
+            }
         }
 
         "getLicenseText provided a custom dir" should {
