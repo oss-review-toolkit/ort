@@ -304,9 +304,9 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 ## 6. Running the evaluator
 
 The evaluator can apply a set of rules against the scan result created above.
-ORT provides examples for the policy rules file [(example.rules.kts)](../examples/example.rules.kts),
-[user-defined categorization of licenses (license-classifications.yml)](../examples/license-classifications.yml) and
-[user-defined package curations (curations.yml)](../examples/curations.yml) that can be used for testing the
+ORT provides examples for the policy rules file ([example.rules.kts](../examples/example.rules.kts)),
+user-defined categorization of licenses ([license-classifications.yml](../examples/license-classifications.yml)) and
+user-defined package curations ([curations.yml](../examples/curations.yml)) that can be used for testing the
 _evaluator_. 
 
 To run the example rules use:
