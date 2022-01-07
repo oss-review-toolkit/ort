@@ -27,8 +27,10 @@ import io.kotest.matchers.collections.shouldHaveSize
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.checkResponse
+import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -68,6 +70,19 @@ class FossIdRulesTest : StringSpec({
                     IgnoreRule(2100, RuleType.EXTENSION, ".txt", 3538, "2022-01-05 14:59:22")
                 )
             }
+        }
+    }
+
+    "An ignore rule can be created" {
+        service.createIgnoreRule(
+            "",
+            "",
+            SCAN_CODE,
+            RuleType.EXTENSION,
+            ".docx",
+            RuleScope.SCAN
+        ) shouldNotBeNull {
+            checkResponse("create ignore rule")
         }
     }
 })

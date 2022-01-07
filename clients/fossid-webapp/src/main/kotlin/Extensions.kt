@@ -21,6 +21,9 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
+
 internal const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
 
@@ -271,5 +274,31 @@ suspend fun FossIdRestService.listIgnoreRules(user: String, apiKey: String, scan
     listIgnoreRules(
         PostRequestBody(
             "ignore_rules_show", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+        )
+    )
+
+/**
+ * Create an 'ignore rule' for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.createIgnoreRule(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    type: RuleType,
+    value: String,
+    scope: RuleScope
+) =
+    createIgnoreRule(
+        PostRequestBody(
+            "ignore_rules_add",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            "scan_code" to scanCode,
+            "type" to type.name.lowercase(),
+            "value" to value,
+            "apply_to" to scope.name.lowercase()
         )
     )
