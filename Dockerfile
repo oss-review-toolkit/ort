@@ -26,7 +26,7 @@ ARG ORT_VERSION="DOCKER-SNAPSHOT"
 ARG CRT_FILES=""
 
 # Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="3.2.1rc2"
+ARG SCANCODE_VERSION="30.1.0"
 ARG ANDROID_SDK_VERSION="6858069"
 
 FROM adoptopenjdk:11-jre-hotspot-focal AS base-image
