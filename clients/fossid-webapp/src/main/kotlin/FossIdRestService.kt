@@ -179,6 +179,9 @@ interface FossIdRestService {
     @POST("api.php")
     suspend fun listIgnoreRules(@Body body: PostRequestBody): PolymorphicResponseBody<IgnoreRule>
 
+    @POST("api.php")
+    suspend fun createIgnoreRule(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
 }
