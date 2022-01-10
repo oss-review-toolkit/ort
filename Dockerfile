@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.2
+# syntax=docker/dockerfile:1.3
 
 # Copyright (C) 2020 Bosch Software Innovations GmbH
 # Copyright (C) 2021 Bosch.IO GmbH
