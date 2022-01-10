@@ -111,8 +111,6 @@ class ClearlyDefinedPackageCurationProvider(
         val contributedCurations = runCatching {
             mutableMapOf<Coordinates, ContributedCurations>().also {
                 coordinatesToIds.keys.chunked(BULK_REQUEST_SIZE).forEach { coordinates ->
-                    // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
-                    //       classes could deal with coroutines more easily.
                     it += runBlocking(Dispatchers.IO) { service.getCurations(coordinates) }
                 }
             }
