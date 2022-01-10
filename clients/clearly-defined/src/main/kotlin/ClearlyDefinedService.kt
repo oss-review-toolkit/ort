@@ -99,7 +99,7 @@ interface ClearlyDefinedService {
         /**
          * The ClearlyDefined server when running locally.
          */
-        LOCALHOST("http://localhost:4000")
+        LOCAL("http://localhost:4000")
     }
 
     /**
