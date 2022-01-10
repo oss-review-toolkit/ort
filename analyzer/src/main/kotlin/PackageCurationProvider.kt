@@ -39,5 +39,6 @@ fun interface PackageCurationProvider {
      * list of curations must be non-empty; if no curation is available for a package, the returned map must not contain
      * a key for that package's identifier at all.
      */
+    // TODO: Maybe make this a suspend function, then all implementing classes could deal with coroutines more easily.
     fun getCurationsFor(pkgIds: Collection<Identifier>): Map<Identifier, List<PackageCuration>>
 }
