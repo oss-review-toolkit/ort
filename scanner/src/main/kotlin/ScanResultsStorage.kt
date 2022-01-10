@@ -305,34 +305,34 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
      * Internal version of [read] that does not update the [access statistics][stats]. Implementations may want to
      * override this function if they can filter for the wanted [scannerCriteria] in a more efficient way.
      */
-    protected open fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
-        val scanResults = readInternal(pkg.id)
-            .onSuccess { if (it.isEmpty()) return Result.success(it) }
-            .getOrElse { return Result.failure(it) }
-            .toMutableList()
+    protected open fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
+        readInternal(pkg.id).map { results ->
+            if (results.isEmpty()) {
+                results
+            } else {
+                val scanResults = results.toMutableList()
 
-        // Only keep scan results whose provenance information matches the package information.
-        scanResults.retainAll { it.provenance.matches(pkg) }
-        if (scanResults.isEmpty()) {
-            log.debug {
-                "No stored scan results found for $pkg. The following entries with non-matching provenance have " +
-                        "been ignored: ${scanResults.map { it.provenance }}"
+                // Only keep scan results whose provenance information matches the package information.
+                scanResults.retainAll { it.provenance.matches(pkg) }
+                if (scanResults.isEmpty()) {
+                    log.debug {
+                        "No stored scan results found for $pkg. The following entries with non-matching provenance " +
+                                "have been ignored: ${scanResults.map { it.provenance }}"
+                    }
+                } else {
+                    // Only keep scan results from compatible scanners.
+                    scanResults.retainAll { scannerCriteria.matches(it.scanner) }
+                    if (scanResults.isEmpty()) {
+                        log.debug {
+                            "No stored scan results found for $scannerCriteria. The following entries with " +
+                                    "incompatible scanners have been ignored: ${scanResults.map { it.scanner }}"
+                        }
+                    }
+                }
+
+                scanResults
             }
-            return Result.success(scanResults)
         }
-
-        // Only keep scan results from compatible scanners.
-        scanResults.retainAll { scannerCriteria.matches(it.scanner) }
-        if (scanResults.isEmpty()) {
-            log.debug {
-                "No stored scan results found for $scannerCriteria. The following entries with incompatible scanners " +
-                        "have been ignored: ${scanResults.map { it.scanner }}"
-            }
-            return Result.success(scanResults)
-        }
-
-        return Result.success(scanResults)
-    }
 
     /**
      * Internal version of [read] that does not update the [access statistics][stats]. The default implementation uses
