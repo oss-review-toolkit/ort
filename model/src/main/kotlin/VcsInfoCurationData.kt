@@ -47,4 +47,16 @@ data class VcsInfoCurationData(
      * interpreted as the path to the manifest file.
      */
     val path: String? = null
-)
+) {
+    /**
+     * Merge with [other] curation data. If in question, data in this instance has precedence over data in the other
+     * instance.
+     */
+    fun merge(other: VcsInfoCurationData) =
+        VcsInfoCurationData(
+            type = type ?: other.type,
+            url = url ?: other.url,
+            revision = revision ?: other.revision,
+            path = path ?: other.path
+        )
+}

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.utils.common.zip
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -161,4 +162,28 @@ data class PackageCurationData(
 
         return CuratedPackage(pkg, curations)
     }
+
+    /**
+     * Merge with [other] curation data. The `comment` properties are joined but probably need to be adjusted before
+     * further processing as their meaning might have been distorted by the merge. For properties that cannot be merged,
+     * data in this instance has precedence over data in the other instance.
+     */
+    fun merge(other: PackageCurationData) =
+        PackageCurationData(
+            comment = setOfNotNull(comment, other.comment).joinToString("\n").takeIf { it.isNotEmpty() },
+            purl = purl ?: other.purl,
+            cpe = cpe ?: other.cpe,
+            authors = (authors.orEmpty() + other.authors.orEmpty()).toSortedSet(),
+            concludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).reduce(SpdxExpression::and),
+            description = description ?: other.description,
+            homepageUrl = homepageUrl ?: other.homepageUrl,
+            binaryArtifact = binaryArtifact ?: other.binaryArtifact,
+            sourceArtifact = sourceArtifact ?: other.sourceArtifact,
+            vcs = vcs?.merge(other.vcs ?: vcs) ?: other.vcs,
+            isMetaDataOnly = isMetaDataOnly ?: other.isMetaDataOnly,
+            isModified = isModified ?: other.isModified,
+            declaredLicenseMapping = declaredLicenseMapping.zip(other.declaredLicenseMapping) { value, otherValue ->
+                (value ?: otherValue)!!
+            }
+        )
 }
