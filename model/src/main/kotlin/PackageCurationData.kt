@@ -106,58 +106,59 @@ data class PackageCurationData(
     val declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
 ) {
     /**
-     * Apply the curation data to the provided [base] package by overriding all values of the original package with
+     * Apply the curation data to the provided [targetPackage] by overriding all values of the original package with
      * non-null values of the curation data, and return the curated package.
      */
-    fun apply(base: CuratedPackage): CuratedPackage = applyCurationToPackage(base, this)
-}
+    fun apply(targetPackage: CuratedPackage): CuratedPackage {
+        val original = targetPackage.pkg
 
-private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: PackageCurationData): CuratedPackage {
-    val base = targetPackage.pkg
+        val vcsProcessed = vcs?.let {
+            // Curation data for VCS information is handled specially so we can curate only individual properties.
+            VcsInfo(
+                type = it.type ?: original.vcsProcessed.type,
+                url = it.url ?: original.vcsProcessed.url,
+                revision = it.revision ?: original.vcsProcessed.revision,
+                path = it.path ?: original.vcsProcessed.path
+            ).normalize()
+        } ?: original.vcsProcessed
 
-    val vcsProcessed = curation.vcs?.let {
-        // Curation data for VCS information is handled specially so we can curate only individual properties.
-        VcsInfo(
-            type = it.type ?: base.vcsProcessed.type,
-            url = it.url ?: base.vcsProcessed.url,
-            revision = it.revision ?: base.vcsProcessed.revision,
-            path = it.path ?: base.vcsProcessed.path
-        ).normalize()
-    } ?: base.vcsProcessed
+        val authors = authors ?: original.authors
+        val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + declaredLicenseMapping
+        val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
+            original.declaredLicenses,
+            declaredLicenseMapping
+        )
 
-    val authors = curation.authors ?: base.authors
-    val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + curation.declaredLicenseMapping
-    val declaredLicensesProcessed = DeclaredLicenseProcessor.process(base.declaredLicenses, declaredLicenseMapping)
+        val pkg = Package(
+            id = original.id,
+            purl = purl ?: original.purl,
+            cpe = cpe ?: original.cpe,
+            authors = authors,
+            declaredLicenses = original.declaredLicenses,
+            declaredLicensesProcessed = declaredLicensesProcessed,
+            concludedLicense = concludedLicense ?: original.concludedLicense,
+            description = description ?: original.description,
+            homepageUrl = homepageUrl ?: original.homepageUrl,
+            binaryArtifact = binaryArtifact ?: original.binaryArtifact,
+            sourceArtifact = sourceArtifact ?: original.sourceArtifact,
+            vcs = original.vcs,
+            vcsProcessed = vcsProcessed,
+            isMetaDataOnly = isMetaDataOnly ?: original.isMetaDataOnly,
+            isModified = isModified ?: original.isModified
+        )
 
-    val pkg = Package(
-        id = base.id,
-        purl = curation.purl ?: base.purl,
-        cpe = curation.cpe ?: base.cpe,
-        authors = authors,
-        declaredLicenses = base.declaredLicenses,
-        declaredLicensesProcessed = declaredLicensesProcessed,
-        concludedLicense = curation.concludedLicense ?: base.concludedLicense,
-        description = curation.description ?: base.description,
-        homepageUrl = curation.homepageUrl ?: base.homepageUrl,
-        binaryArtifact = curation.binaryArtifact ?: base.binaryArtifact,
-        sourceArtifact = curation.sourceArtifact ?: base.sourceArtifact,
-        vcs = base.vcs,
-        vcsProcessed = vcsProcessed,
-        isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly,
-        isModified = curation.isModified ?: base.isModified
-    )
+        val declaredLicenseMappingDiff = mutableMapOf<String, SpdxExpression>().apply {
+            val previous = targetPackage.getDeclaredLicenseMapping().toList()
+            val current = declaredLicenseMapping.toList()
 
-    val declaredLicenseMappingDiff = mutableMapOf<String, SpdxExpression>().apply {
-        val previous = targetPackage.getDeclaredLicenseMapping().toList()
-        val current = declaredLicenseMapping.toList()
+            putAll(previous - current)
+        }
 
-        putAll(previous - current)
+        val curations = targetPackage.curations + PackageCurationResult(
+            base = original.diff(pkg).copy(declaredLicenseMapping = declaredLicenseMappingDiff),
+            curation = this
+        )
+
+        return CuratedPackage(pkg, curations)
     }
-
-    val curations = targetPackage.curations + PackageCurationResult(
-        base = base.diff(pkg).copy(declaredLicenseMapping = declaredLicenseMappingDiff),
-        curation = curation
-    )
-
-    return CuratedPackage(pkg, curations)
 }
