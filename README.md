@@ -81,7 +81,8 @@ Install the following basic prerequisites:
 * Docker 18.09 or later (and ensure its daemon is running).
 * Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for Docker.
 
-Change into the directory with ORT's source code and run `docker build -t ort .`.
+Change into the directory with ORT's source code and run `docker build -t ort .`. Alternatively, use the script at
+`scripts/docker_build.sh` which also sets the ORT version from the Git revision.
 
 ### Build natively
 
