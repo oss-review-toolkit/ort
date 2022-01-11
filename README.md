@@ -79,7 +79,7 @@ by running `git submodule update --init --recursive`.
 Install the following basic prerequisites:
 
 * Docker 18.09 or later (and ensure its daemon is running).
-* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) for Docker.
+* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for Docker.
 
 Change into the directory with ORT's source code and run `docker build -t ort .`.
 
