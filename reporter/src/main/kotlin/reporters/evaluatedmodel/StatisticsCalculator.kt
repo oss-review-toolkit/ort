@@ -45,6 +45,7 @@ internal class StatisticsCalculator {
         repositoryConfiguration = getRepositoryConfigurationStatistics(ortResult),
         openIssues = getOpenIssues(ortResult, resolutionProvider),
         openRuleViolations = getOpenRuleViolations(ortResult, resolutionProvider),
+        openVulnerabilities = getOpenVulnerabilities(ortResult, resolutionProvider),
         dependencyTree = DependencyTreeStatistics(
             includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
             excludedProjects = ortResult.getProjects().count { ortResult.isExcluded(it.id) },
@@ -77,6 +78,10 @@ internal class StatisticsCalculator {
             hints = openIssues.count { it.severity == Severity.HINT }
         )
     }
+
+    private fun getOpenVulnerabilities(ortResult: OrtResult, resolutionProvider: ResolutionProvider): Int =
+        ortResult.getVulnerabilities(omitExcluded = true).values.flatten()
+            .filterNot { resolutionProvider.isResolved(it) }.size
 
     private fun getTreeDepth(ortResult: OrtResult, ignoreExcluded: Boolean = false): Int =
         ortResult
