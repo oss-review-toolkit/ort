@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -107,6 +108,8 @@ data class EvaluatedModel(
     val vulnerabilities: List<EvaluatedVulnerability>,
     val statistics: Statistics,
     val repository: Repository,
+    val severeIssueThreshold: Severity,
+    val severeRuleViolationThreshold: Severity,
 
     /**
      * The repository configuration as YAML string. Required to be able to easily show the repository configuration in

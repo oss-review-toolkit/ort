@@ -847,6 +847,8 @@ repository:
         license_choices:
         - given: "MPL-2.0 OR EPL-1.0"
           choice: "MPL-2.0"
+severe_issue_threshold: "WARNING"
+severe_rule_violation_threshold: "WARNING"
 repository_configuration: "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\
   \n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern:\
   \ \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\
