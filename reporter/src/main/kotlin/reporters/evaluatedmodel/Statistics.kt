@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -54,6 +55,11 @@ data class Statistics(
      * The number of [RuleViolation]s by severity which are not resolved.
      */
     val openRuleViolations: IssueStatistics,
+
+    /**
+     * The number of [Vulnerabilities][Vulnerability] which are not resolved and not excluded.
+     */
+    val openVulnerabilities: Int,
 
     /**
      * Statistics for the dependency tree.

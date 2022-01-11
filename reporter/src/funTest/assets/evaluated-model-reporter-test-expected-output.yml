@@ -783,6 +783,7 @@ statistics:
     errors: 1
     warnings: 1
     hints: 0
+  open_vulnerabilities: 0
   dependency_tree:
     included_projects: 1
     excluded_projects: 1
