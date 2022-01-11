@@ -113,7 +113,7 @@ data class PackageCurationData(
         val original = targetPackage.pkg
 
         val vcsProcessed = vcs?.let {
-            // Curation data for VCS information is handled specially so we can curate only individual properties.
+            // Curation data for VCS information is handled specially, so we can curate only individual properties.
             VcsInfo(
                 type = it.type ?: original.vcsProcessed.type,
                 url = it.url ?: original.vcsProcessed.url,
