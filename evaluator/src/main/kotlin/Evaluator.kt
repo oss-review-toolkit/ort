@@ -39,7 +39,8 @@ import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 class Evaluator(
     ortResult: OrtResult = OrtResult.EMPTY,
     licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
-    licenseClassifications: LicenseClassifications = LicenseClassifications()
+    licenseClassifications: LicenseClassifications = LicenseClassifications(),
+    time: Instant = Instant.now()
 ) : ScriptRunner() {
     override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate> {
         defaultImports(
@@ -49,7 +50,7 @@ class Evaluator(
     }
 
     override val evalConfig = ScriptEvaluationConfiguration {
-        constructorArgs(ortResult, licenseInfoResolver, licenseClassifications)
+        constructorArgs(ortResult, licenseInfoResolver, licenseClassifications, time)
         scriptsInstancesSharing(true)
     }
 
