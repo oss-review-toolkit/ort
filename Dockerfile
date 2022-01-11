@@ -37,7 +37,9 @@ RUN /etc/scripts/import_proxy_certs.sh \
 
 #------------------------------------------------------------------------
 # Ubuntu build toolchain
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
         clang-9 \
@@ -235,22 +237,26 @@ RUN mkdir -p /opt/ort \
 # Main container
 FROM eclipse-temurin:11-jre
 
+# Run with non privileged user
+RUN groupadd --gid 1000 ort \
+    && useradd --uid 1000 --gid ort --shell /bin/bash --home-dir /workspace --create-home ort
+
 COPY docker/00-add_local_path.sh /etc/profile.d/
 
 # Python
-COPY --from=pythonbuild /opt/python /opt/python
+COPY --chown=ort:ort --from=pythonbuild /opt/python /opt/python
 COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
 
 # Ruby
-COPY --from=rubybuild /opt/rbenv /opt/rbenv
+COPY --chown=ort:ort --from=rubybuild /opt/rbenv /opt/rbenv
 COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
 
 # NodeJS
-COPY --from=nodebuild /opt/nodejs /opt/nodejs
+COPY --chown=ort:ort --from=nodebuild /opt/nodejs /opt/nodejs
 COPY --from=nodebuild /etc/profile.d/nodejs.sh /etc/profile.d/
 
 # Golang
-COPY --from=gobuild /opt/go /opt/go/
+COPY --chown=ort:ort --from=gobuild /opt/go /opt/go/
 COPY --from=gobuild  /etc/profile.d/go.sh /etc/profile.d/
 
 # Haskell
@@ -260,16 +266,18 @@ COPY --from=haskellbuild /usr/bin/stack /usr/bin
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
-COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
+COPY --chown=ort:ort --from=androidbuild /opt/android-sdk /opt/android-sdk
 
 # ScanCode
-COPY --from=scancodebuild /opt/scancode /opt/scancode
+COPY --chown=ort:ort --from=scancodebuild /opt/scancode /opt/scancode
 RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
     && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
     && ln -s /opt/scancode/bin/extractcode /usr/bin/extractcode
 
-RUN  --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates \
         cvs \
@@ -304,7 +312,9 @@ RUN KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub" \
 ARG COMPOSER_VERSION=1.10.1-1
 
 # Apt install commands.
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         cargo \
         composer=$COMPOSER_VERSION \
@@ -315,10 +325,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # ORT
-COPY --from=ortbuild /opt/ort /opt/ort
+COPY --chown=ort:ort --from=ortbuild /opt/ort /opt/ort
 COPY docker/ort-wrapper.sh /usr/bin/ort
 COPY docker/ort-wrapper.sh /usr/bin/orth
 RUN chmod 755 /usr/bin/ort
+
+USER ort
+WORKDIR /workspace
 
 ENTRYPOINT ["/usr/bin/ort"]
 

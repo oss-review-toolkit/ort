@@ -17,8 +17,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-set -e
-
 # Global functions
 add_local_path () {
     case ":${PATH:=$1}:" in
