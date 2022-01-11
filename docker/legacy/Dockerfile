@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.2
+# syntax=docker/dockerfile:1.3
 
 # Copyright (C) 2020 Bosch Software Innovations GmbH
 # Copyright (C) 2021 Bosch.IO GmbH
@@ -26,18 +26,9 @@ ARG ORT_VERSION="DOCKER-SNAPSHOT"
 ARG CRT_FILES=""
 
 # Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="3.2.1rc2"
+ARG SCANCODE_VERSION="30.1.0"
 
-FROM adoptopenjdk/openjdk11:alpine-slim AS build
-
-# Apk install commands.
-RUN apk add --no-cache \
-        # Required for Node.js to build the reporter-web-app.
-        libstdc++ \
-        # Required to allow to download via a proxy with a self-signed certificate.
-        ca-certificates \
-        coreutils \
-        openssl
+FROM eclipse-temurin:17-jdk-focal AS build
 
 COPY . /usr/local/src/ort
 
@@ -53,14 +44,14 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM adoptopenjdk:11-jre-hotspot-bionic
+FROM eclipse-temurin:17-jdk-focal
 
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
-    CARGO_VERSION=0.54.0-0ubuntu1~18.04.1 \
-    COMPOSER_VERSION=1.6.3-1 \
-    CONAN_VERSION=1.40.3 \
+    CARGO_VERSION=0.54.0-0ubuntu1~20.04.1 \
+    COMPOSER_VERSION=1.10.1-1 \
+    CONAN_VERSION=1.43.2 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.16.5 \
     HASKELL_STACK_VERSION=2.1.3 \
@@ -112,7 +103,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         composer=$COMPOSER_VERSION \
         nodejs \
         python-dev \
-        python-pip \
         python-setuptools \
         python3-dev \
         python3-pip \

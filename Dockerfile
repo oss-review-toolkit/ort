@@ -22,7 +22,9 @@
 
 #------------------------------------------------------------------------
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
-FROM eclipse-temurin:11-jdk AS build
+FROM eclipse-temurin:17-jdk-focal AS build
+
+ENV LANG=C.UTF-8
 
 # Prepare build environment to use ort scripts from here
 COPY scripts /etc/scripts
@@ -42,11 +44,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
-        clang-9 \
-        clang++-9 \
         dirmngr \
-        clang-9 \
-        clang++-9 \
         dpkg-dev \
         git \
         gnupg \
@@ -77,9 +75,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
-ARG CONAN_VERSION=1.43.2
-ARG PYTHON_VERSION=3.6.15
-ARG PYTHON_VIRTUALENV_VERSION=15.1.0
+ARG CONAN_VERSION=1.44.0
+ARG PYTHON_VERSION=3.9.9
+ARG PYTHON_VIRTUALENV_VERSION=20.13.0
 ARG PIPTOOL_VERSION=21.3.1
 
 ENV PYENV_ROOT=/opt/python
@@ -87,7 +85,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
 ENV PATH=/opt/python/bin:$PATH
 # Python 3.6.x series has problems with alignment with modern GCC
 # As we don not want patch Python versions we use Clang as compiler
-RUN CC=clang-9 CXX=clang++9 pyenv install "${PYTHON_VERSION}"
+RUN pyenv install "${PYTHON_VERSION}"
 RUN pyenv global "${PYTHON_VERSION}"
 ENV PATH=/opt/python/shims:$PATH
 RUN pip install -U \
@@ -192,7 +190,7 @@ COPY docker/android.sh /etc/profile.d
 # SCANCODE - Build ScanCode as a separate component
 FROM pythonbuild AS scancodebuild
 
-ARG SCANCODE_VERSION="3.2.1rc2"
+ARG SCANCODE_VERSION="30.1.0"
 ENV SCANCODE_URL "https://github.com/nexB/scancode-toolkit/archive/refs/tags/"
 ENV PATH=/opt/python/shims:$PATH
 
@@ -218,9 +216,9 @@ WORKDIR /usr/local/src/ort
 # Prepare Gradle
 RUN --mount=type=cache,target=/tmp/.gradle/ \
     . /opt/nodejs/nvm.sh \
+    && GRADLE_USER_HOME=/tmp/.gradle/ \
     && scripts/import_proxy_certs.sh \
     && scripts/set_gradle_proxy.sh \
-    && GRADLE_USER_HOME=/tmp/.gradle/ \
     && sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties \
     && sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties \
     && ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
@@ -235,7 +233,12 @@ RUN mkdir -p /opt/ort \
 
 #------------------------------------------------------------------------
 # Main container
-FROM eclipse-temurin:11-jre
+FROM eclipse-temurin:17-jre-focal
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+ENV HOME=/workspace
 
 # Run with non privileged user
 RUN groupadd --gid 1000 ort \
@@ -284,11 +287,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         curl \
         gnupg \
         libarchive-tools \
+        locales \
         netbase \
         openssh-client \
         openssl \
         unzip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen
 
 # External repositories for SBT
 ARG SBT_VERSION=1.3.8
