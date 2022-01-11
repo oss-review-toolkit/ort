@@ -20,6 +20,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
@@ -92,6 +93,15 @@ data class AdvisorRecord(
             results.any { it.summary.issues.isNotEmpty() }
         }
     }
+
+    /**
+     * Return a map of all [Package]s and the associated [Vulnerabilities][Vulnerability].
+     */
+    @JsonIgnore
+    fun getVulnerabilities(): Map<Identifier, List<Vulnerability>> =
+        advisorResults.mapValues { (_, results) ->
+            results.flatMap { it.vulnerabilities }.mergeVulnerabilities()
+        }
 
     /**
      * Return a list with all [Vulnerability] objects that have been found for the given [package][pkgId]. Results
