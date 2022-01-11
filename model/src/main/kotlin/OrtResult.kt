@@ -429,6 +429,27 @@ data class OrtResult(
     }
 
     @JsonIgnore
+    fun getVulnerabilities(
+        omitResolved: Boolean = false,
+        omitExcluded: Boolean = false
+    ): Map<Identifier, List<Vulnerability>> {
+        val allVulnerabilities = advisor?.results?.getVulnerabilities().orEmpty()
+            .filterKeys { !omitExcluded || !isExcluded(it) }
+
+        return if (omitResolved) {
+            val resolutions = getResolutions().vulnerabilities
+
+            allVulnerabilities.mapValues { (_, vulnerabilities) ->
+                vulnerabilities.filter { vulnerability ->
+                    resolutions.none { it.matches(vulnerability) }
+                }
+            }.filterValues { it.isNotEmpty() }
+        } else {
+            allVulnerabilities
+        }
+    }
+
+    @JsonIgnore
     fun getExcludes(): Excludes = repository.config.excludes
 
     /**
