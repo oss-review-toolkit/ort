@@ -21,6 +21,7 @@
 package org.ossreviewtoolkit.utils.scripting
 
 import java.security.MessageDigest
+import java.time.Instant
 
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptAcceptedLocation
@@ -53,7 +54,8 @@ import org.ossreviewtoolkit.utils.core.ortDataDirectory
 open class RulesScriptTemplate(
     val ortResult: OrtResult = OrtResult.EMPTY,
     val licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
-    val licenseClassifications: LicenseClassifications = LicenseClassifications()
+    val licenseClassifications: LicenseClassifications = LicenseClassifications(),
+    val time: Instant
 ) {
     val ruleViolations = mutableListOf<RuleViolation>()
 }
