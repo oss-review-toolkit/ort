@@ -850,8 +850,8 @@
       "scope_excludes" : 1,
       "license_choices" : 2,
       "license_finding_curations" : 0,
-      "rule_violation_resolutions" : 1,
-      "issue_resolutions" : 0
+      "issue_resolutions" : 0,
+      "rule_violation_resolutions" : 1
     },
     "open_issues" : {
       "errors" : 1,
