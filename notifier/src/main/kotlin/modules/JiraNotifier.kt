@@ -77,13 +77,13 @@ class JiraNotifier(
                         "valid issue type, specified in your project '$projectKey'"))
             }
 
-            val issueInputBuilder = IssueInputBuilder()
+            val issueInput = IssueInputBuilder()
                 .setProjectKey(projectKey)
                 .setSummary(summary)
                 .setDescription(description)
                 .setIssueType(issueTypes[issueType])
-            assignee?.let { issueInputBuilder.setAssigneeName(assignee) }
-            val issueInput = issueInputBuilder.build()
+                .apply { if (assignee != null) setAssigneeName(assignee) }
+                .build()
 
             if (avoidDuplicates) {
                 val searchResult = restClient.searchClient.searchJql(
