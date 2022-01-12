@@ -246,8 +246,6 @@ class SpdxCompoundExpression(
         val leftDnf = left.disjunctiveNormalForm()
         val rightDnf = right.disjunctiveNormalForm()
 
-        if (leftDnf == rightDnf) return leftDnf
-
         return when (operator) {
             SpdxOperator.OR -> SpdxCompoundExpression(leftDnf, SpdxOperator.OR, rightDnf)
 
