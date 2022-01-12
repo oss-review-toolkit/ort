@@ -17,9 +17,14 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     // Apply core plugins.
     `java-library`
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
@@ -32,6 +37,17 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
+    implementation(libs.kotlinxSerialization)
 
     testImplementation(libs.mockk)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+    }
 }
