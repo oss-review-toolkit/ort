@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 
 /**
  * A class containing statistics for an [OrtResult].
@@ -184,5 +185,10 @@ data class RepositoryConfigurationStatistics(
     /**
      * The number of [RuleViolationResolution]s.
      */
-    val ruleViolationResolutions: Int
+    val ruleViolationResolutions: Int,
+
+    /**
+     * The number of [VulnerabilityResolution]s.
+     */
+    val vulnerabilityResolutions: Int
 )
