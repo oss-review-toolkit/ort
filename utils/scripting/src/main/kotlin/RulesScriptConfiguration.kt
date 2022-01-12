@@ -41,7 +41,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
-import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
@@ -52,9 +51,9 @@ import org.ossreviewtoolkit.utils.core.ortDataDirectory
     compilationConfiguration = RulesCompilationConfiguration::class
 )
 open class RulesScriptTemplate(
-    val ortResult: OrtResult = OrtResult.EMPTY,
-    val licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
-    val licenseClassifications: LicenseClassifications = LicenseClassifications(),
+    val ortResult: OrtResult,
+    val licenseInfoResolver: LicenseInfoResolver,
+    val licenseClassifications: LicenseClassifications,
     val time: Instant
 ) {
     val ruleViolations = mutableListOf<RuleViolation>()
