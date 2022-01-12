@@ -28,7 +28,16 @@ ARG CRT_FILES=""
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="30.1.0"
 
-FROM eclipse-temurin:17-jdk-focal AS build
+FROM adoptopenjdk/openjdk11:alpine-slim AS build
+
+# Apk install commands.
+RUN apk add --no-cache \
+        # Required for Node.js to build the reporter-web-app.
+        libstdc++ \
+        # Required to allow to download via a proxy with a self-signed certificate.
+        ca-certificates \
+        coreutils \
+        openssl
 
 COPY . /usr/local/src/ort
 
@@ -44,7 +53,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM eclipse-temurin:17-jdk-focal
+FROM adoptopenjdk:11-jre-hotspot-focal
 
 ENV \
     # Package manager versions.
