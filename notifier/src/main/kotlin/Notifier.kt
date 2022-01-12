@@ -21,42 +21,52 @@ package org.ossreviewtoolkit.notifier
 
 import java.time.Instant
 
+import kotlin.script.experimental.api.KotlinType
+import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.defaultImports
+import kotlin.script.experimental.api.providedProperties
+import kotlin.script.experimental.api.scriptsInstancesSharing
+import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
+
 import org.ossreviewtoolkit.model.NotifierRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
 import org.ossreviewtoolkit.notifier.modules.JiraNotifier
 import org.ossreviewtoolkit.notifier.modules.MailNotifier
-import org.ossreviewtoolkit.utils.common.ScriptRunner
+import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Notifier(
     ortResult: OrtResult = OrtResult.EMPTY,
     config: NotifierConfiguration = NotifierConfiguration()
 ) : ScriptRunner() {
-    override val preface = """
-            import org.ossreviewtoolkit.model.*
-            import org.ossreviewtoolkit.model.config.*
-            import org.ossreviewtoolkit.model.licenses.*
-            import org.ossreviewtoolkit.model.utils.*
-            import org.ossreviewtoolkit.notifier.modules.*
-            import org.ossreviewtoolkit.utils.common.*
-            import org.ossreviewtoolkit.utils.core.*
-
-            import java.util.*
-
-        """.trimIndent()
-
-    init {
-        engine.put("ortResult", ortResult)
-
-        config.mail?.let { engine.put("mailClient", MailNotifier(it)) }
-        config.jira?.let { engine.put("jiraClient", JiraNotifier(it)) }
+    private val customProperties = buildMap {
+        config.mail?.let { put("mailClient", MailNotifier(it)) }
+        config.jira?.let { put("jiraClient", JiraNotifier(it)) }
     }
 
-    override fun run(script: String): NotifierRun {
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<NotificationsScriptTemplate> {
+        defaultImports(
+            "org.ossreviewtoolkit.model.*",
+            "org.ossreviewtoolkit.model.config.*",
+            "org.ossreviewtoolkit.model.licenses.*",
+            "org.ossreviewtoolkit.model.utils.*",
+            "org.ossreviewtoolkit.notifier.modules.*"
+        )
+
+        providedProperties(customProperties.mapValues { (_, v) -> KotlinType(v::class) })
+    }
+
+    override val evalConfig = ScriptEvaluationConfiguration {
+        constructorArgs(ortResult)
+        scriptsInstancesSharing(true)
+
+        providedProperties(customProperties)
+    }
+
+    fun run(script: String): NotifierRun {
         val startTime = Instant.now()
-
-        super.run(script)
-
+        runScript(script)
         val endTime = Instant.now()
 
         return NotifierRun(startTime, endTime)
