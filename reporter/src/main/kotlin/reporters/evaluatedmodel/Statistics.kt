@@ -177,12 +177,12 @@ data class RepositoryConfigurationStatistics(
     val licenseFindingCurations: Int,
 
     /**
-     * The number of [RuleViolationResolution]s.
-     */
-    val ruleViolationResolutions: Int,
-
-    /**
      * The number of [IssueResolution]s.
      */
-    val issueResolutions: Int
+    val issueResolutions: Int,
+
+    /**
+     * The number of [RuleViolationResolution]s.
+     */
+    val ruleViolationResolutions: Int
 )

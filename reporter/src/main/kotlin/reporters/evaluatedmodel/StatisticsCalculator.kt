@@ -141,8 +141,8 @@ internal class StatisticsCalculator {
                 it.packageLicenseChoices.size + it.repositoryLicenseChoices.size
             },
             licenseFindingCurations = config.curations.licenseFindings.size,
-            ruleViolationResolutions = config.resolutions.ruleViolations.size,
-            issueResolutions = config.resolutions.issues.size
+            issueResolutions = config.resolutions.issues.size,
+            ruleViolationResolutions = config.resolutions.ruleViolations.size
         )
     }
 }
