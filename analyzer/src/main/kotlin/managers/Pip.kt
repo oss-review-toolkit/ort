@@ -442,8 +442,9 @@ class Pip(
         // Example license classifier:
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         val classifiers = classifier.split(" :: ").map { it.trim() }
-        val license = classifiers.takeIf { it.first() == "License" }?.last()
-        return license?.takeUnless { it in listOf("License", "OSI Approved") }
+        val licenseClassifiers = listOf("License", "OSI Approved")
+        val license = classifiers.takeIf { it.first() in licenseClassifiers }?.last()
+        return license?.takeUnless { it in licenseClassifiers }
     }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
