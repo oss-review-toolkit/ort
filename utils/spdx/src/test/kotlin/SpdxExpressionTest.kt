@@ -349,11 +349,6 @@ class SpdxExpressionTest : WordSpec() {
         }
 
         "disjunctiveNormalForm()" should {
-            "simplify compound expressions with equal operands" {
-                "a AND a".toSpdx().disjunctiveNormalForm() should beString("a")
-                "a OR a".toSpdx().disjunctiveNormalForm() should beString("a")
-            }
-
             "not change an expression already in DNF" {
                 "a AND b OR c AND d".toSpdx().disjunctiveNormalForm() should beString("a AND b OR c AND d")
             }
@@ -412,7 +407,8 @@ class SpdxExpressionTest : WordSpec() {
             "not contain duplicate valid choice for a complex expression" {
                 "(a OR b) AND (a OR b)".toSpdx().validChoices() should containExactlyInAnyOrder(
                     "a".toSpdx(),
-                    "b".toSpdx()
+                    "b".toSpdx(),
+                    "a AND b".toSpdx()
                 )
             }
 
