@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.core.ortDataDirectory
 @KotlinScript(
     displayName = "ORT Evaluator Rules Script",
     fileExtension = "rules.kts",
-    compilationConfiguration = RulesCompilationConfiguration::class
+    compilationConfiguration = OrtScriptCompilationConfiguration::class
 )
 open class RulesScriptTemplate(
     val ortResult: OrtResult,
@@ -59,7 +59,7 @@ open class RulesScriptTemplate(
     val ruleViolations = mutableListOf<RuleViolation>()
 }
 
-class RulesCompilationConfiguration : ScriptCompilationConfiguration({
+class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     ide {
         acceptedLocations(ScriptAcceptedLocation.Everywhere)
     }
