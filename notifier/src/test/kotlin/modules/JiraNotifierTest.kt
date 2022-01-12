@@ -283,6 +283,56 @@ class JiraNotifierTest : WordSpec({
                 }
             }
         }
+
+        "change the state of an issue" {
+            val issueId = "2457255"
+            val issueKey = "TEST-505"
+            val state = "Start Progress"
+
+            val notifier = JiraNotifier(
+                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
+            )
+            val resultFile = File("$TEST_FILES_ROOT/__files/jira/response_get_issue_without_comments.json").readText()
+            val replaced = resultFile.replace("\$port", server.port().toString())
+
+            server.stubFor(
+                get(urlPathEqualTo("/rest/api/latest/issue/$issueKey"))
+                    .withQueryParam("expand", equalTo("schema,names,transitions"))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBody(replaced)
+                    )
+            )
+            server.stubFor(
+                get(urlPathEqualTo("/rest/api/latest/issue/$issueId/transitions"))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_transitions.json")
+                    )
+            )
+            server.stubFor(
+                get(urlPathEqualTo("/rest/api/latest/serverInfo"))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBodyFile("$TEST_FILES_DIRECTORY/response_serverInfo.json")
+                    )
+            )
+            server.stubFor(
+                post(urlPathEqualTo("/rest/api/latest/issue/$issueId/transitions"))
+                    .willReturn(
+                        aResponse().withStatus(204)
+                    )
+            )
+
+            notifier.changeState(issueKey, state)
+
+            server.verify(
+                exactly(1),
+                postRequestedFor(urlEqualTo("/rest/api/latest/issue/$issueId/transitions?expand=transitions.fields"))
+                    .withRequestBody(matching(".*"))
+                    .withHeader("Content-Type", matching("application/json.*"))
+            )
+        }
     }
 })
 

@@ -1,0 +1,43 @@
+{
+  "expand": "transitions",
+  "transitions": [
+    {
+      "id": "1",
+      "name": "Start Progress",
+      "to": {
+        "self": "https://jira.oss-review-toolkit.org/jira/rest/api/2/status/1",
+        "description": "This issue is being actively worked on at the moment by the assignee.",
+        "iconUrl": "https://jira.oss-review-toolkit.org/jira/images/icons/statuses/inprogress.png",
+        "name": "In Progress",
+        "id": "1",
+        "statusCategory": {
+          "self": "https://jira.oss-review-toolkit.org/jira/rest/api/2/statuscategory/4",
+          "id": 4,
+          "key": "indeterminate",
+          "colorName": "yellow",
+          "name": "In Progress"
+        }
+      },
+      "fields": {}
+    },
+    {
+      "id": "2",
+      "name": "Close Issue",
+      "to": {
+        "self": "https://jira.oss-review-toolkit.org/jira/rest/api/2/status/2",
+        "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+        "iconUrl": "https://jira.oss-review-toolkit.org/jira/images/icons/statuses/closed.png",
+        "name": "Closed",
+        "id": "2",
+        "statusCategory": {
+          "self": "https://jira.oss-review-toolkit.org/jira/rest/api/2/statuscategory/3",
+          "id": 3,
+          "key": "done",
+          "colorName": "green",
+          "name": "Done"
+        }
+      },
+      "fields": {}
+    }
+  ]
+}

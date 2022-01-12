@@ -24,6 +24,7 @@ import com.atlassian.jira.rest.client.api.RestClientException
 import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
+import com.atlassian.jira.rest.client.api.domain.input.TransitionInput
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory
 
 import java.net.URI
@@ -45,6 +46,22 @@ class JiraNotifier(
         val issue = restClient.issueClient.getIssue(issueKey).claim()
 
         restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
+    }
+
+    /**
+     * Change the [state] of the given issue specified by the [issueKey].
+     */
+    fun changeState(issueKey: String, state: String): Boolean {
+        val issue = restClient.issueClient.getIssue(issueKey).claim()
+        val possibleTransitions = restClient.issueClient.getTransitions(issue).claim()
+
+        return runCatching {
+            val transition = possibleTransitions.single { it.name == state }
+            restClient.issueClient.transition(issue, TransitionInput(transition.id)).claim()
+        }.onFailure {
+            log.error { "The transition to state '$state' for the issue '$issueKey' is not possible: " +
+                    it.collectMessagesAsString() }
+        }.isSuccess
     }
 
     /**
