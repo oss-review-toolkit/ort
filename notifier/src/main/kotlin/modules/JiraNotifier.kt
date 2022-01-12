@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.notifier.modules
 
 import com.atlassian.jira.rest.client.api.JiraRestClient
-import com.atlassian.jira.rest.client.api.RestClientException
 import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
@@ -105,15 +104,11 @@ class JiraNotifier(
                         return Result.success(issue)
                     }
 
-                    return try {
+                    return runCatching {
                         restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
-
-                        Result.success(issue)
-                    } catch (e: RestClientException) {
+                    }.map { issue }.onFailure {
                         log.error { "The comment for the issue '${issue.key} could not be added: " +
-                                e.collectMessagesAsString() }
-
-                        Result.failure(e)
+                                it.collectMessagesAsString() }
                     }
                 } else if (searchResult.total > 1) {
                     log.debug { "There are more than 1 duplicate issues of '$summary', which is not supported yet." }
@@ -123,17 +118,13 @@ class JiraNotifier(
                 }
             }
 
-            return try {
-                val resultIssue = restClient.issueClient.createIssue(issueInput).claim()
-
-                log.info { "Issue ${resultIssue.key} created." }
-
-                Result.success(resultIssue)
-            } catch (e: RestClientException) {
+            return runCatching {
+                restClient.issueClient.createIssue(issueInput).claim().also {
+                    log.info { "Issue ${it.key} created." }
+                }
+            }.onFailure {
                 log.error { "The issue for the project '$projectKey' could not be created: " +
-                        e.collectMessagesAsString() }
-
-                Result.failure(e)
+                        it.collectMessagesAsString() }
             }
         }
     }
