@@ -21,9 +21,7 @@
 package org.ossreviewtoolkit.utils.scripting
 
 import java.security.MessageDigest
-import java.time.Instant
 
-import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptAcceptedLocation
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.SourceCode
@@ -37,27 +35,9 @@ import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
 import kotlin.script.experimental.jvm.jvm
 import kotlin.script.experimental.jvmhost.CompiledScriptJarsCache
 
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.licenses.LicenseClassifications
-import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
-
-@KotlinScript(
-    displayName = "ORT Evaluator Rules Script",
-    fileExtension = "rules.kts",
-    compilationConfiguration = OrtScriptCompilationConfiguration::class
-)
-open class RulesScriptTemplate(
-    val ortResult: OrtResult,
-    val licenseInfoResolver: LicenseInfoResolver,
-    val licenseClassifications: LicenseClassifications,
-    val time: Instant
-) {
-    val ruleViolations = mutableListOf<RuleViolation>()
-}
 
 class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     ide {

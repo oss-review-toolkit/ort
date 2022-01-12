@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.scripting.RulesScriptTemplate
 import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Evaluator(
