@@ -142,7 +142,8 @@ internal class StatisticsCalculator {
             },
             licenseFindingCurations = config.curations.licenseFindings.size,
             issueResolutions = config.resolutions.issues.size,
-            ruleViolationResolutions = config.resolutions.ruleViolations.size
+            ruleViolationResolutions = config.resolutions.ruleViolations.size,
+            vulnerabilityResolutions = config.resolutions.vulnerabilities.size
         )
     }
 }

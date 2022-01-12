@@ -775,6 +775,7 @@ statistics:
     license_finding_curations: 0
     issue_resolutions: 0
     rule_violation_resolutions: 1
+    vulnerability_resolutions: 0
   open_issues:
     errors: 1
     warnings: 0
