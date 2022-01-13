@@ -193,7 +193,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val serializedResult = yamlMapper.writeValueAsString(result)
                 val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
 
-                deserializedResult.withScopesResolved() shouldBe result.withScopesResolved()
+                deserializedResult.withResolvedScopes() shouldBe result.withResolvedScopes()
             }
         }
 
@@ -220,9 +220,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addResult(analyzerResult1)
                     .addResult(analyzerResult2)
                     .build()
-                    .withScopesResolved()
+                    .withResolvedScopes()
 
-                analyzerResult.withScopesResolved() should beTheSameInstanceAs(analyzerResult)
+                analyzerResult.withResolvedScopes() should beTheSameInstanceAs(analyzerResult)
             }
 
             "resolve the dependency information in affected projects" {
@@ -236,7 +236,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addDependencyGraph(p2.id.type, graph2)
                     .build()
 
-                val resolvedResult = analyzerResult.withScopesResolved()
+                val resolvedResult = analyzerResult.withResolvedScopes()
 
                 resolvedResult.dependencyGraphs.isEmpty() shouldBe true
 
