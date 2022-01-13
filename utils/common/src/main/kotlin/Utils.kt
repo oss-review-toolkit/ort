@@ -32,7 +32,8 @@ val VCS_DIRECTORIES = listOf(
     ".hg",
     ".repo",
     ".svn",
-    "CVS"
+    "CVS",
+    "CVSROOT"
 )
 
 /**
