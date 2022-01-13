@@ -720,6 +720,7 @@ private fun createScan(url: String, revision: String, scanCode: String, scanId: 
     every { scan.gitBranch } returns revision
     every { scan.code } returns scanCode
     every { scan.id } returns scanId
+    every { scan.isArchived } returns null
     return scan
 }
 
