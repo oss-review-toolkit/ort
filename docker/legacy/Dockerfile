@@ -28,7 +28,7 @@ ARG CRT_FILES=""
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="30.1.0"
 
-FROM eclipse-temurin:17-jdk-focal AS build
+FROM eclipse-temurin:11-jdk-focal AS build
 
 COPY . /usr/local/src/ort
 
@@ -44,7 +44,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM eclipse-temurin:17-jdk-focal
+FROM eclipse-temurin:11-jdk-focal
 
 ENV \
     # Package manager versions.

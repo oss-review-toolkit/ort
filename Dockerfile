@@ -22,7 +22,7 @@
 
 #------------------------------------------------------------------------
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
-FROM eclipse-temurin:17-jdk-focal AS build
+FROM eclipse-temurin:11-jdk-focal AS build
 
 ENV LANG=C.UTF-8
 
@@ -44,6 +44,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
+        clang-9 \
+        clang++-9 \
         dirmngr \
         dpkg-dev \
         git \
@@ -85,7 +87,7 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
 ENV PATH=/opt/python/bin:$PATH
 # Python 3.6.x series has problems with alignment with modern GCC
 # As we don not want patch Python versions we use Clang as compiler
-RUN pyenv install "${PYTHON_VERSION}"
+RUN CC=clang-9 CXX=clang++9 pyenv install "${PYTHON_VERSION}"
 RUN pyenv global "${PYTHON_VERSION}"
 ENV PATH=/opt/python/shims:$PATH
 RUN pip install -U \
@@ -233,7 +235,7 @@ RUN mkdir -p /opt/ort \
 
 #------------------------------------------------------------------------
 # Main container
-FROM eclipse-temurin:17-jre-focal
+FROM eclipse-temurin:11-jdk-focal
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
