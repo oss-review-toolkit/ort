@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,6 +64,11 @@ class SetDependencyRepresentationCommand : CliktCommand(
         GRAPH {
             override fun convert(result: AnalyzerResult): AnalyzerResult =
                 DependencyGraphConverter.convert(result)
+        },
+
+        /** The classic dependency tree format. */
+        TREE {
+            override fun convert(result: AnalyzerResult): AnalyzerResult = result.withResolvedScopes()
         };
 
         /**
