@@ -121,7 +121,7 @@ abstract class PathScanner(
     ): Map<Package, List<ScanResult>> {
         val scannerCriteria = getScannerCriteria()
 
-        log.info { "Searching scan results for ${packages.size} packages." }
+        log.info { "Searching scan results for ${packages.size} package(s)." }
 
         val remainingPackages = packages.filterTo(mutableListOf()) { pkg ->
             !pkg.isMetaDataOnly.also {
@@ -131,7 +131,7 @@ abstract class PathScanner(
 
         val resultsFromStorage = readResultsFromStorage(packages, scannerCriteria)
 
-        log.info { "Found stored scan results for ${resultsFromStorage.size} packages and $scannerCriteria." }
+        log.info { "Found ${resultsFromStorage.size} stored scan result(s) matching $scannerCriteria." }
 
         if (scannerConfig.createMissingArchives) {
             createMissingArchives(resultsFromStorage)
@@ -139,7 +139,7 @@ abstract class PathScanner(
 
         remainingPackages.removeAll { it in resultsFromStorage.keys }
 
-        log.info { "Scanning ${remainingPackages.size} packages for which no stored scan results were found." }
+        log.info { "Scanning ${remainingPackages.size} package(s) for which no stored scan results were found." }
 
         val downloadDirectory = createOrtTempDir()
 
