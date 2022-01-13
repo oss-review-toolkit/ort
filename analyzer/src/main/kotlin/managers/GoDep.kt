@@ -24,7 +24,6 @@ import com.moandjiezana.toml.Toml
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.nio.file.Paths
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -182,9 +181,14 @@ class GoDep(
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-        vcs.url.toUri { uri ->
-            Paths.get(gopath.path, "src", uri.host, uri.path)
-        }.getOrDefault(Paths.get(gopath.path, "src", projectDir.name)).toFile()
+        gopath.resolve("src").let { src ->
+            val uri = vcs.url.toUri().getOrNull()
+            if (uri?.host != null) {
+                src.resolve("${uri.host}/${uri.path}")
+            } else {
+                src.resolve(projectDir.name)
+            }
+        }
 
     private fun resolveProjectRoot(definitionFile: File) =
         when (definitionFile.name) {
@@ -270,7 +274,7 @@ class GoDep(
             if (!errorMessagesToIgnore.any { it in msg }) throw IOException(msg)
         }
 
-        val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()
+        val repoRoot = gopath.resolve("src/$importPath")
 
         // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
         return processProjectVcs(repoRoot).copy(revision = revision)
