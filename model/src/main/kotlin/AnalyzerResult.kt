@@ -107,7 +107,7 @@ data class AnalyzerResult(
      * instances that store their dependencies in the classic [Scope]-based format. Otherwise, this instance is
      * returned without changes.
      */
-    fun withScopesResolved(): AnalyzerResult =
+    fun withResolvedScopes(): AnalyzerResult =
         if (dependencyGraphs.isNotEmpty()) {
             copy(
                 projects = projects.map { it.withResolvedScopes(dependencyGraphs[it.id.type]) }.toSortedSet(),

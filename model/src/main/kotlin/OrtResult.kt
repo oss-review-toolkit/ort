@@ -477,7 +477,7 @@ data class OrtResult(
     fun withResolvedScopes(): OrtResult =
         copy(
             analyzer = analyzer?.copy(
-                result = analyzer.result.withScopesResolved()
+                result = analyzer.result.withResolvedScopes()
             )
         )
 

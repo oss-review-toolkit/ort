@@ -79,7 +79,7 @@ class DependencyGraphConverterTest : WordSpec({
                 it.scopeNames shouldNot beNull()
             }
 
-            convertedResult.withScopesResolved() shouldBe result
+            convertedResult.withResolvedScopes() shouldBe result
             convertedResult.packages should beTheSameInstanceAs(result.packages)
         }
 

@@ -528,7 +528,7 @@ class OpossumReporter : Reporter {
             opossumInput.frequentLicenses += OpossumFrequentLicense(it.id, it.fullName, licenseText)
         }
 
-        val analyzerResult = ortResult.analyzer?.result?.withScopesResolved() ?: return opossumInput
+        val analyzerResult = ortResult.analyzer?.result?.withResolvedScopes() ?: return opossumInput
         val analyzerResultProjects = analyzerResult.projects
         val analyzerResultPackages = analyzerResult.packages
         analyzerResultProjects.forEachIndexed { index, project ->
