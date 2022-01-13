@@ -253,18 +253,18 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         if (projectScanner != packageScanner) {
             if (projectScanner != null) {
-                println("Using project scanner '${projectScanner.scannerName}'.")
+                println("Using project scanner '${projectScanner.scannerName}' version ${projectScanner.version}.")
             } else {
                 println("Projects will not be scanned.")
             }
 
             if (packageScanner != null) {
-                println("Using package scanner '${packageScanner.scannerName}'.")
+                println("Using package scanner '${packageScanner.scannerName}' version ${packageScanner.version}.")
             } else {
                 println("Packages will not be scanned.")
             }
         } else {
-            println("Using scanner '${defaultScanner.scannerName}'.")
+            println("Using scanner '${defaultScanner.scannerName}' version ${defaultScanner.version}.")
         }
 
         // Perform the scan.
