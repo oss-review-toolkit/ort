@@ -402,7 +402,7 @@ class FossId internal constructor(
         // The scans in the server contain the url with the credentials so we have to remove it for the
         // comparison. If we don't, the scans won't be matched if the password changes!
         val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
-        !isArchived && urlWithoutCredentials == url && (revision == null || (it.gitBranch == revision))
+        !isArchived && urlWithoutCredentials == url && (revision == null || it.gitBranch == revision)
     }.sortedByDescending { scan -> scan.id }
 
     private suspend fun checkAndCreateScan(
