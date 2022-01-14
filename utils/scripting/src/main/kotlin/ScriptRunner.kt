@@ -63,7 +63,7 @@ abstract class ScriptRunner {
     /**
      * Run the given [script], returning a [ResultValue].
      */
-    open fun run(script: String): Any {
+    fun runScript(script: String): ResultValue {
         val (result, duration) = measureTimedValue {
             scriptingHost.eval(script.toScriptSource(), compConfig, evalConfig)
         }

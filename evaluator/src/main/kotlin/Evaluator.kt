@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.evaluator
 
 import java.time.Instant
 
-import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
 import kotlin.script.experimental.api.constructorArgs
 import kotlin.script.experimental.api.defaultImports
@@ -57,9 +56,9 @@ class Evaluator(
         scriptsInstancesSharing(true)
     }
 
-    override fun run(script: String): EvaluatorRun {
+    fun run(script: String): EvaluatorRun {
         val startTime = Instant.now()
-        val scriptInstance = (super.run(script) as ResultValue).scriptInstance as RulesScriptTemplate
+        val scriptInstance = runScript(script).scriptInstance as RulesScriptTemplate
         val endTime = Instant.now()
 
         return EvaluatorRun(startTime, endTime, scriptInstance.ruleViolations)
