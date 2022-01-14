@@ -28,6 +28,7 @@ import java.nio.file.Paths
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -39,6 +40,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -275,7 +277,14 @@ class GoDep(
 
         val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()
 
+        // The "processProjectVcs()" function should always be able to deduce VCS information from the working tree
+        // created by "go get". However, if that fails for whatever reason, fall back to guessing VCS information from
+        // the "importPath" (which usually resembles a URL).
+        val fallbackVcsInfo = VcsHost.toVcsInfo("https://$importPath").takeIf {
+            it.type != VcsType.UNKNOWN
+        } ?: VcsInfo.EMPTY
+
         // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
-        return processProjectVcs(repoRoot).copy(revision = revision)
+        return processProjectVcs(repoRoot, fallbackVcsInfo).copy(revision = revision)
     }
 }
