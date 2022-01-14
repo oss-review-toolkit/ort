@@ -45,10 +45,6 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     }
 
     defaultImports(
-        "org.ossreviewtoolkit.model.*",
-        "org.ossreviewtoolkit.model.config.*",
-        "org.ossreviewtoolkit.model.licenses.*",
-        "org.ossreviewtoolkit.model.utils.*",
         "org.ossreviewtoolkit.utils.common.*",
         "org.ossreviewtoolkit.utils.core.*",
         "java.util.*"

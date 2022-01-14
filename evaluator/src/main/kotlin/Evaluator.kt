@@ -44,6 +44,10 @@ class Evaluator(
     override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate> {
         defaultImports(
             "org.ossreviewtoolkit.evaluator.*",
+            "org.ossreviewtoolkit.model.*",
+            "org.ossreviewtoolkit.model.config.*",
+            "org.ossreviewtoolkit.model.licenses.*",
+            "org.ossreviewtoolkit.model.utils.*",
             "org.ossreviewtoolkit.utils.spdx.*"
         )
     }
