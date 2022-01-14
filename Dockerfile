@@ -53,7 +53,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM adoptopenjdk:11-jre-hotspot-focal
+FROM adoptopenjdk:11-jdk-hotspot-focal
 
 ENV \
     # Package manager versions.
