@@ -44,7 +44,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM adoptopenjdk:11-jdk-hotspot-focal
+FROM adoptopenjdk:11-jdk-hotspot-focal AS run
 
 ENV \
     # Package manager versions.
@@ -112,7 +112,7 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
     && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /usr/local/src/ort/scripts/*.sh /opt/ort/bin/
+COPY scripts/*.sh /opt/ort/bin/
 
 ARG CRT_FILES
 COPY "$CRT_FILES" /tmp/certificates/
@@ -164,6 +164,8 @@ RUN curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSI
         PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --reindex-licenses && \
         chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
+
+FROM run
 
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
 
