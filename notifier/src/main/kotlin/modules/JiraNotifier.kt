@@ -58,8 +58,10 @@ class JiraNotifier(
             val transition = possibleTransitions.single { it.name == state }
             restClient.issueClient.transition(issue, TransitionInput(transition.id)).claim()
         }.onFailure {
-            log.error { "The transition to state '$state' for the issue '$issueKey' is not possible: " +
-                    it.collectMessagesAsString() }
+            log.error {
+                "The transition to state '$state' for the issue '$issueKey' is not possible: " +
+                        it.collectMessagesAsString()
+            }
         }.isSuccess
     }
 
@@ -89,8 +91,12 @@ class JiraNotifier(
             avoidDuplicates: Boolean = true
         ): Result<BasicIssue> {
             if (issueType !in issueTypes) {
-                return Result.failure(IllegalArgumentException("The issue type '$issueType' is not valid. Use a " +
-                        "valid issue type, specified in your project '$projectKey'"))
+                return Result.failure(
+                    IllegalArgumentException(
+                        "The issue type '$issueType' is not valid. Use a valid issue type as specified in your " +
+                                "project '$projectKey'."
+                    )
+                )
             }
 
             val issueInput = IssueInputBuilder()
@@ -115,8 +121,9 @@ class JiraNotifier(
                     val comment = "$summary\n$description"
 
                     if (comment in issue.comments.mapNotNull { it.body }) {
-                        log.debug { "The comment for the issue '$summary' already exists," +
-                                " therefore no new one will be added." }
+                        log.debug {
+                            "The comment for the issue '$summary' already exists, therefore no new one will be added."
+                        }
 
                         return Result.success(issue)
                     }
@@ -124,14 +131,19 @@ class JiraNotifier(
                     return runCatching {
                         restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
                     }.map { issue }.onFailure {
-                        log.error { "The comment for the issue '${issue.key} could not be added: " +
-                                it.collectMessagesAsString() }
+                        log.error {
+                            "The comment for the issue '${issue.key} could not be added: " +
+                                    it.collectMessagesAsString()
+                        }
                     }
                 } else if (searchResult.total > 1) {
                     log.debug { "There are more than 1 duplicate issues of '$summary', which is not supported yet." }
 
-                    return Result.failure(IllegalArgumentException("There are more than 1 duplicate issues of " +
-                            "'$summary', which is not supported yet."))
+                    return Result.failure(
+                        IllegalArgumentException(
+                            "There are more than 1 duplicate issues of '$summary', which is not supported yet."
+                        )
+                    )
                 }
             }
 
@@ -140,8 +152,10 @@ class JiraNotifier(
                     log.info { "Issue ${it.key} created." }
                 }
             }.onFailure {
-                log.error { "The issue for the project '$projectKey' could not be created: " +
-                        it.collectMessagesAsString() }
+                log.error {
+                    "The issue for the project '$projectKey' could not be created: " +
+                            it.collectMessagesAsString()
+                }
             }
         }
     }
