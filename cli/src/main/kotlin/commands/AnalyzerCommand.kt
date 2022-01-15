@@ -142,13 +142,23 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
                 "times. For example: --label distribution=external"
     ).associate()
 
-    private val packageManagers by option(
+    private val activatedPackageManagers by option(
         "--package-managers", "-m",
-        help = "The comma-separated package managers to activate, any of ${allPackageManagersByName.keys}."
+        help = "The comma-separated package managers to activate, any of ${allPackageManagersByName.keys}. Note that " +
+                "deactivation overrides activation."
     ).convert { name ->
         allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
     }.split(",").default(PackageManager.ALL.toList())
+
+    private val deactivatedPackageManagers by option(
+        "--not-package-managers", "-n",
+        help = "The comma-separated package managers to deactivate, any of ${allPackageManagersByName.keys}. Note " +
+                "that deactivation overrides activation."
+    ).convert { name ->
+        allPackageManagersByName[name]
+            ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
+    }.split(",").default(emptyList())
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -174,7 +184,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         println("The following configuration files and directories are used:")
         println("\t" + configurationFiles.joinToString("\n\t"))
 
-        val distinctPackageManagers = packageManagers.toSet()
+        val distinctPackageManagers = activatedPackageManagers.toSet() - deactivatedPackageManagers.toSet()
         println("The following package managers are activated:")
         println("\t" + distinctPackageManagers.joinToString())
 
