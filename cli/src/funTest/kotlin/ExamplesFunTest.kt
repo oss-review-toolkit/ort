@@ -157,7 +157,7 @@ class ExamplesFunTest : StringSpec() {
             )
         }
 
-        "notifications.kts can be complied and executed" {
+        "example.notifications.kts can be complied and executed" {
             val greenMail = GreenMail(ServerSetup.SMTP.dynamicPort())
             greenMail.setUser("no-reply@oss-review-toolkit.org", "no-reply@oss-review-toolkit.org", "pwd")
             greenMail.start()
@@ -176,9 +176,9 @@ class ExamplesFunTest : StringSpec() {
                 )
             )
 
-            val notifications = takeExampleFile("notifications.kts").readText()
+            val script = examplesDir.resolve("notifications/src/main/resources/example.notifications.kts").readText()
 
-            notifier.run(notifications)
+            notifier.run(script)
 
             greenMail.waitForIncomingEmail(1000, 1) shouldBe true
             val actualBody = GreenMailUtil.getBody(greenMail.receivedMessages[0])
