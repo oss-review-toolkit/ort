@@ -81,7 +81,7 @@ class PackageManagerTest : WordSpec({
 
             // The test project contains at least one file per package manager, so the result should also contain an
             // entry for each package manager.
-            managedFiles.keys shouldContainExactlyInAnyOrder PackageManager.ALL
+            managedFiles.keys shouldContainExactlyInAnyOrder PackageManager.ALL.filterNot { it is Unmanaged.Factory }
 
             // The keys in expected and actual maps of definition files are different instances of package manager
             // factories. So to compare values use the package manager names as keys instead.

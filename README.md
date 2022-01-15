@@ -369,6 +369,9 @@ supported:
   * [Cargo](https://doc.rust-lang.org/cargo/)
 * Scala
   * [SBT](https://www.scala-sbt.org/)
+* Unmanged
+  * This is a special "package manager" that mananges all files that cannot be associated to any of the other package
+  managers.
 
 <a name="analyzer-for-spdx-documents"></a>
 
