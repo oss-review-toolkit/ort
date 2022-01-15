@@ -45,6 +45,9 @@ class Unmanaged(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
+        // The empty list returned here deliberately causes this special package manager to never be considered in
+        // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of
+        // Analyzer.findManagedFiles().
         override val globsForDefinitionFiles = emptyList<String>()
 
         override fun create(

@@ -81,8 +81,9 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             it.parentFile.absoluteFile == absoluteProjectPath
         }
 
-        if (factoryFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-            Unmanaged.Factory().create(absoluteProjectPath, config, repositoryConfiguration).let {
+        val unmanagedFactory = packageManagers.find { it is Unmanaged.Factory }
+        if (unmanagedFactory != null && (factoryFiles.isEmpty() || !hasDefinitionFileInRootDirectory)) {
+            unmanagedFactory.create(absoluteProjectPath, config, repositoryConfiguration).let {
                 managedFiles[it] = listOf(absoluteProjectPath)
             }
         }
