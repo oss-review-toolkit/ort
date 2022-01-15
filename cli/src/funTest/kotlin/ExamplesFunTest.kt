@@ -120,19 +120,18 @@ class ExamplesFunTest : StringSpec() {
             }
         }
 
-        "how-to-fix-text-provider.kts provides the expected how-to-fix text" {
-            val script = takeExampleFile("how-to-fix-text-provider.kts").readText()
-            val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script, OrtResult.EMPTY)
-            val issue = OrtIssue(
-                message = "ERROR: Timeout after 360 seconds while scanning file 'src/res/data.json'.",
-                source = "ScanCode",
-                severity = Severity.ERROR,
-                timestamp = Instant.now()
+        "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
+            val outputDir = createSpecTempDir()
+
+            takeExampleFile("asciidoctor-pdf-theme.yml")
+
+            val report = PdfTemplateReporter().generateReport(
+                ReporterInput(OrtResult.EMPTY),
+                outputDir,
+                mapOf("pdf.theme.file" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path)
             )
 
-            val howToFixText = howToFixTextProvider.getHowToFixText(issue)
-
-            howToFixText shouldContain "Manually verify that the file does not contain any license information."
+            report shouldHaveSize 1
         }
 
         "example.rules.kts can be compiled and executed" {
@@ -156,20 +155,6 @@ class ExamplesFunTest : StringSpec() {
                 "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE",
                 "DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML"
             )
-        }
-
-        "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
-            val outputDir = createSpecTempDir()
-
-            takeExampleFile("asciidoctor-pdf-theme.yml")
-
-            val report = PdfTemplateReporter().generateReport(
-                ReporterInput(OrtResult.EMPTY),
-                outputDir,
-                mapOf("pdf.theme.file" to examplesDir.resolve("asciidoctor-pdf-theme.yml").path)
-            )
-
-            report shouldHaveSize 1
         }
 
         "notifications.kts can be complied and executed" {
@@ -203,6 +188,21 @@ class ExamplesFunTest : StringSpec() {
             actualBody shouldContain "Number of issues found: ${ortResult.collectIssues().size}"
 
             greenMail.stop()
+        }
+
+        "how-to-fix-text-provider.kts provides the expected how-to-fix text" {
+            val script = takeExampleFile("how-to-fix-text-provider.kts").readText()
+            val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script, OrtResult.EMPTY)
+            val issue = OrtIssue(
+                message = "ERROR: Timeout after 360 seconds while scanning file 'src/res/data.json'.",
+                source = "ScanCode",
+                severity = Severity.ERROR,
+                timestamp = Instant.now()
+            )
+
+            val howToFixText = howToFixTextProvider.getHowToFixText(issue)
+
+            howToFixText shouldContain "Manually verify that the file does not contain any license information."
         }
 
         "All example files should have been tested" {
