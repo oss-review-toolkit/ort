@@ -38,9 +38,11 @@ interface Reporter {
         private val LOADER = ServiceLoader.load(Reporter::class.java)!!
 
         /**
-         * The list of all available reporters in the classpath.
+         * The set of all available [reporters][Reporter] in the classpath, sorted by name.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.reporterName } }
+        val ALL: Set<Reporter> by lazy {
+            LOADER.iterator().asSequence().toSortedSet(compareBy { it.reporterName })
+        }
     }
 
     /**

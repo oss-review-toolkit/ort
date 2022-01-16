@@ -68,9 +68,11 @@ abstract class PackageManager(
         private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
 
         /**
-         * The list of all available package managers in the classpath.
+         * The set of all available [package manager factories][PackageManagerFactory] in the classpath, sorted by name.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.managerName } }
+        val ALL: Set<PackageManagerFactory> by lazy {
+            LOADER.iterator().asSequence().toSortedSet(compareBy { it.managerName })
+        }
 
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(
             // Ignore intermediate build system directories.
@@ -93,8 +95,7 @@ abstract class PackageManager(
          * Recursively search the [directory] for files managed by any of the [packageManagers]. The search is performed
          * depth-first so that root project files are found before any subproject files for a specific manager.
          */
-        fun findManagedFiles(directory: File, packageManagers: List<PackageManagerFactory> = ALL):
-                ManagedProjectFiles {
+        fun findManagedFiles(directory: File, packageManagers: Set<PackageManagerFactory> = ALL): ManagedProjectFiles {
             require(directory.isDirectory) {
                 "The provided path is not a directory: ${directory.absolutePath}"
             }

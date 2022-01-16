@@ -132,7 +132,7 @@ class PackageManagerTest : WordSpec({
         "find only files for active package managers" {
             val managedFiles = PackageManager.findManagedFiles(
                 projectDir,
-                listOf(Gradle.Factory(), Pip.Factory(), Sbt.Factory())
+                setOf(Gradle.Factory(), Pip.Factory(), Sbt.Factory())
             )
 
             managedFiles.size shouldBe 3
@@ -155,7 +155,7 @@ class PackageManagerTest : WordSpec({
         }
 
         "find no files if no package managers are active" {
-            val managedFiles = PackageManager.findManagedFiles(projectDir, emptyList())
+            val managedFiles = PackageManager.findManagedFiles(projectDir, emptySet())
 
             managedFiles.size shouldBe 0
         }
