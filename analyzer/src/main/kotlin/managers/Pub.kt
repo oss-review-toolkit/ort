@@ -250,7 +250,7 @@ class Pub(
                 // first to generate the local.properties file by using `flutter pub get`.
                 val gradleFactory = Gradle.Factory()
                 val gradleDefinitionFiles =
-                    findManagedFiles(analysisRoot, listOf(gradleFactory)).getOrDefault(gradleFactory, emptyList())
+                    findManagedFiles(analysisRoot, setOf(gradleFactory)).getOrDefault(gradleFactory, emptyList())
 
                 if (gradleDefinitionFiles.isNotEmpty()) {
                     log.info { "Found ${gradleDefinitionFiles.size} ${gradleFactory.managerName} project(s) at:" }

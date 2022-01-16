@@ -53,7 +53,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     @JvmOverloads
     fun findManagedFiles(
         absoluteProjectPath: File,
-        packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
+        packageManagers: Set<PackageManagerFactory> = PackageManager.ALL,
         repositoryConfiguration: RepositoryConfiguration = RepositoryConfiguration()
     ): ManagedFileInfo {
         require(absoluteProjectPath.isAbsolute)

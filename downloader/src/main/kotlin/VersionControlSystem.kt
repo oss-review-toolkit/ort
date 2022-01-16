@@ -41,9 +41,12 @@ abstract class VersionControlSystem {
         private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)!!
 
         /**
-         * The (prioritized) list of all available Version Control Systems in the classpath.
+         * The set of all available [Version Control Systems][VersionControlSystem] in the classpath, sorted by
+         * priority.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedByDescending { it.priority } }
+        val ALL: Set<VersionControlSystem> by lazy {
+            LOADER.iterator().asSequence().toSortedSet(compareByDescending { it.priority })
+        }
 
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.

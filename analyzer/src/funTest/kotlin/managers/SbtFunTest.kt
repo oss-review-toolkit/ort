@@ -50,7 +50,7 @@ class SbtFunTest : StringSpec({
         Git().run(projectDir, "clean", "-fd")
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
-            analyze(findManagedFiles(projectDir, listOf(Sbt.Factory())))
+            analyze(findManagedFiles(projectDir, setOf(Sbt.Factory())))
         }
 
         val expectedResult = readOrtResult(expectedOutputFile)
@@ -72,7 +72,7 @@ class SbtFunTest : StringSpec({
         Git().run(projectDir, "clean", "-fd")
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
-            analyze(findManagedFiles(projectDir, listOf(Sbt.Factory())))
+            analyze(findManagedFiles(projectDir, setOf(Sbt.Factory())))
         }
 
         val expectedResult = yamlMapper.readValue<OrtResult>(

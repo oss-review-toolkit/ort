@@ -198,9 +198,11 @@ abstract class Scanner(
         private val LOADER = ServiceLoader.load(ScannerFactory::class.java)!!
 
         /**
-         * The list of all available scanners in the classpath.
+         * The set of all available [scanner factories][ScannerFactory] in the classpath, sorted by name.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.scannerName } }
+        val ALL: Set<ScannerFactory> by lazy {
+            LOADER.iterator().asSequence().toSortedSet(compareBy { it.scannerName })
+        }
     }
 
     /**

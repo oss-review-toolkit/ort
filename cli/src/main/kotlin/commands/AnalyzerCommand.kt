@@ -148,7 +148,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { name ->
         allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
-    }.split(",").default(PackageManager.ALL)
+    }.split(",").default(PackageManager.ALL.toList())
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -174,7 +174,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         println("The following configuration files and directories are used:")
         println("\t" + configurationFiles.joinToString("\n\t"))
 
-        val distinctPackageManagers = packageManagers.distinct()
+        val distinctPackageManagers = packageManagers.toSet()
         println("The following package managers are activated:")
         println("\t" + distinctPackageManagers.joinToString())
 

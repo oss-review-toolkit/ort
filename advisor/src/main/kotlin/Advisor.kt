@@ -47,9 +47,11 @@ class Advisor(
         private val LOADER = ServiceLoader.load(AdviceProviderFactory::class.java)!!
 
         /**
-         * The list of all available [AdviceProvider]s in the classpath.
+         * The set of all available [advice provider factories][AdviceProviderFactory] in the classpath, sorted by name.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedBy { it.providerName } }
+        val ALL: Set<AdviceProviderFactory> by lazy {
+            LOADER.iterator().asSequence().toSortedSet(compareBy { it.providerName })
+        }
     }
 
     @JvmOverloads
