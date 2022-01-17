@@ -228,16 +228,19 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             println("No project found.")
         } else {
             val filesPerManager = info.managedFiles.mapKeysTo(sortedMapOf()) { it.key.managerName }
+            var count = 0
 
             filesPerManager.forEach { (manager, files) ->
+                count += files.size
                 println("Found ${files.size} $manager project(s) at:")
+
                 files.forEach { file ->
                     val relativePath = file.toRelativeString(inputDir).takeIf { it.isNotEmpty() } ?: "."
                     println("\t$relativePath")
                 }
             }
 
-            println("Found ${filesPerManager.size} project(s) in total.")
+            println("Found $count project(s) from ${filesPerManager.size} package manager(s) in total.")
         }
 
         val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
