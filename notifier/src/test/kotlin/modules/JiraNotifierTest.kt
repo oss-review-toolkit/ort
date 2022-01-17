@@ -44,7 +44,6 @@ import java.io.File
 import java.net.URI
 
 import org.ossreviewtoolkit.model.config.JiraConfiguration
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class JiraNotifierTest : WordSpec({
     val server = WireMockServer(
@@ -98,11 +97,9 @@ class JiraNotifierTest : WordSpec({
             )
 
             resultIssue.shouldBeSuccess {
-                it.shouldNotBeNull {
-                    id shouldBe 2457237
-                    key shouldBe "PROJECT-1"
-                    self shouldBe URI("https://jira.oss-review-toolkit.org/rest/api/2/issue/2457237")
-                }
+                it.id shouldBe 2457237
+                it.key shouldBe "PROJECT-1"
+                it.self shouldBe URI("https://jira.oss-review-toolkit.org/rest/api/2/issue/2457237")
             }
         }
 
@@ -136,9 +133,7 @@ class JiraNotifierTest : WordSpec({
             )
 
             resultIssue.shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldContain "more than 1 duplicate issues"
-                }
+                it.message shouldContain "more than 1 duplicate issues"
             }
         }
 
@@ -278,9 +273,7 @@ class JiraNotifierTest : WordSpec({
             )
 
             result.shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldContain "'$issueType' is not valid"
-                }
+                it.message shouldContain "'$issueType' is not valid"
             }
         }
 

@@ -62,7 +62,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private const val PACKAGE_TYPE = "Maven"
 private const val NAMESPACE = "someNamespace"
@@ -187,27 +186,14 @@ private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = C
  */
 private fun Result<List<ScanResult>>.shouldBeValid(block: (ScanResult.() -> Unit)? = null) {
     shouldBeSuccess {
-        it.shouldNotBeNull {
-            this shouldHaveSize 1
+        it shouldHaveSize 1
 
-            val scanResult = first()
-            scanResult.summary.licenseFindings.find { finding ->
-                finding.location.path == TEST_PATH && "Apache-2.0" in finding.license.licenses()
-            } shouldNot beNull()
+        val scanResult = it.first()
+        scanResult.summary.licenseFindings.find { finding ->
+            finding.location.path == TEST_PATH && "Apache-2.0" in finding.license.licenses()
+        } shouldNot beNull()
 
-            if (block != null) scanResult.block()
-        }
-    }
-}
-
-/**
- * Check that this [Result] does not contain any data.
- */
-private fun Result<List<ScanResult>>.shouldBeEmpty() {
-    shouldBeSuccess {
-        it.shouldNotBeNull {
-            this should beEmpty()
-        }
+        if (block != null) scanResult.block()
     }
 }
 
@@ -318,9 +304,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             val result = storage.read(TEST_IDENTIFIER)
 
             result.shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldContain "HttpException"
-                }
+                it.message shouldContain "HttpException"
             }
         }
 
@@ -330,7 +314,9 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_IDENTIFIER).shouldBeEmpty()
+            storage.read(TEST_IDENTIFIER).shouldBeSuccess {
+                it should beEmpty()
+            }
         }
 
         "return an empty result if no result for the tool file is returned" {
@@ -343,7 +329,9 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeEmpty()
+            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeSuccess {
+                it should beEmpty()
+            }
         }
 
         "use GitHub VCS info if available" {
@@ -396,7 +384,9 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(id).shouldBeEmpty()
+            storage.read(id).shouldBeSuccess {
+                it should beEmpty()
+            }
         }
 
         "return a failure if a harvest tool request returns an unexpected result" {
@@ -413,9 +403,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             val result = storage.read(TEST_IDENTIFIER)
 
             result.shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldContain "JsonParseException"
-                }
+                it.message shouldContain "JsonParseException"
             }
         }
 
@@ -432,7 +420,9 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_IDENTIFIER).shouldBeEmpty()
+            storage.read(TEST_IDENTIFIER).shouldBeSuccess {
+                it should beEmpty()
+            }
         }
 
         "return a failure if the connection to the server fails" {
@@ -445,9 +435,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             val result = storage.read(TEST_IDENTIFIER)
 
             result.shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldContain "Connection refused"
-                }
+                it.message shouldContain "Connection refused"
             }
         }
     }

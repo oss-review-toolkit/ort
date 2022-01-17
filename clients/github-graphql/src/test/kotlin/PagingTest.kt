@@ -24,9 +24,8 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class PagingTest : WordSpec({
     "Paging" should {
@@ -64,9 +63,7 @@ class PagingTest : WordSpec({
             val allResult = Paging.fetchAll(mutableListOf(), queryFunc, aggregateFunc, queryPageSize)
 
             allResult.shouldBeSuccess { list ->
-                list.shouldNotBeNull {
-                    containExactly("R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8")
-                }
+                list should containExactly("R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8")
             }
         }
 
