@@ -68,13 +68,10 @@ class DependencyGraphBuilderTest : WordSpec({
             }
 
             val scopes = graph.createScopes()
+
             scopes.map { it.name } should containExactlyInAnyOrder(scope1, scope2)
-
-            val scope1Dependencies = scopeDependencies(scopes, scope1)
-            scope1Dependencies should containExactlyInAnyOrder(dep1, dep3)
-
-            val scope2Dependencies = scopeDependencies(scopes, scope2)
-            scope2Dependencies should containExactlyInAnyOrder(dep2, dep1)
+            scopeDependencies(scopes, scope1) shouldBe setOf(dep1, dep3)
+            scopeDependencies(scopes, scope2) shouldBe setOf(dep1, dep2)
         }
 
         "order the scopes, their dependencies, and packages" {
@@ -91,7 +88,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope1, dep1)
                 .build()
 
-            graph.scopes.keys should containExactly("compile", "test")
+            graph.scopes.keys shouldBe setOf("compile", "test")
             graph.scopes.getValue("compile") should containExactly(
                 RootDependencyIndex(0),
                 RootDependencyIndex(2)
@@ -137,18 +134,15 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope1, dep3)
                 .addDependency(scope2, dep4)
                 .build()
+            val scopes = graph.createScopes()
 
             graph.nodes shouldNotBeNull {
                 this shouldHaveSize 5
                 all { it.fragment == 0 } shouldBe true
             }
 
-            val scopes = graph.createScopes()
-            val scopeDependencies1 = scopeDependencies(scopes, scope1)
-            scopeDependencies1 should containExactly(dep5, dep3, dep1)
-
-            val scopeDependencies2 = scopeDependencies(scopes, scope2)
-            scopeDependencies2 should containExactlyInAnyOrder(dep1, dep2, dep4)
+            scopeDependencies(scopes, scope1) shouldBe setOf(dep1, dep3, dep5)
+            scopeDependencies(scopes, scope2) shouldBe setOf(dep1, dep2, dep4)
         }
 
         "deal with packages that have different dependencies in the same scope" {
@@ -178,9 +172,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope, depLib)
                 .build()
 
-            val scopeDependencies = scopeDependencies(graph.createScopes(), scope)
-
-            scopeDependencies should containExactly(depAcme, depLib)
+            scopeDependencies(graph.createScopes(), scope) shouldBe setOf(depAcme, depLib)
         }
 
         "deal with packages that have different dependencies in different scopes" {
@@ -208,10 +200,8 @@ class DependencyGraphBuilderTest : WordSpec({
                 .build()
             val scopes = graph.createScopes()
 
-            val scope1Dependencies = scopeDependencies(scopes, scope1)
-            scope1Dependencies should containExactly(depLog, depConfig1)
-            val scope2Dependencies = scopeDependencies(scopes, scope2)
-            scope2Dependencies should containExactly(depAcmeExclude)
+            scopeDependencies(scopes, scope1) shouldBe setOf(depConfig1, depLog)
+            scopeDependencies(scopes, scope2) shouldBe setOf(depAcmeExclude)
         }
 
         "check for illegal references when building the graph" {
@@ -286,7 +276,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope1, createDependency("g1", "a1", "1"))
                 .addDependency("anotherScope", createDependency("g2", "a2", "2"))
 
-            builder.scopesFor(projectId) should containExactly("compile", "test")
+            builder.scopesFor(projectId) shouldBe sortedSetOf("compile", "test")
         }
 
         "collect information about qualified scopes of projects" {
@@ -300,7 +290,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope1, createDependency("g1", "a1", "1"))
                 .addDependency("anotherScope", createDependency("g2", "a2", "2"))
 
-            builder.scopesFor(projectId, unqualify = false) should containExactly(scope2, scope1)
+            builder.scopesFor(projectId, unqualify = false) shouldBe sortedSetOf(scope2, scope1)
         }
     }
 
