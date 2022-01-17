@@ -44,35 +44,6 @@ class MavenFunTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "jgnash parent dependencies are detected correctly" {
-            val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
-            val pomFile = projectDir.resolve("pom.xml")
-            val expectedResult = projectDir.parentFile.resolve("jgnash-expected-output.yml").readText()
-
-            val result = createMaven().resolveSingleProject(pomFile, resolveScopes = true)
-
-            result.toYaml() shouldBe expectedResult
-        }
-
-        "jgnash-core dependencies are detected correctly" {
-            val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
-
-            val pomFileCore = projectDir.resolve("jgnash-core/pom.xml")
-            val pomFileResources = projectDir.resolve("jgnash-resources/pom.xml")
-
-            val expectedResult = projectDir.parentFile.resolve("jgnash-core-expected-output.yml").readText()
-
-            // jgnash-core depends on jgnash-resources, so we also have to pass the pom.xml of jgnash-resources to
-            // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
-            // of transitive dependencies would not work.
-            val managerResult = createMaven().resolveDependencies(listOf(pomFileCore, pomFileResources), emptyMap())
-            val result = managerResult.projectResults[pomFileCore]
-
-            result.shouldNotBeNull()
-            result should haveSize(1)
-            managerResult.resolveScopes(result.single()).toYaml() shouldBe expectedResult
-        }
-
         "Root project dependencies are detected correctly" {
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
