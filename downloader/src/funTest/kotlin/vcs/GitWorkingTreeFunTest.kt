@@ -120,7 +120,6 @@ class GitWorkingTreeFunTest : StringSpec({
         val expectedSubmodules = listOf(
             "analyzer/src/funTest/assets/projects/external/dart-http",
             "analyzer/src/funTest/assets/projects/external/example-python-flask",
-            "analyzer/src/funTest/assets/projects/external/jgnash",
             "analyzer/src/funTest/assets/projects/external/quickcheck-state-machine",
             "analyzer/src/funTest/assets/projects/external/sbt-multi-project-example",
             "analyzer/src/funTest/assets/projects/external/spdx-tools-python"
