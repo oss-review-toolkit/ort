@@ -153,7 +153,7 @@ private val ID_HAMCREST = Identifier("Maven:org.hamcrest:hamcrest-core:1.3")
 private val ID_JUNIT = Identifier("Maven:junit:junit:4.12")
 
 private const val COMPONENTS_REQUEST_URL = "/api/v3/component-report"
-private val COMPONENTS_REQUEST_IDS = listOf(ID_HAMCREST, ID_JUNIT)
+private val COMPONENTS_REQUEST_IDS = setOf(ID_HAMCREST, ID_JUNIT)
 
 private val COMPONENTS_REQUEST_JSON =
     COMPONENTS_REQUEST_IDS.joinToString(prefix = "{ \"coordinates\": [", postfix = "] }") { "\"${it.toPurl()}\"" }

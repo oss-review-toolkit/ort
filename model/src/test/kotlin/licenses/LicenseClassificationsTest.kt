@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -148,7 +147,11 @@ class LicenseClassificationsTest : WordSpec({
             val cat3 = LicenseCategory("other", "Completely different licenses")
             val licenseClassifications = LicenseClassifications(categories = listOf(cat1, cat2, cat3))
 
-            licenseClassifications.categoryNames should containExactly("non permissive", "other", "permissive")
+            licenseClassifications.categoryNames should containExactlyInAnyOrder(
+                "permissive",
+                "non permissive",
+                "other"
+            )
         }
     }
 })

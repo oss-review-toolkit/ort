@@ -216,7 +216,7 @@ private val idHamcrest = Identifier("Maven:org.hamcrest:hamcrest-core:1.3")
 /**
  * The list with the identifiers of packages that are referenced in the test result file.
  */
-private val packageIdentifiers = listOf(idJUnit, idLang, idText, idStruts, idHamcrest)
+private val packageIdentifiers = setOf(idJUnit, idLang, idText, idStruts, idHamcrest)
 
 /**
  * The list of packages referenced by the test result. These packages should be requested by the vulnerability provider.

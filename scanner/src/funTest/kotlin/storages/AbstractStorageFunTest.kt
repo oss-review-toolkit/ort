@@ -356,7 +356,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
                 readResult.shouldBeSuccess {
                     it.shouldNotBeNull {
-                        keys should containExactly(id1, id2)
+                        keys shouldBe setOf(id1, id2)
                         get(id1) should containExactlyInAnyOrder(scanResult1, scanResult2)
                         get(id2) should containExactlyInAnyOrder(scanResult4, scanResult5)
                     }
@@ -388,7 +388,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
                 readResult.shouldBeSuccess {
                     it.shouldNotBeNull {
-                        keys should containExactly(id1, id2)
+                        keys shouldBe setOf(id1, id2)
                         get(id1) should containExactlyInAnyOrder(scanResult1, scanResult2)
                         get(id2) should containExactlyInAnyOrder(scanResult4, scanResult5)
                     }
@@ -426,7 +426,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
                 readResult.shouldBeSuccess {
                     it.shouldNotBeNull {
-                        keys should containExactly(id1, id2)
+                        keys shouldBe setOf(id1, id2)
                         get(id1) should containExactlyInAnyOrder(
                             scanResult1,
                             scanResult1Compatible1,
@@ -474,7 +474,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
                 readResult.shouldBeSuccess {
                     it.shouldNotBeNull {
-                        keys should containExactly(id1, id2)
+                        keys shouldBe setOf(id1, id2)
                         get(id1) should containExactlyInAnyOrder(
                             scanResult1,
                             scanResult1Compatible1,
@@ -540,7 +540,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
                 readResult.shouldBeSuccess {
                     it.shouldNotBeNull {
-                        keys should containExactly(id1, id2)
+                        keys shouldBe setOf(id1, id2)
                         get(id1) should containExactlyInAnyOrder(
                             scanResultSourceArtifactMatching1,
                             scanResultVcsMatching1
@@ -562,7 +562,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
                 addResult.shouldBeSuccess()
                 readResult.shouldBeSuccess {
                     it.shouldNotBeNull {
-                        keys should containExactly(id1)
+                        keys shouldBe setOf(id1)
                         get(id1) should containExactly(scanResult)
                     }
                 }
