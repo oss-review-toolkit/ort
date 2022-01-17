@@ -55,7 +55,7 @@ open class RulesScriptTemplate(
     val ortResult: OrtResult = OrtResult.EMPTY,
     val licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
     val licenseClassifications: LicenseClassifications = LicenseClassifications(),
-    val time: Instant
+    val executionTime: Instant
 ) {
     val ruleViolations = mutableListOf<RuleViolation>()
 }
