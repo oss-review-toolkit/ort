@@ -222,6 +222,10 @@ subprojects {
         configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
     }
 
+    dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinPluginVersion")
+    }
+
     configurations.all {
         // Do not tamper with configurations related to the detekt plugin, for some background information
         // https://github.com/detekt/detekt/issues/2501.
