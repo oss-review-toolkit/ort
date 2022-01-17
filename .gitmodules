@@ -2,10 +2,6 @@
 	path = analyzer/src/funTest/assets/projects/external/example-python-flask
 	url = https://github.com/deis/example-python-flask.git
 	ignore = untracked
-[submodule "jgnash"]
-	path = analyzer/src/funTest/assets/projects/external/jgnash
-	url = https://github.com/ccavanaugh/jgnash.git
-	ignore = untracked
 [submodule "spdx-tools-python"]
 	path = analyzer/src/funTest/assets/projects/external/spdx-tools-python
 	url = https://github.com/spdx/tools-python.git
