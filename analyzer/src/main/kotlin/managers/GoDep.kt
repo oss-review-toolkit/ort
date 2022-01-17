@@ -257,7 +257,10 @@ class GoDep(
     }
 
     private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
-        val pc = ProcessCapture("go", "get", "-d", importPath, environment = mapOf("GOPATH" to gopath.path))
+        val pc = ProcessCapture(
+            "go", "get", "-d", importPath,
+            environment = mapOf("GOPATH" to gopath.path, "GO111MODULE" to "off")
+        )
 
         // HACK Some failure modes from "go get" can be ignored:
         // 1. repositories that don't have .go files in the root directory
