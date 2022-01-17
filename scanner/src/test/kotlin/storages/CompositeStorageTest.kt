@@ -48,7 +48,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private val ID = Identifier(type = "Gradle", namespace = "testNS", name = "test", version = "1.0.9")
 
@@ -113,9 +112,7 @@ class CompositeStorageTest : WordSpec({
             val storage = CompositeStorage(emptyList(), listOf(mockk()))
 
             storage.read(ID).shouldBeSuccess {
-                it.shouldNotBeNull {
-                    this should beEmpty()
-                }
+                it should beEmpty()
             }
         }
 
@@ -153,9 +150,7 @@ class CompositeStorageTest : WordSpec({
             val storage = CompositeStorage(emptyList(), listOf(mockk()))
 
             storage.read(PACKAGE, CRITERIA).shouldBeSuccess {
-                it.shouldNotBeNull {
-                    this should beEmpty()
-                }
+                it should beEmpty()
             }
         }
 
@@ -186,9 +181,7 @@ class CompositeStorageTest : WordSpec({
             val storage = CompositeStorage(listOf(reader1, reader2), emptyList())
 
             storage.read(ID).shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldBe "error1, error2"
-                }
+                it.message shouldBe "error1, error2"
             }
         }
 
@@ -226,9 +219,7 @@ class CompositeStorageTest : WordSpec({
             val storage = CompositeStorage(emptyList(), listOf(writer1, writer2))
 
             storage.add(ID, result).shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldBe "failed"
-                }
+                it.message shouldBe "failed"
             }
         }
 
@@ -241,9 +232,7 @@ class CompositeStorageTest : WordSpec({
             val storage = CompositeStorage(emptyList(), listOf(writer1, writer2))
 
             storage.add(ID, result).shouldBeFailure {
-                it.shouldNotBeNull {
-                    message shouldBe "boom1, boom2"
-                }
+                it.message shouldBe "boom1, boom2"
             }
         }
     }
