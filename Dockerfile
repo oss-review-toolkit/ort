@@ -28,16 +28,7 @@ ARG CRT_FILES=""
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="30.1.0"
 
-FROM adoptopenjdk/openjdk11:alpine-slim AS build
-
-# Apk install commands.
-RUN apk add --no-cache \
-        # Required for Node.js to build the reporter-web-app.
-        libstdc++ \
-        # Required to allow to download via a proxy with a self-signed certificate.
-        ca-certificates \
-        coreutils \
-        openssl
+FROM adoptopenjdk:11-jdk-hotspot-focal AS build
 
 COPY . /usr/local/src/ort
 
