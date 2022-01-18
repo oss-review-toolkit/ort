@@ -52,7 +52,6 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -140,7 +139,6 @@ class ExamplesFunTest : StringSpec() {
             val ortResult = resultFile.readValue<OrtResult>()
             val evaluator = Evaluator(
                 ortResult = ortResult,
-                licenseInfoResolver = ortResult.createLicenseInfoResolver(),
                 licenseClassifications = licenseFile.readValue()
             )
 

@@ -27,26 +27,22 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class EvaluatorTest : WordSpec() {
-    private fun createEvaluator() = Evaluator(OrtResult.EMPTY, ortResult.createLicenseInfoResolver())
-
     init {
         "checkSyntax" should {
             "succeed if the script can be compiled" {
                 val script = javaClass.getResource("/rules/no_gpl.rules.kts").readText()
 
-                val result = createEvaluator().checkSyntax(script)
+                val result = Evaluator(ortResult).checkSyntax(script)
 
                 result shouldBe true
             }
 
             "fail if the script can not be compiled" {
-                val result = createEvaluator().checkSyntax(
+                val result = Evaluator(ortResult).checkSyntax(
                     """
                     broken script
                     """.trimIndent()
@@ -58,15 +54,15 @@ class EvaluatorTest : WordSpec() {
 
         "evaluate" should {
             "return no rule violations for an empty script" {
-                val result = createEvaluator().run("")
+                val result = Evaluator(ortResult).run("")
 
                 result.violations should beEmpty()
             }
 
             "be able to access the ORT result" {
-                val result = createEvaluator().run(
+                val result = Evaluator(ortResult).run(
                     """
-                    require(ortResult == OrtResult.EMPTY) { "Could not verify the ORT result to be empty." }
+                    require(ortResult.labels["label"] == "value") { "Failed to verify the ORT result." }
                     """.trimIndent()
                 )
 
@@ -74,7 +70,7 @@ class EvaluatorTest : WordSpec() {
             }
 
             "contain rule violations in the result" {
-                val result = createEvaluator().run(
+                val result = Evaluator(ortResult).run(
                     """
                     ruleViolations += RuleViolation(
                         rule = "rule 1",
