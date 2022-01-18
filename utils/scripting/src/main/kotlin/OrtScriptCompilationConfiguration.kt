@@ -26,6 +26,7 @@ import kotlin.script.experimental.api.ScriptAcceptedLocation
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.SourceCode
 import kotlin.script.experimental.api.acceptedLocations
+import kotlin.script.experimental.api.compilerOptions
 import kotlin.script.experimental.api.defaultImports
 import kotlin.script.experimental.api.hostConfiguration
 import kotlin.script.experimental.api.ide
@@ -37,12 +38,15 @@ import kotlin.script.experimental.jvmhost.CompiledScriptJarsCache
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.toHexString
+import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
 
 class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     ide {
         acceptedLocations(ScriptAcceptedLocation.Everywhere)
     }
+
+    compilerOptions("-jvm-target", Environment().javaVersion.substringBefore('.'))
 
     defaultImports(
         "org.ossreviewtoolkit.utils.common.*",
