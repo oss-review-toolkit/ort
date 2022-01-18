@@ -73,6 +73,11 @@ class DependencyRule(
         "$name - ${pkg.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope $scopeName)"
 
     /**
+     * Return the direct dependencies of the [dependency].
+     */
+    fun directDependencies() = dependency.visitDependencies { it.toList() }
+
+    /**
      * A [RuleMatcher] that checks if the level of the [dependency] inside the dependency tree equals [level].
      */
     fun isAtTreeLevel(level: Int) =
