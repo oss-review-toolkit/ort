@@ -23,7 +23,6 @@ import java.time.Instant
 
 import kotlin.script.experimental.api.ScriptEvaluationConfiguration
 import kotlin.script.experimental.api.constructorArgs
-import kotlin.script.experimental.api.defaultImports
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 
@@ -40,16 +39,7 @@ class Evaluator(
     licenseClassifications: LicenseClassifications = LicenseClassifications(),
     time: Instant = Instant.now()
 ) : ScriptRunner() {
-    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate> {
-        defaultImports(
-            "org.ossreviewtoolkit.evaluator.*",
-            "org.ossreviewtoolkit.model.*",
-            "org.ossreviewtoolkit.model.config.*",
-            "org.ossreviewtoolkit.model.licenses.*",
-            "org.ossreviewtoolkit.model.utils.*",
-            "org.ossreviewtoolkit.utils.spdx.*"
-        )
-    }
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
 
     override val evalConfig = ScriptEvaluationConfiguration {
         constructorArgs(ortResult, licenseInfoResolver, licenseClassifications, time)

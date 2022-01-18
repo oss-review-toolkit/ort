@@ -20,14 +20,29 @@
 package org.ossreviewtoolkit.notifier
 
 import kotlin.script.experimental.annotations.KotlinScript
+import kotlin.script.experimental.api.ScriptCompilationConfiguration
+import kotlin.script.experimental.api.defaultImports
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
 
+class NotificationScriptCompilationConfiguration : ScriptCompilationConfiguration(
+    OrtScriptCompilationConfiguration(),
+    body = {
+        defaultImports(
+            "org.ossreviewtoolkit.model.*",
+            "org.ossreviewtoolkit.model.config.*",
+            "org.ossreviewtoolkit.model.licenses.*",
+            "org.ossreviewtoolkit.model.utils.*",
+            "org.ossreviewtoolkit.notifier.modules.*"
+        )
+    }
+)
+
 @KotlinScript(
     displayName = "ORT Notifications Script",
     fileExtension = "notifications.kts",
-    compilationConfiguration = OrtScriptCompilationConfiguration::class
+    compilationConfiguration = NotificationScriptCompilationConfiguration::class
 )
 open class NotificationsScriptTemplate(
     val ortResult: OrtResult

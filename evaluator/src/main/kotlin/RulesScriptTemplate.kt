@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.evaluator
 import java.time.Instant
 
 import kotlin.script.experimental.annotations.KotlinScript
+import kotlin.script.experimental.api.ScriptCompilationConfiguration
+import kotlin.script.experimental.api.defaultImports
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
@@ -29,10 +31,24 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
 
+class RulesScriptCompilationConfiguration : ScriptCompilationConfiguration(
+    OrtScriptCompilationConfiguration(),
+    body = {
+        defaultImports(
+            "org.ossreviewtoolkit.evaluator.*",
+            "org.ossreviewtoolkit.model.*",
+            "org.ossreviewtoolkit.model.config.*",
+            "org.ossreviewtoolkit.model.licenses.*",
+            "org.ossreviewtoolkit.model.utils.*",
+            "org.ossreviewtoolkit.utils.spdx.*"
+        )
+    }
+)
+
 @KotlinScript(
     displayName = "ORT Evaluator Rules Script",
     fileExtension = "rules.kts",
-    compilationConfiguration = OrtScriptCompilationConfiguration::class
+    compilationConfiguration = RulesScriptCompilationConfiguration::class
 )
 open class RulesScriptTemplate(
     val ortResult: OrtResult,
