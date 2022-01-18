@@ -59,8 +59,8 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
             val scriptCacheDir = ortDataDirectory.resolve("cache/scripts").apply { safeMkdirs() }
 
             compilationCache(
-                CompiledScriptJarsCache { script, scriptCompilationConfiguration ->
-                    val cacheKey = generateUniqueName(script, scriptCompilationConfiguration)
+                CompiledScriptJarsCache { script, configuration ->
+                    val cacheKey = generateUniqueName(script, configuration)
                     scriptCacheDir.resolve("$cacheKey.jar")
                 }
             )
@@ -71,14 +71,11 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
 // Use MD5 for speed.
 private val digest = MessageDigest.getInstance("MD5")
 
-private fun generateUniqueName(
-    script: SourceCode,
-    scriptCompilationConfiguration: ScriptCompilationConfiguration
-): String {
+private fun generateUniqueName(script: SourceCode, configuration: ScriptCompilationConfiguration): String {
     digest.reset()
     digest.update(script.text.toByteArray())
 
-    scriptCompilationConfiguration.notTransientData.entries
+    configuration.notTransientData.entries
         .sortedBy { it.key.name }
         .forEach {
             digest.update(it.key.name.toByteArray())
