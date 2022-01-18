@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Evaluator(
     ortResult: OrtResult = OrtResult.EMPTY,
-    licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
+    licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
     licenseClassifications: LicenseClassifications = LicenseClassifications(),
     time: Instant = Instant.now()
 ) : ScriptRunner() {
