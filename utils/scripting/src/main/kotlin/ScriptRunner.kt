@@ -80,6 +80,9 @@ abstract class ScriptRunner {
             }
         }
 
-        return result.valueOrThrow().returnValue
+        val value = result.valueOrThrow().returnValue
+        if (value is ResultValue.Error) throw value.error
+
+        return value
     }
 }
