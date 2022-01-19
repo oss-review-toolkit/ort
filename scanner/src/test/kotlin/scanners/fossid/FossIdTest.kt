@@ -51,12 +51,14 @@ import org.ossreviewtoolkit.clients.fossid.MapResponseBody
 import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.PolymorphicResponseBody
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
+import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
 import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
@@ -68,6 +70,9 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredF
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.License
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.LicenseFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
@@ -461,6 +466,7 @@ class FossIdTest : WordSpec({
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode, emptyList())
                 .mockFiles(scanCode)
             coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
 
@@ -473,6 +479,47 @@ class FossIdTest : WordSpec({
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(USER, API_KEY, scanCode, *FossId.deltaScanRunParameters(originCode))
+            }
+        }
+
+        "carry exclusion rules to a delta scan from an existing scan" {
+            val projectCode = projectCode(PROJECT)
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig()
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode)
+
+            val service = config.createService()
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode, listOf(IGNORE_RULE))
+                .expectCreateIgnoreRule(scanCode, IGNORE_RULE.type, IGNORE_RULE.value, DEFAULT_IGNORE_RULE_SCOPE)
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.runScan(USER, API_KEY, scanCode, *FossId.deltaScanRunParameters(originCode))
+                service.listIgnoreRules(USER, API_KEY, originCode)
+                service.createIgnoreRule(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    IGNORE_RULE.type,
+                    IGNORE_RULE.value,
+                    DEFAULT_IGNORE_RULE_SCOPE
+                )
             }
         }
 
@@ -583,6 +630,7 @@ class FossIdTest : WordSpec({
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
+                .expectListIgnoreRules(recentScan.code!!, emptyList())
                 .mockFiles(scanCode)
             coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
             coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 1)
@@ -627,6 +675,12 @@ private const val FOSSID_VERSION = "2021.2.2"
 
 /** A test scan ID that is returned by default when mocking the creation of a scan. */
 private const val SCAN_ID = 1
+
+/** An [IgnoreRule], returned by default wrapped in a list when mocking the listing of exclusion rules. */
+private val IGNORE_RULE = IgnoreRule(1, RuleType.EXTENSION, ".docx", SCAN_ID, "2021-06-09 14:45:25")
+
+/** The default scope used when creating ignore rule. */
+private val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 
 /**
  * Create a new [FossId] instance with the specified [config].
@@ -867,6 +921,33 @@ private fun FossIdServiceWithVersion.expectCheckScanStatus(
 private fun FossIdServiceWithVersion.expectListScans(projectCode: String, scans: List<Scan>): FossIdServiceWithVersion {
     coEvery { listScansForProject(USER, API_KEY, projectCode) } returns
             PolymorphicResponseBody(status = 1, data = PolymorphicList(scans))
+    return this
+}
+
+/**
+ * Prepare this service mock to return the list of [rules] for the given [scanCode].
+ */
+private fun FossIdServiceWithVersion.expectListIgnoreRules(
+    scanCode: String, rules: List<IgnoreRule>
+): FossIdServiceWithVersion {
+    coEvery { listIgnoreRules(USER, API_KEY, scanCode) } returns
+            PolymorphicResponseBody(status = 1, data = PolymorphicList(rules))
+    return this
+}
+
+/**
+ * Prepare this service mock to expect a request to create an 'ignore rule' for the given [scanCode], [ruleType],
+ * [value] and [scope].
+ */
+private fun FossIdServiceWithVersion.expectCreateIgnoreRule(
+    scanCode: String,
+    ruleType: RuleType,
+    value: String,
+    scope: RuleScope
+): FossIdServiceWithVersion {
+    coEvery {
+        createIgnoreRule(USER, API_KEY, scanCode, ruleType, value, scope)
+    } returns EntityResponseBody(status = 1)
     return this
 }
 
