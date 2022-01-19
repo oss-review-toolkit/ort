@@ -34,18 +34,22 @@ import kotlinx.coroutines.withTimeoutOrNull
 
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
+import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
 import org.ossreviewtoolkit.clients.fossid.createProject
 import org.ossreviewtoolkit.clients.fossid.createScan
 import org.ossreviewtoolkit.clients.fossid.deleteScan
 import org.ossreviewtoolkit.clients.fossid.downloadFromGit
 import org.ossreviewtoolkit.clients.fossid.getProject
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
@@ -468,6 +472,25 @@ class FossId internal constructor(
         } else {
             val existingScanCode = requireNotNull(existingScan.code) {
                 "The code for an existing scan must not be null."
+            }
+
+            log.info { "Loading ignore rules from '$existingScanCode'." }
+
+            val ignoreRules = service.listIgnoreRules(config.user, config.apiKey, existingScanCode)
+                .checkResponse("list ignore rules")
+            ignoreRules.data?.let { rules ->
+                log.info { "${rules.size} ignore rule(s) have been found." }
+
+                // When a scan is created with the optional property 'git_repo_url', the server automatically creates
+                // an 'ignore rule' to exclude the '.git' directory.
+                // Therefore, this rule will be created automatically and does not need to be carried from the old scan.
+                rules.filterNot { it.type == RuleType.DIRECTORY && it.value == ".git" }.forEach {
+                    service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
+                        .checkResponse("create ignore rules", false)
+                    log.info {
+                        "Ignore rule of type '${it.type}' and value '${it.value}' has been carried to the new scan."
+                    }
+                }
             }
 
             log.info { "Reusing identifications from scan '$existingScanCode'." }
