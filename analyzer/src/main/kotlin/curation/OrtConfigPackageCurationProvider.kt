@@ -58,7 +58,7 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
         val file = curationsDir.resolve("curations").resolve(pkgId.toCurationPath())
         return if (file.isFile) {
             runCatching {
-                yamlMapper.readValue<List<PackageCuration>>(file)
+                yamlMapper.readValue<List<PackageCuration>>(file).filter { it.isApplicable(pkgId) }
             }.onFailure {
                 log.warn { "Failed parsing package curation from '${file.absolutePath}'." }
             }.getOrThrow()
