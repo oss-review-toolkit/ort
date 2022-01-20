@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +28,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -49,9 +50,9 @@ class NuGetFunTest : StringSpec() {
             val result = reader.getPackageReferences(packageFile)
 
             result should containExactly(
-                Identifier(type = "NuGet", namespace = "", name = "jQuery", version = "3.3.1"),
-                Identifier(type = "NuGet", namespace = "", name = "WebGrease", version = "1.5.2"),
-                Identifier(type = "NuGet", namespace = "", name = "foobar", version = "1.2.3")
+                NuGetDependency(name = "jQuery", version = "3.3.1", targetFramework = "net462"),
+                NuGetDependency(name = "WebGrease", version = "1.5.2", targetFramework = "net462"),
+                NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "net462")
             )
         }
 
