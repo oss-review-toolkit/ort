@@ -122,7 +122,7 @@ data class OrtResult(
             )
         }
 
-        log.perf { "Computing excluded projects took ${duration.inWholeSeconds}s." }
+        log.perf { "Computing excluded projects took $duration." }
 
         result
     }
@@ -163,7 +163,7 @@ data class OrtResult(
             }
         }
 
-        log.perf { "Computing excluded packages took ${duration.inWholeSeconds}s." }
+        log.perf { "Computing excluded packages took $duration." }
 
         result
     }

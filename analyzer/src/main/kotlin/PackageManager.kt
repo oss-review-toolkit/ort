@@ -273,7 +273,7 @@ abstract class PackageManager(
                 }
             }
 
-            log.info { "Resolving $managerName dependencies for '$relativePath' took ${duration.inWholeSeconds}s." }
+            log.info { "Resolving $managerName dependencies for '$relativePath' took $duration." }
         }
 
         afterResolution(definitionFiles)

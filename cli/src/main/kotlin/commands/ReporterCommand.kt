@@ -276,23 +276,23 @@ class ReporterCommand : CliktCommand(
 
         reportDurationMap.value.forEach { (reporter, timedValue) ->
             val name = reporter.reporterName
-            val durationInSeconds = timedValue.duration.inWholeSeconds
 
             timedValue.value.onSuccess { files ->
                 val fileList = files.joinToString { "'$it'" }
-                println("Successfully created '$name' report(s) at $fileList in ${durationInSeconds}s.")
+                println("Successfully created '$name' report(s) at $fileList in ${timedValue.duration}.")
             }.onFailure { e ->
                 e.showStackTrace()
 
-                log.error { "Could not create '$name' report in ${durationInSeconds}s: ${e.collectMessagesAsString()}" }
+                log.error {
+                    "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessagesAsString()}"
+                }
 
                 ++failureCount
             }
         }
 
         val successCount = reportFormats.size - failureCount
-        println("Created $successCount of ${reportFormats.size} report(s) in " +
-                "${reportDurationMap.duration.inWholeSeconds}s.")
+        println("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration}.")
 
         if (failureCount > 0) throw ProgramResult(2)
     }
