@@ -165,7 +165,7 @@ data class License(
             "The '$name' value of the 'name' field must not contain any leading or trailing whitespaces."
         }
 
-        require(spdx?.isValid() != false) {
+        require(spdx?.isValid(SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS) != false) {
             "The '$spdx' value of the 'spdx' field must be a valid SPDX identifier."
         }
 
