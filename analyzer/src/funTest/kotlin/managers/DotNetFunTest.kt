@@ -47,7 +47,7 @@ class DotNetFunTest : StringSpec() {
     init {
         "Definition file is correctly read" {
             val reader = DotNetPackageFileReader()
-            val result = reader.getPackageReferences(packageFile)
+            val result = reader.getDependencies(packageFile)
 
             result should containExactly(
                 NuGetDependency(name = "jQuery", version = "3.3.1", targetFramework = ""),

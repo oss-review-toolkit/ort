@@ -294,7 +294,7 @@ data class NuGetDependency(
 )
 
 interface XmlPackageFileReader {
-    fun getPackageReferences(definitionFile: File): Set<NuGetDependency>
+    fun getDependencies(definitionFile: File): Set<NuGetDependency>
 }
 
 fun PackageManager.resolveNuGetDependencies(
@@ -310,7 +310,7 @@ fun PackageManager.resolveNuGetDependencies(
     val packages = sortedSetOf<Package>()
     val issues = mutableListOf<OrtIssue>()
 
-    val references = reader.getPackageReferences(definitionFile)
+    val references = reader.getDependencies(definitionFile)
     val ids = references.map { Identifier(type = "NuGet", namespace = "", name = it.name, version = it.version) }
     support.buildDependencyTree(ids, dependencies, packages, issues)
 

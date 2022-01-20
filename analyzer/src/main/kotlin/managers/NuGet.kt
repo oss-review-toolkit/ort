@@ -88,7 +88,7 @@ class NuGetPackageFileReader : XmlPackageFileReader {
         val developmentDependency: Boolean?
     )
 
-    override fun getPackageReferences(definitionFile: File): Set<NuGetDependency> {
+    override fun getDependencies(definitionFile: File): Set<NuGetDependency> {
         val packagesConfig = NuGetSupport.XML_MAPPER.readValue<PackagesConfig>(definitionFile)
 
         return packagesConfig.packages.mapTo(mutableSetOf()) { pkg ->

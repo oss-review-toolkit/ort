@@ -85,7 +85,7 @@ class DotNetPackageFileReader : XmlPackageFileReader {
         val version: String
     )
 
-    override fun getPackageReferences(definitionFile: File): Set<NuGetDependency> {
+    override fun getDependencies(definitionFile: File): Set<NuGetDependency> {
         val itemGroups = NuGetSupport.XML_MAPPER.readValue<List<ItemGroup>>(definitionFile)
 
         return itemGroups.flatMapTo(mutableSetOf()) { itemGroup ->
