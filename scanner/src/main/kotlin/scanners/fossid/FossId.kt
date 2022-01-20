@@ -358,7 +358,7 @@ class FossId internal constructor(
             results
         }
 
-        log.info { "Scan has been performed. Total time was ${duration.inWholeSeconds}s." }
+        log.info { "Scan has been performed. Total time was $duration." }
 
         return results
     }
