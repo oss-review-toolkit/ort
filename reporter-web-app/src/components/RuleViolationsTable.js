@@ -19,32 +19,95 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, Table, Tooltip } from 'antd';
-import {
-    ExclamationCircleOutlined,
-    FileAddOutlined,
-    FileExcelOutlined,
-    InfoCircleOutlined,
-    IssuesCloseOutlined,
-    WarningOutlined
-} from '@ant-design/icons';
+import { Table } from 'antd';
 
-import Markdown from 'markdown-to-jsx';
-import PackageDetails from './PackageDetails';
-import PackageLicenses from './PackageLicenses';
-import PackagePaths from './PackagePaths';
-import PackageFindingsTable from './PackageFindingsTable';
-import PathExcludesTable from './PathExcludesTable';
-import ResolutionTable from './ResolutionTable';
-import ScopeExcludesTable from './ScopeExcludesTable';
-import { getColumnSearchProps } from './Shared';
-
-
-const { Panel } = Collapse;
+import { getDefaultViolationsTableColumns } from './Shared';
+import RuleViolationsSubTable from './RuleViolationsSubTable';
+import RuleViolationCollapsable from './RuleViolationCollapsable'
 
 // Generates the HTML to display violations as a Table
 class RuleViolationsTable extends React.Component {
-    render () {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            mergedViolations: []
+        }
+    }
+
+    checkDuplicates = (list, key) => {
+        let hasDuplicates = false
+
+        for (let entry of list) {
+            if (entry === key) {
+                hasDuplicates = true
+                break
+            }
+        }
+
+        return hasDuplicates
+    }
+
+    componentDidMount = () => {
+        let rawList = [...this.props.ruleViolations]
+        let ruleViolationsMap = new Map()
+
+        for (let entry of rawList) {
+            if (entry.package) {
+                let mergedRuleViolation = ruleViolationsMap.get(entry.packageName) || entry
+                let ruleNames = mergedRuleViolation.rule.split(', ')
+                let newRuleName = mergedRuleViolation.rule
+
+                if (!this.checkDuplicates(ruleNames, entry.rule))
+                    newRuleName += `, ${entry.rule}`
+
+                switch (true) {
+                    // case: n doubled violation
+                    case mergedRuleViolation && mergedRuleViolation.subList && mergedRuleViolation.subList.length !== 0:
+
+                        // add the entry to the sublist
+                        mergedRuleViolation.subList.push(entry)
+
+                        // extend the rule name
+                        mergedRuleViolation.rule = newRuleName
+
+                        // update the message
+                        mergedRuleViolation.message = `Expand the entry to see all ${mergedRuleViolation.subList.length} violations.`
+                        break;
+
+                    // case: first doubled violation
+                    case mergedRuleViolation && !mergedRuleViolation.subList:
+                        let violationsParent = {
+                            key: `${mergedRuleViolation.packageName}-box`,
+                            severity: mergedRuleViolation.severity,
+                            severityIndex: mergedRuleViolation.severityIndex,
+                            package: mergedRuleViolation.package,
+                            packageName: `${mergedRuleViolation.packageName}`,
+                            rule: newRuleName,
+                            message: 'Expand the entry to see all 2 violations.',
+                            subList: [mergedRuleViolation, entry]
+                        }
+
+                        mergedRuleViolation = violationsParent
+
+                        break;
+
+                    // case: first violation
+                    default:
+                        mergedRuleViolation = entry
+                        break;
+                }
+
+                ruleViolationsMap.set(entry.package.id, mergedRuleViolation)
+            }
+        }
+
+        this.setState((previousState, props) => ({
+            mergedViolations: Array.from(ruleViolationsMap.values())
+        }))
+    }
+
+    render() {
         const {
             onChange,
             ruleViolations,
@@ -61,270 +124,41 @@ class RuleViolationsTable extends React.Component {
             return null;
         }
 
-        const columns = [
-            {
-                align: 'center',
-                dataIndex: 'severityIndex',
-                key: 'severityIndex',
-                filters: [
-                    { 
-                        text: 'Errors',
-                        value: 0
-                    },
-                    {
-                        text: 'Warnings',
-                        value: 1
-                    },
-                    {
-                        text: 'Hint',
-                        value: 2
-                    },
-                    {
-                        text: 'Resolved',
-                        value: 3
-                    }
-                ],
-                filteredValue: filteredInfo.severityIndex || null,
-                onFilter: (value, webAppRuleViolation) => webAppRuleViolation.severityIndex === Number(value),
-                render: (text, webAppRuleViolation) => (
-                    webAppRuleViolation.isResolved
-                        ? (
-                            <Tooltip
-                                placement="right"
-                                title={Array.from(webAppRuleViolation.resolutionReasons).join(', ')}
-                            >
-                                <IssuesCloseOutlined
-                                    className="ort-ok"
-                                />
-                            </Tooltip>
-                        ) : (
-                            <span>
-                                {
-                                    webAppRuleViolation.severity === 'ERROR'
-                                    && (
-                                        <ExclamationCircleOutlined
-                                            className="ort-error"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.severity === 'WARNING'
-                                    && (
-                                        <WarningOutlined
-                                            className="ort-warning"
-                                        />
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.severity === 'HINT'
-                                    && (
-                                        <InfoCircleOutlined
-                                            className="ort-hint"
-                                        />
-                                    )
-                                }
-                            </span>
-                        )
-                ),
-                sorter: (a, b) => a.severityIndex - b.severityIndex,
-                sortOrder: sortedInfo.field === 'severityIndex' && sortedInfo.order,
-                width: '5em'
-            }
-        ];
-
-        if (showExcludesColumn) {
-            columns.push({
-                align: 'right',
-                filters: (() => [
-                    {
-                        text: (
-                            <span>
-                                <FileExcelOutlined className="ort-excluded" />
-                                {' '}
-                                Excluded
-                            </span>
-                        ),
-                        value: 'excluded'
-                    },
-                    {
-                        text: (
-                            <span>
-                                <FileAddOutlined />
-                                {' '}
-                                Included
-                            </span>
-                        ),
-                        value: 'included'
-                    }
-                ])(),
-                filteredValue: filteredInfo.excludes || null,
-                key: 'excludes',
-                onFilter: (value, webAppRuleViolation) => {
-                    if (!webAppRuleViolation.hasPackage()) return true;
-
-                    const { isExcluded } = webAppRuleViolation.package;
-
-                    return (isExcluded && value === 'excluded') || (!isExcluded && value === 'included');
-                },
-                render: (webAppRuleViolation) => {
-                    const webAppPackage = webAppRuleViolation.package;
-
-                    if (webAppPackage) {
-                        return webAppPackage.isExcluded ? (
-                            <span className="ort-excludes">
-                                <Tooltip
-                                    placement="right"
-                                    title={Array.from(webAppPackage.excludeReasons).join(', ')}
-                                >
-                                    <FileExcelOutlined className="ort-excluded" />
-                                </Tooltip>
-                            </span>
-                        ) : (
-                            <FileAddOutlined />
-                        );
-                    }
-
-                    return null;
-                },
-                responsive: ['md'],
-                width: '2em'
-            });
-        }
-
-        columns.push(
-            {
-                dataIndex: 'packageName',
-                ellipsis: true,
-                key: 'packageName',
-                responsive: ['md'],
-                sorter: (a, b) => a.packageName.localeCompare(b.packageName),
-                sortOrder: sortedInfo.field === 'packageName' && sortedInfo.order,
-                title: 'Package',
-                width: '25%',
-                ...getColumnSearchProps('packageName', filteredInfo, this)
-            },
-            {
-                dataIndex: 'rule',
-                key: 'rule',
-                responsive: ['md'],
-                sorter: (a, b) => a.rule.localeCompare(b.rule),
-                sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
-                title: 'Rule',
-                width: '25%',
-                ...getColumnSearchProps('rule', filteredInfo, this)
-            },
-            {
-                dataIndex: 'message',
-                key: 'message',
-                textWrap: 'word-break',
-                title: 'Message',
-                ...getColumnSearchProps('message', filteredInfo, this)
-            }
-        );
+        const columns = getDefaultViolationsTableColumns(showExcludesColumn, filteredInfo, sortedInfo, this)
 
         return (
             <Table
                 className="ort-table-rule-violations"
                 columns={columns}
-                dataSource={ruleViolations}
+                dataSource={this.state.mergedViolations}
                 expandedRowRender={
                     (webAppRuleViolation) => {
-                        let defaultActiveKey = [0];
                         const webAppPackage = webAppRuleViolation.package;
+                        let defaultActiveKey = webAppRuleViolation.isResolved ? [1] : [0];
+                        let Component = null
 
-                        if (webAppRuleViolation.isResolved) {
-                            defaultActiveKey = [1];
+                        if (webAppRuleViolation.subList) {
+                            Component = (
+                                <RuleViolationsSubTable
+                                    onChange={onChange}
+                                    ruleViolations={webAppRuleViolation.subList}
+                                    showExcludesColumn={showExcludesColumn}
+                                    state={state}
+                                    filteredInfo={filteredInfo}
+                                    sortedInfo={sortedInfo}
+                                />
+                            )
+                        } else {
+                            Component = (
+                                <RuleViolationCollapsable
+                                    defaultActiveKey={defaultActiveKey}
+                                    webAppRuleViolation={webAppRuleViolation}
+                                    webAppPackage={webAppPackage}
+                                />
+                            )
                         }
 
-                        return (
-                            <Collapse
-                                className="ort-package-collapse"
-                                bordered={false}
-                                defaultActiveKey={defaultActiveKey}
-                            >
-                                {
-                                    webAppRuleViolation.hasHowToFix()
-                                    && (
-                                        <Panel header="How to fix" key="0">
-                                            <Markdown
-                                                className="ort-how-to-fix"
-                                            >
-                                                {webAppRuleViolation.howToFix}
-                                            </Markdown>
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.isResolved
-                                    && (
-                                        <Panel header="Resolutions" key="1">
-                                            <ResolutionTable
-                                                resolutions={webAppRuleViolation.resolutions}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && (
-                                        <Panel header="Details" key="2">
-                                            <PackageDetails webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasLicenses()
-                                    && (
-                                        <Panel header="Licenses" key="3">
-                                            <PackageLicenses webAppPackage={webAppPackage} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasPaths()
-                                    && (
-                                        <Panel header="Paths" key="4">
-                                            <PackagePaths paths={webAppPackage.paths} />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasFindings()
-                                    && (
-                                        <Panel header="Scan Results" key="5">
-                                            <PackageFindingsTable
-                                                webAppPackage={webAppPackage}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasPathExcludes()
-                                    && (
-                                        <Panel header="Path Excludes" key="6">
-                                            <PathExcludesTable
-                                                excludes={webAppPackage.pathExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                                {
-                                    webAppRuleViolation.hasPackage()
-                                    && webAppPackage.hasScopeExcludes()
-                                    && (
-                                        <Panel header="Scope Excludes" key="7">
-                                            <ScopeExcludesTable
-                                                excludes={webAppPackage.scopeExcludes}
-                                            />
-                                        </Panel>
-                                    )
-                                }
-                            </Collapse>
-                        );
+                        return Component
                     }
                 }
                 locale={{
