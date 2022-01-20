@@ -42,10 +42,10 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Contrib
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ContributionType
 import org.ossreviewtoolkit.clients.clearlydefined.Curation
-import org.ossreviewtoolkit.clients.clearlydefined.Described
+import org.ossreviewtoolkit.clients.clearlydefined.CurationDescribed
+import org.ossreviewtoolkit.clients.clearlydefined.CurationLicensed
 import org.ossreviewtoolkit.clients.clearlydefined.ErrorResponse
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
-import org.ossreviewtoolkit.clients.clearlydefined.Licensed
 import org.ossreviewtoolkit.clients.clearlydefined.Patch
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
@@ -177,14 +177,14 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
 
     val licenseExpression = data.concludedLicense?.toString()
 
-    val described = Described(
+    val described = CurationDescribed(
         projectWebsite = data.homepageUrl?.let { URI(it) },
         sourceLocation = id.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
     )
 
     val curation = Curation(
-        described = described.takeIf { it != Described() },
-        licensed = licenseExpression?.let { Licensed(declared = it) }
+        described = described.takeIf { it != CurationDescribed() },
+        licensed = licenseExpression?.let { CurationLicensed(declared = it) }
     )
 
     val patch = Patch(
