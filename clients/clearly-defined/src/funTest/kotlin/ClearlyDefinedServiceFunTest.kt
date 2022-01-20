@@ -95,7 +95,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         val revisions = mapOf(
-            "6.2.3" to Curation(licensed = Licensed(declared = "Apache-1.0"))
+            "6.2.3" to Curation(licensed = CurationLicensed(declared = "Apache-1.0"))
         )
 
         val patch = Patch(

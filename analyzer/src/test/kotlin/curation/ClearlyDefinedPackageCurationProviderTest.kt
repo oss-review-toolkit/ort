@@ -42,6 +42,14 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
                     "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
         }
 
+        "return an existing curation for the slf4j-log4j12 Maven package" {
+            val identifier = Identifier("Maven:org.slf4j:slf4j-log4j12:1.7.30")
+            val curations = provider.getCurationsFor(listOf(identifier))
+
+            curations should haveSize(1)
+            curations.values.flatten().first().data.vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
+        }
+
         "return no curation for a non-existing dummy NPM package" {
             val identifier = Identifier("NPM:@scope:name:1.2.3")
             val curations = provider.getCurationsFor(listOf(identifier))

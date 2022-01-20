@@ -24,6 +24,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.JsonNode
 
+import java.io.File
+import java.net.URI
+
 data class ContributedCurations(
     val curations: Map<Coordinates, Curation>,
     val contributions: List<JsonNode>
@@ -34,9 +37,51 @@ data class ContributedCurations(
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Curation(
-    val described: Described? = null,
-    val licensed: Licensed? = null,
-    val files: List<FileEntry>? = null
+    val described: CurationDescribed? = null,
+    val licensed: CurationLicensed? = null,
+    val files: List<CurationFileEntry>? = null
+)
+
+/**
+ * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L70-L119.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class CurationDescribed(
+    val facets: CurationFacets? = null,
+    val sourceLocation: SourceLocation? = null,
+    val projectWebsite: URI? = null,
+    val issueTracker: URI? = null,
+    val releaseDate: String? = null
+)
+
+/**
+ * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L74-L90.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class CurationFacets(
+    val data: List<String>? = null,
+    val dev: List<String>? = null,
+    val doc: List<String>? = null,
+    val examples: List<String>? = null,
+    val tests: List<String>? = null
+)
+
+/**
+ * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L243-L247.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class CurationLicensed(
+    val declared: String? = null
+)
+
+/**
+ * See https://github.com/clearlydefined/service/blob/0d00f25/schemas/curation-1.0.json#L201-L229.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class CurationFileEntry(
+    val path: File,
+    val license: String? = null,
+    val attributions: List<String>? = null
 )
 
 /**
