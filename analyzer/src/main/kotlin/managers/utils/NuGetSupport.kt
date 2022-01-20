@@ -47,6 +47,7 @@ import okhttp3.Request
 import org.apache.logging.log4j.Level
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageData
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageDetails
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageSpec
@@ -178,18 +179,21 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         }.orEmpty()
 
         return with(all.details) {
+            val homepageUrl = projectUrl.orEmpty()
+
             Package(
                 id = getIdentifier(id, version),
                 authors = parseAuthors(all.spec),
                 declaredLicenses = parseLicenses(all.spec),
                 description = description.orEmpty(),
-                homepageUrl = projectUrl.orEmpty(),
+                homepageUrl = homepageUrl,
                 binaryArtifact = RemoteArtifact(
                     url = all.data.packageContent,
                     hash = Hash.create("$packageHashAlgorithm-$packageHash")
                 ),
                 sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = vcs
+                vcs = vcs,
+                vcsProcessed = processPackageVcs(vcs, homepageUrl)
             )
         }
     }
