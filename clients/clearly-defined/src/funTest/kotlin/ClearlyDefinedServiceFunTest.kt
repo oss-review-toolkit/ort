@@ -33,10 +33,6 @@ import java.io.File
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curation
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull

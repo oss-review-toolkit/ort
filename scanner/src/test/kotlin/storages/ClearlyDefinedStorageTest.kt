@@ -49,8 +49,8 @@ import java.net.ServerSocket
 import java.time.Duration
 import java.time.Instant
 
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
