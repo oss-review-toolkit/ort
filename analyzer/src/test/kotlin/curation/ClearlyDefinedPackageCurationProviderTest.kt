@@ -31,9 +31,9 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class ClearlyDefinedPackageCurationProviderTest : WordSpec({
     "The production server" should {
-        "return an existing curation for the javax.servlet-api Maven package" {
-            val provider = ClearlyDefinedPackageCurationProvider()
+        val provider = ClearlyDefinedPackageCurationProvider()
 
+        "return an existing curation for the javax.servlet-api Maven package" {
             val identifier = Identifier("Maven:javax.servlet:javax.servlet-api:3.1.0")
             val curations = provider.getCurationsFor(listOf(identifier))
 
@@ -43,8 +43,6 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
         }
 
         "return no curation for a non-existing dummy NPM package" {
-            val provider = ClearlyDefinedPackageCurationProvider()
-
             val identifier = Identifier("NPM:@scope:name:1.2.3")
             val curations = provider.getCurationsFor(listOf(identifier))
 
@@ -53,9 +51,9 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
     }
 
     "The development server" should {
-        "return an existing curation for the platform-express NPM package" {
-            val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
+        val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
 
+        "return an existing curation for the platform-express NPM package" {
             val identifier = Identifier("NPM:@nestjs:platform-express:6.2.3")
             val curations = provider.getCurationsFor(listOf(identifier))
 
@@ -67,8 +65,6 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
         }
 
         "return no curation for a non-existing dummy Maven package" {
-            val provider = ClearlyDefinedPackageCurationProvider()
-
             val identifier = Identifier("Maven:group:name:1.2.3")
             val curations = provider.getCurationsFor(listOf(identifier))
 
