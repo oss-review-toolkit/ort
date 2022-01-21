@@ -161,7 +161,7 @@ abstract class PathScanner(
                 // Due to a bug that has been fixed in d839f6e the scan results for packages were not properly filtered
                 // by VCS path. Filter them again to fix the problem.
                 // TODO: Remove this workaround together with the next change that requires recreating the scan storage.
-                scanResults.map { it.filterByVcsPath().filterByIgnorePatterns(scannerConfig.ignorePatterns) }
+                scanResults.map { it.filterByVcsPath() }
             }
 
     private fun Collection<Package>.scan(downloadDirectory: File): Map<Package, List<ScanResult>> {
@@ -297,9 +297,8 @@ abstract class PathScanner(
 
         val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
         val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
-        val filteredResult = scanResult.filterByIgnorePatterns(scannerConfig.ignorePatterns)
 
-        return storageResult.map { filteredResult }.getOrElse {
+        return storageResult.map { scanResult }.getOrElse {
             val issue = OrtIssue(
                 source = ScanResultsStorage.storage.name,
                 message = it.message.orEmpty(),
@@ -307,7 +306,7 @@ abstract class PathScanner(
             )
             val issues = scanSummary.issues + issue
             val summary = scanSummary.copy(issues = issues)
-            filteredResult.copy(summary = summary)
+            scanResult.copy(summary = summary)
         }
     }
 
