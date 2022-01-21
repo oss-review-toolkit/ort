@@ -248,7 +248,7 @@ abstract class PathScanner(
      * Scan the provided [pkg] for license information and return a [ScanResult]. The package's source code is
      * downloaded to [downloadDirectory] for scanning. If the package could not be scanned a [ScanException] is thrown.
      */
-    fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, downloadDirectory: File): ScanResult {
+    private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, downloadDirectory: File): ScanResult {
         val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
         val provenance = try {
