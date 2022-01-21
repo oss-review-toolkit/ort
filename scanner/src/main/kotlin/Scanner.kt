@@ -148,8 +148,6 @@ fun scanOrtResult(
         }
     }
 
-    val scanRecord = ScanRecord(scanResults, ScanResultsStorage.storage.stats)
-
     val endTime = Instant.now()
 
     // Note: Currently, each scanner gets its own reference to the whole scanner configuration, which includes the
@@ -179,6 +177,12 @@ fun scanOrtResult(
     val configWithFilteredOptions = scannerConfig.copy(
         options = filteredScannerOptions.takeUnless { it.isEmpty() }
     )
+
+    val filteredScanResults = scanResults.mapValues { (_, results) ->
+        results.map { it.filterByIgnorePatterns(scannerConfig.ignorePatterns) }
+    }.toSortedMap()
+
+    val scanRecord = ScanRecord(filteredScanResults, ScanResultsStorage.storage.stats)
 
     // Note: This overwrites any existing ScannerRun from the input file.
     val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
