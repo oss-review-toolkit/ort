@@ -341,11 +341,11 @@ abstract class PathScanner(
         log.info { "Scanning path '$absoluteInputPath' with $details..." }
 
         val summary = try {
-            scanPathInternal(path).also {
+            scanPathInternal(path).filterByIgnorePatterns(scannerConfig.ignorePatterns).also {
                 log.info {
                     "Detected licenses for path '$absoluteInputPath': ${it.licenses.joinToString()}"
                 }
-            }.filterByIgnorePatterns(scannerConfig.ignorePatterns)
+            }
         } catch (e: ScanException) {
             e.showStackTrace()
 
