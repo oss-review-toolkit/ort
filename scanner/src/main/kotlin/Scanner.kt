@@ -82,8 +82,6 @@ fun scanOrtResult(
         "At least one scanner must be specified."
     }
 
-    val startTime = Instant.now()
-
     if (ortResult.analyzer == null) {
         Scanner.log.warn {
             "Cannot run the scanner as the provided ORT result does not contain an analyzer result. " +
@@ -92,6 +90,8 @@ fun scanOrtResult(
 
         return ortResult
     }
+
+    val startTime = Instant.now()
 
     // Determine the projects to scan as packages.
     val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
