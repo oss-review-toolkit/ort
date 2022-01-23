@@ -31,11 +31,13 @@ jobs:
 
       # Install git-repo.
       mkdir -p $HOME/.local/bin
+      PATH=$HOME/.local/bin:$PATH
       curl https://storage.googleapis.com/git-repo-downloads/repo > $HOME/.local/bin/repo
       chmod a+x $HOME/.local/bin/repo
 
       # Install Go Dep (requires the GOBIN directory to already exist).
       mkdir -p $HOME/go/bin
+      PATH=$HOME/go/bin:$PATH
       curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
 
       # Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
@@ -44,10 +46,9 @@ jobs:
       gem build cocoapods.gemspec
       sudo gem install cocoapods-1.10.1.gem
 
-      # Update PATH for next steps, see:
-      # https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/logging-commands?view=azure-devops&tabs=bash#prependpath-prepend-a-path-to-the--path-environment-variable
-      echo "##vso[task.prependpath]$HOME/.local/bin"
-      echo "##vso[task.prependpath]$HOME/go/bin"
+      # Set environment variables for next steps, see:
+      # https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/logging-commands?view=azure-devops&tabs=bash#setvariable-initialize-or-modify-the-value-of-a-variable
+      echo "##vso[task.setvariable variable=PATH]$PATH"
     displayName: Install Required Tools
 
   # Clone repository.
