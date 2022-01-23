@@ -67,13 +67,6 @@ class Licensee(
     override fun bootstrap(): File {
         val gem = if (Os.isWindows) "gem.cmd" else "gem"
 
-        if (Os.isWindows) {
-            // Version 0.28.0 of rugged broke building on Windows and the fix is unreleased yet, see
-            // https://github.com/libgit2/rugged/commit/2f5a8f6c8f4ae9b94a2d1f6ffabc315f2592868d. So install the latest
-            // version < 0.28.0 (and => 0.24.0) manually to satisfy Licensee's needs.
-            ProcessCapture(gem, "install", "rugged", "-v", "0.27.10.1").requireSuccess()
-        }
-
         ProcessCapture(gem, "install", "--user-install", "licensee", "-v", expectedVersion).requireSuccess()
 
         val ruby = ProcessCapture("ruby", "-r", "rubygems", "-e", "puts Gem.user_dir").requireSuccess()
