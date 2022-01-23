@@ -7,8 +7,6 @@ jobs:
     displayName: Enable Python 3.6
     inputs:
       versionSpec: 3.6
-      addToPath: true
-      architecture: x64
 
   # Install required tools.
   - bash: |
