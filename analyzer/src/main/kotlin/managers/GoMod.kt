@@ -347,6 +347,8 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
     private fun dependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
 
+private val GITHUB_NAME_REGEX = "(github\\.com/[^/]+/[^/]+)/v\\d".toRegex()
+
 private const val DATE_REVISION_PATTERN = "[\\d]{14}-(?<sha1>[0-9a-f]+)"
 
 // See https://golang.org/ref/mod#pseudo-versions.
@@ -381,7 +383,11 @@ private fun getRevision(version: String): String {
 }
 
 internal fun Identifier.toVcsInfo(): VcsInfo {
-    val vcsInfo = VcsHost.toVcsInfo("https://$name")
+    val hostname = GITHUB_NAME_REGEX.matchEntire(name)?.let {
+        it.groupValues[1]
+    } ?: name
+
+    val vcsInfo = VcsHost.toVcsInfo("https://$hostname")
     return vcsInfo.copy(revision = getRevision(version))
 }
 
