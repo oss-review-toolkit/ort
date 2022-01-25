@@ -203,7 +203,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
             }
 
             "create an issue for an external reference with an invalid URI" {
-                val reference = SpdxExternalDocumentReference("someDocument", "?Not a valid URI?!!", DUMMY_CHECKSUM)
+                val reference = SpdxExternalDocumentReference("DocumentRef-ort", "?Not a valid URI?!!", DUMMY_CHECKSUM)
                 val identifier = "${reference.externalDocumentId}:somePackage"
                 val doc = createSpdxDocument(1, listOf(createPackage(1)), references = listOf(reference))
 
@@ -221,7 +221,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
             }
 
             "create an issue for an external reference pointing to a non-existing file" {
-                val reference = SpdxExternalDocumentReference("someDocument", "nonExisting.spdx.yml", DUMMY_CHECKSUM)
+                val reference = SpdxExternalDocumentReference("DocumentRef-ort", "absent.spdx.yml", DUMMY_CHECKSUM)
                 val identifier = "${reference.externalDocumentId}:somePackage"
                 val doc = createSpdxDocument(1, listOf(createPackage(1)), references = listOf(reference))
 
@@ -318,7 +318,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
             "handle a failure when downloading an external document" {
                 val errorRef = SpdxExternalDocumentReference(
-                    "error",
+                    "DocumentRef-ort",
                     "http://localhost:${server.port()}/doc.spdx.json",
                     DUMMY_CHECKSUM
                 )
