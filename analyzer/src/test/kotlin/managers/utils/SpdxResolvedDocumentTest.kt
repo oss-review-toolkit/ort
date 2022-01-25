@@ -20,9 +20,12 @@
 package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
+import com.github.tomakehurst.wiremock.client.WireMock.exactly
 import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -155,6 +158,20 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile, MANAGER_NAME)
 
                 resolvedDoc.referencedDocuments.keys should containExactlyInAnyOrder(ref1, ref2, ref3)
+            }
+        }
+
+        "SpdxExternalDocumentReference.resolve" should {
+            "maintain a query string" {
+                val ref = SpdxExternalDocumentReference("DocumentRef-ort", "../lib/package.spdx.yml", DUMMY_CHECKSUM)
+                val baseUri = URI("http://localhost:${server.port()}/documents/spdx/app/package.spdx.yml?branch=main")
+
+                ref.resolve(SpdxDocumentCache(), baseUri, MANAGER_NAME)
+
+                server.verify(
+                    exactly(1),
+                    getRequestedFor(WireMock.urlEqualTo("/documents/spdx/lib/package.spdx.yml?branch=main"))
+                )
             }
         }
 
