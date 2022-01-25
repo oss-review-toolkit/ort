@@ -216,14 +216,28 @@ private fun getSpdxCopyrightText(
 }
 
 private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
-    if (purl.isEmpty()) return emptyList()
+    val externalRefs = mutableListOf<SpdxExternalReference>()
 
-    val reference = SpdxExternalReference(
-        referenceType = SpdxExternalReference.Type.Purl,
-        referenceLocator = purl
-    )
+    if (purl.isNotEmpty()) {
+        externalRefs += SpdxExternalReference(
+            referenceType = SpdxExternalReference.Type.Purl,
+            referenceLocator = purl
+        )
+    }
 
-    return listOf(reference)
+    cpe?.takeUnless { it.isEmpty() }?.let {
+        val referenceType = if (it.startsWith("cpe:2.3")) {
+            SpdxExternalReference.Type.Cpe23Type
+        } else {
+            SpdxExternalReference.Type.Cpe22Type
+        }
+        externalRefs += SpdxExternalReference(
+            referenceType,
+            referenceLocator = it
+        )
+    }
+
+    return externalRefs
 }
 
 private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
