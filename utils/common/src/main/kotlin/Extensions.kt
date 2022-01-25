@@ -48,13 +48,13 @@ fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.RO
 /**
  * Return the duplicates as identified by [keySelector] of a collection.
  */
-fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Set<K> =
-    if (this is Set) emptySet() else groupBy(keySelector).filter { it.value.size > 1 }.keys
+fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Map<K, List<T>> =
+    if (this is Set) emptyMap() else groupBy(keySelector).filter { it.value.size > 1 }
 
 /**
  * Return the duplicates of a collection.
  */
-fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }
+fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }.keys
 
 /**
  * Format this [Double] as a string with the provided number of [decimalPlaces].
