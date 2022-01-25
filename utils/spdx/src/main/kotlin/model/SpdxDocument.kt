@@ -130,7 +130,7 @@ data class SpdxDocument(
     val relationships: List<SpdxRelationship> = emptyList()
 ) {
     init {
-        require(spdxId.isNotBlank()) { "The SPDX-Id must not be blank." }
+        require(spdxId.isNotBlank()) { "The SPDX-ID must not be blank." }
 
         require(spdxVersion.isNotBlank()) { "The SPDX version must not be blank." }
 
