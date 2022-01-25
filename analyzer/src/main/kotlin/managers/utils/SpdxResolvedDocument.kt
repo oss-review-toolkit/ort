@@ -227,7 +227,7 @@ private fun collectAndQualifyRelations(
  * A data class to hold the result of an operation to resolve an [SpdxDocument] from an external reference. Resolving
  * of the document may fail, then the document is *null*, and a corresponding [OrtIssue] is present.
  */
-private data class ResolutionResult(
+internal data class ResolutionResult(
     /**
      * The document the reference points to, if it could be resolved successfully.
      */
@@ -258,12 +258,15 @@ private fun URI.toDefinitionFile(): File? =
  * Return the [SpdxDocument] this [SpdxExternalDocumentReference]'s [SpdxDocument] refers to. Use [cache] to parse
  * the document, and [baseUri] to resolve relative references.
  */
-private fun SpdxExternalDocumentReference.resolve(
+internal fun SpdxExternalDocumentReference.resolve(
     cache: SpdxDocumentCache,
     baseUri: URI,
     managerName: String
 ): ResolutionResult {
-    val uri = runCatching { baseUri.resolve(spdxDocument) }.getOrElse {
+    val uri = runCatching {
+        val resolvedUri = baseUri.resolve(spdxDocument)
+        resolvedUri.takeUnless { baseUri.query != null } ?: URI("$resolvedUri?${baseUri.query}")
+    }.getOrElse {
         return ResolutionResult(
             null,
             baseUri,
