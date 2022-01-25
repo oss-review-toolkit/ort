@@ -180,15 +180,20 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             }
         }
 
-        val actualRepositoryConfigurationFile = (repositoryConfigurationFile
-            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)).takeIf { it.isFile }
+        // Manually set a default value based on another option to avoid a "Cannot read from option delegate before
+        // parsing command line" error.
+        val actualRepositoryConfigurationFile = repositoryConfigurationFile
+            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)
 
-        val configurationFiles = listOfNotNull(
-            packageCurationsFile, packageCurationsDir, actualRepositoryConfigurationFile
-        ).map { it.absolutePath }
+        val configurationFiles = listOf(packageCurationsFile, packageCurationsDir, actualRepositoryConfigurationFile,
+            resolutionsFile)
 
-        println("The following configuration files and directories are used:")
-        println("\t" + configurationFiles.joinToString("\n\t"))
+        val configurationInfo = configurationFiles.joinToString("\n\t") { file ->
+            file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
+        }
+
+        println("Looking for configuration in the following files and directories:")
+        println("\t" + configurationInfo)
 
         val distinctPackageManagers = activatedPackageManagers.toSet() - deactivatedPackageManagers.toSet()
         println("The following package managers are activated:")
@@ -199,7 +204,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val config = globalOptionsForSubcommands.config
         val analyzer = Analyzer(config.analyzer, labels)
 
-        val repositoryConfiguration = actualRepositoryConfigurationFile?.readValueOrNull() ?: RepositoryConfiguration()
+        val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
+            ?: RepositoryConfiguration()
 
         val packageCurations =
             FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations.toMutableList()
