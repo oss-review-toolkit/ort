@@ -252,7 +252,7 @@ data class SpdxRelationship(
 
     init {
         require(spdxElementId.isNotBlank()) {
-            "The SPDX element Id must not be blank."
+            "The SPDX element ID must not be blank."
         }
 
         require(relatedSpdxElement.isNotBlank()) {
