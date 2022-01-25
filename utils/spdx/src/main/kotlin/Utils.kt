@@ -162,11 +162,15 @@ private val LICENSE_REF_FILENAME_REGEX by lazy { Regex("^LicenseRef-\\w+-") }
 
 private fun getLicenseTextFile(id: String, dir: File): File? =
     id.replace(LICENSE_REF_FILENAME_REGEX, "").let { idWithoutLicenseRefNamespace ->
-        sequenceOf(
+        listOfNotNull(
             id,
             id.removePrefix("LicenseRef-"),
             idWithoutLicenseRefNamespace,
-            "$idWithoutLicenseRefNamespace.LICENSE"
+            "$idWithoutLicenseRefNamespace.LICENSE",
+            "x11-xconsortium_veillard.LICENSE".takeIf {
+                // Work around for https://github.com/nexB/scancode-toolkit/issues/2813.
+                id == "LicenseRef-scancode-x11-xconsortium-veillard"
+            }
         ).mapNotNull { filename ->
             dir.resolve(filename).takeIf { it.isFile }
         }.firstOrNull()

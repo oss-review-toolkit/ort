@@ -209,7 +209,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
  */
 private fun getSpdxLicenseId(license: JsonNode): String {
     // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
-    val id = license["spdx_license_key"].textValueOrEmpty()
+    val id = license["spdx_license_key"].textValueOrEmpty().replace('_', '-')
 
     // For regular SPDX IDs, return early here.
     if (id.isNotEmpty() && !id.startsWith(LICENSE_REF_PREFIX)) return id
