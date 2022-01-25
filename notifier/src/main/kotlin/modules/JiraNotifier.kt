@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.notifier.modules
 import com.atlassian.jira.rest.client.api.JiraRestClient
 import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import com.atlassian.jira.rest.client.api.domain.Comment
+import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.api.domain.input.TransitionInput
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory
@@ -63,6 +64,19 @@ class JiraNotifier(
                         it.collectMessagesAsString()
             }
         }.isSuccess
+    }
+
+    /**
+     * Return the issue for the given [issueKey].
+     */
+    fun getIssue(issueKey: String): Issue? {
+        return runCatching {
+            restClient.issueClient.getIssue(issueKey).claim()
+        }.onFailure {
+            log.error {
+                "Could not retrieve the issue with the key '$issueKey' due to: ${it.collectMessagesAsString()}"
+            }
+        }.getOrNull()
     }
 
     /**
