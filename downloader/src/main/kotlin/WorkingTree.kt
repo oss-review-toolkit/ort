@@ -81,10 +81,9 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
     abstract fun listRemoteTags(): List<String>
 
     /**
-     * Search (symbolic) names of VCS revisions for a match with the given [project] and [version].
-     *
-     * @return The matching VCS revision, never blank.
-     * @throws IOException If no or multiple matching revisions are found.
+     * Search tags / symbolic names for fixed VCS revisions for a match based on the given [project] and [version].
+     * Return the matching VCS revision (which is never blank), or throw an [IOException] if no or multiple matching
+     * revisions are found.
      */
     fun guessRevisionName(project: String, version: String): String {
         if (version.isBlank()) throw IOException("Cannot guess a revision name from a blank version.")
