@@ -263,9 +263,9 @@ abstract class VersionControlSystem {
     }
 
     /**
-     * Get a set of revision candidates for the [package][pkg]. The iteration order of the elements of the returned set
-     * represents the priority of the revision candidates. If no revision candidates can be found a [DownloadException]
-     * is thrown.
+     * Get a list of distinct revision candidates for the [package][pkg]. The iteration order of the elements in the
+     * list represents the priority of the revision candidates. If no revision candidates can be found a
+     * [DownloadException] is thrown.
      *
      * The provided [workingTree] must have been created from the [processed VCS information][Package.vcsProcessed] of
      * the [package][pkg] for the function to return correct results.
@@ -286,32 +286,16 @@ abstract class VersionControlSystem {
         val revisionCandidates = mutableListOf<String>()
         val emptyRevisionCandidatesException = DownloadException("Unable to determine a revision to checkout.")
 
-        runCatching {
-            pkg.vcsProcessed.revision.also {
-                if (it.isNotBlank() && (allowMovingRevisions || isFixedRevision(workingTree, it))) {
-                    if (revisionCandidates.add(it)) {
-                        logger.info {
-                            "Adding $type revision '$it' (taken from package metadata) as a candidate."
-                        }
-                    }
-                }
-            }
-        }.onFailure {
-            logger.info {
-                "Metadata has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessages()}"
-            }
-
-            emptyRevisionCandidatesException.addSuppressed(it)
-        }
-
         fun addGuessedRevision(project: String, version: String): Boolean =
             runCatching {
                 workingTree.guessRevisionName(project, version).also {
-                    if (revisionCandidates.add(it)) {
+                    if (it !in revisionCandidates) {
                         logger.info {
                             "Adding $type revision '$it' (guessed from package '$project' and version '$version') as " +
                                     "a candidate."
                         }
+
+                        revisionCandidates += it
                     }
                 }
             }.onFailure {
@@ -338,6 +322,34 @@ abstract class VersionControlSystem {
 
                     if (tag in workingTree.listRemoteTags()) revisionCandidates += tag
                 }
+            }
+        }
+
+        pkg.vcsProcessed.revision.takeIf { it.isNotBlank() && it !in revisionCandidates }?.also { revision ->
+            val isFixedRevision = runCatching {
+                isFixedRevision(workingTree, revision)
+            }.onFailure {
+                logger.info {
+                    "Metadata has invalid $type revision '$revision': ${it.collectMessages()}"
+                }
+
+                emptyRevisionCandidatesException.addSuppressed(it)
+            }.getOrDefault(false)
+
+            if (isFixedRevision) {
+                logger.info {
+                    "Adding $type fixed revision '$revision' (taken from package metadata) as a candidate."
+                }
+
+                // Add a fixed revision from package metadata with the highest priority.
+                revisionCandidates.add(0, revision)
+            } else if (allowMovingRevisions) {
+                logger.info {
+                    "Adding $type moving revision '$revision' (taken from package metadata) as a candidate."
+                }
+
+                // Add a moving revision from package metadata with lower priority than guessed fixed revisions.
+                revisionCandidates += revision
             }
         }
 
