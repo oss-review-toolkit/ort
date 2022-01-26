@@ -52,7 +52,7 @@ application {
 
 graal {
     graalVersion("22.0.0.2")
-    javaVersion("11")
+    javaVersion("17")
 
     option("--no-fallback")
 
