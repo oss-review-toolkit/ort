@@ -71,7 +71,7 @@ class VersionControlSystemTest : WordSpec({
     }
 
     "getRevisionCandidates()" should {
-        "return revision candidates in the expected order" {
+        "prefer a matching tag name over a branch name from metadata" {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Gem::google-cloud-core:1.6.0"),
                 vcsProcessed = VcsInfo(
@@ -86,8 +86,8 @@ class VersionControlSystemTest : WordSpec({
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
             Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBe listOf(
-                "master",
-                "v1.6.0"
+                "v1.6.0",
+                "master"
             )
         }
     }
