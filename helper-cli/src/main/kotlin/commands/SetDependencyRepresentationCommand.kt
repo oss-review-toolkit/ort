@@ -133,7 +133,7 @@ class SetDependencyRepresentationCommand : CliktCommand(
 
     override fun run() {
         val converters = sequenceOf(::convertOrtResult, ::convertAnalyzerResult, ::convertProjectAnalyzerResult)
-        converters.mapNotNull { it() }.firstOrNull()?.let { writeResult(it) }
+        converters.firstNotNullOfOrNull { it() }?.let { writeResult(it) }
             ?: throw UsageError("$ortFile does not contain a supported result.")
     }
 

@@ -104,10 +104,10 @@ object Os {
         return if (isWindows) {
             val referencePattern = Regex("%(?<reference>\\w+)%")
 
-            paths.mapNotNull { path ->
+            paths.firstNotNullOfOrNull { path ->
                 val expandedPath = path.expandVariable(referencePattern, "reference")
                 resolveWindowsExecutable(File(expandedPath, executable))
-            }.firstOrNull()
+            }
         } else {
             val referencePattern = Regex("\\$\\{?(?<reference>\\w+)}?")
 

@@ -151,13 +151,12 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         // Note: The package name in the URL is case-sensitive and must be lower-case!
         val lowerId = id.name.lowercase()
 
-        val data = registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
+        val data = registrationsBaseUrls.asSequence().firstNotNullOfOrNull { baseUrl ->
             runCatching {
                 val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
                 runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
             }.getOrNull()
-        }.firstOrNull()
-            ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
+        } ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
 
         val nupkgUrl = data.packageContent
         val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
