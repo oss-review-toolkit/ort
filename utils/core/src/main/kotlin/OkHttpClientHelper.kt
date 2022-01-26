@@ -184,8 +184,8 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
     val candidateNames = mutableSetOf<String>()
 
     response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
-        val filenames = value.split(';').mapNotNull { it.trim().withoutPrefix("filename=") }
-        filenames.firstOrNull()?.removeSurrounding("\"")
+        value.split(';').firstNotNullOfOrNull { it.trim().withoutPrefix("filename=") }
+            ?.removeSurrounding("\"")
     }
 
     listOf(response.request.url.toString(), url).mapTo(candidateNames) {

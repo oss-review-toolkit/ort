@@ -63,9 +63,9 @@ private val scanCodeLicenseTextDir by lazy {
         "../site-packages/licensedcode/data/licenses",
         "../lib/site-packages/licensedcode/data/licenses",
         *candidates.toTypedArray()
-    ).mapNotNull { relativePath ->
+    ).firstNotNullOfOrNull { relativePath ->
         scanCodeDir?.resolve(relativePath)?.takeIf { it.isDirectory }
-    }.firstOrNull()
+    }
 }
 
 /**
@@ -146,9 +146,9 @@ fun getLicenseTextReader(
 ): (() -> String)? {
     return if (id.startsWith(LICENSE_REF_PREFIX)) {
         getLicenseTextResource(id)?.let { { it.readText() } }
-            ?: addScanCodeLicenseTextsDir(licenseTextDirectories).asSequence().mapNotNull {
+            ?: addScanCodeLicenseTextsDir(licenseTextDirectories).asSequence().firstNotNullOfOrNull {
                 getLicenseTextFile(id, it)?.let { file -> { file.readText() } }
-            }.firstOrNull()
+            }
     } else {
         SpdxLicense.forId(id)?.let { { it.text } }
             ?: SpdxLicenseException.forId(id)?.takeIf { handleExceptions }?.let { { it.text } }
@@ -171,9 +171,9 @@ private fun getLicenseTextFile(id: String, dir: File): File? =
                 // Work around for https://github.com/nexB/scancode-toolkit/issues/2813.
                 id == "LicenseRef-scancode-x11-xconsortium-veillard"
             }
-        ).mapNotNull { filename ->
+        ).firstNotNullOfOrNull { filename ->
             dir.resolve(filename).takeIf { it.isFile }
-        }.firstOrNull()
+        }
     }
 
 private fun addScanCodeLicenseTextsDir(licenseTextDirectories: List<File>): List<File> =
