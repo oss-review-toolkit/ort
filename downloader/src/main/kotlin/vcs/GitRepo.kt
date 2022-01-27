@@ -143,11 +143,18 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
     override fun isApplicableUrlInternal(vcsUrl: String) = false
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
-        val manifestRevision = vcs.revision.takeUnless { it.isBlank() } ?: "master"
-        val manifestPath = vcs.path.takeUnless { it.isBlank() } ?: "default.xml"
+        val manifestRevision = vcs.revision.takeUnless { it.isBlank() }
+        val manifestPath = vcs.path.takeUnless { it.isBlank() }
+
+        val manifestOptions = listOfNotNull(
+            manifestRevision?.let { listOf("-b", it) },
+            manifestPath?.let { listOf("-m", it) }
+        ).flatten()
 
         log.info {
-            "Initializing git-repo from ${vcs.url} with revision '$manifestRevision' and manifest '$manifestPath'."
+            val revisionDetails = manifestRevision?.let { " with revision '$it'" }.orEmpty()
+            val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
+            "Initializing git-repo from ${vcs.url}$revisionDetails$pathDetails."
         }
 
         runRepo(
@@ -159,9 +166,8 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             "--no-repo-verify",
             "--no-clone-bundle",
             "--repo-branch=$GIT_REPO_BRANCH",
-            "-b", manifestRevision,
             "-u", vcs.url,
-            "-m", manifestPath
+            *manifestOptions.toTypedArray()
         )
 
         return getWorkingTree(targetDir)
@@ -173,12 +179,17 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
         path: String,
         recursive: Boolean
     ): Result<String> {
-        val manifestRevision = revision.takeUnless { it.isBlank() } ?: "master"
-        val manifestPath = path.takeUnless { it.isBlank() } ?: "default.xml"
+        val manifestRevision = revision.takeUnless { it.isBlank() }
+        val manifestPath = path.takeUnless { it.isBlank() }
+
+        val manifestOptions = listOfNotNull(
+            manifestRevision?.let { listOf("-b", it) },
+            manifestPath?.let { listOf("-m", it) }
+        ).flatten()
 
         return runCatching {
             // Switching manifest branches / revisions requires running "init" again.
-            runRepo(workingTree.workingDir, "init", "-b", manifestRevision, "-m", manifestPath)
+            runRepo(workingTree.workingDir, "init", *manifestOptions.toTypedArray())
 
             // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
             // nested Git checkout overwrites files in a directory of the upper-level Git repository. However, we still
@@ -190,12 +201,13 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             runRepo(workingTree.workingDir, *syncArgs.toTypedArray())
 
             log.debug { runRepo(workingTree.workingDir, "info").stdout }
-        }.onFailure {
-            it.showStackTrace()
+        }.onFailure { e ->
+            e.showStackTrace()
 
             log.warn {
-                "Failed to sync the working tree to revision '$manifestRevision' using manifest '$manifestPath': " +
-                        it.collectMessagesAsString()
+                val revisionDetails = manifestRevision?.let { " to revision '$it'" }.orEmpty()
+                val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
+                "Failed to sync the working tree$revisionDetails$pathDetails: ${e.collectMessagesAsString()}"
             }
         }.map {
             revision
