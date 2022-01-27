@@ -48,6 +48,10 @@ data class SpdxExternalDocumentReference(
             "The external document ID must start with '${SpdxConstants.DOCUMENT_REF_PREFIX}'."
         }
 
-        require(spdxDocument.isNotBlank()) { "The SPDX document must not be blank." }
+        require(spdxDocument.isNotEmpty()) { "The SPDX document must not be empty." }
+
+        require(spdxDocument.trim() == spdxDocument) {
+            "The SPDX document must not contain any leading or trailing whitespace."
+        }
     }
 }
