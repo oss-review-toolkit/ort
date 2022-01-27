@@ -38,7 +38,7 @@ plugins {
 
 application {
     applicationName = "orth"
-    mainClassName = "org.ossreviewtoolkit.helper.HelperMainKt"
+    mainClass.set("org.ossreviewtoolkit.helper.HelperMainKt")
 }
 
 tasks.withType<ShadowJar> {
