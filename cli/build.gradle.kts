@@ -47,7 +47,7 @@ plugins {
 
 application {
     applicationName = "ort"
-    mainClassName = "org.ossreviewtoolkit.cli.OrtMainKt"
+    mainClass.set("org.ossreviewtoolkit.cli.OrtMainKt")
 }
 
 graal {
