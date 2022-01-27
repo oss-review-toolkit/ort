@@ -105,6 +105,7 @@ COPY docker/python.sh /etc/profile.d
 # RUBY - Build Ruby as a separate component with rbenv
 FROM build as rubybuild
 
+ARG COCOAPODS_VERSION=1.11.2
 ARG RUBY_VERSION=2.7.4
 ENV RBENV_ROOT=/opt/rbenv
 ENV PATH=${RBENV_ROOT}/bin:${RBENV_ROOT}/shims/:${RBENV_ROOT}/plugins/ruby-build/bin:$PATH
@@ -116,7 +117,7 @@ RUN src/configure \
     && make -C src
 RUN rbenv install ${RUBY_VERSION} \
     && rbenv global ${RUBY_VERSION} \
-    && gem install bundler cocoapods
+    && gem install bundler cocoapods:${COCOAPODS_VERSION}
 
 # Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
 RUN curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | \

@@ -28,7 +28,7 @@ ARG CRT_FILES=""
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="30.1.0"
 
-FROM eclipse-temurin:11-jdk-focal AS build
+FROM adoptopenjdk:11-jdk-hotspot-focal AS build
 
 COPY . /usr/local/src/ort
 
@@ -44,12 +44,13 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM eclipse-temurin:11-jdk-focal
+FROM adoptopenjdk:11-jdk-hotspot-focal AS run
 
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
     CARGO_VERSION=0.54.0-0ubuntu1~20.04.1 \
+    COCOAPODS_VERSION=1.11.2 \
     COMPOSER_VERSION=1.10.1-1 \
     CONAN_VERSION=1.43.2 \
     GO_DEP_VERSION=0.5.4 \
@@ -112,7 +113,7 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
     && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /usr/local/src/ort/scripts/*.sh /opt/ort/bin/
+COPY scripts/*.sh /opt/ort/bin/
 
 ARG CRT_FILES
 COPY "$CRT_FILES" /tmp/certificates/
@@ -146,14 +147,8 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi && \
     yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
-    # Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
-    curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | \
-        tar -zxC . && \
-        (cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
-            gem build cocoapods.gemspec && \
-            gem install cocoapods-1.10.1.gem \
-        ) && \
-        rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
+    # Install 'CocoaPods'.
+    gem install cocoapods -v $COCOAPODS_VERSION
 
 # Add scanners (in versions known to work).
 ARG SCANCODE_VERSION
@@ -164,6 +159,8 @@ RUN curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSI
         PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --reindex-licenses && \
         chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
+
+FROM run
 
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
 
