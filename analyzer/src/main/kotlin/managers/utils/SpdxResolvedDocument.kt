@@ -272,8 +272,8 @@ internal fun SpdxExternalDocumentReference.resolve(
             baseUri,
             createAndLogIssue(
                 source = managerName,
-                message = "'$spdxDocument' defined in '$baseUri' as part of '$externalDocumentId' is not a valid " +
-                        "URI."
+                message = "The SPDX document at '$spdxDocument' cannot be resolved as a URI (referred from $baseUri " +
+                        "as part of '$externalDocumentId')."
             )
         )
     }
@@ -319,7 +319,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
     baseUri: URI,
     managerName: String
 ): ResolutionResult {
-    log.info { "Downloading '$uri' referred to by '$baseUri' in reference '$externalDocumentId'." }
+    log.info { "Downloading SPDX document from $uri (referred from $baseUri as part of '$externalDocumentId')." }
 
     val tempDir = createOrtTempDir()
     return try {
@@ -342,8 +342,8 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
         val file = client.downloadFile(uri.toString(), tempDir).getOrNull() ?: run {
             val issue = createAndLogIssue(
                 source = managerName,
-                message = "Failed to download '$spdxDocument' from '$uri' pointed to by '$baseUri' in reference " +
-                        "'$externalDocumentId'."
+                message = "Failed to download SPDX document from $uri (referred from $baseUri as part of " +
+                        "'$externalDocumentId')."
             )
             return ResolutionResult(null, uri, issue)
         }
@@ -365,8 +365,8 @@ private fun SpdxExternalDocumentReference.verifyChecksum(file: File, uri: URI, m
     return createAndLogIssue(
         source = managerName,
         severity = Severity.WARNING,
-        message = "The file '$spdxDocument' pointed to by '$uri' in reference '$externalDocumentId' does not match " +
-                "the expected checksum '$hash'."
+        message = "The SPDX document at '$spdxDocument' does not match the expected $hash (referred from $uri as " +
+                "part of '$externalDocumentId')."
     )
 }
 
