@@ -74,12 +74,12 @@ class ExcelReporter : Reporter {
     private val defaultColumns = 5
 
     private val colorMap = DefaultIndexedColorMap()
-    private val borderColor = XSSFColor(Color(211, 211, 211), colorMap)
-    private val errorColor = XSSFColor(Color(240, 128, 128), colorMap)
-    private val excludedColor = XSSFColor(Color(180, 180, 180), colorMap)
-    private val excludedFontColor = XSSFColor(Color(100, 100, 100), colorMap)
-    private val successColor = XSSFColor(Color(173, 216, 230), colorMap)
-    private val warningColor = XSSFColor(Color(255, 255, 224), colorMap)
+    private val borderColor by lazy { XSSFColor(Color(211, 211, 211), colorMap) }
+    private val errorColor by lazy { XSSFColor(Color(240, 128, 128), colorMap) }
+    private val excludedColor by lazy { XSSFColor(Color(180, 180, 180), colorMap) }
+    private val excludedFontColor by lazy { XSSFColor(Color(100, 100, 100), colorMap) }
+    private val successColor by lazy { XSSFColor(Color(173, 216, 230), colorMap) }
+    private val warningColor by lazy { XSSFColor(Color(255, 255, 224), colorMap) }
 
     private lateinit var defaultStyle: CellStyle
     private lateinit var excludedStyle: CellStyle
