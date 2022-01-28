@@ -27,11 +27,9 @@ import java.io.File
 import java.net.URL
 import java.security.MessageDigest
 
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
-import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
@@ -44,29 +42,6 @@ internal val PATH_STRING_COMPARATOR = compareBy<String>({ path -> path.count { i
  * A mapper to read license mapping from YAML resource files.
  */
 internal val yamlMapper = YAMLMapper().registerKotlinModule()
-
-/**
- * The directory that contains the ScanCode license texts. This is located using a heuristic based on the path of the
- * ScanCode binary.
- */
-private val scanCodeLicenseTextDir by lazy {
-    val scanCodeDir = Os.getPathFromEnvironment("scancode")?.realFile()?.parentFile
-
-    // Locate directories that contain the Python version in their name.
-    val candidates = scanCodeDir?.resolve("../lib")?.listFiles().orEmpty()
-        .filter { it.isDirectory && it.name.startsWith("python") }
-        .map { "../lib/${it.name}/site-packages/licensedcode/data/licenses" }
-
-    sequenceOf(
-        "src/licensedcode/data/licenses",
-        "../src/licensedcode/data/licenses",
-        "../site-packages/licensedcode/data/licenses",
-        "../lib/site-packages/licensedcode/data/licenses",
-        *candidates.toTypedArray()
-    ).firstNotNullOfOrNull { relativePath ->
-        scanCodeDir?.resolve(relativePath)?.takeIf { it.isDirectory }
-    }
-}
 
 /**
  * Calculate the [SPDX package verification code][1] for a list of [known SHA1s][sha1sums] of files and [excludes].
@@ -131,13 +106,13 @@ fun getLicenseText(
     id: String,
     handleExceptions: Boolean = false,
     licenseTextDirectories: List<File> = emptyList()
-): String? = getLicenseTextReader(id, handleExceptions, addScanCodeLicenseTextsDir(licenseTextDirectories))?.invoke()
+): String? = getLicenseTextReader(id, handleExceptions, licenseTextDirectories)?.invoke()
 
 fun hasLicenseText(
     id: String,
     handleExceptions: Boolean = false,
     licenseTextDirectories: List<File> = emptyList()
-): Boolean = getLicenseTextReader(id, handleExceptions, addScanCodeLicenseTextsDir(licenseTextDirectories)) != null
+): Boolean = getLicenseTextReader(id, handleExceptions, licenseTextDirectories) != null
 
 fun getLicenseTextReader(
     id: String,
@@ -146,7 +121,7 @@ fun getLicenseTextReader(
 ): (() -> String)? {
     return if (id.startsWith(LICENSE_REF_PREFIX)) {
         getLicenseTextResource(id)?.let { { it.readText() } }
-            ?: addScanCodeLicenseTextsDir(licenseTextDirectories).asSequence().firstNotNullOfOrNull {
+            ?: licenseTextDirectories.asSequence().firstNotNullOfOrNull {
                 getLicenseTextFile(id, it)?.let { file -> { file.readText() } }
             }
     } else {
@@ -175,6 +150,3 @@ private fun getLicenseTextFile(id: String, dir: File): File? =
             dir.resolve(filename).takeIf { it.isFile }
         }
     }
-
-private fun addScanCodeLicenseTextsDir(licenseTextDirectories: List<File>): List<File> =
-    (listOfNotNull(scanCodeLicenseTextDir) + licenseTextDirectories).distinct()

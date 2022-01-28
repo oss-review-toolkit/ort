@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.utils.core.ortToolsDirectory
 class ScanCode(
     name: String,
     scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
+    downloaderConfig: DownloaderConfiguration,
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
     class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
@@ -228,4 +228,27 @@ class ScanCode(
         }
 
     override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
+
+    /**
+     * The directory that contains the ScanCode license texts. This is located using a heuristic
+     * based on the path of the ScanCode binary.
+     */
+    val licenseTextDir by lazy {
+        val scanCodeDir = scannerPath.parentFile
+
+        // Locate directories that contain the Python version in their name.
+        val candidates = scanCodeDir?.resolve("../lib")?.listFiles().orEmpty()
+            .filter { it.isDirectory && it.name.startsWith("python") }
+            .map { "../lib/${it.name}/site-packages/licensedcode/data/licenses" }
+
+        sequenceOf(
+            "src/licensedcode/data/licenses",
+            "../src/licensedcode/data/licenses",
+            "../site-packages/licensedcode/data/licenses",
+            "../lib/site-packages/licensedcode/data/licenses",
+            *candidates.toTypedArray()
+        ).mapNotNull { relativePath ->
+            scanCodeDir?.resolve(relativePath)?.takeIf { it.isDirectory }
+        }.firstOrNull()
+    }
 }
