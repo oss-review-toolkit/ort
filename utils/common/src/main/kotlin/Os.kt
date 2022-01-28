@@ -119,6 +119,21 @@ object Os {
     }
 
     /**
+     * Prepend [path] to the system's PATH environment.
+     */
+    fun prependToPathEnvironment(path: File) {
+        val paths = env["PATH"]?.split(File.pathSeparatorChar)
+        val absolutePath = path.absolutePath
+        if (paths != null) {
+            if (absolutePath !in paths) {
+                env["PATH"] = absolutePath + File.pathSeparatorChar + env["PATH"]
+            }
+        } else {
+            env["PATH"] = absolutePath
+        }
+    }
+
+    /**
      * Resolve the Windows [executable] to its full name including the optional extension.
      */
     fun resolveWindowsExecutable(executable: File): File? {

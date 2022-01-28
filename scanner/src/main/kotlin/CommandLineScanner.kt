@@ -69,6 +69,7 @@ abstract class CommandLineScanner(
                                         "$expectedVersion."
                             )
                         }
+                        Os.prependToPathEnvironment(it)
                     }
                 }
 
