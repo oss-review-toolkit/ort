@@ -27,5 +27,5 @@ class OrtRuleSet : RuleSetProvider {
     override val ruleSetId: String = "ORT"
 
     override fun instance(config: Config) =
-        RuleSet(ruleSetId, listOf(OrtImportOrder(), OrtPackageNaming()))
+        RuleSet(ruleSetId, listOf(OrtImportOrder(config), OrtPackageNaming(config)))
 }

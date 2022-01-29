@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.detekt
 import io.github.detekt.psi.absolutePath
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -32,7 +33,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 
-class OrtImportOrder : Rule() {
+class OrtImportOrder(config: Config) : Rule(config) {
     private val commonTopLevelDomains = listOf("com", "org", "io")
 
     override val issue = Issue(
