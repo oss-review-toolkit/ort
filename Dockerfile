@@ -59,7 +59,7 @@ ENV \
     NPM_VERSION=7.20.6 \
     PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
-    SBT_VERSION=1.3.8 \
+    SBT_VERSION=1.6.1 \
     YARN_VERSION=1.22.10 \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
@@ -74,7 +74,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
     apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates gnupg software-properties-common && \
-    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list && \
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee -a /etc/apt/sources.list.d/sbt.list && \
     curl -ksS "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key adv --import - && \
     curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     add-apt-repository -y ppa:git-core/ppa && \
