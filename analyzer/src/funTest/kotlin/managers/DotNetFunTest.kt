@@ -50,9 +50,9 @@ class DotNetFunTest : StringSpec() {
             val result = reader.getDependencies(packageFile)
 
             result should containExactly(
-                NuGetDependency(name = "jQuery", version = "3.3.1", targetFramework = ""),
-                NuGetDependency(name = "WebGrease", version = "1.5.2", targetFramework = ""),
-                NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "")
+                NuGetDependency(name = "jQuery", version = "3.3.1", targetFramework = "test"),
+                NuGetDependency(name = "WebGrease", version = "1.5.2", targetFramework = "test"),
+                NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "test")
             )
         }
 
