@@ -24,11 +24,45 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
+    - id: "NuGet::System.Globalization:4.3.0"
+      dependencies:
+      - id: "NuGet::Microsoft.NETCore.Platforms:1.1.0"
+      - id: "NuGet::Microsoft.NETCore.Targets:1.1.0"
+      - id: "NuGet::System.Runtime:4.3.0"
+    - id: "NuGet::System.Threading:4.0.11"
+      dependencies:
+      - id: "NuGet::System.Runtime:4.1.0"
+        dependencies:
+        - id: "NuGet::Microsoft.NETCore.Platforms:1.0.1"
+        - id: "NuGet::Microsoft.NETCore.Targets:1.0.1"
+      - id: "NuGet::System.Threading.Tasks:4.0.11"
+        dependencies:
+        - id: "NuGet::Microsoft.NETCore.Platforms:1.0.1"
+        - id: "NuGet::Microsoft.NETCore.Targets:1.0.1"
+        - id: "NuGet::System.Runtime:4.1.0"
+    - id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+      dependencies:
+      - id: "NuGet::System.Collections:4.3.0"
+        dependencies:
+        - id: "NuGet::Microsoft.NETCore.Platforms:1.1.0"
+        - id: "NuGet::Microsoft.NETCore.Targets:1.1.0"
+        - id: "NuGet::System.Runtime:4.3.0"
+      - id: "NuGet::System.Runtime:4.3.0"
+      - id: "NuGet::System.Runtime.CompilerServices.Unsafe:4.5.3"
+        dependencies:
+        - id: "NuGet::System.Runtime:4.3.0"
+          dependencies:
+          - id: "NuGet::Microsoft.NETCore.Platforms:1.1.0"
+          - id: "NuGet::Microsoft.NETCore.Targets:1.1.0"
+      - id: "NuGet::System.Threading.Tasks:4.3.0"
+        dependencies:
+        - id: "NuGet::Microsoft.NETCore.Platforms:1.1.0"
+        - id: "NuGet::Microsoft.NETCore.Targets:1.1.0"
+        - id: "NuGet::System.Runtime:4.3.0"
     - id: "NuGet::WebGrease:1.5.2"
       dependencies:
       - id: "NuGet::Antlr:3.4.1.9004"
       - id: "NuGet::Newtonsoft.Json:5.0.4"
-    - id: "NuGet::jQuery:3.3.1"
 packages:
 - id: "NuGet::Antlr:3.4.1.9004"
   purl: "pkg:nuget/Antlr@3.4.1.9004"
@@ -44,6 +78,144 @@ packages:
     url: "https://api.nuget.org/v3-flatcontainer/antlr/3.4.1.9004/antlr.3.4.1.9004.nupkg"
     hash:
       value: "b7846aa81ff2bd21d4f2892bc924b52f629a68fb003820ccf0d3db88ecbc389c3fa223488e35334b98a021525db349b993902663219657d8c156915072af37d3"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::Microsoft.NETCore.Platforms:1.0.1"
+  purl: "pkg:nuget/Microsoft.NETCore.Platforms@1.0.1"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides runtime information required to resolve target framework,\
+    \ platform, and runtime specific implementations of .NETCore packages. \nWhen\
+    \ using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.platforms/1.0.1/microsoft.netcore.platforms.1.0.1.nupkg"
+    hash:
+      value: "5f3622dafd8fe8f3406c7a7ee506a7363c9955b28819ae1f2b067c38eae7ab6e620eb63442929b967c94fc511e47a2b7547ab62b6f1aafe37daa222499c9bb19"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::Microsoft.NETCore.Platforms:1.1.0"
+  purl: "pkg:nuget/Microsoft.NETCore.Platforms@1.1.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides runtime information required to resolve target framework,\
+    \ platform, and runtime specific implementations of .NETCore packages. \nWhen\
+    \ using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg"
+    hash:
+      value: "6bf892c274596fe2c7164e3d8503b24e187f64d0b7bec6d9b05eb95f04086fceb7a85ea6b2685d42dc465c52f6f0e6f636c0b3fddac48f6f0125dfd83e92d106"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::Microsoft.NETCore.Targets:1.0.1"
+  purl: "pkg:nuget/Microsoft.NETCore.Targets@1.0.1"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides supporting infrastructure for portable projects: support\
+    \ identifiers that define framework and runtime for support targets and packages\
+    \ that reference the minimum supported package versions when targeting these.\
+    \ \nWhen using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.targets/1.0.1/microsoft.netcore.targets.1.0.1.nupkg"
+    hash:
+      value: "6ed8e75f945a18651066fe9ee31cf6c8257a5974340fe4d262438903c4959a479f4a515a4d1389e6d3d3ab34f09a3c7bc2009aada2e8a7f697b6655a82d3bfc9"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::Microsoft.NETCore.Targets:1.1.0"
+  purl: "pkg:nuget/Microsoft.NETCore.Targets@1.1.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides supporting infrastructure for portable projects: support\
+    \ identifiers that define framework and runtime for support targets and packages\
+    \ that reference the minimum supported package versions when targeting these.\
+    \ \nWhen using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg"
+    hash:
+      value: "1ef033a68688aab9997ec1c0378acb1638b4afb618e533fcaf749d93389737ba94f4a0a94481becdf701c7e988ae2fe390136a8eae225887ee60db45063490fe"
       algorithm: "SHA-512"
   source_artifact:
     url: ""
@@ -92,22 +264,29 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "NuGet::WebGrease:1.5.2"
-  purl: "pkg:nuget/WebGrease@1.5.2"
+- id: "NuGet::System.Collections:4.3.0"
+  purl: "pkg:nuget/System.Collections@4.3.0"
   authors:
-  - "webgrease@microsoft.com"
+  - "Microsoft"
   declared_licenses:
-  - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
   declared_licenses_processed:
-    unmapped:
-    - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
-  description: "Web Grease is a suite of tools for optimizing javascript, css files\
-    \ and images."
-  homepage_url: ""
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides classes that define generic collections, which allow developers\
+    \ to create strongly typed collections that provide better type safety and performance\
+    \ than non-generic strongly typed collections.\n\nCommonly Used Types:\nSystem.Collections.Generic.List<T>\n\
+    System.Collections.Generic.Dictionary<TKey, TValue>\nSystem.Collections.Generic.Queue<T>\n\
+    System.Collections.Generic.Stack<T>\nSystem.Collections.Generic.HashSet<T>\nSystem.Collections.Generic.LinkedList<T>\n\
+    System.Collections.Generic.EqualityComparer<T>\nSystem.Collections.Generic.Comparer<T>\n\
+    System.Collections.Generic.SortedDictionary<TKey, TValue>\n \nWhen using NuGet\
+    \ 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
   binary_artifact:
-    url: "https://api.nuget.org/v3-flatcontainer/webgrease/1.5.2/webgrease.1.5.2.nupkg"
+    url: "https://api.nuget.org/v3-flatcontainer/system.collections/4.3.0/system.collections.4.3.0.nupkg"
     hash:
-      value: "453fa7a3483b424dbc27f5d5c07827e6527faa6e21c96169ef0b7423bd54c348f749f4df3a636a3ccc5f79d1da9c08ed7f7741dbfd0a8d0ddf424bd57b0b2fb0"
+      value: "ca7b952d30da1487ca4e43aa522817b5ee26e7e10537062810112fc67a7512766c39d402f394bb0426d1108bbcf9bbb64e9ce1f5af736ef215a51a35e55f051b"
       algorithm: "SHA-512"
   source_artifact:
     url: ""
@@ -124,27 +303,318 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "NuGet::jQuery:3.3.1"
-  purl: "pkg:nuget/jQuery@3.3.1"
+- id: "NuGet::System.Globalization:4.3.0"
+  purl: "pkg:nuget/System.Globalization@4.3.0"
   authors:
-  - "Inc."
-  - "jQuery Foundation"
+  - "Microsoft"
   declared_licenses:
-  - "http://jquery.org/license"
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides classes that define culture-related information, including\
+    \ language, country/region, calendars in use, format patterns for dates, currency,\
+    \ and numbers, and sort order for strings.\n\nCommonly Used Types:\nSystem.Globalization.DateTimeFormatInfo\n\
+    System.Globalization.CultureInfo\nSystem.Globalization.NumberFormatInfo\nSystem.Globalization.CalendarWeekRule\n\
+    System.Globalization.TextInfo\nSystem.Globalization.Calendar\nSystem.Globalization.CompareInfo\n\
+    System.Globalization.CompareOptions\nSystem.Globalization.UnicodeCategory\n \n\
+    When using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.globalization/4.3.0/system.globalization.4.3.0.nupkg"
+    hash:
+      value: "823d2ba308cb073b40a3146ecccd0d9fd7b1615ac3fbefb16f73d873e411fd81c3bdc87df206d3dc7e2f14c9cd53aafca684a3570c25471280aada8de805ece2"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Runtime:4.1.0"
+  purl: "pkg:nuget/System.Runtime@4.1.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides the fundamental primitives, classes and base classes that\
+    \ define commonly-used value and reference data types, events and event handlers,\
+    \ interfaces, attributes, and exceptions. This packages represents the core package,\
+    \ and provides the minimal set of types required to build a managed application.\n\
+    \nCommonly Used Types:\nSystem.Object\nSystem.Exception\nSystem.Int16\nSystem.Int32\n\
+    System.Int64\nSystem.Enum\nSystem.String\nSystem.Char\nSystem.Boolean\nSystem.SByte\n\
+    System.Byte\nSystem.DateTime\nSystem.DateTimeOffset\nSystem.Single\nSystem.Double\n\
+    System.UInt16\nSystem.UInt32\nSystem.UInt64\nSystem.IDisposable\nSystem.Uri\n\
+    \ \nWhen using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.runtime/4.1.0/system.runtime.4.1.0.nupkg"
+    hash:
+      value: "4b05eb68bb485846707c4fe3393f9616d3ffb6c5f62a121d81142ddf7d0241c931fe96d193b7bf02281a9368458e0764466766557cfa9709035dc76d8fdd7706"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Runtime:4.3.0"
+  purl: "pkg:nuget/System.Runtime@4.3.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides the fundamental primitives, classes and base classes that\
+    \ define commonly-used value and reference data types, events and event handlers,\
+    \ interfaces, attributes, and exceptions. This packages represents the core package,\
+    \ and provides the minimal set of types required to build a managed application.\n\
+    \nCommonly Used Types:\nSystem.Object\nSystem.Exception\nSystem.Int16\nSystem.Int32\n\
+    System.Int64\nSystem.Enum\nSystem.String\nSystem.Char\nSystem.Boolean\nSystem.SByte\n\
+    System.Byte\nSystem.DateTime\nSystem.DateTimeOffset\nSystem.Single\nSystem.Double\n\
+    System.UInt16\nSystem.UInt32\nSystem.UInt64\nSystem.IDisposable\nSystem.Uri\n\
+    \ \nWhen using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.runtime/4.3.0/system.runtime.4.3.0.nupkg"
+    hash:
+      value: "92ab2249f08073cfafdc4cfbd7db36d651ad871b8d8ba961006982187de374bf4a30af93f15f73b05af343f7a70cbd484b04d646570587636ae72171eb0714fb"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Runtime.CompilerServices.Unsafe:4.5.3"
+  purl: "pkg:nuget/System.Runtime.CompilerServices.Unsafe@4.5.3"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides the System.Runtime.CompilerServices.Unsafe class, which provides\
+    \ generic, low-level functionality for manipulating pointers.\n\nCommonly Used\
+    \ Types:\nSystem.Runtime.CompilerServices.Unsafe\n \n7601f4f6225089ffb291dc7d58293c7bbf5c5d4f\
+    \ \nWhen using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/4.5.3/system.runtime.compilerservices.unsafe.4.5.3.nupkg"
+    hash:
+      value: "765d87d36a7b7415dee5b6cbd3a08ead9762915fbfacfad8a205a78d4a187cec6677da2407f7f7c2d1b55fe9f8c0257925c9b0bc193d402972c323979678baab"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Threading:4.0.11"
+  purl: "pkg:nuget/System.Threading@4.0.11"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides the fundamental synchronization primitives, including System.Threading.Monitor\
+    \ and System.Threading.Mutex, that are required when writing asynchronous code.\n\
+    \nCommonly Used Types:\nSystem.Threading.Monitor\nSystem.Threading.SynchronizationContext\n\
+    System.Threading.ManualResetEvent\nSystem.Threading.AutoResetEvent\nSystem.Threading.ThreadLocal<T>\n\
+    System.Threading.EventWaitHandle\nSystem.Threading.SemaphoreSlim\nSystem.Threading.Mutex\n\
+    \ \nWhen using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.threading/4.0.11/system.threading.4.0.11.nupkg"
+    hash:
+      value: "05c0dd1bbcfcedb6fc6c5f311c41920a4775f8a28a61ca246b6c65ad8afd9b04881d3357880af000ac056fd121fc5c3ec0b56d6fd607e0c27e7a639157c85e3e"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Threading.Tasks:4.0.11"
+  purl: "pkg:nuget/System.Threading.Tasks@4.0.11"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides types that simplify the work of writing concurrent and asynchronous\
+    \ code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Task<TResult>\nSystem.Runtime.CompilerServices.TaskAwaiter<TResult>\n\
+    System.Threading.Tasks.TaskCompletionSource<TResult>\nSystem.Threading.Tasks.Task\n\
+    System.OperationCanceledException\nSystem.AggregateException\n \nWhen using NuGet\
+    \ 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.threading.tasks/4.0.11/system.threading.tasks.4.0.11.nupkg"
+    hash:
+      value: "fb66c496a5b4c88c5cb6e9d7b7d220e10f2fc0aed181420390f12f8d9986a1bd2829e9f1bf080bb6361cd8b8b4ffc9b622288dfa42124859e1be1e981b5cfa7b"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Threading.Tasks:4.3.0"
+  purl: "pkg:nuget/System.Threading.Tasks@4.3.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides types that simplify the work of writing concurrent and asynchronous\
+    \ code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Task<TResult>\nSystem.Runtime.CompilerServices.TaskAwaiter<TResult>\n\
+    System.Threading.Tasks.TaskCompletionSource<TResult>\nSystem.Threading.Tasks.Task\n\
+    System.OperationCanceledException\nSystem.AggregateException\n \nWhen using NuGet\
+    \ 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.threading.tasks/4.3.0/system.threading.tasks.4.3.0.nupkg"
+    hash:
+      value: "7d488ff82cb20a3b3cef6380f2dae5ea9f7baa66bf75ad711aade1e3301b25993ccf2694e33c847ea5b9bdb90ff34c46fcd8a6ba7d6f95605ba0c124ed7c5d13"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+  purl: "pkg:nuget/System.Threading.Tasks.Extensions@4.5.4"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides additional types that simplify the work of writing concurrent\
+    \ and asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.ValueTask<TResult>\n\
+    \ \n7601f4f6225089ffb291dc7d58293c7bbf5c5d4f"
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg"
+    hash:
+      value: "68052086e77d3c7198737a3da163d67740b7c44f93250c39659b3bf21b6547a9abf64cbf40481f5c78f24361af3aaf47d52d188b371554a0928a7f7665c1fc14"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::WebGrease:1.5.2"
+  purl: "pkg:nuget/WebGrease@1.5.2"
+  authors:
+  - "webgrease@microsoft.com"
+  declared_licenses:
+  - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
   declared_licenses_processed:
     unmapped:
-    - "http://jquery.org/license"
-  description: "jQuery is a new kind of JavaScript Library.\n        jQuery is a fast\
-    \ and concise JavaScript Library that simplifies HTML document traversing, event\
-    \ handling, animating, and Ajax interactions for rapid web development. jQuery\
-    \ is designed to change the way that you write JavaScript.\n        NOTE: This\
-    \ package is maintained on behalf of the library owners by the NuGet Community\
-    \ Packages project at http://nugetpackages.codeplex.com/"
-  homepage_url: "http://jquery.com/"
+    - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+  description: "Web Grease is a suite of tools for optimizing javascript, css files\
+    \ and images."
+  homepage_url: ""
   binary_artifact:
-    url: "https://api.nuget.org/v3-flatcontainer/jquery/3.3.1/jquery.3.3.1.nupkg"
+    url: "https://api.nuget.org/v3-flatcontainer/webgrease/1.5.2/webgrease.1.5.2.nupkg"
     hash:
-      value: "126b2db350fa1360201d5066e1c4c3d9dc684725951bedf32b5c7c9986dffa4e9a000acf4d71d1d88a7efa8d6eb6535b99823368f167846c376037b1a7c3e395"
+      value: "453fa7a3483b424dbc27f5d5c07827e6527faa6e21c96169ef0b7423bd54c348f749f4df3a636a3ccc5f79d1da9c08ed7f7741dbfd0a8d0ddf424bd57b0b2fb0"
       algorithm: "SHA-512"
   source_artifact:
     url: ""
