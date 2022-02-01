@@ -71,32 +71,60 @@ class DotNet(
  */
 class DotNetPackageFileReader : XmlPackageFileReader {
     @JsonIgnoreProperties(ignoreUnknown = true)
+    private data class PropertyGroup(
+        @JsonProperty(value = "TargetFramework")
+        val targetFramework: String?,
+        @JsonProperty(value = "TargetFrameworks")
+        val targetFrameworks: String?
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private data class ItemGroup(
+        @JacksonXmlProperty(isAttribute = true, localName = "Condition")
+        val condition: String?,
         @JsonProperty(value = "PackageReference")
         @JacksonXmlElementWrapper(useWrapping = false)
-        val packageReference: List<PackageReference>?
+        val packageReferences: List<PackageReference>?
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private data class PackageReference(
+        @JacksonXmlProperty(isAttribute = true, localName = "Condition")
+        val condition: String?,
         @JacksonXmlProperty(isAttribute = true, localName = "Include")
         val include: String,
         @JacksonXmlProperty(isAttribute = true, localName = "Version")
-        val version: String
+        val version: String,
+        @JsonProperty(value = "PrivateAssets")
+        val privateAssets: String?
     )
 
     override fun getDependencies(definitionFile: File): Set<NuGetDependency> {
+        // TODO: Find a way to parse both collections at once to not have to parse the file twice. The problem with
+        //       adding propertyGroups and itemGroups to a parent object is that the elements can be mixed and in this
+        //       case Jackson only returns the last match for each list.
+        val propertyGroups = NuGetSupport.XML_MAPPER.readValue<List<PropertyGroup>>(definitionFile)
         val itemGroups = NuGetSupport.XML_MAPPER.readValue<List<ItemGroup>>(definitionFile)
 
-        return itemGroups.flatMapTo(mutableSetOf()) { itemGroup ->
-            itemGroup.packageReference?.map { packageReference ->
-                NuGetDependency(
-                    name = packageReference.include,
-                    version = packageReference.version,
-                    targetFramework = "",
-                    developmentDependency = false
-                )
-            }.orEmpty()
+        val targetFrameworks = propertyGroups.find { it.targetFramework != null }?.targetFramework?.let { listOf(it) }
+            ?: propertyGroups.find { it.targetFrameworks != null }?.targetFrameworks?.split(";")
+            ?: listOf("")
+
+        fun conditionMatchesTargetFramework(condition: String?, targetFramework: String) =
+            condition == null || targetFramework.isEmpty() || condition.contains(targetFramework)
+
+        return targetFrameworks.distinct().flatMapTo(mutableSetOf()) { targetFramework ->
+            itemGroups.filter { conditionMatchesTargetFramework(it.condition, targetFramework) }.flatMap { itemGroup ->
+                itemGroup.packageReferences?.filter { conditionMatchesTargetFramework(it.condition, targetFramework) }
+                    ?.map { packageReference ->
+                        NuGetDependency(
+                            name = packageReference.include,
+                            version = packageReference.version,
+                            targetFramework = targetFramework,
+                            developmentDependency = packageReference.privateAssets?.lowercase() == "all"
+                        )
+                    }.orEmpty()
+            }
         }
     }
 }
