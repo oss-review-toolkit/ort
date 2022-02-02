@@ -2,7 +2,7 @@
 
 jdk11 = true
 
-disableTools = [ "detekt" ]
+disableTools = [ "detekt", "eslint" ]
 
 ignoreFiles = """
 **/funTest/assets/
