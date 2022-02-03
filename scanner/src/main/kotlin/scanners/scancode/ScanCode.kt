@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
-import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
@@ -192,12 +191,11 @@ class ScanCode(
 
         val issues = summary.issues.toMutableList()
 
-        val hasOnlyMemoryErrors = mapUnknownIssues(issues)
-        val hasOnlyTimeoutErrors = mapTimeoutErrors(issues)
+        mapUnknownIssues(issues)
+        mapTimeoutErrors(issues)
 
         return with(process) {
             if (stderr.isNotBlank()) log.debug { stderr }
-            if (isError && !(hasOnlyMemoryErrors || hasOnlyTimeoutErrors)) throw ScanException(errorMessage)
 
             summary.copy(issues = issues)
         }
