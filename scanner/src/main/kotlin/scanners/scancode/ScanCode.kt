@@ -180,13 +180,7 @@ class ScanCode(
         val startTime = Instant.now()
 
         val resultFile = createOrtTempDir().resolve("result.json")
-        val process = ProcessCapture(
-            scannerPath.absolutePath,
-            *commandLineOptions.toTypedArray(),
-            path.absolutePath,
-            OUTPUT_FORMAT_OPTION,
-            resultFile.absolutePath
-        )
+        val process = runScanCode(path, resultFile)
 
         val endTime = Instant.now()
 
@@ -208,6 +202,20 @@ class ScanCode(
             summary.copy(issues = issues)
         }
     }
+
+    /**
+     * Execute ScanCode with the configured arguments to scan the given [path] and produce [resultFile].
+     */
+    internal fun runScanCode(
+        path: File,
+        resultFile: File
+    ) = ProcessCapture(
+        scannerPath.absolutePath,
+        *commandLineOptions.toTypedArray(),
+        path.absolutePath,
+        OUTPUT_FORMAT_OPTION,
+        resultFile.absolutePath
+    )
 
     override fun getVersion(workingDir: File?): String =
         // The release candidate version names lack a hyphen in between the minor version and the extension, e.g.
