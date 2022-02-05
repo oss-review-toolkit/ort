@@ -29,12 +29,10 @@ import org.eclipse.jgit.lib.AbbreviatedObjectId
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.plugins.ide.idea.model.IdeaProject
 
 import org.jetbrains.gradle.ext.Gradle
-import org.jetbrains.gradle.ext.ProjectSettings
-import org.jetbrains.gradle.ext.RunConfiguration
-import org.jetbrains.gradle.ext.RunConfigurationContainer
+import org.jetbrains.gradle.ext.runConfigurations
+import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -96,22 +94,13 @@ if (!javaVersion.isCompatibleWith(JavaVersion.VERSION_11)) {
     throw GradleException("At least Java 11 is required, but Java $javaVersion is being used.")
 }
 
-fun IdeaProject.settings(block: ProjectSettings.() -> Unit) =
-    (this@settings as ExtensionAware).extensions.configure("settings", block)
-
-fun ProjectSettings.runConfigurations(block: RunConfigurationContainer.() -> Unit) =
-    (this@runConfigurations as ExtensionAware).extensions.configure("runConfigurations", block)
-
-inline fun <reified T : RunConfiguration> RunConfigurationContainer.defaults(noinline block: T.() -> Unit) =
-    defaults(T::class.java, block)
-
 idea {
     project {
         settings {
             runConfigurations {
                 // Disable "condensed" multi-line diffs when running tests from the IDE via Gradle run configurations to
                 // more easily accept actual results as expected results.
-                defaults<Gradle> {
+                defaults(Gradle::class.java) {
                     jvmArgs = "-Dkotest.assertions.multi-line-diff=simple"
                 }
             }
