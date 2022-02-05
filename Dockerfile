@@ -34,8 +34,8 @@ ARG CRT_FILES=""
 COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/import_proxy_certs.sh \
     && if [ -n "$CRT_FILES" ]; then \
-        /etc/scripts/import_certificates.sh /tmp/certificates/; \
-       fi
+    /etc/scripts/import_certificates.sh /tmp/certificates/; \
+    fi
 
 #------------------------------------------------------------------------
 # Ubuntu build toolchain
@@ -43,34 +43,34 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        build-essential \
-        clang-9 \
-        clang++-9 \
-        dirmngr \
-        dpkg-dev \
-        git \
-        gnupg \
-        libbluetooth-dev \
-        libbz2-dev \
-        libc6-dev \
-        libexpat1-dev \
-        libffi-dev \
-        libgmp-dev \
-        libgdbm-dev \
-        liblzma-dev \
-        libmpdec-dev \
-        libncursesw5-dev \
-        libreadline-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        make \
-        netbase \
-        tk-dev \
-        tzdata \
-        uuid-dev \
-        unzip \
-        xz-utils \
-        zlib1g-dev \
+    build-essential \
+    clang-9 \
+    clang++-9 \
+    dirmngr \
+    dpkg-dev \
+    git \
+    gnupg \
+    libbluetooth-dev \
+    libbz2-dev \
+    libc6-dev \
+    libexpat1-dev \
+    libffi-dev \
+    libgmp-dev \
+    libgdbm-dev \
+    liblzma-dev \
+    libmpdec-dev \
+    libncursesw5-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    make \
+    netbase \
+    tk-dev \
+    tzdata \
+    uuid-dev \
+    unzip \
+    xz-utils \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 #------------------------------------------------------------------------
@@ -123,9 +123,9 @@ RUN rbenv install ${RUBY_VERSION} \
 RUN curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | \
     tar -zxC . \
     && (cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b \
-        && gem build cocoapods.gemspec \
-        && gem install cocoapods-1.10.1.gem \
-        ) \
+    && gem build cocoapods.gemspec \
+    && gem install cocoapods-1.10.1.gem \
+    ) \
     && rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
 
 COPY docker/ruby.sh /etc/profile.d
@@ -135,17 +135,17 @@ COPY docker/ruby.sh /etc/profile.d
 FROM build AS nodebuild
 
 ARG BOWER_VERSION=1.8.8
-ARG NODEJS_VERSION="--lts"
+ARG NODEJS_VERSION=16.13.2
 ARG NPM_VERSION=7.20.6
+ARG NVM_DIR=/opt/nodejs
 ARG YARN_VERSION=1.22.10
 
-ENV NVM_DIR=/opt/nodejs
-
-RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git /opt/nodejs
-RUN . $NVM_DIR/nvm.sh && nvm install "${NODEJS_VERSION}"
+RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git $NVM_DIR
 RUN . $NVM_DIR/nvm.sh \
+    && nvm install "${NODEJS_VERSION}" \
+    && nvm alias default "${NODEJS_VERSION}" \
+    && nvm use default \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION
-COPY docker/nodejs.sh /etc/profile.d
 
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
@@ -182,11 +182,11 @@ RUN curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${A
     && rm commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
     && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
-       # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
-       SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+    # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+    SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi \
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS \
-       --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
+    --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
 COPY docker/android.sh /etc/profile.d
 
 #------------------------------------------------------------------------
@@ -258,8 +258,11 @@ COPY --chown=ort:ort --from=rubybuild /opt/rbenv /opt/rbenv
 COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
 
 # NodeJS
+ARG NODEJS_VERSION=16.13.2
+ARG NVM_DIR=/opt/nodejs
+ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
 COPY --chown=ort:ort --from=nodebuild /opt/nodejs /opt/nodejs
-COPY --from=nodebuild /etc/profile.d/nodejs.sh /etc/profile.d/
 
 # Golang
 COPY --chown=ort:ort --from=gobuild /opt/go /opt/go/
@@ -285,22 +288,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        ca-certificates \
-        cvs \
-        curl \
-        gnupg \
-        libarchive-tools \
-        locales \
-        netbase \
-        openssh-client \
-        openssl \
-        unzip \
+    ca-certificates \
+    cvs \
+    curl \
+    gnupg \
+    libarchive-tools \
+    locales \
+    netbase \
+    openssh-client \
+    openssl \
+    unzip \
     && rm -rf /var/lib/apt/lists/* \
     && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
     && locale-gen
 
 # External repositories for SBT
-ARG SBT_VERSION=1.3.8
+ARG SBT_VERSION=1.6.1
 RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" \
     && echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list \
     && echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list \
@@ -325,12 +328,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        cargo \
-        composer=$COMPOSER_VERSION \
-        dart \
-        git \
-        sbt=$SBT_VERSION \
-        subversion \
+    cargo \
+    composer=$COMPOSER_VERSION \
+    dart \
+    git \
+    sbt=$SBT_VERSION \
+    subversion \
     && rm -rf /var/lib/apt/lists/*
 
 # ORT
