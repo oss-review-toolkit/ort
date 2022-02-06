@@ -62,7 +62,6 @@ class OrtPackageNaming(config: Config) : Rule(config) {
 
         // Maintain a hard-coded mapping of exceptions to the general package naming rules.
         val projectName = when (projectDir) {
-            "buildSrc" -> ".gradle"
             "detekt-rules" -> ".detekt"
             "fossid-webapp" -> ".fossid"
             "github-graphql" -> ".github"
