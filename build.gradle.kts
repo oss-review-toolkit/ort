@@ -168,8 +168,7 @@ allprojects {
         buildUponDefaultConfig = true
         config = files("$rootDir/.detekt.yml")
 
-        source = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
-            "src/funTest/kotlin")
+        source = files("build.gradle.kts", "src/main/kotlin", "src/test/kotlin", "src/funTest/kotlin")
 
         basePath = rootProject.projectDir.path
     }
