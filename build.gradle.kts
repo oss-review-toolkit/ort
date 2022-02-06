@@ -126,7 +126,7 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     val nonFinalQualifiers = listOf(
-        "alpha", "b", "beta", "cr", "ea", "eap", "m", "milestone", "pr", "preview", "rc", "\\d{14}"
+        "alpha", "b", "beta", "cr", "dev", "ea", "eap", "m", "milestone", "pr", "preview", "rc", "\\d{14}"
     ).joinToString("|", "(", ")")
 
     val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
