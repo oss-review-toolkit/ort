@@ -33,26 +33,26 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
  * FossID adds new licenses.
  */
 private val fossIdLicenseMappings = mapOf(
-    "BSD (Three Clause License)" to "BSD-3-clause".toSpdx(),
-    "BSD-Acknowledgment-(Carrot2)" to "LicenseRef-scancode-bsd-ack-carrot2".toSpdx(),
-    "Freeware-Public-(FPL)" to "LicenseRef-scancode-fpl".toSpdx(),
-    "MediaInfo(Lib)" to "LicenseRef-scancode-mediainfo-lib".toSpdx(),
-    "Oracle-Master-Agreement-(OMA)" to "LicenseRef-scancode-oracle-master-agreement".toSpdx(),
-    "Things-I-Made-(TIM)-Public" to "LicenseRef-scancode-things-i-made-public-license".toSpdx(),
-    "X11-Style-(Adobe)" to "LicenseRef-scancode-x11-adobe".toSpdx(),
-    "X11-Style-(Adobe-DEC)" to "LicenseRef-scancode-x11-adobe-dec".toSpdx(),
-    "X11-Style-(Bitstream-Charter)" to "LicenseRef-scancode-x11-bitstream".toSpdx(),
-    "X11-Style-(DEC-1)" to "LicenseRef-scancode-x11-dec1".toSpdx(),
-    "X11-Style-(DEC-2)" to "LicenseRef-scancode-x11-dec2".toSpdx(),
-    "X11-Style-(DSC-Technologies)" to "LicenseRef-scancode-x11-dsc".toSpdx(),
-    "X11-Style-(David-R.-Hanson)" to "LicenseRef-scancode-x11-hanson".toSpdx(),
-    "X11-Style-(Lucent)" to "LicenseRef-scancode-x11-lucent".toSpdx(),
-    "X11-Style-(OAR)" to "LicenseRef-scancode-x11-oar".toSpdx(),
-    "X11-Style-(Open-Group)" to "MIT-open-group".toSpdx(),
-    "X11-Style-(Quarterdeck)" to "LicenseRef-scancode-x11-quarterdeck".toSpdx(),
-    "X11-Style-(Realmode)" to "LicenseRef-scancode-x11-realmode".toSpdx(),
-    "X11-Style-(Silicon-Graphics)" to "LicenseRef-scancode-x11-sg".toSpdx(),
-    "X11-Style-(Tektronix)" to "LicenseRef-scancode-x11-tektronix".toSpdx()
+    "BSD (Three Clause License)" to "BSD-3-clause",
+    "BSD-Acknowledgment-(Carrot2)" to "LicenseRef-scancode-bsd-ack-carrot2",
+    "Freeware-Public-(FPL)" to "LicenseRef-scancode-fpl",
+    "MediaInfo(Lib)" to "LicenseRef-scancode-mediainfo-lib",
+    "Oracle-Master-Agreement-(OMA)" to "LicenseRef-scancode-oracle-master-agreement",
+    "Things-I-Made-(TIM)-Public" to "LicenseRef-scancode-things-i-made-public-license",
+    "X11-Style-(Adobe)" to "LicenseRef-scancode-x11-adobe",
+    "X11-Style-(Adobe-DEC)" to "LicenseRef-scancode-x11-adobe-dec",
+    "X11-Style-(Bitstream-Charter)" to "LicenseRef-scancode-x11-bitstream",
+    "X11-Style-(DEC-1)" to "LicenseRef-scancode-x11-dec1",
+    "X11-Style-(DEC-2)" to "LicenseRef-scancode-x11-dec2",
+    "X11-Style-(DSC-Technologies)" to "LicenseRef-scancode-x11-dsc",
+    "X11-Style-(David-R.-Hanson)" to "LicenseRef-scancode-x11-hanson",
+    "X11-Style-(Lucent)" to "LicenseRef-scancode-x11-lucent",
+    "X11-Style-(OAR)" to "LicenseRef-scancode-x11-oar",
+    "X11-Style-(Open-Group)" to "MIT-open-group",
+    "X11-Style-(Quarterdeck)" to "LicenseRef-scancode-x11-quarterdeck",
+    "X11-Style-(Realmode)" to "LicenseRef-scancode-x11-realmode",
+    "X11-Style-(Silicon-Graphics)" to "LicenseRef-scancode-x11-sg",
+    "X11-Style-(Tektronix)" to "LicenseRef-scancode-x11-tektronix"
 )
 
 /**
@@ -86,9 +86,8 @@ internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, Ign
         val location = TextLocation(summary.path, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
         summary.licences.forEach {
-            val license = fossIdLicenseMappings[it.identifier] ?: it.identifier.toSpdx()
-
-            val finding = LicenseFinding(license, location)
+            val license = fossIdLicenseMappings[it.identifier] ?: it.identifier
+            val finding = LicenseFinding(license.toSpdx(), location)
             licenseFindings += finding
         }
 
