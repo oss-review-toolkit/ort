@@ -13,7 +13,7 @@ The sections below explain how to create resolutions in the `resolutions.yml` fi
 the _reporter_, applies to each scan made. If a resolution is project-specific, then add it in the
 [.ort.yml](config-file-ort-yml.md) file for the project.
 
-Resolutions are only taken into account by the _reporter_, while the _analyzer_ and `scanner` ignore them.
+Resolutions are only taken into account by the _reporter_, while the _analyzer_ and _scanner_ ignore them.
 
 ## Resolution Basics
 
@@ -62,7 +62,7 @@ notices. To resolve a license policy rule violation either add a local `license_
 [.ort.yml file](./config-file-ort-yml.md) if the finding is in your code repository or add a curation to the
 [curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
 
-The code below shows the structure of a policy rule violation resolution in the `resolutions.yml`file:
+The code below shows the structure of a policy rule violation resolution in the `resolutions.yml` file:
 
 ```yaml
 rule_violations:
