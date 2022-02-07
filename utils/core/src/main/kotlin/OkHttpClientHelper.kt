@@ -23,6 +23,8 @@ import java.io.File
 import java.io.IOException
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
+import java.util.logging.Level
+import java.util.logging.Logger
 
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -71,6 +73,11 @@ object OkHttpClientHelper {
 
     private val defaultClient by lazy {
         installAuthenticatorAndProxySelector()
+
+        if (log.delegate.isDebugEnabled) {
+            // Allow to track down leaked connections.
+            Logger.getLogger(OkHttpClient::javaClass.name).level = Level.FINE
+        }
 
         val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
         val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
