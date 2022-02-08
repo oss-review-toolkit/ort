@@ -65,6 +65,14 @@ graal {
     // "Error: Classes that should be initialized at run time got initialized during image building"
     option("--initialize-at-build-time=org.jruby.util.RubyFileTypeDetector")
 
+    // Work-around for:
+    // "Unsupported method java.lang.invoke.MethodHandleNatives.setCallSiteTargetNormal() is reachable"
+    option("--report-unsupported-elements-at-runtime")
+
+    // Work-around for:
+    // "Error: Non-reducible loop requires too much duplication"
+    option("-H:MaxDuplicationFactor=3.0")
+
     mainClass("org.ossreviewtoolkit.cli.OrtMainKt")
     outputName("ort")
 }
