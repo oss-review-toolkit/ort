@@ -48,10 +48,10 @@ private val HOW_TO_FIX_TEXT_PROVIDER = HowToFixTextProvider {
 
 class StaticHtmlReporterFunTest : WordSpec({
     "StaticHtmlReporter" should {
-        "use the Apache Xalan TransformerFactory" {
+        "use the Saxon TransformerFactory" {
             val transformer = TransformerFactory.newInstance().newTransformer()
 
-            transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
+            transformer.javaClass.name shouldBe "net.sf.saxon.jaxp.IdentityTransformer"
         }
 
         "successfully export to a static HTML page" {
