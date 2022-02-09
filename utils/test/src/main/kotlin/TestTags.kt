@@ -25,4 +25,6 @@ object AndroidTag : Tag()
 
 object ExpensiveTag : Tag()
 
+object NoDockerTag : Tag()
+
 object ScanCodeTag : Tag()
