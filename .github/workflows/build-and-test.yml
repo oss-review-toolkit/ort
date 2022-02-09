@@ -87,13 +87,29 @@ jobs:
       uses: burrunan/gradle-cache-action@v1
       with:
         arguments: funTest -x :analyzer:funTest
-  funTest-analyzer:
-    if: ${{ false }}
+  funTest-analyzer-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+        cache: gradle
+    - name: Run functional tests
+      run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- -Dkotest.tags=!NoDockerTag -p analyzer
+  funTest-analyzer-no-docker:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
+      with:
+        submodules: recursive
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
@@ -103,4 +119,4 @@ jobs:
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: :analyzer:funTest
+        arguments: :analyzer:funTest -Dkotest.tags=NoDockerTag
