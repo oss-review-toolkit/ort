@@ -167,7 +167,7 @@ class ExperimentalScanner(
         log.info { "Resolving nested provenances for ${controller.packages.size} packages." }
 
         val duration = measureTime {
-            controller.getPackageProvenances().forEach { provenance ->
+            controller.getPackageProvenancesWithoutVcsPath().forEach { provenance ->
                 runCatching {
                     nestedProvenanceResolver.resolveNestedProvenance(provenance)
                 }.onSuccess { nestedProvenance ->
@@ -298,7 +298,7 @@ class ExperimentalScanner(
 
     private fun readStoredResults(controller: ScanController) {
         log.info {
-            "Reading stored scan results for ${controller.getPackageProvenances().size} packages with " +
+            "Reading stored scan results for ${controller.getPackageProvenancesWithoutVcsPath().size} packages with " +
                     "${controller.getAllProvenances().size} provenances."
         }
 

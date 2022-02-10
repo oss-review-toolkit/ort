@@ -36,6 +36,7 @@ import io.mockk.verify
 import java.io.File
 import java.io.IOException
 import java.time.Instant
+import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -248,6 +249,52 @@ class ExperimentalScannerTest : WordSpec({
             verify(exactly = 1) {
                 provenanceDownloader.download(pkgWithArtifact.artifactProvenance())
                 provenanceDownloader.download(pkgWithVcs.repositoryProvenance())
+            }
+        }
+
+        "always download the full repository" {
+            val pkgWithVcsPath = Package.new(id = "repository").copy(
+                vcsProcessed = VcsInfo.valid().copy(path = "subdirectory")
+            )
+            val scannerWrapper = FakePathScannerWrapper()
+            val provenanceDownloader = spyk(FakeProvenanceDownloader())
+            val scanner = createScanner(
+                provenanceDownloader = provenanceDownloader,
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            val provenance = pkgWithVcsPath.repositoryProvenance().copy(
+                vcsInfo = pkgWithVcsPath.vcsProcessed.copy(path = "")
+            )
+
+            scanner.scan(setOf(pkgWithVcsPath), createContext())
+
+            verify(exactly = 1) {
+                provenanceDownloader.download(provenance)
+            }
+        }
+
+        "download a repository with multiple packages only once" {
+            val pkgWithVcsPath1 = Package.new(id = "repository").copy(
+                vcsProcessed = VcsInfo.valid().copy(path = "")
+            )
+            val pkgWithVcsPath2 = Package.new(id = "subdirectory1").copy(
+                vcsProcessed = VcsInfo.valid().copy(path = "subdirectory1")
+            )
+            val pkgWithVcsPath3 = Package.new(id = "subdirectory2").copy(
+                vcsProcessed = VcsInfo.valid().copy(path = "subdirectory2")
+            )
+            val scannerWrapper = FakePathScannerWrapper()
+            val provenanceDownloader = spyk(FakeProvenanceDownloader())
+            val scanner = createScanner(
+                provenanceDownloader = provenanceDownloader,
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            scanner.scan(setOf(pkgWithVcsPath1, pkgWithVcsPath2, pkgWithVcsPath3), createContext())
+
+            verify(exactly = 1) {
+                provenanceDownloader.download(any())
             }
         }
     }
@@ -513,6 +560,91 @@ class ExperimentalScannerTest : WordSpec({
             verify(exactly = 1) {
                 scannerWrapper.scanProvenance(unscannedSubRepository, any())
             }
+        }
+
+        "store the result for the full repository" {
+            val pkgWithVcsPath = Package.new(id = "repository").copy(
+                vcsProcessed = VcsInfo.valid().copy(path = "subdirectory")
+            )
+
+            val provenanceWithoutVcsPath = pkgWithVcsPath.repositoryProvenance().copy(
+                vcsInfo = pkgWithVcsPath.vcsProcessed.copy(path = "")
+            )
+
+            val scannerWrapper = FakePathScannerWrapper()
+
+            val writer = spyk(FakeProvenanceBasedStorageWriter())
+
+            val scanner = createScanner(
+                storageWriters = listOf(writer),
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            val fullScanResult = createScanResult(provenanceWithoutVcsPath, scannerWrapper.details)
+
+            scanner.scan(setOf(pkgWithVcsPath), createContext())
+
+            verify(exactly = 1) {
+                writer.write(fullScanResult)
+            }
+        }
+
+        "filter a stored scan result by VCS path" {
+            val pkgWithVcsPath = Package.new(id = "repository").copy(
+                vcsProcessed = VcsInfo.valid().copy(path = "subdirectory")
+            )
+
+            val provenanceWithVcsPath = pkgWithVcsPath.repositoryProvenance()
+
+            val provenanceWithoutVcsPath = pkgWithVcsPath.repositoryProvenance().copy(
+                vcsInfo = pkgWithVcsPath.vcsProcessed.copy(path = "")
+            )
+
+            val scannerWrapper = FakePathScannerWrapper()
+
+            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
+
+            val scanResult = createScanResult(
+                provenanceWithoutVcsPath,
+                scannerWrapper.details,
+                sortedSetOf(
+                    // Add a license finding outside of the subdirectory that is matched by a license file pattern.
+                    LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 1)),
+                    // Add a license finding outside of the subdirectory that is not matched by a license file pattern.
+                    LicenseFinding("Apache-2.0", TextLocation("other", 1, 1)),
+                    // Add a license finding inside the subdirectory.
+                    LicenseFinding("Apache-2.0", TextLocation("subdirectory/file", 1, 1))
+                )
+            )
+
+            every { reader.read(any()) } returns listOf(scanResult)
+
+            val scanner = createScanner(
+                storageReaders = listOf(reader),
+                packageScannerWrappers = listOf(scannerWrapper)
+            )
+
+            val result = scanner.scan(setOf(pkgWithVcsPath), createContext())
+
+            val filteredScanResult = createScanResult(
+                provenanceWithVcsPath,
+                scannerWrapper.details,
+                sortedSetOf(
+                    // Add a license finding outside of the subdirectory that is matched by a license file pattern.
+                    LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 1)),
+                    // Add a license finding inside the subdirectory.
+                    LicenseFinding("Apache-2.0", TextLocation("subdirectory/file", 1, 1))
+                )
+            )
+
+            val nestedScanResult = NestedProvenanceScanResult(
+                nestedProvenance = NestedProvenance(root = provenanceWithVcsPath, emptyMap()),
+                scanResults = mapOf(provenanceWithVcsPath to listOf(filteredScanResult))
+            )
+
+            result should containExactly(
+                pkgWithVcsPath to nestedScanResult
+            )
         }
     }
 
@@ -820,15 +952,17 @@ private fun VcsInfo.Companion.valid() =
 private fun createScanSummary(licenseFindings: Set<LicenseFinding> = emptySet()) =
     ScanSummary(Instant.EPOCH, Instant.EPOCH, "", licenseFindings.toSortedSet(), sortedSetOf())
 
-private fun createScanResult(provenance: Provenance, scannerDetails: ScannerDetails) =
+private fun createScanResult(
+    provenance: Provenance,
+    scannerDetails: ScannerDetails,
+    licenseFindings: SortedSet<LicenseFinding> = sortedSetOf(
+        LicenseFinding("Apache-2.0", TextLocation("${scannerDetails.name}.txt", 1, 2))
+    )
+) =
     ScanResult(
         provenance,
         scannerDetails,
-        createScanSummary(
-            licenseFindings = sortedSetOf(
-                LicenseFinding("Apache-2.0", TextLocation("${scannerDetails.name}.txt", 1, 2))
-            )
-        )
+        createScanSummary(licenseFindings)
     )
 
 private fun createNestedScanResult(
