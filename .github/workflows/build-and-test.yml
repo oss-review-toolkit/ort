@@ -58,7 +58,7 @@ jobs:
         arguments: test -x :reporter-web-app:yarnBuild
   funTest:
     if: ${{ false }}
-    needs: build
+    needs: build-reporter-web-app
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
@@ -72,7 +72,7 @@ jobs:
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: funTest -x :reporter-web-app:yarnBuild -x :analyzer:funTest
+        arguments: funTest -x :analyzer:funTest
   funTest-analyzer:
     if: ${{ false }}
     needs: build
