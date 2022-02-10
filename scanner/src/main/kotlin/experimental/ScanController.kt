@@ -23,6 +23,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 
 /**
@@ -46,9 +47,16 @@ class ScanController(
     private val nestedProvenances = mutableMapOf<KnownProvenance, NestedProvenance>()
 
     /**
-     * A map of package [Identifier]s to their resolved [KnownProvenance]s.
+     * A map of package [Identifier]s to their resolved [KnownProvenance]s. These provenances are used to filter the
+     * scan results for a package based on the VCS path.
      */
     private val packageProvenances = mutableMapOf<Identifier, KnownProvenance>()
+
+    /**
+     * A map of package [Identifier]s to their resolved [KnownProvenance]s with the VCS path removed. These provenances
+     * are used during scanning to make sure that always the full repositories are scanned.
+     */
+    private val packageProvenancesWithoutVcsPath = mutableMapOf<Identifier, KnownProvenance>()
 
     /**
      * The [ScanResult]s for each [KnownProvenance] and [ScannerWrapper].
@@ -56,10 +64,14 @@ class ScanController(
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
 
     /**
-     * Add an entry to [packageProvenances], overwriting any existing values.
+     * Add an entry to [packageProvenances] and [packageProvenancesWithoutVcsPath], overwriting any existing values.
      */
     fun addPackageProvenance(id: Identifier, provenance: KnownProvenance) {
         packageProvenances[id] = provenance
+        packageProvenancesWithoutVcsPath[id] = when (provenance) {
+            is RepositoryProvenance -> provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = ""))
+            else -> provenance
+        }
     }
 
     /**
@@ -88,13 +100,14 @@ class ScanController(
     /**
      * Find the [NestedProvenance] for the provided [id].
      */
-    fun findNestedProvenance(id: Identifier): NestedProvenance? = nestedProvenances[packageProvenances[id]]
+    fun findNestedProvenance(id: Identifier): NestedProvenance? =
+        nestedProvenances[packageProvenancesWithoutVcsPath[id]]
 
     /**
-     * Return all [KnownProvenance]s contained in [nestedProvenances] and [packageProvenances].
+     * Return all [KnownProvenance]s contained in [nestedProvenances] and [packageProvenancesWithoutVcsPath].
      */
     fun getAllProvenances(): Set<KnownProvenance> =
-        (packageProvenances.values + nestedProvenances.values.flatMap { it.getProvenances() }).toSet()
+        (packageProvenancesWithoutVcsPath.values + nestedProvenances.values.flatMap { it.getProvenances() }).toSet()
 
     /**
      * Get all provenances for which no scan result for the provided [scanner] is available.
@@ -106,13 +119,13 @@ class ScanController(
      * Get the [NestedProvenance] for the provided [id].
      */
     fun getNestedProvenance(id: Identifier): NestedProvenance =
-        nestedProvenances.getValue(packageProvenances.getValue(id))
+        nestedProvenances.getValue(packageProvenancesWithoutVcsPath.getValue(id))
 
     /**
      * Get all [NestedProvenance]s by [Package].
      */
     fun getNestedProvenancesByPackage(): Map<Package, NestedProvenance> =
-        packageProvenances.keys.associate { id ->
+        packageProvenancesWithoutVcsPath.keys.associate { id ->
             packages.first { it.id == id } to getNestedProvenance(id)
         }
 
@@ -120,31 +133,31 @@ class ScanController(
      * Get the [NestedProvenanceScanResult] for the provided [id].
      */
     fun getNestedScanResult(id: Identifier): NestedProvenanceScanResult =
-        buildNestedProvenanceScanResult(packageProvenances.getValue(id))
+        buildNestedProvenanceScanResult(packageProvenancesWithoutVcsPath.getValue(id))
 
     /**
-     * Get the [NestedProvenanceScanResult] for each [Package].
+     * Get the [NestedProvenanceScanResult] for each [Package], filtered by the VCS path for each package.
      */
     fun getNestedScanResultsByPackage(): Map<Package, NestedProvenanceScanResult> =
         // TODO: Return map containing all packages with issues for packages that could not be completely scanned.
-        packageProvenances.entries.associate { (id, provenance) ->
+        packageProvenancesWithoutVcsPath.entries.associate { (id, provenance) ->
             packages.first { it.id == id } to buildNestedProvenanceScanResult(provenance)
-        }
+        }.filterByVcsPath()
 
     /**
      * Return all [Package]s for which adding a scan result for [scanner] and [provenance] would complete the scan of
      * their [NestedProvenance] by the respective [scanner].
      */
     fun getPackagesCompletedByProvenance(scanner: ScannerWrapper, provenance: KnownProvenance): List<Package> =
-        packageProvenances.entries.filter { (_, packageProvenance) ->
+        packageProvenancesWithoutVcsPath.entries.filter { (_, packageProvenance) ->
             val nestedProvenance = nestedProvenances[packageProvenance]
             nestedProvenance != null && getMissingProvenanceScans(scanner, nestedProvenance) == listOf(provenance)
         }.map { (id, _) -> packages.first { it.id == id } }
 
     /**
-     * Return all [KnownProvenance]s for the [packages].
+     * Return all [KnownProvenance]s for the [packages] with the VCS path removed.
      */
-    fun getPackageProvenances(): Set<KnownProvenance> = packageProvenances.values.toSet()
+    fun getPackageProvenancesWithoutVcsPath(): Set<KnownProvenance> = packageProvenancesWithoutVcsPath.values.toSet()
 
     /**
      * Return all [PackageScannerWrapper]s.
@@ -198,4 +211,10 @@ class ScanController(
 
         return NestedProvenanceScanResult(nestedProvenance, scanResults)
     }
+
+    private fun Map<Package, NestedProvenanceScanResult>.filterByVcsPath(): Map<Package, NestedProvenanceScanResult> =
+        mapValues { (pkg, nestedProvenanceScanResult) ->
+            val path = (packageProvenances.getValue(pkg.id) as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
+            nestedProvenanceScanResult.filterByVcsPath(path)
+        }
 }
