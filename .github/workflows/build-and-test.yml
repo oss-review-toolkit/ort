@@ -58,7 +58,6 @@ jobs:
       with:
         arguments: test -x :reporter-web-app:yarnBuild
   funTest:
-    if: ${{ false }}
     needs: build-reporter-web-app
     runs-on: ubuntu-latest
     steps:
