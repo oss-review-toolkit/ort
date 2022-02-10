@@ -142,6 +142,13 @@ class UtilsTest : WordSpec() {
                 text should endWith("limitations under the License.")
             }
 
+            "return the full license text for a valid SPDX license id with the '+' operator" {
+                val text = getLicenseText("Apache-2.0+")?.trim()
+
+                text should startWith("Apache License")
+                text should endWith("limitations under the License.")
+            }
+
             "return null for an invalid SPDX license id" {
                 getLicenseText("FooBar-1.0") should beNull()
             }

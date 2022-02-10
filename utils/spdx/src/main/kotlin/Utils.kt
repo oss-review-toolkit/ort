@@ -150,7 +150,7 @@ fun getLicenseTextReader(
                 getLicenseTextFile(id, it)?.let { file -> { file.readText() } }
             }
     } else {
-        SpdxLicense.forId(id)?.let { { it.text } }
+        SpdxLicense.forId(id.removeSuffix("+"))?.let { { it.text } }
             ?: SpdxLicenseException.forId(id)?.takeIf { handleExceptions }?.let { { it.text } }
     }
 }
