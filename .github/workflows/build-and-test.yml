@@ -103,4 +103,4 @@ jobs:
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: :analyzer:funTest -x :reporter-web-app:yarnBuild
+        arguments: :analyzer:funTest
