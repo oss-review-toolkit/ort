@@ -706,7 +706,7 @@ private fun containNoLicenseLocations(): Matcher<ResolvedLicenseInfo?> =
 
 private fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
     transformingCollectionEmptyMatcher { resolvedLicenseInfo ->
-        resolvedLicenseInfo.flatMap { it.locations.flatMap { it.copyrights } }
+        resolvedLicenseInfo.flatMap { resolvedLicense -> resolvedLicense.locations.flatMap { it.copyrights } }
     }
 
 private fun containCopyrightsExactly(vararg copyrights: String): Matcher<Iterable<ResolvedLicense>?> =
