@@ -139,7 +139,7 @@ private fun getScannedPackages(
             scan_results s 
         WHERE
             $whereClause;
-        """.trimMargin()
+    """.trimIndent()
 
     val resultSet = connection.prepareStatement(query).apply {
         val array = connection.createArrayOf("VARCHAR", ids.distinct().map { it.toCoordinates() }.toTypedArray())
