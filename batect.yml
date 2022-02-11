@@ -17,13 +17,18 @@
 
 forbid_telemetry: true
 
+config_variables:
+  gradle_console:
+    description: Gradle console mode
+    default: rich
+
 .common-container-config: &common-container-config
   run_as_current_user:
     enabled: true
     home_directory: /home/ort
   privileged: true
   environment:
-    GRADLE_OPTS: -Dorg.gradle.console=rich -Dorg.gradle.daemon=false
+    GRADLE_OPTS: -Dorg.gradle.console=<gradle_console -Dorg.gradle.daemon=false
     GRADLE_RO_DEP_CACHE: /home/ort/.gradle-ro-dep-cache
   volumes:
     # Mount any Gradle cache present on the host read-only into the
