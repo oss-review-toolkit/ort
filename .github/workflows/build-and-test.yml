@@ -57,7 +57,7 @@ jobs:
       uses: burrunan/gradle-cache-action@v1
       with:
         arguments: test -x :reporter-web-app:yarnBuild
-  funTest:
+  funTest-non-analyzer:
     needs: build-reporter-web-app
     runs-on: ubuntu-latest
     steps:
