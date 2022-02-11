@@ -21,11 +21,12 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 
 /**
- * A helper class for [[SpdxDocumentFile]] that deals with loading and caching of SPDX documents.
+ * A helper class for [SpdxDocumentFile] that deals with loading and caching of SPDX documents.
  *
  * While loading of SPDX documents is not that complicated, this class mainly is responsible for caching loaded
  * documents to prevent that they are loaded multiple times - which could be the case for instance if multiple
