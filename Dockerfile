@@ -65,7 +65,7 @@ ENV \
     ANDROID_SDK_VERSION=6858069 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
-    GOPATH=$HOME/go
+    GOPATH=/tmp/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PATH="$PATH:$GOPATH/bin:/opt/go/bin:/opt/ort/bin"
