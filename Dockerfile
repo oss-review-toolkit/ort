@@ -68,7 +68,7 @@ ENV \
     GOPATH=$HOME/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH="$PATH:$HOME/.local/bin:$GOPATH/bin:/opt/go/bin:$GEM_PATH/bin:/opt/ort/bin"
+    PATH="$PATH:$GOPATH/bin:/opt/go/bin:$GEM_PATH/bin:/opt/ort/bin"
 
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
