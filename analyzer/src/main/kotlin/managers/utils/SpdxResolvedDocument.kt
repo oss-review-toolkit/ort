@@ -25,6 +25,7 @@ import java.io.File
 import java.net.Authenticator
 import java.net.URI
 
+import org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Severity
