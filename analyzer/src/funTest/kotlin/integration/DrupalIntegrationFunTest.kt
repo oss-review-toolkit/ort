@@ -52,7 +52,6 @@ class DrupalIntegrationFunTest : AbstractIntegrationSpec() {
     override val expectedManagedFiles by lazy {
         mapOf(
             Composer.Factory() as PackageManagerFactory to listOf(
-                outputDir.resolve("core/modules/system/tests/fixtures/HtaccessTest/composer.json"),
                 outputDir.resolve("core/lib/Drupal/Component/Uuid/composer.json"),
                 outputDir.resolve("core/lib/Drupal/Component/Utility/composer.json"),
                 outputDir.resolve("core/lib/Drupal/Component/Transliteration/composer.json"),
