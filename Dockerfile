@@ -164,7 +164,7 @@ FROM run
 
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
 
-RUN tar xf /opt/ort.tar -C /opt/ort --strip-components 1 && \
+RUN tar xf /opt/ort.tar -C /opt/ort --exclude="*.bat" --strip-components 1 && \
     rm /opt/ort.tar && \
     /opt/ort/bin/ort requirements
 
