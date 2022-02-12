@@ -134,7 +134,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
     rm go$GO_VERSION.linux-amd64.tar.gz && \
-    mkdir -p $GOPATH/bin && \
+    export GOBIN=/opt/go/bin && \
     curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh && \
     curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
     # Install SDKs required for analysis.
