@@ -43,7 +43,7 @@ class WebAppReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
+        val template = javaClass.getResource("/scan-report-template.html").readText()
         val evaluatedModel = EvaluatedModel.create(input)
 
         val index = template.indexOf(PLACEHOLDER)
