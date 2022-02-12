@@ -236,7 +236,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
             is StringType -> {
                 val rulesResource = (rules as StringType).string
-                javaClass.classLoader.getResource(rulesResource)?.readText()
+                javaClass.getResource(rulesResource)?.readText()
                     ?: throw UsageError("Invalid rules resource '$rulesResource'.")
             }
 
