@@ -185,8 +185,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
             ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)
 
-        val configurationFiles = listOf(packageCurationsFile, packageCurationsDir, actualRepositoryConfigurationFile,
-            resolutionsFile)
+        val configurationFiles = listOf(
+            packageCurationsFile,
+            packageCurationsDir,
+            actualRepositoryConfigurationFile,
+            resolutionsFile
+        )
 
         val configurationInfo = configurationFiles.joinToString("\n\t") { file ->
             file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
