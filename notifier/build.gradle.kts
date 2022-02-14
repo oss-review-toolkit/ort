@@ -35,6 +35,7 @@ repositories {
 
         filter {
             includeGroupByRegex("com\\.atlassian\\..*")
+            includeVersionByRegex("log4j", "log4j", ".*-atlassian-.*")
         }
     }
 }
