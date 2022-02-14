@@ -217,7 +217,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
         }
 
-        println("Looking for configuration in the following files and directories:")
+        println("Looking for evaluator-specific configuration in the following files and directories:")
         println("\t" + configurationInfo)
 
         // Fail early if output files exist and must not be overwritten.
