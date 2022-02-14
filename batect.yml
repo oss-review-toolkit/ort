@@ -78,7 +78,7 @@ tasks:
       command: ./cli/build/install/ort/bin/ort requirements
   funTest:
     description: >-
-      A task to execute ORT's funtional tests in the runtime container. Can be limited to e.g. the "analyzer" project
+      A task to execute ORT's functional tests in the runtime container. Can be limited to e.g. the "analyzer" project
       like `./batect funTest -- -p analyzer`.
     prerequisites:
       - buildFunTest
