@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -180,8 +179,6 @@ class Conan(
                     log.warn { "Failed to list remotes." }
                 }
             }
-
-            installDependencies(workingDir)
 
             val jsonFile = createOrtTempDir().resolve("info.json")
             run(workingDir, "info", ".", "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS).requireSuccess()
@@ -430,16 +427,6 @@ class Conan(
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             vcs = parseVcsInfo(node)
         )
-
-    /**
-     * Run `conan install .` to install packages in [workingDir]. The `conan install .` command looks for the package
-     * in the remote repository that is built for the same architecture as the host that runs this command. That package
-     * may not exist in the remote and in that case the command will fail. As this is acceptable since package
-     * metadata is fetched anyway, ignore the exit code by not using [run] but [ProcessCapture] directly.
-     */
-    private fun installDependencies(workingDir: File) {
-        ProcessCapture(workingDir, "conan", "install", ".")
-    }
 
     /**
      * Parse information about the package author from the given JSON [node]. If present, return a set containing the
