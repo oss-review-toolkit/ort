@@ -196,7 +196,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
         }
 
-        println("Looking for configuration in the following files and directories:")
+        println("Looking for analyzer-specific configuration in the following files and directories:")
         println("\t" + configurationInfo)
 
         val distinctPackageManagers = activatedPackageManagers.toSet() - deactivatedPackageManagers.toSet()
