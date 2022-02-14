@@ -12,7 +12,9 @@ docker run \
   analyze [...] # Insert further arguments for the command.
 ```
 
-**Note:** The single forward slash `/` between the environment variable `$PWD` and the `:` is required for PowerShell compatibility, as PowerShell otherwise interprets `:` as part of the environment variable. 
+**Note:** The single forward slash `/` between the environment variable `$PWD` and the `:` is required for PowerShell compatibility, as PowerShell otherwise interprets `:` as part of the environment variable.
+
+**Note:** When using Yarn/NPM as a projects package manager and mounting a directory relative to the root directory, make sure to **not** have a [repository](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#repository) defined in your `package.json`. As the subdirectory is not recogniced as a VCS managed directory, the repository information cannot be written to the analyzer result. Generating a report will lead to an error.
 
 ### Setting custom certificates to Docker image keystore
 
