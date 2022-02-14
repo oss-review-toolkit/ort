@@ -90,6 +90,17 @@ class Conan(
         ) = Conan(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val conanHome = Os.userHomeDirectory.resolve(".conan")
+
+    // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
+    // layout does not support packages from different remotes that are named (and versioned) the same.
+    //
+    // TODO: Consider using the experimental (and by default disabled) download cache [2] to lift these limitations.
+    //
+    // [1]: https://docs.conan.io/en/latest/reference/config_files/conan.conf.html#storage
+    // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
+    private val conanStoragePath = conanHome.resolve("data")
+
     private val pkgInspectResults = mutableMapOf<String, JsonNode>()
 
     override fun command(workingDir: File?) = "conan"
@@ -119,66 +130,13 @@ class Conan(
         }
 
     private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
-        val conanHome = Os.userHomeDirectory.resolve(".conan")
-
-        // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
-        // layout does not support packages from different remotes that are named (and versioned) the same.
-        //
-        // TODO: Consider using the experimental (and by default disabled) download cache [2] to lift these limitations.
-        //
-        // [1]: https://docs.conan.io/en/latest/reference/config_files/conan.conf.html#storage
-        // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
-        val conanStoragePath = conanHome.resolve("data")
-
         val workingDir = definitionFile.parentFile
         val conanConfig = listOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
             .find { it.isDirectory }
         val directoryToStash = conanConfig?.let { conanHome } ?: conanStoragePath
 
         stashDirectories(directoryToStash).use {
-            conanConfig?.also {
-                run("config", "install", it.absolutePath)
-
-                val remoteList = run("remote", "list", "--raw")
-                if (remoteList.isSuccess) {
-                    remoteList.stdout.lines().forEach { line ->
-                        val trimmedLine = line.trim()
-                        if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
-
-                        val wordIterator = trimmedLine.splitToSequence(' ').iterator()
-
-                        if (!wordIterator.hasNext()) return@forEach
-                        val remoteName = wordIterator.next()
-
-                        if (!wordIterator.hasNext()) return@forEach
-                        val remoteUrl = wordIterator.next()
-
-                        remoteUrl.toUri().onSuccess { uri ->
-                            log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
-
-                            val auth = Authenticator.requestPasswordAuthentication(
-                                /* host = */ uri.host,
-                                /* addr = */ null,
-                                /* port = */ uri.port,
-                                /* protocol = */ uri.scheme,
-                                /* prompt = */ null,
-                                /* scheme = */ null
-                            )
-
-                            if (auth != null) {
-                                val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
-                                if (userAuth.isError) {
-                                    log.error { "Failed to configure user authentication for remote '$remoteName'." }
-                                }
-                            }
-                        }.onFailure {
-                            log.warn { "The remote '$remoteName' points to invalid URL $remoteUrl." }
-                        }
-                    }
-                } else {
-                    log.warn { "Failed to list remotes." }
-                }
-            }
+            conanConfig?.also { configureRemoteAuthentication(it) }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
             run(workingDir, "info", ".", "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS).requireSuccess()
@@ -219,6 +177,50 @@ class Conan(
                     packages = packages.values.toSortedSet()
                 )
             )
+        }
+    }
+
+    private fun configureRemoteAuthentication(conanConfig: File) {
+        run("config", "install", conanConfig.absolutePath)
+
+        val remoteList = run("remote", "list", "--raw")
+        if (remoteList.isSuccess) {
+            remoteList.stdout.lines().forEach { line ->
+                val trimmedLine = line.trim()
+                if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
+
+                val wordIterator = trimmedLine.splitToSequence(' ').iterator()
+
+                if (!wordIterator.hasNext()) return@forEach
+                val remoteName = wordIterator.next()
+
+                if (!wordIterator.hasNext()) return@forEach
+                val remoteUrl = wordIterator.next()
+
+                remoteUrl.toUri().onSuccess { uri ->
+                    log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
+
+                    val auth = Authenticator.requestPasswordAuthentication(
+                        /* host = */ uri.host,
+                        /* addr = */ null,
+                        /* port = */ uri.port,
+                        /* protocol = */ uri.scheme,
+                        /* prompt = */ null,
+                        /* scheme = */ null
+                    )
+
+                    if (auth != null) {
+                        val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
+                        if (userAuth.isError) {
+                            log.error { "Failed to configure user authentication for remote '$remoteName'." }
+                        }
+                    }
+                }.onFailure {
+                    log.warn { "The remote '$remoteName' points to invalid URL $remoteUrl." }
+                }
+            }
+        } else {
+            log.warn { "Failed to list remotes." }
         }
     }
 
