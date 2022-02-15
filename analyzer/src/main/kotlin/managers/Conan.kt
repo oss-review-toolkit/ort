@@ -131,7 +131,7 @@ class Conan(
 
     private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        val conanConfig = listOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
+        val conanConfig = sequenceOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
             .find { it.isDirectory }
         val directoryToStash = conanConfig?.let { conanHome } ?: conanStoragePath
 
