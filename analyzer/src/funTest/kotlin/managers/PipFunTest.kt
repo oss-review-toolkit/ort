@@ -49,15 +49,6 @@ class PipFunTest : WordSpec() {
                 result.toYaml() shouldBe expectedResult
             }
 
-            "resolve requirements.txt dependencies correctly for example-python-flask".config(enabled = !Os.isWindows) {
-                val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
-
-                val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
-
-                result.toYaml() shouldBe expectedResult
-            }
-
             "capture metadata from setup.py even if requirements.txt is present" {
                 val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -76,6 +67,15 @@ class PipFunTest : WordSpec() {
         }
 
         "Python 3" should {
+            "resolve requirements.txt dependencies correctly for example-python-flask".config(enabled = !Os.isWindows) {
+                val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
+
+                val result = createPIP().resolveSingleProject(definitionFile)
+                val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
+
+                result.toYaml() shouldBe expectedResult
+            }
+
             "resolve dependencies correctly for a Django project" {
                 val definitionFile = projectsDir.resolve("synthetic/pip-python3/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
