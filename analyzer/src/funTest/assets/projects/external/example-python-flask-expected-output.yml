@@ -21,18 +21,11 @@ project:
     - id: "PyPI::flask:0.12"
       dependencies:
       - id: "PyPI::click:8.0.3"
-        dependencies:
-        - id: "PyPI::importlib-metadata:4.8.3"
-          dependencies:
-          - id: "PyPI::typing-extensions:4.1.1"
-          - id: "PyPI::zipp:3.6.0"
       - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
         - id: "PyPI::markupsafe:2.0.1"
       - id: "PyPI::werkzeug:2.0.3"
-        dependencies:
-        - id: "PyPI::dataclasses:0.8"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
 - id: "PyPI::click:8.0.3"
@@ -66,40 +59,6 @@ packages:
   vcs_processed:
     type: ""
     url: ""
-    revision: ""
-    path: ""
-- id: "PyPI::dataclasses:0.8"
-  purl: "pkg:pypi/dataclasses@0.8"
-  authors:
-  - "Eric V. Smith"
-  declared_licenses:
-  - "Apache"
-  - "Apache Software License"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache: "Apache-2.0"
-      Apache Software License: "Apache-2.0"
-  description: "A backport of the dataclasses module for Python 3.6"
-  homepage_url: "https://github.com/ericvsmith/dataclasses"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/fe/ca/75fac5856ab5cfa51bbbcefa250182e50441074fdc3f803f6e76451fab43/dataclasses-0.8-py3-none-any.whl"
-    hash:
-      value: "0d6e5bb7adcc8fb0de3ef1ace1b32999"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/1f/12/7919c5d8b9c497f9180db15ea8ead6499812ea8264a6ae18766d93c59fe5/dataclasses-0.8.tar.gz"
-    hash:
-      value: "c9a52e322ada1406bfde9ebe3cdbbcca"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/ericvsmith/dataclasses.git"
     revision: ""
     path: ""
 - id: "PyPI::flask:0.12"
@@ -168,38 +127,6 @@ packages:
   vcs_processed:
     type: ""
     url: ""
-    revision: ""
-    path: ""
-- id: "PyPI::importlib-metadata:4.8.3"
-  purl: "pkg:pypi/importlib-metadata@4.8.3"
-  authors:
-  - "Jason R. Coombs"
-  declared_licenses:
-  - "Apache Software License"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      Apache Software License: "Apache-2.0"
-  description: "Read metadata from Python packages"
-  homepage_url: "https://github.com/python/importlib_metadata"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/a0/a1/b153a0a4caf7a7e3f15c2cd56c7702e2cf3d89b1b359d1f1c5e59d68f4ce/importlib_metadata-4.8.3-py3-none-any.whl"
-    hash:
-      value: "492a63a286daa402226ae8f36cff221d"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/85/ed/e65128cc5cb1580f22ee3009d9187ecdfcc43ffb3b581fe854b24e87d8e7/importlib_metadata-4.8.3.tar.gz"
-    hash:
-      value: "833c41fd427678c8b590c5a7818dd873"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/python/importlib_metadata.git"
     revision: ""
     path: ""
 - id: "PyPI::itsdangerous:2.0.1"
@@ -304,36 +231,6 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::typing-extensions:4.1.1"
-  purl: "pkg:pypi/typing-extensions@4.1.1"
-  declared_licenses:
-  - "Python Software Foundation License"
-  declared_licenses_processed:
-    spdx_expression: "PSF-2.0"
-    mapped:
-      Python Software Foundation License: "PSF-2.0"
-  description: "Backported and Experimental Type Hints for Python 3.6+"
-  homepage_url: "None"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/45/6b/44f7f8f1e110027cf88956b59f2fad776cca7e1704396d043f89effd3a0e/typing_extensions-4.1.1-py3-none-any.whl"
-    hash:
-      value: "51e77e114d727c80f57551ca7aabb015"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/b1/5a/8b5fbb891ef3f81fc923bf3cb4a578c0abf9471eb50ce0f51c74212182ab/typing_extensions-4.1.1.tar.gz"
-    hash:
-      value: "3cd9b7b9a465afbcca8548e11668ca64"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
 - id: "PyPI::werkzeug:2.0.3"
   purl: "pkg:pypi/werkzeug@2.0.3"
   authors:
@@ -365,37 +262,5 @@ packages:
   vcs_processed:
     type: ""
     url: ""
-    revision: ""
-    path: ""
-- id: "PyPI::zipp:3.6.0"
-  purl: "pkg:pypi/zipp@3.6.0"
-  authors:
-  - "Jason R. Coombs"
-  declared_licenses:
-  - "MIT License"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-    mapped:
-      MIT License: "MIT"
-  description: "Backport of pathlib-compatible object wrapper for zip files"
-  homepage_url: "https://github.com/jaraco/zipp"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/bd/df/d4a4974a3e3957fd1c1fa3082366d7fff6e428ddb55f074bf64876f8e8ad/zipp-3.6.0-py3-none-any.whl"
-    hash:
-      value: "655d8bb10a010accc0158d23b11f2009"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/02/bf/0d03dbdedb83afec081fefe86cae3a2447250ef1a81ac601a9a56e785401/zipp-3.6.0.tar.gz"
-    hash:
-      value: "8d5cf6eb3270384ae13a6440797ea564"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jaraco/zipp.git"
     revision: ""
     path: ""

@@ -71,6 +71,8 @@ class PipFunTest : WordSpec() {
                 val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
 
                 val result = createPIP().resolveSingleProject(definitionFile)
+
+                // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
                 val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
 
                 result.toYaml() shouldBe expectedResult
