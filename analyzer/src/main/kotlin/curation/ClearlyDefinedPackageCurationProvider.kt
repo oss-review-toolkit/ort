@@ -145,10 +145,7 @@ class ClearlyDefinedPackageCurationProvider(
 
         contributedCurations.forEach { (_, contributions) ->
             contributions.curations.forEach inner@{ (coordinates, curation) ->
-                val pkgId = coordinatesToIds[coordinates] ?: run {
-                    log.warn { "The returned coordinate '$coordinates' is not among the requested coordinates." }
-                    return@inner
-                }
+                val pkgId = coordinatesToIds[coordinates] ?: return@inner
 
                 val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
                     // Only take curations of good quality (i.e. those not using deprecated identifiers) and in
