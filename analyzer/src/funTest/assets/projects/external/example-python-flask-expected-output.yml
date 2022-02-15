@@ -24,13 +24,13 @@ project:
         dependencies:
         - id: "PyPI::importlib-metadata:4.8.3"
           dependencies:
-          - id: "PyPI::typing-extensions:4.0.1"
+          - id: "PyPI::typing-extensions:4.1.1"
           - id: "PyPI::zipp:3.6.0"
       - id: "PyPI::itsdangerous:2.0.1"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
         - id: "PyPI::markupsafe:2.0.1"
-      - id: "PyPI::werkzeug:2.0.2"
+      - id: "PyPI::werkzeug:2.0.3"
         dependencies:
         - id: "PyPI::dataclasses:0.8"
     - id: "PyPI::gunicorn:19.6.0"
@@ -304,8 +304,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::typing-extensions:4.0.1"
-  purl: "pkg:pypi/typing-extensions@4.0.1"
+- id: "PyPI::typing-extensions:4.1.1"
+  purl: "pkg:pypi/typing-extensions@4.1.1"
   declared_licenses:
   - "Python Software Foundation License"
   declared_licenses_processed:
@@ -315,14 +315,14 @@ packages:
   description: "Backported and Experimental Type Hints for Python 3.6+"
   homepage_url: "None"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/05/e4/baf0031e39cf545f0c9edd5b1a2ea12609b7fcba2d58e118b11753d68cf0/typing_extensions-4.0.1-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/45/6b/44f7f8f1e110027cf88956b59f2fad776cca7e1704396d043f89effd3a0e/typing_extensions-4.1.1-py3-none-any.whl"
     hash:
-      value: "716362736bf3143f3f8e68924c4f1c6e"
+      value: "51e77e114d727c80f57551ca7aabb015"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/0d/4a/60ba3706797b878016f16edc5fbaf1e222109e38d0fa4d7d9312cb53f8dd/typing_extensions-4.0.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/b1/5a/8b5fbb891ef3f81fc923bf3cb4a578c0abf9471eb50ce0f51c74212182ab/typing_extensions-4.1.1.tar.gz"
     hash:
-      value: "33f184a97b6833fc99838c23acad2332"
+      value: "3cd9b7b9a465afbcca8548e11668ca64"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -334,8 +334,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::werkzeug:2.0.2"
-  purl: "pkg:pypi/werkzeug@2.0.2"
+- id: "PyPI::werkzeug:2.0.3"
+  purl: "pkg:pypi/werkzeug@2.0.3"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -348,14 +348,14 @@ packages:
   description: "The comprehensive WSGI web application library."
   homepage_url: "https://palletsprojects.com/p/werkzeug/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/1e/73/51137805d1b8d97367a8a77cae4a792af14bb7ce58fbd071af294c740cf0/Werkzeug-2.0.2-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/f4/f3/22afbdb20cc4654b10c98043414a14057cd27fdba9d4ae61cea596000ba2/Werkzeug-2.0.3-py3-none-any.whl"
     hash:
-      value: "bbf2c196a7c287f598890e4bdb78c2e1"
+      value: "1c42fa3b914e33854b9b89e927efda46"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/83/3c/ecdb36f49ab06defb0d5a466cfeb4ae90a55d02cfef379f781da2801a45d/Werkzeug-2.0.2.tar.gz"
+    url: "https://files.pythonhosted.org/packages/6c/a8/60514fade2318e277453c9588545d0c335ea3ea6440ce5cdabfca7f73117/Werkzeug-2.0.3.tar.gz"
     hash:
-      value: "33805d2b4bb46aec303237eef8476c74"
+      value: "467e7b13f30479dd6d2c8c1eeb42515f"
       algorithm: "MD5"
   vcs:
     type: ""
