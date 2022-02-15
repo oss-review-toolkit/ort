@@ -184,43 +184,44 @@ class Conan(
         run("config", "install", conanConfig.absolutePath)
 
         val remoteList = run("remote", "list", "--raw")
-        if (remoteList.isSuccess) {
-            remoteList.stdout.lines().forEach { line ->
-                val trimmedLine = line.trim()
-                if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
-
-                val wordIterator = trimmedLine.splitToSequence(' ').iterator()
-
-                if (!wordIterator.hasNext()) return@forEach
-                val remoteName = wordIterator.next()
-
-                if (!wordIterator.hasNext()) return@forEach
-                val remoteUrl = wordIterator.next()
-
-                remoteUrl.toUri().onSuccess { uri ->
-                    log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
-
-                    val auth = Authenticator.requestPasswordAuthentication(
-                        /* host = */ uri.host,
-                        /* addr = */ null,
-                        /* port = */ uri.port,
-                        /* protocol = */ uri.scheme,
-                        /* prompt = */ null,
-                        /* scheme = */ null
-                    )
-
-                    if (auth != null) {
-                        val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
-                        if (userAuth.isError) {
-                            log.error { "Failed to configure user authentication for remote '$remoteName'." }
-                        }
-                    }
-                }.onFailure {
-                    log.warn { "The remote '$remoteName' points to invalid URL $remoteUrl." }
-                }
-            }
-        } else {
+        if (remoteList.isError) {
             log.warn { "Failed to list remotes." }
+            return
+        }
+
+        remoteList.stdout.lines().forEach { line ->
+            val trimmedLine = line.trim()
+            if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
+
+            val wordIterator = trimmedLine.splitToSequence(' ').iterator()
+
+            if (!wordIterator.hasNext()) return@forEach
+            val remoteName = wordIterator.next()
+
+            if (!wordIterator.hasNext()) return@forEach
+            val remoteUrl = wordIterator.next()
+
+            remoteUrl.toUri().onSuccess { uri ->
+                log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
+
+                val auth = Authenticator.requestPasswordAuthentication(
+                    /* host = */ uri.host,
+                    /* addr = */ null,
+                    /* port = */ uri.port,
+                    /* protocol = */ uri.scheme,
+                    /* prompt = */ null,
+                    /* scheme = */ null
+                )
+
+                if (auth != null) {
+                    val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
+                    if (userAuth.isError) {
+                        log.error { "Failed to configure user authentication for remote '$remoteName'." }
+                    }
+                }
+            }.onFailure {
+                log.warn { "The remote '$remoteName' points to invalid URL $remoteUrl." }
+            }
         }
     }
 
