@@ -222,16 +222,16 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             log.warn { "Local package curation were not applied because the feature is not enabled." }
         }
 
-        val curationProvider = FallbackPackageCurationProvider(
-            listOfNotNull(
-                SimplePackageCurationProvider(packageCurations.toSet()),
-                config.analyzer.sw360Configuration?.let {
-                    Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
-                },
-                OrtConfigPackageCurationProvider().takeIf { useOrtCurations },
-                ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
-            )
+        val curationProviders = listOfNotNull(
+            SimplePackageCurationProvider(packageCurations.toSet()),
+            config.analyzer.sw360Configuration?.let {
+                Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
+            },
+            OrtConfigPackageCurationProvider().takeIf { useOrtCurations },
+            ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
         )
+
+        val curationProvider = FallbackPackageCurationProvider(curationProviders)
 
         val info = analyzer.findManagedFiles(inputDir, distinctPackageManagers, repositoryConfiguration)
         if (info.managedFiles.isEmpty()) {
@@ -254,6 +254,9 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         }
 
         val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
+
+        val curationCount = ortResult.getPackages().sumOf { it.curations.size }
+        println("Applied $curationCount curation(s) from ${curationProviders.size} provider(s).")
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")
