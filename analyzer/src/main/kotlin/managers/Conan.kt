@@ -181,15 +181,19 @@ class Conan(
     }
 
     private fun configureRemoteAuthentication(conanConfig: File) {
+        // Install configuration from a local directory.
         run("config", "install", conanConfig.absolutePath)
 
+        // List configured remotes in "remotes.txt" format.
         val remoteList = run("remote", "list", "--raw")
         if (remoteList.isError) {
             log.warn { "Failed to list remotes." }
             return
         }
 
+        // Iterate over configured remotes.
         remoteList.stdout.lines().forEach { line ->
+            // Extract the remote URL.
             val trimmedLine = line.trim()
             if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
 
@@ -204,6 +208,7 @@ class Conan(
             remoteUrl.toUri().onSuccess { uri ->
                 log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
 
+                // Request authentication for the extracted remote URL.
                 val auth = Authenticator.requestPasswordAuthentication(
                     /* host = */ uri.host,
                     /* addr = */ null,
@@ -214,6 +219,7 @@ class Conan(
                 )
 
                 if (auth != null) {
+                    // Configure Conan's authentication based on ORT's authentication for the remote.
                     val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
                     if (userAuth.isError) {
                         log.error { "Failed to configure user authentication for remote '$remoteName'." }
