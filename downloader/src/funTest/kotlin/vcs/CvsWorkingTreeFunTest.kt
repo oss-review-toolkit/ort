@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.core.ortDataDirectory
-import org.ossreviewtoolkit.utils.test.Ci
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class CvsWorkingTreeFunTest : StringSpec({
@@ -44,15 +43,13 @@ class CvsWorkingTreeFunTest : StringSpec({
         zipFile.unpack(zipContentDir)
     }
 
-    // Disabled on Azure Windows build because CVS is not installed there.
-    "Detected CVS version is not empty".config(enabled = !Ci.isAzureWindows) {
+    "Detected CVS version is not empty" {
         val version = cvs.getVersion()
         println("CVS version $version detected.")
         version shouldNotBe ""
     }
 
-    // Disabled on Azure Windows build because CVS is not installed there.
-    "CVS detects non-working-trees".config(enabled = !Ci.isAzureWindows) {
+    "CVS detects non-working-trees" {
         cvs.getWorkingTree(ortDataDirectory).isValid() shouldBe false
     }
 
