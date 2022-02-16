@@ -18,7 +18,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Build all classes
@@ -34,7 +34,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Build the reporter-web-app
@@ -50,7 +50,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Run unit tests
@@ -80,7 +80,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Run functional tests
@@ -97,7 +97,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Run functional tests
@@ -113,7 +113,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Run functional tests
