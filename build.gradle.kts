@@ -296,8 +296,7 @@ subprojects {
         listOf(
             "java.io.tmpdir",
             "kotest.assertions.multi-line-diff",
-            "kotest.tags.include",
-            "kotest.tags.exclude"
+            "kotest.tags"
         ).mapNotNullTo(testSystemProperties) { key ->
             System.getProperty(key)?.let { key to it }
         }
