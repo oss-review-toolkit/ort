@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -44,10 +43,10 @@ private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-dat
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 private const val REPO_MANIFEST = "manifest.xml"
 
-class GitRepoFunTest : StringSpec() {
-    private lateinit var outputDir: File
+class GitRepoFunTest : StringSpec({
+    lateinit var outputDir: File
 
-    override fun beforeSpec(spec: Spec) {
+    beforeSpec {
         // Do not use createSpecTempDir() here, as otherwise the path will get too long for Windows to handle.
         outputDir = createTempDirectory(ORT_NAME).toFile()
 
@@ -57,39 +56,37 @@ class GitRepoFunTest : StringSpec() {
         GitRepo().download(pkg, outputDir)
     }
 
-    override fun afterSpec(spec: Spec) {
+    afterSpec {
         outputDir.safeDeleteRecursively(force = true)
     }
 
-    init {
-        // Disabled on Azure Windows because it fails for unknown reasons.
-        "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isAzureWindows) {
-            val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
-                analyze(findManagedFiles(outputDir))
-            }
-
-            val actualResult = ortResult.withResolvedScopes().toYaml()
-            val expectedResult = patchExpectedResult(
-                File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
-                revision = REPO_REV,
-                path = outputDir.invariantSeparatorsPath
-            )
-
-            patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+    // Disabled on Azure Windows because it fails for unknown reasons.
+    "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isAzureWindows) {
+        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+            analyze(findManagedFiles(outputDir))
         }
 
-        "GitRepo correctly lists submodules" {
-            val expectedSubmodules = listOf(
-                "spdx-tools",
-                "submodules",
-                "submodules/commons-text",
-                "submodules/test-data-npm",
-                "submodules/test-data-npm/isarray",
-                "submodules/test-data-npm/long.js"
-            ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
+        val actualResult = ortResult.withResolvedScopes().toYaml()
+        val expectedResult = patchExpectedResult(
+            File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
+            revision = REPO_REV,
+            path = outputDir.invariantSeparatorsPath
+        )
 
-            val workingTree = GitRepo().getWorkingTree(outputDir)
-            workingTree.getNested() shouldBe expectedSubmodules
-        }
+        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
     }
-}
+
+    "GitRepo correctly lists submodules" {
+        val expectedSubmodules = listOf(
+            "spdx-tools",
+            "submodules",
+            "submodules/commons-text",
+            "submodules/test-data-npm",
+            "submodules/test-data-npm/isarray",
+            "submodules/test-data-npm/long.js"
+        ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
+
+        val workingTree = GitRepo().getWorkingTree(outputDir)
+        workingTree.getNested() shouldBe expectedSubmodules
+    }
+})
