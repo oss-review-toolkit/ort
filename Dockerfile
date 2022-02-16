@@ -153,13 +153,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
 
 # Add scanners (in versions known to work).
 ARG SCANCODE_VERSION
-RUN curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
-        tar -zxC /usr/local && \
-        # Trigger ScanCode configuration for Python 3 and reindex licenses initially.
-        cd /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
-        PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --reindex-licenses && \
-        chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
-        ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
+RUN pip install --no-cache-dir scancode-toolkit==$SCANCODE_VERSION
 
 FROM run
 
