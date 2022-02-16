@@ -9,19 +9,10 @@ docker run \
   -v $PWD/:/project \ # Mount current working directory into /project to use as input.
   ort --info \
   -c /project/ort/config.hocon \ # Use file from "<workingdirectory>/ort" as config.
-  analyze [...] # Insert further arguments for the command.
+  analyze -i /project [...] # Insert further arguments for the command.
 ```
 
-Make sure to mount the project root directory so ORT is able to detect VCS information. To work on a subproject use the option `-i` to specify the actual working directory:
-
-```shell
-docker run \
-  -v $PWD/:/project \ # Mount current working directory into /project to use as input.
-  ort --info \
-  -c /project/ort/config.hocon \ # Use file from "<workingdirectory>/ort" as config.
-  -i /project/subproject \ # Specify working directory
-  analyze [...] # Insert further arguments for the command.
-```
+If only a subproject shall be analyzed, change the input path `-i /project` to `-i /project/subproject`. Note that still the projects root directory needs to be mounted to Docker for ORT to detect VCS information.
 
 **Note:** The single forward slash `/` between the environment variable `$PWD` and the `:` is required for PowerShell compatibility, as PowerShell otherwise interprets `:` as part of the environment variable.
 
