@@ -67,7 +67,7 @@ jobs:
     inputs:
       gradleWrapperFile: gradlew.bat
       # TODO: Only exclude ExpensiveTag on PR builds.
-      options: --no-daemon -Dorg.gradle.parallel=false --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -x analyzer:test -x analyzer:funTest -PbuildCacheRetentionDays=3
+      options: --no-daemon -Dorg.gradle.parallel=false --stacktrace -Dkotest.tags=!ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -x analyzer:test -x analyzer:funTest -PbuildCacheRetentionDays=3
       tasks: test funTest
       publishJUnitResults: true
       testResultsFiles: '**/flattened/TEST-*.xml'
