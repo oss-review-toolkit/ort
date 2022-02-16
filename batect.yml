@@ -46,7 +46,7 @@ config_variables:
 
 containers:
   build:
-    image: adoptopenjdk:11-jdk-hotspot-focal
+    image: eclipse-temurin:11-jdk-focal
     <<: *common-container-config
   run:
     build_directory: <{batect.project_directory}
