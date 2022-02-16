@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.Ci
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
@@ -82,10 +81,7 @@ class GoDepFunTest : WordSpec() {
                 }
             }
 
-            // Disabled on Azure Windows because it fails for unknown reasons.
-            "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set".config(
-                enabled = !Ci.isAzureWindows
-            ) {
+            "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
                 val manifestFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
                 val config = AnalyzerConfiguration(allowDynamicVersions = true)
                 val result = createGoDep(config).resolveSingleProject(manifestFile)

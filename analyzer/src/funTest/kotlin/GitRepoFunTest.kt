@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.ORT_NAME
-import org.ossreviewtoolkit.utils.test.Ci
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -60,8 +59,7 @@ class GitRepoFunTest : StringSpec({
         outputDir.safeDeleteRecursively(force = true)
     }
 
-    // Disabled on Azure Windows because it fails for unknown reasons.
-    "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isAzureWindows) {
+    "Analyzer correctly reports VcsInfo for git-repo projects" {
         beforeSpec()
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
