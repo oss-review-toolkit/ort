@@ -3,7 +3,7 @@ name: Static Analysis
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   detekt-issues:
@@ -36,6 +36,7 @@ jobs:
     - name: Check Links
       uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
+        base-branch: main
         check-modified-files-only: yes
         max-depth: 2
         use-quiet-mode: yes
