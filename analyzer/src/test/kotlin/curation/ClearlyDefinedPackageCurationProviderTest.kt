@@ -67,9 +67,7 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
 
             curations should haveSize(1)
 
-            // Note: The ClearlyDefined service returns "Apache-1.0" here for a GET (single) request, but "Apache-2.0"
-            // for a POST (bulk) request, see https://github.com/clearlydefined/service/issues/901.
-            curations.values.flatten().first().data.concludedLicense shouldBe "Apache-2.0".toSpdx()
+            curations.values.flatten().first().data.concludedLicense shouldBe "Apache-1.0".toSpdx()
         }
 
         "return no curation for a non-existing dummy Maven package" {
