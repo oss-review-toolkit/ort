@@ -46,7 +46,7 @@ private const val REPO_MANIFEST = "manifest.xml"
 class GitRepoFunTest : StringSpec({
     lateinit var outputDir: File
 
-    beforeSpec {
+    fun beforeSpec() {
         // Do not use createSpecTempDir() here, as otherwise the path will get too long for Windows to handle.
         outputDir = createTempDirectory(ORT_NAME).toFile()
 
@@ -56,12 +56,14 @@ class GitRepoFunTest : StringSpec({
         GitRepo().download(pkg, outputDir)
     }
 
-    afterSpec {
+    fun afterSpec() {
         outputDir.safeDeleteRecursively(force = true)
     }
 
     // Disabled on Azure Windows because it fails for unknown reasons.
     "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isAzureWindows) {
+        beforeSpec()
+
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
             analyze(findManagedFiles(outputDir))
         }
@@ -88,5 +90,7 @@ class GitRepoFunTest : StringSpec({
 
         val workingTree = GitRepo().getWorkingTree(outputDir)
         workingTree.getNested() shouldBe expectedSubmodules
+
+        afterSpec()
     }
 })
