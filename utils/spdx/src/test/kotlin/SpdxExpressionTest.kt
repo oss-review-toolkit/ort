@@ -45,34 +45,30 @@ class SpdxExpressionTest : WordSpec() {
     init {
         "toString()" should {
             "return the textual SPDX expression" {
-                val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
+                val expression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
 
                 expression.toSpdx() should beString(expression)
             }
 
             "not include unnecessary parenthesis" {
-                val expression = "(license1 AND (license2 AND license3) AND (license4 OR (license5 WITH exception)))"
+                val expression = "(a AND (b AND c) AND (d OR (e WITH exception)))"
 
-                expression.toSpdx() should
-                        beString("license1 AND license2 AND license3 AND (license4 OR license5 WITH exception)")
+                expression.toSpdx() should beString("a AND b AND c AND (d OR e WITH exception)")
             }
 
             "always add parentheses around groups with different operators" {
-                val expression1 = "license1 AND license2 AND license3 OR license4 AND license5 AND license6"
-                val expression2 = "(license1 OR license2 OR license3) AND (license4 OR license5 OR license6)"
-                val expression3 = "(license1 OR license2 AND license3) AND (license4 AND license5 OR license6)"
+                val expression1 = "a AND b AND c OR d AND e AND f"
+                val expression2 = "(a OR b OR c) AND (d OR e OR f)"
+                val expression3 = "(a OR b AND c) AND (d AND e OR f)"
 
-                expression1.toSpdx() should
-                        beString("(license1 AND license2 AND license3) OR (license4 AND license5 AND license6)")
-                expression2.toSpdx() should
-                        beString("(license1 OR license2 OR license3) AND (license4 OR license5 OR license6)")
-                expression3.toSpdx() should
-                        beString("(license1 OR (license2 AND license3)) AND ((license4 AND license5) OR license6)")
+                expression1.toSpdx() should beString("(a AND b AND c) OR (d AND e AND f)")
+                expression2.toSpdx() should beString("(a OR b OR c) AND (d OR e OR f)")
+                expression3.toSpdx() should beString("(a OR (b AND c)) AND ((d AND e) OR f)")
             }
         }
 
         "A dummy SpdxExpression" should {
-            val dummyExpression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
+            val dummyExpression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
 
             "be serializable to a string representation" {
                 val spdxExpression = dummyExpression.toSpdx()
@@ -89,20 +85,20 @@ class SpdxExpressionTest : WordSpec() {
 
                 deserializedExpression shouldBe SpdxCompoundExpression(
                     SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("license1", true),
+                        SpdxLicenseIdExpression("a", true),
                         SpdxOperator.AND,
                         SpdxCompoundExpression(
                             SpdxLicenseWithExceptionExpression(
-                                SpdxLicenseIdExpression("license2"),
+                                SpdxLicenseIdExpression("b"),
                                 "exception1"
                             ),
                             SpdxOperator.OR,
-                            SpdxLicenseIdExpression("license3", true)
+                            SpdxLicenseIdExpression("c", true)
                         )
                     ),
                     SpdxOperator.AND,
                     SpdxLicenseWithExceptionExpression(
-                        SpdxLicenseIdExpression("license4"),
+                        SpdxLicenseIdExpression("d"),
                         "exception2"
                     )
                 )
