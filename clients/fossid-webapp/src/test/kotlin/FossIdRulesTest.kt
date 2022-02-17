@@ -23,6 +23,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
@@ -32,7 +33,6 @@ import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private const val SCAN_CODE = "semver4j_20210609_144524"
 
@@ -58,10 +58,10 @@ class FossIdRulesTest : StringSpec({
     }
 
     "Ignore rules can be listed" {
-        service.listIgnoreRules("", "", SCAN_CODE) shouldNotBeNull {
+        service.listIgnoreRules("", "", SCAN_CODE).shouldNotBeNull().run {
             checkResponse("list ignore rules")
 
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 shouldHaveSize(3)
 
                 shouldContainExactly(
@@ -81,8 +81,6 @@ class FossIdRulesTest : StringSpec({
             RuleType.EXTENSION,
             ".docx",
             RuleScope.SCAN
-        ) shouldNotBeNull {
-            checkResponse("create ignore rule")
-        }
+        ).shouldNotBeNull().checkResponse("create ignore rule")
     }
 })
