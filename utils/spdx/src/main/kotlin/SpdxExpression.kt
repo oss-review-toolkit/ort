@@ -382,20 +382,24 @@ class SpdxCompoundExpression(
 
     override fun hashCode() = decompose().sumOf { it.hashCode() }
 
-    override fun toString(): String {
-        // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
-        // left or right expressions in parenthesis to not change the semantics of the expression.
-        val leftString = when {
-            left is SpdxCompoundExpression && operator.priority > left.operator.priority -> "($left)"
-            else -> "$left"
-        }
-        val rightString = when {
-            right is SpdxCompoundExpression && operator.priority > right.operator.priority -> "($right)"
-            else -> "$right"
-        }
+    override fun toString() =
+        // If the operator of the left or right expression is different from the operator of this expression, put the
+        // respective expression in parentheses. Semantically this would only be required if the priority of this
+        // operator is higher than the priority of the operator of the left or right expression, but always adding
+        // parentheses makes it easier to understand the expression.
+        buildString {
+            when {
+                left is SpdxCompoundExpression && operator != left.operator -> append("($left)")
+                else -> append("$left")
+            }
 
-        return "$leftString $operator $rightString"
-    }
+            append(" $operator ")
+
+            when {
+                right is SpdxCompoundExpression && operator != right.operator -> append("($right)")
+                else -> append("$right")
+            }
+        }
 }
 
 /**
