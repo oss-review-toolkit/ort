@@ -24,6 +24,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.comparables.shouldBeGreaterThan
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -35,7 +36,6 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Contrib
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ClearlyDefinedServiceFunTest : WordSpec({
     "A contribution patch" should {
@@ -45,12 +45,8 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
             val curation = ClearlyDefinedService.JSON_MAPPER.readValue<Curation>(curationWithEmptyFacetArrays)
 
-            curation.described?.facets?.dev.shouldNotBeNull {
-                this should beEmpty()
-            }
-            curation.described?.facets?.tests.shouldNotBeNull {
-                this should beEmpty()
-            }
+            curation.described?.facets?.dev.shouldNotBeNull() should beEmpty()
+            curation.described?.facets?.tests.shouldNotBeNull() should beEmpty()
         }
     }
 
@@ -126,7 +122,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
             val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
 
-            summary shouldNotBeNull {
+            summary.shouldNotBeNull().run {
                 prNumber shouldBeGreaterThan 0
                 url shouldStartWith "https://github.com/clearlydefined/curated-data-dev/pull/"
             }

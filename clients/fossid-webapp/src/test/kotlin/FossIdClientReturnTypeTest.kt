@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -40,7 +41,6 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private const val PROJECT_CODE_1 = "semver4j"
 private const val PROJECT_CODE_2 = "semver4j_2"
@@ -76,49 +76,43 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Scans for project can be listed when there is none" {
-        service.listScansForProject("", "", PROJECT_CODE_1) shouldNotBeNull {
+        service.listScansForProject("", "", PROJECT_CODE_1).shouldNotBeNull().run {
             checkResponse("list scans")
-            data shouldNotBeNull {
-                this should beEmpty()
-            }
+            data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Scans for project can be listed when there is exactly one" {
-        service.listScansForProject("", "", PROJECT_CODE_3) shouldNotBeNull {
+        service.listScansForProject("", "", PROJECT_CODE_3).shouldNotBeNull().run {
             checkResponse("list scans")
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 size shouldBe 1
-                forEach {
-                    it.shouldBeTypeOf<Scan>()
-                }
+                first().shouldBeTypeOf<Scan>()
             }
         }
     }
 
     "Scans for project can be listed when there is some" {
-        service.listScansForProject("", "", PROJECT_CODE_2) shouldNotBeNull {
+        service.listScansForProject("", "", PROJECT_CODE_2).shouldNotBeNull().run {
             checkResponse("list scans")
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 this shouldNot beEmpty()
-                this[0].shouldBeTypeOf<Scan>()
+                first().shouldBeTypeOf<Scan>()
             }
         }
     }
 
     "Scan results can be listed when there is none" {
-        service.listScanResults("", "", SCAN_CODE_1) shouldNotBeNull {
+        service.listScanResults("", "", SCAN_CODE_1).shouldNotBeNull().run {
             checkResponse("list scan results")
-            data shouldNotBeNull {
-                this should beEmpty()
-            }
+            data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Scan results can be listed when there is some" {
-        service.listScanResults("", "", SCAN_CODE_2) shouldNotBeNull {
+        service.listScanResults("", "", SCAN_CODE_2).shouldNotBeNull().run {
             checkResponse("list scan results")
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<FossIdScanResult>()
@@ -128,18 +122,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Identified files can be listed when there is none" {
-        service.listIdentifiedFiles("", "", SCAN_CODE_1) shouldNotBeNull {
+        service.listIdentifiedFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
             checkResponse("list identified files")
-            data shouldNotBeNull {
-                this should beEmpty()
-            }
+            data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Identified files can be listed when there is some" {
-        service.listIdentifiedFiles("", "", SCAN_CODE_2) shouldNotBeNull {
+        service.listIdentifiedFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
             checkResponse("list identified files")
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<IdentifiedFile>()
@@ -149,18 +141,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Marked as identified  files can be listed when there is none" {
-        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_1) shouldNotBeNull {
+        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
             checkResponse("list marked as identified files")
-            data shouldNotBeNull {
-                this should beEmpty()
-            }
+            data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Marked as identified  files can be listed when there is some" {
-        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_2) shouldNotBeNull {
+        service.listMarkedAsIdentifiedFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
             checkResponse("list marked as identified files")
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<MarkedAsIdentifiedFile>()
@@ -170,18 +160,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Ignored files can be listed when there is none" {
-        service.listIgnoredFiles("", "", SCAN_CODE_1) shouldNotBeNull {
+        service.listIgnoredFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
             checkResponse("list ignored files")
-            data shouldNotBeNull {
-                this should beEmpty()
-            }
+            data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Ignored files can be listed when there is some" {
-        service.listIgnoredFiles("", "", SCAN_CODE_2) shouldNotBeNull {
+        service.listIgnoredFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
             checkResponse("list ignored files")
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<IgnoredFile>()
@@ -191,18 +179,16 @@ class FossIdClientReturnTypeTest : StringSpec({
     }
 
     "Pending files can be listed when there is none" {
-        service.listPendingFiles("", "", SCAN_CODE_1) shouldNotBeNull {
+        service.listPendingFiles("", "", SCAN_CODE_1).shouldNotBeNull().run {
             checkResponse("list pending files")
-            data shouldNotBeNull {
-                this should beEmpty()
-            }
+            data.shouldNotBeNull() should beEmpty()
         }
     }
 
     "Pending files can be listed when there is some" {
-        service.listPendingFiles("", "", SCAN_CODE_2) shouldNotBeNull {
+        service.listPendingFiles("", "", SCAN_CODE_2).shouldNotBeNull().run {
             checkResponse("list pending files")
-            data shouldNotBeNull {
+            data.shouldNotBeNull().run {
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<String>()
