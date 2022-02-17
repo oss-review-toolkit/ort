@@ -46,20 +46,15 @@ class SpdxExpressionTest : WordSpec() {
         "toString()" should {
             "return the textual SPDX expression" {
                 val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
-                val spdxExpression = expression.toSpdx()
 
-                val spdxString = spdxExpression.toString()
-
-                spdxString shouldBe expression
+                expression.toSpdx() should beString(expression)
             }
 
             "not include unnecessary parenthesis" {
-                val spdxExpression =
-                    "(license1 AND (license2 AND license3) AND (license4 OR (license5 WITH exception)))".toSpdx()
+                val expression = "(license1 AND (license2 AND license3) AND (license4 OR (license5 WITH exception)))"
 
-                val spdxString = spdxExpression.toString()
-
-                spdxString shouldBe "license1 AND license2 AND license3 AND (license4 OR license5 WITH exception)"
+                expression.toSpdx() should
+                        beString("license1 AND license2 AND license3 AND (license4 OR license5 WITH exception)")
             }
 
             "always add parentheses around groups with different operators" {
