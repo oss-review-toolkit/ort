@@ -61,6 +61,19 @@ class SpdxExpressionTest : WordSpec() {
 
                 spdxString shouldBe "license1 AND license2 AND license3 AND (license4 OR license5 WITH exception)"
             }
+
+            "always add parentheses around groups with different operators" {
+                val expression1 = "license1 AND license2 AND license3 OR license4 AND license5 AND license6"
+                val expression2 = "(license1 OR license2 OR license3) AND (license4 OR license5 OR license6)"
+                val expression3 = "(license1 OR license2 AND license3) AND (license4 AND license5 OR license6)"
+
+                expression1.toSpdx() should
+                        beString("(license1 AND license2 AND license3) OR (license4 AND license5 AND license6)")
+                expression2.toSpdx() should
+                        beString("(license1 OR license2 OR license3) AND (license4 OR license5 OR license6)")
+                expression3.toSpdx() should
+                        beString("(license1 OR (license2 AND license3)) AND ((license4 AND license5) OR license6)")
+            }
         }
 
         "A dummy SpdxExpression" should {
@@ -350,25 +363,25 @@ class SpdxExpressionTest : WordSpec() {
 
         "disjunctiveNormalForm()" should {
             "not change an expression already in DNF" {
-                "a AND b OR c AND d".toSpdx().disjunctiveNormalForm() should beString("a AND b OR c AND d")
+                "a AND b OR c AND d".toSpdx().disjunctiveNormalForm() should beString("(a AND b) OR (c AND d)")
             }
 
             "correctly convert an OR on the left side of an AND expression" {
-                "(a OR b) AND c".toSpdx().disjunctiveNormalForm() should beString("a AND c OR b AND c")
+                "(a OR b) AND c".toSpdx().disjunctiveNormalForm() should beString("(a AND c) OR (b AND c)")
             }
 
             "correctly convert an OR on the right side of an AND expression" {
-                "a AND (b OR c)".toSpdx().disjunctiveNormalForm() should beString("a AND b OR a AND c")
+                "a AND (b OR c)".toSpdx().disjunctiveNormalForm() should beString("(a AND b) OR (a AND c)")
             }
 
             "correctly convert ORs on both sides of an AND expression" {
                 "(a OR b) AND (c OR d)".toSpdx().disjunctiveNormalForm() should
-                        beString("a AND c OR a AND d OR b AND c OR b AND d")
+                        beString("(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)")
             }
 
             "correctly convert a complex expression" {
                 "(a OR b) AND c AND (d OR e)".toSpdx().disjunctiveNormalForm() should
-                        beString("a AND c AND d OR a AND c AND e OR b AND c AND d OR b AND c AND e")
+                        beString("(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)")
             }
         }
 
@@ -386,7 +399,7 @@ class SpdxExpressionTest : WordSpec() {
 
             "correctly sort a complex expression" {
                 "(h OR g) AND (f OR e) OR (c OR d) AND (a OR b)".toSpdx().sort() should
-                        beString("(a OR b) AND (c OR d) OR (e OR f) AND (g OR h)")
+                        beString("((a OR b) AND (c OR d)) OR ((e OR f) AND (g OR h))")
             }
         }
 
@@ -583,7 +596,7 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "return the correct result if multiple simple choices are applied" {
-                val expression = "a OR b AND c OR d".toSpdx()
+                val expression = "(a OR b) AND (c OR d)".toSpdx()
 
                 val choices = listOf(
                     SpdxLicenseChoice("a OR b".toSpdx(), "a".toSpdx()),
