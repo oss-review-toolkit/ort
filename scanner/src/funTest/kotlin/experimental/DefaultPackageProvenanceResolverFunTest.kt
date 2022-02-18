@@ -20,9 +20,12 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
+
+import java.io.IOException
 
 import kotlinx.coroutines.runBlocking
 
@@ -33,7 +36,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -71,7 +73,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                     )
                 )
 
-                resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.ARTIFACT)) shouldBe UnknownProvenance
+                shouldThrow<IOException> { resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.ARTIFACT)) }
             }
         }
 
@@ -117,7 +119,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                     )
                 )
 
-                resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) shouldBe UnknownProvenance
+                shouldThrow<IOException> { resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) }
             }
 
             "Guess the correct tag for a package" {
