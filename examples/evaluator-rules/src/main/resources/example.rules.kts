@@ -255,7 +255,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
             warning(
                 "The repository configuration is using the deprecated scope exclude reason '$offendingReason'.",
                 "Please use only non-deprecated scope exclude reasons, see " +
-                        "https://github.com/oss-review-toolkit/ort/blob/master/model/src/main/" +
+                        "https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/" +
                         "kotlin/config/ScopeExcludeReason.kt."
             )
         }
