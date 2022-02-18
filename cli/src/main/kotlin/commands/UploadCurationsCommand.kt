@@ -169,7 +169,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
         summary = "Curation for component $coordinates.",
         details = "Imported from curation data of the " +
                 "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
-                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/master/clearly-defined) " +
+                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/main/clients/clearly-defined) " +
                 "module.",
         resolution = data.comment ?: "Unknown, original data contains no comment.",
         removedDefinitions = false
