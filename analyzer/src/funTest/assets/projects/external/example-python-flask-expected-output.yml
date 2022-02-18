@@ -21,7 +21,7 @@ project:
     - id: "PyPI::flask:0.12"
       dependencies:
       - id: "PyPI::click:8.0.3"
-      - id: "PyPI::itsdangerous:2.0.1"
+      - id: "PyPI::itsdangerous:2.1.0"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
         - id: "PyPI::markupsafe:2.0.1"
@@ -129,8 +129,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::itsdangerous:2.0.1"
-  purl: "pkg:pypi/itsdangerous@2.0.1"
+- id: "PyPI::itsdangerous:2.1.0"
+  purl: "pkg:pypi/itsdangerous@2.1.0"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -143,14 +143,14 @@ packages:
   description: "Safely pass data to untrusted environments and back."
   homepage_url: "https://palletsprojects.com/p/itsdangerous/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/9c/96/26f935afba9cd6140216da5add223a0c465b99d0f112b68a4ca426441019/itsdangerous-2.0.1-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/53/f8/64d2488f48332f33a6dbfe2f19d7bde7d750d9cb182b4b37c02eadec33d3/itsdangerous-2.1.0-py3-none-any.whl"
     hash:
-      value: "5f220a8fb0b37b5ba8b436c618d5b987"
+      value: "fe8269cff386af54b02bf883764de3ab"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/58/66/d6c5859dcac92b442626427a8c7a42322068c5cd5d4a463ce78b93f730b7/itsdangerous-2.0.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/82/00/89037083314067f1605233f6f30b94fdddc89d18e283b30b0c5be9e7f801/itsdangerous-2.1.0.tar.gz"
     hash:
-      value: "996b9763d1b4bd0edd6eb86f0a490629"
+      value: "f16ccadd2fbaa6b03a368789a18ba955"
       algorithm: "MD5"
   vcs:
     type: ""
