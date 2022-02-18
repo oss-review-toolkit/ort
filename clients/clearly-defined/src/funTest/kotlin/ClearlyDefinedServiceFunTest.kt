@@ -35,7 +35,6 @@ import java.io.File
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class ClearlyDefinedServiceFunTest : WordSpec({
     "A contribution patch" should {
@@ -59,7 +58,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             "3.1.0"
         )
 
-        "return single curation data".config(tags = setOf(ExpensiveTag)) {
+        "return single curation data" {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
             val curation = service.getCuration(
@@ -73,7 +72,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
 
-        "return bulk curation data".config(tags = setOf(ExpensiveTag)) {
+        "return bulk curation data" {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
             val curations = service.getCurations(listOf(coordinates))
@@ -107,7 +106,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             revisions
         )
 
-        "only serialize non-null values".config(tags = setOf(ExpensiveTag)) {
+        "only serialize non-null values" {
             val contributionPatch = ContributionPatch(info, listOf(patch))
 
             val patchJson = ClearlyDefinedService.JSON_MAPPER.writeValueAsString(contributionPatch)
@@ -117,7 +116,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
         // pull-requests at https://github.com/clearlydefined/curated-data-dev.
-        "return a summary of the created pull-request".config(enabled = false, tags = setOf(ExpensiveTag)) {
+        "return a summary of the created pull-request".config(enabled = false) {
             val service = ClearlyDefinedService.create(Server.DEVELOPMENT)
 
             val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
