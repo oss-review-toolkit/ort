@@ -4,33 +4,32 @@
 
 [![Slack][1]][2]
 
-[![Linux build status][4]][3] [![Windows build status][5]][3] [![Docker build status][6]][3] [![JitPack build status][10]][11]
+[![Validate Gradle Wrapper][3]][4] [![Static Analysis][5]][6]
 
-[![Linux analyzer tests][7]][3] [![Windows analyzer tests][8]][3] [![Code coverage][12]][13]
+[![Build and Test][7]][8] [![JitPack build status][9]][10] [![Code coverage][11]][12]
 
-[![TODOs][14]][15] [![Static Analysis][9]][3] [![LGTM][16]][17] [![REUSE status][18]][19] [![CII][20]][21]
+[![TODOs][13]][14] [![LGTM][15]][16] [![REUSE status][17]][18] [![CII][19]][20]
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
-[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
-[4]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=LinuxTest&label=Linux%20Build
-[5]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=WindowsTest&label=Windows%20Build
-[6]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=DockerBuild&label=Docker%20Build
-[7]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=LinuxAnalyzerTest&label=Linux%20Analyzer%20Tests
-[8]: https://dev.azure.com/oss-review-toolkit/ort/_apis/build/status/oss-review-toolkit.ort?branchName=master&jobName=WindowsAnalyzerTest&label=Windows%20Analyzer%20Tests
-[9]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg?branch=master
-[10]: https://jitpack.io/v/oss-review-toolkit/ort.svg
-[11]: https://jitpack.io/#oss-review-toolkit/ort
-[12]: https://codecov.io/gh/oss-review-toolkit/ort/branch/master/graph/badge.svg?token=QD2tCSUTVN
-[13]: https://app.codecov.io/gh/oss-review-toolkit/ort
-[14]: https://badgen.net/https/api.tickgit.com/badgen/github.com/oss-review-toolkit/ort
-[15]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
-[16]: https://img.shields.io/lgtm/alerts/g/oss-review-toolkit/ort.svg?logo=lgtm&logoWidth=18
-[17]: https://lgtm.com/projects/g/oss-review-toolkit/ort/alerts/
-[18]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
-[19]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
-[20]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
-[21]: https://bestpractices.coreinfrastructure.org/projects/4618
+[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/gradle-wrapper-validation.yml/badge.svg?branch=main
+[4]: https://github.com/oss-review-toolkit/ort/actions/workflows/gradle-wrapper-validation.yml
+[5]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg?branch=main
+[6]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
+[7]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml/badge.svg?branch=main
+[8]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml
+[9]: https://jitpack.io/v/oss-review-toolkit/ort.svg
+[10]: https://jitpack.io/#oss-review-toolkit/ort
+[11]: https://codecov.io/gh/oss-review-toolkit/ort/branch/main/graph/badge.svg?token=QD2tCSUTVN
+[12]: https://app.codecov.io/gh/oss-review-toolkit/ort
+[13]: https://badgen.net/https/api.tickgit.com/badgen/github.com/oss-review-toolkit/ort
+[14]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
+[15]: https://img.shields.io/lgtm/alerts/g/oss-review-toolkit/ort.svg?logo=lgtm&logoWidth=18
+[16]: https://lgtm.com/projects/g/oss-review-toolkit/ort/alerts/
+[17]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
+[18]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
+[19]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
+[20]: https://bestpractices.coreinfrastructure.org/projects/4618
 
 # Introduction
 
