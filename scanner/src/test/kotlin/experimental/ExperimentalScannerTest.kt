@@ -33,6 +33,7 @@ import io.mockk.spyk
 import io.mockk.verify
 
 import java.io.File
+import java.io.IOException
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -51,7 +52,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -696,7 +696,7 @@ private class FakeProvenanceDownloader(val filename: String = "fake.txt") : Prov
  * validation.
  */
 private class FakePackageProvenanceResolver : PackageProvenanceResolver {
-    override fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): Provenance {
+    override fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): KnownProvenance {
         sourceCodeOriginPriority.forEach { sourceCodeOrigin ->
             when (sourceCodeOrigin) {
                 SourceCodeOrigin.ARTIFACT -> {
@@ -713,7 +713,7 @@ private class FakePackageProvenanceResolver : PackageProvenanceResolver {
             }
         }
 
-        return UnknownProvenance
+        throw IOException()
     }
 }
 

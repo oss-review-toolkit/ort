@@ -135,11 +135,12 @@ class ExperimentalScanner(
         if (scanners.isEmpty()) return emptyMap()
 
         log.info { "Resolving provenance for ${packages.size} packages." }
-        // TODO: Handle issues for packages where provenance cannot be resolved.
-        val (packageProvenances, packageProvenanceDuration) = measureTimedValue { getPackageProvenances(packages) }
-        log.info {
-            "Resolved provenance for ${packages.size} packages in $packageProvenanceDuration."
+        val (packageProvenanceResults, packageProvenanceDuration) = measureTimedValue {
+            getPackageProvenances(packages)
         }
+        log.info { "Resolved provenance for ${packages.size} packages in $packageProvenanceDuration." }
+
+        val packageProvenances = packageProvenanceResults.mapValuesNotNull { it.value.getOrNull() }
 
         log.info { "Resolving nested provenances for ${packages.size} packages." }
         val (nestedProvenances, nestedProvenanceDuration) =
@@ -149,7 +150,7 @@ class ExperimentalScanner(
         }
 
         val allKnownProvenances = (
-                packageProvenances.values.filterIsInstance<KnownProvenance>() +
+                packageProvenances.values +
                         nestedProvenances.values.flatMap { nestedProvenance ->
                             nestedProvenance.subRepositories.values
                         }
@@ -350,9 +351,9 @@ class ExperimentalScanner(
             keep
         }
 
-    private fun getPackageProvenances(packages: Set<Package>): Map<Package, Provenance> =
+    private fun getPackageProvenances(packages: Set<Package>): Map<Package, Result<KnownProvenance>> =
         packages.associateWith { pkg ->
-            packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins)
+            runCatching { packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins) }
         }
 
     private fun getNestedProvenances(packageProvenances: Map<Package, Provenance>): Map<Package, NestedProvenance> =
@@ -594,3 +595,10 @@ private fun Map<ScannerWrapper, Map<KnownProvenance, List<ScanResult>>>.hasResul
     scanner: ScannerWrapper,
     provenance: Provenance
 ) = getValue(scanner)[provenance].let { it != null && it.isNotEmpty() }
+
+private fun <K, V, R> Map<K, V>.mapValuesNotNull(transform: (Map.Entry<K, V>) -> R?): Map<K, R> =
+    mutableMapOf<K, R>().apply {
+        this@mapValuesNotNull.forEach { entry ->
+            transform(entry)?.let { put(entry.key, it) }
+        }
+    }
