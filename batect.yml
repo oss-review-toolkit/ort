@@ -20,6 +20,7 @@ forbid_telemetry: true
 config_variables:
   gradle_console:
     description: Gradle console mode
+    # Supported values: "auto", "plain", "rich", "verbose"
     default: rich
 
 .common-container-config: &common-container-config
