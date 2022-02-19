@@ -40,6 +40,7 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+    api("com.zaxxer:HikariCP:$hikariVersion")
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion")
@@ -47,7 +48,6 @@ dependencies {
     implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
     implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
     implementation("com.vdurmont:semver4j:$semverVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
