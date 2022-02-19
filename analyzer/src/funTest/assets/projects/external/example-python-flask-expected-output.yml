@@ -20,7 +20,7 @@ project:
     dependencies:
     - id: "PyPI::flask:0.12"
       dependencies:
-      - id: "PyPI::click:8.0.3"
+      - id: "PyPI::click:8.0.4"
       - id: "PyPI::itsdangerous:2.1.0"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
@@ -28,8 +28,8 @@ project:
       - id: "PyPI::werkzeug:2.0.3"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
-- id: "PyPI::click:8.0.3"
-  purl: "pkg:pypi/click@8.0.3"
+- id: "PyPI::click:8.0.4"
+  purl: "pkg:pypi/click@8.0.4"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -42,14 +42,14 @@ packages:
   description: "Composable command line interface toolkit"
   homepage_url: "https://palletsprojects.com/p/click/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/48/58/c8aa6a8e62cc75f39fee1092c45d6b6ba684122697d7ce7d53f64f98a129/click-8.0.3-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/4a/a8/0b2ced25639fb20cc1c9784de90a8c25f9504a7f18cd8b5397bd61696d7d/click-8.0.4-py3-none-any.whl"
     hash:
-      value: "f4399393e58c56b25d9b9e8a665d2255"
+      value: "2741fac1595e26f79294e1b5efadf477"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/f4/09/ad003f1e3428017d1c3da4ccc9547591703ffea548626f47ec74509c5824/click-8.0.3.tar.gz"
+    url: "https://files.pythonhosted.org/packages/dd/cf/706c1ad49ab26abed0b77a2f867984c1341ed7387b8030a6aa914e2942a0/click-8.0.4.tar.gz"
     hash:
-      value: "6bcf62c52c6b58c9977c7d19b0d0cbf9"
+      value: "c89efc98d1b36d52ba26a39c803df0cc"
       algorithm: "MD5"
   vcs:
     type: ""
