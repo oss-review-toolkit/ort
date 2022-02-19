@@ -39,6 +39,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import com.zaxxer.hikari.HikariDataSource
+
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
@@ -366,27 +368,28 @@ private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
         StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
     }
 
-private fun createPostgresStorage(config: PostgresStorageConfiguration) =
-    when (config.type) {
-        StorageType.PACKAGE_BASED -> PostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME)
-        )
-        StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME)
-        )
+private fun createPostgresStorage(config: PostgresStorageConfiguration): ScanStorage {
+    val hikariConfig = DatabaseUtils.createHikariConfig(config = config, applicationNameSuffix = TOOL_NAME)
+    val dataSource = HikariDataSource(hikariConfig)
+
+    return when (config.type) {
+        StorageType.PACKAGE_BASED -> PostgresStorage(dataSource)
+        StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(dataSource)
     }
+}
 
 private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration) = ClearlyDefinedStorage(config)
 
 private fun createSw360Storage(config: Sw360StorageConfiguration) = Sw360Storage(config)
 
 private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguration?): PackageProvenanceStorage {
-    config?.fileStorage?.let { fileStorageConfiguration ->
-        return FileBasedPackageProvenanceStorage(fileStorageConfiguration.createFileStorage())
+    config?.fileStorage?.let { fileStorageConfig ->
+        return FileBasedPackageProvenanceStorage(fileStorageConfig.createFileStorage())
     }
 
-    config?.postgresStorage?.let { postgresStorageConfiguration ->
-        return PostgresPackageProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
+    config?.postgresStorage?.let { postgresStorageConfig ->
+        val hikariConfig = DatabaseUtils.createHikariConfig(postgresStorageConfig)
+        return PostgresPackageProvenanceStorage(HikariDataSource(hikariConfig))
     }
 
     return FileBasedPackageProvenanceStorage(
@@ -395,12 +398,13 @@ private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguratio
 }
 
 private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration?): NestedProvenanceStorage {
-    config?.fileStorage?.let { fileStorageConfiguration ->
-        return FileBasedNestedProvenanceStorage(fileStorageConfiguration.createFileStorage())
+    config?.fileStorage?.let { fileStorageConfig ->
+        return FileBasedNestedProvenanceStorage(fileStorageConfig.createFileStorage())
     }
 
-    config?.postgresStorage?.let { postgresStorageConfiguration ->
-        return PostgresNestedProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
+    config?.postgresStorage?.let { postgresStorageConfig ->
+        val hikariConfig = DatabaseUtils.createHikariConfig(postgresStorageConfig)
+        return PostgresNestedProvenanceStorage(HikariDataSource(hikariConfig))
     }
 
     return FileBasedNestedProvenanceStorage(

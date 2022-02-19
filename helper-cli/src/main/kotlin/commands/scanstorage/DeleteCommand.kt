@@ -27,6 +27,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
+import com.zaxxer.hikari.HikariDataSource
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
@@ -115,12 +117,12 @@ internal class DeleteCommand : CliktCommand(
             "Using Postgres storage with URL '${storageConfig.url}' and schema '${storageConfig.schema}'."
         }
 
-        val dataSource = DatabaseUtils.createHikariDataSource(
+        val hikariConfig = DatabaseUtils.createHikariConfig(
             config = storageConfig,
             applicationNameSuffix = ORTH_NAME,
             maxPoolSize = 1
         )
 
-        return Database.connect(dataSource)
+        return Database.connect(HikariDataSource(hikariConfig))
     }
 }

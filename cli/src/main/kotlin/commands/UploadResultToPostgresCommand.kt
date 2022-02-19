@@ -27,6 +27,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import com.zaxxer.hikari.HikariDataSource
+
 import java.sql.SQLException
 
 import org.jetbrains.exposed.dao.id.IntIdTable
@@ -110,12 +112,12 @@ class UploadResultToPostgresCommand : CliktCommand(
             "The column name must not be blank."
         }
 
-        val dataSource = DatabaseUtils.createHikariDataSource(
+        val hikariConfig = DatabaseUtils.createHikariConfig(
             config = postgresConfig,
             applicationNameSuffix = "upload-result-command"
         )
 
-        Database.connect(dataSource)
+        Database.connect(HikariDataSource(hikariConfig))
 
         val table = OrtResults(tableName, columnName)
 

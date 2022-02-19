@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model.utils
 
 import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 
 import kotlinx.coroutines.Deferred
 
@@ -35,13 +34,13 @@ import org.ossreviewtoolkit.utils.core.log
 
 object DatabaseUtils {
     /**
-     * Return a [HikariDataSource] for the given [PostgresStorageConfiguration].
+     * Return a [HikariConfig] for the given [PostgresStorageConfiguration].
      */
-    fun createHikariDataSource(
+    fun createHikariConfig(
         config: PostgresStorageConfiguration,
         applicationNameSuffix: String = "",
         maxPoolSize: Int = 5
-    ): HikariDataSource {
+    ): HikariConfig {
         require(config.url.isNotBlank()) {
             "URL for PostgreSQL storage is missing."
         }
@@ -58,7 +57,7 @@ object DatabaseUtils {
             "Password for PostgreSQL storage is missing."
         }
 
-        val dataSourceConfig = HikariConfig().apply {
+        return HikariConfig().apply {
             jdbcUrl = config.url
             username = config.username
             password = config.password
@@ -76,8 +75,6 @@ object DatabaseUtils {
             addDataSourcePropertyIfDefined("sslkey", config.sslkey)
             addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
         }
-
-        return HikariDataSource(dataSourceConfig)
     }
 
     /**

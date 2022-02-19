@@ -27,6 +27,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import com.zaxxer.hikari.HikariDataSource
+
 import java.sql.Connection
 import java.time.Instant
 
@@ -106,11 +108,13 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
             ?.filterIsInstance<PostgresStorageConfiguration>()?.firstOrNull()
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
-        return DatabaseUtils.createHikariDataSource(
+        val hikariConfig = DatabaseUtils.createHikariConfig(
             config = storageConfig,
             applicationNameSuffix = ORTH_NAME,
             maxPoolSize = 1
-        ).connection
+        )
+
+        return HikariDataSource(hikariConfig).connection
     }
 }
 

@@ -67,12 +67,12 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver {
         this?.fileStorage != null -> FileArchiverFileStorage(fileStorage.createFileStorage())
 
         this?.postgresStorage != null -> {
-            val dataSource = DatabaseUtils.createHikariDataSource(
+            val hikariConfig = DatabaseUtils.createHikariConfig(
                 config = postgresStorage,
                 applicationNameSuffix = "file-archiver"
             )
 
-            PostgresFileArchiverStorage(dataSource)
+            PostgresFileArchiverStorage(hikariConfig)
         }
 
         else -> FileArchiverFileStorage(LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR))

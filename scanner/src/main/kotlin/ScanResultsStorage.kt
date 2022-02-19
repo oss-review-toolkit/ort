@@ -20,6 +20,8 @@
 
 package org.ossreviewtoolkit.scanner
 
+import com.zaxxer.hikari.HikariDataSource
+
 import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.Dispatchers
@@ -150,18 +152,16 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          * Create a [PostgresStorage] based on the [config] passed in.
          */
         private fun createPostgresStorage(config: PostgresStorageConfiguration): ScanResultsStorage {
-            val dataSource = DatabaseUtils.createHikariDataSource(
+            log.info { "Using Postgres storage with URL '${config.url}' and schema '${config.schema}'." }
+
+            val hikariConfig = DatabaseUtils.createHikariConfig(
                 config = config,
                 applicationNameSuffix = TOOL_NAME,
                 // Use a value slightly higher than the number of threads accessing the storage.
                 maxPoolSize = PathScanner.NUM_STORAGE_THREADS + 3
             )
 
-            log.info {
-                "Using Postgres storage with URL '${config.url}' and schema '${config.schema}'."
-            }
-
-            return PostgresStorage(dataSource)
+            return PostgresStorage(HikariDataSource(hikariConfig))
         }
 
         /**

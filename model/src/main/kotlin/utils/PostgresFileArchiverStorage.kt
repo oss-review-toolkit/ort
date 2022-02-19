@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
+
 import java.io.File
 import java.io.IOException
-
-import javax.sql.DataSource
 
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -48,23 +49,23 @@ import org.ossreviewtoolkit.utils.core.log
 /**
  * A PostgreSQL based storage for archive files.
  */
-class PostgresFileArchiverStorage(
-    /**
-     * The JDBC data source to obtain database connections.
-     */
-    dataSource: DataSource
-) : FileArchiverStorage {
-    /** Stores the database connection used by this object. */
-    val database = Database.connect(dataSource, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
-        transaction {
-            withDataBaseLock {
-                if (!tableExists(FileArchiveTable.tableName)) {
-                    checkDatabaseEncoding()
-                    createMissingTablesAndColumns(FileArchiveTable)
-                }
-            }
+class PostgresFileArchiverStorage(config: HikariConfig) : FileArchiverStorage {
+    /** The JDBC data source to obtain database connections. */
+    val dataSource by lazy { HikariDataSource(config) }
 
-            commit()
+    /** The database connection used by this object. */
+    val database by lazy {
+        Database.connect(dataSource, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
+            transaction {
+                withDataBaseLock {
+                    if (!tableExists(FileArchiveTable.tableName)) {
+                        checkDatabaseEncoding()
+                        createMissingTablesAndColumns(FileArchiveTable)
+                    }
+                }
+
+                commit()
+            }
         }
     }
 
