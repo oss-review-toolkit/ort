@@ -22,6 +22,10 @@ config_variables:
     description: Gradle console mode
     # Supported values: "auto", "plain", "rich", "verbose"
     default: rich
+  kotest_diff:
+    description: Kotest multi-line string assertion mode
+    # Supported values: "simple", "condensed" (or anything different from "simple")
+    default: simple
 
 .common-container-config: &common-container-config
   run_as_current_user:
@@ -29,7 +33,7 @@ config_variables:
     home_directory: /home/ort
   privileged: true
   environment:
-    GRADLE_OPTS: -Dorg.gradle.console=<gradle_console -Dorg.gradle.daemon=false
+    GRADLE_OPTS: -Dorg.gradle.console=<gradle_console -Dorg.gradle.daemon=false -Dkotest.assertions.multi-line-diff=<kotest_diff
     GRADLE_RO_DEP_CACHE: /home/ort/.gradle-ro-dep-cache
   volumes:
     # Mount any Gradle cache present on the host read-only into the
