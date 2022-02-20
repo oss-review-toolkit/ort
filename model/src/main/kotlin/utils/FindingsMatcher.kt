@@ -62,8 +62,9 @@ class FindingsMatcher(
         licenseEndLine: Int,
         copyrightLines: Collection<Int>
     ): IntRange {
-        val range = max(0, licenseStartLine - toleranceLines) until
-                max(licenseStartLine + toleranceLines, licenseEndLine) + 1
+        val startLine = max(0, licenseStartLine - toleranceLines)
+        val endLine = max(licenseStartLine + toleranceLines, licenseEndLine)
+        val range = startLine..endLine
 
         var expandedStartLine = copyrightLines.filter { it in range }.minOrNull() ?: return range
         val queue = PriorityQueue<Int>(copyrightLines.size, compareByDescending { it })
@@ -76,7 +77,7 @@ class FindingsMatcher(
             expandedStartLine = line
         }
 
-        return min(range.first, expandedStartLine) until range.last + 1
+        return min(startLine, expandedStartLine)..endLine
     }
 
     /**
