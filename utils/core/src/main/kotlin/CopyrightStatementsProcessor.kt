@@ -63,11 +63,7 @@ private val U_QUOTE_REGEX = "(.*\\b)u'(\\d{4}\\b)".toRegex()
 
 private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})([ ]*[-][ ]*)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
 
-private val PARTS_COMPARATOR = compareBy<Parts>(
-    { it.owner },
-    { prettyPrintYears(it.years) },
-    { it.prefix }
-)
+private val PARTS_COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
 
 private fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
     fun divideAndConquer(years: IntArray, start: Int = 0, end: Int = years.size - 1): List<Pair<Int, Int>> {

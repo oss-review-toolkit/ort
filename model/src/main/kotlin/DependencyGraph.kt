@@ -108,7 +108,7 @@ data class DependencyGraph(
          * A comparator for [DependencyReference] objects. Note that the concrete order does not really matter, it
          * just has to be well-defined.
          */
-        val DEPENDENCY_REFERENCE_COMPARATOR = compareBy<DependencyReference> { it.pkg }.thenBy { it.fragment }
+        val DEPENDENCY_REFERENCE_COMPARATOR = compareBy<DependencyReference>({ it.pkg }, { it.fragment })
 
         /**
          * Return a name for the given [scope][scopeName] that is qualified with parts of the identifier of the given

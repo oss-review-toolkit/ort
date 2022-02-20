@@ -530,7 +530,7 @@ private fun constructSortedDependencyIds(ids: Collection<Identifier>): Pair<List
 }
 
 /** A Comparator for ordering [RootDependencyIndex] instances. */
-private val rootDependencyIndexComparator = compareBy(RootDependencyIndex::root).thenBy(RootDependencyIndex::fragment)
+private val rootDependencyIndexComparator = compareBy<RootDependencyIndex>({ it.root }, { it.fragment })
 
 /**
  * Sort the given [scopeMappings] by scope names, and the lists of dependencies per scope by their package indices.
