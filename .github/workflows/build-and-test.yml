@@ -59,7 +59,9 @@ jobs:
     - name: Run unit tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: test -x :reporter-web-app:yarnBuild
+        arguments: test jacocoTestReport -x :reporter-web-app:yarnBuild
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2
   funTest-non-analyzer:
     needs: build-reporter-web-app
     runs-on: ubuntu-latest
@@ -89,7 +91,9 @@ jobs:
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: funTest -x :analyzer:funTest
+        arguments: funTest jacocoFunTestReport -x :analyzer:funTest
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2
   funTest-analyzer-docker:
     runs-on: ubuntu-latest
     steps:
@@ -104,7 +108,9 @@ jobs:
         java-version: 11
         cache: gradle
     - name: Run functional tests
-      run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- -Dkotest.tags=!NoDockerTag -p analyzer
+      run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- jacocoFunTestReport -Dkotest.tags=!NoDockerTag -p analyzer
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2
   funTest-analyzer-no-docker:
     needs: build
     runs-on: ubuntu-latest
@@ -122,4 +128,6 @@ jobs:
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: :analyzer:funTest -Dkotest.tags=NoDockerTag
+        arguments: :analyzer:funTest :analyzer:jacocoFunTestReport -Dkotest.tags=NoDockerTag
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2
