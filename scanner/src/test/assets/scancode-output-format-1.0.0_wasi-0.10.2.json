@@ -1,0 +1,691 @@
+{
+  "headers": [
+    {
+      "tool_name": "scancode-toolkit",
+      "tool_version": "30.1.0",
+      "options": {
+        "input": [
+          "."
+        ],
+        "--json-pp": "scancode.json",
+        "--license": true
+      },
+      "notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+      "start_timestamp": "2022-02-19T173047.601436",
+      "end_timestamp": "2022-02-19T173102.048033",
+      "output_format_version": "1.0.0",
+      "duration": 14.446620464324951,
+      "message": null,
+      "errors": [],
+      "extra_data": {
+        "spdx_license_list_version": "3.14",
+        "OUTDATED": "WARNING: Outdated ScanCode Toolkit version! You are using an outdated version of ScanCode Toolkit: 30.1.0 released on: 2021-09-24. A new version is available with important improvements including bug and security fixes, updated license, copyright and package detection, and improved scanning accuracy. Please download and install the latest version of ScanCode. Visit https://github.com/nexB/scancode-toolkit/releases for details.",
+        "files_count": 17
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "Downloads",
+      "type": "directory",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1.crate",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1",
+      "type": "directory",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/.cargo_vcs_info.json",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/.gitmodules",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml",
+      "type": "file",
+      "licenses": [
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 23,
+          "end_line": 23,
+          "matched_rule": {
+            "identifier": "apache-2.0_65.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": false,
+            "is_license_notice": false,
+            "is_license_reference": false,
+            "is_license_tag": true,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 4,
+            "matched_length": 4,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 23,
+          "end_line": 23,
+          "matched_rule": {
+            "identifier": "spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": false,
+            "is_license_notice": false,
+            "is_license_reference": true,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "apache-2.0",
+        "apache-2.0"
+      ],
+      "percentage_of_license_text": 3.74,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml.orig",
+      "type": "file",
+      "licenses": [
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 5,
+          "end_line": 5,
+          "matched_rule": {
+            "identifier": "apache-2.0_65.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": false,
+            "is_license_notice": false,
+            "is_license_reference": false,
+            "is_license_tag": true,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 4,
+            "matched_length": 4,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 5,
+          "end_line": 5,
+          "matched_rule": {
+            "identifier": "spdx_license_id_apache-2.0_for_apache-2.0.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": false,
+            "is_license_notice": false,
+            "is_license_reference": true,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "apache-2.0",
+        "apache-2.0"
+      ],
+      "percentage_of_license_text": 5.6,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/CODE_OF_CONDUCT.md",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/CONTRIBUTING.md",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-APACHE",
+      "type": "file",
+      "licenses": [
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 1,
+          "end_line": 201,
+          "matched_rule": {
+            "identifier": "apache-2.0.LICENSE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": true,
+            "is_license_notice": false,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "1-hash",
+            "rule_length": 1581,
+            "matched_length": 1581,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "apache-2.0"
+      ],
+      "percentage_of_license_text": 100.0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-Apache-2.0_WITH_LLVM-exception",
+      "type": "file",
+      "licenses": [
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 2,
+          "end_line": 202,
+          "matched_rule": {
+            "identifier": "apache-2.0.LICENSE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": true,
+            "is_license_notice": false,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 1581,
+            "matched_length": 1581,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "llvm-exception",
+          "score": 100.0,
+          "name": "LLVM Exception to Apache 2.0",
+          "short_name": "LLVM Exception to Apache 2.0",
+          "category": "Permissive",
+          "is_exception": true,
+          "is_unknown": false,
+          "owner": "llvm Project",
+          "homepage_url": "http://llvm.org/foundation/relicensing/LICENSE.txt",
+          "text_url": "",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/llvm-exception",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/llvm-exception.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/llvm-exception.yml",
+          "spdx_license_key": "LLVM-exception",
+          "spdx_url": "https://spdx.org/licenses/LLVM-exception",
+          "start_line": 205,
+          "end_line": 219,
+          "matched_rule": {
+            "identifier": "llvm-exception.LICENSE",
+            "license_expression": "llvm-exception",
+            "licenses": [
+              "llvm-exception"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": true,
+            "is_license_notice": false,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 143,
+            "matched_length": 143,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "apache-2.0",
+        "llvm-exception"
+      ],
+      "percentage_of_license_text": 100.0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-MIT",
+      "type": "file",
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 100.0,
+          "name": "MIT License",
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/mit",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/mit.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/mit.yml",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1,
+          "end_line": 23,
+          "matched_rule": {
+            "identifier": "mit.LICENSE",
+            "license_expression": "mit",
+            "licenses": [
+              "mit"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": true,
+            "is_license_notice": false,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "1-hash",
+            "rule_length": 161,
+            "matched_length": 161,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "mit"
+      ],
+      "percentage_of_license_text": 100.0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/ORG_CODE_OF_CONDUCT.md",
+      "type": "file",
+      "licenses": [
+        {
+          "key": "free-unknown",
+          "score": 50.0,
+          "name": "Free unknown license detected but not recognized",
+          "short_name": "Free unknown",
+          "category": "Unstated License",
+          "is_exception": false,
+          "is_unknown": true,
+          "owner": "Unspecified",
+          "homepage_url": null,
+          "text_url": "",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/free-unknown",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/free-unknown.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/free-unknown.yml",
+          "spdx_license_key": "LicenseRef-scancode-free-unknown",
+          "spdx_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/free-unknown.LICENSE",
+          "start_line": 106,
+          "end_line": 106,
+          "matched_rule": {
+            "identifier": "free-unknown_88.RULE",
+            "license_expression": "free-unknown",
+            "licenses": [
+              "free-unknown"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": false,
+            "is_license_notice": false,
+            "is_license_reference": true,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": true,
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 50
+          }
+        }
+      ],
+      "license_expressions": [
+        "free-unknown"
+      ],
+      "percentage_of_license_text": 0.28,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md",
+      "type": "file",
+      "licenses": [
+        {
+          "key": "apache-2.0",
+          "score": 66.67,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 85,
+          "end_line": 88,
+          "matched_rule": {
+            "identifier": "apache-2.0_354.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [
+              "LICENSE.txt"
+            ],
+            "is_license_text": false,
+            "is_license_notice": true,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "3-seq",
+            "rule_length": 18,
+            "matched_length": 12,
+            "match_coverage": 66.67,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "unknown-license-reference",
+          "score": 100.0,
+          "name": "Unknown License file reference",
+          "short_name": "Unknown License reference",
+          "category": "Unstated License",
+          "is_exception": false,
+          "is_unknown": true,
+          "owner": "Unspecified",
+          "homepage_url": null,
+          "text_url": "",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/unknown-license-reference",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/unknown-license-reference.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/unknown-license-reference.yml",
+          "spdx_license_key": "LicenseRef-scancode-unknown-license-reference",
+          "spdx_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/unknown-license-reference.LICENSE",
+          "start_line": 88,
+          "end_line": 88,
+          "matched_rule": {
+            "identifier": "unknown-license-reference_see-license_1.RULE",
+            "license_expression": "unknown-license-reference",
+            "licenses": [
+              "unknown-license-reference"
+            ],
+            "referenced_filenames": [
+              "LICENSE"
+            ],
+            "is_license_text": false,
+            "is_license_notice": false,
+            "is_license_reference": true,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": true,
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        },
+        {
+          "key": "apache-2.0",
+          "score": 100.0,
+          "name": "Apache License 2.0",
+          "short_name": "Apache 2.0",
+          "category": "Permissive",
+          "is_exception": false,
+          "is_unknown": false,
+          "owner": "Apache Software Foundation",
+          "homepage_url": "http://www.apache.org/licenses/",
+          "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
+          "reference_url": "https://scancode-licensedb.aboutcode.org/apache-2.0",
+          "scancode_text_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.LICENSE",
+          "scancode_data_url": "https://github.com/nexB/scancode-toolkit/tree/develop/src/licensedcode/data/licenses/apache-2.0.yml",
+          "spdx_license_key": "Apache-2.0",
+          "spdx_url": "https://spdx.org/licenses/Apache-2.0",
+          "start_line": 93,
+          "end_line": 93,
+          "matched_rule": {
+            "identifier": "apache-2.0_175.RULE",
+            "license_expression": "apache-2.0",
+            "licenses": [
+              "apache-2.0"
+            ],
+            "referenced_filenames": [],
+            "is_license_text": false,
+            "is_license_notice": true,
+            "is_license_reference": false,
+            "is_license_tag": false,
+            "is_license_intro": false,
+            "has_unknown": false,
+            "matcher": "2-aho",
+            "rule_length": 5,
+            "matched_length": 5,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "license_expressions": [
+        "apache-2.0",
+        "unknown-license-reference",
+        "apache-2.0"
+      ],
+      "percentage_of_license_text": 4.18,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/SECURITY.md",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/.github",
+      "type": "directory",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/.github/workflows",
+      "type": "directory",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/.github/workflows/main.yml",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/src",
+      "type": "directory",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/src/error.rs",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/src/lib.rs",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    },
+    {
+      "path": "Downloads/wasi-0.10.2+wasi-snapshot-preview1/src/lib_generated.rs",
+      "type": "file",
+      "licenses": [],
+      "license_expressions": [],
+      "percentage_of_license_text": 0,
+      "scan_errors": []
+    }
+  ]
+}
