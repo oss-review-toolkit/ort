@@ -316,8 +316,8 @@ class ScanCodeResultParserTest : WordSpec({
             )
         }
 
-        "properly parse license expressions for ScanCode 3.2.1" {
-            val resultFile = File("src/test/assets/scancode-3.2.1_h2database-1.4.200.json")
+        "properly parse license expressions for ScanCode 3.2.1rc2" {
+            val resultFile = File("src/test/assets/scancode-3.2.1rc2_h2database-1.4.200.json")
             val result = readJsonFile(resultFile)
 
             val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
