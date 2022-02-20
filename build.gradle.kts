@@ -187,8 +187,16 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.dokka")
 
-    sourceSets.create("funTest") {
-        kotlin.sourceSets.getByName(name).kotlin.srcDirs("src/funTest/kotlin")
+    testing {
+        suites {
+            register("funTest", JvmTestSuite::class) {
+                sources {
+                    kotlin {
+                        testType.set(TestSuiteType.FUNCTIONAL_TEST)
+                    }
+                }
+            }
+        }
     }
 
     // Associate the "funTest" compilation with the "main" compilation to be able to access "internal" objects from
@@ -203,8 +211,6 @@ subprojects {
 
             "testImplementation"("io.kotest:kotest-runner-junit5:$kotestVersion")
             "testImplementation"("io.kotest:kotest-assertions-core:$kotestVersion")
-
-            "funTestImplementation"(sourceSets["main"].output)
         }
 
         configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
@@ -282,14 +288,6 @@ subprojects {
         }
     }
 
-    val funTest by tasks.registering(Test::class) {
-        description = "Runs the functional tests."
-        group = "Verification"
-
-        classpath = sourceSets["funTest"].runtimeClasspath
-        testClassesDirs = sourceSets["funTest"].output.classesDirs
-    }
-
     tasks.withType<Test>().configureEach {
         val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
 
@@ -322,7 +320,7 @@ subprojects {
         description = "Generates code coverage report for the funTest task."
         group = "Reporting"
 
-        executionData(funTest.get())
+        executionData(tasks["funTest"])
         sourceSets(sourceSets["main"])
 
         reports {
@@ -339,7 +337,7 @@ subprojects {
     }
 
     tasks.named("check").configure {
-        dependsOn(funTest)
+        dependsOn(tasks["funTest"])
     }
 
     tasks.withType<Jar>().configureEach {
