@@ -311,18 +311,6 @@ subprojects {
         useJUnitPlatform()
     }
 
-    // Enable JaCoCo only if a JacocoReport task is in the graph as JaCoCo
-    // is using "append = true" which disables Gradle's build cache.
-    gradle.taskGraph.whenReady {
-        val enabled = allTasks.any { it is JacocoReport }
-
-        tasks.withType<Test>().configureEach {
-            extensions.configure(JacocoTaskExtension::class) {
-                isEnabled = enabled
-            }
-        }
-    }
-
     tasks.named<JacocoReport>("jacocoTestReport").configure {
         reports {
             // Enable XML in addition to HTML for CI integration.
