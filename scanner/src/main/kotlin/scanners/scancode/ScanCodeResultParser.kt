@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
@@ -201,7 +202,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
         }
     }
 
-    return licenseFindings
+    return associateLicensesWithExceptions(licenseFindings)
 }
 
 /**

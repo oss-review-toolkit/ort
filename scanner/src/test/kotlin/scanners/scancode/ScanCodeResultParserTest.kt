@@ -386,6 +386,61 @@ class ScanCodeResultParserTest : FreeSpec({
                             listOf(TextLocation("LICENSE", 4))
                 )
             }
+
+            "associate LLVM-exception findings with Apache-2.0" {
+                val resultFile = File("src/test/assets/scancode-output-format-1.0.0_wasi-0.10.2.json")
+                val result = readJsonFile(resultFile)
+
+                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+
+                summary.licenseFindings should containExactlyInAnyOrder(
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml", 23, 23)
+                    ),
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml.orig", 5, 5)
+                    ),
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-APACHE", 1, 201)
+                    ),
+                    LicenseFinding(
+                        license = "Apache-2.0 WITH LLVM-exception",
+                        location = TextLocation(
+                            path = "Downloads/wasi-0.10.2+wasi-snapshot-preview1/" +
+                                    "LICENSE-Apache-2.0_WITH_LLVM-exception",
+                            startLine = 2,
+                            endLine = 219
+                        )
+                    ),
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 85, 88)
+                    ),
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 93, 93)
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-free-unknown",
+                        location = TextLocation(
+                            path = "Downloads/wasi-0.10.2+wasi-snapshot-preview1/ORG_CODE_OF_CONDUCT.md",
+                            startLine = 106,
+                            endLine = 106
+                        )
+                    ),
+                    LicenseFinding(
+                        license = "LicenseRef-scancode-unknown-license-reference",
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 88, 88)
+                    ),
+                    LicenseFinding(
+                        license = "MIT",
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-MIT", 1, 23)
+                    )
+                )
+            }
         }
     }
 
