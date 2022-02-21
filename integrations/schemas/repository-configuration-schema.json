@@ -375,10 +375,27 @@
           "type": "string"
         }
       },
-      "required": [
-        "type",
-        "url",
-        "revision"
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        },
+        {
+          "required": [
+            "revision"
+          ]
+        },
+        {
+          "required": [
+            "path"
+          ]
+        }
       ]
     },
     "licenseFindingCurations": {
