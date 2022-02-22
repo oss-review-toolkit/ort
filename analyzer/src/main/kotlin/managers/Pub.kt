@@ -31,6 +31,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.PubCacheReader
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -54,7 +55,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
-import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -74,7 +74,7 @@ private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
 private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "2.2.3-stable"
 private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
 
-private val flutterHome by lazy {
+val flutterHome by lazy {
     Os.getPathFromEnvironment(flutterCommand)?.realFile()?.parentFile?.parentFile
         ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir.resolve("flutter")
 }
@@ -102,80 +102,6 @@ class Pub(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) = Pub(managerName, analysisRoot, analyzerConfig, repoConfig)
-    }
-
-    /**
-     * A reader for the Pub cache directory. It looks for files in the ".pub-cache" directory in the user's home
-     * directory. If Flutter is installed it additionally looks for files in the ".pub-cache" directory of Flutter's
-     * installation directory.
-     */
-    private class PubCacheReader {
-        private val pubCacheRoot by lazy {
-            Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
-
-            if (Os.isWindows) {
-                File(Os.env["LOCALAPPDATA"], "Pub/Cache")
-            } else {
-                Os.userHomeDirectory.resolve(".pub-cache")
-            }
-        }
-
-        private val flutterPubCacheRoot by lazy {
-            flutterHome.resolve(".pub-cache").takeIf { it.isDirectory }
-        }
-
-        fun findFile(packageInfo: JsonNode, filename: String): File? {
-            val artifactRootDir = findProjectRoot(packageInfo) ?: return null
-
-            // Try to locate the file directly.
-            val file = artifactRootDir.resolve(filename)
-            if (file.isFile) return file
-
-            // Search the directory tree for the file.
-            return artifactRootDir.walk()
-                .onEnter { !it.isSymbolicLink() }
-                .find { !it.isSymbolicLink() && it.isFile && it.name == filename }
-        }
-
-        fun findProjectRoot(packageInfo: JsonNode): File? {
-            val packageVersion = packageInfo["version"].textValueOrEmpty()
-            val type = packageInfo["source"].textValueOrEmpty()
-            val description = packageInfo["description"]
-            val packageName = description["name"].textValueOrEmpty()
-            val url = description["url"].textValueOrEmpty()
-            val resolvedRef = packageInfo["resolved-ref"].textValueOrEmpty()
-
-            val path = if (type == "hosted" && url.isNotEmpty()) {
-                // Packages with source set to "hosted" and "url" key in description set to "https://pub.dartlang.org".
-                // The path should be resolved to "hosted/pub.dartlang.org/packageName-packageVersion".
-                "hosted/${url.replace("https://", "")}/$packageName-$packageVersion"
-            } else if (type == "git" && resolvedRef.isNotEmpty()) {
-                // Packages with source set to "git" and a "resolved-ref" key in description set to a gitHash.
-                // The path should be resolved to "git/packageName-gitHash".
-                "git/$packageName-$resolvedRef"
-            } else {
-                log.error { "Could not find projectRoot of '$packageName'." }
-
-                // Unsupported type.
-                null
-            }
-
-            if (path != null) {
-                pubCacheRoot.resolve(path).let {
-                    if (it.isDirectory) {
-                        return it
-                    }
-                }
-
-                flutterPubCacheRoot?.resolve(path)?.let {
-                    if (it.isDirectory) {
-                        return it
-                    }
-                }
-            }
-
-            return null
-        }
     }
 
     private data class ParsePackagesResult(
