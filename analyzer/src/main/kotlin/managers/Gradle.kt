@@ -134,8 +134,8 @@ class Gradle(
     // The path to the root project. In a single-project, just points to the project path.
     private lateinit var rootProjectDir: File
 
-    // Filter Gradle projects that are managed via Flutter / Pub. These projects are analyzed from within Pub.
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+        // Filter Gradle projects that are managed via Flutter / Pub. These projects are analyzed from within Pub.
         val pubDefinitionFiles = findManagedFiles(analysisRoot, setOf(Pub.Factory())).values.flatten()
 
         return definitionFiles.filter { gradleDefinitionFile ->
