@@ -242,7 +242,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
             filesPerManager.forEach { (manager, files) ->
                 count += files.size
-                println("Found ${files.size} $manager definition files(s) at:")
+                println("Found ${files.size} $manager definition file(s) at:")
 
                 files.forEach { file ->
                     val relativePath = file.toRelativeString(inputDir).takeIf { it.isNotEmpty() } ?: "."
@@ -250,7 +250,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
                 }
             }
 
-            println("Found $count definition files(s) from ${filesPerManager.size} package manager(s) in total.")
+            println("Found $count definition file(s) from ${filesPerManager.size} package manager(s) in total.")
         }
 
         val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
