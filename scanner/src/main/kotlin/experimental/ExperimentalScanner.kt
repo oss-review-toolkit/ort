@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -131,8 +130,9 @@ class ExperimentalScanner(
 
     suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Package, NestedProvenanceScanResult> {
         val scanners = scannerWrappers[context.packageType].orEmpty()
-
         if (scanners.isEmpty()) return emptyMap()
+
+        val controller = ScanController(packages, scanners)
 
         log.info { "Resolving provenance for ${packages.size} packages." }
         val (packageProvenanceResults, packageProvenanceDuration) = measureTimedValue {
@@ -140,192 +140,120 @@ class ExperimentalScanner(
         }
         log.info { "Resolved provenance for ${packages.size} packages in $packageProvenanceDuration." }
 
-        val packageProvenances = packageProvenanceResults.mapValuesNotNull { it.value.getOrNull() }
+        packageProvenanceResults.forEach { (pkg, result) ->
+            if (result.isSuccess) controller.addPackageProvenance(pkg.id, result.getOrThrow())
+        }
 
         log.info { "Resolving nested provenances for ${packages.size} packages." }
         val (nestedProvenances, nestedProvenanceDuration) =
-            measureTimedValue { getNestedProvenances(packageProvenances) }
+            measureTimedValue { getNestedProvenances(controller.getPackageProvenances()) }
         log.info {
             "Resolved nested provenances for ${packages.size} packages in $nestedProvenanceDuration."
         }
 
-        val allKnownProvenances = (
-                packageProvenances.values +
-                        nestedProvenances.values.flatMap { nestedProvenance ->
-                            nestedProvenance.subRepositories.values
-                        }
-                ).toSet()
-
-        val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, List<ScanResult>>>()
+        nestedProvenances.forEach { (root, nestedProvenance) ->
+            controller.addNestedProvenance(root, nestedProvenance)
+        }
 
         // Get stored scan results for each ScannerWrapper by provenance.
         log.info {
-            "Reading stored scan results for ${packageProvenances.size} packages with ${allKnownProvenances.size} " +
-                    "provenances."
+            "Reading stored scan results for ${controller.getPackageProvenances().size} packages with " +
+                    "${controller.getAllProvenances().size} provenances."
         }
-        val (storedResults, readDuration) = measureTimedValue {
-            getStoredResults(scanners, allKnownProvenances, nestedProvenances, packageProvenances)
-        }
+        val readDuration = measureTime { getStoredResults(controller) }
+        log.info { "Read stored scan results in $readDuration:" }
 
-        log.info {
-            "Read stored scan results in $readDuration:"
-        }
-        storedResults.entries.forEach { (scanner, results) ->
+        val allKnownProvenances = controller.getAllProvenances()
+        scanners.forEach { scanner ->
+            val results = controller.getScanResults(scanner)
             log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
         }
 
-        scanResults += storedResults
+        // Run PackageScannerWrappers for packages with incomplete scan results.
+        controller.packages.forEach { pkg ->
+            // TODO: Use coroutines to execute scanners in parallel.
+            controller.getPackageScanners().forEach scanner@{ scanner ->
+                if (controller.hasCompleteScanResult(scanner, pkg)) {
+                    log.debug {
+                        "Skipping scan of ${pkg.id.toCoordinates()} with package scanner ${scanner.name} because " +
+                                "stored results are available."
+                    }
 
-        // Check which packages have incomplete scan results.
-        val packagesWithIncompleteScanResult =
-            getPackagesWithIncompleteResults(scanners, packages, packageProvenances, nestedProvenances, scanResults)
+                    return@scanner
+                }
 
-        log.info { "${packagesWithIncompleteScanResult.size} packages have incomplete scan results." }
-
-        log.info { "Starting scan of missing packages if any package scanners are configured." }
-
-        // Scan packages with incomplete scan results.
-        packagesWithIncompleteScanResult.forEach { (pkg, scanners) ->
-            // TODO: Move to function.
-            // TODO: Verify that there are still missing scan results for the package, previous scan of another package
-            //       from the same repository could have fixed that already.
-            scanners.filterIsInstance<PackageScannerWrapper>().forEach { scanner ->
                 log.info { "Scanning ${pkg.id.toCoordinates()} with package scanner ${scanner.name}." }
 
-                // Scan whole package with package scanner.
-                // TODO: Use coroutines to execute scanners in parallel.
                 val scanResult = scanner.scanPackage(pkg, context)
 
-                log.info {
-                    "Scan of ${pkg.id.toCoordinates()} with package scanner ${scanner.name} finished."
-                }
+                log.info { "Scan of ${pkg.id.toCoordinates()} with package scanner ${scanner.name} finished." }
 
-                // Split scan results by provenance and add them to the map of scan results.
-                val nestedProvenanceScanResult =
-                    scanResult.toNestedProvenanceScanResult(nestedProvenances.getValue(pkg))
-                nestedProvenanceScanResult.scanResults.forEach { (provenance, scanResultsForProvenance) ->
-                    val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
-                    scanResultsForScanner[provenance] =
-                        scanResultsForScanner[provenance].orEmpty() + scanResultsForProvenance
+                val nestedProvenance = controller.getNestedProvenance(pkg.id)
+                val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
 
-                    if (scanner.criteria != null) {
-                        storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                            scanResultsForProvenance.forEach { scanResult ->
-                                // TODO: Only store new scan results, for nested provenance some of them could have a
-                                //       stored result already.
-                                try {
-                                    writer.write(scanResult)
-                                } catch (e: ScanStorageException) {
-                                    e.showStackTrace()
+                controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
 
-                                    log.warn {
-                                        "Could not write scan result for ${scanResult.provenance} to " +
-                                                "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
-                                    }
-                                }
-                            }
-                        }
-                    }
+                // TODO: Run in coroutine.
+                if (scanner.criteria != null) {
+                    storeNestedScanResult(pkg, nestedProvenanceScanResult)
                 }
             }
         }
 
-        // Check which provenances have incomplete scan results.
-        val provenancesWithIncompleteScanResults =
-            getProvenancesWithIncompleteScanResults(scanners, allKnownProvenances, scanResults)
+        // Run provenance scanners for provenances with missing scan results.
+        controller.getAllProvenances().forEach { provenance ->
+            // TODO: Use coroutines to execute scanners in parallel.
+            controller.getProvenanceScanners().forEach scanner@{ scanner ->
+                if (controller.hasScanResult(scanner, provenance)) {
+                    log.debug {
+                        "Skipping scan of $provenance with provenance scanner ${scanner.name} because a result is " +
+                                "already available."
+                    }
 
-        log.info { "${provenancesWithIncompleteScanResults.size} provenances have incomplete scan results." }
+                    return@scanner
+                }
 
-        log.info { "Starting scan of missing provenances if any provenance scanners are configured." }
-
-        provenancesWithIncompleteScanResults.forEach { (provenance, scanners) ->
-            // Scan provenances with provenance scanners.
-            // TODO: Move to function.
-            scanners.filterIsInstance<ProvenanceScannerWrapper>().forEach { scanner ->
                 log.info { "Scanning $provenance with provenance scanner ${scanner.name}." }
 
-                // TODO: Use coroutines to execute scanners in parallel.
                 val scanResult = scanner.scanProvenance(provenance, context)
 
-                log.info {
-                    "Scan of $provenance with provenance scanner ${scanner.name} finished."
-                }
+                val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
 
-                val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
-                scanResultsForScanner[provenance] = scanResultsForScanner[provenance].orEmpty() + scanResult
+                controller.addScanResults(scanner, provenance, listOf(scanResult))
 
-                if (scanner.criteria != null) {
-                    storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                        try {
-                            writer.write(scanResult)
-                        } catch (e: ScanStorageException) {
-                            e.showStackTrace()
+                storeProvenanceScanResult(provenance, scanResult)
 
-                            log.warn {
-                                "Could not write scan result for ${scanResult.provenance} to " +
-                                        "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Scan provenances with path scanners.
-            val pathScanners = scanners.filterIsInstance<PathScannerWrapper>()
-            if (pathScanners.isNotEmpty()) {
-                val pathScanResults = scanPath(provenance, pathScanners, context)
-
-                pathScanResults.forEach { (scanner, scanResult) ->
-                    val scanResultsForScanner = scanResults.getOrPut(scanner) { mutableMapOf() }
-                    scanResultsForScanner[provenance] = scanResultsForScanner[provenance].orEmpty() + scanResult
-
-                    if (scanner.criteria != null) {
-                        storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
-                            try {
-                                writer.write(scanResult)
-                            } catch (e: ScanStorageException) {
-                                e.showStackTrace()
-
-                                log.warn {
-                                    "Could not write scan result for ${scanResult.provenance} to " +
-                                            "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
-                                }
-                            }
-                        }
-                    }
+                completedPackages.forEach { pkg ->
+                    storePackageScanResult(pkg, controller.getNestedScanResult(pkg.id))
                 }
             }
         }
 
-        val nestedProvenanceScanResults = createNestedProvenanceScanResults(packages, nestedProvenances, scanResults)
+        // Run path scanners for provenances with missing scan results.
+        controller.getAllProvenances().forEach { provenance ->
+            val scannersForProvenance =
+                controller.getPathScanners().filterNot { controller.hasScanResult(it, provenance) }
 
-        packagesWithIncompleteScanResult.forEach { (pkg, _) ->
-            storageWriters.filterIsInstance<PackageBasedScanStorageWriter>().forEach { writer ->
-                nestedProvenanceScanResults[pkg]?.let { nestedProvenanceScanResult ->
-                    val filteredScanResult = nestedProvenanceScanResult.filter { scanResult ->
-                        scanners.find { it.name == scanResult.scanner.name }?.criteria != null
-                    }
+            if (scannersForProvenance.isEmpty()) return@forEach
 
-                    if (filteredScanResult.isComplete()) {
-                        try {
-                            // TODO: Save only results for scanners which did not have a stored result.
-                            writer.write(pkg, filteredScanResult)
-                        } catch (e: ScanStorageException) {
-                            e.showStackTrace()
+            val scanResults = scanPath(provenance, scannersForProvenance, context)
 
-                            log.warn {
-                                "Could not write scan result for ${pkg.id.toCoordinates()} to " +
-                                        "${writer.javaClass.simpleName}: ${e.collectMessagesAsString()}"
-                            }
-                        }
-                    }
+            scanResults.forEach { (scanner, scanResult) ->
+                val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
+
+                controller.addScanResults(scanner, provenance, listOf(scanResult))
+
+                storeProvenanceScanResult(provenance, scanResult)
+
+                completedPackages.forEach { pkg ->
+                    storePackageScanResult(pkg, controller.getNestedScanResult(pkg.id))
                 }
             }
         }
 
-        createFileArchives(nestedProvenances)
+        createFileArchives(controller.getNestedProvenancesByPackage())
 
-        return nestedProvenanceScanResults
+        return controller.getNestedScanResultsByPackage()
     }
 
     private fun Collection<Package>.filterNotConcluded(): Collection<Package> =
@@ -356,55 +284,43 @@ class ExperimentalScanner(
             runCatching { packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins) }
         }
 
-    private fun getNestedProvenances(packageProvenances: Map<Package, Provenance>): Map<Package, NestedProvenance> =
-        packageProvenances.mapNotNull { (pkg, provenance) ->
-            (provenance as? KnownProvenance)?.let { knownProvenance ->
-                pkg to nestedProvenanceResolver.resolveNestedProvenance(knownProvenance)
-            }
-        }.toMap()
+    private fun getNestedProvenances(provenances: Set<KnownProvenance>): Map<KnownProvenance, NestedProvenance> =
+        provenances.associateWith { nestedProvenanceResolver.resolveNestedProvenance(it) }
 
-    private fun getStoredResults(
-        scannerWrappers: List<ScannerWrapper>,
-        provenances: Set<KnownProvenance>,
-        nestedProvenances: Map<Package, NestedProvenance>,
-        packageProvenances: Map<Package, Provenance>
-    ): Map<ScannerWrapper, MutableMap<KnownProvenance, List<ScanResult>>> {
-        return scannerWrappers.associateWith { scanner ->
-            val scannerCriteria = scanner.criteria ?: return@associateWith mutableMapOf()
+    private fun getStoredResults(controller: ScanController) {
+        controller.scanners.forEach { scanner ->
+            val scannerCriteria = scanner.criteria ?: return@forEach
 
-            val result = mutableMapOf<KnownProvenance, MutableList<ScanResult>>()
-
-            provenances.forEach { provenance ->
-                if (result[provenance] != null) return@forEach
+            controller.getAllProvenances().forEach provenance@{ provenance ->
+                if (controller.getScanResults(scanner, provenance).isNotEmpty()) return@provenance
 
                 storageReaders.forEach { reader ->
                     @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
                     when (reader) {
                         is PackageBasedScanStorageReader -> {
-                            packageProvenances.entries.find { it.value == provenance }?.key?.let { pkg ->
-                                val nestedProvenance = nestedProvenances.getValue(pkg)
-                                try {
-                                    reader.read(pkg, nestedProvenance, scannerCriteria).forEach { scanResult ->
-                                        scanResult.scanResults.forEach { (provenance, scanResults) ->
-                                            result.getOrPut(provenance) { mutableListOf() } += scanResults
+                            controller.findNestedProvenance(provenance)?.let { nestedProvenance ->
+                                controller.findPackages(provenance).forEach { pkg ->
+                                    runCatching {
+                                        reader.read(pkg, nestedProvenance, scannerCriteria).forEach { result ->
+                                            controller.addNestedScanResult(scanner, result)
                                         }
-                                    }
-                                } catch (e: ScanStorageException) {
-                                    e.showStackTrace()
+                                    }.onFailure { e ->
+                                        e.showStackTrace()
 
-                                    log.warn {
-                                        "Could not read scan result for ${pkg.id.toCoordinates()} from " +
-                                                "${reader.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                                        log.warn {
+                                            "Could not read scan result for ${pkg.id.toCoordinates()} from " +
+                                                    "${reader.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                                        }
                                     }
                                 }
                             }
                         }
 
                         is ProvenanceBasedScanStorageReader -> {
-                            try {
-                                result.getOrPut(provenance) { mutableListOf() } +=
-                                    reader.read(provenance, scannerCriteria)
-                            } catch (e: ScanStorageException) {
+                            runCatching {
+                                val results = reader.read(provenance, scannerCriteria)
+                                controller.addScanResults(scanner, provenance, results)
+                            }.onFailure { e ->
                                 e.showStackTrace()
 
                                 log.warn {
@@ -416,54 +332,8 @@ class ExperimentalScanner(
                     }
                 }
             }
-
-            result.mapValuesTo(mutableMapOf()) { it.value.toList() }
         }
     }
-
-    private fun getPackagesWithIncompleteResults(
-        scannerWrappers: List<ScannerWrapper>,
-        packages: Set<Package>,
-        packageProvenances: Map<Package, Provenance>,
-        nestedProvenances: Map<Package, NestedProvenance>,
-        scanResults: Map<ScannerWrapper, Map<KnownProvenance, List<ScanResult>>>,
-    ): Map<Package, List<ScannerWrapper>> =
-        packages.associateWith { pkg ->
-            scannerWrappers.filter { scanner ->
-                val hasPackageProvenanceResult = scanResults.hasResult(scanner, packageProvenances.getValue(pkg))
-                val hasAllNestedProvenanceResults = nestedProvenances[pkg]?.let { nestedProvenance ->
-                    scanResults.hasResult(scanner, nestedProvenance.root) &&
-                            nestedProvenance.subRepositories.all { (_, provenance) ->
-                                scanResults.hasResult(scanner, provenance)
-                            }
-                } != false
-
-                !hasPackageProvenanceResult || !hasAllNestedProvenanceResults
-            }
-        }.filterValues { it.isNotEmpty() }
-
-    private fun getProvenancesWithIncompleteScanResults(
-        scannerWrappers: List<ScannerWrapper>,
-        provenances: Set<KnownProvenance>,
-        scanResults: Map<ScannerWrapper, Map<KnownProvenance, List<ScanResult>>>
-    ): Map<KnownProvenance, List<ScannerWrapper>> =
-        provenances.associateWith { provenance ->
-            scannerWrappers.filter { scanner -> !scanResults.hasResult(scanner, provenance) }
-        }.filterValues { it.isNotEmpty() }
-
-    private fun createNestedProvenanceScanResults(
-        packages: Set<Package>,
-        nestedProvenances: Map<Package, NestedProvenance>,
-        scanResults: Map<ScannerWrapper, Map<KnownProvenance, List<ScanResult>>>
-    ): Map<Package, NestedProvenanceScanResult> =
-        packages.associateWith { pkg ->
-            val nestedProvenance = nestedProvenances.getValue(pkg)
-            val provenances = nestedProvenance.getProvenances()
-            val scanResultsByProvenance = provenances.associateWith { provenance ->
-                scanResults.values.flatMap { it[provenance].orEmpty() }
-            }
-            NestedProvenanceScanResult(nestedProvenance, scanResultsByProvenance)
-        }
 
     private fun scanPath(
         provenance: KnownProvenance,
@@ -511,6 +381,46 @@ class ExperimentalScanner(
             }
         } finally {
             downloadDir.safeDeleteRecursively(force = true)
+        }
+    }
+
+    private fun storeNestedScanResult(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
+        storePackageScanResult(pkg, nestedProvenanceScanResult)
+
+        nestedProvenanceScanResult.scanResults.forEach { (provenance, scanResults) ->
+            scanResults.forEach { scanResult ->
+                storeProvenanceScanResult(provenance, scanResult)
+            }
+        }
+    }
+
+    private fun storeProvenanceScanResult(provenance: KnownProvenance, scanResult: ScanResult) {
+        storageWriters.filterIsInstance<ProvenanceBasedScanStorageWriter>().forEach { writer ->
+            runCatching {
+                writer.write(scanResult)
+            }.onFailure { e ->
+                e.showStackTrace()
+
+                log.warn {
+                    "Could not write scan result for $provenance to ${writer.javaClass.simpleName}: " +
+                            e.collectMessagesAsString()
+                }
+            }
+        }
+    }
+
+    private fun storePackageScanResult(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
+        storageWriters.filterIsInstance<PackageBasedScanStorageWriter>().forEach { writer ->
+            runCatching {
+                writer.write(pkg, nestedProvenanceScanResult)
+            }.onFailure { e ->
+                e.showStackTrace()
+
+                log.warn {
+                    "Could not write scan result for ${pkg.id.toCoordinates()} to ${writer.javaClass.simpleName}: " +
+                            e.collectMessagesAsString()
+                }
+            }
         }
     }
 
@@ -562,9 +472,10 @@ class ExperimentalScanner(
  * matching the paths of findings with the paths in the nested provenance.
  */
 fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance): NestedProvenanceScanResult {
-    val provenanceByPath = nestedProvenance.subRepositories.toList().toMutableList<Pair<String, KnownProvenance>>()
-        .also { it += ("" to nestedProvenance.root) }
-        .sortedByDescending { it.first.length }
+    val provenanceByPath =
+        nestedProvenance.subRepositories.toList().toMutableList<Pair<String, KnownProvenance>>()
+            .also { it += ("" to nestedProvenance.root) }
+            .sortedByDescending { it.first.length }
 
     val copyrightFindingsByProvenance = summary.copyrightFindings.groupBy { copyrightFinding ->
         provenanceByPath.first { copyrightFinding.location.path.startsWith(it.first) }.second
@@ -590,15 +501,3 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
 
     return NestedProvenanceScanResult(nestedProvenance, scanResultsByProvenance)
 }
-
-private fun Map<ScannerWrapper, Map<KnownProvenance, List<ScanResult>>>.hasResult(
-    scanner: ScannerWrapper,
-    provenance: Provenance
-) = getValue(scanner)[provenance].let { it != null && it.isNotEmpty() }
-
-private fun <K, V, R> Map<K, V>.mapValuesNotNull(transform: (Map.Entry<K, V>) -> R?): Map<K, R> =
-    mutableMapOf<K, R>().apply {
-        this@mapValuesNotNull.forEach { entry ->
-            transform(entry)?.let { put(entry.key, it) }
-        }
-    }
