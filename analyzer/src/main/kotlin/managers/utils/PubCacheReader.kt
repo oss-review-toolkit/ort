@@ -83,20 +83,18 @@ internal class PubCacheReader {
             log.error { "Could not find projectRoot of '$packageName'." }
 
             // Unsupported type.
-            null
+            return null
         }
 
-        if (path != null) {
-            pubCacheRoot.resolve(path).let {
-                if (it.isDirectory) {
-                    return it
-                }
+        pubCacheRoot.resolve(path).let {
+            if (it.isDirectory) {
+                return it
             }
+        }
 
-            flutterPubCacheRoot?.resolve(path)?.let {
-                if (it.isDirectory) {
-                    return it
-                }
+        flutterPubCacheRoot?.resolve(path)?.let {
+            if (it.isDirectory) {
+                return it
             }
         }
 
