@@ -86,18 +86,7 @@ internal class PubCacheReader {
             return null
         }
 
-        pubCacheRoot.resolve(path).let {
-            if (it.isDirectory) {
-                return it
-            }
-        }
-
-        flutterPubCacheRoot?.resolve(path)?.let {
-            if (it.isDirectory) {
-                return it
-            }
-        }
-
-        return null
+        return pubCacheRoot.resolve(path).takeIf { it.isDirectory }
+            ?: flutterPubCacheRoot?.resolve(path)?.takeIf { it.isDirectory }
     }
 }
