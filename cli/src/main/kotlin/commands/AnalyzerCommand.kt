@@ -255,6 +255,10 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
 
+        val projectCount = ortResult.getProjects().size
+        val packageCount = ortResult.getPackages().size
+        println("Found $projectCount project(s) and $packageCount package(s) in total (not counting excluded ones).")
+
         val curationCount = ortResult.getPackages().sumOf { it.curations.size }
         println("Applied $curationCount curation(s) from ${curationProviders.size} provider(s).")
 
