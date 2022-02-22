@@ -88,6 +88,7 @@ private val flutterAbsolutePath = flutterHome.resolve("bin")
  * system it is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
  * automatically installed can be configured by setting the `FLUTTER_VERSION` environment variable.
  */
+@Suppress("TooManyFunctions")
 class Pub(
     name: String,
     analysisRoot: File,
@@ -111,12 +112,28 @@ class Pub(
 
     private val processedPackages = mutableListOf<String>()
     private val reader = PubCacheReader()
+    private val gradleDefinitionFilesForPubDefinitionFiles = mutableMapOf<File, Set<File>>()
 
     override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.10,)")
 
     override fun beforeResolution(definitionFiles: List<File>) {
+        gradleDefinitionFilesForPubDefinitionFiles.clear()
+        gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(definitionFiles)
+
+        log.info { "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)." }
+
+        gradleDefinitionFilesForPubDefinitionFiles.forEach { (flutterDefinitionFile, gradleDefinitionFiles) ->
+            if (gradleDefinitionFiles.isEmpty()) return@forEach
+
+            log.info { "- ${flutterDefinitionFile.relativeTo(analysisRoot)}" }
+
+            gradleDefinitionFiles.forEach { gradleDefinitionFile ->
+                log.info { "  - ${gradleDefinitionFile.relativeTo(analysisRoot)}" }
+            }
+        }
+
         if (flutterAbsolutePath.resolve(flutterCommand).isFile) {
             log.info { "Skipping to bootstrap flutter as it was found in $flutterAbsolutePath." }
             return
@@ -147,6 +164,30 @@ class Pub(
             .requireSuccess()
     }
 
+    private fun findGradleDefinitionFiles(pubDefinitionFiles: Collection<File>): Map<File, Set<File>> {
+        val result = mutableMapOf<File, MutableSet<File>>()
+
+        val gradleDefinitionFiles = findManagedFiles(analysisRoot, setOf(Gradle.Factory())).values.flatten()
+
+        val pubDefinitionFilesWithFlutterSdkSorted = pubDefinitionFiles.filter {
+            containsFlutterSdk(it.parentFile)
+        }.sortedByDescending {
+            it.parentFile.canonicalPath.length
+        }
+
+        pubDefinitionFiles.associateWithTo(result) { mutableSetOf() }
+
+        gradleDefinitionFiles.forEach { gradleDefinitionFile ->
+            val pubDefinitionFile = pubDefinitionFilesWithFlutterSdkSorted.firstOrNull {
+                gradleDefinitionFile.parentFile.canonicalFile.startsWith(it.parentFile)
+            } ?: return@forEach
+
+            result.getValue(pubDefinitionFile) += gradleDefinitionFile
+        }
+
+        return result
+    }
+
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val manifest = yamlMapper.readTree(definitionFile)
@@ -171,27 +212,21 @@ class Pub(
 
             val parsePackagesResult = parseInstalledPackages(lockFile, labels)
 
-            if (containsFlutterSdk(workingDir)) {
-                // Run Gradle dependency resolution. This is required because for Flutter projects, Pub needs to run
-                // first to generate the local.properties file by using `flutter pub get`.
-                val gradleFactory = Gradle.Factory()
-                val gradleDefinitionFiles =
-                    findManagedFiles(analysisRoot, setOf(gradleFactory)).getOrDefault(gradleFactory, emptyList())
+            val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles.getValue(definitionFile).toList()
 
-                if (gradleDefinitionFiles.isNotEmpty()) {
-                    log.info { "Found ${gradleDefinitionFiles.size} Gradle definition file(s) at:" }
+            if (gradleDefinitionFiles.isNotEmpty()) {
+                log.info { "Found ${gradleDefinitionFiles.size} Gradle definition file(s) at:" }
 
-                    gradleDefinitionFiles.forEach { gradleDefinitionFile ->
-                        val relativePath =
-                            gradleDefinitionFile.toRelativeString(workingDir).takeIf { it.isNotEmpty() } ?: "."
+                gradleDefinitionFiles.forEach { gradleDefinitionFile ->
+                    val relativePath =
+                        gradleDefinitionFile.toRelativeString(workingDir).takeIf { it.isNotEmpty() } ?: "."
 
-                        log.info { "\t$relativePath" }
-                    }
+                    log.info { "\t$relativePath" }
                 }
 
                 log.info { "Running Gradle analysis for Flutter project." }
 
-                val gradleAnalyzerResult = gradleFactory.create(analysisRoot, analyzerConfig, repoConfig)
+                val gradleAnalyzerResult = Gradle.Factory().create(analysisRoot, analyzerConfig, repoConfig)
                     .resolveDependencies(gradleDefinitionFiles, labels)
 
                 val androidScope = Scope("android", sortedSetOf())
