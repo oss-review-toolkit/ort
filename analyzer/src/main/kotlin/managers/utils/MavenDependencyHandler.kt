@@ -17,14 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers.utils
 
 import org.apache.maven.project.MavenProject
 
 import org.eclipse.aether.graph.DependencyNode
 
-import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
-import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers.utils
 
 import Dependency
 
@@ -27,8 +27,6 @@ import org.eclipse.aether.RepositoryException
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.repository.RemoteRepository
 
-import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
-import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package

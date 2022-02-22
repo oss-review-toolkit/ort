@@ -37,6 +37,7 @@ import org.gradle.tooling.internal.consumer.DefaultGradleConnector
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.GradleDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.downloader.VersionControlSystem

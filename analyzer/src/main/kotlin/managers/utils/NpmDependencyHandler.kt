@@ -17,10 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers.utils
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
