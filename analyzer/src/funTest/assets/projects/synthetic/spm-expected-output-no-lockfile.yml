@@ -1,0 +1,27 @@
+---
+project:
+  id: "SPM::src/funTest/assets/projects/synthetic/spm/Package.swift:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes: []
+packages: []
+issues:
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "SPM"
+  message: "Resolving SPM dependencies for 'src/funTest/assets/projects/synthetic/spm/Package.swift'\
+    \ failed with: IllegalArgumentException: Resolving SPM dependencies from Package.swift\
+    \ might result in potentially unstable versions of dependencies. To support this,\
+    \ enable the 'allowDynamicVersions' option in 'ort.conf'."
+  severity: "ERROR"

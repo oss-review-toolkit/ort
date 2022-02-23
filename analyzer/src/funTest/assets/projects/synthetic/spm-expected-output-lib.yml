@@ -1,0 +1,488 @@
+---
+project:
+  id: "SPM:<REPLACE_GITHUB_PROJECT>:<REPLACE_REVISION>"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "<REPLACE_URL>"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "SPM:apple:swift-crypto:2.0.4"
+    - id: "SPM:apple:swift-log:1.4.2"
+    - id: "SPM:apple:swift-metrics:2.2.0"
+    - id: "SPM:apple:swift-nio:2.38.0"
+    - id: "SPM:apple:swift-nio-extras:1.10.2"
+      dependencies:
+      - id: "SPM:apple:swift-nio:2.38.0"
+    - id: "SPM:apple:swift-nio-http2:1.19.2"
+      dependencies:
+      - id: "SPM:apple:swift-nio:2.38.0"
+    - id: "SPM:apple:swift-nio-ssl:2.17.2"
+      dependencies:
+      - id: "SPM:apple:swift-nio:2.38.0"
+    - id: "SPM:swift-server:async-http-client:1.9.0"
+      dependencies:
+      - id: "SPM:apple:swift-log:1.4.2"
+      - id: "SPM:apple:swift-nio:2.38.0"
+      - id: "SPM:apple:swift-nio-extras:1.10.2"
+        dependencies:
+        - id: "SPM:apple:swift-nio:2.38.0"
+      - id: "SPM:apple:swift-nio-http2:1.19.2"
+        dependencies:
+        - id: "SPM:apple:swift-nio:2.38.0"
+      - id: "SPM:apple:swift-nio-ssl:2.17.2"
+        dependencies:
+        - id: "SPM:apple:swift-nio:2.38.0"
+      - id: "SPM:apple:swift-nio-transport-services:1.11.4"
+        dependencies:
+        - id: "SPM:apple:swift-nio:2.38.0"
+    - id: "SPM:swift-server:swift-backtrace:1.3.1"
+    - id: "SPM:vapor:async-kit:1.11.1"
+      dependencies:
+      - id: "SPM:apple:swift-log:1.4.2"
+      - id: "SPM:apple:swift-nio:2.38.0"
+    - id: "SPM:vapor:console-kit:4.2.7"
+      dependencies:
+      - id: "SPM:apple:swift-log:1.4.2"
+    - id: "SPM:vapor:multipart-kit:4.5.1"
+      dependencies:
+      - id: "SPM:apple:swift-nio:2.38.0"
+    - id: "SPM:vapor:routing-kit:4.3.1"
+    - id: "SPM:vapor:websocket-kit:2.3.0"
+      dependencies:
+      - id: "SPM:apple:swift-nio:2.38.0"
+      - id: "SPM:apple:swift-nio-ssl:2.17.2"
+        dependencies:
+        - id: "SPM:apple:swift-nio:2.38.0"
+packages:
+- id: "SPM:apple:swift-crypto:2.0.4"
+  purl: "pkg:spm/apple/swift-crypto@2.0.4"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-crypto"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-crypto.git"
+    revision: "2.0.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-crypto.git"
+    revision: "2.0.4"
+    path: ""
+- id: "SPM:apple:swift-log:1.4.2"
+  purl: "pkg:spm/apple/swift-log@1.4.2"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-log"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-log.git"
+    revision: "1.4.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-log.git"
+    revision: "1.4.2"
+    path: ""
+- id: "SPM:apple:swift-metrics:2.2.0"
+  purl: "pkg:spm/apple/swift-metrics@2.2.0"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-metrics"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-metrics.git"
+    revision: "2.2.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-metrics.git"
+    revision: "2.2.0"
+    path: ""
+- id: "SPM:apple:swift-nio:2.38.0"
+  purl: "pkg:spm/apple/swift-nio@2.38.0"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-nio"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio.git"
+    revision: "2.38.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio.git"
+    revision: "2.38.0"
+    path: ""
+- id: "SPM:apple:swift-nio-extras:1.10.2"
+  purl: "pkg:spm/apple/swift-nio-extras@1.10.2"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-nio-extras"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-extras.git"
+    revision: "1.10.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-extras.git"
+    revision: "1.10.2"
+    path: ""
+- id: "SPM:apple:swift-nio-http2:1.19.2"
+  purl: "pkg:spm/apple/swift-nio-http2@1.19.2"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-nio-http2"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-http2.git"
+    revision: "1.19.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-http2.git"
+    revision: "1.19.2"
+    path: ""
+- id: "SPM:apple:swift-nio-ssl:2.17.2"
+  purl: "pkg:spm/apple/swift-nio-ssl@2.17.2"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-nio-ssl"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-ssl.git"
+    revision: "2.17.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-ssl.git"
+    revision: "2.17.2"
+    path: ""
+- id: "SPM:apple:swift-nio-transport-services:1.11.4"
+  purl: "pkg:spm/apple/swift-nio-transport-services@1.11.4"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-nio-transport-services"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-transport-services.git"
+    revision: "1.11.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-nio-transport-services.git"
+    revision: "1.11.4"
+    path: ""
+- id: "SPM:swift-server:async-http-client:1.9.0"
+  purl: "pkg:spm/swift-server/async-http-client@1.9.0"
+  authors:
+  - "swift-server"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/swift-server/async-http-client"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/swift-server/async-http-client.git"
+    revision: "1.9.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/swift-server/async-http-client.git"
+    revision: "1.9.0"
+    path: ""
+- id: "SPM:swift-server:swift-backtrace:1.3.1"
+  purl: "pkg:spm/swift-server/swift-backtrace@1.3.1"
+  authors:
+  - "swift-server"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/swift-server/swift-backtrace"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/swift-server/swift-backtrace.git"
+    revision: "1.3.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/swift-server/swift-backtrace.git"
+    revision: "1.3.1"
+    path: ""
+- id: "SPM:vapor:async-kit:1.11.1"
+  purl: "pkg:spm/vapor/async-kit@1.11.1"
+  authors:
+  - "vapor"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/vapor/async-kit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/vapor/async-kit.git"
+    revision: "1.11.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vapor/async-kit.git"
+    revision: "1.11.1"
+    path: ""
+- id: "SPM:vapor:console-kit:4.2.7"
+  purl: "pkg:spm/vapor/console-kit@4.2.7"
+  authors:
+  - "vapor"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/vapor/console-kit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/vapor/console-kit.git"
+    revision: "4.2.7"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vapor/console-kit.git"
+    revision: "4.2.7"
+    path: ""
+- id: "SPM:vapor:multipart-kit:4.5.1"
+  purl: "pkg:spm/vapor/multipart-kit@4.5.1"
+  authors:
+  - "vapor"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/vapor/multipart-kit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/vapor/multipart-kit.git"
+    revision: "4.5.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vapor/multipart-kit.git"
+    revision: "4.5.1"
+    path: ""
+- id: "SPM:vapor:routing-kit:4.3.1"
+  purl: "pkg:spm/vapor/routing-kit@4.3.1"
+  authors:
+  - "vapor"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/vapor/routing-kit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/vapor/routing-kit.git"
+    revision: "4.3.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vapor/routing-kit.git"
+    revision: "4.3.1"
+    path: ""
+- id: "SPM:vapor:websocket-kit:2.3.0"
+  purl: "pkg:spm/vapor/websocket-kit@2.3.0"
+  authors:
+  - "vapor"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/vapor/websocket-kit"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/vapor/websocket-kit.git"
+    revision: "2.3.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vapor/websocket-kit.git"
+    revision: "2.3.0"
+    path: ""

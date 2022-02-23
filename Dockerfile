@@ -326,6 +326,13 @@ RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A
     && echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list \
     && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/scala_ubuntu.gpg" > /dev/null
 
+# Install swift for SPM analysis
+ENV SWIFT_VERSION="swift-5.5.3-RELEASE-ubuntu20.04"
+ENV SWIFT_DOWNLOAD_PATH="swift-5.5.3-release/ubuntu2004/swift-5.5.3-RELEASE/${SWIFT_VERSION}.tar.gz"
+RUN curl "https://download.swift.org/${SWIFT_DOWNLOAD_PATH}" -o swift.tar.gz && \
+    tar -xvzf swift.tar.gz && mv ${SWIFT_VERSION} /usr/local/bin/swift && rm swift.tar.gz
+ENV PATH="/usr/local/bin/swift/usr/bin:${PATH}"
+
 # External repository for Dart
 RUN KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub" \
     && LISTURL="https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list" \

@@ -385,6 +385,7 @@ supported:
     [no `cartfile.private`](https://github.com/oss-review-toolkit/ort/issues/3774))
   * [CocoaPods](https://github.com/CocoaPods/CocoaPods) (limitations:
     [no custom source repositories](https://github.com/oss-review-toolkit/ort/issues/4188))
+  * [Swift Package Manager](https://www.swift.org/package-manager)
 * PHP
   * [Composer](https://getcomposer.org/)
 * Python

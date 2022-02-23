@@ -64,6 +64,7 @@ class PackageManagerTest : WordSpec({
         "sbt/build.sbt",
         "spdx-package/package.spdx.yml",
         "spdx-project/project.spdx.yml",
+        "spm/Package.resolved",
         "stack/stack.yaml"
     )
     val projectDir = createSpecTempDir()
@@ -130,6 +131,7 @@ class PackageManagerTest : WordSpec({
                     "spdx-project/project.spdx.yml"
                 )
                 managedFilesByName["Stack"] should containExactlyInAnyOrder("stack/stack.yaml")
+                managedFilesByName["SPM"] should containExactlyInAnyOrder("spm/Package.resolved")
                 managedFilesByName["Yarn"] should containExactlyInAnyOrder("npm-pnpm-and-yarn/package.json")
             }
         }
