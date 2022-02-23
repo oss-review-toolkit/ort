@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections
 
@@ -166,6 +167,13 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
         println("\t- The tool was not found in the PATH environment.")
         println("\t+ The tool was found in the PATH environment, but not in the required version.")
         println("\t* The tool was found in the PATH environment in the required version.")
+
+        println()
+        if (scanCodeLicenseTextDir != null) {
+            println("ScanCode license texts found in '$scanCodeLicenseTextDir'.")
+        } else {
+            println("ScanCode license texts not found.")
+        }
 
         if (statusCode != 0) {
             println()
