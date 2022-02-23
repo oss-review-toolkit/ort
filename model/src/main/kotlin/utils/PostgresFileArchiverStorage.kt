@@ -55,7 +55,7 @@ class PostgresFileArchiverStorage(
     dataSource: Lazy<DataSource>
 ) : FileArchiverStorage {
     /** Stores the database connection used by this object. */
-    val database by lazy {
+    private val database by lazy {
         Database.connect(dataSource.value, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
             transaction {
                 withDataBaseLock {
