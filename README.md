@@ -350,6 +350,7 @@ supported:
   [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
   [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
 * Objective-C / Swift
+  * [Swift Package Manager](https://www.swift.org/package-manager)
   * [Carthage](https://github.com/Carthage/Carthage) (limitation:
   [no `cartfile.private`](https://github.com/oss-review-toolkit/ort/issues/3774))
   * [CocoaPods](https://github.com/CocoaPods/CocoaPods) (limitations:
