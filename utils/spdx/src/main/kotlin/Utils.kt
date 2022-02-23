@@ -49,7 +49,7 @@ internal val yamlMapper = YAMLMapper().registerKotlinModule()
  * The directory that contains the ScanCode license texts. This is located using a heuristic based on the path of the
  * ScanCode binary.
  */
-private val scanCodeLicenseTextDir by lazy {
+val scanCodeLicenseTextDir by lazy {
     val scanCodeExeDir = Os.getPathFromEnvironment("scancode")?.realFile()?.parentFile
 
     val pythonBinDir = listOf("bin", "Scripts")
