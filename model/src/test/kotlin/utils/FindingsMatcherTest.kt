@@ -223,5 +223,44 @@ class FindingsMatcherTest : WordSpec() {
                 result.getCopyrights("root-license-1").map { it.statement } should containExactly("statement 1")
             }
         }
+
+        "associateLicensesWithExceptions()" should {
+            "merge with the nearest license" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("Apache-2.0", TextLocation("file", 1)),
+                        LicenseFinding("Apache-2.0", TextLocation("file", 100)),
+                        LicenseFinding("LLVM-exception", TextLocation("file", 5))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("Apache-2.0 WITH LLVM-exception", TextLocation("file", 1, 5)),
+                    LicenseFinding("Apache-2.0", TextLocation("file", 100))
+                )
+            }
+
+            "associate orphan exceptions by NOASSERTION" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("GPL-2.0-only", TextLocation("file", 1)),
+                        LicenseFinding("389-exception", TextLocation("file", 100))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("GPL-2.0-only", TextLocation("file", 1)),
+                    LicenseFinding("NOASSERTION WITH 389-exception", TextLocation("file", 100))
+                )
+            }
+
+            "not associate findings from different files" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
+                        LicenseFinding("LLVM-exception", TextLocation("fileB", 5))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
+                    LicenseFinding("NOASSERTION WITH LLVM-exception", TextLocation("fileB", 5))
+                )
+            }
+        }
     }
 }
