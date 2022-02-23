@@ -78,12 +78,7 @@ class PostgresStorage(
     }
 
     /** The [Database] instance on which all operations are executed. */
-    private val database by lazy { setupDatabase() }
-
-    /**
-     * Setup the database.
-     */
-    private fun setupDatabase(): Database =
+    private val database by lazy {
         Database.connect(dataSource.value, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
             transaction {
                 withDataBaseLock {
@@ -98,6 +93,7 @@ class PostgresStorage(
                 }
             }
         }
+    }
 
     private fun Transaction.createIdentifierAndScannerVersionIndex() =
         exec(
