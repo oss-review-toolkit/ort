@@ -115,7 +115,7 @@ class UploadResultToPostgresCommand : CliktCommand(
             applicationNameSuffix = "upload-result-command"
         )
 
-        Database.connect(dataSource)
+        Database.connect(dataSource.value)
 
         val table = OrtResults(tableName, columnName)
 

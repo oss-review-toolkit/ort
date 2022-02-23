@@ -52,19 +52,21 @@ class PostgresFileArchiverStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    dataSource: DataSource
+    dataSource: Lazy<DataSource>
 ) : FileArchiverStorage {
     /** Stores the database connection used by this object. */
-    val database = Database.connect(dataSource, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
-        transaction {
-            withDataBaseLock {
-                if (!tableExists(FileArchiveTable.tableName)) {
-                    checkDatabaseEncoding()
-                    createMissingTablesAndColumns(FileArchiveTable)
+    val database by lazy {
+        Database.connect(dataSource.value, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
+            transaction {
+                withDataBaseLock {
+                    if (!tableExists(FileArchiveTable.tableName)) {
+                        checkDatabaseEncoding()
+                        createMissingTablesAndColumns(FileArchiveTable)
+                    }
                 }
-            }
 
-            commit()
+                commit()
+            }
         }
     }
 

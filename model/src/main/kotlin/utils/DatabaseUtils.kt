@@ -43,7 +43,7 @@ object DatabaseUtils {
         config: PostgresStorageConfiguration,
         applicationNameSuffix: String = "",
         maxPoolSize: Int = 5
-    ): DataSource {
+    ): Lazy<DataSource> {
         require(config.url.isNotBlank()) {
             "URL for PostgreSQL storage is missing."
         }
@@ -79,7 +79,7 @@ object DatabaseUtils {
             addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
         }
 
-        return HikariDataSource(dataSourceConfig)
+        return lazyOf(HikariDataSource(dataSourceConfig))
     }
 
     /**

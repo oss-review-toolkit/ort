@@ -36,7 +36,7 @@ import javax.sql.DataSource
 class PostgresListener(private val startupWait: Duration = Duration.ofSeconds(20)) : TestListener {
     private lateinit var postgres: EmbeddedPostgres
 
-    val dataSource: DataSource get() = postgres.postgresDatabase
+    val dataSource: Lazy<DataSource> get() = lazyOf(postgres.postgresDatabase)
 
     override suspend fun beforeSpec(spec: Spec) {
         postgres = EmbeddedPostgres.builder().setPGStartupWait(startupWait).start()

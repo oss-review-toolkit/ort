@@ -66,7 +66,7 @@ class PostgresStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    private val dataSource: DataSource
+    private val dataSource: Lazy<DataSource>
 ) : ScanResultsStorage() {
     companion object {
         /** Expression to reference the scanner version as an array. */
@@ -78,13 +78,13 @@ class PostgresStorage(
     }
 
     /** The [Database] instance on which all operations are executed. */
-    private val database = setupDatabase()
+    private val database by lazy { setupDatabase() }
 
     /**
      * Setup the database.
      */
     private fun setupDatabase(): Database =
-        Database.connect(dataSource, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
+        Database.connect(dataSource.value, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
             transaction {
                 withDataBaseLock {
                     if (!tableExists(TABLE_NAME)) {

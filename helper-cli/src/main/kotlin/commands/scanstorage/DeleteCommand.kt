@@ -121,6 +121,6 @@ internal class DeleteCommand : CliktCommand(
             maxPoolSize = 1
         )
 
-        return Database.connect(dataSource)
+        return Database.connect(dataSource.value)
     }
 }
