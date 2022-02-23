@@ -339,6 +339,22 @@ FROM scratch AS sbt
 COPY --from=sbtbuild /opt/sbt /opt/sbt
 
 #------------------------------------------------------------------------
+# SPM
+FROM ort-base-image AS spmbuild
+
+ARG SWIFT_VERSION=5.8.1
+
+ENV SWIFT_HOME=/opt/swift
+ENV PATH=$PATH:$SWIFT_HOME/bin
+
+RUN mkdir $SWIFT_HOME \
+    && curl -L https://download.swift.org/swift-$SWIFT_VERSION-release/ubuntu2204/swift-$SWIFT_VERSION-RELEASE/swift-$SWIFT_VERSION-RELEASE-ubuntu22.04.tar.gz \
+    | tar -xz -C $SWIFT_HOME --strip-components=2
+
+FROM scratch AS spm
+COPY --from=spmbuild /opt/swift /opt/swift
+
+#------------------------------------------------------------------------
 # ORT
 FROM ort-base-image as ortbuild
 
@@ -444,6 +460,11 @@ COPY --from=dart --chown=$USER:$USER $DART_SDK $DART_SDK
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:$SBT_HOME/bin
 COPY --from=sbt --chown=$USER:$USER $SBT_HOME $SBT_HOME
+
+# SPM
+ENV SWIFT_HOME=/opt/swift
+ENV PATH=$PATH:$SWIFT_HOME/bin
+COPY --from=spm --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
 
 # PHP composer
 ARG COMPOSER_VERSION=2.2

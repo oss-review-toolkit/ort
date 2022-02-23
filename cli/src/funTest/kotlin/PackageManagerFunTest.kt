@@ -70,6 +70,8 @@ class PackageManagerFunTest : WordSpec({
         "sbt/build.sbt",
         "spdx-package/package.spdx.yml",
         "spdx-project/project.spdx.yml",
+        "spm-app/Package.resolved",
+        "spm-lib/Package.swift",
         "stack/stack.yaml"
     )
 
@@ -130,6 +132,10 @@ class PackageManagerFunTest : WordSpec({
                 managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder(
                     "spdx-package/package.spdx.yml",
                     "spdx-project/project.spdx.yml"
+                )
+                managedFilesByName["SPM"] should containExactlyInAnyOrder(
+                    "spm-app/Package.resolved",
+                    "spm-lib/Package.swift"
                 )
                 managedFilesByName["Stack"] should containExactly("stack/stack.yaml")
                 managedFilesByName["Yarn"] should containExactly("npm-pnpm-and-yarn/package.json")
