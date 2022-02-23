@@ -1,0 +1,48 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "grpc-swift",
+        "repositoryURL": "https://github.com/grpc/grpc-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "efb67a324eaf1696b50e66bc471a53690e41fbf6",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
+        "state": {
+          "branch": null,
+          "revision": "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0",
+          "version": "0.2.0"
+        }
+      },
+      {
+        "package": "swift-crypto",
+        "repositoryURL": "https://github.com/apple/swift-crypto.git",
+        "state": null
+      },
+      {
+        "package": "llbuild",
+        "repositoryURL": "https://github.com/apple/swift-llbuild.git",
+        "state": {
+          "branch": "master",
+          "revision": null,
+          "version": "9.0.8"
+        }
+      },
+      {
+        "package": "Appboy_iOS_SDK",
+        "repositoryURL": "https://github.com/braze-inc/braze-ios-sdk",
+        "state": {
+          "branch": "master",
+          "revision": "",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
