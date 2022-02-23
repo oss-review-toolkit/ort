@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
@@ -215,11 +216,21 @@ class ReporterCommand : CliktCommand(
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
+        val config = globalOptionsForSubcommands.config
+
+        val packageConfigurations = packageConfigurationOption.createProvider().getPackageConfigurations()
+            .toMutableSet()
+        val repositoryPackageConfigurations = ortResult.repository.config.packageConfigurations
+
+        if (config.enableRepositoryPackageConfigurations) {
+            packageConfigurations += repositoryPackageConfigurations
+        } else if (repositoryPackageConfigurations.isNotEmpty()) {
+            log.warn { "Local package configurations were not applied because the feature is not enabled." }
+        }
+
+        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations)
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
-
-        val config = globalOptionsForSubcommands.config
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
