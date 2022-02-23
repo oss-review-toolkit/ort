@@ -31,11 +31,4 @@ class DefaultLicenseTextProviderFunTest : StringSpec({
         resolver.hasLicenseText("Apache-2.0") shouldBe true
         resolver.getLicenseText("Apache-2.0") shouldNot beEmpty()
     }
-
-    "Can provide a LicenseRef-scancode license text" {
-        val resolver = DefaultLicenseTextProvider()
-
-        resolver.hasLicenseText("LicenseRef-scancode-mit-modern") shouldBe true
-        resolver.getLicenseText("LicenseRef-scancode-mit-modern") shouldNot beEmpty()
-    }
 })

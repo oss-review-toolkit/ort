@@ -36,16 +36,20 @@ class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCo
     override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
     override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())
 
+    val licenseTextDirs = listOfNotNull(scanner.licenseTextDir)
+
     init {
         "return the full license text for the HERE proprietary license" {
-            val text = getLicenseText("LicenseRef-scancode-here-proprietary")?.trim()
+            val text =
+                getLicenseText("LicenseRef-scancode-here-proprietary", licenseTextDirectories = licenseTextDirs)?.trim()
 
             text should startWith("This software and other materials contain proprietary information")
             text should endWith("allowed.")
         }
 
         "return the full license text for a known SPDX LicenseRef" {
-            val text = getLicenseText("LicenseRef-scancode-indiana-extreme")?.trim()
+            val text =
+                getLicenseText("LicenseRef-scancode-indiana-extreme", licenseTextDirectories = licenseTextDirs)?.trim()
 
             text should startWith("Indiana University Extreme! Lab Software License Version 1.1.1")
             text should endWith("EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.")
@@ -57,7 +61,8 @@ class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCo
 
             val outputDir = createOrtTempDir().apply { resolve(id).apply { writeText(text) } }
 
-            getLicenseText(id, true, listOf(outputDir)) shouldBe getLicenseText(id, true)
+            getLicenseText(id, true, licenseTextDirs + listOf(outputDir)) shouldBe
+                    getLicenseText(id, true, licenseTextDirectories = licenseTextDirs)
         }
     }
 }
