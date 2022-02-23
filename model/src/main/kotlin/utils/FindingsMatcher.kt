@@ -27,6 +27,9 @@ import kotlin.math.min
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants.NOASSERTION
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
  * A class for matching copyright findings to license findings. Copyright statements may be matched either to license
@@ -203,4 +206,63 @@ private fun MutableMap<LicenseFinding, MutableSet<CopyrightFinding>>.merge(
     other.forEach { (licenseFinding, copyrightFindings) ->
         getOrPut(licenseFinding) { mutableSetOf() } += copyrightFindings
     }
+}
+
+/**
+ * Process [findings] for stand-alone license exceptions and associate them with nearby (according to [toleranceLines])
+ * applicable licenses. Orphan license exceptions will get associated by [NOASSERTION]. Return the list of resulting
+ * findings.
+ */
+fun associateLicensesWithExceptions(
+    findings: List<LicenseFinding>,
+    toleranceLines: Int = FindingsMatcher.DEFAULT_TOLERANCE_LINES
+): List<LicenseFinding> {
+    val (exceptions, licenses) = findings.partition { SpdxLicenseException.forId(it.license.toString()) != null }
+
+    val remainingExceptions = exceptions.toMutableList()
+    val fixedLicenses = licenses.toMutableList()
+
+    val i = remainingExceptions.iterator()
+
+    while (i.hasNext()) {
+        val exception = i.next()
+
+        // Determine all licenses exception is applicable to.
+        val applicableLicenses = SpdxLicenseException.mapping[exception.license.toString()].orEmpty().map { it.id }
+
+        // Determine applicable license findings from the same path.
+        val applicableLicenseFindings = licenses.filter {
+            it.location.path == exception.location.path && it.license.toString() in applicableLicenses
+        }
+
+        // Find the closest license within the tolerance.
+        val associatedLicenseFinding = applicableLicenseFindings
+            .map { it to it.location.distanceTo(exception.location) }
+            .sortedBy { it.second }
+            .firstOrNull { it.second <= toleranceLines }
+            ?.first
+
+        if (associatedLicenseFinding != null) {
+            // Add the fixed-up license with the exception.
+            fixedLicenses += associatedLicenseFinding.copy(
+                license = "${associatedLicenseFinding.license} WITH ${exception.license}".toSpdx(),
+                location = associatedLicenseFinding.location.copy(
+                    startLine = min(associatedLicenseFinding.location.startLine, exception.location.startLine),
+                    endLine = max(associatedLicenseFinding.location.endLine, exception.location.endLine)
+                )
+            )
+
+            // Remove the original license and the stand-alone exception.
+            fixedLicenses.remove(associatedLicenseFinding)
+            i.remove()
+        }
+    }
+
+    // Associate remaining "orphan" exceptions with "NOASSERTION" to turn them into valid SPDX expressions and at the
+    // same time "marking" them for review as "NOASSERTION" is not a real license.
+    remainingExceptions.mapTo(fixedLicenses) { exception ->
+        exception.copy(license = "$NOASSERTION WITH ${exception.license}".toSpdx())
+    }
+
+    return fixedLicenses
 }
