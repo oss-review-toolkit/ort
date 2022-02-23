@@ -50,9 +50,7 @@ class PostgresNestedProvenanceStorage(
     private val table = NestedProvenances(tableName)
 
     /** The [Database] instance on which all operations are executed. */
-    private val database by lazy { setupDatabase() }
-
-    private fun setupDatabase(): Database =
+    private val database by lazy {
         Database.connect(dataSource.value).apply {
             transaction {
                 withDataBaseLock {
@@ -63,6 +61,7 @@ class PostgresNestedProvenanceStorage(
                 }
             }
         }
+    }
 
     override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
         database.transaction {
