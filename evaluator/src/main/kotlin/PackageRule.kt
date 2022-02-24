@@ -88,7 +88,7 @@ open class PackageRule(
      * A [RuleMatcher] that checks whether any vulnerability for the [package][pkg] has a score that equals or is
      * greater than [threshold] according to the [scoringSystem] and the belonging [severityComparator].
      */
-    fun hasVulnerability(threshold: String, scoringSystem: String, severityComparator: Comparator<String>) =
+    fun hasVulnerability(threshold: String, scoringSystem: String, severityComparator: (String, String) -> Boolean) =
         object : RuleMatcher {
             override val description = "hasVulnerability($threshold, $scoringSystem)"
 
@@ -98,8 +98,7 @@ open class PackageRule(
                     .flatMap { it.references }
                     .filter { reference -> reference.scoringSystem == scoringSystem }
                     .mapNotNull { reference -> reference.severity }
-                    .map { severity -> severityComparator.compare(severity, threshold) }
-                    .any { it >= 0 }
+                    .any { severityComparator(it, threshold) }
             }
         }
 

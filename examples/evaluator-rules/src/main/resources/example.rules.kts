@@ -198,7 +198,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         require {
             -isExcluded()
             +hasVulnerability(maxAcceptedSeverity, scoringSystem) { value, threshold ->
-                value.toFloat().compareTo(threshold.toFloat())
+                value.toFloat() >= threshold.toFloat()
             }
         }
 
