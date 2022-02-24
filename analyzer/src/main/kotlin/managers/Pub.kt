@@ -179,7 +179,7 @@ class Pub(
                     findManagedFiles(analysisRoot, setOf(gradleFactory)).getOrDefault(gradleFactory, emptyList())
 
                 if (gradleDefinitionFiles.isNotEmpty()) {
-                    log.info { "Found ${gradleDefinitionFiles.size} ${gradleFactory.managerName} project(s) at:" }
+                    log.info { "Found ${gradleDefinitionFiles.size} Gradle definition file(s) at:" }
 
                     gradleDefinitionFiles.forEach { gradleDefinitionFile ->
                         val relativePath =
