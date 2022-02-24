@@ -77,11 +77,10 @@ open class PackageRule(
         return object : RuleMatcher {
             override val description = "hasVulnerability()"
 
-            override fun matches() = ruleSet.ortResult.advisor
-                ?.results
-                ?.getVulnerabilities(pkg.id)
-                ?.isNotEmpty()
-                ?: false
+            override fun matches(): Boolean {
+                val run = ruleSet.ortResult.advisor ?: return false
+                return run.results.getVulnerabilities(pkg.id).isNotEmpty()
+            }
         }
     }
 
@@ -93,15 +92,15 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "hasVulnerability($threshold, $scoringSystem)"
 
-            override fun matches() = ruleSet.ortResult.advisor
-                ?.results
-                ?.getVulnerabilities(pkg.id)
-                ?.flatMap { it.references }
-                ?.filter { reference -> reference.scoringSystem == scoringSystem }
-                ?.mapNotNull { reference -> reference.severity }
-                ?.map { severity -> severityComparator.compare(severity, threshold) }
-                ?.any { it >= 0 }
-                ?: false
+            override fun matches(): Boolean {
+                val run = ruleSet.ortResult.advisor ?: return false
+                return run.results.getVulnerabilities(pkg.id)
+                    .flatMap { it.references }
+                    .filter { reference -> reference.scoringSystem == scoringSystem }
+                    .mapNotNull { reference -> reference.severity }
+                    .map { severity -> severityComparator.compare(severity, threshold) }
+                    .any { it >= 0 }
+            }
         }
 
     /**
