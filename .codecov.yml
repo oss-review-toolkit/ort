@@ -1,3 +1,8 @@
 comment:
   # Keep this in sync with the number of codecov-action calls.
   after_n_builds: 4
+coverage:
+  status:
+    project:
+      default:
+        threshold: 0.1%
