@@ -211,8 +211,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
 
-        val packageCurations =
-            FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations.toMutableList()
+        val packageCurations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir)
+            .packageCurations.toMutableSet()
 
         val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
@@ -223,7 +223,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         }
 
         val curationProviders = listOfNotNull(
-            SimplePackageCurationProvider(packageCurations.toSet()),
+            SimplePackageCurationProvider(packageCurations),
             config.analyzer.sw360Configuration?.let {
                 Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
             },
