@@ -80,7 +80,7 @@ class CompositeStorage(
 
             reader.read(remainingPackages, scannerCriteria)
                 .onSuccess { compatibleResults ->
-                    remainingPackages.filter { it.id !in compatibleResults.keys }
+                    remainingPackages.removeIf { it.id in compatibleResults.keys }
                     results += compatibleResults
                 }
                 .onFailure {
