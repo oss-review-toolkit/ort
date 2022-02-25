@@ -169,7 +169,19 @@ class ExperimentalScanner(
             log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
         }
 
-        // Run PackageScannerWrappers for packages with incomplete scan results.
+        runPackageScanners(controller, context)
+        runProvenanceScanners(controller, context)
+        runPathScanners(controller, context)
+
+        createFileArchives(controller.getNestedProvenancesByPackage())
+
+        return controller.getNestedScanResultsByPackage()
+    }
+
+    /**
+     * Run package scanners for packages with incomplete scan results.
+     */
+    private fun runPackageScanners(controller: ScanController, context: ScanContext) {
         controller.packages.forEach { pkg ->
             // TODO: Use coroutines to execute scanners in parallel.
             controller.getPackageScanners().forEach scanner@{ scanner ->
@@ -199,8 +211,12 @@ class ExperimentalScanner(
                 }
             }
         }
+    }
 
-        // Run provenance scanners for provenances with missing scan results.
+    /**
+     * Run provenance scanners for provenances with missing scan results.
+     */
+    private fun runProvenanceScanners(controller: ScanController, context: ScanContext) {
         controller.getAllProvenances().forEach { provenance ->
             // TODO: Use coroutines to execute scanners in parallel.
             controller.getProvenanceScanners().forEach scanner@{ scanner ->
@@ -228,8 +244,12 @@ class ExperimentalScanner(
                 }
             }
         }
+    }
 
-        // Run path scanners for provenances with missing scan results.
+    /**
+     * Run path scanners for provenances with missing scan results.
+     */
+    private fun runPathScanners(controller: ScanController, context: ScanContext) {
         controller.getAllProvenances().forEach { provenance ->
             val scannersForProvenance =
                 controller.getPathScanners().filterNot { controller.hasScanResult(it, provenance) }
@@ -250,10 +270,6 @@ class ExperimentalScanner(
                 }
             }
         }
-
-        createFileArchives(controller.getNestedProvenancesByPackage())
-
-        return controller.getNestedScanResultsByPackage()
     }
 
     private fun Collection<Package>.filterNotConcluded(): Collection<Package> =
