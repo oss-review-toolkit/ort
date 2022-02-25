@@ -25,7 +25,6 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.time.Instant
 
-import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -234,7 +233,7 @@ abstract class PathScanner(
                 val downloadProvenance = Downloader(downloaderConfig).download(pkg, downloadDirectory)
 
                 if (downloadProvenance == provenance) {
-                    archiveFiles(downloadDirectory, pkg.id, provenance)
+                    archiver.archive(downloadDirectory, provenance)
                 } else {
                     log.warn { "Mismatching provenance when creating missing archive for $provenance." }
                 }
@@ -276,12 +275,10 @@ abstract class PathScanner(
             )
         }
 
-        log.info {
-            "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'."
-        }
+        log.info { "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'." }
 
         if (provenance is KnownProvenance) {
-            archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
+            archiver.archive(pkgDownloadDirectory, provenance)
         }
 
         val (scanSummary, scanDuration) = measureTimedValue {
@@ -291,9 +288,7 @@ abstract class PathScanner(
             scanPathInternal(pkgDownloadDirectory).filterByPath(vcsPath)
         }
 
-        log.perf {
-            "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in $scanDuration."
-        }
+        log.perf { "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in $scanDuration." }
 
         val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
         val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
@@ -308,14 +303,6 @@ abstract class PathScanner(
             val summary = scanSummary.copy(issues = issues)
             scanResult.copy(summary = summary)
         }
-    }
-
-    private fun archiveFiles(directory: File, id: Identifier, provenance: KnownProvenance) {
-        log.info { "Archiving files for '${id.toCoordinates()}'." }
-
-        val duration = measureTime { archiver.archive(directory, provenance) }
-
-        log.perf { "Archived files for '${id.toCoordinates()}' in $duration." }
     }
 
     /**
