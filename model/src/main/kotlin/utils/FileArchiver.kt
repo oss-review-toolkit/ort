@@ -83,6 +83,8 @@ class FileArchiver(
      * Archive all files in [directory] matching any of the configured patterns in the [storage].
      */
     fun archive(directory: File, provenance: KnownProvenance) {
+        log.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
+
         val zipFile = createOrtTempFile(suffix = ".zip")
 
         val zipDuration = measureTime {
@@ -101,15 +103,11 @@ class FileArchiver(
             }
         }
 
-        log.perf {
-            "Archived directory '${directory.invariantSeparatorsPath}' in $zipDuration."
-        }
+        log.perf { "Archived directory '${directory.invariantSeparatorsPath}' in $zipDuration." }
 
         val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
 
-        log.perf {
-            "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in $writeDuration."
-        }
+        log.perf { "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in $writeDuration." }
 
         zipFile.delete()
     }
