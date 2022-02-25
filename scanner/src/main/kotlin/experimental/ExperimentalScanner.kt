@@ -25,6 +25,7 @@ import java.nio.file.StandardCopyOption
 import java.time.Instant
 
 import kotlin.io.path.moveTo
+import kotlin.time.TimeSource
 import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -136,19 +137,7 @@ class ExperimentalScanner(
         resolvePackageProvenances(controller)
         resolveNestedProvenances(controller)
 
-        // Get stored scan results for each ScannerWrapper by provenance.
-        log.info {
-            "Reading stored scan results for ${controller.getPackageProvenances().size} packages with " +
-                    "${controller.getAllProvenances().size} provenances."
-        }
-        val readDuration = measureTime { getStoredResults(controller) }
-        log.info { "Read stored scan results in $readDuration:" }
-
-        val allKnownProvenances = controller.getAllProvenances()
-        scanners.forEach { scanner ->
-            val results = controller.getScanResults(scanner)
-            log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
-        }
+        readStoredResults(controller)
 
         runPackageScanners(controller, context)
         runProvenanceScanners(controller, context)
@@ -308,7 +297,14 @@ class ExperimentalScanner(
             keep
         }
 
-    private fun getStoredResults(controller: ScanController) {
+    private fun readStoredResults(controller: ScanController) {
+        log.info {
+            "Reading stored scan results for ${controller.getPackageProvenances().size} packages with " +
+                    "${controller.getAllProvenances().size} provenances."
+        }
+
+        val mark = TimeSource.Monotonic.markNow()
+
         controller.scanners.forEach { scanner ->
             val scannerCriteria = scanner.criteria ?: return@forEach
 
@@ -353,6 +349,14 @@ class ExperimentalScanner(
                     }
                 }
             }
+        }
+
+        log.info { "Read stored scan results in ${mark.elapsedNow()}:" }
+
+        val allKnownProvenances = controller.getAllProvenances()
+        controller.scanners.forEach { scanner ->
+            val results = controller.getScanResults(scanner)
+            log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
         }
     }
 
