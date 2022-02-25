@@ -26,7 +26,6 @@ import java.time.Instant
 
 import kotlin.io.path.moveTo
 import kotlin.time.measureTime
-import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
@@ -135,17 +134,7 @@ class ExperimentalScanner(
         val controller = ScanController(packages, scanners)
 
         resolvePackageProvenances(controller)
-
-        log.info { "Resolving nested provenances for ${packages.size} packages." }
-        val (nestedProvenances, nestedProvenanceDuration) =
-            measureTimedValue { getNestedProvenances(controller.getPackageProvenances()) }
-        log.info {
-            "Resolved nested provenances for ${packages.size} packages in $nestedProvenanceDuration."
-        }
-
-        nestedProvenances.forEach { (root, nestedProvenance) ->
-            controller.addNestedProvenance(root, nestedProvenance)
-        }
+        resolveNestedProvenances(controller)
 
         // Get stored scan results for each ScannerWrapper by provenance.
         log.info {
@@ -184,6 +173,22 @@ class ExperimentalScanner(
         }
 
         log.info { "Resolved provenance for ${controller.packages.size} packages in $duration." }
+    }
+
+    private fun resolveNestedProvenances(controller: ScanController) {
+        log.info { "Resolving nested provenances for ${controller.packages.size} packages." }
+
+        val duration = measureTime {
+            controller.getPackageProvenances().forEach { provenance ->
+                runCatching {
+                    nestedProvenanceResolver.resolveNestedProvenance(provenance)
+                }.onSuccess { nestedProvenance ->
+                    controller.addNestedProvenance(provenance, nestedProvenance)
+                }
+            }
+        }
+
+        log.info { "Resolved nested provenance for ${controller.packages.size} packages in $duration." }
     }
 
     /**
@@ -302,9 +307,6 @@ class ExperimentalScanner(
 
             keep
         }
-
-    private fun getNestedProvenances(provenances: Set<KnownProvenance>): Map<KnownProvenance, NestedProvenance> =
-        provenances.associateWith { nestedProvenanceResolver.resolveNestedProvenance(it) }
 
     private fun getStoredResults(controller: ScanController) {
         controller.scanners.forEach { scanner ->
