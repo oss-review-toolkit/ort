@@ -124,7 +124,7 @@ abstract class PathScanner(
 
         val remainingPackages = packages.filterTo(mutableListOf()) { pkg ->
             !pkg.isMetaDataOnly.also {
-                if (it) PathScanner.log.info { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
+                if (it) PathScanner.log.debug { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
             }
         }
 
