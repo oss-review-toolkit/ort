@@ -250,6 +250,18 @@ class FindingsMatcherTest : WordSpec() {
                 )
             }
 
+            "not associate licenses and exceptions that do not belog together" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("LicenseRef-scancode-unknown", TextLocation("file", 1)),
+                        LicenseFinding("LLVM-exception", TextLocation("file", 5))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("LicenseRef-scancode-unknown", TextLocation("file", 1)),
+                    LicenseFinding("NOASSERTION WITH LLVM-exception", TextLocation("file", 5))
+                )
+            }
+
             "not associate findings from different files" {
                 associateLicensesWithExceptions(
                     listOf(
