@@ -25,7 +25,6 @@ import java.nio.file.StandardCopyOption
 import java.time.Instant
 
 import kotlin.io.path.moveTo
-import kotlin.time.TimeSource
 import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -303,60 +302,71 @@ class ExperimentalScanner(
                     "${controller.getAllProvenances().size} provenances."
         }
 
-        val mark = TimeSource.Monotonic.markNow()
-
-        controller.scanners.forEach { scanner ->
-            val scannerCriteria = scanner.criteria ?: return@forEach
-
-            controller.getAllProvenances().forEach provenance@{ provenance ->
-                if (controller.getScanResults(scanner, provenance).isNotEmpty()) return@provenance
-
-                storageReaders.forEach { reader ->
-                    @Suppress("NON_EXHAUSTIVE_WHEN_STATEMENT")
-                    when (reader) {
-                        is PackageBasedScanStorageReader -> {
-                            controller.findNestedProvenance(provenance)?.let { nestedProvenance ->
-                                controller.findPackages(provenance).forEach { pkg ->
-                                    runCatching {
-                                        reader.read(pkg, nestedProvenance, scannerCriteria).forEach { result ->
-                                            controller.addNestedScanResult(scanner, result)
-                                        }
-                                    }.onFailure { e ->
-                                        e.showStackTrace()
-
-                                        log.warn {
-                                            "Could not read scan result for ${pkg.id.toCoordinates()} from " +
-                                                    "${reader.javaClass.simpleName}: ${e.collectMessagesAsString()}"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        is ProvenanceBasedScanStorageReader -> {
-                            runCatching {
-                                val results = reader.read(provenance, scannerCriteria)
-                                controller.addScanResults(scanner, provenance, results)
-                            }.onFailure { e ->
-                                e.showStackTrace()
-
-                                log.warn {
-                                    "Could not read scan result for $provenance from ${reader.javaClass.simpleName}: " +
-                                            e.collectMessagesAsString()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        val readDuration = measureTime {
+            readStoredPackageResults(controller)
+            readStoredProvenanceResults(controller)
         }
 
-        log.info { "Read stored scan results in ${mark.elapsedNow()}:" }
+        log.info { "Read stored scan results in $readDuration:" }
 
         val allKnownProvenances = controller.getAllProvenances()
         controller.scanners.forEach { scanner ->
             val results = controller.getScanResults(scanner)
             log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
+        }
+    }
+
+    private fun readStoredPackageResults(controller: ScanController) {
+        controller.scanners.forEach { scanner ->
+            val scannerCriteria = scanner.criteria ?: return@forEach
+
+            controller.packages.forEach pkg@{ pkg ->
+                val nestedProvenance = controller.findNestedProvenance(pkg.id) ?: return@pkg
+
+                storageReaders.filterIsInstance<PackageBasedScanStorageReader>().forEach { reader ->
+                    if (controller.hasCompleteScanResult(scanner, pkg)) return@pkg
+
+                    runCatching {
+                        reader.read(pkg, nestedProvenance, scannerCriteria)
+                    }.onSuccess { results ->
+                        results.forEach { result ->
+                            controller.addNestedScanResult(scanner, result)
+                        }
+                    }.onFailure { e ->
+                        e.showStackTrace()
+
+                        log.warn {
+                            "Could not read scan result for ${pkg.id.toCoordinates()} from " +
+                                    "${reader.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun readStoredProvenanceResults(controller: ScanController) {
+        controller.scanners.forEach { scanner ->
+            val scannerCriteria = scanner.criteria ?: return@forEach
+
+            controller.getAllProvenances().forEach provenance@{ provenance ->
+                if (controller.hasScanResult(scanner, provenance)) return@provenance
+
+                storageReaders.filterIsInstance<ProvenanceBasedScanStorageReader>().forEach { reader ->
+                    runCatching {
+                        reader.read(provenance, scannerCriteria)
+                    }.onSuccess { results ->
+                        controller.addScanResults(scanner, provenance, results)
+                    }.onFailure { e ->
+                        e.showStackTrace()
+
+                        log.warn {
+                            "Could not read scan result for $provenance from ${reader.javaClass.simpleName}: " +
+                                    e.collectMessagesAsString()
+                        }
+                    }
+                }
+            }
         }
     }
 
