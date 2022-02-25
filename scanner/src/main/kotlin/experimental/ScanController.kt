@@ -86,6 +86,11 @@ class ScanController(
     }
 
     /**
+     * Find the [NestedProvenance] for the provided [id].
+     */
+    fun findNestedProvenance(id: Identifier): NestedProvenance? = nestedProvenances[packageProvenances[id]]
+
+    /**
      * Find the [NestedProvenance] for the provided [provenance].
      */
     fun findNestedProvenance(provenance: KnownProvenance): NestedProvenance? = nestedProvenances[provenance]
