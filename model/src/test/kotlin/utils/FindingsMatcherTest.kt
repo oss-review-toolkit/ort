@@ -250,7 +250,7 @@ class FindingsMatcherTest : WordSpec() {
                 )
             }
 
-            "not associate licenses and exceptions that do not belog together" {
+            "not associate licenses and exceptions that do not belong together" {
                 associateLicensesWithExceptions(
                     listOf(
                         LicenseFinding("LicenseRef-scancode-unknown", TextLocation("file", 1)),
