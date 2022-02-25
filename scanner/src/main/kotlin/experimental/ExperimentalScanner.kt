@@ -134,15 +134,7 @@ class ExperimentalScanner(
 
         val controller = ScanController(packages, scanners)
 
-        log.info { "Resolving provenance for ${packages.size} packages." }
-        val (packageProvenanceResults, packageProvenanceDuration) = measureTimedValue {
-            getPackageProvenances(packages)
-        }
-        log.info { "Resolved provenance for ${packages.size} packages in $packageProvenanceDuration." }
-
-        packageProvenanceResults.forEach { (pkg, result) ->
-            if (result.isSuccess) controller.addPackageProvenance(pkg.id, result.getOrThrow())
-        }
+        resolvePackageProvenances(controller)
 
         log.info { "Resolving nested provenances for ${packages.size} packages." }
         val (nestedProvenances, nestedProvenanceDuration) =
@@ -176,6 +168,22 @@ class ExperimentalScanner(
         createFileArchives(controller.getNestedProvenancesByPackage())
 
         return controller.getNestedScanResultsByPackage()
+    }
+
+    private fun resolvePackageProvenances(controller: ScanController) {
+        log.info { "Resolving provenance for ${controller.packages.size} packages." }
+
+        val duration = measureTime {
+            controller.packages.forEach { pkg ->
+                runCatching {
+                    packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins)
+                }.onSuccess { provenance ->
+                    controller.addPackageProvenance(pkg.id, provenance)
+                }
+            }
+        }
+
+        log.info { "Resolved provenance for ${controller.packages.size} packages in $duration." }
     }
 
     /**
@@ -293,11 +301,6 @@ class ExperimentalScanner(
             }
 
             keep
-        }
-
-    private fun getPackageProvenances(packages: Set<Package>): Map<Package, Result<KnownProvenance>> =
-        packages.associateWith { pkg ->
-            runCatching { packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins) }
         }
 
     private fun getNestedProvenances(provenances: Set<KnownProvenance>): Map<KnownProvenance, NestedProvenance> =
