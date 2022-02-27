@@ -85,16 +85,26 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
 ENV PATH=/opt/python/bin:$PATH
 # Python 3.6.x series has problems with alignment with modern GCC
 # As we don not want patch Python versions we use Clang as compiler
-RUN CC=clang-9 CXX=clang++9 pyenv install "${PYTHON_VERSION}"
-RUN pyenv global "${PYTHON_VERSION}"
+RUN for pyvers in ${PYTHON_VERSION} ${PYTHON2_VERSION}; do \
+    CC=clang-9 CXX=clang++9 pyenv install $pyvers; done
+RUN pyenv global ${PYTHON_VERSION} ${PYTHON2_VERSION}
 ENV PATH=/opt/python/shims:$PATH
+
+ARG CONAN_VERSION=1.44.0
+ARG PYTHON_VIRTUALENV_VERSION=20.13.0
+ARG PIPTOOL_VERSION=21.3.1
+ARG SCANCODE_VERSION=30.1.0
+
+# Install pip and wheel ahead of regular modules as python try to generate
+# whl packages if they are not automatic available to download.
 RUN pip install -U \
     pip=="${PIPTOOL_VERSION}" \
     wheel
 RUN pip install -U \
+    Mercurial \
     conan=="${CONAN_VERSION}" \
     pipenv \
-    Mercurial \
+    scancode-toolkit==${SCANCODE_VERSION} \
     virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
 
 COPY docker/python.sh /etc/profile.d
@@ -177,23 +187,6 @@ RUN curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${A
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS \
     --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
 COPY docker/android.sh /etc/profile.d
-
-#------------------------------------------------------------------------
-# SCANCODE - Build ScanCode as a separate component
-FROM pythonbuild AS scancodebuild
-
-ARG SCANCODE_VERSION="30.1.0"
-ENV SCANCODE_URL "https://github.com/nexB/scancode-toolkit/archive/refs/tags/"
-ENV PATH=/opt/python/shims:$PATH
-
-RUN mkdir -p /opt/scancode \
-    && curl -ksSL ${SCANCODE_URL}/v${SCANCODE_VERSION}.tar.gz | tar -C /opt/scancode -xz --strip-components=1 \
-    && cd /opt/scancode \
-    && PYTHON_EXE=python3 ./configure \
-    # Clean up unneeded installed binaries
-    && rm -rf /opt/scancode/thirdparty \
-    # Run scancode once to generate indexes as superuser
-    && /opt/scancode/bin/scancode --version
 
 #------------------------------------------------------------------------
 # ORT
@@ -309,13 +302,6 @@ ENV ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
 COPY --chown=$USERNAME:$USERNAME --from=androidbuild /opt/android-sdk /opt/android-sdk
-
-# ScanCode
-COPY --chown=$USERNAME:$USERNAME --from=scancodebuild /opt/scancode /opt/scancode
-RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
-    && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
-    && ln -s /opt/scancode/bin/extractcode /usr/bin/extractcode
-
 
 # External repositories for SBT
 ARG SBT_VERSION=1.6.1
