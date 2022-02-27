@@ -1,6 +1,5 @@
 # Ignore the Docker files themselves to avoid that all layers are invalidated if
 # the Docker files are changed during development.
-.dockerignore
 Dockerfile
 
 # Ignore the Jenkinsfile to avoid that all layers are invalidated if the
