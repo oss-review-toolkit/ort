@@ -77,10 +77,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
-ARG CONAN_VERSION=1.44.0
-ARG PYTHON_VERSION=3.9.9
-ARG PYTHON_VIRTUALENV_VERSION=20.13.0
-ARG PIPTOOL_VERSION=21.3.1
+ARG PYTHON_VERSION=3.10.2
+ARG PYTHON2_VERSION=""
 
 ENV PYENV_ROOT=/opt/python
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
@@ -118,15 +116,6 @@ RUN src/configure \
 RUN rbenv install ${RUBY_VERSION} \
     && rbenv global ${RUBY_VERSION} \
     && gem install bundler cocoapods:${COCOAPODS_VERSION}
-
-# Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
-RUN curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | \
-    tar -zxC . \
-    && (cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b \
-    && gem build cocoapods.gemspec \
-    && gem install cocoapods-1.10.1.gem \
-    ) \
-    && rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
 
 COPY docker/ruby.sh /etc/profile.d
 
