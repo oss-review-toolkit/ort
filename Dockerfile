@@ -241,20 +241,63 @@ FROM eclipse-temurin:11-jdk-focal
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
-ENV HOME=/workspace
+
+
+# Base package set
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ca-certificates \
+    coreutils \
+    cvs \
+    curl \
+    dirmngr \
+    gcc \
+    gnupg2 \
+    iproute2 \
+    libarchive-tools \
+    libz-dev \
+    locales \
+    netbase \
+    openssh-client \
+    openssl \
+    procps \
+    rsync \
+    sudo \
+    unzip \
+    wget \
+    && rm -rf /var/lib/apt/lists/* \
+    && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen
+
+ARG USERNAME=ort
+ARG USER_ID=1000
+ARG USER_GID=$USER_ID
+ARG HOMEDIR=/workspace
+ENV HOME=$HOMEDIR
 
 # Run with non privileged user
-RUN groupadd --gid 1000 ort \
-    && useradd --uid 1000 --gid ort --shell /bin/bash --home-dir /workspace --create-home ort
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd \
+    --uid $USER_ID \
+    --gid $USER_GID \
+    --shell /bin/bash \
+    --home-dir $HOMEDIR \
+    --create-home $USERNAME
+
+# sudo support
+RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 COPY docker/00-add_local_path.sh /etc/profile.d/
 
 # Python
-COPY --chown=ort:ort --from=pythonbuild /opt/python /opt/python
+COPY --chown=$USERNAME:$USERNAME --from=pythonbuild /opt/python /opt/python
 COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
 
 # Ruby
-COPY --chown=ort:ort --from=rubybuild /opt/rbenv /opt/rbenv
+COPY --chown=$USERNAME:$USERNAME --from=rubybuild /opt/rbenv /opt/rbenv
 COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
 
 # NodeJS
@@ -262,10 +305,10 @@ ARG NODEJS_VERSION=16.13.2
 ARG NVM_DIR=/opt/nodejs
 ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
-COPY --chown=ort:ort --from=nodebuild /opt/nodejs /opt/nodejs
+COPY --chown=$USERNAME:$USERNAME --from=nodebuild /opt/nodejs /opt/nodejs
 
 # Golang
-COPY --chown=ort:ort --from=gobuild /opt/go /opt/go/
+COPY --chown=$USERNAME:$USERNAME --from=gobuild /opt/go /opt/go/
 COPY --from=gobuild  /etc/profile.d/go.sh /etc/profile.d/
 
 # Haskell
@@ -276,31 +319,14 @@ ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
-COPY --chown=ort:ort --from=androidbuild /opt/android-sdk /opt/android-sdk
+COPY --chown=$USERNAME:$USERNAME --from=androidbuild /opt/android-sdk /opt/android-sdk
 
 # ScanCode
-COPY --chown=ort:ort --from=scancodebuild /opt/scancode /opt/scancode
+COPY --chown=$USERNAME:$USERNAME --from=scancodebuild /opt/scancode /opt/scancode
 RUN ln -s /opt/scancode/bin/scancode /usr/bin/scancode \
     && ln -s /opt/scancode/bin/pip /usr/bin/scancode-pip \
     && ln -s /opt/scancode/bin/extractcode /usr/bin/extractcode
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    ca-certificates \
-    cvs \
-    curl \
-    gnupg \
-    libarchive-tools \
-    locales \
-    netbase \
-    openssh-client \
-    openssl \
-    unzip \
-    && rm -rf /var/lib/apt/lists/* \
-    && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
-    && locale-gen
 
 # External repositories for SBT
 ARG SBT_VERSION=1.6.1
@@ -337,13 +363,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rm -rf /var/lib/apt/lists/*
 
 # ORT
-COPY --chown=ort:ort --from=ortbuild /opt/ort /opt/ort
+COPY --chown=$USERNAME:$USERNAME --from=ortbuild /opt/ort /opt/ort
 COPY docker/ort-wrapper.sh /usr/bin/ort
 COPY docker/ort-wrapper.sh /usr/bin/orth
 RUN chmod 755 /usr/bin/ort
 
-USER ort
-WORKDIR /workspace
+USER $USERNAME
+WORKDIR $HOMEDIR
 
 ENTRYPOINT ["/usr/bin/ort"]
 
