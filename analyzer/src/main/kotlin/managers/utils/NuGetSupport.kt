@@ -304,17 +304,39 @@ fun PackageManager.resolveNuGetDependencies(
 ): ProjectAnalyzerResult {
     val workingDir = definitionFile.parentFile
 
-    val dependencies = sortedSetOf<PackageReference>()
-    val scope = Scope("dependencies", dependencies)
-
     val packages = sortedSetOf<Package>()
     val issues = mutableListOf<OrtIssue>()
 
     val references = reader.getDependencies(definitionFile)
-    val ids = references.map { Identifier(type = "NuGet", namespace = "", name = it.name, version = it.version) }
-    support.buildDependencyTree(ids, dependencies, packages, issues)
+    val referencesByFramework = references.groupBy { it.targetFramework }
 
-    val project = getProject(definitionFile, workingDir, scope)
+    val scopes = referencesByFramework.flatMapTo(sortedSetOf()) { (targetFramework, frameworkDependencies) ->
+        frameworkDependencies.groupBy { it.developmentDependency }.map { (isDevDependency, dependencies) ->
+            val allDependencies = buildSet {
+                addAll(dependencies)
+                // Add dependencies without a specified target framework to all scopes.
+                addAll(referencesByFramework[""].orEmpty().filter { it.developmentDependency == isDevDependency })
+            }
+
+            val packageReferences = sortedSetOf<PackageReference>()
+
+            support.buildDependencyTree(
+                references = allDependencies.map { Identifier("NuGet::${it.name}:${it.version}") },
+                dependencies = packageReferences,
+                packages = packages,
+                issues = issues
+            )
+
+            val scopeName = buildString {
+                if (targetFramework.isEmpty()) append("allTargetFrameworks") else append(targetFramework)
+                if (isDevDependency) append("-dev")
+            }
+
+            Scope(scopeName, packageReferences)
+        }
+    }
+
+    val project = getProject(definitionFile, workingDir, scopes)
 
     return ProjectAnalyzerResult(project, packages, issues)
 }
@@ -322,7 +344,7 @@ fun PackageManager.resolveNuGetDependencies(
 private fun PackageManager.getProject(
     definitionFile: File,
     workingDir: File,
-    scope: Scope
+    scopes: SortedSet<Scope>
 ): Project {
     val spec = resolveLocalSpec(definitionFile)?.let { NuGetSupport.XML_MAPPER.readValue<PackageSpec>(it) }
 
@@ -339,7 +361,7 @@ private fun PackageManager.getProject(
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),
         homepageUrl = "",
-        scopeDependencies = sortedSetOf(scope)
+        scopeDependencies = scopes
     )
 }
 
