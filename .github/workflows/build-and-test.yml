@@ -43,6 +43,7 @@ jobs:
     - name: Build the reporter-web-app
       uses: burrunan/gradle-cache-action@v1
       with:
+        job-id: build-reporter-web-app
         arguments: --stacktrace :reporter-web-app:yarnBuild
   test:
     needs: build
@@ -59,6 +60,7 @@ jobs:
     - name: Run unit tests
       uses: burrunan/gradle-cache-action@v1
       with:
+        job-id: test
         arguments: test jacocoTestReport -x :reporter-web-app:yarnBuild
     - name: Upload code coverage data
       uses: codecov/codecov-action@v2
@@ -91,6 +93,7 @@ jobs:
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
+        job-id: funTest-non-analyzer
         arguments: funTest jacocoFunTestReport -x :analyzer:funTest
     - name: Upload code coverage data
       uses: codecov/codecov-action@v2
@@ -128,6 +131,7 @@ jobs:
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
+        job-id: funTest-analyzer-no-docker
         arguments: :analyzer:funTest :analyzer:jacocoFunTestReport -Dkotest.tags=NoDockerTag
     - name: Upload code coverage data
       uses: codecov/codecov-action@v2
