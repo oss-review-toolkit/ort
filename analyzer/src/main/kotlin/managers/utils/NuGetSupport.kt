@@ -73,6 +73,8 @@ import org.ossreviewtoolkit.utils.core.await
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.logOnce
 
+internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
+
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
 private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"

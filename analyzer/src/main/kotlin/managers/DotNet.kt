@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
+import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
 import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -42,6 +43,9 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 /**
  * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
  * embed NuGet package configuration.
+ *
+ * This package manager supports the following [options][AnalyzerConfiguration.options]:
+ * - *directDependenciesOnly*: If true, only direct dependencies are reported. Defaults to false.
  */
 class DotNet(
     name: String,
@@ -59,6 +63,9 @@ class DotNet(
         ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val directDependenciesOnly =
+        analyzerConfig.options?.get(managerName)?.get(OPTION_DIRECT_DEPENDENCIES_ONLY).toBoolean()
+
     private val reader = DotNetPackageFileReader()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
@@ -67,7 +74,7 @@ class DotNet(
                 definitionFile,
                 reader,
                 NuGetSupport.create(definitionFile),
-                directDependenciesOnly = false
+                directDependenciesOnly
             )
         )
 }
