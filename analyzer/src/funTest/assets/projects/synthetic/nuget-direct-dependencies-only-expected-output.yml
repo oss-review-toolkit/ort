@@ -1,0 +1,177 @@
+---
+project:
+  id: "NuGet::src/funTest/assets/projects/synthetic/nuget/packages.config:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/nuget/packages.config"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "net45"
+    dependencies:
+    - id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+  - name: "netcoreapp3.1"
+    dependencies:
+    - id: "NuGet::System.Globalization:4.3.0"
+    - id: "NuGet::System.Threading:4.0.11"
+  - name: "netcoreapp3.1-dev"
+    dependencies:
+    - id: "NuGet::WebGrease:1.5.2"
+packages:
+- id: "NuGet::System.Globalization:4.3.0"
+  purl: "pkg:nuget/System.Globalization@4.3.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides classes that define culture-related information, including\
+    \ language, country/region, calendars in use, format patterns for dates, currency,\
+    \ and numbers, and sort order for strings.\n\nCommonly Used Types:\nSystem.Globalization.DateTimeFormatInfo\n\
+    System.Globalization.CultureInfo\nSystem.Globalization.NumberFormatInfo\nSystem.Globalization.CalendarWeekRule\n\
+    System.Globalization.TextInfo\nSystem.Globalization.Calendar\nSystem.Globalization.CompareInfo\n\
+    System.Globalization.CompareOptions\nSystem.Globalization.UnicodeCategory\n \n\
+    When using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.globalization/4.3.0/system.globalization.4.3.0.nupkg"
+    hash:
+      value: "823d2ba308cb073b40a3146ecccd0d9fd7b1615ac3fbefb16f73d873e411fd81c3bdc87df206d3dc7e2f14c9cd53aafca684a3570c25471280aada8de805ece2"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Threading:4.0.11"
+  purl: "pkg:nuget/System.Threading@4.0.11"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  declared_licenses_processed:
+    spdx_expression: "LicenseRef-scancode-ms-net-library-2018-11"
+    mapped:
+      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2018-11"
+  description: "Provides the fundamental synchronization primitives, including System.Threading.Monitor\
+    \ and System.Threading.Mutex, that are required when writing asynchronous code.\n\
+    \nCommonly Used Types:\nSystem.Threading.Monitor\nSystem.Threading.SynchronizationContext\n\
+    System.Threading.ManualResetEvent\nSystem.Threading.AutoResetEvent\nSystem.Threading.ThreadLocal<T>\n\
+    System.Threading.EventWaitHandle\nSystem.Threading.SemaphoreSlim\nSystem.Threading.Mutex\n\
+    \ \nWhen using NuGet 3.x this package requires at least version 3.4."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.threading/4.0.11/system.threading.4.0.11.nupkg"
+    hash:
+      value: "05c0dd1bbcfcedb6fc6c5f311c41920a4775f8a28a61ca246b6c65ad8afd9b04881d3357880af000ac056fd121fc5c3ec0b56d6fd607e0c27e7a639157c85e3e"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+  purl: "pkg:nuget/System.Threading.Tasks.Extensions@4.5.4"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides additional types that simplify the work of writing concurrent\
+    \ and asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.ValueTask<TResult>\n\
+    \ \n7601f4f6225089ffb291dc7d58293c7bbf5c5d4f"
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg"
+    hash:
+      value: "68052086e77d3c7198737a3da163d67740b7c44f93250c39659b3bf21b6547a9abf64cbf40481f5c78f24361af3aaf47d52d188b371554a0928a7f7665c1fc14"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::WebGrease:1.5.2"
+  purl: "pkg:nuget/WebGrease@1.5.2"
+  authors:
+  - "webgrease@microsoft.com"
+  declared_licenses:
+  - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+  declared_licenses_processed:
+    unmapped:
+    - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+  description: "Web Grease is a suite of tools for optimizing javascript, css files\
+    \ and images."
+  homepage_url: ""
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/webgrease/1.5.2/webgrease.1.5.2.nupkg"
+    hash:
+      value: "453fa7a3483b424dbc27f5d5c07827e6527faa6e21c96169ef0b7423bd54c348f749f4df3a636a3ccc5f79d1da9c08ed7f7741dbfd0a8d0ddf424bd57b0b2fb0"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+issues:
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NuGet"
+  message: "Failed to get package data for 'NuGet::foobar:1.2.3': IOException: Failed\
+    \ to retrieve package data for 'foobar' from any of [https://api.nuget.org/v3/registration5-gz-semver2,\
+    \ https://pkgs.dev.azure.com/ms/20953fb4-d427-4ad6-b78c-13142d0c5462/_packaging/64e3bf16-3e04-41cd-b90f-60fdc9ccf494/nuget/v3/registrations2-semver2]."
+  severity: "ERROR"
