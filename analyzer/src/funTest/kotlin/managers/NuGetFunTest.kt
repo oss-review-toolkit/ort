@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
+import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -79,8 +80,28 @@ class NuGetFunTest : StringSpec() {
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
+
+        "Direct project dependencies are detected correctly" {
+            val vcsPath = vcsDir.getPathToRoot(projectDir)
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("nuget-direct-dependencies-only-expected-output.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsPath
+            )
+            val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(packageFile)
+
+            patchActualResult(result.toYaml()) shouldBe expectedResult
+        }
     }
 
-    private fun createNuGet() =
-        NuGet("NuGet", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createNuGet(directDependenciesOnly: Boolean = false) =
+        NuGet(
+            "NuGet",
+            USER_DIR,
+            DEFAULT_ANALYZER_CONFIGURATION.copy(
+                options = mapOf("NuGet" to mapOf(OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"))
+            ),
+            DEFAULT_REPOSITORY_CONFIGURATION
+        )
 }
