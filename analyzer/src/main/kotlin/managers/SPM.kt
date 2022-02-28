@@ -39,6 +39,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 
@@ -54,16 +56,56 @@ class SPM(
 
     private companion object {
         const val UNKNOWN = "Unknown"
+        const val PACKAGE_SWIFT = "Package.swift"
+        const val PACKAGE_RESOLVED = "Package.resolved"
     }
 
     class Factory : AbstractPackageManagerFactory<SPM>("SPM") {
-        override val globsForDefinitionFiles = listOf("Package.resolved", ".package.resolved")
+        override val globsForDefinitionFiles = listOf(PACKAGE_RESOLVED, ".package.resolved")
 
         override fun create(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) = SPM(managerName, analysisRoot, analyzerConfig, repoConfig)
+    }
+
+    /**
+     * Custom mapping for definition files is needed to combat differences that Swift Package Manager implies based on
+     * the build target. If the build target is an application, the Package.resolved files would exist, but if a build
+     * target is a library, only Package.swift files would exist. We would use `swift package show-dependencies`
+     * to convert a Package.swift file to a Package.resolved file, that can later be parsed. Also, when the build target
+     * is a library, the .build/checkouts directory would exist with internal Package.resolved files. These internal
+     * Package.resolved are unnecessary for us to parse since the top-level Package.resolved will contain the full
+     * dependency graph, with transitive dependencies included. So to speed up the analyzer, these files are excluded.
+     * See https://www.swift.org/package-manager/ for reference
+     */
+
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+
+        fun filterInternalPackageResolvedFiles(): List<File> {
+            return definitionFiles.filterNot { file -> file.path.contains(".build/checkouts") }
+        }
+
+        if (analysisRoot.resolve(PACKAGE_RESOLVED).exists() || !analysisRoot.resolve(PACKAGE_SWIFT).exists()) {
+            return filterInternalPackageResolvedFiles()
+        }
+
+        if (!analyzerConfig.allowDynamicVersions) {
+            log.info {
+                "Skipping dependency resolution of $PACKAGE_SWIFT files because this potentially results in " +
+                        "unstable versions of dependencies. To support this, enable the 'allowDynamicVersions' option" +
+                        " in '$ORT_CONFIG_FILENAME'."
+            }
+            return filterInternalPackageResolvedFiles()
+        }
+
+        ProcessCapture(workingDir = analysisRoot, command = arrayOf("swift", "package", "show-dependencies"))
+        val packageResolvedFile = File(analysisRoot, PACKAGE_RESOLVED)
+        if (!packageResolvedFile.exists()) {
+            return filterInternalPackageResolvedFiles()
+        }
+        return listOf(packageResolvedFile) + filterInternalPackageResolvedFiles()
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
