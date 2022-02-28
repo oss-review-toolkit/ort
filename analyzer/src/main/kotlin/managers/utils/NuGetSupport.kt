@@ -201,7 +201,8 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         references: Collection<Identifier>,
         dependencies: MutableCollection<PackageReference>,
         packages: MutableCollection<Package>,
-        issues: MutableCollection<OrtIssue>
+        issues: MutableCollection<OrtIssue>,
+        recursive: Boolean
     ) {
         references.forEach { id ->
             try {
@@ -213,9 +214,12 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                 val pkgRef = pkg.toReference()
                 dependencies += pkgRef
 
+                val packageIsNew = packages.add(pkg)
+                if (!recursive) return@forEach
+
                 // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
                 // grow really huge.
-                if (packages.add(pkg)) {
+                if (packageIsNew) {
                     // TODO: Consider mapping dependency groups to scopes.
                     val referredDependencies =
                         all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
@@ -237,7 +241,8 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                         },
                         pkgRef.dependencies,
                         packages,
-                        issues
+                        issues,
+                        recursive = true
                     )
                 } else {
                     logOnce(Level.DEBUG) {
@@ -300,7 +305,8 @@ interface XmlPackageFileReader {
 fun PackageManager.resolveNuGetDependencies(
     definitionFile: File,
     reader: XmlPackageFileReader,
-    support: NuGetSupport
+    support: NuGetSupport,
+    directDependenciesOnly: Boolean
 ): ProjectAnalyzerResult {
     val workingDir = definitionFile.parentFile
 
@@ -309,13 +315,14 @@ fun PackageManager.resolveNuGetDependencies(
 
     val references = reader.getDependencies(definitionFile)
     val referencesByFramework = references.groupBy { it.targetFramework }
+    val referencesForAllFrameworks = referencesByFramework[""].orEmpty()
 
     val scopes = referencesByFramework.flatMapTo(sortedSetOf()) { (targetFramework, frameworkDependencies) ->
         frameworkDependencies.groupBy { it.developmentDependency }.map { (isDevDependency, dependencies) ->
             val allDependencies = buildSet {
                 addAll(dependencies)
                 // Add dependencies without a specified target framework to all scopes.
-                addAll(referencesByFramework[""].orEmpty().filter { it.developmentDependency == isDevDependency })
+                addAll(referencesForAllFrameworks.filter { it.developmentDependency == isDevDependency })
             }
 
             val packageReferences = sortedSetOf<PackageReference>()
@@ -324,7 +331,8 @@ fun PackageManager.resolveNuGetDependencies(
                 references = allDependencies.map { Identifier("NuGet::${it.name}:${it.version}") },
                 dependencies = packageReferences,
                 packages = packages,
-                issues = issues
+                issues = issues,
+                recursive = !directDependenciesOnly
             )
 
             val scopeName = buildString {
