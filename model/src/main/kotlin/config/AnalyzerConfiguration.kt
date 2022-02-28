@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
+typealias PackageManagerOptions = Map<String, String>
+
 @JsonIgnoreProperties(value = ["ignore_tool_versions"]) // Backwards compatibility.
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AnalyzerConfiguration(
@@ -34,6 +36,12 @@ data class AnalyzerConfiguration(
      * false.
      */
     val allowDynamicVersions: Boolean = false,
+
+    /**
+     * Package manager specific configuration options. The key needs to match the name of the package manager class,
+     * e.g. "NuGet" for the NuGet package manager. See the documentation of the respective class for available options.
+     */
+    val options: Map<String, PackageManagerOptions>? = null,
 
     /**
      * Configuration of the SW360 package curation provider.
