@@ -412,7 +412,7 @@ abstract class PathScanner(
 
         val duplicatesCount = size - deduplicatedResults.size
         if (duplicatesCount > 0) {
-            PathScanner.log.info { "Removed $duplicatesCount duplicate(s) out of $size scan result(s)." }
+            PathScanner.log.debug { "Removed $duplicatesCount duplicate(s) out of $size scan result(s)." }
         }
 
         return deduplicatedResults
