@@ -271,7 +271,7 @@ As for the _analyzer_ you can get the command line options for the `scanner` usi
 cli/build/install/ort/bin/ort scan --help
 ```
 
-The `mime-types` package has only one dependency in the `depenencies` scope, but a lot of dependencies in the
+The `mime-types` package has only one dependency in the `dependencies` scope, but a lot of dependencies in the
 `devDependencies` scope. Scanning all of the `devDependencies` would take a lot of time, so we will only run the
 scanner on the `dependencies` scope in this tutorial. If you also want to scan the `devDependencies` it is strongly
 advised to configure a [scan storage](../README.md#storage-backends) for the scan results to speed up repeated scans.
