@@ -1,0 +1,23 @@
+{
+  "id" : "0a7de786-48f0-4815-b5f9-8d3c0f435bc5",
+  "name" : "scan_direct",
+  "request" : {
+    "url" : "/scan/direct",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "anything" : "anything"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"pasted.wfp\": [{\"id\": \"snippet\",\"status\": \"pending\",\"lines\": \"1-11\",\"oss_lines\": \"119-129\",\"matched\": \"90%\",\"purl\": [\"pkg:github/unoconv/unoconv\",\"pkg:deb/unoconv\",\"pkg:pypi/unoconv\"],\"vendor\": \"unoconv\",\"component\": \"unoconv\",\"version\": \"0.6\",\"latest\": \"0.6\",\"url\": \"https://github.com/unoconv/unoconv\",\"release_date\": \"2012-09-10\",\"file\": \"unoconv\",\"url_hash\": \"2b5b8e4c1c62f2b3cba48ceabc1f3671\",\"file_hash\": \"38e743a8566d3df4a2dc4432f8d6b091\",\"source_hash\": \"24e35278ad5d4d3babe7379dc34d5bce\",\"file_url\": \"https://osskb.org/api/file_contents/38e743a8566d3df4a2dc4432f8d6b091\",\"licenses\": [{\"name\": \"GPL-2.0-only\",\"patent_hints\": \"yes\", \"copyleft\": \"yes\", \"checklist_url\": \"https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-only.txt\", \"incompatible_with\": \"Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1\",\"osadl_updated\": \"2022-02-15\",\"source\": \"component_declared\"},{\"name\": \"GPL-1.0-or-later\",\"source\": \"scancode\"},{\"name\": \"GPL-2.0-only\",\"patent_hints\": \"yes\", \"copyleft\": \"yes\", \"checklist_url\": \"https://www.osadl.org/fileadmin/checklists/unreflicenses/GPL-2.0-only.txt\", \"incompatible_with\": \"Apache-1.0, Apache-1.1, Apache-2.0, BSD-4-Clause, BSD-4-Clause-UC, FTL, IJG, OpenSSL, Python-2.0, zlib-acknowledgement, XFree86-1.1\",\"osadl_updated\": \"2022-02-15\",\"source\": \"scancode\"}],\"server\": {\"version\": \"4.4.1\",\"kb_version\": {\"monthly\":\"22.01\", \"daily\":\"22.02.08\"}}}]}\n\r\n",
+    "headers" : {
+      "Server" : "nginx/1.14.2",
+      "Date" : "Tue, 01 Mar 2022 09:39:58 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "0a7de786-48f0-4815-b5f9-8d3c0f435bc5",
+  "persistent" : true,
+  "insertionIndex" : 10
+}
