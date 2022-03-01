@@ -49,6 +49,7 @@ private val fossIdLicenseMappings = mapOf(
     "X11-Style-(DEC-2)" to "LicenseRef-scancode-x11-dec2",
     "X11-Style-(DSC-Technologies)" to "LicenseRef-scancode-x11-dsc",
     "X11-Style-(David-R.-Hanson)" to "LicenseRef-scancode-x11-hanson",
+    "X11-Style-(Keith-Packard)" to "HPND-sell-variant",
     "X11-Style-(Lucent)" to "LicenseRef-scancode-x11-lucent",
     "X11-Style-(OAR)" to "LicenseRef-scancode-x11-oar",
     "X11-Style-(Open-Group)" to "MIT-open-group",
