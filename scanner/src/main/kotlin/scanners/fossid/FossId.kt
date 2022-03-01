@@ -696,11 +696,11 @@ class FossId internal constructor(
      * Construct the [ScanSummary] for this FossID scan.
      */
     private fun createResultSummary(startTime: Instant, provenance: Provenance, rawResults: RawResults): ScanResult {
-        val associate = rawResults.listIgnoredFiles.associateBy { it.path }
+        val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
 
         val (licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
             rawResults.identifiedFiles
-        }.mapSummary(associate)
+        }.mapSummary(ignoredFiles)
 
         val summary = ScanSummary(
             startTime = startTime,
