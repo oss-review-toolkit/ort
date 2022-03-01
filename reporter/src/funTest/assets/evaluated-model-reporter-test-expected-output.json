@@ -37,40 +37,40 @@
     "id" : "MIT"
   }, {
     "_id" : 5,
-    "id" : "GPL-2.0-only WITH Classpath-exception-2.0"
+    "id" : "(GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-3-Clause) OR MIT"
   }, {
     "_id" : 6,
-    "id" : "BSD-3-Clause"
-  }, {
-    "_id" : 7,
     "id" : "LicenseRef-test-Apache-2.0-multi-line"
   }, {
-    "_id" : 8,
+    "_id" : 7,
     "id" : "LicenseRef-test-Apache-2.0-single-line"
   }, {
-    "_id" : 9,
+    "_id" : 8,
     "id" : "Eclipse Public License 1.0"
   }, {
-    "_id" : 10,
+    "_id" : 9,
     "id" : "EPL-1.0"
   }, {
-    "_id" : 11,
+    "_id" : 10,
     "id" : "GPL-2.0-only OR MIT"
   }, {
-    "_id" : 12,
+    "_id" : 11,
     "id" : "GPL-2.0-only"
   }, {
-    "_id" : 13,
+    "_id" : 12,
     "id" : "MPL 2.0 or EPL 1.0"
   }, {
-    "_id" : 14,
+    "_id" : 13,
     "id" : "MPL-2.0"
   }, {
-    "_id" : 15,
+    "_id" : 14,
     "id" : "Apache License, Version 2.0"
   }, {
-    "_id" : 16,
+    "_id" : 15,
     "id" : "New BSD License"
+  }, {
+    "_id" : 16,
+    "id" : "BSD-3-Clause"
   } ],
   "scopes" : [ {
     "_id" : 0,
@@ -233,7 +233,7 @@
     "is_project" : true,
     "definition_file_path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
     "declared_licenses_processed" : { },
-    "detected_licenses" : [ 5, 6, 4, 7, 8 ],
+    "detected_licenses" : [ 5, 6, 7 ],
     "binary_artifact" : {
       "url" : "",
       "hash" : {
@@ -271,18 +271,18 @@
       "end_line" : 1,
       "scan_result" : 0
     }, {
-      "type" : "LICENSE",
-      "license" : 6,
-      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp",
-      "start_line" : 1,
-      "end_line" : 1,
+      "type" : "COPYRIGHT",
+      "copyright" : 0,
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
+      "start_line" : 20,
+      "end_line" : 20,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
-      "license" : 4,
-      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp",
-      "start_line" : 1,
-      "end_line" : 1,
+      "license" : 6,
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
+      "start_line" : 19,
+      "end_line" : 20,
       "scan_result" : 0
     }, {
       "type" : "COPYRIGHT",
@@ -296,25 +296,11 @@
       "license" : 7,
       "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
       "start_line" : 19,
-      "end_line" : 20,
-      "scan_result" : 0
-    }, {
-      "type" : "COPYRIGHT",
-      "copyright" : 0,
-      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
-      "start_line" : 20,
-      "end_line" : 20,
-      "scan_result" : 0
-    }, {
-      "type" : "LICENSE",
-      "license" : 8,
-      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
-      "start_line" : 19,
       "end_line" : 19,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
-      "license" : 8,
+      "license" : 7,
       "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle",
       "start_line" : 20,
       "end_line" : 20,
@@ -418,10 +404,10 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/junit/junit@4.12",
-    "declared_licenses" : [ 9 ],
+    "declared_licenses" : [ 8 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "EPL-1.0",
-      "mapped_licenses" : [ 10 ]
+      "mapped_licenses" : [ 9 ]
     },
     "description" : "JUnit is a unit testing framework for Java, created by Erich Gamma and Kent Beck.",
     "homepage_url" : "http://junit.org",
@@ -463,10 +449,10 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/com.foobar/foobar@1.0",
-    "declared_licenses" : [ 11 ],
+    "declared_licenses" : [ 10 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "GPL-2.0-only OR MIT",
-      "mapped_licenses" : [ 12, 4 ]
+      "mapped_licenses" : [ 11, 4 ]
     },
     "concluded_license" : "GPL-2.0-only OR MIT",
     "binary_artifact" : {
@@ -513,10 +499,10 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/com.h2database/h2@1.4.200",
-    "declared_licenses" : [ 13 ],
+    "declared_licenses" : [ 12 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "MPL-2.0 OR EPL-1.0",
-      "mapped_licenses" : [ 14, 10 ]
+      "mapped_licenses" : [ 13, 9 ]
     },
     "concluded_license" : "MPL-2.0 OR EPL-1.0",
     "description" : "H2 Database Engine",
@@ -566,7 +552,7 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/org.apache.commons/commons-lang3@3.5",
-    "declared_licenses" : [ 15 ],
+    "declared_licenses" : [ 14 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "Apache-2.0",
       "mapped_licenses" : [ 3 ]
@@ -610,7 +596,7 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/org.apache.commons/commons-text@1.1",
-    "declared_licenses" : [ 15 ],
+    "declared_licenses" : [ 14 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "Apache-2.0",
       "mapped_licenses" : [ 3 ]
@@ -654,10 +640,10 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/org.hamcrest/hamcrest-core@1.3",
-    "declared_licenses" : [ 16 ],
+    "declared_licenses" : [ 15 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "BSD-3-Clause",
-      "mapped_licenses" : [ 6 ]
+      "mapped_licenses" : [ 16 ]
     },
     "description" : "This is the core API of hamcrest matcher framework to be used by third-party framework providers. This includes the a foundation set of matcher implementations for common operations.",
     "homepage_url" : "https://github.com/hamcrest/JavaHamcrest/hamcrest-core",
@@ -806,7 +792,7 @@
     "_id" : 0,
     "rule" : "rule 1",
     "pkg" : 2,
-    "license" : 10,
+    "license" : 9,
     "license_source" : "DETECTED",
     "severity" : "ERROR",
     "message" : "EPL-1.0 error",
@@ -825,7 +811,7 @@
     "_id" : 2,
     "rule" : "rule 3",
     "pkg" : 7,
-    "license" : 6,
+    "license" : 16,
     "license_source" : "CONCLUDED",
     "severity" : "WARNING",
     "message" : "BSD-3-Clause warning",
