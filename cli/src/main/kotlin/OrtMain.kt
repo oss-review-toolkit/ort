@@ -20,6 +20,7 @@
 
 package org.ossreviewtoolkit.cli
 
+import com.github.ajalt.clikt.completion.completionOption
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
@@ -141,6 +142,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     }
 
     init {
+        completionOption()
+
         context {
             expandArgumentFiles = false
             helpFormatter = OrtHelpFormatter()
