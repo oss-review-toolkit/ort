@@ -25,7 +25,10 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentifi
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -76,7 +79,10 @@ internal data class FindingsContainer(
 /**
  * Map a FossID raw result to sections that can be included in a [org.ossreviewtoolkit.model.ScanSummary].
  */
-internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, IgnoredFile>): FindingsContainer {
+internal fun <T : Summarizable> List<T>.mapSummary(
+    ignoredFiles: Map<String, IgnoredFile>,
+    issues: MutableList<OrtIssue>
+): FindingsContainer {
     val licenseFindings = mutableListOf<LicenseFinding>()
     val copyrightFindings = mutableListOf<CopyrightFinding>()
 
@@ -87,8 +93,18 @@ internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, Ign
 
         summary.licences.forEach {
             val license = fossIdLicenseMappings[it.identifier] ?: it.identifier
-            val finding = LicenseFinding(license.toSpdx(), location)
-            licenseFindings += finding
+
+            runCatching {
+                license.toSpdx()
+            }.onSuccess { licenseExpression ->
+                licenseFindings += LicenseFinding(licenseExpression, location)
+            }.onFailure { spdxException ->
+                issues += createAndLogIssue(
+                    source = "FossId",
+                    message = "Failed to parse license '$license' as an SPDX expression: " +
+                            spdxException.collectMessagesAsString()
+                )
+            }
         }
 
         summarizable.getCopyright().let {

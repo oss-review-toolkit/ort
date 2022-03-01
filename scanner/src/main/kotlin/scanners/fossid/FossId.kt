@@ -696,11 +696,16 @@ class FossId internal constructor(
      * Construct the [ScanSummary] for this FossID scan.
      */
     private fun createResultSummary(startTime: Instant, provenance: Provenance, rawResults: RawResults): ScanResult {
+        // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
+        val issues = rawResults.listPendingFiles.mapTo(mutableListOf()) {
+            OrtIssue(source = scannerName, message = "Pending identification for '$it'.", severity = Severity.HINT)
+        }
+
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
 
         val (licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
             rawResults.identifiedFiles
-        }.mapSummary(ignoredFiles)
+        }.mapSummary(ignoredFiles, issues)
 
         val summary = ScanSummary(
             startTime = startTime,
@@ -708,10 +713,7 @@ class FossId internal constructor(
             packageVerificationCode = "",
             licenseFindings = licenseFindings.toSortedSet(),
             copyrightFindings = copyrightFindings.toSortedSet(),
-            // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
-            issues = rawResults.listPendingFiles.map {
-                OrtIssue(source = scannerName, message = "Pending identification for '$it'.", severity = Severity.HINT)
-            }
+            issues = issues
         )
 
         return ScanResult(provenance, details, summary)
