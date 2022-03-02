@@ -70,23 +70,33 @@ object SpdxDocumentModelMapper {
         val packages = mutableListOf<SpdxPackage>()
         val relationships = mutableListOf<SpdxRelationship>()
 
-        val rootProjects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false)
-        val rootPackage = rootProjects.first().toPackage().toSpdxPackage(licenseInfoResolver, isProject = true)
+        val projectPackages = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).map { project ->
+            val spdxProjectPackage = project.toPackage().toSpdxPackage(licenseInfoResolver, isProject = true)
 
-        packages += rootPackage
+            ortResult.collectDependencies(project.id, 1).mapTo(relationships) { dependency ->
+                SpdxRelationship(
+                    spdxElementId = spdxProjectPackage.spdxId,
+                    relationshipType = SpdxRelationship.Type.DEPENDS_ON,
+                    relatedSpdxElement = dependency.toSpdxId("Package")
+                )
+            }
+
+            spdxProjectPackage
+        }
 
         ortResult.getPackages(omitExcluded = true).forEach { curatedPackage ->
             val pkg = curatedPackage.pkg
             val binaryPackage = pkg.toSpdxPackage(licenseInfoResolver)
 
-            val binaryPackageRelationship = SpdxRelationship(
-                spdxElementId = binaryPackage.spdxId,
-                relationshipType = SpdxRelationship.Type.DEPENDENCY_OF,
-                relatedSpdxElement = rootPackage.spdxId
-            )
+            ortResult.collectDependencies(pkg.id, 1).mapTo(relationships) { dependency ->
+                SpdxRelationship(
+                    spdxElementId = binaryPackage.spdxId,
+                    relationshipType = SpdxRelationship.Type.DEPENDS_ON,
+                    relatedSpdxElement = dependency.toSpdxId("Package")
+                )
+            }
 
             packages += binaryPackage
-            relationships += binaryPackageRelationship
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
                 val vcsScanResult =
@@ -161,9 +171,9 @@ object SpdxDocumentModelMapper {
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
-            documentDescribes = listOf(rootPackage.spdxId),
+            documentDescribes = projectPackages.map { it.spdxId },
             name = params.documentName,
-            packages = packages,
+            packages = projectPackages + packages,
             relationships = relationships.sortedBy { it.spdxElementId }
         ).addExtractedLicenseInfo(licenseTextProvider)
     }
