@@ -20,7 +20,7 @@ packages: []
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
-  message: "Resolving NPM dependencies for 'src/funTest/assets/projects/synthetic/npm/no-lockfile/package.json'\
+  message: "Resolving NPM dependencies for path 'src/funTest/assets/projects/synthetic/npm/no-lockfile/package.json'\
     \ failed with: IllegalArgumentException: No lockfile found in 'src/funTest/assets/projects/synthetic/npm/no-lockfile'.\
     \ This potentially results in unstable versions of dependencies. To support this,\
     \ enable the 'allowDynamicVersions' option in 'ort.conf'."
