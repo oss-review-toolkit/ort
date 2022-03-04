@@ -38,7 +38,7 @@ data class ScanDescription2021dot2(
 
     val isFinished: Boolean,
 
-    val percentageDone: String,
+    val percentageDone: String?,
 
     val currentFile: String?,
     val currentFilename: String?,
