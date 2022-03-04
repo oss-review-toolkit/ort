@@ -23,15 +23,15 @@ import io.kotest.core.Tag
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.file.shouldNotStartWithPath
-import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.PathScanner
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -46,8 +46,8 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     private lateinit var inputDir: File
 
     abstract val scanner: PathScanner
-    abstract val expectedFileLicenses: Set<SpdxExpression>
-    abstract val expectedDirectoryLicenses: Set<SpdxExpression>
+    abstract val expectedFileLicenses: List<LicenseFinding>
+    abstract val expectedDirectoryLicenses: List<LicenseFinding>
 
     override fun beforeSpec(spec: Spec) {
         inputDir = createSpecTempDir()
@@ -63,7 +63,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
             summary shouldNotBeNull {
-                licenses shouldBe expectedFileLicenses
+                licenseFindings shouldContainExactlyInAnyOrder expectedFileLicenses
                 licenseFindings.forAll {
                     File(it.location.path) shouldNotStartWithPath inputDir
                 }
@@ -75,7 +75,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.singleOrNull()?.summary
 
             summary shouldNotBeNull {
-                licenses shouldBe expectedDirectoryLicenses
+                licenseFindings shouldContainExactlyInAnyOrder expectedDirectoryLicenses
                 licenseFindings.forAll {
                     File(it.location.path) shouldNotStartWithPath inputDir
                 }
