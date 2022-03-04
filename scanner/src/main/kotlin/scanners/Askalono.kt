@@ -123,10 +123,9 @@ class Askalono(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, File(root["path"].textValue())),
                         TextLocation.UNKNOWN_LINE
-                    )
+                    ),
+                    score = result["score"].floatValue()
                 )
-
-                log.info { "Found $licenseFinding with score ${result["score"].floatValue()}." }
 
                 licenseFindings += licenseFinding
             }
