@@ -43,7 +43,8 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 private data class LicenseExpression(
     val expression: String,
     val startLine: Int,
-    val endLine: Int
+    val endLine: Int,
+    val score: Float
 )
 
 data class LicenseKeyReplacement(
@@ -182,7 +183,8 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
                     it["matched_rule"]?.get("license_expression")?.textValue().takeIf { parseExpressions }
                         ?: it["key"].textValue(),
                     it["start_line"].intValue(),
-                    it["end_line"].intValue()
+                    it["end_line"].intValue(),
+                    it["score"].floatValue()
                 )
             },
             valueTransform = {
@@ -197,7 +199,8 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
                     path = file["path"].textValue().removePrefix(input),
                     startLine = licenseExpression.startLine,
                     endLine = licenseExpression.endLine
-                )
+                ),
+                score = licenseExpression.score
             )
         }
     }
