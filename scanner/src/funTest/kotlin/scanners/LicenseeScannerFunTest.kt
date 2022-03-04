@@ -31,8 +31,8 @@ class LicenseeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag)) {
     )
 
     override val expectedDirectoryLicenses = listOf(
-        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 100.0f),
-        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 100.0f),
+        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 99.37578f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 99.5f),
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 100.0f)
     )
 }

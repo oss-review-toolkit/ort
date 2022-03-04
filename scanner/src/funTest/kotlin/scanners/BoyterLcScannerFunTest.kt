@@ -31,11 +31,11 @@ class BoyterLcScannerFunTest : AbstractScannerFunTest() {
     )
 
     override val expectedDirectoryLicenses = listOf(
-        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.98388565f),
-        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.98388565f),
+        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.9824694f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.9824694f),
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98388565f),
-        LicenseFinding("ECL-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.98301715f),
-        LicenseFinding("ECL-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.98301715f),
+        LicenseFinding("ECL-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.9814965f),
+        LicenseFinding("ECL-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.9814965f),
         LicenseFinding("ECL-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98301715f)
     )
 }
