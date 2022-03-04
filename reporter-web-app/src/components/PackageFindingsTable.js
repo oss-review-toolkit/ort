@@ -29,6 +29,7 @@ import {
     PlusSquareOutlined
 } from '@ant-design/icons';
 import PathExcludesTable from './PathExcludesTable';
+import { getColumnSearchProps } from './Shared';
 
 // Generates the HTML to display scanFindings as a Table
 const PackageFindingsTable = (props) => {
@@ -206,7 +207,9 @@ const PackageFindingsTable = (props) => {
             key: 'path',
             sorter: (a, b) => a.path.length - b.path.length,
             textWrap: 'word-break',
-            title: 'Path'
+            title: 'Path',
+            // Search bar
+            ...getColumnSearchProps('path',{},webAppPackage)
         },
         {
             align: 'center',
