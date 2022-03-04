@@ -77,8 +77,9 @@ internal fun generateSummary(
 /**
  * Get the license findings from the given [match]. Use [filename] as a fallback if no file is given in the match.
  */
-private fun getLicenseFindings(match: JsonNode, filename: String): Sequence<LicenseFinding> =
-    match["licenses"]?.asSequence().orEmpty().map {
+private fun getLicenseFindings(match: JsonNode, filename: String): Sequence<LicenseFinding> {
+    val score = match["matched"]?.textValue()?.removeSuffix("%")?.toFloatOrNull()
+    return match["licenses"]?.asSequence().orEmpty().map {
         val licenseName = it["name"].asText()
         val licenseExpression = runCatching { SpdxExpression.parse(licenseName) }.getOrNull()
 
@@ -94,9 +95,11 @@ private fun getLicenseFindings(match: JsonNode, filename: String): Sequence<Lice
                 path = match["file"].textValue() ?: filename,
                 startLine = TextLocation.UNKNOWN_LINE,
                 endLine = TextLocation.UNKNOWN_LINE
-            )
+            ),
+            score = score
         )
     }
+}
 
 /**
  * Get the copyright findings from the given [match]. Use [filename] as a fallback if no file is given in the match.
