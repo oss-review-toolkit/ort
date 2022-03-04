@@ -109,7 +109,8 @@ class Licensee(
                     // The path is already relative.
                     filePath.path,
                     TextLocation.UNKNOWN_LINE
-                )
+                ),
+                score = it["matcher"]["confidence"].floatValue()
             )
         }
 
