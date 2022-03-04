@@ -54,7 +54,10 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
 
         // Copy our own root license under different names to a temporary directory so we have something to operate on.
         val ortLicense = File("../LICENSE")
-        commonlyDetectedFiles.forEach { ortLicense.copyTo(inputDir.resolve(it), overwrite = true) }
+        commonlyDetectedFiles.forEach {
+            val text = ortLicense.readText()
+            inputDir.resolve(it).writeText(text.replace("license", it))
+        }
     }
 
     init {

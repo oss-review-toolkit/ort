@@ -30,8 +30,8 @@ class AskalonoScannerFunTest : AbstractScannerFunTest() {
     )
 
     override val expectedDirectoryLicenses = listOf(
-        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 1.0f),
-        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 1.0f),
+        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.9891926f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.99112236f),
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 1.0f)
     )
 }
