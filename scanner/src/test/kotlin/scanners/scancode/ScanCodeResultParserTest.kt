@@ -315,11 +315,13 @@ class ScanCodeResultParserTest : FreeSpec({
                 summary.licenseFindings should containExactlyInAnyOrder(
                     LicenseFinding(
                         license = "(MPL-2.0 OR EPL-1.0) AND LicenseRef-scancode-proprietary-license",
-                        location = TextLocation("h2/src/main/org/h2/table/Column.java", 2, 3)
+                        location = TextLocation("h2/src/main/org/h2/table/Column.java", 2, 3),
+                        score = 20.37f
                     ),
                     LicenseFinding(
                         license = "LicenseRef-scancode-public-domain",
-                        location = TextLocation("h2/src/main/org/h2/table/Column.java", 317)
+                        location = TextLocation("h2/src/main/org/h2/table/Column.java", 317),
+                        score = 70.0f
                     )
                 )
             }
@@ -396,15 +398,18 @@ class ScanCodeResultParserTest : FreeSpec({
                 summary.licenseFindings should containExactlyInAnyOrder(
                     LicenseFinding(
                         license = "Apache-2.0",
-                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml", 23, 23)
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml", 23, 23),
+                        score = 100.0f
                     ),
                     LicenseFinding(
                         license = "Apache-2.0",
-                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml.orig", 5, 5)
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/Cargo.toml.orig", 5, 5),
+                        score = 100.0f
                     ),
                     LicenseFinding(
                         license = "Apache-2.0",
-                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-APACHE", 1, 201)
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-APACHE", 1, 201),
+                        score = 100.0f
                     ),
                     LicenseFinding(
                         license = "Apache-2.0 WITH LLVM-exception",
@@ -413,15 +418,18 @@ class ScanCodeResultParserTest : FreeSpec({
                                     "LICENSE-Apache-2.0_WITH_LLVM-exception",
                             startLine = 2,
                             endLine = 219
-                        )
+                        ),
+                        score = 100.0f
                     ),
                     LicenseFinding(
                         license = "Apache-2.0",
-                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 85, 88)
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 85, 88),
+                        score = 66.67f
                     ),
                     LicenseFinding(
                         license = "Apache-2.0",
-                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 93, 93)
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 93, 93),
+                        score = 100.0f
                     ),
                     LicenseFinding(
                         license = "LicenseRef-scancode-free-unknown",
@@ -429,15 +437,18 @@ class ScanCodeResultParserTest : FreeSpec({
                             path = "Downloads/wasi-0.10.2+wasi-snapshot-preview1/ORG_CODE_OF_CONDUCT.md",
                             startLine = 106,
                             endLine = 106
-                        )
+                        ),
+                        score = 50.0f
                     ),
                     LicenseFinding(
                         license = "LicenseRef-scancode-unknown-license-reference",
-                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 88, 88)
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 88, 88),
+                        score = 100.0f
                     ),
                     LicenseFinding(
                         license = "MIT",
-                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-MIT", 1, 23)
+                        location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-MIT", 1, 23),
+                        score = 100.0f
                     )
                 )
             }
