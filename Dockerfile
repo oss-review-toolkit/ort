@@ -37,7 +37,7 @@ WORKDIR /usr/local/src/ort
 # Gradle build.
 ARG ORT_VERSION
 RUN --mount=type=cache,target=/tmp/.gradle/ \
-    GRADLE_USER_HOME=/tmp/.gradle/ && \
+    export GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
