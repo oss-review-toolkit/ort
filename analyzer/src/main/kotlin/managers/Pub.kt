@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortToolsDirectory
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
-private const val GRADLE_VERSION = "5.6.4"
+private const val GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 
@@ -379,7 +379,6 @@ class Pub(
         log.info { "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION." }
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            // Use the latest 5.x Gradle version as Flutter / its Android Gradle plugin does not support Gradle 6 yet.
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
                 .resolveDependencies(listOf(packageFile), labels).run {
                     projectResults.getValue(packageFile).map { result ->
