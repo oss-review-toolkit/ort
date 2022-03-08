@@ -209,7 +209,7 @@ const PackageFindingsTable = (props) => {
             textWrap: 'word-break',
             title: 'Path',
             // Search bar
-            ...getColumnSearchProps('path',{},webAppPackage)
+            ...getColumnSearchProps('path', {}, webAppPackage)
         },
         {
             align: 'center',
