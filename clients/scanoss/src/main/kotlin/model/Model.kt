@@ -177,6 +177,18 @@ enum class QualityScoreType {
 }
 
 /**
+ * The "cryptography" section of the raw report.
+ */
+@Serializable
+data class Cryptography(
+    /** Algorithm name. */
+    val algorithm: String,
+
+    /** Algorithm strength (number of bits). */
+    val strength: String
+)
+
+/**
  * Type of identification for the scanned file.
  */
 @Serializable
