@@ -93,7 +93,7 @@ data class ScanResponse(
     val vulnerabilities: List<Vulnerability> = emptyList(),
 
     /** List of quality metrics associated with the OSS component. */
-    val quality: String? = null,
+    val quality: List<Quality> = emptyList(),
 
     /** List of cryptographic algorithms found in the OSS component. */
     val cryptography: String? = null,

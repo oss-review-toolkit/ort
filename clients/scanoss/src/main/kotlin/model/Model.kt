@@ -152,6 +152,31 @@ enum class VulnerabilitySource {
 }
 
 /**
+ * The "quality" section of the raw report.
+ */
+@Serializable
+data class Quality(
+    /** Rating for that quality score */
+    val score: String,
+
+    /** Type of quality score presented. */
+    val source: QualityScoreType
+)
+
+/**
+ * Type of quality score.
+ */
+@Serializable
+enum class QualityScoreType {
+    /**
+     * Score from 0 to 5 based on various items : Proper amount of code comment, proper length of file, proper lines
+     * length, SPDX license identifier tag found and uniform indentation.
+     */
+    @SerialName("best_practices")
+    BEST_PRACTICES
+}
+
+/**
  * Type of identification for the scanned file.
  */
 @Serializable
