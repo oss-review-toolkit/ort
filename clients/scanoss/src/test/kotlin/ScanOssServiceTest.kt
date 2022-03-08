@@ -50,6 +50,14 @@ class ScanOssServiceTest : StringSpec({
     )
     lateinit var service: ScanossService
 
+    val sampleFile = File("src/test/assets/scan/file.wfp").let { file ->
+        MultipartBody.Part.createFormData(
+            "file",
+            file.name,
+            file.asRequestBody("application/octet-stream".toMediaType())
+        )
+    }
+
     beforeSpec {
         server.start()
         service = ScanossService.create("http://localhost:${server.port()}")
@@ -64,14 +72,7 @@ class ScanOssServiceTest : StringSpec({
     }
 
     "A WFP file scan can be requested" {
-        val file = File("src/test/assets/scan/file.wfp")
-        val filePart = MultipartBody.Part.createFormData(
-            "file",
-            file.name,
-            file.asRequestBody("application/octet-stream".toMediaType())
-        )
-
-        val result = service.scan(filePart)
+        val result = service.scan(sampleFile)
         result shouldHaveKey SCANOSS_RESPONSE_FILENAME
         result[SCANOSS_RESPONSE_FILENAME] shouldNotBeNull {
             this shouldNot beEmpty()
