@@ -26,7 +26,7 @@ import kotlinx.serialization.Serializable
 data class Server(
     val version: String,
     @SerialName("kb_version")
-    val kbVersion: KnowledgeBaseVersion
+    val kbVersion: KnowledgeBaseVersion? = null
 )
 
 @Serializable
