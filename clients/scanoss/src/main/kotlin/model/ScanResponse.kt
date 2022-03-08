@@ -96,7 +96,7 @@ data class ScanResponse(
     val quality: List<Quality> = emptyList(),
 
     /** List of cryptographic algorithms found in the OSS component. */
-    val cryptography: String? = null,
+    val cryptography: List<Cryptography> = emptyList(),
 
     /** Details about the SCANOSS server used to conduct the scan. */
     val server: Server
