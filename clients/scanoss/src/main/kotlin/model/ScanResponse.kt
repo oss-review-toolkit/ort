@@ -90,7 +90,7 @@ data class ScanResponse(
     val copyrights: List<Copyright> = emptyList(),
 
     /** List of known vulnerabilities associated with the OSS component. */
-    val vulnerabilities: String? = null,
+    val vulnerabilities: List<Vulnerability> = emptyList(),
 
     /** List of quality metrics associated with the OSS component. */
     val quality: String? = null,

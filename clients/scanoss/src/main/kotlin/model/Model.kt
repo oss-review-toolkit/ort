@@ -106,6 +106,52 @@ enum class Source {
 }
 
 /**
+ * The "vulnerabilities" section of the raw report.
+ */
+@Serializable
+data class Vulnerability(
+    /** Vulnerability identifier (i.e CVE or Github Advisory ID). */
+    @SerialName("ID")
+    val id: String,
+
+    /** Published CVE Identifier. */
+    @SerialName("CVE")
+    val cve: String,
+
+    /** Source location for the vulnerability data. */
+    val source: VulnerabilitySource,
+
+    /** Severity of the vulnerability */
+    val severity: String,
+
+    /** Summary of the issue. */
+    val summary: String,
+
+    /** Date first reported. */
+    val reported: String,
+
+    /** Version when the issue was introduced. */
+    val introduced: String,
+
+    /** Version the issue is patched/resolved in */
+    val patched: String
+)
+
+/**
+ * Source location for the vulnerability data.
+ */
+@Serializable
+enum class VulnerabilitySource {
+    /** Github Advisories. */
+    @SerialName("github_advisories")
+    GITHUB_ADVISORIES,
+
+    /** National Vulnerability Database. */
+    @SerialName("nvd")
+    NVD
+}
+
+/**
  * Type of identification for the scanned file.
  */
 @Serializable
