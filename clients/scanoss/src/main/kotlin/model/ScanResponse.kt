@@ -81,7 +81,7 @@ data class ScanResponse(
     val fileUrl: String,
 
     /** List of declared dependencies for the detected component. */
-    val dependencies: String? = null,
+    val dependencies: List<String> = emptyList(),
 
     /** List of licenses associated with the OSS component. */
     val licenses: List<License>,
