@@ -67,6 +67,21 @@ data class License(
     val osadlUpdated: String? = null
 )
 
+/**
+ * The "copyrights" section of the raw report.
+ */
+@Serializable
+data class Copyright(
+    /** The copyright found. */
+    val name: String,
+
+    /**
+     * Location where the copyright was mined from. Reuse the [Source] enum for simplicity even if the
+     * [Source.FILE_SPDX_TAG] value is not supported here.
+     */
+    val source: Source
+)
+
 @Serializable
 enum class Source {
     /** A component level declaration was found in the component’s repository for the matched file. */
