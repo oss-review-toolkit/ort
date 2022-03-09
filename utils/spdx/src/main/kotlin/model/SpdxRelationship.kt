@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.spdx.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 /**
  * A relationship between two SPDX documents, packages or files.
  */
@@ -36,7 +38,10 @@ data class SpdxRelationship(
     /**
      * The target element of this directed relationship.
      */
-    val relatedSpdxElement: String
+    val relatedSpdxElement: String,
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val comment: String = ""
 ) {
     enum class Type {
         /**
