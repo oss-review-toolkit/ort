@@ -35,17 +35,32 @@ data class KnowledgeBaseVersion(
     val daily: String
 )
 
+/**
+ * The "licenses" section of the raw report.
+ */
 @Serializable
 data class License(
+    /** Name of the license */
     val name: String,
+
+    /** Location where the license was mined from. */
     val source: String,
+
+    /** Are there patent hints for this license.*/
     @SerialName("patent_hints")
     val patentHints: String? = null,
+
+    /** Is this considered a copyleft license or not. */
     val copyleft: String? = null,
+
+    /** URL of the OSADL checklist for this license. */
     @SerialName("checklist_url")
     val checklistUrl: String? = null,
+
     @SerialName("incompatible_with")
     val incompatibleWith: String? = null,
+
+    /** Date the OSADL data was last updated. */
     @SerialName("osadl_updated")
     val osadlUpdated: String? = null
 )
