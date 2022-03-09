@@ -87,7 +87,7 @@ data class ScanResponse(
     val licenses: List<License>,
 
     /** List of copyrights found in the OSS file. */
-    val copyrights: String? = null,
+    val copyrights: List<Copyright> = emptyList(),
 
     /** List of known vulnerabilities associated with the OSS component. */
     val vulnerabilities: String? = null,
