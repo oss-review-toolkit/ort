@@ -39,6 +39,12 @@ data class SpdxSnippet(
     val spdxId: String,
 
     /**
+     * The [SpdxAnnotation]s for the file.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val annotations: List<SpdxAnnotation> = emptyList(),
+
+    /**
      * A general comment about the snippet.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
