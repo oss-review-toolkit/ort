@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import io.kotest.core.spec.style.StringSpec
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -31,7 +34,7 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class SPMFunTest : StringSpec() {
+class SPMFunTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/spm").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -41,22 +44,51 @@ class SPMFunTest : StringSpec() {
     private val gitHubProject = normalizedVcsUrl.split('/', '.').dropLast(1).takeLast(2).joinToString(":")
 
     init {
-            "Project dependencies are detected correctly" {
-                val vcsPath = vcsDir.getPathToRoot(projectDir)
-                val expectedResult = patchExpectedResult(
-                    path = vcsPath,
-                    revision = vcsRevision,
-                    url = normalizedVcsUrl,
-                    definitionFilePath = "$vcsPath/Package.resolved",
-                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject),
-                    result = projectDir.parentFile.resolve("spm-expected-output.yml"),
+        "SPM" should {
+            "Parse Package.resolved dependencies correctly" {
+                createSPM()
+                    .resolveSingleProject(projectDir.resolve("Package.resolved"))
+                    .toYaml() shouldBe patchExpectedResult(
+                    definitionFileName = "Package.resolved",
+                    expectedFilename = "spm-expected-output-app.yml"
                 )
-
-                val actualResult = createSPM().resolveSingleProject(projectDir.resolve("Package.resolved"))
-                actualResult.toYaml() shouldBe expectedResult
             }
+
+            "Parse Package.swift dependencies correctly" {
+                createSPM()
+                    .resolveSingleProject(projectDir.resolve("Package.swift"), resolveScopes = true)
+                    .toYaml() shouldBe patchExpectedResult(
+                    definitionFileName = "Package.swift",
+                    expectedFilename = "spm-expected-output-lib.yml"
+                )
+            }
+        }
     }
 
-    private fun createSPM() =
-        SPM("SPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private inner class MockSPMCLIExecutor : SPMCLIExecutor {
+        override fun executeSwift(definitionFile: File): JsonNode {
+            val mockedDependencies = projectDir.resolve("spm-package-show-dependencies.json")
+            return ObjectMapper().readValue(mockedDependencies, JsonNode::class.java)
+        }
+    }
+
+    private fun patchExpectedResult(definitionFileName: String, expectedFilename: String): String {
+        val vcsPath = vcsDir.getPathToRoot(projectDir)
+        return patchExpectedResult(
+            path = vcsPath,
+            revision = vcsRevision,
+            url = normalizedVcsUrl,
+            definitionFilePath = "$vcsPath/$definitionFileName",
+            custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject),
+            result = projectDir.parentFile.resolve(expectedFilename),
+        )
+    }
+
+    private fun createSPM() = SPM(
+        name = "SPM",
+        analysisRoot = USER_DIR,
+        cliExecutor = MockSPMCLIExecutor(),
+        repoConfig = DEFAULT_REPOSITORY_CONFIGURATION,
+        analyzerConfig = DEFAULT_ANALYZER_CONFIGURATION
+    )
 }

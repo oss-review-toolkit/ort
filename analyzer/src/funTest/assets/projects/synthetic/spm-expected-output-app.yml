@@ -15,7 +15,6 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: "<REPLACE_URL>"
-  scopes: []
 packages:
 - id: "SPM:apple:swift-argument-parser:0.2.0"
   purl: "pkg:spm/apple/swift-argument-parser@0.2.0"

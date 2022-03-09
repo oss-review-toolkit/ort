@@ -166,4 +166,11 @@ RUN tar xf /opt/ort.tar -C /opt/ort --exclude="*.bat" --strip-components 1 && \
 COPY --from=build /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
 COPY --from=build /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
 
+# Install swift for SPM analysis
+ENV SWIFT_VERSION="swift-5.5.3-RELEASE-ubuntu20.04"
+ENV SWIFT_DOWNLOAD_PATH="swift-5.5.3-release/ubuntu2004/swift-5.5.3-RELEASE/${SWIFT_VERSION}.tar.gz"
+RUN curl "https://download.swift.org/${SWIFT_DOWNLOAD_PATH}" -o swift.tar.gz && \
+    tar -xvzf swift.tar.gz && mv ${SWIFT_VERSION} /usr/local/bin/swift && rm swift.tar.gz
+ENV PATH="/usr/local/bin/swift/usr/bin:${PATH}"
+
 ENTRYPOINT ["/opt/ort/bin/ort"]
