@@ -85,4 +85,19 @@ class ScanOssServiceTest : StringSpec({
             }
         }
     }
+
+    "A Boolean value from SCANOSS can be deserialized" {
+        val result = service.scan(sampleFile)
+        result shouldHaveKey SCANOSS_RESPONSE_FILENAME
+        result[SCANOSS_RESPONSE_FILENAME] shouldNotBeNull {
+            this shouldNot beEmpty()
+            first() shouldNotBeNull {
+                licenses shouldHaveSize 3
+                licenses[0].copyleft shouldBe true
+                licenses[0].patentHints shouldBe true
+                licenses[1].copyleft shouldBe null
+                licenses[1].patentHints shouldBe null
+            }
+        }
+    }
 })

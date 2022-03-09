@@ -44,14 +44,16 @@ data class License(
     val name: String,
 
     /** Location where the license was mined from. */
-    val source: String,
+    val source: Source,
 
     /** Are there patent hints for this license.*/
     @SerialName("patent_hints")
-    val patentHints: String? = null,
+    @Serializable(with = BooleanSerializer::class)
+    val patentHints: Boolean? = null,
 
     /** Is this considered a copyleft license or not. */
-    val copyleft: String? = null,
+    @Serializable(with = BooleanSerializer::class)
+    val copyleft: Boolean? = null,
 
     /** URL of the OSADL checklist for this license. */
     @SerialName("checklist_url")
@@ -64,6 +66,29 @@ data class License(
     @SerialName("osadl_updated")
     val osadlUpdated: String? = null
 )
+
+@Serializable
+enum class Source {
+    /** A component level declaration was found in the component’s repository for the matched file. */
+    @SerialName("component_declared")
+    COMPONENT_DECLARED,
+
+    /** Minr detected a license text in the file header. */
+    @SerialName("file_header")
+    FILE_HEADER,
+
+    /** The matched file contains a SPDX-License-Identifier tag in its header. */
+    @SerialName("file_spdx_tag")
+    FILE_SPDX_TAG,
+
+    /** Minr detected a license in the LICENSE file in the component of the matched file. */
+    @SerialName("license_file")
+    LICENSE_FILE,
+
+    /** Scancode detected a license declaration in the matched file. */
+    @SerialName("scancode")
+    SCANCODE
+}
 
 /**
  * Type of identification for the scanned file.
