@@ -33,6 +33,21 @@ class MavenSupportTest : WordSpec({
         "handle GitRepo URLs" {
             val mavenProject = MavenProject().apply {
                 scm = Scm().apply {
+                    connection = "scm:git-repo:ssh://host.com/project/foo?manifest=path/to/manifest.xml"
+                    tag = "v1.2.3"
+                }
+            }
+
+            MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
+                type = VcsType.GIT_REPO,
+                url = "ssh://host.com/project/foo?manifest=path/to/manifest.xml",
+                revision = "v1.2.3"
+            )
+        }
+
+        "handle deprecated GitRepo URLs" {
+            val mavenProject = MavenProject().apply {
+                scm = Scm().apply {
                     connection = "scm:git-repo:ssh://host.com/project/foo?path/to/manifest.xml"
                     tag = "v1.2.3"
                 }
@@ -40,9 +55,8 @@ class MavenSupportTest : WordSpec({
 
             MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
                 type = VcsType.GIT_REPO,
-                url = "ssh://host.com/project/foo",
-                revision = "v1.2.3",
-                path = "path/to/manifest.xml"
+                url = "ssh://host.com/project/foo?manifest=path/to/manifest.xml",
+                revision = "v1.2.3"
             )
         }
 
