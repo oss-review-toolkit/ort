@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -113,7 +114,8 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
                         workingDir.resolve(manifest.include.name)
                     }
 
-                    return super.getInfo().copy(path = manifestFile.relativeTo(workingDir).invariantSeparatorsPath)
+                    val manifestPath = manifestFile.relativeTo(workingDir).invariantSeparatorsPath
+                    return super.getInfo().let { it.copy(url = "${it.url}?manifest=$manifestPath", path = "") }
                 }
 
                 override fun getNested(): Map<String, VcsInfo> {
@@ -143,8 +145,9 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
     override fun isApplicableUrlInternal(vcsUrl: String) = false
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+        val repoUrl = vcs.url.substringBefore('?')
         val manifestRevision = vcs.revision.takeUnless { it.isBlank() }
-        val manifestPath = vcs.path.takeUnless { it.isBlank() }
+        val manifestPath = vcs.url.parseRepoManifestPath()
 
         val manifestOptions = listOfNotNull(
             manifestRevision?.let { listOf("-b", it) },
@@ -154,7 +157,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
         log.info {
             val revisionDetails = manifestRevision?.let { " with revision '$it'" }.orEmpty()
             val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
-            "Initializing git-repo from ${vcs.url}$revisionDetails$pathDetails."
+            "Initializing git-repo from $repoUrl$revisionDetails$pathDetails."
         }
 
         runRepo(
@@ -166,7 +169,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             "--no-repo-verify",
             "--no-clone-bundle",
             "--repo-branch=$GIT_REPO_BRANCH",
-            "-u", vcs.url,
+            "-u", repoUrl,
             *manifestOptions.toTypedArray()
         )
 
@@ -180,7 +183,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
         recursive: Boolean
     ): Result<String> {
         val manifestRevision = revision.takeUnless { it.isBlank() }
-        val manifestPath = path.takeUnless { it.isBlank() }
+        val manifestPath = workingTree.getInfo().url.parseRepoManifestPath()
 
         val manifestOptions = listOfNotNull(
             manifestRevision?.let { listOf("-b", it) },

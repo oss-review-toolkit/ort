@@ -127,9 +127,8 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT_REPO,
-                        url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git",
-                        revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa",
-                        path = "manifest.xml"
+                        url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml",
+                        revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
                     ),
                     resolvedRevision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
                 )

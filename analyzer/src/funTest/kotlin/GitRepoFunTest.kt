@@ -38,9 +38,8 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
+private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
-private const val REPO_MANIFEST = "manifest.xml"
 
 class GitRepoFunTest : StringSpec({
     lateinit var outputDir: File
@@ -49,7 +48,7 @@ class GitRepoFunTest : StringSpec({
         // Do not use createSpecTempDir() here, as otherwise the path will get too long for Windows to handle.
         outputDir = createTempDirectory(ORT_NAME).toFile()
 
-        val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)
+        val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)
         val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
         GitRepo().download(pkg, outputDir)

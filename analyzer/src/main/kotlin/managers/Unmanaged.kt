@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.core.log
 
 /**
@@ -86,10 +87,13 @@ class Unmanaged(
             vcsInfo.type == VcsType.GIT_REPO -> {
                 // For GitRepo looking at the URL and revision only is not enough, we also need to take the used
                 // manifest into account.
+                val manifestPath = vcsInfo.url.parseRepoManifestPath()
+
                 Identifier(
                     type = managerName,
-                    namespace = vcsInfo.path.substringBeforeLast('/'),
-                    name = vcsInfo.path.substringAfterLast('/').removeSuffix(".xml"),
+                    namespace = manifestPath?.substringBeforeLast('/').orEmpty(),
+                    name = manifestPath?.substringAfterLast('/')?.removeSuffix(".xml")
+                        ?: vcsInfo.url.split('/').last().removeSuffix(".git"),
                     version = vcsInfo.revision
                 )
             }
