@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
@@ -129,8 +128,7 @@ private fun createPackageConfiguration(id: Identifier, provenance: Provenance): 
                 vcs = VcsMatcher(
                     type = provenance.vcsInfo.type,
                     url = provenance.vcsInfo.url,
-                    revision = provenance.resolvedRevision,
-                    path = provenance.vcsInfo.path.takeIf { provenance.vcsInfo.type == VcsType.GIT_REPO }
+                    revision = provenance.resolvedRevision
                 )
             )
         }
