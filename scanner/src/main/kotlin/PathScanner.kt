@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.UnknownProvenance
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
@@ -282,9 +281,7 @@ abstract class PathScanner(
         }
 
         val (scanSummary, scanDuration) = measureTimedValue {
-            val vcsPath = (provenance as? RepositoryProvenance)?.vcsInfo?.takeUnless {
-                it.type == VcsType.GIT_REPO
-            }?.path.orEmpty()
+            val vcsPath = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
             scanPathInternal(pkgDownloadDirectory).filterByPath(vcsPath)
         }
 
