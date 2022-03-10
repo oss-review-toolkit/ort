@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2017-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,6 @@ enum class SpdxLicenseException(
             val resource = SpdxLicenseException::class.java.getResource("/exception-mapping.yml")
             yamlMapper.readValue<Map<String, List<SpdxLicense>>>(resource)
         }
-
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license exception id.
          */
