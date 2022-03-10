@@ -2,14 +2,14 @@
 repository:
   vcs:
     type: "GitRepo"
-    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
     revision: "<REPLACE_REVISION>"
-    path: "manifest.xml"
+    path: ""
   vcs_processed:
     type: "GitRepo"
-    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml"
     revision: "<REPLACE_REVISION>"
-    path: "manifest.xml"
+    path: ""
   nested_repositories:
     spdx-tools:
       type: "Git"
@@ -388,9 +388,9 @@ analyzer:
         path: ""
       vcs_processed:
         type: "GitRepo"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
         revision: "<REPLACE_REVISION>"
-        path: "manifest.xml"
+        path: ""
       homepage_url: ""
       scope_names: []
     packages:
