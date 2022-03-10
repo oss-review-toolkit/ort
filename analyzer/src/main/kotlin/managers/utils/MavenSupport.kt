@@ -81,6 +81,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
@@ -202,14 +203,20 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                         }
 
                         // Maven does not officially support git-repo as an SCM, see
-                        // http://maven.apache.org/scm/scms-overview.html, so come up with a convention to use the URL
-                        // fragment for the path to the manifest inside the repository.
+                        // http://maven.apache.org/scm/scms-overview.html, so come up with the convention to use the
+                        // "manifest" query parameter for the path to the manifest inside the repository. An earlier
+                        // version of this workaround expected the query string to be only the path to the manifest, for
+                        // backward compatibility convert such URLs to the new syntax.
                         type == "git-repo" -> {
+                            val manifestPath = url.parseRepoManifestPath()
+                                ?: url.substringAfter('?').takeIf { it.isNotBlank() && it.endsWith(".xml") }
+                            val urlWithManifest = url.takeIf { manifestPath == null }
+                                ?: "${url.substringBefore('?')}?manifest=$manifestPath"
+
                             VcsInfo(
                                 type = VcsType.GIT_REPO,
-                                url = url.substringBefore('?'),
-                                revision = tag,
-                                path = url.substringAfter('?')
+                                url = urlWithManifest,
+                                revision = tag
                             )
                         }
 
