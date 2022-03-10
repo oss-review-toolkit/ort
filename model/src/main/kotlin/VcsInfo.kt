@@ -53,9 +53,8 @@ data class VcsInfo(
     val revision: String,
 
     /**
-     * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
-     * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
-     * interpreted as the path to the manifest file.
+     * The path inside the VCS to take into account. If the VCS supports checking out only a subdirectory, only this
+     * path is checked out.
      */
     val path: String = ""
 ) {
