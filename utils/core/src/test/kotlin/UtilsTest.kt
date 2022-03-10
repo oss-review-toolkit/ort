@@ -353,5 +353,11 @@ class UtilsTest : WordSpec({
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
+
+        "keep the query component" {
+            val url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml"
+
+            normalizeVcsUrl(url) shouldBe url
+        }
     }
 })
