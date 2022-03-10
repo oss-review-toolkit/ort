@@ -38,7 +38,6 @@ import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
@@ -125,13 +124,8 @@ internal class FileArchive(id: EntityID<Int>) : IntEntity(id) {
 private fun KnownProvenance.storageKey(): String =
     when (this) {
         is ArtifactProvenance -> "source-artifact|${sourceArtifact.url}|${sourceArtifact.hash}"
-        is RepositoryProvenance -> {
-            // The content on the archives does not depend on the VCS path in general, thus that path must not be part
-            // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes
-            // the Git-Repo manifest location rather than the path to be (sparse) checked out.
-            val path = vcsInfo.path.takeIf { vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
-            "vcs|${vcsInfo.type}|${vcsInfo.url}|$resolvedRevision|$path"
-        }
+        // The trailing "|" is kept for backward compatibility because there used to be an additional parameter.
+        is RepositoryProvenance -> "vcs|${vcsInfo.type}|${vcsInfo.url}|$resolvedRevision|"
     }
 
 private fun queryFileArchive(provenance: KnownProvenance): FileArchive? =
