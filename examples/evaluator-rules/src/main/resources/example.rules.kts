@@ -249,6 +249,8 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
 
     ortResultRule("DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML") {
         val reasons = ortResult.repository.config.excludes.scopes.mapTo(mutableSetOf()) { it.reason }
+
+        @Suppress("DEPRECATION")
         val deprecatedReasons = setOf(ScopeExcludeReason.TEST_TOOL_OF)
 
         reasons.intersect(deprecatedReasons).forEach { offendingReason ->
