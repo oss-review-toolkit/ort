@@ -210,17 +210,19 @@ open class Npm(
 
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
+
+            // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
             var downloadUrl = expandNpmShortcutUrl(json["_resolved"].textValueOrEmpty()).ifEmpty {
                 // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
                 val fromVersion = json["_from"].textValueOrEmpty().substringAfterLast('@')
                 expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
             }
 
+            var hash = Hash.create(json["_integrity"].textValueOrEmpty())
+
             var vcsFromPackage = parseVcsInfo(json)
 
             val identifier = "$rawName@$version"
-
-            var hash = Hash.create(json["_integrity"].textValueOrEmpty())
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
