@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
+import java.io.IOException
 import java.net.URLEncoder
 import java.util.SortedSet
 
@@ -69,6 +70,7 @@ import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.core.log
@@ -657,7 +659,7 @@ open class Npm(
         requireLockfile(workingDir) { hasLockFile(workingDir) }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {
+        val process = if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {
             run(workingDir, "ci", *installParameters)
         } else {
             run(workingDir, "install", *installParameters)
@@ -665,5 +667,6 @@ open class Npm(
 
         // TODO: Capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         //       platforms except for Mac.
+        process.stderr.withoutPrefix("Error: ")?.also { throw IOException(it.lineSequence().first()) }
     }
 }
