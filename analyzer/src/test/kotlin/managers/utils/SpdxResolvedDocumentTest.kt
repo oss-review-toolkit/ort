@@ -63,7 +63,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
     /** A mock server used for testing whether external references can reference documents via the Internet. */
     private lateinit var server: WireMockServer
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         server = WireMockServer(
             WireMockConfiguration.options()
                 .dynamicPort()
@@ -71,13 +71,13 @@ class SpdxResolvedDocumentTest : WordSpec() {
         server.start()
     }
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         tempDir = createTestTempDir()
 
         server.resetAll()
     }
 
-    override fun afterSpec(spec: Spec) {
+    override suspend fun afterSpec(spec: Spec) {
         server.stop()
     }
 

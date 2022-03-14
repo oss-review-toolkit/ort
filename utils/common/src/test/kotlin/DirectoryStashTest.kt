@@ -38,7 +38,7 @@ class DirectoryStashTest : StringSpec() {
     private lateinit var b: File
     private lateinit var b1: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         sandboxDir = createTestTempDir()
         a = sandboxDir.resolve("a")
         a1 = a.resolve("a1")

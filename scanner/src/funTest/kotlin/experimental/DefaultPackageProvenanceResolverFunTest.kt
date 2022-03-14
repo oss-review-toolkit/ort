@@ -27,8 +27,6 @@ import io.kotest.matchers.shouldBe
 
 import java.io.IOException
 
-import kotlinx.coroutines.runBlocking
-
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -47,8 +45,8 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
         "https://github.com/oss-review-toolkit/ort-test-data-npm/blob/test-1.0.0/README.md"
     private val repositoryUrl = "https://github.com/oss-review-toolkit/ort-test-data-npm"
 
-    override fun afterSpec(spec: Spec) {
-        runBlocking { workingTreeCache.shutdown() }
+    override suspend fun afterSpec(spec: Spec) {
+        workingTreeCache.shutdown()
     }
 
     init {
