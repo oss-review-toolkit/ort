@@ -222,7 +222,7 @@ open class Npm(
 
             var vcsFromPackage = parseVcsInfo(json)
 
-            val identifier = "$rawName@$version"
+            val id = Identifier("NPM", namespace, name, version)
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
@@ -239,12 +239,12 @@ open class Npm(
 
                 // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
                 // as the trigger to get VcsInfo locally instead of querying the NPM registry.
-                log.debug { "Resolving the package info for '$identifier' locally from '$realPackageDir'." }
+                log.debug { "Resolving the package info for '${id.toCoordinates()}' locally from '$realPackageDir'." }
 
                 val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
-                log.debug { "Resolving the package info for '$identifier' via NPM registry." }
+                log.debug { "Resolving the package info for '${id.toCoordinates()}' via NPM registry." }
 
                 OkHttpClientHelper.downloadText("$npmRegistry/$encodedName/$version").onSuccess {
                     val versionInfo = jsonMapper.readTree(it)
@@ -276,12 +276,7 @@ open class Npm(
             }
 
             val module = Package(
-                id = Identifier(
-                    type = "NPM",
-                    namespace = namespace,
-                    name = name,
-                    version = version
-                ),
+                id = id,
                 authors = authors,
                 declaredLicenses = declaredLicenses,
                 description = description,
@@ -296,14 +291,14 @@ open class Npm(
             )
 
             require(module.id.name.isNotEmpty()) {
-                "Generated package info for $identifier has no name."
+                "Generated package info for ${id.toCoordinates()} has no name."
             }
 
             require(module.id.version.isNotEmpty()) {
-                "Generated package info for $identifier has no version."
+                "Generated package info for ${id.toCoordinates()} has no version."
             }
 
-            return Pair(identifier, module)
+            return Pair(id.toCoordinates(), module)
         }
 
         /**
