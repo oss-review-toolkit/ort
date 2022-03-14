@@ -49,7 +49,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     abstract val expectedFileLicenses: List<LicenseFinding>
     abstract val expectedDirectoryLicenses: List<LicenseFinding>
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         inputDir = createSpecTempDir()
 
         // Copy our own root license under different names to a temporary directory so we have something to operate on.

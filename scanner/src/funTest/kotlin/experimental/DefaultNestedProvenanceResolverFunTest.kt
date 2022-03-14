@@ -28,8 +28,6 @@ import io.kotest.matchers.shouldBe
 
 import java.io.IOException
 
-import kotlinx.coroutines.runBlocking
-
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -43,8 +41,8 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
     private val resolver = DefaultNestedProvenanceResolver(DummyNestedProvenanceStorage(), workingTreeCache)
 
-    override fun afterSpec(spec: Spec) {
-        runBlocking { workingTreeCache.shutdown() }
+    override suspend fun afterSpec(spec: Spec) {
+        workingTreeCache.shutdown()
     }
 
     init {

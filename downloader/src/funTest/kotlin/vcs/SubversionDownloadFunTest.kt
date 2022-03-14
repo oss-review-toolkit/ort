@@ -45,7 +45,7 @@ class SubversionDownloadFunTest : StringSpec() {
     private val svn = Subversion()
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

@@ -49,7 +49,7 @@ class OrtMainFunTest : StringSpec() {
 
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

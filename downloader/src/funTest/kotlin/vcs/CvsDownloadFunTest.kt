@@ -44,7 +44,7 @@ class CvsDownloadFunTest : StringSpec() {
     private val cvs = Cvs()
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

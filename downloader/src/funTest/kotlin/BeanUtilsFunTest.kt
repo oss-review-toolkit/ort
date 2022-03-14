@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 class BeanUtilsFunTest : StringSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

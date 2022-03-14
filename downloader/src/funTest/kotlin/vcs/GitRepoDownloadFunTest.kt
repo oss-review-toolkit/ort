@@ -38,7 +38,7 @@ private const val REPO_MANIFEST = "manifest.xml"
 class GitRepoDownloadFunTest : StringSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 
