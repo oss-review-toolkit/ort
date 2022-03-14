@@ -224,14 +224,6 @@ open class Npm(
 
             val id = Identifier("NPM", namespace, name, version)
 
-            // Download package info from registry.npmjs.org.
-            // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
-            val encodedName = if (rawName.startsWith("@")) {
-                "@${URLEncoder.encode(rawName.substringAfter('@'), "UTF-8")}"
-            } else {
-                rawName
-            }
-
             if (packageDir.isSymbolicLink()) {
                 val realPackageDir = packageDir.realFile()
 
@@ -244,6 +236,14 @@ open class Npm(
                 val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
+                // Download package info from registry.npmjs.org.
+                // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
+                val encodedName = if (rawName.startsWith("@")) {
+                    "@${URLEncoder.encode(rawName.substringAfter('@'), "UTF-8")}"
+                } else {
+                    rawName
+                }
+
                 log.debug { "Resolving the package info for '${id.toCoordinates()}' via NPM registry." }
 
                 OkHttpClientHelper.downloadText("$npmRegistry/$encodedName/$version").onSuccess {
