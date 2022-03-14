@@ -52,6 +52,17 @@ writeProxyStringToGradleProps () {
 	EOF
 }
 
+writeNoProxyEnvToGradleProps () {
+    local HOSTS=$1
+    local FILE=$2
+
+    grep -qF "systemProp.http.nonProxyHosts" $FILE 2>/dev/null && return 1
+
+    # Gradle / JVM expects a list separated by pipes instead of the comma that
+    # is used in shell environments
+    echo "systemProp.http.nonProxyHosts=${HOSTS//,/\|}" >> $FILE
+}
+
 writeProxyEnvToGradleProps () {
     local GRADLE_PROPS="${GRADLE_USER_HOME:-$HOME/.gradle}/gradle.properties"
 
@@ -66,6 +77,13 @@ writeProxyEnvToGradleProps () {
         echo "Setting HTTPS proxy $https_proxy for Gradle in file '$GRADLE_PROPS'..."
         if ! writeProxyStringToGradleProps $https_proxy "https" $GRADLE_PROPS; then
             echo "Not replacing existing HTTPS proxy."
+        fi
+    fi
+
+    if [ -n "$no_proxy" ]; then
+        echo "Setting proxy exemptions $no_proxy for Gradle in file '$GRADLE_PROPS'..."
+        if ! writeNoProxyEnvToGradleProps $no_proxy $GRADLE_PROPS; then
+            echo "Not replacing existing proxy exemptions."
         fi
     fi
 }
