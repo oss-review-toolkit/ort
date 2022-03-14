@@ -53,7 +53,7 @@ writeProxyStringToGradleProps () {
 }
 
 writeProxyEnvToGradleProps () {
-    local GRADLE_PROPS="$HOME/.gradle/gradle.properties"
+    local GRADLE_PROPS="${GRADLE_USER_HOME:-$HOME/.gradle}/gradle.properties"
 
     if [ -n "$http_proxy" ]; then
         echo "Setting HTTP proxy $http_proxy for Gradle in file '$GRADLE_PROPS'..."
