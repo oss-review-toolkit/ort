@@ -198,6 +198,8 @@ open class Npm(
 
             log.debug { "Found a 'package.json' file in '$packageDir'." }
 
+            // The "name" and "version" are the only required fields, see:
+            // https://docs.npmjs.com/creating-a-package-json-file#required-name-and-version-fields
             val json = packageFile.readValue<ObjectNode>()
             val rawName = json["name"].textValue()
             val (namespace, name) = splitNamespaceAndName(rawName)
