@@ -56,6 +56,7 @@ dependencies {
 
     implementation(project(":clients:clearly-defined"))
     implementation(project(":clients:fossid-webapp"))
+    implementation(project(":clients:scanoss"))
     implementation(project(":downloader"))
     implementation(project(":utils:core-utils"))
 
