@@ -35,57 +35,55 @@ private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-dat
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 private const val REPO_MANIFEST = "manifest.xml"
 
-class GitRepoDownloadFunTest : StringSpec() {
-    private lateinit var outputDir: File
+class GitRepoDownloadFunTest : StringSpec({
+    lateinit var outputDir: File
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    beforeTest {
         outputDir = createTestTempDir()
     }
 
-    init {
-        "GitRepo can download a given revision".config(tags = setOf(ExpensiveTag)) {
-            val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)
-            val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
-            val workingTree = GitRepo().download(pkg, outputDir)
+    "GitRepo can download a given revision".config(tags = setOf(ExpensiveTag)) {
+        val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)
+        val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
+        val workingTree = GitRepo().download(pkg, outputDir)
 
-            val spdxDir = outputDir.resolve("spdx-tools")
-            val expectedSpdxFiles = listOf(
-                ".git",
-                "Examples",
-                "Test",
-                "TestFiles",
-                "doc",
-                "resources",
-                "src"
-            )
+        val spdxDir = outputDir.resolve("spdx-tools")
+        val expectedSpdxFiles = listOf(
+            ".git",
+            "Examples",
+            "Test",
+            "TestFiles",
+            "doc",
+            "resources",
+            "src"
+        )
 
-            val actualSpdxFiles = spdxDir.walk().maxDepth(1).filter {
-                it.isDirectory && it != spdxDir
-            }.map {
-                it.name
-            }.sorted()
+        val actualSpdxFiles = spdxDir.walk().maxDepth(1).filter {
+            it.isDirectory && it != spdxDir
+        }.map {
+            it.name
+        }.sorted()
 
-            val submodulesDir = outputDir.resolve("submodules")
-            val expectedSubmodulesFiles = listOf(
-                ".git",
-                "commons-text",
-                "test-data-npm"
-            )
+        val submodulesDir = outputDir.resolve("submodules")
+        val expectedSubmodulesFiles = listOf(
+            ".git",
+            "commons-text",
+            "test-data-npm"
+        )
 
-            val actualSubmodulesFiles = submodulesDir.walk().maxDepth(1).filter {
-                it.isDirectory && it != submodulesDir
-            }.map {
-                it.name
-            }.sorted()
+        val actualSubmodulesFiles = submodulesDir.walk().maxDepth(1).filter {
+            it.isDirectory && it != submodulesDir
+        }.map {
+            it.name
+        }.sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getInfo() shouldBe vcs
+        workingTree.isValid() shouldBe true
+        workingTree.getInfo() shouldBe vcs
 
-            workingTree.getPathToRoot(outputDir.resolve("grpc/README.md")) shouldBe "grpc/README.md"
-            workingTree.getPathToRoot(outputDir.resolve("spdx-tools/TODO")) shouldBe "spdx-tools/TODO"
+        workingTree.getPathToRoot(outputDir.resolve("grpc/README.md")) shouldBe "grpc/README.md"
+        workingTree.getPathToRoot(outputDir.resolve("spdx-tools/TODO")) shouldBe "spdx-tools/TODO"
 
-            actualSpdxFiles.joinToString("\n") shouldBe expectedSpdxFiles.joinToString("\n")
-            actualSubmodulesFiles.joinToString("\n") shouldBe expectedSubmodulesFiles.joinToString("\n")
-        }
+        actualSpdxFiles.joinToString("\n") shouldBe expectedSpdxFiles.joinToString("\n")
+        actualSubmodulesFiles.joinToString("\n") shouldBe expectedSubmodulesFiles.joinToString("\n")
     }
-}
+})

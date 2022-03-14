@@ -43,106 +43,104 @@ private const val REPO_PATH = "lib"
 private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe8f"
 private const val REPO_PATH_FOR_VERSION = "specs"
 
-class GitDownloadFunTest : StringSpec() {
-    private val git = Git()
-    private lateinit var outputDir: File
+class GitDownloadFunTest : StringSpec({
+    val git = Git()
+    lateinit var outputDir: File
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    beforeTest {
         outputDir = createTestTempDir()
     }
 
-    init {
-        "Git does not prompt for credentials for non-existing repositories" {
-            val url = "https://github.com/oss-review-toolkit/foobar.git"
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "master"))
+    "Git does not prompt for credentials for non-existing repositories" {
+        val url = "https://github.com/oss-review-toolkit/foobar.git"
+        val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "master"))
 
-            val exception = shouldThrow<DownloadException> {
-                git.download(pkg, outputDir, allowMovingRevisions = true)
-            }
-            exception.message shouldBe "Git failed to download from URL '$url'."
+        val exception = shouldThrow<DownloadException> {
+            git.download(pkg, outputDir, allowMovingRevisions = true)
         }
-
-        "Git can download a given revision".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
-            val expectedFiles = listOf(
-                ".git",
-                ".gitignore",
-                "CHANGELOG.md",
-                "LICENSE",
-                "README.md",
-                "lib",
-                "package.json",
-                "specs"
-            )
-
-            val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
-
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
-
-        "Git can download only a single path".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV, path = REPO_PATH))
-            val expectedFiles = listOf(
-                File("LICENSE"),
-                File("README.md"),
-                File(REPO_PATH, "dep_graph.js"),
-                File(REPO_PATH, "index.d.ts")
-            )
-
-            val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
-                .onEnter { it.name != ".git" }
-                .filter { it.isFile }
-                .map { it.relativeTo(outputDir) }
-                .sortedBy { it.path }
-                .toList()
-
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
-
-        "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(
-                id = Identifier("Test:::$PKG_VERSION"),
-
-                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
-                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy")
-            )
-
-            val workingTree = git.download(pkg, outputDir)
-
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-        }
-
-        "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(
-                id = Identifier("Test:::$PKG_VERSION"),
-
-                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
-                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
-            )
-            val expectedFiles = listOf(
-                File("LICENSE"),
-                File("README.md"),
-                File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
-            )
-
-            val workingTree = git.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
-                .onEnter { it.name != ".git" }
-                .filter { it.isFile }
-                .map { it.relativeTo(outputDir) }
-                .sortedBy { it.path }
-                .toList()
-
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
+        exception.message shouldBe "Git failed to download from URL '$url'."
     }
-}
+
+    "Git can download a given revision".config(tags = setOf(ExpensiveTag)) {
+        val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
+        val expectedFiles = listOf(
+            ".git",
+            ".gitignore",
+            "CHANGELOG.md",
+            "LICENSE",
+            "README.md",
+            "lib",
+            "package.json",
+            "specs"
+        )
+
+        val workingTree = git.download(pkg, outputDir)
+        val actualFiles = workingTree.workingDir.list().sorted()
+
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV
+        actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+    }
+
+    "Git can download only a single path".config(tags = setOf(ExpensiveTag)) {
+        val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV, path = REPO_PATH))
+        val expectedFiles = listOf(
+            File("LICENSE"),
+            File("README.md"),
+            File(REPO_PATH, "dep_graph.js"),
+            File(REPO_PATH, "index.d.ts")
+        )
+
+        val workingTree = git.download(pkg, outputDir)
+        val actualFiles = workingTree.workingDir.walkBottomUp()
+            .onEnter { it.name != ".git" }
+            .filter { it.isFile }
+            .map { it.relativeTo(outputDir) }
+            .sortedBy { it.path }
+            .toList()
+
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV
+        actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+    }
+
+    "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Test:::$PKG_VERSION"),
+
+            // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+            vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy")
+        )
+
+        val workingTree = git.download(pkg, outputDir)
+
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+    }
+
+    "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Test:::$PKG_VERSION"),
+
+            // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+            vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
+        )
+        val expectedFiles = listOf(
+            File("LICENSE"),
+            File("README.md"),
+            File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
+        )
+
+        val workingTree = git.download(pkg, outputDir)
+        val actualFiles = workingTree.workingDir.walkBottomUp()
+            .onEnter { it.name != ".git" }
+            .filter { it.isFile }
+            .map { it.relativeTo(outputDir) }
+            .sortedBy { it.path }
+            .toList()
+
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+        actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+    }
+})

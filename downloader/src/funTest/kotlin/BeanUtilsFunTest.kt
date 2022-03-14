@@ -35,47 +35,45 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class BeanUtilsFunTest : StringSpec() {
-    private lateinit var outputDir: File
+class BeanUtilsFunTest : StringSpec({
+    lateinit var outputDir: File
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    beforeTest {
         outputDir = createTestTempDir()
     }
 
-    init {
-        "BeanUtils SVN tag should be correctly downloaded" {
-            val vcsFromCuration = VcsInfo(
-                type = VcsType.SUBVERSION,
-                url = "https://svn.apache.org/repos/asf/commons/_moved_to_git/beanutils",
-                revision = ""
-            )
+    "BeanUtils SVN tag should be correctly downloaded" {
+        val vcsFromCuration = VcsInfo(
+            type = VcsType.SUBVERSION,
+            url = "https://svn.apache.org/repos/asf/commons/_moved_to_git/beanutils",
+            revision = ""
+        )
 
-            val pkg = Package(
-                id = Identifier(
-                    type = "Maven",
-                    namespace = "commons-beanutils",
-                    name = "commons-beanutils-bean-collections",
-                    version = "1.8.3"
-                ),
-                declaredLicenses = sortedSetOf("The Apache Software License, Version 2.0"),
-                description = "",
-                homepageUrl = "http://commons.apache.org/beanutils/",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = vcsFromCuration
-            )
+        val pkg = Package(
+            id = Identifier(
+                type = "Maven",
+                namespace = "commons-beanutils",
+                name = "commons-beanutils-bean-collections",
+                version = "1.8.3"
+            ),
+            declaredLicenses = sortedSetOf("The Apache Software License, Version 2.0"),
+            description = "",
+            homepageUrl = "http://commons.apache.org/beanutils/",
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = vcsFromCuration
+        )
 
-            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+        val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
 
-            outputDir.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
+        outputDir.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
 
-            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
-                vcsInfo.type shouldBe VcsType.SUBVERSION
-                vcsInfo.url shouldBe vcsFromCuration.url
-                vcsInfo.revision shouldBe ""
-                vcsInfo.path shouldBe vcsFromCuration.path
-                resolvedRevision shouldBe "928490"
-            }
+        provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+            vcsInfo.type shouldBe VcsType.SUBVERSION
+            vcsInfo.url shouldBe vcsFromCuration.url
+            vcsInfo.revision shouldBe ""
+            vcsInfo.path shouldBe vcsFromCuration.path
+            resolvedRevision shouldBe "928490"
         }
     }
-}
+})

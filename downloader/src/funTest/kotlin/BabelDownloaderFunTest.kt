@@ -38,61 +38,59 @@ import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
-class BabelDownloaderFunTest : StringSpec() {
-    private lateinit var outputDir: File
+class BabelDownloaderFunTest : StringSpec({
+    lateinit var outputDir: File
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    beforeTest {
         outputDir = createTestTempDir()
     }
 
-    init {
-        "Babel packages should be correctly downloaded" {
-            val vcsFromPackage = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
-                revision = ""
-            )
-            val vcsFromUrl = VcsHost.toVcsInfo(normalizeVcsUrl(vcsFromPackage.url))
-            val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
+    "Babel packages should be correctly downloaded" {
+        val vcsFromPackage = VcsInfo(
+            type = VcsType.GIT,
+            url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
+            revision = ""
+        )
+        val vcsFromUrl = VcsHost.toVcsInfo(normalizeVcsUrl(vcsFromPackage.url))
+        val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
 
-            val pkg = Package(
-                id = Identifier(
-                    type = "NPM",
-                    namespace = "",
-                    name = "babel-cli",
-                    version = "6.26.0"
-                ),
-                declaredLicenses = sortedSetOf("MIT"),
-                description = "Babel command line.",
-                homepageUrl = "https://babeljs.io/",
-                binaryArtifact = RemoteArtifact(
-                    url = "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz",
-                    hash = Hash.create("502ab54874d7db88ad00b887a06383ce03d002f1")
-                ),
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = vcsFromPackage,
-                vcsProcessed = vcsMerged
-            )
+        val pkg = Package(
+            id = Identifier(
+                type = "NPM",
+                namespace = "",
+                name = "babel-cli",
+                version = "6.26.0"
+            ),
+            declaredLicenses = sortedSetOf("MIT"),
+            description = "Babel command line.",
+            homepageUrl = "https://babeljs.io/",
+            binaryArtifact = RemoteArtifact(
+                url = "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz",
+                hash = Hash.create("502ab54874d7db88ad00b887a06383ce03d002f1")
+            ),
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = vcsFromPackage,
+            vcsProcessed = vcsMerged
+        )
 
-            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
-            val workingTree = VersionControlSystem.forDirectory(outputDir)
-            val babelCliDir = outputDir.resolve("packages/babel-cli")
+        val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+        val workingTree = VersionControlSystem.forDirectory(outputDir)
+        val babelCliDir = outputDir.resolve("packages/babel-cli")
 
-            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
-                vcsInfo.type shouldBe pkg.vcsProcessed.type
-                vcsInfo.url shouldBe pkg.vcsProcessed.url
-                vcsInfo.revision shouldBe "master"
-                vcsInfo.path shouldBe pkg.vcsProcessed.path
-                resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
-            }
-
-            workingTree shouldNotBeNull {
-                isValid() shouldBe true
-                getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
-            }
-
-            babelCliDir.isDirectory shouldBe true
-            babelCliDir.walk().count() shouldBe 242
+        provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+            vcsInfo.type shouldBe pkg.vcsProcessed.type
+            vcsInfo.url shouldBe pkg.vcsProcessed.url
+            vcsInfo.revision shouldBe "master"
+            vcsInfo.path shouldBe pkg.vcsProcessed.path
+            resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
         }
+
+        workingTree shouldNotBeNull {
+            isValid() shouldBe true
+            getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+        }
+
+        babelCliDir.isDirectory shouldBe true
+        babelCliDir.walk().count() shouldBe 242
     }
-}
+})

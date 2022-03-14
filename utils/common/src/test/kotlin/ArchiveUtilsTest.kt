@@ -33,223 +33,221 @@ import org.apache.commons.compress.archivers.ArchiveEntry
 
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class ArchiveUtilsTest : WordSpec() {
-    private lateinit var outputDir: File
+/**
+ * A filter for archive entries that filters only for a file named "a".
+ */
+private val A_FILTER: (ArchiveEntry) -> Boolean = { it.name == "a" }
 
-    override suspend fun beforeEach(testCase: TestCase) {
+class ArchiveUtilsTest : WordSpec({
+    lateinit var outputDir: File
+
+    beforeEach {
         outputDir = createTestTempDir()
     }
 
-    init {
-        "Tar archives" should {
-            "unpack" {
-                val archive = File("src/test/assets/test.tar")
+    "Tar archives" should {
+        "unpack" {
+            val archive = File("src/test/assets/test.tar")
 
-                archive.unpack(outputDir)
+            archive.unpack(outputDir)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileA.readText() shouldBe "a\n"
-                fileB shouldBe aFile()
-                fileB.readText() shouldBe "b\n"
-            }
-
-            "unpack with a filter" {
-                val archive = File("src/test/assets/test.tar")
-
-                archive.unpack(outputDir, A_FILTER)
-
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
-
-                fileA shouldBe aFile()
-                fileB shouldNotBe aFile()
-            }
+            fileA shouldBe aFile()
+            fileA.readText() shouldBe "a\n"
+            fileB shouldBe aFile()
+            fileB.readText() shouldBe "b\n"
         }
 
-        "Tar GZ archives" should {
-            "unpack" {
-                val archive = File("src/test/assets/test.tar.gz")
+        "unpack with a filter" {
+            val archive = File("src/test/assets/test.tar")
 
-                archive.unpack(outputDir)
+            archive.unpack(outputDir, A_FILTER)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileA.readText() shouldBe "a\n"
-                fileB shouldBe aFile()
-                fileB.readText() shouldBe "b\n"
-            }
+            fileA shouldBe aFile()
+            fileB shouldNotBe aFile()
+        }
+    }
 
-            "unpack with a filter" {
-                val archive = File("src/test/assets/test.tar.gz")
+    "Tar GZ archives" should {
+        "unpack" {
+            val archive = File("src/test/assets/test.tar.gz")
 
-                archive.unpack(outputDir, A_FILTER)
+            archive.unpack(outputDir)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileB shouldNotBe aFile()
-            }
+            fileA shouldBe aFile()
+            fileA.readText() shouldBe "a\n"
+            fileB shouldBe aFile()
+            fileB.readText() shouldBe "b\n"
         }
 
-        "Tar bzip2 archives" should {
-            "unpack" {
-                val archive = File("src/test/assets/test.tar.bz2")
+        "unpack with a filter" {
+            val archive = File("src/test/assets/test.tar.gz")
 
-                archive.unpack(outputDir)
+            archive.unpack(outputDir, A_FILTER)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileA.readText() shouldBe "a\n"
-                fileB shouldBe aFile()
-                fileB.readText() shouldBe "b\n"
-            }
+            fileA shouldBe aFile()
+            fileB shouldNotBe aFile()
+        }
+    }
 
-            "unpack with a filter" {
-                val archive = File("src/test/assets/test.tar.bz2")
+    "Tar bzip2 archives" should {
+        "unpack" {
+            val archive = File("src/test/assets/test.tar.bz2")
 
-                archive.unpack(outputDir, A_FILTER)
+            archive.unpack(outputDir)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileB shouldNotBe aFile()
-            }
+            fileA shouldBe aFile()
+            fileA.readText() shouldBe "a\n"
+            fileB shouldBe aFile()
+            fileB.readText() shouldBe "b\n"
         }
 
-        "Tar xz archives" should {
-            "unpack" {
-                val archive = File("src/test/assets/test.tar.xz")
+        "unpack with a filter" {
+            val archive = File("src/test/assets/test.tar.bz2")
 
-                archive.unpack(outputDir)
+            archive.unpack(outputDir, A_FILTER)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileA.readText() shouldBe "a\n"
-                fileB shouldBe aFile()
-                fileB.readText() shouldBe "b\n"
-            }
+            fileA shouldBe aFile()
+            fileB shouldNotBe aFile()
+        }
+    }
 
-            "unpack with a filter" {
-                val archive = File("src/test/assets/test.tar.xz")
+    "Tar xz archives" should {
+        "unpack" {
+            val archive = File("src/test/assets/test.tar.xz")
 
-                archive.unpack(outputDir, A_FILTER)
+            archive.unpack(outputDir)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileB shouldNotBe aFile()
-            }
+            fileA shouldBe aFile()
+            fileA.readText() shouldBe "a\n"
+            fileB shouldBe aFile()
+            fileB.readText() shouldBe "b\n"
         }
 
-        "Zip archives" should {
-            "unpack" {
-                val archive = File("src/test/assets/test.zip")
+        "unpack with a filter" {
+            val archive = File("src/test/assets/test.tar.xz")
 
-                archive.unpack(outputDir)
+            archive.unpack(outputDir, A_FILTER)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileA.readText() shouldBe "a\n"
-                fileB shouldBe aFile()
-                fileB.readText() shouldBe "b\n"
-            }
+            fileA shouldBe aFile()
+            fileB shouldNotBe aFile()
+        }
+    }
 
-            "unpack with a filter" {
-                val archive = File("src/test/assets/test.zip")
+    "Zip archives" should {
+        "unpack" {
+            val archive = File("src/test/assets/test.zip")
 
-                archive.unpack(outputDir, A_FILTER)
+            archive.unpack(outputDir)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileB shouldNotBe aFile()
-            }
+            fileA shouldBe aFile()
+            fileA.readText() shouldBe "a\n"
+            fileB shouldBe aFile()
+            fileB.readText() shouldBe "b\n"
         }
 
-        "7z archives" should {
-            "unpack" {
-                val archive = File("src/test/assets/test.7z")
+        "unpack with a filter" {
+            val archive = File("src/test/assets/test.zip")
 
-                archive.unpack(outputDir)
+            archive.unpack(outputDir, A_FILTER)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileA.readText() shouldBe "a\n"
-                fileB shouldBe aFile()
-                fileB.readText() shouldBe "b\n"
-            }
+            fileA shouldBe aFile()
+            fileB shouldNotBe aFile()
+        }
+    }
 
-            "unpack with a filter" {
-                val archive = File("src/test/assets/test.7z")
+    "7z archives" should {
+        "unpack" {
+            val archive = File("src/test/assets/test.7z")
 
-                archive.unpack(outputDir, A_FILTER)
+            archive.unpack(outputDir)
 
-                val fileA = outputDir.resolve("a")
-                val fileB = outputDir.resolve("dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                fileA shouldBe aFile()
-                fileB shouldNotBe aFile()
-            }
+            fileA shouldBe aFile()
+            fileA.readText() shouldBe "a\n"
+            fileB shouldBe aFile()
+            fileB.readText() shouldBe "b\n"
         }
 
-        "Debian deb archives" should {
-            "unpack" {
-                val tempDir = createTestTempDir()
-                val archiveDeb = File("src/test/assets/testpkg.deb")
-                val archiveUdepTemp = tempDir.resolve("testpkg.udeb")
-                val archiveUdep = archiveDeb.copyTo(archiveUdepTemp)
+        "unpack with a filter" {
+            val archive = File("src/test/assets/test.7z")
 
-                listOf(archiveDeb, archiveUdep).forAll { archive ->
-                    archive.unpack(outputDir)
+            archive.unpack(outputDir, A_FILTER)
 
-                    val extractedScriptFile = outputDir.resolve("data/usr/bin/test")
-                    extractedScriptFile shouldBe aFile()
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
-                    val extractedControlFile = outputDir.resolve("control/control")
-                    extractedControlFile shouldBe aFile()
-                    val expectedControl = File("src/test/assets/control-expected.txt").readText()
-                    extractedControlFile.readText() shouldBe expectedControl
+            fileA shouldBe aFile()
+            fileB shouldNotBe aFile()
+        }
+    }
 
-                    DEB_NESTED_ARCHIVES.forEach { tarFileName ->
-                        val tarFile = outputDir.resolve(tarFileName)
-                        tarFile shouldNotBe aFile()
-                    }
-                }
-            }
+    "Debian deb archives" should {
+        "unpack" {
+            val tempDir = createTestTempDir()
+            val archiveDeb = File("src/test/assets/testpkg.deb")
+            val archiveUdepTemp = tempDir.resolve("testpkg.udeb")
+            val archiveUdep = archiveDeb.copyTo(archiveUdepTemp)
 
-            "unpack with a filter" {
-                val archive = File("src/test/assets/testpkg.deb")
-
-                archive.unpack(outputDir) { it.name.endsWith("test") }
+            listOf(archiveDeb, archiveUdep).forAll { archive ->
+                archive.unpack(outputDir)
 
                 val extractedScriptFile = outputDir.resolve("data/usr/bin/test")
                 extractedScriptFile shouldBe aFile()
 
                 val extractedControlFile = outputDir.resolve("control/control")
-                extractedControlFile shouldNotBe aFile()
+                extractedControlFile shouldBe aFile()
+                val expectedControl = File("src/test/assets/control-expected.txt").readText()
+                extractedControlFile.readText() shouldBe expectedControl
+
+                DEB_NESTED_ARCHIVES.forEach { tarFileName ->
+                    val tarFile = outputDir.resolve(tarFileName)
+                    tarFile shouldNotBe aFile()
+                }
             }
         }
-    }
-}
 
-/**
- * A filter for archive entries that filters only for a file named "a".
- */
-private val A_FILTER: (ArchiveEntry) -> Boolean = { it.name == "a" }
+        "unpack with a filter" {
+            val archive = File("src/test/assets/testpkg.deb")
+
+            archive.unpack(outputDir) { it.name.endsWith("test") }
+
+            val extractedScriptFile = outputDir.resolve("data/usr/bin/test")
+            extractedScriptFile shouldBe aFile()
+
+            val extractedControlFile = outputDir.resolve("control/control")
+            extractedControlFile shouldNotBe aFile()
+        }
+    }
+})

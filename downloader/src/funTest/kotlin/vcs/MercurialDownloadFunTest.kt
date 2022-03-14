@@ -41,110 +41,112 @@ private const val REPO_PATH = "test"
 private const val REPO_REV_FOR_VERSION = "a766fe47501b185bc46cffc210735304e28f2189"
 private const val REPO_PATH_FOR_VERSION = "build"
 
-class MercurialDownloadFunTest : StringSpec() {
-    private val hg = Mercurial()
-    private lateinit var outputDir: File
+class MercurialDownloadFunTest : StringSpec({
+    val hg = Mercurial()
+    lateinit var outputDir: File
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    beforeTest {
         outputDir = createTestTempDir()
     }
 
-    init {
-        "Mercurial can download a given revision".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV))
-            val expectedFiles = listOf(
-                ".hg",
-                ".hgignore",
-                ".hgtags",
-                ".travis.yml",
-                "COPYING",
-                "Makefile",
-                "README.md",
-                "bqfft",
-                "build",
-                "src",
-                "test"
-            )
+    "Mercurial can download a given revision".config(tags = setOf(ExpensiveTag)) {
+        val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV))
+        val expectedFiles = listOf(
+            ".hg",
+            ".hgignore",
+            ".hgtags",
+            ".travis.yml",
+            "COPYING",
+            "Makefile",
+            "README.md",
+            "bqfft",
+            "build",
+            "src",
+            "test"
+        )
 
-            val workingTree = hg.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+        val workingTree = hg.download(pkg, outputDir)
+        val actualFiles = workingTree.workingDir.list().sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
-
-        "Mercurial can download only a single path"
-            .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
-                val pkg = Package.EMPTY.copy(
-                    vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV, path = REPO_PATH)
-                )
-                val expectedFiles = listOf(
-                    ".hgignore",
-                    ".hgtags",
-                    "COPYING",
-                    "README.md",
-                    "$REPO_PATH/TestFFT.cpp",
-                    "$REPO_PATH/timings.cpp"
-                )
-
-                val workingTree = hg.download(pkg, outputDir)
-                val actualFiles = workingTree.workingDir.walkBottomUp()
-                    .onEnter { it.name != ".hg" }
-                    .filter { it.isFile }
-                    .map { it.relativeTo(outputDir) }
-                    .sortedBy { it.path }
-                    .toList()
-
-                workingTree.isValid() shouldBe true
-                workingTree.getRevision() shouldBe REPO_REV
-                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-            }
-
-        "Mercurial can download based on a version".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(
-                id = Identifier("Test:::$PKG_VERSION"),
-
-                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
-                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy")
-            )
-
-            val workingTree = hg.download(pkg, outputDir)
-
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-        }
-
-        "Mercurial can download only a single path based on a version"
-            .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
-                val pkg = Package.EMPTY.copy(
-                    id = Identifier("Test:::$PKG_VERSION"),
-
-                    // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
-                    vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
-                )
-                val expectedFiles = listOf(
-                    ".hgignore",
-                    "COPYING",
-                    "README.md",
-                    "build/Makefile.inc",
-                    "build/Makefile.linux.fftw",
-                    "build/Makefile.linux.ipp",
-                    "build/Makefile.osx",
-                    "build/run-platform-tests.sh"
-                )
-
-                val workingTree = hg.download(pkg, outputDir)
-                val actualFiles = workingTree.workingDir.walkBottomUp()
-                    .onEnter { it.name != ".hg" }
-                    .filter { it.isFile }
-                    .map { it.relativeTo(outputDir) }
-                    .sortedBy { it.path }
-                    .toList()
-
-                workingTree.isValid() shouldBe true
-                workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-            }
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV
+        actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
     }
-}
+
+    "Mercurial can download only a single path".config(
+        enabled = hg.isAtLeastVersion("4.3"),
+        tags = setOf(ExpensiveTag)
+    ) {
+        val pkg = Package.EMPTY.copy(
+            vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV, path = REPO_PATH)
+        )
+        val expectedFiles = listOf(
+            ".hgignore",
+            ".hgtags",
+            "COPYING",
+            "README.md",
+            "$REPO_PATH/TestFFT.cpp",
+            "$REPO_PATH/timings.cpp"
+        )
+
+        val workingTree = hg.download(pkg, outputDir)
+        val actualFiles = workingTree.workingDir.walkBottomUp()
+            .onEnter { it.name != ".hg" }
+            .filter { it.isFile }
+            .map { it.relativeTo(outputDir) }
+            .sortedBy { it.path }
+            .toList()
+
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV
+        actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+    }
+
+    "Mercurial can download based on a version".config(tags = setOf(ExpensiveTag)) {
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Test:::$PKG_VERSION"),
+
+            // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+            vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy")
+        )
+
+        val workingTree = hg.download(pkg, outputDir)
+
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+    }
+
+    "Mercurial can download only a single path based on a version".config(
+        enabled = hg.isAtLeastVersion("4.3"),
+        tags = setOf(ExpensiveTag)
+    ) {
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Test:::$PKG_VERSION"),
+
+            // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+            vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
+        )
+        val expectedFiles = listOf(
+            ".hgignore",
+            "COPYING",
+            "README.md",
+            "build/Makefile.inc",
+            "build/Makefile.linux.fftw",
+            "build/Makefile.linux.ipp",
+            "build/Makefile.osx",
+            "build/run-platform-tests.sh"
+        )
+
+        val workingTree = hg.download(pkg, outputDir)
+        val actualFiles = workingTree.workingDir.walkBottomUp()
+            .onEnter { it.name != ".hg" }
+            .filter { it.isFile }
+            .map { it.relativeTo(outputDir) }
+            .sortedBy { it.path }
+            .toList()
+
+        workingTree.isValid() shouldBe true
+        workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+        actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+    }
+})
