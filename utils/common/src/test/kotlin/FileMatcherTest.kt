@@ -33,6 +33,31 @@ class FileMatcherTest : StringSpec({
         }
     }
 
+    "Patterns with globs should be matched" {
+        val matcher = FileMatcher("*.md", "dir/*.txt")
+
+        with(matcher) {
+            matches("README.md") shouldBe true
+            matches("dir/info.txt") shouldBe true
+            matches("root.txt") shouldBe false
+            matches("dir/doc.md") shouldBe false
+        }
+    }
+
+    "A globstar should match zero or more directories" {
+        val matcher = FileMatcher("**/src/**")
+
+        with(matcher) {
+            matches("project/src/main") shouldBe true
+            matches("project/src") shouldBe true
+            matches("src/main") shouldBe true
+            matches("a/project/src/main/kotlin") shouldBe true
+            matches("src") shouldBe true
+            matches("./src") shouldBe true
+            matches("srcs") shouldBe false
+        }
+    }
+
     "Matching should adhere ignoring case" {
         FileMatcher("LICENSE", ignoreCase = false).apply {
             matches("LICENSE") shouldBe true
