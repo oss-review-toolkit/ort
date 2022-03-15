@@ -26,6 +26,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.file.aDirectory
+import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.beNull
@@ -88,7 +89,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "return 'false' for files" {
-            file.isFile shouldBe true
+            file shouldBe aFile()
             file.isSymbolicLink() shouldBe false
         }
 
@@ -101,7 +102,7 @@ class ExtensionsTest : WordSpec({
             ProcessCapture(tempDir, "cmd", "/c", "mklink", "/h", "hardlink", "file")
 
             tempDir.resolve("hardlink").let { hardlink ->
-                hardlink.isFile shouldBe true
+                hardlink shouldBe aFile()
                 hardlink.isSymbolicLink() shouldBe false
             }
         }
@@ -119,7 +120,7 @@ class ExtensionsTest : WordSpec({
             ProcessCapture(tempDir, "cmd", "/c", "mklink", "symlink-to-file", "file")
 
             tempDir.resolve("symlink-to-file").let { symlinkToFile ->
-                symlinkToFile.isFile shouldBe true
+                symlinkToFile shouldBe aFile()
                 symlinkToFile.isSymbolicLink() shouldBe true
             }
         }
@@ -204,9 +205,9 @@ class ExtensionsTest : WordSpec({
         "throw exception if file is not a directory" {
             val file = createTestTempFile()
 
-            file.isFile shouldBe true
+            file shouldBe aFile()
             shouldThrow<IOException> { file.safeMkdirs() }
-            file.isFile shouldBe true // should still be a file afterwards
+            file shouldBe aFile() // should still be a file afterwards
         }
     }
 
@@ -297,7 +298,7 @@ class ExtensionsTest : WordSpec({
             val tempDir = createTestTempDir()
             val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
 
-            fileFromStr.isFile shouldBe true
+            fileFromStr shouldBe aFile()
         }
     }
 

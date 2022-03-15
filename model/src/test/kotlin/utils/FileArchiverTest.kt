@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -69,7 +70,7 @@ class FileArchiverTest : StringSpec() {
      */
     private fun File.shouldContainFileWithContent(path: String) {
         val file = resolve(path)
-        file.isFile shouldBe true
+        file shouldBe aFile()
         file.readText() shouldBe path
     }
 
