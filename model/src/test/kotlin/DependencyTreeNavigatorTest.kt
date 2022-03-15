@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -66,7 +67,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                 val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
                 val paths = navigator.getShortestPaths(project)[scope.name]!!
 
-                paths should org.ossreviewtoolkit.utils.test.containExactly(
+                paths should containExactly(
                     Identifier("A") to emptyList(),
                     Identifier("B") to emptyList(),
                     Identifier("C") to emptyList(),

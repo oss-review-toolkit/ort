@@ -27,6 +27,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
+import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -34,7 +35,6 @@ import java.io.File
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.ProtocolProxyMap
-import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.toGenericString
 

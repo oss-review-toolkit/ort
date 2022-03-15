@@ -27,6 +27,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.sequences.beEmpty as beEmptySequence
 import io.kotest.matchers.sequences.containExactly as containSequenceExactly
 import io.kotest.matchers.should
@@ -37,7 +38,6 @@ import io.kotest.matchers.shouldNotBe
 import java.io.File
 import java.time.Instant
 
-import org.ossreviewtoolkit.utils.test.containExactly as containExactlyPairs
 import org.ossreviewtoolkit.utils.test.readOrtResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -237,7 +237,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                 paths.keys should haveSize(2)
 
                 paths["compile"] shouldNotBeNull {
-                    this should containExactlyPairs(
+                    this should containExactlyEntries(
                         Identifier("Maven:ch.qos.logback:logback-classic:1.2.3") to emptyList(),
                         Identifier("Maven:ch.qos.logback:logback-core:1.2.3") to listOf(
                             Identifier("Maven:ch.qos.logback:logback-classic:1.2.3")
@@ -348,7 +348,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 
                 val issues = navigator.projectIssues(project)
 
-                issues should org.ossreviewtoolkit.utils.test.containExactly(
+                issues should containExactlyEntries(
                     Identifier("Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0") to setOf(
                         OrtIssue(
                             Instant.EPOCH,

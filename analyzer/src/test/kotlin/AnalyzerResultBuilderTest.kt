@@ -24,6 +24,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beTheSameInstanceAs
@@ -39,7 +40,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.test.containExactly
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerResultBuilderTest : WordSpec() {
