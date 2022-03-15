@@ -25,6 +25,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
@@ -33,7 +34,6 @@ import io.kotest.matchers.string.shouldStartWith
 
 import org.ossreviewtoolkit.model.utils.createPurl
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.test.containExactly
 
 class IdentifierTest : WordSpec({
     "String representations" should {

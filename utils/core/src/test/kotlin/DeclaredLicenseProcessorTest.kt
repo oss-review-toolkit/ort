@@ -25,6 +25,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
+import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -39,7 +40,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSimpleLicenseMapping
 import org.ossreviewtoolkit.utils.spdx.toExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DeclaredLicenseProcessorTest : StringSpec() {

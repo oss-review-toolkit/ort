@@ -27,6 +27,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.exist
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -38,7 +39,6 @@ import java.io.IOException
 import java.time.DayOfWeek
 import java.util.Locale
 
-import org.ossreviewtoolkit.utils.test.containExactly
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempFile
