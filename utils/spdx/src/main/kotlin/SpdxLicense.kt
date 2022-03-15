@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2017-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ enum class SpdxLicense(
     APACHE_2_0("Apache-2.0", "Apache License 2.0"),
     APAFML("APAFML", "Adobe Postscript AFM License"),
     APL_1_0("APL-1.0", "Adaptive Public License 1.0"),
+    APP_S2P("App-s2p", "App::s2p License"),
     APSL_1_0("APSL-1.0", "Apple Public Source License 1.0"),
     APSL_1_1("APSL-1.1", "Apple Public Source License 1.1"),
     APSL_1_2("APSL-1.2", "Apple Public Source License 1.2"),
@@ -111,7 +112,7 @@ enum class SpdxLicense(
     BSD_SOURCE_CODE("BSD-Source-Code", "BSD Source Code Attribution"),
     BSL_1_0("BSL-1.0", "Boost Software License 1.0"),
     BUSL_1_1("BUSL-1.1", "Business Source License 1.1"),
-    BZIP2_1_0_5("bzip2-1.0.5", "bzip2 and libbzip2 License v1.0.5"),
+    BZIP2_1_0_5("bzip2-1.0.5", "bzip2 and libbzip2 License v1.0.5", true),
     BZIP2_1_0_6("bzip2-1.0.6", "bzip2 and libbzip2 License v1.0.6"),
     CALDERA("Caldera", "Caldera License"),
     CAL_1_0("CAL-1.0", "Cryptographic Autonomy License 1.0"),
@@ -187,6 +188,8 @@ enum class SpdxLicense(
     CNRI_JYTHON("CNRI-Jython", "CNRI Jython License"),
     CNRI_PYTHON("CNRI-Python", "CNRI Python License"),
     CNRI_PYTHON_GPL_COMPATIBLE("CNRI-Python-GPL-Compatible", "CNRI Python Open Source GPL Compatible License Agreement"),
+    COIL_1_0("COIL-1.0", "Copyfree Open Innovation License"),
+    COMMUNITY_SPEC_1_0("Community-Spec-1.0", "Community Specification License 1.0"),
     CONDOR_1_1("Condor-1.1", "Condor Public License v1.1"),
     COPYLEFT_NEXT_0_3_0("copyleft-next-0.3.0", "copyleft-next 0.3.0"),
     COPYLEFT_NEXT_0_3_1("copyleft-next-0.3.1", "copyleft-next 0.3.1"),
@@ -200,6 +203,7 @@ enum class SpdxLicense(
     CURL("curl", "curl License"),
     C_UDA_1_0("C-UDA-1.0", "Computational Use of Data Agreement v1.0"),
     DIFFMARK("diffmark", "diffmark license"),
+    DL_DE_BY_2_0("DL-DE-BY-2.0", "Data licence Germany – attribution – version 2.0"),
     DOC("DOC", "DOC License"),
     DOTSEQN("Dotseqn", "Dotseqn License"),
     DRL_1_0("DRL-1.0", "Detection Rule License 1.0"),
@@ -212,6 +216,7 @@ enum class SpdxLicense(
     EFL_1_0("EFL-1.0", "Eiffel Forum License v1.0"),
     EFL_2_0("EFL-2.0", "Eiffel Forum License v2.0"),
     EGENIX("eGenix", "eGenix.com Public License 1.1.0"),
+    ELASTIC_2_0("Elastic-2.0", "Elastic License 2.0"),
     ENTESSA("Entessa", "Entessa Public License v1.0"),
     EPICS("EPICS", "EPICS Open License"),
     EPL_1_0("EPL-1.0", "Eclipse Public License 1.0"),
@@ -224,6 +229,7 @@ enum class SpdxLicense(
     EUPL_1_2("EUPL-1.2", "European Union Public License 1.2"),
     EUROSYM("Eurosym", "Eurosym License"),
     FAIR("Fair", "Fair License"),
+    FDK_AAC("FDK-AAC", "Fraunhofer FDK AAC Codec Library"),
     FRAMEWORX_1_0("Frameworx-1.0", "Frameworx Open License 1.0"),
     FREEBSD_DOC("FreeBSD-DOC", "FreeBSD Documentation License"),
     FREEIMAGE("FreeImage", "FreeImage Public License v1.0"),
@@ -297,6 +303,7 @@ enum class SpdxLicense(
     IPA("IPA", "IPA Font License"),
     IPL_1_0("IPL-1.0", "IBM Public License v1.0"),
     ISC("ISC", "ISC License"),
+    JAM("Jam", "Jam License"),
     JASPER_2_0("JasPer-2.0", "JasPer License"),
     JPNIC("JPNIC", "Japan Network Information Center License"),
     JSON("JSON", "JSON License"),
@@ -324,6 +331,7 @@ enum class SpdxLicense(
     LILIQ_P_1_1("LiLiQ-P-1.1", "Licence Libre du Québec – Permissive version 1.1"),
     LILIQ_RPLUS_1_1("LiLiQ-Rplus-1.1", "Licence Libre du Québec – Réciprocité forte version 1.1"),
     LILIQ_R_1_1("LiLiQ-R-1.1", "Licence Libre du Québec – Réciprocité version 1.1"),
+    LINUX_MAN_PAGES_COPYLEFT("Linux-man-pages-copyleft", "Linux man-pages Copyleft"),
     LINUX_OPENIB("Linux-OpenIB", "Linux Kernel Variant of OpenIB.org license"),
     LPL_1_0("LPL-1.0", "Lucent Public License Version 1.0"),
     LPL_1_02("LPL-1.02", "Lucent Public License v1.02"),
@@ -451,6 +459,7 @@ enum class SpdxLicense(
     SAXPATH("Saxpath", "Saxpath License"),
     SAX_PD("SAX-PD", "Sax Public Domain Notice"),
     SCEA("SCEA", "SCEA Shared Source License"),
+    SCHEMEREPORT("SchemeReport", "Scheme Language Report License"),
     SENDMAIL("Sendmail", "Sendmail License"),
     SENDMAIL_8_23("Sendmail-8.23", "Sendmail License 8.23"),
     SGI_B_1_0("SGI-B-1.0", "SGI Free Software License B v1.0"),
@@ -500,6 +509,7 @@ enum class SpdxLicense(
     WTFPL("WTFPL", "Do What The F*ck You Want To Public License"),
     WXWINDOWS("wxWindows", "wxWindows Library License", true),
     X11("X11", "X11 License"),
+    X11_DISTRIBUTE_MODIFICATIONS_VARIANT("X11-distribute-modifications-variant", "X11 License Distribution Modification Variant"),
     XEROX("Xerox", "Xerox License"),
     XFREE86_1_1("XFree86-1.1", "XFree86 License 1.1"),
     XINETD("xinetd", "xinetd License"),
@@ -523,7 +533,7 @@ enum class SpdxLicense(
         /**
          * The version of the license list.
          */
-        const val LICENSE_LIST_VERSION = "3.14"
+        const val LICENSE_LIST_VERSION = "3.16"
 
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
