@@ -47,8 +47,6 @@ private val ENV_TOOL_REGEX = Regex("(\\s{4}tool_versions:)\\n(?:\\s{6}.+)+")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
-fun <K, V> containExactly(vararg expected: Pair<K, V>): Matcher<Map<K, V>> = MapContainsMatcher(expected.toMap())
-
 fun patchExpectedResult(
     result: File,
     custom: Map<String, String> = emptyMap(),
