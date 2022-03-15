@@ -19,31 +19,29 @@
 
 package org.ossreviewtoolkit.utils.common
 
-import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class FileMatcherTest : WordSpec({
-    "matches" should {
-        "match the given patterns" {
-            val matcher = FileMatcher("a/LICENSE", "b/LICENSE")
+class FileMatcherTest : StringSpec({
+    "Patterns without globs should be matched" {
+        val matcher = FileMatcher("a/LICENSE", "b/LICENSE")
 
-            with(matcher) {
-                matches("a/LICENSE") shouldBe true
-                matches("b/LICENSE") shouldBe true
-                matches("c/LICENSE") shouldBe false
-            }
+        with(matcher) {
+            matches("a/LICENSE") shouldBe true
+            matches("b/LICENSE") shouldBe true
+            matches("c/LICENSE") shouldBe false
+        }
+    }
+
+    "Matching should adhere ignoring case" {
+        FileMatcher("LICENSE", ignoreCase = false).apply {
+            matches("LICENSE") shouldBe true
+            matches("license") shouldBe false
         }
 
-        "adhere to the case-sensitivity" {
-            FileMatcher("LICENSE", ignoreCase = false).apply {
-                matches("LICENSE") shouldBe true
-                matches("license") shouldBe false
-            }
-
-            FileMatcher("LICENSE", ignoreCase = true).apply {
-                matches("LICENSE") shouldBe true
-                matches("license") shouldBe true
-            }
+        FileMatcher("LICENSE", ignoreCase = true).apply {
+            matches("LICENSE") shouldBe true
+            matches("license") shouldBe true
         }
     }
 })
