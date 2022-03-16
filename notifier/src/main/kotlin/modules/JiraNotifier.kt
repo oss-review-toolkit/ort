@@ -33,11 +33,12 @@ import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.log
 
-class JiraNotifier(
-    config: JiraConfiguration,
-    private val restClient: JiraRestClient = AsynchronousJiraRestClientFactory()
-        .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
-) {
+class JiraNotifier(private val restClient: JiraRestClient) {
+    constructor(config: JiraConfiguration) : this(
+        AsynchronousJiraRestClientFactory()
+            .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
+    )
+
     /**
      * Create a [comment] within the issue specified by the [issueKey].
      */
