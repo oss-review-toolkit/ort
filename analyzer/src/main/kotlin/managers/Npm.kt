@@ -78,6 +78,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 const val PUBLIC_NPM_REGISTRY = "https://registry.npmjs.org"
 
+object NpmCli : CommandLineTool {
+    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
+
+    override fun getVersionRequirement() = Requirement.buildNPM("5.7.* - 7.20.*")
+}
+
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  */
@@ -86,7 +92,7 @@ open class Npm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -344,16 +350,12 @@ open class Npm(
 
     protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
-
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 7.20.*")
-
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun beforeResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        checkVersion()
+        NpmCli.checkVersion()
     }
 
     override fun afterResolution(definitionFiles: List<File>) {
@@ -667,9 +669,9 @@ open class Npm(
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         val process = if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {
-            run(workingDir, "ci", *installParameters)
+            NpmCli.run(workingDir, "ci", *installParameters)
         } else {
-            run(workingDir, "install", *installParameters)
+            NpmCli.run(workingDir, "install", *installParameters)
         }
 
         // TODO: Capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
