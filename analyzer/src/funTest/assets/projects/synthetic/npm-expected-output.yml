@@ -1165,7 +1165,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "TypeScript definitions for Node.js"
-  homepage_url: ""
+  homepage_url: "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node"
   binary_artifact:
     url: ""
     hash:

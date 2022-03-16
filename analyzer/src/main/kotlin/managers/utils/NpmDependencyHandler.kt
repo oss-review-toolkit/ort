@@ -49,10 +49,7 @@ data class NpmModuleInfo(
 /**
  * A specialized [DependencyHandler] implementation for NPM.
  */
-class NpmDependencyHandler(
-    /** The URL for queries to the NPM registry. */
-    private val npmRegistryUrl: String
-) : DependencyHandler<NpmModuleInfo> {
+class NpmDependencyHandler : DependencyHandler<NpmModuleInfo> {
     override fun identifierFor(dependency: NpmModuleInfo): Identifier = dependency.id
 
     override fun dependenciesFor(dependency: NpmModuleInfo): Collection<NpmModuleInfo> = dependency.dependencies
@@ -60,5 +57,5 @@ class NpmDependencyHandler(
     override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage = PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: NpmModuleInfo, issues: MutableList<OrtIssue>): Package =
-        Npm.parsePackage(dependency.packageFile, npmRegistryUrl).second
+        Npm.parsePackage(dependency.packageFile).second
 }
