@@ -87,8 +87,9 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         ProjectIssueBuilder(projectKey, restClient)
 
     class ProjectIssueBuilder(private val projectKey: String, private val restClient: JiraRestClient) {
-        private val issueTypes = restClient.projectClient.getProject(projectKey).claim()
-            .issueTypes.associateBy { it.name }
+        private val issueTypes by lazy {
+            restClient.projectClient.getProject(projectKey).claim().issueTypes.associateBy { it.name }
+        }
 
         /**
          * Create an issue for the project with the usage of [summary], [description] and [issueType]. If an [assignee]
