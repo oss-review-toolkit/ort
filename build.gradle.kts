@@ -25,7 +25,6 @@ import io.gitlab.arturbosch.detekt.Detekt
 import java.net.URL
 
 import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.lib.AbbreviatedObjectId
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -68,19 +67,10 @@ if (version == Project.DEFAULT_VERSION) {
     version = Git.open(rootDir).use { git ->
         // Make the output exactly match "git describe --abbrev=10 --always --tags --dirty", which is what is used in
         // "scripts/docker_build.sh", to make the hash match what JitPack uses.
-        val abbrevLength = 10
-        val description = git.describe().setAlways(true).setTags(true).call()
-
-        // Manually resolve an abbreviated hash to the custom length until
-        // https://bugs.eclipse.org/bugs/show_bug.cgi?id=537883 is implemented.
-        val customDescription = runCatching {
-            val abbrevObject = AbbreviatedObjectId.fromString(description)
-            val objects = git.repository.objectDatabase.newReader().use { it.resolve(abbrevObject) }
-            objects.single().name.take(abbrevLength)
-        }.getOrDefault(description)
-
+        val description = git.describe().setAbbrev(10).setAlways(true).setTags(true).call()
         val isDirty = git.status().call().hasUncommittedChanges()
-        if (isDirty) "$customDescription-dirty" else customDescription
+
+        if (isDirty) "$description-dirty" else description
     }
 }
 
