@@ -58,6 +58,17 @@ class FileMatcherTest : StringSpec({
         }
     }
 
+    "Glob and globstar can be combined" {
+        val matcher = FileMatcher("*/**/examples")
+
+        with(matcher) {
+            matches("project/examples") shouldBe true
+            matches("project/subproject/examples") shouldBe true
+            matches("examples") shouldBe false
+            matches("project/examples/hello") shouldBe false
+        }
+    }
+
     "Matching should adhere ignoring case" {
         FileMatcher("LICENSE", ignoreCase = false).apply {
             matches("LICENSE") shouldBe true
