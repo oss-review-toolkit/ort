@@ -64,8 +64,8 @@ class JiraNotifierTest : WordSpec({
         server.resetAll()
     }
 
-    "JiraNotifier" should {
-        "create a Jira ticket" {
+    "createIssue" should {
+        "succeed for valid input" {
             val projectKey = "TEST"
             val notifier = JiraNotifier(
                 JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
@@ -103,7 +103,7 @@ class JiraNotifierTest : WordSpec({
             }
         }
 
-        "not create an issue when there are more than one duplicate" {
+        "fail if more than one duplicate issues exist" {
             val projectKey = "TEST"
             val notifier = JiraNotifier(
                 JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
@@ -137,7 +137,7 @@ class JiraNotifierTest : WordSpec({
             }
         }
 
-        "add a comment when there is a duplicate issue without the comments" {
+        "add a comment if one duplicate issue exists" {
             val projectKey = "TEST"
             val issueId = "2457255"
             val issueKey = "TEST-505"
@@ -202,7 +202,7 @@ class JiraNotifierTest : WordSpec({
             )
         }
 
-        "not add a comment when there is already the same comment for the issue" {
+        "not add a comment if one duplicate issue exists that already has an identical comment" {
             val projectKey = "TEST"
             val issueKey = "TEST-505"
             val notifier = JiraNotifier(
@@ -248,7 +248,7 @@ class JiraNotifierTest : WordSpec({
             }
         }
 
-        "return a Failure if issue type is invalid" {
+        "fail if the issue type is invalid" {
             val projectKey = "TEST"
             val issueType = "unknownType"
             val notifier = JiraNotifier(
@@ -259,7 +259,7 @@ class JiraNotifierTest : WordSpec({
                 get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
                     .willReturn(
                         aResponse().withStatus(200)
-                                .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
+                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
                     )
             )
 
@@ -276,8 +276,10 @@ class JiraNotifierTest : WordSpec({
                 it.message shouldContain "'$issueType' is not valid"
             }
         }
+    }
 
-        "change the state of an issue" {
+    "changeState" should {
+        "succeed for valid input" {
             val issueId = "2457255"
             val issueKey = "TEST-505"
             val state = "Start Progress"
