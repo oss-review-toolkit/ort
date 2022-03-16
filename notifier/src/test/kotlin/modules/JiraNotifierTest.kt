@@ -23,6 +23,7 @@ import com.atlassian.jira.rest.client.api.IssueRestClient
 import com.atlassian.jira.rest.client.api.JiraRestClient
 import com.atlassian.jira.rest.client.api.OptionalIterable
 import com.atlassian.jira.rest.client.api.ProjectRestClient
+import com.atlassian.jira.rest.client.api.RestClientException
 import com.atlassian.jira.rest.client.api.SearchRestClient
 import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import com.atlassian.jira.rest.client.api.domain.Comment
@@ -213,6 +214,34 @@ class JiraNotifierTest : WordSpec({
             result.shouldBeFailure {
                 it.message shouldContain "'$issueType' is not valid"
             }
+        }
+    }
+
+    "changeAssignee" should {
+        "succeed for valid input" {
+            val issueClient = mockk<IssueRestClient>()
+            val restClient = mockk<JiraRestClient>()
+
+            every { restClient.issueClient } returns issueClient
+            every { issueClient.updateIssue(any(), any()) } returns createVoidPromise()
+
+            val notifier = JiraNotifier(restClient)
+            notifier.changeAssignee("$PROJECT_KEY-1", "USER") shouldBe true
+
+            verify(exactly = 1) {
+                issueClient.updateIssue(any(), any())
+            }
+        }
+
+        "fail if the assignee cannot be set" {
+            val issueClient = mockk<IssueRestClient>()
+            val restClient = mockk<JiraRestClient>()
+
+            every { restClient.issueClient } returns issueClient
+            every { issueClient.updateIssue(any(), any()) } throws RestClientException("Error", Exception())
+
+            val notifier = JiraNotifier(restClient)
+            notifier.changeAssignee("$PROJECT_KEY-1", "USER") shouldBe false
         }
     }
 

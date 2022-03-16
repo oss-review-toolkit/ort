@@ -50,6 +50,21 @@ class JiraNotifier(private val restClient: JiraRestClient) {
     }
 
     /**
+     * Change the [assignee] of the give issue specified by the [issueKey].
+     */
+    fun changeAssignee(issueKey: String, assignee: String): Boolean {
+        val input = IssueInputBuilder().setAssigneeName(assignee).build()
+
+        return runCatching {
+            restClient.issueClient.updateIssue(issueKey, input)
+        }.onFailure {
+            log.error {
+                "Could not set the assignee to '$assignee' for issue '$issueKey': ${it.collectMessagesAsString()}"
+            }
+        }.isSuccess
+    }
+
+    /**
      * Change the [state] of the given issue specified by the [issueKey].
      */
     fun changeState(issueKey: String, state: String): Boolean {
