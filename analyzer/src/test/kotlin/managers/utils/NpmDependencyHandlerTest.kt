@@ -78,9 +78,6 @@ class NpmDependencyHandlerTest : StringSpec({
     }
 })
 
-/** The URI to be used for queries to the NPM registry. */
-const val NPM_REGISTRY_URL = "https://npm-test.example.org"
-
 /**
  * Construct a test identifier with the given [name].
  */
@@ -100,4 +97,4 @@ private fun createModuleInfo(
 /**
  * Creates an [NpmDependencyHandler] instance to be used by test cases.
  */
-private fun createHandler() = NpmDependencyHandler(NPM_REGISTRY_URL)
+private fun createHandler() = NpmDependencyHandler()

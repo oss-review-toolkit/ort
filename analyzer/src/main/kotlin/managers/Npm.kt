@@ -28,7 +28,6 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.net.URLEncoder
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -39,8 +38,6 @@ import org.ossreviewtoolkit.analyzer.managers.utils.NpmModuleInfo
 import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutUrl
 import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
-import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingsFromNpmRc
-import org.ossreviewtoolkit.analyzer.managers.utils.readRegistryFromNpmRc
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -71,17 +68,13 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-
-const val PUBLIC_NPM_REGISTRY = "https://registry.npmjs.org"
 
 object NpmCli : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
-    override fun getVersionRequirement() = Requirement.buildNPM("5.7.* - 7.20.*")
+    override fun getVersionRequirement() = Requirement.buildNPM("6.* - 7.20.*")
 }
 
 /**
@@ -196,10 +189,10 @@ open class Npm(
 
         /**
          * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
-         * content from the [npmRegistry]. Result is a [Pair] with the raw identifier and the new package.
+         * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
          */
         @Suppress("HttpUrlsUsage")
-        internal fun parsePackage(packageFile: File, npmRegistry: String): Pair<String, Package> {
+        internal fun parsePackage(packageFile: File): Pair<String, Package> {
             val packageDir = packageFile.parentFile
 
             log.debug { "Found a 'package.json' file in '$packageDir'." }
@@ -246,36 +239,20 @@ open class Npm(
                         || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
                 if (hasIncompleteData) {
-                    // Download package info from registry.npmjs.org.
-                    // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
-                    val encodedName = if (rawName.startsWith("@")) {
-                        "@${URLEncoder.encode(rawName.substringAfter('@'), "UTF-8")}"
-                    } else {
-                        rawName
-                    }
+                    val process = NpmCli.run("view", "--json", "$rawName@$version")
+                    val view = jsonMapper.readTree(process.stdoutFile)
 
-                    log.debug { "Resolving the package info for '${id.toCoordinates()}' via NPM registry." }
+                    if (description.isEmpty()) description = view["description"].textValueOrEmpty()
+                    if (homepageUrl.isEmpty()) homepageUrl = view["homepage"].textValueOrEmpty()
 
-                    OkHttpClientHelper.downloadText("$npmRegistry/$encodedName/$version").onSuccess {
-                        val versionInfo = jsonMapper.readTree(it)
-
-                        if (description.isEmpty()) description = versionInfo["description"].textValueOrEmpty()
-                        if (homepageUrl.isEmpty()) homepageUrl = versionInfo["homepage"].textValueOrEmpty()
-
-                        versionInfo["dist"]?.let { dist ->
-                            if (downloadUrl.isEmpty() || hash == Hash.NONE) {
-                                downloadUrl = dist["tarball"].textValueOrEmpty()
-                                hash = Hash.create(dist["shasum"].textValueOrEmpty())
-                            }
-                        }
-
-                        vcsFromPackage = parseVcsInfo(versionInfo)
-                    }.onFailure {
-                        log.info {
-                            "Could not retrieve package information for '$encodedName' from NPM registry " +
-                                    "$npmRegistry: ${it.message}"
+                    view["dist"]?.let { dist ->
+                        if (downloadUrl.isEmpty() || hash == Hash.NONE) {
+                            downloadUrl = dist["tarball"].textValueOrEmpty()
+                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
                         }
                     }
+
+                    vcsFromPackage = parseVcsInfo(view)
                 }
             }
 
@@ -325,23 +302,8 @@ open class Npm(
         }
     }
 
-    private val ortProxySelector = installAuthenticatorAndProxySelector()
-
-    private val npmRegistry: String
-
-    init {
-        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
-        npmRegistry = if (npmRcFile.isFile) {
-            val npmRcContent = npmRcFile.readText()
-            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcContent))
-            readRegistryFromNpmRc(npmRcContent) ?: PUBLIC_NPM_REGISTRY
-        } else {
-            PUBLIC_NPM_REGISTRY
-        }
-    }
-
     private val graphBuilder: DependencyGraphBuilder<NpmModuleInfo> =
-        DependencyGraphBuilder(NpmDependencyHandler(npmRegistry))
+        DependencyGraphBuilder(NpmDependencyHandler())
 
     /**
      * Array of parameters passed to the install command when installing dependencies.
@@ -356,10 +318,6 @@ open class Npm(
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
         NpmCli.checkVersion()
-    }
-
-    override fun afterResolution(definitionFiles: List<File>) {
-        ortProxySelector.removeProxyOrigin(managerName)
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
@@ -425,7 +383,7 @@ open class Npm(
         nodeModulesDir.walk().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }.forEach { file ->
-            val (id, pkg) = parsePackage(file, npmRegistry)
+            val (id, pkg) = parsePackage(file)
             packages[id] = pkg
         }
 
