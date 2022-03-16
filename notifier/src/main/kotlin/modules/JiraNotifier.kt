@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.log
 
 class JiraNotifier(
-    val config: JiraConfiguration,
+    config: JiraConfiguration,
     private val restClient: JiraRestClient = AsynchronousJiraRestClientFactory()
         .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
 ) {
