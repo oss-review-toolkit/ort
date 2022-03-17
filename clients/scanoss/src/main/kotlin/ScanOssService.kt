@@ -58,6 +58,7 @@ interface ScanOssService {
 
     /**
      * Scan a file using the SCANOSS streaming API.
+     * TODO: Implement support for scanning with SBOM.
      */
     @Multipart
     @POST("scan/direct")
