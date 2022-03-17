@@ -58,7 +58,6 @@ class ScanOss(
         val scannerConf = ScannerConf.defaultConf()
         val scanner = Scanner(scannerConf)
 
-        // TODO: Implement support for scanning with SBOM.
         val scanType = null
         val sbomPath = ""
 
