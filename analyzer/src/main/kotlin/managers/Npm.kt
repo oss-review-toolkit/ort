@@ -236,36 +236,41 @@ open class Npm(
                 val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
-                // Download package info from registry.npmjs.org.
-                // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
-                val encodedName = if (rawName.startsWith("@")) {
-                    "@${URLEncoder.encode(rawName.substringAfter('@'), "UTF-8")}"
-                } else {
-                    rawName
-                }
+                val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
+                        || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
-                log.debug { "Resolving the package info for '${id.toCoordinates()}' via NPM registry." }
-
-                OkHttpClientHelper.downloadText("$npmRegistry/$encodedName/$version").onSuccess {
-                    val versionInfo = jsonMapper.readTree(it)
-
-                    description = versionInfo["description"].textValueOrEmpty()
-                    homepageUrl = versionInfo["homepage"].textValueOrEmpty()
-
-                    versionInfo["dist"]?.let { dist ->
-                        downloadUrl = dist["tarball"].textValueOrEmpty()
-                            // Work around the issue described at
-                            // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                            .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
-
-                        hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                if (hasIncompleteData) {
+                    // Download package info from registry.npmjs.org.
+                    // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
+                    val encodedName = if (rawName.startsWith("@")) {
+                        "@${URLEncoder.encode(rawName.substringAfter('@'), "UTF-8")}"
+                    } else {
+                        rawName
                     }
 
-                    vcsFromPackage = parseVcsInfo(versionInfo)
-                }.onFailure {
-                    log.info {
-                        "Could not retrieve package information for '$encodedName' from NPM registry $npmRegistry: " +
-                                it.message
+                    log.debug { "Resolving the package info for '${id.toCoordinates()}' via NPM registry." }
+
+                    OkHttpClientHelper.downloadText("$npmRegistry/$encodedName/$version").onSuccess {
+                        val versionInfo = jsonMapper.readTree(it)
+
+                        description = versionInfo["description"].textValueOrEmpty()
+                        homepageUrl = versionInfo["homepage"].textValueOrEmpty()
+
+                        versionInfo["dist"]?.let { dist ->
+                            downloadUrl = dist["tarball"].textValueOrEmpty()
+                                // Work around the issue described at
+                                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
+
+                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                        }
+
+                        vcsFromPackage = parseVcsInfo(versionInfo)
+                    }.onFailure {
+                        log.info {
+                            "Could not retrieve package information for '$encodedName' from NPM registry " +
+                                    "$npmRegistry: ${it.message}"
+                        }
                     }
                 }
             }
