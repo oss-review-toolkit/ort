@@ -97,7 +97,7 @@ private fun SpdxSingleLicenseExpression.toLicenseName(): String {
         else -> ""
     }
 
-    return SpdxLicense.forId(spdxLicenseId)?.fullName ?: ""
+    return SpdxLicense.forId(spdxLicenseId)?.fullName.orEmpty()
 }
 
 /**
