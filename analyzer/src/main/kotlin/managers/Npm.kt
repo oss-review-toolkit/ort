@@ -253,12 +253,14 @@ open class Npm(
                     OkHttpClientHelper.downloadText("$npmRegistry/$encodedName/$version").onSuccess {
                         val versionInfo = jsonMapper.readTree(it)
 
-                        description = versionInfo["description"].textValueOrEmpty()
-                        homepageUrl = versionInfo["homepage"].textValueOrEmpty()
+                        if (description.isEmpty()) description = versionInfo["description"].textValueOrEmpty()
+                        if (homepageUrl.isEmpty()) homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
                         versionInfo["dist"]?.let { dist ->
-                            downloadUrl = dist["tarball"].textValueOrEmpty()
-                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                            if (downloadUrl.isEmpty() || hash == Hash.NONE) {
+                                downloadUrl = dist["tarball"].textValueOrEmpty()
+                                hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                            }
                         }
 
                         vcsFromPackage = parseVcsInfo(versionInfo)
