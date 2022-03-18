@@ -197,7 +197,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
                     path.endsWith(".git") || path.count { it == '/' } != 2
                 } ?: "${uri.path}.git"
 
-                val query = uri.query?.takeIf { it.isNotBlank() }?.let { "?$it" } ?: ""
+                val query = uri.query?.takeIf { it.isNotBlank() }?.let { "?$it" }.orEmpty()
 
                 return if (uri.scheme == "ssh") {
                     // Ensure the generic "git" user name is specified.
