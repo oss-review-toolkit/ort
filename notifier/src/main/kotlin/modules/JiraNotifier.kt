@@ -133,7 +133,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
                 //       An improvement has to be added here so that it can handle the case that the search returns more
                 //       than one issue.
                 if (searchResult.total == 1) {
-                    val issue = restClient.issueClient.getIssue(searchResult.issues.iterator().next().key).claim()
+                    val issue = searchResult.issues.first()
                     val comment = "$summary\n$description"
 
                     if (comment in issue.comments.mapNotNull { it.body }) {
