@@ -33,7 +33,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
-import org.ossreviewtoolkit.clients.scanoss.ScanossService
+import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.clients.scanoss.model.IdentificationType
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -48,7 +48,7 @@ class ScanOssServiceTest : StringSpec({
             .dynamicPort()
             .usingFilesUnderDirectory("src/test/assets/scan")
     )
-    lateinit var service: ScanossService
+    lateinit var service: ScanOssService
 
     val sampleFile = File("src/test/assets/scan/file.wfp").let { file ->
         MultipartBody.Part.createFormData(
@@ -60,7 +60,7 @@ class ScanOssServiceTest : StringSpec({
 
     beforeSpec {
         server.start()
-        service = ScanossService.create("http://localhost:${server.port()}")
+        service = ScanOssService.create("http://localhost:${server.port()}")
     }
 
     afterSpec {

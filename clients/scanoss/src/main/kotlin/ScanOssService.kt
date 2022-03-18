@@ -34,7 +34,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
-interface ScanossService {
+interface ScanOssService {
     companion object {
         /**
          * The JSON (de-)serialization object used by this service.
@@ -44,7 +44,7 @@ interface ScanossService {
         /**
          * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
          */
-        fun create(url: String, client: OkHttpClient? = null): ScanossService {
+        fun create(url: String, client: OkHttpClient? = null): ScanOssService {
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
@@ -52,7 +52,7 @@ interface ScanossService {
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
-            return retrofit.create(ScanossService::class.java)
+            return retrofit.create(ScanOssService::class.java)
         }
     }
 
