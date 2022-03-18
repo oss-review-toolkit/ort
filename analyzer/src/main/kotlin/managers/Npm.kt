@@ -258,10 +258,6 @@ open class Npm(
 
                         versionInfo["dist"]?.let { dist ->
                             downloadUrl = dist["tarball"].textValueOrEmpty()
-                                // Work around the issue described at
-                                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
-
                             hash = Hash.create(dist["shasum"].textValueOrEmpty())
                         }
 
@@ -274,6 +270,11 @@ open class Npm(
                     }
                 }
             }
+
+            downloadUrl = downloadUrl
+                // Work around the issue described at
+                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
 
             val vcsFromDownloadUrl = VcsHost.toVcsInfo(downloadUrl)
             if (vcsFromDownloadUrl.url != downloadUrl) {
