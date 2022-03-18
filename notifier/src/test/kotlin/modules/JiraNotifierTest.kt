@@ -19,257 +19,195 @@
 
 package org.ossreviewtoolkit.notifier.modules
 
+import com.atlassian.jira.rest.client.api.IssueRestClient
+import com.atlassian.jira.rest.client.api.JiraRestClient
+import com.atlassian.jira.rest.client.api.OptionalIterable
+import com.atlassian.jira.rest.client.api.ProjectRestClient
+import com.atlassian.jira.rest.client.api.SearchRestClient
+import com.atlassian.jira.rest.client.api.domain.BasicIssue
+import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
+import com.atlassian.jira.rest.client.api.domain.IssueType
+import com.atlassian.jira.rest.client.api.domain.Project
+import com.atlassian.jira.rest.client.api.domain.SearchResult
+import com.atlassian.jira.rest.client.api.domain.Transition
 
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.equalTo
-import com.github.tomakehurst.wiremock.client.WireMock.exactly
-import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.matching
-import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
-import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import io.atlassian.util.concurrent.Promise
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.types.shouldBeTypeOf
 
-import java.io.File
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+
 import java.net.URI
 
-import org.ossreviewtoolkit.model.config.JiraConfiguration
-
 class JiraNotifierTest : WordSpec({
-    val server = WireMockServer(
-        WireMockConfiguration.options()
-            .dynamicPort()
-            .usingFilesUnderDirectory(TEST_FILES_ROOT)
-    )
-
-    beforeSpec {
-        server.start()
-    }
-
-    afterSpec {
-        server.stop()
-    }
-
-    beforeEach {
-        server.resetAll()
-    }
-
     "createIssue" should {
         "succeed for valid input" {
-            val projectKey = "TEST"
-            val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
-            )
+            val project = createProject()
+            val issueClient = mockk<IssueRestClient>()
+            val projectClient = mockk<ProjectRestClient>()
+            val restClient = mockk<JiraRestClient>()
 
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
-                    )
-            )
-            server.stubFor(
-                post(urlPathEqualTo("/rest/api/latest/issue"))
-                    .withHeader("Content-Type", equalTo("application/json"))
-                    .willReturn(
-                        aResponse().withStatus(201)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_create_issue.json")
-                    )
-            )
+            every { restClient.issueClient } returns issueClient
+            every { restClient.projectClient } returns projectClient
+            every { issueClient.createIssue(any()) } returns createPromise(BasicIssue(URI(""), "$PROJECT_KEY-1", 1L))
+            every { projectClient.getProject(any<String>()) } returns createPromise(project)
 
-            val projectIssueBuilder = notifier.projectIssueBuilder(projectKey)
+            val notifier = JiraNotifier(restClient)
+
+            val projectIssueBuilder = notifier.projectIssueBuilder(project.key)
             val resultIssue = projectIssueBuilder.createIssue(
-                "Ticket summary",
-                "The description of the ticket.",
-                "Bug",
-                null,
-                false
+                summary = "Ticket summary",
+                description = "The description of the ticket.",
+                issueType = "Bug",
+                avoidDuplicates = false
             )
 
             resultIssue.shouldBeSuccess {
-                it.id shouldBe 2457237
-                it.key shouldBe "PROJECT-1"
-                it.self shouldBe URI("https://jira.oss-review-toolkit.org/rest/api/2/issue/2457237")
+                it.id shouldBe 1L
+                it.key shouldBe "${project.key}-${it.id}"
+                it.self shouldBe URI("")
             }
         }
 
         "fail if more than one duplicate issues exist" {
-            val projectKey = "TEST"
-            val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
-            )
+            val project = createProject()
+            val issueClient = mockk<IssueRestClient>()
+            val projectClient = mockk<ProjectRestClient>()
+            val searchClient = mockk<SearchRestClient>()
+            val restClient = mockk<JiraRestClient>()
 
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/search"))
-                    .withQueryParam("jql", matching("project.*summary.*"))
-                    .willReturn(
-                        aResponse().withStatus(201)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_search_jql.json")
-                    )
-            )
+            val summary = "Ticket summary"
+            val query = "project = \"${project.key}\" AND summary ~ \"$summary\""
 
-            val projectIssueBuilder = notifier.projectIssueBuilder(projectKey)
+            val existingIssues = listOf(createIssue(id = 1, summary = summary), createIssue(id = 2, summary = summary))
+
+            every { restClient.issueClient } returns issueClient
+            every { restClient.projectClient } returns projectClient
+            every { restClient.searchClient } returns searchClient
+            every { issueClient.createIssue(any()) } returns createPromise(BasicIssue(URI(""), "$PROJECT_KEY-1", 1L))
+            every { projectClient.getProject(any<String>()) } returns createPromise(project)
+            every { searchClient.searchJql(query) } returns createPromise(SearchResult(0, 2, 2, existingIssues))
+
+            val notifier = JiraNotifier(restClient)
+
+            val projectIssueBuilder = notifier.projectIssueBuilder(project.key)
             val resultIssue = projectIssueBuilder.createIssue(
-                "Ticket summary",
-                "The description of the ticket.",
-                "Bug"
+                summary = summary,
+                description = "The description of the ticket.",
+                issueType = "Bug",
+                avoidDuplicates = true
             )
 
             resultIssue.shouldBeFailure {
                 it.message shouldContain "more than 1 duplicate issues"
             }
+
+            verify(exactly = 0) {
+                issueClient.createIssue(any())
+                issueClient.addComment(any(), any())
+            }
         }
 
         "add a comment if one duplicate issue exists" {
-            val projectKey = "TEST"
-            val issueId = "2457255"
-            val issueKey = "TEST-505"
-            val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
-            )
-            val resultFile = File("$TEST_FILES_ROOT/__files/jira/response_get_issue_without_comments.json").readText()
-            val replaced = resultFile.replace("\$port", server.port().toString())
+            val project = createProject()
+            val issueClient = mockk<IssueRestClient>()
+            val projectClient = mockk<ProjectRestClient>()
+            val searchClient = mockk<SearchRestClient>()
+            val restClient = mockk<JiraRestClient>()
 
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/search"))
-                    .withQueryParam("jql", matching("project.*summary.*"))
-                    .willReturn(
-                        aResponse().withStatus(201)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_search_jql_with_one_issue.json")
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/issue/$issueKey"))
-                    .withQueryParam("expand", equalTo("schema,names,transitions"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBody(replaced)
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/serverInfo"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_serverInfo.json")
-                    )
-            )
-            server.stubFor(
-                post(urlPathEqualTo("/rest/api/latest/issue/$issueId/comment"))
-                    .willReturn(
-                        aResponse().withStatus(201)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_add_comment.json")
-                    )
-            )
+            val summary = "Ticket summary"
+            val query = "project = \"${project.key}\" AND summary ~ \"$summary\""
 
-            val projectIssueBuilder = notifier.projectIssueBuilder(projectKey)
+            val existingIssues = listOf(createIssue(id = 1, summary = summary))
+
+            every { restClient.issueClient } returns issueClient
+            every { restClient.projectClient } returns projectClient
+            every { restClient.searchClient } returns searchClient
+            every { issueClient.createIssue(any()) } returns createPromise(BasicIssue(URI(""), "$PROJECT_KEY-1", 1L))
+            every { issueClient.addComment(any(), any()) } returns createVoidPromise()
+            every { projectClient.getProject(any<String>()) } returns createPromise(project)
+            every { searchClient.searchJql(query) } returns createPromise(SearchResult(0, 1, 1, existingIssues))
+
+            val notifier = JiraNotifier(restClient)
+
+            val projectIssueBuilder = notifier.projectIssueBuilder(project.key)
+
             projectIssueBuilder.createIssue(
-                "Ticket summary",
-                "The description of the ticket.",
-                "Bug",
-                null,
-                true
+                summary = summary,
+                description = "The description of the ticket.",
+                issueType = "Bug",
+                avoidDuplicates = true
             )
 
-            server.verify(
-                exactly(1),
-                postRequestedFor(urlEqualTo("/rest/api/latest/issue/$issueId/comment"))
-                    .withRequestBody(matching(".*"))
-                    .withHeader("Content-Type", equalTo("application/json"))
-            )
+            verify(exactly = 1) {
+                issueClient.addComment(any(), any())
+            }
         }
 
         "not add a comment if one duplicate issue exists that already has an identical comment" {
-            val projectKey = "TEST"
-            val issueKey = "TEST-505"
-            val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
+            val project = createProject()
+            val issueClient = mockk<IssueRestClient>()
+            val projectClient = mockk<ProjectRestClient>()
+            val searchClient = mockk<SearchRestClient>()
+            val restClient = mockk<JiraRestClient>()
+
+            val summary = "Ticket summary"
+            val description = "The description of the ticket."
+            val query = "project = \"${project.key}\" AND summary ~ \"$summary\""
+
+            val existingIssues =
+                listOf(createIssue(id = 1, summary = summary, comments = listOf("$summary\n$description")))
+
+            every { restClient.issueClient } returns issueClient
+            every { restClient.projectClient } returns projectClient
+            every { restClient.searchClient } returns searchClient
+            every { issueClient.createIssue(any()) } returns createPromise(BasicIssue(URI(""), "$PROJECT_KEY-1", 1L))
+            every { projectClient.getProject(any<String>()) } returns createPromise(project)
+            every { searchClient.searchJql(query) } returns createPromise(SearchResult(0, 1, 1, existingIssues))
+
+            val notifier = JiraNotifier(restClient)
+
+            val projectIssueBuilder = notifier.projectIssueBuilder(project.key)
+
+            projectIssueBuilder.createIssue(
+                summary = summary,
+                description = description,
+                issueType = "Bug",
+                avoidDuplicates = true
             )
 
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/search"))
-                    .withQueryParam("jql", matching("project.*summary.*"))
-                    .willReturn(
-                        aResponse().withStatus(201)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_search_jql_with_one_issue.json")
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/issue/$issueKey"))
-                    .withQueryParam("expand", equalTo("schema,names,transitions"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_issue.json")
-                    )
-            )
-
-            val projectIssueBuilder = notifier.projectIssueBuilder(projectKey)
-            val resultIssue = projectIssueBuilder.createIssue(
-                "Ticket summary",
-                "The description of the ticket.",
-                "Bug",
-                null,
-                true
-            )
-
-            resultIssue.shouldBeSuccess {
-                it.shouldBeTypeOf<Issue>()
-                it.comments.count() shouldBe 2
+            verify(exactly = 0) {
+                issueClient.addComment(any(), any())
             }
         }
 
         "fail if the issue type is invalid" {
-            val projectKey = "TEST"
-            val issueType = "unknownType"
-            val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
-            )
+            val project = createProject()
+            val issueClient = mockk<IssueRestClient>()
+            val projectClient = mockk<ProjectRestClient>()
+            val restClient = mockk<JiraRestClient>()
 
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/project/$projectKey"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_project.json")
-                    )
-            )
+            every { restClient.issueClient } returns issueClient
+            every { restClient.projectClient } returns projectClient
+            every { projectClient.getProject(any<String>()) } returns createPromise(project)
 
-            val projectIssueBuilder = notifier.projectIssueBuilder(projectKey)
+            val notifier = JiraNotifier(restClient)
+
+            val issueType = "Invalid"
+
+            val projectIssueBuilder = notifier.projectIssueBuilder(project.key)
             val result = projectIssueBuilder.createIssue(
-                "Ticket summary",
-                "The description of the ticket.",
-                issueType,
-                null,
-                false
+                summary = "Ticket summary",
+                description = "The description of the ticket.",
+                issueType = issueType,
+                avoidDuplicates = false
             )
 
             result.shouldBeFailure {
@@ -280,56 +218,70 @@ class JiraNotifierTest : WordSpec({
 
     "changeState" should {
         "succeed for valid input" {
-            val issueId = "2457255"
-            val issueKey = "TEST-505"
-            val state = "Start Progress"
+            val issueClient = mockk<IssueRestClient>()
+            val restClient = mockk<JiraRestClient>()
 
-            val notifier = JiraNotifier(
-                JiraConfiguration("http://localhost:${server.port()}", "testuser", "testpassword")
-            )
-            val resultFile = File("$TEST_FILES_ROOT/__files/jira/response_get_issue_without_comments.json").readText()
-            val replaced = resultFile.replace("\$port", server.port().toString())
+            val state = "Bug"
+            val transitions = listOf(createTransition(id = 1, state = state))
 
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/issue/$issueKey"))
-                    .withQueryParam("expand", equalTo("schema,names,transitions"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBody(replaced)
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/issue/$issueId/transitions"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_get_transitions.json")
-                    )
-            )
-            server.stubFor(
-                get(urlPathEqualTo("/rest/api/latest/serverInfo"))
-                    .willReturn(
-                        aResponse().withStatus(200)
-                            .withBodyFile("$TEST_FILES_DIRECTORY/response_serverInfo.json")
-                    )
-            )
-            server.stubFor(
-                post(urlPathEqualTo("/rest/api/latest/issue/$issueId/transitions"))
-                    .willReturn(
-                        aResponse().withStatus(204)
-                    )
-            )
+            every { restClient.issueClient } returns issueClient
+            every { issueClient.getIssue(any()) } returns createPromise(createIssue(id = 1, summary = "Ticket summary"))
+            every { issueClient.getTransitions(any<Issue>()) } returns createPromise(transitions)
 
-            notifier.changeState(issueKey, state)
+            val notifier = JiraNotifier(restClient)
+            notifier.changeState("$PROJECT_KEY-1", state)
 
-            server.verify(
-                exactly(1),
-                postRequestedFor(urlEqualTo("/rest/api/latest/issue/$issueId/transitions?expand=transitions.fields"))
-                    .withRequestBody(matching(".*"))
-                    .withHeader("Content-Type", matching("application/json.*"))
-            )
+            verify(exactly = 1) {
+                issueClient.transition(any<Issue>(), any())
+            }
         }
     }
 })
 
-private const val TEST_FILES_ROOT = "src/test/assets"
-private const val TEST_FILES_DIRECTORY = "jira"
+private const val PROJECT_KEY = "PROJECT"
+
+private val ISSUE_TYPES = listOf(
+    createIssueType("Bug"),
+    createIssueType("New Feature"),
+    createIssueType("Task"),
+    createIssueType("Improvement")
+)
+
+private fun createIssueType(name: String) =
+    IssueType(URI(""), 0L, name, false, "", URI(""))
+
+private fun <T> createPromise(value: T): Promise<T> =
+    mockk {
+        every { claim() } returns value
+    }
+
+private fun createVoidPromise(): Promise<Void> =
+    mockk {
+        every { claim() } returns null
+    }
+
+private fun createProject(): Project =
+    mockk {
+        every { key } returns PROJECT_KEY
+        every { issueTypes } returns OptionalIterable(ISSUE_TYPES)
+    }
+
+private fun createComment(message: String): Comment =
+    mockk {
+        every { body } returns message
+    }
+
+private fun createIssue(id: Long, summary: String = "", comments: List<String> = emptyList()): Issue =
+    mockk {
+        every { this@mockk.id } returns id
+        every { key } returns "$PROJECT_KEY-$id"
+        every { this@mockk.summary } returns summary
+        every { this@mockk.comments } returns comments.map { createComment(it) }
+        every { commentsUri } returns URI("")
+    }
+
+private fun createTransition(id: Int, state: String): Transition =
+    mockk {
+        every { this@mockk.id } returns id
+        every { name } returns state
+    }
