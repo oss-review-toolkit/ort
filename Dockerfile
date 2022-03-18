@@ -133,7 +133,7 @@ COPY docker/ruby.sh /etc/profile.d
 # NODEJS - Build NodeJS as a separate component with nvm
 FROM build AS nodebuild
 
-ARG BOWER_VERSION=1.8.8
+ARG BOWER_VERSION=1.8.12
 ARG NODEJS_VERSION=16.13.2
 ARG NPM_VERSION=7.20.6
 ARG NVM_DIR=/opt/nodejs
@@ -190,7 +190,7 @@ COPY docker/android.sh /etc/profile.d
 
 #------------------------------------------------------------------------
 # ORT
-FROM nodebuild as ortbuild
+FROM build as ortbuild
 
 # Set this to the version ORT should report.
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
@@ -200,8 +200,7 @@ WORKDIR /usr/local/src/ort
 
 # Prepare Gradle
 RUN --mount=type=cache,target=/tmp/.gradle/ \
-    . /opt/nodejs/nvm.sh \
-    && GRADLE_USER_HOME=/tmp/.gradle/ \
+    export GRADLE_USER_HOME=/tmp/.gradle/ \
     && scripts/import_proxy_certs.sh \
     && scripts/set_gradle_proxy.sh \
     && sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties \
