@@ -47,7 +47,7 @@ project:
         - id: "NPM::domhandler:2.4.2"
           dependencies:
           - id: "NPM::domelementtype:1.3.1"
-        - id: "NPM::domutils:1.7.0"
+        - id: "NPM::domutils:1.5.1"
           dependencies:
           - id: "NPM::dom-serializer:0.1.1"
             dependencies:
@@ -467,36 +467,6 @@ packages:
     type: "Git"
     url: "https://github.com/FB55/domutils.git"
     revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
-    path: ""
-- id: "NPM::domutils:1.7.0"
-  purl: "pkg:npm/domutils@1.7.0"
-  authors:
-  - "Felix Boehm"
-  declared_licenses:
-  - "BSD-2-Clause"
-  declared_licenses_processed:
-    spdx_expression: "BSD-2-Clause"
-  description: "utilities for working with htmlparser2's dom"
-  homepage_url: "https://github.com/FB55/domutils#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/domutils/-/domutils-1.7.0.tgz"
-    hash:
-      value: "56ea341e834e06e6748af7a1cb25da67ea9f8c2a"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "git://github.com/FB55/domutils.git"
-    revision: "34f193ca17d11a98d9310b1965efe5f73d32d79f"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/FB55/domutils.git"
-    revision: "34f193ca17d11a98d9310b1965efe5f73d32d79f"
     path: ""
 - id: "NPM::eachr:3.2.0"
   purl: "pkg:npm/eachr@3.2.0"
