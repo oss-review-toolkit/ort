@@ -96,7 +96,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "libxml2 is a software library for parsing XML documents"
-  homepage_url: "https://xmlsoft.org"
+  homepage_url: "https://gitlab.gnome.org/GNOME/libxml2/-/wikis/"
   binary_artifact:
     url: ""
     hash:
