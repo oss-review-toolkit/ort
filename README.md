@@ -744,9 +744,9 @@ needs to be installed. Afterwards tests can be run via the green "Play" icon fro
 
 # License
 
-Copyright (C) 2017-2021 HERE Europe B.V.\
+Copyright (C) 2017-2022 HERE Europe B.V.\
 Copyright (C) 2019-2020 Bosch Software Innovations GmbH\
-Copyright (C) 2020-2021 Bosch.IO GmbH
+Copyright (C) 2020-2022 Bosch.IO GmbH
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 
