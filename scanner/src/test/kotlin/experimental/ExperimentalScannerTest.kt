@@ -75,7 +75,7 @@ class ExperimentalScannerTest : WordSpec({
 
     "Scanning with different scanners for projects and packages" should {
         "Use the correct scanners for each data entity" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val packageScannerWrapper = FakePackageScannerWrapper(name = "package scanner")
             val projectScannerWrapper = FakePackageScannerWrapper(name = "project scanner")
             val scanner = createScanner(
@@ -98,7 +98,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "Not scan projects if no scanner wrapper for projects is configured" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val scanner = createScanner(
                 packageScannerWrappers = listOf(scannerWrapper),
@@ -109,7 +109,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "Not scan packages if no scanner wrapper for packages is configured" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val scanner = createScanner(
                 packageScannerWrappers = emptyList(),
@@ -122,8 +122,8 @@ class ExperimentalScannerTest : WordSpec({
 
     "Scanning with a package scanner" should {
         "return a scan result for each package" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
-            val pkgWithVcs = Package.new(id = "repository").withValidVcs()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+            val pkgWithVcs = Package.new(name = "repository").withValidVcs()
             val scannerWrapper = spyk(FakePackageScannerWrapper())
             val scanner = createScanner(packageScannerWrappers = listOf(scannerWrapper))
 
@@ -152,8 +152,8 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "not try to download the source code" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
-            val pkgWithVcs = Package.new(id = "repository").withValidVcs()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+            val pkgWithVcs = Package.new(name = "repository").withValidVcs()
             val provenanceDownloader = mockk<ProvenanceDownloader>()
             val scannerWrapper = FakePackageScannerWrapper()
             val scanner = createScanner(
@@ -169,8 +169,8 @@ class ExperimentalScannerTest : WordSpec({
 
     "Scanning with a provenance scanner" should {
         "return a scan result for each provenance" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
-            val pkgWithVcs = Package.new(id = "repository").withValidVcs()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+            val pkgWithVcs = Package.new(name = "repository").withValidVcs()
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
             val scanner = createScanner(packageScannerWrappers = listOf(scannerWrapper))
 
@@ -194,8 +194,8 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "not try to download the source code" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
-            val pkgWithVcs = Package.new(id = "repository").withValidVcs()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+            val pkgWithVcs = Package.new(name = "repository").withValidVcs()
             val provenanceDownloader = mockk<ProvenanceDownloader>()
             val scannerWrapper = FakeProvenanceScannerWrapper()
             val scanner = createScanner(
@@ -211,8 +211,8 @@ class ExperimentalScannerTest : WordSpec({
 
     "scanning with a path scanner" should {
         "return a scan result for each provenance" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
-            val pkgWithVcs = Package.new(id = "repository").withValidVcs()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+            val pkgWithVcs = Package.new(name = "repository").withValidVcs()
             val scannerWrapper = spyk(FakePathScannerWrapper())
             val scanner = createScanner(packageScannerWrappers = listOf(scannerWrapper))
 
@@ -235,8 +235,8 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "try to download the source code" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
-            val pkgWithVcs = Package.new(id = "repository").withValidVcs()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
+            val pkgWithVcs = Package.new(name = "repository").withValidVcs()
             val scannerWrapper = FakePathScannerWrapper()
             val provenanceDownloader = spyk(FakeProvenanceDownloader("${scannerWrapper.name}.txt"))
             val scanner = createScanner(
@@ -253,7 +253,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "always download the full repository" {
-            val pkgWithVcsPath = Package.new(id = "repository").copy(
+            val pkgWithVcsPath = Package.new(name = "repository").copy(
                 vcsProcessed = VcsInfo.valid().copy(path = "subdirectory")
             )
             val scannerWrapper = FakePathScannerWrapper()
@@ -275,13 +275,13 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "download a repository with multiple packages only once" {
-            val pkgWithVcsPath1 = Package.new(id = "repository").copy(
+            val pkgWithVcsPath1 = Package.new(name = "repository").copy(
                 vcsProcessed = VcsInfo.valid().copy(path = "")
             )
-            val pkgWithVcsPath2 = Package.new(id = "subdirectory1").copy(
+            val pkgWithVcsPath2 = Package.new(name = "subdirectory1").copy(
                 vcsProcessed = VcsInfo.valid().copy(path = "subdirectory1")
             )
-            val pkgWithVcsPath3 = Package.new(id = "subdirectory2").copy(
+            val pkgWithVcsPath3 = Package.new(name = "subdirectory2").copy(
                 vcsProcessed = VcsInfo.valid().copy(path = "subdirectory2")
             )
             val scannerWrapper = FakePathScannerWrapper()
@@ -301,7 +301,7 @@ class ExperimentalScannerTest : WordSpec({
 
     "scanning with a package based storage reader" should {
         "prefer a stored result over a new scan" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakePackageScannerWrapper())
             val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details))
 
@@ -329,7 +329,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "start a scan if no stored result is available" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakePackageScannerWrapper())
             val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details))
 
@@ -356,8 +356,8 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "scan only the parts of a nested provenance for which no stored result is available" {
-            val pkgCompletelyScanned = Package.new(id = "completely").withValidVcs().withVcsRevision("revision1")
-            val pkgPartlyScanned = Package.new(id = "partly").withValidVcs().withVcsRevision("revision2")
+            val pkgCompletelyScanned = Package.new(name = "completely").withValidVcs().withVcsRevision("revision1")
+            val pkgPartlyScanned = Package.new(name = "partly").withValidVcs().withVcsRevision("revision2")
 
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
 
@@ -428,7 +428,7 @@ class ExperimentalScannerTest : WordSpec({
 
     "scanning with a provenance based storage reader" should {
         "prefer a stored result over a new scan" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
 
@@ -456,7 +456,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "start a scan if no stored result is available" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
             val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
 
@@ -483,8 +483,8 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "scan only the parts of a nested provenance for which no stored result is available" {
-            val pkgCompletelyScanned = Package.new(id = "completely").withValidVcs().withVcsRevision("revision1")
-            val pkgPartlyScanned = Package.new(id = "partly").withValidVcs().withVcsRevision("revision2")
+            val pkgCompletelyScanned = Package.new(name = "completely").withValidVcs().withVcsRevision("revision1")
+            val pkgPartlyScanned = Package.new(name = "partly").withValidVcs().withVcsRevision("revision2")
 
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
 
@@ -563,7 +563,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "store the result for the full repository" {
-            val pkgWithVcsPath = Package.new(id = "repository").copy(
+            val pkgWithVcsPath = Package.new(name = "repository").copy(
                 vcsProcessed = VcsInfo.valid().copy(path = "subdirectory")
             )
 
@@ -590,7 +590,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "filter a stored scan result by VCS path" {
-            val pkgWithVcsPath = Package.new(id = "repository").copy(
+            val pkgWithVcsPath = Package.new(name = "repository").copy(
                 vcsProcessed = VcsInfo.valid().copy(path = "subdirectory")
             )
 
@@ -650,7 +650,7 @@ class ExperimentalScannerTest : WordSpec({
 
     "scanning with a package based storage writer" should {
         "store the scan result" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val writer = spyk(FakePackageBasedStorageWriter())
 
@@ -670,7 +670,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "not try to store the scan result if it was retrieved from a storage" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val reader = FakePackageBasedStorageReader(scannerWrapper.details)
             val writer = spyk(FakePackageBasedStorageWriter())
@@ -691,7 +691,7 @@ class ExperimentalScannerTest : WordSpec({
 
     "scanning with a provenance based storage writer" should {
         "store the scan result" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val writer = spyk(FakeProvenanceBasedStorageWriter())
 
@@ -708,7 +708,7 @@ class ExperimentalScannerTest : WordSpec({
         }
 
         "not try to store the scan result if it was retrieved from a storage" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = FakePackageScannerWrapper()
             val reader = FakePackageBasedStorageReader(scannerWrapper.details)
             val writer = spyk(FakeProvenanceBasedStorageWriter())
@@ -729,7 +729,7 @@ class ExperimentalScannerTest : WordSpec({
 
     "scanning with a scanner that does not provide criteria" should {
         "not store the scan results" {
-            val pkgWithArtifact = Package.new(id = "artifact").withValidSourceArtifact()
+            val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakePackageScannerWrapper())
 
             every { scannerWrapper.criteria } returns null
@@ -926,8 +926,8 @@ private fun createScanner(
         )
     )
 
-private fun Package.Companion.new(type: String = "", group: String = "", id: String = "", version: String = "") =
-    EMPTY.copy(id = Identifier(type, group, id, version))
+private fun Package.Companion.new(type: String = "", group: String = "", name: String = "", version: String = "") =
+    EMPTY.copy(id = Identifier(type, group, name, version))
 
 private fun Package.artifactProvenance() = ArtifactProvenance(sourceArtifact)
 private fun Package.repositoryProvenance() = RepositoryProvenance(vcsProcessed, "resolvedRevision")
