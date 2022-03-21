@@ -20,7 +20,6 @@
 val apacheCommonsEmailVersion: String by project
 val jiraRestClientVersion: String by project
 val mockkVersion: String by project
-val wiremockVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -54,6 +53,5 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
-    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
