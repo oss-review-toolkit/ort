@@ -228,17 +228,28 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             }
         }
 
+        log.info { "Found ${packages.size} package(s)." }
+
         packageIds?.also {
+            val originalCount = packages.size
+
             val pkgIdRegex = it.joinToString(".*|.*", "(.*", ".*)").toRegex()
-            packages.retainAll { pkg -> pkgIdRegex.matches(pkg.id.toCoordinates()) }
+            val isModified = packages.retainAll { pkg -> pkgIdRegex.matches(pkg.id.toCoordinates()) }
+
+            if (isModified) {
+                val diffCount = originalCount - packages.size
+                log.info { "Removed $diffCount package(s) which do not match the specified id pattern." }
+            }
         }
 
         val includedLicenseCategories = globalOptionsForSubcommands.config.downloader.includedLicenseCategories
         if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
+            val originalCount = packages.size
+
             val licenseCategorizations = licenseClassificationsFile.readValue<LicenseClassifications>().categorizations
             val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
-            packages.retainAll { pkg ->
+            val isModified = packages.retainAll { pkg ->
                 // A package is only downloaded if its license is part of a category that is part of the
                 // DownloaderConfiguration's includedLicenseCategories.
                 getLicenseCategoriesForPackage(
@@ -249,7 +260,14 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     ortResult.getPackageLicenseChoices(pkg.id)
                 ).any { it in includedLicenseCategories }
             }
+
+            if (isModified) {
+                val diffCount = originalCount - packages.size
+                log.info { "Removed $diffCount package(s) which do not match the specified license classification." }
+            }
         }
+
+        log.info { "Downloading ${packages.size} package(s)." }
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
