@@ -223,27 +223,24 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         }
 
         val includedLicenseCategories = globalOptionsForSubcommands.config.downloader.includedLicenseCategories
+        if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
+            val licenseCategorizations = licenseClassificationsFile.readValue<LicenseClassifications>().categorizations
+            val licenseInfoResolver = ortResult.createLicenseInfoResolver()
 
-        val packageDownloadDirs =
-            if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
-                val licenseCategorizations =
-                    licenseClassificationsFile.readValue<LicenseClassifications>().categorizations
-                val licenseInfoResolver = ortResult.createLicenseInfoResolver()
+            packages.retainAll { pkg ->
+                // A package is only downloaded if its license is part of a category that is part of the
+                // DownloaderConfiguration's includedLicenseCategories.
+                getLicenseCategoriesForPackage(
+                    pkg,
+                    licenseCategorizations,
+                    licenseInfoResolver,
+                    ortResult.getRepositoryLicenseChoices(),
+                    ortResult.getPackageLicenseChoices(pkg.id)
+                ).any { it in includedLicenseCategories }
+            }
+        }
 
-                packages.filter { pkg ->
-                    // A package is only downloaded if its license is part of a category that is part of the
-                    // DownloaderConfiguration's includedLicenseCategories.
-                    getLicenseCategoriesForPackage(
-                        pkg,
-                        licenseCategorizations,
-                        licenseInfoResolver,
-                        ortResult.getRepositoryLicenseChoices(),
-                        ortResult.getPackageLicenseChoices(pkg.id)
-                    ).any { it in includedLicenseCategories }
-                }
-            } else {
-                packages
-            }.associateWith { outputDir.resolve(it.id.toPath()) }
+        val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
         packageDownloadDirs.forEach { (pkg, dir) ->
             try {
