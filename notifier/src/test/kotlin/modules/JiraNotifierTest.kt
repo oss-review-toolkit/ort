@@ -235,6 +235,22 @@ class JiraNotifierTest : WordSpec({
                 issueClient.transition(any<Issue>(), any())
             }
         }
+
+        "fail if attempting an invalid transition" {
+            val issueClient = mockk<IssueRestClient>()
+            val restClient = mockk<JiraRestClient>()
+
+            val validState = "Bug"
+            val invalidState = "Task"
+            val transitions = listOf(createTransition(id = 1, state = validState))
+
+            every { restClient.issueClient } returns issueClient
+            every { issueClient.getIssue(any()) } returns createPromise(createIssue(id = 1, summary = "Ticket summary"))
+            every { issueClient.getTransitions(any<Issue>()) } returns createPromise(transitions)
+
+            val notifier = JiraNotifier(restClient)
+            notifier.changeState("$PROJECT_KEY-1", invalidState) shouldBe false
+        }
     }
 })
 
