@@ -99,7 +99,8 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
     val sourcePath = absoluteFile.toPath()
     val targetPath = target.absoluteFile.toPath()
 
-    val copyOptions = mutableListOf<CopyOption>(LinkOption.NOFOLLOW_LINKS).apply {
+    val copyOptions = buildList<CopyOption> {
+        add(LinkOption.NOFOLLOW_LINKS)
         if (overwrite) add(StandardCopyOption.REPLACE_EXISTING)
     }.toTypedArray()
 

@@ -108,7 +108,7 @@ class ScanCode(
     override val expectedVersion = BuildConfig.SCANCODE_VERSION
 
     override val configuration by lazy {
-        mutableListOf<String>().apply {
+        buildList {
             addAll(configurationOptions)
             add(OUTPUT_FORMAT_OPTION)
         }.joinToString(" ")
@@ -122,10 +122,10 @@ class ScanCode(
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {
-        mutableListOf<String>().apply {
+        buildList {
             addAll(configurationOptions)
             addAll(nonConfigurationOptions)
-        }.toList()
+        }
     }
 
     override fun command(workingDir: File?) =
