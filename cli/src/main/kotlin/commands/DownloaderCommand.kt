@@ -173,6 +173,12 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 PackageType.values().joinToString { it.name }
     ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
+    private val packageIds by option(
+        "--package-ids",
+        help = "A comma-separated list of regular expressions for matching package ids from the ORT file's analyzer " +
+                "result to limit downloads to. If not specified, all packages are downloaded."
+    ).split(",")
+
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
@@ -220,6 +226,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             if (PackageType.PACKAGE in packageTypes) {
                 addAll(analyzerResult.packages.map { it.pkg })
             }
+        }
+
+        packageIds?.also {
+            val pkgIdRegex = it.joinToString(".*|.*", "(.*", ".*)").toRegex()
+            packages.retainAll { pkg -> pkgIdRegex.matches(pkg.id.toCoordinates()) }
         }
 
         val includedLicenseCategories = globalOptionsForSubcommands.config.downloader.includedLicenseCategories
