@@ -91,18 +91,6 @@ class ScanController(
     fun findNestedProvenance(id: Identifier): NestedProvenance? = nestedProvenances[packageProvenances[id]]
 
     /**
-     * Find the [NestedProvenance] for the provided [provenance].
-     */
-    fun findNestedProvenance(provenance: KnownProvenance): NestedProvenance? = nestedProvenances[provenance]
-
-    /**
-     * Find all packages for [provenance].
-     */
-    fun findPackages(provenance: KnownProvenance) =
-        packageProvenances.entries.filter { it.value == provenance }
-            .mapNotNull { (id, _) -> packages.find { it.id == id } }
-
-    /**
      * Return all [KnownProvenance]s contained in [nestedProvenances] and [packageProvenances].
      */
     fun getAllProvenances(): Set<KnownProvenance> =
