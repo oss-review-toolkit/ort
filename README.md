@@ -187,9 +187,9 @@ The main configuration file for the operation of ORT. This configuration is main
 the ORT instance. In contrast to the configuration files in the following, this file rarely changes once ORT is
 operational.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` |
 
 The [reference configuration file](./model/src/main/resources/reference.conf) gives a good impression about the content
 of the main ORT configuration file. It consists of sections related to different sub components of ORT. The meaning
@@ -226,59 +226,59 @@ customize the configuration to a specific environment. The following options are
 A list of copyright statements that are considered garbage, for example statements that were incorrectly classified as
 copyrights by the scanner.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| YAML / JSON | Global | `$ORT_CONFIG_DIR/copyright-garbage.yml` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/copyright-garbage.yml` |
 
 #### [Curations file](./docs/config-file-curations-yml.md)
 
 A file to correct invalid or missing package metadata, and to set the concluded license for packages.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| YAML / JSON | Global | `$ORT_CONFIG_DIR/curations.yml` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/curations.yml` |
 
 #### [Custom license texts dir](./docs/dir-custom-license-texts.md)
 
 A directory that contains license texts which are not provided by ORT.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| Text | Global | `$ORT_CONFIG_DIR/custom-license-texts/` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| Text | Global | `$ORT_CONFIG_DIR/custom-license-texts/` |
 
 #### [How to fix text provider script](./docs/how-to-fix-text-provider-kts.md)
 
 A Kotlin script that enables the injection of how-to-fix texts in markdown format for ORT issues into the reports.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| Kotlin script | Global | `$ORT_CONFIG_DIR/how-to-fix-text-provider.kts` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| Kotlin script | Global | `$ORT_CONFIG_DIR/how-to-fix-text-provider.kts` |
 
 #### [License classifications file](docs/config-file-license-classifications-yml.md)
 
 A file that contains user-defined categorization of licenses.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| YAML / JSON | Global | `$ORT_CONFIG_DIR/license-classifications.yml` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/license-classifications.yml` |
 
 #### [Resolution file](./docs/config-file-resolutions-yml.md)
 
 Configurations to resolve any issues or rule violations by providing a mandatory reason, and an optional comment to
 justify the resolution on a global scale.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| YAML / JSON | Global | `$ORT_CONFIG_DIR/resolutions.yml` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/resolutions.yml` |
 
 #### [Repository configuration file](./docs/config-file-ort-yml.md)
 
 A configuration file, usually stored in the project's repository, for license finding curations, exclusions, and issues
 or rule violations resolutions in the context of the repository.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| YAML / JSON | Repository (project) | `[analyzer-input-dir]/.ort.yml` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| YAML / JSON | Repository (project) | `[analyzer-input-dir]/.ort.yml` |
 
 #### [Package configuration file / directory](./docs/config-file-package-configuration-yml.md)
 
@@ -287,17 +287,17 @@ license finding curations for dependency packages to address issues found within
 [`package-config create` command](./helper-cli/src/main/kotlin/commands/packageconfig/CreateCommand.kt)
 can be used to populate a directory with template package configuration files.
 
-| Format | Scope | Default location | Default value |
-| ------ | ----- | ---------------- | ------------- |
-| YAML / JSON | Package (dependency) | `$ORT_CONFIG_DIR/package-configurations/` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- | ---------------- |
+| YAML / JSON | Package (dependency) | `$ORT_CONFIG_DIR/package-configurations/` |
 
 #### [Policy rules file](./docs/file-rules-kts.md)
 
 The file containing any policy rule implementations to be used with the _evaluator_.
 
-| Format | Scope | Default location                | Default value |
-| ------ | ----- |---------------------------------| ------------- |
-| Kotlin script (DSL) | Evaluator | `$ORT_CONFIG_DIR/evaluator.rules.kts` | Empty (n/a) |
+| Format | Scope | Default location |
+| ------ | ----- |------------------|
+| Kotlin script (DSL) | Evaluator | `$ORT_CONFIG_DIR/evaluator.rules.kts` |
 
 # Details on the tools
 
