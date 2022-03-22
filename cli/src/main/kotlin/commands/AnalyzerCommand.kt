@@ -38,6 +38,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
+import org.ossreviewtoolkit.analyzer.curation.CompositePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.OrtConfigPackageCurationProvider
@@ -211,19 +212,20 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
 
-        val packageCurations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir)
-            .packageCurations.toMutableList()
+        val localCurationProviders = buildList {
+            add(FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir))
 
-        val repositoryPackageCurations = repositoryConfiguration.curations.packages
+            val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
-        if (config.enableRepositoryPackageCurations) {
-            packageCurations += repositoryPackageCurations
-        } else if (repositoryPackageCurations.isNotEmpty()) {
-            log.warn { "Local package curation were not applied because the feature is not enabled." }
+            if (config.enableRepositoryPackageCurations) {
+                add(SimplePackageCurationProvider(repositoryPackageCurations))
+            } else if (repositoryPackageCurations.isNotEmpty()) {
+                log.warn { "Local package curation were not applied because the feature is not enabled." }
+            }
         }
 
         val curationProviders = listOfNotNull(
-            SimplePackageCurationProvider(packageCurations),
+            CompositePackageCurationProvider(localCurationProviders),
             config.analyzer.sw360Configuration?.let {
                 Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
             },
