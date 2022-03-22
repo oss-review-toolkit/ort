@@ -212,7 +212,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             ?: RepositoryConfiguration()
 
         val packageCurations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir)
-            .packageCurations.toMutableSet()
+            .packageCurations.toMutableList()
 
         val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
