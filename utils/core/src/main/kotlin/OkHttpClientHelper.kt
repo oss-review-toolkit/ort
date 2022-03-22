@@ -169,50 +169,50 @@ fun OkHttpClient.Builder.addBasicAuthorization(username: String, password: Strin
  * Download from [url] and return a [Result] with a file inside [directory] that holds the response body content on
  * success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
  */
-fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> {
+fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> =
     // Disable transparent gzip compression, as otherwise we might end up writing a tar file to disk while
     // expecting to find a tar.gz file, and fail to unpack the archive. See
     // https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
-    val (response, body) = download(url, acceptEncoding = "identity").getOrElse { return Result.failure(it) }
+    download(url, acceptEncoding = "identity").mapCatching { (response, body) ->
 
-    // Depending on the server, we may only get a useful target file name when looking at the response
-    // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
-    //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
-    // to
-    //     https://static.crates.io/crates/cfg-if/cfg-if-0.1.9.crate
-    //
-    // On the other hand, e.g. for GitHub exactly the opposite is the case, as there a get-request for URL
-    //     https://github.com/microsoft/tslib/archive/1.10.0.zip
-    // resolves to the less meaningful
-    //     https://codeload.github.com/microsoft/tslib/zip/1.10.0
-    //
-    // So first look for a dedicated header in the response, but then also try both redirected and
-    // original URLs to find a name which has a recognized archive type extension.
-    val candidateNames = mutableSetOf<String>()
+        // Depending on the server, we may only get a useful target file name when looking at the response
+        // header or at a redirected URL. In case of the Crates registry, for example, we want to resolve
+        //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
+        // to
+        //     https://static.crates.io/crates/cfg-if/cfg-if-0.1.9.crate
+        //
+        // On the other hand, e.g. for GitHub exactly the opposite is the case, as there a get-request for URL
+        //     https://github.com/microsoft/tslib/archive/1.10.0.zip
+        // resolves to the less meaningful
+        //     https://codeload.github.com/microsoft/tslib/zip/1.10.0
+        //
+        // So first look for a dedicated header in the response, but then also try both redirected and
+        // original URLs to find a name which has a recognized archive type extension.
+        val candidateNames = mutableSetOf<String>()
 
-    response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
-        value.split(';').firstNotNullOfOrNull { it.trim().withoutPrefix("filename=") }
-            ?.removeSurrounding("\"")
+        response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
+            value.split(';').firstNotNullOfOrNull { it.trim().withoutPrefix("filename=") }
+                ?.removeSurrounding("\"")
+        }
+
+        listOf(response.request.url.toString(), url).mapTo(candidateNames) {
+            it.substringAfterLast('/').substringBefore('?')
+        }
+
+        check(candidateNames.isNotEmpty())
+
+        val filename = candidateNames.find {
+            ArchiveType.getType(it) != ArchiveType.NONE
+        } ?: candidateNames.first()
+
+        val file = directory.resolve(filename)
+
+        file.sink().buffer().use { target ->
+            body.use { target.writeAll(it.source()) }
+        }
+
+        file
     }
-
-    listOf(response.request.url.toString(), url).mapTo(candidateNames) {
-        it.substringAfterLast('/').substringBefore('?')
-    }
-
-    check(candidateNames.isNotEmpty())
-
-    val filename = candidateNames.find {
-        ArchiveType.getType(it) != ArchiveType.NONE
-    } ?: candidateNames.first()
-
-    val file = directory.resolve(filename)
-
-    file.sink().buffer().use { target ->
-        body.use { target.writeAll(it.source()) }
-    }
-
-    return Result.success(file)
-}
 
 /**
  * Download from [url] and return a [Result] with a string representing the response body content on success, or a
