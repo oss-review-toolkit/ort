@@ -186,7 +186,7 @@ class CocoaPods(
         return Package(
             id = id,
             authors = sortedSetOf(),
-            declaredLicenses = listOf(podspec.license).toSortedSet(),
+            declaredLicenses = podspec.license.takeUnless { it.isEmpty() }?.let { sortedSetOf(it) } ?: sortedSetOf(),
             description = podspec.summary,
             homepageUrl = podspec.homepage,
             binaryArtifact = RemoteArtifact.EMPTY,
