@@ -28,10 +28,12 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SPMFunTest : WordSpec() {
@@ -46,7 +48,7 @@ class SPMFunTest : WordSpec() {
     init {
         "SPM" should {
             "Parse Package.resolved dependencies correctly" {
-                createSPM()
+                createSPM(DEFAULT_ANALYZER_CONFIGURATION)
                     .resolveSingleProject(projectDir.resolve("Package.resolved"))
                     .toYaml() shouldBe patchExpectedResult(
                     definitionFileName = "Package.resolved",
@@ -55,11 +57,21 @@ class SPMFunTest : WordSpec() {
             }
 
             "Parse Package.swift dependencies correctly" {
-                createSPM()
+                createSPM(AnalyzerConfiguration(allowDynamicVersions = true))
                     .resolveSingleProject(projectDir.resolve("Package.swift"), resolveScopes = true)
                     .toYaml() shouldBe patchExpectedResult(
                     definitionFileName = "Package.swift",
                     expectedFilename = "spm-expected-output-lib.yml"
+                )
+            }
+
+            "Show error if only Package.swift is present but allowDynamicVersions is set to false" {
+                val actualResult = createSPM(DEFAULT_ANALYZER_CONFIGURATION)
+                    .resolveSingleProject(projectDir.resolve("Package.swift"), resolveScopes = true)
+                    .toYaml()
+                patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe patchExpectedResult(
+                    definitionFileName = "Package.swift",
+                    expectedFilename = "spm-expected-output-no-lockfile.yml"
                 )
             }
         }
@@ -84,11 +96,11 @@ class SPMFunTest : WordSpec() {
         )
     }
 
-    private fun createSPM() = SPM(
+    private fun createSPM(analyzerConfiguration: AnalyzerConfiguration) = SPM(
         name = "SPM",
         analysisRoot = USER_DIR,
         cliExecutor = MockSPMCLIExecutor(),
-        repoConfig = DEFAULT_REPOSITORY_CONFIGURATION,
-        analyzerConfig = DEFAULT_ANALYZER_CONFIGURATION
+        analyzerConfig = analyzerConfiguration,
+        repoConfig = DEFAULT_REPOSITORY_CONFIGURATION
     )
 }

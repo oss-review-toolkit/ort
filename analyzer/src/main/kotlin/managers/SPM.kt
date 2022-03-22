@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 
@@ -175,25 +174,18 @@ class SPM(
         PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
-        val validResolvedFiles = listOf("Package.resolved", ".package.resolved")
-        val relevantDefinitionFiles = definitionFiles.filterNot { file -> file.path.contains(".build/checkouts") }
-
-        val isPackageSwiftPresent = analysisRoot.resolve(PACKAGE_SWIFT).exists() || analysisRoot.name == PACKAGE_SWIFT
-
-        if (!analyzerConfig.allowDynamicVersions && isPackageSwiftPresent) {
-            log.info {
-                "Skipping dependency resolution of $PACKAGE_SWIFT files because this potentially results in " +
-                        "unstable versions of dependencies. To support this, enable the 'allowDynamicVersions' option" +
-                        " in '$ORT_CONFIG_FILENAME'."
-            }
-            return relevantDefinitionFiles.filter { file -> validResolvedFiles.contains(file.name) }
-        } else if (analyzerConfig.allowDynamicVersions && isPackageSwiftPresent) {
-            return relevantDefinitionFiles.filter { file -> file.name == PACKAGE_SWIFT }
-        }
-        return relevantDefinitionFiles.filter { file -> validResolvedFiles.contains(file.name) }
+        return definitionFiles.filterNot { file -> file.path.contains(".build/checkouts") }
     }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+        if (definitionFile.name == PACKAGE_SWIFT && !analyzerConfig.allowDynamicVersions) {
+            throw IllegalArgumentException(
+                "Resolving SPM dependencies from Package.swift might result in " +
+                        "potentially unstable versions of dependencies. To support this, enable the " +
+                        "'allowDynamicVersions' option in 'ort.conf'."
+            )
+        }
+
         if (definitionFile.name == PACKAGE_SWIFT) {
             return resolveLibraryDependencies(definitionFile)
         }
