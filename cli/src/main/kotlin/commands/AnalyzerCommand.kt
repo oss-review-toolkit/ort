@@ -220,7 +220,10 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             if (config.enableRepositoryPackageCurations) {
                 add(SimplePackageCurationProvider(repositoryPackageCurations))
             } else if (repositoryPackageCurations.isNotEmpty()) {
-                log.warn { "Local package curation were not applied because the feature is not enabled." }
+                log.warn {
+                    "Existing package curations from '$ORT_REPO_CONFIG_FILENAME' are not applied because the feature " +
+                            "is disabled."
+                }
             }
         }
 
