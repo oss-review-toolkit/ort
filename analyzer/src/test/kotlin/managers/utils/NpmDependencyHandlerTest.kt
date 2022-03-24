@@ -26,8 +26,12 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class NpmDependencyHandlerTest : StringSpec({
@@ -97,4 +101,5 @@ private fun createModuleInfo(
 /**
  * Creates an [NpmDependencyHandler] instance to be used by test cases.
  */
-private fun createHandler() = NpmDependencyHandler()
+private fun createHandler() =
+    NpmDependencyHandler(Npm("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION))
