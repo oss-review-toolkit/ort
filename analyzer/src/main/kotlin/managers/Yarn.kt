@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
@@ -28,14 +30,8 @@ import org.ossreviewtoolkit.analyzer.managers.utils.hasYarnLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.Os
-
-object YarnCli : CommandLineTool {
-    override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
-
-    override fun getVersionRequirement() = Requirement.buildNPM("1.3.* - 1.22.*")
-}
 
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
@@ -60,10 +56,19 @@ class Yarn(
 
     override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
 
+    override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
+
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.22.*")
+
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForYarn(definitionFiles).toList()
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        YarnCli.checkVersion()
+        checkVersion()
+
+    override fun getRemotePackageDetails(packageName: String): JsonNode {
+        val process = run("info", "--json", packageName)
+        return jsonMapper.readTree(process.stdoutFile)["data"]
+    }
 }
