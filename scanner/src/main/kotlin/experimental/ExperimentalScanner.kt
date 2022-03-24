@@ -131,7 +131,7 @@ class ExperimentalScanner(
         val scanners = scannerWrappers[context.packageType].orEmpty()
         if (scanners.isEmpty()) return emptyMap()
 
-        val controller = ScanController(packages, scanners)
+        val controller = ScanController(packages, scanners, scannerConfig)
 
         resolvePackageProvenances(controller)
         resolveNestedProvenances(controller)
