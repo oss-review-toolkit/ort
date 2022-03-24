@@ -19,12 +19,17 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
@@ -48,6 +53,12 @@ class ScanController(
     val config: ScannerConfiguration
 ) {
     /**
+     * A map of package [Identifier]s to a list of [OrtIssue]s that occurred during provenance resolution for the
+     * respective package.
+     */
+    private val provenanceResolutionIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
+
+    /**
      * A map of [KnownProvenance]s to their resolved [NestedProvenance]s.
      */
     private val nestedProvenances = mutableMapOf<KnownProvenance, NestedProvenance>()
@@ -68,6 +79,10 @@ class ScanController(
      * The [ScanResult]s for each [KnownProvenance] and [ScannerWrapper].
      */
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
+
+    fun addProvenanceResolutionIssue(id: Identifier, issue: OrtIssue) {
+        provenanceResolutionIssues.getOrPut(id) { mutableListOf() } += issue
+    }
 
     /**
      * Add an entry to [packageProvenances] and [packageProvenancesWithoutVcsPath], overwriting any existing values.
@@ -166,6 +181,12 @@ class ScanController(
         }.map { (id, _) -> packages.first { it.id == id } }
 
     /**
+     * Return all package [Identifier]s for the provided [provenance].
+     */
+    fun getPackagesForProvenanceWithoutVcsPath(provenance: KnownProvenance): Set<Identifier> =
+        packageProvenancesWithoutVcsPath.filter { (_, packageProvenance) -> packageProvenance == provenance }.keys
+
+    /**
      * Return all [KnownProvenance]s for the [packages] with the VCS path removed.
      */
     fun getPackageProvenancesWithoutVcsPath(): Set<KnownProvenance> = packageProvenancesWithoutVcsPath.values.toSet()
@@ -184,6 +205,27 @@ class ScanController(
      * Return all [ProvenanceScannerWrapper]s.
      */
     fun getProvenanceScanners(): List<ProvenanceScannerWrapper> = scanners.filterIsInstance<ProvenanceScannerWrapper>()
+
+    /**
+     * Return scan results for provenance resolution issues.
+     */
+    fun getResultsForProvenanceResolutionIssues(): Map<Identifier, List<ScanResult>> =
+        provenanceResolutionIssues.mapValues { (_, issues) ->
+            scanners.map { scanner ->
+                ScanResult(
+                    provenance = UnknownProvenance,
+                    scanner = scanner.details,
+                    summary = ScanSummary(
+                        startTime = Instant.now(),
+                        endTime = Instant.now(),
+                        packageVerificationCode = "",
+                        licenseFindings = sortedSetOf(),
+                        copyrightFindings = sortedSetOf(),
+                        issues = issues
+                    )
+                )
+            }
+        }
 
     /**
      * Get all [ScanResult]s for the provided [provenance].
