@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
  * A controller for the data related to a run of the [ExperimentalScanner].
@@ -39,7 +40,12 @@ class ScanController(
     /**
      * The list of [ScannerWrapper]s used for scanning.
      */
-    val scanners: List<ScannerWrapper>
+    val scanners: List<ScannerWrapper>,
+
+    /**
+     * The [ScannerConfiguration].
+     */
+    val config: ScannerConfiguration
 ) {
     /**
      * A map of [KnownProvenance]s to their resolved [NestedProvenance]s.
@@ -136,13 +142,14 @@ class ScanController(
         buildNestedProvenanceScanResult(packageProvenancesWithoutVcsPath.getValue(id))
 
     /**
-     * Get the [NestedProvenanceScanResult] for each [Package], filtered by the VCS path for each package.
+     * Get the [NestedProvenanceScanResult] for each [Package], filtered by the VCS path for each package and the
+     * configured [ignore patterns][ScannerConfiguration.ignorePatterns].
      */
     fun getNestedScanResultsByPackage(): Map<Package, NestedProvenanceScanResult> =
         // TODO: Return map containing all packages with issues for packages that could not be completely scanned.
         packageProvenancesWithoutVcsPath.entries.associate { (id, provenance) ->
             packages.first { it.id == id } to buildNestedProvenanceScanResult(provenance)
-        }.filterByVcsPath()
+        }.filterByVcsPath().filterByIgnorePatterns()
 
     /**
      * Return all [Package]s for which adding a scan result for [scanner] and [provenance] would complete the scan of
@@ -211,6 +218,12 @@ class ScanController(
 
         return NestedProvenanceScanResult(nestedProvenance, scanResults)
     }
+
+    private fun Map<Package, NestedProvenanceScanResult>.filterByIgnorePatterns():
+            Map<Package, NestedProvenanceScanResult> =
+        mapValues { (_, nestedProvenanceScanResult) ->
+            nestedProvenanceScanResult.filterByIgnorePatterns(config.ignorePatterns)
+        }
 
     private fun Map<Package, NestedProvenanceScanResult>.filterByVcsPath(): Map<Package, NestedProvenanceScanResult> =
         mapValues { (pkg, nestedProvenanceScanResult) ->
