@@ -71,12 +71,6 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
-object NpmCli : CommandLineTool {
-    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
-
-    override fun getVersionRequirement() = Requirement.buildNPM("6.* - 7.20.*")
-}
-
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  */
@@ -85,7 +79,7 @@ open class Npm(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -206,12 +200,16 @@ open class Npm(
 
     protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
 
+    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
+
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("6.* - 7.20.*")
+
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun beforeResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        NpmCli.checkVersion()
+        checkVersion()
     }
 
     override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
@@ -363,20 +361,19 @@ open class Npm(
                     || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
             if (hasIncompleteData) {
-                val process = NpmCli.run("view", "--json", "$rawName@$version")
-                val view = jsonMapper.readTree(process.stdoutFile)
+                val details = getRemotePackageDetails("$rawName@$version")
 
-                if (description.isEmpty()) description = view["description"].textValueOrEmpty()
-                if (homepageUrl.isEmpty()) homepageUrl = view["homepage"].textValueOrEmpty()
+                if (description.isEmpty()) description = details["description"].textValueOrEmpty()
+                if (homepageUrl.isEmpty()) homepageUrl = details["homepage"].textValueOrEmpty()
 
-                view["dist"]?.let { dist ->
+                details["dist"]?.let { dist ->
                     if (downloadUrl.isEmpty() || hash == Hash.NONE) {
                         downloadUrl = dist["tarball"].textValueOrEmpty()
                         hash = Hash.create(dist["shasum"].textValueOrEmpty())
                     }
                 }
 
-                vcsFromPackage = parseVcsInfo(view)
+                vcsFromPackage = parseVcsInfo(details)
             }
         }
 
@@ -414,6 +411,11 @@ open class Npm(
         }
 
         return Pair(id.toCoordinates(), module)
+    }
+
+    protected open fun getRemotePackageDetails(packageName: String): JsonNode {
+        val process = run("view", "--json", packageName)
+        return jsonMapper.readTree(process.stdoutFile)
     }
 
     /**
@@ -626,9 +628,9 @@ open class Npm(
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         val process = if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {
-            NpmCli.run(workingDir, "ci", *installParameters)
+            run(workingDir, "ci", *installParameters)
         } else {
-            NpmCli.run(workingDir, "install", *installParameters)
+            run(workingDir, "install", *installParameters)
         }
 
         // TODO: Capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
