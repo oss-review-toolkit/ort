@@ -193,11 +193,6 @@ open class Npm(
 
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
-    /**
-     * Array of parameters passed to the install command when installing dependencies.
-     */
-    protected open val installParameters = arrayOf("--ignore-scripts")
-
     protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
@@ -627,14 +622,13 @@ open class Npm(
         requireLockfile(workingDir) { hasLockFile(workingDir) }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        val process = if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {
-            run(workingDir, "ci", *installParameters)
-        } else {
-            run(workingDir, "install", *installParameters)
-        }
+        val process = runInstall(workingDir)
 
         // TODO: Capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         //       platforms except for Mac.
         process.stderr.withoutPrefix("Error: ")?.also { throw IOException(it.lineSequence().first()) }
     }
+
+    protected open fun runInstall(workingDir: File) =
+        run(workingDir, if (hasLockFile(workingDir)) "ci" else "install", "--ignore-scripts")
 }

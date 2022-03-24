@@ -52,8 +52,6 @@ class Yarn(
         ) = Yarn(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override val installParameters = arrayOf("--ignore-scripts", "--ignore-engines")
-
     override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
@@ -66,6 +64,8 @@ class Yarn(
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
         checkVersion()
+
+    override fun runInstall(workingDir: File) = run(workingDir, "install", "--ignore-scripts", "--ignore-engines")
 
     override fun getRemotePackageDetails(packageName: String): JsonNode {
         val process = run("info", "--json", packageName)
