@@ -61,7 +61,7 @@ import org.ossreviewtoolkit.utils.core.ortToolsDirectory
  *   detected licenses. If this option is set to "true", the detected `license_expression` is used instead, which can
  *   contain an SPDX expression.
  */
-class ScanCode(
+class ScanCode internal constructor(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration

@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 
-class ScanOss(
+class ScanOss internal constructor(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
