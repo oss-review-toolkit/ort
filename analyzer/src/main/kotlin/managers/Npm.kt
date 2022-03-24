@@ -188,111 +188,6 @@ open class Npm(
         }
 
         /**
-         * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
-         * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
-         */
-        @Suppress("HttpUrlsUsage")
-        internal fun parsePackage(packageFile: File): Pair<String, Package> {
-            val packageDir = packageFile.parentFile
-
-            log.debug { "Found a 'package.json' file in '$packageDir'." }
-
-            // The "name" and "version" are the only required fields, see:
-            // https://docs.npmjs.com/creating-a-package-json-file#required-name-and-version-fields
-            val json = packageFile.readValue<ObjectNode>()
-            val rawName = json["name"].textValue()
-            val (namespace, name) = splitNamespaceAndName(rawName)
-            val version = json["version"].textValue()
-
-            val declaredLicenses = parseLicenses(json)
-            val authors = parseAuthors(json)
-
-            var description = json["description"].textValueOrEmpty()
-            var homepageUrl = json["homepage"].textValueOrEmpty()
-
-            // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
-            var downloadUrl = expandNpmShortcutUrl(json["_resolved"].textValueOrEmpty()).ifEmpty {
-                // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
-                val fromVersion = json["_from"].textValueOrEmpty().substringAfterLast('@')
-                expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
-            }
-
-            var hash = Hash.create(json["_integrity"].textValueOrEmpty())
-
-            var vcsFromPackage = parseVcsInfo(json)
-
-            val id = Identifier("NPM", namespace, name, version)
-
-            if (packageDir.isSymbolicLink()) {
-                val realPackageDir = packageDir.realFile()
-
-                log.debug { "The package directory '$packageDir' links to '$realPackageDir'." }
-
-                // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
-                // as the trigger to get VcsInfo locally instead of querying the NPM registry.
-                log.debug { "Resolving the package info for '${id.toCoordinates()}' locally from '$realPackageDir'." }
-
-                val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
-                vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
-            } else {
-                val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
-                        || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
-
-                if (hasIncompleteData) {
-                    val process = NpmCli.run("view", "--json", "$rawName@$version")
-                    val view = jsonMapper.readTree(process.stdoutFile)
-
-                    if (description.isEmpty()) description = view["description"].textValueOrEmpty()
-                    if (homepageUrl.isEmpty()) homepageUrl = view["homepage"].textValueOrEmpty()
-
-                    view["dist"]?.let { dist ->
-                        if (downloadUrl.isEmpty() || hash == Hash.NONE) {
-                            downloadUrl = dist["tarball"].textValueOrEmpty()
-                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
-                        }
-                    }
-
-                    vcsFromPackage = parseVcsInfo(view)
-                }
-            }
-
-            downloadUrl = downloadUrl
-                // Work around the issue described at
-                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
-
-            val vcsFromDownloadUrl = VcsHost.toVcsInfo(downloadUrl)
-            if (vcsFromDownloadUrl.url != downloadUrl) {
-                vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
-            }
-
-            val module = Package(
-                id = id,
-                authors = authors,
-                declaredLicenses = declaredLicenses,
-                description = description,
-                homepageUrl = homepageUrl,
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact(
-                    url = VcsHost.toArchiveDownloadUrl(vcsFromDownloadUrl) ?: downloadUrl,
-                    hash = hash
-                ),
-                vcs = vcsFromPackage,
-                vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
-            )
-
-            require(module.id.name.isNotEmpty()) {
-                "Generated package info for ${id.toCoordinates()} has no name."
-            }
-
-            require(module.id.version.isNotEmpty()) {
-                "Generated package info for ${id.toCoordinates()} has no version."
-            }
-
-            return Pair(id.toCoordinates(), module)
-        }
-
-        /**
          * Split the given [rawName] of a module to a pair with namespace and name.
          */
         internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
@@ -302,7 +197,7 @@ open class Npm(
         }
     }
 
-    private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler())
+    private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
     /**
      * Array of parameters passed to the install command when installing dependencies.
@@ -414,6 +309,111 @@ open class Npm(
         }
 
         return modulesDir.takeIf { it.name == "node_modules" }
+    }
+
+    /**
+     * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
+     * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
+     */
+    @Suppress("HttpUrlsUsage")
+    internal fun parsePackage(packageFile: File): Pair<String, Package> {
+        val packageDir = packageFile.parentFile
+
+        log.debug { "Found a 'package.json' file in '$packageDir'." }
+
+        // The "name" and "version" are the only required fields, see:
+        // https://docs.npmjs.com/creating-a-package-json-file#required-name-and-version-fields
+        val json = packageFile.readValue<ObjectNode>()
+        val rawName = json["name"].textValue()
+        val (namespace, name) = splitNamespaceAndName(rawName)
+        val version = json["version"].textValue()
+
+        val declaredLicenses = parseLicenses(json)
+        val authors = parseAuthors(json)
+
+        var description = json["description"].textValueOrEmpty()
+        var homepageUrl = json["homepage"].textValueOrEmpty()
+
+        // Note that all fields prefixed with "_" are considered private to NPM and should not be relied on.
+        var downloadUrl = expandNpmShortcutUrl(json["_resolved"].textValueOrEmpty()).ifEmpty {
+            // If the normalized form of the specified dependency contains a URL as the version, expand and use it.
+            val fromVersion = json["_from"].textValueOrEmpty().substringAfterLast('@')
+            expandNpmShortcutUrl(fromVersion).takeIf { it != fromVersion }.orEmpty()
+        }
+
+        var hash = Hash.create(json["_integrity"].textValueOrEmpty())
+
+        var vcsFromPackage = parseVcsInfo(json)
+
+        val id = Identifier("NPM", namespace, name, version)
+
+        if (packageDir.isSymbolicLink()) {
+            val realPackageDir = packageDir.realFile()
+
+            log.debug { "The package directory '$packageDir' links to '$realPackageDir'." }
+
+            // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
+            // as the trigger to get VcsInfo locally instead of querying the NPM registry.
+            log.debug { "Resolving the package info for '${id.toCoordinates()}' locally from '$realPackageDir'." }
+
+            val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
+            vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
+        } else {
+            val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
+                    || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
+
+            if (hasIncompleteData) {
+                val process = NpmCli.run("view", "--json", "$rawName@$version")
+                val view = jsonMapper.readTree(process.stdoutFile)
+
+                if (description.isEmpty()) description = view["description"].textValueOrEmpty()
+                if (homepageUrl.isEmpty()) homepageUrl = view["homepage"].textValueOrEmpty()
+
+                view["dist"]?.let { dist ->
+                    if (downloadUrl.isEmpty() || hash == Hash.NONE) {
+                        downloadUrl = dist["tarball"].textValueOrEmpty()
+                        hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                    }
+                }
+
+                vcsFromPackage = parseVcsInfo(view)
+            }
+        }
+
+        downloadUrl = downloadUrl
+            // Work around the issue described at
+            // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+            .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
+
+        val vcsFromDownloadUrl = VcsHost.toVcsInfo(downloadUrl)
+        if (vcsFromDownloadUrl.url != downloadUrl) {
+            vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
+        }
+
+        val module = Package(
+            id = id,
+            authors = authors,
+            declaredLicenses = declaredLicenses,
+            description = description,
+            homepageUrl = homepageUrl,
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact(
+                url = VcsHost.toArchiveDownloadUrl(vcsFromDownloadUrl) ?: downloadUrl,
+                hash = hash
+            ),
+            vcs = vcsFromPackage,
+            vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+        )
+
+        require(module.id.name.isNotEmpty()) {
+            "Generated package info for ${id.toCoordinates()} has no name."
+        }
+
+        require(module.id.version.isNotEmpty()) {
+            "Generated package info for ${id.toCoordinates()} has no version."
+        }
+
+        return Pair(id.toCoordinates(), module)
     }
 
     /**
