@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.config.createFileArchiver
+import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.Environment
@@ -143,9 +144,13 @@ class ExperimentalScanner(
 
         createFileArchives(controller.getNestedProvenancesByPackage())
 
-        return controller.getNestedScanResultsByPackage().entries.associateTo(sortedMapOf()) {
+        val results = controller.getNestedScanResultsByPackage().entries.associateTo(sortedMapOf()) {
             it.key.id to it.value.merge()
         }
+
+        val issueResults = controller.getResultsForProvenanceResolutionIssues()
+
+        return results + issueResults
     }
 
     private fun resolvePackageProvenances(controller: ScanController) {
@@ -157,6 +162,16 @@ class ExperimentalScanner(
                     packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins)
                 }.onSuccess { provenance ->
                     controller.addPackageProvenance(pkg.id, provenance)
+                }.onFailure {
+                    controller.addProvenanceResolutionIssue(
+                        pkg.id,
+                        OrtIssue(
+                            source = TOOL_NAME,
+                            severity = Severity.ERROR,
+                            message = "Could not resolve provenance for package '${pkg.id.toCoordinates()}': " +
+                                    it.collectMessagesAsString()
+                        )
+                    )
                 }
             }
         }
@@ -173,6 +188,18 @@ class ExperimentalScanner(
                     nestedProvenanceResolver.resolveNestedProvenance(provenance)
                 }.onSuccess { nestedProvenance ->
                     controller.addNestedProvenance(provenance, nestedProvenance)
+                }.onFailure {
+                    controller.getPackagesForProvenanceWithoutVcsPath(provenance).forEach { id ->
+                        controller.addProvenanceResolutionIssue(
+                            id,
+                            OrtIssue(
+                                source = TOOL_NAME,
+                                severity = Severity.ERROR,
+                                message = "Could not resolve nested provenance for package " +
+                                        "'${id.toCoordinates()}': ${it.collectMessagesAsString()}"
+                            )
+                        )
+                    }
                 }
             }
         }
