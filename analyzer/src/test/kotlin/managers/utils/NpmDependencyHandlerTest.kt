@@ -94,9 +94,9 @@ private fun createIdentifier(name: String): Identifier =
  */
 private fun createModuleInfo(
     id: Identifier,
-    packageFile: File = File("package.json"),
+    packageFile: File = File("project/package.json"),
     dependencies: Set<NpmModuleInfo> = emptySet()
-): NpmModuleInfo = NpmModuleInfo(id, packageFile, dependencies)
+): NpmModuleInfo = NpmModuleInfo(id, packageFile.parentFile, packageFile, dependencies)
 
 /**
  * Creates an [NpmDependencyHandler] instance to be used by test cases.

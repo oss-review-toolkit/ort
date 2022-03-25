@@ -270,7 +270,7 @@ open class Npm(
         nodeModulesDir.walk().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }.forEach { file ->
-            val (id, pkg) = parsePackage(file)
+            val (id, pkg) = parsePackage(rootDirectory, file)
             packages[id] = pkg
         }
 
@@ -309,7 +309,7 @@ open class Npm(
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
      */
     @Suppress("HttpUrlsUsage")
-    internal fun parsePackage(packageFile: File): Pair<String, Package> {
+    internal fun parsePackage(workingDir: File, packageFile: File): Pair<String, Package> {
         val packageDir = packageFile.parentFile
 
         log.debug { "Found a 'package.json' file in '$packageDir'." }
@@ -356,7 +356,7 @@ open class Npm(
                     || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
             if (hasIncompleteData) {
-                val details = getRemotePackageDetails(packageDir, "$rawName@$version")
+                val details = getRemotePackageDetails(workingDir, "$rawName@$version")
 
                 if (description.isEmpty()) description = details["description"].textValueOrEmpty()
                 if (homepageUrl.isEmpty()) homepageUrl = details["homepage"].textValueOrEmpty()
@@ -516,7 +516,7 @@ open class Npm(
             getPackageReferenceForMissingModule(dependencyName, pathToRoot.first())
         }
 
-        return NpmModuleInfo(moduleId, moduleInfo.packageJson, dependencies)
+        return NpmModuleInfo(moduleId, moduleDir, moduleInfo.packageJson, dependencies)
     }
 
     /**
