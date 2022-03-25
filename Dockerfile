@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.3
 
 # Copyright (C) 2020 Bosch Software Innovations GmbH
-# Copyright (C) 2021 Bosch.IO GmbH
+# Copyright (C) 2021-2022 Bosch.IO GmbH
 # Copyright (C) 2021 Alliander N.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +56,7 @@ ENV \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.16.5 \
     HASKELL_STACK_VERSION=2.1.3 \
-    NPM_VERSION=7.20.6 \
+    NPM_VERSION=8.5.0 \
     PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
     SBT_VERSION=1.6.1 \
