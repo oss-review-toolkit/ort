@@ -67,8 +67,8 @@ class Yarn(
 
     override fun runInstall(workingDir: File) = run(workingDir, "install", "--ignore-scripts", "--ignore-engines")
 
-    override fun getRemotePackageDetails(packageName: String): JsonNode {
-        val process = run("info", "--json", packageName)
+    override fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
+        val process = run(workingDir, "info", "--json", packageName)
         return jsonMapper.readTree(process.stdoutFile)["data"]
     }
 }
