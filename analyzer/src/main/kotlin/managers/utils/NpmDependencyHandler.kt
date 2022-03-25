@@ -39,6 +39,9 @@ data class NpmModuleInfo(
     /** The identifier for the represented module. */
     val id: Identifier,
 
+    /** The working directory of the NPM project. */
+    val workingDir: File,
+
     /** The file pointing to the package.json for this module. */
     val packageFile: File,
 
@@ -57,5 +60,5 @@ class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<NpmModuleIn
     override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage = PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: NpmModuleInfo, issues: MutableList<OrtIssue>): Package =
-        npm.parsePackage(dependency.packageFile).second
+        npm.parsePackage(dependency.workingDir, dependency.packageFile).second
 }
