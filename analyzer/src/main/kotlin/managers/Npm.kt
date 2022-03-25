@@ -356,7 +356,7 @@ open class Npm(
                     || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
             if (hasIncompleteData) {
-                val details = getRemotePackageDetails("$rawName@$version")
+                val details = getRemotePackageDetails(packageDir, "$rawName@$version")
 
                 if (description.isEmpty()) description = details["description"].textValueOrEmpty()
                 if (homepageUrl.isEmpty()) homepageUrl = details["homepage"].textValueOrEmpty()
@@ -408,8 +408,8 @@ open class Npm(
         return Pair(id.toCoordinates(), module)
     }
 
-    protected open fun getRemotePackageDetails(packageName: String): JsonNode {
-        val process = run("view", "--json", packageName)
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
+        val process = run(workingDir, "view", "--json", packageName)
         return jsonMapper.readTree(process.stdoutFile)
     }
 
