@@ -71,7 +71,8 @@ class BoyterLc internal constructor(
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
 
     override fun transformVersion(output: String) =
-        // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
+        // The version string can be something like:
+        // licensechecker version 1.1.1
         output.removePrefix("licensechecker version ")
 
     override fun bootstrap(): File {

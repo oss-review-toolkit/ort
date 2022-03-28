@@ -71,7 +71,7 @@ class Stack(
     override fun command(workingDir: File?) = "stack"
 
     override fun transformVersion(output: String) =
-        // Stack could report version strings like:
+        // The version string can be something like:
         // Version 1.7.1 x86_64
         // Version 2.1.1, Git revision f612ea85316bbc327a64e4ad8d9f0b150dc12d4b (7648 commits) x86_64 hpack-0.31.2
         output.removePrefix("Version ").substringBefore(',').substringBefore(' ')

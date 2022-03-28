@@ -78,7 +78,7 @@ object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
 
     override fun transformVersion(output: String) =
-        // virtualenv could report versions like:
+        // The version string can be something like:
         // 16.6.1
         // virtualenv 20.0.14 from /usr/local/lib/python2.7/dist-packages/virtualenv/__init__.pyc
         output.removePrefix("virtualenv ").substringBefore(' ')

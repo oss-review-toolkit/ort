@@ -132,8 +132,9 @@ class ScanCode internal constructor(
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
 
     override fun transformVersion(output: String): String {
-        // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181" which might be preceded
-        // by a line saying "Configuring ScanCode for first use...".
+        // On first use, the output is prefixed by "Configuring ScanCode for first use...". The version string can be
+        // something like:
+        // ScanCode version 2.0.1.post1.fb67a181
         val prefix = "ScanCode version "
         return output.lineSequence().first { it.startsWith(prefix) }.substring(prefix.length)
     }
