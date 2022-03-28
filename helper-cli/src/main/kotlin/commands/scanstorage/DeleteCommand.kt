@@ -113,6 +113,10 @@ internal class DeleteCommand : CliktCommand(
             }
 
             println("Would delete $count scan result(s).")
+
+            if (log.delegate.isDebugEnabled) {
+                ScanResults.slice(ScanResults.identifier).select { condition }.forEach(log::debug)
+            }
         } else {
             val count = database.transaction {
                 ScanResults.deleteWhere { condition }
