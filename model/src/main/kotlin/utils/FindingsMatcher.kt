@@ -43,14 +43,14 @@ class FindingsMatcher(
 ) {
     companion object {
         /**
-         * The default value of 5 seems to be a good balance between associating findings separated by blank lines but
-         * not skipping complete license statements.
+         * The default value seems to be a good balance between associating findings separated by blank lines but not
+         * skipping complete license statements.
          */
         const val DEFAULT_TOLERANCE_LINES = 5
 
         /**
-         * The default value of 2 seems to be a good balance between associating findings separated by blank lines but
-         * not skipping complete license statements.
+         * The default value seems to be a good balance between associating findings separated by blank lines but not
+         * skipping complete license statements.
          */
         const val DEFAULT_EXPAND_TOLERANCE_LINES = 2
     }
