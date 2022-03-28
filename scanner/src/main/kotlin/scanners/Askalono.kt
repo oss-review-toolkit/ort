@@ -62,7 +62,8 @@ class Askalono internal constructor(
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
 
     override fun transformVersion(output: String) =
-        // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
+        // The version string can be something like:
+        // askalono 0.2.0-beta.1
         output.removePrefix("askalono ")
 
     override fun bootstrap(): File {
