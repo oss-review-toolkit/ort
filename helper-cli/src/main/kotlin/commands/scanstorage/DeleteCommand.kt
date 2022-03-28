@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.jetbrains.exposed.sql.Database
@@ -67,9 +68,7 @@ internal class DeleteCommand : CliktCommand(
     private val sourceCodeOrigins by option(
         "--source-code-origins",
         help = "The origin of the scan results that should be deleted."
-    ).convert { SourceCodeOrigin.valueOf(it) }
-        .split(",")
-        .default(emptyList())
+    ).enum<SourceCodeOrigin>().split(",").default(emptyList())
 
     private val packageType by option(
         "--package-type",
