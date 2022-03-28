@@ -31,7 +31,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.regexp
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.compoundOr
 import org.jetbrains.exposed.sql.deleteWhere
@@ -72,9 +72,9 @@ internal class DeleteCommand : CliktCommand(
         help = "The origin of the scan results that should be deleted."
     ).enum<SourceCodeOrigin>().split(",").default(emptyList())
 
-    private val packageType by option(
-        "--package-type",
-        help = "The package manager type to delete from the scan storage. Like 'Maven' or 'NPM'."
+    private val packageId by option(
+        "--package-id",
+        help = "A regular expression for matching the package id."
     )
 
     private val dryRun by option(
@@ -92,12 +92,12 @@ internal class DeleteCommand : CliktCommand(
             }
         }
 
-        val typeCondition = packageType?.let { ScanResults.identifier like "$it:%" }
+        val identifierCondition = packageId?.let { ScanResults.identifier regexp it }
         val provenanceConditions = provenanceKeys.map { key ->
             rawParam("scan_result->'provenance'->>'$key'").isNotNull()
         }.takeIf { it.isNotEmpty() }?.compoundOr()
 
-        val conditions = listOfNotNull(typeCondition, provenanceConditions)
+        val conditions = listOfNotNull(identifierCondition, provenanceConditions)
         if (conditions.isEmpty()) {
             // Default to the safe option to not delete anything if no conditions are given.
             println("Not specified what entries to delete. Not deleting anything.")
