@@ -75,7 +75,10 @@ class Cargo(
 
     override fun command(workingDir: File?) = "cargo"
 
-    override fun transformVersion(output: String) = output.removePrefix("cargo ")
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // cargo 1.35.0 (6f3e9c367 2019-04-04)
+        output.removePrefix("cargo ").substringBefore(' ')
 
     private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
 
