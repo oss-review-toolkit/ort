@@ -20,11 +20,12 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.sksamuel.hoplite.ConfigLoader
+import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.ConfigResult
 import com.sksamuel.hoplite.Node
 import com.sksamuel.hoplite.PropertySource
 import com.sksamuel.hoplite.PropertySourceContext
+import com.sksamuel.hoplite.addEnvironmentSource
 import com.sksamuel.hoplite.fp.getOrElse
 import com.sksamuel.hoplite.fp.valid
 import com.sksamuel.hoplite.parsers.toNode
@@ -123,7 +124,7 @@ data class OrtConfiguration(
                 }
             )
 
-            val loader = ConfigLoader.Builder().addSources(sources).build()
+            val loader = ConfigLoaderBuilder.default().addEnvironmentSource().addPropertySources(sources).build()
             val config = loader.loadConfig<OrtConfigurationWrapper>()
 
             return config.getOrElse { failure ->
@@ -141,6 +142,7 @@ data class OrtConfiguration(
         private fun argumentsSource(args: Map<String, String>): PropertySource {
             val node = args.toProperties().toNode("arguments").valid()
             return object : PropertySource {
+                override fun source() = "ORT configuration arguments"
                 override fun node(context: PropertySourceContext): ConfigResult<Node> = node
             }
         }
