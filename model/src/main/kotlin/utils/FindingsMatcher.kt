@@ -46,7 +46,7 @@ class FindingsMatcher(
          * The default value seems to be a good balance between associating findings separated by blank lines but not
          * skipping complete license statements.
          */
-        const val DEFAULT_TOLERANCE_LINES = 5
+        const val DEFAULT_TOLERANCE_LINES = 7
 
         /**
          * The default value seems to be a good balance between associating findings separated by blank lines but not
