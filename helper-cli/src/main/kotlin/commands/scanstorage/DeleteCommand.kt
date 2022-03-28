@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
@@ -34,6 +35,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.compoundOr
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.select
 
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
 import org.ossreviewtoolkit.model.SourceCodeOrigin
@@ -75,6 +77,11 @@ internal class DeleteCommand : CliktCommand(
         help = "The package manager type to delete from the scan storage. Like 'Maven' or 'NPM'."
     )
 
+    private val dryRun by option(
+        "--dry-run",
+        help = "Perform a dry run without actually deleting anything."
+    ).flag()
+
     override fun run() {
         val database = connectPostgresStorage(OrtConfiguration.load(configArguments, configFile))
 
@@ -99,11 +106,20 @@ internal class DeleteCommand : CliktCommand(
         }
 
         val condition = conditions.compoundAnd()
-        database.transaction {
-            ScanResults.deleteWhere { condition }
-        }
 
-        log.info { "Successfully deleted stored scan results." }
+        if (dryRun) {
+            val count = database.transaction {
+                ScanResults.select { condition }.count()
+            }
+
+            println("Would delete $count scan result(s).")
+        } else {
+            val count = database.transaction {
+                ScanResults.deleteWhere { condition }
+            }
+
+            println("Successfully deleted $count stored scan result(s).")
+        }
     }
 
     private fun connectPostgresStorage(config: OrtConfiguration): Database {
