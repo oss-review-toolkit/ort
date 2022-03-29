@@ -110,10 +110,10 @@ class ScanController(
         nestedProvenances[packageProvenancesWithoutVcsPath[id]]
 
     /**
-     * Return all [KnownProvenance]s contained in [nestedProvenances] and [packageProvenancesWithoutVcsPath].
+     * Return all [KnownProvenance]s contained in [nestedProvenances].
      */
     fun getAllProvenances(): Set<KnownProvenance> =
-        (packageProvenancesWithoutVcsPath.values + nestedProvenances.values.flatMap { it.getProvenances() }).toSet()
+        nestedProvenances.values.flatMapTo(mutableSetOf()) { it.getProvenances() }
 
     /**
      * Get all provenances for which no scan result for the provided [scanner] is available.
