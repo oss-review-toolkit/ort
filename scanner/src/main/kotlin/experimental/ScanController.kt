@@ -122,17 +122,21 @@ class ScanController(
         nestedProvenance.getProvenances().filter { hasScanResult(scanner, it) }
 
     /**
-     * Get the [NestedProvenance] for the provided [id].
+     * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.
      */
-    fun getNestedProvenance(id: Identifier): NestedProvenance =
-        nestedProvenances.getValue(packageProvenancesWithoutVcsPath.getValue(id))
+    fun getNestedProvenance(id: Identifier): NestedProvenance? =
+        nestedProvenances[packageProvenancesWithoutVcsPath.getValue(id)]
 
     /**
      * Get all [NestedProvenance]s by [Package].
      */
     fun getNestedProvenancesByPackage(): Map<Package, NestedProvenance> =
-        packageProvenancesWithoutVcsPath.keys.associate { id ->
-            packages.first { it.id == id } to getNestedProvenance(id)
+        buildMap {
+            packageProvenancesWithoutVcsPath.forEach { (id, _) ->
+                getNestedProvenance(id)?.let { nestedProvenance ->
+                    put(packages.first { it.id == id }, nestedProvenance)
+                }
+            }
         }
 
     /**
@@ -202,7 +206,7 @@ class ScanController(
      * Return true if [ScanResult]s for the complete [NestedProvenance] of the package are available.
      */
     fun hasCompleteScanResult(scanner: ScannerWrapper, pkg: Package): Boolean =
-        getNestedProvenance(pkg.id).getProvenances().all { provenance -> hasScanResult(scanner, provenance) }
+        getNestedProvenance(pkg.id)?.getProvenances()?.all { provenance -> hasScanResult(scanner, provenance) } ?: false
 
     /**
      * Return true if a [ScanResult] for the provided [scanner] and [provenance] is available.
