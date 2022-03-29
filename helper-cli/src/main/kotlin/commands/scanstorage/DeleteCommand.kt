@@ -94,8 +94,8 @@ internal class DeleteCommand : CliktCommand(
 
         val typeCondition = packageType?.let { ScanResults.identifier like "$it:%" }
         val provenanceConditions = provenanceKeys.map { key ->
-                rawParam("scan_result->'provenance'->>'$key'").isNotNull()
-            }.takeIf { it.isNotEmpty() }?.compoundOr()
+            rawParam("scan_result->'provenance'->>'$key'").isNotNull()
+        }.takeIf { it.isNotEmpty() }?.compoundOr()
 
         val conditions = listOfNotNull(typeCondition, provenanceConditions)
         if (conditions.isEmpty()) {
