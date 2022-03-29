@@ -18,9 +18,9 @@
     "licenseId" : "LicenseRef-scancode-srgb"
   } ],
   "documentNamespace" : "<REPLACE_DOCUMENT_NAMESPACE>",
-  "documentDescribes" : [ "SPDXRef-Package-0-root-package" ],
+  "documentDescribes" : [ "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1" ],
   "packages" : [ {
-    "SPDXID" : "SPDXRef-Package-0-root-package",
+    "SPDXID" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1",
     "copyrightText" : "NOASSERTION",
     "downloadLocation" : "NOASSERTION",
     "filesAnalyzed" : false,
@@ -29,7 +29,7 @@
     "licenseDeclared" : "NOASSERTION",
     "name" : "Root package"
   }, {
-    "SPDXID" : "SPDXRef-Package-1-first-package",
+    "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1",
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "https://some-host/first-package.jar",
     "externalRefs" : [ {
@@ -45,7 +45,7 @@
     "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with a scan result containing two copyright finding matched to a license finding.",
     "versionInfo" : "0.0.1"
   }, {
-    "SPDXID" : "SPDXRef-Package-2-first-package-vcs",
+    "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs",
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "git+ssh://github.com/path/first-package-repo.git@deadbeef#project-path",
     "externalRefs" : [ {
@@ -64,7 +64,7 @@
     "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with a scan result containing two copyright finding matched to a license finding.",
     "versionInfo" : "0.0.1"
   }, {
-    "SPDXID" : "SPDXRef-Package-3-first-package-source-artifact",
+    "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact",
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "https://some-host/first-package-sources.jar",
     "externalRefs" : [ {
@@ -83,7 +83,7 @@
     "summary" : "A package with all supported attributes set, with a VCS URL containing a user name, and with a scan result containing two copyright finding matched to a license finding.",
     "versionInfo" : "0.0.1"
   }, {
-    "SPDXID" : "SPDXRef-Package-4-fourth-package",
+    "SPDXID" : "SPDXRef-Package-Maven-fourth-package-group-fourth-package-0.0.1",
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
@@ -99,7 +99,7 @@
     "summary" : "A package with partially mapped declared license.",
     "versionInfo" : "0.0.1"
   }, {
-    "SPDXID" : "SPDXRef-Package-5-second-package",
+    "SPDXID" : "SPDXRef-Package-Maven-second-package-group-second-package-0.0.1",
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
@@ -115,7 +115,7 @@
     "summary" : "A package with minimal attributes set.",
     "versionInfo" : "0.0.1"
   }, {
-    "SPDXID" : "SPDXRef-Package-6-sixth-package",
+    "SPDXID" : "SPDXRef-Package-Maven-sixth-package-group-sixth-package-0.0.1",
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
@@ -131,7 +131,7 @@
     "summary" : "A package with non-SPDX license IDs in the declared and concluded license.",
     "versionInfo" : "0.0.1"
   }, {
-    "SPDXID" : "SPDXRef-Package-7-third-package",
+    "SPDXID" : "SPDXRef-Package-Maven-third-package-group-third-package-0.0.1",
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
     "externalRefs" : [ {
@@ -148,32 +148,32 @@
     "versionInfo" : "0.0.1"
   } ],
   "relationships" : [ {
-    "spdxElementId" : "SPDXRef-Package-1-first-package",
+    "spdxElementId" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1",
     "relationshipType" : "DEPENDENCY_OF",
-    "relatedSpdxElement" : "SPDXRef-Package-0-root-package"
+    "relatedSpdxElement" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
   }, {
-    "spdxElementId" : "SPDXRef-Package-1-first-package",
+    "spdxElementId" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1",
     "relationshipType" : "GENERATED_FROM",
-    "relatedSpdxElement" : "SPDXRef-Package-2-first-package-vcs"
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs"
   }, {
-    "spdxElementId" : "SPDXRef-Package-1-first-package",
+    "spdxElementId" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1",
     "relationshipType" : "GENERATED_FROM",
-    "relatedSpdxElement" : "SPDXRef-Package-3-first-package-source-artifact"
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact"
   }, {
-    "spdxElementId" : "SPDXRef-Package-4-fourth-package",
+    "spdxElementId" : "SPDXRef-Package-Maven-fourth-package-group-fourth-package-0.0.1",
     "relationshipType" : "DEPENDENCY_OF",
-    "relatedSpdxElement" : "SPDXRef-Package-0-root-package"
+    "relatedSpdxElement" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
   }, {
-    "spdxElementId" : "SPDXRef-Package-5-second-package",
+    "spdxElementId" : "SPDXRef-Package-Maven-second-package-group-second-package-0.0.1",
     "relationshipType" : "DEPENDENCY_OF",
-    "relatedSpdxElement" : "SPDXRef-Package-0-root-package"
+    "relatedSpdxElement" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
   }, {
-    "spdxElementId" : "SPDXRef-Package-6-sixth-package",
+    "spdxElementId" : "SPDXRef-Package-Maven-sixth-package-group-sixth-package-0.0.1",
     "relationshipType" : "DEPENDENCY_OF",
-    "relatedSpdxElement" : "SPDXRef-Package-0-root-package"
+    "relatedSpdxElement" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
   }, {
-    "spdxElementId" : "SPDXRef-Package-7-third-package",
+    "spdxElementId" : "SPDXRef-Package-Maven-third-package-group-third-package-0.0.1",
     "relationshipType" : "DEPENDENCY_OF",
-    "relatedSpdxElement" : "SPDXRef-Package-0-root-package"
+    "relatedSpdxElement" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
   } ]
 }
