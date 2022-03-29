@@ -184,6 +184,8 @@ class ExperimentalScanner(
      */
     private fun runPackageScanners(controller: ScanController, context: ScanContext) {
         controller.packages.forEach { pkg ->
+            val nestedProvenance = controller.getNestedProvenance(pkg.id) ?: return@forEach
+
             // TODO: Use coroutines to execute scanners in parallel.
             controller.getPackageScanners().forEach scanner@{ scanner ->
                 if (controller.hasCompleteScanResult(scanner, pkg)) {
@@ -201,7 +203,6 @@ class ExperimentalScanner(
 
                 log.info { "Scan of ${pkg.id.toCoordinates()} with package scanner ${scanner.name} finished." }
 
-                val nestedProvenance = controller.getNestedProvenance(pkg.id)
                 val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
 
                 controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
