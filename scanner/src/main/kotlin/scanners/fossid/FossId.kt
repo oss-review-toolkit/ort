@@ -604,17 +604,25 @@ class FossId internal constructor(
             val response = service.checkDownloadStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check download status")
 
-            if (response.data == DownloadStatus.FINISHED) return@wait true
+            when (response.data) {
+                DownloadStatus.FINISHED -> return@wait true
 
-            // There is a bug with the FossID server version < 20.2: Sometimes the download is complete, but it stays in
-            // state "NOT FINISHED". Therefore, we check the output of the Git fetch to find out whether the download is
-            // actually done.
-            val message = response.message
-            if (message == null || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)) return@wait false
+                DownloadStatus.FAILED -> throw IllegalStateException(
+                    "Could not download scan: ${response.error}."
+                )
 
-            FossId.log.warn { "The download is not finished but Git Fetch has completed. Carrying on..." }
+                else -> {
+                    // There is a bug with the FossID server version < 20.2: Sometimes the download is complete, but it
+                    // stays in state "NOT FINISHED". Therefore, we check the output of the Git fetch to find out
+                    // whether the download is actually done.
+                    val message = response.message
+                    if (message == null || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)) return@wait false
 
-            return@wait true
+                    FossId.log.warn { "The download is not finished but Git Fetch has completed. Carrying on..." }
+
+                    return@wait true
+                }
+            }
         }
 
         requireNotNull(result) { "Timeout while waiting for the download to complete" }
