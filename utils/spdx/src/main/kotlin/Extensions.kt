@@ -86,3 +86,37 @@ fun String.isSpdxExpressionOrNotPresent(): Boolean =
  */
 fun String.toSpdx(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpression =
     SpdxExpression.parse(this, strictness)
+
+/**
+ * Convert a [String] to an SPDX "idstring" (like license IDs, package IDs, etc.) which may only contain letters,
+ * numbers, ".", and / or "-". If [allowPlusSuffix] is enabled, a "+" (as used in license IDs) is kept as the suffix.
+ */
+fun String.toSpdxId(allowPlusSuffix: Boolean = false): String {
+    val hasPlusSuffix = endsWith('+')
+    val special = listOf('-', '.')
+
+    val converted = buildString {
+        var lastChar: Char? = null
+
+        this@toSpdxId.forEach { c ->
+            when (c) {
+                // Take allowed chars as-is.
+                in special, in '0'..'9', in 'A'..'Z', in 'a'..'z' -> c
+
+                // Replace colons and underscores with dashes. Do not allow consecutive special chars for readability.
+                ':', '_' -> '-'.takeUnless { lastChar in special }
+
+                // Replace anything else with dots. Do not allow consecutive special chars for readability.
+                else -> '.'.takeUnless { lastChar in special }
+            }?.let {
+                append(it)
+                lastChar = it
+            }
+        }
+    }
+
+    // Do not allow leading or trailing special chars for readability.
+    val trimmed = converted.trim { it in special }
+
+    return trimmed.takeUnless { hasPlusSuffix && allowPlusSuffix } ?: "$trimmed+"
+}
