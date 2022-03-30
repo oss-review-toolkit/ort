@@ -29,6 +29,7 @@ import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
@@ -96,14 +97,12 @@ class ExperimentalScanner(
             emptyMap()
         }
 
-        val results = projectResults + packageResults
+        val results = (projectResults + packageResults).toSortedMap()
 
         val endTime = Instant.now()
 
-        val scanResults = results.entries.associateTo(sortedMapOf()) { it.key.id to it.value.merge() }
-
         val scanRecord = ScanRecord(
-            scanResults = scanResults,
+            scanResults = results,
             storageStats = AccessStatistics() // TODO: Record access statistics.
         )
 
@@ -127,7 +126,7 @@ class ExperimentalScanner(
         return ortResult.copy(scanner = scannerRun)
     }
 
-    suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Package, NestedProvenanceScanResult> {
+    suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Identifier, List<ScanResult>> {
         val scanners = scannerWrappers[context.packageType].orEmpty()
         if (scanners.isEmpty()) return emptyMap()
 
@@ -144,7 +143,9 @@ class ExperimentalScanner(
 
         createFileArchives(controller.getNestedProvenancesByPackage())
 
-        return controller.getNestedScanResultsByPackage()
+        return controller.getNestedScanResultsByPackage().entries.associateTo(sortedMapOf()) {
+            it.key.id to it.value.merge()
+        }
     }
 
     private fun resolvePackageProvenances(controller: ScanController) {

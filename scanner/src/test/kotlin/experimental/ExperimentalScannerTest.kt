@@ -22,7 +22,8 @@ package org.ossreviewtoolkit.scanner.experimental
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -86,14 +87,14 @@ class ExperimentalScannerTest : WordSpec({
             val packageContext = createContext(type = PackageType.PACKAGE)
             val projectContext = createContext(type = PackageType.PROJECT)
 
-            scanner.scan(setOf(pkgWithArtifact), packageContext)[pkgWithArtifact] shouldNotBeNull {
-                scanResults shouldNot beEmpty()
-                scanResults.values.flatten().forEach { it.scanner.name shouldBe "package scanner" }
+            scanner.scan(setOf(pkgWithArtifact), packageContext)[pkgWithArtifact.id] shouldNotBeNull {
+                this shouldNot beEmpty()
+                forEach { it.scanner.name shouldBe "package scanner" }
             }
 
-            scanner.scan(setOf(pkgWithArtifact), projectContext)[pkgWithArtifact] shouldNotBeNull {
-                scanResults shouldNot beEmpty()
-                scanResults.values.flatten().forEach { it.scanner.name shouldBe "project scanner" }
+            scanner.scan(setOf(pkgWithArtifact), projectContext)[pkgWithArtifact.id] shouldNotBeNull {
+                this shouldNot beEmpty()
+                forEach { it.scanner.name shouldBe "project scanner" }
             }
         }
 
@@ -105,7 +106,7 @@ class ExperimentalScannerTest : WordSpec({
                 projectScannerWrappers = emptyList()
             )
 
-            scanner.scan(setOf(pkgWithArtifact), createContext(type = PackageType.PROJECT)) should beEmpty()
+            scanner.scan(setOf(pkgWithArtifact), createContext(type = PackageType.PROJECT)) should beEmptyMap()
         }
 
         "Not scan packages if no scanner wrapper for packages is configured" {
@@ -116,7 +117,7 @@ class ExperimentalScannerTest : WordSpec({
                 projectScannerWrappers = listOf(scannerWrapper)
             )
 
-            scanner.scan(setOf(pkgWithArtifact), createContext()) should beEmpty()
+            scanner.scan(setOf(pkgWithArtifact), createContext()) should beEmptyMap()
         }
     }
 
@@ -135,13 +136,17 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgWithArtifact, pkgWithVcs), createContext())
 
             result should containExactly(
-                pkgWithArtifact to createNestedScanResult(
-                    provenance = pkgWithArtifact.artifactProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithArtifact.id to listOf(
+                    createScanResult(
+                        provenance = pkgWithArtifact.artifactProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 ),
-                pkgWithVcs to createNestedScanResult(
-                    provenance = pkgWithVcs.repositoryProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithVcs.id to listOf(
+                    createScanResult(
+                        provenance = pkgWithVcs.repositoryProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 )
             )
 
@@ -177,13 +182,17 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgWithArtifact, pkgWithVcs), createContext())
 
             result should containExactly(
-                pkgWithArtifact to createNestedScanResult(
-                    provenance = pkgWithArtifact.artifactProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithArtifact.id to listOf(
+                    createScanResult(
+                        provenance = pkgWithArtifact.artifactProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 ),
-                pkgWithVcs to createNestedScanResult(
-                    provenance = pkgWithVcs.repositoryProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithVcs.id to listOf(
+                    createScanResult(
+                        provenance = pkgWithVcs.repositoryProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 )
             )
 
@@ -219,13 +228,17 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgWithArtifact, pkgWithVcs), createContext())
 
             result should containExactly(
-                pkgWithArtifact to createNestedScanResult(
-                    provenance = pkgWithArtifact.artifactProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithArtifact.id to listOf(
+                    createScanResult(
+                        provenance = pkgWithArtifact.artifactProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 ),
-                pkgWithVcs to createNestedScanResult(
-                    provenance = pkgWithVcs.repositoryProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithVcs.id to listOf(
+                    createScanResult(
+                        provenance = pkgWithVcs.repositoryProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 )
             )
 
@@ -317,9 +330,11 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgWithArtifact), createContext())
 
             result should containExactly(
-                pkgWithArtifact to createStoredNestedScanResult(
-                    provenance = pkgWithArtifact.artifactProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithArtifact.id to listOf(
+                    createStoredScanResult(
+                        provenance = pkgWithArtifact.artifactProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 )
             )
 
@@ -343,9 +358,11 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgWithArtifact), createContext())
 
             result should containExactly(
-                pkgWithArtifact to createNestedScanResult(
-                    provenance = pkgWithArtifact.artifactProvenance(),
-                    scannerDetails = scannerWrapper.details
+                pkgWithArtifact.id to listOf(
+                    createScanResult(
+                        provenance = pkgWithArtifact.artifactProvenance(),
+                        scannerDetails = scannerWrapper.details
+                    )
                 )
             )
 
@@ -412,8 +429,8 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgCompletelyScanned, pkgPartlyScanned), createContext())
 
             result should containExactly(
-                pkgCompletelyScanned to nestedScanResultCompletelyScanned,
-                pkgPartlyScanned to nestedScanResultPartlyScanned
+                pkgCompletelyScanned.id to nestedScanResultCompletelyScanned.merge(),
+                pkgPartlyScanned.id to nestedScanResultPartlyScanned.merge()
             )
 
             verify(exactly = 0) {
@@ -444,9 +461,11 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgWithArtifact), createContext())
 
             result should containExactly(
-                pkgWithArtifact to createStoredNestedScanResult(
-                    pkgWithArtifact.artifactProvenance(),
-                    scannerWrapper.details
+                pkgWithArtifact.id to listOf(
+                    createStoredScanResult(
+                        pkgWithArtifact.artifactProvenance(),
+                        scannerWrapper.details
+                    )
                 )
             )
 
@@ -470,9 +489,11 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgWithArtifact), createContext())
 
             result should containExactly(
-                pkgWithArtifact to createNestedScanResult(
-                    pkgWithArtifact.artifactProvenance(),
-                    scannerWrapper.details
+                pkgWithArtifact.id to listOf(
+                    createScanResult(
+                        pkgWithArtifact.artifactProvenance(),
+                        scannerWrapper.details
+                    )
                 )
             )
 
@@ -549,8 +570,8 @@ class ExperimentalScannerTest : WordSpec({
             val result = scanner.scan(setOf(pkgCompletelyScanned, pkgPartlyScanned), createContext())
 
             result should containExactly(
-                pkgCompletelyScanned to nestedScanResultCompletelyScanned,
-                pkgPartlyScanned to nestedScanResultPartlyScanned
+                pkgCompletelyScanned.id to nestedScanResultCompletelyScanned.merge(),
+                pkgPartlyScanned.id to nestedScanResultPartlyScanned.merge()
             )
 
             verify(exactly = 0) {
@@ -643,7 +664,7 @@ class ExperimentalScannerTest : WordSpec({
             )
 
             result should containExactly(
-                pkgWithVcsPath to nestedScanResult
+                pkgWithVcsPath.id to nestedScanResult.merge()
             )
         }
     }
