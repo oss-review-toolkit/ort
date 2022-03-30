@@ -80,7 +80,7 @@ data class Identifier(
     constructor(identifier: String) : this(identifier.split(':', limit = 4))
 
     private val sanitizedComponents = listOf(type, namespace, name, version).map { component ->
-            component.trim().filterNot { it < ' ' }
+        component.trim().filterNot { it < ' ' }
     }
 
     init {
