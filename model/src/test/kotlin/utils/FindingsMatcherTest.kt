@@ -238,6 +238,19 @@ class FindingsMatcherTest : WordSpec() {
                 )
             }
 
+            "omit exceptions that are already contained in existing findings" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("GPL-1.0-or-later", TextLocation("pom.xml", 45)),
+                        LicenseFinding("GPL-2.0-only WITH Classpath-exception-2.0", TextLocation("pom.xml", 46, 48)),
+                        LicenseFinding("Classpath-exception-2.0", TextLocation("pom.xml", 47))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("GPL-1.0-or-later", TextLocation("pom.xml", 45)),
+                    LicenseFinding("GPL-2.0-only WITH Classpath-exception-2.0", TextLocation("pom.xml", 46, 48))
+                )
+            }
+
             "associate orphan exceptions by NOASSERTION" {
                 associateLicensesWithExceptions(
                     listOf(
