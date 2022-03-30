@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package org.ossreviewtoolkit.scanner.experimental
 
 import java.io.File
+import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
@@ -36,6 +37,17 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
  * The base interface for all types of scanners.
  */
 sealed interface ScannerWrapper {
+    companion object {
+        private val LOADER = ServiceLoader.load(ScannerWrapperFactory::class.java)!!
+
+        /**
+         * The set of all available [scanner wrapper factories][ScannerWrapperFactory] in the classpath, sorted by name.
+         */
+        val ALL: Set<ScannerWrapperFactory> by lazy {
+            LOADER.iterator().asSequence().toSortedSet(compareBy { it.scannerName })
+        }
+    }
+
     /**
      * The name of the scanner.
      */
