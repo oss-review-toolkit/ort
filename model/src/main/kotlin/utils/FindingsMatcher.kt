@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.NOASSERTION
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -220,7 +221,16 @@ fun associateLicensesWithExceptions(
     val (licenses, exceptions) = findings.partition { SpdxLicenseException.forId(it.license.toString()) == null }
 
     val fixedLicenses = licenses.toMutableList()
-    val remainingExceptions = exceptions.toMutableList()
+
+    val existingExceptions = licenses.mapNotNull { finding ->
+        (finding.license as? SpdxLicenseWithExceptionExpression)?.exception?.let { it to finding.location }
+    }
+
+    val remainingExceptions = exceptions.filterNotTo(mutableListOf()) {
+        existingExceptions.any { (exception, location) ->
+            it.license.toString() == exception && it.location in location
+        }
+    }
 
     val i = remainingExceptions.iterator()
 
