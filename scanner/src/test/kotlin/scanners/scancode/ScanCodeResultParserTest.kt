@@ -432,7 +432,7 @@ class ScanCodeResultParserTest : FreeSpec({
                         score = 100.0f
                     ),
                     LicenseFinding(
-                        license = "LicenseRef-scancode-free-unknown",
+                        license = "NOASSERTION",
                         location = TextLocation(
                             path = "Downloads/wasi-0.10.2+wasi-snapshot-preview1/ORG_CODE_OF_CONDUCT.md",
                             startLine = 106,
@@ -441,7 +441,7 @@ class ScanCodeResultParserTest : FreeSpec({
                         score = 50.0f
                     ),
                     LicenseFinding(
-                        license = "LicenseRef-scancode-unknown-license-reference",
+                        license = "NOASSERTION",
                         location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/README.md", 88, 88),
                         score = 100.0f
                     ),
