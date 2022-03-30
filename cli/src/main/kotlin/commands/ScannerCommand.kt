@@ -158,9 +158,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
     private val packageTypes by option(
         "--package-types",
-        help = "A comma-separated list of the package types from the ORT file's analyzer result to limit scans to. " +
-                "If not specified, all package types are scanned. Possible values are: " +
-                PackageType.values().joinToString { it.name }
+        help = "A comma-separated list of the package types from the ORT file's analyzer result to limit scans to."
     ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     private val skipExcluded by option(
