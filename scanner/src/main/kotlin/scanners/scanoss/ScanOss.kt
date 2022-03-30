@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2020-2021 SCANOSS TECNOLOGIAS SL
- * Copyright (C) 2020-2021 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,9 @@ import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.PathScanner
+import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
+import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -53,7 +56,12 @@ class ScanOss internal constructor(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
-) : PathScanner(name, scannerConfig, downloaderConfig) {
+) : PathScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    class ScanOssFactory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            ScanOss(scannerName, scannerConfig, downloaderConfig)
+    }
+
     class Factory : AbstractScannerFactory<ScanOss>("SCANOSS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             ScanOss(scannerName, scannerConfig, downloaderConfig)
@@ -64,6 +72,9 @@ class ScanOss internal constructor(
     }
 
     private val service = ScanOssService.create(config.apiUrl)
+
+    override val name = scannerName
+    override val criteria by lazy { getScannerCriteria() }
 
     // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
     override val version = BuildConfig.SCANOSS_VERSION
@@ -130,4 +141,6 @@ class ScanOss internal constructor(
             return Winnowing.wfpForFile(uuid.toString(), filePath)
         }
     }
+
+    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }
