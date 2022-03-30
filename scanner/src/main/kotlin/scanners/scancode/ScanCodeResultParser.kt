@@ -72,7 +72,8 @@ private val TIMEOUT_ERROR_REGEX = Pattern.compile(
 private val UNKNOWN_LICENSE_REF = listOf(
     "LicenseRef-scancode-free-unknown",
     "LicenseRef-scancode-unknown",
-    "LicenseRef-scancode-unknown-license-reference"
+    "LicenseRef-scancode-unknown-license-reference",
+    "LicenseRef-scancode-unknown-spdx"
 )
 
 /**
