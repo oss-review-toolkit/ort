@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.enumSetOf
@@ -89,6 +90,11 @@ class FossId internal constructor(
     downloaderConfig: DownloaderConfiguration,
     private val config: FossIdConfig
 ) : Scanner(name, scannerConfig, downloaderConfig), PackageScannerWrapper {
+    class FossIdFactory : AbstractScannerWrapperFactory<FossId>("FossId") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
+    }
+
     class Factory : AbstractScannerFactory<FossId>("FossId") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
