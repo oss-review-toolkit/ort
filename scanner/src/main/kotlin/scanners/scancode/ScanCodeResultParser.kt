@@ -239,14 +239,11 @@ private fun getSpdxLicenseId(license: JsonNode): String {
  */
 internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collection<LicenseKeyReplacement>): String =
     replacements.fold(licenseExpression) { expression, replacement ->
-        var result = expression
-        val regex = "(?:^| |\\()(${replacement.scanCodeLicenseKey})(?:$| |\\))".toRegex()
+        val regex = "(^| |\\()(${replacement.scanCodeLicenseKey})($| |\\))".toRegex()
 
-        regex.findAll(expression).forEach {
-            result = expression.replaceRange(it.groups[1]!!.range, replacement.spdxExpression)
+        regex.replace(expression) {
+            "${it.groupValues[1]}${replacement.spdxExpression}${it.groupValues[3]}"
         }
-
-        result
     }
 
 /**
