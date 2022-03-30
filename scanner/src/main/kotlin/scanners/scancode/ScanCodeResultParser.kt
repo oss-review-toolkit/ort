@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 private data class LicenseMatch(
     val expression: String,
@@ -66,10 +67,12 @@ private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
 )
 
-private val UNKNOWN_LICENSE_KEYS = listOf(
-    "free-unknown",
-    "unknown",
-    "unknown-license-reference"
+// A list of ScanCode-specific LicenseRefs that do not actually name concrete licenses, but which are generic findings
+// that "look like" licenses as per https://scancode-licensedb.aboutcode.org/?search=unknown.
+private val UNKNOWN_LICENSE_REF = listOf(
+    "LicenseRef-scancode-free-unknown",
+    "LicenseRef-scancode-unknown",
+    "LicenseRef-scancode-unknown-license-reference"
 )
 
 /**
@@ -213,24 +216,24 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
  */
 private fun getSpdxLicenseId(license: JsonNode): String {
     // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
-    val id = license["spdx_license_key"].textValueOrEmpty().replace('_', '-')
+    val idFromSpdxKey = license["spdx_license_key"].textValueOrEmpty().toSpdxId(allowPlusSuffix = true)
 
     // For regular SPDX IDs, return early here.
-    if (id.isNotEmpty() && !id.startsWith(LICENSE_REF_PREFIX)) return id
+    if (idFromSpdxKey.isNotEmpty() && !idFromSpdxKey.startsWith(LICENSE_REF_PREFIX)) return idFromSpdxKey
 
     // Before version 2.9.8, ScanCode used SPDX LicenseRefs that did not include the "scancode" namespace, like
     // "LicenseRef-Proprietary-HERE" instead of now "LicenseRef-scancode-here-proprietary", see
     // https://github.com/nexB/scancode-toolkit/blob/f94f716/src/licensedcode/data/licenses/here-proprietary.yml#L6-L8
     // But if the "scancode" namespace is present, return early here.
-    if (id.startsWith(LICENSE_REF_PREFIX_SCAN_CODE)) return id
+    val id = idFromSpdxKey.takeIf { it.startsWith(LICENSE_REF_PREFIX_SCAN_CODE) } ?: run {
+        // At this point the ID is either empty or a non-ScanCode SPDX LicenseRef, so fall back to building an ID based
+        // on the ScanCode-specific "key".
+        val idFromKey = license["key"].textValue().toSpdxId(allowPlusSuffix = true)
 
-    // At this point the ID is either empty or a non-"scancode" SPDX LicenseRef that needs to be fixed up.
-    val key = license["key"].textValue().replace('_', '-')
-    return if (key in UNKNOWN_LICENSE_KEYS) {
-        SpdxConstants.NOASSERTION
-    } else {
-        "$LICENSE_REF_PREFIX_SCAN_CODE$key"
+        "$LICENSE_REF_PREFIX_SCAN_CODE$idFromKey"
     }
+
+    return id.takeUnless { it in UNKNOWN_LICENSE_REF } ?: SpdxConstants.NOASSERTION
 }
 
 /**
