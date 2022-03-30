@@ -217,10 +217,10 @@ fun associateLicensesWithExceptions(
     findings: List<LicenseFinding>,
     toleranceLines: Int = FindingsMatcher.DEFAULT_TOLERANCE_LINES
 ): List<LicenseFinding> {
-    val (exceptions, licenses) = findings.partition { SpdxLicenseException.forId(it.license.toString()) != null }
+    val (licenses, exceptions) = findings.partition { SpdxLicenseException.forId(it.license.toString()) == null }
 
-    val remainingExceptions = exceptions.toMutableList()
     val fixedLicenses = licenses.toMutableList()
+    val remainingExceptions = exceptions.toMutableList()
 
     val i = remainingExceptions.iterator()
 
