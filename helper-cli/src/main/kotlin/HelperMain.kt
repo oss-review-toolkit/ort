@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.helper
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
+import com.github.ajalt.clikt.output.CliktHelpFormatter
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -74,6 +75,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
     init {
         context {
             expandArgumentFiles = false
+            helpFormatter = CliktHelpFormatter(showDefaultValues = true)
         }
 
         subcommands(
