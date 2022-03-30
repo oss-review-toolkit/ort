@@ -622,6 +622,18 @@ class ScanCodeResultParserTest : FreeSpec({
             result shouldBe "LicenseRef-scancode-public-domain"
         }
 
+        "properly replace the same license multiple times" {
+            val expression = "gpl-2.0 AND (gpl-2.0 OR gpl-2.0-plus)"
+            val replacements = listOf(
+                LicenseKeyReplacement("gpl-2.0", "GPL-2.0-only"),
+                LicenseKeyReplacement("gpl-2.0-plus", "GPL-2.0-or-later")
+            )
+
+            val result = replaceLicenseKeys(expression, replacements)
+
+            result shouldBe "GPL-2.0-only AND (GPL-2.0-only OR GPL-2.0-or-later)"
+        }
+
         "properly handle replacements with a license key being a suffix of another" {
             val expression = "agpl-3.0-openssl"
             val replacements = listOf(
