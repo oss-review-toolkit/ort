@@ -69,6 +69,11 @@ data class TextLocation(
     operator fun contains(line: Int) = line != UNKNOWN_LINE && line in startLine..endLine
 
     /**
+     * Return whether the given [other] location is contained in this location.
+     */
+    operator fun contains(other: TextLocation) = other.path == path && other.startLine in this && other.endLine in this
+
+    /**
      * Return whether this and the [other] locations are overlapping, i.e. they share at least a single line. Note that
      * the [path] is not compared.
      */
