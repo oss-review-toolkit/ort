@@ -131,8 +131,12 @@ class Conan(
 
     private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
+
+        // TODO: Support customizing the "conan_config" directory name, and also support getting the config from a URL.
+        //       These options should be retrieved from package manager specific analyzer configuration in ".ort.yml".
         val conanConfig = sequenceOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
             .find { it.isDirectory }
+
         val directoryToStash = conanConfig?.let { conanHome } ?: conanStoragePath
 
         stashDirectories(directoryToStash).use {
