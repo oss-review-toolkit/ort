@@ -239,7 +239,7 @@ class Git : VersionControlSystem(), CommandLineTool {
  * [Authenticator]. An instance of this class is installed by [Git], making sure that JGit uses the exact same
  * authentication mechanism as ORT.
  */
-private object AuthenticatorCredentialsProvider : CredentialsProvider() {
+internal object AuthenticatorCredentialsProvider : CredentialsProvider() {
     override fun isInteractive(): Boolean = false
 
     override fun supports(vararg items: CredentialItem): Boolean =
