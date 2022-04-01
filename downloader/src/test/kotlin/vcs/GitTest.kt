@@ -56,8 +56,8 @@ class GitTest : WordSpec({
 
     "The CredentialsProvider" should {
         "support user name and password credentials" {
-            val userCredential = mockk<CredentialItem.Username>()
-            val passwordCredential = mockk<CredentialItem.Password>()
+            val userCredential = CredentialItem.Username()
+            val passwordCredential = CredentialItem.Password()
 
             val credentialProvider = CredentialsProvider.getDefault()
 
@@ -65,8 +65,8 @@ class GitTest : WordSpec({
         }
 
         "not support any other types of credentials" {
-            val userCredential = mockk<CredentialItem.Username>()
-            val passwordCredential = mockk<CredentialItem.Password>()
+            val userCredential = CredentialItem.Username()
+            val passwordCredential = CredentialItem.Password()
             val otherCredential = mockk<CredentialItem.StringType>()
 
             val credentialProvider = CredentialsProvider.getDefault()
@@ -105,8 +105,8 @@ class GitTest : WordSpec({
         }
 
         "handle unknown credentials" {
-            val userCredential = mockk<CredentialItem.Username>()
-            val passwordCredential = mockk<CredentialItem.Password>()
+            val userCredential = CredentialItem.Username()
+            val passwordCredential = CredentialItem.Password()
 
             val authenticator = object : Authenticator() {
                 override fun getPasswordAuthentication(): PasswordAuthentication? = null
