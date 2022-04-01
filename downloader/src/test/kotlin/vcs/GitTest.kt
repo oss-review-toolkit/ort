@@ -55,6 +55,10 @@ class GitTest : WordSpec({
     }
 
     "The CredentialsProvider" should {
+        "default to the AuthenticatorCredentialsProvider" {
+            CredentialsProvider.getDefault() shouldBe AuthenticatorCredentialsProvider
+        }
+
         "support user name and password credentials" {
             val userCredential = CredentialItem.Username()
             val passwordCredential = CredentialItem.Password()
