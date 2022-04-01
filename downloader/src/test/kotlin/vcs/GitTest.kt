@@ -54,7 +54,7 @@ class GitTest : WordSpec({
         CredentialsProvider.setDefault(originalCredentialsProvider)
     }
 
-    "the CredentialsProvider" should {
+    "The CredentialsProvider" should {
         "support user name and password credentials" {
             val userCredential = mockk<CredentialItem.Username>()
             val passwordCredential = mockk<CredentialItem.Password>()
