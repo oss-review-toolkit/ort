@@ -32,7 +32,7 @@ class ProjectConfig : AbstractProjectConfig() {
         OrtProxySelector.install()
     }
 
-    override fun listeners() =
+    override fun extensions() =
         listOf(
             JunitXmlReporter(
                 includeContainers = false,
