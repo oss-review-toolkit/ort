@@ -202,7 +202,7 @@ packages:
   description: ""
   homepage_url: "http://jenkins-ci.org/version-number/"
   binary_artifact:
-    url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4.jar"
+    url: "https://repo.jenkins-ci.org/releases/org/jenkins-ci/version-number/1.4/version-number-1.4.jar"
     hash:
       value: "5d0f2ea16514c0ec8de86c102ce61a7837e45eb8"
       algorithm: "SHA-1"
