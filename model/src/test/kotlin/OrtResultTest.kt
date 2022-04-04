@@ -71,7 +71,7 @@ class OrtResultTest : WordSpec({
             )
 
             val ids = ortResult.collectProjectsAndPackages()
-            val idsWithoutSubProjects = ortResult.collectProjectsAndPackages(false)
+            val idsWithoutSubProjects = ortResult.collectProjectsAndPackages(includeSubProjects = false)
             val actualIds = ids - idsWithoutSubProjects
 
             ids should haveSize(9)
