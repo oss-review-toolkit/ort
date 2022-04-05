@@ -30,6 +30,11 @@ import java.io.File
 import java.io.IOException
 import java.util.SortedSet
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
@@ -262,19 +267,24 @@ open class Npm(
     }
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
-        val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = rootDirectory.resolve("node_modules")
 
         log.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 
-        nodeModulesDir.walk().filter {
+        val nodeModulesFiles = nodeModulesDir.walk().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
-        }.forEach { file ->
-            val (id, pkg) = parsePackage(rootDirectory, file)
-            packages[id] = pkg
         }
 
-        return packages
+        return runBlocking(Dispatchers.IO) {
+            nodeModulesFiles.mapTo(mutableListOf()) { file ->
+                this@Npm.log.debug { "Starting to parse '$file'..." }
+                async {
+                    parsePackage(rootDirectory, file).also { (id, _) ->
+                        this@Npm.log.debug { "Finished parsing '$file' to '$id'." }
+                    }
+                }
+            }.awaitAll().toMap()
+        }
     }
 
     private fun isValidNodeModulesDirectory(rootModulesDir: File, modulesDir: File?): Boolean {
