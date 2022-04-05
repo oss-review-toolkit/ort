@@ -19,8 +19,13 @@
 
 package org.ossreviewtoolkit.reporter.reporters.spdx
 
+import com.networknt.schema.JsonSchemaFactory
+import com.networknt.schema.SpecVersion
+
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -71,8 +76,22 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SpdxDocumentReporterFunTest : WordSpec({
-    "SpdxDocumentReporter" should {
-        "create the expected JSON SPDX document" {
+    "Reporting to JSON" should {
+        "create a valid document" {
+            val jsonMapper = FileFormat.JSON.mapper
+            val schema = JsonSchemaFactory
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
+                .objectMapper(FileFormat.JSON.mapper)
+                .build()
+                .getSchema(File("src/funTest/assets/spdx-schema.json").toURI())
+
+            val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
+            val errors = schema.validate(jsonMapper.readTree(jsonSpdxDocument))
+
+            errors should beEmpty()
+        }
+
+        "create the expected document" {
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
 
             jsonSpdxDocument shouldBe patchExpectedResult(
@@ -80,8 +99,10 @@ class SpdxDocumentReporterFunTest : WordSpec({
                 fromJson(jsonSpdxDocument)
             )
         }
+    }
 
-        "create the expected YAML SPDX document" {
+    "Reporting to YAML" should {
+        "create the expected document" {
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
 
             yamlSpdxDocument shouldBe patchExpectedResult(

@@ -56,6 +56,10 @@ Files: */src/test/assets/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: reporter/src/funTest/assets/spdx-schema.json
+Copyright: 2020-2022 Linux Foundation and its Contributors
+License: CC-BY-3.0
+
 Files: reporter-web-app/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
