@@ -158,6 +158,12 @@ sealed class SpdxExpression {
     protected open fun validChoicesForDnf(): Set<SpdxExpression> = setOf(this)
 
     /**
+     * Return whether this expression contains [present][SpdxConstants.isPresent] licenses, i.e. not all licenses in
+     * this expression are "not present" values.
+     */
+    fun isPresent() = licenses().any { SpdxConstants.isPresent(it) }
+
+    /**
      * Return if this expression is valid according to the [strictness]. Also see [validate].
      */
     fun isValid(strictness: Strictness = Strictness.ALLOW_CURRENT): Boolean =
