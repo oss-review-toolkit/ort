@@ -149,7 +149,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
                     val gitInfoDir = targetDir.resolve(".git/info").apply { safeMkdirs() }
                     val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-                    val globPatterns = getLicenseFileGlobPatterns() + path
+                    val globPatterns = getSparseCheckoutGlobPatterns() + path
 
                     gitInfoDir.resolve("sparse-checkout").writeText(globPatterns.joinToString("\n"))
                 }
