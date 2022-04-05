@@ -31,9 +31,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
 
 /**
  * A [Rule] to check a single [Package].
@@ -238,7 +236,7 @@ open class PackageRule(
             }
 
         /**
-         * A [RuleMatcher] that checks if the [license] is a valid [SpdxLicense].
+         * A [RuleMatcher] that checks if the [license] is a valid SPDX license.
          */
         fun isSpdxLicense() =
             object : RuleMatcher {
@@ -246,7 +244,7 @@ open class PackageRule(
 
                 override fun matches() =
                     when (license) {
-                        is SpdxLicenseIdExpression, is SpdxLicenseWithExceptionExpression ->
+                        !is SpdxLicenseReferenceExpression ->
                             license.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED)
                         else -> false
                     }
