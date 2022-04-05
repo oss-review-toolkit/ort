@@ -64,7 +64,7 @@ class PackageReferenceTest : WordSpec() {
                     it
                 }
 
-                expectedOrder should haveSize(0)
+                expectedOrder should beEmpty()
             }
 
             "change nodes as expected" {
