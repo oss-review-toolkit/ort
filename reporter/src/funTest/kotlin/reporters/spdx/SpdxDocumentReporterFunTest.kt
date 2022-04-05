@@ -73,8 +73,6 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 class SpdxDocumentReporterFunTest : WordSpec({
     "SpdxDocumentReporter" should {
         "create the expected JSON SPDX document" {
-            val ortResult = createOrtResult()
-
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
 
             jsonSpdxDocument shouldBe patchExpectedResult(
@@ -84,8 +82,6 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected YAML SPDX document" {
-            val ortResult = createOrtResult()
-
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
 
             yamlSpdxDocument shouldBe patchExpectedResult(
@@ -126,224 +122,221 @@ private fun patchExpectedResult(expectedResultFile: String, actualSpdxDocument: 
         )
     )
 
-@Suppress("LongMethod")
-private fun createOrtResult(): OrtResult {
-    val analyzedVcs = VcsInfo(
-        type = VcsType.GIT,
-        revision = "master",
-        url = "https://github.com/path/first-project.git",
-        path = ""
-    )
+private val analyzedVcs = VcsInfo(
+    type = VcsType.GIT,
+    revision = "master",
+    url = "https://github.com/path/first-project.git",
+    path = ""
+)
 
-    return OrtResult(
-        repository = Repository(
-            config = RepositoryConfiguration(
-                excludes = Excludes(
-                    scopes = listOf(
-                        ScopeExclude(
-                            pattern = "test",
-                            reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
-                            comment = "Packages for testing only."
-                        )
+private val ortResult = OrtResult(
+    repository = Repository(
+        config = RepositoryConfiguration(
+            excludes = Excludes(
+                scopes = listOf(
+                    ScopeExclude(
+                        pattern = "test",
+                        reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
+                        comment = "Packages for testing only."
                     )
                 )
-            ),
-            vcs = analyzedVcs,
-            vcsProcessed = analyzedVcs
+            )
         ),
-        analyzer = AnalyzerRun(
-            environment = Environment(),
-            config = AnalyzerConfiguration(allowDynamicVersions = true),
-            result = AnalyzerResult(
-                projects = sortedSetOf(
-                    Project(
-                        id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
-                        declaredLicenses = sortedSetOf("MIT"),
-                        definitionFilePath = "",
-                        homepageUrl = "first project's homepage",
-                        scopeDependencies = sortedSetOf(
-                            Scope(
-                                name = "compile",
-                                dependencies = sortedSetOf(
-                                    PackageReference(
-                                        id = Identifier("Maven:first-package-group:first-package:0.0.1")
-                                    ),
-                                    PackageReference(
-                                        id = Identifier("Maven:second-package-group:second-package:0.0.1")
-                                    ),
-                                    PackageReference(
-                                        id = Identifier("Maven:third-package-group:third-package:0.0.1")
-                                    ),
-                                    PackageReference(
-                                        id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1")
-                                    ),
-                                    PackageReference(
-                                        id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1")
-                                    )
-                                )
-                            ),
-                            Scope(
-                                name = "test",
-                                dependencies = sortedSetOf(
-                                    PackageReference(
-                                        id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1")
-                                    )
+        vcs = analyzedVcs,
+        vcsProcessed = analyzedVcs
+    ),
+    analyzer = AnalyzerRun(
+        environment = Environment(),
+        config = AnalyzerConfiguration(allowDynamicVersions = true),
+        result = AnalyzerResult(
+            projects = sortedSetOf(
+                Project(
+                    id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
+                    declaredLicenses = sortedSetOf("MIT"),
+                    definitionFilePath = "",
+                    homepageUrl = "first project's homepage",
+                    scopeDependencies = sortedSetOf(
+                        Scope(
+                            name = "compile",
+                            dependencies = sortedSetOf(
+                                PackageReference(
+                                    id = Identifier("Maven:first-package-group:first-package:0.0.1")
+                                ),
+                                PackageReference(
+                                    id = Identifier("Maven:second-package-group:second-package:0.0.1")
+                                ),
+                                PackageReference(
+                                    id = Identifier("Maven:third-package-group:third-package:0.0.1")
+                                ),
+                                PackageReference(
+                                    id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1")
+                                ),
+                                PackageReference(
+                                    id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1")
                                 )
                             )
                         ),
-                        vcs = analyzedVcs
+                        Scope(
+                            name = "test",
+                            dependencies = sortedSetOf(
+                                PackageReference(
+                                    id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1")
+                                )
+                            )
+                        )
+                    ),
+                    vcs = analyzedVcs
+                )
+            ),
+            packages = sortedSetOf(
+                CuratedPackage(
+                    pkg = Package(
+                        id = Identifier("Maven:first-package-group:first-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
+                        concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
+                        declaredLicenses = sortedSetOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
+                        description = "A package with all supported attributes set, with a VCS URL containing a " +
+                                "user name, and with a scan result containing two copyright finding matched to a " +
+                                "license finding.",
+                        homepageUrl = "first package's homepage URL",
+                        sourceArtifact = RemoteArtifact("https://some-host/first-package-sources.jar", Hash.NONE),
+                        vcs = VcsInfo(
+                            type = VcsType.GIT,
+                            revision = "master",
+                            url = "ssh://git@github.com/path/first-package-repo.git",
+                            path = "project-path"
+                        )
                     )
                 ),
-                packages = sortedSetOf(
-                    CuratedPackage(
-                        pkg = Package(
-                            id = Identifier("Maven:first-package-group:first-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
-                            concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
-                            declaredLicenses = sortedSetOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
-                            description = "A package with all supported attributes set, with a VCS URL containing a " +
-                                    "user name, and with a scan result containing two copyright finding matched to a " +
-                                    "license finding.",
-                            homepageUrl = "first package's homepage URL",
-                            sourceArtifact = RemoteArtifact("https://some-host/first-package-sources.jar", Hash.NONE),
-                            vcs = VcsInfo(
+                CuratedPackage(
+                    pkg = Package(
+                        id = Identifier("Maven:second-package-group:second-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = sortedSetOf(),
+                        description = "A package with minimal attributes set.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+                    )
+                ),
+                CuratedPackage(
+                    pkg = Package(
+                        id = Identifier("Maven:third-package-group:third-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = sortedSetOf("unmappable license"),
+                        description = "A package with only unmapped declared license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+                    )
+                ),
+                CuratedPackage(
+                    pkg = Package(
+                        id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = sortedSetOf("unmappable license", "MIT"),
+                        description = "A package with partially mapped declared license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+                    )
+                ),
+                CuratedPackage(
+                    pkg = Package(
+                        id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = sortedSetOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
+                        concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
+                        description = "A package used only from the excluded 'test' scope, with non-SPDX license " +
+                                "IDs in the declared and concluded license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+                    )
+                ),
+                CuratedPackage(
+                    pkg = Package(
+                        id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = sortedSetOf("LicenseRef-scancode-asmus"),
+                        concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
+                        description = "A package with non-SPDX license IDs in the declared and concluded license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+                    )
+                )
+            )
+        )
+    ),
+    scanner = ScannerRun(
+        environment = Environment(),
+        config = ScannerConfiguration(),
+        results = ScanRecord(
+            scanResults = sortedMapOf(
+                Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
+                    ScanResult(
+                        provenance = ArtifactProvenance(
+                            sourceArtifact = RemoteArtifact(
+                                url = "https://some-host/first-package-sources.jar",
+                                hash = Hash.NONE
+                            )
+                        ),
+                        scanner = ScannerDetails.EMPTY,
+                        summary = ScanSummary(
+                            startTime = Instant.MIN,
+                            endTime = Instant.MIN,
+                            packageVerificationCode = "0000000000000000000000000000000000000000",
+                            licenseFindings = sortedSetOf(
+                                LicenseFinding(
+                                    license = "Apache-2.0",
+                                    location = TextLocation("LICENSE", 1)
+                                )
+                            ),
+                            copyrightFindings = sortedSetOf(
+                                CopyrightFinding(
+                                    statement = "Copyright 2020 Some copyright holder in source artifact",
+                                    location = TextLocation("some/file", 1)
+                                ),
+                                CopyrightFinding(
+                                    statement = "Copyright 2020 Some other copyright holder in source artifact",
+                                    location = TextLocation("some/file", 7)
+                                )
+                            )
+                        )
+                    ),
+                    ScanResult(
+                        provenance = RepositoryProvenance(
+                            vcsInfo = VcsInfo(
                                 type = VcsType.GIT,
                                 revision = "master",
                                 url = "ssh://git@github.com/path/first-package-repo.git",
                                 path = "project-path"
+                            ),
+                            resolvedRevision = "deadbeef"
+                        ),
+                        scanner = ScannerDetails.EMPTY,
+                        summary = ScanSummary(
+                            startTime = Instant.MIN,
+                            endTime = Instant.MIN,
+                            packageVerificationCode = "0000000000000000000000000000000000000000",
+                            licenseFindings = sortedSetOf(
+                                LicenseFinding(
+                                    license = "BSD-2-Clause",
+                                    location = TextLocation("LICENSE", 1)
+                                )
+                            ),
+                            copyrightFindings = sortedSetOf(
+                                CopyrightFinding(
+                                    statement = "Copyright 2020 Some copyright holder in VCS",
+                                    location = TextLocation("some/file", 1)
+                                )
                             )
-                        )
-                    ),
-                    CuratedPackage(
-                        pkg = Package(
-                            id = Identifier("Maven:second-package-group:second-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf(),
-                            description = "A package with minimal attributes set.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
-                    ),
-                    CuratedPackage(
-                        pkg = Package(
-                            id = Identifier("Maven:third-package-group:third-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("unmappable license"),
-                            description = "A package with only unmapped declared license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
-                    ),
-                    CuratedPackage(
-                        pkg = Package(
-                            id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("unmappable license", "MIT"),
-                            description = "A package with partially mapped declared license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
-                    ),
-                    CuratedPackage(
-                        pkg = Package(
-                            id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
-                            concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
-                            description = "A package used only from the excluded 'test' scope, with non-SPDX license " +
-                                    "IDs in the declared and concluded license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
-                    ),
-                    CuratedPackage(
-                        pkg = Package(
-                            id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("LicenseRef-scancode-asmus"),
-                            concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
-                            description = "A package with non-SPDX license IDs in the declared and concluded license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
                         )
                     )
                 )
-            )
-        ),
-        scanner = ScannerRun(
-            environment = Environment(),
-            config = ScannerConfiguration(),
-            results = ScanRecord(
-                scanResults = sortedMapOf(
-                    Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
-                        ScanResult(
-                            provenance = ArtifactProvenance(
-                                sourceArtifact = RemoteArtifact(
-                                    url = "https://some-host/first-package-sources.jar",
-                                    hash = Hash.NONE
-                                )
-                            ),
-                            scanner = ScannerDetails.EMPTY,
-                            summary = ScanSummary(
-                                startTime = Instant.MIN,
-                                endTime = Instant.MIN,
-                                packageVerificationCode = "0000000000000000000000000000000000000000",
-                                licenseFindings = sortedSetOf(
-                                    LicenseFinding(
-                                        license = "Apache-2.0",
-                                        location = TextLocation("LICENSE", 1)
-                                    )
-                                ),
-                                copyrightFindings = sortedSetOf(
-                                    CopyrightFinding(
-                                        statement = "Copyright 2020 Some copyright holder in source artifact",
-                                        location = TextLocation("some/file", 1)
-                                    ),
-                                    CopyrightFinding(
-                                        statement = "Copyright 2020 Some other copyright holder in source artifact",
-                                        location = TextLocation("some/file", 7)
-                                    )
-                                )
-                            )
-                        ),
-                        ScanResult(
-                            provenance = RepositoryProvenance(
-                                vcsInfo = VcsInfo(
-                                    type = VcsType.GIT,
-                                    revision = "master",
-                                    url = "ssh://git@github.com/path/first-package-repo.git",
-                                    path = "project-path"
-                                ),
-                                resolvedRevision = "deadbeef"
-                            ),
-                            scanner = ScannerDetails.EMPTY,
-                            summary = ScanSummary(
-                                startTime = Instant.MIN,
-                                endTime = Instant.MIN,
-                                packageVerificationCode = "0000000000000000000000000000000000000000",
-                                licenseFindings = sortedSetOf(
-                                    LicenseFinding(
-                                        license = "BSD-2-Clause",
-                                        location = TextLocation("LICENSE", 1)
-                                    )
-                                ),
-                                copyrightFindings = sortedSetOf(
-                                    CopyrightFinding(
-                                        statement = "Copyright 2020 Some copyright holder in VCS",
-                                        location = TextLocation("some/file", 1)
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ),
-                storageStats = AccessStatistics()
-            )
+            ),
+            storageStats = AccessStatistics()
         )
     )
-}
+)
