@@ -145,9 +145,9 @@ abstract class VersionControlSystem {
         }
 
         /**
-         * Return glob patterns matching all potential license or patent files.
+         * Return glob patterns for files that should be checkout out in addition to explicit sparse checkout paths.
          */
-        internal fun getLicenseFileGlobPatterns(): List<String> =
+        internal fun getSparseCheckoutGlobPatterns(): List<String> =
             LicenseFilenamePatterns.getInstance().allLicenseFilenames.generateCapitalizationVariants().map { "**/$it" }
 
         private fun Collection<String>.generateCapitalizationVariants() =
