@@ -555,7 +555,7 @@ class SpdxLicenseIdExpression(
     val id: String,
     val orLaterVersion: Boolean = false
 ) : SpdxSimpleExpression() {
-    private val spdxLicense = SpdxLicense.forId(id)
+    private val spdxLicense by lazy { SpdxLicense.forId(id) }
 
     override fun decompose() = setOf(this)
 
