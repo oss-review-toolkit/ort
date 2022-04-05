@@ -75,10 +75,12 @@ object SpdxConstants {
      */
     const val EMPTY_PACKAGE_VERIFICATION_CODE = "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 
+    private val NOT_PRESENT_VALUES = setOf(null, NONE, NOASSERTION)
+
     /**
      * Return true if and only if the given value is null or equals [NONE] or [NOASSERTION].
      */
-    fun isNotPresent(value: String?) = value in setOf(null, NONE, NOASSERTION)
+    fun isNotPresent(value: String?) = value in NOT_PRESENT_VALUES
 
     /**
      * Return true if and only if the given value is not null and does not equal [NONE] or [NOASSERTION].
