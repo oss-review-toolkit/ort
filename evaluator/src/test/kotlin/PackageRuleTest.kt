@@ -76,6 +76,13 @@ class PackageRuleTest : WordSpec() {
 
                 matcher.matches() shouldBe false
             }
+
+            "return false if the package has only 'not present' licenses" {
+                val rule = createPackageRule(packageWithNotPresentLicense)
+                val matcher = rule.hasLicense()
+
+                matcher.matches() shouldBe false
+            }
         }
 
         "isExcluded()" should {

@@ -109,7 +109,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "hasLicense()"
 
-            override fun matches() = resolvedLicenseInfo.licenses.isNotEmpty()
+            override fun matches() = resolvedLicenseInfo.licenses.any { it.license.isPresent() }
         }
 
     /**
