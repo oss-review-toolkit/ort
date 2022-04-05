@@ -24,7 +24,7 @@ import com.networknt.schema.SpecVersion
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 
 import java.io.File
@@ -44,7 +44,7 @@ class JsonSchemaTest : StringSpec() {
 
             val errors = schema.validate(repositoryConfiguration)
 
-            errors should haveSize(0)
+            errors should beEmpty()
         }
 
         ".ort.yml examples validates successfully" {
@@ -57,7 +57,7 @@ class JsonSchemaTest : StringSpec() {
 
                 val errors = schema.validate(repositoryConfiguration)
 
-                errors should haveSize(0)
+                errors should beEmpty()
             }
         }
     }

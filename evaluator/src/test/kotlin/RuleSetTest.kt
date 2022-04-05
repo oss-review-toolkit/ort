@@ -157,7 +157,7 @@ class RuleSetTest : WordSpec() {
                     }
                 }
 
-                ruleSet.violations should haveSize(0)
+                ruleSet.violations should beEmpty()
             }
 
             "use stable references as ancestor nodes" {
