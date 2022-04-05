@@ -79,7 +79,7 @@ class RuleSetTest : WordSpec() {
                     }
                 }
 
-                ruleSet.violations should haveSize(4)
+                ruleSet.violations should haveSize(6)
             }
         }
 
@@ -125,7 +125,7 @@ class RuleSetTest : WordSpec() {
                     }
                 }
 
-                ruleSet.violations should haveSize(4)
+                ruleSet.violations should haveSize(6)
             }
 
             "add no license errors if license is removed by package license choice in the correct order" {
