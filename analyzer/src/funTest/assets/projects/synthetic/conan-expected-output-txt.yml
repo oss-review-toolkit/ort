@@ -23,13 +23,14 @@ project:
       - id: "Conan::libxml2:2.9.12"
         dependencies:
         - id: "Conan::libiconv:1.16"
-        - id: "Conan::zlib:1.2.11"
+        - id: "Conan::zlib:1.2.12"
   - name: "requires"
     dependencies:
     - id: "Conan::libcurl:7.79.1"
       dependencies:
       - id: "Conan::openssl:1.1.1m"
-      - id: "Conan::zlib:1.2.11"
+      - id: "Conan::zlib:1.2.12"
+    - id: "Conan::zlib:1.2.12"
 packages:
 - id: "Conan::libcurl:7.79.1"
   purl: "pkg:conan/libcurl@7.79.1"
@@ -175,8 +176,8 @@ packages:
     url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
-- id: "Conan::zlib:1.2.11"
-  purl: "pkg:conan/zlib@1.2.11"
+- id: "Conan::zlib:1.2.12"
+  purl: "pkg:conan/zlib@1.2.12"
   declared_licenses:
   - "Zlib"
   declared_licenses_processed:
@@ -190,10 +191,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz"
+    url: "https://zlib.net/zlib-1.2.12.tar.gz"
     hash:
-      value: "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1"
-      algorithm: "SHA-256"
+      value: ""
+      algorithm: ""
   vcs:
     type: ""
     url: ""
