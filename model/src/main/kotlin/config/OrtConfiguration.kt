@@ -119,7 +119,12 @@ data class OrtConfiguration(
                 }
             )
 
-            val loader = ConfigLoaderBuilder.default().addEnvironmentSource().addPropertySources(sources).build()
+            val loader = ConfigLoaderBuilder.default()
+                .addEnvironmentSource()
+                .addPropertySources(sources)
+                .allowUnresolvedSubstitutions()
+                .build()
+
             val config = loader.loadConfig<OrtConfigurationWrapper>()
 
             return config.getOrElse { failure ->
