@@ -23,6 +23,7 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.vdurmont.semver4j.Requirement
 
@@ -286,8 +287,10 @@ class Conan(
      * Return the [Package] parsed from the given [node].
      */
     private fun parsePackage(node: JsonNode, workingDir: File, conanStoragePath: File): Package {
-        val id = parsePackageId(node, workingDir)
         val homepageUrl = node["homepage"].textValueOrEmpty()
+
+        val id = parsePackageId(node, workingDir)
+        val conanData = readConanData(id, conanStoragePath)
 
         return Package(
             id = id,
@@ -296,7 +299,7 @@ class Conan(
             description = parsePackageField(node, workingDir, "description"),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            sourceArtifact = parseSourceArtifact(id, conanStoragePath),
+            sourceArtifact = parseSourceArtifact(conanData),
             vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
         )
     }
@@ -362,14 +365,31 @@ class Conan(
         inspectField(node["display_name"].textValue(), workingDir, field)
 
     /**
-     * Try to read the source artifact from the [conanStoragePath], if not possible return [RemoteArtifact.EMPTY].
+     * Return the generic map of Conan data for the [id] under [conanStoragePath].
      */
-    private fun parseSourceArtifact(id: Identifier, conanStoragePath: File): RemoteArtifact {
+    private fun readConanData(id: Identifier, conanStoragePath: File): Map<String, JsonNode> {
         val conanDataFile = conanStoragePath.resolve("${id.name}/${id.version}/_/_/export/conandata.yml")
 
         return runCatching {
-            val conanData = yamlMapper.readTree(conanDataFile)
-            val artifactEntry = conanData["sources"][id.version]
+            val conanData = yamlMapper.readValue<Map<String, JsonNode>>(conanDataFile)
+
+            // Replace metadata for all version with metadata for this specific version for convenient access.
+            conanData.mapValues { (key, value) ->
+                when (key) {
+                    "patches", "sources" -> value[id.version]
+                    else -> value
+                }
+            }
+        }.getOrDefault(emptyMap())
+    }
+
+    /**
+     * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
+     * available.
+     */
+    private fun parseSourceArtifact(conanData: Map<String, JsonNode>): RemoteArtifact {
+        return runCatching {
+            val artifactEntry = conanData.getValue("sources")
 
             val url = artifactEntry["url"].let { urlNode ->
                 (urlNode.takeIf { it.isTextual } ?: urlNode.first()).textValueOrEmpty()
