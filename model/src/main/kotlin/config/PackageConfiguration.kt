@@ -98,17 +98,19 @@ data class VcsMatcher(
     val url: String,
 
     /**
-     * The [revision] to match for equality against [RepositoryProvenance.resolvedRevision].
+     * The [revision] to match for equality against [RepositoryProvenance.resolvedRevision], or null to match any
+     * revision.
      */
-    val revision: String
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val revision: String? = null
 ) {
     init {
-        require(url.isNotBlank() && revision.isNotBlank())
+        require(url.isNotBlank() && revision?.isBlank() != true)
     }
 
     fun matches(provenance: RepositoryProvenance): Boolean =
         type == provenance.vcsInfo.type &&
                 // URLs need to match only after any credentials have been removed.
                 url.replaceCredentialsInUri() == provenance.vcsInfo.url.replaceCredentialsInUri() &&
-                revision == provenance.resolvedRevision
+                (revision == null || revision == provenance.resolvedRevision)
 }
