@@ -68,6 +68,17 @@ data class License(
 )
 
 /**
+ * The "Dependency" section of the raw report.
+ */
+@Serializable
+data class Dependency(
+    val vendor: String,
+    val component: String,
+    val version: String,
+    val source: String
+)
+
+/**
  * The "copyrights" section of the raw report.
  */
 @Serializable
