@@ -87,3 +87,4 @@ packages:
     url: ""
     revision: ""
     path: ""
+  is_modified: true

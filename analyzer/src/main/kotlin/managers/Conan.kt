@@ -300,7 +300,8 @@ class Conan(
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             sourceArtifact = parseSourceArtifact(conanData),
-            vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
+            vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl),
+            isModified = "patches" in conanData
         )
     }
 
