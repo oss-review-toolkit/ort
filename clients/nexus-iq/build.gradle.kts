@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val kotlinxSerializationVersion: String by project
 val retrofitVersion: String by project
 val retrofitKotlinxSerializationConverterVersion: String by project
@@ -37,7 +39,7 @@ dependencies {
             retrofitKotlinxSerializationConverterVersion)
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<KotlinCompile> {
     val customCompilerArgs = listOf(
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
     )

@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val kotlinxSerializationVersion: String by project
 val retrofitVersion: String by project
 val retrofitKotlinxSerializationConverterVersion: String by project
@@ -40,7 +42,7 @@ dependencies {
     testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<KotlinCompile> {
     val customCompilerArgs = listOf(
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
     )
