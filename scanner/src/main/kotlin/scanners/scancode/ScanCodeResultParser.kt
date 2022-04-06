@@ -69,7 +69,7 @@ private val TIMEOUT_ERROR_REGEX = Pattern.compile(
 
 // A list of ScanCode-specific LicenseRefs that do not actually name concrete licenses, but which are generic findings
 // that "look like" licenses.
-private val UNKNOWN_LICENSE_REF = listOf(
+private val NOASSERTION_LICENSE_REFS = listOf(
     // https://scancode-licensedb.aboutcode.org/?search=unknown
     "LicenseRef-scancode-free-unknown",
     "LicenseRef-scancode-unknown",
@@ -246,7 +246,7 @@ private fun getSpdxLicenseId(license: JsonNode): String {
         "$LICENSE_REF_PREFIX_SCAN_CODE$idFromKey"
     }
 
-    return id.takeUnless { it in UNKNOWN_LICENSE_REF } ?: SpdxConstants.NOASSERTION
+    return id.takeUnless { it in NOASSERTION_LICENSE_REFS } ?: SpdxConstants.NOASSERTION
 }
 
 /**
