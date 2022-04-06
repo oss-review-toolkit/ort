@@ -17,7 +17,7 @@ Use a package configuration file to:
 # Package Configuration File Basics
 
 Each package configuration applies exactly to one *package id* and *provenance* which must be specified. The
-*provenance* can be specified as either a *source artifact* or a *VCS location and revision*. 
+*provenance* can be specified as either a *source artifact* or a *VCS location* with an optional revision.
 
 Here is an example of a package configuration for `ansi-styles 4.2.1`, when the source artifact is (to be) scanned:
 
