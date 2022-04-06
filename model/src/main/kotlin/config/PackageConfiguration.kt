@@ -108,9 +108,7 @@ data class VcsMatcher(
 
     fun matches(provenance: RepositoryProvenance): Boolean =
         type == provenance.vcsInfo.type &&
-                matchesWithoutCredentials(url, provenance.vcsInfo.url) &&
+                // URLs need to match only after any credentials have been removed.
+                url.replaceCredentialsInUri() == provenance.vcsInfo.url.replaceCredentialsInUri() &&
                 revision == provenance.resolvedRevision
 }
-
-private fun matchesWithoutCredentials(lhs: String, rhs: String): Boolean =
-    lhs.replaceCredentialsInUri() == rhs.replaceCredentialsInUri()
