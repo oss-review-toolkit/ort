@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,14 +34,14 @@ data class Project(
 
     val limitDate: String?,
 
-    val productCode: String,
-    val productName: String,
+    val productCode: String?,
+    val productName: String?,
 
-    val description: String,
+    val description: String?,
     val comment: String,
 
     val isArchived: Int,
-    val jiraProjectKey: String,
+    val jiraProjectKey: String?,
     val creationDate: String,
     val dateLimitDate: String?
 )
