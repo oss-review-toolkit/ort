@@ -614,7 +614,7 @@ class FossId internal constructor(
                 DownloadStatus.FINISHED -> return@wait true
 
                 DownloadStatus.FAILED -> throw IllegalStateException(
-                    "Could not download scan: ${response.error}."
+                    "Could not download scan: ${response.message}."
                 )
 
                 else -> {
