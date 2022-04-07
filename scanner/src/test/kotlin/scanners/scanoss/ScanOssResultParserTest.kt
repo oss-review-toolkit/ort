@@ -28,17 +28,21 @@ import io.kotest.matchers.should
 import java.io.File
 import java.time.Instant
 
+import kotlinx.serialization.json.decodeFromStream
+
+import org.ossreviewtoolkit.clients.scanoss.FullScanResponse
+import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 class ScanOssResultParserTest : WordSpec({
     "generateSummary()" should {
         "properly summarize JUnit 4.12 findings" {
-            val resultFile = File("src/test/assets/scanoss-junit-4.12.json")
-            val result = readJsonFile(resultFile)
+            val result = File("src/test/assets/scanoss-junit-4.12.json").inputStream().use {
+                ScanOssService.JSON.decodeFromStream<FullScanResponse>(it)
+            }
 
             val time = Instant.now()
             val summary = generateSummary(time, time, SpdxConstants.NONE, result)
