@@ -76,6 +76,10 @@ Files: integrations/completions/*
 Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
 License: Apache-2.0
 
+Files: integrations/tekton/*
+Copyright: 2022 Google, LLC.
+License: Apache-2.0
+
 # Third-party files.
 
 Files: gradlew*
