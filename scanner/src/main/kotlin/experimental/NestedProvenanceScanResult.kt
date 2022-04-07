@@ -167,10 +167,19 @@ data class NestedProvenanceScanResult(
 
         val pathsWithinProvenances = provenances.filter {
             val provenancePath = getPath(it)
-            provenancePath.isEmpty() || path.startsWith("$provenancePath/")
+            // Return true if the provenance is on the same branch as the filter path. Otherwise it can be discarded,
+            // because all findings would be filtered anyway.
+            provenancePath.isEmpty() || provenancePath == path || provenancePath.startsWith("$path/") ||
+                    path.startsWith("$provenancePath/")
         }.associateWith { provenance ->
             val provenancePath = getPath(provenance)
-            path.removePrefix("$provenancePath/")
+
+            // Get the relative path of the filter path inside the provenance.
+            when {
+                provenancePath.isEmpty() -> path
+                path.startsWith("$provenancePath/") -> path.removePrefix("$provenancePath/")
+                else -> ""
+            }
         }
 
         fun KnownProvenance.withVcsPath() =
