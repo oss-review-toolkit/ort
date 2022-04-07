@@ -37,16 +37,12 @@ import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 
 // An arbitrary name to use for the multipart body being sent.
@@ -92,7 +88,6 @@ class ScanOss internal constructor(
     private val fileNamesAnonymizationMapping = mutableMapOf<UUID, String>()
 
     override fun scanPathInternal(path: File): ScanSummary {
-        val resultFile = createOrtTempDir().resolve("result.json")
         val startTime = Instant.now()
 
         val wfpString = buildString {
@@ -123,13 +118,8 @@ class ScanOss internal constructor(
             fileName to entry.value
         }.toMap()
 
-        jsonMapper.writeValue(resultFile, resolvedResponse)
-
         val endTime = Instant.now()
-        val result = readJsonFile(resultFile)
-        resultFile.parentFile.safeDeleteRecursively(force = true)
-
-        return generateSummary(startTime, endTime, path, result)
+        return generateSummary(startTime, endTime, path, resolvedResponse)
     }
 
     internal fun generateRandomUUID() = UUID.randomUUID()
