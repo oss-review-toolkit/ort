@@ -555,6 +555,7 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
         //       correct scan result.
         listOf(
             copy(
+                provenance = provenance,
                 summary = summary.copy(
                     licenseFindings = licenseFindingsByProvenance[provenance].orEmpty().toSortedSet(),
                     copyrightFindings = copyrightFindingsByProvenance[provenance].orEmpty().toSortedSet()
