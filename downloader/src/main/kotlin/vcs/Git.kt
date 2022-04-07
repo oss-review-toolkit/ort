@@ -228,7 +228,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     private fun updateSubmodules(workingTree: WorkingTree) {
         if (!workingTree.workingDir.resolve(".gitmodules").isFile) return
-        workingTree.runGit("submodule", "update", "--init", "--recursive")
+        workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
     }
 
     private fun WorkingTree.runGit(vararg args: String) = run(*args, workingDir = workingDir)
