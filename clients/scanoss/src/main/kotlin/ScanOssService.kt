@@ -34,6 +34,8 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
+typealias FullScanResponse = Map<String, List<ScanResponse>>
+
 interface ScanOssService {
     companion object {
         /**
@@ -62,5 +64,5 @@ interface ScanOssService {
      */
     @Multipart
     @POST("scan/direct")
-    suspend fun scan(@Part file: MultipartBody.Part): Map<String, List<ScanResponse>>
+    suspend fun scan(@Part file: MultipartBody.Part): FullScanResponse
 }
