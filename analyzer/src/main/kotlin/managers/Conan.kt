@@ -150,7 +150,7 @@ class Conan(
             jsonFile.parentFile.safeDeleteRecursively(force = true)
 
             val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
-            val packages = parsePackages(packageList, workingDir, conanStoragePath)
+            val packages = parsePackages(packageList, workingDir)
 
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
@@ -277,20 +277,20 @@ class Conan(
     /**
      * Return the map of packages and their identifiers which are contained in [nodes].
      */
-    private fun parsePackages(nodes: List<JsonNode>, workingDir: File, conanStoragePath: File): Map<String, Package> =
+    private fun parsePackages(nodes: List<JsonNode>, workingDir: File): Map<String, Package> =
         nodes.associate { node ->
-            val pkg = parsePackage(node, workingDir, conanStoragePath)
+            val pkg = parsePackage(node, workingDir)
             "${pkg.id.name}:${pkg.id.version}" to pkg
         }
 
     /**
      * Return the [Package] parsed from the given [node].
      */
-    private fun parsePackage(node: JsonNode, workingDir: File, conanStoragePath: File): Package {
+    private fun parsePackage(node: JsonNode, workingDir: File): Package {
         val homepageUrl = node["homepage"].textValueOrEmpty()
 
         val id = parsePackageId(node, workingDir)
-        val conanData = readConanData(id, conanStoragePath)
+        val conanData = readConanData(id)
 
         return Package(
             id = id,
@@ -366,9 +366,9 @@ class Conan(
         inspectField(node["display_name"].textValue(), workingDir, field)
 
     /**
-     * Return the generic map of Conan data for the [id] under [conanStoragePath].
+     * Return the generic map of Conan data for the [id].
      */
-    private fun readConanData(id: Identifier, conanStoragePath: File): Map<String, JsonNode> {
+    private fun readConanData(id: Identifier): Map<String, JsonNode> {
         val conanDataFile = conanStoragePath.resolve("${id.name}/${id.version}/_/_/export/conandata.yml")
 
         return runCatching {
