@@ -116,11 +116,11 @@ class ScanOss internal constructor(
         val resolvedResponse = response.map { entry ->
             val uuid = UUID.fromString(entry.key)
 
-            require(uuid in fileNamesAnonymizationMapping) {
+            val fileName = fileNamesAnonymizationMapping[uuid] ?: throw IllegalArgumentException(
                 "The $scannerName server returned an UUID not present in the mapping."
-            }
+            )
 
-            fileNamesAnonymizationMapping[uuid] to entry.value
+            fileName to entry.value
         }.toMap()
 
         jsonMapper.writeValue(resultFile, resolvedResponse)
