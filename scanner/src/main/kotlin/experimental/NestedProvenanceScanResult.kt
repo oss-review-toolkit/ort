@@ -130,13 +130,7 @@ data class NestedProvenanceScanResult(
         return findings
     }
 
-    private fun getPath(provenance: KnownProvenance): String {
-        if (provenance == nestedProvenance.root) return ""
-
-        nestedProvenance.subRepositories.forEach { if (provenance == it.value) return it.key }
-
-        throw IllegalArgumentException("Could not find entry for $provenance.")
-    }
+    private fun getPath(provenance: KnownProvenance) = nestedProvenance.getPath(provenance)
 
     fun filterByIgnorePatterns(ignorePatterns: List<String>): NestedProvenanceScanResult =
         copy(
