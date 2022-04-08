@@ -318,7 +318,6 @@ open class Npm(
      * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
      */
-    @Suppress("HttpUrlsUsage")
     internal fun parsePackage(workingDir: File, packageFile: File): Pair<String, Package> {
         val packageDir = packageFile.parentFile
 
@@ -382,6 +381,7 @@ open class Npm(
             }
         }
 
+        @Suppress("HttpUrlsUsage")
         downloadUrl = downloadUrl
             // Work around the issue described at
             // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
