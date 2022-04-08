@@ -529,9 +529,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             try {
                 wrapMavenSession {
-                    val repositoryConnector = repositoryConnectorProvider
-                        .newRepositoryConnector(repositorySystemSession, repository)
-                    repositoryConnector.get(listOf(artifactDownload), null)
+                    repositoryConnectorProvider.newRepositoryConnector(repositorySystemSession, repository).use {
+                        it.get(listOf(artifactDownload), null)
+                    }
                 }
             } catch (e: NoRepositoryConnectorException) {
                 e.showStackTrace()
