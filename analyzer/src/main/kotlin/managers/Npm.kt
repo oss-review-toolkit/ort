@@ -196,6 +196,7 @@ open class Npm(
         }
     }
 
+    private val artifactoryApiPathPattern = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
     protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
@@ -386,6 +387,10 @@ open class Npm(
             // Work around the issue described at
             // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
             .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
+            // Work around Artifactory returning API URLs instead of download URLs. See these somewhat related issues:
+            // https://www.jfrog.com/jira/browse/RTFACT-8727
+            // https://www.jfrog.com/jira/browse/RTFACT-18463
+            .replace(artifactoryApiPathPattern, "$1/$2")
 
         val vcsFromDownloadUrl = VcsHost.toVcsInfo(downloadUrl)
         if (vcsFromDownloadUrl.url != downloadUrl) {
