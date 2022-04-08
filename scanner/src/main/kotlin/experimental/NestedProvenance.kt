@@ -42,6 +42,18 @@ data class NestedProvenance(
     val subRepositories: Map<String, RepositoryProvenance>
 ) {
     /**
+     * Return path of the provided [provenance] within this [NestedProvenance]. Throws an [IllegalArgumentException] if
+     * the provided [provenance] cannot be found.
+     */
+    fun getPath(provenance: KnownProvenance): String {
+        if (provenance == root) return ""
+
+        subRepositories.forEach { if (provenance == it.value) return it.key }
+
+        throw IllegalArgumentException("Could not find entry for $provenance.")
+    }
+
+    /**
      * Return a set of all contained [KnownProvenance]s.
      */
     @JsonIgnore
