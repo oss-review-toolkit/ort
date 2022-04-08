@@ -31,13 +31,15 @@ documentDescribes:
 - "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
 packages:
 - SPDXID: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
-  copyrightText: "NOASSERTION"
-  downloadLocation: "NOASSERTION"
+  copyrightText: "NONE"
+  downloadLocation: "NONE"
   filesAnalyzed: false
-  homepage: "NOASSERTION"
+  homepage: "first project's homepage"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
-  name: "Root package"
+  licenseDeclared: "MIT"
+  name: "first-project-name"
+  summary: "NONE"
+  versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1"
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
