@@ -543,10 +543,16 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
 
     val copyrightFindingsByProvenance = summary.copyrightFindings.groupBy { copyrightFinding ->
         provenanceByPath.first { copyrightFinding.location.path.startsWith(it.first) }.second
+    }.mapValues { (provenance, findings) ->
+        val provenancePrefix = "${nestedProvenance.getPath(provenance)}/"
+        findings.map { it.copy(location = it.location.copy(path = it.location.path.removePrefix(provenancePrefix))) }
     }
 
     val licenseFindingsByProvenance = summary.licenseFindings.groupBy { licenseFinding ->
         provenanceByPath.first { licenseFinding.location.path.startsWith(it.first) }.second
+    }.mapValues { (provenance, findings) ->
+        val provenancePrefix = "${nestedProvenance.getPath(provenance)}/"
+        findings.map { it.copy(location = it.location.copy(path = it.location.path.removePrefix(provenancePrefix))) }
     }
 
     val provenances = nestedProvenance.getProvenances()
