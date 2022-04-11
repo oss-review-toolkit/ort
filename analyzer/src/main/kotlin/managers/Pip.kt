@@ -224,8 +224,8 @@ class Pip(
         // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
-        var authors: SortedSet<String> = sortedSetOf()
-        var declaredLicenses: SortedSet<String> = sortedSetOf()
+        val authors = sortedSetOf<String>()
+        val declaredLicenses = sortedSetOf<String>()
 
         // First try to get metadata from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
