@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
+import java.time.Duration
+
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -201,7 +203,9 @@ internal data class FossIdConfig(
      */
     fun createService(): FossIdServiceWithVersion {
         log.info { "The FossID server URL is $serverUrl." }
-        val service = FossIdRestService.create(serverUrl, OkHttpClientHelper.buildClient())
+        val service = FossIdRestService.create(serverUrl, OkHttpClientHelper.buildClient {
+            readTimeout(Duration.ofSeconds(60))
+        })
         return FossIdServiceWithVersion.instance(service).also {
             if (it.version.isEmpty()) {
                 log.warn { "The FossID server is running an unknown version." }
