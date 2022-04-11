@@ -72,8 +72,6 @@ private fun isPhonyDependency(name: String, version: String): Boolean =
         PHONY_DEPENDENCIES.containsKey(name) && (ignoredVersion.isEmpty() || version == ignoredVersion)
     }
 
-private const val PYDEP_REVISION = "license-and-classifiers"
-
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
 
@@ -213,7 +211,7 @@ class Pip(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
-        // 2. Get metadata about the local project via pydep (only for setup.py-based projects).
+        // 2. Get metadata about the local project via `python setup.py`.
         // 3. Get the hierarchy of dependencies via pipdeptree.
         // 4. Get additional remote package metadata via PyPIJSON.
 
@@ -226,50 +224,29 @@ class Pip(
         // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
-        // Install pydep after running any other command but before looking at the dependencies because it downgrades
-        // pip to version 7.1.2. Use it to get meta-information about the project from setup.py. As pydep is not on
-        // PyPI, install it from Git instead.
-        val pydepUrl = "git+https://github.com/oss-review-toolkit/pydep@$PYDEP_REVISION"
-        val pip = if (Os.isWindows) {
-            // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
-            // https://github.com/pypa/pip/issues/1299.
-            runInVirtualEnv(
-                virtualEnvDir, workingDir, "python", "-m", command(workingDir),
-                *TRUSTED_HOSTS, "install", pydepUrl
-            )
-        } else {
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", pydepUrl)
-        }
-        pip.requireSuccess()
-
         var authors: SortedSet<String> = sortedSetOf()
         var declaredLicenses: SortedSet<String> = sortedSetOf()
 
         // First try to get metadata from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
-            val pydep = if (Os.isWindows) {
-                // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-                runInVirtualEnv(
-                    virtualEnvDir, workingDir, "python",
-                    virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", "."
-                )
-            } else {
-                runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
+            // See https://docs.python.org/3.8/distutils/setupscript.html#additional-meta-data.
+            fun getSetupPyMetadata(option: String): String? {
+                val process = runInVirtualEnv(virtualEnvDir, workingDir, "python", "setup.py", option)
+                val metadata = process.stdout.trim()
+                return metadata.takeUnless { process.isError || metadata == "UNKNOWN" }
             }
-            pydep.requireSuccess()
 
-            // What pydep actually returns as "repo_url" is either setup.py's
-            // - "url", denoting the "home page for the package", or
-            // - "download_url", denoting the "location where the package may be downloaded".
-            // So the best we can do is to map it to the project's homepage URL.
-            jsonMapper.readTree(pydep.stdout).let {
-                authors = parseAuthors(it)
-                declaredLicenses = getDeclaredLicenses(it)
-                listOf(
-                    it["project_name"].textValue(), it["version"].textValueOrEmpty(),
-                    it["repo_url"].textValueOrEmpty()
-                )
+            parseAuthorString(getSetupPyMetadata("--author")).also { authors += it }
+            getLicenseFromLicenseField(getSetupPyMetadata("--license"))?.also { declaredLicenses += it }
+            getSetupPyMetadata("--classifiers")?.lines()?.mapNotNullTo(declaredLicenses) {
+                getLicenseFromClassifier(it)
             }
+
+            listOf(
+                getSetupPyMetadata("--name").orEmpty(),
+                getSetupPyMetadata("--version").orEmpty(),
+                getSetupPyMetadata("--url").orEmpty()
+            )
         } else {
             listOf("", "", "")
         }
