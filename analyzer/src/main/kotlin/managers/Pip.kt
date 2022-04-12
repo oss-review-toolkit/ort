@@ -206,7 +206,6 @@ class Pip(
 
     override fun beforeResolution(definitionFiles: List<File>) = VirtualEnv.checkVersion()
 
-    @Suppress("LongMethod")
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
@@ -216,12 +215,6 @@ class Pip(
 
         val workingDir = definitionFile.parentFile
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
-
-        // List all packages installed locally in the virtualenv.
-        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
-
-        // Get the locally available metadata for all installed packages as a fallback.
-        val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
         val authors = sortedSetOf<String>()
         val declaredLicenses = sortedSetOf<String>()
@@ -285,8 +278,48 @@ class Pip(
         }
         val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
 
+        val (packages, installDependencies) = getInstallDependencies(definitionFile, virtualEnvDir, projectName)
+
+        // TODO: Handle "extras" and "tests" dependencies.
+        val scopes = sortedSetOf(
+            Scope("install", installDependencies)
+        )
+
+        val project = Project(
+            id = Identifier(
+                type = managerName,
+                namespace = "",
+                name = projectName,
+                version = projectVersion
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = authors,
+            declaredLicenses = declaredLicenses,
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
+            homepageUrl = setupHomepage,
+            scopeDependencies = scopes
+        )
+
+        // Remove the virtualenv by simply deleting the directory.
+        virtualEnvDir.safeDeleteRecursively()
+
+        return listOf(ProjectAnalyzerResult(project, packages))
+    }
+
+    private fun getInstallDependencies(
+        definitionFile: File, virtualEnvDir: File, projectName: String
+    ): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
+
+        val workingDir = definitionFile.parentFile
+
+        // List all packages installed locally in the virtualenv.
+        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
+
+        // Get the locally available metadata for all installed packages as a fallback.
+        val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
         if (pipdeptree.isSuccess) {
             val fullDependencyTree = jsonMapper.readTree(pipdeptree.stdout)
@@ -323,31 +356,7 @@ class Pip(
             }
         }
 
-        // TODO: Handle "extras" and "tests" dependencies.
-        val scopes = sortedSetOf(
-            Scope("install", installDependencies)
-        )
-
-        val project = Project(
-            id = Identifier(
-                type = managerName,
-                namespace = "",
-                name = projectName,
-                version = projectVersion
-            ),
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = authors,
-            declaredLicenses = declaredLicenses,
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
-            homepageUrl = setupHomepage,
-            scopeDependencies = scopes
-        )
-
-        // Remove the virtualenv by simply deleting the directory.
-        virtualEnvDir.safeDeleteRecursively()
-
-        return listOf(ProjectAnalyzerResult(project, packages))
+        return packages to installDependencies
     }
 
     private fun getBinaryArtifact(releaseNode: ArrayNode?): RemoteArtifact {
