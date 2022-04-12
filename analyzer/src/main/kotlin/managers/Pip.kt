@@ -127,12 +127,9 @@ object PythonVersion : CommandLineTool {
      */
     fun getPythonInterpreter(version: Int): String? =
         if (Os.isWindows) {
-            // TODO: Make analysis compatible with Python 3.10 (not only on Windows).
-            val incompatibleVersions = listOf("3.10")
-
             val installedVersions = run("--list-paths").stdout
             val versionAndPath = installedVersions.lines().find { line ->
-                line.startsWith(" -$version") && incompatibleVersions.none { it in line }
+                line.startsWith(" -$version")
             }
 
             // Parse a line like " -2.7-32        C:\Python27\python.exe".
