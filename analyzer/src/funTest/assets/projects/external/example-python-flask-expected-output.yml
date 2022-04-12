@@ -24,7 +24,7 @@ project:
       - id: "PyPI::itsdangerous:2.1.2"
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
-        - id: "PyPI::markupsafe:2.0.1"
+        - id: "PyPI::markupsafe:2.1.1"
       - id: "PyPI::werkzeug:2.1.1"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
@@ -198,8 +198,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::markupsafe:2.0.1"
-  purl: "pkg:pypi/markupsafe@2.0.1"
+- id: "PyPI::markupsafe:2.1.1"
+  purl: "pkg:pypi/markupsafe@2.1.1"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -212,14 +212,14 @@ packages:
   description: "Safely add untrusted strings to HTML/XML markup."
   homepage_url: "https://palletsprojects.com/p/markupsafe/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/81/8b/f28eac2790d49dde61f89ae9e007ac65002edc90bb2dd63c3b9e653820d2/MarkupSafe-2.0.1-cp310-cp310-macosx_10_9_universal2.whl"
+    url: "https://files.pythonhosted.org/packages/d9/60/94e9de017674f88a514804e2924bdede9a642aba179d2045214719d6ec76/MarkupSafe-2.1.1-cp310-cp310-macosx_10_9_universal2.whl"
     hash:
-      value: "f42b3feff99f5f5f0fa9637d2e790288"
+      value: "edd92cc0efdc919430f86fac719864d7"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/bf/10/ff66fea6d1788c458663a84d88787bae15d45daa16f6b3ef33322a51fc7e/MarkupSafe-2.0.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/1d/97/2288fe498044284f39ab8950703e88abbac2abbdf65524d576157af70556/MarkupSafe-2.1.1.tar.gz"
     hash:
-      value: "892e0fefa3c488387e5cc0cad2daa523"
+      value: "9809f9fdd98bc835b0c21aa8f79cbf30"
       algorithm: "MD5"
   vcs:
     type: ""
