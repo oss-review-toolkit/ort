@@ -25,16 +25,13 @@ import io.gitlab.arturbosch.detekt.Detekt
 import java.net.URL
 
 import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.lib.AbbreviatedObjectId
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.plugins.ide.idea.model.IdeaProject
 
 import org.jetbrains.gradle.ext.Gradle
-import org.jetbrains.gradle.ext.ProjectSettings
-import org.jetbrains.gradle.ext.RunConfiguration
-import org.jetbrains.gradle.ext.RunConfigurationContainer
+import org.jetbrains.gradle.ext.runConfigurations
+import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -70,19 +67,10 @@ if (version == Project.DEFAULT_VERSION) {
     version = Git.open(rootDir).use { git ->
         // Make the output exactly match "git describe --abbrev=10 --always --tags --dirty", which is what is used in
         // "scripts/docker_build.sh", to make the hash match what JitPack uses.
-        val abbrevLength = 10
-        val description = git.describe().setAlways(true).setTags(true).call()
-
-        // Manually resolve an abbreviated hash to the custom length until
-        // https://bugs.eclipse.org/bugs/show_bug.cgi?id=537883 is implemented.
-        val customDescription = runCatching {
-            val abbrevObject = AbbreviatedObjectId.fromString(description)
-            val objects = git.repository.objectDatabase.newReader().use { it.resolve(abbrevObject) }
-            objects.single().name.take(abbrevLength)
-        }.getOrDefault(description)
-
+        val description = git.describe().setAbbrev(10).setAlways(true).setTags(true).call()
         val isDirty = git.status().call().hasUncommittedChanges()
-        if (isDirty) "$customDescription-dirty" else customDescription
+
+        if (isDirty) "$description-dirty" else description
     }
 }
 
@@ -96,22 +84,13 @@ if (!javaVersion.isCompatibleWith(JavaVersion.VERSION_11)) {
     throw GradleException("At least Java 11 is required, but Java $javaVersion is being used.")
 }
 
-fun IdeaProject.settings(block: ProjectSettings.() -> Unit) =
-    (this@settings as ExtensionAware).extensions.configure("settings", block)
-
-fun ProjectSettings.runConfigurations(block: RunConfigurationContainer.() -> Unit) =
-    (this@runConfigurations as ExtensionAware).extensions.configure("runConfigurations", block)
-
-inline fun <reified T : RunConfiguration> RunConfigurationContainer.defaults(noinline block: T.() -> Unit) =
-    defaults(T::class.java, block)
-
 idea {
     project {
         settings {
             runConfigurations {
                 // Disable "condensed" multi-line diffs when running tests from the IDE via Gradle run configurations to
                 // more easily accept actual results as expected results.
-                defaults<Gradle> {
+                defaults(Gradle::class.java) {
                     jvmArgs = "-Dkotest.assertions.multi-line-diff=simple"
                 }
             }
@@ -126,7 +105,7 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     val nonFinalQualifiers = listOf(
-        "alpha", "b", "beta", "cr", "ea", "eap", "m", "milestone", "pr", "preview", "rc", "\\d{14}"
+        "alpha", "b", "beta", "cr", "dev", "ea", "eap", "m", "milestone", "pr", "preview", "rc", "\\d{14}"
     ).joinToString("|", "(", ")")
 
     val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
@@ -168,8 +147,7 @@ allprojects {
         buildUponDefaultConfig = true
         config = files("$rootDir/.detekt.yml")
 
-        source = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
-            "src/funTest/kotlin")
+        source.from(fileTree(".") { include("*.gradle.kts") }, "src/funTest/kotlin")
 
         basePath = rootProject.projectDir.path
     }
@@ -199,8 +177,16 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.dokka")
 
-    sourceSets.create("funTest") {
-        kotlin.sourceSets.getByName(name).kotlin.srcDirs("src/funTest/kotlin")
+    testing {
+        suites {
+            register("funTest", JvmTestSuite::class) {
+                sources {
+                    kotlin {
+                        testType.set(TestSuiteType.FUNCTIONAL_TEST)
+                    }
+                }
+            }
+        }
     }
 
     // Associate the "funTest" compilation with the "main" compilation to be able to access "internal" objects from
@@ -215,8 +201,6 @@ subprojects {
 
             "testImplementation"("io.kotest:kotest-runner-junit5:$kotestVersion")
             "testImplementation"("io.kotest:kotest-assertions-core:$kotestVersion")
-
-            "funTestImplementation"(sourceSets["main"].output)
         }
 
         configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
@@ -247,9 +231,9 @@ subprojects {
     tasks.withType<KotlinCompile>().configureEach {
         val customCompilerArgs = listOf(
             "-Xallow-result-return-type",
-            "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-            "-Xopt-in=kotlin.io.path.ExperimentalPathApi",
-            "-Xopt-in=kotlin.time.ExperimentalTime"
+            "-opt-in=kotlin.contracts.ExperimentalContracts",
+            "-opt-in=kotlin.io.path.ExperimentalPathApi",
+            "-opt-in=kotlin.time.ExperimentalTime"
         )
 
         kotlinOptions {
@@ -294,22 +278,13 @@ subprojects {
         }
     }
 
-    val funTest by tasks.registering(Test::class) {
-        description = "Runs the functional tests."
-        group = "Verification"
-
-        classpath = sourceSets["funTest"].runtimeClasspath
-        testClassesDirs = sourceSets["funTest"].output.classesDirs
-    }
-
     tasks.withType<Test>().configureEach {
         val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
 
         listOf(
             "java.io.tmpdir",
             "kotest.assertions.multi-line-diff",
-            "kotest.tags.include",
-            "kotest.tags.exclude"
+            "kotest.tags"
         ).mapNotNullTo(testSystemProperties) { key ->
             System.getProperty(key)?.let { key to it }
         }
@@ -324,18 +299,6 @@ subprojects {
         useJUnitPlatform()
     }
 
-    // Enable JaCoCo only if a JacocoReport task is in the graph as JaCoCo
-    // is using "append = true" which disables Gradle's build cache.
-    gradle.taskGraph.whenReady {
-        val enabled = allTasks.any { it is JacocoReport }
-
-        tasks.withType<Test>().configureEach {
-            extensions.configure(JacocoTaskExtension::class) {
-                isEnabled = enabled
-            }
-        }
-    }
-
     tasks.named<JacocoReport>("jacocoTestReport").configure {
         reports {
             // Enable XML in addition to HTML for CI integration.
@@ -347,7 +310,7 @@ subprojects {
         description = "Generates code coverage report for the funTest task."
         group = "Reporting"
 
-        executionData(funTest.get())
+        executionData(tasks["funTest"])
         sourceSets(sourceSets["main"])
 
         reports {
@@ -364,7 +327,7 @@ subprojects {
     }
 
     tasks.named("check").configure {
-        dependsOn(funTest)
+        dependsOn(tasks["funTest"])
     }
 
     tasks.withType<Jar>().configureEach {

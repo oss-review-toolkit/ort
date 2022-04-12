@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
+import kotlin.math.abs
+import kotlin.math.min
+
 /**
  * A [TextLocation] references text located in a file.
  */
@@ -59,4 +62,30 @@ data class TextLocation(
     constructor(path: String, line: Int) : this(path, line, line)
 
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
+
+    /**
+     * Return whether the given [line] is contained in the location.
+     */
+    operator fun contains(line: Int) = line != UNKNOWN_LINE && line in startLine..endLine
+
+    /**
+     * Return whether the given [other] location is contained in this location.
+     */
+    operator fun contains(other: TextLocation) = other.path == path && other.startLine in this && other.endLine in this
+
+    /**
+     * Return whether this and the [other] locations are overlapping, i.e. they share at least a single line. Note that
+     * the [path] is not compared.
+     */
+    fun linesOverlapWith(other: TextLocation) = startLine in other || other.startLine in this
+
+    /**
+     * Return the minimum distance between this and the [other] location. A distance of 0 means that the locations are
+     * overlapping.
+     */
+    fun distanceTo(other: TextLocation) =
+        when {
+            linesOverlapWith(other) -> 0
+            else -> min(abs(other.startLine - endLine), abs(startLine - other.endLine))
+        }
 }

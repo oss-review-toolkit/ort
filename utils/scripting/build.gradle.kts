@@ -25,10 +25,11 @@ plugins {
 }
 
 dependencies {
+    api("org.jetbrains.kotlin:kotlin-scripting-common")
+
     implementation(project(":utils:common-utils"))
     implementation(project(":utils:core-utils"))
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")

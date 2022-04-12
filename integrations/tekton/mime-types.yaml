@@ -1,0 +1,46 @@
+# Copyright 2022 Google, LLC.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: scan-mime-types
+spec:
+  serviceAccountName: mime-types-pipeline
+  pipelineRef:
+    name: ort-scan
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  - name: gcs-credentials
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  - name: ort-data-dir
+    persistentVolumeClaim:
+      claimName: ort-data-dir
+  params:
+  - name: repo-url
+    value: https://github.com/jshttp/mime-types.git
+  - name: result-bucket-path
+    value: gs://ort-tekton/reports

@@ -37,6 +37,7 @@ import org.gradle.tooling.internal.consumer.DefaultGradleConnector
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.GradleDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -52,7 +53,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
@@ -135,13 +135,13 @@ class Gradle(
     // The path to the root project. In a single-project, just points to the project path.
     private lateinit var rootProjectDir: File
 
-    // Filter Gradle projects that are managed via Flutter / Pub. These projects are analyzed from within Pub.
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
-        val pubFactory = Pub.Factory()
+        // Filter Gradle projects that are managed via Flutter / Pub. These projects are analyzed from within Pub.
+        val pubDefinitionFiles = findManagedFiles(analysisRoot, setOf(Pub.Factory())).values.flatten()
 
         return definitionFiles.filter { gradleDefinitionFile ->
-            pubFactory.globsForDefinitionFiles.none { pubDefinitionFile ->
-                gradleDefinitionFile.parentFile.searchUpwardsForFile(pubDefinitionFile) != null
+            pubDefinitionFiles.none { pubDefinitionFile ->
+                gradleDefinitionFile.parentFile.canonicalFile.startsWith(pubDefinitionFile.parentFile.canonicalFile)
             }
         }
     }

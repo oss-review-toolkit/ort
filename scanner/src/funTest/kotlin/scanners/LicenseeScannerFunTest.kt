@@ -19,11 +19,20 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class LicenseeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag)) {
     override val scanner = Licensee("Licensee", scannerConfig, downloaderConfig)
-    override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
-    override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())
+
+    override val expectedFileLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 100.0f)
+    )
+
+    override val expectedDirectoryLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 99.37578f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 99.5f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 100.0f)
+    )
 }

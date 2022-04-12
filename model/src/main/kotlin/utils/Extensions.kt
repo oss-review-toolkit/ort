@@ -20,11 +20,12 @@
 package org.ossreviewtoolkit.model.utils
 
 import java.io.File
+import java.net.URI
 
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
+import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -235,6 +236,22 @@ fun List<ScanResult>.filterByProject(project: Project): List<ScanResult> {
         }
     }
 }
+
+/**
+ * Return the repo manifest path parsed from this string. The string is interpreted as a URL and the manifest path is
+ * expected as the value of the "manifest" query parameter, for example:
+ * http://example.com/repo.git?manifest=manifest.xml.
+ *
+ * Return an empty string if no "manifest" query parameter is found or this string cannot be parsed as a URL.
+ */
+fun String.parseRepoManifestPath() =
+    runCatching {
+        URI(this).query.splitToSequence("&")
+            .map { it.split("=", limit = 2) }
+            .find { it.first() == "manifest" }
+            ?.get(1)
+            ?.takeUnless { it.isEmpty() }
+    }.getOrNull()
 
 /**
  * Messages are not rendered using additional white spaces and newlines in the reports. However, resolutions are based

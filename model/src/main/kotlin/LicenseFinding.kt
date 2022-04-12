@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -28,6 +30,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
  * [SpdxExpression]s, depending on the capabilities of the used license scanner. [LicenseFindingCuration]s can also be
  * used to create findings with complex expressions.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class LicenseFinding(
     /**
      * The found SPDX expression.
@@ -37,13 +40,20 @@ data class LicenseFinding(
     /**
      * The text location where the license was found.
      */
-    val location: TextLocation
+    val location: TextLocation,
+
+    /**
+     * The score of a license finding. Its exact meaning is scanner-specific, but it should give some hint at how much
+     * the finding can be relied on / how confident the scanner is to be right. In most cases this is a percentage where
+     * 100.0 means that the scanner is 100% confident that the finding is correct.
+     */
+    val score: Float? = null
 ) : Comparable<LicenseFinding> {
     companion object {
-        private val COMPARATOR = compareBy<LicenseFinding> { it.license.toString() }.thenBy(LicenseFinding::location)
+        private val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
     }
 
-    constructor(license: String, location: TextLocation) : this(license.toSpdx(), location)
+    constructor(license: String, location: TextLocation, score: Float? = null) : this(license.toSpdx(), location, score)
 
     override fun compareTo(other: LicenseFinding) = COMPARATOR.compare(this, other)
 }

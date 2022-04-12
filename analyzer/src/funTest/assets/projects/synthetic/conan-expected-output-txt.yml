@@ -23,13 +23,14 @@ project:
       - id: "Conan::libxml2:2.9.12"
         dependencies:
         - id: "Conan::libiconv:1.16"
-        - id: "Conan::zlib:1.2.11"
+        - id: "Conan::zlib:1.2.12"
   - name: "requires"
     dependencies:
     - id: "Conan::libcurl:7.79.1"
       dependencies:
-      - id: "Conan::openssl:1.1.1l"
-      - id: "Conan::zlib:1.2.11"
+      - id: "Conan::openssl:1.1.1n"
+      - id: "Conan::zlib:1.2.12"
+    - id: "Conan::zlib:1.2.12"
 packages:
 - id: "Conan::libcurl:7.79.1"
   purl: "pkg:conan/libcurl@7.79.1"
@@ -89,6 +90,7 @@ packages:
     url: ""
     revision: ""
     path: ""
+  is_modified: true
 - id: "Conan::libxml2:2.9.12"
   purl: "pkg:conan/libxml2@2.9.12"
   declared_licenses:
@@ -96,7 +98,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "libxml2 is a software library for parsing XML documents"
-  homepage_url: "https://xmlsoft.org"
+  homepage_url: "https://gitlab.gnome.org/GNOME/libxml2/-/wikis/"
   binary_artifact:
     url: ""
     hash:
@@ -146,8 +148,9 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "Conan::openssl:1.1.1l"
-  purl: "pkg:conan/openssl@1.1.1l"
+  is_modified: true
+- id: "Conan::openssl:1.1.1n"
+  purl: "pkg:conan/openssl@1.1.1n"
   declared_licenses:
   - "OpenSSL"
   declared_licenses_processed:
@@ -161,9 +164,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://www.openssl.org/source/openssl-1.1.1l.tar.gz"
+    url: "https://www.openssl.org/source/openssl-1.1.1n.tar.gz"
     hash:
-      value: "0b7a3e5e59c34827fe0c3a74b7ec8baef302b98fa80088d7f9153aa16fa76bd1"
+      value: "40dceb51a4f6a5275bde0e6bf20ef4b91bfc32ed57c0552e2e8e15463372b17a"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -175,8 +178,9 @@ packages:
     url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
-- id: "Conan::zlib:1.2.11"
-  purl: "pkg:conan/zlib@1.2.11"
+  is_modified: true
+- id: "Conan::zlib:1.2.12"
+  purl: "pkg:conan/zlib@1.2.12"
   declared_licenses:
   - "Zlib"
   declared_licenses_processed:
@@ -190,10 +194,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://zlib.net/zlib-1.2.11.tar.gz"
+    url: "https://zlib.net/zlib-1.2.12.tar.gz"
     hash:
-      value: "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1"
-      algorithm: "SHA-256"
+      value: ""
+      algorithm: ""
   vcs:
     type: ""
     url: ""
@@ -204,3 +208,4 @@ packages:
     url: ""
     revision: ""
     path: ""
+  is_modified: true

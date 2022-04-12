@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
@@ -215,11 +216,21 @@ class ReporterCommand : CliktCommand(
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
+        val config = globalOptionsForSubcommands.config
+
+        val packageConfigurations = packageConfigurationOption.createProvider().getPackageConfigurations()
+            .toMutableSet()
+        val repositoryPackageConfigurations = ortResult.repository.config.packageConfigurations
+
+        if (config.enableRepositoryPackageConfigurations) {
+            packageConfigurations += repositoryPackageConfigurations
+        } else if (repositoryPackageConfigurations.isNotEmpty()) {
+            log.warn { "Local package configurations were not applied because the feature is not enabled." }
+        }
+
+        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations)
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
-
-        val config = globalOptionsForSubcommands.config
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
@@ -276,23 +287,23 @@ class ReporterCommand : CliktCommand(
 
         reportDurationMap.value.forEach { (reporter, timedValue) ->
             val name = reporter.reporterName
-            val durationInSeconds = timedValue.duration.inWholeSeconds
 
             timedValue.value.onSuccess { files ->
                 val fileList = files.joinToString { "'$it'" }
-                println("Successfully created '$name' report(s) at $fileList in ${durationInSeconds}s.")
+                println("Successfully created '$name' report(s) at $fileList in ${timedValue.duration}.")
             }.onFailure { e ->
                 e.showStackTrace()
 
-                log.error { "Could not create '$name' report in ${durationInSeconds}s: ${e.collectMessagesAsString()}" }
+                log.error {
+                    "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessagesAsString()}"
+                }
 
                 ++failureCount
             }
         }
 
         val successCount = reportFormats.size - failureCount
-        println("Created $successCount of ${reportFormats.size} report(s) in " +
-                "${reportDurationMap.duration.inWholeSeconds}s.")
+        println("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration}.")
 
         if (failureCount > 0) throw ProgramResult(2)
     }

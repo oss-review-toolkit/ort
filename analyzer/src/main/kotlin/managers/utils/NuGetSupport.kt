@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import okhttp3.Request
 import org.apache.logging.log4j.Level
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageData
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageDetails
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageSpec
@@ -71,6 +72,8 @@ import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.await
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.logOnce
+
+internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
@@ -150,13 +153,12 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         // Note: The package name in the URL is case-sensitive and must be lower-case!
         val lowerId = id.name.lowercase()
 
-        val data = registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
+        val data = registrationsBaseUrls.asSequence().firstNotNullOfOrNull { baseUrl ->
             runCatching {
                 val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
                 runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
             }.getOrNull()
-        }.firstOrNull()
-            ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
+        } ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
 
         val nupkgUrl = data.packageContent
         val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
@@ -178,18 +180,21 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         }.orEmpty()
 
         return with(all.details) {
+            val homepageUrl = projectUrl.orEmpty()
+
             Package(
                 id = getIdentifier(id, version),
                 authors = parseAuthors(all.spec),
                 declaredLicenses = parseLicenses(all.spec),
                 description = description.orEmpty(),
-                homepageUrl = projectUrl.orEmpty(),
+                homepageUrl = homepageUrl,
                 binaryArtifact = RemoteArtifact(
                     url = all.data.packageContent,
                     hash = Hash.create("$packageHashAlgorithm-$packageHash")
                 ),
                 sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = vcs
+                vcs = vcs,
+                vcsProcessed = processPackageVcs(vcs, homepageUrl)
             )
         }
     }
@@ -198,7 +203,8 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         references: Collection<Identifier>,
         dependencies: MutableCollection<PackageReference>,
         packages: MutableCollection<Package>,
-        issues: MutableCollection<OrtIssue>
+        issues: MutableCollection<OrtIssue>,
+        recursive: Boolean
     ) {
         references.forEach { id ->
             try {
@@ -210,9 +216,12 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                 val pkgRef = pkg.toReference()
                 dependencies += pkgRef
 
+                val packageIsNew = packages.add(pkg)
+                if (!recursive) return@forEach
+
                 // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
                 // grow really huge.
-                if (packages.add(pkg)) {
+                if (packageIsNew) {
                     // TODO: Consider mapping dependency groups to scopes.
                     val referredDependencies =
                         all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
@@ -234,7 +243,8 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                         },
                         pkgRef.dependencies,
                         packages,
-                        issues
+                        issues,
+                        recursive = true
                     )
                 } else {
                     logOnce(Level.DEBUG) {
@@ -283,27 +293,60 @@ private fun resolveLocalSpec(definitionFile: File): File? =
 private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
 
+data class NuGetDependency(
+    val name: String,
+    val version: String,
+    val targetFramework: String,
+    val developmentDependency: Boolean = false
+)
+
 interface XmlPackageFileReader {
-    fun getPackageReferences(definitionFile: File): Set<Identifier>
+    fun getDependencies(definitionFile: File): Set<NuGetDependency>
 }
 
 fun PackageManager.resolveNuGetDependencies(
     definitionFile: File,
     reader: XmlPackageFileReader,
-    support: NuGetSupport
+    support: NuGetSupport,
+    directDependenciesOnly: Boolean
 ): ProjectAnalyzerResult {
     val workingDir = definitionFile.parentFile
-
-    val dependencies = sortedSetOf<PackageReference>()
-    val scope = Scope("dependencies", dependencies)
 
     val packages = sortedSetOf<Package>()
     val issues = mutableListOf<OrtIssue>()
 
-    val references = reader.getPackageReferences(definitionFile)
-    support.buildDependencyTree(references, dependencies, packages, issues)
+    val references = reader.getDependencies(definitionFile)
+    val referencesByFramework = references.groupBy { it.targetFramework }
+    val referencesForAllFrameworks = referencesByFramework[""].orEmpty()
 
-    val project = getProject(definitionFile, workingDir, scope)
+    val scopes = referencesByFramework.flatMapTo(sortedSetOf()) { (targetFramework, frameworkDependencies) ->
+        frameworkDependencies.groupBy { it.developmentDependency }.map { (isDevDependency, dependencies) ->
+            val allDependencies = buildSet {
+                addAll(dependencies)
+                // Add dependencies without a specified target framework to all scopes.
+                addAll(referencesForAllFrameworks.filter { it.developmentDependency == isDevDependency })
+            }
+
+            val packageReferences = sortedSetOf<PackageReference>()
+
+            support.buildDependencyTree(
+                references = allDependencies.map { Identifier("NuGet::${it.name}:${it.version}") },
+                dependencies = packageReferences,
+                packages = packages,
+                issues = issues,
+                recursive = !directDependenciesOnly
+            )
+
+            val scopeName = buildString {
+                if (targetFramework.isEmpty()) append("allTargetFrameworks") else append(targetFramework)
+                if (isDevDependency) append("-dev")
+            }
+
+            Scope(scopeName, packageReferences)
+        }
+    }
+
+    val project = getProject(definitionFile, workingDir, scopes)
 
     return ProjectAnalyzerResult(project, packages, issues)
 }
@@ -311,7 +354,7 @@ fun PackageManager.resolveNuGetDependencies(
 private fun PackageManager.getProject(
     definitionFile: File,
     workingDir: File,
-    scope: Scope
+    scopes: SortedSet<Scope>
 ): Project {
     val spec = resolveLocalSpec(definitionFile)?.let { NuGetSupport.XML_MAPPER.readValue<PackageSpec>(it) }
 
@@ -328,7 +371,7 @@ private fun PackageManager.getProject(
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),
         homepageUrl = "",
-        scopeDependencies = sortedSetOf(scope)
+        scopeDependencies = scopes
     )
 }
 

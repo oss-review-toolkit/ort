@@ -108,8 +108,7 @@ private fun scanResults(
 
 private val PROJECT_VCS_INFO = VcsInfo(
     type = VcsType.GIT_REPO,
-    url = "ssh://git@host/manifests/repo",
-    path = "path/to/manifest.xml",
+    url = "ssh://git@host/manifests/repo?manifest=path/to/manifest.xml",
     revision = "deadbeaf44444444333333332222222211111111"
 )
 private val NESTED_VCS_INFO = VcsInfo(

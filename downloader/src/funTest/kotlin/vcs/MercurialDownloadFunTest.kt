@@ -45,7 +45,7 @@ class MercurialDownloadFunTest : StringSpec() {
     private val hg = Mercurial()
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

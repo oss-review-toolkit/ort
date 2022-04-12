@@ -73,13 +73,18 @@ class ExcelReporter : Reporter {
 
     private val defaultColumns = 5
 
-    private val colorMap = DefaultIndexedColorMap()
-    private val borderColor = XSSFColor(Color(211, 211, 211), colorMap)
-    private val errorColor = XSSFColor(Color(240, 128, 128), colorMap)
-    private val excludedColor = XSSFColor(Color(180, 180, 180), colorMap)
-    private val excludedFontColor = XSSFColor(Color(100, 100, 100), colorMap)
-    private val successColor = XSSFColor(Color(173, 216, 230), colorMap)
-    private val warningColor = XSSFColor(Color(255, 255, 224), colorMap)
+    private val colors by lazy {
+        object {
+            private val colorMap = DefaultIndexedColorMap()
+
+            val border = XSSFColor(Color(211, 211, 211), colorMap)
+            val error = XSSFColor(Color(240, 128, 128), colorMap)
+            val excluded = XSSFColor(Color(180, 180, 180), colorMap)
+            val excludedFont = XSSFColor(Color(100, 100, 100), colorMap)
+            val success = XSSFColor(Color(173, 216, 230), colorMap)
+            val warning = XSSFColor(Color(255, 255, 224), colorMap)
+        }
+    }
 
     private lateinit var defaultStyle: CellStyle
     private lateinit var excludedStyle: CellStyle
@@ -117,7 +122,7 @@ class ExcelReporter : Reporter {
             wrapText = true
 
             setBorder(BorderStyle.THIN)
-            setBorderColor(borderColor)
+            setBorderColor(colors.border)
         }
 
         defaultFont = workbook.createFont().apply {
@@ -131,7 +136,7 @@ class ExcelReporter : Reporter {
 
         excludedFont = workbook.createFont().apply {
             fontHeightInPoints = 11
-            setColor(excludedFontColor)
+            setColor(colors.excludedFont)
         }
 
         headerStyle = workbook.createCellStyle().apply {
@@ -141,25 +146,25 @@ class ExcelReporter : Reporter {
 
         successStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(successColor)
+            setFillForegroundColor(colors.success)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         warningStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(warningColor)
+            setFillForegroundColor(colors.warning)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         errorStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(errorColor)
+            setFillForegroundColor(colors.error)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         excludedStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(excludedColor)
+            setFillForegroundColor(colors.excluded)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 

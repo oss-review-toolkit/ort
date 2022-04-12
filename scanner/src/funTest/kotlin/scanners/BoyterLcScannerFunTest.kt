@@ -19,10 +19,23 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
 
 class BoyterLcScannerFunTest : AbstractScannerFunTest() {
     override val scanner = BoyterLc("BoyterLc", scannerConfig, downloaderConfig)
-    override val expectedFileLicenses = setOf("Apache-2.0".toSpdx(), "ECL-2.0".toSpdx())
-    override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx(), "ECL-2.0".toSpdx())
+
+    override val expectedFileLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98388565f),
+        LicenseFinding("ECL-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98301715f)
+    )
+
+    override val expectedDirectoryLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.9824694f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.9824694f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98388565f),
+        LicenseFinding("ECL-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.9814965f),
+        LicenseFinding("ECL-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.9814965f),
+        LicenseFinding("ECL-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98301715f)
+    )
 }

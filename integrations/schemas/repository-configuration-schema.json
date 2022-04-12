@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "$id": "https://oss-review-toolkit.org/.ort.yml",
   "title": "ORT repository configuration",
-  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to configure exclusions, resolutions and more in a file called `.ort.yml`. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md.",
+  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to configure exclusions, resolutions and more in a file called `.ort.yml`. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-ort-yml.md.",
   "type": "object",
   "properties": {
     "excludes": {
@@ -99,6 +99,27 @@
               "reason"
             ]
           }
+        },
+        "vulnerabilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/vulnerabilityResolutionReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "reason"
+            ]
+          }
         }
       },
       "anyOf": [
@@ -110,6 +131,11 @@
         {
           "required": [
             "rule_violations"
+          ]
+        },
+        {
+          "required": [
+            "vulnerabilities"
           ]
         }
       ]
@@ -349,10 +375,27 @@
           "type": "string"
         }
       },
-      "required": [
-        "type",
-        "url",
-        "revision"
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        },
+        {
+          "required": [
+            "revision"
+          ]
+        },
+        {
+          "required": [
+            "path"
+          ]
+        }
       ]
     },
     "licenseFindingCurations": {
@@ -436,6 +479,16 @@
         "INCORRECT",
         "NOT_DETECTED",
         "REFERENCE"
+      ]
+    },
+    "vulnerabilityResolutionReason": {
+      "enum": [
+        "CANT_FIX_VULNERABILITY",
+        "INEFFECTIVE_VULNERABILITY",
+        "INVALID_MATCH_VULNERABILITY",
+        "MITIGATED_VULNERABILITY",
+        "WILL_NOT_FIX_VULNERABILITY",
+        "WORKAROUND_FOR_VULNERABILITY"
       ]
     }
   }

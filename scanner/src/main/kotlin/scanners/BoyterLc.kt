@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
 import org.ossreviewtoolkit.scanner.ScanException
+import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
@@ -45,11 +46,16 @@ import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
-class BoyterLc(
+class BoyterLc internal constructor(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    class BoyterLcFactory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            BoyterLc(scannerName, scannerConfig, downloaderConfig)
+    }
+
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             BoyterLc(scannerName, scannerConfig, downloaderConfig)
@@ -71,7 +77,8 @@ class BoyterLc(
         listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
 
     override fun transformVersion(output: String) =
-        // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
+        // The version string can be something like:
+        // licensechecker version 1.1.1
         output.removePrefix("licensechecker version ")
 
     override fun bootstrap(): File {
@@ -137,7 +144,8 @@ class BoyterLc(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, filePath),
                         TextLocation.UNKNOWN_LINE
-                    )
+                    ),
+                    score = it["Percentage"].floatValue()
                 )
             }
         }

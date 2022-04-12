@@ -23,6 +23,25 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 class ExtensionsTest : WordSpec({
+    "parseRepomanifestPath()" should {
+        "return the manifest path" {
+            "https://example.com/repo.git?manifest=default.xml".parseRepoManifestPath() shouldBe "default.xml"
+            "https://example.com/repo.git?other=param&manifest=default.xml".parseRepoManifestPath() shouldBe
+                    "default.xml"
+        }
+
+        "return null if no manifest is found" {
+            "https://example.com/repo.git".parseRepoManifestPath() shouldBe null
+            "https://example.com/repo.git?other=param".parseRepoManifestPath() shouldBe null
+            "https://example.com/repo.git?manifest=".parseRepoManifestPath() shouldBe null
+        }
+
+        "return null if the string is no valid URI" {
+            "^invalid-uri".parseRepoManifestPath() shouldBe null
+            "^invalid-uri?manifest=default.xml".parseRepoManifestPath() shouldBe null
+        }
+    }
+
     "sanitizeMessage()" should {
         "remove additional white spaces" {
             "String with additional   white spaces. ".sanitizeMessage() shouldBe "String with additional white spaces."

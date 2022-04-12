@@ -31,9 +31,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseReferenceExpression
 
 /**
  * A [Rule] to check a single [Package].
@@ -77,11 +75,10 @@ open class PackageRule(
         return object : RuleMatcher {
             override val description = "hasVulnerability()"
 
-            override fun matches() = ruleSet.ortResult.advisor
-                ?.results
-                ?.getVulnerabilities(pkg.id)
-                ?.isNotEmpty()
-                ?: false
+            override fun matches(): Boolean {
+                val run = ruleSet.ortResult.advisor ?: return false
+                return run.results.getVulnerabilities(pkg.id).isNotEmpty()
+            }
         }
     }
 
@@ -89,19 +86,18 @@ open class PackageRule(
      * A [RuleMatcher] that checks whether any vulnerability for the [package][pkg] has a score that equals or is
      * greater than [threshold] according to the [scoringSystem] and the belonging [severityComparator].
      */
-    fun hasVulnerability(threshold: String, scoringSystem: String, severityComparator: Comparator<String>) =
+    fun hasVulnerability(threshold: String, scoringSystem: String, severityComparator: (String, String) -> Boolean) =
         object : RuleMatcher {
             override val description = "hasVulnerability($threshold, $scoringSystem)"
 
-            override fun matches() = ruleSet.ortResult.advisor
-                ?.results
-                ?.getVulnerabilities(pkg.id)
-                ?.flatMap { it.references }
-                ?.filter { reference -> reference.scoringSystem == scoringSystem }
-                ?.mapNotNull { reference -> reference.severity }
-                ?.map { severity -> severityComparator.compare(severity, threshold) }
-                ?.any { it >= 0 }
-                ?: false
+            override fun matches(): Boolean {
+                val run = ruleSet.ortResult.advisor ?: return false
+                return run.results.getVulnerabilities(pkg.id)
+                    .flatMap { it.references }
+                    .filter { reference -> reference.scoringSystem == scoringSystem }
+                    .mapNotNull { reference -> reference.severity }
+                    .any { severityComparator(it, threshold) }
+            }
         }
 
     /**
@@ -111,7 +107,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "hasLicense()"
 
-            override fun matches() = resolvedLicenseInfo.licenses.isNotEmpty()
+            override fun matches() = resolvedLicenseInfo.licenses.any { it.license.isPresent() }
         }
 
     /**
@@ -240,7 +236,7 @@ open class PackageRule(
             }
 
         /**
-         * A [RuleMatcher] that checks if the [license] is a valid [SpdxLicense].
+         * A [RuleMatcher] that checks if the [license] is a valid SPDX license.
          */
         fun isSpdxLicense() =
             object : RuleMatcher {
@@ -248,7 +244,7 @@ open class PackageRule(
 
                 override fun matches() =
                     when (license) {
-                        is SpdxLicenseIdExpression, is SpdxLicenseWithExceptionExpression ->
+                        !is SpdxLicenseReferenceExpression ->
                             license.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED)
                         else -> false
                     }

@@ -16,6 +16,10 @@ Files: *.md
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: batect*
+Copyright: 2017-2021 Charles Korn <me@charleskorn.com>
+License: Apache-2.0
+
 Files: mlc_config.json
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
@@ -52,6 +56,10 @@ Files: */src/test/assets/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: reporter/src/funTest/assets/spdx-schema.json
+Copyright: 2020-2022 Linux Foundation and its Contributors
+License: CC-BY-3.0
+
 Files: reporter-web-app/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
@@ -62,6 +70,14 @@ License: Apache-2.0
 
 Files: integrations/schemas/*
 Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
+Files: integrations/completions/*
+Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
+Files: integrations/tekton/*
+Copyright: 2022 Google, LLC.
 License: Apache-2.0
 
 # Third-party files.

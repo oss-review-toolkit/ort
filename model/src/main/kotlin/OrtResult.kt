@@ -122,7 +122,7 @@ data class OrtResult(
             )
         }
 
-        log.perf { "Computing excluded projects took ${duration.inWholeSeconds}s." }
+        log.perf { "Computing excluded projects took $duration." }
 
         result
     }
@@ -163,7 +163,7 @@ data class OrtResult(
             }
         }
 
-        log.perf { "Computing excluded packages took ${duration.inWholeSeconds}s." }
+        log.perf { "Computing excluded packages took $duration." }
 
         result
     }
@@ -211,18 +211,9 @@ data class OrtResult(
      */
     fun collectProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
         val projectsAndPackages = mutableSetOf<Identifier>()
-        val projects = getProjects()
+        val projects = getProjects(includeSubProjects = includeSubProjects)
 
         projects.mapTo(projectsAndPackages) { it.id }
-
-        if (!includeSubProjects) {
-            val allSubProjects = projects.flatMapTo(mutableSetOf()) {
-                dependencyNavigator.collectSubProjects(it)
-            }
-
-            projectsAndPackages -= allSubProjects
-        }
-
         getPackages().mapTo(projectsAndPackages) { it.pkg.id }
 
         return projectsAndPackages
@@ -366,13 +357,25 @@ data class OrtResult(
         }
 
     /**
-     * Return all [Project]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is true.
+     * Return the [Project]s contained in this [OrtResult], optionally limited to only non-excluded ones if
+     * [omitExcluded] is true, or to only root projects if [includeSubProjects] is false.
      */
     @JsonIgnore
-    fun getProjects(omitExcluded: Boolean = false): Set<Project> =
-        analyzer?.result?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
+    fun getProjects(omitExcluded: Boolean = false, includeSubProjects: Boolean = true): Set<Project> {
+        val projects = analyzer?.result?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
             !omitExcluded || !isExcluded(project.id)
         }
+
+        if (!includeSubProjects) {
+            val subProjectIds = projects.flatMapTo(mutableSetOf()) {
+                dependencyNavigator.collectSubProjects(it)
+            }
+
+            projects.removeAll { it.id in subProjectIds }
+        }
+
+        return projects
+    }
 
     /**
      * Return all [AdvisorResult]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is

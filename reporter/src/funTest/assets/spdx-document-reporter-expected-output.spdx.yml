@@ -28,17 +28,19 @@ hasExtractedLicensingInfos:
   licenseId: "LicenseRef-scancode-srgb"
 documentNamespace: "<REPLACE_DOCUMENT_NAMESPACE>"
 documentDescribes:
-- "SPDXRef-Package-0-root-package"
+- "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
 packages:
-- SPDXID: "SPDXRef-Package-0-root-package"
-  copyrightText: "NOASSERTION"
-  downloadLocation: "NOASSERTION"
+- SPDXID: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
+  copyrightText: "NONE"
+  downloadLocation: "NONE"
   filesAnalyzed: false
-  homepage: "NOASSERTION"
+  homepage: "first project's homepage"
   licenseConcluded: "NOASSERTION"
-  licenseDeclared: "NOASSERTION"
-  name: "Root package"
-- SPDXID: "SPDXRef-Package-1-first-package"
+  licenseDeclared: "MIT"
+  name: "first-project-name"
+  summary: "NONE"
+  versionInfo: "0.0.1"
+- SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1"
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
@@ -56,7 +58,7 @@ packages:
     \ a user name, and with a scan result containing two copyright finding matched\
     \ to a license finding."
   versionInfo: "0.0.1"
-- SPDXID: "SPDXRef-Package-2-first-package-vcs"
+- SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs"
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
@@ -76,7 +78,7 @@ packages:
     \ a user name, and with a scan result containing two copyright finding matched\
     \ to a license finding."
   versionInfo: "0.0.1"
-- SPDXID: "SPDXRef-Package-3-first-package-source-artifact"
+- SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact"
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
@@ -96,7 +98,7 @@ packages:
     \ a user name, and with a scan result containing two copyright finding matched\
     \ to a license finding."
   versionInfo: "0.0.1"
-- SPDXID: "SPDXRef-Package-4-fourth-package"
+- SPDXID: "SPDXRef-Package-Maven-fourth-package-group-fourth-package-0.0.1"
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
@@ -110,7 +112,7 @@ packages:
   name: "fourth-package"
   summary: "A package with partially mapped declared license."
   versionInfo: "0.0.1"
-- SPDXID: "SPDXRef-Package-5-second-package"
+- SPDXID: "SPDXRef-Package-Maven-second-package-group-second-package-0.0.1"
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
@@ -124,7 +126,7 @@ packages:
   name: "second-package"
   summary: "A package with minimal attributes set."
   versionInfo: "0.0.1"
-- SPDXID: "SPDXRef-Package-6-sixth-package"
+- SPDXID: "SPDXRef-Package-Maven-sixth-package-group-sixth-package-0.0.1"
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
@@ -138,7 +140,7 @@ packages:
   name: "sixth-package"
   summary: "A package with non-SPDX license IDs in the declared and concluded license."
   versionInfo: "0.0.1"
-- SPDXID: "SPDXRef-Package-7-third-package"
+- SPDXID: "SPDXRef-Package-Maven-third-package-group-third-package-0.0.1"
   copyrightText: "NONE"
   downloadLocation: "NONE"
   externalRefs:
@@ -153,24 +155,27 @@ packages:
   summary: "A package with only unmapped declared license."
   versionInfo: "0.0.1"
 relationships:
-- spdxElementId: "SPDXRef-Package-1-first-package"
-  relationshipType: "DEPENDENCY_OF"
-  relatedSpdxElement: "SPDXRef-Package-0-root-package"
-- spdxElementId: "SPDXRef-Package-1-first-package"
+- spdxElementId: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1"
   relationshipType: "GENERATED_FROM"
-  relatedSpdxElement: "SPDXRef-Package-2-first-package-vcs"
-- spdxElementId: "SPDXRef-Package-1-first-package"
+  relatedSpdxElement: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs"
+- spdxElementId: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1"
   relationshipType: "GENERATED_FROM"
-  relatedSpdxElement: "SPDXRef-Package-3-first-package-source-artifact"
-- spdxElementId: "SPDXRef-Package-4-fourth-package"
-  relationshipType: "DEPENDENCY_OF"
-  relatedSpdxElement: "SPDXRef-Package-0-root-package"
-- spdxElementId: "SPDXRef-Package-5-second-package"
-  relationshipType: "DEPENDENCY_OF"
-  relatedSpdxElement: "SPDXRef-Package-0-root-package"
-- spdxElementId: "SPDXRef-Package-6-sixth-package"
-  relationshipType: "DEPENDENCY_OF"
-  relatedSpdxElement: "SPDXRef-Package-0-root-package"
-- spdxElementId: "SPDXRef-Package-7-third-package"
-  relationshipType: "DEPENDENCY_OF"
-  relatedSpdxElement: "SPDXRef-Package-0-root-package"
+  relatedSpdxElement: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact"
+- spdxElementId: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-fourth-package-group-fourth-package-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-second-package-group-second-package-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-sixth-package-group-sixth-package-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-third-package-group-third-package-0.0.1"
+- spdxElementId: "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-Maven-fifth-package-group-fifth-package-0.0.1"

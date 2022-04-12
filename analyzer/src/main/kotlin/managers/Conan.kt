@@ -23,6 +23,7 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.vdurmont.semver4j.Requirement
 
@@ -50,7 +51,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -91,6 +91,17 @@ class Conan(
         ) = Conan(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val conanHome = Os.userHomeDirectory.resolve(".conan")
+
+    // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
+    // layout does not support packages from different remotes that are named (and versioned) the same.
+    //
+    // TODO: Consider using the experimental (and by default disabled) download cache [2] to lift these limitations.
+    //
+    // [1]: https://docs.conan.io/en/latest/reference/config_files/conan.conf.html#storage
+    // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
+    private val conanStoragePath = conanHome.resolve("data")
+
     private val pkgInspectResults = mutableMapOf<String, JsonNode>()
 
     override fun command(workingDir: File?) = "conan"
@@ -120,68 +131,17 @@ class Conan(
         }
 
     private fun resolvedDependenciesInternal(definitionFile: File): List<ProjectAnalyzerResult> {
-        val conanHome = Os.userHomeDirectory.resolve(".conan")
-
-        // This is where Conan caches downloaded packages [1]. Note that the package cache is not concurrent, and its
-        // layout does not support packages from different remotes that are named (and versioned) the same.
-        //
-        // TODO: Consider using the experimental (and by default disabled) download cache [2] to lift these limitations.
-        //
-        // [1]: https://docs.conan.io/en/latest/reference/config_files/conan.conf.html#storage
-        // [2]: https://docs.conan.io/en/latest/configuration/download_cache.html#download-cache
-        val conanStoragePath = conanHome.resolve("data")
-
         val workingDir = definitionFile.parentFile
-        val conanConfig = listOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
+
+        // TODO: Support customizing the "conan_config" directory name, and also support getting the config from a URL.
+        //       These options should be retrieved from package manager specific analyzer configuration in ".ort.yml".
+        val conanConfig = sequenceOf(workingDir, analysisRoot).map { it.resolve("conan_config") }
             .find { it.isDirectory }
+
         val directoryToStash = conanConfig?.let { conanHome } ?: conanStoragePath
 
         stashDirectories(directoryToStash).use {
-            conanConfig?.also {
-                run("config", "install", it.absolutePath)
-
-                val remoteList = run("remote", "list", "--raw")
-                if (remoteList.isSuccess) {
-                    remoteList.stdout.lines().forEach { line ->
-                        val trimmedLine = line.trim()
-                        if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
-
-                        val wordIterator = trimmedLine.splitToSequence(' ').iterator()
-
-                        if (!wordIterator.hasNext()) return@forEach
-                        val remoteName = wordIterator.next()
-
-                        if (!wordIterator.hasNext()) return@forEach
-                        val remoteUrl = wordIterator.next()
-
-                        remoteUrl.toUri().onSuccess { uri ->
-                            log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
-
-                            val auth = Authenticator.requestPasswordAuthentication(
-                                /* host = */ uri.host,
-                                /* addr = */ null,
-                                /* port = */ uri.port,
-                                /* protocol = */ uri.scheme,
-                                /* prompt = */ null,
-                                /* scheme = */ null
-                            )
-
-                            if (auth != null) {
-                                val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
-                                if (userAuth.isError) {
-                                    log.error { "Failed to configure user authentication for remote '$remoteName'." }
-                                }
-                            }
-                        }.onFailure {
-                            log.warn { "The remote '$remoteName' points to invalid URL $remoteUrl." }
-                        }
-                    }
-                } else {
-                    log.warn { "Failed to list remotes." }
-                }
-            }
-
-            installDependencies(workingDir)
+            conanConfig?.also { configureRemoteAuthentication(it) }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
             run(workingDir, "info", ".", "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS).requireSuccess()
@@ -190,7 +150,7 @@ class Conan(
             jsonFile.parentFile.safeDeleteRecursively(force = true)
 
             val packageList = removeProjectPackage(pkgInfos, definitionFile.name)
-            val packages = parsePackages(packageList, workingDir, conanStoragePath)
+            val packages = parsePackages(packageList, workingDir)
 
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
@@ -222,6 +182,57 @@ class Conan(
                     packages = packages.values.toSortedSet()
                 )
             )
+        }
+    }
+
+    private fun configureRemoteAuthentication(conanConfig: File) {
+        // Install configuration from a local directory.
+        run("config", "install", conanConfig.absolutePath)
+
+        // List configured remotes in "remotes.txt" format.
+        val remoteList = run("remote", "list", "--raw")
+        if (remoteList.isError) {
+            log.warn { "Failed to list remotes." }
+            return
+        }
+
+        // Iterate over configured remotes.
+        remoteList.stdout.lines().forEach { line ->
+            // Extract the remote URL.
+            val trimmedLine = line.trim()
+            if (trimmedLine.isEmpty() || trimmedLine.startsWith('#')) return@forEach
+
+            val wordIterator = trimmedLine.splitToSequence(' ').iterator()
+
+            if (!wordIterator.hasNext()) return@forEach
+            val remoteName = wordIterator.next()
+
+            if (!wordIterator.hasNext()) return@forEach
+            val remoteUrl = wordIterator.next()
+
+            remoteUrl.toUri().onSuccess { uri ->
+                log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
+
+                // Request authentication for the extracted remote URL.
+                val auth = Authenticator.requestPasswordAuthentication(
+                    /* host = */ uri.host,
+                    /* addr = */ null,
+                    /* port = */ uri.port,
+                    /* protocol = */ uri.scheme,
+                    /* prompt = */ null,
+                    /* scheme = */ null
+                )
+
+                if (auth != null) {
+                    // Configure Conan's authentication based on ORT's authentication for the remote.
+                    val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
+                    if (userAuth.isError) {
+                        log.error { "Failed to configure user authentication for remote '$remoteName'." }
+                    }
+                }
+            }.onFailure {
+                log.warn { "The remote '$remoteName' points to invalid URL $remoteUrl." }
+            }
         }
     }
 
@@ -266,18 +277,20 @@ class Conan(
     /**
      * Return the map of packages and their identifiers which are contained in [nodes].
      */
-    private fun parsePackages(nodes: List<JsonNode>, workingDir: File, conanStoragePath: File): Map<String, Package> =
+    private fun parsePackages(nodes: List<JsonNode>, workingDir: File): Map<String, Package> =
         nodes.associate { node ->
-            val pkg = parsePackage(node, workingDir, conanStoragePath)
+            val pkg = parsePackage(node, workingDir)
             "${pkg.id.name}:${pkg.id.version}" to pkg
         }
 
     /**
      * Return the [Package] parsed from the given [node].
      */
-    private fun parsePackage(node: JsonNode, workingDir: File, conanStoragePath: File): Package {
-        val id = parsePackageId(node, workingDir)
+    private fun parsePackage(node: JsonNode, workingDir: File): Package {
         val homepageUrl = node["homepage"].textValueOrEmpty()
+
+        val id = parsePackageId(node, workingDir)
+        val conanData = readConanData(id)
 
         return Package(
             id = id,
@@ -286,8 +299,9 @@ class Conan(
             description = parsePackageField(node, workingDir, "description"),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-            sourceArtifact = parseSourceArtifact(id, conanStoragePath),
-            vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
+            sourceArtifact = parseSourceArtifact(conanData),
+            vcs = processPackageVcs(VcsInfo.EMPTY, homepageUrl),
+            isModified = "patches" in conanData
         )
     }
 
@@ -352,14 +366,31 @@ class Conan(
         inspectField(node["display_name"].textValue(), workingDir, field)
 
     /**
-     * Try to read the source artifact from the [conanStoragePath], if not possible return [RemoteArtifact.EMPTY].
+     * Return the generic map of Conan data for the [id].
      */
-    private fun parseSourceArtifact(id: Identifier, conanStoragePath: File): RemoteArtifact {
+    private fun readConanData(id: Identifier): Map<String, JsonNode> {
         val conanDataFile = conanStoragePath.resolve("${id.name}/${id.version}/_/_/export/conandata.yml")
 
         return runCatching {
-            val conanData = yamlMapper.readTree(conanDataFile)
-            val artifactEntry = conanData["sources"][id.version]
+            val conanData = yamlMapper.readValue<Map<String, JsonNode>>(conanDataFile)
+
+            // Replace metadata for all version with metadata for this specific version for convenient access.
+            conanData.mapValues { (key, value) ->
+                when (key) {
+                    "patches", "sources" -> value[id.version]
+                    else -> value
+                }
+            }
+        }.getOrDefault(emptyMap())
+    }
+
+    /**
+     * Return the source artifact contained in [conanData], or [RemoteArtifact.EMPTY] if no source artifact is
+     * available.
+     */
+    private fun parseSourceArtifact(conanData: Map<String, JsonNode>): RemoteArtifact {
+        return runCatching {
+            val artifactEntry = conanData.getValue("sources")
 
             val url = artifactEntry["url"].let { urlNode ->
                 (urlNode.takeIf { it.isTextual } ?: urlNode.first()).textValueOrEmpty()
@@ -430,16 +461,6 @@ class Conan(
             sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
             vcs = parseVcsInfo(node)
         )
-
-    /**
-     * Run `conan install .` to install packages in [workingDir]. The `conan install .` command looks for the package
-     * in the remote repository that is built for the same architecture as the host that runs this command. That package
-     * may not exist in the remote and in that case the command will fail. As this is acceptable since package
-     * metadata is fetched anyway, ignore the exit code by not using [run] but [ProcessCapture] directly.
-     */
-    private fun installDependencies(workingDir: File) {
-        ProcessCapture(workingDir, "conan", "install", ".")
-    }
 
     /**
      * Parse information about the package author from the given JSON [node]. If present, return a set containing the

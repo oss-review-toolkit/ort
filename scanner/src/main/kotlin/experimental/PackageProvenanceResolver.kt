@@ -28,12 +28,12 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Request
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
@@ -45,10 +45,11 @@ import org.ossreviewtoolkit.utils.core.showStackTrace
  */
 interface PackageProvenanceResolver {
     /**
-     * Resolve the [Provenance] of [pkg] based on the provided [sourceCodeOriginPriority]. If no provenance can be
-     * resolved [UnknownProvenance] is returned.
+     * Resolve the [KnownProvenance] of [pkg] based on the provided [sourceCodeOriginPriority].
+     *
+     * Throws an [IOException] if the provenance cannot be resolved.
      */
-    fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): Provenance
+    fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): KnownProvenance
 }
 
 /**
@@ -64,7 +65,9 @@ class DefaultPackageProvenanceResolver(
      * provided by the [package][pkg] metadata does not exist or is missing, the function tries to guess the tag based
      * on the name and version of the [package][pkg].
      */
-    override fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): Provenance {
+    override fun resolveProvenance(pkg: Package, sourceCodeOriginPriority: List<SourceCodeOrigin>): KnownProvenance {
+        val errors = mutableMapOf<SourceCodeOrigin, Throwable>()
+
         sourceCodeOriginPriority.forEach { sourceCodeOrigin ->
             runCatching {
                 when (sourceCodeOrigin) {
@@ -82,6 +85,7 @@ class DefaultPackageProvenanceResolver(
                 }
             }.onFailure {
                 it.showStackTrace()
+                errors[sourceCodeOrigin] = it
 
                 log.info {
                     "Could not resolve $sourceCodeOrigin for ${pkg.id.toCoordinates()}: ${it.collectMessagesAsString()}"
@@ -89,7 +93,20 @@ class DefaultPackageProvenanceResolver(
             }
         }
 
-        return UnknownProvenance
+        val message = buildString {
+            append(
+                "Could not resolve provenance for ${pkg.id.toCoordinates()} for source code origins " +
+                        "$sourceCodeOriginPriority."
+            )
+
+            errors.forEach { (origin, throwable) ->
+                append("\nResolution of $origin failed with:\n${throwable.collectMessagesAsString()}")
+            }
+        }
+
+        log.info { message }
+
+        throw IOException(message)
     }
 
     private fun resolveSourceArtifact(pkg: Package): ArtifactProvenance {

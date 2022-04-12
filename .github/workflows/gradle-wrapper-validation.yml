@@ -3,7 +3,10 @@ name: Validate Gradle Wrapper
 on:
   pull_request:
     branches:
-      - master
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   wrapper-validation:

@@ -25,7 +25,6 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.time.Instant
 
-import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -46,7 +45,6 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.UnknownProvenance
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
@@ -121,17 +119,17 @@ abstract class PathScanner(
     ): Map<Package, List<ScanResult>> {
         val scannerCriteria = getScannerCriteria()
 
-        log.info { "Searching scan results for ${packages.size} package(s)." }
+        log.info { "Searching scan results for ${packages.size} package(s)..." }
 
         val remainingPackages = packages.filterTo(mutableListOf()) { pkg ->
             !pkg.isMetaDataOnly.also {
-                if (it) PathScanner.log.info { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
+                if (it) PathScanner.log.debug { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
             }
         }
 
         val resultsFromStorage = readResultsFromStorage(packages, scannerCriteria)
 
-        log.info { "Found ${resultsFromStorage.size} stored scan result(s) matching $scannerCriteria." }
+        log.info { "Found scan results for ${resultsFromStorage.size} package(s) matching $scannerCriteria." }
 
         if (scannerConfig.createMissingArchives) {
             createMissingArchives(resultsFromStorage)
@@ -139,7 +137,7 @@ abstract class PathScanner(
 
         remainingPackages.removeAll { it in resultsFromStorage.keys }
 
-        log.info { "Scanning ${remainingPackages.size} package(s) for which no stored scan results were found." }
+        log.info { "Scanning ${remainingPackages.size} remaining of ${packages.size} total package(s)." }
 
         val downloadDirectory = createOrtTempDir()
 
@@ -161,7 +159,7 @@ abstract class PathScanner(
                 // Due to a bug that has been fixed in d839f6e the scan results for packages were not properly filtered
                 // by VCS path. Filter them again to fix the problem.
                 // TODO: Remove this workaround together with the next change that requires recreating the scan storage.
-                scanResults.map { it.filterByVcsPath().filterByIgnorePatterns(scannerConfig.ignorePatterns) }
+                scanResults.map { it.filterByVcsPath() }
             }
 
     private fun Collection<Package>.scan(downloadDirectory: File): Map<Package, List<ScanResult>> {
@@ -234,7 +232,7 @@ abstract class PathScanner(
                 val downloadProvenance = Downloader(downloaderConfig).download(pkg, downloadDirectory)
 
                 if (downloadProvenance == provenance) {
-                    archiveFiles(downloadDirectory, pkg.id, provenance)
+                    archiver.archive(downloadDirectory, provenance)
                 } else {
                     log.warn { "Mismatching provenance when creating missing archive for $provenance." }
                 }
@@ -248,7 +246,7 @@ abstract class PathScanner(
      * Scan the provided [pkg] for license information and return a [ScanResult]. The package's source code is
      * downloaded to [downloadDirectory] for scanning. If the package could not be scanned a [ScanException] is thrown.
      */
-    fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, downloadDirectory: File): ScanResult {
+    private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, downloadDirectory: File): ScanResult {
         val pkgDownloadDirectory = downloadDirectory.resolve(pkg.id.toPath())
 
         val provenance = try {
@@ -276,30 +274,23 @@ abstract class PathScanner(
             )
         }
 
-        log.info {
-            "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'."
-        }
+        log.info { "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'." }
 
         if (provenance is KnownProvenance) {
-            archiveFiles(pkgDownloadDirectory, pkg.id, provenance)
+            archiver.archive(pkgDownloadDirectory, provenance)
         }
 
         val (scanSummary, scanDuration) = measureTimedValue {
-            val vcsPath = (provenance as? RepositoryProvenance)?.vcsInfo?.takeUnless {
-                it.type == VcsType.GIT_REPO
-            }?.path.orEmpty()
+            val vcsPath = (provenance as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
             scanPathInternal(pkgDownloadDirectory).filterByPath(vcsPath)
         }
 
-        log.perf {
-            "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in $scanDuration."
-        }
+        log.perf { "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in $scanDuration." }
 
         val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
         val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
-        val filteredResult = scanResult.filterByIgnorePatterns(scannerConfig.ignorePatterns)
 
-        return storageResult.map { filteredResult }.getOrElse {
+        return storageResult.map { scanResult }.getOrElse {
             val issue = OrtIssue(
                 source = ScanResultsStorage.storage.name,
                 message = it.message.orEmpty(),
@@ -307,16 +298,8 @@ abstract class PathScanner(
             )
             val issues = scanSummary.issues + issue
             val summary = scanSummary.copy(issues = issues)
-            filteredResult.copy(summary = summary)
+            scanResult.copy(summary = summary)
         }
-    }
-
-    private fun archiveFiles(directory: File, id: Identifier, provenance: KnownProvenance) {
-        log.info { "Archiving files for '${id.toCoordinates()}'." }
-
-        val duration = measureTime { archiver.archive(directory, provenance) }
-
-        log.perf { "Archived files for '${id.toCoordinates()}' in $duration." }
     }
 
     /**
@@ -341,11 +324,11 @@ abstract class PathScanner(
         log.info { "Scanning path '$absoluteInputPath' with $details..." }
 
         val summary = try {
-            scanPathInternal(path).also {
+            scanPathInternal(path).filterByIgnorePatterns(scannerConfig.ignorePatterns).also {
                 log.info {
                     "Detected licenses for path '$absoluteInputPath': ${it.licenses.joinToString()}"
                 }
-            }.filterByIgnorePatterns(scannerConfig.ignorePatterns)
+            }
         } catch (e: ScanException) {
             e.showStackTrace()
 
@@ -426,7 +409,7 @@ abstract class PathScanner(
 
         val duplicatesCount = size - deduplicatedResults.size
         if (duplicatesCount > 0) {
-            PathScanner.log.info { "Removed $duplicatesCount duplicates out of $size scan results." }
+            PathScanner.log.debug { "Removed $duplicatesCount duplicate(s) out of $size scan result(s)." }
         }
 
         return deduplicatedResults

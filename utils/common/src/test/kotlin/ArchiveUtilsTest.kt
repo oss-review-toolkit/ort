@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 class ArchiveUtilsTest : WordSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeEach(testCase: TestCase) {
+    override suspend fun beforeEach(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

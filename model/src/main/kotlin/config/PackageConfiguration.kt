@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -84,6 +85,7 @@ data class PackageConfiguration(
 /**
  * A matcher which matches its properties against a [RepositoryProvenance].
  */
+@JsonIgnoreProperties("path")
 data class VcsMatcher(
     /**
      * The [type] to match for equality against [VcsInfo.type].
@@ -96,37 +98,19 @@ data class VcsMatcher(
     val url: String,
 
     /**
-     * The [revision] to match for equality against [RepositoryProvenance.resolvedRevision].
+     * The [revision] to match for equality against [RepositoryProvenance.resolvedRevision], or null to match any
+     * revision.
      */
-    val revision: String,
-
-    /**
-     * The [path] to match for equality against [VcsInfo.path]. Must only be specified in case [type] equals
-     * [VcsType.GIT_REPO].
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val path: String? = null
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val revision: String? = null
 ) {
     init {
-        require(url.isNotBlank() && revision.isNotBlank())
-
-        if (type == VcsType.GIT_REPO) {
-            require(!path.isNullOrBlank()) {
-                "Matching against Git-Repo VCS info requires a non-blank path."
-            }
-        } else {
-            require(path == null) {
-                "A path must only be specified for matching Git-Repo VCS info."
-            }
-        }
+        require(url.isNotBlank() && revision?.isBlank() != true)
     }
 
     fun matches(provenance: RepositoryProvenance): Boolean =
         type == provenance.vcsInfo.type &&
-                matchesWithoutCredentials(url, provenance.vcsInfo.url) &&
-                (path == null || path == provenance.vcsInfo.path) &&
-                revision == provenance.resolvedRevision
+                // URLs need to match only after any credentials have been removed.
+                url.replaceCredentialsInUri() == provenance.vcsInfo.url.replaceCredentialsInUri() &&
+                (revision == null || revision == provenance.resolvedRevision)
 }
-
-private fun matchesWithoutCredentials(lhs: String, rhs: String): Boolean =
-    lhs.replaceCredentialsInUri() == rhs.replaceCredentialsInUri()

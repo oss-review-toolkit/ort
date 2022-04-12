@@ -76,3 +76,9 @@ style:
       kotlinx.html.*,
       kotlinx.html.dom.*
       '
+
+ORT:
+  OrtImportOrder:
+    active: true
+  OrtPackageNaming:
+    active: true

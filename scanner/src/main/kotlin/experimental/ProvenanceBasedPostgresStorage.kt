@@ -50,7 +50,7 @@ class ProvenanceBasedPostgresStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    private val dataSource: DataSource,
+    private val dataSource: Lazy<DataSource>,
 
     /**
      * The name of the table used for storing scan results.
@@ -60,10 +60,8 @@ class ProvenanceBasedPostgresStorage(
     private val table = ProvenanceScanResults(tableName)
 
     /** The [Database] instance on which all operations are executed. */
-    private val database = setupDatabase()
-
-    private fun setupDatabase(): Database =
-        Database.connect(dataSource).apply {
+    private val database by lazy {
+        Database.connect(dataSource.value).apply {
             transaction {
                 withDataBaseLock {
                     if (!tableExists(tableName)) {
@@ -73,6 +71,7 @@ class ProvenanceBasedPostgresStorage(
                 }
             }
         }
+    }
 
     override fun read(provenance: KnownProvenance): List<ScanResult> {
         requireEmptyVcsPath(provenance)

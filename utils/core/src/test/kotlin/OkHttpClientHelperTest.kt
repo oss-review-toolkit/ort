@@ -20,9 +20,26 @@
 package org.ossreviewtoolkit.utils.core
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.should
+import io.kotest.matchers.types.beInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+
+import java.io.IOException
 import java.time.Duration
+
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.ResponseBody
+
+import okio.BufferedSource
 
 class OkHttpClientHelperTest : StringSpec({
     "Passing no lambda blocks should return the same client" {
@@ -38,5 +55,30 @@ class OkHttpClientHelperTest : StringSpec({
         val clientB = OkHttpClientHelper.buildClient(timeout)
 
         clientA shouldBeSameInstanceAs clientB
+    }
+
+    "Exceptions during file download should be handled" {
+        val outputDirectory = tempdir()
+        val invalidUrl = "https://example.org/folder/"
+
+        mockkStatic(OkHttpClient::download)
+        val response = mockk<Response>(relaxed = true)
+        val request = mockk<Request>(relaxed = true)
+        val body = mockk<ResponseBody>(relaxed = true)
+        val source = mockk<BufferedSource>(relaxed = true)
+
+        every { request.url } returns invalidUrl.toHttpUrl()
+        every { response.headers(any()) } returns emptyList()
+        every { response.request } returns request
+        every { body.source() } returns source
+        every { source.read(any(), any()) } returnsMany listOf(100, -1)
+
+        val client = OkHttpClientHelper.buildClient()
+        every { client.download(any(), any()) } returns Result.success(response to body)
+
+        val result = client.downloadFile(invalidUrl, outputDirectory)
+        result.shouldBeFailure {
+            it should beInstanceOf<IOException>()
+        }
     }
 })

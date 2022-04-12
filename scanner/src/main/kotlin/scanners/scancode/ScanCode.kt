@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ import org.ossreviewtoolkit.model.readJsonFile
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
-import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
@@ -62,11 +62,16 @@ import org.ossreviewtoolkit.utils.core.ortToolsDirectory
  *   detected licenses. If this option is set to "true", the detected `license_expression` is used instead, which can
  *   contain an SPDX expression.
  */
-class ScanCode(
+class ScanCode internal constructor(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    class ScanCodeFactory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            ScanCode(scannerName, scannerConfig, downloaderConfig)
+    }
+
     class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             ScanCode(scannerName, scannerConfig, downloaderConfig)
@@ -109,7 +114,7 @@ class ScanCode(
     override val expectedVersion = BuildConfig.SCANCODE_VERSION
 
     override val configuration by lazy {
-        mutableListOf<String>().apply {
+        buildList {
             addAll(configurationOptions)
             add(OUTPUT_FORMAT_OPTION)
         }.joinToString(" ")
@@ -123,18 +128,19 @@ class ScanCode(
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {
-        mutableListOf<String>().apply {
+        buildList {
             addAll(configurationOptions)
             addAll(nonConfigurationOptions)
-        }.toList()
+        }
     }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
 
     override fun transformVersion(output: String): String {
-        // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181" which might be preceded
-        // by a line saying "Configuring ScanCode for first use...".
+        // On first use, the output is prefixed by "Configuring ScanCode for first use...". The version string can be
+        // something like:
+        // ScanCode version 2.0.1.post1.fb67a181
         val prefix = "ScanCode version "
         return output.lineSequence().first { it.startsWith(prefix) }.substring(prefix.length)
     }
@@ -180,13 +186,7 @@ class ScanCode(
         val startTime = Instant.now()
 
         val resultFile = createOrtTempDir().resolve("result.json")
-        val process = ProcessCapture(
-            scannerPath.absolutePath,
-            *commandLineOptions.toTypedArray(),
-            path.absolutePath,
-            OUTPUT_FORMAT_OPTION,
-            resultFile.absolutePath
-        )
+        val process = runScanCode(path, resultFile)
 
         val endTime = Instant.now()
 
@@ -198,16 +198,29 @@ class ScanCode(
 
         val issues = summary.issues.toMutableList()
 
-        val hasOnlyMemoryErrors = mapUnknownIssues(issues)
-        val hasOnlyTimeoutErrors = mapTimeoutErrors(issues)
+        mapUnknownIssues(issues)
+        mapTimeoutErrors(issues)
 
         return with(process) {
             if (stderr.isNotBlank()) log.debug { stderr }
-            if (isError && !(hasOnlyMemoryErrors || hasOnlyTimeoutErrors)) throw ScanException(errorMessage)
 
             summary.copy(issues = issues)
         }
     }
+
+    /**
+     * Execute ScanCode with the configured arguments to scan the given [path] and produce [resultFile].
+     */
+    internal fun runScanCode(
+        path: File,
+        resultFile: File
+    ) = ProcessCapture(
+        scannerPath.absolutePath,
+        *commandLineOptions.toTypedArray(),
+        path.absolutePath,
+        OUTPUT_FORMAT_OPTION,
+        resultFile.absolutePath
+    )
 
     override fun getVersion(workingDir: File?): String =
         // The release candidate version names lack a hyphen in between the minor version and the extension, e.g.

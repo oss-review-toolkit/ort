@@ -20,7 +20,6 @@
 
 import org.apache.tools.ant.taskdefs.condition.Os
 
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
@@ -28,9 +27,6 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 // The Yarn plugin is only applied programmatically for Kotlin projects that target JavaScript. As we do not target
 // JavaScript from Kotlin (yet), manually apply the plugin to make its setup tasks available.
 YarnPlugin.apply(rootProject).version = "1.22.10"
-
-// Required for builds on ARM64 machines see: https://youtrack.jetbrains.com/issue/KT-49109.
-rootProject.the<NodeJsRootExtension>().nodeVersion = "16.13.0"
 
 // The Yarn plugin registers tasks always on the root project, see
 // https://github.com/JetBrains/kotlin/blob/1.4.0/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L53-L57
@@ -52,6 +48,10 @@ tasks.addRule("Pattern: yarn<Command>") {
         tasks.register<Exec>(taskName).configure {
             // Execute the Yarn version downloaded by Gradle using the NodeJs version downloaded by Gradle.
             commandLine = listOf(nodeExecutable.path, yarnJs.path, command)
+
+            // Prepend the directory of the bootstrapped Node.js to the PATH environment.
+            environment = environment + mapOf("PATH" to "$nodeBinDir${File.pathSeparator}${environment["PATH"]}")
+
             outputs.cacheIf { true }
         }
     }

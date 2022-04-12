@@ -32,8 +32,8 @@ val kotlinxCoroutinesVersion: String by project
 val kotlinxHtmlVersion: String by project
 val mockkVersion: String by project
 val retrofitVersion: String by project
+val saxonHeVersion: String by project
 val simpleExcelVersion: String by project
-val xalanVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -91,7 +91,7 @@ dependencies {
 
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise the formatting of
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
-    implementation("xalan:xalan:$xalanVersion")
+    implementation("net.sf.saxon:Saxon-HE:$saxonHeVersion")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
 }

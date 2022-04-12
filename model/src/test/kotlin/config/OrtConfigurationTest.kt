@@ -26,6 +26,7 @@ import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -36,7 +37,6 @@ import java.io.File
 import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 

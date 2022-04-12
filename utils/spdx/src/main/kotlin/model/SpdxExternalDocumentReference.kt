@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.spdx.model
 
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+
 /**
  * [SpdxExternalDocumentReference]s are used by [SpdxDocument]s to list all external documents which are referenced from
  * that particular [SpdxDocument].
@@ -40,8 +42,16 @@ data class SpdxExternalDocumentReference(
     val checksum: SpdxChecksum
 ) {
     init {
-        require(externalDocumentId.isNotBlank()) { "The external document Id must not be blank." }
+        require(externalDocumentId.isNotBlank()) { "The external document ID must not be blank." }
 
-        require(spdxDocument.isNotBlank()) { "The SPDX document must not be blank." }
+        require(externalDocumentId.startsWith(SpdxConstants.DOCUMENT_REF_PREFIX)) {
+            "The external document ID must start with '${SpdxConstants.DOCUMENT_REF_PREFIX}'."
+        }
+
+        require(spdxDocument.isNotEmpty()) { "The SPDX document must not be empty." }
+
+        require(spdxDocument.trim() == spdxDocument) {
+            "The SPDX document must not contain any leading or trailing whitespace."
+        }
     }
 }

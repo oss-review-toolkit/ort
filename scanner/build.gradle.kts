@@ -18,12 +18,16 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val exposedVersion: String by project
 val hikariVersion: String by project
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
+val kotlinxSerializationVersion: String by project
 val mockkVersion: String by project
 val postgresVersion: String by project
+val retrofitKotlinxSerializationConverterVersion: String by project
 val retrofitVersion: String by project
 val scanossVersion: String by project
 val sw360ClientVersion: String by project
@@ -56,6 +60,7 @@ dependencies {
 
     implementation(project(":clients:clearly-defined"))
     implementation(project(":clients:fossid-webapp"))
+    implementation(project(":clients:scanoss"))
     implementation(project(":downloader"))
     implementation(project(":utils:core-utils"))
 
@@ -73,6 +78,9 @@ dependencies {
 
     testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+    testImplementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
+            retrofitKotlinxSerializationConverterVersion)
 }
 
 buildConfig {
@@ -83,4 +91,16 @@ buildConfig {
     buildConfigField("String", "LICENSEE_VERSION", "\"$licenseeVersion\"")
     buildConfigField("String", "SCANCODE_VERSION", "\"$scancodeVersion\"")
     buildConfigField("String", "SCANOSS_VERSION", "\"$scanossVersion\"")
+}
+
+tasks.withType<KotlinCompile> {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    if ("test" in name.toLowerCase()) {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+        }
+    }
 }

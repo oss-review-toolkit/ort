@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
 import org.ossreviewtoolkit.scanner.ScanException
+import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
@@ -43,11 +44,16 @@ import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
-class Askalono(
+class Askalono internal constructor(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    class AskalonoFactory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            Askalono(scannerName, scannerConfig, downloaderConfig)
+    }
+
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             Askalono(scannerName, scannerConfig, downloaderConfig)
@@ -62,7 +68,8 @@ class Askalono(
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
 
     override fun transformVersion(output: String) =
-        // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
+        // The version string can be something like:
+        // askalono 0.2.0-beta.1
         output.removePrefix("askalono ")
 
     override fun bootstrap(): File {
@@ -123,10 +130,9 @@ class Askalono(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, File(root["path"].textValue())),
                         TextLocation.UNKNOWN_LINE
-                    )
+                    ),
+                    score = result["score"].floatValue()
                 )
-
-                log.info { "Found $licenseFinding with score ${result["score"].floatValue()}." }
 
                 licenseFindings += licenseFinding
             }

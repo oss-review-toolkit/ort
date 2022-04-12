@@ -149,7 +149,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
                     val gitInfoDir = targetDir.resolve(".git/info").apply { safeMkdirs() }
                     val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-                    val globPatterns = getLicenseFileGlobPatterns() + path
+                    val globPatterns = getSparseCheckoutGlobPatterns() + path
 
                     gitInfoDir.resolve("sparse-checkout").writeText(globPatterns.joinToString("\n"))
                 }
@@ -199,7 +199,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         }.recoverCatching {
             log.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
 
-            workingTree.runGit("fetch", "--depth", GIT_HISTORY_DEPTH.toString(), "--tags", "origin")
+            workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "--tags", "origin")
             workingTree.runGit("checkout", revision).isSuccess
         }.onFailure {
             it.showStackTrace()
@@ -228,7 +228,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     private fun updateSubmodules(workingTree: WorkingTree) {
         if (!workingTree.workingDir.resolve(".gitmodules").isFile) return
-        workingTree.runGit("submodule", "update", "--init", "--recursive")
+        workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
     }
 
     private fun WorkingTree.runGit(vararg args: String) = run(*args, workingDir = workingDir)
@@ -239,7 +239,7 @@ class Git : VersionControlSystem(), CommandLineTool {
  * [Authenticator]. An instance of this class is installed by [Git], making sure that JGit uses the exact same
  * authentication mechanism as ORT.
  */
-private object AuthenticatorCredentialsProvider : CredentialsProvider() {
+internal object AuthenticatorCredentialsProvider : CredentialsProvider() {
     override fun isInteractive(): Boolean = false
 
     override fun supports(vararg items: CredentialItem): Boolean =

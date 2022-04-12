@@ -26,17 +26,13 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.core.ProtocolProxyMap
-import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 import org.ossreviewtoolkit.utils.test.createTestTempDir
-import org.ossreviewtoolkit.utils.test.toGenericString
 
 class NodeSupportTest : WordSpec() {
     companion object {
@@ -205,90 +201,17 @@ class NodeSupportTest : WordSpec() {
                 }
             }
         }
-
-        "readProxySettingFromNpmRc" should {
-            "properly read proxy configuration" {
-                fun ProtocolProxyMap.mapSingleValuesToString() =
-                    mapValues { (_, proxies) ->
-                        val (proxy, authentication) = proxies.single()
-                        listOfNotNull(
-                            proxy.toGenericString(),
-                            authentication?.userName,
-                            authentication?.password?.let { String(it) }
-                        )
-                    }
-
-                readProxySettingsFromNpmRc("""
-                    proxy=http://user:password@host.tld:3129/
-                    https-proxy=http://user:password@host.tld:3129/
-                    """.trimIndent()
-                ).mapSingleValuesToString() should containExactlyEntries(
-                    "http" to listOf("HTTP @ host.tld:3129", "user", "password"),
-                    "https" to listOf("HTTP @ host.tld:3129", "user", "password")
-                )
-
-                readProxySettingsFromNpmRc("""
-                    proxy=http://user:password@host.tld
-                    https-proxy=http://user:password@host.tld
-                    """.trimIndent()
-                ).mapSingleValuesToString() should containExactlyEntries(
-                    "http" to listOf("HTTP @ host.tld:8080", "user", "password"),
-                    "https" to listOf("HTTP @ host.tld:8080", "user", "password")
-                )
-
-                readProxySettingsFromNpmRc("""
-                    proxy=user:password@host.tld
-                    https-proxy=user:password@host.tld
-                    """.trimIndent()
-                ).mapSingleValuesToString() should containExactlyEntries(
-                    "http" to listOf("HTTP @ host.tld:8080", "user", "password"),
-                    "https" to listOf("HTTP @ host.tld:8080", "user", "password")
-                )
-
-                readProxySettingsFromNpmRc("""
-                    proxy=host.tld
-                    https-proxy=host.tld
-                    """.trimIndent()
-                ).mapSingleValuesToString() should containExactlyEntries(
-                    "http" to listOf("HTTP @ host.tld:8080"),
-                    "https" to listOf("HTTP @ host.tld:8080")
-                )
-            }
-
-            "ignore non-proxy URLs" {
-                readProxySettingsFromNpmRc("""
-                    registry=http://my.artifactory.com/artifactory/api/npm/npm-virtual
-                    """.trimIndent()
-                ) should beEmptyMap()
-            }
-        }
-
-        "readRegistryFromNpmRc" should {
-            "properly read registry configuration" {
-                readRegistryFromNpmRc("""
-                    registry=http://my.artifactory.com/artifactory/api/npm/npm-virtual
-                    """.trimIndent()
-                ) shouldBe "http://my.artifactory.com/artifactory/api/npm/npm-virtual"
-            }
-
-            "return null when no registry is defined" {
-                readRegistryFromNpmRc("""
-                    
-                    """.trimIndent()
-                ) shouldBe null
-            }
-        }
     }
 
     private lateinit var tempDir: File
     private val definitionFiles = mutableSetOf<File>()
 
-    override fun beforeEach(testCase: TestCase) {
+    override suspend fun beforeEach(testCase: TestCase) {
         tempDir = createTestTempDir()
         definitionFiles.clear()
     }
 
-    override fun afterEach(testCase: TestCase, result: TestResult) {
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
         definitionFiles.clear()
     }
 

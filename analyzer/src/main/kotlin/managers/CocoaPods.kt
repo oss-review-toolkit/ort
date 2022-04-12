@@ -68,9 +68,7 @@ import org.ossreviewtoolkit.utils.core.log
  *
  * The only interactions with the 'pod' command happen in order to obtain metadata for dependencies. Therefore
  * 'pod spec which' gets executed, which works also under Linux.
- *
- * Note: This class depends on https://github.com/CocoaPods/CocoaPods/pull/10609 which is not yet released.
-  */
+ */
 class CocoaPods(
     name: String,
     analysisRoot: File,
@@ -91,7 +89,7 @@ class CocoaPods(
 
     override fun command(workingDir: File?) = "pod"
 
-    override fun getVersionRequirement() = Requirement.buildIvy("[1.10.1,)")
+    override fun getVersionRequirement() = Requirement.buildIvy("[1.11.0,)")
 
     override fun getVersionArguments() = "--version --allow-root"
 
@@ -188,7 +186,7 @@ class CocoaPods(
         return Package(
             id = id,
             authors = sortedSetOf(),
-            declaredLicenses = listOf(podspec.license).toSortedSet(),
+            declaredLicenses = podspec.license.takeUnless { it.isEmpty() }?.let { sortedSetOf(it) } ?: sortedSetOf(),
             description = podspec.summary,
             homepageUrl = podspec.homepage,
             binaryArtifact = RemoteArtifact.EMPTY,

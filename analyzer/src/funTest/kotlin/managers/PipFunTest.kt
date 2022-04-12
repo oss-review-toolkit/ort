@@ -43,17 +43,8 @@ class PipFunTest : WordSpec() {
             "resolve setup.py dependencies correctly for spdx-tools-python" {
                 val definitionFile = projectsDir.resolve("external/spdx-tools-python/setup.py")
 
-                val result = createPIP().resolveSingleProject(definitionFile)
+                val result = createPip().resolveSingleProject(definitionFile)
                 val expectedResult = projectsDir.resolve("external/spdx-tools-python-expected-output.yml").readText()
-
-                result.toYaml() shouldBe expectedResult
-            }
-
-            "resolve requirements.txt dependencies correctly for example-python-flask".config(enabled = !Os.isWindows) {
-                val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
-
-                val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
 
                 result.toYaml() shouldBe expectedResult
             }
@@ -69,18 +60,29 @@ class PipFunTest : WordSpec() {
                     path = vcsPath
                 )
 
-                val result = createPIP().resolveSingleProject(definitionFile)
+                val result = createPip().resolveSingleProject(definitionFile)
 
                 result.toYaml() shouldBe expectedResult
             }
         }
 
         "Python 3" should {
+            "resolve requirements.txt dependencies correctly for example-python-flask".config(enabled = !Os.isWindows) {
+                val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
+
+                val result = createPip().resolveSingleProject(definitionFile)
+
+                // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
+                val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
+
+                result.toYaml() shouldBe expectedResult
+            }
+
             "resolve dependencies correctly for a Django project" {
                 val definitionFile = projectsDir.resolve("synthetic/pip-python3/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-                val result = createPIP().resolveSingleProject(definitionFile)
+                val result = createPip().resolveSingleProject(definitionFile)
                 val expectedResultFile = projectsDir.resolve("synthetic/pip-python3-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
@@ -94,6 +96,6 @@ class PipFunTest : WordSpec() {
         }
     }
 
-    private fun createPIP() =
+    private fun createPip() =
         Pip("PIP", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

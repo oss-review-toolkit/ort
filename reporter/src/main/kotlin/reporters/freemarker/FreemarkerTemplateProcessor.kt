@@ -41,7 +41,6 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
@@ -439,14 +438,13 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
         getScanResultsForId(id).forEach { scanResult ->
             val provenance = scanResult.provenance as RepositoryProvenance
             val vcsPath = provenance.vcsInfo.path
-            val isGitRepo = provenance.vcsInfo.type == VcsType.GIT_REPO
             val repositoryPath = getRepositoryPath(provenance)
 
             val findingPaths = with(scanResult.summary) {
                 copyrightFindings.mapTo(mutableSetOf()) { it.location.path } + licenseFindings.map { it.location.path }
             }
 
-            excludePaths += findingPaths.filter { it.startsWith(vcsPath) || isGitRepo }.map { "$repositoryPath$it" }
+            excludePaths += findingPaths.filter { it.startsWith(vcsPath) }.map { "$repositoryPath$it" }
         }
     }
 

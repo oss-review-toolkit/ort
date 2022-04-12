@@ -1,15 +1,8 @@
-# Help Codecov to map Kotlin package paths to paths stored in Git, see
-# https://docs.codecov.io/docs/fixing-paths.
-
-fixes:
-  - "com/here/ort/::cli/src/main/kotlin/"
-  - "com/here/ort/analyzer/::analyzer/src/main/kotlin/"
-  - "com/here/ort/clearlydefined/::clearly-defined/src/main/kotlin/"
-  - "com/here/ort/downloader/::downloader/src/main/kotlin/"
-  - "com/here/ort/evaluator/::evaluator/src/main/kotlin/"
-  - "com/here/ort/helper/::helper-cli/src/main/kotlin/"
-  - "com/here/ort/model/::model/src/main/kotlin/"
-  - "com/here/ort/reporter/::reporter/src/main/kotlin/"
-  - "com/here/ort/scanner/::scanner/src/main/kotlin/"
-  - "com/here/ort/spdx/::spdx-utils/src/main/kotlin/"
-  - "com/here/ort/utils/::utils/src/main/kotlin/"
+comment:
+  # Keep this in sync with the number of codecov-action calls.
+  after_n_builds: 4
+coverage:
+  status:
+    project:
+      default:
+        threshold: 0.1%

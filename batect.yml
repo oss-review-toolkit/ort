@@ -1,0 +1,97 @@
+# Copyright (C) 2021 Bosch.IO GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+# License-Filename: LICENSE
+
+forbid_telemetry: true
+
+config_variables:
+  gradle_console:
+    description: Gradle console mode
+    # Supported values: "auto", "plain", "rich", "verbose"
+    default: rich
+  kotest_diff:
+    description: Kotest multi-line string assertion mode
+    # Supported values: "simple", "condensed" (or anything different from "simple")
+    default: simple
+
+.common-container-config: &common-container-config
+  run_as_current_user:
+    enabled: true
+    home_directory: /home/ort
+  privileged: true
+  environment:
+    GRADLE_OPTS: -Dorg.gradle.console=<gradle_console -Dorg.gradle.daemon=false -Dkotest.assertions.multi-line-diff=<kotest_diff
+    GRADLE_RO_DEP_CACHE: /home/ort/.gradle-ro-dep-cache
+  volumes:
+    # Mount any Gradle cache present on the host read-only into the
+    # container to speed up the build.
+    - local: ~/.gradle/caches
+      container: /home/ort/.gradle-ro-dep-cache
+    # Cache contents written to /home/ort/.gradle between task runs.
+    - type: cache
+      name: gradle-user-home
+      container: /home/ort/.gradle
+    # Mount the source code into the container.
+    - local: <{batect.project_directory}
+      container: /home/ort/src
+  working_directory: /home/ort/src
+
+containers:
+  build:
+    image: eclipse-temurin:11-jdk-focal
+    <<: *common-container-config
+  run:
+    build_directory: <{batect.project_directory}
+    build_target: run
+    <<: *common-container-config
+
+tasks:
+  gradle:
+    description: >-
+      A generic task that "forwards" task arguments to Gradle. Use it like
+      `./batect gradle -- installDist`.
+    run:
+      container: build
+      command: ./gradlew --stacktrace
+  buildCli:
+    description: >-
+      A convenience task to build (but not run) ORT's command line interface.
+    run:
+      container: build
+      command: ./gradlew --stacktrace :cli:installDist
+  buildFunTest:
+    description: >-
+      A convenience task to build (but not run) ORT's functional tests.
+    run:
+      container: build
+      command: ./gradlew --stacktrace jar funTestClasses
+  requirements:
+    description: >-
+      A task to check ORT's requirements against the runtime container.
+    prerequisites:
+      - buildCli
+    run:
+      container: run
+      command: ./cli/build/install/ort/bin/ort requirements
+  funTest:
+    description: >-
+      A task to execute ORT's functional tests in the runtime container. Can be limited to e.g. the "analyzer" project
+      like `./batect funTest -- -p analyzer`.
+    prerequisites:
+      - buildFunTest
+    run:
+      container: run
+      command: ./gradlew funTest

@@ -198,7 +198,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         require {
             -isExcluded()
             +hasVulnerability(maxAcceptedSeverity, scoringSystem) { value, threshold ->
-                value.toFloat().compareTo(threshold.toFloat())
+                value.toFloat() >= threshold.toFloat()
             }
         }
 
@@ -249,13 +249,15 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
 
     ortResultRule("DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML") {
         val reasons = ortResult.repository.config.excludes.scopes.mapTo(mutableSetOf()) { it.reason }
+
+        @Suppress("DEPRECATION")
         val deprecatedReasons = setOf(ScopeExcludeReason.TEST_TOOL_OF)
 
         reasons.intersect(deprecatedReasons).forEach { offendingReason ->
             warning(
                 "The repository configuration is using the deprecated scope exclude reason '$offendingReason'.",
                 "Please use only non-deprecated scope exclude reasons, see " +
-                        "https://github.com/oss-review-toolkit/ort/blob/master/model/src/main/" +
+                        "https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/" +
                         "kotlin/config/ScopeExcludeReason.kt."
             )
         }

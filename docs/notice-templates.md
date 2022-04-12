@@ -1,6 +1,6 @@
 # The Notice templates
 
-The [`NoticeTemplateProcessor`](../reporter/src/main/kotlin/reporters/NoticeTemplateReporter.kt) enables customization
+The [`NoticeTemplateProcessor`](../reporter/src/main/kotlin/reporters/freemarker/NoticeTemplateReporter.kt) enables customization
 of the generated open source notices with [Apache Freemarker](https://freemarker.apache.org/) templates.
 
 ORT provides two templates that can be used as a base for creating your custom open source notices:

@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
+import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
@@ -145,10 +146,13 @@ abstract class VersionControlSystem {
         }
 
         /**
-         * Return glob patterns matching all potential license or patent files.
+         * Return glob patterns for files that should be checkout out in addition to explicit sparse checkout paths.
          */
-        internal fun getLicenseFileGlobPatterns(): List<String> =
-            LicenseFilenamePatterns.getInstance().allLicenseFilenames.generateCapitalizationVariants().map { "**/$it" }
+        internal fun getSparseCheckoutGlobPatterns(): List<String> {
+            val globPatterns = mutableListOf("*$ORT_REPO_CONFIG_FILENAME")
+            val licensePatterns = LicenseFilenamePatterns.getInstance()
+            return licensePatterns.allLicenseFilenames.generateCapitalizationVariants().mapTo(globPatterns) { "**/$it" }
+        }
 
         private fun Collection<String>.generateCapitalizationVariants() =
             flatMap { listOf(it, it.uppercase(), it.uppercaseFirstChar()) }

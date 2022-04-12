@@ -26,7 +26,9 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.file.aDirectory
+import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -38,7 +40,6 @@ import java.io.IOException
 import java.time.DayOfWeek
 import java.util.Locale
 
-import org.ossreviewtoolkit.utils.test.containExactly
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.createTestTempFile
@@ -88,7 +89,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "return 'false' for files" {
-            file.isFile shouldBe true
+            file shouldBe aFile()
             file.isSymbolicLink() shouldBe false
         }
 
@@ -101,7 +102,7 @@ class ExtensionsTest : WordSpec({
             ProcessCapture(tempDir, "cmd", "/c", "mklink", "/h", "hardlink", "file")
 
             tempDir.resolve("hardlink").let { hardlink ->
-                hardlink.isFile shouldBe true
+                hardlink shouldBe aFile()
                 hardlink.isSymbolicLink() shouldBe false
             }
         }
@@ -119,7 +120,7 @@ class ExtensionsTest : WordSpec({
             ProcessCapture(tempDir, "cmd", "/c", "mklink", "symlink-to-file", "file")
 
             tempDir.resolve("symlink-to-file").let { symlinkToFile ->
-                symlinkToFile.isFile shouldBe true
+                symlinkToFile shouldBe aFile()
                 symlinkToFile.isSymbolicLink() shouldBe true
             }
         }
@@ -130,40 +131,6 @@ class ExtensionsTest : WordSpec({
             tempDir.resolve("symlink-to-directory").let { symlinkToDirectory ->
                 symlinkToDirectory.isDirectory shouldBe true
                 symlinkToDirectory.isSymbolicLink() shouldBe true
-            }
-        }
-    }
-
-    "File.searchUpwardsForFile" should {
-        "find the README.md file case insensitive" {
-            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", true)
-
-            readmeFile shouldNotBeNull {
-                this shouldBe File("../..").absoluteFile.normalize().resolve("README.md")
-            }
-        }
-
-        "find the README.md file case sensitive" {
-            val readmeFile = File(".").searchUpwardsForFile("README.md", false)
-
-            readmeFile shouldNotBeNull {
-                this shouldBe File("../..").absoluteFile.normalize().resolve("README.md")
-            }
-        }
-
-        "not find the README.md with wrong cases" {
-            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", false)
-
-            readmeFile should beNull()
-        }
-    }
-
-    "File.searchUpwardsForSubdirectory" should {
-        "find the root Git directory" {
-            val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
-
-            gitRoot shouldNotBeNull {
-                this shouldBe File("../..").absoluteFile.normalize()
             }
         }
     }
@@ -204,100 +171,43 @@ class ExtensionsTest : WordSpec({
         "throw exception if file is not a directory" {
             val file = createTestTempFile()
 
-            file.isFile shouldBe true
+            file shouldBe aFile()
             shouldThrow<IOException> { file.safeMkdirs() }
-            file.isFile shouldBe true // should still be a file afterwards
+            file shouldBe aFile() // should still be a file afterwards
         }
     }
 
-    "String.isSemanticVersion" should {
-        "return true for a semantic version" {
-            "1.0.0".isSemanticVersion() shouldBe true
-        }
+    "File.searchUpwardsForFile" should {
+        "find the README.md file case insensitive" {
+            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", true)
 
-        "return false for a URL" {
-            "https://registry.npmjs.org/form-data/-/form-data-0.2.0.tgz".isSemanticVersion() shouldBe false
-        }
-    }
-
-    "String.percentEncode" should {
-        "encode characters according to RFC 3986" {
-            val genDelims = listOf(':', '/', '?', '#', '[', ']', '@')
-            val subDelims = listOf('!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=')
-            val reserved = genDelims + subDelims
-
-            val alpha = CharArray(26) { 'a' + it } + CharArray(26) { 'A' + it }
-            val digit = CharArray(10) { '0' + it }
-            val special = listOf('-', '.', '_', '~')
-            val unreserved = alpha + digit + special
-
-            assertSoftly {
-                reserved.forEach {
-                    val hexString = String.format(Locale.ROOT, "%%%02X", it.code)
-                    it.toString().percentEncode() shouldBe hexString
-                }
-
-                unreserved.forEach {
-                    val singleCharString = it.toString()
-                    singleCharString.percentEncode() shouldBe singleCharString
-                }
-
-                " ".percentEncode() shouldBe "%20"
+            readmeFile shouldNotBeNull {
+                this shouldBe File("../..").absoluteFile.normalize().resolve("README.md")
             }
         }
-    }
 
-    "String.replaceCredentialsInUri" should {
-        "strip the user name from a string representing a URL" {
-            "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
-                    "ssh://gerrit.host.com:29418/parent/project"
+        "find the README.md file case sensitive" {
+            val readmeFile = File(".").searchUpwardsForFile("README.md", false)
+
+            readmeFile shouldNotBeNull {
+                this shouldBe File("../..").absoluteFile.normalize().resolve("README.md")
+            }
         }
 
-        "strip the user name and password from a string representing a URL" {
-            "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
-                    "ssh://gerrit.host.com:29418/parent/project"
-        }
+        "not find the README.md with wrong cases" {
+            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", false)
 
-        "replace the user name from a string representing a URL" {
-            "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user") shouldBe
-                    "ssh://user@gerrit.host.com:29418/parent/project"
-        }
-
-        "replace the user name and password from a string representing a URL" {
-            "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user:secret") shouldBe
-                    "ssh://user:secret@gerrit.host.com:29418/parent/project"
-        }
-
-        "not modify encodings in a URL" {
-            "ssh://bot@gerrit.host.com:29418/parent/project%20with%20spaces".replaceCredentialsInUri() shouldBe
-                    "ssh://gerrit.host.com:29418/parent/project%20with%20spaces"
-        }
-
-        "not modify a string not representing a URL" {
-            "This is not a URL".replaceCredentialsInUri() shouldBe "This is not a URL"
+            readmeFile should beNull()
         }
     }
 
-    "String.urlencode" should {
-        val str = "project: fünky\$name*>nul."
+    "File.searchUpwardsForSubdirectory" should {
+        "find the root Git directory" {
+            val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
 
-        "encode '*'" {
-            "*".fileSystemEncode() shouldBe "%2A"
-        }
-
-        "encode '.'" {
-            ".".fileSystemEncode() shouldBe "%2E"
-        }
-
-        "encode ':'" {
-            ":".fileSystemEncode() shouldBe "%3A"
-        }
-
-        "create a valid file name" {
-            val tempDir = createTestTempDir()
-            val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
-
-            fileFromStr.isFile shouldBe true
+            gitRoot shouldNotBeNull {
+                this shouldBe File("../..").absoluteFile.normalize()
+            }
         }
     }
 
@@ -415,6 +325,16 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "String.isSemanticVersion" should {
+        "return true for a semantic version" {
+            "1.0.0".isSemanticVersion() shouldBe true
+        }
+
+        "return false for a URL" {
+            "https://registry.npmjs.org/form-data/-/form-data-0.2.0.tgz".isSemanticVersion() shouldBe false
+        }
+    }
+
     "String.isValidUri" should {
         "return true for a valid URI" {
             "https://github.com/oss-review-toolkit/ort".isValidUri() shouldBe true
@@ -422,6 +342,87 @@ class ExtensionsTest : WordSpec({
 
         "return false for an invalid URI" {
             "https://github.com/oss-review-toolkit/ort, ".isValidUri() shouldBe false
+        }
+    }
+
+    "String.percentEncode" should {
+        "encode characters according to RFC 3986" {
+            val genDelims = listOf(':', '/', '?', '#', '[', ']', '@')
+            val subDelims = listOf('!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=')
+            val reserved = genDelims + subDelims
+
+            val alpha = CharArray(26) { 'a' + it } + CharArray(26) { 'A' + it }
+            val digit = CharArray(10) { '0' + it }
+            val special = listOf('-', '.', '_', '~')
+            val unreserved = alpha + digit + special
+
+            assertSoftly {
+                reserved.forEach {
+                    val hexString = String.format(Locale.ROOT, "%%%02X", it.code)
+                    it.toString().percentEncode() shouldBe hexString
+                }
+
+                unreserved.forEach {
+                    val singleCharString = it.toString()
+                    singleCharString.percentEncode() shouldBe singleCharString
+                }
+
+                " ".percentEncode() shouldBe "%20"
+            }
+        }
+    }
+
+    "String.replaceCredentialsInUri" should {
+        "strip the user name from a string representing a URL" {
+            "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
+                    "ssh://gerrit.host.com:29418/parent/project"
+        }
+
+        "strip the user name and password from a string representing a URL" {
+            "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
+                    "ssh://gerrit.host.com:29418/parent/project"
+        }
+
+        "replace the user name from a string representing a URL" {
+            "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user") shouldBe
+                    "ssh://user@gerrit.host.com:29418/parent/project"
+        }
+
+        "replace the user name and password from a string representing a URL" {
+            "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user:secret") shouldBe
+                    "ssh://user:secret@gerrit.host.com:29418/parent/project"
+        }
+
+        "not modify encodings in a URL" {
+            "ssh://bot@gerrit.host.com:29418/parent/project%20with%20spaces".replaceCredentialsInUri() shouldBe
+                    "ssh://gerrit.host.com:29418/parent/project%20with%20spaces"
+        }
+
+        "not modify a string not representing a URL" {
+            "This is not a URL".replaceCredentialsInUri() shouldBe "This is not a URL"
+        }
+    }
+
+    "String.urlencode" should {
+        val str = "project: fünky\$name*>nul."
+
+        "encode '*'" {
+            "*".fileSystemEncode() shouldBe "%2A"
+        }
+
+        "encode '.'" {
+            ".".fileSystemEncode() shouldBe "%2E"
+        }
+
+        "encode ':'" {
+            ":".fileSystemEncode() shouldBe "%3A"
+        }
+
+        "create a valid file name" {
+            val tempDir = createTestTempDir()
+            val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
+
+            fileFromStr shouldBe aFile()
         }
     }
 })

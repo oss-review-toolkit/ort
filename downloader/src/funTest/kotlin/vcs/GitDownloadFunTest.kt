@@ -47,7 +47,7 @@ class GitDownloadFunTest : StringSpec() {
     private val git = Git()
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

@@ -40,7 +40,7 @@ class PostgresNestedProvenanceStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    private val dataSource: DataSource,
+    private val dataSource: Lazy<DataSource>,
 
     /**
      * The name of the table used for storing nested provenances.
@@ -50,10 +50,8 @@ class PostgresNestedProvenanceStorage(
     private val table = NestedProvenances(tableName)
 
     /** The [Database] instance on which all operations are executed. */
-    private val database = setupDatabase()
-
-    private fun setupDatabase(): Database =
-        Database.connect(dataSource).apply {
+    private val database by lazy {
+        Database.connect(dataSource.value).apply {
             transaction {
                 withDataBaseLock {
                     if (!tableExists(tableName)) {
@@ -63,6 +61,7 @@ class PostgresNestedProvenanceStorage(
                 }
             }
         }
+    }
 
     override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
         database.transaction {

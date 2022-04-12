@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,16 +31,20 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
+import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
 import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
  * The [NuGet](https://www.nuget.org/) package manager for .NET.
+ *
+ * This package manager supports the following [options][AnalyzerConfiguration.options]:
+ * - *directDependenciesOnly*: If true, only direct dependencies are reported. Defaults to false.
  */
 class NuGet(
     name: String,
@@ -57,10 +62,20 @@ class NuGet(
         ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val directDependenciesOnly =
+        analyzerConfig.options?.get(managerName)?.get(OPTION_DIRECT_DEPENDENCIES_ONLY).toBoolean()
+
     private val reader = NuGetPackageFileReader()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
-        listOf(resolveNuGetDependencies(definitionFile, reader, NuGetSupport.create(definitionFile)))
+        listOf(
+            resolveNuGetDependencies(
+                definitionFile,
+                reader,
+                NuGetSupport.create(definitionFile),
+                directDependenciesOnly
+            )
+        )
 }
 
 /**
@@ -80,17 +95,23 @@ class NuGetPackageFileReader : XmlPackageFileReader {
         @JacksonXmlProperty(isAttribute = true)
         val id: String,
         @JacksonXmlProperty(isAttribute = true)
-        val version: String
+        val version: String,
+        @JacksonXmlProperty(isAttribute = true)
+        val targetFramework: String?,
+        @JacksonXmlProperty(isAttribute = true)
+        val developmentDependency: Boolean?
     )
 
-    override fun getPackageReferences(definitionFile: File): Set<Identifier> {
-        val ids = mutableSetOf<Identifier>()
+    override fun getDependencies(definitionFile: File): Set<NuGetDependency> {
         val packagesConfig = NuGetSupport.XML_MAPPER.readValue<PackagesConfig>(definitionFile)
 
-        packagesConfig.packages.forEach {
-            ids += Identifier(type = "NuGet", namespace = "", name = it.id, version = it.version)
+        return packagesConfig.packages.mapTo(mutableSetOf()) { pkg ->
+            NuGetDependency(
+                name = pkg.id,
+                version = pkg.version,
+                targetFramework = pkg.targetFramework.orEmpty(),
+                developmentDependency = pkg.developmentDependency ?: false
+            )
         }
-
-        return ids
     }
 }

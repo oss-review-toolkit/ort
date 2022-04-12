@@ -60,6 +60,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
@@ -81,6 +82,11 @@ val packageStaticallyLinked = Package.EMPTY.copy(
 
 val packageWithoutLicense = Package.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:package-without-license:1.0")
+)
+
+val packageWithNotPresentLicense = Package.EMPTY.copy(
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-not-present-license:1.0"),
+    concludedLicense = "${SpdxConstants.NONE} OR ${SpdxConstants.NOASSERTION}".toSpdx()
 )
 
 val packageWithOnlyConcludedLicense = Package.EMPTY.copy(
@@ -125,6 +131,7 @@ val allPackages = listOf(
     packageDynamicallyLinked,
     packageStaticallyLinked,
     packageWithoutLicense,
+    packageWithNotPresentLicense,
     packageWithOnlyConcludedLicense,
     packageWithOnlyDeclaredLicense,
     packageWithConcludedAndDeclaredLicense,
@@ -152,6 +159,7 @@ val scopeIncluded = Scope(
     name = "compile",
     dependencies = sortedSetOf(
         packageWithoutLicense.toReference(),
+        packageWithNotPresentLicense.toReference(),
         packageWithOnlyConcludedLicense.toReference(),
         packageWithOnlyDeclaredLicense.toReference(dependencies = sortedSetOf(packageDependency.toReference())),
         packageWithConcludedAndDeclaredLicense.toReference(),

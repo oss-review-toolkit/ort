@@ -19,7 +19,8 @@
 
 /**
  * Required Jenkins plugins:
- * - https://plugins.jenkins.io/pipeline-utility-steps/
+ * - Pipeline Utility Steps (https://plugins.jenkins.io/pipeline-utility-steps)
+ * - Docker Pipeline (https://plugins.jenkins.io/docker-workflow)
  */
 
 import com.cloudbees.groovy.cps.NonCPS
@@ -219,8 +220,8 @@ pipeline {
                             VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
                         fi
 
-                        rm -fr $PROJECT_DIR
-                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o $PROJECT_DIR/source
+                        rm -fr "$PROJECT_DIR"
+                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o "$PROJECT_DIR/source"
 
                         rm -f $HOME/.netrc
                     '''
@@ -298,7 +299,7 @@ pipeline {
                         fi
 
                         rm -fr out/results
-                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
+                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i "$PROJECT_DIR/source" -o out/results/analyzer
                     '''
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
@@ -416,7 +417,7 @@ pipeline {
                                 STACKTRACE_OPTION="--stacktrace"
                             fi
 
-                            /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION evaluate -i out/results/current-result.yml -o out/results/evaluator
+                            /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION evaluate -i out/results/current-result.yml --rules-resource /rules/no_gpl.rules.kts -o out/results/evaluator
                         '''
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')

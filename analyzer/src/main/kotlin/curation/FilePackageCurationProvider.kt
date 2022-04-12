@@ -48,21 +48,32 @@ class FilePackageCurationProvider(
         }
 
         fun readCurationFiles(curationFiles: Collection<File>): List<PackageCuration> {
-            val allCurations = curationFiles.map { curationFile ->
-                runCatching {
+            val allCurations = mutableListOf<Pair<PackageCuration, File>>()
+
+            curationFiles.map { curationFile ->
+                val curations = runCatching {
                     curationFile.readValueOrDefault(emptyList<PackageCuration>())
                 }.onFailure {
                     log.warn { "Failed parsing package curation from '${curationFile.absoluteFile}'." }
                 }.getOrThrow()
-            }.flatten()
 
-            val duplicates = allCurations.getDuplicates()
-
-            if (duplicates.isNotEmpty()) {
-                throw DuplicatedCurationException("Duplicate curations found: $duplicates")
+                curations.mapTo(allCurations) { it to curationFile }
             }
 
-            return allCurations
+            val duplicates = allCurations.getDuplicates { it.first }
+
+            if (duplicates.isNotEmpty()) {
+                val duplicatesInfo = buildString {
+                    duplicates.forEach { (curation, origins) ->
+                        appendLine("Curation for '${curation.id.toCoordinates()}' found in all of:")
+                        val files = origins.joinToString(separator = "\n") { (_, file) -> file.absolutePath }
+                        appendLine(files.prependIndent())
+                    }
+                }
+                throw DuplicatedCurationException("Duplicate curations found:\n${duplicatesInfo.prependIndent()}")
+            }
+
+            return allCurations.unzip().first
         }
     }
 }

@@ -106,11 +106,13 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
             ?.filterIsInstance<PostgresStorageConfiguration>()?.firstOrNull()
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
-        return DatabaseUtils.createHikariDataSource(
+        val dataSource = DatabaseUtils.createHikariDataSource(
             config = storageConfig,
             applicationNameSuffix = ORTH_NAME,
             maxPoolSize = 1
-        ).connection
+        )
+
+        return dataSource.value.connection
     }
 }
 
@@ -139,7 +141,7 @@ private fun getScannedPackages(
             scan_results s 
         WHERE
             $whereClause;
-        """.trimMargin()
+    """.trimIndent()
 
     val resultSet = connection.prepareStatement(query).apply {
         val array = connection.createArrayOf("VARCHAR", ids.distinct().map { it.toCoordinates() }.toTypedArray())

@@ -26,9 +26,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 /**
  * A [PackageCurationProvider] that provides the specified [packageCurations].
  */
-open class SimplePackageCurationProvider(
-    val packageCurations: Collection<PackageCuration>
-) : PackageCurationProvider {
+open class SimplePackageCurationProvider(val packageCurations: List<PackageCuration>) : PackageCurationProvider {
     override fun getCurationsFor(pkgIds: Collection<Identifier>) =
         pkgIds.mapNotNull { pkgId ->
             packageCurations.filter { it.isApplicable(pkgId) }.takeUnless { it.isEmpty() }?.let { pkgId to it }

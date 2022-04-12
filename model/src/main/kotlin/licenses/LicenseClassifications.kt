@@ -81,13 +81,13 @@ data class LicenseClassifications(
     init {
         categories.getDuplicates { it.name }.let { duplicates ->
             require(duplicates.isEmpty()) {
-                "Found multiple license category entries with the same name: $duplicates"
+                "Found multiple license categories with the same name: ${duplicates.keys}"
             }
         }
 
         categorizations.getDuplicates { it.id }.let { duplicates ->
             require(duplicates.isEmpty()) {
-                "Found multiple license entries with the same id: $duplicates"
+                "Found multiple license categorizations with the same id: ${duplicates.keys}"
             }
         }
 

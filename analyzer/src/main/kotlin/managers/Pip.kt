@@ -55,10 +55,12 @@ import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
 
-// The lowest version that supports "--prefer-binary" and PEP 508 URL requirements to be used as dependencies.
-private const val PIP_VERSION = "18.1"
+// Use the most recent version that still supports Python 2. PIP 21.0.0 dropped Python 2 support, see
+// https://pip.pypa.io/en/stable/news/#id176.
+private const val PIP_VERSION = "20.3.4"
 
-private const val PIPDEPTREE_VERSION = "0.13.2"
+// See https://github.com/naiquevin/pipdeptree.
+private const val PIPDEPTREE_VERSION = "2.2.1"
 
 private val PHONY_DEPENDENCIES = mapOf(
     "pipdeptree" to "", // A dependency of pipdeptree itself.
@@ -72,13 +74,11 @@ private fun isPhonyDependency(name: String, version: String): Boolean =
         PHONY_DEPENDENCIES.containsKey(name) && (ignoredVersion.isEmpty() || version == ignoredVersion)
     }
 
-private const val PYDEP_REVISION = "license-and-classifiers"
-
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
 
     override fun transformVersion(output: String) =
-        // virtualenv could report versions like:
+        // The version string can be something like:
         // 16.6.1
         // virtualenv 20.0.14 from /usr/local/lib/python2.7/dist-packages/virtualenv/__init__.pyc
         output.removePrefix("virtualenv ").substringBefore(' ')
@@ -127,12 +127,9 @@ object PythonVersion : CommandLineTool {
      */
     fun getPythonInterpreter(version: Int): String? =
         if (Os.isWindows) {
-            // TODO: Make analysis compatible with Python 3.10 (not only on Windows).
-            val incompatibleVersions = listOf("3.10")
-
             val installedVersions = run("--list-paths").stdout
             val versionAndPath = installedVersions.lines().find { line ->
-                line.startsWith(" -$version") && incompatibleVersions.none { it in line }
+                line.startsWith(" -$version")
             }
 
             // Parse a line like " -2.7-32        C:\Python27\python.exe".
@@ -209,67 +206,56 @@ class Pip(
 
     override fun beforeResolution(definitionFiles: List<File>) = VirtualEnv.checkVersion()
 
-    @Suppress("LongMethod")
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
-        // 2. Get metadata about the local project via pydep (only for setup.py-based projects).
+        // 2. Get metadata about the local project via `python setup.py`.
         // 3. Get the hierarchy of dependencies via pipdeptree.
         // 4. Get additional remote package metadata via PyPIJSON.
 
         val workingDir = definitionFile.parentFile
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
-        // List all packages installed locally in the virtualenv.
-        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
+        val project = getProjectBasics(definitionFile, virtualEnvDir)
+        val (packages, installDependencies) = getInstallDependencies(definitionFile, virtualEnvDir, project.id.name)
 
-        // Get the locally available metadata for all installed packages as a fallback.
-        val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
+        // TODO: Handle "extras" and "tests" dependencies.
+        val scopes = sortedSetOf(
+            Scope("install", installDependencies)
+        )
 
-        // Install pydep after running any other command but before looking at the dependencies because it downgrades
-        // pip to version 7.1.2. Use it to get meta-information about the project from setup.py. As pydep is not on
-        // PyPI, install it from Git instead.
-        val pydepUrl = "git+https://github.com/oss-review-toolkit/pydep@$PYDEP_REVISION"
-        val pip = if (Os.isWindows) {
-            // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
-            // https://github.com/pypa/pip/issues/1299.
-            runInVirtualEnv(
-                virtualEnvDir, workingDir, "python", "-m", command(workingDir),
-                *TRUSTED_HOSTS, "install", pydepUrl
-            )
-        } else {
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", pydepUrl)
-        }
-        pip.requireSuccess()
+        // Remove the virtualenv by simply deleting the directory.
+        virtualEnvDir.safeDeleteRecursively()
 
-        var authors: SortedSet<String> = sortedSetOf()
-        var declaredLicenses: SortedSet<String> = sortedSetOf()
+        return listOf(ProjectAnalyzerResult(project.copy(scopeDependencies = scopes), packages))
+    }
+
+    private fun getProjectBasics(definitionFile: File, virtualEnvDir: File): Project {
+        val authors = sortedSetOf<String>()
+        val declaredLicenses = sortedSetOf<String>()
+
+        val workingDir = definitionFile.parentFile
 
         // First try to get metadata from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
-            val pydep = if (Os.isWindows) {
-                // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-                runInVirtualEnv(
-                    virtualEnvDir, workingDir, "python",
-                    virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", "."
-                )
-            } else {
-                runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
+            // See https://docs.python.org/3.8/distutils/setupscript.html#additional-meta-data.
+            fun getSetupPyMetadata(option: String): String? {
+                val process = runInVirtualEnv(virtualEnvDir, workingDir, "python", "setup.py", option)
+                val metadata = process.stdout.trim()
+                return metadata.takeUnless { process.isError || metadata == "UNKNOWN" }
             }
-            pydep.requireSuccess()
 
-            // What pydep actually returns as "repo_url" is either setup.py's
-            // - "url", denoting the "home page for the package", or
-            // - "download_url", denoting the "location where the package may be downloaded".
-            // So the best we can do is to map it to the project's homepage URL.
-            jsonMapper.readTree(pydep.stdout).let {
-                authors = parseAuthors(it)
-                declaredLicenses = getDeclaredLicenses(it)
-                listOf(
-                    it["project_name"].textValue(), it["version"].textValueOrEmpty(),
-                    it["repo_url"].textValueOrEmpty()
-                )
+            parseAuthorString(getSetupPyMetadata("--author")).also { authors += it }
+            getLicenseFromLicenseField(getSetupPyMetadata("--license"))?.also { declaredLicenses += it }
+            getSetupPyMetadata("--classifiers")?.lines()?.mapNotNullTo(declaredLicenses) {
+                getLicenseFromClassifier(it)
             }
+
+            listOf(
+                getSetupPyMetadata("--name").orEmpty(),
+                getSetupPyMetadata("--version").orEmpty(),
+                getSetupPyMetadata("--url").orEmpty()
+            )
         } else {
             listOf("", "", "")
         }
@@ -309,8 +295,35 @@ class Pip(
         }
         val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
 
+        return Project(
+            id = Identifier(
+                type = managerName,
+                namespace = "",
+                name = projectName,
+                version = projectVersion
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = authors,
+            declaredLicenses = declaredLicenses,
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
+            homepageUrl = setupHomepage
+        )
+    }
+
+    private fun getInstallDependencies(
+        definitionFile: File, virtualEnvDir: File, projectName: String
+    ): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
+
+        val workingDir = definitionFile.parentFile
+
+        // List all packages installed locally in the virtualenv.
+        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
+
+        // Get the locally available metadata for all installed packages as a fallback.
+        val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
         if (pipdeptree.isSuccess) {
             val fullDependencyTree = jsonMapper.readTree(pipdeptree.stdout)
@@ -347,31 +360,7 @@ class Pip(
             }
         }
 
-        // TODO: Handle "extras" and "tests" dependencies.
-        val scopes = sortedSetOf(
-            Scope("install", installDependencies)
-        )
-
-        val project = Project(
-            id = Identifier(
-                type = managerName,
-                namespace = "",
-                name = projectName,
-                version = projectVersion
-            ),
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = authors,
-            declaredLicenses = declaredLicenses,
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
-            homepageUrl = setupHomepage,
-            scopeDependencies = scopes
-        )
-
-        // Remove the virtualenv by simply deleting the directory.
-        virtualEnvDir.safeDeleteRecursively()
-
-        return listOf(ProjectAnalyzerResult(project, packages))
+        return packages to installDependencies
     }
 
     private fun getBinaryArtifact(releaseNode: ArrayNode?): RemoteArtifact {
@@ -460,7 +449,24 @@ class Pip(
         val install = installDependencies(workingDir, definitionFile, virtualEnvDir)
 
         if (install.isError) {
-            throw IOException(install.stdout)
+            log.debug {
+                // pip writes the real error message to stdout instead of stderr.
+                "First try to install dependencies using Python $projectPythonVersion failed with:\n${install.stdout}"
+            }
+
+            // If there was a problem maybe the required Python version was detected incorrectly, so simply try again
+            // with the other version.
+            projectPythonVersion = when (projectPythonVersion) {
+                2 -> 3
+                3 -> 2
+                else -> throw IllegalArgumentException("Unsupported Python version $projectPythonVersion.")
+            }
+
+            log.info { "Falling back to trying to install dependencies using Python $projectPythonVersion..." }
+
+            virtualEnvDir.safeDeleteRecursively()
+            virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
+            installDependencies(workingDir, definitionFile, virtualEnvDir).requireSuccess()
         }
 
         log.info {

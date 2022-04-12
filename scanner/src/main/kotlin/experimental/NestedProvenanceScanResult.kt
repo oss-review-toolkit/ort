@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 
@@ -135,5 +136,83 @@ data class NestedProvenanceScanResult(
         nestedProvenance.subRepositories.forEach { if (provenance == it.value) return it.key }
 
         throw IllegalArgumentException("Could not find entry for $provenance.")
+    }
+
+    fun filterByIgnorePatterns(ignorePatterns: List<String>): NestedProvenanceScanResult =
+        copy(
+            scanResults = scanResults.mapValues { (_, scanResults) ->
+                scanResults.map { it.filterByIgnorePatterns(ignorePatterns) }
+            }
+        )
+
+    /**
+     * Remove all scan results for [nestedProvenance]s which are not within the provided [path] and filter all findings
+     * within the scan results by [path], taking the sub repository paths into account.
+     * This also updates the VCS paths for all [RepositoryProvenance]s accordingly to make clear that they are not
+     * results for the whole repository.
+     *
+     * Throws an [IllegalArgumentException] if any provenance in [nestedProvenance] already has a VCS path set.
+     */
+    fun filterByVcsPath(path: String): NestedProvenanceScanResult {
+        if (path.isEmpty()) return this
+
+        val provenances = getProvenances()
+        val provenancesWithVcsPath = provenances.filter { it is RepositoryProvenance && it.vcsInfo.path.isNotBlank() }
+
+        require(provenancesWithVcsPath.isEmpty()) {
+            "Cannot filter scan results by VCS path that have a repository provenance with a non-blank VCS path " +
+                    "because their partial scan result might not contain the path to filter for. The following " +
+                    "provenances have a non-blank VCS path: ${provenancesWithVcsPath.joinToString("\n") { "\t$it" }}."
+        }
+
+        val pathsWithinProvenances = provenances.filter {
+            val provenancePath = getPath(it)
+            provenancePath.isEmpty() || path.startsWith("$provenancePath/")
+        }.associateWith { provenance ->
+            val provenancePath = getPath(provenance)
+            path.removePrefix("$provenancePath/")
+        }
+
+        fun KnownProvenance.withVcsPath() =
+            when (this) {
+                is RepositoryProvenance -> {
+                    val pathWithinProvenance = pathsWithinProvenances.getValue(this)
+                    copy(vcsInfo = vcsInfo.copy(path = pathWithinProvenance))
+                }
+
+                else -> this
+            }
+
+        // Set the VCS path of all provenances according to the provided path and filter provenances which are not
+        // within path.
+        val newNestedProvenance = NestedProvenance(
+            root = nestedProvenance.root.withVcsPath(),
+            subRepositories = nestedProvenance.subRepositories.filterValues { it in pathsWithinProvenances.keys }
+                .mapValues { (_, provenance) -> provenance.withVcsPath() as RepositoryProvenance }
+        )
+
+        // Filter findings in scan results according to the provided path, filter scan results for provenances which
+        // are not within path, and update the scan result provenances.
+        val newScanResults = scanResults.filterKeys { it in pathsWithinProvenances.keys }
+            .mapValues { (provenance, scanResults) ->
+                val pathWithinProvenance = pathsWithinProvenances.getValue(provenance)
+                scanResults.map { scanResult ->
+                    when (val scanResultProvenance = scanResult.provenance) {
+                        is RepositoryProvenance -> {
+                            scanResult.filterByPath(pathWithinProvenance)
+                                .copy(provenance = scanResultProvenance.withVcsPath())
+                        }
+
+                        else -> scanResult
+                    }
+                }
+            }.mapKeys { (provenance, _) ->
+                provenance.withVcsPath()
+            }
+
+        return NestedProvenanceScanResult(
+            nestedProvenance = newNestedProvenance,
+            scanResults = newScanResults
+        )
     }
 }

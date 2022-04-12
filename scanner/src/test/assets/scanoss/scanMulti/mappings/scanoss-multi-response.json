@@ -1,0 +1,23 @@
+{
+  "id" : "b28995c4-70e0-4fda-a1a8-c8a0ea1f1c85",
+  "name" : "scan_direct",
+  "request" : {
+    "url" : "/scan/direct",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "anything" : "anything"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{  \"c198b884-f6cf-496f-95eb-0e7968dd2ec6\": [    {      \"id\": \"snippet\",      \"status\": \"pending\",      \"lines\": \"1-240\",      \"oss_lines\": \"128-367\",      \"matched\": \"99%\",      \"purl\": [        \"pkg:github/scanoss/ort\"      ],      \"vendor\": \"scanoss\",      \"component\": \"ort\",      \"version\": \"e654028\",      \"latest\": \"b12f8ee\",      \"url\": \"https://github.com/scanoss/ort\",      \"release_date\": \"2021-03-18\",      \"file\": \"utils/src/main/kotlin/ArchiveUtils.kt\",      \"url_hash\": \"37faa38a820322fa93bf7a8fa8290bb8\",      \"file_hash\": \"871fb0c5188c2f620d9b997e225b0095\",      \"source_hash\": \"2e91edbe430c4eb195a977d326d6d6c0\",      \"file_url\": \"https://osskb.org/api/file_contents/871fb0c5188c2f620d9b997e225b0095\",      \"licenses\": [        {          \"name\": \"Apache-2.0\",          \"patent_hints\": \"yes\",          \"copyleft\": \"no\",          \"checklist_url\": \"https://www.osadl.org/fileadmin/checklists/unreflicenses/Apache-2.0.txt\",          \"osadl_updated\": \"2022-03-17 13:38\",          \"source\": \"file_spdx_tag\"        },        {          \"name\": \"Apache-2.0\",          \"patent_hints\": \"yes\",          \"copyleft\": \"no\",          \"checklist_url\": \"https://www.osadl.org/fileadmin/checklists/unreflicenses/Apache-2.0.txt\",          \"osadl_updated\": \"2022-03-17 13:38\",          \"source\": \"scancode\"        }      ],      \"server\": {        \"version\": \"4.4.2\",        \"kb_version\": {          \"monthly\": \"22.02\",          \"daily\": \"22.03.25\"        }      }    }  ],  \"5530105e-0752-4750-9c07-4e4604b879a5\": [    {      \"id\": \"file\",      \"status\": \"pending\",      \"lines\": \"all\",      \"oss_lines\": \"all\",      \"matched\": \"100%\",      \"purl\": [        \"pkg:github/scanoss/ort\"      ],      \"vendor\": \"scanoss\",      \"component\": \"ort\",      \"version\": \"e654028\",      \"latest\": \"b12f8ee\",      \"url\": \"https://github.com/scanoss/ort\",      \"release_date\": \"2021-03-18\",      \"file\": \"scanner/src/main/kotlin/ScannerFactory.kt\",      \"url_hash\": \"37faa38a820322fa93bf7a8fa8290bb8\",      \"file_hash\": \"5c8ab9be40df937e46c53509481107cd\",      \"source_hash\": \"5c8ab9be40df937e46c53509481107cd\",      \"file_url\": \"https://osskb.org/api/file_contents/5c8ab9be40df937e46c53509481107cd\",      \"licenses\": [        {          \"name\": \"Apache-2.0\",          \"patent_hints\": \"yes\",          \"copyleft\": \"no\",          \"checklist_url\": \"https://www.osadl.org/fileadmin/checklists/unreflicenses/Apache-2.0.txt\",          \"osadl_updated\": \"2022-03-17 13:38\",          \"source\": \"file_spdx_tag\"        },        {          \"name\": \"Apache-2.0\",          \"patent_hints\": \"yes\",          \"copyleft\": \"no\",          \"checklist_url\": \"https://www.osadl.org/fileadmin/checklists/unreflicenses/Apache-2.0.txt\",          \"osadl_updated\": \"2022-03-17 13:38\",          \"source\": \"scancode\"        }      ],      \"server\": {        \"version\": \"4.4.2\",        \"kb_version\": {          \"monthly\": \"22.02\",          \"daily\": \"22.03.25\"        }      }    }  ]}",
+    "headers" : {
+      "Server" : "nginx/1.14.2",
+      "Date" : "Wed, 16 Mar 2022 13:07:04 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "b28995c4-70e0-4fda-a1a8-c8a0ea1f1c85",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

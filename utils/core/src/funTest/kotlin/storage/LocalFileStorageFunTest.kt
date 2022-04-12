@@ -22,7 +22,10 @@ package org.ossreviewtoolkit.utils.core.storage
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.file.aFile
+import io.kotest.matchers.file.exist
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.io.BufferedReader
 import java.io.File
@@ -101,7 +104,7 @@ class LocalFileStorageFunTest : WordSpec() {
 
                     val file = directory.resolve("target/file")
 
-                    file.isFile shouldBe true
+                    file shouldBe aFile()
                     file.readText() shouldBe "content"
                 }
             }
@@ -113,7 +116,7 @@ class LocalFileStorageFunTest : WordSpec() {
 
                     storage.write("file", "content".byteInputStream())
 
-                    file.isFile shouldBe true
+                    file shouldBe aFile()
                     file.readText() shouldBe "content"
                 }
             }
@@ -126,7 +129,7 @@ class LocalFileStorageFunTest : WordSpec() {
 
                     val file = directory.resolve("../file")
 
-                    file.isFile shouldBe false
+                    file shouldNot exist()
                 }
             }
 

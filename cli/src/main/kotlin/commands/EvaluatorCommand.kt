@@ -211,9 +211,14 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
                 licenseClassificationsFile,
                 packageCurationsFile,
                 repositoryConfigurationFile
-        ).map { it.absolutePath }
-        println("The following configuration files are used:")
-        println("\t" + configurationFiles.joinToString("\n\t"))
+        )
+
+        val configurationInfo = configurationFiles.joinToString("\n\t") { file ->
+            file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
+        }
+
+        println("Looking for evaluator-specific configuration in the following files and directories:")
+        println("\t" + configurationInfo)
 
         // Fail early if output files exist and must not be overwritten.
         val outputFiles = mutableSetOf<File>()
@@ -236,7 +241,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
             is StringType -> {
                 val rulesResource = (rules as StringType).string
-                javaClass.classLoader.getResource(rulesResource)?.readText()
+                javaClass.getResource(rulesResource)?.readText()
                     ?: throw UsageError("Invalid rules resource '$rulesResource'.")
             }
 
@@ -278,8 +283,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         val config = globalOptionsForSubcommands.config
 
-        val packageConfigurations =
-            packageConfigurationOption.createProvider().getPackageConfigurations().toMutableList()
+        val packageConfigurations = packageConfigurationOption.createProvider().getPackageConfigurations()
+            .toMutableSet()
         val repositoryPackageConfigurations = ortResultInput.repository.config.packageConfigurations
 
         if (config.enableRepositoryPackageConfigurations) {
@@ -288,7 +293,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             log.warn { "Local package configurations were not applied because the feature is not enabled." }
         }
 
-        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations.toSet())
+        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations)
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(

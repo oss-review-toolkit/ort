@@ -2,14 +2,14 @@
 repository:
   vcs:
     type: "GitRepo"
-    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
     revision: "<REPLACE_REVISION>"
-    path: "manifest.xml"
+    path: ""
   vcs_processed:
     type: "GitRepo"
-    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml"
     revision: "<REPLACE_REVISION>"
-    path: "manifest.xml"
+    path: ""
   nested_repositories:
     spdx-tools:
       type: "Git"
@@ -388,9 +388,9 @@ analyzer:
         path: ""
       vcs_processed:
         type: "GitRepo"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
         revision: "<REPLACE_REVISION>"
-        path: "manifest.xml"
+        path: ""
       homepage_url: ""
       scope_names: []
     packages:
@@ -4288,7 +4288,7 @@ analyzer:
         declared_licenses_processed:
           spdx_expression: "MIT"
         description: "TypeScript definitions for Node.js"
-        homepage_url: ""
+        homepage_url: "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node"
         binary_artifact:
           url: ""
           hash:
@@ -4314,7 +4314,7 @@ analyzer:
       'NPM::submodules/test-data-npm/long.js/package.json:':
       - timestamp: "1970-01-01T00:00:00Z"
         source: "NPM"
-        message: "Resolving NPM dependencies for 'submodules/test-data-npm/long.js/package.json'\
+        message: "Resolving NPM dependencies for path 'submodules/test-data-npm/long.js/package.json'\
           \ failed with: IllegalArgumentException: No lockfile found in 'submodules/test-data-npm/long.js'.\
           \ This potentially results in unstable versions of dependencies. To support\
           \ this, enable the 'allowDynamicVersions' option in 'ort.conf'."

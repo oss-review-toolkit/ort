@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.scanner.scanners.scanoss
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.time.Instant
 
+import org.ossreviewtoolkit.clients.scanoss.FullScanResponse
+import org.ossreviewtoolkit.clients.scanoss.model.ScanResponse
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
@@ -33,10 +33,10 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 /**
- * Generate a summary from the given raw SCANOSS [result], using [startTime] and [endTime] metadata. From the [scanPath]
+ * Generate a summary from the given SCANOSS [result], using [startTime] and [endTime] metadata. From the [scanPath]
  * the package verification code is generated.
  */
-internal fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode) =
+internal fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: FullScanResponse) =
     generateSummary(
         startTime,
         endTime,
@@ -45,22 +45,22 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, scanPath: Fil
     )
 
 /**
- * Generate a summary from the given raw SCANOSS [result], using [startTime], [endTime], and [verificationCode]
+ * Generate a summary from the given SCANOSS [result], using [startTime], [endTime], and [verificationCode]
  * metadata. This variant can be used if the result is not read from a local file.
  */
 internal fun generateSummary(
     startTime: Instant,
     endTime: Instant,
     verificationCode: String,
-    result: JsonNode
+    result: FullScanResponse
 ): ScanSummary {
     val licenseFindings = mutableListOf<LicenseFinding>()
     val copyrightFindings = mutableListOf<CopyrightFinding>()
 
-    result.fields().asSequence().forEach { (filename, matches) ->
-        matches.asSequence().forEach { match ->
-            licenseFindings += getLicenseFindings(match, filename)
-            copyrightFindings += getCopyrightFindings(match, filename)
+    result.forEach { (_, scanResponses) ->
+        scanResponses.forEach { scanResponse ->
+            licenseFindings += getLicenseFindings(scanResponse)
+            copyrightFindings += getCopyrightFindings(scanResponse)
         }
     }
 
@@ -75,40 +75,40 @@ internal fun generateSummary(
 }
 
 /**
- * Get the license findings from the given [match]. Use [filename] as a fallback if no file is given in the match.
+ * Get the license findings from the given [scanResponse].
  */
-private fun getLicenseFindings(match: JsonNode, filename: String): Sequence<LicenseFinding> =
-    match["licenses"]?.asSequence().orEmpty().map {
-        val licenseName = it["name"].asText()
-        val licenseExpression = runCatching { SpdxExpression.parse(licenseName) }.getOrNull()
+private fun getLicenseFindings(scanResponse: ScanResponse): List<LicenseFinding> {
+    val score = scanResponse.matched.removeSuffix("%").toFloatOrNull()
+    return scanResponse.licenses.map { license ->
+        val licenseExpression = runCatching { SpdxExpression.parse(license.name) }.getOrNull()
 
-        val license = when {
+        val validatedLicense = when {
             licenseExpression == null -> SpdxConstants.NOASSERTION
-            licenseExpression.isValid() -> licenseName
-            else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-$licenseName"
+            licenseExpression.isValid() -> license.name
+            else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}"
         }
 
         LicenseFinding(
-            license = license,
+            license = validatedLicense,
             location = TextLocation(
-                path = match["file"].textValue() ?: filename,
+                path = scanResponse.file,
                 startLine = TextLocation.UNKNOWN_LINE,
                 endLine = TextLocation.UNKNOWN_LINE
-            )
+            ),
+            score = score
         )
     }
+}
 
 /**
- * Get the copyright findings from the given [match]. Use [filename] as a fallback if no file is given in the match.
+ * Get the copyright findings from the given [scanResponse].
  */
-private fun getCopyrightFindings(match: JsonNode, filename: String): Sequence<CopyrightFinding> =
-    match["copyrights"]?.asSequence().orEmpty().map {
-        val copyrightName = it["name"].asText()
-
+private fun getCopyrightFindings(scanResponse: ScanResponse): List<CopyrightFinding> =
+    scanResponse.copyrights.map { copyright ->
         CopyrightFinding(
-            statement = copyrightName,
+            statement = copyright.name,
             location = TextLocation(
-                path = match["file"].textValue() ?: filename,
+                path = scanResponse.file,
                 startLine = TextLocation.UNKNOWN_LINE,
                 endLine = TextLocation.UNKNOWN_LINE
             )

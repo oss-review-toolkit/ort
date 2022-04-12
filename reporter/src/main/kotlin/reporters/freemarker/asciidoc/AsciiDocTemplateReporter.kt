@@ -58,7 +58,7 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
         ASCII_DOC_FILE_EXTENSION,
         ASCII_DOC_TEMPLATE_DIRECTORY
     )
-    private val asciidoctor = Asciidoctor.Factory.create()
+    private val asciidoctor by lazy { Asciidoctor.Factory.create() }
 
     protected open fun processTemplateOptions(options: MutableMap<String, String>): Attributes =
         Attributes.builder().build()

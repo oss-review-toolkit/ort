@@ -44,7 +44,7 @@ class NpmVersionUrlFunTest : WordSpec() {
                 val packageFile = projectDir.resolve("package.json")
 
                 val config = AnalyzerConfiguration(allowDynamicVersions = true)
-                val result = createNPM(config).resolveSingleProject(packageFile, resolveScopes = true)
+                val result = createNpm(config).resolveSingleProject(packageFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
                     projectDir.parentFile.resolve("npm-version-urls-expected-output.yml"),
@@ -59,6 +59,6 @@ class NpmVersionUrlFunTest : WordSpec() {
         }
     }
 
-    private fun createNPM(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
+    private fun createNpm(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
         Npm("NPM", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
 }

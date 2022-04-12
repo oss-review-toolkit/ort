@@ -79,9 +79,9 @@ class CompositeStorage(
             if (remainingPackages.isEmpty()) return@forEach
 
             reader.read(remainingPackages, scannerCriteria)
-                .onSuccess {
-                    remainingPackages.filter { pkg -> pkg.id !in it.keys }
-                    results += it
+                .onSuccess { compatibleResults ->
+                    remainingPackages.removeIf { it.id in compatibleResults.keys }
+                    results += compatibleResults
                 }
                 .onFailure {
                     failures += it

@@ -76,6 +76,20 @@ class PackageRuleTest : WordSpec() {
 
                 matcher.matches() shouldBe false
             }
+
+            "return false if the package has only 'not present' licenses" {
+                val rule = createPackageRule(packageWithNotPresentLicense)
+                val matcher = rule.hasLicense()
+
+                matcher.matches() shouldBe false
+            }
+
+            "return false for non-existing packages" {
+                val rule = createPackageRule(Package.EMPTY)
+                val matcher = rule.hasLicense()
+
+                matcher.matches() shouldBe false
+            }
         }
 
         "isExcluded()" should {
@@ -196,7 +210,7 @@ class PackageRuleTest : WordSpec() {
             "return true if a severity of a vulnerability is higher than the threshold" {
                 val rule = createPackageRule(packageWithVulnerabilities)
                 val matcher = rule.hasVulnerability("8.9", "CVSS3") { value, threshold ->
-                    value.toFloat().compareTo(threshold.toFloat())
+                    value.toFloat() >= threshold.toFloat()
                 }
 
                 matcher.matches() shouldBe true
@@ -205,7 +219,7 @@ class PackageRuleTest : WordSpec() {
             "return false if a severity of a vulnerability is lower than the threshold" {
                 val rule = createPackageRule(packageWithVulnerabilities)
                 val matcher = rule.hasVulnerability("9.1", "CVSS3") { value, threshold ->
-                    value.toFloat().compareTo(threshold.toFloat())
+                    value.toFloat() >= threshold.toFloat()
                 }
 
                 matcher.matches() shouldBe false
@@ -214,7 +228,7 @@ class PackageRuleTest : WordSpec() {
             "return true if a severity of a vulnerability is the same as the threshold" {
                 val rule = createPackageRule(packageWithVulnerabilities)
                 val matcher = rule.hasVulnerability("9.0", "CVSS3") { value, threshold ->
-                    value.toFloat().compareTo(threshold.toFloat())
+                    value.toFloat() >= threshold.toFloat()
                 }
 
                 matcher.matches() shouldBe true
@@ -223,7 +237,7 @@ class PackageRuleTest : WordSpec() {
             "return true if a severity of a vulnerability is the same as the threshold without decimals" {
                 val rule = createPackageRule(packageWithVulnerabilities)
                 val matcher = rule.hasVulnerability("9", "CVSS3") { value, threshold ->
-                    value.toFloat().compareTo(threshold.toFloat())
+                    value.toFloat() >= threshold.toFloat()
                 }
 
                 matcher.matches() shouldBe true
@@ -232,7 +246,7 @@ class PackageRuleTest : WordSpec() {
             "return false if no vulnerability is found for the scoringSystem" {
                 val rule = createPackageRule(packageWithVulnerabilities)
                 val matcher = rule.hasVulnerability("10.0", "fake-scoring-system") { value, threshold ->
-                    value.toFloat().compareTo(threshold.toFloat())
+                    value.toFloat() >= threshold.toFloat()
                 }
 
                 matcher.matches() shouldBe false

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
 import org.ossreviewtoolkit.scanner.ScanException
+import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
@@ -40,11 +41,16 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
-class Licensee(
+class Licensee internal constructor(
     name: String,
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    class LicenseeFactory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            Licensee(scannerName, scannerConfig, downloaderConfig)
+    }
+
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             Licensee(scannerName, scannerConfig, downloaderConfig)
@@ -66,13 +72,6 @@ class Licensee(
 
     override fun bootstrap(): File {
         val gem = if (Os.isWindows) "gem.cmd" else "gem"
-
-        if (Os.isWindows) {
-            // Version 0.28.0 of rugged broke building on Windows and the fix is unreleased yet, see
-            // https://github.com/libgit2/rugged/commit/2f5a8f6c8f4ae9b94a2d1f6ffabc315f2592868d. So install the latest
-            // version < 0.28.0 (and => 0.24.0) manually to satisfy Licensee's needs.
-            ProcessCapture(gem, "install", "rugged", "-v", "0.27.10.1").requireSuccess()
-        }
 
         ProcessCapture(gem, "install", "--user-install", "licensee", "-v", expectedVersion).requireSuccess()
 
@@ -116,7 +115,8 @@ class Licensee(
                     // The path is already relative.
                     filePath.path,
                     TextLocation.UNKNOWN_LINE
-                )
+                ),
+                score = it["matcher"]["confidence"].floatValue()
             )
         }
 

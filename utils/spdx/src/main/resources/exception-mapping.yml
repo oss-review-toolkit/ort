@@ -1,0 +1,138 @@
+# Sort the entries below via IntelliJ's "Edit" -> "Sort Lines".
+---
+389-exception:
+- GPL-2.0-only
+- GPL-2.0-or-later
+Autoconf-exception-2.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+Autoconf-exception-3.0:
+- GPL-3.0-only
+- GPL-3.0-or-later
+Bison-exception-2.2:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+Bootloader-exception:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+CLISP-exception-2.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+Classpath-exception-2.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+DigiRule-FOSS-exception:
+- GPL-2.0-only
+- GPL-2.0-or-later
+FLTK-exception:
+- LGPL-2.0-only
+Fawkes-Runtime-exception:
+- GPL-2.0-only
+Font-exception-2.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+GCC-exception-2.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+GCC-exception-3.1:
+- GPL-3.0-only
+- GPL-3.0-or-later
+GPL-3.0-linking-exception:
+- GPL-3.0-only
+- GPL-3.0-or-later
+GPL-3.0-linking-source-exception:
+- GPL-3.0-only
+- GPL-3.0-or-later
+GPL-CC-1.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- LGPL-2.0-only
+- LGPL-2.0-or-later
+- LGPL-2.1-only
+- LGPL-2.1-or-later
+LGPL-3.0-linking-exception:
+- LGPL-3.0-only
+- LGPL-3.0-or-later
+LLVM-exception:
+- Apache-2.0
+LZMA-exception:
+- CPL-1.0
+Libtool-exception:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+Linux-syscall-note:
+- GPL-2.0-only
+Nokia-Qt-exception-1.1:
+- LGPL-2.1-only
+OCCT-exception-1.0:
+- LGPL-2.1-only
+OCaml-LGPL-linking-exception:
+- LGPL-2.0-only
+- LGPL-2.0-or-later
+- LGPL-2.1-only
+- LGPL-2.1-or-later
+- LGPL-3.0-only
+- LGPL-3.0-or-later
+OpenJDK-assembly-exception-1.0:
+- GPL-2.0-only
+PS-or-PDF-font-exception-20170817:
+- AGPL-3.0
+Qt-GPL-exception-1.0:
+- GPL-3.0-only
+Qt-LGPL-exception-1.1:
+- LGPL-2.1-only
+- LGPL-2.1-or-later
+Qwt-exception-1.0:
+- LGPL-2.1-only
+- LGPL-2.1-or-later
+SHL-2.0:
+- Apache-2.0
+SHL-2.1:
+- Apache-2.0
+Swift-exception:
+- Apache-2.0
+Universal-FOSS-exception-1.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+WxWindows-exception-3.1:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+eCos-exception-2.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+freertos-exception-2.0:
+- GPL-2.0-only
+gnu-javamail-exception:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+i2p-gpl-java-exception:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+mif-exception:
+- GPL-2.0-only
+openvpn-openssl-exception:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later
+u-boot-exception-2.0:
+- GPL-2.0-only
+- GPL-2.0-or-later
+- GPL-3.0-only
+- GPL-3.0-or-later

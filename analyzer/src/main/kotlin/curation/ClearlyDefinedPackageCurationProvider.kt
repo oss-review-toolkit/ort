@@ -30,11 +30,11 @@ import okhttp3.OkHttpClient
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributedCurations
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.ContributedCurations
+import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
+import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration

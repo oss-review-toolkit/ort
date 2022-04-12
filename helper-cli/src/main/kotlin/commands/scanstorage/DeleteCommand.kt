@@ -23,16 +23,19 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.regexp
 import org.jetbrains.exposed.sql.compoundAnd
 import org.jetbrains.exposed.sql.compoundOr
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.select
 
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
 import org.ossreviewtoolkit.model.SourceCodeOrigin
@@ -67,14 +70,17 @@ internal class DeleteCommand : CliktCommand(
     private val sourceCodeOrigins by option(
         "--source-code-origins",
         help = "The origin of the scan results that should be deleted."
-    ).convert { SourceCodeOrigin.valueOf(it) }
-        .split(",")
-        .default(emptyList())
+    ).enum<SourceCodeOrigin>().split(",").default(emptyList())
 
-    private val packageType by option(
-        "--package-type",
-        help = "The package manager type to delete from the scan storage. Like 'Maven' or 'NPM'."
+    private val packageId by option(
+        "--package-id",
+        help = "A regular expression for matching the package id."
     )
+
+    private val dryRun by option(
+        "--dry-run",
+        help = "Perform a dry run without actually deleting anything."
+    ).flag()
 
     override fun run() {
         val database = connectPostgresStorage(OrtConfiguration.load(configArguments, configFile))
@@ -86,12 +92,12 @@ internal class DeleteCommand : CliktCommand(
             }
         }
 
-        val typeCondition = packageType?.let { ScanResults.identifier like "$it:%" }
+        val identifierCondition = packageId?.let { ScanResults.identifier regexp it }
         val provenanceConditions = provenanceKeys.map { key ->
-                rawParam("scan_result->'provenance'->>'$key'").isNotNull()
-            }.takeIf { it.isNotEmpty() }?.compoundOr()
+            rawParam("scan_result->'provenance'->>'$key'").isNotNull()
+        }.takeIf { it.isNotEmpty() }?.compoundOr()
 
-        val conditions = listOfNotNull(typeCondition, provenanceConditions)
+        val conditions = listOfNotNull(identifierCondition, provenanceConditions)
         if (conditions.isEmpty()) {
             // Default to the safe option to not delete anything if no conditions are given.
             println("Not specified what entries to delete. Not deleting anything.")
@@ -100,11 +106,27 @@ internal class DeleteCommand : CliktCommand(
         }
 
         val condition = conditions.compoundAnd()
-        database.transaction {
-            ScanResults.deleteWhere { condition }
-        }
 
-        log.info { "Successfully deleted stored scan results." }
+        if (dryRun) {
+            val count = database.transaction {
+                ScanResults.select { condition }.count()
+            }
+
+            println("Would delete $count scan result(s).")
+
+            if (log.delegate.isDebugEnabled) {
+                database.transaction {
+                    ScanResults.slice(ScanResults.identifier).select { condition }
+                        .forEach(this@DeleteCommand.log::debug)
+                }
+            }
+        } else {
+            val count = database.transaction {
+                ScanResults.deleteWhere { condition }
+            }
+
+            println("Successfully deleted $count stored scan result(s).")
+        }
     }
 
     private fun connectPostgresStorage(config: OrtConfiguration): Database {
@@ -121,6 +143,6 @@ internal class DeleteCommand : CliktCommand(
             maxPoolSize = 1
         )
 
-        return Database.connect(dataSource)
+        return Database.connect(dataSource.value)
     }
 }

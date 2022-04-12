@@ -36,7 +36,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
 
-import java.io.File
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -170,6 +169,38 @@ class FossIdTest : WordSpec({
 
             coVerify(exactly = 0) {
                 service.createProject(any())
+            }
+        }
+
+        "throw an exception if the scan download failed" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+
+            val service = config.createService()
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDeleteScan(scanCode)
+
+            coEvery { service.downloadFromGit(USER, API_KEY, scanCode) } returns
+                    EntityResponseBody(status = 1)
+            coEvery { service.checkDownloadStatus(USER, API_KEY, scanCode) } returns
+                    EntityResponseBody(status = 1, data = DownloadStatus.FAILED)
+
+            val fossId = createFossId(config)
+            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                // The fact that deleteScan has been called is a proof that an exception has been thrown.
+                service.deleteScan(USER, API_KEY, scanCode)
             }
         }
 

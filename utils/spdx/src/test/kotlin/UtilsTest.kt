@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 class UtilsTest : WordSpec() {
     private lateinit var tempDir: File
 
-    override fun beforeEach(testCase: TestCase) {
+    override suspend fun beforeEach(testCase: TestCase) {
         tempDir = createTestTempDir()
     }
 
@@ -137,6 +137,13 @@ class UtilsTest : WordSpec() {
         "getLicenseText" should {
             "return the full license text for a valid SPDX license id" {
                 val text = getLicenseText("Apache-2.0")?.trim()
+
+                text should startWith("Apache License")
+                text should endWith("limitations under the License.")
+            }
+
+            "return the full license text for a valid SPDX license id with the '+' operator" {
+                val text = getLicenseText("Apache-2.0+")?.trim()
 
                 text should startWith("Apache License")
                 text should endWith("limitations under the License.")

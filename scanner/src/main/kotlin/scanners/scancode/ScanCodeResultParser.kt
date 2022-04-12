@@ -34,15 +34,18 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
-private data class LicenseExpression(
+private data class LicenseMatch(
     val expression: String,
     val startLine: Int,
-    val endLine: Int
+    val endLine: Int,
+    val score: Float
 )
 
 data class LicenseKeyReplacement(
@@ -64,10 +67,25 @@ private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
 )
 
-private val UNKNOWN_LICENSE_KEYS = listOf(
-    "free-unknown",
-    "unknown",
-    "unknown-license-reference"
+// A list of ScanCode-specific LicenseRefs that do not actually name concrete licenses, but which are generic findings
+// that "look like" licenses.
+private val NOASSERTION_LICENSE_REFS = listOf(
+    // https://scancode-licensedb.aboutcode.org/?search=unknown
+    "LicenseRef-scancode-free-unknown",
+    "LicenseRef-scancode-unknown",
+    "LicenseRef-scancode-unknown-license-reference",
+    "LicenseRef-scancode-unknown-spdx",
+
+    // https://scancode-licensedb.aboutcode.org/?search=generic
+    "LicenseRef-scancode-agpl-generic-additional-terms",
+    "LicenseRef-scancode-generic-cla",
+    "LicenseRef-scancode-generic-exception",
+    "LicenseRef-scancode-generic-export-compliance",
+    "LicenseRef-scancode-generic-tos",
+    "LicenseRef-scancode-generic-trademark",
+    "LicenseRef-scancode-gpl-generic-additional-terms",
+    "LicenseRef-scancode-patent-disclaimer",
+    "LicenseRef-scancode-warranty-disclaimer"
 )
 
 /**
@@ -175,33 +193,35 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
 
         licenses.groupBy(
             keySelector = {
-                LicenseExpression(
+                LicenseMatch(
                     // Older ScanCode versions do not produce the `license_expression` field.
                     // Just use the `key` field in this case.
                     it["matched_rule"]?.get("license_expression")?.textValue().takeIf { parseExpressions }
                         ?: it["key"].textValue(),
                     it["start_line"].intValue(),
-                    it["end_line"].intValue()
+                    it["end_line"].intValue(),
+                    it["score"].floatValue()
                 )
             },
             valueTransform = {
                 LicenseKeyReplacement(it["key"].textValue(), getSpdxLicenseId(it))
             }
-        ).map { (licenseExpression, replacements) ->
-            val spdxLicenseExpression = replaceLicenseKeys(licenseExpression.expression, replacements)
+        ).map { (licenseMatch, replacements) ->
+            val spdxLicenseExpression = replaceLicenseKeys(licenseMatch.expression, replacements)
 
             LicenseFinding(
                 license = spdxLicenseExpression,
                 location = TextLocation(
                     path = file["path"].textValue().removePrefix(input),
-                    startLine = licenseExpression.startLine,
-                    endLine = licenseExpression.endLine
-                )
+                    startLine = licenseMatch.startLine,
+                    endLine = licenseMatch.endLine
+                ),
+                score = licenseMatch.score
             )
         }
     }
 
-    return licenseFindings
+    return associateLicensesWithExceptions(licenseFindings)
 }
 
 /**
@@ -209,24 +229,24 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
  */
 private fun getSpdxLicenseId(license: JsonNode): String {
     // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
-    val id = license["spdx_license_key"].textValueOrEmpty()
+    val idFromSpdxKey = license["spdx_license_key"].textValueOrEmpty().toSpdxId(allowPlusSuffix = true)
 
     // For regular SPDX IDs, return early here.
-    if (id.isNotEmpty() && !id.startsWith(LICENSE_REF_PREFIX)) return id
+    if (idFromSpdxKey.isNotEmpty() && !idFromSpdxKey.startsWith(LICENSE_REF_PREFIX)) return idFromSpdxKey
 
     // Before version 2.9.8, ScanCode used SPDX LicenseRefs that did not include the "scancode" namespace, like
     // "LicenseRef-Proprietary-HERE" instead of now "LicenseRef-scancode-here-proprietary", see
     // https://github.com/nexB/scancode-toolkit/blob/f94f716/src/licensedcode/data/licenses/here-proprietary.yml#L6-L8
     // But if the "scancode" namespace is present, return early here.
-    if (id.startsWith(LICENSE_REF_PREFIX_SCAN_CODE)) return id
+    val id = idFromSpdxKey.takeIf { it.startsWith(LICENSE_REF_PREFIX_SCAN_CODE) } ?: run {
+        // At this point the ID is either empty or a non-ScanCode SPDX LicenseRef, so fall back to building an ID based
+        // on the ScanCode-specific "key".
+        val idFromKey = license["key"].textValue().toSpdxId(allowPlusSuffix = true)
 
-    // At this point the ID is either empty or a non-"scancode" SPDX LicenseRef that needs to be fixed up.
-    val key = license["key"].textValue().replace('_', '-')
-    return if (key in UNKNOWN_LICENSE_KEYS) {
-        SpdxConstants.NOASSERTION
-    } else {
-        "$LICENSE_REF_PREFIX_SCAN_CODE$key"
+        "$LICENSE_REF_PREFIX_SCAN_CODE$idFromKey"
     }
+
+    return id.takeUnless { it in NOASSERTION_LICENSE_REFS } ?: SpdxConstants.NOASSERTION
 }
 
 /**
@@ -235,14 +255,11 @@ private fun getSpdxLicenseId(license: JsonNode): String {
  */
 internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collection<LicenseKeyReplacement>): String =
     replacements.fold(licenseExpression) { expression, replacement ->
-        var result = expression
-        val regex = "(?:^| |\\()(${replacement.scanCodeLicenseKey})(?:$| |\\))".toRegex()
+        val regex = "(^| |\\()(${replacement.scanCodeLicenseKey})($| |\\))".toRegex()
 
-        regex.findAll(expression).forEach {
-            result = expression.replaceRange(it.groups[1]!!.range, replacement.spdxExpression)
+        regex.replace(expression) {
+            "${it.groupValues[1]}${replacement.spdxExpression}${it.groupValues[3]}"
         }
-
-        result
     }
 
 /**

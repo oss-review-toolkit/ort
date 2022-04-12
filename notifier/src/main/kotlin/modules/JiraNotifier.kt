@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.notifier.modules
 import com.atlassian.jira.rest.client.api.JiraRestClient
 import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import com.atlassian.jira.rest.client.api.domain.Comment
+import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.api.domain.input.TransitionInput
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory
@@ -32,11 +33,12 @@ import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.core.log
 
-class JiraNotifier(
-    val config: JiraConfiguration,
-    private val restClient: JiraRestClient = AsynchronousJiraRestClientFactory()
-        .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
-) {
+class JiraNotifier(private val restClient: JiraRestClient) {
+    constructor(config: JiraConfiguration) : this(
+        AsynchronousJiraRestClientFactory()
+            .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
+    )
+
     /**
      * Create a [comment] within the issue specified by the [issueKey].
      */
@@ -45,6 +47,21 @@ class JiraNotifier(
         val issue = restClient.issueClient.getIssue(issueKey).claim()
 
         restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
+    }
+
+    /**
+     * Change the [assignee] of the give issue specified by the [issueKey].
+     */
+    fun changeAssignee(issueKey: String, assignee: String): Boolean {
+        val input = IssueInputBuilder().setAssigneeName(assignee).build()
+
+        return runCatching {
+            restClient.issueClient.updateIssue(issueKey, input)
+        }.onFailure {
+            log.error {
+                "Could not set the assignee to '$assignee' for issue '$issueKey': ${it.collectMessagesAsString()}"
+            }
+        }.isSuccess
     }
 
     /**
@@ -66,14 +83,28 @@ class JiraNotifier(
     }
 
     /**
+     * Return the issue for the given [issueKey].
+     */
+    fun getIssue(issueKey: String): Issue? {
+        return runCatching {
+            restClient.issueClient.getIssue(issueKey).claim()
+        }.onFailure {
+            log.error {
+                "Could not retrieve the issue with the key '$issueKey' due to: ${it.collectMessagesAsString()}"
+            }
+        }.getOrNull()
+    }
+
+    /**
      * Returns a [ProjectIssueBuilder] object, which can be used to do operations for the given [projectKey].
      */
     fun projectIssueBuilder(projectKey: String): ProjectIssueBuilder =
         ProjectIssueBuilder(projectKey, restClient)
 
     class ProjectIssueBuilder(private val projectKey: String, private val restClient: JiraRestClient) {
-        private val issueTypes = restClient.projectClient.getProject(projectKey).claim()
-            .issueTypes.associateBy { it.name }
+        private val issueTypes by lazy {
+            restClient.projectClient.getProject(projectKey).claim().issueTypes.associateBy { it.name }
+        }
 
         /**
          * Create an issue for the project with the usage of [summary], [description] and [issueType]. If an [assignee]
@@ -117,7 +148,7 @@ class JiraNotifier(
                 //       An improvement has to be added here so that it can handle the case that the search returns more
                 //       than one issue.
                 if (searchResult.total == 1) {
-                    val issue = restClient.issueClient.getIssue(searchResult.issues.iterator().next().key).claim()
+                    val issue = searchResult.issues.first()
                     val comment = "$summary\n$description"
 
                     if (comment in issue.comments.mapNotNull { it.body }) {

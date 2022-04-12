@@ -130,7 +130,7 @@ data class SpdxDocument(
     val relationships: List<SpdxRelationship> = emptyList()
 ) {
     init {
-        require(spdxId.isNotBlank()) { "The SPDX-Id must not be blank." }
+        require(spdxId.isNotBlank()) { "The SPDX-ID must not be blank." }
 
         require(spdxVersion.isNotBlank()) { "The SPDX version must not be blank." }
 
@@ -143,24 +143,24 @@ data class SpdxDocument(
         val duplicateExternalDocumentRefs = externalDocumentRefs.getDuplicates { it.externalDocumentId }
         require(duplicateExternalDocumentRefs.isEmpty()) {
             "The document must not contain duplicate external document references but has " +
-                    "$duplicateExternalDocumentRefs."
+                    "${duplicateExternalDocumentRefs.keys}."
         }
 
         require(documentNamespace.isNotBlank()) { "The document namespace must not be blank." }
 
         val duplicatePackages = packages.getDuplicates { it.spdxId }
         require(duplicatePackages.isEmpty()) {
-            "The document must not contain duplicate packages but has $duplicatePackages."
+            "The document must not contain duplicate packages but has ${duplicatePackages.keys}."
         }
 
         val duplicateFiles = files.getDuplicates { it.spdxId }
         require(duplicateFiles.isEmpty()) {
-            "The document must not contain duplicate files but has $duplicateFiles."
+            "The document must not contain duplicate files but has ${duplicateFiles.keys}."
         }
 
         val duplicateSnippets = snippets.getDuplicates { it.spdxId }
         require(duplicateSnippets.isEmpty()) {
-            "The document must not contain duplicate snippets but has $duplicateSnippets."
+            "The document must not contain duplicate snippets but has ${duplicateSnippets.keys}."
         }
 
         val hasDescribesRelationship = relationships.any { it.relationshipType == SpdxRelationship.Type.DESCRIBES }

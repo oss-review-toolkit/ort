@@ -32,16 +32,13 @@ import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.Ci
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResultObject
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class SbtFunTest : StringSpec({
-    "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly".config(
-        enabled = !Ci.isAzureWindows // Disabled as a prompt in Sbt 1.5.0 blocks execution when getting the version.
-    ) {
+    "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
         val projectName = "sbt-multi-project-example"
         val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
         val expectedOutputFile = projectDir.parentFile.resolve("$projectName-expected-output.yml")
@@ -58,9 +55,7 @@ class SbtFunTest : StringSpec({
         patchActualResultObject(ortResult, patchStartAndEndTime = true).withResolvedScopes() shouldBe expectedResult
     }
 
-    "Dependencies of the synthetic 'http4s-template' project should be detected correctly".config(
-        enabled = !Ci.isAzureWindows // Disabled as a prompt in Sbt 1.5.0 blocks execution when getting the version.
-    ) {
+    "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
         val projectName = "sbt-http4s-template"
         val projectDir = File("src/funTest/assets/projects/synthetic/$projectName").absoluteFile
         val expectedOutputFile = projectDir.parentFile.resolve("$projectName-expected-output.yml")

@@ -23,12 +23,11 @@ package org.ossreviewtoolkit.scanner.experimental
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.IOException
-
-import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -37,14 +36,13 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.containExactly
 
 class DefaultNestedProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
     private val resolver = DefaultNestedProvenanceResolver(DummyNestedProvenanceStorage(), workingTreeCache)
 
-    override fun afterSpec(spec: Spec) {
-        runBlocking { workingTreeCache.shutdown() }
+    override suspend fun afterSpec(spec: Spec) {
+        workingTreeCache.shutdown()
     }
 
     init {
@@ -129,9 +127,8 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT_REPO,
-                        url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git",
-                        revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa",
-                        path = "manifest.xml"
+                        url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml",
+                        revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
                     ),
                     resolvedRevision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
                 )

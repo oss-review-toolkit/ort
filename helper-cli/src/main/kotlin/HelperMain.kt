@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.helper
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
+import com.github.ajalt.clikt.output.CliktHelpFormatter
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -31,6 +32,7 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.helper.commands.CreateAnalyzerResultCommand
+import org.ossreviewtoolkit.helper.commands.DownloadResultsFromPostgresCommand
 import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.GenerateTimeoutErrorResolutionsCommand
 import org.ossreviewtoolkit.helper.commands.GetPackageLicensesCommand
@@ -73,6 +75,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
     init {
         context {
             expandArgumentFiles = false
+            helpFormatter = CliktHelpFormatter(showDefaultValues = true)
         }
 
         subcommands(
@@ -80,6 +83,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             ExtractRepositoryConfigurationCommand(),
             GenerateTimeoutErrorResolutionsCommand(),
             GetPackageLicensesCommand(),
+            DownloadResultsFromPostgresCommand(),
             ImportCopyrightGarbageCommand(),
             ImportScanResultsCommand(),
             ListCopyrightsCommand(),

@@ -62,6 +62,6 @@ data class SpdxExtractedLicenseInfo(
     init {
         require(extractedText.isNotBlank()) { "The extracted text must not be blank." }
 
-        require(licenseId.isNotBlank()) { "The license Id must not be blank." }
+        require(licenseId.isNotBlank()) { "The license ID must not be blank." }
     }
 }

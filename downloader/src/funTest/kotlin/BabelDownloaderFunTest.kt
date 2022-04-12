@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 class BabelDownloaderFunTest : StringSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 

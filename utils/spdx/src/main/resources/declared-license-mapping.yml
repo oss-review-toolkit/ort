@@ -58,6 +58,7 @@
 "Apache version 2.0": Apache-2.0
 "Apache, Version 2.0": Apache-2.0
 "Apache-2.0 */ &#39; &quot; &#x3D;end --\n": Apache-2.0
+"Apache-2.0 license": Apache-2.0
 "Apple Public Source License": APSL-1.0
 "Artistic 2.0": Artistic-2.0
 "Artistic License": Artistic-2.0
@@ -105,7 +106,7 @@
 "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication": CC0-1.0
 "CC0 1.0 Universal License": CC0-1.0
 "CC0 1.0 Universal": CC0-1.0
-"CDDL + GPLv2 with classpath exception": CDDL-1.0 AND GPL-2.0-only WITH Classpath-exception-2.0
+"CDDL + GPLv2 with classpath exception": CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0
 "CDDL 1.0": CDDL-1.0
 "CDDL 1.1": CDDL-1.1
 "CDDL License": CDDL-1.0
@@ -113,9 +114,9 @@
 "CDDL or GPLv2 with exceptions": CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0
 "CDDL v1.0 / GPL v2 dual license": CDDL-1.0 OR GPL-2.0-only
 "CDDL v1.1 / GPL v2 dual license": CDDL-1.0 OR GPL-2.0-only
-"CDDL+GPL License": CDDL-1.0 AND GPL-2.0-or-later
-"CDDL+GPL": CDDL-1.0 AND GPL-2.0-or-later
-"CDDL+GPLv2": CDDL-1.0 AND GPL-2.0-only
+"CDDL+GPL License": CDDL-1.0 OR GPL-2.0-or-later
+"CDDL+GPL": CDDL-1.0 OR GPL-2.0-or-later
+"CDDL+GPLv2": CDDL-1.0 OR GPL-2.0-only
 "CDDL, v1.0": CDDL-1.0
 "CDDL/GPLv2 dual license": CDDL-1.0 OR GPL-2.0-only
 "CDDL/GPLv2+CE": CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0
@@ -166,12 +167,13 @@
 "Creative Commons": CC-BY-3.0
 "DBAD": LicenseRef-scancode-dbad
 "DFSG approved": LicenseRef-scancode-free-unknown
-"Dual License: CDDL 1.0 and GPL V2 with Classpath Exception": CDDL-1.0 AND GPL-2.0-only
-"Dual license consisting of the CDDL v1.1 and GPL v2": CDDL-1.1 AND GPL-2.0-only
+"Dual License: CDDL 1.0 and GPL V2 with Classpath Exception": CDDL-1.0 OR GPL-2.0-only
+"Dual license consisting of the CDDL v1.1 and GPL v2": CDDL-1.1 OR GPL-2.0-only
 "EDL 1.0": BSD-3-Clause
 "EPL (Eclipse Public License), V1.0 or later": EPL-1.0
 "Eclipse Distribution License (EDL), Version 1.0": BSD-3-Clause
 "Eclipse Distribution License (New BSD License)": BSD-3-Clause
+"Eclipse Distribution License - Version 1.0": BSD-3-Clause
 "Eclipse Distribution License - v 1.0": BSD-3-Clause
 "Eclipse Distribution License v. 1.0": BSD-3-Clause
 "Eclipse Public License (EPL) 1.0": EPL-1.0
@@ -257,6 +259,7 @@
 "GNU Lesser General Public License 2.1": LGPL-2.1-only
 "GNU Lesser General Public License Version 2.1": LGPL-2.1-only
 "GNU Lesser General Public License Version 2.1, February 1999": LGPL-2.1-only
+"GNU Lesser General Public License v2 (LGPLv2)": LGPL-2.0-only
 "GNU Lesser General Public License v2 or later (LGPLv2+)": LGPL-2.0-or-later
 "GNU Lesser General Public License v3 (LGPLv3)": LGPL-3.0-only
 "GNU Lesser General Public License v3 or later (LGPLv3+)": LGPL-3.0-or-later
@@ -264,6 +267,7 @@
 "GNU Lesser General Public License": LGPL-2.1-or-later
 "GNU Lesser General Public License, Version 2.1": LGPL-2.1-only
 "GNU Lesser General Public License, Version 2.1, February 1999": LGPL-2.1-only
+"GNU Lesser General Public License, Version 3": LGPL-3.0-only
 "GNU Lesser Public License": LGPL-2.1-or-later
 "GNU Library or Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "GNU Library or Lesser General Public License version 2.0 (LGPLv2)": LGPL-2.0-only
@@ -302,6 +306,7 @@
 "LGPL 3.0": LGPL-3.0-only
 "LGPL v3": LGPL-3.0-only
 "LGPL v3+": LGPL-3.0-or-later
+"LGPL v3.0": LGPL-3.0-only
 "LGPL with exceptions or ZPL": LGPL-3.0-or-later OR ZPL-2.1
 "LGPL+BSD": LGPL-2.1-or-later AND BSD-2-Clause
 "LGPL, v2.1 or later": LGPL-2.1-or-later
@@ -370,6 +375,7 @@
 "Python License (CNRI)": CNRI-Python
 "Python Software Foundation License": PSF-2.0
 "Python Software Foundation": PSF-2.0
+"Python license": PSF-2.0
 "Qt Public License (QPL)": QPL-1.0
 "Qt Public License": QPL-1.0
 "Revised BSD License": BSD-3-Clause

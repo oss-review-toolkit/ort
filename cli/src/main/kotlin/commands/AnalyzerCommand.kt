@@ -38,6 +38,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
+import org.ossreviewtoolkit.analyzer.curation.CompositePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.OrtConfigPackageCurationProvider
@@ -180,15 +181,24 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             }
         }
 
-        val actualRepositoryConfigurationFile = (repositoryConfigurationFile
-            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)).takeIf { it.isFile }
+        // Manually set a default value based on another option to avoid a "Cannot read from option delegate before
+        // parsing command line" error.
+        val actualRepositoryConfigurationFile = repositoryConfigurationFile
+            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)
 
-        val configurationFiles = listOfNotNull(
-            packageCurationsFile, packageCurationsDir, actualRepositoryConfigurationFile
-        ).map { it.absolutePath }
+        val configurationFiles = listOf(
+            packageCurationsFile,
+            packageCurationsDir,
+            actualRepositoryConfigurationFile,
+            resolutionsFile
+        )
 
-        println("The following configuration files and directories are used:")
-        println("\t" + configurationFiles.joinToString("\n\t"))
+        val configurationInfo = configurationFiles.joinToString("\n\t") { file ->
+            file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
+        }
+
+        println("Looking for analyzer-specific configuration in the following files and directories:")
+        println("\t" + configurationInfo)
 
         val distinctPackageManagers = activatedPackageManagers.toSet() - deactivatedPackageManagers.toSet()
         println("The following package managers are activated:")
@@ -199,40 +209,45 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val config = globalOptionsForSubcommands.config
         val analyzer = Analyzer(config.analyzer, labels)
 
-        val repositoryConfiguration = actualRepositoryConfigurationFile?.readValueOrNull() ?: RepositoryConfiguration()
+        val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
+            ?: RepositoryConfiguration()
 
-        val packageCurations =
-            FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations.toMutableList()
+        val localCurationProviders = buildList {
+            add(FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir))
 
-        val repositoryPackageCurations = repositoryConfiguration.curations.packages
+            val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
-        if (config.enableRepositoryPackageCurations) {
-            packageCurations += repositoryPackageCurations
-        } else if (repositoryPackageCurations.isNotEmpty()) {
-            log.warn { "Local package curation were not applied because the feature is not enabled." }
+            if (config.enableRepositoryPackageCurations) {
+                add(SimplePackageCurationProvider(repositoryPackageCurations))
+            } else if (repositoryPackageCurations.isNotEmpty()) {
+                log.warn {
+                    "Existing package curations from '$ORT_REPO_CONFIG_FILENAME' are not applied because the feature " +
+                            "is disabled."
+                }
+            }
         }
 
-        val curationProvider = FallbackPackageCurationProvider(
-            listOfNotNull(
-                SimplePackageCurationProvider(packageCurations.toSet()),
-                config.analyzer.sw360Configuration?.let {
-                    Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
-                },
-                OrtConfigPackageCurationProvider().takeIf { useOrtCurations },
-                ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
-            )
+        val curationProviders = listOfNotNull(
+            CompositePackageCurationProvider(localCurationProviders),
+            config.analyzer.sw360Configuration?.let {
+                Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
+            },
+            OrtConfigPackageCurationProvider().takeIf { useOrtCurations },
+            ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
         )
+
+        val curationProvider = FallbackPackageCurationProvider(curationProviders)
 
         val info = analyzer.findManagedFiles(inputDir, distinctPackageManagers, repositoryConfiguration)
         if (info.managedFiles.isEmpty()) {
-            println("No project found.")
+            println("No definition files found.")
         } else {
             val filesPerManager = info.managedFiles.mapKeysTo(sortedMapOf()) { it.key.managerName }
             var count = 0
 
             filesPerManager.forEach { (manager, files) ->
                 count += files.size
-                println("Found ${files.size} $manager project(s) at:")
+                println("Found ${files.size} $manager definition file(s) at:")
 
                 files.forEach { file ->
                     val relativePath = file.toRelativeString(inputDir).takeIf { it.isNotEmpty() } ?: "."
@@ -240,10 +255,17 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
                 }
             }
 
-            println("Found $count project(s) from ${filesPerManager.size} package manager(s) in total.")
+            println("Found $count definition file(s) from ${filesPerManager.size} package manager(s) in total.")
         }
 
         val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
+
+        val projectCount = ortResult.getProjects().size
+        val packageCount = ortResult.getPackages().size
+        println("Found $projectCount project(s) and $packageCount package(s) in total (not counting excluded ones).")
+
+        val curationCount = ortResult.getPackages().sumOf { it.curations.size }
+        println("Applied $curationCount curation(s) from ${curationProviders.size} provider(s).")
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")

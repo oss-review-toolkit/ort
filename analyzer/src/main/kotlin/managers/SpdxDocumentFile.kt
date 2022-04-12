@@ -26,6 +26,8 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.SpdxDocumentCache
+import org.ossreviewtoolkit.analyzer.managers.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -163,9 +165,9 @@ private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.i
 
 /**
  * Sanitize a string for use as an [Identifier] property where colons are not supported by replacing them with spaces,
- * and finally collapsing multiple consecutive spaces.
+ * trimming, and finally collapsing multiple consecutive spaces.
  */
-private fun String.sanitize(): String = replace(':', ' ').replace(Regex("\\s{2,}"), " ")
+private fun String.sanitize(): String = replace(':', ' ').trim().replace(Regex("\\s{2,}"), " ")
 
 /**
  * Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise.

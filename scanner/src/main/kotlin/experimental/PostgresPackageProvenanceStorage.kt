@@ -42,7 +42,7 @@ class PostgresPackageProvenanceStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    private val dataSource: DataSource,
+    private val dataSource: Lazy<DataSource>,
 
     /**
      * The name of the table used for storing package provenances.
@@ -52,10 +52,8 @@ class PostgresPackageProvenanceStorage(
     private val table = PackageProvenances(tableName)
 
     /** The [Database] instance on which all operations are executed. */
-    private val database = setupDatabase()
-
-    private fun setupDatabase(): Database =
-        Database.connect(dataSource).apply {
+    private val database by lazy {
+        Database.connect(dataSource.value).apply {
             transaction {
                 withDataBaseLock {
                     if (!tableExists(tableName)) {
@@ -65,6 +63,7 @@ class PostgresPackageProvenanceStorage(
                 }
             }
         }
+    }
 
     override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =
         database.transaction {

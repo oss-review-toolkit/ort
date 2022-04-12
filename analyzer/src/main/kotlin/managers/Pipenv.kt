@@ -51,7 +51,8 @@ class Pipenv(
     override fun command(workingDir: File?) = "pipenv"
 
     override fun transformVersion(output: String) =
-        // "pipenv --version" returns a string like "pipenv, version 2018.11.26", so simply remove the prefix.
+        // The version string can be something like:
+        // pipenv, version 2018.11.26
         output.removePrefix("pipenv, version ")
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2018.10.9,)")

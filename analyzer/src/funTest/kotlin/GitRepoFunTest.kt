@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -35,61 +34,60 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.ORT_NAME
-import org.ossreviewtoolkit.utils.test.Ci
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
+private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
-private const val REPO_MANIFEST = "manifest.xml"
 
-class GitRepoFunTest : StringSpec() {
-    private lateinit var outputDir: File
+class GitRepoFunTest : StringSpec({
+    lateinit var outputDir: File
 
-    override fun beforeSpec(spec: Spec) {
+    fun beforeSpec() {
         // Do not use createSpecTempDir() here, as otherwise the path will get too long for Windows to handle.
         outputDir = createTempDirectory(ORT_NAME).toFile()
 
-        val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)
+        val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)
         val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
         GitRepo().download(pkg, outputDir)
     }
 
-    override fun afterSpec(spec: Spec) {
+    fun afterSpec() {
         outputDir.safeDeleteRecursively(force = true)
     }
 
-    init {
-        // Disabled on Azure Windows because it fails for unknown reasons.
-        "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isAzureWindows) {
-            val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
-                analyze(findManagedFiles(outputDir))
-            }
+    "Analyzer correctly reports VcsInfo for git-repo projects" {
+        beforeSpec()
 
-            val actualResult = ortResult.withResolvedScopes().toYaml()
-            val expectedResult = patchExpectedResult(
-                File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
-                revision = REPO_REV,
-                path = outputDir.invariantSeparatorsPath
-            )
-
-            patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+            analyze(findManagedFiles(outputDir))
         }
 
-        "GitRepo correctly lists submodules" {
-            val expectedSubmodules = listOf(
-                "spdx-tools",
-                "submodules",
-                "submodules/commons-text",
-                "submodules/test-data-npm",
-                "submodules/test-data-npm/isarray",
-                "submodules/test-data-npm/long.js"
-            ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
+        val actualResult = ortResult.withResolvedScopes().toYaml()
+        val expectedResult = patchExpectedResult(
+            File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
+            revision = REPO_REV,
+            path = outputDir.invariantSeparatorsPath
+        )
 
-            val workingTree = GitRepo().getWorkingTree(outputDir)
-            workingTree.getNested() shouldBe expectedSubmodules
-        }
+        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
     }
-}
+
+    "GitRepo correctly lists submodules" {
+        val expectedSubmodules = listOf(
+            "spdx-tools",
+            "submodules",
+            "submodules/commons-text",
+            "submodules/test-data-npm",
+            "submodules/test-data-npm/isarray",
+            "submodules/test-data-npm/long.js"
+        ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
+
+        val workingTree = GitRepo().getWorkingTree(outputDir)
+        workingTree.getNested() shouldBe expectedSubmodules
+
+        afterSpec()
+    }
+})

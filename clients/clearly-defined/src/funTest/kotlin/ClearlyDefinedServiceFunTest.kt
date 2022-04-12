@@ -22,8 +22,9 @@ package org.ossreviewtoolkit.clients.clearlydefined
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.comparables.shouldBeGreaterThan
-import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -33,26 +34,18 @@ import java.io.File
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Coordinates
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curation
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ClearlyDefinedServiceFunTest : WordSpec({
     "A contribution patch" should {
-        "be correctly deserialized even when using invalid facet arrays" {
+        "be correctly deserialized when using empty facet arrays" {
             // See https://github.com/clearlydefined/curated-data/blob/0b2db78/curations/maven/mavencentral/com.google.code.gson/gson.yaml#L10-L11.
-            val curationWithInvalidFacetArrays = File("src/funTest/assets/gson.json")
+            val curationWithEmptyFacetArrays = File("src/funTest/assets/gson.json")
 
-            val curation = ClearlyDefinedService.JSON_MAPPER.readValue<Curation>(curationWithInvalidFacetArrays)
+            val curation = ClearlyDefinedService.JSON_MAPPER.readValue<Curation>(curationWithEmptyFacetArrays)
 
-            curation.described?.facets.shouldNotBeNull {
-                dev should beNull()
-                tests should beNull()
-            }
+            curation.described?.facets?.dev.shouldNotBeNull() should beEmpty()
+            curation.described?.facets?.tests.shouldNotBeNull() should beEmpty()
         }
     }
 
@@ -65,7 +58,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             "3.1.0"
         )
 
-        "return single curation data".config(tags = setOf(ExpensiveTag)) {
+        "return single curation data" {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
             val curation = service.getCuration(
@@ -79,7 +72,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             curation.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
         }
 
-        "return bulk curation data".config(tags = setOf(ExpensiveTag)) {
+        "return bulk curation data" {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
             val curations = service.getCurations(listOf(coordinates))
@@ -99,7 +92,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         val revisions = mapOf(
-            "6.2.3" to Curation(licensed = Licensed(declared = "Apache-1.0"))
+            "6.2.3" to Curation(licensed = CurationLicensed(declared = "Apache-1.0"))
         )
 
         val patch = Patch(
@@ -113,7 +106,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             revisions
         )
 
-        "only serialize non-null values".config(tags = setOf(ExpensiveTag)) {
+        "only serialize non-null values" {
             val contributionPatch = ContributionPatch(info, listOf(patch))
 
             val patchJson = ClearlyDefinedService.JSON_MAPPER.writeValueAsString(contributionPatch)
@@ -123,12 +116,12 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
         // pull-requests at https://github.com/clearlydefined/curated-data-dev.
-        "return a summary of the created pull-request".config(enabled = false, tags = setOf(ExpensiveTag)) {
+        "return a summary of the created pull-request".config(enabled = false) {
             val service = ClearlyDefinedService.create(Server.DEVELOPMENT)
 
             val summary = service.putCuration(ContributionPatch(info, listOf(patch)))
 
-            summary shouldNotBeNull {
+            summary.shouldNotBeNull().run {
                 prNumber shouldBeGreaterThan 0
                 url shouldStartWith "https://github.com/clearlydefined/curated-data-dev/pull/"
             }

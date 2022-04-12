@@ -62,8 +62,7 @@ data class Identifier(
             version = ""
         )
 
-        private val COMPARATOR = compareBy<Identifier> { it.type }.thenBy { it.namespace }.thenBy { it.name }
-            .thenBy { it.version }
+        private val COMPARATOR = compareBy<Identifier>({ it.type }, { it.namespace }, { it.name }, { it.version })
     }
 
     private constructor(components: List<String>) : this(
@@ -81,7 +80,7 @@ data class Identifier(
     constructor(identifier: String) : this(identifier.split(':', limit = 4))
 
     private val sanitizedComponents = listOf(type, namespace, name, version).map { component ->
-            component.trim().filterNot { it < ' ' }
+        component.trim().filterNot { it < ' ' }
     }
 
     init {

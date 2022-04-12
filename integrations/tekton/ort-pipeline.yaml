@@ -1,0 +1,110 @@
+# Copyright 2022 Google, LLC.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ort-scan
+spec:
+  workspaces:
+  - name: shared-data
+    description: |
+      This workspace will receive the cloned git repo and be passed
+      to the Tasks.
+  - name: gcs-credentials
+  - name: ort-data-dir
+  params:
+  - name: repo-url
+    type: string
+    description: The git repository URL to clone from
+  - name: result-bucket-path
+    type: string
+    description: The GCS bucket and folder path under which to place the report, it follows the pattern gs://<gcs-bucket>/<sub_path>
+  tasks:
+  - name: fetch-repo
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: url
+      value: $(params.repo-url)
+    - name: subdirectory
+      value: source
+  - name: fetch-ort
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: url
+      value: https://github.com/oss-review-toolkit/ort.git
+    - name: subdirectory
+      value: ort
+  - name: ort-scan
+    runAfter: ["fetch-repo"] 
+    workspaces:
+    - name: shared
+      workspace: shared-data
+    - name: ort-data-dir
+      workspace: ort-data-dir
+    taskSpec:
+      workspaces:
+      - name: shared
+      - name: ort-data-dir
+      steps: 
+      - name: "analyze" 
+        image: ort:latest
+        args: ["analyze", "-i", "/workspace/shared/source", "-o" ,"/workspace/shared/results/analyzer", "--package-curations-file", "/workspace/shared/ort/examples/curations.yml" ]
+        env:
+          - name: "ORT_DATA_DIR"
+            value: "/workspace/ort-data-dir/data"
+      - name: "scan"
+        image: ort:latest
+        args: ["scan", "-i", "/workspace/shared/results/analyzer/analyzer-result.yml", "-o" ,"/workspace/shared/results/scanner", "--skip-excluded" ]
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 4  
+      - name: "evaluate"
+        image: ort:latest
+        args: ["evaluate", "-i", "/workspace/shared/results/scanner/scan-result.yml", "-o" ,"/workspace/shared/results/evaluator","--package-curations-file", "/workspace/shared/ort/examples/curations.yml","--rules-file","/workspace/shared/ort/examples/evaluator-rules/src/main/resources/example.rules.kts","--license-classifications-file","/workspace/shared/ort/examples/license-classifications.yml" ]
+        env:
+          - name: "ORT_DATA_DIR"
+            value: "/workspace/ort-data-dir/data"
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 4
+      - name: "reports"
+        image: ort:latest
+        args: ["report","-f","CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp", "-O","NoticeTemplate=template.id=default,summary","-i", "/workspace/shared/results/evaluator/evaluation-result.yml", "-o" ,"/workspace/shared/results/report" ]
+        env:
+          - name: "ORT_DATA_DIR"
+            value: "/workspace/ort-data-dir/data"
+  finally:
+  - name: upload
+    taskRef:
+      name: gcs-upload
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: credentials
+      workspace: gcs-credentials
+    params:
+    - name: path
+      value: "./results/"
+    - name: location
+      value: "$(params.repo-url)/$(context.pipelineRun.name)"

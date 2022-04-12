@@ -39,14 +39,14 @@ import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curation
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Described
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ContributionType
+import org.ossreviewtoolkit.clients.clearlydefined.Curation
+import org.ossreviewtoolkit.clients.clearlydefined.CurationDescribed
+import org.ossreviewtoolkit.clients.clearlydefined.CurationLicensed
 import org.ossreviewtoolkit.clients.clearlydefined.ErrorResponse
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
+import org.ossreviewtoolkit.clients.clearlydefined.Patch
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.jsonMapper
@@ -169,7 +169,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
         summary = "Curation for component $coordinates.",
         details = "Imported from curation data of the " +
                 "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
-                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/master/clearly-defined) " +
+                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/main/clients/clearly-defined) " +
                 "module.",
         resolution = data.comment ?: "Unknown, original data contains no comment.",
         removedDefinitions = false
@@ -177,14 +177,14 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
 
     val licenseExpression = data.concludedLicense?.toString()
 
-    val described = Described(
+    val described = CurationDescribed(
         projectWebsite = data.homepageUrl?.let { URI(it) },
         sourceLocation = id.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
     )
 
     val curation = Curation(
-        described = described.takeIf { it != Described() },
-        licensed = licenseExpression?.let { Licensed(declared = it) }
+        described = described.takeIf { it != CurationDescribed() },
+        licensed = licenseExpression?.let { CurationLicensed(declared = it) }
     )
 
     val patch = Patch(

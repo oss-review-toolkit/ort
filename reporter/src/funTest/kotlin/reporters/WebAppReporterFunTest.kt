@@ -20,7 +20,8 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.longs.shouldBeGreaterThan
+import io.kotest.matchers.longs.beInRange
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -37,8 +38,7 @@ class WebAppReporterFunTest : WordSpec({
 
             val report = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir).single()
 
-            // Do not be more specific here as the web-app report changes quite often still.
-            report.length() shouldBeGreaterThan 0L
+            report.length() should beInRange(1910000L..1920000L)
         }
     }
 })

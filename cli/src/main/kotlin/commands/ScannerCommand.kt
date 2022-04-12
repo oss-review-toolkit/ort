@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
@@ -65,6 +66,7 @@ import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.ScannerFactory
 import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.scanner.experimental.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolver
@@ -81,11 +83,8 @@ import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedFileStorage
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapper
+import org.ossreviewtoolkit.scanner.experimental.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.scanOrtResult
-import org.ossreviewtoolkit.scanner.scanners.Askalono
-import org.ossreviewtoolkit.scanner.scanners.BoyterLc
-import org.ossreviewtoolkit.scanner.scanners.Licensee
-import org.ossreviewtoolkit.scanner.scanners.fossid.FossId
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
@@ -100,11 +99,28 @@ import org.ossreviewtoolkit.utils.core.ortDataDirectory
 import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.core.storage.XZCompressedLocalFileStorage
 
+sealed class ScannerOption {
+    data class Stable(val scannerFactory: ScannerFactory) : ScannerOption()
+    data class Experimental(val scannerWrapperFactories: List<ScannerWrapperFactory>) : ScannerOption()
+}
+
 private fun RawOption.convertToScanner() =
     convert { scannerName ->
         // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
-            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
+        ScannerOption.Stable(
+            Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
+                ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
+        )
+    }
+
+private fun RawOption.convertToScannerWrapperFactories() =
+    convert { scannerNames ->
+        ScannerOption.Experimental(
+            scannerNames.split(",").map { name ->
+                ScannerWrapper.ALL.find { it.scannerName.equals(name, ignoreCase = true) }
+                    ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
+            }
+        )
     }
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
@@ -145,22 +161,41 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 "times. For example: --label distribution=external"
     ).associate()
 
-    private val scannerFactory by option(
-        "--scanner", "-s",
-        help = "The scanner to use, one of ${Scanner.ALL}."
-    ).convertToScanner().default(ScanCode.Factory())
+    private val scannerOption by mutuallyExclusiveOptions(
+        option(
+            "--scanner", "-s",
+            help = "The scanner to use.\nPossible values are: ${Scanner.ALL}"
+        ).convertToScanner(),
+        option(
+            "--experimental-scanners",
+            help = "A comma-separated list of experimental scanners to use. This option is mutually exclusive with " +
+                    "'--scanner'. The experimental scanner implementation scans by provenance instead of by package. " +
+                    "This improves reuse of stored scan results and increases performance if multiple packages are " +
+                    "coming from the same source code repository. The experimental scanner is work in progress and " +
+                    "it is therefore not recommended to use it in production.\n" +
+                    "Possible values are: ${ScannerWrapper.ALL}"
+        ).convertToScannerWrapperFactories()
+    ).single().default(ScannerOption.Stable(ScanCode.Factory()))
 
-    private val projectScannerFactory by option(
-        "--project-scanner",
-        help = "The scanner to use for scanning the source code of projects. By default, projects and packages are " +
-                "scanned with the same scanner as specified by '--scanner'."
-    ).convertToScanner()
+    private val projectScannerOption by mutuallyExclusiveOptions(
+        option(
+            "--project-scanner",
+            help = "The scanner to use for scanning the source code of projects. By default, projects and packages " +
+                    "are scanned with the same scanner as specified by '--scanner'.\n" +
+                    "Possible values are: ${Scanner.ALL}"
+        ).convertToScanner(),
+        option(
+            "--experimental-project-scanners",
+            help = "A comma-separated list of experimental scanners to use for scanning the source code of projects. " +
+                    "By default, projects and packages are scanned with the same scanner as specified by " +
+                    "'--experimental-scanner'.\n" +
+                    "Possible values are: ${ScannerWrapper.ALL}"
+        ).convertToScannerWrapperFactories()
+    ).single()
 
     private val packageTypes by option(
         "--package-types",
-        help = "A comma-separated list of the package types from the ORT file's analyzer result to limit scans to. " +
-                "If not specified, all package types are scanned. Possible values are: " +
-                PackageType.values().joinToString { it.name }
+        help = "A comma-separated list of the package types from the ORT file's analyzer result to limit scans to."
     ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     private val skipExcluded by option(
@@ -176,14 +211,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
         .configurationGroup()
-
-    private val experimental by option(
-        "--experimental",
-        help = "Use a new experimental implementation of the scanner which scans by provenance instead of by " +
-                "package. This improves reuse of stored scan results and increases performance if multiple packages " +
-                "are coming from the same source code repository. The experimental scanner is work in progress and " +
-                "it is therefore not recommended to use it in production."
-    ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -201,10 +228,20 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         val config = globalOptionsForSubcommands.config
 
-        val ortResult = if (experimental) {
-            runExperimental(config)
-        } else {
-            run(config)
+        val ortResult = when (val scanner = scannerOption) {
+            is ScannerOption.Stable -> {
+                val projectScannerFactory = (projectScannerOption as? ScannerOption.Stable)?.scannerFactory
+
+                run(scanner.scannerFactory, projectScannerFactory, config)
+            }
+
+            is ScannerOption.Experimental -> {
+                val projectScannerWrapperFactories =
+                    (projectScannerOption as? ScannerOption.Experimental)?.scannerWrapperFactories
+                        ?: scanner.scannerWrapperFactories
+
+                runExperimental(scanner.scannerWrapperFactories, projectScannerWrapperFactories, config)
+            }
         }.mergeLabels(labels)
 
         // Write the result.
@@ -226,7 +263,11 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         severityStats.print().conclude(config.severeIssueThreshold, 2)
     }
 
-    private fun run(config: OrtConfiguration): OrtResult {
+    private fun run(
+        scannerFactory: ScannerFactory,
+        projectScannerFactory: ScannerFactory?,
+        config: OrtConfiguration
+    ): OrtResult {
         // Configure the scan storage, which is common to all scanners.
         ScanResultsStorage.configure(config.scanner)
 
@@ -280,29 +321,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
     }
 
-    private fun runExperimental(config: OrtConfiguration): OrtResult {
-        // TODO: The experimental scanner supports using multiple scanner wrappers for projects and packages at once,
-        //       for now use only one for each to stay compatible with the existing scanner command. Once the
-        //       experimental flag is removed this command can support multiple scanners and use the proper
-        //       ScannerWrapperFactories.
-        fun createScannerWrapper(name: String): ScannerWrapper =
-            when (name) {
-                "Askalono" -> Askalono.Factory().create(config.scanner, config.downloader)
-                "BoyterLc" -> BoyterLc.Factory().create(config.scanner, config.downloader)
-                "FossId" -> FossId.Factory().create(config.scanner, config.downloader)
-                "Licensee" -> Licensee.Factory().create(config.scanner, config.downloader)
-                "ScanCode" -> ScanCode.Factory().create(config.scanner, config.downloader)
-                else -> {
-                    throw IllegalArgumentException(
-                        "The scanner ${scannerFactory.scannerName} is not supported by the experimental scanner."
-                    )
-                }
-            }
-
-        val packageScannerWrapper =
-            scannerFactory.scannerName.takeIf { PackageType.PACKAGE in packageTypes }?.let { createScannerWrapper(it) }
-        val projectScannerWrapper = (projectScannerFactory?.scannerName ?: scannerFactory.scannerName)
-            .takeIf { PackageType.PROJECT in packageTypes }?.let { createScannerWrapper(it) }
+    private fun runExperimental(
+        scannerWrapperFactories: List<ScannerWrapperFactory>,
+        projectScannerWrapperFactories: List<ScannerWrapperFactory>,
+        config: OrtConfiguration
+    ): OrtResult {
+        val packageScannerWrappers = scannerWrapperFactories.map { it.create(config.scanner, config.downloader) }
+        val projectScannerWrappers = projectScannerWrapperFactories.map { it.create(config.scanner, config.downloader) }
 
         val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
 
@@ -332,8 +357,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 ),
                 nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache),
                 scannerWrappers = mapOf(
-                    PackageType.PACKAGE to listOfNotNull(packageScannerWrapper),
-                    PackageType.PROJECT to listOfNotNull(projectScannerWrapper)
+                    PackageType.PACKAGE to packageScannerWrappers,
+                    PackageType.PROJECT to projectScannerWrappers
                 )
             )
 

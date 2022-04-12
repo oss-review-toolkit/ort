@@ -3,10 +3,14 @@ name: Build and Test
 on:
   pull_request:
     branches:
-      - master
+      - main
+  push:
+    branches:
+      - main
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
+  SCANCODE_VERSION: 30.1.0
 
 jobs:
   build:
@@ -17,7 +21,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Build all classes
@@ -25,7 +29,6 @@ jobs:
       with:
         arguments: --stacktrace classes -x :reporter-web-app:yarnBuild
   build-reporter-web-app:
-    if: ${{ false }}
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -34,12 +37,13 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Build the reporter-web-app
       uses: burrunan/gradle-cache-action@v1
       with:
+        job-id: build-reporter-web-app
         arguments: --stacktrace :reporter-web-app:yarnBuild
   test:
     needs: build
@@ -50,44 +54,84 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Run unit tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: test -x :reporter-web-app:yarnBuild
-  funTest:
-    if: ${{ false }}
-    needs: build
+        job-id: test
+        arguments: test jacocoTestReport -x :reporter-web-app:yarnBuild
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2
+  funTest-non-analyzer:
+    needs: build-reporter-web-app
     runs-on: ubuntu-latest
     steps:
+    - name: Install required tools
+      run: |
+          sudo apt-get install -y --no-install-recommends cvs
+
+          # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
+          sudo apt-get -qq remove mono-devel
+
+          # Install git-repo.
+          mkdir -p $HOME/.local/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo -o $HOME/.local/bin/repo
+          chmod a+x $HOME/.local/bin/repo
+
+          # Install ScanCode for license texts.
+          pip install --user scancode-toolkit==$SCANCODE_VERSION
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: funTest -x :reporter-web-app:yarnBuild -x :analyzer:funTest
-  funTest-analyzer:
-    if: ${{ false }}
+        job-id: funTest-non-analyzer
+        arguments: funTest jacocoFunTestReport -x :analyzer:funTest
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2
+  funTest-analyzer-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: temurin
+        java-version: 11
+        cache: gradle
+    - name: Run functional tests
+      run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- jacocoFunTestReport -Dkotest.tags=!NoDockerTag -p analyzer
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2
+  funTest-analyzer-no-docker:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
+      with:
+        submodules: recursive
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Run functional tests
       uses: burrunan/gradle-cache-action@v1
       with:
-        arguments: :analyzer:funTest -x :reporter-web-app:yarnBuild
+        job-id: funTest-analyzer-no-docker
+        arguments: :analyzer:funTest :analyzer:jacocoFunTestReport -Dkotest.tags=NoDockerTag
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v2

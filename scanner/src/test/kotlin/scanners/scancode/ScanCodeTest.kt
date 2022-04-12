@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +21,24 @@
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.shouldMatch
 
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
+
+import java.io.File
+
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ScanCodeTest : WordSpec({
     val scanner = ScanCode("ScanCode", ScannerConfiguration(), DownloaderConfiguration())
@@ -72,6 +86,35 @@ class ScanCodeTest : WordSpec({
 
             scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
                     "--command --line --commandLineNonConfig"
+        }
+    }
+
+    "scanPathInternal" should {
+        "handle a ScanCode result with errors" {
+            val path = createTestTempDir("scan-code")
+
+            val process = mockk<ProcessCapture>()
+            every { process.isError } returns true
+            every { process.stderr } returns "some error"
+            every { process.errorMessage } returns "some error message"
+
+            val scannerSpy = spyk(scanner)
+            every { scannerSpy.details } returns ScannerDetails("ScanCode", "30.1.0", "")
+            every { scannerSpy.runScanCode(any(), any()) } answers {
+                val resultFile = File("src/test/assets/scancode-with-issues.json")
+                val targetFile = secondArg<File>()
+                resultFile.copyTo(targetFile)
+
+                process
+            }
+
+            val result = scannerSpy.scanPath(path)
+
+            result.scanner?.results.shouldNotBeNull {
+                val summary = scanResults.iterator().next().value.single().summary
+                summary.licenseFindings shouldNot beEmpty()
+                summary.issues.find { it.message.contains("Unexpected EOF") } shouldNot beNull()
+            }
         }
     }
 })

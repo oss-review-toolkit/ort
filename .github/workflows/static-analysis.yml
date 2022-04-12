@@ -3,7 +3,10 @@ name: Static Analysis
 on:
   pull_request:
     branches:
-      - master
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   detekt-issues:
@@ -16,7 +19,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
-        distribution: adopt
+        distribution: temurin
         java-version: 11
         cache: gradle
     - name: Check for Detekt Issues
@@ -36,6 +39,7 @@ jobs:
     - name: Check Links
       uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
+        base-branch: main
         check-modified-files-only: yes
         max-depth: 2
         use-quiet-mode: yes

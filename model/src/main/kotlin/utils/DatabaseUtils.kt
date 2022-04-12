@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model.utils
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 
+import javax.sql.DataSource
+
 import kotlinx.coroutines.Deferred
 
 import org.jetbrains.exposed.sql.Database
@@ -41,7 +43,7 @@ object DatabaseUtils {
         config: PostgresStorageConfiguration,
         applicationNameSuffix: String = "",
         maxPoolSize: Int = 5
-    ): HikariDataSource {
+    ): Lazy<DataSource> {
         require(config.url.isNotBlank()) {
             "URL for PostgreSQL storage is missing."
         }
@@ -77,7 +79,7 @@ object DatabaseUtils {
             addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
         }
 
-        return HikariDataSource(dataSourceConfig)
+        return lazyOf(HikariDataSource(dataSourceConfig))
     }
 
     /**

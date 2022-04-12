@@ -22,6 +22,9 @@ package org.ossreviewtoolkit.downloader
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.file.aFile
+import io.kotest.matchers.file.haveFileSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 
@@ -43,7 +46,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 class DownloaderFunTest : StringSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
     }
 
@@ -75,8 +78,8 @@ class DownloaderFunTest : StringSpec() {
                 sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
-            licenseFile.isFile shouldBe true
-            licenseFile.length() shouldBe 11376L
+            licenseFile shouldBe aFile()
+            licenseFile should haveFileSize(11376L)
 
             outputDir.walk().count() shouldBe 234
         }
@@ -147,8 +150,8 @@ class DownloaderFunTest : StringSpec() {
                 sourceArtifact.hash shouldBe pkg.sourceArtifact.hash
             }
 
-            licenseFile.isFile shouldBe true
-            licenseFile.length() shouldBe 11376L
+            licenseFile shouldBe aFile()
+            licenseFile should haveFileSize(11376L)
 
             outputDir.walk().count() shouldBe 234
         }
@@ -188,8 +191,8 @@ class DownloaderFunTest : StringSpec() {
                 vcsInfo.revision shouldBe pkg.vcs.revision
             }
 
-            licenseFile.isFile shouldBe true
-            licenseFile.length() shouldBe 11376L
+            licenseFile shouldBe aFile()
+            licenseFile should haveFileSize(11376L)
 
             outputDir.walk().count() shouldBe 608
         }

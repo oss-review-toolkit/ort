@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.3
 
 # Copyright (C) 2020 Bosch Software Innovations GmbH
-# Copyright (C) 2021 Bosch.IO GmbH
+# Copyright (C) 2021-2022 Bosch.IO GmbH
 # Copyright (C) 2021 Alliander N.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ ARG CRT_FILES=""
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="30.1.0"
 
-FROM adoptopenjdk:11-jdk-hotspot-focal AS build
+FROM eclipse-temurin:11-jdk-focal AS build
 
 COPY . /usr/local/src/ort
 
@@ -37,43 +37,44 @@ WORKDIR /usr/local/src/ort
 # Gradle build.
 ARG ORT_VERSION
 RUN --mount=type=cache,target=/tmp/.gradle/ \
-    GRADLE_USER_HOME=/tmp/.gradle/ && \
+    export GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
     sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM adoptopenjdk:11-jdk-hotspot-focal AS run
+FROM eclipse-temurin:11-jdk-focal AS run
 
 ENV \
     # Package manager versions.
-    BOWER_VERSION=1.8.8 \
-    CARGO_VERSION=0.54.0-0ubuntu1~20.04.1 \
+    BOWER_VERSION=1.8.12 \
+    CARGO_VERSION=0.58.0-0ubuntu1~20.04.1 \
+    COCOAPODS_VERSION=1.11.2 \
     COMPOSER_VERSION=1.10.1-1 \
-    CONAN_VERSION=1.43.2 \
+    CONAN_VERSION=1.45.0 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.16.5 \
     HASKELL_STACK_VERSION=2.1.3 \
-    NPM_VERSION=7.20.6 \
+    NPM_VERSION=8.5.0 \
     PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
-    SBT_VERSION=1.3.8 \
+    SBT_VERSION=1.6.1 \
     YARN_VERSION=1.22.10 \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
-    GOPATH=$HOME/go
+    GOPATH=/tmp/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH="$PATH:$HOME/.local/bin:$GOPATH/bin:/opt/go/bin:$GEM_PATH/bin:/opt/ort/bin"
+    PATH="$PATH:$GOPATH/bin:/opt/go/bin:/opt/ort/bin"
 
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
     apt-get update && \
     apt-get install -y --no-install-recommends ca-certificates gnupg software-properties-common && \
-    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list && \
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee -a /etc/apt/sources.list.d/sbt.list && \
     curl -ksS "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key adv --import - && \
     curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     add-apt-repository -y ppa:git-core/ppa && \
@@ -133,7 +134,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
     rm go$GO_VERSION.linux-amd64.tar.gz && \
-    mkdir -p $GOPATH/bin && \
+    export GOBIN=/opt/go/bin && \
     curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh && \
     curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
     # Install SDKs required for analysis.
@@ -146,30 +147,19 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi && \
     yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
-    # Install 'CocoaPods'. As https://github.com/CocoaPods/CocoaPods/pull/10609 is needed but not yet released.
-    curl -ksSL https://github.com/CocoaPods/CocoaPods/archive/9461b346aeb8cba6df71fd4e71661688138ec21b.tar.gz | \
-        tar -zxC . && \
-        (cd CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b && \
-            gem build cocoapods.gemspec && \
-            gem install cocoapods-1.10.1.gem \
-        ) && \
-        rm -rf CocoaPods-9461b346aeb8cba6df71fd4e71661688138ec21b
+    chmod -R o+w $ANDROID_HOME && \
+    # Install 'CocoaPods'.
+    gem install cocoapods -v $COCOAPODS_VERSION
 
 # Add scanners (in versions known to work).
 ARG SCANCODE_VERSION
-RUN curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
-        tar -zxC /usr/local && \
-        # Trigger ScanCode configuration for Python 3 and reindex licenses initially.
-        cd /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
-        PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --reindex-licenses && \
-        chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
-        ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
+RUN pip install --no-cache-dir scancode-toolkit==$SCANCODE_VERSION
 
 FROM run
 
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
 
-RUN tar xf /opt/ort.tar -C /opt/ort --strip-components 1 && \
+RUN tar xf /opt/ort.tar -C /opt/ort --exclude="*.bat" --strip-components 1 && \
     rm /opt/ort.tar && \
     /opt/ort/bin/ort requirements
 

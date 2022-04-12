@@ -24,17 +24,26 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.endWith
 import io.kotest.matchers.string.startWith
 
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.scanner.scanners.AbstractScannerFunTest
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
-import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.ScanCodeTag
 
 class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCodeTag)) {
     override val scanner = ScanCode("ScanCode", scannerConfig, downloaderConfig)
-    override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
-    override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())
+
+    override val expectedFileLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 201), 99.94f)
+    )
+
+    override val expectedDirectoryLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("COPYING", 1, 201), 99.18f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", 1, 201), 99.18f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 201), 99.94f)
+    )
 
     init {
         "return the full license text for the HERE proprietary license" {

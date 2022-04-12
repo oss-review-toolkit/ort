@@ -20,11 +20,12 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import kotlinx.coroutines.runBlocking
+import java.io.IOException
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -33,7 +34,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -45,8 +45,8 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
         "https://github.com/oss-review-toolkit/ort-test-data-npm/blob/test-1.0.0/README.md"
     private val repositoryUrl = "https://github.com/oss-review-toolkit/ort-test-data-npm"
 
-    override fun afterSpec(spec: Spec) {
-        runBlocking { workingTreeCache.shutdown() }
+    override suspend fun afterSpec(spec: Spec) {
+        workingTreeCache.shutdown()
     }
 
     init {
@@ -71,7 +71,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                     )
                 )
 
-                resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.ARTIFACT)) shouldBe UnknownProvenance
+                shouldThrow<IOException> { resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.ARTIFACT)) }
             }
         }
 
@@ -117,7 +117,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                     )
                 )
 
-                resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) shouldBe UnknownProvenance
+                shouldThrow<IOException> { resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) }
             }
 
             "Guess the correct tag for a package" {
