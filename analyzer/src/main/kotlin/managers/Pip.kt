@@ -216,8 +216,25 @@ class Pip(
         val workingDir = definitionFile.parentFile
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
+        val project = getProjectBasics(definitionFile, virtualEnvDir)
+        val (packages, installDependencies) = getInstallDependencies(definitionFile, virtualEnvDir, project.id.name)
+
+        // TODO: Handle "extras" and "tests" dependencies.
+        val scopes = sortedSetOf(
+            Scope("install", installDependencies)
+        )
+
+        // Remove the virtualenv by simply deleting the directory.
+        virtualEnvDir.safeDeleteRecursively()
+
+        return listOf(ProjectAnalyzerResult(project.copy(scopeDependencies = scopes), packages))
+    }
+
+    private fun getProjectBasics(definitionFile: File, virtualEnvDir: File): Project {
         val authors = sortedSetOf<String>()
         val declaredLicenses = sortedSetOf<String>()
+
+        val workingDir = definitionFile.parentFile
 
         // First try to get metadata from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
@@ -278,14 +295,7 @@ class Pip(
         }
         val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
 
-        val (packages, installDependencies) = getInstallDependencies(definitionFile, virtualEnvDir, projectName)
-
-        // TODO: Handle "extras" and "tests" dependencies.
-        val scopes = sortedSetOf(
-            Scope("install", installDependencies)
-        )
-
-        val project = Project(
+        return Project(
             id = Identifier(
                 type = managerName,
                 namespace = "",
@@ -297,14 +307,8 @@ class Pip(
             declaredLicenses = declaredLicenses,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
-            homepageUrl = setupHomepage,
-            scopeDependencies = scopes
+            homepageUrl = setupHomepage
         )
-
-        // Remove the virtualenv by simply deleting the directory.
-        virtualEnvDir.safeDeleteRecursively()
-
-        return listOf(ProjectAnalyzerResult(project, packages))
     }
 
     private fun getInstallDependencies(
