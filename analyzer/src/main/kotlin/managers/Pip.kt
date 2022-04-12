@@ -451,6 +451,7 @@ class Pip(
 
             log.info { "Falling back to trying to install dependencies using Python $projectPythonVersion..." }
 
+            virtualEnvDir.safeDeleteRecursively()
             virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
             installDependencies(workingDir, definitionFile, virtualEnvDir).requireSuccess()
         }
