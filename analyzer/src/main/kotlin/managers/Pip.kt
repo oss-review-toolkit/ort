@@ -55,8 +55,9 @@ import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
 
-// The lowest version that supports "--prefer-binary" and PEP 508 URL requirements to be used as dependencies.
-private const val PIP_VERSION = "18.1"
+// Use the most recent version that still supports Python 2. PIP 21.0.0 dropped Python 2 support, see
+// https://pip.pypa.io/en/stable/news/#id176.
+private const val PIP_VERSION = "20.3.4"
 
 // See https://github.com/naiquevin/pipdeptree.
 private const val PIPDEPTREE_VERSION = "2.2.1"
