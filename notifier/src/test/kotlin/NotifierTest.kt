@@ -39,7 +39,12 @@ class NotifierTest : WordSpec({
 
             assertSoftly {
                 shouldNotThrow<RuntimeException> {
-                    val result = mailNotifier.runScript("mailClient as MailNotifier")
+                    val result = mailNotifier.runScript(
+                        """
+                        mailClient as MailNotifier
+                        resolutionProvider as ResolutionProvider
+                        """.trimIndent()
+                    )
                     result.shouldBeInstanceOf<ResultValue.Value>()
                 }
 
@@ -54,7 +59,12 @@ class NotifierTest : WordSpec({
                 }
 
                 shouldNotThrow<RuntimeException> {
-                    val result = jiraNotifier.runScript("jiraClient as JiraNotifier")
+                    val result = jiraNotifier.runScript(
+                        """
+                        jiraClient as JiraNotifier
+                        resolutionProvider as ResolutionProvider
+                        """.trimIndent()
+                    )
                     result.shouldBeInstanceOf<ResultValue.Value>()
                 }
             }
