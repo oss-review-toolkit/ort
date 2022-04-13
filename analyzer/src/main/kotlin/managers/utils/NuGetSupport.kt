@@ -52,8 +52,10 @@ import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageD
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageDetails
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageSpec
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.ServiceIndex
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -67,11 +69,16 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
+import org.ossreviewtoolkit.utils.core.ORT_NAME
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.await
+import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.logOnce
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
@@ -275,7 +282,21 @@ private fun parseLicenses(spec: PackageSpec?): SortedSet<String> {
     if (license != null) return sortedSetOf(license)
 
     val licenseUrl = data.licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" } ?: return sortedSetOf()
-    return sortedSetOf(licenseUrl)
+
+    // TODO: Consider checking declared licenses for URLs for all package managers, and creating "LicenseRef-ort-SWHID"
+    //       in a central place.
+    val tempDir = createOrtTempDir("NuGetSupport")
+
+    val licenseDownloadUrl = VcsHost.toRawDownloadUrl(licenseUrl) ?: licenseUrl
+    val licenseFromUrl = OkHttpClientHelper.downloadFile(licenseDownloadUrl, tempDir).map {
+        val algorithm = HashAlgorithm.SHA1GIT
+        val hash = algorithm.calculate(it)
+        "${SpdxConstants.LICENSE_REF_PREFIX}$ORT_NAME-SWHID-$hash-${it.name}".toSpdxId()
+    }.getOrDefault(licenseUrl)
+
+    tempDir.safeDeleteRecursively()
+
+    return sortedSetOf(licenseFromUrl)
 }
 
 /**

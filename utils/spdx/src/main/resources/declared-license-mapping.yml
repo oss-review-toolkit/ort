@@ -318,6 +318,8 @@
 "Lesser General Public License (LGPL)": LGPL-2.1-or-later
 "Lesser General Public License, version 3 or greater": LGPL-3.0-or-later
 "License Agreement For Open Source Computer Vision Library (3-clause BSD License)": BSD-3-Clause
+"LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm": LicenseRef-scancode-ms-net-library-2019-06
+"LicenseRef-ort-SWHID-984713a49622a96da110443c15477613bc12656b-LICENSE.TXT": MIT
 "MIT (http://mootools.net/license.txt)": MIT
 "MIT -or- Apache License 2.0": MIT OR Apache-2.0
 "MIT / http://rem.mit-license.org": MIT
@@ -483,7 +485,6 @@
 "http://creativecommons.org/licenses/publicdomain": CC-PDDC
 "http://creativecommons.org/publicdomain/zero/1.0/legalcode": CC0-1.0
 "http://en.wikipedia.org/wiki/Zlib_License": Zlib
-"http://go.microsoft.com/fwlink/?LinkId=329770": LicenseRef-scancode-ms-net-library-2019-06
 "http://go.microsoft.com/fwlink/?LinkId=529443": LicenseRef-scancode-ms-net-library-2019-06
 "http://json.codeplex.com/license": MIT
 "http://polymer.github.io/LICENSE.txt": BSD-3-Clause
@@ -526,7 +527,6 @@
 "https://creativecommons.org/publicdomain/zero/1.0/": CC0-1.0
 "https://dotnet.microsoft.com/en/dotnet_library_license.htm": LicenseRef-scancode-ms-net-library-2018-11
 "https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT": MIT
-"https://github.com/dotnet/corefx/blob/master/LICENSE.TXT": MIT
 "https://raw.github.com/RDFLib/rdflib/master/LICENSE": BSD-3-Clause
 "https://raw.githubusercontent.com/NuGet/NuGet.Client/dev/LICENSE.txt": Apache-2.0
 "https://raw.githubusercontent.com/aspnet/AspNetCore/2.0.0/LICENSE.txt": Apache-2.0
