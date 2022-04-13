@@ -43,7 +43,7 @@ import java.util.Locale
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
-fun ByteArray.toHexString(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
+fun ByteArray.encodeHex(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
 
 /**
  * Return the duplicates as identified by [keySelector] of a collection.

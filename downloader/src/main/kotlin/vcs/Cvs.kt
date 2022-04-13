@@ -29,9 +29,9 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.common.toHexString
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 
@@ -105,7 +105,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                         update(file.toByteArray())
                         update(revision.toByteArray())
                     }
-                }.digest().toHexString()
+                }.digest().encodeHex()
 
             override fun getRootPath(): File {
                 val rootDir = workingDir.searchUpwardsForSubdirectory("CVS")

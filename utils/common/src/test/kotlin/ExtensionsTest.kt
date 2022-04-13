@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 class ExtensionsTest : WordSpec({
     "ByteArray.toHexString" should {
         "correctly convert a byte array to a string of hexadecimal digits" {
-            byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).toHexString() shouldBe "deadbeef"
+            byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).encodeHex() shouldBe "deadbeef"
         }
     }
 

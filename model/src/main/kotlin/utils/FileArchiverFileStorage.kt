@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
-import org.ossreviewtoolkit.utils.common.toHexString
+import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.storage.FileStorage
@@ -83,7 +83,7 @@ private fun KnownProvenance.hash(): String {
         is RepositoryProvenance -> "${vcsInfo.type}${vcsInfo.url}$resolvedRevision"
     }
 
-    return SHA1_DIGEST.digest(key.toByteArray()).toHexString()
+    return SHA1_DIGEST.digest(key.toByteArray()).encodeHex()
 }
 
 internal fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/archive.zip"
