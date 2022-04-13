@@ -267,14 +267,15 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
  * Parse information about the licenses of a package from the given [spec].
  */
 private fun parseLicenses(spec: PackageSpec?): SortedSet<String> {
-    val license = spec?.metadata?.run {
-        // Note: "licenseUrl" has been deprecated in favor of "license", see
-        // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
-        val licenseValue = license?.value?.takeUnless { license.type == "file" }
-        licenseValue ?: licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" }
-    }
+    val data = spec?.metadata ?: return sortedSetOf()
 
-    return setOfNotNull(license).toSortedSet()
+    // Prefer "license" over "licenseUrl" as the latter has been deprecated, see
+    // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
+    val license = data.license?.value?.takeUnless { data.license.type == "file" }
+    if (license != null) return sortedSetOf(license)
+
+    val licenseUrl = data.licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" } ?: return sortedSetOf()
+    return sortedSetOf(licenseUrl)
 }
 
 /**
