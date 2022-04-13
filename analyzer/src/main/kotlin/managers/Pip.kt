@@ -441,7 +441,7 @@ class Pip(
         log.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
 
         // Try to determine the Python version the project requires.
-        var projectPythonVersion = 3
+        var projectPythonVersion = PythonVersion.getPythonVersion(workingDir)
 
         log.info { "Trying to install dependencies using Python $projectPythonVersion..." }
 
