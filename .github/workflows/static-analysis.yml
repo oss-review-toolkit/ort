@@ -34,6 +34,8 @@ jobs:
   markdown-links:
     runs-on: ubuntu-latest
     steps:
+    - name: Mark the Git workspace as safe
+      run: git config --global --add safe.directory /github/workspace
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Check Links
