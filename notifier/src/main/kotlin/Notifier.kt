@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,17 +31,22 @@ import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromT
 import org.ossreviewtoolkit.model.NotifierRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.notifier.modules.JiraNotifier
 import org.ossreviewtoolkit.notifier.modules.MailNotifier
 import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Notifier(
     ortResult: OrtResult = OrtResult.EMPTY,
-    config: NotifierConfiguration = NotifierConfiguration()
+    config: NotifierConfiguration = NotifierConfiguration(),
+    resolutionProvider: ResolutionProvider = DefaultResolutionProvider()
 ) : ScriptRunner() {
     private val customProperties = buildMap {
         config.mail?.let { put("mailClient", MailNotifier(it)) }
         config.jira?.let { put("jiraClient", JiraNotifier(it)) }
+
+        put("resolutionProvider", resolutionProvider)
     }
 
     override val compConfig = createJvmCompilationConfigurationFromTemplate<NotificationsScriptTemplate> {

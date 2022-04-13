@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,21 @@ import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.core.ORT_NOTIFIER_SCRIPT_FILENAME
+import org.ossreviewtoolkit.utils.core.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
 
 class NotifierCommand : CliktCommand(name = "notify", help = "Create notifications based on an ORT result.") {
@@ -55,6 +59,15 @@ class NotifierCommand : CliktCommand(name = "notify", help = "Create notificatio
         .convert { it.absoluteFile.normalize() }
         .inputGroup()
 
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue and rule violation resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .configurationGroup()
+
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result passed to the notifier script, overwriting any existing label of the " +
@@ -70,7 +83,7 @@ class NotifierCommand : CliktCommand(name = "notify", help = "Create notificatio
 
         val config = globalOptionsForSubcommands.config.notifier
 
-        val notifier = Notifier(ortResult, config)
+        val notifier = Notifier(ortResult, config, DefaultResolutionProvider.create(ortResult, resolutionsFile))
 
         notifier.run(script)
     }
