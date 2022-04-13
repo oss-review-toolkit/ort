@@ -247,7 +247,7 @@ private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> {
         .filterTo(sortedSetOf()) { it.isNotEmpty() }
 
     // Cargo allows to declare non-SPDX licenses only by referencing a license file. If a license file is specified, add
-    // an unknown declared license to indicate that there is a declared license but we cannot know which it is at this
+    // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
     // point.
     // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
     if (node["license_file"].textValueOrEmpty().isNotBlank()) {
