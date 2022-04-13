@@ -44,7 +44,7 @@ packages:
     url: "https://crates.io/api/v1/crates/spin/0.4.10/download"
     hash:
       value: "ceac490aa12c567115b40b7b7fceca03a6c9d53d5defea066123debc83c5dc1f"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/mvdnes/spin-rs.git"

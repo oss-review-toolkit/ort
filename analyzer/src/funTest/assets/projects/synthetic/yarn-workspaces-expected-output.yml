@@ -46,7 +46,7 @@ packages:
     url: "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz"
     hash:
       value: "e633456386d4aa55863f676a7ab0daa8fdecb0fd"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/bitinn/node-fetch.git"
@@ -104,7 +104,7 @@ packages:
     url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
     hash:
       value: "8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/heremaps/harp.gl.git"
@@ -134,7 +134,7 @@ packages:
     url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
     hash:
       value: "703fc8b034f6e0d621cc2c3ded96c6f904723742"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/heremaps/harp.gl.git"

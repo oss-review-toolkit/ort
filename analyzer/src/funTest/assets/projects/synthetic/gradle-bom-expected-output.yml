@@ -56,12 +56,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.12.2/jackson-core-2.12.2.jar"
     hash:
       value: "8df50138521d05561a308ec2799cc8dda20c06df"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.12.2/jackson-core-2.12.2-sources.jar"
     hash:
       value: "882b7c5f3b71f22f181e0b4c88d5a1f818de04a6"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git@github.com:FasterXML/jackson-core.git"
@@ -88,12 +88,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar"
     hash:
       value: "fc9dff4bb36d627bdc553de77e1f17efd790876c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0-sources.jar"
     hash:
       value: "f3c15fe970af864390c8d0634c9f16aca1b064a8"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/apiguardian-team/apiguardian.git"
@@ -126,12 +126,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.7.2/junit-platform-commons-1.7.2.jar"
     hash:
       value: "34adfea6c13fc4a996cf38cdad80800ce850d198"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.7.2/junit-platform-commons-1.7.2-sources.jar"
     hash:
       value: "1ff6be63f8bb2ef0d8c20b771a1d9160b6077a81"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/junit-team/junit5.git"

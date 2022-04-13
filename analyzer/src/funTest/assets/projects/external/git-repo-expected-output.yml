@@ -410,7 +410,7 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar"
           hash:
             value: "83cd2cd674a217ade95a4bb83a8a14f351f48bd0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: ""
           hash:
@@ -448,12 +448,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar"
           hash:
             value: "07c10d545325e3a6e72e06381afe469fd40eb701"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0-sources.jar"
           hash:
             value: "a0ad4e203304ccab7e01266fa814115850edb8a9"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:FasterXML/jackson-annotations.git"
@@ -486,12 +486,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.6/jackson-core-2.9.6.jar"
           hash:
             value: "4e393793c37c77e042ccc7be5a914ae39251b365"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.6/jackson-core-2.9.6-sources.jar"
           hash:
             value: "297b561cc2ca89e07bf4cb6445c08260b524aa4d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:FasterXML/jackson-core.git"
@@ -524,12 +524,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6.jar"
           hash:
             value: "cfa4f316351a91bfd95cb0644c6a2c95f52db1fc"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6-sources.jar"
           hash:
             value: "dad3a9fbbedf8781dfd138539cd82638ebad5678"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:FasterXML/jackson-databind.git"
@@ -558,12 +558,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/github/andrewoma/dexx/collection/0.7/collection-0.7.jar"
           hash:
             value: "264efc08bdcd22126bd429aaea9efaf5158b2b90"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/andrewoma/dexx/collection/0.7/collection-0.7-sources.jar"
           hash:
             value: "2ae719e29cc8881a0e27714acf8ef56597c1fb1f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/andrewoma/dexx.git"
@@ -594,12 +594,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/github/cliftonlabs/json-simple/2.3.1/json-simple-2.3.1.jar"
           hash:
             value: "3c85e3c6bd74262da4ae008c657b8ec2e2e35c89"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/cliftonlabs/json-simple/2.3.1/json-simple-2.3.1-sources.jar"
           hash:
             value: "5b5b13c1b449042bd342c4ec4a103b34375a1494"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/cliftonlabs/json-simple.git"
@@ -629,12 +629,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/github/jsonld-java/jsonld-java/0.12.1/jsonld-java-0.12.1.jar"
           hash:
             value: "a47686f733038125bd327147487dec96a2fb238e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/jsonld-java/jsonld-java/0.12.1/jsonld-java-0.12.1-sources.jar"
           hash:
             value: "0db9097c3b633c55017cca9d5a2d6bc4e3af203c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:jsonld-java/jsonld-java.git"
@@ -663,12 +663,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/github/spullara/mustache/java/compiler/0.7.9/compiler-0.7.9.jar"
           hash:
             value: "ff7dba87e24f6074a84f31e2ab7c041e3e94e35b"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/spullara/mustache/java/compiler/0.7.9/compiler-0.7.9-sources.jar"
           hash:
             value: "1014c81c0c36ca20359e6094af3bf94ee2d6ea2e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/spullara/mustache.java.git"
@@ -700,12 +700,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/github/virtuald/curvesapi/1.04/curvesapi-1.04.jar"
           hash:
             value: "3386abf821719bc89c7685f9eaafaf4a842f0199"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/virtuald/curvesapi/1.04/curvesapi-1.04-sources.jar"
           hash:
             value: "5c01708d122c6a61e90716e931b58226d8261312"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/virtuald/curvesapi.git"
@@ -732,12 +732,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar"
           hash:
             value: "c4ba5371a29ac9b2ad6129b1d39ea38750043eff"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.0/gson-2.8.0-sources.jar"
           hash:
             value: "baf95d8519fc1a11d388f8543cb40cd2bb9d66dc"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/google/gson.git"
@@ -769,12 +769,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar"
           hash:
             value: "5fa98cd1a63c99a44dd8d3b77e4762b066a5d0c5"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1-sources.jar"
           hash:
             value: "2477d012cd5379f9696e0d9d3ccc62ad13a09ca4"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://code.google.com/p/guava-libraries/"
@@ -810,12 +810,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.4/commons-cli-1.4.jar"
           hash:
             value: "c51c00206bb913cd8612b24abd9fa98ae89719b1"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.4/commons-cli-1.4-sources.jar"
           hash:
             value: "40dfd9fdef125e19136135e68d54af6d9b0cfbb8"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Subversion"
           url: "http://svn.apache.org/repos/asf/commons/proper/cli/trunk/"
@@ -857,12 +857,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.10/commons-codec-1.10.jar"
           hash:
             value: "4b95f4897fa13f2cd904aee711aeafc0c5295cd8"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.10/commons-codec-1.10-sources.jar"
           hash:
             value: "11fb3d88ae7e3b757d70237064210ceb954a5a04"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Subversion"
           url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
@@ -907,12 +907,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.6/commons-io-2.6.jar"
           hash:
             value: "815893df5f31da2ece4040fe0a12fd44b577afaf"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.6/commons-io-2.6-sources.jar"
           hash:
             value: "2566800dc841d9d2c5a0d34d807e45d4107dbbdf"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-io.git"
@@ -946,12 +946,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar"
           hash:
             value: "2973d150c0dc1fefe998f834810d68f278ea58ec"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
           hash:
             value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit.git"
@@ -982,12 +982,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/net/sf/opencsv/opencsv/2.3/opencsv-2.3.jar"
           hash:
             value: "c23708cdb9e80a144db433e23344a788a1fd6599"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/net/sf/opencsv/opencsv/2.3/opencsv-2.3-sources.jar"
           hash:
             value: "235993117036d44d126f76db9ea2202ee4884682"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Subversion"
           url: "https://opencsv.svn.sourceforge.net/svnroot/opencsv/trunk"
@@ -1014,7 +1014,7 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon/8.7/saxon-8.7.jar"
           hash:
             value: "68f963a06e2c384ab8d60aaa89ed0363928f6e84"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: ""
           hash:
@@ -1046,7 +1046,7 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon-dom/8.7/saxon-dom-8.7.jar"
           hash:
             value: "ca5abeba98e41eca830e6ddc74385a9538c0c908"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: ""
           hash:
@@ -1086,12 +1086,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/nu/validator/htmlparser/htmlparser/1.4/htmlparser-1.4.jar"
           hash:
             value: "70573d780fa08271499e201bbd86caa3c62f20e1"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/nu/validator/htmlparser/htmlparser/1.4/htmlparser-1.4-sources.jar"
           hash:
             value: "7703abdb7fba3ed993330e5d3aac163268f69e15"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Mercurial"
           url: "http://hg.mozilla.org/projects/htmlparser/"
@@ -1131,12 +1131,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/antlr/ST4/4.0.4/ST4-4.0.4.jar"
           hash:
             value: "467a2aa12be6d0f0f68c70eecf6714ab733027ac"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/ST4/4.0.4/ST4-4.0.4-sources.jar"
           hash:
             value: "e13c7f5f536ad6cabfa5de628fcb93910531a293"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: ""
           url: ""
@@ -1160,12 +1160,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4.jar"
           hash:
             value: "7797e70e3f5cb4229695f08ff50333266cf81125"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4-sources.jar"
           hash:
             value: "2e6a31f24631eb533d8170da9cac6849345f8fda"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Subversion"
           url: "http://svn.sonatype.org/spice/tags/oss-parent-7"
@@ -1192,12 +1192,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr-runtime/3.4/antlr-runtime-3.4.jar"
           hash:
             value: "8f011408269a8e42b8548687e137d8eeb56df4b4"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr-runtime/3.4/antlr-runtime-3.4-sources.jar"
           hash:
             value: "57a73190ad97f56c0cb83a6a5b6c08d5d428319b"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: ""
           url: ""
@@ -1237,12 +1237,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/antlr/stringtemplate/3.2.1/stringtemplate-3.2.1.jar"
           hash:
             value: "59ec8083721eae215c6f3caee944c410d2be34de"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/stringtemplate/3.2.1/stringtemplate-3.2.1-sources.jar"
           hash:
             value: "105785687b0c85a7f70cddfdc3a391bcab121872"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: ""
           url: ""
@@ -1289,12 +1289,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar"
           hash:
             value: "a4cf4688fe1c7e3a63aa636cc96d013af537768e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1-sources.jar"
           hash:
             value: "f305f3aa45a3b208c013ef92328f8f230329f20e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Subversion"
           url: "http://svn.apache.org/repos/asf/commons/proper/collections/trunk"
@@ -1335,12 +1335,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17.jar"
           hash:
             value: "474c20609032e7f815ef534cd8174d2e400d9a8d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17-sources.jar"
           hash:
             value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
@@ -1372,12 +1372,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-csv/1.5/commons-csv-1.5.jar"
           hash:
             value: "e10f140af5b82167640f254fa9d88e35ad74329c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-csv/1.5/commons-csv-1.5-sources.jar"
           hash:
             value: "b76c277916ffef14d63279b896b6a82252ddeb79"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-csv.git"
@@ -1422,12 +1422,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar"
           hash:
             value: "905075e6c80f206bbe6cf1e809d2caa69f420c76"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1-sources.jar"
           hash:
             value: "8d30b90ae8bda4fbac8363161c8a9b5a99e23baf"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Subversion"
           url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
@@ -1475,12 +1475,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar"
           hash:
             value: "6505a72a097d9270f7a9e7bf42c4238283247755"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1-sources.jar"
           hash:
             value: "e9748d7783594da3735ad9724390a10e7cebc01d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
@@ -1524,12 +1524,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.5.5/httpclient-4.5.5.jar"
           hash:
             value: "1603dfd56ebcd583ccdf337b6c3984ac55d89e58"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.5.5/httpclient-4.5.5-sources.jar"
           hash:
             value: "9fd59f6f22326a4241f9524fdfd66a1f34824054"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
@@ -1573,12 +1573,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5.jar"
           hash:
             value: "8115af15235c603db957db37f24e0faa168474f7"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5-sources.jar"
           hash:
             value: "f619aff61d2307f2f01de79ca4ffb554f695d7c3"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
@@ -1622,12 +1622,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.9/httpcore-4.4.9.jar"
           hash:
             value: "a86ce739e5a7175b4b234c290a00a5fdb80957a0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.9/httpcore-4.4.9-sources.jar"
           hash:
             value: "5808b4637c385d939e901eee3dc5f1121fc73a3b"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-core.git"
@@ -1657,12 +1657,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/apache-jena-libs/3.9.0/apache-jena-libs-3.9.0.pom"
           hash:
             value: "91f9355a290f35e94c30d4cef30cc5328f1d68a5"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/apache-jena-libs/3.9.0/apache-jena-libs-3.9.0.pom"
           hash:
             value: "91f9355a290f35e94c30d4cef30cc5328f1d68a5"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1692,12 +1692,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-arq/3.9.0/jena-arq-3.9.0.jar"
           hash:
             value: "b44ea2da8bdaf61e77272070f96ee2e29a70bfe3"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-arq/3.9.0/jena-arq-3.9.0-sources.jar"
           hash:
             value: "51048d4801496588fab0a91ffd38b4c8d3f5d94c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1727,12 +1727,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-base/3.9.0/jena-base-3.9.0.jar"
           hash:
             value: "9e4acf03fa31d4408ab6aafc492e8595de2fe731"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-base/3.9.0/jena-base-3.9.0-sources.jar"
           hash:
             value: "cba2a11b8d1b4636f0836e5125c6b5b62cde121e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1763,12 +1763,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-core/3.9.0/jena-core-3.9.0.jar"
           hash:
             value: "2133974da091ea11638c47d9977bff6ee92e2877"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-core/3.9.0/jena-core-3.9.0-sources.jar"
           hash:
             value: "dd16c18b53a009b49f0028d2bc0e137a5ff6bf96"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1803,12 +1803,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-base/3.9.0/jena-dboe-base-3.9.0.jar"
           hash:
             value: "5a7ba9babdcfb8e2fcfc8acb5a6be93c0e086548"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-base/3.9.0/jena-dboe-base-3.9.0-sources.jar"
           hash:
             value: "1fb6ed0e206bf1bef38afdef2fae7cd6610039c0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1843,12 +1843,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-index/3.9.0/jena-dboe-index-3.9.0.jar"
           hash:
             value: "4f9d134b1fc2caf43baad59e4decf3bb64d6dbdb"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-index/3.9.0/jena-dboe-index-3.9.0-sources.jar"
           hash:
             value: "b602643a7642887ba423fe99742e835f2751ea82"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1883,12 +1883,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-trans-data/3.9.0/jena-dboe-trans-data-3.9.0.jar"
           hash:
             value: "fb6e44296842cd7c1f374c9b6cf36a4a7babd8d8"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-trans-data/3.9.0/jena-dboe-trans-data-3.9.0-sources.jar"
           hash:
             value: "7dc38aa7173425e941f2a0f7ba740e1f705dfe81"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1923,12 +1923,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-transaction/3.9.0/jena-dboe-transaction-3.9.0.jar"
           hash:
             value: "2ae13878df1bdb473b15ca40cee6dbbcaff777db"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-transaction/3.9.0/jena-dboe-transaction-3.9.0-sources.jar"
           hash:
             value: "a382cf6d002eb576b062fa185b31a4998be95016"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1960,12 +1960,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-iri/3.9.0/jena-iri-3.9.0.jar"
           hash:
             value: "721937f1d096bba145e9f92c1166489bf6848e56"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-iri/3.9.0/jena-iri-3.9.0-sources.jar"
           hash:
             value: "3505cf1e1115017225e0c3bf0da94ca957864aa7"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1994,12 +1994,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-rdfconnection/3.9.0/jena-rdfconnection-3.9.0.jar"
           hash:
             value: "ecdafc24fb75d1dd73df4166672eda2931e5d491"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-rdfconnection/3.9.0/jena-rdfconnection-3.9.0-sources.jar"
           hash:
             value: "338fb223d2c84ec68b152f712f1bf069bf71b9ed"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2031,12 +2031,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-shaded-guava/3.9.0/jena-shaded-guava-3.9.0.jar"
           hash:
             value: "612c6e587e07f280771e5e27a94778414e51bd52"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-shaded-guava/3.9.0/jena-shaded-guava-3.9.0-sources.jar"
           hash:
             value: "701d64fb3c688ee88e3c201a38b8299ea360fb37"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2066,12 +2066,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0.jar"
           hash:
             value: "f2e40a4fa8a8ee02aaaec5c9a5f3dc7579e68227"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0-sources.jar"
           hash:
             value: "fe2889a11367d5538ca4e17204155a984ac8c101"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2106,12 +2106,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb2/3.9.0/jena-tdb2-3.9.0.jar"
           hash:
             value: "2dd3d5f89c6a3025e18e0b50d17a7509f001528d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb2/3.9.0/jena-tdb2-3.9.0-sources.jar"
           hash:
             value: "9aa945b5f64400870893b9399d93ac6a4942417e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2148,12 +2148,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.10.0/log4j-api-2.10.0.jar"
           hash:
             value: "fec5797a55b786184a537abd39c3fa1449d752d6"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.10.0/log4j-api-2.10.0-sources.jar"
           hash:
             value: "fd42afa6acbfb3801accec744106ee28b9342567"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
@@ -2190,12 +2190,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.10.0/log4j-core-2.10.0.jar"
           hash:
             value: "c90b597163cd28ab6d9687edd53db601b6ea75a1"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.10.0/log4j-core-2.10.0-sources.jar"
           hash:
             value: "a2041b29bc3e761fba750c0df933cd48f76f5b3a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
@@ -2232,12 +2232,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.10.0/log4j-slf4j-impl-2.10.0.jar"
           hash:
             value: "8e4e0a30736175e31c7f714d95032c1734cfbdea"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.10.0/log4j-slf4j-impl-2.10.0-sources.jar"
           hash:
             value: "51e9adc49fcb32d961c66170c9b4b092ee809d9c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
@@ -2266,12 +2266,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15.jar"
           hash:
             value: "965bba8899988008bb2341e300347de62aad5391"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15-sources.jar"
           hash:
             value: "bd552aa859b560a2ab85694f23771b6ef50698dd"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: ""
           url: ""
@@ -2300,12 +2300,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml/3.15/poi-ooxml-3.15.jar"
           hash:
             value: "e2800856735b07b8edd417aee07685470216a00f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml/3.15/poi-ooxml-3.15-sources.jar"
           hash:
             value: "b49e9cf942f8ba4492017a274c6c3480584909d8"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: ""
           url: ""
@@ -2334,7 +2334,7 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml-schemas/3.15/poi-ooxml-schemas-3.15.jar"
           hash:
             value: "de4a50ca39de48a19606b35644ecadb2f733c479"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: ""
           hash:
@@ -2386,12 +2386,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0.jar"
           hash:
             value: "3201c5a6d85d3f030bae5a520abaaf81ef7df037"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0-sources.jar"
           hash:
             value: "e52aec15d774e90d2c9588571634c054e352b26b"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://git-wip-us.apache.org/repos/asf/thrift.git"
@@ -2425,7 +2425,7 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar"
           hash:
             value: "29e80d2dd51f9dcdef8f9ffaee0d4dc1c9bbfc87"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: ""
           hash:
@@ -2459,12 +2459,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar"
           hash:
             value: "3ef5276905e36f4d8055fe3cb0bdcc7503ffc85d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0-sources.jar"
           hash:
             value: "777508fa9f3e03cafb3c1fb2eba3dca317f4b1ee"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/apiguardian-team/apiguardian.git"
@@ -2494,12 +2494,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/assertj/assertj-core/3.11.1/assertj-core-3.11.1.jar"
           hash:
             value: "fdac3217b804d6900fa3650f17b5cb48e620b140"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/assertj/assertj-core/3.11.1/assertj-core-3.11.1-sources.jar"
           hash:
             value: "55362d8f04018b1140c5a370057bf8cd4a63c3de"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:joel-costigliola/assertj-core.git"
@@ -2534,12 +2534,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
           hash:
             value: "42a25dc3219429f0e5d060061f71acb49bf010a0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
           hash:
             value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:hamcrest/JavaHamcrest.git"
@@ -2568,12 +2568,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.7.2/jsoup-1.7.2.jar"
           hash:
             value: "d7e275ba05aa380ca254f72d0c0ffebaedc3adcf"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.7.2/jsoup-1.7.2-sources.jar"
           hash:
             value: "833f425e7a40d7fc88922370a072965dda8ee216"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "http://github.com/jhy/jsoup.git"
@@ -2607,12 +2607,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/5.3.1/junit-jupiter-api-5.3.1.jar"
           hash:
             value: "a7e97eac2784395cb991403f9641b042ad972941"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/5.3.1/junit-jupiter-api-5.3.1-sources.jar"
           hash:
             value: "b03f607c0822a283c972e37eaeacb00dc3a3c2e7"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2646,12 +2646,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.3.1/junit-jupiter-engine-5.3.1.jar"
           hash:
             value: "e2676b1786c57a80eb98f5bebd51a3d05e228c40"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.3.1/junit-jupiter-engine-5.3.1-sources.jar"
           hash:
             value: "c769957170b2240854d6da6c6706dcc2a281542f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2685,12 +2685,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-params/5.3.1/junit-jupiter-params-5.3.1.jar"
           hash:
             value: "9dfac3fbd6768974fc0c142304a3e90ba713b2a8"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-params/5.3.1/junit-jupiter-params-5.3.1-sources.jar"
           hash:
             value: "bc4eb2ef307286fcd45551d4da397518c2e15394"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2724,12 +2724,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.3.1/junit-platform-commons-1.3.1.jar"
           hash:
             value: "67b7edddfac1935e6e6d9b58d7c7df6db59b1d39"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.3.1/junit-platform-commons-1.3.1-sources.jar"
           hash:
             value: "297bb35bca3d229c5e6edbffd22de7b5ad4cf430"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2763,12 +2763,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-engine/1.3.1/junit-platform-engine-1.3.1.jar"
           hash:
             value: "3ee68a06bbdab157dd260e2095c356481d6cd172"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-engine/1.3.1/junit-platform-engine-1.3.1-sources.jar"
           hash:
             value: "effe038ffcf21f6988e78b12119ca456d7d144fd"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2802,12 +2802,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.3.1/junit-platform-launcher-1.3.1.jar"
           hash:
             value: "8a07cb776e5aeb320b051183dc8ff142650ddb4e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.3.1/junit-platform-launcher-1.3.1-sources.jar"
           hash:
             value: "e144c1c4935632fa730c8a2d0c0c879b824562df"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2840,12 +2840,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/opentest4j/opentest4j/1.1.1/opentest4j-1.1.1.jar"
           hash:
             value: "efd9f971e91074491ea55b19f67b13470cf4fcdd"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/opentest4j/opentest4j/1.1.1/opentest4j-1.1.1-sources.jar"
           hash:
             value: "88a3a2cb15c413565462cea99f201b67bc6d2f10"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/ota4j-team/opentest4j.git"
@@ -2875,12 +2875,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25.jar"
           hash:
             value: "f8c32b13ff142a513eeb5b6330b1588dcb2c0461"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25-sources.jar"
           hash:
             value: "ffd0827a7c67d5915b7dc611afbda56a1f247191"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:qos-ch/slf4j.git"
@@ -2910,12 +2910,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"
           hash:
             value: "da76ca59f6a57ee3102f8f9bd9cee742973efa8a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25-sources.jar"
           hash:
             value: "962153db4a9ea71b79d047dfd1b2a0d80d8f4739"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:qos-ch/slf4j.git"
@@ -2946,7 +2946,7 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/stax/stax-api/1.0.1/stax-api-1.0.1.jar"
           hash:
             value: "49c100caf72d658aca8e58bd74a4ba90fa2b0d70"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: ""
           hash:
@@ -2983,7 +2983,7 @@ analyzer:
           url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
           hash:
             value: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/fb55/boolbase"
@@ -3016,7 +3016,7 @@ analyzer:
           url: "https://registry.npmjs.org/cheerio/-/cheerio-1.0.0-rc.1.tgz"
           hash:
             value: "2af37339eab713ef6b72cde98cefa672b87641fe"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/cheeriojs/cheerio.git"
@@ -3048,7 +3048,7 @@ analyzer:
           url: "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.7.tgz"
           hash:
             value: "c05dae0cb79591d05b3070a8433a98c9a89ccc53"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/jashkenas/coffeescript.git"
@@ -3081,7 +3081,7 @@ analyzer:
           url: "https://registry.npmjs.org/cson/-/cson-4.1.0.tgz"
           hash:
             value: "b1075344fa9d9fe5cf88d80f21d9366296b865c7"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/bevry/cson.git"
@@ -3113,7 +3113,7 @@ analyzer:
           url: "https://registry.npmjs.org/cson-parser/-/cson-parser-1.3.5.tgz"
           hash:
             value: "7ec675e039145533bf2a6a856073f1599d9c2d24"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+ssh://git@github.com/groupon/cson-parser.git"
@@ -3147,7 +3147,7 @@ analyzer:
           url: "https://registry.npmjs.org/css-select/-/css-select-1.2.0.tgz"
           hash:
             value: "2b3a110539c5355f1cd8d314623e870b121ec858"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/fb55/css-select.git"
@@ -3179,7 +3179,7 @@ analyzer:
           url: "https://registry.npmjs.org/css-what/-/css-what-2.1.3.tgz"
           hash:
             value: "a6d7604573365fe74686c3f311c56513d88285f2"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: ""
           url: "git+https://github.com/fb55/css-what.git"
@@ -3211,7 +3211,7 @@ analyzer:
           url: "https://registry.npmjs.org/deep-equal/-/deep-equal-0.2.2.tgz"
           hash:
             value: "84b745896f34c684e98f2ce0e42abaf43bba017d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "http://github.com/substack/node-deep-equal.git"
@@ -3243,7 +3243,7 @@ analyzer:
           url: "https://registry.npmjs.org/defined/-/defined-0.0.0.tgz"
           hash:
             value: "f35eea7d705e933baf13b2f03b3f83d921403b3e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/substack/defined.git"
@@ -3275,7 +3275,7 @@ analyzer:
           url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.1.1.tgz"
           hash:
             value: "1ec4059e284babed36eec2941d4a970a189ce7c0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/cheeriojs/dom-renderer.git"
@@ -3307,7 +3307,7 @@ analyzer:
           url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.1.tgz"
           hash:
             value: "d048c44b37b0d10a7f2a3d5fee3f4333d790481f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/fb55/domelementtype.git"
@@ -3339,7 +3339,7 @@ analyzer:
           url: "https://registry.npmjs.org/domhandler/-/domhandler-2.4.2.tgz"
           hash:
             value: "8805097e933d65e85546f726d60f5eb88b44f803"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/fb55/DomHandler.git"
@@ -3369,7 +3369,7 @@ analyzer:
           url: "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
           hash:
             value: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/FB55/domutils.git"
@@ -3403,7 +3403,7 @@ analyzer:
           url: "https://registry.npmjs.org/eachr/-/eachr-3.2.0.tgz"
           hash:
             value: "2c35e43ea086516f7997cf80b7aa64d55a4a4484"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+ssh://git@github.com/bevry/eachr.git"
@@ -3436,7 +3436,7 @@ analyzer:
           url: "https://registry.npmjs.org/editions/-/editions-1.3.4.tgz"
           hash:
             value: "3662cb592347c3168eb8e498a0ff73271d67f50b"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/bevry/editions.git"
@@ -3469,7 +3469,7 @@ analyzer:
           url: "https://registry.npmjs.org/editions/-/editions-2.1.3.tgz"
           hash:
             value: "727ccf3ec2c7b12dcc652c71000f16c4824d6f7d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/bevry/editions.git"
@@ -3501,7 +3501,7 @@ analyzer:
           url: "https://registry.npmjs.org/entities/-/entities-1.1.2.tgz"
           hash:
             value: "bdfa735299664dfafd34529ed4f8522a275fea56"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/fb55/entities.git"
@@ -3534,7 +3534,7 @@ analyzer:
           url: "https://registry.npmjs.org/errlop/-/errlop-1.1.1.tgz"
           hash:
             value: "d9ae4c76c3e64956c5d79e6e035d6343bfd62250"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/bevry/errlop.git"
@@ -3567,7 +3567,7 @@ analyzer:
           url: "https://registry.npmjs.org/extract-opts/-/extract-opts-3.3.1.tgz"
           hash:
             value: "5abbedc98c0d5202e3278727f9192d7e086c6be1"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+ssh://git@github.com/bevry/extract-opts.git"
@@ -3601,7 +3601,7 @@ analyzer:
           url: "https://registry.npmjs.org/glob/-/glob-3.2.11.tgz"
           hash:
             value: "4a973f635b9190f715d10987d5c00fd2815ebe3d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/isaacs/node-glob.git"
@@ -3631,7 +3631,7 @@ analyzer:
           url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.15.tgz"
           hash:
             value: "ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/isaacs/node-graceful-fs.git"
@@ -3663,7 +3663,7 @@ analyzer:
           url: "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.10.1.tgz"
           hash:
             value: "bd679dc3f59897b6a34bb10749c855bb53a9392f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/fb55/htmlparser2.git"
@@ -3694,7 +3694,7 @@ analyzer:
           url: "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz"
           hash:
             value: "633c2c83e3da42a502f52466022480f4208261de"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/isaacs/inherits.git"
@@ -3726,7 +3726,7 @@ analyzer:
           url: "https://registry.npmjs.org/lodash/-/lodash-4.17.11.tgz"
           hash:
             value: "b39ea6229ef607ecd89e2c8df12536891cac9b8d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/lodash/lodash.git"
@@ -3758,7 +3758,7 @@ analyzer:
           url: "https://registry.npmjs.org/lru-cache/-/lru-cache-2.7.3.tgz"
           hash:
             value: "6d4524e8b955f95d4f5b58851ce21dd72fb4e952"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/isaacs/node-lru-cache.git"
@@ -3790,7 +3790,7 @@ analyzer:
           url: "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz"
           hash:
             value: "275d8edaac4f1bb3326472089e7949c8394699dd"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/isaacs/minimatch.git"
@@ -3822,7 +3822,7 @@ analyzer:
           url: "https://registry.npmjs.org/nth-check/-/nth-check-1.0.2.tgz"
           hash:
             value: "b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/fb55/nth-check.git"
@@ -3854,7 +3854,7 @@ analyzer:
           url: "https://registry.npmjs.org/object-inspect/-/object-inspect-0.4.0.tgz"
           hash:
             value: "f5157c116c1455b243b06ee97703392c5ad89fec"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/substack/object-inspect.git"
@@ -3887,7 +3887,7 @@ analyzer:
           url: "https://registry.npmjs.org/parse5/-/parse5-3.0.3.tgz"
           hash:
             value: "042f792ffdd36851551cf4e9e066b3874ab45b5c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/inikulin/parse5.git"
@@ -3917,7 +3917,7 @@ analyzer:
           url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.2.0.tgz"
           hash:
             value: "de17f229864c120a9f56945756e4f32c4045245d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/nodejs/readable-stream.git"
@@ -3949,7 +3949,7 @@ analyzer:
           url: "https://registry.npmjs.org/requirefresh/-/requirefresh-2.2.0.tgz"
           hash:
             value: "68298ae66af9da3d6843375adf8351dd29d73789"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/bevry/requirefresh.git"
@@ -3982,7 +3982,7 @@ analyzer:
           url: "https://registry.npmjs.org/resumer/-/resumer-0.0.0.tgz"
           hash:
             value: "f1e8f461e4064ba39e82af3cdc2a8c893d076759"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/substack/resumer.git"
@@ -4014,7 +4014,7 @@ analyzer:
           url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
           hash:
             value: "991ec69d296e0313747d59bdfd2b745c35f8828d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/feross/safe-buffer.git"
@@ -4047,7 +4047,7 @@ analyzer:
           url: "https://registry.npmjs.org/safefs/-/safefs-4.1.0.tgz"
           hash:
             value: "f82aeb4bdd7ae51f653eb20f6728b3058c8d6445"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+ssh://git@github.com/bevry/safefs.git"
@@ -4077,7 +4077,7 @@ analyzer:
           url: "https://registry.npmjs.org/semver/-/semver-5.6.0.tgz"
           hash:
             value: "7e74256fbaa49c75aa7c7a205cc22799cac80004"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/npm/node-semver.git"
@@ -4109,7 +4109,7 @@ analyzer:
           url: "https://registry.npmjs.org/sigmund/-/sigmund-1.0.1.tgz"
           hash:
             value: "3ff21f198cad2175f9f3b781853fd94d0d19b590"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/isaacs/sigmund.git"
@@ -4139,7 +4139,7 @@ analyzer:
           url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.2.0.tgz"
           hash:
             value: "fe86e738b19544afe70469243b2a1ee9240eae8d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/nodejs/string_decoder.git"
@@ -4171,7 +4171,7 @@ analyzer:
           url: "https://registry.npmjs.org/tape/-/tape-2.13.4.tgz"
           hash:
             value: "5a4d272a029eab4a9926bf4a6d606a77343ec490"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/substack/tape.git"
@@ -4203,7 +4203,7 @@ analyzer:
           url: "https://registry.npmjs.org/through/-/through-2.3.8.tgz"
           hash:
             value: "0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/dominictarr/through.git"
@@ -4236,7 +4236,7 @@ analyzer:
           url: "https://registry.npmjs.org/typechecker/-/typechecker-4.7.0.tgz"
           hash:
             value: "5249f427358f45b7250c4924fd4d01ed9ba435e9"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git+https://github.com/bevry/typechecker.git"
@@ -4268,7 +4268,7 @@ analyzer:
           url: "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
           hash:
             value: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/TooTallNate/util-deprecate.git"
@@ -4298,7 +4298,7 @@ analyzer:
           url: "https://registry.npmjs.org/@types/node/-/node-11.9.6.tgz"
           hash:
             value: "c632bbcc780a1349673a6e2e9b9dfa8c369d3c74"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"

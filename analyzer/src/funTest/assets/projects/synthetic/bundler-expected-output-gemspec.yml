@@ -70,7 +70,7 @@ packages:
     url: "https://rubygems.org/gems/addressable-2.7.0.gem"
     hash:
       value: "5e9b62fe1239091ea9b2893cd00ffe1bcbdd9371f4e1d35fac595c98c5856cbb"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "http://github.com/sporkmonger/addressable.git"
@@ -110,7 +110,7 @@ packages:
     url: "https://rubygems.org/gems/diff-lcs-1.3.gem"
     hash:
       value: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/halostatue/diff-lcs.git"
@@ -142,7 +142,7 @@ packages:
     url: "https://rubygems.org/gems/faraday-0.17.3.gem"
     hash:
       value: "c27a8fd7614f1abe9889d8b797246a8e0e5aa6e9d7f1e34ba05a445bf5844f8d"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/lostisland/faraday.git"
@@ -173,7 +173,7 @@ packages:
     url: "https://rubygems.org/gems/jwt-2.2.1.gem"
     hash:
       value: "2c899043f87f4287e30a57c0e71e1e0339f846622ccf263d75837a3aee0eef07"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/jwt/ruby-jwt.git"
@@ -208,7 +208,7 @@ packages:
     url: "https://rubygems.org/gems/multi_json-1.14.1.gem"
     hash:
       value: "d971296c0eacea289d31e4a7ab7ac5eda97262c62bbc8c110de4f5e36425c577"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/intridea/multi_json.git"
@@ -241,7 +241,7 @@ packages:
     url: "https://rubygems.org/gems/multipart-post-2.1.1.gem"
     hash:
       value: "d2dd7aa957650e0d99e0513cd388401b069f09528441b87d884609c8e94ffcfd"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/nicksieger/multipart-post.git"
@@ -272,7 +272,7 @@ packages:
     url: "https://rubygems.org/gems/public_suffix-4.0.5.gem"
     hash:
       value: "efbc976b8f8cd7e2f9387b41ad4dc5447bcc7e862cf3afd909f13b0048a3dc6f"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/weppos/publicsuffix-ruby.git"
@@ -305,7 +305,7 @@ packages:
     url: "https://rubygems.org/gems/rack-2.2.3.gem"
     hash:
       value: "2638e7eb6689a5725c7e16f30cc4aa4e31694dc3ca30d790952526781bd0bb44"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/rack/rack.git"
@@ -337,7 +337,7 @@ packages:
     url: "https://rubygems.org/gems/rspec-3.7.0.gem"
     hash:
       value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "http://github.com/rspec/rspec.git"
@@ -370,7 +370,7 @@ packages:
     url: "https://rubygems.org/gems/rspec-core-3.7.1.gem"
     hash:
       value: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "http://github.com/rspec/rspec-core.git"
@@ -403,7 +403,7 @@ packages:
     url: "https://rubygems.org/gems/rspec-expectations-3.7.0.gem"
     hash:
       value: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "http://github.com/rspec/rspec-expectations.git"
@@ -435,7 +435,7 @@ packages:
     url: "https://rubygems.org/gems/rspec-mocks-3.7.0.gem"
     hash:
       value: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "http://github.com/rspec/rspec-mocks.git"
@@ -470,7 +470,7 @@ packages:
     url: "https://rubygems.org/gems/rspec-support-3.7.1.gem"
     hash:
       value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/rspec/rspec-support.git"
@@ -501,7 +501,7 @@ packages:
     url: "https://rubygems.org/gems/signet-0.8.1.gem"
     hash:
       value: "7b2efb61e689a22b4fc721ba5e9f4fc45b1702dcca38e11e52bfe5883b0d484b"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/googleapis/signet.git"

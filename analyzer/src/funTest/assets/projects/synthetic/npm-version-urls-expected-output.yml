@@ -655,7 +655,7 @@ packages:
     url: "https://registry.npmjs.org/ansi-green/-/ansi-green-0.1.1.tgz"
     hash:
       value: "8a5d9a979e458d57c40e33580b37390b8e10d0f7"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/ansi-green.git"
@@ -685,7 +685,7 @@ packages:
     url: "https://registry.npmjs.org/ansi-wrap/-/ansi-wrap-0.1.0.tgz"
     hash:
       value: "a82250ddb0015e9a27ca82e82ea603bbfa45efaf"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "https://github.com/jonschlinkert/ansi-wrap.git"
@@ -714,7 +714,7 @@ packages:
     url: "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz"
     hash:
       value: "bcd6791ea5ae09725e17e5ad988134cd40b3d911"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/nodeca/argparse.git"
@@ -745,7 +745,7 @@ packages:
     url: "https://registry.npmjs.org/arr-union/-/arr-union-3.1.0.tgz"
     hash:
       value: "e39b09aea9def866a8f206e288af63919bae39c4"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/arr-union.git"
@@ -776,7 +776,7 @@ packages:
     url: "https://registry.npmjs.org/array-each/-/array-each-1.0.1.tgz"
     hash:
       value: "a794af0c05ab1752846ee753a1f211a05ba0c44f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/array-each.git"
@@ -807,7 +807,7 @@ packages:
     url: "https://registry.npmjs.org/array-slice/-/array-slice-0.2.3.tgz"
     hash:
       value: "dd3cfb80ed7973a75117cdac69b0b99ec86186f5"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/jonschlinkert/array-slice.git"
@@ -840,7 +840,7 @@ packages:
     url: "https://registry.npmjs.org/assign-symbols/-/assign-symbols-1.0.0.tgz"
     hash:
       value: "59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/assign-symbols.git"
@@ -870,7 +870,7 @@ packages:
     url: "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz"
     hash:
       value: "6d9517eb9e030d2436666651e86bd9f6f13533c9"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://git.coolaj86.com/coolaj86/atob.js.git"
@@ -901,7 +901,7 @@ packages:
     url: "https://registry.npmjs.org/autolinker/-/autolinker-0.28.1.tgz"
     hash:
       value: "0652b491881879f0775dace0cdca3233942a4e47"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/gregjacobs/Autolinker.js.git"
@@ -931,7 +931,7 @@ packages:
     url: "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.0.tgz"
     hash:
       value: "89b4d199ab2bee49de164ea02b89ce462d71b767"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/juliangruber/balanced-match.git"
@@ -963,7 +963,7 @@ packages:
     url: "https://registry.npmjs.org/base/-/base-0.11.2.tgz"
     hash:
       value: "7bde5ced145b6d551a90db87f83c558b4eb48a8f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/node-base/base.git"
@@ -993,7 +993,7 @@ packages:
     url: "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
     hash:
       value: "3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/juliangruber/brace-expansion.git"
@@ -1023,7 +1023,7 @@ packages:
     url: "https://registry.npmjs.org/browser-stdout/-/browser-stdout-1.3.1.tgz"
     hash:
       value: "baa559ee14ced73452229bad7326467c61fabd60"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+ssh://git@github.com/kumavis/browser-stdout.git"
@@ -1054,7 +1054,7 @@ packages:
     url: "https://registry.npmjs.org/cache-base/-/cache-base-1.0.1.tgz"
     hash:
       value: "0a7f46416831c8b662ee36fe4e7c59d76f666ab2"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/cache-base.git"
@@ -1084,7 +1084,7 @@ packages:
     url: "https://registry.npmjs.org/class-utils/-/class-utils-0.3.6.tgz"
     hash:
       value: "f93369ae8b9a7ce02fd41faad0ca83033190c463"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/class-utils.git"
@@ -1114,7 +1114,7 @@ packages:
     url: "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
     hash:
       value: "1b7f4b9f591f1e8f83670401600345a02887435f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/pvorb/node-clone.git"
@@ -1144,7 +1144,7 @@ packages:
     url: "https://registry.npmjs.org/clone-buffer/-/clone-buffer-1.0.0.tgz"
     hash:
       value: "e3e25b207ac4e701af721e2cb5a16792cac3dc58"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/gulpjs/clone-buffer.git"
@@ -1175,7 +1175,7 @@ packages:
     url: "https://registry.npmjs.org/clone-stats/-/clone-stats-1.0.0.tgz"
     hash:
       value: "b3782dff8bb5474e18b9b6bf0fdfe782f8777680"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/hughsk/clone-stats.git"
@@ -1205,7 +1205,7 @@ packages:
     url: "https://registry.npmjs.org/cloneable-readable/-/cloneable-readable-1.1.3.tgz"
     hash:
       value: "120a00cb053bfb63a222e709f9683ea2e11d8cec"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/mcollina/cloneable-readable.git"
@@ -1236,7 +1236,7 @@ packages:
     url: "https://registry.npmjs.org/collection-visit/-/collection-visit-1.0.0.tgz"
     hash:
       value: "4bc0373c164bc3291b4d368c829cf1a80a59dca0"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/collection-visit.git"
@@ -1266,7 +1266,7 @@ packages:
     url: "https://registry.npmjs.org/commander/-/commander-2.15.1.tgz"
     hash:
       value: "df46e867d0fc2aec66a34662b406a9ccafff5b0f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/tj/commander.js.git"
@@ -1294,7 +1294,7 @@ packages:
     url: "https://registry.npmjs.org/component-emitter/-/component-emitter-1.3.0.tgz"
     hash:
       value: "16e4070fba8ae29b679f2215853ee181ab2eabc0"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/component/emitter.git"
@@ -1324,7 +1324,7 @@ packages:
     url: "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
     hash:
       value: "d8a96bd77fd68df7793a73036a3ba0d5405d477b"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/substack/node-concat-map.git"
@@ -1355,7 +1355,7 @@ packages:
     url: "https://registry.npmjs.org/concat-with-sourcemaps/-/concat-with-sourcemaps-1.1.0.tgz"
     hash:
       value: "d4ea93f05ae25790951b99e7b3b09e3908a4082e"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/floridoo/concat-with-sourcemaps.git"
@@ -1385,7 +1385,7 @@ packages:
     url: "https://registry.npmjs.org/copy-descriptor/-/copy-descriptor-0.1.1.tgz"
     hash:
       value: "676f6eb3c39997c2ee1ac3a924fd6124748f578d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/copy-descriptor.git"
@@ -1415,7 +1415,7 @@ packages:
     url: "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
     hash:
       value: "b5fd54220aa2bc5ab57aab7140c940754503c1a7"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/core-util-is.git"
@@ -1445,7 +1445,7 @@ packages:
     url: "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"
     hash:
       value: "5d128515df134ff327e90a4c93f4e077a536341f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/visionmedia/debug.git"
@@ -1475,7 +1475,7 @@ packages:
     url: "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz"
     hash:
       value: "5bb5a0672628b64149566ba16819e61518c67261"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/visionmedia/debug.git"
@@ -1505,7 +1505,7 @@ packages:
     url: "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
     hash:
       value: "eb3913333458775cb84cd1a1fae062106bb87545"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/samverschueren/decode-uri-component.git"
@@ -1535,7 +1535,7 @@ packages:
     url: "https://registry.npmjs.org/define-property/-/define-property-0.2.5.tgz"
     hash:
       value: "c35b1ef918ec3c990f9a5bc57be04aacec5c8116"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/define-property.git"
@@ -1565,7 +1565,7 @@ packages:
     url: "https://registry.npmjs.org/define-property/-/define-property-1.0.0.tgz"
     hash:
       value: "769ebaaf3f4a63aad3af9e8d304c9bbe79bfb0e6"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/define-property.git"
@@ -1596,7 +1596,7 @@ packages:
     url: "https://registry.npmjs.org/define-property/-/define-property-2.0.2.tgz"
     hash:
       value: "d459689e8d654ba77e02a817f8710d702cb16e9d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/define-property.git"
@@ -1624,7 +1624,7 @@ packages:
     url: "https://registry.npmjs.org/diff/-/diff-3.5.0.tgz"
     hash:
       value: "800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/kpdecker/jsdiff.git"
@@ -1654,7 +1654,7 @@ packages:
     url: "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
     hash:
       value: "1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "https://github.com/sindresorhus/escape-string-regexp"
@@ -1685,7 +1685,7 @@ packages:
     url: "https://registry.npmjs.org/expand-range/-/expand-range-1.8.2.tgz"
     hash:
       value: "a299effd335fe2721ebae8e257ec79644fc85337"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/expand-range.git"
@@ -1715,7 +1715,7 @@ packages:
     url: "https://registry.npmjs.org/expand-reflinks/-/expand-reflinks-0.2.1.tgz"
     hash:
       value: "6d5e2199eb0ee3e6474e8edebe9a5c6c05a02a30"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/expand-reflinks.git"
@@ -1746,7 +1746,7 @@ packages:
     url: "https://registry.npmjs.org/extend-shallow/-/extend-shallow-2.0.1.tgz"
     hash:
       value: "51af7d614ad9a9f610ea1bafbb989d6b1c56890f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/extend-shallow.git"
@@ -1777,7 +1777,7 @@ packages:
     url: "https://registry.npmjs.org/extend-shallow/-/extend-shallow-3.0.2.tgz"
     hash:
       value: "26a71aaf073b39fb2127172746131c2704028db8"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/extend-shallow.git"
@@ -1808,7 +1808,7 @@ packages:
     url: "https://registry.npmjs.org/fill-range/-/fill-range-2.2.4.tgz"
     hash:
       value: "eb1e773abb056dcd8df2bfdf6af59b8b3a936565"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/fill-range.git"
@@ -1840,7 +1840,7 @@ packages:
     url: "https://registry.npmjs.org/for-in/-/for-in-1.0.2.tgz"
     hash:
       value: "81068d295a8142ec0ac726c6e2200c30fb6d5e80"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/for-in.git"
@@ -1872,7 +1872,7 @@ packages:
     url: "https://registry.npmjs.org/fs-exists-sync/-/fs-exists-sync-0.1.0.tgz"
     hash:
       value: "982d6893af918e72d08dec9e8673ff2b5a8d6add"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/fs-exists-sync.git"
@@ -1903,7 +1903,7 @@ packages:
     url: "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
     hash:
       value: "1504ad2523158caa40db4a2787cb01411994ea4f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/isaacs/fs.realpath.git"
@@ -1933,7 +1933,7 @@ packages:
     url: "https://registry.npmjs.org/get-value/-/get-value-2.0.6.tgz"
     hash:
       value: "dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/get-value.git"
@@ -1963,7 +1963,7 @@ packages:
     url: "https://registry.npmjs.org/gfm-code-block-regex/-/gfm-code-block-regex-1.0.0.tgz"
     hash:
       value: "bb83c7d6284e6b5b72fa02198a58ac0d256215d2"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/regexhq/gfm-code-block-regex.git"
@@ -1993,7 +1993,7 @@ packages:
     url: "https://registry.npmjs.org/gfm-code-blocks/-/gfm-code-blocks-1.0.0.tgz"
     hash:
       value: "614d21059b844c6bbc9d588c089b25c4e8bccf0d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/gfm-code-blocks.git"
@@ -2023,7 +2023,7 @@ packages:
     url: "https://registry.npmjs.org/glob/-/glob-7.1.2.tgz"
     hash:
       value: "c19c9df9a028702d678612384a6552404c636d15"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/node-glob.git"
@@ -2053,7 +2053,7 @@ packages:
     url: "https://registry.npmjs.org/growl/-/growl-1.10.5.tgz"
     hash:
       value: "f2735dc2283674fa67478b10181059355c369e5e"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/tj/node-growl.git"
@@ -2083,7 +2083,7 @@ packages:
     url: "https://registry.npmjs.org/gulp-format-md/-/gulp-format-md-1.0.0.tgz"
     hash:
       value: "0a866365b5e118caef89cd449525d5477589da62"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/gulp-format-md.git"
@@ -2113,7 +2113,7 @@ packages:
     url: "https://registry.npmjs.org/gulp-header/-/gulp-header-1.8.12.tgz"
     hash:
       value: "ad306be0066599127281c4f8786660e705080a84"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/tracker1/gulp-header.git"
@@ -2143,7 +2143,7 @@ packages:
     url: "https://registry.npmjs.org/has-flag/-/has-flag-3.0.0.tgz"
     hash:
       value: "b5d454dc2199ae225699f3467e5a07f3b955bafd"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/sindresorhus/has-flag.git"
@@ -2174,7 +2174,7 @@ packages:
     url: "https://registry.npmjs.org/has-value/-/has-value-0.3.1.tgz"
     hash:
       value: "7b1f58bada62ca827ec0a2078025654845995e1f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/has-value.git"
@@ -2205,7 +2205,7 @@ packages:
     url: "https://registry.npmjs.org/has-value/-/has-value-1.0.0.tgz"
     hash:
       value: "18b281da585b1c5c51def24c930ed29a0be6b177"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/has-value.git"
@@ -2236,7 +2236,7 @@ packages:
     url: "https://registry.npmjs.org/has-values/-/has-values-0.1.4.tgz"
     hash:
       value: "6d61de95d91dfca9b9a02089ad384bff8f62b771"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/has-values.git"
@@ -2267,7 +2267,7 @@ packages:
     url: "https://registry.npmjs.org/has-values/-/has-values-1.0.0.tgz"
     hash:
       value: "95b0b63fec2146619a6fe57fe75628d5a39efe4f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/has-values.git"
@@ -2297,7 +2297,7 @@ packages:
     url: "https://registry.npmjs.org/he/-/he-1.1.1.tgz"
     hash:
       value: "93410fd21b009735151f8868c2f271f3427e23fd"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/mathiasbynens/he.git"
@@ -2327,7 +2327,7 @@ packages:
     url: "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz"
     hash:
       value: "49bd6331d7d02d0c09bc910a1075ba8165b56df9"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/npm/inflight.git"
@@ -2356,7 +2356,7 @@ packages:
     url: "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
     hash:
       value: "0fa2c64f932917c3433a0ded55363aae37416b7c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/inherits.git"
@@ -2387,7 +2387,7 @@ packages:
     url: "https://registry.npmjs.org/is-accessor-descriptor/-/is-accessor-descriptor-0.1.6.tgz"
     hash:
       value: "a9e12cb3ae8d876727eeef3843f8a0897b5c98d6"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-accessor-descriptor.git"
@@ -2418,7 +2418,7 @@ packages:
     url: "https://registry.npmjs.org/is-accessor-descriptor/-/is-accessor-descriptor-1.0.0.tgz"
     hash:
       value: "169c2f6d3df1f992618072365c9b0ea1f6878656"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-accessor-descriptor.git"
@@ -2448,7 +2448,7 @@ packages:
     url: "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
     hash:
       value: "efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/feross/is-buffer.git"
@@ -2479,7 +2479,7 @@ packages:
     url: "https://registry.npmjs.org/is-data-descriptor/-/is-data-descriptor-0.1.4.tgz"
     hash:
       value: "0b5ee648388e2c860282e793f1856fec3f301b56"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-data-descriptor.git"
@@ -2510,7 +2510,7 @@ packages:
     url: "https://registry.npmjs.org/is-data-descriptor/-/is-data-descriptor-1.0.0.tgz"
     hash:
       value: "d84876321d0e7add03990406abbbbd36ba9268c7"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-data-descriptor.git"
@@ -2541,7 +2541,7 @@ packages:
     url: "https://registry.npmjs.org/is-descriptor/-/is-descriptor-0.1.6.tgz"
     hash:
       value: "366d8240dde487ca51823b1ab9f07a10a78251ca"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-descriptor.git"
@@ -2572,7 +2572,7 @@ packages:
     url: "https://registry.npmjs.org/is-descriptor/-/is-descriptor-1.0.2.tgz"
     hash:
       value: "3b159746a66604b04f8c81524ba365c5f14d86ec"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-descriptor.git"
@@ -2604,7 +2604,7 @@ packages:
     url: "https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz"
     hash:
       value: "62b110e289a471418e3ec36a617d472e301dfc89"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-extendable.git"
@@ -2634,7 +2634,7 @@ packages:
     url: "https://registry.npmjs.org/is-extendable/-/is-extendable-1.0.1.tgz"
     hash:
       value: "a7470f9e426733d81bd81e1155264e3a3507cab4"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-extendable.git"
@@ -2664,7 +2664,7 @@ packages:
     url: "https://registry.npmjs.org/is-number/-/is-number-2.1.0.tgz"
     hash:
       value: "01fcbbb393463a548f2f466cce16dece49db908f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-number.git"
@@ -2694,7 +2694,7 @@ packages:
     url: "https://registry.npmjs.org/is-number/-/is-number-3.0.0.tgz"
     hash:
       value: "24fd6201a4782cf50561c810276afc7d12d71195"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-number.git"
@@ -2724,7 +2724,7 @@ packages:
     url: "https://registry.npmjs.org/is-number/-/is-number-4.0.0.tgz"
     hash:
       value: "0026e37f5454d73e356dfe6564699867c6a7f0ff"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-number.git"
@@ -2754,7 +2754,7 @@ packages:
     url: "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.4.tgz"
     hash:
       value: "2c163b3fafb1b606d9d17928f05c2a1c38e07677"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-plain-object.git"
@@ -2784,7 +2784,7 @@ packages:
     url: "https://registry.npmjs.org/is-win/-/is-win-1.0.8.tgz"
     hash:
       value: "298e654acce43b6c2935b526c23b2651babe7d8b"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+ssh://git@github.com/IonicaBizau/is-win.git"
@@ -2815,7 +2815,7 @@ packages:
     url: "https://registry.npmjs.org/is-windows/-/is-windows-1.0.2.tgz"
     hash:
       value: "d1850eb9791ecd18e6182ce12a30f396634bb19d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/is-windows.git"
@@ -2845,7 +2845,7 @@ packages:
     url: "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
     hash:
       value: "bb935d48582cba168c06834957a54a3e07124f11"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/juliangruber/isarray.git"
@@ -2875,7 +2875,7 @@ packages:
     url: "https://registry.npmjs.org/isobject/-/isobject-2.1.0.tgz"
     hash:
       value: "f065561096a3f1da2ef46272f815c840d87e0c89"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/isobject.git"
@@ -2905,7 +2905,7 @@ packages:
     url: "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
     hash:
       value: "4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/isobject.git"
@@ -2935,7 +2935,7 @@ packages:
     url: "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
     hash:
       value: "31ea21a734bab9bbb0f32466d893aea51e4a3c64"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/kind-of.git"
@@ -2965,7 +2965,7 @@ packages:
     url: "https://registry.npmjs.org/kind-of/-/kind-of-4.0.0.tgz"
     hash:
       value: "20813df3d712928b207378691a45066fae72dd57"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/kind-of.git"
@@ -2995,7 +2995,7 @@ packages:
     url: "https://registry.npmjs.org/kind-of/-/kind-of-5.1.0.tgz"
     hash:
       value: "729c91e2d857b7a419a1f9aa65685c4c33f5845d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/kind-of.git"
@@ -3025,7 +3025,7 @@ packages:
     url: "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
     hash:
       value: "07c05034a6c349fa06e24fa35aa76db4580ce4dd"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/kind-of.git"
@@ -3055,7 +3055,7 @@ packages:
     url: "https://registry.npmjs.org/lazy-cache/-/lazy-cache-2.0.2.tgz"
     hash:
       value: "b9190a4f913354694840859f8a8f7084d8822264"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/lazy-cache.git"
@@ -3086,7 +3086,7 @@ packages:
     url: "https://registry.npmjs.org/list-item/-/list-item-1.1.1.tgz"
     hash:
       value: "0c65d00e287cb663ccb3cb3849a77e89ec268a56"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/list-item.git"
@@ -3116,7 +3116,7 @@ packages:
     url: "https://registry.npmjs.org/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz"
     hash:
       value: "0ccf2d89166af03b3663c796538b75ac6e114d9d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "https://github.com/lodash/lodash"
@@ -3146,7 +3146,7 @@ packages:
     url: "https://registry.npmjs.org/lodash.template/-/lodash.template-4.5.0.tgz"
     hash:
       value: "f976195cf3f347d0d5f52483569fe8031ccce8ab"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/lodash/lodash.git"
@@ -3176,7 +3176,7 @@ packages:
     url: "https://registry.npmjs.org/lodash.templatesettings/-/lodash.templatesettings-4.2.0.tgz"
     hash:
       value: "e481310f049d3cf6d47e912ad09313b154f0fb33"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/lodash/lodash.git"
@@ -3206,7 +3206,7 @@ packages:
     url: "https://registry.npmjs.org/log-ok/-/log-ok-0.1.1.tgz"
     hash:
       value: "bea3dd36acd0b8a7240d78736b5b97c65444a334"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/log-ok.git"
@@ -3236,7 +3236,7 @@ packages:
     url: "https://registry.npmjs.org/map-cache/-/map-cache-0.2.2.tgz"
     hash:
       value: "c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/map-cache.git"
@@ -3266,7 +3266,7 @@ packages:
     url: "https://registry.npmjs.org/map-visit/-/map-visit-1.0.0.tgz"
     hash:
       value: "ecdca8f13144e660f1b5bd41f12f3479d98dfb8f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/map-visit.git"
@@ -3296,7 +3296,7 @@ packages:
     url: "https://registry.npmjs.org/markdown-utils/-/markdown-utils-0.7.3.tgz"
     hash:
       value: "4c583a31e251d69b313aceb3802a4f5d1b0f1e76"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/markdown-utils.git"
@@ -3328,7 +3328,7 @@ packages:
     url: "https://registry.npmjs.org/math-random/-/math-random-1.0.4.tgz"
     hash:
       value: "5dd6943c938548267016d4e34f057583080c514c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/michaelrhodes/math-random.git"
@@ -3358,7 +3358,7 @@ packages:
     url: "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
     hash:
       value: "5166e286457f03306064be5497e8dbb0c3d32083"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/minimatch.git"
@@ -3388,7 +3388,7 @@ packages:
     url: "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
     hash:
       value: "857fcabfc3397d2625b8228262e86aa7a011b05d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/substack/minimist.git"
@@ -3418,7 +3418,7 @@ packages:
     url: "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
     hash:
       value: "67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/substack/minimist.git"
@@ -3449,7 +3449,7 @@ packages:
     url: "https://registry.npmjs.org/mixin-deep/-/mixin-deep-1.3.2.tgz"
     hash:
       value: "1120b43dc359a785dce65b55b82e257ccf479566"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/mixin-deep.git"
@@ -3479,7 +3479,7 @@ packages:
     url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
     hash:
       value: "30057438eac6cf7f8c4767f38648d6697d75c903"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/substack/node-mkdirp.git"
@@ -3509,7 +3509,7 @@ packages:
     url: "https://registry.npmjs.org/mocha/-/mocha-5.2.0.tgz"
     hash:
       value: "6d8ae508f59167f940f2b5b3c4a612ae50c90ae6"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/mochajs/mocha.git"
@@ -3537,7 +3537,7 @@ packages:
     url: "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
     hash:
       value: "5608aeadfc00be6c2901df5f9861788de0d597c8"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/zeit/ms.git"
@@ -3568,7 +3568,7 @@ packages:
     url: "https://registry.npmjs.org/object-copy/-/object-copy-0.1.0.tgz"
     hash:
       value: "7e7d858b781bd7c991a41ba975ed3812754e998c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/object-copy.git"
@@ -3598,7 +3598,7 @@ packages:
     url: "https://registry.npmjs.org/object-visit/-/object-visit-1.0.1.tgz"
     hash:
       value: "f79c4493af0c5377b59fe39d395e41042dd045bb"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/object-visit.git"
@@ -3628,7 +3628,7 @@ packages:
     url: "https://registry.npmjs.org/once/-/once-1.4.0.tgz"
     hash:
       value: "583b1aa775961d4b113ac17d9c50baef9dd76bd1"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/isaacs/once.git"
@@ -3658,7 +3658,7 @@ packages:
     url: "https://registry.npmjs.org/pascalcase/-/pascalcase-0.1.1.tgz"
     hash:
       value: "b363e55e8006ca6fe21784d2db22bd15d7917f14"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/pascalcase.git"
@@ -3688,7 +3688,7 @@ packages:
     url: "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz"
     hash:
       value: "174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/sindresorhus/path-is-absolute.git"
@@ -3719,7 +3719,7 @@ packages:
     url: "https://registry.npmjs.org/pretty-remarkable/-/pretty-remarkable-0.4.1.tgz"
     hash:
       value: "437b53c8a7d4c47a5933c01bb25982f840560201"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/pretty-remarkable.git"
@@ -3747,7 +3747,7 @@ packages:
     url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
     hash:
       value: "7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
@@ -3778,7 +3778,7 @@ packages:
     url: "https://registry.npmjs.org/randomatic/-/randomatic-3.1.1.tgz"
     hash:
       value: "b776efc59375984e36c537b2f51a1f0aff0da1ed"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/randomatic.git"
@@ -3806,7 +3806,7 @@ packages:
     url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
     hash:
       value: "1eca1cf711aef814c04f62252a36a62f6cb23b57"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/nodejs/readable-stream.git"
@@ -3837,7 +3837,7 @@ packages:
     url: "https://registry.npmjs.org/regex-not/-/regex-not-1.0.2.tgz"
     hash:
       value: "1f4ece27e00b0b65e0247a6810e6a85d83a5752c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/regex-not.git"
@@ -3866,7 +3866,7 @@ packages:
     url: "https://registry.npmjs.org/remarkable/-/remarkable-1.7.4.tgz"
     hash:
       value: "19073cb960398c87a7d6546eaa5e50d2022fcd00"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "https://github.com/jonschlinkert/remarkable.git"
@@ -3896,7 +3896,7 @@ packages:
     url: "https://registry.npmjs.org/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz"
     hash:
       value: "c24bce2a283adad5bc3f58e0d48249b92379d8ef"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/darsain/remove-trailing-separator.git"
@@ -3926,7 +3926,7 @@ packages:
     url: "https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.3.tgz"
     hash:
       value: "782e0d825c0c5a3bb39731f84efee6b742e6b1ce"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/repeat-element.git"
@@ -3957,7 +3957,7 @@ packages:
     url: "https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz"
     hash:
       value: "8dcae470e1c88abc2d600fff4a776286da75e637"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/repeat-string.git"
@@ -3987,7 +3987,7 @@ packages:
     url: "https://registry.npmjs.org/replace-ext/-/replace-ext-1.0.0.tgz"
     hash:
       value: "de63128373fcbf7c3ccfa4de5a480c45a67958eb"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/gulpjs/replace-ext.git"
@@ -4017,7 +4017,7 @@ packages:
     url: "https://registry.npmjs.org/resolve-url/-/resolve-url-0.2.1.tgz"
     hash:
       value: "2c637fe77c893afd2a663fe21aa9080068e2052a"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/lydell/resolve-url"
@@ -4047,7 +4047,7 @@ packages:
     url: "https://registry.npmjs.org/ret/-/ret-0.1.15.tgz"
     hash:
       value: "b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/fent/ret.js.git"
@@ -4077,7 +4077,7 @@ packages:
     url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
     hash:
       value: "991ec69d296e0313747d59bdfd2b745c35f8828d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/feross/safe-buffer.git"
@@ -4107,7 +4107,7 @@ packages:
     url: "https://registry.npmjs.org/safe-regex/-/safe-regex-1.1.0.tgz"
     hash:
       value: "40a3669f3b077d1e943d44629e157dd48023bf2e"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/substack/safe-regex.git"
@@ -4138,7 +4138,7 @@ packages:
     url: "https://registry.npmjs.org/sections/-/sections-1.0.0.tgz"
     hash:
       value: "db657f5a478b45d2a046d045c1aa792eb823c2c1"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/sections.git"
@@ -4169,7 +4169,7 @@ packages:
     url: "https://registry.npmjs.org/set-getter/-/set-getter-0.1.0.tgz"
     hash:
       value: "d769c182c9d5a51f409145f2fba82e5e86e80376"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/doowb/set-getter.git"
@@ -4200,7 +4200,7 @@ packages:
     url: "https://registry.npmjs.org/set-value/-/set-value-2.0.1.tgz"
     hash:
       value: "a18d40530e6f07de4228c7defe4227af8cad005b"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/set-value.git"
@@ -4231,7 +4231,7 @@ packages:
     url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.11.5.tgz"
     hash:
       value: "522812d175f24f919629fd37406b02e434e645e6"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/here-be/snapdragon.git"
@@ -4261,7 +4261,7 @@ packages:
     url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.8.2.tgz"
     hash:
       value: "64922e7c565b0e14204ba1aa7d6964278d25182d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/snapdragon.git"
@@ -4292,7 +4292,7 @@ packages:
     url: "https://registry.npmjs.org/snapdragon-node/-/snapdragon-node-1.0.6.tgz"
     hash:
       value: "2448d5ef6fea7f5e8fd5326a0a114854da271356"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/snapdragon-node.git"
@@ -4322,7 +4322,7 @@ packages:
     url: "https://registry.npmjs.org/snapdragon-util/-/snapdragon-util-1.0.6.tgz"
     hash:
       value: "8b3d2d6dec8930c90e054ba052e562ca1b3a621e"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/snapdragon-util.git"
@@ -4352,7 +4352,7 @@ packages:
     url: "https://registry.npmjs.org/snapdragon-util/-/snapdragon-util-2.1.1.tgz"
     hash:
       value: "552779df8a1493a0e78c06cc80953a262770957a"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/snapdragon-util.git"
@@ -4383,7 +4383,7 @@ packages:
     url: "https://registry.npmjs.org/sort-by-value/-/sort-by-value-0.1.0.tgz"
     hash:
       value: "d07598927d43d425e51ffa3f6c0b91b708576ba7"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/sort-by-value.git"
@@ -4413,7 +4413,7 @@ packages:
     url: "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
     hash:
       value: "8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+ssh://git@github.com/mozilla/source-map.git"
@@ -4443,7 +4443,7 @@ packages:
     url: "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
     hash:
       value: "74722af32e9614e9c287a8d0bbde48b5e2f1a263"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+ssh://git@github.com/mozilla/source-map.git"
@@ -4473,7 +4473,7 @@ packages:
     url: "https://registry.npmjs.org/source-map-resolve/-/source-map-resolve-0.5.3.tgz"
     hash:
       value: "190866bece7553e1f8f267a2ee82c606b5509a1a"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/lydell/source-map-resolve.git"
@@ -4503,7 +4503,7 @@ packages:
     url: "https://registry.npmjs.org/source-map-url/-/source-map-url-0.4.0.tgz"
     hash:
       value: "3e935d7ddd73631b97659956d55128e87b5084a3"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/lydell/source-map-url.git"
@@ -4533,7 +4533,7 @@ packages:
     url: "https://registry.npmjs.org/split-string/-/split-string-3.1.0.tgz"
     hash:
       value: "7cb09dda3a86585705c64b39a6466038682e8fe2"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/split-string.git"
@@ -4563,7 +4563,7 @@ packages:
     url: "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
     hash:
       value: "04e6926f662895354f3dd015203633b857297e2c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/alexei/sprintf.js.git"
@@ -4595,7 +4595,7 @@ packages:
     url: "https://registry.npmjs.org/static-extend/-/static-extend-0.1.2.tgz"
     hash:
       value: "60809c39cbff55337226fd5e0b520f341f1fb5c6"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/static-extend.git"
@@ -4623,7 +4623,7 @@ packages:
     url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz"
     hash:
       value: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/nodejs/string_decoder.git"
@@ -4653,7 +4653,7 @@ packages:
     url: "https://registry.npmjs.org/success-symbol/-/success-symbol-0.1.0.tgz"
     hash:
       value: "24022e486f3bf1cdca094283b769c472d3b72897"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "https://github.com/jonschlinkert/success-symbol"
@@ -4683,7 +4683,7 @@ packages:
     url: "https://registry.npmjs.org/supports-color/-/supports-color-5.4.0.tgz"
     hash:
       value: "1c6b337402c2137605efe19f10fec390f6faab54"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/chalk/supports-color.git"
@@ -4714,7 +4714,7 @@ packages:
     url: "https://registry.npmjs.org/through2/-/through2-2.0.5.tgz"
     hash:
       value: "01c1e39eb31d07cb7d03a96a70823260b23132cd"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/rvagg/through2.git"
@@ -4744,7 +4744,7 @@ packages:
     url: "https://registry.npmjs.org/to-gfm-code-block/-/to-gfm-code-block-0.1.1.tgz"
     hash:
       value: "25d045a5fae553189e9637b590900da732d8aa82"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/jonschlinkert/to-gfm-code-block.git"
@@ -4774,7 +4774,7 @@ packages:
     url: "https://registry.npmjs.org/to-object-path/-/to-object-path-0.3.0.tgz"
     hash:
       value: "297588b7b0e7e0ac08e04e672f85c1f4999e17af"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/to-object-path.git"
@@ -4804,7 +4804,7 @@ packages:
     url: "https://registry.npmjs.org/to-regex/-/to-regex-3.0.2.tgz"
     hash:
       value: "13cfdd9b336552f30b51f33a8ae1b42a7a7599ce"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/to-regex.git"
@@ -4836,7 +4836,7 @@ packages:
     url: "https://registry.npmjs.org/tokenize-comment/-/tokenize-comment-1.0.3.tgz"
     hash:
       value: "c6ef8833ce64b7c7797d161eec3bc51f6049eda5"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/tokenize-comment.git"
@@ -4867,7 +4867,7 @@ packages:
     url: "https://registry.npmjs.org/union-value/-/union-value-1.0.1.tgz"
     hash:
       value: "0b6fe7b835aecda61c6ea4d4f02c14221e109847"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/union-value.git"
@@ -4897,7 +4897,7 @@ packages:
     url: "https://registry.npmjs.org/unset-value/-/unset-value-1.0.0.tgz"
     hash:
       value: "8376873f7d2335179ffb1e6fc3a8ed0dfc8ab559"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/unset-value.git"
@@ -4927,7 +4927,7 @@ packages:
     url: "https://registry.npmjs.org/urix/-/urix-0.1.0.tgz"
     hash:
       value: "da937f7a62e21fec1fd18d49b35c2935067a6c72"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/lydell/urix"
@@ -4957,7 +4957,7 @@ packages:
     url: "https://registry.npmjs.org/use/-/use-3.1.1.tgz"
     hash:
       value: "d50c8cac79a19fbc20f2911f56eb973f4e10070f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/use.git"
@@ -4987,7 +4987,7 @@ packages:
     url: "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
     hash:
       value: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/TooTallNate/util-deprecate.git"
@@ -5017,7 +5017,7 @@ packages:
     url: "https://registry.npmjs.org/vinyl/-/vinyl-2.2.0.tgz"
     hash:
       value: "d85b07da96e458d25b2ffe19fece9f2caa13ed86"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/gulpjs/vinyl.git"
@@ -5047,7 +5047,7 @@ packages:
     url: "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
     hash:
       value: "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/npm/wrappy.git"
@@ -5078,7 +5078,7 @@ packages:
     url: "https://registry.npmjs.org/write/-/write-0.3.3.tgz"
     hash:
       value: "09cdc5a2155607ee279f45e38d91ae29fb6a5178"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git+https://github.com/jonschlinkert/write.git"
@@ -5108,7 +5108,7 @@ packages:
     url: "https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz"
     hash:
       value: "bb72779f5fa465186b1f438f674fa347fdb5db54"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/Raynos/xtend.git"

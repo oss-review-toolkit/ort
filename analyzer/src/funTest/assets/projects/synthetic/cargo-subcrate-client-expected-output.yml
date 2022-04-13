@@ -48,7 +48,7 @@ packages:
     url: "https://crates.io/api/v1/crates/cfg-if/0.1.9/download"
     hash:
       value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/alexcrichton/cfg-if.git"

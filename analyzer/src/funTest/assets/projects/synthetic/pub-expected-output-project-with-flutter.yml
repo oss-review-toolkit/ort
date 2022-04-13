@@ -130,7 +130,7 @@ packages:
     url: "https://dl.google.com/dl/android/maven2/com/crashlytics/sdk/android/answers/1.4.7/answers-1.4.7.aar"
     hash:
       value: "5321e6b7e247c2d8bad7b4405525c8fde362d6fb"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: ""
     hash:
@@ -159,7 +159,7 @@ packages:
     url: "https://dl.google.com/dl/android/maven2/com/crashlytics/sdk/android/beta/1.2.10/beta-1.2.10.aar"
     hash:
       value: "8ccde9499a9f3ad02c0096ef3486db17731ce298"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: ""
     hash:
@@ -188,7 +188,7 @@ packages:
     url: "https://dl.google.com/dl/android/maven2/com/crashlytics/sdk/android/crashlytics/2.9.9/crashlytics-2.9.9.aar"
     hash:
       value: "2cc0daced1a3cf87248ba19546073a1e7aebb78c"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: ""
     hash:
@@ -217,7 +217,7 @@ packages:
     url: "https://dl.google.com/dl/android/maven2/com/crashlytics/sdk/android/crashlytics-core/2.6.8/crashlytics-core-2.6.8.aar"
     hash:
       value: "2069a189e58914727b3d6a2e9fe7e98b703c218e"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: ""
     hash:
@@ -246,7 +246,7 @@ packages:
     url: "https://dl.google.com/dl/android/maven2/com/crashlytics/sdk/android/crashlytics-ndk/2.0.5/crashlytics-ndk-2.0.5.aar"
     hash:
       value: "0fc67e15413dc66ab1fb87d7717f899eebbd7462"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: ""
     hash:
@@ -275,7 +275,7 @@ packages:
     url: "https://dl.google.com/dl/android/maven2/io/fabric/sdk/android/fabric/1.4.8/fabric-1.4.8.aar"
     hash:
       value: "3bf74ec4c468b0644c2d18c199b984dcaaa85681"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: ""
     hash:
