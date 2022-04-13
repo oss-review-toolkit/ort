@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import java.io.File
 import java.util.Base64
 
-import org.ossreviewtoolkit.utils.common.toHexString
+import org.ossreviewtoolkit.utils.common.encodeHex
 
 /**
  * A class that bundles a hash algorithm with its hash value.
@@ -61,7 +61,7 @@ data class Hash(
                 // Support Subresource Integrity (SRI) hashes, see
                 // https://w3c.github.io/webappsec-subresource-integrity/
                 Hash(
-                    value = Base64.getDecoder().decode(splitValue.last()).toHexString(),
+                    value = Base64.getDecoder().decode(splitValue.last()).encodeHex(),
                     algorithm = HashAlgorithm.fromString(splitValue.first())
                 )
             } else {

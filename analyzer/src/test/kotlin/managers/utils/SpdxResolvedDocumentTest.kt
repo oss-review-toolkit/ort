@@ -47,7 +47,7 @@ import java.net.URI
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.calculateHash
-import org.ossreviewtoolkit.utils.common.toHexString
+import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
@@ -661,6 +661,6 @@ private fun File.toExternalReference(index: Int): SpdxExternalDocumentReference 
     return SpdxExternalDocumentReference(
         externalDocumentId = referenceId(index),
         spdxDocument = name,
-        checksum = SpdxChecksum(SpdxChecksum.Algorithm.SHA1, hash.toHexString())
+        checksum = SpdxChecksum(SpdxChecksum.Algorithm.SHA1, hash.encodeHex())
     )
 }

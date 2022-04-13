@@ -30,9 +30,9 @@ import java.security.MessageDigest
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.calculateHash
+import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
-import org.ossreviewtoolkit.utils.common.toHexString
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 
 /**
@@ -67,7 +67,7 @@ val scanCodeLicenseTextDir by lazy {
 fun calculatePackageVerificationCode(sha1sums: Sequence<String>, excludes: Sequence<String> = emptySequence()): String {
     val sha1sum = sha1sums.sorted().fold(MessageDigest.getInstance("SHA-1")) { digest, sha1sum ->
         digest.apply { update(sha1sum.toByteArray()) }
-    }.digest().toHexString()
+    }.digest().encodeHex()
 
     return if (excludes.none()) {
         sha1sum
@@ -83,7 +83,7 @@ fun calculatePackageVerificationCode(sha1sums: Sequence<String>, excludes: Seque
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
 fun calculatePackageVerificationCode(files: Sequence<File>, excludes: Sequence<String> = emptySequence()): String =
-    calculatePackageVerificationCode(files.map { calculateHash(it).toHexString() }, excludes)
+    calculatePackageVerificationCode(files.map { calculateHash(it).encodeHex() }, excludes)
 
 /**
  * Calculate the [SPDX package verification code][1] for all files in a [directory]. If [directory] points to a file

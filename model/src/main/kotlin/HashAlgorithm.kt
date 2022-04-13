@@ -27,7 +27,7 @@ import java.io.InputStream
 import java.security.MessageDigest
 
 import org.ossreviewtoolkit.utils.common.calculateHash
-import org.ossreviewtoolkit.utils.common.toHexString
+import org.ossreviewtoolkit.utils.common.encodeHex
 
 /**
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
@@ -147,5 +147,5 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
      * closing the stream.
      */
     private fun calculate(inputStream: InputStream, size: Long): String =
-        calculateHash(inputStream, getMessageDigest(size)).toHexString()
+        calculateHash(inputStream, getMessageDigest(size)).encodeHex()
 }
