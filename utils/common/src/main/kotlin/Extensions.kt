@@ -306,6 +306,14 @@ fun <K, V : Set<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V>
 fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)
 
 /**
+ * Decode a hex-string and return the value as a [ByteArray].
+ */
+fun String.decodeHex(): ByteArray {
+    require(length % 2 == 0) { "The string must have an even number of characters." }
+    return chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+}
+
+/**
  * Return the string encoded for safe use as a file name or [emptyValue] encoded for safe use as a file name, if this
  * string is empty. Throws an exception if [emptyValue] is empty.
  */
