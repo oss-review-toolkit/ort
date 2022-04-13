@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import java.io.File
 import java.util.Base64
 
+import org.ossreviewtoolkit.utils.common.decodeHex
 import org.ossreviewtoolkit.utils.common.encodeHex
 
 /**
@@ -80,6 +81,11 @@ data class Hash(
                 }
             }
     }
+
+    /**
+     * Return the hash in Support Subresource Integrity (SRI) format.
+     */
+    fun toSri() = "${algorithm.toString().lowercase()}-${Base64.getEncoder().encodeToString(value.decodeHex())}"
 
     /**
      * Verify that the [file] matches this hash.

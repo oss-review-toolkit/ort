@@ -83,6 +83,19 @@ class HashTest : WordSpec({
         }
     }
 
+    "toSri()" should {
+        "return an SRI value from which a hash can be created" {
+            val hash = Hash("a8115c55e4a702fe4d150abd3872822a7e09fc98", HashAlgorithm.SHA1)
+            val sri = hash.toSri()
+
+            sri shouldBe "sha1-qBFcVeSnAv5NFQq9OHKCKn4J/Jg="
+            with(Hash.create(sri)) {
+                value shouldBe "a8115c55e4a702fe4d150abd3872822a7e09fc98"
+                algorithm shouldBe HashAlgorithm.SHA1
+            }
+        }
+    }
+
     "verify()" should {
         "be insensitive to the hash's case" {
             val licenseFile = File("../LICENSE")
