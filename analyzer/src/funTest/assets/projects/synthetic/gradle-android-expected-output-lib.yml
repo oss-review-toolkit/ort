@@ -165,12 +165,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17.jar"
     hash:
       value: "474c20609032e7f815ef534cd8174d2e400d9a8d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17-sources.jar"
     hash:
       value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
@@ -216,12 +216,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar"
     hash:
       value: "557edd918fd41f9260963583ebf5a61a43a6b423"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7-sources.jar"
     hash:
       value: "e7e36219edde1c66c93495a75490d8f526c377cb"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
@@ -254,12 +254,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.2/commons-text-1.2.jar"
     hash:
       value: "74acdec7237f576c4803fff0c1008ab8a3808b2b"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.2/commons-text-1.2-sources.jar"
     hash:
       value: "679282ee0f6f2b236f58a7a1dc8395861ad9fd97"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
@@ -292,12 +292,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.3/commons-text-1.3.jar"
     hash:
       value: "9abf61708a66ab5e55f6169a200dbfc584b546d9"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.3/commons-text-1.3-sources.jar"
     hash:
       value: "9c51853f855aca4ea31785f30385e980a58eaf4b"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"

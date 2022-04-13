@@ -47,7 +47,7 @@ packages:
     url: "https://www.openssl.org/source/openssl-3.0.0.tar.gz"
     hash:
       value: "59eedfcb46c25214c9bd37ed6078297b4df01d012267fe9e9eee31f61bc70536"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/openssl/openssl.git"

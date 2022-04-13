@@ -55,7 +55,7 @@ packages:
     url: "https://crates.io/api/v1/crates/cfg-if/0.1.9/download"
     hash:
       value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/alexcrichton/cfg-if.git"
@@ -87,7 +87,7 @@ packages:
     url: "https://crates.io/api/v1/crates/spin/0.4.10/download"
     hash:
       value: "ceac490aa12c567115b40b7b7fceca03a6c9d53d5defea066123debc83c5dc1f"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/mvdnes/spin-rs.git"
@@ -119,7 +119,7 @@ packages:
     url: "https://crates.io/api/v1/crates/spin/0.5.0/download"
     hash:
       value: "44363f6f51401c34e7be73db0db371c04705d35efbe9f7d6082e03a921a32c55"
-      algorithm: "SHA-256"
+      algorithm: "SHA256"
   vcs:
     type: "Git"
     url: "https://github.com/mvdnes/spin-rs.git"

@@ -53,12 +53,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/beam/beam-parent/2.3.0/beam-parent-2.3.0.pom"
     hash:
       value: "9e1ed0d1f714b13d0625fc9feb1410a7a2250424"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/beam/beam-parent/2.3.0/beam-parent-2.3.0.pom"
     hash:
       value: "9e1ed0d1f714b13d0625fc9feb1410a7a2250424"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "https://gitbox.apache.org/repos/asf/beam.git"
@@ -105,12 +105,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
     hash:
       value: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
     hash:
       value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
@@ -142,12 +142,12 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
     hash:
       value: "c336bf600f44b88af356c8a85eef4af822b06a4d"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
     hash:
       value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
@@ -172,12 +172,12 @@ packages:
     url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4.jar"
     hash:
       value: "5d0f2ea16514c0ec8de86c102ce61a7837e45eb8"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   source_artifact:
     url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4-sources.jar"
     hash:
       value: "ab4e04d731d43157f66d80e4a5daef33ce24f0c2"
-      algorithm: "SHA-1"
+      algorithm: "SHA1"
   vcs:
     type: "Git"
     url: "git://github.com/jenkinsci/lib-version-number.git"

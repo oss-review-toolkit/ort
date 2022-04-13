@@ -52,29 +52,29 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
     /**
      * The Secure Hash Algorithm 1, see [SHA-1](https://en.wikipedia.org/wiki/SHA-1).
      */
-    SHA1("SHA-1", "SHA1"),
+    SHA1("SHA1", "SHA-1"),
 
     /**
      * The Secure Hash Algorithm 2 with 256 bits, see [SHA-256](https://en.wikipedia.org/wiki/SHA-256).
      */
-    SHA256("SHA-256", "SHA256"),
+    SHA256("SHA256", "SHA-256"),
 
     /**
      * The Secure Hash Algorithm 2 with 384 bits, see [SHA-384](https://en.wikipedia.org/wiki/SHA-384).
      */
-    SHA384("SHA-384", "SHA384"),
+    SHA384("SHA384", "SHA-384"),
 
     /**
      * The Secure Hash Algorithm 2 with 512 bits, see [SHA-512](https://en.wikipedia.org/wiki/SHA-512).
      */
-    SHA512("SHA-512", "SHA512"),
+    SHA512("SHA512", "SHA-512"),
 
     /**
      * The Secure Hash Algorithm 1, but calculated on a Git "blob" object, see
      * - https://git-scm.com/book/en/v2/Git-Internals-Git-Objects#_object_storage
      * - https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html#git-compatibility
      */
-    SHA1_GIT("SHA-1-GIT", "SHA1-GIT", "SHA1GIT") {
+    SHA1_GIT("SHA1GIT", "SHA1-GIT", "SHA-1-GIT") {
         override fun getMessageDigest(size: Long): MessageDigest =
             MessageDigest.getInstance(SHA1.toString()).apply {
                 val header = "blob $size\u0000"

@@ -129,12 +129,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar"
           hash:
             value: "7c4f3c474fb2c041d8028740440937705ebb473a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3-sources.jar"
           hash:
             value: "cfd5385e0c5ed1c8a5dce57d86e79cf357153a64"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:ceki/logback.git"
@@ -167,12 +167,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar"
           hash:
             value: "864344400c3d4d92dfeb0a305dc87d953677c03c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3-sources.jar"
           hash:
             value: "3ebabe69eba0196af9ad3a814f723fb720b9101e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:ceki/logback.git"
@@ -209,12 +209,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/co/fs2/fs2-core_2.13/2.5.0/fs2-core_2.13-2.5.0.jar"
           hash:
             value: "faf9c3b2084cc228c43c79853e9b4025c22504ac"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/co/fs2/fs2-core_2.13/2.5.0/fs2-core_2.13-2.5.0-sources.jar"
           hash:
             value: "bbe37c6b4f8093647ebf964968807c76b53ca45e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/fs2.git"
@@ -251,12 +251,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/co/fs2/fs2-io_2.13/2.5.0/fs2-io_2.13-2.5.0.jar"
           hash:
             value: "b168589456bbc5c9a837e4469e26f5194c2d8ae0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/co/fs2/fs2-io_2.13/2.5.0/fs2-io_2.13-2.5.0-sources.jar"
           hash:
             value: "c15a7e8683b638dca4eae7da8ba25b2d5a2f3cc0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/fs2.git"
@@ -286,12 +286,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/chuusai/shapeless_2.13/2.3.3/shapeless_2.13-2.3.3.jar"
           hash:
             value: "61817a5ac96ba59ce20b9073416c57519be40f41"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/chuusai/shapeless_2.13/2.3.3/shapeless_2.13-2.3.3-sources.jar"
           hash:
             value: "3544e77678c51f9f255fe22da9775d1d6e845e6d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:milessabin/shapeless.git"
@@ -321,12 +321,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/com/twitter/hpack/1.0.2/hpack-1.0.2.jar"
           hash:
             value: "67ae8c061a3446e64015712a3aa39d0218340046"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/twitter/hpack/1.0.2/hpack-1.0.2-sources.jar"
           hash:
             value: "ac70bd5153459920cacb6b8ef8e548df24db97f9"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:twitter/hpack.git"
@@ -354,12 +354,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/io/chrisdavenport/unique_2.13/2.0.0/unique_2.13-2.0.0.jar"
           hash:
             value: "bf2f1ceb7b8f55a3a3a597d9e0c88bfbdde13706"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/io/chrisdavenport/unique_2.13/2.0.0/unique_2.13-2.0.0-sources.jar"
           hash:
             value: "9331bf4d030ab2bdfbc5120d7c29fd8b27ea415e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:ChristopherDavenport/unique.git"
@@ -387,12 +387,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/io/chrisdavenport/vault_2.13/2.0.0/vault_2.13-2.0.0.jar"
           hash:
             value: "25652f36cd72d57fad9ab1ccdc0f64210baab035"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/io/chrisdavenport/vault_2.13/2.0.0/vault_2.13-2.0.0-sources.jar"
           hash:
             value: "0ff21ee0c8cddedf143a2f1615ad44c1d5c3e68e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:ChristopherDavenport/vault.git"
@@ -422,12 +422,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-core_2.13/0.13.0/circe-core_2.13-0.13.0.jar"
           hash:
             value: "a11c55979c7036b2be9a16b9175b5a7c31fb2668"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-core_2.13/0.13.0/circe-core_2.13-0.13.0-sources.jar"
           hash:
             value: "88e78140cdd4a8f0496368ec1ef61557d7ce65b6"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:circe/circe.git"
@@ -457,12 +457,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-generic_2.13/0.13.0/circe-generic_2.13-0.13.0.jar"
           hash:
             value: "4df608e1d03cdd11b4e38aff1c64fd82d1a22e1a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-generic_2.13/0.13.0/circe-generic_2.13-0.13.0-sources.jar"
           hash:
             value: "a7a672047f84386657978c30aaf09ae348a37b86"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:circe/circe.git"
@@ -492,12 +492,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-jawn_2.13/0.13.0/circe-jawn_2.13-0.13.0.jar"
           hash:
             value: "04e1dd26291c28addfa228256119fba42cc73a03"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-jawn_2.13/0.13.0/circe-jawn_2.13-0.13.0-sources.jar"
           hash:
             value: "d22bf5ec75633d64a332567aea11765d67543c1a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:circe/circe.git"
@@ -527,12 +527,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-numbers_2.13/0.13.0/circe-numbers_2.13-0.13.0.jar"
           hash:
             value: "49206744a512c9709a5e0c2e7497475ecba73ebe"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/io/circe/circe-numbers_2.13/0.13.0/circe-numbers_2.13-0.13.0-sources.jar"
           hash:
             value: "14d9bc2972783b79bc687dd8e48d886477f96461"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:circe/circe.git"
@@ -566,12 +566,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1.jar"
           hash:
             value: "cdd00374f1fee76b11e2a9d127405aa3f6be5b6a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/junit/junit/4.13.1/junit-4.13.1-sources.jar"
           hash:
             value: "523bdce923a13622132b263550d06519fc591ec4"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/junit-team/junit4.git"
@@ -608,12 +608,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/eclipse/jetty/alpn/alpn-api/1.1.3.v20160715/alpn-api-1.1.3.v20160715.jar"
           hash:
             value: "a1bf3a937f91b4c953acd13e8c9552347adc2198"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/eclipse/jetty/alpn/alpn-api/1.1.3.v20160715/alpn-api-1.1.3.v20160715-sources.jar"
           hash:
             value: "00c4895d0fb6425ff46cbb60d43f4b018e236779"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "http://git.eclipse.org/gitroot/jetty/org.eclipse.jetty.alpn.git"
@@ -648,12 +648,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
           hash:
             value: "42a25dc3219429f0e5d060061f71acb49bf010a0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
           hash:
             value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:hamcrest/JavaHamcrest.git"
@@ -683,12 +683,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/blaze-core_2.13/0.14.14/blaze-core_2.13-0.14.14.jar"
           hash:
             value: "34a308b1813b60e875c185d442184ec9ea0e4908"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/blaze-core_2.13/0.14.14/blaze-core_2.13-0.14.14-sources.jar"
           hash:
             value: "ef634caef56d9a15ce6ae75e74e091ddf6de233a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/http4s/blaze.git"
@@ -718,12 +718,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/blaze-http_2.13/0.14.14/blaze-http_2.13-0.14.14.jar"
           hash:
             value: "772cc46448194a3af5d9ebe004eb5c3313d80d6e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/blaze-http_2.13/0.14.14/blaze-http_2.13-0.14.14-sources.jar"
           hash:
             value: "8788e7ba3f2a61d153d1d6839a53e27b6b17b5ab"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/http4s/blaze.git"
@@ -769,12 +769,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-blaze-client_2.13/0.21.16/http4s-blaze-client_2.13-0.21.16.jar"
           hash:
             value: "7e66a1681fcdd2d607dbb91fb7a8895e582a03aa"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-blaze-client_2.13/0.21.16/http4s-blaze-client_2.13-0.21.16-sources.jar"
           hash:
             value: "47076aa47b5f0114d4164c1c44d9ad7afb2af3d6"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -820,12 +820,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-blaze-core_2.13/0.21.16/http4s-blaze-core_2.13-0.21.16.jar"
           hash:
             value: "f1733a401e6bf1ff460c575fa2fa7087b7ad321d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-blaze-core_2.13/0.21.16/http4s-blaze-core_2.13-0.21.16-sources.jar"
           hash:
             value: "1d89cb039d3d994700a4c8ba5613f85db5dd9dd8"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -871,12 +871,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-blaze-server_2.13/0.21.16/http4s-blaze-server_2.13-0.21.16.jar"
           hash:
             value: "fcf24163a09a6a3b10e5f7e4ba11ae3f68135274"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-blaze-server_2.13/0.21.16/http4s-blaze-server_2.13-0.21.16-sources.jar"
           hash:
             value: "3694f44147bb216b085a1c9630f5c7872c77a89e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -922,12 +922,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-circe_2.13/0.21.16/http4s-circe_2.13-0.21.16.jar"
           hash:
             value: "d484d22fc29209489b5efbf4de6766807df855fd"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-circe_2.13/0.21.16/http4s-circe_2.13-0.21.16-sources.jar"
           hash:
             value: "12de4f835147ec513883f9420ff4553f8aa52a6f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -973,12 +973,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-client_2.13/0.21.16/http4s-client_2.13-0.21.16.jar"
           hash:
             value: "0a5acfc28e87a8e2d6311e44cfe23ee6440884c6"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-client_2.13/0.21.16/http4s-client_2.13-0.21.16-sources.jar"
           hash:
             value: "09857c9e937dba6227246b7f332f05a37dcb7d05"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -1024,12 +1024,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-core_2.13/0.21.16/http4s-core_2.13-0.21.16.jar"
           hash:
             value: "1d63bcafd3b9cd8310fe962d28e713da6fda40ca"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-core_2.13/0.21.16/http4s-core_2.13-0.21.16-sources.jar"
           hash:
             value: "11387a858b8e4926046f14981143e3ccefa8c3b5"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -1075,12 +1075,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-dsl_2.13/0.21.16/http4s-dsl_2.13-0.21.16.jar"
           hash:
             value: "7f2a222adf7797e41df00b2a19e89426de3b7ad6"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-dsl_2.13/0.21.16/http4s-dsl_2.13-0.21.16-sources.jar"
           hash:
             value: "9ce376b054315c357efe75339318f328c090692d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -1126,12 +1126,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-jawn_2.13/0.21.16/http4s-jawn_2.13-0.21.16.jar"
           hash:
             value: "46cf8323ed1f4b2e561f5738b0aaf7eefef74220"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-jawn_2.13/0.21.16/http4s-jawn_2.13-0.21.16-sources.jar"
           hash:
             value: "cad6d3f0dcd7b1d0dccc7d85579f3161dc2babc6"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -1177,12 +1177,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-server_2.13/0.21.16/http4s-server_2.13-0.21.16.jar"
           hash:
             value: "ebf3a3a56aa2208473925fbbbe9b1a0c0938080e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/http4s-server_2.13/0.21.16/http4s-server_2.13-0.21.16-sources.jar"
           hash:
             value: "2f905a7a6649907c5e52b81e31cba3ad148b4100"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:http4s/http4s.git"
@@ -1211,12 +1211,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/jawn-fs2_2.13/1.0.0/jawn-fs2_2.13-1.0.0.jar"
           hash:
             value: "734dd8dfe25289c5c50e6ac44a9928f3937640a1"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/jawn-fs2_2.13/1.0.0/jawn-fs2_2.13-1.0.0-sources.jar"
           hash:
             value: "54cfdd7fa058d8f44480bdaced39dd5ad461a7e0"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/http4s/jawn-fs2.git"
@@ -1245,12 +1245,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/http4s/parboiled_2.13/2.0.1/parboiled_2.13-2.0.1.jar"
           hash:
             value: "98d7e970642049ff9783461a6a655fd2c84eb691"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/http4s/parboiled_2.13/2.0.1/parboiled_2.13-2.0.1-sources.jar"
           hash:
             value: "574ba9c990ea3e5817871a540719c5615eb1629f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:sirthias/parboiled2.git"
@@ -1281,12 +1281,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/log4s/log4s_2.13/1.9.0/log4s_2.13-1.9.0.jar"
           hash:
             value: "458190515762b384395bc9d6433383665167c48a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/log4s/log4s_2.13/1.9.0/log4s_2.13-1.9.0-sources.jar"
           hash:
             value: "15507c1dab1616e66b4633798127ab697a0047b5"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:Log4s/log4s.git"
@@ -1314,12 +1314,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.4/scala-library-2.13.4.jar"
           hash:
             value: "b6781c71dfe4a3d5980a514eec8a513f693ead95"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.13.4/scala-library-2.13.4-sources.jar"
           hash:
             value: "69007f50916f311991fc29b47448d475b9ed5543"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/scala/scala.git"
@@ -1347,12 +1347,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.2/scala-reflect-2.13.2.jar"
           hash:
             value: "2a6dd4989a27aba0dd43bc297045cff633d70064"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-reflect/2.13.2/scala-reflect-2.13.2-sources.jar"
           hash:
             value: "11f47bb48cc482aee6a47fb058eca05e576e7411"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git://github.com/scala/scala.git"
@@ -1386,12 +1386,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar"
           hash:
             value: "0a3f14d010c4cb32071f863d97291df31603b521"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar"
           hash:
             value: "d44b23e9e3419ad0e00b91bba764a48d43075000"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: ""
           url: ""
@@ -1419,12 +1419,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/scalameta/junit-interface/0.7.20/junit-interface-0.7.20.jar"
           hash:
             value: "57c22a6a3469a8fe1c79764b8adddc489dfc2392"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/scalameta/junit-interface/0.7.20/junit-interface-0.7.20-sources.jar"
           hash:
             value: "cd7858f06a0405298d64ebbd80fc3f6c8d2ac23e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/scalameta/munit.git"
@@ -1452,12 +1452,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/scalameta/munit_2.13/0.7.20/munit_2.13-0.7.20.jar"
           hash:
             value: "626291a3826971b1be984fcc36a488c79c89bb98"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/scalameta/munit_2.13/0.7.20/munit_2.13-0.7.20-sources.jar"
           hash:
             value: "a8d3a5b99ef42c282ec10c6cde67889c10d512c2"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/scalameta/munit.git"
@@ -1485,12 +1485,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/scalameta/svm-subs_2.13/20.2.0/svm-subs_2.13-20.2.0.jar"
           hash:
             value: "fe7eebfa1d2e7dfead168569cb981eb3b0c3db06"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/scalameta/svm-subs_2.13/20.2.0/svm-subs_2.13-20.2.0-sources.jar"
           hash:
             value: "e20eb69dc9d950bf4e1b4b9745f69bf79f8742a3"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "https://github.com/scalameta/svm-subs.git"
@@ -1519,12 +1519,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/scodec/scodec-bits_2.13/1.1.23/scodec-bits_2.13-1.1.23.jar"
           hash:
             value: "f45a2b9b5811c0d5a518356a4a45004c7528ad42"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/scodec/scodec-bits_2.13/1.1.23/scodec-bits_2.13-1.1.23-sources.jar"
           hash:
             value: "fe7f4d42f08a04b19b1a014ea3763e8e4904d172"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:scodec/scodec-bits.git"
@@ -1554,12 +1554,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"
           hash:
             value: "da76ca59f6a57ee3102f8f9bd9cee742973efa8a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25-sources.jar"
           hash:
             value: "962153db4a9ea71b79d047dfd1b2a0d80d8f4739"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:qos-ch/slf4j.git"
@@ -1601,12 +1601,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/cats-core_2.13/2.3.1/cats-core_2.13-2.3.1.jar"
           hash:
             value: "0fcd0cc007cba8cf0bbe33e1f9e11a69b20d9716"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/cats-core_2.13/2.3.1/cats-core_2.13-2.3.1-sources.jar"
           hash:
             value: "a315bf7a42fe458d0084a7840f4bc4161bf0bcbe"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/cats.git"
@@ -1637,12 +1637,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/cats-effect_2.13/2.3.1/cats-effect_2.13-2.3.1.jar"
           hash:
             value: "21c0fe60b4896c338828edb0893dc9122b7751ea"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/cats-effect_2.13/2.3.1/cats-effect_2.13-2.3.1-sources.jar"
           hash:
             value: "664e155b66d364e944f2fe4666b9a52a1b51358a"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/cats-effect.git"
@@ -1684,12 +1684,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/cats-kernel_2.13/2.3.1/cats-kernel_2.13-2.3.1.jar"
           hash:
             value: "4ad652787ecd49e55a5985b035546b07d64765c6"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/cats-kernel_2.13/2.3.1/cats-kernel_2.13-2.3.1-sources.jar"
           hash:
             value: "bdd596244a84daa9cf4fb451b8cb429422c28247"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/cats.git"
@@ -1717,12 +1717,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/jawn-parser_2.13/1.0.1/jawn-parser_2.13-1.0.1.jar"
           hash:
             value: "4b7be6f4f03b1e0071d28ceeec671298d50be78e"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/jawn-parser_2.13/1.0.1/jawn-parser_2.13-1.0.1-sources.jar"
           hash:
             value: "aaaa15852bddbd2d6a2d4fa990015c9c8b9b6dcd"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/jawn.git"
@@ -1750,12 +1750,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/munit-cats-effect-2_2.13/0.13.0/munit-cats-effect-2_2.13-0.13.0.jar"
           hash:
             value: "a0c823b65312142ca30519b0d7761efe5809082f"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/munit-cats-effect-2_2.13/0.13.0/munit-cats-effect-2_2.13-0.13.0-sources.jar"
           hash:
             value: "4b12cf400658fd7545a17c49360f9e7113d135f5"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/munit-cats-effect.git"
@@ -1785,12 +1785,12 @@ analyzer:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/simulacrum-scalafix-annotations_2.13/0.5.3/simulacrum-scalafix-annotations_2.13-0.5.3.jar"
           hash:
             value: "ec959001e735722980a4428b1906b11b61c6835d"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/typelevel/simulacrum-scalafix-annotations_2.13/0.5.3/simulacrum-scalafix-annotations_2.13-0.5.3-sources.jar"
           hash:
             value: "7a2cdc4729332a6277a34462cfd8fbf06a007f8c"
-            algorithm: "SHA-1"
+            algorithm: "SHA1"
         vcs:
           type: "Git"
           url: "git@github.com:typelevel/simulacrum-scalafix.git"
