@@ -466,7 +466,8 @@ data class OrtResult(
         }
 
     /**
-     * Retrieve all unresolved and non-excluded issues with severities equal to or over [minSeverity].
+     * Retrieve non-excluded issues which are not resolved by resolutions in the repository configuration of this
+     * [OrtResult] with severities equal to or over [minSeverity].
      */
     @JsonIgnore
     fun getOpenIssues(minSeverity: Severity = Severity.WARNING) = collectIssues()
