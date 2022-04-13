@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
@@ -251,7 +252,7 @@ private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> {
     // point.
     // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
     if (node["license_file"].textValueOrEmpty().isNotBlank()) {
-        declaredLicenses += "LicenseRef-ort-unknown-license-reference"
+        declaredLicenses += SpdxConstants.NOASSERTION
     }
 
     return declaredLicenses
