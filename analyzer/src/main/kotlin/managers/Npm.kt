@@ -138,7 +138,7 @@ open class Npm(
 
                     // NPM allows to declare non-SPDX licenses only by referencing a license file. Avoid reporting an
                     // [OrtIssue] by mapping this to a valid license identifier.
-                    declaredLicense.startsWith("SEE LICENSE IN ") -> "LicenseRef-ort-unknown-license-reference"
+                    declaredLicense.startsWith("SEE LICENSE IN ") -> SpdxConstants.NOASSERTION
 
                     else -> declaredLicense.takeUnless { it.isBlank() }
                 }
