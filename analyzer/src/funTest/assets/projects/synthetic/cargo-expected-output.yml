@@ -7,10 +7,10 @@ project:
   - "anon"
   declared_licenses:
   - "Apache-2.0"
-  - "LicenseRef-ort-unknown-license-reference"
   - "MIT"
+  - "NOASSERTION"
   declared_licenses_processed:
-    spdx_expression: "Apache-2.0 OR LicenseRef-ort-unknown-license-reference OR MIT"
+    spdx_expression: "Apache-2.0 OR MIT OR NOASSERTION"
   vcs:
     type: ""
     url: ""
@@ -259,9 +259,9 @@ packages:
   authors:
   - "Erick Tryzelaar"
   declared_licenses:
-  - "LicenseRef-ort-unknown-license-reference"
+  - "NOASSERTION"
   declared_licenses_processed:
-    spdx_expression: "LicenseRef-ort-unknown-license-reference"
+    spdx_expression: "NOASSERTION"
   description: "Rust crate for the Fuchsia cryptographically secure pseudorandom number\
     \ generator"
   homepage_url: ""
