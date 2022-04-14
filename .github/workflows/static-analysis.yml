@@ -15,7 +15,7 @@ jobs:
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Java
       uses: actions/setup-java@v2
       with:
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Check Links
       uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
