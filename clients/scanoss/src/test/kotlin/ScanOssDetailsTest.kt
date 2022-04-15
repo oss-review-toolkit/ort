@@ -38,9 +38,9 @@ import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.clients.scanoss.model.Source
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
-class ScanOssDetailsTest : StringSpec({
-    val SCANOSS_DETAILS_RESPONSE_FILENAME = "osskb.c"
+private const val SCANOSS_DETAILS_RESPONSE_FILENAME = "osskb.c"
 
+class ScanOssDetailsTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()

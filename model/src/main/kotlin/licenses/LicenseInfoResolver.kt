@@ -97,23 +97,25 @@ class LicenseInfoResolver(
                 )
 
                 if (addAuthorsToCopyrights && licenseInfo.declaredLicenseInfo.authors.isNotEmpty()) {
-                    locations.add(ResolvedLicenseLocation(
-                        provenance = UnknownProvenance,
-                        location = UNDEFINED_TEXT_LOCATION,
-                        appliedCuration = null,
-                        matchingPathExcludes = emptyList(),
-                        copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) { author ->
-                            val statement = "Copyright (C) $author".takeUnless {
-                                author.contains("Copyright", ignoreCase = true)
-                            } ?: author
+                    locations.add(
+                        ResolvedLicenseLocation(
+                            provenance = UnknownProvenance,
+                            location = UNDEFINED_TEXT_LOCATION,
+                            appliedCuration = null,
+                            matchingPathExcludes = emptyList(),
+                            copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) { author ->
+                                val statement = "Copyright (C) $author".takeUnless {
+                                    author.contains("Copyright", ignoreCase = true)
+                                } ?: author
 
-                            ResolvedCopyrightFinding(
-                                statement = statement,
-                                location = UNDEFINED_TEXT_LOCATION,
-                                matchingPathExcludes = emptyList()
-                            )
-                        }
-                    ))
+                                ResolvedCopyrightFinding(
+                                    statement = statement,
+                                    location = UNDEFINED_TEXT_LOCATION,
+                                    matchingPathExcludes = emptyList()
+                                )
+                            }
+                        )
+                    )
                 }
             }
         }

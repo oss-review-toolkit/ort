@@ -196,26 +196,29 @@ fun File.packZip(
     ZipArchiveOutputStream(targetFile).use { output ->
         output.setLevel(Deflater.BEST_COMPRESSION)
 
-        Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
-            override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                return if (directoryFilter(dir.toFile())) FileVisitResult.CONTINUE else FileVisitResult.SKIP_SUBTREE
-            }
-
-            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                if (!attrs.isRegularFile) return FileVisitResult.CONTINUE
-
-                val fileAsFile = file.toFile()
-                if (fileFilter(fileAsFile)) {
-                    val packPath = prefix + fileAsFile.toRelativeString(this@packZip)
-                    val entry = ZipArchiveEntry(fileAsFile, packPath)
-                    output.putArchiveEntry(entry)
-                    fileAsFile.inputStream().use { input -> input.copyTo(output) }
-                    output.closeArchiveEntry()
+        Files.walkFileTree(
+            toPath(),
+            object : SimpleFileVisitor<Path>() {
+                override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                    return if (directoryFilter(dir.toFile())) FileVisitResult.CONTINUE else FileVisitResult.SKIP_SUBTREE
                 }
 
-                return FileVisitResult.CONTINUE
+                override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                    if (!attrs.isRegularFile) return FileVisitResult.CONTINUE
+
+                    val fileAsFile = file.toFile()
+                    if (fileFilter(fileAsFile)) {
+                        val packPath = prefix + fileAsFile.toRelativeString(this@packZip)
+                        val entry = ZipArchiveEntry(fileAsFile, packPath)
+                        output.putArchiveEntry(entry)
+                        fileAsFile.inputStream().use { input -> input.copyTo(output) }
+                        output.closeArchiveEntry()
+                    }
+
+                    return FileVisitResult.CONTINUE
+                }
             }
-        })
+        )
     }
 }
 

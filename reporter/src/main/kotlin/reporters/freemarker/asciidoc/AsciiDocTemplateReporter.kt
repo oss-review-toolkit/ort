@@ -87,13 +87,16 @@ abstract class AsciiDocTemplateReporter(private val backend: String, override va
         val templateOptions = options.toMutableMap()
 
         if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in templateOptions) {
-            templateOptions.putIfAbsent(FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID, buildString {
-                append(DISCLOSURE_TEMPLATE_ID)
+            templateOptions.putIfAbsent(
+                FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID,
+                buildString {
+                    append(DISCLOSURE_TEMPLATE_ID)
 
-                if (input.ortResult.getAdvisorResults().isNotEmpty()) {
-                    append(",$VULNERABILITY_TEMPLATE_ID,$DEFECT_TEMPLATE_ID")
+                    if (input.ortResult.getAdvisorResults().isNotEmpty()) {
+                        append(",$VULNERABILITY_TEMPLATE_ID,$DEFECT_TEMPLATE_ID")
+                    }
                 }
-            })
+            )
         }
 
         return templateProcessor.processTemplates(input, outputDir, templateOptions)

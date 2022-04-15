@@ -95,8 +95,9 @@ class DownloadResultsFromPostgresCommand : CliktCommand(
         openDatabaseConnection().use { connection ->
             val remoteRowIds = fetchRowIds(connection)
             val missingRowIds = remoteRowIds - localRowIds
-            println("Requested the download of ${remoteRowIds.size} results of which ${missingRowIds.size} " +
-                    "are missing.")
+            println(
+                "Requested the download of ${remoteRowIds.size} results of which ${missingRowIds.size} are missing."
+            )
 
             missingRowIds.forEachIndexed { i, rowId ->
                 println("[${i + 1} / ${missingRowIds.size}] downloading row $rowId")

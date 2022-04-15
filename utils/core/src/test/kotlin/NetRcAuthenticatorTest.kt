@@ -29,9 +29,10 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 class NetRcAuthenticatorTest : WordSpec({
     "getNetrcAuthentication()" should {
         "correctly parse single-line contents" {
-            val authentication = getNetrcAuthentication("""
-                machine github.com login foo password bar
-            """.trimIndent(), "github.com")
+            val authentication = getNetrcAuthentication(
+                "machine github.com login foo password bar",
+                "github.com"
+            )
 
             authentication shouldNotBeNull {
                 userName shouldBe "foo"
@@ -40,11 +41,14 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "correctly parse multi-line contents" {
-            val authentication = getNetrcAuthentication("""
+            val authentication = getNetrcAuthentication(
+                """
                 machine gitlab.com
                 login foo
                 password bar
-            """.trimIndent(), "gitlab.com")
+                """.trimIndent(),
+                "gitlab.com"
+            )
 
             authentication shouldNotBeNull {
                 userName shouldBe "foo"
@@ -53,12 +57,15 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "recognize the default machine" {
-            val authentication = getNetrcAuthentication("""
+            val authentication = getNetrcAuthentication(
+                """
                 machine github.com
                 login git
                 password hub
                 default login foo password bar
-            """.trimIndent(), "gitlab.com")
+                """.trimIndent(),
+                "gitlab.com"
+            )
 
             authentication shouldNotBeNull {
                 userName shouldBe "foo"
@@ -67,7 +74,8 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "ignore superfluous statements" {
-            val authentication = getNetrcAuthentication("""
+            val authentication = getNetrcAuthentication(
+                """
                 machine "# A funky way to add comments."
                 login funkyLogin
                 password funkyPassword
@@ -76,7 +84,9 @@ class NetRcAuthenticatorTest : WordSpec({
                 port 433
                 password bar
                 login foo
-            """.trimIndent(), "bitbucket.com")
+                """.trimIndent(),
+                "bitbucket.com"
+            )
 
             authentication shouldNotBeNull {
                 userName shouldBe "foo"
@@ -97,9 +107,10 @@ class NetRcAuthenticatorTest : WordSpec({
         }
 
         "ignore irrelevant machines" {
-            val authentication = getNetrcAuthentication("""
-                machine bitbucket.com login foo password bar
-            """.trimIndent(), "github.com")
+            val authentication = getNetrcAuthentication(
+                "machine bitbucket.com login foo password bar",
+                "github.com"
+            )
 
             authentication should beNull()
         }

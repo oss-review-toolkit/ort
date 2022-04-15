@@ -192,8 +192,9 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding("license-nearby", "path", licenseStartLine)
                 setupLicenseFinding("license-far-away", "path", licenseStartLine + 100 * DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding(
-                    "statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES -
-                            DEFAULT_EXPAND_TOLERANCE_LINES - 1
+                    "statement1",
+                    "path",
+                    licenseStartLine - DEFAULT_TOLERANCE_LINES - DEFAULT_EXPAND_TOLERANCE_LINES - 1
                 )
                 setupCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES)

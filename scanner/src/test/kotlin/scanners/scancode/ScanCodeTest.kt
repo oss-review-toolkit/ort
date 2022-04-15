@@ -50,7 +50,8 @@ class ScanCodeTest : WordSpec({
 
         "return the non-config values from the scanner configuration" {
             val scannerWithConfig = ScanCode(
-                "ScanCode", ScannerConfiguration(
+                "ScanCode",
+                ScannerConfiguration(
                     options = mapOf(
                         "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
@@ -73,7 +74,8 @@ class ScanCodeTest : WordSpec({
 
         "contain the values from the scanner configuration" {
             val scannerWithConfig = ScanCode(
-                "ScanCode", ScannerConfiguration(
+                "ScanCode",
+                ScannerConfiguration(
                     options = mapOf(
                         "ScanCode" to mapOf(
                             "commandLine" to "--command --line",

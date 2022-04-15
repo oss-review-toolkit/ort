@@ -81,9 +81,11 @@ class ReportTableModelMapper(
             description = this@toResolvableIssue.toString(),
             resolutionDescription = buildString {
                 if (resolutions.isNotEmpty()) {
-                    append(resolutions.joinToString(prefix = "\nResolved by: ") {
-                        "${it.reason} - ${it.comment}"
-                    })
+                    append(
+                        resolutions.joinToString(prefix = "\nResolved by: ") {
+                            "${it.reason} - ${it.comment}"
+                        }
+                    )
                 }
             },
             isResolved = resolutions.isNotEmpty(),
@@ -98,9 +100,11 @@ class ReportTableModelMapper(
             violation = this,
             resolutionDescription = buildString {
                 if (resolutions.isNotEmpty()) {
-                    append(resolutions.joinToString(prefix = "\nResolved by: ") {
-                        "${it.reason} - ${it.comment}"
-                    })
+                    append(
+                        resolutions.joinToString(prefix = "\nResolved by: ") {
+                            "${it.reason} - ${it.comment}"
+                        }
+                    )
                 }
             },
             isResolved = resolutions.isNotEmpty()

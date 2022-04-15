@@ -36,8 +36,10 @@ dependencies {
     api("com.squareup.retrofit2:retrofit:$retrofitVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
-            retrofitKotlinxSerializationConverterVersion)
+    implementation(
+        "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
+                retrofitKotlinxSerializationConverterVersion
+    )
 
     testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
 }

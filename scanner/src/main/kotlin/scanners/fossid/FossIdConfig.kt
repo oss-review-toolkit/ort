@@ -203,9 +203,14 @@ internal data class FossIdConfig(
      */
     fun createService(): FossIdServiceWithVersion {
         log.info { "The FossID server URL is $serverUrl." }
-        val service = FossIdRestService.create(serverUrl, OkHttpClientHelper.buildClient {
-            readTimeout(Duration.ofSeconds(60))
-        })
+
+        val service = FossIdRestService.create(
+            serverUrl,
+            OkHttpClientHelper.buildClient {
+                readTimeout(Duration.ofSeconds(60))
+            }
+        )
+
         return FossIdServiceWithVersion.instance(service).also {
             if (it.version.isEmpty()) {
                 log.warn { "The FossID server is running an unknown version." }

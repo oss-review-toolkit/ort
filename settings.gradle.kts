@@ -37,8 +37,10 @@ pluginManagement {
                 gradle.rootProject.properties[versionPropertyName]?.let { version ->
                     logger.info("Setting '${requested.id.id}' plugin version to $version.")
                     useVersion(version.toString())
-                } ?: logger.warn("No version specified for plugin '${requested.id.id}' and property " +
-                        "'$versionPropertyName' does not exist.")
+                } ?: logger.warn(
+                    "No version specified for plugin '${requested.id.id}' and property '$versionPropertyName' does " +
+                            "not exist."
+                )
             }
         }
     }

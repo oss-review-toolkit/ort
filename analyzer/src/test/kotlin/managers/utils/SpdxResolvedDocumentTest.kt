@@ -567,8 +567,10 @@ class SpdxResolvedDocumentTest : WordSpec() {
             "return a normalized definition file" {
                 val resolvedDocument = ResolvedSpdxDocument(
                     SpdxDocumentCache().load(BASE_DOCUMENT_FILE),
-                    URI("../analyzer/src/funTest/assets/projects/synthetic/spdx/" +
-                            "project-xyz-with-inline-packages.spdx.yml")
+                    URI(
+                        "../analyzer/src/funTest/assets/projects/synthetic/spdx/" +
+                            "project-xyz-with-inline-packages.spdx.yml"
+                    )
                 )
 
                 resolvedDocument.definitionFile() shouldBe BASE_DOCUMENT_FILE.absoluteFile

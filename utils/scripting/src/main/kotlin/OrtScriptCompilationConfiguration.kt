@@ -58,18 +58,20 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
         dependenciesFromCurrentContext(wholeClasspath = true)
     }
 
-    hostConfiguration(ScriptingHostConfiguration {
-        jvm {
-            val scriptCacheDir = ortDataDirectory.resolve("cache/scripts").apply { safeMkdirs() }
+    hostConfiguration(
+        ScriptingHostConfiguration {
+            jvm {
+                val scriptCacheDir = ortDataDirectory.resolve("cache/scripts").apply { safeMkdirs() }
 
-            compilationCache(
-                CompiledScriptJarsCache { script, configuration ->
-                    val cacheKey = generateUniqueName(script, configuration)
-                    scriptCacheDir.resolve("$cacheKey.jar")
-                }
-            )
+                compilationCache(
+                    CompiledScriptJarsCache { script, configuration ->
+                        val cacheKey = generateUniqueName(script, configuration)
+                        scriptCacheDir.resolve("$cacheKey.jar")
+                    }
+                )
+            }
         }
-    })
+    )
 })
 
 // Use MD5 for speed.

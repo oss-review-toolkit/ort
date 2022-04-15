@@ -162,7 +162,8 @@ class ExamplesFunTest : StringSpec() {
 
             val ortResult = File("src/funTest/assets/semver4j-analyzer-result.yml").readValue<OrtResult>()
             val notifier = Notifier(
-                ortResult, NotifierConfiguration(
+                ortResult,
+                NotifierConfiguration(
                     SendMailConfiguration(
                         hostName = "localhost",
                         port = greenMail.smtp.serverSetup.port,

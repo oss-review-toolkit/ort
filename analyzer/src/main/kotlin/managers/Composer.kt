@@ -134,11 +134,11 @@ class Composer(
                 val lockFile = readJsonFile(workingDir.resolve(COMPOSER_LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
 
-                // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as 
-                // required, but are not listed in composer.lock as installed.  
-                // If we didn't handle them specifically, we would report them as missing when trying to load the 
-                // dependency information for them. We can't simply put these "virtual" packages in the normal package 
-                // map as this would cause us to report a package which is not actually installed with the contents of 
+                // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
+                // required, but are not listed in composer.lock as installed.
+                // If we didn't handle them specifically, we would report them as missing when trying to load the
+                // dependency information for them. We can't simply put these "virtual" packages in the normal package
+                // map as this would cause us to report a package which is not actually installed with the contents of
                 // the "replacing" package.
                 val virtualPackages = parseVirtualPackageNames(packages, manifest, lockFile)
 
@@ -291,8 +291,8 @@ class Composer(
             Set<String> {
         val replacedNames = mutableSetOf<String>()
 
-        // The contents of the manifest file, which can also define replacements, is not included in the lock file, so 
-        // we parse the manifest file as well. 
+        // The contents of the manifest file, which can also define replacements, is not included in the lock file, so
+        // we parse the manifest file as well.
         replacedNames += parseVirtualNames(manifest)
 
         listOf("packages", "packages-dev").forEach { type ->

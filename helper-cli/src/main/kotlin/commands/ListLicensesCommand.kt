@@ -188,9 +188,14 @@ internal class ListLicensesCommand : CliktCommand(
                     !offendingOnly || license in violatedRulesByLicense
                 }.mapValues { (license, locations) ->
                     locations.filter { location ->
-                        (fileAllowList.isEmpty() || fileAllowList.any { it.matches(Paths.get(location.path)) }) &&
-                                (!omitExcluded || !isPathExcluded(provenance, location.path) ||
-                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty())
+                        val isAllowedFile = fileAllowList.isEmpty() || fileAllowList.any {
+                            it.matches(Paths.get(location.path))
+                        }
+
+                        val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
+                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+
+                        isAllowedFile && isIncluded
                     }
                 }.mapValues { (_, locations) ->
                     locations.groupByText(sourcesDir)
