@@ -336,6 +336,10 @@ class SpdxDocumentFile(
         doc.relationships.mapNotNullTo(sortedSetOf()) { (source, relation, target) ->
             val issues = mutableListOf<OrtIssue>()
 
+            val isDependsOnRelation = relation == SpdxRelationship.Type.DEPENDS_ON || hasDefaultScopeLinkage(
+                source, target, relation, doc.relationships
+            )
+
             when {
                 // Dependencies can either be defined on the target...
                 pkgId.equals(target, ignoreCase = true) && relation == dependencyOfRelation -> {
@@ -364,8 +368,7 @@ class SpdxDocumentFile(
                 }
 
                 // ...or on the source.
-                pkgId.equals(source, ignoreCase = true) && (relation == SpdxRelationship.Type.DEPENDS_ON
-                        || hasDefaultScopeLinkage(source, target, relation, doc.relationships)) -> {
+                pkgId.equals(source, ignoreCase = true) && isDependsOnRelation -> {
                     if (pkgId != source) {
                         issues += createAndLogIssue(
                             source = managerName,

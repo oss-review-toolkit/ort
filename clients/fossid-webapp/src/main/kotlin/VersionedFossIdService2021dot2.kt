@@ -27,8 +27,9 @@ class VersionedFossIdService2021dot2(
     override suspend fun checkScanStatus(
         user: String,
         apiKey: String,
-        scanCode: String): EntityResponseBody<out UnversionedScanDescription> =
-            delegate.checkScanStatus2021dot2(
-                PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
-            )
+        scanCode: String
+    ): EntityResponseBody<out UnversionedScanDescription> =
+        delegate.checkScanStatus2021dot2(
+            PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
+        )
 }

@@ -79,8 +79,10 @@ dependencies {
     testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-    testImplementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
-            retrofitKotlinxSerializationConverterVersion)
+    testImplementation(
+        "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
+                retrofitKotlinxSerializationConverterVersion
+    )
 }
 
 buildConfig {

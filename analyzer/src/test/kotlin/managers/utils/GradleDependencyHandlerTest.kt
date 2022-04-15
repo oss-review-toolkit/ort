@@ -189,7 +189,8 @@ class GradleDependencyHandlerTest : WordSpec({
             val scopeDependencies2 = scopeDependencies(scopes, scope2)
             scopeDependencies2.identifiers() should containExactlyInAnyOrder(dep1.toId(), dep2.toId(), dep4.toId())
             dep3Pkg.dependencies.findDependency(dep2) should beTheSameInstanceAs(
-                scopeDependencies2.findDependency(dep2))
+                scopeDependencies2.findDependency(dep2)
+            )
         }
 
         "deal with packages that have different dependencies in the same scope" {

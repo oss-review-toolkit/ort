@@ -86,12 +86,20 @@ tasks.named<CreateStartScripts>("startScripts").configure {
         // Work around the command line length limit on Windows when passing the classpath to Java, see
         // https://github.com/gradle/gradle/issues/1989#issuecomment-395001392.
         val windowsScriptText = windowsScript.readText(Charset.defaultCharset())
-        windowsScript.writeText(windowsScriptText.replace(Regex("set CLASSPATH=%APP_HOME%\\\\lib\\\\.*"),
-            "set CLASSPATH=%APP_HOME%\\\\lib\\\\*;%APP_HOME%\\\\plugin\\\\*"))
+        windowsScript.writeText(
+            windowsScriptText.replace(
+                Regex("set CLASSPATH=%APP_HOME%\\\\lib\\\\.*"),
+                "set CLASSPATH=%APP_HOME%\\\\lib\\\\*;%APP_HOME%\\\\plugin\\\\*"
+            )
+        )
 
         val unixScriptText = unixScript.readText(Charset.defaultCharset())
-        unixScript.writeText(unixScriptText.replace(Regex("CLASSPATH=\\\$APP_HOME/lib/.*"),
-            "CLASSPATH=\\\$APP_HOME/lib/*:\\\$APP_HOME/plugin/*"))
+        unixScript.writeText(
+            unixScriptText.replace(
+                Regex("CLASSPATH=\\\$APP_HOME/lib/.*"),
+                "CLASSPATH=\\\$APP_HOME/lib/*:\\\$APP_HOME/plugin/*"
+            )
+        )
     }
 }
 

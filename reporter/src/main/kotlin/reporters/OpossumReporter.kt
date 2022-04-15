@@ -195,7 +195,9 @@ class OpossumReporter : Reporter {
         )
 
         override fun compareTo(other: OpossumFrequentLicense) =
-            compareValuesBy(this, other,
+            compareValuesBy(
+                this,
+                other,
                 { it.shortName },
                 { it.fullName },
                 { it.defaultText }
@@ -437,9 +439,10 @@ class OpossumReporter : Reporter {
                         copyright = copyright,
                         license = license
                     )
-                    addSignal(pathSignal,
-                        rootsBelowMaxDepth.map { resolvePath(it, pathFromFinding) }
-                            .toSortedSet())
+                    addSignal(
+                        pathSignal,
+                        rootsBelowMaxDepth.map { resolvePath(it, pathFromFinding) }.toSortedSet()
+                    )
                 }
             }
 

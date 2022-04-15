@@ -455,7 +455,8 @@ private fun createOrtResult(): OrtResult {
                         OrtIssue(
                             source = "Source-1",
                             message = "Message-1"
-                        ), OrtIssue(
+                        ),
+                        OrtIssue(
                             source = "Source-2",
                             message = "Message-2"
                         )
@@ -544,7 +545,8 @@ private fun createOrtResult(): OrtResult {
                                     OrtIssue(
                                         source = "Source-4",
                                         message = "Message-4"
-                                    ), OrtIssue(
+                                    ),
+                                    OrtIssue(
                                         source = "Source-5",
                                         message = "Message-5"
                                     )

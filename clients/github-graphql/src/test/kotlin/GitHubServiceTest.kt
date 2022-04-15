@@ -291,12 +291,14 @@ private fun variablesRegex(variables: List<Pair<String, Any>>): String {
  * variable can be provided.
  */
 private fun repoVariablesRegex(pageSize: Int = PAGE_SIZE, cursor: String? = null): String =
-    variablesRegex(listOfNotNull(
-        "repo_owner" to REPO_OWNER,
-        "repo_name" to REPO_NAME,
-        "page_size" to pageSize,
-        cursor?.let { "cursor" to it }
-    ))
+    variablesRegex(
+        listOfNotNull(
+            "repo_owner" to REPO_OWNER,
+            "repo_name" to REPO_NAME,
+            "page_size" to pageSize,
+            cursor?.let { "cursor" to it }
+        )
+    )
 
 /**
  * Read an expected GraphQL query from a file with the given [name] and convert it to a form, so that it can be

@@ -282,8 +282,11 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
      * construct graphs for specific scopes.
      */
     fun subgraph(subNodes: Set<Identifier>): Graph =
-        Graph(nodeMap.filter { it.key in subNodes }
-            .mapValuesTo(mutableMapOf()) { e -> e.value.filterTo(mutableSetOf()) { it in subNodes } })
+        Graph(
+            nodeMap.filter { it.key in subNodes }.mapValuesTo(mutableMapOf()) { e ->
+                e.value.filterTo(mutableSetOf()) { it in subNodes }
+            }
+        )
 
     /**
      * Search for the single package that represents the main project. This is the only package without a version.

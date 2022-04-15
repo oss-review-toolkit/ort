@@ -85,10 +85,12 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
     companion object {
         val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
-        val XML_MAPPER = XmlMapper(XmlFactory().apply {
-            // Work-around for https://github.com/FasterXML/jackson-module-kotlin/issues/138.
-            xmlTextElementName = "value"
-        }).registerKotlinModule()
+        val XML_MAPPER = XmlMapper(
+            XmlFactory().apply {
+                // Work-around for https://github.com/FasterXML/jackson-module-kotlin/issues/138.
+                xmlTextElementName = "value"
+            }
+        ).registerKotlinModule()
 
         fun create(definitionFile: File): NuGetSupport {
             val configXmlReader = NuGetConfigFileReader()

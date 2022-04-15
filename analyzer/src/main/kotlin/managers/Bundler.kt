@@ -398,7 +398,9 @@ data class GemSpec(
             "Cannot merge specs for different gems."
         }
 
-        return GemSpec(name, version,
+        return GemSpec(
+            name,
+            version,
             homepageUrl.takeUnless { it.isEmpty() } ?: other.homepageUrl,
             authors.takeUnless { it.isEmpty() } ?: other.authors,
             declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,

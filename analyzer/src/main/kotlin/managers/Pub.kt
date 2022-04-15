@@ -233,10 +233,12 @@ class Pub(
                 gradleAnalyzerResult.projectResults.values.flatten().forEach { projectAnalyzerResult ->
                     val project = projectAnalyzerResult.project.withResolvedScopes(gradleAnalyzerResult.dependencyGraph)
 
-                    androidScope.dependencies += PackageReference(id = project.id,
+                    androidScope.dependencies += PackageReference(
+                        id = project.id,
                         linkage = PackageLinkage.PROJECT_STATIC,
-                        dependencies = project.scopes.find { it.name == "releaseCompileClasspath" }
-                            ?.dependencies ?: sortedSetOf())
+                        dependencies = project.scopes.find { it.name == "releaseCompileClasspath" }?.dependencies
+                            ?: sortedSetOf()
+                    )
 
                     projectAnalyzerResults += ProjectAnalyzerResult(
                         project,

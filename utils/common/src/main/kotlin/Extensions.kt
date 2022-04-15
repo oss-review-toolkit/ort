@@ -104,25 +104,28 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
         if (overwrite) add(StandardCopyOption.REPLACE_EXISTING)
     }.toTypedArray()
 
-    Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
-        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-            // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions on Windows,
-            // so do a better check here.
-            if (dir.toFile().isSymbolicLink()) return FileVisitResult.SKIP_SUBTREE
+    Files.walkFileTree(
+        sourcePath,
+        object : SimpleFileVisitor<Path>() {
+            override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions on
+                // Windows, so do a better check here.
+                if (dir.toFile().isSymbolicLink()) return FileVisitResult.SKIP_SUBTREE
 
-            val targetDir = targetPath.resolve(sourcePath.relativize(dir))
-            targetDir.toFile().safeMkdirs()
+                val targetDir = targetPath.resolve(sourcePath.relativize(dir))
+                targetDir.toFile().safeMkdirs()
 
-            return FileVisitResult.CONTINUE
+                return FileVisitResult.CONTINUE
+            }
+
+            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                val targetFile = targetPath.resolve(sourcePath.relativize(file))
+                Files.copy(file, targetFile, *copyOptions)
+
+                return FileVisitResult.CONTINUE
+            }
         }
-
-        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-            val targetFile = targetPath.resolve(sourcePath.relativize(file))
-            Files.copy(file, targetFile, *copyOptions)
-
-            return FileVisitResult.CONTINUE
-        }
-    })
+    )
 }
 
 /**

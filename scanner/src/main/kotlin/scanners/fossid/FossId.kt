@@ -336,8 +336,9 @@ class FossId internal constructor(
                                     "Scan results need to be inspected on the server instance.",
                             severity = Severity.HINT
                         )
-                        val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(),
-                            listOf(issue))
+                        val summary = ScanSummary(
+                            startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue)
+                        )
 
                         val scanResult = ScanResult(provenance, details, summary)
                         results.getOrPut(pkg) { mutableListOf() } += scanResult

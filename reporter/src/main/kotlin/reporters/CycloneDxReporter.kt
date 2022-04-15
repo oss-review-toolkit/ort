@@ -80,21 +80,25 @@ class CycloneDxReporter : Reporter {
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
         if (url.isBlank()) return
 
-        addExternalReference(ExternalReference().also { ref ->
-            ref.type = type
-            ref.url = url
-            ref.comment = comment?.takeUnless { it.isBlank() }
-        })
+        addExternalReference(
+            ExternalReference().also { ref ->
+                ref.type = type
+                ref.url = url
+                ref.comment = comment?.takeUnless { it.isBlank() }
+            }
+        )
     }
 
     private fun Component.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
         if (url.isBlank()) return
 
-        addExternalReference(ExternalReference().also { ref ->
-            ref.type = type
-            ref.url = url
-            ref.comment = comment?.takeUnless { it.isBlank() }
-        })
+        addExternalReference(
+            ExternalReference().also { ref ->
+                ref.type = type
+                ref.url = url
+                ref.comment = comment?.takeUnless { it.isBlank() }
+            }
+        )
     }
 
     private fun mapHash(hash: org.ossreviewtoolkit.model.Hash): Hash? =

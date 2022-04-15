@@ -218,9 +218,8 @@ class DependencyGraphBuilder<D>(
      */
     fun scopesFor(prefix: String, unqualify: Boolean = true): SortedSet<String> {
         val qualifiedScopes = scopeMapping.keys.filter { it.startsWith(prefix) }
-
-        return (qualifiedScopes.takeUnless { unqualify }
-            ?: qualifiedScopes.map { it.substring(prefix.length) }).toSortedSet()
+        val scopes = qualifiedScopes.takeUnless { unqualify } ?: qualifiedScopes.map { it.substring(prefix.length) }
+        return scopes.toSortedSet()
     }
 
     /**

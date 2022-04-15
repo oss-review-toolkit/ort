@@ -89,7 +89,9 @@ class GetPackageLicensesCommand : CliktCommand(
 
         val result = scanResults.firstOrNull()?.let { scanResult ->
             val packageConfiguration = packageConfigurationProvider.getPackageConfiguration(
-                packageId, scanResult.provenance)
+                packageId, scanResult.provenance
+            )
+
             val licenseFindingCurations = packageConfiguration?.licenseFindingCurations.orEmpty()
             val pathExcludes = packageConfiguration?.pathExcludes.orEmpty()
 

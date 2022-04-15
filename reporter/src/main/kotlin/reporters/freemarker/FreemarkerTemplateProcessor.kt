@@ -482,7 +482,8 @@ private fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): Strin
     repository.nestedRepositories.forEach { (path, vcsInfo) ->
         if (vcsInfo.type == provenance.vcsInfo.type
             && vcsInfo.url == provenance.vcsInfo.url
-            && vcsInfo.revision == provenance.resolvedRevision) {
+            && vcsInfo.revision == provenance.resolvedRevision
+        ) {
             return "/$path/"
         }
     }
