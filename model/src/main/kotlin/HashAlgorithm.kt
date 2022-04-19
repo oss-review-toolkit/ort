@@ -74,7 +74,7 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
      * - https://git-scm.com/book/en/v2/Git-Internals-Git-Objects#_object_storage
      * - https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html#git-compatibility
      */
-    SHA1GIT("SHA1GIT", "SHA1-GIT", "SHA-1-GIT") {
+    SHA1GIT("SHA1GIT", "SHA1-GIT", "SHA-1-GIT", "SWHID") {
         override fun getMessageDigest(size: Long): MessageDigest =
             MessageDigest.getInstance(SHA1.toString()).apply {
                 val header = "blob $size\u0000"
