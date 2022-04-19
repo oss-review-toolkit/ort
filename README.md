@@ -12,11 +12,11 @@
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
-[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/gradle-wrapper-validation.yml/badge.svg?branch=main
+[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/gradle-wrapper-validation.yml/badge.svg
 [4]: https://github.com/oss-review-toolkit/ort/actions/workflows/gradle-wrapper-validation.yml
-[5]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg?branch=main
+[5]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg
 [6]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
-[7]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml/badge.svg?branch=main
+[7]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml/badge.svg
 [8]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml
 [9]: https://jitpack.io/v/oss-review-toolkit/ort.svg
 [10]: https://jitpack.io/#oss-review-toolkit/ort
