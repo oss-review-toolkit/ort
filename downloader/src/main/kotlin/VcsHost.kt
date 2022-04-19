@@ -89,6 +89,9 @@ enum class VcsHost(
 
         override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://$hostname/$userOrOrg/$project/get/${vcsInfo.revision}.tar.gz"
+
+        override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://$hostname/$userOrOrg/$project/raw/${vcsInfo.revision}/${vcsInfo.path}"
     },
 
     /**
@@ -124,6 +127,9 @@ enum class VcsHost(
 
         override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://$hostname/$userOrOrg/$project/archive/${vcsInfo.revision}.tar.gz"
+
+        override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://$hostname/$userOrOrg/$project/raw/${vcsInfo.revision}/${vcsInfo.path}"
     },
 
     /**
@@ -165,6 +171,9 @@ enum class VcsHost(
 
         override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://$hostname/$userOrOrg/$project/-/archive/${vcsInfo.revision}/$project-${vcsInfo.revision}.tar.gz"
+
+        override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://$hostname/$userOrOrg/$project/-/raw/${vcsInfo.revision}/${vcsInfo.path}"
     },
 
     SOURCEHUT("sr.ht", VcsType.GIT, VcsType.MERCURIAL) {
@@ -238,6 +247,10 @@ enum class VcsHost(
         override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://${vcsInfo.type.toString().lowercase()}.$hostname/~$userOrOrg/$project/archive/" +
                     "${vcsInfo.revision}.tar.gz"
+
+        override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
+            "https://${vcsInfo.type.toString().lowercase()}.$hostname/~$userOrOrg/$project/blob/${vcsInfo.revision}/" +
+                    "${vcsInfo.path}"
     };
 
     companion object {
@@ -358,6 +371,20 @@ enum class VcsHost(
                 host.toArchiveDownloadUrlInternal(userOrOrg, project, normalizedVcsInfo)
             }.getOrNull()
         }
+
+        /**
+         * Return the download URL to the raw file referenced by [fileUrl], or null if no raw download URL can be
+         * determined.
+         */
+        fun toRawDownloadUrl(fileUrl: String): String? {
+            val host = values().find { it.isApplicable(fileUrl) } ?: return null
+            return fileUrl.toUri {
+                val userOrOrg = host.getUserOrOrgInternal(it) ?: return@toUri null
+                val project = host.getProjectInternal(it) ?: return@toUri null
+                val vcsInfo = host.toVcsInfoInternal(it)
+                host.toRawDownloadUrlInternal(userOrOrg, project, vcsInfo)
+            }.getOrNull()
+        }
     }
 
     private val supportedTypes = supportedTypes.asList()
@@ -429,6 +456,22 @@ enum class VcsHost(
     }
 
     abstract fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo): String
+
+    /**
+     * Return the download URL to the raw file referenced by [fileUrl], or null if no raw download URL can be
+     * determined.
+     */
+    fun toRawDownloadUrl(fileUrl: String): String? {
+        return fileUrl.toUri {
+            if (!isApplicable(it)) return@toUri null
+            val userOrOrg = getUserOrOrgInternal(it) ?: return@toUri null
+            val project = getProjectInternal(it) ?: return@toUri null
+            val vcsInfo = toVcsInfoInternal(it)
+            toRawDownloadUrlInternal(userOrOrg, project, vcsInfo)
+        }.getOrNull()
+    }
+
+    abstract fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo): String
 }
 
 private fun String.isPathToMarkdownFile() =
