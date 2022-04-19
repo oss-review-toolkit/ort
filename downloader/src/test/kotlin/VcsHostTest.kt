@@ -65,6 +65,12 @@ class VcsHostTest : WordSpec({
             BITBUCKET.toArchiveDownloadUrl(vcsInfo) shouldBe
                     "https://bitbucket.org/yevster/spdxtraxample/get/287aebca5e7ff4167af1fb648640dcdbdf4ec666.tar.gz"
         }
+
+        "be able to create raw download URLs from file URLs" {
+            BITBUCKET.toRawDownloadUrl(
+                "https://bitbucket.org/pypa/distlib/src/8ed03aab48add854f377ce392efffb79bb4d6091/setup.py"
+            ) shouldBe "https://bitbucket.org/pypa/distlib/raw/8ed03aab48add854f377ce392efffb79bb4d6091/setup.py"
+        }
     }
 
     "The GitHub implementation" should {
@@ -114,6 +120,12 @@ class VcsHostTest : WordSpec({
             GITHUB.toArchiveDownloadUrl(vcsInfo) shouldBe
                     "https://github.com/oss-review-toolkit/ort/archive/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7.tar.gz"
         }
+
+        "be able to create raw download URLs from file URLs" {
+            GITHUB.toRawDownloadUrl(
+                "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+            ) shouldBe "https://github.com/dotnet/corefx/raw/master/LICENSE.TXT"
+        }
     }
 
     "The GitLab implementation" should {
@@ -162,6 +174,12 @@ class VcsHostTest : WordSpec({
             GITLAB.toArchiveDownloadUrl(vcsInfo) shouldBe
                     "https://gitlab.com/mbunkus/mkvtoolnix/-/archive/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/" +
                     "mkvtoolnix-ec80478f87f1941fe52f15c5f4fa7ee6a70d7006.tar.gz"
+        }
+
+        "be able to create raw download URLs from file URLs" {
+            GITLAB.toRawDownloadUrl(
+                "https://gitlab.com/mbunkus/mkvtoolnix/-/blob/main/AUTHORS"
+            ) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/-/raw/main/AUTHORS"
         }
     }
 
@@ -213,6 +231,12 @@ class VcsHostTest : WordSpec({
 
         "be able to create source archive links from project URLs" {
             SOURCEHUT.toArchiveDownloadUrl(gitVcsInfo) shouldBe "https://git.sr.ht/~ben/web/archive/2c3d173d.tar.gz"
+        }
+
+        "be able to create raw download URLs from file URLs" {
+            SOURCEHUT.toRawDownloadUrl(
+                "https://git.sr.ht/~ben/web/tree/master/keybase.txt"
+            ) shouldBe "https://git.sr.ht/~ben/web/blob/master/keybase.txt"
         }
     }
 
