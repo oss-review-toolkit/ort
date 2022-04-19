@@ -483,8 +483,8 @@
 "http://creativecommons.org/licenses/publicdomain": CC-PDDC
 "http://creativecommons.org/publicdomain/zero/1.0/legalcode": CC0-1.0
 "http://en.wikipedia.org/wiki/Zlib_License": Zlib
-"http://go.microsoft.com/fwlink/?LinkId=329770": LicenseRef-scancode-ms-net-library-2018-11
-"http://go.microsoft.com/fwlink/?LinkId=529443": LicenseRef-scancode-ms-net-library-2018-11
+"http://go.microsoft.com/fwlink/?LinkId=329770": LicenseRef-scancode-ms-net-library-2019-06
+"http://go.microsoft.com/fwlink/?LinkId=529443": LicenseRef-scancode-ms-net-library-2019-06
 "http://json.codeplex.com/license": MIT
 "http://polymer.github.io/LICENSE.txt": BSD-3-Clause
 "http://svnkit.com/license.html": TMate
@@ -495,7 +495,7 @@
 "http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt": CECILL-2.1
 "http://www.gnu.org/copyleft/lesser.html": LGPL-3.0-only
 "http://www.gwtproject.org/terms.html": Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-1.0 AND LGPL-2.1-only AND MPL-1.1
-"http://www.microsoft.com/web/webpi/eula/net_library_eula_ENU.htm": LicenseRef-scancode-ms-net-library-2018-11
+"http://www.microsoft.com/web/webpi/eula/net_library_eula_ENU.htm": LicenseRef-scancode-ms-net-library-2019-06
 "http://www.scala-lang.org/downloads/license.html": Apache-2.0 AND BSD-3-Clause AND MIT
 "http://www.scala-lang.org/node/146": Apache-2.0 AND BSD-3-Clause AND MIT
 "https://creativecommons.org/licenses/by-nc-nd/1.0": CC-BY-NC-ND-1.0
