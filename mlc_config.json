@@ -1,6 +1,9 @@
 {
     "ignorePatterns": [
         {
+            "pattern": "^#.*$"
+        },
+        {
             "pattern": "^https://fpchat-invite.herokuapp.com/$"
         },
         {
