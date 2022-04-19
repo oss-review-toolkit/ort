@@ -636,7 +636,7 @@ class StaticHtmlReporter : Reporter {
     private fun DIV.licenseLink(license: String) {
         val licenseResourcePath = getLicenseResourcePath(license)
         val sha1Git = licensesSha1.getOrPut(license) {
-            HashAlgorithm.SHA1_GIT.calculate(licenseResourcePath) ?: license
+            HashAlgorithm.SHA1GIT.calculate(licenseResourcePath) ?: license
         }
 
         if (sha1Git == license) {
