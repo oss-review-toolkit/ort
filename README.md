@@ -669,7 +669,7 @@ following formats are supported (reporter names are case-insensitive):
     * Man page (`-f ManPageTemplate`)
     * AsciiDoc (`-f AdocTemplate`): Does not convert the created AsciiDoc files but writes the generated files as
       reports.
-* [ctrlX AUTOMATION](https://ctrlx-automation.com/) platform
+* [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform
   [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo) (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
