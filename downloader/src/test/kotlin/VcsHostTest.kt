@@ -217,6 +217,10 @@ class VcsHostTest : WordSpec({
     }
 
     "The generic implementation" should {
+        "handle blank URLs" {
+            VcsHost.parseUrl("    ") shouldBe VcsInfo.EMPTY
+        }
+
         "split paths from a URL to a Git repository" {
             val actual = VcsHost.parseUrl(
                 "https://git-wip-us.apache.org/repos/asf/zeppelin.git"

@@ -256,11 +256,12 @@ enum class VcsHost(
         fun fromUrl(url: String): VcsHost? = url.toUri { fromUrl(it) }.getOrNull()
 
         /**
-         * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
+         * Return all [VcsInfo] that can be parsed from the [vcsUrl] without actually making a network request.
          */
-        fun parseUrl(projectUrl: String): VcsInfo {
-            val unknownVcs = VcsInfo(type = VcsType.UNKNOWN, url = projectUrl, revision = "")
-            val projectUri = projectUrl.takeUnless { it.isBlank() }?.toUri()?.getOrNull() ?: return unknownVcs
+        fun parseUrl(vcsUrl: String): VcsInfo {
+            val projectUrl = vcsUrl.takeUnless { it.isBlank() } ?: return VcsInfo.EMPTY
+            val unknownVcsInfo = VcsInfo.EMPTY.copy(url = projectUrl)
+            val projectUri = projectUrl.toUri().getOrNull() ?: return unknownVcsInfo
 
             fun URI.isTfsGitUrl() = path != null && host != null &&
                     ("/tfs/" in path || ".visualstudio.com" in host) && "/_git/" in path
@@ -326,7 +327,7 @@ enum class VcsHost(
                     )
                 }
 
-                else -> unknownVcs
+                else -> unknownVcsInfo
             }
 
             val vcsInfoFromHost = fromUrl(projectUri)?.toVcsInfoInternal(projectUri)
