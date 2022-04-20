@@ -177,7 +177,7 @@ class Carthage(
     }
 
     private fun createPackageFromGenericGitUrl(projectUrl: String, revision: String): Package {
-        val vcsInfoFromUrl = VcsHost.toVcsInfo(projectUrl)
+        val vcsInfoFromUrl = VcsHost.parseUrl(projectUrl)
         val vcsInfo = vcsInfoFromUrl.copy(revision = revision)
         val vcsHost = VcsHost.fromUrl(vcsInfo.url)
 

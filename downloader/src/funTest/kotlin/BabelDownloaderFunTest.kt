@@ -52,7 +52,7 @@ class BabelDownloaderFunTest : StringSpec() {
                 url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
                 revision = ""
             )
-            val vcsFromUrl = VcsHost.toVcsInfo(normalizeVcsUrl(vcsFromPackage.url))
+            val vcsFromUrl = VcsHost.parseUrl(normalizeVcsUrl(vcsFromPackage.url))
             val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
 
             val pkg = Package(

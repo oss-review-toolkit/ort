@@ -284,7 +284,7 @@ class GoDep(
         // The "processProjectVcs()" function should always be able to deduce VCS information from the working tree
         // created by "go get". However, if that fails for whatever reason, fall back to guessing VCS information from
         // the "importPath" (which usually resembles a URL).
-        val fallbackVcsInfo = VcsHost.toVcsInfo("https://$importPath").takeIf {
+        val fallbackVcsInfo = VcsHost.parseUrl("https://$importPath").takeIf {
             it.type != VcsType.UNKNOWN
         } ?: VcsInfo.EMPTY
 

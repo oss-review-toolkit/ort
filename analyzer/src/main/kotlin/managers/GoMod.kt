@@ -390,7 +390,7 @@ internal fun Identifier.toVcsInfo(): VcsInfo {
         it.groupValues[1]
     } ?: name
 
-    val vcsInfo = VcsHost.toVcsInfo("https://$hostname")
+    val vcsInfo = VcsHost.parseUrl("https://$hostname")
     return vcsInfo.copy(revision = getRevision(version))
 }
 

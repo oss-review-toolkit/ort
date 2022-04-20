@@ -218,7 +218,7 @@ class VcsHostTest : WordSpec({
 
     "The generic implementation" should {
         "split paths from a URL to a Git repository" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "https://git-wip-us.apache.org/repos/asf/zeppelin.git"
             )
             val expected = VcsInfo(
@@ -231,7 +231,7 @@ class VcsHostTest : WordSpec({
         }
 
         "split paths from a URL to a Git repository with path" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
             )
             val expected = VcsInfo(
@@ -244,7 +244,7 @@ class VcsHostTest : WordSpec({
         }
 
         "split the revision from an NPM URL to a Git repository" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "git+ssh://sub.domain.com:42/foo-bar#b3b5b3c60dcdc39347b23cf94ab8f577239b7df3"
             )
             val expected = VcsInfo(
@@ -257,7 +257,7 @@ class VcsHostTest : WordSpec({
         }
 
         "split the revision from a NPM URL to a GitHub repository" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "https://github.com/mochajs/mocha.git#5bd33a0ba201d227159759e8ced86756595b0c54"
             )
             val expected = VcsInfo(
@@ -274,7 +274,7 @@ class VcsHostTest : WordSpec({
                 "https://ibm-alm-server/tfs/org/project/_git/repo?version=GBmaster",
                 "https://hosted.visualstudio.com/org/project/_git/repo?foo=bar&version=GBmain",
                 "https://hosted.visualstudio.com/tfs/project/_git/repo"
-            ).map { VcsHost.toVcsInfo(it) }
+            ).map { VcsHost.parseUrl(it) }
 
             val expected = listOf(
                 VcsInfo(
@@ -301,7 +301,7 @@ class VcsHostTest : WordSpec({
         }
 
         "separate an SVN branch into the revision" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x"
             )
             val expected = VcsInfo(
@@ -314,7 +314,7 @@ class VcsHostTest : WordSpec({
         }
 
         "separate branch and path from an SVN URL" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x/src/gpl.txt"
             )
             val expected = VcsInfo(
@@ -327,7 +327,7 @@ class VcsHostTest : WordSpec({
         }
 
         "separate an SVN tag into the revision" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21"
             )
             val expected = VcsInfo(
@@ -340,7 +340,7 @@ class VcsHostTest : WordSpec({
         }
 
         "separate tag and path from an SVN URL" {
-            val actual = VcsHost.toVcsInfo(
+            val actual = VcsHost.parseUrl(
                 "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21/pom.xml"
             )
             val expected = VcsInfo(

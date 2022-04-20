@@ -422,7 +422,7 @@ class Pub(
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
         val authors = parseAuthors(pubspec)
 
-        val vcs = VcsHost.toVcsInfo(repositoryUrl)
+        val vcs = VcsHost.parseUrl(repositoryUrl)
 
         return Project(
             id = Identifier(
@@ -472,7 +472,7 @@ class Pub(
                             authors = parseAuthors(pkgInfoFromYamlFile)
 
                             val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
-                            vcs = VcsHost.toVcsInfo(repositoryUrl)
+                            vcs = VcsHost.parseUrl(repositoryUrl)
                         }
 
                         pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
