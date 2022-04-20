@@ -329,6 +329,16 @@ enum class VcsHost(
         }
 
         /**
+         * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional
+         * highlighting of [startLine] to [endLine].
+         */
+        fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
+            if (!isValidLineRange(startLine, endLine)) return null
+            return values().find { host -> host.isApplicable(vcsInfo) }
+                ?.toPermalinkInternal(vcsInfo.normalize(), startLine, endLine)
+        }
+
+        /**
          * Return the download URL to an archive generated for the referenced [vcsInfo], or null if no download URL can
          * be determined.
          */
@@ -341,16 +351,6 @@ enum class VcsHost(
                 val project = host.getProjectInternal(it) ?: return@toUri null
                 host.toArchiveDownloadUrlInternal(userOrOrg, project, normalizedVcsInfo)
             }.getOrNull()
-        }
-
-        /**
-         * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional
-         * highlighting of [startLine] to [endLine].
-         */
-        fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
-            if (!isValidLineRange(startLine, endLine)) return null
-            return values().find { host -> host.isApplicable(vcsInfo) }
-                ?.toPermalinkInternal(vcsInfo.normalize(), startLine, endLine)
         }
     }
 
@@ -396,6 +396,18 @@ enum class VcsHost(
     protected abstract fun toVcsInfoInternal(projectUrl: URI): VcsInfo
 
     /**
+     * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional
+     * highlighting of [startLine] to [endLine].
+     */
+    fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
+        val normalizedVcsInfo = vcsInfo.normalize()
+        if (!isApplicable(normalizedVcsInfo) || !isValidLineRange(startLine, endLine)) return null
+        return toPermalinkInternal(normalizedVcsInfo, startLine, endLine)
+    }
+
+    protected abstract fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int): String
+
+    /**
      * Return the download URL to an archive generated for the referenced [vcsInfo], or null if no download URL can be
      * determined.
      */
@@ -411,18 +423,6 @@ enum class VcsHost(
     }
 
     abstract fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo): String
-
-    /**
-     * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional
-     * highlighting of [startLine] to [endLine].
-     */
-    fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
-        val normalizedVcsInfo = vcsInfo.normalize()
-        if (!isApplicable(normalizedVcsInfo) || !isValidLineRange(startLine, endLine)) return null
-        return toPermalinkInternal(normalizedVcsInfo, startLine, endLine)
-    }
-
-    protected abstract fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int): String
 }
 
 private fun String.isPathToMarkdownFile() =
