@@ -37,7 +37,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
     - name: Check Links
-      uses: oss-review-toolkit/github-action-markdown-link-check@unsafe-repository
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
         base-branch: main
         check-modified-files-only: yes
