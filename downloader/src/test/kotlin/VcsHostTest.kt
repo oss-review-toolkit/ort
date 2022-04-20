@@ -353,28 +353,28 @@ class VcsHostTest : WordSpec({
         }
     }
 
-    "The conversion from URI to VcsHost" should {
-        "convert a Github URI" {
+    "Creating a VcsHost from a URL" should {
+        "work for a GitHub URL" {
             VcsHost.fromUrl("https://github.com/oss-review-toolkit/ort") shouldBe GITHUB
         }
 
-        "convert a Gitlab URI" {
+        "work for a GitLab URL" {
             VcsHost.fromUrl("https://gitlab.com/gitlab-org/gitlab") shouldBe GITLAB
         }
 
-        "convert a Bitbucket URI" {
+        "work for a Bitbucket URL" {
             VcsHost.fromUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe BITBUCKET
         }
 
-        "convert a SourceHut git URI" {
+        "work for a SourceHut URL to a Git repository" {
             VcsHost.fromUrl("https://git.sr.ht/~sircmpwn/sourcehut.org") shouldBe SOURCEHUT
         }
 
-        "convert a SourceHut hg URI" {
+        "work for a SourceHut URL to a Mercurial repository" {
             VcsHost.fromUrl("https://hg.sr.ht/~sircmpwn/invertbucket") shouldBe SOURCEHUT
         }
 
-        "handle an unknown URI" {
+        "handle an unknown URL" {
             VcsHost.fromUrl("https://host.tld/path/to/repo") should beNull()
         }
     }
