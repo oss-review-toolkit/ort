@@ -24,8 +24,6 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.net.URI
-
 import org.ossreviewtoolkit.downloader.VcsHost.BITBUCKET
 import org.ossreviewtoolkit.downloader.VcsHost.GITHUB
 import org.ossreviewtoolkit.downloader.VcsHost.GITLAB
@@ -357,27 +355,27 @@ class VcsHostTest : WordSpec({
 
     "The conversion from URI to VcsHost" should {
         "convert a Github URI" {
-            VcsHost.toVcsHost(URI("https://github.com/oss-review-toolkit/ort")) shouldBe GITHUB
+            VcsHost.fromUrl("https://github.com/oss-review-toolkit/ort") shouldBe GITHUB
         }
 
         "convert a Gitlab URI" {
-            VcsHost.toVcsHost(URI("https://gitlab.com/gitlab-org/gitlab")) shouldBe GITLAB
+            VcsHost.fromUrl("https://gitlab.com/gitlab-org/gitlab") shouldBe GITLAB
         }
 
         "convert a Bitbucket URI" {
-            VcsHost.toVcsHost(URI("https://bitbucket.org/yevster/spdxtraxample")) shouldBe BITBUCKET
+            VcsHost.fromUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe BITBUCKET
         }
 
         "convert a SourceHut git URI" {
-            VcsHost.toVcsHost(URI("https://git.sr.ht/~sircmpwn/sourcehut.org")) shouldBe SOURCEHUT
+            VcsHost.fromUrl("https://git.sr.ht/~sircmpwn/sourcehut.org") shouldBe SOURCEHUT
         }
 
         "convert a SourceHut hg URI" {
-            VcsHost.toVcsHost(URI("https://hg.sr.ht/~sircmpwn/invertbucket")) shouldBe SOURCEHUT
+            VcsHost.fromUrl("https://hg.sr.ht/~sircmpwn/invertbucket") shouldBe SOURCEHUT
         }
 
         "handle an unknown URI" {
-            VcsHost.toVcsHost(URI("https://host.tld/path/to/repo")) should beNull()
+            VcsHost.fromUrl("https://host.tld/path/to/repo") should beNull()
         }
     }
 })
