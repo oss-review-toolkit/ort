@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
-import java.net.URI
 import java.net.URL
 import java.util.SortedSet
 
@@ -100,7 +99,7 @@ class Carthage(
         val workingTree = VersionControlSystem.forDirectory(workingDir)
         val vcsInfo = workingTree?.getInfo().orEmpty()
         val normalizedVcsUrl = normalizeVcsUrl(vcsInfo.url)
-        val vcsHost = VcsHost.toVcsHost(URI(normalizedVcsUrl))
+        val vcsHost = VcsHost.fromUrl(normalizedVcsUrl)
 
         return ProjectInfo(
             namespace = vcsHost?.getUserOrOrganization(normalizedVcsUrl),
@@ -180,7 +179,7 @@ class Carthage(
     private fun createPackageFromGenericGitUrl(projectUrl: String, revision: String): Package {
         val vcsInfoFromUrl = VcsHost.toVcsInfo(projectUrl)
         val vcsInfo = vcsInfoFromUrl.copy(revision = revision)
-        val vcsHost = VcsHost.toVcsHost(URI(vcsInfo.url))
+        val vcsHost = VcsHost.fromUrl(vcsInfo.url)
 
         return Package(
             id = Identifier(

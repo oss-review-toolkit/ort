@@ -246,9 +246,14 @@ enum class VcsHost(
         private val GIT_REVISION_FRAGMENT = Regex("git.+#[a-fA-F0-9]{7,}")
 
         /**
-         * Return the [VcsHost] for a [vcsUrl].
+         * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
          */
-        fun toVcsHost(vcsUrl: URI): VcsHost? = values().find { host -> host.isApplicable(vcsUrl) }
+        fun fromUrl(url: URI): VcsHost? = values().find { host -> host.isApplicable(url) }
+
+        /**
+         * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
+         */
+        fun fromUrl(url: String): VcsHost? = url.toUri { fromUrl(it) }.getOrNull()
 
         /**
          * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
@@ -324,7 +329,7 @@ enum class VcsHost(
                 else -> unknownVcs
             }
 
-            val vcsInfoFromHost = toVcsHost(projectUri)?.toVcsInfoInternal(projectUri)
+            val vcsInfoFromHost = fromUrl(projectUri)?.toVcsInfoInternal(projectUri)
             return vcsInfoFromHost?.merge(vcsInfoFromUrl) ?: vcsInfoFromUrl
         }
 
