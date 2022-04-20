@@ -347,7 +347,7 @@ data class GemSpec(
                 node["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 node["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
-                VcsHost.toVcsInfo(homepage),
+                VcsHost.parseUrl(homepage),
                 RemoteArtifact.EMPTY
             )
         }
@@ -358,8 +358,8 @@ data class GemSpec(
             }?.toSet()
 
             val vcs = when {
-                node.hasNonNull("source_code_uri") -> VcsHost.toVcsInfo(node["source_code_uri"].textValue())
-                node.hasNonNull("homepage_uri") -> VcsHost.toVcsInfo(node["homepage_uri"].textValue())
+                node.hasNonNull("source_code_uri") -> VcsHost.parseUrl(node["source_code_uri"].textValue())
+                node.hasNonNull("homepage_uri") -> VcsHost.parseUrl(node["homepage_uri"].textValue())
                 else -> VcsInfo.EMPTY
             }
 

@@ -74,7 +74,7 @@ abstract class VersionControlSystem {
                 urlToVcsMap[vcsUrl]
             } else {
                 // First try to determine the VCS type statically...
-                when (val type = VcsHost.toVcsInfo(vcsUrl).type) {
+                when (val type = VcsHost.parseUrl(vcsUrl).type) {
                     VcsType.UNKNOWN -> {
                         // ...then eventually try to determine the type also dynamically.
                         ALL.find {
@@ -201,7 +201,7 @@ abstract class VersionControlSystem {
     fun isApplicableUrl(vcsUrl: String): Boolean {
         if (vcsUrl.isBlank() || vcsUrl.endsWith(".html")) return false
 
-        return VcsHost.toVcsInfo(vcsUrl).type == type || isApplicableUrlInternal(vcsUrl)
+        return VcsHost.parseUrl(vcsUrl).type == type || isApplicableUrlInternal(vcsUrl)
     }
 
     /**

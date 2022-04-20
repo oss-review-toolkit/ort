@@ -392,7 +392,7 @@ open class Npm(
             // https://www.jfrog.com/jira/browse/RTFACT-18463
             .replace(artifactoryApiPathPattern, "$1/$2")
 
-        val vcsFromDownloadUrl = VcsHost.toVcsInfo(downloadUrl)
+        val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
         if (vcsFromDownloadUrl.url != downloadUrl) {
             vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
         }

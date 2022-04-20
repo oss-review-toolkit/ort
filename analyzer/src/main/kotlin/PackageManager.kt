@@ -161,8 +161,8 @@ abstract class PackageManager(
         fun processPackageVcs(vcsFromPackage: VcsInfo, vararg fallbackUrls: String): VcsInfo {
             val normalizedVcsFromPackage = vcsFromPackage.normalize()
 
-            val fallbackVcs = fallbackUrls.mapTo(mutableListOf(VcsHost.toVcsInfo(normalizedVcsFromPackage.url))) {
-                VcsHost.toVcsInfo(normalizeVcsUrl(it))
+            val fallbackVcs = fallbackUrls.mapTo(mutableListOf(VcsHost.parseUrl(normalizedVcsFromPackage.url))) {
+                VcsHost.parseUrl(normalizeVcsUrl(it))
             }.find {
                 // Ignore fallback VCS information that changes a known type, or where the VCS type is unknown.
                 if (normalizedVcsFromPackage.type != VcsType.UNKNOWN) {

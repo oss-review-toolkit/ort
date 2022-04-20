@@ -258,7 +258,7 @@ enum class VcsHost(
         /**
          * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
          */
-        fun toVcsInfo(projectUrl: String): VcsInfo {
+        fun parseUrl(projectUrl: String): VcsInfo {
             val unknownVcs = VcsInfo(type = VcsType.UNKNOWN, url = projectUrl, revision = "")
             val projectUri = projectUrl.takeUnless { it.isBlank() }?.toUri()?.getOrNull() ?: return unknownVcs
 

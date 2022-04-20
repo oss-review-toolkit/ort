@@ -231,7 +231,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                             // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
                             // special URL paths.
-                            VcsHost.toVcsInfo(fixedUrl).copy(revision = tag).also {
+                            VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
                                 log.info { "Fixed up invalid SCM connection '$connection' without a provider to $it." }
                             }
                         }

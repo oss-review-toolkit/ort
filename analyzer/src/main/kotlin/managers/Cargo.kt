@@ -311,7 +311,7 @@ private fun parseSourceArtifact(
 }
 
 private fun parseVcsInfo(node: JsonNode) =
-    VcsHost.toVcsInfo(parseRepositoryUrl(node))
+    VcsHost.parseUrl(parseRepositoryUrl(node))
 
 private fun getResolvedVersion(
     parentName: String,
