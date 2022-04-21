@@ -85,7 +85,8 @@ data class ScannerConfiguration(
         "**/*.spdx.yml",
         "**/*.spdx.yaml",
         "**/*.spdx.json",
-        "**/META-INF/DEPENDENCIES"
+        "**/META-INF/DEPENDENCIES",
+        "**/META-INF/NOTICE"
     ),
 
     /**
