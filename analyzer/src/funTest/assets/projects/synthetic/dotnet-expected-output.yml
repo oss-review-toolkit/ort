@@ -97,11 +97,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides runtime information required to resolve target framework,\
     \ platform, and runtime specific implementations of .NETCore packages. \nWhen\
     \ using NuGet 3.x this package requires at least version 3.4."
@@ -131,11 +131,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides runtime information required to resolve target framework,\
     \ platform, and runtime specific implementations of .NETCore packages. \nWhen\
     \ using NuGet 3.x this package requires at least version 3.4."
@@ -165,11 +165,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides supporting infrastructure for portable projects: support\
     \ identifiers that define framework and runtime for support targets and packages\
     \ that reference the minimum supported package versions when targeting these.\
@@ -200,11 +200,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides supporting infrastructure for portable projects: support\
     \ identifiers that define framework and runtime for support targets and packages\
     \ that reference the minimum supported package versions when targeting these.\
@@ -267,11 +267,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides classes that define generic collections, which allow developers\
     \ to create strongly typed collections that provide better type safety and performance\
     \ than non-generic strongly typed collections.\n\nCommonly Used Types:\nSystem.Collections.Generic.List<T>\n\
@@ -306,11 +306,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides classes that define culture-related information, including\
     \ language, country/region, calendars in use, format patterns for dates, currency,\
     \ and numbers, and sort order for strings.\n\nCommonly Used Types:\nSystem.Globalization.DateTimeFormatInfo\n\
@@ -344,11 +344,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides the fundamental primitives, classes and base classes that\
     \ define commonly-used value and reference data types, events and event handlers,\
     \ interfaces, attributes, and exceptions. This packages represents the core package,\
@@ -384,11 +384,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides the fundamental primitives, classes and base classes that\
     \ define commonly-used value and reference data types, events and event handlers,\
     \ interfaces, attributes, and exceptions. This packages represents the core package,\
@@ -424,11 +424,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  - "LicenseRef-ort-SWHID-984713a49622a96da110443c15477613bc12656b-LICENSE.TXT"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
-      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+      LicenseRef-ort-SWHID-984713a49622a96da110443c15477613bc12656b-LICENSE.TXT: "MIT"
   description: "Provides the System.Runtime.CompilerServices.Unsafe class, which provides\
     \ generic, low-level functionality for manipulating pointers.\n\nCommonly Used\
     \ Types:\nSystem.Runtime.CompilerServices.Unsafe\n \n7601f4f6225089ffb291dc7d58293c7bbf5c5d4f\
@@ -459,11 +459,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides the fundamental synchronization primitives, including System.Threading.Monitor\
     \ and System.Threading.Mutex, that are required when writing asynchronous code.\n\
     \nCommonly Used Types:\nSystem.Threading.Monitor\nSystem.Threading.SynchronizationContext\n\
@@ -496,11 +496,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides types that simplify the work of writing concurrent and asynchronous\
     \ code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Task<TResult>\nSystem.Runtime.CompilerServices.TaskAwaiter<TResult>\n\
     System.Threading.Tasks.TaskCompletionSource<TResult>\nSystem.Threading.Tasks.Task\n\
@@ -532,11 +532,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "http://go.microsoft.com/fwlink/?LinkId=329770"
+  - "LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm"
   declared_licenses_processed:
     spdx_expression: "LicenseRef-scancode-ms-net-library-2019-06"
     mapped:
-      http://go.microsoft.com/fwlink/?LinkId=329770: "LicenseRef-scancode-ms-net-library-2019-06"
+      LicenseRef-ort-SWHID-1096f5766ea09cfffebc364f1cd38664fc181269-dotnet-library-license.htm: "LicenseRef-scancode-ms-net-library-2019-06"
   description: "Provides types that simplify the work of writing concurrent and asynchronous\
     \ code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.Task<TResult>\nSystem.Runtime.CompilerServices.TaskAwaiter<TResult>\n\
     System.Threading.Tasks.TaskCompletionSource<TResult>\nSystem.Threading.Tasks.Task\n\
@@ -568,11 +568,11 @@ packages:
   authors:
   - "Microsoft"
   declared_licenses:
-  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  - "LicenseRef-ort-SWHID-984713a49622a96da110443c15477613bc12656b-LICENSE.TXT"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
-      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+      LicenseRef-ort-SWHID-984713a49622a96da110443c15477613bc12656b-LICENSE.TXT: "MIT"
   description: "Provides additional types that simplify the work of writing concurrent\
     \ and asynchronous code.\n\nCommonly Used Types:\nSystem.Threading.Tasks.ValueTask<TResult>\n\
     \ \n7601f4f6225089ffb291dc7d58293c7bbf5c5d4f"
@@ -602,10 +602,9 @@ packages:
   authors:
   - "webgrease@microsoft.com"
   declared_licenses:
-  - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+  - "LicenseRef-ort-SWHID-690b6577ac26dcdbea2dfe93a2a0dd1c08e6e6fd-msn-webgrease-eula.htm"
   declared_licenses_processed:
-    unmapped:
-    - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+    spdx_expression: "LicenseRef-ort-SWHID-690b6577ac26dcdbea2dfe93a2a0dd1c08e6e6fd-msn-webgrease-eula.htm"
   description: "Web Grease is a suite of tools for optimizing javascript, css files\
     \ and images."
   homepage_url: ""
