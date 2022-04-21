@@ -171,13 +171,13 @@ abstract class PathScanner(
             val packageIndex = "($index of $size)"
 
             PathScanner.log.info {
-                "Scanning ${pkg.id.toCoordinates()}' in thread '${Thread.currentThread().name}' $packageIndex"
+                "Scanning '${pkg.id.toCoordinates()}' in thread '${Thread.currentThread().name}' $packageIndex"
             }
 
             val scanResult = try {
                 scanPackage(details, pkg, downloadDirectory).also {
                     PathScanner.log.info {
-                        "Finished scanning ${pkg.id.toCoordinates()} in thread '${Thread.currentThread().name}' " +
+                        "Finished scanning '${pkg.id.toCoordinates()}' in thread '${Thread.currentThread().name}' " +
                                 "$packageIndex."
                     }
                 }
