@@ -236,7 +236,18 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                             }
                         }
 
-                        else -> VcsInfo(type = VcsType(type), url = url, revision = tag)
+                        else -> {
+                            VcsHost.fromUrl(url)?.let { host ->
+                                host.toVcsInfo(url)?.let { vcsInfo ->
+                                    // Fixup paths that are specified as part of the URL and contain the project name as
+                                    // a prefix.
+                                    val projectPrefix = "${host.getProject(url)}-"
+                                    vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
+                                        vcsInfo.copy(path = path)
+                                    }
+                                }
+                            } ?: VcsInfo(type = VcsType(type), url = url, revision = tag)
+                        }
                     }
                 } else {
                     val userHostMatcher = USER_HOST_REGEX.matcher(connection)
