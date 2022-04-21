@@ -84,5 +84,20 @@ class MavenSupportTest : WordSpec({
                 revision = ""
             )
         }
+
+        "handle GitHub URLs with the project name as a path prefix" {
+            val mavenProject = MavenProject().apply {
+                scm = Scm().apply {
+                    connection = "scm:git:git://github.com/netty/netty-tcnative.git/netty-tcnative-boringssl-static"
+                }
+            }
+
+            MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "git://github.com/netty/netty-tcnative.git",
+                revision = "",
+                path = "boringssl-static"
+            )
+        }
     }
 })
