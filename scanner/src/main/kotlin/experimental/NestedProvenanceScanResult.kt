@@ -84,7 +84,7 @@ data class NestedProvenanceScanResult(
 
             val startTime = allScanResults.minByOrNull { it.summary.startTime }?.summary?.startTime ?: Instant.now()
             val endTime = allScanResults.maxByOrNull { it.summary.endTime }?.summary?.endTime ?: startTime
-            val issues = allScanResults.flatMap { it.summary.issues }
+            val issues = allScanResults.flatMap { it.summary.issues }.distinct()
 
             val licenseFindings = scanResultsForScanner.mergeLicenseFindings()
             val copyrightFindings = scanResultsForScanner.mergeCopyrightFindings()
