@@ -110,6 +110,8 @@ jobs:
         distribution: temurin
         java-version: 11
         cache: gradle
+    - name: Validate Batect wrapper scripts
+      uses: batect/batect-wrapper-validation-action@v0
     - name: Run functional tests
       run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- jacocoFunTestReport -Dkotest.tags=!NoDockerTag -p analyzer
     - name: Upload code coverage data
