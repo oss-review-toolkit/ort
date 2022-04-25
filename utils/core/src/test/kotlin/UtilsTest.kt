@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.utils.core
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -68,9 +70,9 @@ class UtilsTest : WordSpec({
                 "before_debug_changes"
             )
 
-            filterVersionNames("1.0.3", names).joinToString("\n") shouldBe "PROD_1_0_3"
-            filterVersionNames("1", names).joinToString("\n") shouldBe ""
-            filterVersionNames("0.3", names).joinToString("\n") shouldBe ""
+            filterVersionNames("1.0.3", names) shouldHaveSingleElement "PROD_1_0_3"
+            filterVersionNames("1", names) should beEmpty()
+            filterVersionNames("0.3", names) should beEmpty()
         }
 
         "find names separated by dots" {
@@ -84,10 +86,10 @@ class UtilsTest : WordSpec({
                 "0.9.0"
             )
 
-            filterVersionNames("0.10.0", names).joinToString("\n") shouldBe "0.10.0"
-            filterVersionNames("0.10", names).joinToString("\n") shouldBe ""
-            filterVersionNames("10.0", names).joinToString("\n") shouldBe ""
-            filterVersionNames("1", names).joinToString("\n") shouldBe ""
+            filterVersionNames("0.10.0", names) shouldHaveSingleElement "0.10.0"
+            filterVersionNames("0.10", names) should beEmpty()
+            filterVersionNames("10.0", names) should beEmpty()
+            filterVersionNames("1", names) should beEmpty()
         }
 
         "find names with mixed separators" {
@@ -118,18 +120,18 @@ class UtilsTest : WordSpec({
                 "start"
             )
 
-            filterVersionNames("0.3.9", names).joinToString("\n") shouldBe "docutils-0.3.9"
-            filterVersionNames("0.14", names).joinToString("\n") shouldBe "docutils-0.14"
-            filterVersionNames("0.3.10", names).joinToString("\n") shouldBe "prest-0.3.10"
-            filterVersionNames("0.13", names).joinToString("\n") shouldBe ""
-            filterVersionNames("13.1", names).joinToString("\n") shouldBe ""
-            filterVersionNames("1.0", names).joinToString("\n") shouldBe ""
+            filterVersionNames("0.3.9", names) shouldHaveSingleElement "docutils-0.3.9"
+            filterVersionNames("0.14", names) shouldHaveSingleElement "docutils-0.14"
+            filterVersionNames("0.3.10", names) shouldHaveSingleElement "prest-0.3.10"
+            filterVersionNames("0.13", names) should beEmpty()
+            filterVersionNames("13.1", names) should beEmpty()
+            filterVersionNames("1.0", names) should beEmpty()
         }
 
         "find names with mixed separators and different capitalization" {
             val names = listOf("CLASSWORLDS_1_1_ALPHA_2")
 
-            filterVersionNames("1.1-alpha-2", names).joinToString("\n") shouldBe "CLASSWORLDS_1_1_ALPHA_2"
+            filterVersionNames("1.1-alpha-2", names) shouldHaveSingleElement "CLASSWORLDS_1_1_ALPHA_2"
         }
 
         "find names with a 'v' prefix" {
@@ -158,10 +160,10 @@ class UtilsTest : WordSpec({
                 "v7.0.0-beta.3"
             )
 
-            filterVersionNames("6.26.0", names).joinToString("\n") shouldBe "v6.26.0"
-            filterVersionNames("7.0.0-beta.2", names).joinToString("\n") shouldBe "v7.0.0-beta.2"
-            filterVersionNames("7.0.0", names).joinToString("\n") shouldBe ""
-            filterVersionNames("2.0", names).joinToString("\n") shouldBe ""
+            filterVersionNames("6.26.0", names) shouldHaveSingleElement "v6.26.0"
+            filterVersionNames("7.0.0-beta.2", names) shouldHaveSingleElement "v7.0.0-beta.2"
+            filterVersionNames("7.0.0", names) should beEmpty()
+            filterVersionNames("2.0", names) should beEmpty()
         }
 
         "find names with the project name as the prefix" {
@@ -171,8 +173,11 @@ class UtilsTest : WordSpec({
                 "babel-plugin-transform-property-literals@6.9.0"
             )
 
-            filterVersionNames("6.9.0", names, "babel-plugin-transform-simplify-comparison-operators")
-                .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
+            filterVersionNames(
+                "6.9.0",
+                names,
+                "babel-plugin-transform-simplify-comparison-operators"
+            ) shouldHaveSingleElement "babel-plugin-transform-simplify-comparison-operators@6.9.0"
         }
 
         "find names when others with trailing digits are present" {
@@ -181,26 +186,26 @@ class UtilsTest : WordSpec({
                 "1.11.68", "1.11.69"
             )
 
-            filterVersionNames("1.11.6", names).joinToString("\n") shouldBe "1.11.6"
+            filterVersionNames("1.11.6", names) shouldHaveSingleElement "1.11.6"
         }
 
         "find names with only a single revision number as the version" {
             val names = listOf("my_project-123", "my_project-4711", "my_project-8888")
 
-            filterVersionNames("4711", names).joinToString("\n") shouldBe "my_project-4711"
+            filterVersionNames("4711", names) shouldHaveSingleElement "my_project-4711"
         }
 
         "find names that have a numeric suffix as part of the name" {
             val names = listOf("my_project_v1-1.0.2", "my_project_v1-1.0.3", "my_project_v1-1.1.0")
 
-            filterVersionNames("1.0.3", names).joinToString("\n") shouldBe "my_project_v1-1.0.3"
+            filterVersionNames("1.0.3", names) shouldHaveSingleElement "my_project_v1-1.0.3"
         }
 
         "find names that use an abbreviated SHA1 as the suffix" {
             val names = listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
 
-            filterVersionNames("3.9.0.99", names).joinToString("\n") shouldBe
-                    listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99").joinToString("\n")
+            filterVersionNames("3.9.0.99", names) shouldContainExactly
+                    listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
         }
     }
 
