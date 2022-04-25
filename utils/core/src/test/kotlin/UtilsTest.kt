@@ -75,6 +75,20 @@ class UtilsTest : WordSpec({
             filterVersionNames("0.3", names) should beEmpty()
         }
 
+        "find names separated by underscores that include a prefix / suffix" {
+            val names = listOf(
+                "REL_4_0_0_FINAL",
+                "REL_3_16_FINAL",
+                "REL_3_16_BETA2",
+                "REL_3_16_BETA1",
+                "before_junit5_update"
+            )
+
+            filterVersionNames("4.0.0", names) shouldHaveSingleElement "REL_4_0_0_FINAL"
+            filterVersionNames("3.16", names) shouldHaveSingleElement "REL_3_16_FINAL"
+            filterVersionNames("before_junit5_update", names) shouldHaveSingleElement "before_junit5_update"
+        }
+
         "find names separated by dots" {
             val names = listOf(
                 "0.10.0",
