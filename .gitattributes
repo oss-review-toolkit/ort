@@ -1,13 +1,13 @@
 # Always use Unix line endings for the license file so it has the same hash on all platforms.
-/LICENSE					text eol=lf
+/LICENSE	text eol=lf
 
 # Always use Unix line endings for Unix shell scripts.
-gradlew						text eol=lf
-*.sh						text eol=lf
+gradlew	text eol=lf
+*.sh	text eol=lf
 
 # Always use Windows line endings for Windows batch scripts.
-*.bat						text eol=crlf
-*.cmd						text eol=crlf
+*.bat	text eol=crlf
+*.cmd	text eol=crlf
 
 # Use Unix line endings for SPDX files as they might be referenced by checksum.
 analyzer/src/funTest/assets/projects/synthetic/spdx/**/*.spdx.*	text eol=lf
@@ -17,13 +17,13 @@ analyzer/src/funTest/assets/projects/synthetic/spdx/**/*.spdx.*	text eol=lf
 reporter/src/funTest/assets/*-expected-*	text eol=lf
 
 # Use Unix line endings for Freemarker templates for consistency across platforms.
-reporter/src/main/resources/**/*.ftl		text eol=lf
+reporter/src/main/resources/**/*.ftl	text eol=lf
 
 # Use Unix line endings for scan results which are misused for also testing the calculation of the SPDX package verification code.
-scanner/src/test/assets/*.json			text eol=lf
+scanner/src/test/assets/*.json	text eol=lf
 
 # Use Unix line endings for JavaScript source code to avoid problems with eslint.
-reporter-web-app/**/*.js			text eol=lf
+reporter-web-app/**/*.js	text eol=lf
 
 # Use Unix line endings for SPDX license texts for consistency across platforms.
 utils/spdx/src/main/resources/exceptions/*	text eol=lf
@@ -37,8 +37,8 @@ utils/spdx/src/main/resources/licenserefs/*	linguist-detectable=false
 utils/spdx/src/main/resources/licenses/*	linguist-detectable=false
 
 # Use Unix line endings for the expected control file of a Debian package.
-utils/common/src/test/assets/control-expected.txt  text eol=lf
+utils/common/src/test/assets/control-expected.txt	text eol=lf
 
 # Use Unix line endings for *.graphql files. This is mainly done to prevent that tests need to fiddle with
 # different platform-specific line endings.
-*.graphql     text eol=lf
+*.graphql	text eol=lf
