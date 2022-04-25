@@ -5,6 +5,10 @@
 gradlew						text eol=lf
 *.sh						text eol=lf
 
+# Always use Windows line endings for Windows batch scripts.
+*.bat						text eol=crlf
+*.cmd						text eol=crlf
+
 # Use Unix line endings for SPDX files as they might be referenced by checksum.
 analyzer/src/funTest/assets/projects/synthetic/spdx/**/*.spdx.*	text eol=lf
 
