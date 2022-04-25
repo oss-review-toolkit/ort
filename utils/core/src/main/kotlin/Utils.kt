@@ -65,6 +65,8 @@ val ortDataDirectory by lazy {
  */
 var printStackTrace = false
 
+private val versionSeparators = listOf('-', '_', '.')
+
 /**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
  */
@@ -76,7 +78,6 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     if (fullMatches.isNotEmpty()) return fullMatches
 
     // The list of supported version separators.
-    val versionSeparators = listOf('-', '_', '.')
     val versionHasSeparator = versionSeparators.any { it in version }
 
     // Create variants of the version string to recognize.
