@@ -66,6 +66,12 @@ val ortDataDirectory by lazy {
 var printStackTrace = false
 
 private val versionSeparators = listOf('-', '_', '.')
+private val versionSeparatorsPattern = versionSeparators.joinToString("", "[", "]")
+
+private val ignorablePrefixSuffixPattern = listOf("rel", "release", "final").joinToString("|", "(", ")")
+private val ignorablePrefixSuffixRegex = Regex(
+    "(^$ignorablePrefixSuffixPattern$versionSeparatorsPattern|$versionSeparatorsPattern$ignorablePrefixSuffixPattern$)"
+)
 
 /**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
@@ -92,7 +98,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     }
 
     val filteredNames = names.filter {
-        val name = it.lowercase()
+        val name = it.lowercase().replace(ignorablePrefixSuffixRegex, "")
 
         versionVariants.any { versionVariant ->
             // Allow to ignore suffixes in names that are separated by something else than the current separator, e.g.
