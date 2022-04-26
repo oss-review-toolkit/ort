@@ -141,9 +141,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         fun parseLicenses(mavenProject: MavenProject) =
             mavenProject.licenses.mapNotNull { license ->
-                license.comments.withoutPrefix("SPDX-License-Identifier:") {
-                    license.name ?: license.url ?: license.comments
-                }?.trim()
+                license.name ?: license.url ?: license.comments
             }.toSortedSet()
 
         fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
