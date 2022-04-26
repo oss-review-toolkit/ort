@@ -47,6 +47,7 @@ import okio.sink
 
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
@@ -191,8 +192,7 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> =
         val candidateNames = mutableSetOf<String>()
 
         response.headers("Content-disposition").mapNotNullTo(candidateNames) { value ->
-            value.split(';').firstNotNullOfOrNull { it.trim().withoutPrefix("filename=") }
-                ?.removeSurrounding("\"")
+            value.split(';').firstNotNullOfOrNull { it.trim().withoutPrefix("filename=") }?.unquote()
         }
 
         listOf(response.request.url.toString(), url).mapTo(candidateNames) {

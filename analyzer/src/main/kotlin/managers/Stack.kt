@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.log
 
@@ -115,8 +116,8 @@ class Stack(
             val dependencies = mutableMapOf<String, MutableList<String>>()
 
             dotParser.edges.values.forEach { edge ->
-                val parent = edge.node1.id.removeSurrounding("\"")
-                val child = edge.node2.id.removeSurrounding("\"")
+                val parent = edge.node1.id.unquote()
+                val child = edge.node2.id.unquote()
                 dependencies.getOrPut(parent) { mutableListOf() } += child
             }
 
