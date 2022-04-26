@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
@@ -80,8 +81,11 @@ object DeclaredLicenseProcessor {
         customLicenseMapping: Map<String, SpdxExpression> = emptyMap()
     ): SpdxExpression? {
         val strippedLicense = stripUrlSurroundings(declaredLicense)
+
         val mappedLicense = customLicenseMapping[strippedLicense]
+            // When looking up built-in mappings, try some variations of the license name.
             ?: SpdxDeclaredLicenseMapping.map(strippedLicense)
+            ?: SpdxDeclaredLicenseMapping.map(strippedLicense.unquote())
             ?: parseLicense(strippedLicense)
 
         return mappedLicense?.normalize()?.takeIf { it.isValid() || it.toString() == SpdxConstants.NONE }
