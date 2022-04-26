@@ -26,6 +26,7 @@ import java.nio.charset.Charset
 val cliktVersion: String by project
 val config4kVersion: String by project
 val exposedVersion: String by project
+val graalVmVersion: String by project
 val jacksonVersion: String by project
 val hikariVersion: String by project
 val kotestVersion: String by project
@@ -51,7 +52,7 @@ application {
 }
 
 graal {
-    graalVersion("22.0.0.2")
+    graalVersion(graalVmVersion)
     javaVersion("17")
 
     option("--no-fallback")
