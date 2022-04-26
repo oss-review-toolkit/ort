@@ -81,6 +81,10 @@ private val NOASSERTION_LICENSE_REFS = listOf(
     "LicenseRef-scancode-patent-disclaimer",
     "LicenseRef-scancode-warranty-disclaimer",
 
+    // https://scancode-licensedb.aboutcode.org/?search=other
+    "LicenseRef-scancode-other-copyleft",
+    "LicenseRef-scancode-other-permissive",
+
     // https://scancode-licensedb.aboutcode.org/?search=unknown
     "LicenseRef-scancode-free-unknown",
     "LicenseRef-scancode-unknown",
