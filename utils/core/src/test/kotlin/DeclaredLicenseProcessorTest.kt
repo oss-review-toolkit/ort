@@ -94,7 +94,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
 
         "Preprocessing licenses does not make mapping redundant" {
             val processableLicenses = SpdxDeclaredLicenseMapping.mapping.keys.filter { declaredLicense ->
-                SpdxSimpleLicenseMapping.map(DeclaredLicenseProcessor.preprocess(declaredLicense)) != null
+                SpdxSimpleLicenseMapping.map(DeclaredLicenseProcessor.extractLicenseNameFromUrl(declaredLicense)) != null
             }
 
             processableLicenses should beEmpty()

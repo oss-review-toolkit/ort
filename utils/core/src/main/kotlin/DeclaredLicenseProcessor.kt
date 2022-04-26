@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.isValidUri
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
@@ -30,6 +32,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxException
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 object DeclaredLicenseProcessor {
     private val urlPrefixesToRemove = listOf(
@@ -53,20 +56,13 @@ object DeclaredLicenseProcessor {
      * Return a declared license that has known URL prefixes and file suffixes stripped, so that the remaining string
      * can more generally be mapped in further processing steps.
      */
-    internal fun preprocess(declaredLicense: String): String {
+    internal fun extractLicenseNameFromUrl(declaredLicense: String): String {
         val licenseWithoutPrefix = urlPrefixesToRemove.fold(declaredLicense) { license, url ->
             license.removePrefix(url)
         }
 
-        // Only also strip suffixes if at least one prefix was stripped. Otherwise URLs like
-        // "http://ant-contrib.sourceforge.net/tasks/LICENSE.txt" would be stripped, but for such URLs separate
-        // mappings might exist.
-        return if (licenseWithoutPrefix != declaredLicense) {
-            fileSuffixesToRemove.fold(licenseWithoutPrefix) { license, extension ->
-                license.removeSuffix(extension)
-            }
-        } else {
-            licenseWithoutPrefix
+        return fileSuffixesToRemove.fold(licenseWithoutPrefix) { license, extension ->
+            license.removeSuffix(extension)
         }
     }
 
@@ -80,10 +76,25 @@ object DeclaredLicenseProcessor {
         declaredLicense: String,
         declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
     ): SpdxExpression? {
-        val licenseWithoutPrefixOrSuffix = preprocess(declaredLicense)
-        val mappedLicense = declaredLicenseMapping[licenseWithoutPrefixOrSuffix]
-            ?: SpdxDeclaredLicenseMapping.map(licenseWithoutPrefixOrSuffix)
-            ?: parseLicense(licenseWithoutPrefixOrSuffix)
+        val licenseName = extractLicenseNameFromUrl(declaredLicense)
+
+        if (licenseName.isValidUri()) {
+            val tempDir = createOrtTempDir("NuGetSupport")
+
+            val licenseDownloadUrl = VcsHost.toRawDownloadUrl(licenseUrl) ?: licenseUrl
+            val licenseFromUrl = OkHttpClientHelper.downloadFile(licenseDownloadUrl, tempDir).map {
+                val algorithm = HashAlgorithm.SHA1GIT
+                val hash = algorithm.calculate(it)
+                "${SpdxConstants.LICENSE_REF_PREFIX}$ORT_NAME-SWHID-$hash-${it.name}".toSpdxId()
+            }.getOrDefault(licenseUrl)
+
+            tempDir.safeDeleteRecursively()
+
+        }
+
+        val mappedLicense = declaredLicenseMapping[licenseName]
+            ?: SpdxDeclaredLicenseMapping.map(licenseName)
+            ?: parseLicense(licenseName)
 
         return mappedLicense?.normalize()?.takeIf { it.isValid() || it.toString() == SpdxConstants.NONE }
     }
