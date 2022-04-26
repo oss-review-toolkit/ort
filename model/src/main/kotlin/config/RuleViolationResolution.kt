@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.utils.sanitizeMessage
 
@@ -46,7 +44,6 @@ data class RuleViolationResolution(
      */
     val comment: String
 ) {
-    @JsonIgnore
     private val regex = Regex(message.sanitizeMessage(), RegexOption.DOT_MATCHES_ALL)
 
     /**
