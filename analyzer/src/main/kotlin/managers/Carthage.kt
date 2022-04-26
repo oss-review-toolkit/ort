@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 
 /**
@@ -130,8 +131,8 @@ class Carthage(
         }
 
         val type = DependencyType.valueOf(split[0].uppercase())
-        val id = split[1].removeSurrounding("\"")
-        val revision = split[2].removeSurrounding("\"")
+        val id = split[1].unquote()
+        val revision = split[2].unquote()
 
         return when (type) {
             DependencyType.GITHUB -> {
