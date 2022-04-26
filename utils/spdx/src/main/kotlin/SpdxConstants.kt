@@ -36,6 +36,14 @@ object SpdxConstants {
     const val NOASSERTION = "NOASSERTION"
 
     /**
+     * The tag to use in a line of source code to declare an SPDX ID.
+     *
+     * Note: The tag does not include the (actually required) trailing space after the colon to work around
+     * https://github.com/fsfe/reuse-tool/issues/463.
+     */
+    const val TAG = "SPDX-License-Identifier:"
+
+    /**
      * A prefix used in fields like "originator", "supplier", or "annotator" to describe a person.
      */
     const val PERSON = "Person: "

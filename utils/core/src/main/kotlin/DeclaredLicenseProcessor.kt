@@ -86,6 +86,7 @@ object DeclaredLicenseProcessor {
             // When looking up built-in mappings, try some variations of the license name.
             ?: SpdxDeclaredLicenseMapping.map(strippedLicense)
             ?: SpdxDeclaredLicenseMapping.map(strippedLicense.unquote())
+            ?: SpdxDeclaredLicenseMapping.map(strippedLicense.removePrefix(SpdxConstants.TAG).trim())
             ?: parseLicense(strippedLicense)
 
         return mappedLicense?.normalize()?.takeIf { it.isValid() || it.toString() == SpdxConstants.NONE }
