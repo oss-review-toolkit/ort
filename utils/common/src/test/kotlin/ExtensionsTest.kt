@@ -403,6 +403,33 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "String.unquote" should {
+        "remove surrounding quotes" {
+            "'single'".unquote() shouldBe "single"
+            "\"double\"".unquote() shouldBe "double"
+        }
+
+        "remove nested quotes" {
+            "'\"single-double\"'".unquote() shouldBe "single-double"
+            "\"'double-single'\"".unquote() shouldBe "double-single"
+        }
+
+        "remove unmatched quotes" {
+            "'single-unmatched".unquote() shouldBe "single-unmatched"
+            "\"double-unmatched".unquote() shouldBe "double-unmatched"
+            "'\"broken-nesting'\"".unquote() shouldBe "broken-nesting"
+        }
+
+        "remove whitespace by default" {
+            "  '  \"  single-double  \"  '  ".unquote() shouldBe "single-double"
+        }
+
+        "keep whitespace optionally" {
+            "  '  \"  single-double  \"  '  ".unquote(trimWhitespace = false) shouldBe "  '  \"  single-double  \"  '  "
+            "'\"  single-double  \"'".unquote(trimWhitespace = false) shouldBe "  single-double  "
+        }
+    }
+
     "String.urlencode" should {
         val str = "project: fünky\$name*>nul."
 

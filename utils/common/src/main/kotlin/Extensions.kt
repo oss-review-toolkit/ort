@@ -422,6 +422,13 @@ fun String.toUri() = runCatching { URI(this) }
 fun <R> String.toUri(transform: (URI) -> R) = toUri().mapCatching(transform)
 
 /**
+ * Return this string with (nested) single- and double-quotes removed. If [trimWhitespace] is true, then intermediate
+ * whitespace is also removed, otherwise it is kept.
+ */
+fun String.unquote(trimWhitespace: Boolean = true) =
+    trim { (trimWhitespace && it.isWhitespace()) || it == '\'' || it == '"' }
+
+/**
  * Return this string with the first character upper-cased.
  */
 fun String.uppercaseFirstChar() =
