@@ -26,7 +26,6 @@ import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxDeclaredLicenseMapping
-import org.ossreviewtoolkit.utils.spdx.SpdxException
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -107,12 +106,16 @@ object DeclaredLicenseProcessor {
         declaredLicenses.forEach { declaredLicense ->
             process(declaredLicense, declaredLicenseMapping)?.let {
                 processedLicenses[declaredLicense] = it
-            } ?: run { unmapped += declaredLicense }
+            } ?: run {
+                unmapped += declaredLicense
+            }
         }
 
         val spdxExpression = processedLicenses.values.toSet().filter {
             it.toString() != SpdxConstants.NONE
-        }.reduceOrNull { left, right -> SpdxCompoundExpression(left, operator, right) }
+        }.reduceOrNull { left, right ->
+            SpdxCompoundExpression(left, operator, right)
+        }
 
         val mapped = processedLicenses.filterNot { (key, value) ->
             key.removeSurrounding("(", ")") == value.toString()
@@ -122,12 +125,11 @@ object DeclaredLicenseProcessor {
     }
 
     private fun parseLicense(declaredLicense: String) =
-        try {
+        runCatching {
             declaredLicense.toSpdx()
-        } catch (e: SpdxException) {
-            log.debug { "Could not parse declared license '$declaredLicense': ${e.collectMessagesAsString()}" }
-            null
-        }
+        }.onFailure {
+            log.debug { "Could not parse declared license '$declaredLicense': ${it.collectMessagesAsString()}" }
+        }.getOrNull()
 }
 
 data class ProcessedDeclaredLicense(
