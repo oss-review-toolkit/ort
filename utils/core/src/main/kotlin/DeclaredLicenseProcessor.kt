@@ -52,7 +52,7 @@ object DeclaredLicenseProcessor {
      * Return a declared license that has known URL prefixes and file suffixes stripped, so that the remaining string
      * can more generally be mapped in further processing steps.
      */
-    internal fun preprocess(declaredLicense: String): String {
+    internal fun stripUrlSurroundings(declaredLicense: String): String {
         val licenseWithoutPrefix = urlPrefixesToRemove.fold(declaredLicense) { license, url ->
             license.removePrefix(url)
         }
@@ -79,10 +79,10 @@ object DeclaredLicenseProcessor {
         declaredLicense: String,
         declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
     ): SpdxExpression? {
-        val licenseWithoutPrefixOrSuffix = preprocess(declaredLicense)
-        val mappedLicense = declaredLicenseMapping[licenseWithoutPrefixOrSuffix]
-            ?: SpdxDeclaredLicenseMapping.map(licenseWithoutPrefixOrSuffix)
-            ?: parseLicense(licenseWithoutPrefixOrSuffix)
+        val strippedLicense = stripUrlSurroundings(declaredLicense)
+        val mappedLicense = declaredLicenseMapping[strippedLicense]
+            ?: SpdxDeclaredLicenseMapping.map(strippedLicense)
+            ?: parseLicense(strippedLicense)
 
         return mappedLicense?.normalize()?.takeIf { it.isValid() || it.toString() == SpdxConstants.NONE }
     }

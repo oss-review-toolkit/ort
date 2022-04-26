@@ -92,9 +92,9 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             processedLicense shouldBe SpdxLicenseIdExpression("Apache-2.0")
         }
 
-        "Preprocessing licenses does not make mapping redundant" {
+        "Stripping URL surroundings should not make any mapping redundant" {
             val processableLicenses = SpdxDeclaredLicenseMapping.mapping.keys.filter { declaredLicense ->
-                SpdxSimpleLicenseMapping.map(DeclaredLicenseProcessor.preprocess(declaredLicense)) != null
+                SpdxSimpleLicenseMapping.map(DeclaredLicenseProcessor.stripUrlSurroundings(declaredLicense)) != null
             }
 
             processableLicenses should beEmpty()
