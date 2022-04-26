@@ -70,12 +70,6 @@ private val TIMEOUT_ERROR_REGEX = Pattern.compile(
 // A list of ScanCode-specific LicenseRefs that do not actually name concrete licenses, but which are generic findings
 // that "look like" licenses.
 private val NOASSERTION_LICENSE_REFS = listOf(
-    // https://scancode-licensedb.aboutcode.org/?search=unknown
-    "LicenseRef-scancode-free-unknown",
-    "LicenseRef-scancode-unknown",
-    "LicenseRef-scancode-unknown-license-reference",
-    "LicenseRef-scancode-unknown-spdx",
-
     // https://scancode-licensedb.aboutcode.org/?search=generic
     "LicenseRef-scancode-agpl-generic-additional-terms",
     "LicenseRef-scancode-generic-cla",
@@ -85,7 +79,13 @@ private val NOASSERTION_LICENSE_REFS = listOf(
     "LicenseRef-scancode-generic-trademark",
     "LicenseRef-scancode-gpl-generic-additional-terms",
     "LicenseRef-scancode-patent-disclaimer",
-    "LicenseRef-scancode-warranty-disclaimer"
+    "LicenseRef-scancode-warranty-disclaimer",
+
+    // https://scancode-licensedb.aboutcode.org/?search=unknown
+    "LicenseRef-scancode-free-unknown",
+    "LicenseRef-scancode-unknown",
+    "LicenseRef-scancode-unknown-license-reference",
+    "LicenseRef-scancode-unknown-spdx"
 )
 
 /**
