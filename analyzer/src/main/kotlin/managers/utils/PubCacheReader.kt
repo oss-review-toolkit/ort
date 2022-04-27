@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.managers.flutterHome
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -36,7 +37,7 @@ import org.ossreviewtoolkit.utils.core.log
  * installation directory.
  */
 internal class PubCacheReader {
-    private val pubCacheRoot by lazy {
+    internal val pubCacheRoot by lazy {
         Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
 
         if (Os.isWindows) {
@@ -69,7 +70,7 @@ internal class PubCacheReader {
         val description = packageInfo["description"]
         val packageName = description["name"].textValueOrEmpty()
         val url = description["url"].textValueOrEmpty()
-        val resolvedRef = packageInfo["resolved-ref"].textValueOrEmpty()
+        val resolvedRef = description["resolved-ref"].textValueOrEmpty()
 
         val path = if (type == "hosted" && url.isNotEmpty()) {
             // Packages with source set to "hosted" and "url" key in description set to "https://pub.dartlang.org".
@@ -77,8 +78,11 @@ internal class PubCacheReader {
             "hosted/${url.replace("https://", "")}/$packageName-$packageVersion"
         } else if (type == "git" && resolvedRef.isNotEmpty()) {
             // Packages with source set to "git" and a "resolved-ref" key in description set to a gitHash.
-            // The path should be resolved to "git/packageName-gitHash".
-            "git/$packageName-$resolvedRef"
+            // These packages do not define a packageName in the packageInfo, but by definition the path resolves to
+            // the project name as given from the VcsHost and to the resolvedRef.
+            val projectName = VcsHost.fromUrl(url)?.getProject(url) ?: return null
+
+            "git/$projectName-$resolvedRef"
         } else {
             log.error { "Could not find projectRoot of '$packageName'." }
 
