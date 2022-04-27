@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.core
 
 import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
@@ -27,6 +28,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.maps.shouldContainExactly
+import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -93,11 +95,13 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "Stripping URL surroundings should not make any mapping redundant" {
-            val processableLicenses = SpdxDeclaredLicenseMapping.mapping.keys.filter { declaredLicense ->
-                SpdxSimpleLicenseMapping.map(DeclaredLicenseProcessor.stripUrlSurroundings(declaredLicense)) != null
-            }
+            SpdxDeclaredLicenseMapping.mapping.forAll { (license, expression) ->
+                val strippedLicense = DeclaredLicenseProcessor.stripUrlSurroundings(license)
 
-            processableLicenses should beEmpty()
+                withClue("Stripping '$license' to '$strippedLicense' makes the mapping to '$expression' redundant") {
+                    SpdxSimpleLicenseMapping.map(strippedLicense) should beNull()
+                }
+            }
         }
 
         "The SPDX expression only contains valid licenses" {
