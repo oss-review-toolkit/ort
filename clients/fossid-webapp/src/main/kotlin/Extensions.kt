@@ -21,6 +21,13 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
+import java.io.File
+
+import okio.buffer
+import okio.sink
+
+import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
+import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 
@@ -302,3 +309,64 @@ suspend fun FossIdRestService.createIgnoreRule(
             "apply_to" to scope.name.lowercase()
         )
     )
+
+/**
+ * Ask the FossID server to generate a [reportType] report containing [selectionType]. The report will be generated in
+ * the [directory].
+ */
+suspend fun FossIdRestService.generateReport(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    reportType: ReportType,
+    selectionType: SelectionType,
+    directory: File
+): Result<File> {
+    val response = generateReport(
+        PostRequestBody(
+            "generate_report",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            "scan_code" to scanCode,
+            "report_type" to reportType.toString(),
+            "selection_type" to selectionType.name.lowercase()
+        )
+    )
+
+    return if (response.isSuccessful) {
+        // The API is quirky here: If the report type is HTML, the result is returned as a standard HTML response,
+        // without filename. For any other report types, the result is returned as an attachment with a filename in the
+        // headers (even for report types generating HTML such as DYNAMIC).
+        val fileName = if (reportType == ReportType.HTML_STATIC) {
+            "fossid-$scanCode-report.html"
+        } else {
+            response.headers()["Content-disposition"]?.split(';')?.firstNotNullOfOrNull {
+                it.trim().withoutPrefix("filename=")?.removeSurrounding("\"")
+            } ?: return Result.failure(IllegalStateException("Cannot determine name of the report"))
+        }
+
+        Result.success(
+            directory.resolve(fileName).apply {
+                sink().buffer().use { target ->
+                    response.body()?.use { target.writeAll(it.source()) }
+                }
+            }
+        )
+    } else {
+        Result.failure(
+            IllegalStateException(
+                """
+                    Report generation failed with error code ${response.code()}: ${response.message()}.
+                    Details: ${response.errorBody()?.string()}
+                """.trimIndent()
+            )
+        )
+    }
+}
+
+/**
+ * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
+ */
+fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
+    this?.removePrefix(prefix)?.takeIf { it != this } ?: missingPrefixValue()

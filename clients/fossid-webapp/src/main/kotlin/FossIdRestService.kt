@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanDescription
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanDescription2021dot2
 
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
@@ -181,6 +182,9 @@ interface FossIdRestService {
 
     @POST("api.php")
     suspend fun createIgnoreRule(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
+    @POST("api.php")
+    suspend fun generateReport(@Body body: PostRequestBody): Response<ResponseBody>
 
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
