@@ -128,8 +128,9 @@ sealed class SpdxExpression {
 
     /**
      * Normalize all license IDs using a mapping containing common misspellings of license IDs. If [mapDeprecated] is
-     * `true` also deprecated IDs are mapped to they current counterparts. The result of this function is not guaranteed
-     * to contain only valid IDs. Use [validate] to check the returned [SpdxExpression] for validity afterwards.
+     * `true`, also deprecated IDs are mapped to their current counterparts. The result of this function is not
+     * guaranteed to contain only valid IDs. Use [validate] to check the returned [SpdxExpression] for validity
+     * afterwards.
      */
     abstract fun normalize(mapDeprecated: Boolean = true): SpdxExpression
 
