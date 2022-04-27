@@ -70,17 +70,17 @@ object DeclaredLicenseProcessor {
     }
 
     /**
-     * Try to map the [declaredLicense] to an [SpdxExpression] by taking both hard-coded mappings and
-     * [declaredLicenseMapping] into account. As a special case, a license may be mapped to [SpdxConstants.NONE] to mark
+     * Try to map the [declaredLicense] to an [SpdxExpression] by taking both built-in mappings and
+     * [customLicenseMapping] into account. As a special case, a license may be mapped to [SpdxConstants.NONE] to mark
      * it as something that is not a license, like a copyright that was accidentally entered as a license. Return the
      * successfully mapped license expression, or null if the declared license could not be mapped.
      */
     internal fun process(
         declaredLicense: String,
-        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
+        customLicenseMapping: Map<String, SpdxExpression> = emptyMap()
     ): SpdxExpression? {
         val strippedLicense = stripUrlSurroundings(declaredLicense)
-        val mappedLicense = declaredLicenseMapping[strippedLicense]
+        val mappedLicense = customLicenseMapping[strippedLicense]
             ?: SpdxDeclaredLicenseMapping.map(strippedLicense)
             ?: parseLicense(strippedLicense)
 
@@ -88,8 +88,8 @@ object DeclaredLicenseProcessor {
     }
 
     /**
-     * Try to map all [declaredLicenses] to a (compound) [SpdxExpression] by taking both hard-coded mappings and
-     * [declaredLicenseMapping] into account. As a special case, a license may be mapped to [SpdxConstants.NONE] to mark
+     * Try to map all [declaredLicenses] to a (compound) [SpdxExpression] by taking both built-in mappings and
+     * [customLicenseMapping] into account. As a special case, a license may be mapped to [SpdxConstants.NONE] to mark
      * it as something that is not a license, like a copyright that was accidentally entered as a license. Multiple
      * declared licenses are reduced to a [SpdxCompoundExpression] using the specified [operator]. Return a
      * [ProcessedDeclaredLicense] which contains the final [SpdxExpression] (or null if none of the declared licenses
@@ -97,14 +97,14 @@ object DeclaredLicenseProcessor {
      */
     fun process(
         declaredLicenses: Set<String>,
-        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap(),
+        customLicenseMapping: Map<String, SpdxExpression> = emptyMap(),
         operator: SpdxOperator = SpdxOperator.AND
     ): ProcessedDeclaredLicense {
         val processedLicenses = mutableMapOf<String, SpdxExpression>()
         val unmapped = mutableListOf<String>()
 
         declaredLicenses.forEach { declaredLicense ->
-            process(declaredLicense, declaredLicenseMapping)?.let {
+            process(declaredLicense, customLicenseMapping)?.let {
                 processedLicenses[declaredLicense] = it
             } ?: run {
                 unmapped += declaredLicense
