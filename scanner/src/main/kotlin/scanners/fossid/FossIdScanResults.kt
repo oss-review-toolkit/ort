@@ -96,7 +96,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
             val license = fossIdLicenseMappings[it.identifier] ?: it.identifier
 
             runCatching {
-                license.toSpdx()
+                license.toSpdx().normalize()
             }.onSuccess { licenseExpression ->
                 licenseFindings += LicenseFinding(licenseExpression, location)
             }.onFailure { spdxException ->
