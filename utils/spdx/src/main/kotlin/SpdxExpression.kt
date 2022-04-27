@@ -471,8 +471,8 @@ class SpdxLicenseWithExceptionExpression(
     override fun exception() = exception
 
     override fun normalize(mapDeprecated: Boolean) =
-        // Manually cast to SpdxLicenseException, because the type resolver does not recognize that in all subclasses of
-        // SpdxSimpleExpression normalize() returns an SpdxSingleLicenseExpression.
+        // Manually cast to SpdxSingleLicenseExpression as the type resolver does not recognize that in all subclasses
+        // of SpdxSimpleExpression normalize() returns an SpdxSingleLicenseExpression.
         when (val normalizedLicense = license.normalize(mapDeprecated) as SpdxSingleLicenseExpression) {
             is SpdxSimpleExpression -> SpdxLicenseWithExceptionExpression(normalizedLicense, exception)
 
