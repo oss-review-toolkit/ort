@@ -65,6 +65,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libssl-dev \
     make \
     netbase \
+    openssl \
     tk-dev \
     tzdata \
     uuid-dev \
@@ -72,6 +73,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     xz-utils \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
+
+
 
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
