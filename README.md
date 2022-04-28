@@ -318,8 +318,7 @@ Currently, the following package managers (grouped by the programming language t
 supported:
 
 * C / C++
-  * [Conan](https://conan.io/) (limitations:
-  [receipe vs. source repository](https://github.com/oss-review-toolkit/ort/issues/2037))
+  * [Conan](https://conan.io/)
   * Also see: [SPDX documents](#analyzer-for-spdx-documents)
 * Dart / Flutter
   * [Pub](https://pub.dev/)
