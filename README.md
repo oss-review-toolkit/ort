@@ -741,6 +741,12 @@ created run configuration to your needs, e.g. by adding an argument and options 
 For running tests and individual test cases from the IDE, the [kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest)
 needs to be installed. Afterwards tests can be run via the green "Play" icon from the gutter as described above.
 
+# Want to Help or have Questions?
+
+All contributions are welcome. If you are interested in contributing, please read our
+[contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers
+to any of your questions we recommend you [join our Slack community](https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY).
+
 # License
 
 Copyright (C) 2017-2022 HERE Europe B.V.\
