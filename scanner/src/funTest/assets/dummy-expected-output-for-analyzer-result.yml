@@ -211,7 +211,9 @@ scanner:
     - "**/*.spdx.yaml"
     - "**/*.spdx.json"
     - "**/META-INF/DEPENDENCIES"
+    - "**/META-INF/DEPENDENCIES.txt"
     - "**/META-INF/NOTICE"
+    - "**/META-INF/NOTICE.txt"
   results:
     scan_results:
       Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0:
