@@ -26,7 +26,10 @@ import java.nio.file.Paths
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.common.getQueryParameters
+import org.ossreviewtoolkit.utils.common.nextOrNull
 import org.ossreviewtoolkit.utils.common.toUri
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
 
 /**
@@ -44,6 +47,57 @@ enum class VcsHost(
      */
     vararg supportedTypes: VcsType
 ) {
+    AZURE_DEVOPS("dev.azure.com", VcsType.GIT) {
+        private val gitCommitPrefix = "GC"
+
+        override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
+
+        override fun getProjectInternal(projectUrl: URI) = projectUrl.path.substringAfterLast("/")
+
+        override fun toVcsInfoInternal(projectUrl: URI): VcsInfo {
+            val uri = with(projectUrl) { URI(scheme, authority, path, null, fragment) }
+            val revision = projectUrl.getQueryParameters()["version"]?.firstOrNull()
+                .withoutPrefix(gitCommitPrefix).orEmpty()
+            val path = projectUrl.getQueryParameters()["path"]?.firstOrNull().withoutPrefix("/").orEmpty()
+
+            return VcsInfo(VcsType.GIT, uri.toString(), revision, path)
+        }
+
+        override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int): String {
+            val actualEndLine = if (endLine != -1) endLine else startLine + 1
+
+            val lineQueryParam = "line=$startLine&lineEnd=$actualEndLine&lineColumn=1&lineEndColumn=1"
+            val pathQueryParam = "&path=/${vcsInfo.path}".takeUnless { vcsInfo.path.isEmpty() }.orEmpty()
+            val revisionQueryParam = "&version=$gitCommitPrefix${vcsInfo.revision}".takeUnless {
+                vcsInfo.revision.isEmpty()
+            }.orEmpty()
+            return "${vcsInfo.url}?$lineQueryParam$pathQueryParam$revisionQueryParam"
+        }
+
+        override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo): String {
+            val pathIterator = Paths.get(URI(vcsInfo.url).path).iterator()
+            val team = pathIterator.nextOrNull().takeIf { it.toString() == userOrOrg }?.let {
+                pathIterator.nextOrNull()?.toString()
+            }.orEmpty()
+
+            return "https://dev.azure.com/$userOrOrg/$team/_apis/git/repositories/" +
+                    "$project/items?path=/" +
+                    "&versionDescriptor[version]=${vcsInfo.revision}" +
+                    "&versionDescriptor[versionType]=commit" +
+                    "&\$format=zip&download=true"
+        }
+
+        override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo): String {
+            val pathIterator = Paths.get(URI(vcsInfo.url).path).iterator()
+            val team = pathIterator.nextOrNull().takeIf { it.toString() == userOrOrg }?.let {
+                pathIterator.nextOrNull()?.toString()
+            }.orEmpty()
+
+            return "https://dev.azure.com/$userOrOrg/$team/_apis/git/repositories/$project/items" +
+                    "?scopePath=/${vcsInfo.path}"
+        }
+    },
+
     /**
      * The enum constant to handle [Bitbucket][https://bitbucket.org/]-specific information.
      */
