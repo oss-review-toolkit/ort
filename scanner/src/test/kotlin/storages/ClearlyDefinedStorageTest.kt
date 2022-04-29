@@ -35,7 +35,6 @@ import com.vdurmont.semver4j.Semver
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
@@ -46,8 +45,6 @@ import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.net.ServerSocket
-import java.time.Duration
-import java.time.Instant
 
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
@@ -75,9 +72,6 @@ private const val TEST_FILES_DIRECTORY = "clearly-defined"
 
 /** The name of the file with the test response from ClearlyDefined. */
 private const val RESPONSE_FILE = "scancode-$SCANCODE_VERSION.json"
-
-/** A delta for comparing timestamps against the current time. */
-private val MAX_TIME_DELTA = Duration.ofSeconds(30)
 
 /** The ClearlyDefined coordinates referencing the test package. */
 private val COORDINATES = Coordinates(ComponentType.MAVEN, Provider.MAVEN_CENTRAL, NAMESPACE, NAME, VERSION)
@@ -198,15 +192,6 @@ private fun Result<List<ScanResult>>.shouldBeValid(block: (ScanResult.() -> Unit
 }
 
 /**
- * Check whether this [Instant] is close to the current time. This is used to check whether correct timestamps are set.
- */
-private fun Instant.shouldBeCloseToCurrentTime(maxDelta: Duration = MAX_TIME_DELTA) {
-    val delta = Duration.between(this, Instant.now())
-    delta.isNegative shouldBe false
-    delta.compareTo(maxDelta) shouldBeLessThan 0
-}
-
-/**
  * Read the template for a ClearlyDefines definitions request from the test file.
  */
 private fun readDefinitionsTemplate(): String {
@@ -288,8 +273,6 @@ class ClearlyDefinedStorageTest : WordSpec({
             storage.read(TEST_IDENTIFIER).shouldBeValid {
                 scanner.name shouldBe "ScanCode"
                 scanner.version shouldBe "3.0.2"
-                summary.startTime.shouldBeCloseToCurrentTime()
-                summary.endTime.shouldBeCloseToCurrentTime()
             }
         }
 
