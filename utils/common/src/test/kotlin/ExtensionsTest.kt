@@ -37,6 +37,7 @@ import io.kotest.matchers.types.beInstanceOf
 
 import java.io.File
 import java.io.IOException
+import java.net.URI
 import java.time.DayOfWeek
 import java.util.Locale
 
@@ -450,6 +451,34 @@ class ExtensionsTest : WordSpec({
             val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
 
             fileFromStr shouldBe aFile()
+        }
+    }
+
+    "URI.getQueryParameters" should {
+        "return the query parameter for a simple query" {
+            URI("https://oss-review-toolkit.org?key=value").getQueryParameters() shouldBe
+                    mapOf("key" to listOf("value"))
+        }
+
+        "work with multiple query parameters" {
+            URI("https://oss-review-toolkit.org?key1=value1&key2=value2").getQueryParameters() shouldBe
+                    mapOf("key1" to listOf("value1"), "key2" to listOf("value2"))
+        }
+
+        "return query parameter with multiple values" {
+            URI("https://oss-review-toolkit.org?key=value1,value2,value3").getQueryParameters() shouldBe
+                    mapOf("key" to listOf("value1", "value2", "value3"))
+
+            URI("https://oss-review-toolkit.org?key=value1&key=value2").getQueryParameters() shouldBe
+                    mapOf("key" to listOf("value1", "value2"))
+        }
+
+        "work for URIs without query parameters" {
+            URI("https://oss-review-toolkit.org").getQueryParameters() shouldBe emptyMap()
+        }
+
+        "work with empty values" {
+            URI("https://oss-review-toolkit.org?key=").getQueryParameters() shouldBe mapOf("key" to listOf(""))
         }
     }
 })
