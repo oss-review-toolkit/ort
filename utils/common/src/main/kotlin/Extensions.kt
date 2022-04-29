@@ -464,3 +464,15 @@ fun Throwable.collectMessages(): List<String> {
  * Recursively collect the messages of this [Throwable] and all its causes and join them to a single [String].
  */
 fun Throwable.collectMessagesAsString() = collectMessages().joinToString("\nCaused by: ")
+
+/**
+ * Retrieve query parameters of this [URI]. Multiple values of a single key are supported if they are split by a comma,
+ * or if keys are repeated as defined in RFC6570 section 3.2.9, see https://datatracker.ietf.org/doc/rfc6570.
+ */
+fun URI.getQueryParameters(): Map<String, List<String>> {
+    if (query == null) return emptyMap()
+
+    return query.split('&')
+        .groupBy({ it.substringBefore('=') }, { it.substringAfter('=').split(',') })
+        .mapValues { (_, v) -> v.flatten() }
+}
