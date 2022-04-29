@@ -52,7 +52,7 @@ private data class LicenseMatch(
     val score: Float
 )
 
-data class LicenseKeyReplacement(
+internal data class LicenseKeyReplacement(
     val scanCodeLicenseKey: String,
     val spdxExpression: String
 )
