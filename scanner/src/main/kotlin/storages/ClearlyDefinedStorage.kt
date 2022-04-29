@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
+import org.ossreviewtoolkit.scanner.scanners.scancode.SCANCODE_TIMESTAMP_FORMATTER
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -145,7 +146,6 @@ class ClearlyDefinedStorage(
      * identifier, as we try to lookup source code results if a GitHub repository is known.
      */
     private suspend fun readFromClearlyDefined(id: Identifier, coordinates: Coordinates): Result<List<ScanResult>> {
-        val startTime = Instant.now()
         log.info { "Looking up results for '${id.toCoordinates()}'." }
 
         return try {
@@ -158,7 +158,7 @@ class ClearlyDefinedStorage(
             )
 
             findScanCodeVersion(tools, coordinates)?.let { version ->
-                loadScanCodeResults(coordinates, version, startTime)
+                loadScanCodeResults(coordinates, version)
             } ?: EMPTY_RESULT
         } catch (e: HttpException) {
             e.response()?.errorBody()?.string()?.let {
@@ -188,13 +188,9 @@ class ClearlyDefinedStorage(
 
     /**
      * Load the ScanCode results file for the package with the given [coordinates] from ClearlyDefined.
-     * The results have been produced by ScanCode in the given [version]; use the [startTime] for metadata.
+     * The results have been produced by ScanCode in the given [version].
      */
-    private suspend fun loadScanCodeResults(
-        coordinates: Coordinates,
-        version: String,
-        startTime: Instant
-    ): Result<List<ScanResult>> {
+    private suspend fun loadScanCodeResults(coordinates: Coordinates, version: String): Result<List<ScanResult>> {
         val toolResponse = service.harvestToolData(
             coordinates.type, coordinates.provider, coordinates.namespace.orEmpty(), coordinates.name,
             coordinates.revision.orEmpty(), TOOL_SCAN_CODE, version
@@ -231,7 +227,15 @@ class ClearlyDefinedStorage(
                     }
                 }
 
-                val summary = generateSummary(startTime, Instant.now(), "", result)
+                val header = result["headers"].first()
+
+                val startTimestamp = header["start_timestamp"].textValue()
+                val endTimestamp = header["end_timestamp"].textValue()
+
+                val startTime = SCANCODE_TIMESTAMP_FORMATTER.parse(startTimestamp).query(Instant::from)
+                val endTime = SCANCODE_TIMESTAMP_FORMATTER.parse(endTimestamp).query(Instant::from)
+
+                val summary = generateSummary(startTime, endTime, "", result)
                 val details = generateScannerDetails(result)
 
                 Result.success(listOf(ScanResult(provenance, details, summary)))
