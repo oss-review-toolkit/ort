@@ -79,9 +79,21 @@ class Subversion : VersionControlSystem() {
 
             override fun isShallow() = false
 
-            override fun getRemoteUrl() = doSvnInfo()?.url?.toString().orEmpty()
+            override fun getRemoteUrl(): String {
+                val svnInfo = doSvnInfo() ?: return ""
 
-            override fun getRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
+                val file = svnInfo.file
+                val workingCopyRoot = svnInfo.workingCopyRoot
+                val svnUrl = svnInfo.url.toString()
+
+                return when {
+                    file.startsWith(workingCopyRoot) ->
+                        svnUrl.removeSuffix(file.path.removePrefix(workingCopyRoot.path))
+                    else -> svnUrl
+                }
+            }
+
+            override fun getRevision() = doSvnInfo()?.revision?.number?.toString().orEmpty()
 
             override fun getRootPath() = doSvnInfo()?.workingCopyRoot ?: workingDir
 
