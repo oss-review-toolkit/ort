@@ -72,21 +72,16 @@ private val TIMEOUT_ERROR_REGEX = Pattern.compile(
 )
 
 /**
- * Generate a summary from the given raw ScanCode [result], using [startTime] and [endTime] metadata. From the
- * [scanPath] the package verification code is generated. If [parseExpressions] is true, license findings are preferably
- * parsed as license expressions.
+ * Generate a summary from the given raw ScanCode [result]. From the [scanPath] the package verification code is
+ * generated. If [parseExpressions] is true, license findings are preferably parsed as license expressions.
  */
 internal fun generateSummary(
-    startTime: Instant,
-    endTime: Instant,
     scanPath: File,
     result: JsonNode,
     detectedLicenseMapping: Map<String, String> = emptyMap(),
     parseExpressions: Boolean = true
 ) =
     generateSummary(
-        startTime,
-        endTime,
         calculatePackageVerificationCode(scanPath),
         result,
         detectedLicenseMapping,
@@ -94,19 +89,25 @@ internal fun generateSummary(
     )
 
 /**
- * Generate a summary from the given raw ScanCode [result], using [startTime], [endTime], and [verificationCode]
- * metadata. This variant can be used if the result is not read from a local file. If [parseExpressions] is true,
- * license findings are preferably parsed as license expressions.
+ * Generate a summary from the given raw ScanCode [result] using [verificationCode] metadata. This variant can be used
+ * if the result is not read from a local file. If [parseExpressions] is true, license findings are preferably parsed as
+ * license expressions.
  */
 internal fun generateSummary(
-    startTime: Instant,
-    endTime: Instant,
     verificationCode: String,
     result: JsonNode,
     detectedLicenseMapping: Map<String, String> = emptyMap(),
     parseExpressions: Boolean = true
-) =
-    ScanSummary(
+): ScanSummary {
+    val header = result["headers"].single()
+
+    val startTimestamp = header["start_timestamp"].textValue()
+    val endTimestamp = header["end_timestamp"].textValue()
+
+    val startTime = SCANCODE_TIMESTAMP_FORMATTER.parse(startTimestamp).query(Instant::from)
+    val endTime = SCANCODE_TIMESTAMP_FORMATTER.parse(endTimestamp).query(Instant::from)
+
+    return ScanSummary(
         startTime = startTime,
         endTime = endTime,
         packageVerificationCode = verificationCode,
@@ -114,6 +115,7 @@ internal fun generateSummary(
         copyrightFindings = getCopyrightFindings(result).toSortedSet(),
         issues = getIssues(result)
     )
+}
 
 /**
  * Generate details for the given raw ScanCode [result].
