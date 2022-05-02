@@ -35,7 +35,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 import java.io.File
-import java.time.Instant
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
@@ -51,7 +50,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json")
                 val result = resultFile.readTree()
 
-                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
 
                 summary.licenseFindings.size shouldBe 4
                 summary.copyrightFindings.size shouldBe 4
@@ -64,7 +63,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File("src/test/assets/scancode-3.2.1rc2_h2database-1.4.200.json")
                 val result = resultFile.readTree()
 
-                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
 
                 summary.licenseFindings should containExactlyInAnyOrder(
                     LicenseFinding(
@@ -84,7 +83,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File("src/test/assets/scancode-3.2.1rc2_spring-javaformat-checkstyle-0.0.15.json")
                 val result = resultFile.readTree()
 
-                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
                 val fileExtensions = listOf("html", "java", "txt")
 
                 summary.licenseFindings.forAll {
@@ -106,7 +105,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json")
                 val result = resultFile.readTree()
 
-                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
 
                 summary.licenseFindings.size shouldBe 5
                 summary.copyrightFindings.size shouldBe 4
@@ -117,7 +116,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json")
                 val result = resultFile.readTree()
 
-                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
 
                 summary should containLicensesExactly("MIT")
 
@@ -135,7 +134,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json")
                 val result = resultFile.readTree()
 
-                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
 
                 summary should containCopyrightsExactly(
                     "Copyright (c) 2014 Jonathan Ong" to
@@ -153,7 +152,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_wasi-0.10.2.json")
                 val result = resultFile.readTree()
 
-                val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
 
                 summary.licenseFindings should containExactlyInAnyOrder(
                     LicenseFinding(

@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.scanner.storages
 
 import java.io.IOException
 import java.lang.IllegalArgumentException
-import java.time.Instant
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -51,7 +50,6 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
-import org.ossreviewtoolkit.scanner.scanners.scancode.SCANCODE_TIMESTAMP_FORMATTER
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -231,15 +229,7 @@ class ClearlyDefinedStorage(
                     }
                 }
 
-                val header = result["headers"].first()
-
-                val startTimestamp = header["start_timestamp"].textValue()
-                val endTimestamp = header["end_timestamp"].textValue()
-
-                val startTime = SCANCODE_TIMESTAMP_FORMATTER.parse(startTimestamp).query(Instant::from)
-                val endTime = SCANCODE_TIMESTAMP_FORMATTER.parse(endTimestamp).query(Instant::from)
-
-                val summary = generateSummary(startTime, endTime, SpdxConstants.NONE, result)
+                val summary = generateSummary(SpdxConstants.NONE, result)
                 val details = generateScannerDetails(result)
 
                 Result.success(listOf(ScanResult(provenance, details, summary)))

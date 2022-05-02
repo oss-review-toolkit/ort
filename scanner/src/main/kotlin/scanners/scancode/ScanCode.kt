@@ -21,7 +21,6 @@
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import java.io.File
-import java.time.Instant
 
 import kotlin.math.max
 
@@ -187,20 +186,14 @@ class ScanCode internal constructor(
     }
 
     override fun scanPathInternal(path: File): ScanSummary {
-        val startTime = Instant.now()
-
         val resultFile = createOrtTempDir().resolve("result.json")
         val process = runScanCode(path, resultFile)
-
-        val endTime = Instant.now()
 
         val result = resultFile.readTree()
         resultFile.parentFile.safeDeleteRecursively(force = true)
 
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
         val summary = generateSummary(
-            startTime,
-            endTime,
             path,
             result,
             scannerConfig.detectedLicenseMapping,
