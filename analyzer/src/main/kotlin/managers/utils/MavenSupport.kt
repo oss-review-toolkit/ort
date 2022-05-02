@@ -109,6 +109,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         private val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
         private val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+):(?<url>.+)")!!
 
+        private val WHITESPACE_REGEX = Regex("\\s")
+
         private val remoteArtifactCache =
             DiskCache(
                 ortDataDirectory.resolve("cache/remote_artifacts"),
@@ -273,9 +275,14 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         }
 
         /**
-         * Trim the data from checksum files as it sometimes contains a path after the actual checksum.
+         * Split the provided [checksum] by whitespace and return a [Hash] for the first element that matches the
+         * provided algorithm. If no element matches, return [Hash.NONE]. This works around the issue that Maven
+         * checksum files sometimes contain arbitrary strings before or after the actual checksum.
          */
-        private fun trimChecksumData(checksum: String) = checksum.trimStart().takeWhile { !it.isWhitespace() }
+        internal fun parseChecksum(checksum: String, algorithm: String) =
+            checksum.split(WHITESPACE_REGEX).firstNotNullOfOrNull {
+                runCatching { Hash.create(it, algorithm) }.getOrNull()
+            } ?: Hash.NONE
 
         /**
          * Return true if an artifact that has not been requested from Maven Central is also available on Maven Central
@@ -292,7 +299,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             }
 
             val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrNull() ?: return false
-            return !trimChecksumData(checksum).equals(remoteArtifact.hash.value, ignoreCase = true)
+            return !remoteArtifact.hash.verify(parseChecksum(checksum, remoteArtifact.hash.algorithm.name))
         }
     }
 
@@ -561,22 +568,22 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
 
-                val actualChecksum = runCatching {
+                val hash = runCatching {
                     val task = GetTask(checksum.location)
                     transporter.get(task)
 
-                    trimChecksumData(task.dataString)
+                    parseChecksum(task.dataString, checksum.algorithm)
                 }.getOrElse {
                     it.showStackTrace()
 
                     log.warn { "Could not get checksum for '$artifact': ${it.collectMessagesAsString()}" }
 
-                    // Fall back to an empty checksum string.
-                    ""
+                    // Fall back to an empty hash.
+                    Hash.NONE
                 }
 
                 val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
-                val hash = if (actualChecksum.isBlank()) Hash.NONE else Hash.create(actualChecksum, checksum.algorithm)
+
                 return RemoteArtifact(downloadUrl, hash).also {
                     log.debug { "Writing remote artifact for '$artifact' to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))

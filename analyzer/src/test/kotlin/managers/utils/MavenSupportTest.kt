@@ -25,6 +25,7 @@ import io.kotest.matchers.shouldBe
 import org.apache.maven.model.Scm
 import org.apache.maven.project.MavenProject
 
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
@@ -98,6 +99,26 @@ class MavenSupportTest : WordSpec({
                 revision = "",
                 path = "boringssl-static"
             )
+        }
+    }
+
+    "parseChecksum()" should {
+        "return NONE for an empty string" {
+            MavenSupport.parseChecksum("", "SHA1") shouldBe Hash.NONE
+        }
+
+        "return the first matching hash" {
+            MavenSupport.parseChecksum(
+                checksum = "868c0792233fc78d8c9bac29ac79ade988301318 7de43522ca1a2a65d7c3b9eacb802a51745b245c",
+                algorithm = "SHA1"
+            ) shouldBe Hash.create("868c0792233fc78d8c9bac29ac79ade988301318", "SHA1")
+        }
+
+        "ignore prefixes and suffixes" {
+            MavenSupport.parseChecksum(
+                checksum = "prefix 868c0792233fc78d8c9bac29ac79ade988301318 suffix",
+                algorithm = "SHA1"
+            ) shouldBe Hash.create("868c0792233fc78d8c9bac29ac79ade988301318", "SHA1")
         }
     }
 })
