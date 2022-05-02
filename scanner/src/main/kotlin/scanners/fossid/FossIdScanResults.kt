@@ -56,7 +56,29 @@ private val fossIdLicenseMappings = mapOf(
     "X11-Style-(Quarterdeck)" to "LicenseRef-scancode-x11-quarterdeck",
     "X11-Style-(Realmode)" to "LicenseRef-scancode-x11-realmode",
     "X11-Style-(Silicon-Graphics)" to "LicenseRef-scancode-x11-sg",
-    "X11-Style-(Tektronix)" to "LicenseRef-scancode-x11-tektronix"
+    "X11-Style-(Tektronix)" to "LicenseRef-scancode-x11-tektronix",
+    "u_Agere-BSD" to "LicenseRef-scancode-agere-bsd",
+    "u_BSD-3-Clause-Sun" to "LicenseRef-scancode-bsd-3-clause-sun",
+    "u_CC-BY-2.0-UK" to "LicenseRef-scancode-cc-by-2.0-uk",
+    "u_GLUT-License" to "LicenseRef-scancode-glut",
+    "u_HACOS-1.2" to "LicenseRef-scancode-hacos-1.2",
+    "u_Jscheme-License" to "LicenseRef-scancode-jscheme",
+    "u_MongoDB-SSPL-1.0" to "SSPL-1.0",
+    "u_Philips-Proprietary-Notice-2000" to "LicenseRef-scancode-philips-proprietary-notice-2000",
+    "u_Sun-BCL-11-plus-6" to "LicenseRef-scancode-sun-bcl-11-06",
+    "u_Sun-Communications-API" to "LicenseRef-scancode-sun-communications-api",
+    "u_Sun-EJB-Specification-3.0" to "LicenseRef-scancode-sun-ejb-spec-3.0",
+    "u_Sun-Entitlement-3-plus-15" to "LicenseRef-scancode-sun-entitlement-03-15",
+    "u_Sun-Entitlement-JAF" to "LicenseRef-scancode-sun-entitlement-jaf",
+    "u_Sun-Java-Web-Services-Developer-Pack-1.6" to "Xerox",
+    "u_Sun-JavaMail" to "LicenseRef-scancode-sun-javamail",
+    "u_Sun-Project-X" to "LicenseRef-scancode-sun-project-x",
+    "u_Taligent-JDK-Proprietary-Notice" to "LicenseRef-scancode-taligent-jdk",
+    "u_Trolltech-GPL-Exception-1.2" to "LicenseRef-scancode-trolltech-gpl-exception-1.2",
+    "u_Vuforia-2013-07-29" to "LicenseRef-scancode-vuforia-2013-07-29",
+    "u_Xerox" to "Xerox",
+    "u_nexB-EULA-for-SaaS-1.1.0" to "LicenseRef-scancode-nexb-eula-saas-1.1.0",
+    "u_nexB-SSLA-1.1.0" to "LicenseRef-scancode-nexb-ssla-1.1.0"
 )
 
 /**
