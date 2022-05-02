@@ -66,7 +66,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         val EMPTY_RESULT = Result.success<List<ScanResult>>(emptyList())
 
         /**
-         * The scan result storage in use. Needs to be set via the corresponding configure function.
+         * The scan result storage in use. Needs to be set via the corresponding [configure] function.
          */
         var storage: ScanResultsStorage = NoStorage()
 
