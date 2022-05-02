@@ -28,6 +28,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.include
 import io.kotest.matchers.string.shouldStartWith
 
 import java.io.File
@@ -111,7 +112,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
             val patchJson = ClearlyDefinedService.JSON_MAPPER.writeValueAsString(contributionPatch)
 
-            patchJson shouldNot io.kotest.matchers.string.include("null")
+            patchJson shouldNot include("null")
         }
 
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
