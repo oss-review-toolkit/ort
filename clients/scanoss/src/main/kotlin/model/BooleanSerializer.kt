@@ -20,22 +20,15 @@
 package org.ossreviewtoolkit.clients.scanoss.model
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.Serializer
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 /**
  * SCANOSS returns booleans as "yes" or "no". Therefore, we need a special deserializer for it.
  */
-class BooleanSerializer : KSerializer<Boolean> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
-        "SCANOSS_Boolean",
-        PrimitiveKind.BOOLEAN
-    )
-
+@Serializer(Boolean::class)
+object BooleanSerializer : KSerializer<Boolean> {
     override fun serialize(encoder: Encoder, value: Boolean) = encoder.encodeString(if (value) "yes" else "no")
-
     override fun deserialize(decoder: Decoder): Boolean = decoder.decodeString() == "yes"
 }
