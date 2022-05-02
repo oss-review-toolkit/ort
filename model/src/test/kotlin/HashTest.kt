@@ -102,6 +102,10 @@ class HashTest : WordSpec({
 
             Hash.create("c00ef43045659b53da5d71d49b8cd7e528c9d55b").verify(licenseFile) shouldBe true
             Hash.create("C00EF43045659B53DA5D71D49B8CD7E528C9D55B").verify(licenseFile) shouldBe true
+
+            Hash.create("c00ef43045659b53da5d71d49b8cd7e528c9d55b").verify(
+                Hash.create("C00EF43045659B53DA5D71D49B8CD7E528C9D55B")
+            ) shouldBe true
         }
     }
 })

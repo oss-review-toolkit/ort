@@ -97,6 +97,11 @@ data class Hash(
 
         return algorithm.calculate(file).equals(value, ignoreCase = true)
     }
+
+    /**
+     * Verify that the provided [hash] matches this hash.
+     */
+    fun verify(hash: Hash): Boolean = algorithm == hash.algorithm && value.equals(hash.value, ignoreCase = true)
 }
 
 private class HashDeserializer : StdDeserializer<Hash>(Hash::class.java) {
