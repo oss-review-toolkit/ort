@@ -116,21 +116,12 @@ internal fun generateSummary(
     )
 
 /**
- * Generate an object with details about the ScanCode scanner that produced the given [result]. The corresponding
- * metadata from the result is evaluated.
+ * Generate details for the given raw ScanCode [result].
  */
-internal fun generateScannerDetails(result: JsonNode) =
-    result["headers"]?.let { headers ->
-        generateScannerDetails(headers.single(), "options", "tool_version")
-    } ?: generateScannerDetails(result, "scancode_options", "scancode_version")
-
-/**
- * Generate a ScannerDetails object from the given [result] node, which structure depends on the current ScanCode
- * version. The node names to check are specified via [optionsNode], and [versionNode].
- */
-private fun generateScannerDetails(result: JsonNode, optionsNode: String, versionNode: String): ScannerDetails {
-    val version = result[versionNode].textValueOrEmpty()
-    val config = generateScannerOptions(result[optionsNode])
+internal fun generateScannerDetails(result: JsonNode): ScannerDetails {
+    val header = result["headers"].single()
+    val version = header["tool_version"].textValueOrEmpty()
+    val config = generateScannerOptions(header["options"])
     return ScannerDetails(ScanCode.SCANNER_NAME, version, config)
 }
 
@@ -163,8 +154,10 @@ private fun generateScannerOptions(options: JsonNode?): String {
 }
 
 private fun getInputPath(result: JsonNode): String {
-    val header = result["headers"]?.singleOrNull()
-    return header?.get("options")?.get("input")?.singleOrNull()?.textValue()?.let { "$it/" }.orEmpty()
+    val header = result["headers"].single()
+    val input = header["options"]["input"]
+    val path = input.takeUnless { it.isArray } ?: input.single()
+    return path.textValue().let { "$it/" }
 }
 
 /**
@@ -188,10 +181,7 @@ private fun getLicenseFindings(
         licenses.groupBy(
             keySelector = {
                 LicenseMatch(
-                    // Older ScanCode versions do not produce the `license_expression` field.
-                    // Just use the `key` field in this case.
-                    it["matched_rule"]?.get("license_expression")?.textValue().takeIf { parseExpressions }
-                        ?: it["key"].textValue(),
+                    (if (parseExpressions) it["matched_rule"]["license_expression"] else it["key"]).textValue(),
                     it["start_line"].intValue(),
                     it["end_line"].intValue(),
                     it["score"].floatValue()
@@ -229,11 +219,7 @@ private fun getSpdxLicenseId(license: JsonNode): String {
     // For regular SPDX IDs, return early here.
     if (idFromSpdxKey.isNotEmpty() && !idFromSpdxKey.startsWith(LICENSE_REF_PREFIX)) return idFromSpdxKey
 
-    // Before version 2.9.8, ScanCode used SPDX LicenseRefs that did not include the "scancode" namespace, like
-    // "LicenseRef-Proprietary-HERE" instead of now "LicenseRef-scancode-here-proprietary", see
-    // https://github.com/nexB/scancode-toolkit/blob/f94f716/src/licensedcode/data/licenses/here-proprietary.yml#L6-L8
-    // But if the "scancode" namespace is present, return early here.
-    return idFromSpdxKey.takeIf { it.startsWith(LICENSE_REF_PREFIX_SCAN_CODE) } ?: run {
+    return idFromSpdxKey.takeUnless { it.isEmpty() } ?: run {
         // At this point the ID is either empty or a non-ScanCode SPDX LicenseRef, so fall back to building an ID based
         // on the ScanCode-specific "key".
         val idFromKey = license["key"].textValue().toSpdxId(allowPlusSuffix = true)
@@ -268,23 +254,15 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
         val path = file["path"].textValue().removePrefix(input)
 
         val copyrights = file["copyrights"]?.asSequence().orEmpty()
-        copyrights.flatMap { copyright ->
-            val startLine = copyright["start_line"].intValue()
-            val endLine = copyright["end_line"].intValue()
-
-            // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-            val statements = (copyright["statements"]?.asSequence() ?: sequenceOf(copyright["value"]))
-
-            statements.map { statement ->
-                CopyrightFinding(
-                    statement = statement.textValue(),
-                    location = TextLocation(
-                        path = path,
-                        startLine = startLine,
-                        endLine = endLine
-                    )
+        copyrights.map { copyright ->
+            CopyrightFinding(
+                statement = copyright["value"].textValue(),
+                location = TextLocation(
+                    path = path,
+                    startLine = copyright["start_line"].intValue(),
+                    endLine = copyright["end_line"].intValue()
                 )
-            }
+            )
         }
     }
 
