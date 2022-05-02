@@ -193,6 +193,10 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     overflow: scroll;
 }
 
+.ort-message {
+    white-space: pre-wrap
+}
+
 @media all and (max-width: 1000px) {
     .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
         display: none;

@@ -305,7 +305,7 @@ class StaticHtmlReporter : Reporter {
                 }
             }
             td {
-                p { +ruleViolation.violation.message }
+                p { unsafe { +ruleViolation.violation.message } }
                 if (ruleViolation.isResolved) {
                     p { +ruleViolation.resolutionDescription }
                 } else {
@@ -357,7 +357,7 @@ class StaticHtmlReporter : Reporter {
                     issues.forEach { issue ->
                         li {
                             issueDescription(issue)
-                            p { +issue.resolutionDescription }
+                            p("ort-message") { +issue.resolutionDescription }
                         }
 
                         if (!issue.isResolved && issue.howToFix.isNotBlank()) {
