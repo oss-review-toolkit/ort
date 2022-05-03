@@ -379,14 +379,32 @@ class FossIdTest : WordSpec({
                 .expectCreateScan(projectCode, scanCode, vcsInfo)
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
-            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 1)
+            coEvery {
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
+            } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
             fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
 
             coVerify {
-                service.runScan(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
             }
         }
 
@@ -406,7 +424,17 @@ class FossIdTest : WordSpec({
 
             coEvery { service.version } returns "2021.1.1"
 
-            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(
+            coEvery {
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
+            } returns EntityResponseBody(
                 status = 0,
                 error = "Scan was added to queue."
             )
@@ -416,7 +444,15 @@ class FossIdTest : WordSpec({
             fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
 
             coVerify {
-                service.runScan(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
             }
         }
 
@@ -434,7 +470,17 @@ class FossIdTest : WordSpec({
                 .expectDownload(scanCode)
                 .expectDeleteScan(scanCode)
                 .mockFiles(scanCode)
-            coEvery { service.runScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 1)
+            coEvery {
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
+            } returns EntityResponseBody(status = 1)
 
             val fossId = createFossId(config)
 
@@ -509,7 +555,16 @@ class FossIdTest : WordSpec({
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
-                service.runScan(USER, API_KEY, scanCode, *FossId.deltaScanRunParameters(originCode))
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *FossId.deltaScanRunParameters(originCode),
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
             }
         }
 
@@ -541,7 +596,16 @@ class FossIdTest : WordSpec({
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
-                service.runScan(USER, API_KEY, scanCode, *FossId.deltaScanRunParameters(originCode))
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *FossId.deltaScanRunParameters(originCode),
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
                 service.listIgnoreRules(USER, API_KEY, originCode)
                 service.createIgnoreRule(
                     USER,
@@ -763,6 +827,8 @@ private fun createConfig(
         keepFailedScans = false,
         deltaScans = deltaScans,
         deltaScanLimit = deltaScanLimit,
+        detectLicenseDeclarations = false,
+        detectCopyrightStatements = false,
         timeout = 60,
         options = emptyMap()
     )
