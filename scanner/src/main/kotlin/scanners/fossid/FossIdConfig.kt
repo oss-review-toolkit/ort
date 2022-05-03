@@ -39,6 +39,10 @@ import org.ossreviewtoolkit.utils.ort.logger
  * * **"deltaScanLimit":** This setting can be used to limit the number of delta scans to keep for a given repository.
  *   So if another delta scan is created, older delta scans are deleted until this number is reached. If unspecified, no
  *   limit is enforced on the number of delta scans to keep. This property is evaluated only if *deltaScans* is enabled.
+ * * **"detectLicenseDeclaration":** When set, the FossID scan is configured to automatically detect file license
+ *   declarations.
+ * * **"detectCopyrightStatements":** When set, the FossID scan is configured to automatically detect copyright
+ *   statements.
  *
  * Naming conventions options. If they are not set, default naming conventions are used.
  * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
@@ -70,6 +74,14 @@ internal data class FossIdConfig(
 
     /** A maximum number of delta scans to keep for a single repository. */
     val deltaScanLimit: Int,
+
+    /**
+     * Configure to automatically detect license declarations. Uses the `auto_identification_detect_copyright` setting.
+     */
+    val detectLicenseDeclarations: Boolean,
+
+    /** Configure to detect copyright statements. Uses the `auto_identification_detect_copyright` setting. */
+    val detectCopyrightStatements: Boolean,
 
     /** Timeout in minutes for communication with FossID. */
     val timeout: Int,
@@ -108,6 +120,10 @@ internal data class FossIdConfig(
         /** Name of the configuration property that limits the number of delta scans. */
         private const val DELTA_SCAN_LIMIT_PROPERTY = "deltaScanLimit"
 
+        private const val DETECT_LICENSE_DECLARATIONS_PROPERTY = "detectLicenseDeclarations"
+
+        private const val DETECT_COPYRIGHT_STATEMENTS_PROPERTY = "detectLicenseDeclarations"
+
         /** Name of the configuration property defining the timeout in minutes for communication with FossID. */
         private const val TIMEOUT = "timeout"
 
@@ -140,6 +156,12 @@ internal data class FossIdConfig(
             val keepFailedScans = fossIdScannerOptions[KEEP_FAILED_SCANS_PROPERTY]?.toBoolean() ?: false
             val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
             val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
+
+            val detectLicenseDeclarations =
+                fossIdScannerOptions[DETECT_LICENSE_DECLARATIONS_PROPERTY]?.toBoolean() ?: false
+            val detectCopyrightStatements =
+                fossIdScannerOptions[DETECT_COPYRIGHT_STATEMENTS_PROPERTY]?.toBoolean() ?: false
+
             val timeout = fossIdScannerOptions[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
             require(deltaScanLimit > 0) {
@@ -157,6 +179,8 @@ internal data class FossIdConfig(
                 keepFailedScans = keepFailedScans,
                 deltaScans = deltaScans,
                 deltaScanLimit = deltaScanLimit,
+                detectLicenseDeclarations = detectLicenseDeclarations,
+                detectCopyrightStatements = detectCopyrightStatements,
                 timeout = timeout,
                 options = fossIdScannerOptions
             )
