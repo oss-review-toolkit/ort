@@ -179,7 +179,7 @@ subprojects {
 
     testing {
         suites {
-            register("funTest", JvmTestSuite::class) {
+            register<JvmTestSuite>("funTest") {
                 sources {
                     kotlin {
                         testType.set(TestSuiteType.FUNCTIONAL_TEST)
