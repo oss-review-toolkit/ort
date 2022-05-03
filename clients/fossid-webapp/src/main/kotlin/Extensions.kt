@@ -159,8 +159,6 @@ suspend fun FossIdRestService.runScan(
             user,
             apiKey,
             "scan_code" to scanCode,
-            "auto_identification_detect_declaration" to "1",
-            "auto_identification_detect_copyright" to "1",
             *options
         )
     )

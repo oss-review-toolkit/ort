@@ -5,7 +5,7 @@
     "url" : "/api.php",
     "method" : "POST",
     "bodyPatterns" : [ {
-      "equalToJson" : "{\"action\":\"run\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\",\"auto_identification_detect_declaration\":\"1\",\"auto_identification_detect_copyright\":\"1\"}}",
+      "equalToJson" : "{\"action\":\"run\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20201203_090342\"}}",
       "ignoreArrayOrder" : true,
       "ignoreExtraElements" : true
     } ]
