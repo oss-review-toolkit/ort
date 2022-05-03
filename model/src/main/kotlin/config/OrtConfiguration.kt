@@ -89,6 +89,11 @@ data class OrtConfiguration(
     val scanner: ScannerConfiguration = ScannerConfiguration(),
 
     /**
+     * The configuration of the reporter.
+     */
+    val reporter: ReporterConfiguration = ReporterConfiguration(),
+
+    /**
      * The configuration of the notifier.
      */
     val notifier: NotifierConfiguration = NotifierConfiguration()
