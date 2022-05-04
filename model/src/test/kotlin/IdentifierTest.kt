@@ -74,10 +74,16 @@ class IdentifierTest : WordSpec({
         "be sorted as expected" {
             val ids = listOf(
                 Identifier("Maven:org.springframework.boot:spring-boot-actuator"),
-                Identifier("Maven:org.springframework.boot:spring-boot")
+                Identifier("Maven:org.springframework.boot:spring-boot"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:5.11.0"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:5.6.0"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:NOT_A_VERSION")
             )
 
             ids.sorted() should containExactly(
+                Identifier("Maven:net.java.dev.jna:jna-platform:5.11.0"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:5.6.0"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:NOT_A_VERSION"),
                 Identifier("Maven:org.springframework.boot:spring-boot"),
                 Identifier("Maven:org.springframework.boot:spring-boot-actuator")
             )
