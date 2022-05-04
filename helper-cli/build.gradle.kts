@@ -22,6 +22,9 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 import java.nio.charset.Charset
 
+val logbackClassicVersion: String by project
+val slf4jVersion: String by project
+
 plugins {
     // Apply core plugins.
     application
@@ -96,6 +99,8 @@ dependencies {
     implementation(libs.exposedCore)
     implementation(libs.hikari)
     implementation(libs.jslt)
-    implementation(libs.log4jCore)
-    implementation(libs.log4jImplSlf4j)
+    implementation("ch.qos.logback:logback-classic:$logbackClassicVersion")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
+    implementation("org.slf4j:jul-to-slf4j:$slf4jVersion")
 }
