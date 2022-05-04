@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
+import com.vdurmont.semver4j.Semver
+
 import org.ossreviewtoolkit.utils.common.encodeOr
 
 /**
@@ -62,7 +64,11 @@ data class Identifier(
             version = ""
         )
 
-        private val COMPARATOR = compareBy<Identifier>({ it.type }, { it.namespace }, { it.name }, { it.version })
+        private val COMPARATOR = compareBy<Identifier>(
+            { it.type },
+            { it.namespace },
+            { it.name }
+        )
     }
 
     private constructor(components: List<String>) : this(
@@ -90,7 +96,14 @@ data class Identifier(
         }
     }
 
-    override fun compareTo(other: Identifier) = COMPARATOR.compare(this, other)
+    override fun compareTo(other: Identifier): Int {
+        val result = COMPARATOR.compare(this, other)
+        if (result != 0) return result
+
+        return runCatching {
+            Semver(version, Semver.SemverType.LOOSE).compareTo(Semver(other.version, Semver.SemverType.LOOSE))
+        }.getOrDefault(version.compareTo(other.version))
+    }
 
     /**
      * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names] by looking at

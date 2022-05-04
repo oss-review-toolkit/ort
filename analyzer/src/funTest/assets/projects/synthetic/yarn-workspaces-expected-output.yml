@@ -20,10 +20,10 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "NPM:@here:harp-fetch:0.11.0"
+    - id: "NPM:@here:harp-fetch:0.3.6"
       dependencies:
       - id: "NPM::node-fetch:2.6.0"
-    - id: "NPM:@here:harp-fetch:0.3.6"
+    - id: "NPM:@here:harp-fetch:0.11.0"
       dependencies:
       - id: "NPM::node-fetch:2.6.0"
 packages:
@@ -85,36 +85,6 @@ packages:
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
-- id: "NPM:@here:harp-fetch:0.11.0"
-  purl: "pkg:npm/%40here/harp-fetch@0.11.0"
-  authors:
-  - "HERE Europe B.V."
-  declared_licenses:
-  - "Apache-2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-  description: "This module adds a subset of the fetch API for Node.js"
-  homepage_url: "https://github.com/heremaps/harp.gl#readme"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
-    hash:
-      value: "8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
-      algorithm: "SHA1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/heremaps/harp.gl.git"
-    revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
-    path: "@here/harp-fetch"
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/heremaps/harp.gl.git"
-    revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
-    path: "@here/harp-fetch"
 - id: "NPM:@here:harp-fetch:0.3.6"
   purl: "pkg:npm/%40here/harp-fetch@0.3.6"
   authors:
@@ -144,6 +114,36 @@ packages:
     type: "Git"
     url: "https://github.com/heremaps/harp.gl.git"
     revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+    path: "@here/harp-fetch"
+- id: "NPM:@here:harp-fetch:0.11.0"
+  purl: "pkg:npm/%40here/harp-fetch@0.11.0"
+  authors:
+  - "HERE Europe B.V."
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "This module adds a subset of the fetch API for Node.js"
+  homepage_url: "https://github.com/heremaps/harp.gl#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
+    hash:
+      value: "8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
+      algorithm: "SHA1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/heremaps/harp.gl.git"
+    revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
+    path: "@here/harp-fetch"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/heremaps/harp.gl.git"
+    revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
     path: "@here/harp-fetch"
 - id: "NPM:@scope1:pkg1:1.0.0"
   purl: "pkg:npm/%40scope1/pkg1@1.0.0"
