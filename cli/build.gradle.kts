@@ -31,7 +31,8 @@ val jacksonVersion: String by project
 val hikariVersion: String by project
 val kotestVersion: String by project
 val kotlinxCoroutinesVersion: String by project
-val log4jCoreVersion: String by project
+val logbackClassicVersion: String by project
+val slf4jVersion: String by project
 val postgresVersion: String by project
 val reflectionsVersion: String by project
 val sw360ClientVersion: String by project
@@ -165,8 +166,10 @@ dependencies {
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("io.github.config4k:config4k:$config4kVersion")
-    implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackClassicVersion")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
+    implementation("org.slf4j:jul-to-slf4j:$slf4jVersion")
     implementation("org.eclipse.sw360:client:$sw360ClientVersion")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")

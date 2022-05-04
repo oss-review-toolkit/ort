@@ -27,7 +27,8 @@ val commonsCompressVersion: String by project
 val exposedVersion: String by project
 val hikariVersion: String by project
 val jsltVersion: String by project
-val log4jCoreVersion: String by project
+val logbackClassicVersion: String by project
+val slf4jVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -102,7 +103,9 @@ dependencies {
     implementation("com.schibsted.spt.data:jslt:$jsltVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
-    implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackClassicVersion")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
+    implementation("org.slf4j:jul-to-slf4j:$slf4jVersion")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
 }
