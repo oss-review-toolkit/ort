@@ -102,33 +102,45 @@ fun scanOrtResult(
         .filter { it.pkg.id !in projectPackageIds }
         .map { it.pkg }
 
-    val scanResults = runBlocking {
-        val deferredProjectScan = async {
-            if (projectScanner == null) emptyMap()
-            else {
-                // Scan the projects from the ORT result.
-                val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
-
-                if (filteredProjectPackages.isEmpty()) emptyMap()
-                else projectScanner.scanPackages(filteredProjectPackages, ortResult.labels).mapKeys { it.key.id }
+    val scanResults = if (packageScanner is OrtResultScanner) {
+        runBlocking {
+            val deferredScanResults = async {
+                packageScanner.scanOrtResult(ortResult, ortResult.labels).mapKeys { it.key.id }
             }
+
+            val scanResult = deferredScanResults.await()
+
+            scanResult
         }
+    } else {
+        runBlocking {
+            val deferredProjectScan = async {
+                if (projectScanner == null) emptyMap()
+                else {
+                    // Scan the projects from the ORT result.
+                    val filteredProjectPackages = removeConcludedPackages(projectPackages, projectScanner)
 
-        val deferredPackageScan = async {
-            if (packageScanner == null) emptyMap()
-            else {
-                // Scan the packages from the ORT result.
-                val filteredPackages = removeConcludedPackages(packages.toSet(), packageScanner)
-
-                if (filteredPackages.isEmpty()) emptyMap()
-                else packageScanner.scanPackages(filteredPackages, ortResult.labels).mapKeys { it.key.id }
+                    if (filteredProjectPackages.isEmpty()) emptyMap()
+                    else projectScanner.scanPackages(filteredProjectPackages, ortResult.labels).mapKeys { it.key.id }
+                }
             }
+
+            val deferredPackageScan = async {
+                if (packageScanner == null) emptyMap()
+                else {
+                    // Scan the packages from the ORT result.
+                    val filteredPackages = removeConcludedPackages(packages.toSet(), packageScanner)
+
+                    if (filteredPackages.isEmpty()) emptyMap()
+                    else packageScanner.scanPackages(filteredPackages, ortResult.labels).mapKeys { it.key.id }
+                }
+            }
+
+            val projectResults = deferredProjectScan.await()
+            val packageResults = deferredPackageScan.await()
+
+            projectResults + packageResults
         }
-
-        val projectResults = deferredProjectScan.await()
-        val packageResults = deferredPackageScan.await()
-
-        projectResults + packageResults
     }.toSortedMap()
 
     // Add scan results from de-duplicated project packages to result.
