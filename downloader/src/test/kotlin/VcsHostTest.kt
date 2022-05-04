@@ -63,7 +63,7 @@ class VcsHostTest : WordSpec({
                     "&version=GC0000000000000000000000000000000000000000"
 
             AZURE_DEVOPS.toPermalink(vcsInfo, 1, 3) shouldBe "https://dev.azure.com/oss-review-toolkit/kotlin-devs/" +
-                    "_git/ort?line=1&lineEnd=3" +
+                    "_git/ort?line=1&lineEnd=4" +
                     "&lineStartColumn=1&lineEndColumn=1" +
                     "&path=/README.md" +
                     "&version=GC0000000000000000000000000000000000000000"
