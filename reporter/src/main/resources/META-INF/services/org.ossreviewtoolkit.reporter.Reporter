@@ -1,3 +1,5 @@
+org.ossreviewtoolkit.reporter.reporters.AOSD2JSONReporter
+org.ossreviewtoolkit.reporter.reporters.AOSDExcelReporter
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.OpossumReporter
