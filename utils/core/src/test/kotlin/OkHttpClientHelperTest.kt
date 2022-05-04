@@ -23,6 +23,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
@@ -79,6 +80,29 @@ class OkHttpClientHelperTest : StringSpec({
         val result = client.downloadFile(invalidUrl, outputDirectory)
         result.shouldBeFailure {
             it should beInstanceOf<IOException>()
+        }
+    }
+
+    "Exceptions when accessing the response body should be handled" {
+        val failureUrl = "https://example.org/fault/"
+        val exception = IOException("Connection closed")
+
+        mockkStatic(OkHttpClient::download)
+        val response = mockk<Response>(relaxed = true)
+        val request = mockk<Request>(relaxed = true)
+        val body = mockk<ResponseBody>(relaxed = true)
+
+        every { request.url } returns failureUrl.toHttpUrl()
+        every { response.headers(any()) } returns emptyList()
+        every { response.request } returns request
+        every { body.string() } throws exception
+
+        val client = OkHttpClientHelper.buildClient()
+        every { client.download(any(), any()) } returns Result.success(response to body)
+
+        val result = client.downloadText(failureUrl)
+        result.shouldBeFailure {
+            it shouldBe exception
         }
     }
 })

@@ -219,7 +219,7 @@ fun OkHttpClient.downloadFile(url: String, directory: File): Result<File> =
  * [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
  */
 fun OkHttpClient.downloadText(url: String): Result<String> =
-    download(url).map { (_, body) ->
+    download(url).mapCatching { (_, body) ->
         body.use { it.string() }
     }
 
