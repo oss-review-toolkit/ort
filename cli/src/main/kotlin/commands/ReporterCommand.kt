@@ -265,6 +265,11 @@ class ReporterCommand : CliktCommand(
 
         val reportOptionsMap = sortedMapOf<String, MutableMap<String, String>>(String.CASE_INSENSITIVE_ORDER)
 
+        config.reporter.options?.forEach { (reporterName, option) ->
+            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
+            reportSpecificOptionsMap += option
+        }
+
         reportOptions.forEach { (format, option) ->
             val reportSpecificOptionsMap = reportOptionsMap.getOrPut(format) { mutableMapOf() }
             reportSpecificOptionsMap[option.first] = option.second
