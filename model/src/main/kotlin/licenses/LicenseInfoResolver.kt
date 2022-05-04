@@ -117,6 +117,25 @@ class LicenseInfoResolver(
                         )
                     )
                 }
+
+                licenseInfo.declaredLicenseInfo.copyrightHolders.takeIf { it.isNotEmpty() }?.let {
+                    locations.add(
+                        ResolvedLicenseLocation(
+                            provenance = UnknownProvenance,
+                            location = UNDEFINED_TEXT_LOCATION,
+                            appliedCuration = null,
+                            matchingPathExcludes = emptyList(),
+                            copyrights = licenseInfo.declaredLicenseInfo
+                                .copyrightHolders.mapTo(mutableSetOf()) { copyrightHolder ->
+                                    ResolvedCopyrightFinding(
+                                        statement = copyrightHolder,
+                                        location = UNDEFINED_TEXT_LOCATION,
+                                        matchingPathExcludes = emptyList()
+                                    )
+                                }
+                        )
+                    )
+                }
             }
         }
 
