@@ -4211,6 +4211,36 @@ packages:
     url: "https://github.com/jonschlinkert/set-value.git"
     revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
     path: ""
+- id: "NPM::snapdragon:0.8.2"
+  purl: "pkg:npm/snapdragon@0.8.2"
+  authors:
+  - "Jon Schlinkert"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Fast, pluggable and easy-to-use parser-renderer factory."
+  homepage_url: "https://github.com/jonschlinkert/snapdragon"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.8.2.tgz"
+    hash:
+      value: "64922e7c565b0e14204ba1aa7d6964278d25182d"
+      algorithm: "SHA1"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/jonschlinkert/snapdragon.git"
+    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jonschlinkert/snapdragon.git"
+    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
+    path: ""
 - id: "NPM::snapdragon:0.11.5"
   purl: "pkg:npm/snapdragon@0.11.5"
   authors:
@@ -4241,36 +4271,6 @@ packages:
     type: "Git"
     url: "https://github.com/here-be/snapdragon.git"
     revision: "3067f0fe16d5d2771aea793c450f09cb2da533ca"
-    path: ""
-- id: "NPM::snapdragon:0.8.2"
-  purl: "pkg:npm/snapdragon@0.8.2"
-  authors:
-  - "Jon Schlinkert"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "Fast, pluggable and easy-to-use parser-renderer factory."
-  homepage_url: "https://github.com/jonschlinkert/snapdragon"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://registry.npmjs.org/snapdragon/-/snapdragon-0.8.2.tgz"
-    hash:
-      value: "64922e7c565b0e14204ba1aa7d6964278d25182d"
-      algorithm: "SHA1"
-  vcs:
-    type: "Git"
-    url: "git+https://github.com/jonschlinkert/snapdragon.git"
-    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/jonschlinkert/snapdragon.git"
-    revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
     path: ""
 - id: "NPM::snapdragon-node:1.0.6"
   purl: "pkg:npm/snapdragon-node@1.0.6"
