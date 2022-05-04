@@ -66,7 +66,7 @@ enum class VcsHost(
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int): String {
             val actualEndLine = if (endLine != -1) endLine else startLine + 1
 
-            val lineQueryParam = "line=$startLine&lineEnd=$actualEndLine&lineColumn=1&lineEndColumn=1"
+            val lineQueryParam = "line=$startLine&lineEnd=$actualEndLine&lineStartColumn=1&lineEndColumn=1"
             val pathQueryParam = "&path=/${vcsInfo.path}".takeUnless { vcsInfo.path.isEmpty() }.orEmpty()
             val revisionQueryParam = "&version=$gitCommitPrefix${vcsInfo.revision}".takeUnless {
                 vcsInfo.revision.isEmpty()
