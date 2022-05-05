@@ -148,8 +148,8 @@ class DefaultPackageProvenanceResolver(
 
     private suspend fun resolveVcs(pkg: Package): RepositoryProvenance {
         // TODO: Currently the commit revision is resolved by checking out the provided revision. There are probably
-        //       probably more efficient ways to do this depending on the VCS, especially for providers like GitHub
-        //       or GitLab which provide an API.
+        //       more efficient ways to do this depending on the VCS, especially for providers like GitHub or GitLab
+        //       which provide an API.
 
         when (val storedResult = storage.readProvenance(pkg.id, pkg.vcsProcessed)) {
             is ResolvedRepositoryProvenance -> {
