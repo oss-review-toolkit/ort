@@ -140,7 +140,7 @@ class ScanController(
      * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.
      */
     fun getNestedProvenance(id: Identifier): NestedProvenance? =
-        nestedProvenances[packageProvenancesWithoutVcsPath.getValue(id)]
+        packageProvenancesWithoutVcsPath[id]?.let { nestedProvenances[it] }
 
     /**
      * Get all [NestedProvenance]s by [Package].
