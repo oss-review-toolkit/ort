@@ -122,10 +122,8 @@ class DefaultPackageProvenanceResolver(
             is UnresolvedPackageProvenance -> {
                 log.info {
                     "Found a stored artifact resolution for package ${pkg.id.toCoordinates()} which failed " +
-                            "previously. Not attempting resolution again. The error was: ${storedResult.message}"
+                            "previously, re-attempting resolution. The error was: ${storedResult.message}"
                 }
-
-                throw IOException(storedResult.message)
             }
 
             else -> {
@@ -176,10 +174,8 @@ class DefaultPackageProvenanceResolver(
             is UnresolvedPackageProvenance -> {
                 log.info {
                     "Found a stored repository resolution result for package ${pkg.id.toCoordinates()} which failed " +
-                            "previously. Not attempting resolution again. The error was: ${storedResult.message}"
+                            "previously, re-attempting resolution. The error was: ${storedResult.message}"
                 }
-
-                throw IOException(storedResult.message)
             }
 
             else -> {
