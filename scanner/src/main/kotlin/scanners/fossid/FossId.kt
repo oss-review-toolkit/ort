@@ -110,6 +110,9 @@ class FossId internal constructor(
         @JvmStatic
         private val WAIT_DELAY = 10.seconds
 
+        @JvmStatic
+        internal val SCAN_CODE_KEY = "scancode"
+
         /**
          * The scan states for which a scan can be triggered.
          */
@@ -326,7 +329,7 @@ class FossId internal constructor(
 
                     if (config.waitForResult) {
                         val rawResults = getRawResults(scanCode)
-                        val resultsSummary = createResultSummary(startTime, provenance, rawResults)
+                        val resultsSummary = createResultSummary(startTime, provenance, rawResults, scanCode)
 
                         results.getOrPut(pkg) { mutableListOf() } += resultsSummary
                     } else {
@@ -340,7 +343,7 @@ class FossId internal constructor(
                             startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue)
                         )
 
-                        val scanResult = ScanResult(provenance, details, summary)
+                        val scanResult = ScanResult(provenance, details, summary, mapOf(SCAN_CODE_KEY to scanCode))
                         results.getOrPut(pkg) { mutableListOf() } += scanResult
                     }
                 } catch (e: IllegalStateException) {
@@ -710,7 +713,12 @@ class FossId internal constructor(
     /**
      * Construct the [ScanSummary] for this FossID scan.
      */
-    private fun createResultSummary(startTime: Instant, provenance: Provenance, rawResults: RawResults): ScanResult {
+    private fun createResultSummary(
+        startTime: Instant,
+        provenance: Provenance,
+        rawResults: RawResults,
+        scanCode: String
+    ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
         val issues = rawResults.listPendingFiles.mapTo(mutableListOf()) {
             OrtIssue(source = scannerName, message = "Pending identification for '$it'.", severity = Severity.HINT)
@@ -731,7 +739,7 @@ class FossId internal constructor(
             issues = issues
         )
 
-        return ScanResult(provenance, details, summary)
+        return ScanResult(provenance, details, summary, mapOf(SCAN_CODE_KEY to scanCode))
     }
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
