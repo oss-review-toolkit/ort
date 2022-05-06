@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 
@@ -41,7 +42,14 @@ data class ScanResult(
     /**
      * A summary of the scan results.
      */
-    val summary: ScanSummary
+    val summary: ScanSummary,
+
+    /**
+     * A map for scanner specific data that cannot be mapped into any generalized property, but still needs to be
+     * stored in the scan result.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val additionalData: Map<String, String> = emptyMap()
 ) {
     /**
      * Filter all detected licenses and copyrights from the [summary] which are underneath [path], and set the [path]
