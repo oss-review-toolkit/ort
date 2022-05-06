@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAtLeastOne
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
@@ -83,6 +84,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
@@ -92,6 +94,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.scanOrtResult
+import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -686,6 +689,33 @@ class FossIdTest : WordSpec({
                 )
             }
         }
+
+        "return scan code of a scan" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            config.createService()
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDownload(scanCode)
+                .mockFiles(scanCode, identifiedRange = 1..2, markedRange = 1..2)
+
+            val fossId = createFossId(config)
+
+            val results = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).scanResults(pkgId)
+
+            val expectedAdditionalData = mapOf(SCAN_CODE_KEY to scanCode)
+
+            results.forAtLeastOne { result ->
+                result.additionalData shouldBe expectedAdditionalData
+            }
+        }
     }
 })
 
@@ -1050,15 +1080,21 @@ private fun FossIdServiceWithVersion.mockFiles(
 }
 
 /**
- * Obtain the [ScanSummary] for the package with the given [pkgId] from this [ScannerRun] or fail if it cannot be
- * resolved.
+ * Obtain the [ScanSummary] for the package with the given [pkgId] from this [ScannerRun].
  */
 private fun ScannerRun.summary(pkgId: Identifier): ScanSummary {
-    val scanResults = results.scanResults[pkgId] ?: fail("No result for package $pkgId found.")
+    val scanResults = scanResults(pkgId)
     scanResults shouldHaveSize 1
 
     return scanResults[0].summary
 }
+
+/**
+ * Obtain the [ScanResult]s for the package with the given [pkgId] from this [ScannerRun] or fail if it cannot be
+ * resolved.
+ */
+private fun ScannerRun.scanResults(pkgId: Identifier): List<ScanResult> =
+    results.scanResults[pkgId] ?: fail("No result for package $pkgId found.")
 
 /**
  * Trigger a FossID scan of the given [packages]. Return the resulting [ScannerRun].
