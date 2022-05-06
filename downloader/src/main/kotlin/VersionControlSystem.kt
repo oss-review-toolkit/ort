@@ -296,8 +296,6 @@ abstract class VersionControlSystem {
                 }
             }
         }.onFailure {
-            it.showStackTrace()
-
             log.info {
                 "Metadata has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessagesAsString()}"
             }
@@ -316,8 +314,6 @@ abstract class VersionControlSystem {
                     }
                 }
             }.onFailure {
-                it.showStackTrace()
-
                 log.info {
                     "No $type revision for package '$project' and version '$version' found: " +
                             it.collectMessagesAsString()
