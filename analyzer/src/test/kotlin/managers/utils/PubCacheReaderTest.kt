@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -30,11 +32,15 @@ import org.ossreviewtoolkit.utils.test.createSpecTempDir
 private const val PACKAGE_NAME = "non-existing-package"
 private const val PACKAGE_VERSION = "0.0.0"
 private const val RESOLVED_REF = "0000000000000000000000000000000000000000"
+private const val RELATIVE_PATH = ".."
+private val ABSOLUTE_PATH = File(Os.env["PUB_CACHE"])
 
 class PubCacheReaderTest : WordSpec({
     val tmpPubCacheDir = createSpecTempDir().also { Os.env["PUB_CACHE"] = it.absolutePath }
     val gitPackageCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF")
     val hostedPackageCacheDir = tmpPubCacheDir.resolve("hosted/oss-review-toolkit.org/$PACKAGE_NAME-$PACKAGE_VERSION")
+    val localPackagePathAbsolute = ABSOLUTE_PATH
+    val localPackagePathRelative = ABSOLUTE_PATH.resolve(RELATIVE_PATH)
 
     val reader = PubCacheReader()
 
@@ -60,7 +66,8 @@ class PubCacheReaderTest : WordSpec({
                             "version": "9.9.9"
                         }
                     """.trimIndent()
-                )
+                ),
+                ABSOLUTE_PATH // not used
             ) shouldBe gitPackageCacheDir
         }
 
@@ -78,8 +85,45 @@ class PubCacheReaderTest : WordSpec({
                             "version": "$PACKAGE_VERSION"
                         }
                     """.trimIndent()
-                )
+                ),
+                ABSOLUTE_PATH // not used
             ) shouldBe hostedPackageCacheDir
+        }
+
+        "resolve the relative path of a local dependency" {
+            PubCacheReader().findProjectRoot(
+                jsonMapper.readTree(
+                    """
+                        {
+                            "dependency": "transitive",
+                            "description": {
+                                "path": "$RELATIVE_PATH",
+                                "relative": true
+                            },
+                            "source": "path"
+                        }
+                    """.trimIndent()
+                ),
+                ABSOLUTE_PATH
+            ) shouldBe localPackagePathRelative
+        }
+
+        "resolve the absolute path of a local dependency" {
+            PubCacheReader().findProjectRoot(
+                jsonMapper.readTree(
+                    """
+                        {
+                            "dependency": "transitive",
+                            "description": {
+                                "path": "$ABSOLUTE_PATH",
+                                "relative": false
+                            },
+                            "source": "path"
+                        }
+                    """.trimIndent()
+                ),
+                ABSOLUTE_PATH
+            ) shouldBe localPackagePathAbsolute
         }
     }
 })

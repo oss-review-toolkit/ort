@@ -210,7 +210,7 @@ class Pub(
 
             log.info { "Successfully read lockfile." }
 
-            val parsePackagesResult = parseInstalledPackages(lockFile, labels)
+            val parsePackagesResult = parseInstalledPackages(lockFile, labels, workingDir)
 
             val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles.getValue(definitionFile).toList()
 
@@ -256,8 +256,10 @@ class Pub(
 
             log.info { "Successfully parsed installed packages." }
 
-            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages, labels)
-            scopes += parseScope("dev_dependencies", manifest, lockFile, parsePackagesResult.packages, labels)
+            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages, labels, workingDir)
+            scopes += parseScope(
+                "dev_dependencies", manifest, lockFile, parsePackagesResult.packages, labels, workingDir
+            )
         }
 
         log.info { "Reading ${definitionFile.name} file in $workingDir." }
@@ -274,14 +276,15 @@ class Pub(
         manifest: JsonNode,
         lockFile: JsonNode,
         packages: Map<Identifier, Package>,
-        labels: Map<String, String>
+        labels: Map<String, String>,
+        workingDir: File
     ): Scope {
         val packageName = manifest["name"].textValue()
 
         log.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
         val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence()?.toList() ?: listOf<String>()
-        val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages, labels)
+        val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages, labels, workingDir)
         return Scope(scopeName, dependencies)
     }
 
@@ -290,7 +293,8 @@ class Pub(
         manifest: JsonNode,
         lockFile: JsonNode,
         packages: Map<Identifier, Package>,
-        labels: Map<String, String>
+        labels: Map<String, String>,
+        workingDir: File
     ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
         val nameOfCurrentPackage = manifest["name"].textValue()
@@ -323,18 +327,18 @@ class Pub(
             val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
 
             try {
-                val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
                 val requiredPackages =
                     dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
 
                 val transitiveDependencies =
-                    buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages, labels)
+                    buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages, labels, workingDir)
 
                 // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the ".pub-cache" directory.
                 if (containsFlutter) {
-                    scanAndroidPackages(pkgInfoFromLockFile, labels).forEach { resultAndroid ->
+                    scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
@@ -365,13 +369,17 @@ class Pub(
 
     private val analyzerResultCacheAndroid = mutableMapOf<String, List<ProjectAnalyzerResult>>()
 
-    private fun scanAndroidPackages(packageInfo: JsonNode, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+    private fun scanAndroidPackages(
+        packageInfo: JsonNode,
+        labels: Map<String, String>,
+        workingDir: File
+    ): List<ProjectAnalyzerResult> {
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
         // We cannot find packages without a valid name.
         if (packageName.isEmpty()) return emptyList()
 
-        val projectRoot = reader.findProjectRoot(packageInfo) ?: return emptyList()
+        val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return emptyList()
         val androidDir = projectRoot.resolve("android")
         val packageFile = androidDir.resolve("build.gradle")
 
@@ -391,14 +399,14 @@ class Pub(
         }
     }
 
-    private fun scanIosPackages(packageInfo: JsonNode): ProjectAnalyzerResult? {
+    private fun scanIosPackages(packageInfo: JsonNode, workingDir: File): ProjectAnalyzerResult? {
         // TODO: Implement similar to `scanAndroidPackages` once Cocoapods is implemented.
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
         // We cannot find packages without a valid name.
         if (packageName.isEmpty()) return null
 
-        val projectRoot = reader.findProjectRoot(packageInfo) ?: return null
+        val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return null
         val iosDir = projectRoot.resolve("ios")
         val packageFile = iosDir.resolve("$packageName.podspec")
 
@@ -442,7 +450,11 @@ class Pub(
         )
     }
 
-    private fun parseInstalledPackages(lockFile: JsonNode, labels: Map<String, String>): ParsePackagesResult {
+    private fun parseInstalledPackages(
+        lockFile: JsonNode,
+        labels: Map<String, String>,
+        workingDir: File
+    ): ParsePackagesResult {
         log.info { "Parsing installed Pub packages..." }
 
         val packages = mutableMapOf<Identifier, Package>()
@@ -452,7 +464,7 @@ class Pub(
         var containsFlutter = false
 
         listOf("packages"/*, "packages-dev"*/).forEach {
-            lockFile[it]?.forEach { pkgInfoFromLockFile ->
+            lockFile[it]?.fields()?.forEach { (packageName, pkgInfoFromLockFile) ->
                 try {
                     val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
                     var description = ""
@@ -461,10 +473,22 @@ class Pub(
                     var vcs = VcsInfo.EMPTY
                     var authors: SortedSet<String> = sortedSetOf<String>()
 
-                    // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                     when {
+                        pkgInfoFromLockFile["source"].textValueOrEmpty() == "path" -> {
+                            rawName = packageName
+                            val path = pkgInfoFromLockFile["description"]["path"].textValueOrEmpty()
+                            vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
+                                log.warn {
+                                    "Invalid path of package $rawName: " +
+                                    "'$path' is outside of the project root '$workingDir'."
+                                }
+                                VcsInfo.EMPTY
+                            }
+                        }
+
+                        // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                         pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
-                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
 
                             rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
                             description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
@@ -520,7 +544,6 @@ class Pub(
                 } catch (e: JacksonYAMLParseException) {
                     e.showStackTrace()
 
-                    val packageName = pkgInfoFromLockFile["name"].textValueOrEmpty()
                     val packageVersion = pkgInfoFromLockFile["version"].textValueOrEmpty()
                     issues += createAndLogIssue(
                         source = managerName,
@@ -537,7 +560,7 @@ class Pub(
         if (containsFlutter) {
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains flutter, trigger Gradle manually for it.
-                scanAndroidPackages(pkgInfoFromLockFile, labels).forEach { result ->
+                scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
@@ -546,7 +569,7 @@ class Pub(
                 }
 
                 // As this package contains flutter, trigger CocoaPods manually for it.
-                scanIosPackages(pkgInfoFromLockFile)?.let { result ->
+                scanIosPackages(pkgInfoFromLockFile, workingDir)?.let { result ->
                     result.packages.forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
@@ -559,8 +582,8 @@ class Pub(
         return ParsePackagesResult(packages, issues)
     }
 
-    private fun readPackageInfoFromCache(packageInfo: JsonNode): JsonNode {
-        val definitionFile = reader.findFile(packageInfo, PUBSPEC_YAML)
+    private fun readPackageInfoFromCache(packageInfo: JsonNode, workingDir: File): JsonNode {
+        val definitionFile = reader.findFile(packageInfo, workingDir, PUBSPEC_YAML)
         if (definitionFile == null) {
             createAndLogIssue(
                 source = managerName,

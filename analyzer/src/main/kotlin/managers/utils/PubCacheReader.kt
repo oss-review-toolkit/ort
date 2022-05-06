@@ -51,9 +51,8 @@ internal class PubCacheReader {
         flutterHome.resolve(".pub-cache").takeIf { it.isDirectory }
     }
 
-    fun findFile(packageInfo: JsonNode, filename: String): File? {
-        val artifactRootDir = findProjectRoot(packageInfo) ?: return null
-
+    fun findFile(packageInfo: JsonNode, workingDir: File, filename: String): File? {
+        val artifactRootDir = findProjectRoot(packageInfo, workingDir) ?: return null
         // Try to locate the file directly.
         val file = artifactRootDir.resolve(filename)
         if (file.isFile) return file
@@ -64,13 +63,25 @@ internal class PubCacheReader {
             .find { !it.isSymbolicLink() && it.isFile && it.name == filename }
     }
 
-    fun findProjectRoot(packageInfo: JsonNode): File? {
+    fun findProjectRoot(packageInfo: JsonNode, workingDir: File): File? {
         val packageVersion = packageInfo["version"].textValueOrEmpty()
         val type = packageInfo["source"].textValueOrEmpty()
         val description = packageInfo["description"]
         val packageName = description["name"].textValueOrEmpty()
         val url = description["url"].textValueOrEmpty()
         val resolvedRef = description["resolved-ref"].textValueOrEmpty()
+        val resolvedPath = description["path"].textValueOrEmpty()
+        val isPathRelative = description["relative"]?.booleanValue() ?: false
+
+        if (type == "path" && resolvedPath.isNotEmpty()) {
+            // For "path" packages, the path should be the absolute resolved path
+            // of the "path" given in the description.
+            return if (isPathRelative) {
+                workingDir.resolve(resolvedPath).takeIf { it.isDirectory }
+            } else {
+                File(resolvedPath).takeIf { it.isDirectory }
+            }
+        }
 
         val path = if (type == "hosted" && url.isNotEmpty()) {
             // Packages with source set to "hosted" and "url" key in description set to "https://pub.dartlang.org".
