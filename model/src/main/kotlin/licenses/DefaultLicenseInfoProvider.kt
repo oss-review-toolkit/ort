@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,10 +109,10 @@ class DefaultLicenseInfoProvider(
                 ortResult.repository.config.excludes.paths,
                 ortResult.repository.getRelativePath(project.vcsProcessed).orEmpty()
             )
-        } ?: packageConfigurationProvider.getPackageConfiguration(id, provenance).let { packageConfiguration ->
+        } ?: packageConfigurationProvider.getPackageConfigurations(id, provenance).let { packageConfigurations ->
             Triple(
-                packageConfiguration?.licenseFindingCurations.orEmpty(),
-                packageConfiguration?.pathExcludes.orEmpty(),
+                packageConfigurations.flatMap { it.licenseFindingCurations },
+                packageConfigurations.flatMap { it.pathExcludes },
                 ""
             )
         }

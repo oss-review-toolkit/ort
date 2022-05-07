@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,12 +89,11 @@ class GetPackageLicensesCommand : CliktCommand(
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val result = scanResults.firstOrNull()?.let { scanResult ->
-            val packageConfiguration = packageConfigurationProvider.getPackageConfiguration(
-                packageId, scanResult.provenance
-            )
+            val packageConfigurations =
+                packageConfigurationProvider.getPackageConfigurations(packageId, scanResult.provenance)
 
-            val licenseFindingCurations = packageConfiguration?.licenseFindingCurations.orEmpty()
-            val pathExcludes = packageConfiguration?.pathExcludes.orEmpty()
+            val licenseFindingCurations = packageConfigurations.flatMap { it.licenseFindingCurations }
+            val pathExcludes = packageConfigurations.flatMap { it.pathExcludes }
 
             val nonExcludedLicenseFindings = scanResult.summary.licenseFindings.filter { licenseFinding ->
                 pathExcludes.none { it.matches(licenseFinding.location.path) }
