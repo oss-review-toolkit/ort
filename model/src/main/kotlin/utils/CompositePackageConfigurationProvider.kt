@@ -33,9 +33,6 @@ class CompositePackageConfigurationProvider(
 ) : PackageConfigurationProvider {
     constructor(vararg providers: PackageConfigurationProvider) : this(providers.asList())
 
-    override fun getPackageConfigurations(): List<PackageConfiguration> =
-        providers.flatMap { it.getPackageConfigurations() }
-
     override fun getPackageConfiguration(packageId: Identifier, provenance: Provenance): PackageConfiguration? =
         providers.firstNotNullOfOrNull { it.getPackageConfiguration(packageId, provenance) }
 }
