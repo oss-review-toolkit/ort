@@ -27,7 +27,15 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 /**
  * A provider for [PackageConfiguration]s.
  */
-interface PackageConfigurationProvider {
+fun interface PackageConfigurationProvider {
+    companion object {
+        /**
+         * A provider that does not provide any curations.
+         */
+        @JvmField
+        val EMPTY = PackageConfigurationProvider { _, _ -> null }
+    }
+
     /**
      * Return the first matching [PackageConfiguration] for the given [packageId] and [provenance] if any.
      */
