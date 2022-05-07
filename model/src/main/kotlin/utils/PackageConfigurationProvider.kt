@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +28,6 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
  * A provider for [PackageConfiguration]s.
  */
 interface PackageConfigurationProvider {
-    /**
-     * Return all [PackageConfiguration]s of this provider.
-     */
-    fun getPackageConfigurations(): List<PackageConfiguration>
-
     /**
      * Return the first matching [PackageConfiguration] for the given [packageId] and [provenance] if any.
      */
