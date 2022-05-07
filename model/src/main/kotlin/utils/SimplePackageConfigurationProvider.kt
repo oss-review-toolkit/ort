@@ -37,14 +37,6 @@ import org.ossreviewtoolkit.model.readValue
 open class SimplePackageConfigurationProvider(
     configurations: Collection<PackageConfiguration>
 ) : PackageConfigurationProvider {
-    companion object {
-        /**
-         * A provider without any package configurations.
-         */
-        @JvmField
-        val EMPTY = SimplePackageConfigurationProvider(emptyList())
-   }
-
     private val configurationsById: Map<Identifier, List<PackageConfiguration>>
 
     init {
