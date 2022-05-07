@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
 /**
- * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
+ * The branch or tag of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
  */
 private const val GIT_REPO_BRANCH = "v2.17.2"
 
