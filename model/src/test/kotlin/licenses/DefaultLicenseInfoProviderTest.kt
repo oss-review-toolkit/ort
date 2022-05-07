@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ package org.ossreviewtoolkit.model.licenses
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 
 class DefaultLicenseInfoProviderTest : WordSpec({
-    val defaultLicenseInfoProvider = DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider.EMPTY)
+    val defaultLicenseInfoProvider = DefaultLicenseInfoProvider(ortResult, PackageConfigurationProvider.EMPTY)
 
     "declaredLicenseInfo" should {
         "contain author information for package" {

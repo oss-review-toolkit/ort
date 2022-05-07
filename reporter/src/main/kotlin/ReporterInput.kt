@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +33,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 
 /**
  * A bundle of input to be used by [Reporter] implementations.
@@ -51,7 +51,7 @@ data class ReporterInput(
     /**
      * A [PackageConfigurationProvider], can be used to obtain [PackageConfiguration]s for packages.
      */
-    val packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
+    val packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
 
     /**
      * A [ResolutionProvider], can be used to check which [OrtIssue]s and [RuleViolation]s are resolved.

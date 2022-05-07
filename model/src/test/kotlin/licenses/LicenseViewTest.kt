@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +30,14 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.createDefault
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class LicenseViewTest : WordSpec() {
     private val licenseInfoResolver = LicenseInfoResolver(
-        provider = DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider.EMPTY),
+        provider = DefaultLicenseInfoProvider(ortResult, PackageConfigurationProvider.EMPTY),
         copyrightGarbage = CopyrightGarbage(),
         addAuthorsToCopyrights = false,
         archiver = FileArchiver.createDefault()
