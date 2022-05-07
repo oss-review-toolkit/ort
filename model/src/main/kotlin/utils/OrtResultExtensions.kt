@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +56,7 @@ fun OrtResult.collectDeclaredLicenses(omitExcluded: Boolean = false): Map<Identi
  * instead of calling this function multiple times for better performance.
  */
 fun OrtResult.createLicenseInfoResolver(
-    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
+    packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
     addAuthorsToCopyrights: Boolean = false,
     archiver: FileArchiver? = null
