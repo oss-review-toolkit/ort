@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,8 +80,6 @@ class SimplePackageConfigurationProvider(
 
         configurationsById = configurations.groupByTo(HashMap()) { it.id }
     }
-
-    override fun getPackageConfigurations() = configurationsById.values.flatten()
 
     override fun getPackageConfiguration(packageId: Identifier, provenance: Provenance): PackageConfiguration? =
         configurationsById[packageId]?.filter { it.matches(packageId, provenance) }?.let {
