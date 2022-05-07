@@ -25,14 +25,13 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 
 /**
  * A [PackageConfigurationProvider] that combines the provided [providers] into a single provider. The order of the
- * [providers] determines the order in which they are queried when requesting a [PackageConfiguration] in
- * [getPackageConfiguration].
+ * [providers] determines the order in which they are queried when calling [getPackageConfigurations].
  */
 class CompositePackageConfigurationProvider(
     private val providers: List<PackageConfigurationProvider>
 ) : PackageConfigurationProvider {
     constructor(vararg providers: PackageConfigurationProvider) : this(providers.asList())
 
-    override fun getPackageConfiguration(packageId: Identifier, provenance: Provenance): PackageConfiguration? =
-        providers.firstNotNullOfOrNull { it.getPackageConfiguration(packageId, provenance) }
+    override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
+        providers.flatMap { it.getPackageConfigurations(packageId, provenance) }
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,7 +172,7 @@ internal class ListLicensesCommand : CliktCommand(
             if (ortResult.isProject(packageId)) {
                 ortResult.getExcludes().paths
             } else {
-                packageConfigurationProvider.getPackageConfiguration(packageId, provenance)?.pathExcludes.orEmpty()
+                packageConfigurationProvider.getPackageConfigurations(packageId, provenance).flatMap { it.pathExcludes }
             }.any { it.matches(path) }
 
         val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverity)
