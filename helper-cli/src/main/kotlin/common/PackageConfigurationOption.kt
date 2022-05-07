@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,8 @@
 
 package org.ossreviewtoolkit.helper.common
 
+import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.FilePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 
@@ -29,7 +32,7 @@ internal sealed class PackageConfigurationOption {
 
 internal fun PackageConfigurationOption?.createProvider(): PackageConfigurationProvider =
     when (this) {
-        is PackageConfigurationOption.Dir -> SimplePackageConfigurationProvider.forDirectory(value)
-        is PackageConfigurationOption.File -> SimplePackageConfigurationProvider.forFile(value)
+        is PackageConfigurationOption.Dir -> DirectoryPackageConfigurationProvider(value)
+        is PackageConfigurationOption.File -> FilePackageConfigurationProvider(value)
         null -> SimplePackageConfigurationProvider.EMPTY
     }
