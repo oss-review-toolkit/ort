@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
+import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
@@ -218,17 +219,19 @@ class ReporterCommand : CliktCommand(
 
         val config = globalOptionsForSubcommands.config
 
-        val packageConfigurations = packageConfigurationOption.createProvider().getPackageConfigurations()
-            .toMutableSet()
-        val repositoryPackageConfigurations = ortResult.repository.config.packageConfigurations
+        val packageConfigurationProvider = if (config.enableRepositoryPackageConfigurations) {
+            CompositePackageConfigurationProvider(
+                SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
+                packageConfigurationOption.createProvider()
+            )
+        } else {
+            if (ortResult.repository.config.packageConfigurations.isNotEmpty()) {
+                log.info { "Local package configurations were not applied because the feature is not enabled." }
+            }
 
-        if (config.enableRepositoryPackageConfigurations) {
-            packageConfigurations += repositoryPackageConfigurations
-        } else if (repositoryPackageConfigurations.isNotEmpty()) {
-            log.info { "Local package configurations were not applied because the feature is not enabled." }
+            packageConfigurationOption.createProvider()
         }
 
-        val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations)
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(
