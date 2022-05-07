@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.readValue
  * A provider for [PackageConfiguration]s providing exactly the packages of the given list.
  * Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
  */
-class SimplePackageConfigurationProvider(
+open class SimplePackageConfigurationProvider(
     configurations: Collection<PackageConfiguration>
 ) : PackageConfigurationProvider {
     companion object {
@@ -43,35 +43,7 @@ class SimplePackageConfigurationProvider(
          */
         @JvmField
         val EMPTY = SimplePackageConfigurationProvider(emptyList())
-
-        /**
-         * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found recursively
-         * in the given [directory]. All non-hidden files within the given [directory] must be package curation files,
-         * each only containing a single package configuration. Throws an exception if there is more than one
-         * configuration per [Identifier] and [Provenance].
-         */
-        fun forDirectory(directory: File): SimplePackageConfigurationProvider {
-            val entries = FileFormat.findFilesWithKnownExtensions(directory).mapTo(mutableListOf()) { file ->
-                try {
-                    file.readValue<PackageConfiguration>()
-                } catch (e: IOException) {
-                    throw IOException("Error reading package configuration from '${file.absoluteFile}'.", e)
-                }
-            }
-
-            return SimplePackageConfigurationProvider(entries)
-        }
-
-        /**
-         * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found in the given
-         * file. Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
-         */
-        fun forFile(file: File): SimplePackageConfigurationProvider {
-            val entries = file.readValue<List<PackageConfiguration>>()
-
-            return SimplePackageConfigurationProvider(entries)
-        }
-    }
+   }
 
     private val configurationsById: Map<Identifier, List<PackageConfiguration>>
 
@@ -87,6 +59,31 @@ class SimplePackageConfigurationProvider(
             it.singleOrNull()
         }
 }
+
+/**
+ * A [PackageConfigurationProvider] that provides all [PackageConfiguration]s recursively found in the given directory.
+ * All files in the directory with a [known extension][FileFormat.findFilesWithKnownExtensions] must be package
+ * configuration files, each containing only a single package configuration. Throws an exception if there is more than
+ * one configuration per [Identifier] and [Provenance].
+ */
+class DirectoryPackageConfigurationProvider(directory: File) :
+    SimplePackageConfigurationProvider(readDirectory(directory))
+
+private fun readDirectory(directory: File) =
+    FileFormat.findFilesWithKnownExtensions(directory).map { file ->
+        runCatching {
+            file.readValue<PackageConfiguration>()
+        }.getOrElse { e ->
+            throw IOException("Error reading package configuration from '${file.absolutePath}'.", e)
+        }
+    }
+
+/**
+ * A [PackageConfigurationProvider] that provides all [PackageConfiguration]s found in the given file. Throws an
+ * exception if there is more than one configuration per [Identifier] and [Provenance].
+ */
+class FilePackageConfigurationProvider(file: File) :
+    SimplePackageConfigurationProvider(file.readValue<List<PackageConfiguration>>())
 
 private fun Collection<PackageConfiguration>.checkAtMostOneConfigurationPerIdAndProvenance() {
     data class Key(val id: Identifier, val sourceArtifactUrl: String?, val vcsMatcher: VcsMatcher?)

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +20,9 @@
 
 package org.ossreviewtoolkit.cli.utils
 
+import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.FilePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
 
@@ -31,10 +33,10 @@ internal sealed class PackageConfigurationOption {
 
 internal fun PackageConfigurationOption?.createProvider(): PackageConfigurationProvider =
     when (this) {
-        is PackageConfigurationOption.Dir -> SimplePackageConfigurationProvider.forDirectory(value)
-        is PackageConfigurationOption.File -> SimplePackageConfigurationProvider.forFile(value)
+        is PackageConfigurationOption.Dir -> DirectoryPackageConfigurationProvider(value)
+        is PackageConfigurationOption.File -> FilePackageConfigurationProvider(value)
         null -> {
             val globalPackageConfigurations = ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME)
-            SimplePackageConfigurationProvider.forDirectory(globalPackageConfigurations)
+            DirectoryPackageConfigurationProvider(globalPackageConfigurations)
         }
     }
