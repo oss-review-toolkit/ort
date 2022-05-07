@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.core.showStackTrace
 /**
  * The branch or tag of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
  */
-private const val GIT_REPO_BRANCH = "v2.17.2"
+private const val GIT_REPO_BRANCH = "v2.21"
 
 /**
  * The minimal manifest structure as used by the wrapping "manifest.xml" file as of repo version 2.4. For the full
