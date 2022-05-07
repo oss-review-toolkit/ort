@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2021 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -235,15 +235,16 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         if (input.ortResult.isProject(id)) {
             input.ortResult.repository.config.curations.licenseFindings
         } else {
-            input.packageConfigurationProvider.getPackageConfiguration(id, provenance)
-                ?.licenseFindingCurations.orEmpty()
+            input.packageConfigurationProvider.getPackageConfigurations(id, provenance)
+                .flatMap { it.licenseFindingCurations }
         }
 
     private fun getPathExcludes(id: Identifier, provenance: Provenance): List<PathExclude> =
         if (input.ortResult.isProject(id)) {
             input.ortResult.getExcludes().paths
         } else {
-            input.packageConfigurationProvider.getPackageConfiguration(id, provenance)?.pathExcludes.orEmpty()
+            input.packageConfigurationProvider.getPackageConfigurations(id, provenance)
+                .flatMap { it.pathExcludes }
         }
 
     private fun addProject(project: Project) {

@@ -33,11 +33,11 @@ fun interface PackageConfigurationProvider {
          * A provider that does not provide any curations.
          */
         @JvmField
-        val EMPTY = PackageConfigurationProvider { _, _ -> null }
+        val EMPTY = PackageConfigurationProvider { _, _ -> emptyList() }
     }
 
     /**
-     * Return the first matching [PackageConfiguration] for the given [packageId] and [provenance] if any.
+     * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
      */
-    fun getPackageConfiguration(packageId: Identifier, provenance: Provenance): PackageConfiguration?
+    fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration>
 }
