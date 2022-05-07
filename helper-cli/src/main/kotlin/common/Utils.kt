@@ -293,7 +293,7 @@ internal fun OrtResult.getLicenseFindingsById(
         if (isProject(id)) {
             getLicenseFindingsCurations(id)
         } else {
-            packageConfigurationProvider.getPackageConfiguration(id, provenance)?.licenseFindingCurations.orEmpty()
+            packageConfigurationProvider.getPackageConfigurations(id, provenance).flatMap { it.licenseFindingCurations }
         }
 
     scanner?.results?.scanResults?.get(id)?.forEach { scanResult ->
