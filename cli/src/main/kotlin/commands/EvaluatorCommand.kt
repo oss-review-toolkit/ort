@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -290,7 +290,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         if (config.enableRepositoryPackageConfigurations) {
             packageConfigurations += repositoryPackageConfigurations
         } else if (repositoryPackageConfigurations.isNotEmpty()) {
-            log.warn { "Local package configurations were not applied because the feature is not enabled." }
+            log.info { "Local package configurations were not applied because the feature is not enabled." }
         }
 
         val packageConfigurationProvider = SimplePackageConfigurationProvider(packageConfigurations)
