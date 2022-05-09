@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.readJsonFile
+import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
@@ -190,7 +190,7 @@ class ScanCode internal constructor(
 
         val endTime = Instant.now()
 
-        val result = readJsonFile(resultFile)
+        val result = resultFile.readTree()
         resultFile.parentFile.safeDeleteRecursively(force = true)
 
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
