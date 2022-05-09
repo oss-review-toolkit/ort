@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -86,6 +87,11 @@ enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, varar
  * @throws IllegalArgumentException If no matching [FileFormat] for the [File.extension] can be found.
  */
 fun File.mapper() = FileFormat.forFile(this).mapper
+
+/**
+ * Use the Jackson mapper returned from [File.mapper] to read a tree of [(JSON) nodes][JsonNode] from this file.
+ */
+fun File.readTree(): JsonNode = mapper().readTree(this)
 
 /**
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file.

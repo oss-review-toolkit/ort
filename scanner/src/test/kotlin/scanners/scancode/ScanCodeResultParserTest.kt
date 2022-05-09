@@ -41,7 +41,7 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.readJsonFile
+import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
@@ -51,7 +51,7 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 2.2.1 should" - {
             "properly summarize license findings" {
                 val resultFile = File("src/test/assets/scancode-2.2.1_esprima-2.7.3.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -163,7 +163,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "properly summarize copyright findings" {
                 val resultFile = File("src/test/assets/scancode-2.2.1_esprima-2.7.3.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -233,7 +233,7 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 2.9.7 should" - {
             "get correct counts" {
                 val resultFile = File("src/test/assets/scancode-2.9.7_mime-types-2.1.18.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -244,7 +244,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "properly summarize license findings" {
                 val resultFile = File("src/test/assets/scancode-2.9.7_aws-java-sdk-core-1.11.160.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val actualFindings = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
                     .licenseFindings
@@ -267,7 +267,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "properly summarize copyright findings" {
                 val resultFile = File("src/test/assets/scancode-2.9.7_aws-java-sdk-core-1.11.160.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val actualFindings = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
                     .copyrightFindings
@@ -295,7 +295,7 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 3.0.2 should" - {
             "get correct counts" {
                 val resultFile = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -308,7 +308,7 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 3.2.1rc2 should" - {
             "properly parse license expressions" {
                 val resultFile = File("src/test/assets/scancode-3.2.1rc2_h2database-1.4.200.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -328,7 +328,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "properly parse absolute paths" {
                 val resultFile = File("src/test/assets/scancode-3.2.1rc2_spring-javaformat-checkstyle-0.0.15.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
                 val fileExtensions = listOf("html", "java", "txt")
@@ -344,7 +344,7 @@ class ScanCodeResultParserTest : FreeSpec({
         "for output format 1.0.0 should" - {
             "get correct counts" {
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -355,7 +355,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "properly summarize license findings" {
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -373,7 +373,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "properly summarize copyright findings" {
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -391,7 +391,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "associate LLVM-exception findings with Apache-2.0" {
                 val resultFile = File("src/test/assets/scancode-output-format-1.0.0_wasi-0.10.2.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -458,7 +458,7 @@ class ScanCodeResultParserTest : FreeSpec({
     "generateDetails()" - {
         "for ScanCode 2.9.7 should" - {
             "properly parse details" {
-                val result = readJsonFile(File("src/test/assets/scancode-2.9.7_mime-types-2.1.18.json"))
+                val result = File("src/test/assets/scancode-2.9.7_mime-types-2.1.18.json").readTree()
 
                 val details = generateScannerDetails(result)
                 details.name shouldBe ScanCode.SCANNER_NAME
@@ -470,8 +470,8 @@ class ScanCodeResultParserTest : FreeSpec({
             }
 
             "handle a missing scanner version property gracefully" {
-                val result =
-                    readJsonFile(File("src/test/assets/scancode-2.9.7_mime-types-2.1.18.json")) as ObjectNode
+                val result = File("src/test/assets/scancode-2.9.7_mime-types-2.1.18.json").readTree()
+                    as ObjectNode
                 result.remove("scancode_version")
 
                 val details = generateScannerDetails(result)
@@ -481,7 +481,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
         "for ScanCode 3.0.2 should" - {
             "properly parse details" {
-                val result = readJsonFile(File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json"))
+                val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
 
                 val details = generateScannerDetails(result)
                 details.name shouldBe ScanCode.SCANNER_NAME
@@ -491,7 +491,7 @@ class ScanCodeResultParserTest : FreeSpec({
             }
 
             "handle a missing option property gracefully" {
-                val result = readJsonFile(File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json"))
+                val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
                 val headers = result["headers"] as ArrayNode
                 val headerObj = headers[0] as ObjectNode
                 headerObj.remove("options")
@@ -503,7 +503,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
         "for output format 1.0.0 should" - {
             "properly parse details" {
-                val result = readJsonFile(File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json"))
+                val result = File("src/test/assets/scancode-output-format-1.0.0_mime-types-2.1.18.json").readTree()
 
                 val details = generateScannerDetails(result)
                 details.name shouldBe ScanCode.SCANNER_NAME
@@ -518,7 +518,7 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 2.2.1 should" - {
             "return true for scan results with only timeout errors" {
                 val resultFile = File("src/test/assets/scancode-2.2.1.post277.4d68f9377_esprima-2.7.3.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -556,7 +556,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "return false for scan results without errors" {
                 val resultFile = File("src/test/assets/scancode-2.2.1_esprima-2.7.3.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -569,7 +569,7 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 2.2.1 should" - {
             "return true for scan results with only memory errors" {
                 val resultFile = File("src/test/assets/scancode-2.2.1.post277.4d68f9377_very-long-json-lines.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -585,7 +585,7 @@ class ScanCodeResultParserTest : FreeSpec({
                 val resultFile = File(
                     "src/test/assets/scancode-2.2.1.post277.4d68f9377_kotlin-annotation-processing-gradle-1.2.21.json"
                 )
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 
@@ -600,7 +600,7 @@ class ScanCodeResultParserTest : FreeSpec({
 
             "return false for scan results without errors" {
                 val resultFile = File("src/test/assets/scancode-2.2.1_esprima-2.7.3.json")
-                val result = readJsonFile(resultFile)
+                val result = resultFile.readTree()
 
                 val summary = generateSummary(Instant.now(), Instant.now(), SpdxConstants.NONE, result)
 

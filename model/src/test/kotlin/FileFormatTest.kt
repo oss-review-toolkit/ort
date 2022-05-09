@@ -26,10 +26,28 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.file.shouldHaveFileSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 
 class FileFormatTest : WordSpec({
+    "File.readTree()" should {
+        "return and empty node for empty files" {
+            val file = createTestTempFile(suffix = ".json")
+
+            file shouldHaveFileSize 0
+            file.readTree() shouldBe EMPTY_JSON_NODE
+        }
+
+        "throw for invalid files" {
+            val file = createTestTempFile(suffix = ".json").apply { writeText("foo") }
+
+            shouldThrow<JsonParseException> {
+                file.readTree()
+            }
+        }
+    }
+
     "File.readValueOrNull()" should {
         "return null for empty files" {
             val file = createTestTempFile(suffix = ".json")

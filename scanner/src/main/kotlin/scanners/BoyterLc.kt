@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.readJsonFile
+import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
@@ -133,7 +133,7 @@ class BoyterLc internal constructor(
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
-        val result = readJsonFile(resultFile)
+        val result = resultFile.readTree()
 
         result.flatMapTo(licenseFindings) { file ->
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
