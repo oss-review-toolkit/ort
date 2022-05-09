@@ -69,6 +69,6 @@ class Yarn(
 
     override fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
         val process = run(workingDir, "info", "--json", packageName)
-        return jsonMapper.readTree(process.stdoutFile)["data"]
+        return jsonMapper.readTree(process.stdout)["data"]
     }
 }
