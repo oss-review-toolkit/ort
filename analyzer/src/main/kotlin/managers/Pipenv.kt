@@ -69,10 +69,8 @@ class Pipenv(
 
         log.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        ProcessCapture(workingDir, command(), "lock", "--requirements")
-            .requireSuccess()
-            .stdoutFile
-            .copyTo(requirementsFile)
+        val requirements = ProcessCapture(workingDir, command(), "lock", "--requirements").requireSuccess().stdout
+        requirementsFile.writeText(requirements)
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
             .resolveDependencies(requirementsFile, labels)
