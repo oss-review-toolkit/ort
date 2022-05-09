@@ -114,14 +114,14 @@ class Askalono internal constructor(
             if (stderr.isNotBlank()) log.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, path, stdoutFile)
+            generateSummary(startTime, endTime, path, stdout)
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
 
-        resultFile.readLines().forEach { line ->
+        result.lines().forEach { line ->
             val root = jsonMapper.readTree(line)
             root["result"]?.let { result ->
                 val licenseFinding = LicenseFinding(
