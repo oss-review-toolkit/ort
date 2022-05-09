@@ -28,7 +28,7 @@ import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
-import org.ossreviewtoolkit.model.readJsonFile
+import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.core.log
@@ -139,7 +139,7 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
 
 private fun isYarnWorkspaceRoot(definitionFile: File) =
     try {
-        readJsonFile(definitionFile).has("workspaces")
+        definitionFile.readTree().has("workspaces")
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
@@ -176,7 +176,7 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
 
 private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     var workspaces = try {
-        readJsonFile(definitionFile).get("workspaces")
+        definitionFile.readTree().get("workspaces")
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
