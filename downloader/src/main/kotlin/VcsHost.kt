@@ -184,6 +184,9 @@ enum class VcsHost(
 
         override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://$hostname/$userOrOrg/$project/raw/${vcsInfo.revision}/${vcsInfo.path}"
+
+        override fun isApplicable(url: URI): Boolean =
+            super.isApplicable(url) && url.host?.endsWith(".pkg.$hostname") == false
     },
 
     /**
@@ -446,7 +449,7 @@ enum class VcsHost(
     /**
      * Return whether this host is applicable for the [url] URI.
      */
-    fun isApplicable(url: URI) = url.host?.endsWith(hostname) == true
+    open fun isApplicable(url: URI) = url.host?.endsWith(hostname) == true
 
     /**
      * Return whether this host is applicable for the [url] string.
