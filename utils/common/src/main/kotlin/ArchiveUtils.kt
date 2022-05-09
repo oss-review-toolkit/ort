@@ -85,10 +85,16 @@ fun archive(inputDir: File, zipFile: File, prefix: String = ""): File =
     }
 
 /**
- * Unpack the [File] to [targetDirectory] using [filter] to select only the entries of interest.
+ * Unpack the [File] to [targetDirectory] using [filter] to select only the entries of interest. If an archive type
+ * other than [ArchiveType.NONE] is specified in [forceArchiveType], use this one; otherwise, try to detect the type
+ * based on the file extension.
  */
-fun File.unpack(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) =
-    when (ArchiveType.getType(name)) {
+fun File.unpack(
+    targetDirectory: File,
+    forceArchiveType: ArchiveType = ArchiveType.NONE,
+    filter: (ArchiveEntry) -> Boolean = { true }
+) =
+    when (forceArchiveType.takeUnless { it == ArchiveType.NONE } ?: ArchiveType.getType(name)) {
         ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory, filter)
         ArchiveType.ZIP -> unpackZip(targetDirectory, filter)
 
@@ -163,7 +169,7 @@ fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
             subDirectory.safeMkdirs()
 
             val file = tempDir.resolve(name)
-            file.unpack(subDirectory, filter)
+            file.unpack(subDirectory, filter = filter)
         }
     } finally {
         tempDir.safeDeleteRecursively(force = true)

@@ -20,6 +20,7 @@
 
 package org.ossreviewtoolkit.utils.common
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.inspectors.forAll
@@ -28,6 +29,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 import java.io.File
+import java.io.IOException
 
 import org.apache.commons.compress.archivers.ArchiveEntry
 
@@ -59,7 +61,7 @@ class ArchiveUtilsTest : WordSpec() {
             "unpack with a filter" {
                 val archive = File("src/test/assets/test.tar")
 
-                archive.unpack(outputDir, A_FILTER)
+                archive.unpack(outputDir, filter = A_FILTER)
 
                 val fileA = outputDir.resolve("a")
                 val fileB = outputDir.resolve("dir/b")
@@ -87,7 +89,7 @@ class ArchiveUtilsTest : WordSpec() {
             "unpack with a filter" {
                 val archive = File("src/test/assets/test.tar.gz")
 
-                archive.unpack(outputDir, A_FILTER)
+                archive.unpack(outputDir, filter = A_FILTER)
 
                 val fileA = outputDir.resolve("a")
                 val fileB = outputDir.resolve("dir/b")
@@ -115,7 +117,7 @@ class ArchiveUtilsTest : WordSpec() {
             "unpack with a filter" {
                 val archive = File("src/test/assets/test.tar.bz2")
 
-                archive.unpack(outputDir, A_FILTER)
+                archive.unpack(outputDir, filter = A_FILTER)
 
                 val fileA = outputDir.resolve("a")
                 val fileB = outputDir.resolve("dir/b")
@@ -143,7 +145,7 @@ class ArchiveUtilsTest : WordSpec() {
             "unpack with a filter" {
                 val archive = File("src/test/assets/test.tar.xz")
 
-                archive.unpack(outputDir, A_FILTER)
+                archive.unpack(outputDir, filter = A_FILTER)
 
                 val fileA = outputDir.resolve("a")
                 val fileB = outputDir.resolve("dir/b")
@@ -171,7 +173,7 @@ class ArchiveUtilsTest : WordSpec() {
             "unpack with a filter" {
                 val archive = File("src/test/assets/test.zip")
 
-                archive.unpack(outputDir, A_FILTER)
+                archive.unpack(outputDir, filter = A_FILTER)
 
                 val fileA = outputDir.resolve("a")
                 val fileB = outputDir.resolve("dir/b")
@@ -199,7 +201,7 @@ class ArchiveUtilsTest : WordSpec() {
             "unpack with a filter" {
                 val archive = File("src/test/assets/test.7z")
 
-                archive.unpack(outputDir, A_FILTER)
+                archive.unpack(outputDir, filter = A_FILTER)
 
                 val fileA = outputDir.resolve("a")
                 val fileB = outputDir.resolve("dir/b")
@@ -244,6 +246,30 @@ class ArchiveUtilsTest : WordSpec() {
 
                 val extractedControlFile = outputDir.resolve("control/control")
                 extractedControlFile shouldNotBe aFile()
+            }
+        }
+
+        "unpack" should {
+            "throw if no archive type is available" {
+                val archive = File("unknown-format.123")
+
+                shouldThrow<IOException> {
+                    archive.unpack(outputDir)
+                }
+            }
+
+            "support overriding the archive type" {
+                val archive = File("src/test/assets/test.wrong.zip")
+
+                archive.unpack(outputDir, forceArchiveType = ArchiveType.TAR_GZIP)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileA.readText() shouldBe "a\n"
+                fileB shouldBe aFile()
+                fileB.readText() shouldBe "b\n"
             }
         }
     }
