@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.downloader
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -176,6 +177,18 @@ class VcsHostTest : WordSpec({
             GITHUB.toRawDownloadUrl(
                 "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
             ) shouldBe "https://github.com/dotnet/corefx/raw/master/LICENSE.TXT"
+        }
+
+        "not be applicable to a URL pointing to a GitHub registry" {
+            val urls = listOf(
+                "https://npm.pkg.github.com/download/@org/project/1.2.3/1234567890",
+                "https://maven.pkg.github.com/org/respository",
+                "https://nuget.pkg.github.com/OWNER/index.json"
+            )
+
+            urls.forAll {
+                VcsHost.fromUrl(it) should beNull()
+            }
         }
     }
 
