@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.readJsonFile
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
@@ -97,15 +97,15 @@ class Licensee internal constructor(
             if (stderr.isNotBlank()) log.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, path, stdoutFile)
+            generateSummary(startTime, endTime, path, stdout)
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
 
-        val result = readJsonFile(resultFile)
-        val matchedFiles = result["matched_files"]
+        val json = jsonMapper.readTree(result)
+        val matchedFiles = json["matched_files"]
 
         matchedFiles.mapTo(licenseFindings) {
             val filePath = File(it["filename"].textValue())
