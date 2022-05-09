@@ -96,13 +96,10 @@ inline fun <reified T : Any> File.readValue(): T = mapper().readValue(this)
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return null if
  * the file has no content.
  */
-inline fun <reified T : Any> File.readValueOrNull(): T? {
-    val mapper = mapper()
-
+inline fun <reified T : Any> File.readValueOrNull(): T? =
     // Parse the file in a two-step process to avoid readValue() throwing an exception on empty files. Also see
     // https://github.com/FasterXML/jackson-databind/issues/1406#issuecomment-252676674.
-    return mapper.readTree(this)?.let { mapper.convertValue(it) }
-}
+    mapper().let { it.convertValue(it.readTree(this)) }
 
 /**
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file, or return the
