@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.model.readJsonFile
+import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -552,7 +552,7 @@ open class Npm(
         rawModuleInfoCache.getOrPut(moduleDir to scopes) {
             val packageJsonFile = moduleDir.resolve("package.json")
             log.debug { "Parsing module info from '${packageJsonFile.absolutePath}'." }
-            val json = readJsonFile(packageJsonFile)
+            val json = packageJsonFile.readTree()
 
             val name = json["name"].textValueOrEmpty()
             if (name.isBlank()) {
