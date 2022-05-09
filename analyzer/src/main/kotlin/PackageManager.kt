@@ -123,9 +123,7 @@ abstract class PackageManager(
                             return FileVisitResult.SKIP_SUBTREE
                         }
 
-                        val filesInDir = dirAsFile.walk().maxDepth(1).filter {
-                            it.isFile && it.length() > 0
-                        }.toList()
+                        val filesInDir = dirAsFile.walk().maxDepth(1).filter { it.isFile }.toList()
 
                         packageManagers.forEach { manager ->
                             // Create a list of lists of matching files per glob.
