@@ -111,6 +111,23 @@ fun File.unpack(
     }
 
 /**
+ * Try to unpack this [File] of an unknown archive type to [targetDirectory] using [filter] to select only the entries
+ * of interest. Use the file name to guess the archive type. If this is not possible due to a missing or unknown file
+ * extension, try out the supported archive types one after the other.
+ */
+fun File.unpackTryAllTypes(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
+    val typeFromName = ArchiveType.getType(name)
+
+    enumValues<ArchiveType>().mapNotNullTo(mutableListOf(typeFromName)) { type ->
+        type.takeUnless { type == typeFromName || type == ArchiveType.NONE }
+    }.find { archiveType ->
+        runCatching {
+            unpack(targetDirectory, forceArchiveType = archiveType, filter)
+        }.isSuccess
+    } ?: throw IOException("Unable to unpack '$this'. This file is not a supported archive type.")
+}
+
+/**
  * Unpack the [File] assuming it is a 7-Zip archive. This implementation ignores empty directories and symbolic links
  * and all entries not matched by the given [filter].
  */
