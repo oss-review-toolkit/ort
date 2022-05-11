@@ -73,10 +73,10 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://zlib.net/zlib-1.2.12.tar.gz"
+    url: "https://zlib.net/fossils/zlib-1.2.12.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9"
+      algorithm: "SHA256"
   vcs:
     type: ""
     url: ""
