@@ -87,7 +87,7 @@ fun archive(inputDir: File, zipFile: File, prefix: String = ""): File =
 /**
  * Unpack the [File] to [targetDirectory] using [filter] to select only the entries of interest. If an archive type
  * other than [ArchiveType.NONE] is specified in [forceArchiveType], use this one; otherwise, try to detect the type
- * based on the file extension.
+ * based on the file extension. Throw an [IOException] if unpacking fails.
  */
 fun File.unpack(
     targetDirectory: File,
@@ -274,8 +274,11 @@ private fun ArchiveInputStream.unpack(
     mode: (ArchiveEntry) -> Int
 ) =
     use { input ->
+        var processed = false
+
         while (true) {
             val entry = input.nextEntry ?: break
+            processed = true
 
             if (shouldSkip(entry)) continue
 
@@ -291,6 +294,8 @@ private fun ArchiveInputStream.unpack(
 
             copyExecutableModeBit(target, mode(entry))
         }
+
+        if (!processed) throw IOException("Unsupported archive format or empty archive.")
     }
 
 /**
