@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
+import org.ossreviewtoolkit.utils.common.unpackTryAllTypes
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -328,7 +329,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                     gemDirectory.safeDeleteRecursively(force = true)
                 }
             } else {
-                sourceArchive.unpack(outputDirectory)
+                sourceArchive.unpackTryAllTypes(outputDirectory)
             }
         } catch (e: IOException) {
             log.error {
