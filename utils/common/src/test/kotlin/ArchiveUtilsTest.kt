@@ -27,6 +27,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.io.IOException
@@ -34,12 +35,24 @@ import java.io.IOException
 import org.apache.commons.compress.archivers.ArchiveEntry
 
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createTestTempFile
 
 class ArchiveUtilsTest : WordSpec() {
     private lateinit var outputDir: File
 
     override suspend fun beforeEach(testCase: TestCase) {
         outputDir = createTestTempDir()
+    }
+
+    /**
+     * Copy the test archive with the given [sourceName] under an unknown file extension to a temporary folder.
+     * This is used to test whether archives with unknown file extensions can be unpacked.
+     */
+    private fun copyTestArchive(sourceName: String): File {
+        val sourcePath = File("src/test/assets/$sourceName")
+        val targetPath = createTestTempDir().resolve("unknown.dat")
+
+        return sourcePath.copyTo(targetPath)
     }
 
     init {
@@ -270,6 +283,134 @@ class ArchiveUtilsTest : WordSpec() {
                 fileA.readText() shouldBe "a\n"
                 fileB shouldBe aFile()
                 fileB.readText() shouldBe "b\n"
+            }
+        }
+
+        "unpackTryAllTypes" should {
+            "unpack a Tar archive" {
+                val archive = copyTestArchive("test.tar")
+
+                archive.unpackTryAllTypes(outputDir)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileA.readText() shouldBe "a\n"
+                fileB shouldBe aFile()
+                fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack a Tar Gz archive" {
+                val archive = copyTestArchive("test.tar.gz")
+
+                archive.unpackTryAllTypes(outputDir)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileA.readText() shouldBe "a\n"
+                fileB shouldBe aFile()
+                fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack bzip2 archives" {
+                val archive = copyTestArchive("test.tar.bz2")
+
+                archive.unpackTryAllTypes(outputDir)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileA.readText() shouldBe "a\n"
+                fileB shouldBe aFile()
+                fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack xz archives" {
+                val archive = copyTestArchive("test.tar.xz")
+
+                archive.unpackTryAllTypes(outputDir)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileA.readText() shouldBe "a\n"
+                fileB shouldBe aFile()
+                fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack Zip archives" {
+                val archive = copyTestArchive("test.zip")
+
+                archive.unpackTryAllTypes(outputDir)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileA.readText() shouldBe "a\n"
+                fileB shouldBe aFile()
+                fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack 7z archives" {
+                val archive = copyTestArchive("test.7z")
+
+                archive.unpackTryAllTypes(outputDir)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileA.readText() shouldBe "a\n"
+                fileB shouldBe aFile()
+                fileB.readText() shouldBe "b\n"
+            }
+
+            "unpack Debian deb archives" {
+                val archive = copyTestArchive("testpkg.deb")
+
+                archive.unpackTryAllTypes(outputDir)
+
+                val extractedScriptFile = outputDir.resolve("data/usr/bin/test")
+                extractedScriptFile shouldBe aFile()
+
+                val extractedControlFile = outputDir.resolve("control/control")
+                extractedControlFile shouldBe aFile()
+                val expectedControl = File("src/test/assets/control-expected.txt").readText()
+                extractedControlFile.readText() shouldBe expectedControl
+
+                DEB_NESTED_ARCHIVES.forEach { tarFileName ->
+                    val tarFile = outputDir.resolve(tarFileName)
+                    tarFile shouldNotBe aFile()
+                }
+            }
+
+            "unpack with a filter" {
+                val archive = copyTestArchive("test.7z")
+
+                archive.unpackTryAllTypes(outputDir, filter = A_FILTER)
+
+                val fileA = outputDir.resolve("a")
+                val fileB = outputDir.resolve("dir/b")
+
+                fileA shouldBe aFile()
+                fileB shouldNotBe aFile()
+            }
+
+            "throw an exception if the archive cannot be unpacked" {
+                val noArchive = createTestTempFile(suffix = ".abc")
+                noArchive.writeText("This is not an archive.")
+
+                val exception = shouldThrow<IOException> {
+                    noArchive.unpackTryAllTypes(outputDir)
+                }
+
+                exception.message shouldContain noArchive.toString()
             }
         }
     }
