@@ -47,7 +47,7 @@ packages:
     url: "https://www.openssl.org/source/openssl-3.0.0.tar.gz"
     hash:
       value: "59eedfcb46c25214c9bd37ed6078297b4df01d012267fe9e9eee31f61bc70536"
-      algorithm: "SHA256"
+      algorithm: "SHA-256"
   vcs:
     type: "Git"
     url: "https://github.com/openssl/openssl.git"
@@ -76,7 +76,7 @@ packages:
     url: "https://zlib.net/fossils/zlib-1.2.12.tar.gz"
     hash:
       value: "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9"
-      algorithm: "SHA256"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""

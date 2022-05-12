@@ -49,7 +49,7 @@ packages:
     url: "https://api.nuget.org/v3-flatcontainer/system.globalization/4.3.0/system.globalization.4.3.0.nupkg"
     hash:
       value: "823d2ba308cb073b40a3146ecccd0d9fd7b1615ac3fbefb16f73d873e411fd81c3bdc87df206d3dc7e2f14c9cd53aafca684a3570c25471280aada8de805ece2"
-      algorithm: "SHA512"
+      algorithm: "SHA-512"
   source_artifact:
     url: ""
     hash:
@@ -86,7 +86,7 @@ packages:
     url: "https://api.nuget.org/v3-flatcontainer/system.threading/4.0.11/system.threading.4.0.11.nupkg"
     hash:
       value: "05c0dd1bbcfcedb6fc6c5f311c41920a4775f8a28a61ca246b6c65ad8afd9b04881d3357880af000ac056fd121fc5c3ec0b56d6fd607e0c27e7a639157c85e3e"
-      algorithm: "SHA512"
+      algorithm: "SHA-512"
   source_artifact:
     url: ""
     hash:
@@ -120,7 +120,7 @@ packages:
     url: "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg"
     hash:
       value: "68052086e77d3c7198737a3da163d67740b7c44f93250c39659b3bf21b6547a9abf64cbf40481f5c78f24361af3aaf47d52d188b371554a0928a7f7665c1fc14"
-      algorithm: "SHA512"
+      algorithm: "SHA-512"
   source_artifact:
     url: ""
     hash:
@@ -152,7 +152,7 @@ packages:
     url: "https://api.nuget.org/v3-flatcontainer/webgrease/1.5.2/webgrease.1.5.2.nupkg"
     hash:
       value: "453fa7a3483b424dbc27f5d5c07827e6527faa6e21c96169ef0b7423bd54c348f749f4df3a636a3ccc5f79d1da9c08ed7f7741dbfd0a8d0ddf424bd57b0b2fb0"
-      algorithm: "SHA512"
+      algorithm: "SHA-512"
   source_artifact:
     url: ""
     hash:
