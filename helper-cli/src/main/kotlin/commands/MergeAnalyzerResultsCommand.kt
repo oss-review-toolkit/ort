@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Porsche AG
+ * Copyright (C) 2022 Porsche AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,7 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
-import java.time.Clock
 import java.time.Instant
-import java.time.ZonedDateTime
 import java.util.LinkedList
 import java.util.SortedMap
 import java.util.SortedSet
@@ -58,13 +56,10 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.core.Environment
 
 class MergeAnalyzerResultsCommand : CliktCommand(
-    help = "Read multiple analyzer result files and merge them into one combined analyzer result file."
+    help = "Read multiple analyzer result files and merge them into one combined analyzer result file. " +
+            "This tool reduces the number of projects in the output analyzer result to one and merges the " +
+            "dependency graph per scope across all input analyzer result projects."
 ) {
-    companion object {
-        private val utcClock = Clock.systemUTC()
-        private fun now(): Instant = ZonedDateTime.now(utcClock).toInstant()
-    }
-
     private val inputAnalyzerResultFiles by option(
         "--input-analyzer-result-files", "-i",
         help = "A comma separated list of analyzer result files to be merged."
@@ -79,22 +74,24 @@ class MergeAnalyzerResultsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val inputOrtResults: MutableList<AnalyzerRun> = LinkedList()
+        val inputAnalyzerResults: MutableList<AnalyzerRun> = LinkedList()
         val inputRepositories: MutableList<Repository> = LinkedList()
 
-        inputAnalyzerResultFiles.stream()
+        inputAnalyzerResultFiles
             .map { it.readValue<OrtResult>() }
             .forEach {
-                it.analyzer.let { value -> inputOrtResults.add(value!!) }
-                inputRepositories.add(it.repository)
+                it.analyzer?.let { analyzerRun ->
+                    inputAnalyzerResults.add(analyzerRun)
+                    inputRepositories.add(it.repository)
+                }
             }
 
         val analyzerRun = AnalyzerRun(
-            startTime = now(),
-            endTime = now(),
+            startTime = Instant.now(),
+            endTime = Instant.now(),
             environment = Environment(),
-            config = aggregateAnalyzerConfiguration(inputOrtResults),
-            result = aggregrateAnalyzerRun(inputOrtResults)
+            config = aggregateAnalyzerConfigurations(inputAnalyzerResults),
+            result = aggregrateAnalyzerRuns(inputAnalyzerResults)
         )
 
         val repository = Repository(
@@ -112,11 +109,6 @@ class MergeAnalyzerResultsCommand : CliktCommand(
     }
 
     private fun aggregateRepositoryConfigurations(repositories: List<Repository>): RepositoryConfiguration {
-        fun mergeExcludes(leftExlcudes: Excludes, rightExcludes: Excludes): Excludes = Excludes(
-            paths = (leftExlcudes.paths + rightExcludes.paths).distinct(),
-            scopes = (leftExlcudes.scopes + rightExcludes.scopes).distinct()
-        )
-
         fun mergeResolutions(leftResolutions: Resolutions, rightResolutions: Resolutions): Resolutions =
             Resolutions(
                 issues = (leftResolutions.issues + rightResolutions.issues).distinct(),
@@ -141,23 +133,22 @@ class MergeAnalyzerResultsCommand : CliktCommand(
                         ).distinct()
             )
 
-        return repositories.stream()
+        return repositories
             .map { it.config }
-            .reduce { leftConfig, rightConfig ->
+            .reduceOrNull { leftConfig, rightConfig ->
                 RepositoryConfiguration(
-                    excludes = mergeExcludes(leftConfig.excludes, rightConfig.excludes),
+                    excludes = Excludes(),
                     resolutions = mergeResolutions(leftConfig.resolutions, rightConfig.resolutions),
                     curations = mergeCurations(leftConfig.curations, rightConfig.curations),
                     licenseChoices = mergeLicenseChoices(leftConfig.licenseChoices, rightConfig.licenseChoices)
                 )
-            }
-            .orElse(RepositoryConfiguration())
+            } ?: RepositoryConfiguration()
     }
 
-    private fun aggregateAnalyzerConfiguration(inputOrtResults: List<AnalyzerRun>): AnalyzerConfiguration {
-        return inputOrtResults.stream()
+    private fun aggregateAnalyzerConfigurations(inputOrtResults: List<AnalyzerRun>): AnalyzerConfiguration {
+        return inputOrtResults
             .map { it.config }
-            .reduce { a, b ->
+            .reduceOrNull { a, b ->
                 AnalyzerConfiguration(
                     sw360Configuration = if (a.sw360Configuration != null)
                         a.sw360Configuration
@@ -165,13 +156,13 @@ class MergeAnalyzerResultsCommand : CliktCommand(
                         b.sw360Configuration,
                     allowDynamicVersions = a.allowDynamicVersions or b.allowDynamicVersions
                 )
-            }.orElse(AnalyzerConfiguration(allowDynamicVersions = false))
+            } ?: AnalyzerConfiguration(allowDynamicVersions = false)
     }
 
-    private fun aggregrateAnalyzerRun(inputOrtResults: List<AnalyzerRun>): AnalyzerResult {
-        return inputOrtResults.stream()
+    private fun aggregrateAnalyzerRuns(inputOrtResults: List<AnalyzerRun>): AnalyzerResult {
+        return inputOrtResults
             .map { it.result }
-            .reduce { leftResult, rightResult ->
+            .reduceOrNull { leftResult, rightResult ->
                 AnalyzerResult(
                     projects = wrapValueInSortedSet(
                         mergeProjects(
@@ -184,17 +175,14 @@ class MergeAnalyzerResultsCommand : CliktCommand(
                     packages = mergeSortedSets(leftResult.packages, rightResult.packages),
                     issues = mergeIssues(leftResult.issues, rightResult.issues)
                 )
-            }.orElse(AnalyzerResult.EMPTY)
+            } ?: AnalyzerResult.EMPTY
     }
 
-    private fun <T> mergeSortedSets(left: SortedSet<T>, right: SortedSet<T>): SortedSet<T> {
-        val set = TreeSet<T>()
-
-        set.addAll(left)
-        set.addAll(right)
-
-        return set
-    }
+    private fun <T> mergeSortedSets(left: SortedSet<T>, right: SortedSet<T>): SortedSet<T> = sortedSetOf<T>()
+        .apply {
+            addAll(left)
+            addAll(right)
+        }
 
     private fun mergeIssues(
         left: SortedMap<Identifier, List<OrtIssue>>,
@@ -217,8 +205,9 @@ class MergeAnalyzerResultsCommand : CliktCommand(
     }
 
     private fun mergeProjects(projects: SortedSet<Project>): Project = projects
-        .stream()
-        .reduce { leftProject, rightProject ->
+        .reduceOrNull { leftProject, rightProject ->
+            assertSameVcsInfos(leftProject.vcs, rightProject.vcs)
+
             Project(
                 id = if (leftProject.id != Identifier.EMPTY) leftProject.id else rightProject.id,
                 definitionFilePath = firstNotEmptyString(
@@ -227,11 +216,20 @@ class MergeAnalyzerResultsCommand : CliktCommand(
                 ),
                 authors = mergeSortedSets(leftProject.authors, rightProject.authors),
                 declaredLicenses = mergeSortedSets(leftProject.declaredLicenses, rightProject.declaredLicenses),
-                vcs = if (leftProject.vcs != VcsInfo.EMPTY) leftProject.vcs else rightProject.vcs,
+                vcs = leftProject.vcs.merge(rightProject.vcs),
                 homepageUrl = firstNotEmptyString(leftProject.homepageUrl, rightProject.homepageUrl),
                 scopeDependencies = mergeScopes(leftProject.scopes, rightProject.scopes)
             )
-        }.orElse(Project.EMPTY)
+        } ?: Project.EMPTY
+
+    private fun assertSameVcsInfos(leftVcs: VcsInfo, rightVcs: VcsInfo) {
+        if (leftVcs.url != rightVcs.url || leftVcs.type != rightVcs.type || leftVcs.revision != rightVcs.revision) {
+            throw IllegalArgumentException(
+                "Mismatching VCS information for merged analyzer result, "
+                        + "left ${leftVcs}, right ${rightVcs}"
+            )
+        }
+    }
 
     private fun mergeScopes(leftScopes: SortedSet<Scope>, rightScopes: SortedSet<Scope>): SortedSet<Scope> {
         val scopeMap = HashMap<String, Scope>()

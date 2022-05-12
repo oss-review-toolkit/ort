@@ -93,6 +93,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             ListPackagesCommand(),
             ListStoredScanResultsCommand(),
             MapCopyrightsCommand(),
+            MergeAnalyzerResultsCommand(),
             MergeRepositoryConfigurationsCommand(),
             PackageConfigurationCommand(),
             PackageCurationsCommand(),
@@ -102,8 +103,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             SetLabelsCommand(),
             SubtractScanResultsCommand(),
             TransformResultCommand(),
-            VerifySourceArtifactCurationsCommand(),
-            MergeAnalyzerResultsCommand()
+            VerifySourceArtifactCurationsCommand()
         )
     }
 
