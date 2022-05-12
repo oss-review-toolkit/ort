@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldStartWith
 
 import java.io.File
 
@@ -28,6 +30,12 @@ class HashAlgorithmTest : StringSpec({
     // Use a file that is always checked out with Unix line endings in the working tree to get the same file contents on
     // all platforms and in the Git object store.
     val file = File("../LICENSE")
+
+    "SHA string representations need to contain a dash for MessageDigest compatibility" {
+        enumValues<HashAlgorithm>().filter { it.toString().startsWith("SHA") }.forAll {
+            it.toString() shouldStartWith "SHA-"
+        }
+    }
 
     "Calculating the SHA1 on a file should yield the correct result" {
         // The expected hash was calculated with "sha1sum".
