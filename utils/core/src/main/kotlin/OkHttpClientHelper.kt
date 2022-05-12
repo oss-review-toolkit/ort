@@ -241,6 +241,7 @@ fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<P
         val body = response.body
 
         if (!response.isSuccessful || body == null) {
+            body?.close()
             throw HttpDownloadError(response.code, response.message)
         }
 
