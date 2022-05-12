@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.core.storage.FileStorage
 
-typealias ScannerOptions = Map<String, String>
+typealias ScannerOptions = Map<String, Any>
 
 /**
  * The configuration model of the scanner.

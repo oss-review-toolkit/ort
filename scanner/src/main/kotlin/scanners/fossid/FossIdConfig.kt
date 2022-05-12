@@ -24,6 +24,7 @@ import java.time.Duration
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.log
 
@@ -86,7 +87,7 @@ internal data class FossIdConfig(
     val timeout: Int,
 
     /** Stores the map with FossID-specific configuration options. */
-    private val options: Map<String, String>
+    private val options: ScannerOptions
 ) {
     companion object {
         /** Name of the configuration property for the server URL. */
@@ -141,21 +142,22 @@ internal data class FossIdConfig(
 
             requireNotNull(fossIdScannerOptions) { "No FossID Scanner configuration found." }
 
-            val serverUrl = fossIdScannerOptions[SERVER_URL_PROPERTY]
+            val serverUrl = fossIdScannerOptions[SERVER_URL_PROPERTY]?.toString()
                 ?: throw IllegalArgumentException("No FossID server URL configuration found.")
-            val apiKey = fossIdScannerOptions[API_KEY_PROPERTY]
+            val apiKey = fossIdScannerOptions[API_KEY_PROPERTY]?.toString()
                 ?: throw IllegalArgumentException("No FossID API Key configuration found.")
-            val user = fossIdScannerOptions[USER_PROPERTY]
+            val user = fossIdScannerOptions[USER_PROPERTY]?.toString()
                 ?: throw IllegalArgumentException("No FossID User configuration found.")
-            val packageNamespaceFilter = fossIdScannerOptions[NAMESPACE_FILTER_PROPERTY].orEmpty()
-            val packageAuthorsFilter = fossIdScannerOptions[AUTHORS_FILTER_PROPERTY].orEmpty()
-            val addAuthenticationToUrl = fossIdScannerOptions[CREDENTIALS_IN_URL_PROPERTY]?.toBoolean() ?: false
-            val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
-            val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
+            val packageNamespaceFilter = fossIdScannerOptions[NAMESPACE_FILTER_PROPERTY]?.toString().orEmpty()
+            val packageAuthorsFilter = fossIdScannerOptions[AUTHORS_FILTER_PROPERTY]?.toString().orEmpty()
+            val addAuthenticationToUrl =
+                fossIdScannerOptions[CREDENTIALS_IN_URL_PROPERTY]?.toString()?.toBoolean() ?: false
+            val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toString()?.toBoolean() ?: true
+            val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY]?.toString()?.toBoolean() ?: false
 
-            val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
+            val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toString()?.toInt() ?: Int.MAX_VALUE
 
-            val timeout = fossIdScannerOptions[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
+            val timeout = fossIdScannerOptions[TIMEOUT]?.toString()?.toInt() ?: DEFAULT_TIMEOUT
 
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
@@ -183,17 +185,18 @@ internal data class FossIdConfig(
      * Create a [FossIdNamingProvider] helper object based on the configuration stored in this object.
      */
     fun createNamingProvider(): FossIdNamingProvider {
-        val namingProjectPattern = options[NAMING_PROJECT_PATTERN_PROPERTY]?.also {
+        val namingProjectPattern = options[NAMING_PROJECT_PATTERN_PROPERTY]?.toString()?.also {
             log.info { "Naming pattern for projects is $it." }
         }
 
-        val namingScanPattern = options[NAMING_SCAN_PATTERN_PROPERTY]?.also {
+        val namingScanPattern = options[NAMING_SCAN_PATTERN_PROPERTY]?.toString()?.also {
             log.info { "Naming pattern for scans is $it." }
         }
 
         val namingConventionVariables = options
             .filterKeys { it.startsWith(NAMING_CONVENTION_VARIABLE_PREFIX) }
             .mapKeys { it.key.substringAfter(NAMING_CONVENTION_VARIABLE_PREFIX) }
+            .mapValues { it.toString() }
 
         return FossIdNamingProvider(namingProjectPattern, namingScanPattern, namingConventionVariables)
     }

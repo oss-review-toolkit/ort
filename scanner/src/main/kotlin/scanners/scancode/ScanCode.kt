@@ -122,9 +122,9 @@ class ScanCode internal constructor(
 
     private val scanCodeConfiguration = scannerConfig.options?.get("ScanCode").orEmpty()
 
-    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(' ')
+    private val configurationOptions = scanCodeConfiguration["commandLine"]?.toString()?.split(' ')
         ?: DEFAULT_CONFIGURATION_OPTIONS
-    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(' ')
+    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.toString()?.split(' ')
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {
@@ -193,7 +193,7 @@ class ScanCode internal constructor(
         val result = resultFile.readTree()
         resultFile.parentFile.safeDeleteRecursively(force = true)
 
-        val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
+        val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"]?.toString().isTrue()
         val summary = generateSummary(startTime, endTime, path, result, parseLicenseExpressions)
 
         val issues = summary.issues.toMutableList()

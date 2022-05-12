@@ -45,8 +45,8 @@ internal data class ScanOssConfig(
 
             requireNotNull(scanOssIdScannerOptions) { "No ScanOSS Scanner configuration found." }
 
-            val apiURL = scanOssIdScannerOptions[API_URL_PROPERTY] ?: "https://osskb.org/api/"
-            val apiKey = scanOssIdScannerOptions[API_KEY_PROPERTY].orEmpty()
+            val apiURL = scanOssIdScannerOptions[API_URL_PROPERTY]?.toString() ?: "https://osskb.org/api/"
+            val apiKey = scanOssIdScannerOptions[API_KEY_PROPERTY]?.toString().orEmpty()
 
             return ScanOssConfig(apiURL, apiKey)
         }

@@ -202,7 +202,7 @@ class FossId internal constructor(
 
     override fun filterSecretOptions(options: ScannerOptions) =
         options.mapValues { (k, v) ->
-            v.takeUnless { k in secretKeys }.orEmpty()
+            v.takeUnless { k in secretKeys }?.toString().orEmpty()
         }
 
     private suspend fun getProject(projectCode: String): Project? =
