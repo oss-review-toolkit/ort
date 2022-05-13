@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.scanner.TOOL_NAME
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.Environment
 import org.ossreviewtoolkit.utils.core.log
@@ -169,7 +169,7 @@ class ExperimentalScanner(
                             source = TOOL_NAME,
                             severity = Severity.ERROR,
                             message = "Could not resolve provenance for package '${pkg.id.toCoordinates()}': " +
-                                    it.collectMessagesAsString()
+                                    it.collectMessages()
                         )
                     )
                 }
@@ -196,7 +196,7 @@ class ExperimentalScanner(
                                 source = TOOL_NAME,
                                 severity = Severity.ERROR,
                                 message = "Could not resolve nested provenance for package " +
-                                        "'${id.toCoordinates()}': ${it.collectMessagesAsString()}"
+                                        "'${id.toCoordinates()}': ${it.collectMessages()}"
                             )
                         )
                     }
@@ -366,7 +366,7 @@ class ExperimentalScanner(
 
                         log.warn {
                             "Could not read scan result for ${pkg.id.toCoordinates()} from " +
-                                    "${reader.javaClass.simpleName}: ${e.collectMessagesAsString()}"
+                                    "${reader.javaClass.simpleName}: ${e.collectMessages()}"
                         }
                     }
                 }
@@ -391,7 +391,7 @@ class ExperimentalScanner(
 
                         log.warn {
                             "Could not read scan result for $provenance from ${reader.javaClass.simpleName}: " +
-                                    e.collectMessagesAsString()
+                                    e.collectMessages()
                         }
                     }
                 }
@@ -407,7 +407,7 @@ class ExperimentalScanner(
         val downloadDir = try {
             provenanceDownloader.download(provenance)
         } catch (e: DownloadException) {
-            val message = "Could not download provenance $provenance: ${e.collectMessagesAsString()}"
+            val message = "Could not download provenance $provenance: ${e.collectMessages()}"
             log.error { message }
 
             val summary = ScanSummary(
@@ -467,7 +467,7 @@ class ExperimentalScanner(
 
                 log.warn {
                     "Could not write scan result for $provenance to ${writer.javaClass.simpleName}: " +
-                            e.collectMessagesAsString()
+                            e.collectMessages()
                 }
             }
         }
@@ -482,7 +482,7 @@ class ExperimentalScanner(
 
                 log.warn {
                     "Could not write scan result for ${pkg.id.toCoordinates()} to ${writer.javaClass.simpleName}: " +
-                            e.collectMessagesAsString()
+                            e.collectMessages()
                 }
             }
         }

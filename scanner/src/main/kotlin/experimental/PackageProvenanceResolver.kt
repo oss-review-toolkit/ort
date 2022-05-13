@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
@@ -88,7 +88,7 @@ class DefaultPackageProvenanceResolver(
                 errors[sourceCodeOrigin] = it
 
                 log.info {
-                    "Could not resolve $sourceCodeOrigin for ${pkg.id.toCoordinates()}: ${it.collectMessagesAsString()}"
+                    "Could not resolve $sourceCodeOrigin for ${pkg.id.toCoordinates()}: ${it.collectMessages()}"
                 }
             }
         }
@@ -100,7 +100,7 @@ class DefaultPackageProvenanceResolver(
             )
 
             errors.forEach { (origin, throwable) ->
-                append("\nResolution of $origin failed with:\n${throwable.collectMessagesAsString()}")
+                append("\nResolution of $origin failed with:\n${throwable.collectMessages()}")
             }
         }
 

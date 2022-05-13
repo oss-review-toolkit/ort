@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
@@ -210,7 +210,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             log.warn {
                 val revisionDetails = manifestRevision?.let { " to revision '$it'" }.orEmpty()
                 val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
-                "Failed to sync the working tree$revisionDetails$pathDetails: ${e.collectMessagesAsString()}"
+                "Failed to sync the working tree$revisionDetails$pathDetails: ${e.collectMessages()}"
             }
         }.map {
             revision

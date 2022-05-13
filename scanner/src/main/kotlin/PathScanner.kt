@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.Environment
@@ -193,7 +193,7 @@ abstract class PathScanner(
     private fun ScanException.createFailedScanResult(pkg: Package, packageIndex: String): ScanResult {
         val issue = createAndLogIssue(
             source = scannerName,
-            message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: ${collectMessagesAsString()}"
+            message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: ${collectMessages()}"
         )
 
         val now = Instant.now()
@@ -267,7 +267,7 @@ abstract class PathScanner(
                     issues = listOf(
                         createAndLogIssue(
                             source = scannerName,
-                            message = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                            message = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessages()}"
                         )
                     )
                 )
@@ -342,7 +342,7 @@ abstract class PathScanner(
                 issues = listOf(
                     createAndLogIssue(
                         source = scannerName,
-                        message = "Could not scan path '$absoluteInputPath': ${e.collectMessagesAsString()}"
+                        message = "Could not scan path '$absoluteInputPath': ${e.collectMessages()}"
                     )
                 )
             )

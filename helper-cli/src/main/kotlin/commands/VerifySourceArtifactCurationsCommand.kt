@@ -29,7 +29,7 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
@@ -71,7 +71,7 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
                         true
                     }
                 } catch (e: IOException) {
-                    val message = "Failed to download source artifact: ${e.collectMessagesAsString()}"
+                    val message = "Failed to download source artifact: ${e.collectMessages()}"
                     println(message)
                     false
                 } finally {

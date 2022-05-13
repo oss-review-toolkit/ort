@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -161,7 +161,7 @@ class UploadResultToSw360Command : CliktCommand(
             }
         } catch (e: SW360ClientException) {
             log.error {
-                "Could not create the project '${project.id.toCoordinates()}' in SW360: " + e.collectMessagesAsString()
+                "Could not create the project '${project.id.toCoordinates()}' in SW360: " + e.collectMessages()
             }
 
             null
@@ -190,7 +190,7 @@ class UploadResultToSw360Command : CliktCommand(
             }
         } catch (e: SW360ClientException) {
             log.error {
-                "Could not create the release for '${pkg.id.toCoordinates()}' in SW360: " + e.collectMessagesAsString()
+                "Could not create the release for '${pkg.id.toCoordinates()}' in SW360: " + e.collectMessages()
             }
 
             null

@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
@@ -136,7 +136,7 @@ class PostgresStorage(
                 it.showStackTrace()
 
                 val message = "Could not read scan results for ${id.toCoordinates()} from database: " +
-                        it.collectMessagesAsString()
+                        it.collectMessages()
 
                 log.info { message }
 
@@ -168,7 +168,7 @@ class PostgresStorage(
                 it.showStackTrace()
 
                 val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
-                        "$scannerCriteria from database: ${it.collectMessagesAsString()}"
+                        "$scannerCriteria from database: ${it.collectMessages()}"
 
                 log.info { message }
 
@@ -218,7 +218,7 @@ class PostgresStorage(
                 it.showStackTrace()
 
                 val message = "Could not read scan results with $scannerCriteria from database: " +
-                        it.collectMessagesAsString()
+                        it.collectMessages()
 
                 log.info { message }
 
@@ -242,7 +242,7 @@ class PostgresStorage(
         }.recoverCatching {
             it.showStackTrace()
 
-            val message = "Could not store scan result for '${id.toCoordinates()}': ${it.collectMessagesAsString()}"
+            val message = "Could not store scan result for '${id.toCoordinates()}': ${it.collectMessages()}"
 
             log.warn { message }
 

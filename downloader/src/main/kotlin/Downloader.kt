@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -113,7 +113,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 log.info { "Skipping VCS download for Cargo package '${pkg.id.toCoordinates()}'." }
             }
         } catch (e: DownloadException) {
-            log.debug { "VCS download failed for '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
+            log.debug { "VCS download failed for '${pkg.id.toCoordinates()}': ${e.collectMessages()}" }
 
             log.perf {
                 "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.vcsProcessed} " +
@@ -152,7 +152,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             return result
         } catch (e: DownloadException) {
             log.debug {
-                "Source artifact download failed for '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                "Source artifact download failed for '${pkg.id.toCoordinates()}': ${e.collectMessages()}"
             }
 
             log.perf {
@@ -333,7 +333,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             }
         } catch (e: IOException) {
             log.error {
-                "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessagesAsString()}"
+                "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessages()}"
             }
 
             tempDir?.safeDeleteRecursively(force = true)
