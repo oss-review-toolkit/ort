@@ -50,9 +50,9 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
-import org.ossreviewtoolkit.utils.common.archive
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -115,7 +115,7 @@ class UploadResultToSw360Command : CliktCommand(
                         // Finally the created ZIP file of the sources can be uploaded to SW360 as an attachment
                         // of the release.
                         val zipFile = tempDirectory.resolve("${pkg.id.toPath("-")}.zip")
-                        val archiveResult = archive(sourcesDirectory, zipFile)
+                        val archiveResult = sourcesDirectory.packZip(zipFile)
 
                         val uploadResult = sw360ReleaseClient.uploadAttachments(
                             AttachmentUploadRequest.builder(release)
