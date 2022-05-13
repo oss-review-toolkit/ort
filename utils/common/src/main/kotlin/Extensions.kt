@@ -447,23 +447,27 @@ fun String?.withoutSuffix(suffix: String, missingSuffixValue: () -> String? = { 
     this?.removeSuffix(suffix)?.takeIf { it != this } ?: missingSuffixValue()
 
 /**
- * Recursively collect the messages of this [Throwable] and all its causes.
- */
-fun Throwable.collectMessages(): List<String> {
-    val messages = mutableListOf<String>()
-    var cause: Throwable? = this
-    while (cause != null) {
-        val suppressed = cause.suppressed.joinToString("") { "\nSuppressed: ${it.javaClass.simpleName}: ${it.message}" }
-        messages += "${cause.javaClass.simpleName}: ${cause.message}$suppressed"
-        cause = cause.cause
-    }
-    return messages
-}
-
-/**
  * Recursively collect the messages of this [Throwable] and all its causes and join them to a single [String].
  */
-fun Throwable.collectMessagesAsString() = collectMessages().joinToString("\nCaused by: ")
+fun Throwable.collectMessagesAsString(): String {
+    fun Throwable.formatCauseAndSuppressedMessages(): String? =
+        buildString {
+            cause?.also {
+                appendLine("Caused by: ${it.javaClass.simpleName}: ${it.message}")
+                it.formatCauseAndSuppressedMessages()?.prependIndent()?.also(::append)
+            }
+
+            suppressed.forEach {
+                appendLine("Suppressed: ${it.javaClass.simpleName}: ${it.message}")
+                it.formatCauseAndSuppressedMessages()?.prependIndent()?.also(::append)
+            }
+        }.trim().takeUnless { it.isEmpty() }
+
+    return listOfNotNull(
+        "${javaClass.simpleName}: $message",
+        formatCauseAndSuppressedMessages()
+    ).joinToString("\n")
+}
 
 /**
  * Retrieve query parameters of this [URI]. Multiple values of a single key are supported if they are split by a comma,
