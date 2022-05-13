@@ -26,9 +26,9 @@ import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.core.ortConfigDirectory
 
-internal sealed class PackageConfigurationOption {
-    data class Dir(val value: java.io.File) : PackageConfigurationOption()
-    data class File(val value: java.io.File) : PackageConfigurationOption()
+internal sealed interface PackageConfigurationOption {
+    data class Dir(val value: java.io.File) : PackageConfigurationOption
+    data class File(val value: java.io.File) : PackageConfigurationOption
 }
 
 internal fun PackageConfigurationOption?.createProvider(): PackageConfigurationProvider =
