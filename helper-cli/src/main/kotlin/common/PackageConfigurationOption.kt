@@ -24,9 +24,9 @@ import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.FilePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 
-internal sealed class PackageConfigurationOption {
-    data class Dir(val value: java.io.File) : PackageConfigurationOption()
-    data class File(val value: java.io.File) : PackageConfigurationOption()
+internal sealed interface PackageConfigurationOption {
+    data class Dir(val value: java.io.File) : PackageConfigurationOption
+    data class File(val value: java.io.File) : PackageConfigurationOption
 }
 
 internal fun PackageConfigurationOption?.createProvider(): PackageConfigurationProvider =

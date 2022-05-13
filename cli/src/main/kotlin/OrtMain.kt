@@ -61,9 +61,9 @@ import org.ossreviewtoolkit.utils.core.printStackTrace
 /**
  * Helper class for mutually exclusive command line options of different types.
  */
-sealed class GroupTypes {
-    data class FileType(val file: File) : GroupTypes()
-    data class StringType(val string: String) : GroupTypes()
+sealed interface GroupTypes {
+    data class FileType(val file: File) : GroupTypes
+    data class StringType(val string: String) : GroupTypes
 }
 
 /**

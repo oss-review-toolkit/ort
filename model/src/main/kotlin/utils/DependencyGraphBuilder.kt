@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.core.log
  * Internal class to represent the result of a search in the dependency graph. The outcome of the search
  * determines how to integrate a specific dependency into the dependency graph.
  */
-private sealed class DependencyGraphSearchResult {
+private sealed interface DependencyGraphSearchResult {
     /**
      * A specialized [DependencyGraphSearchResult] that indicates that the dependency that was searched for is already
      * present in the dependency graph. This is the easiest case, as the [DependencyReference] that was found
@@ -46,7 +46,7 @@ private sealed class DependencyGraphSearchResult {
     data class Found(
         /** The reference to the dependency that was searched in the graph. */
         val ref: DependencyReference
-    ) : DependencyGraphSearchResult()
+    ) : DependencyGraphSearchResult
 
     /**
      * A specialized [DependencyGraphSearchResult] that indicates that the dependency that was searched for was not
@@ -55,7 +55,7 @@ private sealed class DependencyGraphSearchResult {
     data class NotFound(
         /** The index of the fragment to which to add the dependency. */
         val fragmentIndex: Int
-    ) : DependencyGraphSearchResult()
+    ) : DependencyGraphSearchResult
 
     /**
      * A specialized [DependencyGraphSearchResult] that indicates that the dependency that was searched for in its
@@ -64,7 +64,7 @@ private sealed class DependencyGraphSearchResult {
      * tree. In this case, a new fragment has to be added to the graph to host this special variant of this
      * dependency.
      */
-    object Incompatible : DependencyGraphSearchResult()
+    object Incompatible : DependencyGraphSearchResult
 }
 
 /**
