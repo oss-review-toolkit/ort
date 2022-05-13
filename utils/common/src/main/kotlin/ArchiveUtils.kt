@@ -75,8 +75,7 @@ fun archive(inputDir: File, zipFile: File, prefix: String = ""): File =
         inputDir.packZip(
             this,
             prefix,
-            directoryFilter = { it.name !in VCS_DIRECTORIES },
-            fileFilter = { it != zipFile }
+            directoryFilter = { it.name !in VCS_DIRECTORIES }
         )
     }
 
@@ -217,7 +216,7 @@ fun File.packZip(
 
         walkTopDown()
             .onEnter { directoryFilter(it) }
-            .filter { Files.isRegularFile(it.toPath()) && fileFilter(it) }
+            .filter { Files.isRegularFile(it.toPath()) && fileFilter(it) && it != targetFile }
             .forEach { file ->
                 val packPath = prefix + file.toRelativeString(this)
                 val entry = ZipArchiveEntry(file, packPath)
