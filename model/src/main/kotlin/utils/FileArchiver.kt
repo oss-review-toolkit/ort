@@ -27,7 +27,7 @@ import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
@@ -135,7 +135,7 @@ class FileArchiver(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.error { "Could not extract ${zipFile.absolutePath}: ${e.collectMessagesAsString()}" }
+            log.error { "Could not extract ${zipFile.absolutePath}: ${e.collectMessages()}" }
 
             false
         } finally {

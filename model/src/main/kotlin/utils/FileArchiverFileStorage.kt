@@ -26,7 +26,7 @@ import java.security.MessageDigest
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
@@ -65,7 +65,7 @@ class FileArchiverFileStorage(
 
             zipFile
         } catch (e: IOException) {
-            log.error { "Could not unarchive from $archivePath: ${e.collectMessagesAsString()}" }
+            log.error { "Could not unarchive from $archivePath: ${e.collectMessages()}" }
 
             null
         }

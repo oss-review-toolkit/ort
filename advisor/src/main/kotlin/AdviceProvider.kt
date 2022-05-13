@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
 /**
@@ -73,7 +73,7 @@ abstract class AdviceProvider(val providerName: String) {
                         createAndLogIssue(
                             source = providerName,
                             message = "Failed to retrieve findings from $providerName: " +
-                                    t.collectMessagesAsString()
+                                    t.collectMessages()
                         )
                     )
                 )

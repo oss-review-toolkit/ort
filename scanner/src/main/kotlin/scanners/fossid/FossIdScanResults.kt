@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -125,7 +125,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
                 issues += createAndLogIssue(
                     source = "FossId",
                     message = "Failed to parse license '$license' as an SPDX expression: " +
-                            spdxException.collectMessagesAsString()
+                            spdxException.collectMessages()
                 )
             }
         }

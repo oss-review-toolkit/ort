@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.core.log
@@ -88,7 +88,7 @@ class Git : VersionControlSystem(), CommandLineTool {
                     } catch (e: AgentProxyException) {
                         e.showStackTrace()
 
-                        log.error { "Could not create SSH Agent connector: ${e.collectMessagesAsString()}" }
+                        log.error { "Could not create SSH Agent connector: ${e.collectMessages()}" }
                     }
                 }
             }
@@ -130,7 +130,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         runCatching {
             LsRemoteCommand(null).setRemote(vcsUrl).call().isNotEmpty()
         }.onFailure {
-            log.debug { "Failed to check whether $type is applicable for $vcsUrl: ${it.collectMessagesAsString()}" }
+            log.debug { "Failed to check whether $type is applicable for $vcsUrl: ${it.collectMessages()}" }
         }.isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
@@ -193,7 +193,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             it.showStackTrace()
 
             log.warn {
-                "Could not fetch only revision '$revision': ${it.collectMessagesAsString()}\n" +
+                "Could not fetch only revision '$revision': ${it.collectMessages()}\n" +
                         "Falling back to fetching all refs."
             }
         }.recoverCatching {
@@ -205,7 +205,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             it.showStackTrace()
 
             log.warn {
-                "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessagesAsString()}\n" +
+                "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessages()}\n" +
                         "Falling back to fetching everything."
             }
         }.recoverCatching {
@@ -221,7 +221,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         }.onFailure {
             it.showStackTrace()
 
-            log.warn { "Failed to fetch everything: ${it.collectMessagesAsString()}" }
+            log.warn { "Failed to fetch everything: ${it.collectMessages()}" }
         }.map {
             revision
         }

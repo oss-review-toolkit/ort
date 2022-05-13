@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.log
@@ -271,7 +271,7 @@ abstract class PackageManager(
                         createAndLogIssue(
                             source = managerName,
                             message = "Resolving $managerName dependencies for path '$relativePath' failed with: " +
-                                    it.collectMessagesAsString()
+                                    it.collectMessages()
                         )
                     )
 

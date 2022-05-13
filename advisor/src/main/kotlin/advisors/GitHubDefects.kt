@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.GitHubDefectsConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.core.filterVersionNames
 import org.ossreviewtoolkit.utils.core.log
@@ -161,7 +161,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
                 ortIssues += createAndLogIssue(
                     providerName,
                     "Failed to load information about $itemType for package '${pkg.pkg.id.toCoordinates()}': " +
-                            exception.collectMessagesAsString(),
+                            exception.collectMessages(),
                     Severity.ERROR
                 )
             }.getOrNull().orEmpty()

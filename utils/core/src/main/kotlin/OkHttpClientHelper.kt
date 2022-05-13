@@ -46,7 +46,7 @@ import okio.buffer
 import okio.sink
 
 import org.ossreviewtoolkit.utils.common.ArchiveType
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
@@ -101,7 +101,7 @@ object OkHttpClientHelper {
                     it.showStackTrace()
 
                     log.error {
-                        "HTTP request to '${request.url}' failed with an exception: ${it.collectMessagesAsString()}"
+                        "HTTP request to '${request.url}' failed with an exception: ${it.collectMessages()}"
                     }
                 }.getOrThrow()
             }

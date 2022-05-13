@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 import org.ossreviewtoolkit.utils.core.storage.FileStorage
@@ -58,7 +58,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
                 else -> {
                     log.info {
                         "Could not read resolved provenances for '${id.toCoordinates()}' from path '$path': " +
-                                it.collectMessagesAsString()
+                                it.collectMessages()
                     }
 
                     emptyList()
@@ -101,7 +101,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
 
                     log.warn {
                         "Could not store resolved provenances for '${id.toCoordinates()}' at path '$path': " +
-                                it.collectMessagesAsString()
+                                it.collectMessages()
                     }
                 }
                 else -> throw it

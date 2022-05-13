@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.log
@@ -117,7 +117,7 @@ abstract class VersionControlSystem {
 
                         log.debug {
                             "Exception while validating ${it.vcsType} working tree, treating it as non-applicable: " +
-                                    e.collectMessagesAsString()
+                                    e.collectMessages()
                         }
 
                         false
@@ -297,7 +297,7 @@ abstract class VersionControlSystem {
             }
         }.onFailure {
             log.info {
-                "Metadata has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessagesAsString()}"
+                "Metadata has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessages()}"
             }
 
             emptyRevisionCandidatesException.addSuppressed(it)
@@ -316,7 +316,7 @@ abstract class VersionControlSystem {
             }.onFailure {
                 log.info {
                     "No $type revision for package '$project' and version '$version' found: " +
-                            it.collectMessagesAsString()
+                            it.collectMessages()
                 }
 
                 emptyRevisionCandidatesException.addSuppressed(it)

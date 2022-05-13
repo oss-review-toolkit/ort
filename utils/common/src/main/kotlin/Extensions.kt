@@ -449,7 +449,7 @@ fun String?.withoutSuffix(suffix: String, missingSuffixValue: () -> String? = { 
 /**
  * Recursively collect the messages of this [Throwable] and all its causes and join them to a single [String].
  */
-fun Throwable.collectMessagesAsString(): String {
+fun Throwable.collectMessages(): String {
     fun Throwable.formatCauseAndSuppressedMessages(): String? =
         buildString {
             cause?.also {

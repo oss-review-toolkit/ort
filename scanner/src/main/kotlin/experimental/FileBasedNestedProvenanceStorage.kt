@@ -27,7 +27,7 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
@@ -53,7 +53,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
                 else -> {
                     log.info {
                         "Could not read resolved nested provenances for '$root' from path '$path': " +
-                                it.collectMessagesAsString()
+                                it.collectMessages()
                     }
 
                     emptyList()
@@ -81,7 +81,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
 
                     log.warn {
                         "Could not store resolved nested provenance for '$root' at path '$path': " +
-                                it.collectMessagesAsString()
+                                it.collectMessages()
                     }
                 }
                 else -> throw it
