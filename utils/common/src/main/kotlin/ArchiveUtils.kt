@@ -74,8 +74,7 @@ fun archive(inputDir: File, zipFile: File, prefix: String = ""): File =
     zipFile.apply {
         inputDir.packZip(
             this,
-            prefix,
-            directoryFilter = { it.name !in VCS_DIRECTORIES }
+            prefix
         )
     }
 
@@ -197,14 +196,15 @@ fun ByteArray.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean
 /**
  * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
  * recursively added to the archive. Only regular files are added, e.g. symbolic links or directories are skipped. If
- * a [prefix] is specified, it is added to the file names in the ZIP file.
- * If not all directories or files shall be added to the archive a [directoryFilter] or [fileFilter] can be provided.
+ * a [prefix] is specified, it is added to the file names in the ZIP file. If not all directories or files shall be
+ * added to the archive a [directoryFilter] or [fileFilter] can be provided. By default, [VCS directories]
+ * [VCS_DIRECTORIES] are skipped.
  */
 fun File.packZip(
     targetFile: File,
     prefix: String = "",
     overwrite: Boolean = false,
-    directoryFilter: (File) -> Boolean = { true },
+    directoryFilter: (File) -> Boolean = { it.name !in VCS_DIRECTORIES },
     fileFilter: (File) -> Boolean = { true }
 ) {
     require(overwrite || !targetFile.exists()) {
