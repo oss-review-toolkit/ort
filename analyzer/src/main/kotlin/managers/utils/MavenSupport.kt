@@ -84,7 +84,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -402,7 +402,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             log.warn {
                 "There have been issues building the Maven project models, this could lead to errors during " +
-                        "dependency analysis: ${e.collectMessagesAsString()}"
+                        "dependency analysis: ${e.collectMessages()}"
             }
 
             e.results
@@ -446,14 +446,14 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 log.warn {
                     "There was an error building project '${e.projectId}' at '${e.pomFile.invariantSeparatorsPath}'. " +
                             "Still continuing with the incompletely built project '${resultForPomFile.projectId}' at " +
-                            "'${resultForPomFile.pomFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}"
+                            "'${resultForPomFile.pomFile.invariantSeparatorsPath}': ${e.collectMessages()}"
                 }
 
                 resultForPomFile
             } else {
                 log.error {
                     "Failed to build project '${e.projectId}' at '${e.pomFile.invariantSeparatorsPath}': " +
-                            e.collectMessagesAsString()
+                            e.collectMessages()
                 }
 
                 throw e
@@ -516,7 +516,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             } catch (e: NoRepositoryLayoutException) {
                 e.showStackTrace()
 
-                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessagesAsString()}" }
+                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessages()}" }
 
                 return@forEach
             }
@@ -552,7 +552,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             } catch (e: NoRepositoryConnectorException) {
                 e.showStackTrace()
 
-                log.warn { "Could not create connector for repository '$repository': ${e.collectMessagesAsString()}" }
+                log.warn { "Could not create connector for repository '$repository': ${e.collectMessages()}" }
 
                 return@forEach
             }
@@ -576,7 +576,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 }.getOrElse {
                     it.showStackTrace()
 
-                    log.warn { "Could not get checksum for '$artifact': ${it.collectMessagesAsString()}" }
+                    log.warn { "Could not get checksum for '$artifact': ${it.collectMessages()}" }
 
                     // Fall back to an empty hash.
                     Hash.NONE
@@ -591,7 +591,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             } else {
                 log.debug {
                     "Could not find '$artifact' in '$repository': " +
-                            artifactDownload.exception.collectMessagesAsString()
+                            artifactDownload.exception.collectMessages()
                 }
             }
         }
@@ -649,11 +649,11 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 if (failedProject != null) {
                     log.warn {
                         "There was an error building '${it.identifier()}', continuing with the incompletely built " +
-                                "project: ${e.collectMessagesAsString()}"
+                                "project: ${e.collectMessages()}"
                     }
                     failedProject.project
                 } else {
-                    log.error { "Failed to build '${it.identifier()}': ${e.collectMessagesAsString()}" }
+                    log.error { "Failed to build '${it.identifier()}': ${e.collectMessages()}" }
                     throw e
                 }
             }

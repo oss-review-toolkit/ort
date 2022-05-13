@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
@@ -59,7 +59,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                 else -> {
                     log.info {
                         "Could not read scan results for '$provenance' from path '$path': " +
-                                it.collectMessagesAsString()
+                                it.collectMessages()
                     }
 
                     // TODO: Propagate error.
@@ -101,7 +101,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                     it.showStackTrace()
 
                     log.warn {
-                        "Could not store scan result for '$provenance' at path '$path': ${it.collectMessagesAsString()}"
+                        "Could not store scan result for '$provenance' at path '$path': ${it.collectMessages()}"
                     }
                 }
                 else -> throw it

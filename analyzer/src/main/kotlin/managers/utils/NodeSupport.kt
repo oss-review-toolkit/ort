@@ -29,7 +29,7 @@ import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
 import org.ossreviewtoolkit.model.readTree
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
@@ -144,7 +144,7 @@ private fun isYarnWorkspaceRoot(definitionFile: File) =
         e.showStackTrace()
 
         NodeSupport.log.error {
-            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}"
+            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
         }
 
         false
@@ -181,7 +181,7 @@ private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
         e.showStackTrace()
 
         NodeSupport.log.error {
-            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}"
+            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
         }
 
         null

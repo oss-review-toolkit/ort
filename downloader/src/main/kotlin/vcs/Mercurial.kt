@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
@@ -142,7 +142,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         }.onFailure {
             it.showStackTrace()
 
-            log.warn { "Failed to update $type working tree to revision '$revision': ${it.collectMessagesAsString()}" }
+            log.warn { "Failed to update $type working tree to revision '$revision': ${it.collectMessages()}" }
         }.map {
             revision
         }

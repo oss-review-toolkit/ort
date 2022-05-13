@@ -30,7 +30,7 @@ import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientF
 import java.net.URI
 
 import org.ossreviewtoolkit.model.config.JiraConfiguration
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.log
 
 class JiraNotifier(private val restClient: JiraRestClient) {
@@ -59,7 +59,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             restClient.issueClient.updateIssue(issueKey, input)
         }.onFailure {
             log.error {
-                "Could not set the assignee to '$assignee' for issue '$issueKey': ${it.collectMessagesAsString()}"
+                "Could not set the assignee to '$assignee' for issue '$issueKey': ${it.collectMessages()}"
             }
         }.isSuccess
     }
@@ -77,7 +77,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         }.onFailure {
             log.error {
                 "The transition to state '$state' for the issue '$issueKey' is not possible: " +
-                        it.collectMessagesAsString()
+                        it.collectMessages()
             }
         }.isSuccess
     }
@@ -90,7 +90,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             restClient.issueClient.getIssue(issueKey).claim()
         }.onFailure {
             log.error {
-                "Could not retrieve the issue with the key '$issueKey' due to: ${it.collectMessagesAsString()}"
+                "Could not retrieve the issue with the key '$issueKey' due to: ${it.collectMessages()}"
             }
         }.getOrNull()
     }
@@ -164,7 +164,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
                     }.map { issue }.onFailure {
                         log.error {
                             "The comment for the issue '${issue.key} could not be added: " +
-                                    it.collectMessagesAsString()
+                                    it.collectMessages()
                         }
                     }
                 } else if (searchResult.total > 1) {
@@ -185,7 +185,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             }.onFailure {
                 log.error {
                     "The issue for the project '$projectKey' could not be created: " +
-                            it.collectMessagesAsString()
+                            it.collectMessages()
                 }
             }
         }

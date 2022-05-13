@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.core.HttpDownloadError
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
@@ -211,7 +211,7 @@ class Bundler(
 
             issues += createAndLogIssue(
                 source = managerName,
-                message = "Failed to parse dependency '$gemName': ${it.collectMessagesAsString()}"
+                message = "Failed to parse dependency '$gemName': ${it.collectMessages()}"
             )
         }
     }
