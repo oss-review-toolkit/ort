@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeCopyRecursively
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -123,7 +123,7 @@ class GoDep(
 
                 issues += createAndLogIssue(
                     source = managerName,
-                    message = "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}"
+                    message = "Could not resolve VCS information for project '$name': ${e.collectMessages()}"
                 )
 
                 VcsInfo.EMPTY

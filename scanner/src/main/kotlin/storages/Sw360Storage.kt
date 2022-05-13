@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -127,7 +127,7 @@ class Sw360Storage(
             }
         }.recoverCatching {
             val message = "Failed to add scan results for '${id.toCoordinates()}' to SW360: " +
-                    it.collectMessagesAsString()
+                    it.collectMessages()
 
             log.info { message }
 

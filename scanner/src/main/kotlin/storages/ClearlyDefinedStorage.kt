@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
@@ -179,7 +179,7 @@ class ClearlyDefinedStorage(
         e.showStackTrace()
 
         val message = "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined: " +
-                e.collectMessagesAsString()
+                e.collectMessages()
 
         log.error { message }
 

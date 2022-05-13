@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -353,7 +353,7 @@ class Pub(
                         createAndLogIssue(
                             source = managerName,
                             message = "Could not resolve dependencies of '$packageName': " +
-                                    e.collectMessagesAsString()
+                                    e.collectMessages()
                         )
                     )
                 )
@@ -525,7 +525,7 @@ class Pub(
                     issues += createAndLogIssue(
                         source = managerName,
                         message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
-                                e.collectMessagesAsString()
+                                e.collectMessages()
                     )
                 }
             }
