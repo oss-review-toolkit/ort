@@ -98,10 +98,10 @@ fun File.unpack(
         ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory, filter)
         ArchiveType.ZIP -> unpackZip(targetDirectory, filter)
 
-        ArchiveType.TAR -> inputStream().unpackTar(targetDirectory, filter)
-        ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(inputStream()).unpackTar(targetDirectory, filter)
-        ArchiveType.TAR_GZIP -> GzipCompressorInputStream(inputStream()).unpackTar(targetDirectory, filter)
-        ArchiveType.TAR_XZ -> XZCompressorInputStream(inputStream()).unpackTar(targetDirectory, filter)
+        ArchiveType.TAR -> inputStream().use { it.unpackTar(targetDirectory, filter) }
+        ArchiveType.TAR_BZIP2 -> inputStream().use { BZip2CompressorInputStream(it).unpackTar(targetDirectory, filter) }
+        ArchiveType.TAR_GZIP -> inputStream().use { GzipCompressorInputStream(it).unpackTar(targetDirectory, filter) }
+        ArchiveType.TAR_XZ -> inputStream().use { XZCompressorInputStream(it).unpackTar(targetDirectory, filter) }
 
         ArchiveType.DEB -> unpackDeb(targetDirectory, filter)
 
