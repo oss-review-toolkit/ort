@@ -189,9 +189,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
         if (failureMessages.isNotEmpty()) {
             log.error {
-                val separator = "\n--\n"
-                "The following download exception(s) occurred:" +
-                        failureMessages.joinToString(separator, prefix = separator, postfix = separator)
+                "The following download exception(s) occurred:\n" + failureMessages.joinToString("\n--\n")
             }
 
             throw ProgramResult(1)
