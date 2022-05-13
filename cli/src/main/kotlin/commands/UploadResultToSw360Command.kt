@@ -29,6 +29,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.IOException
+
 import org.eclipse.sw360.clients.adapter.AttachmentUploadRequest
 import org.eclipse.sw360.clients.adapter.SW360ProjectClientAdapter
 import org.eclipse.sw360.clients.adapter.SW360ReleaseClientAdapter
@@ -104,17 +106,18 @@ class UploadResultToSw360Command : CliktCommand(
 
                 if (attachSources) {
                     val tempDirectory = createOrtTempDir(pkg.id.toPath())
-                    try {
+                    val sourcesDirectory = tempDirectory.resolve("sources")
+                    val zipFile = tempDirectory.resolve("${pkg.id.toPath("-")}.zip")
+
+                    runCatching {
                         // First, download the sources of the package into a sources directory, whose parent directory
                         // is temporary.
-                        val sourcesDirectory = tempDirectory.resolve("sources")
                         downloader.download(pkg, sourcesDirectory)
 
                         // After downloading the source files successfully in a sources directory, create a
                         // ZIP file of the sources directory and save it in the root directory of it.
                         // Finally the created ZIP file of the sources can be uploaded to SW360 as an attachment
                         // of the release.
-                        val zipFile = tempDirectory.resolve("${pkg.id.toPath("-")}.zip")
                         val archiveResult = sourcesDirectory.packZip(zipFile)
 
                         val uploadResult = sw360ReleaseClient.uploadAttachments(
@@ -123,17 +126,21 @@ class UploadResultToSw360Command : CliktCommand(
                                 .build()
                         )
 
-                        if (uploadResult.isSuccess) {
-                            log.info {
-                                "Successfully uploaded source attachment '${zipFile.name}' to release " +
-                                        "${release.id}:${release.name}"
-                            }
-                        } else {
-                            log.error { "Could not upload source attachment: " + uploadResult.failedUploads() }
+                        if (!uploadResult.isSuccess) {
+                            throw IOException(
+                                "The following attachment(s) failed to upload: ${uploadResult.failedUploads()}"
+                            )
                         }
-                    } finally {
-                        tempDirectory.safeDeleteRecursively(force = true)
+                    }.onSuccess {
+                        log.info {
+                            "Successfully uploaded source attachment '${zipFile.name}' to release " +
+                                    "${release.id}:${release.name}"
+                        }
+                    }.onFailure {
+                        log.error { "Failed to upload source attachment: ${it.collectMessages()}" }
                     }
+
+                    tempDirectory.safeDeleteRecursively(force = true)
                 }
 
                 release

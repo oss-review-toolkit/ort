@@ -85,31 +85,37 @@ class FileArchiver(
     fun archive(directory: File, provenance: KnownProvenance) {
         log.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
 
-        val zipFile = createOrtTempFile(suffix = ".zip")
+        val (packZipResult, packZipDuration) = measureTimedValue {
+            runCatching {
+                directory.packZip(createOrtTempFile(suffix = ".zip"), overwrite = true) { file ->
+                    val relativePath = file.relativeTo(directory).invariantSeparatorsPath
 
-        val zipDuration = measureTime {
-            directory.packZip(zipFile, overwrite = true) { file ->
-                val relativePath = file.relativeTo(directory).invariantSeparatorsPath
-
-                matcher.matches(relativePath).also { result ->
-                    log.debug {
-                        if (result) {
-                            "Adding '$relativePath' to archive."
-                        } else {
-                            "Not adding '$relativePath' to archive."
+                    matcher.matches(relativePath).also { result ->
+                        log.debug {
+                            if (result) {
+                                "Adding '$relativePath' to archive."
+                            } else {
+                                "Not adding '$relativePath' to archive."
+                            }
                         }
                     }
                 }
             }
         }
 
-        log.perf { "Archived directory '${directory.invariantSeparatorsPath}' in $zipDuration." }
+        packZipResult.onSuccess { zipFile ->
+            log.perf { "Archived directory '$directory' in $packZipDuration." }
 
-        val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
+            val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
 
-        log.perf { "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in $writeDuration." }
+            log.perf { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
-        zipFile.delete()
+            zipFile.delete()
+        }.onFailure {
+            it.showStackTrace()
+
+            log.error { "Failed to archive '$directory': ${it.collectMessages()}" }
+        }
     }
 
     /**
