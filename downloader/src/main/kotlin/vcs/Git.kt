@@ -228,7 +228,13 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     private fun updateSubmodules(workingTree: WorkingTree) {
         if (!workingTree.workingDir.resolve(".gitmodules").isFile) return
-        workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
+
+        runCatching {
+            workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
+        }.recover {
+            // As Git's dumb HTTP transport does not support shallow capabilities, also try to not limit the depth.
+            workingTree.runGit("submodule", "update", "--init", "--recursive")
+        }
     }
 
     private fun WorkingTree.runGit(vararg args: String) = run(*args, workingDir = workingDir)
