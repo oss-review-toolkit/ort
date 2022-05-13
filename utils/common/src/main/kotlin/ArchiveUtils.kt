@@ -67,18 +67,6 @@ enum class ArchiveType(vararg val extensions: String) {
 }
 
 /**
- * Archive the contents of [inputDir], omitting common [VCS_DIRECTORIES], to [zipFile] where an optional [prefix] is
- * added to each file. Return the [zipFile] on success, or throw an exception on failure.
- */
-fun archive(inputDir: File, zipFile: File, prefix: String = ""): File =
-    zipFile.apply {
-        inputDir.packZip(
-            this,
-            prefix
-        )
-    }
-
-/**
  * Unpack the [File] to [targetDirectory] using [filter] to select only the entries of interest. If an archive type
  * other than [ArchiveType.NONE] is specified in [forceArchiveType], use this one; otherwise, try to detect the type
  * based on the file extension. Throw an [IOException] if unpacking fails.
