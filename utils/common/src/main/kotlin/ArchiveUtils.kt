@@ -25,11 +25,7 @@ package org.ossreviewtoolkit.utils.common
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.nio.file.FileVisitResult
 import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
 import java.util.zip.Deflater
 
 import kotlin.io.path.createTempDirectory
@@ -219,29 +215,16 @@ fun File.packZip(
     ZipArchiveOutputStream(targetFile).use { output ->
         output.setLevel(Deflater.BEST_COMPRESSION)
 
-        Files.walkFileTree(
-            toPath(),
-            object : SimpleFileVisitor<Path>() {
-                override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                    return if (directoryFilter(dir.toFile())) FileVisitResult.CONTINUE else FileVisitResult.SKIP_SUBTREE
-                }
-
-                override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                    if (!attrs.isRegularFile) return FileVisitResult.CONTINUE
-
-                    val fileAsFile = file.toFile()
-                    if (fileFilter(fileAsFile)) {
-                        val packPath = prefix + fileAsFile.toRelativeString(this@packZip)
-                        val entry = ZipArchiveEntry(fileAsFile, packPath)
-                        output.putArchiveEntry(entry)
-                        fileAsFile.inputStream().use { input -> input.copyTo(output) }
-                        output.closeArchiveEntry()
-                    }
-
-                    return FileVisitResult.CONTINUE
-                }
+        walkTopDown()
+            .onEnter { directoryFilter(it) }
+            .filter { Files.isRegularFile(it.toPath()) && fileFilter(it) }
+            .forEach { file ->
+                val packPath = prefix + file.toRelativeString(this)
+                val entry = ZipArchiveEntry(file, packPath)
+                output.putArchiveEntry(entry)
+                file.inputStream().use { input -> input.copyTo(output) }
+                output.closeArchiveEntry()
             }
-        )
     }
 }
 
