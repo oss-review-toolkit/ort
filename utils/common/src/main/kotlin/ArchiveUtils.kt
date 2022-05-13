@@ -198,7 +198,7 @@ fun ByteArray.unpackZip(targetDirectory: File, filter: (ArchiveEntry) -> Boolean
  * recursively added to the archive. Only regular files are added, e.g. symbolic links or directories are skipped. If
  * a [prefix] is specified, it is added to the file names in the ZIP file. If not all directories or files shall be
  * added to the archive a [directoryFilter] or [fileFilter] can be provided. By default, [VCS directories]
- * [VCS_DIRECTORIES] are skipped.
+ * [VCS_DIRECTORIES] are skipped. Return the [targetFile] for convenience.
  */
 fun File.packZip(
     targetFile: File,
@@ -206,7 +206,7 @@ fun File.packZip(
     overwrite: Boolean = false,
     directoryFilter: (File) -> Boolean = { it.name !in VCS_DIRECTORIES },
     fileFilter: (File) -> Boolean = { true }
-) {
+): File {
     require(overwrite || !targetFile.exists()) {
         "The target ZIP file '${targetFile.absolutePath}' must not exist."
     }
@@ -225,6 +225,8 @@ fun File.packZip(
                 output.closeArchiveEntry()
             }
     }
+
+    return targetFile
 }
 
 /**
