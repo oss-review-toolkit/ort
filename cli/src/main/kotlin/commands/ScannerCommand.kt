@@ -99,9 +99,9 @@ import org.ossreviewtoolkit.utils.core.ortDataDirectory
 import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.core.storage.XZCompressedLocalFileStorage
 
-sealed class ScannerOption {
-    data class Stable(val scannerFactory: ScannerFactory) : ScannerOption()
-    data class Experimental(val scannerWrapperFactories: List<ScannerWrapperFactory>) : ScannerOption()
+sealed interface ScannerOption {
+    data class Stable(val scannerFactory: ScannerFactory) : ScannerOption
+    data class Experimental(val scannerWrapperFactories: List<ScannerWrapperFactory>) : ScannerOption
 }
 
 private fun RawOption.convertToScanner() =

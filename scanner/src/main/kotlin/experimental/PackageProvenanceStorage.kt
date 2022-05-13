@@ -61,7 +61,7 @@ interface PackageProvenanceStorage {
  * The result of a package provenance resolution.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
-sealed class PackageProvenanceResolutionResult
+sealed interface PackageProvenanceResolutionResult
 
 /**
  * A successful package provenance resolution result for an [ArtifactProvenance].
@@ -71,7 +71,7 @@ data class ResolvedArtifactProvenance(
      * The resolved [ArtifactProvenance].
      */
     val provenance: ArtifactProvenance
-) : PackageProvenanceResolutionResult()
+) : PackageProvenanceResolutionResult
 
 /**
  * A successful package provenance resolution result for a [RepositoryProvenance].
@@ -93,7 +93,7 @@ data class ResolvedRepositoryProvenance(
      * True if the [clonedRevision] is a fixed revision.
      */
     val isFixedRevision: Boolean
-) : PackageProvenanceResolutionResult()
+) : PackageProvenanceResolutionResult
 
 /**
  * A failed package provenance resolution result.
@@ -103,4 +103,4 @@ data class UnresolvedPackageProvenance(
      * A message that describes the error that occurred during resolution.
      */
     val message: String
-) : PackageProvenanceResolutionResult()
+) : PackageProvenanceResolutionResult
