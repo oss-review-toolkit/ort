@@ -30,18 +30,18 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
  * Provenance information about the origin of source code.
  */
 @JsonDeserialize(using = ProvenanceDeserializer::class)
-sealed class Provenance {
+sealed interface Provenance {
     /**
      * True if this [Provenance] refers to the same source code as [pkg], assuming that it belongs to the package id.
      */
-    abstract fun matches(pkg: Package): Boolean
+    fun matches(pkg: Package): Boolean
 }
 
-object UnknownProvenance : Provenance() {
+object UnknownProvenance : Provenance {
     override fun matches(pkg: Package): Boolean = false
 }
 
-sealed class KnownProvenance : Provenance()
+sealed interface KnownProvenance : Provenance
 
 /**
  * Provenance information for a source artifact.
@@ -51,7 +51,7 @@ data class ArtifactProvenance(
      * The source artifact that was downloaded.
      */
     val sourceArtifact: RemoteArtifact
-) : KnownProvenance() {
+) : KnownProvenance {
     override fun matches(pkg: Package): Boolean = sourceArtifact == pkg.sourceArtifact
 }
 
@@ -69,7 +69,7 @@ data class RepositoryProvenance(
      * blank, and must also be fixed revision, e.g. the SHA1 of a Git commit instead of a branch or tag name.
      */
     val resolvedRevision: String
-) : KnownProvenance() {
+) : KnownProvenance {
     init {
         require(resolvedRevision.isNotBlank()) { "The resolved revision must not be blank." }
     }

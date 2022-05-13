@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.core.storage.FileStorage
     Type(PostgresStorageConfiguration::class),
     Type(Sw360StorageConfiguration::class)
 )
-sealed class ScanStorageConfiguration
+sealed interface ScanStorageConfiguration
 
 /**
  * The configuration model of a storage based on ClearlyDefined.
@@ -52,7 +52,7 @@ data class ClearlyDefinedStorageConfiguration(
      * The URL of the ClearlyDefined server.
      */
     val serverUrl: String
-) : ScanStorageConfiguration()
+) : ScanStorageConfiguration
 
 /**
  * The configuration model of a file based storage.
@@ -67,7 +67,7 @@ data class FileBasedStorageConfiguration(
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
      */
     val type: StorageType = StorageType.PACKAGE_BASED
-) : ScanStorageConfiguration()
+) : ScanStorageConfiguration
 
 /**
  * A class to hold the configuration for using Postgres as a storage.
@@ -127,7 +127,7 @@ data class PostgresStorageConfiguration(
      * TODO: Make additional parameters configurable, see:
      *       https://jdbc.postgresql.org/documentation/head/connect.html
      */
-) : ScanStorageConfiguration()
+) : ScanStorageConfiguration
 
 /**
  * A class to hold the configuration for SW360.
@@ -171,7 +171,7 @@ data class Sw360StorageConfiguration(
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val token: String = ""
-) : ScanStorageConfiguration()
+) : ScanStorageConfiguration
 
 /**
  * An enum to describe different types of storages.
