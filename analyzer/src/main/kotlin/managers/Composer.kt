@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -212,7 +212,7 @@ class Composer(
                     issues = listOf(
                         createAndLogIssue(
                             source = managerName,
-                            message = "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}"
+                            message = "Could not resolve dependencies of '$packageName': ${e.collectMessages()}"
                         )
                     )
                 )

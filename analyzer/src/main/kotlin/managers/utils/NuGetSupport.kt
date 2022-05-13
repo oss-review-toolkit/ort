@@ -66,7 +66,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.await
@@ -256,7 +256,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             } catch (e: IOException) {
                 issues += createAndLogIssue(
                     source = "NuGet",
-                    message = "Failed to get package data for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                    message = "Failed to get package data for '${id.toCoordinates()}': ${e.collectMessages()}"
                 )
             }
         }

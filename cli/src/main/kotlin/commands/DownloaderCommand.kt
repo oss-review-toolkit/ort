@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.ArchiveType
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeOrUnknown
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.packZip
@@ -285,7 +285,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     }
 
                     result.exceptionOrNull()?.let {
-                        log.error { "Could not archive '$dir': ${it.collectMessagesAsString()}" }
+                        log.error { "Could not archive '$dir': ${it.collectMessages()}" }
                     }
 
                     dir.safeDeleteRecursively(baseDirectory = outputDir)
@@ -294,7 +294,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 e.showStackTrace()
 
                 val failureMessage = "Could not download '${pkg.id.toCoordinates()}': " +
-                        e.collectMessagesAsString()
+                        e.collectMessages()
                 failureMessages += failureMessage
 
                 log.error { failureMessage }
@@ -308,7 +308,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             val result = runCatching { outputDir.packZip(zipFile) }
 
             result.exceptionOrNull()?.let {
-                log.error { "Could not archive '$outputDir': ${it.collectMessagesAsString()}" }
+                log.error { "Could not archive '$outputDir': ${it.collectMessages()}" }
             }
 
             packageDownloadDirs.forEach { (_, dir) ->
@@ -377,7 +377,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         } catch (e: DownloadException) {
             e.showStackTrace()
 
-            failureMessages += "Could not download '${dummyPackage.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+            failureMessages += "Could not download '${dummyPackage.id.toCoordinates()}': ${e.collectMessages()}"
         }
     }
 }

@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.core.log
 import org.ossreviewtoolkit.utils.core.showStackTrace
@@ -134,7 +134,7 @@ class Subversion : VersionControlSystem() {
             e.showStackTrace()
 
             log.debug {
-                "An exception was thrown when checking $vcsUrl for a $type repository: ${e.collectMessagesAsString()}"
+                "An exception was thrown when checking $vcsUrl for a $type repository: ${e.collectMessages()}"
             }
 
             false
@@ -230,7 +230,7 @@ class Subversion : VersionControlSystem() {
 
             log.warn {
                 "Failed to update the $type working tree at '${workingTree.workingDir}' to revision '$revision':\n" +
-                        it.collectMessagesAsString()
+                        it.collectMessages()
             }
         }.map {
             revision

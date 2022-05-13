@@ -61,7 +61,7 @@ open class ScriptRunner {
             engine.compile(completeScript(script))
             true
         } catch (e: ScriptException) {
-            logger.error { "Could not compile Kotlin script: ${e.collectMessagesAsString()}" }
+            logger.error { "Could not compile Kotlin script: ${e.collectMessages()}" }
             false
         }
     }

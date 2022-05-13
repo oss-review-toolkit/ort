@@ -68,7 +68,7 @@ import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.core.ORT_COPYRIGHT_GARBAGE_FILENAME
@@ -298,7 +298,7 @@ class ReporterCommand : CliktCommand(
                 e.showStackTrace()
 
                 log.error {
-                    "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessagesAsString()}"
+                    "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessages()}"
                 }
 
                 ++failureCount

@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.core.showStackTrace
 
 /**
@@ -105,7 +105,7 @@ class GradleDependencyHandler(
                     issues += createAndLogIssue(
                         source = managerName,
                         message = "Could not get package information for dependency '${artifact.identifier()}': " +
-                                e.collectMessagesAsString()
+                                e.collectMessages()
                     )
 
                     null

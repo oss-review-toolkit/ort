@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.utils.core
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.utils.common.collectMessagesAsString
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -133,7 +133,7 @@ object DeclaredLicenseProcessor {
         runCatching {
             declaredLicense.toSpdx()
         }.onFailure {
-            log.debug { "Could not parse declared license '$declaredLicense': ${it.collectMessagesAsString()}" }
+            log.debug { "Could not parse declared license '$declaredLicense': ${it.collectMessages()}" }
         }.getOrNull()
 }
 
