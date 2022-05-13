@@ -64,10 +64,10 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.ArchiveType
-import org.ossreviewtoolkit.utils.common.archive
 import org.ossreviewtoolkit.utils.common.collectMessagesAsString
 import org.ossreviewtoolkit.utils.common.encodeOrUnknown
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.core.ORT_LICENSE_CLASSIFICATIONS_FILENAME
@@ -278,8 +278,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                     log.info { "Archiving directory '$dir' to '$zipFile'." }
                     val result = runCatching {
-                        archive(
-                            dir,
+                        dir.packZip(
                             zipFile,
                             "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
                         )
@@ -306,7 +305,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             val zipFile = outputDir.resolve("archive.zip")
 
             log.info { "Archiving directory '$outputDir' to '$zipFile'." }
-            val result = runCatching { archive(outputDir, zipFile) }
+            val result = runCatching { outputDir.packZip(zipFile) }
 
             result.exceptionOrNull()?.let {
                 log.error { "Could not archive '$outputDir': ${it.collectMessagesAsString()}" }
