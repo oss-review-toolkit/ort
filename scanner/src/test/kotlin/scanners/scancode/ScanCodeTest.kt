@@ -119,4 +119,32 @@ class ScanCodeTest : WordSpec({
             }
         }
     }
+
+    "transformVersion" should {
+        val scanCode = ScanCode(
+            "ScanCode",
+            ScannerConfiguration(),
+            DownloaderConfiguration()
+        )
+
+        "work with a version output without a colon" {
+            scanCode.transformVersion(
+                """
+                    ScanCode version 30.0.1
+                    ScanCode Output Format version 1.0.0
+                    SPDX License list version 3.16
+                """.trimIndent()
+            ) shouldBe "30.0.1"
+        }
+
+        "work with a version output with a colon" {
+            scanCode.transformVersion(
+                """
+                    ScanCode version: 31.0.0b4
+                    ScanCode Output Format version: 2.0.0
+                    SPDX License list version: 3.16
+                """.trimIndent()
+            ) shouldBe "31.0.0b4"
+        }
+    }
 })
