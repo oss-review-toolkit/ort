@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.utils.common.isTrue
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.log
@@ -141,8 +142,10 @@ class ScanCode internal constructor(
         // On first use, the output is prefixed by "Configuring ScanCode for first use...". The version string can be
         // something like:
         // ScanCode version 2.0.1.post1.fb67a181
-        val prefix = "ScanCode version "
-        return output.lineSequence().first { it.startsWith(prefix) }.substring(prefix.length)
+        // ScanCode version: 31.0.0b4
+        return output.lineSequence().firstNotNullOfOrNull { line ->
+            line.withoutPrefix("ScanCode version")?.removePrefix(":")?.trim()
+        }.orEmpty()
     }
 
     override fun bootstrap(): File {
