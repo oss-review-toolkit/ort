@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -202,6 +203,24 @@ class DependencyGraphBuilderTest : WordSpec({
 
             scopeDependencies(scopes, scope1) shouldBe setOf(depConfig1, depLog)
             scopeDependencies(scopes, scope2) shouldBe setOf(depAcmeExclude)
+        }
+
+        "deal with cycles in dependencies" {
+            val scope = "CyclicScope"
+            val depCyc1 = createDependency("org.cyclic", "cyclic", "77.7")
+            val depFoo = createDependency("org.foo", "foo", "1.2.0", dependencies = listOf(depCyc1))
+            val depCyc2 = createDependency("org.cyclic", "cyclic", "77.7", dependencies = listOf(depFoo))
+
+            val graph = createGraphBuilder()
+                .addDependency(scope, depCyc2)
+                .build()
+            val scopes = graph.createScopes()
+
+            scopeDependencies(scopes, scope) shouldContainExactly listOf(depCyc2)
+
+            graph.nodes.shouldNotBeNull {
+                this shouldHaveSize 3
+            }
         }
 
         "check for illegal references when building the graph" {
