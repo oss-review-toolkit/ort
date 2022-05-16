@@ -165,9 +165,7 @@ fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { 
 
         DEB_NESTED_ARCHIVES.forEach { name ->
             val subDirectoryName = name.substringBefore('.')
-            val subDirectory = targetDirectory.resolve(subDirectoryName)
-            subDirectory.safeMkdirs()
-
+            val subDirectory = targetDirectory.resolve(subDirectoryName).apply { safeMkdirs() }
             val file = tempDir.resolve(name)
             file.unpack(subDirectory, filter = filter)
         }
