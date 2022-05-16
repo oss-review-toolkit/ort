@@ -135,10 +135,10 @@ class DependencyGraphBuilder<D>(
     private val resolvedPackages = mutableMapOf<Identifier, Package>()
 
     /**
-     * A set storing the packages that are direct dependencies of one of the scopes. These are the entry points into
-     * the dependency graph.
+     * A list storing all [DependencyReference]s that have been created to represent the dependencies known to this
+     * builder.
      */
-    private val directDependencies = mutableSetOf<DependencyReference>()
+    private val references = mutableListOf<DependencyReference>()
 
     /**
      * Add the given [dependency] for the scope with the given [scopeName] to this builder. This function needs to be
@@ -168,7 +168,7 @@ class DependencyGraphBuilder<D>(
         if (checkReferences) checkReferences()
 
         val (sortedDependencyIds, indexMapping) = constructSortedDependencyIds(dependencyIds)
-        val (nodes, edges) = directDependencies.toGraph(indexMapping)
+        val (nodes, edges) = references.toGraph(indexMapping)
 
         return DependencyGraph(
             sortedDependencyIds,
@@ -197,7 +197,7 @@ class DependencyGraphBuilder<D>(
                     "${validPackageDependencies - resolvedPackages.keys}."
         }
 
-        val packageReferencesKeysWithMultipleDistinctPackageReferences = directDependencies.groupBy { it.key }.filter {
+        val packageReferencesKeysWithMultipleDistinctPackageReferences = references.groupBy { it.key }.filter {
             it.value.distinct().size > 1
         }.keys
 
@@ -378,12 +378,13 @@ class DependencyGraphBuilder<D>(
             issues = issues
         )
         fragmentMapping[index.root] = ref
+        references += ref
 
         if (ref.issues.isEmpty() && ref.linkage !in PackageLinkage.PROJECT_LINKAGE) {
             validPackageDependencies += id
         }
 
-        return updateDirectDependencies(ref, transitive)
+        return ref
     }
 
     /**
@@ -393,18 +394,6 @@ class DependencyGraphBuilder<D>(
      */
     private fun updateResolvedPackages(id: Identifier, dependency: D, issues: MutableList<OrtIssue>) {
         resolvedPackages.compute(id) { _, pkg -> pkg ?: dependencyHandler.createPackage(dependency, issues) }
-    }
-
-    /**
-     * Add the given [dependency reference][ref] to the set of direct dependencies if it is not [transitive]. If one of
-     * the direct dependencies of this package is in this set, it is removed, as it is obviously no direct dependency.
-     * Because this function is called for all dependencies, all transitive dependencies are eventually removed.
-     */
-    private fun updateDirectDependencies(ref: DependencyReference, transitive: Boolean): DependencyReference {
-        directDependencies.removeAll(ref.dependencies)
-        if (!transitive) directDependencies += ref
-
-        return ref
     }
 
     /**
