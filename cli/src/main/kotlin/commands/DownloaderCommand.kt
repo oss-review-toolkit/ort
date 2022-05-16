@@ -346,36 +346,37 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         }
 
         val dummyId = Identifier("Downloader::$projectName:")
-        val dummyPackage = if (archiveType != ArchiveType.NONE) {
-            println("Downloading $archiveType artifact from $projectUrl...")
-            Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
-        } else {
-            val vcs = VersionControlSystem.forUrl(projectUrl)
-            val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
-            val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()
 
-            val vcsInfo = VcsInfo(
-                type = vcsType,
-                url = projectUrl,
-                revision = vcsRevision,
-                path = vcsPath
-            )
+        runCatching {
+            val dummyPackage = if (archiveType != ArchiveType.NONE) {
+                println("Downloading $archiveType artifact from $projectUrl...")
+                Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
+            } else {
+                val vcs = VersionControlSystem.forUrl(projectUrl)
+                val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
+                val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()
 
-            println("Downloading from $vcsType VCS at $projectUrl...")
-            Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
-        }
+                val vcsInfo = VcsInfo(
+                    type = vcsType,
+                    url = projectUrl,
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
 
-        try {
+                println("Downloading from $vcsType VCS at $projectUrl...")
+                Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
+            }
+
             // Always allow moving revisions when directly downloading a single project only. This is for
             // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
             // project needs to be downloaded.
             val config = globalOptionsForSubcommands.config.downloader.copy(allowMovingRevisions = true)
             val provenance = Downloader(config).download(dummyPackage, outputDir)
             println("Successfully downloaded $provenance.")
-        } catch (e: DownloadException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
-            failureMessages += "Could not download '${dummyPackage.id.toCoordinates()}': ${e.collectMessages()}"
+            failureMessages += "Could not download '${dummyId.toCoordinates()}': ${it.collectMessages()}"
         }
     }
 }
