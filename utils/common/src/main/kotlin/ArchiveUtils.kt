@@ -149,7 +149,7 @@ internal val DEB_NESTED_ARCHIVES = listOf("data.tar.xz", "control.tar.xz")
 
 /**
  * Unpack the [File] assuming it is a Debian archive. The nested top-level "data" and "control" TAR archives are
- * unpacked to the provided [targetDirectory] into sub-directories of the respective names. The [filter] function is
+ * unpacked to the provided [targetDirectory] into subdirectories of the respective names. The [filter] function is
  * applied to the contents of the TAR archives so that [ArchiveEntry]s that do not match are ignored.
  */
 fun File.unpackDeb(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
