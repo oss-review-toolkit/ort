@@ -363,6 +363,13 @@ class DependencyGraphBuilder<D>(
         }
 
         val fragmentMapping = referenceMappings[index.fragment]
+        if (index.root in fragmentMapping) {
+            // If this point is reached, the package has already been inserted when processing its dependencies.
+            // This means that there is a cyclic dependency. To handle this case correctly, the insert operation has
+            // to be started anew.
+            return addDependencyToGraph(scopeName, dependency, transitive)
+        }
+
         val ref = DependencyReference(
             pkg = index.root,
             fragment = index.fragment,
