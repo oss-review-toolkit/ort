@@ -131,9 +131,7 @@ interface VulnerableCodeService {
      */
     @Serializable
     data class PackagesWrapper(
-        // TODO: Change this back to a Collection once https://github.com/Kotlin/kotlinx.serialization/issues/1421 is
-        //       resolved.
-        val purls: Set<String>
+        val purls: Collection<String>
     )
 
     /**
