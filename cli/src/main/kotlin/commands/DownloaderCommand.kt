@@ -189,7 +189,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
         if (failureMessages.isNotEmpty()) {
             log.error {
-                "The following download exception(s) occurred:\n" + failureMessages.joinToString("\n--\n")
+                "The following failure(s) occurred:\n" + failureMessages.joinToString("\n--\n")
             }
 
             throw ProgramResult(1)
