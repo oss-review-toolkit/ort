@@ -46,6 +46,9 @@ import io.kotest.matchers.string.shouldContain
 import java.io.File
 import java.net.ServerSocket
 
+import kotlinx.serialization.encodeToString
+
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
@@ -57,7 +60,6 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 private const val PACKAGE_TYPE = "Maven"
@@ -164,7 +166,7 @@ private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordin
  */
 private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
     val coordinatesList = listOf(coordinates)
-    val expectedBody = jsonMapper.writeValueAsString(coordinatesList)
+    val expectedBody = ClearlyDefinedService.JSON.encodeToString(coordinatesList)
     server.stubFor(
         post(urlPathEqualTo("/definitions"))
             .withRequestBody(equalToJson(expectedBody))
@@ -372,7 +374,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             }
         }
 
-        "return a failure if a harvest tool request returns an unexpected result" {
+        "return an empty result if a harvest tool request returns an unexpected result" {
             server.stubFor(
                 get(anyUrl())
                     .willReturn(
@@ -380,13 +382,12 @@ class ClearlyDefinedStorageTest : WordSpec({
                             .withBody("This is not a JSON response")
                     )
             )
-
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
             val result = storage.read(TEST_IDENTIFIER)
 
-            result.shouldBeFailure {
-                it.message shouldContain "JsonParseException"
+            result.shouldBeSuccess {
+                it should beEmpty()
             }
         }
 
@@ -400,10 +401,11 @@ class ClearlyDefinedStorageTest : WordSpec({
                             .withBody("{ \"unexpected\": true }")
                     )
             )
-
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_IDENTIFIER).shouldBeSuccess {
+            val result = storage.read(TEST_IDENTIFIER)
+
+            result.shouldBeSuccess {
                 it should beEmpty()
             }
         }
