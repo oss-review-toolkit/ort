@@ -27,7 +27,7 @@ jobs:
       with:
         arguments: --stacktrace detekt
     - name: Upload SARIF File
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/detekt.sarif
