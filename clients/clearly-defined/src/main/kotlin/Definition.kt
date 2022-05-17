@@ -17,16 +17,20 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.clients.clearlydefined
+@file:UseSerializers(FileSerializer::class, URISerializer::class)
 
-import com.fasterxml.jackson.annotation.JsonInclude
+package org.ossreviewtoolkit.clients.clearlydefined
 
 import java.io.File
 import java.net.URI
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+
 /**
  * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L48-L61.
  */
+@Serializable
 data class Meta(
     val schemaVersion: String,
     val updated: String
@@ -35,6 +39,7 @@ data class Meta(
 /**
  * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L80-L89.
  */
+@Serializable
 data class FinalScore(
     val effective: Int,
     val tool: Int
@@ -43,7 +48,7 @@ data class FinalScore(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L90-L134.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class FileEntry(
     val path: File,
     val license: String? = null,
@@ -57,7 +62,7 @@ data class FileEntry(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L135-L144.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Hashes(
     val md5: String? = null,
     val sha1: String? = null,
@@ -68,7 +73,7 @@ data class Hashes(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L145-L179.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Described(
     val score: DescribedScore? = null,
     val toolScore: DescribedScore? = null,
@@ -86,6 +91,7 @@ data class Described(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L180-L190.
  */
+@Serializable
 data class DescribedScore(
     val total: Int,
     val date: Int,
@@ -95,6 +101,7 @@ data class DescribedScore(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L191-L204.
  */
+@Serializable
 data class LicensedScore(
     val total: Int,
     val declared: Int,
@@ -107,7 +114,7 @@ data class LicensedScore(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L211-L235.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class SourceLocation(
     // The following properties match those of Coordinates, except that the revision is mandatory here.
     val type: ComponentType,
@@ -123,7 +130,7 @@ data class SourceLocation(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L236-L253.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class URLs(
     val registry: URI? = null,
     val version: URI? = null,
@@ -133,7 +140,7 @@ data class URLs(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L254-L263.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Licensed(
     val score: LicensedScore? = null,
     val toolScore: LicensedScore? = null,
@@ -144,7 +151,7 @@ data class Licensed(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L264-L275.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Facets(
     val core: Facet? = null,
     val data: Facet? = null,
@@ -157,7 +164,7 @@ data class Facets(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L276-L286.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Facet(
     val files: Int? = null,
     val attribution: Attribution? = null,
@@ -167,7 +174,7 @@ data class Facet(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L287-L301.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Attribution(
     val parties: List<String>? = null,
     val unknown: Int? = null
@@ -176,7 +183,7 @@ data class Attribution(
 /**
  * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L305-L319.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Discovered(
     val expressions: List<String>? = null,
     val unknown: Int? = null

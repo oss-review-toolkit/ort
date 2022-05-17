@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +20,6 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.comparables.shouldBeGreaterThan
@@ -33,6 +32,9 @@ import io.kotest.matchers.string.shouldStartWith
 
 import java.io.File
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.decodeFromStream
+
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
@@ -41,9 +43,9 @@ class ClearlyDefinedServiceFunTest : WordSpec({
     "A contribution patch" should {
         "be correctly deserialized when using empty facet arrays" {
             // See https://github.com/clearlydefined/curated-data/blob/0b2db78/curations/maven/mavencentral/com.google.code.gson/gson.yaml#L10-L11.
-            val curationWithEmptyFacetArrays = File("src/funTest/assets/gson.json")
-
-            val curation = ClearlyDefinedService.JSON_MAPPER.readValue<Curation>(curationWithEmptyFacetArrays)
+            val curation = File("src/funTest/assets/gson.json").inputStream().use {
+                ClearlyDefinedService.JSON.decodeFromStream<Curation>(it)
+            }
 
             curation.described?.facets?.dev.shouldNotBeNull() should beEmpty()
             curation.described?.facets?.tests.shouldNotBeNull() should beEmpty()
@@ -110,7 +112,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         "only serialize non-null values" {
             val contributionPatch = ContributionPatch(info, listOf(patch))
 
-            val patchJson = ClearlyDefinedService.JSON_MAPPER.writeValueAsString(contributionPatch)
+            val patchJson = ClearlyDefinedService.JSON.encodeToString(contributionPatch)
 
             patchJson shouldNot include("null")
         }
