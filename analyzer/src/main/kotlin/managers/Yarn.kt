@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.core.log
 
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
@@ -69,6 +70,8 @@ class Yarn(
 
     override fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
         val process = run(workingDir, "info", "--json", packageName)
-        return jsonMapper.readTree(process.stdout)["data"]
+        return jsonMapper.readTree(process.stdout)["data"] ?: jsonMapper.readTree(process.stderr)["data"].also {
+            log.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
+        }
     }
 }
