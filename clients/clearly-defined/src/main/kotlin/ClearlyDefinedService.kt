@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +20,17 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -45,9 +46,9 @@ import retrofit2.http.Query
 interface ClearlyDefinedService {
     companion object {
         /**
-         * The mapper for JSON (de-)serialization used by this service.
+         * The JSON (de-)serialization object used by this service.
          */
-        val JSON_MAPPER = JsonMapper().registerKotlinModule()
+        val JSON = Json { encodeDefaults = false }
 
         /**
          * Create a ClearlyDefined service instance for communicating with the given [server], optionally using a
@@ -61,11 +62,12 @@ interface ClearlyDefinedService {
          * optionally using a pre-built OkHttp [client].
          */
         fun create(url: String, client: OkHttpClient? = null): ClearlyDefinedService {
+            val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
                 .baseUrl(url)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
+                .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
             return retrofit.create(ClearlyDefinedService::class.java)
@@ -97,7 +99,7 @@ interface ClearlyDefinedService {
     /**
      * The return type for https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Serializable
     data class Defined(
         val coordinates: Coordinates,
         val described: Described,
@@ -105,17 +107,16 @@ interface ClearlyDefinedService {
         val files: List<FileEntry>? = null,
         val scores: FinalScore,
 
-        @JsonProperty("_id")
+        @SerialName("_id")
         val id: String? = null,
 
-        @JsonProperty("_meta")
+        @SerialName("_meta")
         val meta: Meta
     ) {
         /**
          * Return the harvest status of a described component, also see
          * https://github.com/clearlydefined/website/blob/de42d2c/src/components/Navigation/Ui/HarvestIndicator.js#L8.
          */
-        @JsonIgnore
         fun getHarvestStatus() =
             when {
                 described.tools == null -> HarvestStatus.NOT_HARVESTED
@@ -127,6 +128,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L84-L101.
      */
+    @Serializable
     data class ContributionPatch(
         val contributionInfo: ContributionInfo,
         val patches: List<Patch>
@@ -135,6 +137,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L87-L97.
      */
+    @Serializable
     data class ContributionInfo(
         val type: ContributionType,
 
@@ -163,6 +166,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/53acc01/routes/curations.js#L86-L89.
      */
+    @Serializable
     data class ContributionSummary(
         val prNumber: Int,
         val url: String
@@ -171,7 +175,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/4917725/schemas/harvest-1.0.json#L12-L22.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Serializable
     data class HarvestRequest(
         val tool: String? = null,
         val coordinates: String,
