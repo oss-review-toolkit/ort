@@ -257,6 +257,18 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 pattern = "devDependencies",
                 reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
                 comment = "Packages for development only."
+            ),
+            ScopeExclude(
+                pattern = "bundleDependencies",
+                reason = ScopeExcludeReason.PROVIDED_DEPENDENCY_OF,
+                comment = "Bundled dependencies are delivered with the " +
+                "dependent package, and they are unsupported by Yarn"
+            ),
+            ScopeExclude(
+                pattern = "bundledDependencies",
+                reason = ScopeExcludeReason.PROVIDED_DEPENDENCY_OF,
+                comment = "Bundled dependencies are delivered with the " +
+                "dependent package, and they are unsupported by Yarn"
             )
         )
         else -> emptyList()
