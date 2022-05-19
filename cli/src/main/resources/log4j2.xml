@@ -22,5 +22,6 @@
     <Logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossId" level="info"/>
     <Logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossIdConfig" level="info"/>
     <Logger name="org.ossreviewtoolkit.clients.fossid.FossIdRestService" level="info"/>
+    <Logger name="org.ossreviewtoolkit.reporter.reporters.fossid.FossIdReporter" level="info"/>
   </Loggers>
 </Configuration>
