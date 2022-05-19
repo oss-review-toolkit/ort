@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.yamlMapper
@@ -930,7 +931,7 @@ private fun createScanner(
     projectScannerWrappers: List<ScannerWrapper> = emptyList()
 ) =
     ExperimentalScanner(
-        ScannerConfiguration(),
+        ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false)),
         DownloaderConfiguration(),
         provenanceDownloader,
         storageReaders,
