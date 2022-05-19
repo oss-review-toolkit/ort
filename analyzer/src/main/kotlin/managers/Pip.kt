@@ -619,7 +619,7 @@ class Pip(
             *allPackages.map { it.name }.toTypedArray()
         ).requireSuccess().stdout
 
-        return output.normalizeLineBreaks().split("---\n").map { parsePipShowOutput(it) }
+        return output.normalizeLineBreaks().split("\n---\n").map { parsePipShowOutput(it) }
     }
 
     /**
