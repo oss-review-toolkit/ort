@@ -32,6 +32,7 @@ import io.kotest.matchers.shouldBe
 
 import kotlin.IllegalArgumentException
 
+import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class FossIdConfigTest : WordSpec({
@@ -201,7 +202,7 @@ class FossIdConfigTest : WordSpec({
                 )
 
                 val fossIdConfig = FossIdConfig.create(scannerConfig)
-                val service = fossIdConfig.createService()
+                val service = FossIdRestService.createService(fossIdConfig.serverUrl)
 
                 service.getLoginPage().string() shouldBe loginPage
             } finally {

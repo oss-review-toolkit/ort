@@ -32,6 +32,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
+import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
@@ -195,7 +196,7 @@ class FossId internal constructor(
     // of scans for each package.
     private val createdScans = mutableSetOf<String>()
 
-    private val service = config.createService()
+    private val service = FossIdRestService.createService(config.serverUrl)
 
     override val criteria: ScannerCriteria? = null
     override val name: String = "FossId"
