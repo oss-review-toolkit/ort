@@ -46,7 +46,7 @@ class FossIdRulesTest : StringSpec({
 
     beforeSpec {
         server.start()
-        service = FossIdServiceWithVersion.instance(FossIdRestService.create("http://localhost:${server.port()}"))
+        service = FossIdRestService.createService("http://localhost:${server.port()}")
     }
 
     afterSpec {

@@ -19,6 +19,7 @@
 
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
+val log4jApiKotlinVersion: String by project
 val retrofitVersion: String by project
 val wiremockVersion: String by project
 
@@ -29,6 +30,7 @@ plugins {
 
 dependencies {
     api("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
