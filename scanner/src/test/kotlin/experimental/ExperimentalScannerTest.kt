@@ -837,7 +837,6 @@ private class FakePathScannerWrapper : PathScannerWrapper {
  */
 private class FakeProvenanceDownloader(val filename: String = "fake.txt") : ProvenanceDownloader {
     override fun download(provenance: KnownProvenance): File {
-        // TODO: Should downloadDir be created if it does not exist?
         val file = createOrtTempDir().resolve(filename)
         file.writeText(yamlMapper.writeValueAsString(provenance))
         return file.parentFile
