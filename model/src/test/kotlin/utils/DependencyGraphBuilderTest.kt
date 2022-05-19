@@ -34,6 +34,7 @@ import io.kotest.matchers.string.shouldContain
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.DependencyGraphEdge
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
@@ -320,13 +321,13 @@ class DependencyGraphBuilderTest : WordSpec({
                 2 to 3,
                 3 to 4,
                 1 to 4
-            )
+            ).map { DependencyGraphEdge(it.first, it.second) }
 
             breakCycles(edges) shouldContainExactlyInAnyOrder edges
         }
 
         "break a directed cycle with a single node" {
-            val edges = listOf(1 to 1)
+            val edges = listOf(DependencyGraphEdge(1, 1))
 
             breakCycles(edges) should beEmpty()
         }
@@ -337,7 +338,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 2 to 3,
                 3 to 4,
                 4 to 1
-            )
+            ).map { DependencyGraphEdge(it.first, it.second) }
 
             val result = breakCycles(edges)
 

@@ -180,15 +180,15 @@ class DependencyGraphBuilder<D>(
     }
 
     private fun Collection<DependencyGraphEdge>.removeCycles(): List<DependencyGraphEdge> {
-        val edges = mapTo(mutableSetOf()) { it.from to it.to }
+        val edges = toMutableSet()
         val edgesToKeep = breakCycles(edges)
         val edgesToRemove = edges - edgesToKeep
 
         edgesToRemove.forEach {
-            this@DependencyGraphBuilder.log.warn { "Removing edge '${it.first} -> ${it.second}' to break a cycle." }
+            this@DependencyGraphBuilder.log.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
         }
 
-        return filter { it.from to it.to in edgesToKeep }
+        return filter { it in edgesToKeep }
     }
 
     private fun checkReferences() {
@@ -472,8 +472,8 @@ private enum class NodeColor { WHITE, GRAY, BLACK }
  * A depth-first-search (DFS)-based implementation which breaks all cycles in O(V + E).
  * Finding a minimal solution is NP-complete.
  */
-internal fun breakCycles(edges: Collection<Pair<Int, Int>>): Set<Pair<Int, Int>> {
-    val outgoingEdgesForNodes = edges.groupBy({ it.first }, { it.second }).mapValues { it.value.toMutableSet() }
+internal fun breakCycles(edges: Collection<DependencyGraphEdge>): Set<DependencyGraphEdge> {
+    val outgoingEdgesForNodes = edges.groupBy({ it.from }, { it.to }).mapValues { it.value.toMutableSet() }
     val color = outgoingEdgesForNodes.keys.associateWithTo(mutableMapOf()) { NodeColor.WHITE }
 
     fun visit(u: Int) {
@@ -505,7 +505,7 @@ internal fun breakCycles(edges: Collection<Pair<Int, Int>>): Set<Pair<Int, Int>>
     }
 
     return outgoingEdgesForNodes.flatMapTo(mutableSetOf()) { (fromNode, toNodes) ->
-        toNodes.map { toNode -> fromNode to toNode }
+        toNodes.map { toNode -> DependencyGraphEdge(fromNode, toNode) }
     }
 }
 
