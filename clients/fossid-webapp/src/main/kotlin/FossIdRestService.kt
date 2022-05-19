@@ -35,8 +35,12 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 
+import java.time.Duration
+
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
+
+import org.apache.logging.log4j.kotlin.loggerOf
 
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
@@ -58,6 +62,9 @@ import retrofit2.http.POST
 
 interface FossIdRestService {
     companion object {
+        @JvmStatic
+        val logger = loggerOf(FossIdRestService::class.java)
+
         /**
          * The mapper for JSON (de-)serialization used by this service.
          */
@@ -117,17 +124,35 @@ interface FossIdRestService {
         }
 
         /**
-         * Create a FossID service instance for communicating with a server running at the given [url],
+         * Create the [FossIdServiceWithVersion] to interact with the FossID instance running at the given [url],
          * optionally using a pre-built OkHttp [client].
          */
-        fun create(url: String, client: OkHttpClient? = null): FossIdRestService {
+        fun createService(url: String, client: OkHttpClient? = null): FossIdServiceWithVersion {
+            logger.info { "The FossID server URL is $url." }
+
+            val minReadTimeout = Duration.ofSeconds(60)
             val retrofit = Retrofit.Builder()
-                .apply { if (client != null) client(client) }
+                .apply {
+                    client(
+                        client?.run {
+                            takeUnless { readTimeoutMillis < minReadTimeout.toMillis() }
+                                ?: newBuilder().readTimeout(minReadTimeout).build()
+                        } ?: OkHttpClient.Builder().readTimeout(minReadTimeout).build()
+                    )
+                }
                 .baseUrl(url)
                 .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
-            return retrofit.create(FossIdRestService::class.java)
+            val service = retrofit.create(FossIdRestService::class.java)
+
+            return FossIdServiceWithVersion.instance(service).also {
+                if (it.version.isEmpty()) {
+                    logger.warn { "The FossID server is running an unknown version." }
+                } else {
+                    logger.info { "The FossID server is running version ${it.version}." }
+                }
+            }
         }
     }
 

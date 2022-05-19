@@ -19,12 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
-import java.time.Duration
-
-import org.ossreviewtoolkit.clients.fossid.FossIdRestService
-import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.log
 
 /**
@@ -196,27 +191,5 @@ internal data class FossIdConfig(
             .mapKeys { it.key.substringAfter(NAMING_CONVENTION_VARIABLE_PREFIX) }
 
         return FossIdNamingProvider(namingProjectPattern, namingScanPattern, namingConventionVariables)
-    }
-
-    /**
-     * Create the [FossIdServiceWithVersion] to interact with the FossID instance described by this configuration.
-     */
-    fun createService(): FossIdServiceWithVersion {
-        log.info { "The FossID server URL is $serverUrl." }
-
-        val service = FossIdRestService.create(
-            serverUrl,
-            OkHttpClientHelper.buildClient {
-                readTimeout(Duration.ofSeconds(60))
-            }
-        )
-
-        return FossIdServiceWithVersion.instance(service).also {
-            if (it.version.isEmpty()) {
-                log.warn { "The FossID server is running an unknown version." }
-            } else {
-                log.info { "The FossID server is running version ${it.version}." }
-            }
-        }
     }
 }

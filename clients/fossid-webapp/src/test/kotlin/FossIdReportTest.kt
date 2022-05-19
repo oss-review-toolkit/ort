@@ -49,7 +49,7 @@ class FossIdReportTest : StringSpec({
 
     beforeSpec {
         server.start()
-        service = FossIdRestService.create("http://localhost:${server.port()}")
+        service = FossIdRestService.createService("http://localhost:${server.port()}")
 
         directory = createTempDirectory("fossid_report").toFile()
     }
