@@ -92,9 +92,7 @@ abstract class PathScanner(
         const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
     }
 
-    private val archiver by lazy {
-        scannerConfig.archive.createFileArchiver()
-    }
+    private val archiver = scannerConfig.archive.createFileArchiver()
 
     /**
      * Return a [ScannerCriteria] object to be used when looking up existing scan results from a [ScanResultsStorage].
@@ -212,6 +210,11 @@ abstract class PathScanner(
     }
 
     private fun createMissingArchives(scanResults: Map<Package, List<ScanResult>>) {
+        if (archiver == null) {
+            log.warn { "Cannot create missing archives as the archiver is disabled." }
+            return
+        }
+
         val missingArchives = mutableSetOf<Pair<Package, KnownProvenance>>()
 
         scanResults.forEach { (pkg, results) ->
@@ -277,7 +280,11 @@ abstract class PathScanner(
         log.info { "Running $scannerDetails on directory '${pkgDownloadDirectory.absolutePath}'." }
 
         if (provenance is KnownProvenance) {
-            archiver.archive(pkgDownloadDirectory, provenance)
+            if (archiver != null) {
+                archiver.archive(pkgDownloadDirectory, provenance)
+            } else {
+                log.warn { "Cannot archive files as the archiver is disabled." }
+            }
         }
 
         val (scanSummary, scanDuration) = measureTimedValue {
