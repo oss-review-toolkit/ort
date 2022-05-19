@@ -67,6 +67,8 @@ class ExperimentalScanner(
         }
     }
 
+    private val archiver = scannerConfig.archive.createFileArchiver()
+
     suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean): OrtResult {
         val startTime = Instant.now()
 
@@ -495,8 +497,6 @@ class ExperimentalScanner(
         //       so that the created archives contain also files from nested repositories.
         //       This could be replaced with creating file archives for each provenance separately and building the
         //       final result on demand, to reduce duplication in the file archives.
-
-        val archiver = scannerConfig.archive.createFileArchiver()
 
         val provenancesWithMissingArchives = nestedProvenances.filterNot { (_, nestedProvenance) ->
             archiver.hasArchive(nestedProvenance.root)
