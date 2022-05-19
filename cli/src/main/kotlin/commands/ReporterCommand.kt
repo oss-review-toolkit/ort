@@ -270,8 +270,8 @@ class ReporterCommand : CliktCommand(
             reportSpecificOptionsMap += option
         }
 
-        reportOptions.forEach { (format, option) ->
-            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(format) { mutableMapOf() }
+        reportOptions.forEach { (reporterName, option) ->
+            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
             reportSpecificOptionsMap[option.first] = option.second
         }
 
