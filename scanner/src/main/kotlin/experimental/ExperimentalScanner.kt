@@ -144,7 +144,7 @@ class ExperimentalScanner(
         runProvenanceScanners(controller, context)
         runPathScanners(controller, context)
 
-        createFileArchives(controller.getNestedProvenancesByPackage())
+        createMissingArchives(controller.getNestedProvenancesByPackage())
 
         val results = controller.getNestedScanResultsByPackage().entries.associateTo(sortedMapOf()) {
             it.key.id to it.value.merge()
@@ -490,7 +490,7 @@ class ExperimentalScanner(
         }
     }
 
-    private fun createFileArchives(nestedProvenances: Map<Package, NestedProvenance>) {
+    private fun createMissingArchives(nestedProvenances: Map<Package, NestedProvenance>) {
         // TODO: The archives are currently created in a way compatible with the existing implementation in the
         //       PathScanner. This allows to keep using existing file archives without changing the logic used to
         //       access those archives in the reporter. To achieve this nested provenances are downloaded recursively,
