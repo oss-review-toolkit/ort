@@ -498,6 +498,11 @@ class ExperimentalScanner(
         //       This could be replaced with creating file archives for each provenance separately and building the
         //       final result on demand, to reduce duplication in the file archives.
 
+        if (archiver == null) {
+            log.warn { "Cannot create missing archives as the archiver is disabled." }
+            return
+        }
+
         val provenancesWithMissingArchives = nestedProvenances.filterNot { (_, nestedProvenance) ->
             archiver.hasArchive(nestedProvenance.root)
         }

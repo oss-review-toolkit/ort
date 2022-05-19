@@ -38,6 +38,11 @@ import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
 @JsonIgnoreProperties(value = ["patterns"])
 data class FileArchiverConfiguration(
     /**
+     * Toggle to enable or disable the file archiver functionality altogether.
+     */
+    val enabled: Boolean = true,
+
+    /**
      * Configuration of the [FileStorage] used for archiving the files.
      */
     @ConfigAlias("storage")
@@ -62,7 +67,9 @@ data class FileArchiverConfiguration(
 /**
  * Create a [FileArchiver] based on this configuration.
  */
-fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver {
+fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
+    if (this?.enabled == false) return null
+
     val storage = when {
         this?.fileStorage != null -> FileArchiverFileStorage(fileStorage.createFileStorage())
 
