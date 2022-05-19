@@ -72,6 +72,7 @@ repositories {
 dependencies {
     api(project(":model"))
 
+    implementation(project(":clients:fossid-webapp"))
     implementation(project(":downloader"))
     implementation(project(":utils:core-utils"))
     implementation(project(":utils:spdx-utils"))
