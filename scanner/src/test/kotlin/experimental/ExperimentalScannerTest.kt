@@ -920,10 +920,7 @@ private fun createContext(
     type: PackageType = PackageType.PACKAGE
 ) = ScanContext(labels, type)
 
-@Suppress("LongParameterList")
 private fun createScanner(
-    scannerConfig: ScannerConfiguration = ScannerConfiguration(),
-    downloaderConfig: DownloaderConfiguration = DownloaderConfiguration(),
     provenanceDownloader: ProvenanceDownloader = FakeProvenanceDownloader(),
     storageReaders: List<ScanStorageReader> = emptyList(),
     storageWriters: List<ScanStorageWriter> = emptyList(),
@@ -933,8 +930,8 @@ private fun createScanner(
     projectScannerWrappers: List<ScannerWrapper> = emptyList()
 ) =
     ExperimentalScanner(
-        scannerConfig,
-        downloaderConfig,
+        ScannerConfiguration(),
+        DownloaderConfiguration(),
         provenanceDownloader,
         storageReaders,
         storageWriters,
