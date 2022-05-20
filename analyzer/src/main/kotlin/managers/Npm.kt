@@ -645,5 +645,5 @@ open class Npm(
     }
 
     protected open fun runInstall(workingDir: File) =
-        run(workingDir, if (hasLockFile(workingDir)) "ci" else "install", "--ignore-scripts")
+        run(workingDir, if (hasLockFile(workingDir)) "ci" else "install", "--ignore-scripts", "--no-audit")
 }
