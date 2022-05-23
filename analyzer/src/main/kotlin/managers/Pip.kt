@@ -432,7 +432,7 @@ class Pip(
     }
 
     private fun getLicenseFromClassifier(classifier: String): String? {
-        // Example license classifier:
+        // Example license classifier (also see https://pypi.org/classifiers/):
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         val classifiers = classifier.split(" :: ").map { it.trim() }
         val licenseClassifiers = listOf("License", "OSI Approved")
