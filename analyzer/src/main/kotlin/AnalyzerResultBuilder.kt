@@ -42,6 +42,7 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     private val dependencyGraphs = sortedMapOf<String, DependencyGraph>()
 
     fun build(): AnalyzerResult {
+        deduplicateProjects()
         val duplicateIds = (projects.map { it.id } + packages.map { it.pkg.id }).getDuplicates()
         require(duplicateIds.isEmpty()) {
             "AnalyzerResult contains packages that are also projects. Duplicates: '$duplicateIds'."
@@ -114,5 +115,31 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     fun addDependencyGraph(packageManagerName: String, graph: DependencyGraph): AnalyzerResultBuilder {
         dependencyGraphs[packageManagerName] = graph
         return this
+    }
+
+    fun deduplicateProjects() {
+        val packages = this.packages.filter { p ->
+            p.pkg.vcsProcessed.path != ""
+        }
+        val duplicatedProjects = this.projects.filter { prj ->
+            prj.vcsProcessed.path != ""
+        }.filter { prj ->
+            val matchingPackages = packages.filter { p ->
+                prj.id.type == p.pkg.id.type &&
+                prj.vcsProcessed == p.pkg.vcsProcessed
+            }
+            if (matchingPackages.size > 0) {
+                matchingPackages.map { p ->
+                    log.warn {
+                        "Project ${prj.id.type}:${prj.id.namespace}:${prj.id.name} " +
+                        "resembles package ${p.pkg.id.type}:${p.pkg.id.namespace}:${p.pkg.id.name}"
+                    }
+                }
+            }
+            matchingPackages.size != 0
+        }
+        duplicatedProjects.map { prj ->
+            this.projects.remove(prj)
+        }
     }
 }
