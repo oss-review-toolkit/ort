@@ -707,6 +707,8 @@ private fun Package.enrichWith(other: Package?): Package =
             description = description.takeUnless { it.isBlank() } ?: other.description,
             authors = authors.takeUnless { it.isEmpty() } ?: other.authors,
             declaredLicenses = declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
+            declaredLicensesProcessed = declaredLicensesProcessed.takeUnless { declaredLicenses.isEmpty() }
+                ?: other.declaredLicensesProcessed,
             binaryArtifact = binaryArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.binaryArtifact,
             sourceArtifact = sourceArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.sourceArtifact,
             vcs = vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
