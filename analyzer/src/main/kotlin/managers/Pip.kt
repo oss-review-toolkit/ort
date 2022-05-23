@@ -50,10 +50,12 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.core.createOrtTempDir
 import org.ossreviewtoolkit.utils.core.createOrtTempFile
 import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 // Use the most recent version that still supports Python 2. PIP 21.0.0 dropped Python 2 support, see
 // https://pip.pypa.io/en/stable/news/#id176.
@@ -162,6 +164,7 @@ class Pip(
     }
 
     companion object {
+        private const val GENERIC_BSD_LICENSE = "BSD License"
         private const val SHORT_STRING_MAX_CHARS = 200
 
         private val INSTALL_OPTIONS = arrayOf(
@@ -561,8 +564,8 @@ class Pip(
         // See https://wiki.python.org/moin/PyPIJSON.
         val url = "https://pypi.org/pypi/${id.name}/${id.version}/json"
 
-        return OkHttpClientHelper.downloadText(url).mapCatching {
-            val pkgData = jsonMapper.readTree(it)
+        return OkHttpClientHelper.downloadText(url).mapCatching { json ->
+            val pkgData = jsonMapper.readTree(json)
 
             val pkgInfo = pkgData["info"]
 
@@ -575,13 +578,31 @@ class Pip(
             } as? ArrayNode
 
             val homepageUrl = pkgInfo["home_page"]?.textValue().orEmpty()
+            val declaredLicenses = getDeclaredLicenses(pkgInfo)
+            var declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
+
+            // Python's classifiers only support a coarse license declaration of "BSD License". So if there is another
+            // more specific declaration of a BSD license, align on that one.
+            if (GENERIC_BSD_LICENSE in declaredLicensesProcessed.unmapped) {
+                declaredLicensesProcessed.spdxExpression?.decompose()?.singleOrNull {
+                    it is SpdxLicenseIdExpression && it.isValid() && it.toString().startsWith("BSD-")
+                }?.let { license ->
+                    log.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for ${id.toCoordinates()}." }
+
+                    declaredLicensesProcessed = declaredLicensesProcessed.copy(
+                        mapped = declaredLicensesProcessed.mapped + mapOf(GENERIC_BSD_LICENSE to license),
+                        unmapped = declaredLicensesProcessed.unmapped - GENERIC_BSD_LICENSE
+                    )
+                }
+            }
 
             Package(
                 id = id,
                 homepageUrl = homepageUrl,
                 description = pkgInfo["summary"]?.textValue().orEmpty(),
                 authors = parseAuthors(pkgInfo),
-                declaredLicenses = getDeclaredLicenses(pkgInfo),
+                declaredLicenses = declaredLicenses,
+                declaredLicensesProcessed = declaredLicensesProcessed,
                 binaryArtifact = getBinaryArtifact(pkgRelease),
                 sourceArtifact = getSourceArtifact(pkgRelease),
                 vcs = VcsInfo.EMPTY,

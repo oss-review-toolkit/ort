@@ -46,8 +46,7 @@ packages:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-    unmapped:
-    - "BSD License"
+      BSD License: "BSD-3-Clause"
   description: "An ISO 8601 date/time/duration parser and formatter"
   homepage_url: "https://github.com/gweis/isodate/"
   binary_artifact:
@@ -143,8 +142,8 @@ packages:
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-    unmapped:
-    - "BSD License"
+    mapped:
+      BSD License: "BSD-3-Clause"
   description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
     \ language for representing information."
   homepage_url: "https://github.com/RDFLib/rdflib"
