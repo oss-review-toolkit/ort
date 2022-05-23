@@ -134,7 +134,7 @@ private class DependencyRefCursor(
     private val nodesIterator = nodes.iterator()
 
     /** Points to the current element of the traversal. */
-    private var current: DependencyGraphNode = initCurrent ?: nodesIterator.next()
+    var current = initCurrent ?: nodesIterator.next()
 
     override val id: Identifier
         get() = graph.packages[current.pkg]
@@ -222,13 +222,18 @@ private fun collectDependencies(
     nodes: Sequence<DependencyNode>,
     maxDepth: Int,
     matcher: DependencyMatcher,
-    ids: MutableSet<Identifier>
+    ids: MutableSet<Identifier>,
+    visited: MutableSet<DependencyGraphNode> = mutableSetOf()
 ) {
     if (maxDepth != 0) {
         nodes.forEach { node ->
-            if (matcher(node)) ids += node.id
+            val cursor = node as DependencyRefCursor
+            if (cursor.current !in visited) {
+                visited += cursor.current
+                if (matcher(node)) ids += node.id
 
-            node.visitDependencies { collectDependencies(it, maxDepth - 1, matcher, ids) }
+                node.visitDependencies { collectDependencies(it, maxDepth - 1, matcher, ids, visited) }
+            }
         }
     }
 }
