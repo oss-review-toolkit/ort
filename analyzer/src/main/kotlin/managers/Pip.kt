@@ -347,14 +347,13 @@ class Pip(
                 }
             }
 
-            val packageTemplates = sortedSetOf<Package>()
-            parseDependencies(projectDependencies, packageTemplates, installDependencies)
+            val allIds = sortedSetOf<Identifier>()
+            parseDependencies(projectDependencies, allIds, installDependencies)
 
             // Enrich the package templates with additional metadata from PyPI.
-            packageTemplates.mapTo(packages) { pkg ->
+            allIds.mapTo(packages) { id ->
                 // TODO: Retrieve metadata of package not hosted on PyPI by querying the respective repository.
-                pkg.enrichWith(getPackageFromPyPi(pkg.id))
-                    .enrichWith(installedPackages[pkg.id])
+                getPackageFromPyPi(id).enrichWith(installedPackages[id])
             }
         } else {
             log.error {
@@ -539,31 +538,22 @@ class Pip(
 
     private fun parseDependencies(
         dependencies: Iterable<JsonNode>,
-        allPackages: SortedSet<Package>,
+        allIds: SortedSet<Identifier>,
         installDependencies: SortedSet<PackageReference>
     ) {
         dependencies.forEach { dependency ->
-            val pkg = Package(
-                id = Identifier(
-                    type = "PyPI",
-                    namespace = "",
-                    name = dependency["package_name"].textValue().normalizePackageName(),
-                    version = dependency["installed_version"].textValue()
-                ),
-                authors = sortedSetOf(),
-                declaredLicenses = sortedSetOf(),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY
+            val id = Identifier(
+                type = "PyPI",
+                namespace = "",
+                name = dependency["package_name"].textValue().normalizePackageName(),
+                version = dependency["installed_version"].textValue()
             )
-            val packageRef = pkg.toReference()
+            val packageRef = PackageReference(id)
 
-            allPackages += pkg
+            allIds += id
             installDependencies += packageRef
 
-            parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
+            parseDependencies(dependency["dependencies"], allIds, packageRef.dependencies)
         }
     }
 
