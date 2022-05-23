@@ -197,12 +197,8 @@ private val Project.managerName: String
 private fun DependencyGraph.dependencyRefMapping(): Array<MutableList<DependencyGraphNode>> {
     val nodesArray = Array<MutableList<DependencyGraphNode>>(packages.size) { mutableListOf() }
 
-    fun addNode(node: DependencyGraphNode) {
-        nodesArray[node.pkg] += node
-        dependencies[node]?.forEach(::addNode)
-    }
+    dependencies.keys.forEach { node -> nodesArray[node.pkg] += node }
 
-    dependencies.keys.forEach(::addNode)
     return nodesArray
 }
 
