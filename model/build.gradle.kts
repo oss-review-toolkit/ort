@@ -34,7 +34,7 @@ plugins {
 
 dependencies {
     api(project(":clients:clearly-defined"))
-    api(project(":utils:core-utils"))
+    api(project(":utils:ort-utils"))
     api(project(":utils:spdx-utils"))
 
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")

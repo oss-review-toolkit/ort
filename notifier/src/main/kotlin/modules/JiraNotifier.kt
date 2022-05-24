@@ -31,7 +31,7 @@ import java.net.URI
 
 import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 
 class JiraNotifier(private val restClient: JiraRestClient) {
     constructor(config: JiraConfiguration) : this(

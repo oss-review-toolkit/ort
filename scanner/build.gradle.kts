@@ -62,7 +62,7 @@ dependencies {
     implementation(project(":clients:fossid-webapp"))
     implementation(project(":clients:scanoss"))
     implementation(project(":downloader"))
-    implementation(project(":utils:core-utils"))
+    implementation(project(":utils:ort-utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.scanoss:scanner:$scanossVersion")

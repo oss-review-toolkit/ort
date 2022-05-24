@@ -20,10 +20,10 @@
 package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.core.storage.FileStorage
-import org.ossreviewtoolkit.utils.core.storage.HttpFileStorage
-import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.core.storage.XZCompressedLocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
+import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
 /**
  * The configuration model for a [FileStorage]. Only one of the storage options can be configured.

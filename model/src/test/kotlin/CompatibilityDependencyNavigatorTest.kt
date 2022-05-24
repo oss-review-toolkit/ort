@@ -30,7 +30,7 @@ import io.mockk.mockk
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.ort.Environment
 
 class CompatibilityDependencyNavigatorTest : WordSpec() {
     private val treeProject = createProject("tree", scopes = sortedSetOf(createScope("scope")))

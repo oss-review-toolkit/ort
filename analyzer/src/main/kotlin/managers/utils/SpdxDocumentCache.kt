@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 

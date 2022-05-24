@@ -26,8 +26,8 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.perf
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.perf
 
 /**
  * A [Reporter] that generates an [EvaluatedModel].

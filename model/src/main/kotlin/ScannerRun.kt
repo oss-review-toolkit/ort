@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
  * The summary of a single run of the scanner.
