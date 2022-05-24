@@ -37,9 +37,9 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.core.ORT_NOTIFIER_SCRIPT_FILENAME
-import org.ossreviewtoolkit.utils.core.ORT_RESOLUTIONS_FILENAME
-import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.ORT_NOTIFIER_SCRIPT_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 class NotifierCommand : CliktCommand(name = "notify", help = "Create notifications based on an ORT result.") {
     private val ortFile by option(

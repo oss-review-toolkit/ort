@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.common.getQueryParameters
 import org.ossreviewtoolkit.utils.common.nextOrNull
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
  * An enum to handle VCS-host-specific information.

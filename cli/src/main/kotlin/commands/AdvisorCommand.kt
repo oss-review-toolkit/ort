@@ -46,8 +46,8 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.core.ORT_RESOLUTIONS_FILENAME
-import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
     private val allVulnerabilityProvidersByName = Advisor.ALL.associateBy { it.providerName }

@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.ort.Environment
 
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")

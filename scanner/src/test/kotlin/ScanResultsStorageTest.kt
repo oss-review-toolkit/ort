@@ -40,8 +40,8 @@ import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.CompositeStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.NoStorage
-import org.ossreviewtoolkit.utils.core.storage.HttpFileStorage
-import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 class ScanResultsStorageTest : WordSpec({
     "ScanResultsStorage.configure()" should {

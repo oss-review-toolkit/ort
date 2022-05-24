@@ -28,7 +28,7 @@ import com.sksamuel.hoplite.fp.getOrElse
 import java.io.File
 
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * The configuration model for all ORT components.

@@ -54,8 +54,8 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.temporaryProperties
-import org.ossreviewtoolkit.utils.core.createOrtTempFile
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.ort.log
 
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 

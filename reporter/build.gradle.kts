@@ -74,7 +74,7 @@ dependencies {
 
     implementation(project(":clients:fossid-webapp"))
     implementation(project(":downloader"))
-    implementation(project(":utils:core-utils"))
+    implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")

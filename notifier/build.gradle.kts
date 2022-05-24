@@ -43,7 +43,7 @@ dependencies {
     api(project(":model"))
     api(project(":utils:scripting-utils"))
 
-    implementation(project(":utils:core-utils"))
+    implementation(project(":utils:ort-utils"))
 
     implementation("com.atlassian.jira:jira-rest-java-client-api:$jiraRestClientVersion")
     implementation("com.atlassian.jira:jira-rest-java-client-app:$jiraRestClientVersion") {

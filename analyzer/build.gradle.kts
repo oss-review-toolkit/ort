@@ -63,7 +63,7 @@ dependencies {
     api(project(":model"))
 
     implementation(project(":downloader"))
-    implementation(project(":utils:core-utils"))
+    implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion")

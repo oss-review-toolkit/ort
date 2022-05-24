@@ -32,7 +32,7 @@ import io.kotest.matchers.should
 import java.time.Duration
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
  * A test for [ClearlyDefinedPackageCurationProvider], which uses a mock server. This allows testing some specific

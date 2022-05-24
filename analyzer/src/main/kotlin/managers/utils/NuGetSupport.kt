@@ -68,10 +68,10 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.await
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.logOnce
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.await
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logOnce
 
 internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
