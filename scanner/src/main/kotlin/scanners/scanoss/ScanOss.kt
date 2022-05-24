@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 
 // An arbitrary name to use for the multipart body being sent.
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"

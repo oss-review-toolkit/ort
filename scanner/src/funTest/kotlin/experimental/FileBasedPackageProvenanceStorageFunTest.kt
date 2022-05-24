@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.experimental
 
-import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class FileBasedPackageProvenanceStorageFunTest : AbstractPackageProvenanceStorageFunTest() {

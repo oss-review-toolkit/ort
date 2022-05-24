@@ -31,8 +31,8 @@ import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.perf
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.perf
 
 /**
  * A class providing the framework to run Kotlin scripts.

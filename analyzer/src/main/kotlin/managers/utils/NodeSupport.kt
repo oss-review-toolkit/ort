@@ -31,8 +31,8 @@ import java.nio.file.PathMatcher
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * A dummy object to provide a logger for top-level functions.

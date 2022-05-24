@@ -38,8 +38,8 @@ import kotlin.script.experimental.jvmhost.CompiledScriptJarsCache
 
 import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.core.Environment
-import org.ossreviewtoolkit.utils.core.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     ide {
@@ -50,7 +50,7 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
 
     defaultImports(
         "org.ossreviewtoolkit.utils.common.*",
-        "org.ossreviewtoolkit.utils.core.*",
+        "org.ossreviewtoolkit.utils.ort.*",
         "java.util.*"
     )
 

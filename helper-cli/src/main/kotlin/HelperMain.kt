@@ -59,7 +59,7 @@ import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsComm
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
-import org.ossreviewtoolkit.utils.core.printStackTrace
+import org.ossreviewtoolkit.utils.ort.printStackTrace
 
 import org.slf4j.LoggerFactory
 

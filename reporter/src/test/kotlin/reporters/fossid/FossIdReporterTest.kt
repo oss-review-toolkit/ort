@@ -60,7 +60,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.ort.Environment
 
 private const val SERVER_URL_SAMPLE = "https://fossid.example.com/instance/"
 private const val API_KEY_SAMPLE = "XYZ"

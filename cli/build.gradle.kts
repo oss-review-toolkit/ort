@@ -159,7 +159,7 @@ dependencies {
     implementation(project(":notifier"))
     implementation(project(":reporter"))
     implementation(project(":scanner"))
-    implementation(project(":utils:core-utils"))
+    implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")

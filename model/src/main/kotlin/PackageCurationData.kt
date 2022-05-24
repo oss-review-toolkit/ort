@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.utils.common.zip
-import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**

@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * A data class that holds the configuration options supported by the [FossId] scanner. An instance of this class is

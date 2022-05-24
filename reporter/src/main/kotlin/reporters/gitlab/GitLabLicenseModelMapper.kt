@@ -24,7 +24,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModel.Dependency
 import org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModel.License
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression

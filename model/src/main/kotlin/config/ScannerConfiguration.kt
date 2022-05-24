@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.utils.core.storage.FileStorage
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 typealias ScannerOptions = Map<String, String>
 
