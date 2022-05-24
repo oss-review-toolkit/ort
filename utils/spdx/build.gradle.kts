@@ -46,8 +46,7 @@ tasks.withType<AntlrTask>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    val antlrTasks = tasks.withType<AntlrTask>()
-    dependsOn(antlrTasks)
+    dependsOn(tasks.withType<AntlrTask>())
 }
 
 dependencies {
