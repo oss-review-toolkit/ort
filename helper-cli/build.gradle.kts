@@ -42,7 +42,7 @@ application {
     mainClass.set("org.ossreviewtoolkit.helper.HelperMainKt")
 }
 
-tasks.withType<ShadowJar> {
+tasks.withType<ShadowJar>().configureEach {
     isZip64 = true
 }
 

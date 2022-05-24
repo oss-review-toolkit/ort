@@ -152,7 +152,7 @@ allprojects {
         basePath = rootProject.projectDir.path
     }
 
-    tasks.withType<Detekt> detekt@{
+    tasks.withType<Detekt>().configureEach detekt@{
         dependsOn(":detekt-rules:assemble")
 
         reports {
@@ -195,7 +195,7 @@ subprojects {
         getByName("funTest").associateWith(getByName(KotlinCompilation.MAIN_COMPILATION_NAME))
     }
 
-    plugins.withType<JavaLibraryPlugin> {
+    plugins.withType<JavaLibraryPlugin>().configureEach {
         dependencies {
             "testImplementation"(project(":utils:test-utils"))
 
