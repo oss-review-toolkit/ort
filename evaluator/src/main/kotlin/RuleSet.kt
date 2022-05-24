@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * A set of evaluator [Rule]s, using an [ortResult] as input.

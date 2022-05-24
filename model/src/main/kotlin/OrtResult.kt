@@ -34,8 +34,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.utils.common.zipWithCollections
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.perf
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.perf
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**

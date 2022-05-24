@@ -32,8 +32,8 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.formatSizeInMib
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.perf
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.perf
 
 fun <T : GroupableOption> T.group(name: String): T = apply { groupName = name }
 

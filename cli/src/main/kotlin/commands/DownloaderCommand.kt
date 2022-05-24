@@ -69,11 +69,11 @@ import org.ossreviewtoolkit.utils.common.encodeOrUnknown
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.core.ORT_LICENSE_CLASSIFICATIONS_FILENAME
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.ortConfigDirectory
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source code from a remote location.") {

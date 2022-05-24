@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.utils.common.enumSetOf
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
  * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the

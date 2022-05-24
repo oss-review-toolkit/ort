@@ -45,8 +45,8 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * The SW360 storage back-end uses the SW360-client library in order to read/add attachments from the configured

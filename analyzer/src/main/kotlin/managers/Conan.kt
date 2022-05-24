@@ -55,8 +55,8 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.

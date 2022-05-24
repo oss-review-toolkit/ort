@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * This class provides names for projects and scans when the FossID scanner creates them, following a given pattern.

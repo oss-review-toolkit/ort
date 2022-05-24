@@ -30,9 +30,9 @@ import java.net.Proxy
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
-import org.ossreviewtoolkit.utils.core.createOrtTempFile
-import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }

@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * An abstract class that represents a service that can retrieve any kind of advice information

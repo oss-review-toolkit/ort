@@ -49,9 +49,9 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 

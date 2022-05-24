@@ -23,8 +23,8 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.config.AdviceProviderOptions
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.utils.core.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 /**
  * A common interface for use with [ServiceLoader] that all [AbstractAdviceProviderFactory] classes need to

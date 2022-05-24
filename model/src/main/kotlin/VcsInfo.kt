@@ -30,7 +30,7 @@ import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.core.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
  * Bundles general Version Control System information.

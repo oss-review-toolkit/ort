@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 

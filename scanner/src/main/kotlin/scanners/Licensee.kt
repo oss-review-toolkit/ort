@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Licensee internal constructor(

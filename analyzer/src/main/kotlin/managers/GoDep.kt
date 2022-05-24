@@ -50,9 +50,9 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeCopyRecursively
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.

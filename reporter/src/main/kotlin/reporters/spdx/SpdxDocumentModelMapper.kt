@@ -34,9 +34,9 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
-import org.ossreviewtoolkit.utils.core.Environment
-import org.ossreviewtoolkit.utils.core.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression

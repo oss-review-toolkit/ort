@@ -30,7 +30,7 @@ plugins {
 
 dependencies {
     api(project(":model"))
-    api(project(":utils:core-utils"))
+    api(project(":utils:ort-utils"))
 
     api("io.kotest:kotest-assertions-core:$kotestVersion")
     api("io.kotest:kotest-framework-api:$kotestVersion")

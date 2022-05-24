@@ -41,8 +41,8 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
-import org.ossreviewtoolkit.utils.core.createOrtTempFile
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * A PostgreSQL based storage for archive files.

@@ -31,11 +31,11 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.addBasicAuthorization
-import org.ossreviewtoolkit.utils.core.createOrtTempDir
-import org.ossreviewtoolkit.utils.core.downloadFile
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.addBasicAuthorization
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.downloadFile
+import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage

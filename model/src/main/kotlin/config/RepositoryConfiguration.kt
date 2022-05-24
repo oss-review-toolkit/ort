@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 
 /**
  * A project specific configuration for ORT which is usually stored in [ORT_REPO_CONFIG_FILENAME] at the root of a

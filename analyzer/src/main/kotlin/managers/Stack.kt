@@ -47,8 +47,8 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.unquote
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.

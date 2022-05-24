@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * A specialized [DependencyHandler] implementation for Gradle's dependency model.

@@ -23,8 +23,8 @@ package org.ossreviewtoolkit.cli.utils
 import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.FilePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
-import org.ossreviewtoolkit.utils.core.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
-import org.ossreviewtoolkit.utils.core.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 internal sealed interface PackageConfigurationOption {
     data class Dir(val value: java.io.File) : PackageConfigurationOption
