@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.core.log
+import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * Configuration of the storage to use for provenance information.

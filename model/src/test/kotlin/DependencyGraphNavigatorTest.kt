@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.assertions.throwables.shouldThrow
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.core.Environment
+import org.ossreviewtoolkit.utils.ort.Environment
 
 class DependencyGraphNavigatorTest : AbstractDependencyNavigatorTest() {
     override val resultFileName = "src/test/assets/sbt-multi-project-example-graph.yml"

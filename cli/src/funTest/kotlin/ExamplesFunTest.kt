@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
-import org.ossreviewtoolkit.utils.core.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull

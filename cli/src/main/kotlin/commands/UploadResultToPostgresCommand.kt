@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class UploadResultToPostgresCommand : CliktCommand(
     name = "upload-result-to-postgres",

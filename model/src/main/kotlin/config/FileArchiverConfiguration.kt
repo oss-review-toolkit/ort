@@ -28,9 +28,9 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
 import org.ossreviewtoolkit.model.utils.PostgresFileArchiverStorage
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.storage.FileStorage
-import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 /**
  * The configuration model for a [FileArchiver].

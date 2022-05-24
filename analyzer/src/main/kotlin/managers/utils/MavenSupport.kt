@@ -88,14 +88,14 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.core.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.core.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.core.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.logOnce
-import org.ossreviewtoolkit.utils.core.ortDataDirectory
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.installAuthenticatorAndProxySelector
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logOnce
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"

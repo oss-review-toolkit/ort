@@ -45,12 +45,12 @@ import org.ossreviewtoolkit.scanner.experimental.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.experimental.toNestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.storages.*
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.ortDataDirectory
-import org.ossreviewtoolkit.utils.core.perf
-import org.ossreviewtoolkit.utils.core.storage.HttpFileStorage
-import org.ossreviewtoolkit.utils.core.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.core.storage.XZCompressedLocalFileStorage
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.perf
+import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
 /**
  * The abstract class that storage backends for scan results need to implement.

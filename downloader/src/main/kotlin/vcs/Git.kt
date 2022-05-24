@@ -51,9 +51,9 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.core.installAuthenticatorAndProxySelector
-import org.ossreviewtoolkit.utils.core.log
-import org.ossreviewtoolkit.utils.core.showStackTrace
+import org.ossreviewtoolkit.utils.ort.installAuthenticatorAndProxySelector
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50

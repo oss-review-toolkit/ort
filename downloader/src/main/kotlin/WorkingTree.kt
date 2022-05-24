@@ -24,7 +24,7 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.core.filterVersionNames
+import org.ossreviewtoolkit.utils.ort.filterVersionNames
 
 /**
  * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
