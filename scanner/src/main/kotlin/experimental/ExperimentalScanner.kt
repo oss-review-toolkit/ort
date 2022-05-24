@@ -78,11 +78,11 @@ class ExperimentalScanner(
         val projectResults = if (projectScannerWrappers.isNotEmpty()) {
             val packages = ortResult.getProjects(skipExcluded).mapTo(mutableSetOf()) { it.toPackage() }
 
-            log.info { "Scanning ${packages.size} projects with ${projectScannerWrappers.size} scanners." }
+            log.info { "Scanning ${packages.size} project(s) with ${projectScannerWrappers.size} scanner(s)." }
 
             scan(packages, ScanContext(ortResult.labels, PackageType.PROJECT))
         } else {
-            log.info { "Skipping scan of projects because no project scanner is configured." }
+            log.info { "Skipping project scan as no project scanner is configured." }
 
             emptyMap()
         }
@@ -91,11 +91,11 @@ class ExperimentalScanner(
             val packages = ortResult.getPackages(skipExcluded).map { it.pkg }.filterNotConcluded()
                 .filterNotMetaDataOnly().toSet()
 
-            log.info { "Scanning ${packages.size} packages with ${packageScannerWrappers.size} scanners." }
+            log.info { "Scanning ${packages.size} package(s) with ${packageScannerWrappers.size} scanner(s)." }
 
             scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGE))
         } else {
-            log.info { "Skipping scan of packages because no package scanner is configured." }
+            log.info { "Skipping package scan as no package scanner is configured." }
 
             emptyMap()
         }
@@ -156,7 +156,7 @@ class ExperimentalScanner(
     }
 
     private fun resolvePackageProvenances(controller: ScanController) {
-        log.info { "Resolving provenance for ${controller.packages.size} packages." }
+        log.info { "Resolving provenance for ${controller.packages.size} package(s)." }
 
         val duration = measureTime {
             controller.packages.forEach { pkg ->
@@ -178,11 +178,11 @@ class ExperimentalScanner(
             }
         }
 
-        log.info { "Resolved provenance for ${controller.packages.size} packages in $duration." }
+        log.info { "Resolved provenance for ${controller.packages.size} package(s) in $duration." }
     }
 
     private fun resolveNestedProvenances(controller: ScanController) {
-        log.info { "Resolving nested provenances for ${controller.packages.size} packages." }
+        log.info { "Resolving nested provenances for ${controller.packages.size} package(s)." }
 
         val duration = measureTime {
             controller.getPackageProvenancesWithoutVcsPath().forEach { provenance ->
@@ -206,7 +206,7 @@ class ExperimentalScanner(
             }
         }
 
-        log.info { "Resolved nested provenance for ${controller.packages.size} packages in $duration." }
+        log.info { "Resolved nested provenance for ${controller.packages.size} package(s) in $duration." }
     }
 
     /**
@@ -220,18 +220,18 @@ class ExperimentalScanner(
             controller.getPackageScanners().forEach scanner@{ scanner ->
                 if (controller.hasCompleteScanResult(scanner, pkg)) {
                     log.debug {
-                        "Skipping scan of ${pkg.id.toCoordinates()} with package scanner ${scanner.name} because " +
+                        "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
                                 "stored results are available."
                     }
 
                     return@scanner
                 }
 
-                log.info { "Scanning ${pkg.id.toCoordinates()} with package scanner ${scanner.name}." }
+                log.info { "Scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' started." }
 
                 val scanResult = scanner.scanPackage(pkg, context)
 
-                log.info { "Scan of ${pkg.id.toCoordinates()} with package scanner ${scanner.name} finished." }
+                log.info { "Scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' finished." }
 
                 val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
 
@@ -254,14 +254,14 @@ class ExperimentalScanner(
             controller.getProvenanceScanners().forEach scanner@{ scanner ->
                 if (controller.hasScanResult(scanner, provenance)) {
                     log.debug {
-                        "Skipping scan of $provenance with provenance scanner ${scanner.name} because a result is " +
-                                "already available."
+                        "Skipping $provenance scan with provenance scanner '${scanner.name}' as a result is already " +
+                                "available."
                     }
 
                     return@scanner
                 }
 
-                log.info { "Scanning $provenance with provenance scanner ${scanner.name}." }
+                log.info { "Scanning $provenance with provenance scanner '${scanner.name}'." }
 
                 val scanResult = scanner.scanProvenance(provenance, context)
 
@@ -309,7 +309,7 @@ class ExperimentalScanner(
             ?: partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
                 if (skip.isNotEmpty()) {
                     this@ExperimentalScanner.log.debug {
-                        "Not scanning the following packages with concluded licenses: $skip"
+                        "Not scanning the following package(s) with concluded licenses: $skip"
                     }
                 }
 
@@ -320,7 +320,7 @@ class ExperimentalScanner(
         partition { it.isMetaDataOnly }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
                 this@ExperimentalScanner.log.debug {
-                    "Not scanning the following packages which are metadata only: $skip"
+                    "Not scanning the following package(s) which are metadata only: $skip"
                 }
             }
 
@@ -329,8 +329,8 @@ class ExperimentalScanner(
 
     private fun readStoredResults(controller: ScanController) {
         log.info {
-            "Reading stored scan results for ${controller.getPackageProvenancesWithoutVcsPath().size} packages with " +
-                    "${controller.getAllProvenances().size} provenances."
+            "Reading stored scan results for ${controller.getPackageProvenancesWithoutVcsPath().size} package(s) " +
+                    "with ${controller.getAllProvenances().size} provenance(s)."
         }
 
         val readDuration = measureTime {
@@ -338,12 +338,14 @@ class ExperimentalScanner(
             readStoredProvenanceResults(controller)
         }
 
-        log.info { "Read stored scan results in $readDuration:" }
+        log.info { "Read the following stored scan result(s) in $readDuration:" }
 
         val allKnownProvenances = controller.getAllProvenances()
         controller.scanners.forEach { scanner ->
             val results = controller.getScanResults(scanner)
-            log.info { "\t${scanner.name}: Results for ${results.size} of ${allKnownProvenances.size} provenances." }
+            log.info {
+                "\t${scanner.name}: Result(s) for ${results.size} of ${allKnownProvenances.size} provenance(s)."
+            }
         }
     }
 
@@ -367,7 +369,7 @@ class ExperimentalScanner(
                         e.showStackTrace()
 
                         log.warn {
-                            "Could not read scan result for ${pkg.id.toCoordinates()} from " +
+                            "Could not read scan result for '${pkg.id.toCoordinates()}' from " +
                                     "${reader.javaClass.simpleName}: ${e.collectMessages()}"
                         }
                     }
@@ -438,10 +440,11 @@ class ExperimentalScanner(
 
         return try {
             scanners.associateWith { scanner ->
-                log.info { "Scanning $provenance with path scanner ${scanner.name}." }
+                log.info { "Scan of $provenance with path scanner '${scanner.name}' started." }
 
                 val summary = scanner.scanPath(downloadDir, context)
-                log.info { "Scan of $provenance with path scanner ${scanner.name} finished." }
+
+                log.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }
 
                 ScanResult(provenance, scanner.details, summary)
             }
@@ -483,7 +486,7 @@ class ExperimentalScanner(
                 e.showStackTrace()
 
                 log.warn {
-                    "Could not write scan result for ${pkg.id.toCoordinates()} to ${writer.javaClass.simpleName}: " +
+                    "Could not write scan result for '${pkg.id.toCoordinates()}' to ${writer.javaClass.simpleName}: " +
                             e.collectMessages()
                 }
             }
@@ -507,7 +510,7 @@ class ExperimentalScanner(
             archiver.hasArchive(nestedProvenance.root)
         }
 
-        log.info { "Creating file archives for ${provenancesWithMissingArchives.size} packages." }
+        log.info { "Creating file archives for ${provenancesWithMissingArchives.size} package(s)." }
 
         val duration = measureTime {
             provenancesWithMissingArchives.forEach { (_, nestedProvenance) ->
@@ -517,7 +520,7 @@ class ExperimentalScanner(
             }
         }
 
-        log.info { "Created file archives for ${provenancesWithMissingArchives.size} packages in $duration." }
+        log.info { "Created file archives for ${provenancesWithMissingArchives.size} package(s) in $duration." }
     }
 
     private fun downloadRecursively(nestedProvenance: NestedProvenance): File {
