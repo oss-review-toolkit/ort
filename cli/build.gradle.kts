@@ -79,7 +79,7 @@ graal {
     outputName("ort")
 }
 
-tasks.withType<ShadowJar> {
+tasks.withType<ShadowJar>().configureEach {
     isZip64 = true
 }
 
