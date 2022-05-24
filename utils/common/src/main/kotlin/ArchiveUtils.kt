@@ -202,16 +202,17 @@ fun File.packZip(
     ZipArchiveOutputStream(targetFile).use { output ->
         output.setLevel(Deflater.BEST_COMPRESSION)
 
-        walkTopDown()
-            .onEnter { directoryFilter(it) }
-            .filter { Files.isRegularFile(it.toPath()) && fileFilter(it) && it != targetFile }
-            .forEach { file ->
-                val packPath = prefix + file.toRelativeString(this)
-                val entry = ZipArchiveEntry(file, packPath)
-                output.putArchiveEntry(entry)
-                file.inputStream().use { input -> input.copyTo(output) }
-                output.closeArchiveEntry()
-            }
+        walkTopDown().onEnter {
+            directoryFilter(it)
+        }.filter {
+            Files.isRegularFile(it.toPath()) && fileFilter(it) && it != targetFile
+        }.forEach { file ->
+            val packPath = prefix + file.toRelativeString(this)
+            val entry = ZipArchiveEntry(file, packPath)
+            output.putArchiveEntry(entry)
+            file.inputStream().use { input -> input.copyTo(output) }
+            output.closeArchiveEntry()
+        }
     }
 
     return targetFile
