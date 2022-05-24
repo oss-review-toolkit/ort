@@ -217,7 +217,7 @@ private const val LOCKFILE_FILENAME = "Podfile.lock"
 
 private const val SCOPE_NAME = "dependencies"
 
-private val NAME_AND_VERSION_REGEX = "([\\S]+)\\s+(.*)".toRegex()
+private val NAME_AND_VERSION_REGEX = "(\\S+)\\s+(.*)".toRegex()
 
 private fun getPackageReferences(podfileLock: File): SortedSet<PackageReference> {
     val versionForName = mutableMapOf<String, String>()
