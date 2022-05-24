@@ -26,6 +26,7 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.nio.file.Files
+import java.nio.file.LinkOption
 import java.util.zip.Deflater
 
 import kotlin.io.path.createTempDirectory
@@ -205,7 +206,7 @@ fun File.packZip(
         walkTopDown().onEnter {
             directoryFilter(it)
         }.filter {
-            Files.isRegularFile(it.toPath()) && fileFilter(it) && it != targetFile
+            Files.isRegularFile(it.toPath(), LinkOption.NOFOLLOW_LINKS) && fileFilter(it) && it != targetFile
         }.forEach { file ->
             val packPath = prefix + file.toRelativeString(this)
             val entry = ZipArchiveEntry(file, packPath)
