@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.utils.common.unpackTryAllTypes
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
@@ -104,7 +103,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 val result = downloadFromVcs(pkg, outputDirectory)
                 val vcsInfo = (result as RepositoryProvenance).vcsInfo
 
-                log.perf {
+                log.info {
                     "Downloaded source code for '${pkg.id.toCoordinates()}' from $vcsInfo in ${vcsMark.elapsedNow()}."
                 }
 
@@ -115,7 +114,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         } catch (e: DownloadException) {
             log.debug { "VCS download failed for '${pkg.id.toCoordinates()}': ${e.collectMessages()}" }
 
-            log.perf {
+            log.info {
                 "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.vcsProcessed} " +
                         "took ${vcsMark.elapsedNow()}."
             }
@@ -144,7 +143,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         try {
             val result = downloadSourceArtifact(pkg, outputDirectory)
 
-            log.perf {
+            log.info {
                 "Downloaded source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} in " +
                         "${sourceArtifactMark.elapsedNow()}."
             }
@@ -155,7 +154,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 "Source artifact download failed for '${pkg.id.toCoordinates()}': ${e.collectMessages()}"
             }
 
-            log.perf {
+            log.info {
                 "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} " +
                         "took ${sourceArtifactMark.elapsedNow()}."
             }

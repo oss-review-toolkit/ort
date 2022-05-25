@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.scanner.experimental.toNestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
-import org.ossreviewtoolkit.utils.ort.perf
 import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
@@ -205,7 +204,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 stats.numHits.incrementAndGet()
             }
 
-            log.perf {
+            log.info {
                 "Read ${results.size} scan result(s) for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
             }
@@ -233,7 +232,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 stats.numHits.incrementAndGet()
             }
 
-            log.perf {
+            log.info {
                 "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
             }
@@ -262,7 +261,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         result.onSuccess { results ->
             stats.numHits.addAndGet(results.count { (_, results) -> results.isNotEmpty() })
 
-            log.perf {
+            log.info {
                 "Read ${results.values.sumOf { it.size }} scan result(s) from ${javaClass.simpleName} in $duration."
             }
         }
@@ -289,9 +288,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
 
         val (result, duration) = measureTimedValue { addInternal(id, scanResult) }
 
-        log.perf {
-            "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in $duration."
-        }
+        log.info { "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in $duration." }
 
         return result
     }

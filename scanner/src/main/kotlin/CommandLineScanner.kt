@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 
 /**
  * A [PathScanner] that is executed as a [CommandLineTool] on the local machine.
@@ -72,9 +71,7 @@ abstract class CommandLineScanner(
                     }
                 }
 
-                log.perf {
-                    "Bootstrapped scanner '$scannerName' version $expectedVersion in $duration."
-                }
+                log.info { "Bootstrapped scanner '$scannerName' version $expectedVersion in $duration." }
 
                 bootstrapDirectory
             } else {
