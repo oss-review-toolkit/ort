@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.contain
 import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ORT_RESULT_WITH_VULNERABILITIES
@@ -32,9 +33,14 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class PdfTemplateReporterFunTest : StringSpec({
     "The report is created successfully from an existing result and default template" {
-        val report = PdfTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir())
+        val report = PdfTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single()
 
-        report.single().length() should beInRange(92000L..97000L)
+        report.reader().use {
+            val header = CharArray(4)
+            it.read(header) shouldBe header.size
+            String(header) shouldBe "%PDF"
+        }
+        report.length() should beInRange(82000L..84000L)
     }
 
     "Report generation is aborted when path to non-existing PDF theme file is given" {
