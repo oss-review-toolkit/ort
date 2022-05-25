@@ -80,7 +80,6 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
-import org.ossreviewtoolkit.utils.ort.perf
 
 class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT result files against policy rules.") {
     private val ortFile by option(
@@ -313,7 +312,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }
 
-        log.perf { "Executed the evaluator in $duration." }
+        log.info { "Executed the evaluator in $duration." }
 
         evaluatorRun.violations.forEach { violation ->
             println(violation.format())
