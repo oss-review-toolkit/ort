@@ -1,7 +1,7 @@
 ---
 excludes:
   paths:
-  - pattern: "*/src/{funTest,test}/**"
+  - pattern: "**/src/{funTest,test}/**"
     reason: "TEST_OF"
     comment: "Licenses contained in this directory are used for testing and do not\
       \ apply to the OSS Review Toolkit."
