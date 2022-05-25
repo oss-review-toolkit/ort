@@ -168,9 +168,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
 
             List<Configuration> configurations = project.configurations.findResults { configuration ->
-                // For versions of Gradle before the "canBeResolved" property was introduced, consider any
-                // configuration to be resolvable.
-                if (!configuration.hasProperty('canBeResolved') || configuration.canBeResolved) {
+                if (canBeResolved(configuration)) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
                     Set<ResolvedArtifact> resolvedArtifacts = []
 
@@ -351,6 +349,20 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                 return dependencyFromDisplayName(dependencyResult.requested.displayName, [],
                         "Unknown result type: ${dependencyResult.getClass().simpleName}", null)
             }
+        }
+
+        private static boolean canBeResolved(org.gradle.api.artifacts.Configuration configuration) {
+            // The canBeResolved property is available since Gradle 3.3.
+            boolean canBeResolved = !configuration.hasProperty('canBeResolved') || configuration.canBeResolved
+
+            // The function getResolutionAlternatives() which belongs to the DeprecatableConfiguration class is
+            // available since Gradle 6.0.
+            boolean isDeprecatedForResolving = false
+            if (configuration.metaClass.respondsTo(configuration, 'getResolutionAlternatives')) {
+                isDeprecatedForResolving = configuration.getResolutionAlternatives() != null
+            }
+
+            return canBeResolved && !isDeprecatedForResolving
         }
 
         private static String collectCauses(Throwable throwable) {
