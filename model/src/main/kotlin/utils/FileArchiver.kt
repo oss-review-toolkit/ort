@@ -103,11 +103,11 @@ class FileArchiver(
             }
         }
 
-        log.perf { "Archived directory '${directory.invariantSeparatorsPath}' in $zipDuration." }
+        log.perf { "Archived directory '$directory' in $zipDuration." }
 
         val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
 
-        log.perf { "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in $writeDuration." }
+        log.perf { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
         zipFile.delete()
     }
@@ -118,18 +118,14 @@ class FileArchiver(
     fun unarchive(directory: File, provenance: KnownProvenance): Boolean {
         val (zipFile, readDuration) = measureTimedValue { storage.getArchive(provenance) }
 
-        log.perf {
-            "Read archive of directory '${directory.invariantSeparatorsPath}' from storage in $readDuration."
-        }
+        log.perf { "Read archive of directory '$directory' from storage in $readDuration." }
 
         if (zipFile == null) return false
 
         return try {
             val unzipDuration = measureTime { zipFile.inputStream().use { it.unpackZip(directory) } }
 
-            log.perf {
-                "Unarchived directory '${directory.invariantSeparatorsPath}' in $unzipDuration."
-            }
+            log.perf { "Unarchived directory '$directory' in $unzipDuration." }
 
             true
         } catch (e: IOException) {
