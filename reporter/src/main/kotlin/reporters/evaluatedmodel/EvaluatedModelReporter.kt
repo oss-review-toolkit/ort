@@ -26,8 +26,6 @@ import kotlin.time.measureTimedValue
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 
 /**
  * A [Reporter] that generates an [EvaluatedModel].
@@ -48,8 +46,6 @@ class EvaluatedModelReporter : Reporter {
         options: Map<String, String>
     ): List<File> {
         val evaluatedModel = measureTimedValue { EvaluatedModel.create(input) }
-
-        log.perf { "Generating evaluated model took ${evaluatedModel.duration}." }
 
         val outputFiles = mutableListOf<File>()
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
