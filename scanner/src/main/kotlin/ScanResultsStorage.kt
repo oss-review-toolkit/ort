@@ -206,7 +206,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             }
 
             log.perf {
-                "Read ${results.size} scan results for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                "Read ${results.size} scan result(s) for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
             }
         }
@@ -234,7 +234,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             }
 
             log.perf {
-                "Read ${results.size} scan results for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
+                "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
             }
         }
@@ -263,7 +263,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             stats.numHits.addAndGet(results.count { (_, results) -> results.isNotEmpty() })
 
             log.perf {
-                "Read ${results.values.sumOf { it.size }} scan results from ${javaClass.simpleName} in $duration."
+                "Read ${results.values.sumOf { it.size }} scan result(s) from ${javaClass.simpleName} in $duration."
             }
         }
 
