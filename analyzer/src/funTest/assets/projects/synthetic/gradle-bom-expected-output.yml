@@ -19,9 +19,6 @@ project:
   - name: "compileClasspath"
     dependencies:
     - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
-  - name: "default"
-    dependencies:
-    - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
   - name: "runtimeClasspath"
     dependencies:
     - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
