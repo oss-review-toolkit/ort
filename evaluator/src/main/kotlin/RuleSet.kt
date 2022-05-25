@@ -25,6 +25,8 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.ort.log
 
@@ -33,7 +35,8 @@ import org.ossreviewtoolkit.utils.ort.log
  */
 class RuleSet(
     val ortResult: OrtResult,
-    val licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver()
+    val licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
+    val resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(ortResult)
 ) {
     /**
      * The list of all issues created by the rules of this [RuleSet].
@@ -145,5 +148,6 @@ class RuleSet(
 fun ruleSet(
     ortResult: OrtResult,
     licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
+    resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
     configure: RuleSet.() -> Unit
-) = RuleSet(ortResult, licenseInfoResolver).apply(configure)
+) = RuleSet(ortResult, licenseInfoResolver, resolutionProvider).apply(configure)

@@ -307,9 +307,10 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )
 
+        val resolutionProvider = DefaultResolutionProvider.create(ortResultInput, resolutionsFile)
         val licenseClassifications =
             licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
-        val evaluator = Evaluator(ortResultInput, licenseInfoResolver, licenseClassifications)
+        val evaluator = Evaluator(ortResultInput, licenseInfoResolver, resolutionProvider, licenseClassifications)
 
         val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }
 
@@ -327,7 +328,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             writeOrtResult(ortResultOutput, outputFiles, "evaluation")
         }
 
-        val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
         val (resolvedViolations, unresolvedViolations) =
             evaluatorRun.violations.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromRuleViolations(resolvedViolations, unresolvedViolations)
