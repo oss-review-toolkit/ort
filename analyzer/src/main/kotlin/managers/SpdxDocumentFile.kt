@@ -113,7 +113,16 @@ private fun SpdxPackage.getRemoteArtifact(): RemoteArtifact? =
     when {
         SpdxConstants.isNotPresent(downloadLocation) -> null
         SPDX_VCS_PREFIXES.any { (prefix, _) -> downloadLocation.startsWith(prefix) } -> null
-        else -> RemoteArtifact(downloadLocation, Hash.NONE)
+        else -> {
+            if (downloadLocation.endsWith(".git")) {
+                log.warn {
+                    "The download location $downloadLocation of SPDX package '$spdxId' looks like a Git repository " +
+                            "URL but it lacks the 'git+' prefix and thus will be treated as an artifact URL."
+                }
+            }
+
+            RemoteArtifact(downloadLocation, Hash.NONE)
+        }
     }
 
 /**
