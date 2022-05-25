@@ -233,7 +233,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
         }.recover {
             // As Git's dumb HTTP transport does not support shallow capabilities, also try to not limit the depth.
-            workingTree.runGit("submodule", "update", "--init", "--recursive")
+            workingTree.runGit("submodule", "update", "--recursive")
         }
     }
 
