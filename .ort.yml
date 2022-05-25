@@ -9,10 +9,11 @@ excludes:
     reason: "DATA_FILE_OF"
     comment: "Licenses contained in this class are used for processing licenses and\
       \ do not apply to the OSS Review Toolkit."
-  - pattern: "utils/spdx/src/main/resources/{exceptions,licenserefs,licenses}/**"
+  - pattern: "utils/spdx/src/main/resources/**"
     reason: "DATA_FILE_OF"
-    comment: "This license file is used for generating license notes and does not\
-      \ apply to the OSS Review Toolkit."
+    comment: "Licenses contained in this directory are used for generating license\
+      \ notes and mapping licenses and exceptions. They do not apply to the OSS Review\
+      \ Toolkit."
   - pattern: "utils/test/**"
     reason: "TEST_OF"
     comment: "Licenses contained in this directory are used for testing and do not\
@@ -66,11 +67,10 @@ curations:
     reason: "DATA_OF"
     comment: "This file defines official SPDX.org exceptions so they can be used in\
       \ OSS Review Toolkit."
-  - path: "utils/spdx/src/main/kotlin/{SpdxDeclaredLicenseMapping.kt,SpdxSimpleLicenseMapping.kt}"
+  - path: "utils/spdx/src/main/resources/{declared-license-mapping.yml,deprecated-license-mapping.yml,exception-mapping.yml,simple-license-mapping.yml}"
     concluded_license: "Apache-2.0"
     reason: "DATA_OF"
-    comment: "These files map declared licenses to SPDX.org license ids so they can\
-      \ be used in OSS Review Toolkit."
+    comment: "These files contain mappings for licenses and exceptions."
   - path: "utils/spdx/src/main/resources/licenserefs/**"
     concluded_license: "CC0-1.0"
     reason: "DATA_OF"
