@@ -31,6 +31,7 @@ import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.io.IOException
+import java.nio.file.Files
 
 import org.apache.commons.compress.archivers.ArchiveEntry
 
@@ -411,6 +412,23 @@ class ArchiveUtilsTest : WordSpec() {
                 }
 
                 exception.message shouldContain noArchive.toString()
+            }
+        }
+
+        "packZip" should {
+            "not follow symbolic links".config(enabled = Os.isLinux) {
+                val inputDir = createTestTempDir()
+                val parentDir = inputDir.resolve("parent").apply { safeMkdirs() }
+                val readmeFile = parentDir.resolve("readme.txt").apply { writeText("Hello World!") }
+                Files.createSymbolicLink(parentDir.resolve("loop-link").toPath(), parentDir.toPath())
+                Files.createSymbolicLink(parentDir.resolve("readme-link.txt").toPath(), readmeFile.toPath())
+
+                val zipFile = inputDir.packZip(outputDir.resolve("archive.zip")) {
+                    it shouldBe readmeFile
+                    true
+                }
+
+                zipFile shouldBe aFile()
             }
         }
     }

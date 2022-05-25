@@ -204,7 +204,7 @@ fun File.packZip(
         output.setLevel(Deflater.BEST_COMPRESSION)
 
         walkTopDown().onEnter {
-            directoryFilter(it)
+            Files.isDirectory(it.toPath(), LinkOption.NOFOLLOW_LINKS) && directoryFilter(it)
         }.filter {
             Files.isRegularFile(it.toPath(), LinkOption.NOFOLLOW_LINKS) && fileFilter(it) && it != targetFile
         }.forEach { file ->
