@@ -61,7 +61,6 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private const val ROOT_DEPENDENCIES_SCRIPT = "scripts/bundler_root_dependencies.rb"
@@ -125,7 +124,7 @@ class Bundler(
                 )
             }
 
-            log.perf { "Installing the ${requiredGems.joinToString()} gem(s) took $duration." }
+            log.info { "Installing the ${requiredGems.joinToString()} gem(s) took $duration." }
         }
     }
 

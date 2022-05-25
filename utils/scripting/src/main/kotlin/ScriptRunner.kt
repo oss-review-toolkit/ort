@@ -32,7 +32,6 @@ import kotlin.time.measureTimedValue
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 
 /**
  * A class providing the framework to run Kotlin scripts.
@@ -55,7 +54,7 @@ abstract class ScriptRunner {
             runBlocking { scriptingHost.compiler.invoke(script.toScriptSource(), compConfig) }
         }
 
-        log.perf { "Compiling the script took $duration." }
+        log.info { "Compiling the script took $duration." }
 
         logReports(result.reports)
 
@@ -70,7 +69,7 @@ abstract class ScriptRunner {
             scriptingHost.eval(script.toScriptSource(), compConfig, evalConfig)
         }
 
-        log.perf { "Evaluating the script took $duration." }
+        log.info { "Evaluating the script took $duration." }
 
         logReports(result.reports)
 

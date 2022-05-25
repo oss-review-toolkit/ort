@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.formatSizeInMib
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 
 fun <T : GroupableOption> T.group(name: String): T = apply { groupName = name }
 
@@ -51,9 +50,7 @@ fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
 
     val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
 
-    log.perf {
-        "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in $duration."
-    }
+    log.info { "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in $duration." }
 
     return ortResult
 }
@@ -66,9 +63,7 @@ fun CliktCommand.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<Fi
         println("Writing $resultName result to '$file'.")
         val duration = measureTime { file.writeValue(ortResult) }
 
-        log.perf {
-            "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in $duration."
-        }
+        log.info { "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in $duration." }
 
         log.debug { "Output ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(file)}." }
     }

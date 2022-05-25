@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphConverter
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 
 class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
     private val projects = sortedSetOf<Project>()
@@ -85,7 +84,7 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     fun addPackages(packageSet: Set<Package>): AnalyzerResultBuilder {
         val (curations, duration) = measureTimedValue { curationProvider.getCurationsFor(packageSet.map { it.id }) }
 
-        log.perf { "Getting package curations took $duration." }
+        log.info { "Getting package curations took $duration." }
 
         packages += packageSet.map { pkg ->
             curations[pkg.id].orEmpty().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
