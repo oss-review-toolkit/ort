@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
-import org.ossreviewtoolkit.utils.ort.perf
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -103,11 +102,11 @@ class FileArchiver(
             }
         }
 
-        log.perf { "Archived directory '$directory' in $zipDuration." }
+        log.info { "Archived directory '$directory' in $zipDuration." }
 
         val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
 
-        log.perf { "Wrote archive of directory '$directory' to storage in $writeDuration." }
+        log.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
         zipFile.delete()
     }
@@ -118,14 +117,14 @@ class FileArchiver(
     fun unarchive(directory: File, provenance: KnownProvenance): Boolean {
         val (zipFile, readDuration) = measureTimedValue { storage.getArchive(provenance) }
 
-        log.perf { "Read archive of directory '$directory' from storage in $readDuration." }
+        log.info { "Read archive of directory '$directory' from storage in $readDuration." }
 
         if (zipFile == null) return false
 
         return try {
             val unzipDuration = measureTime { zipFile.inputStream().use { it.unpackZip(directory) } }
 
-            log.perf { "Unarchived directory '$directory' in $unzipDuration." }
+            log.info { "Unarchived directory '$directory' in $unzipDuration." }
 
             true
         } catch (e: IOException) {

@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.perf
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -292,7 +291,7 @@ abstract class PathScanner(
             scanPathInternal(pkgDownloadDirectory).filterByPath(vcsPath)
         }
 
-        log.perf { "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in $scanDuration." }
+        log.info { "Scanned source code of '${pkg.id.toCoordinates()}' with ${javaClass.simpleName} in $scanDuration." }
 
         val scanResult = ScanResult(provenance, scannerDetails, scanSummary)
         val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
