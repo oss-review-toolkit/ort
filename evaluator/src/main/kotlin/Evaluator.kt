@@ -30,19 +30,22 @@ import org.ossreviewtoolkit.model.EvaluatorRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Evaluator(
     ortResult: OrtResult = OrtResult.EMPTY,
     licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
+    resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
     licenseClassifications: LicenseClassifications = LicenseClassifications(),
     time: Instant = Instant.now()
 ) : ScriptRunner() {
     override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
 
     override val evalConfig = ScriptEvaluationConfiguration {
-        constructorArgs(ortResult, licenseInfoResolver, licenseClassifications, time)
+        constructorArgs(ortResult, licenseInfoResolver, resolutionProvider, licenseClassifications, time)
         scriptsInstancesSharing(true)
     }
 
