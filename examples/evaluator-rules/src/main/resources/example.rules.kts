@@ -93,7 +93,7 @@ fun PackageRule.LicenseRule.isCopyleftLimited() =
  */
 
 // Define the set of policy rules.
-val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
+val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
     packageRule("UNHANDLED_LICENSE") {
         // Do not trigger this rule on packages that have been excluded in the .ort.yml.

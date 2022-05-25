@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
 
 class RulesScriptCompilationConfiguration : ScriptCompilationConfiguration(
@@ -53,6 +54,7 @@ class RulesScriptCompilationConfiguration : ScriptCompilationConfiguration(
 open class RulesScriptTemplate(
     val ortResult: OrtResult,
     val licenseInfoResolver: LicenseInfoResolver,
+    val resolutionProvider: ResolutionProvider,
     val licenseClassifications: LicenseClassifications,
     val time: Instant
 ) {
