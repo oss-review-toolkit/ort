@@ -76,7 +76,7 @@ class JsonSchemaTest : StringSpec() {
 
         "package-configuration.yml validates successfully" {
             val packageConfigurationSchema = JsonSchemaFactory
-                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
                 .objectMapper(mapper)
                 .build()
                 .getSchema(File("../integrations/schemas/package-configuration-schema.json").toURI())
