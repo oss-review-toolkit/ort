@@ -159,48 +159,7 @@
       "type": "array",
       "description": "A configuration for a specific package and provenance.",
       "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "source_artifact_url": {
-            "type": "string"
-          },
-          "vcs": {
-            "$ref": "#/definitions/vcsMatcher"
-          },
-          "license_finding_curations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/licenseFindingCurations"
-            }
-          },
-          "path_excludes": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "pattern": {
-                  "type": "string"
-                },
-                "reason": {
-                  "$ref": "#/definitions/pathExcludeReason"
-                },
-                "comment": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "pattern",
-                "reason"
-              ]
-            }
-          }
-        },
-        "required": [
-          "id"
-        ]
+        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-configuration-schema.json"
       }
     },
     "license_choices": {
