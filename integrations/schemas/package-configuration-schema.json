@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://oss-review-toolkit.org/package-configuration.yml",
   "title": "ORT package configuration",
   "description": "The OSS-Review-Toolkit (ORT) provides a possibility to define path excludes and license finding curations for a specific package (dependency) and provenance in a package configuration file. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-package-configuration-yml.md.",
