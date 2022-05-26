@@ -213,45 +213,6 @@
     }
   },
   "definitions": {
-    "vcsMatcher": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        },
-        "revision": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        }
-      },
-      "anyOf": [
-        {
-          "required": [
-            "type"
-          ]
-        },
-        {
-          "required": [
-            "url"
-          ]
-        },
-        {
-          "required": [
-            "revision"
-          ]
-        },
-        {
-          "required": [
-            "path"
-          ]
-        }
-      ]
-    },
     "licenseFindingCurations": {
       "type": "object",
       "properties": {
