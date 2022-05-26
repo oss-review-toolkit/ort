@@ -47,7 +47,7 @@ class JsonSchemaTest : StringSpec() {
             errors should beEmpty()
         }
 
-        ".ort.yml examples validates successfully" {
+        ".ort.yml examples validate successfully" {
             val examplesDir = File("../examples")
             val exampleFiles =
                 examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(".ort.yml") }
