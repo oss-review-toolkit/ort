@@ -32,7 +32,7 @@ import java.io.File
 class JsonSchemaTest : StringSpec() {
     private val mapper = FileFormat.YAML.mapper
 
-    private val schema = JsonSchemaFactory
+    private val repositoryConfigurationSchema = JsonSchemaFactory
         .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
         .objectMapper(mapper)
         .build()
@@ -42,7 +42,7 @@ class JsonSchemaTest : StringSpec() {
         ".ort.yml validates successfully" {
             val repositoryConfiguration = File("../.ort.yml").toJsonNode()
 
-            val errors = schema.validate(repositoryConfiguration)
+            val errors = repositoryConfigurationSchema.validate(repositoryConfiguration)
 
             errors should beEmpty()
         }
@@ -55,7 +55,7 @@ class JsonSchemaTest : StringSpec() {
             exampleFiles.forAll {
                 val repositoryConfiguration = it.toJsonNode()
 
-                val errors = schema.validate(repositoryConfiguration)
+                val errors = repositoryConfigurationSchema.validate(repositoryConfiguration)
 
                 errors should beEmpty()
             }
