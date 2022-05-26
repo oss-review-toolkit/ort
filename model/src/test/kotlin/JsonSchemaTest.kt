@@ -60,6 +60,19 @@ class JsonSchemaTest : StringSpec() {
                 errors should beEmpty()
             }
         }
+
+        "curation.yml example validates successfully" {
+            val curationsSchema = JsonSchemaFactory
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
+                .objectMapper(mapper)
+                .build()
+                .getSchema(File("../integrations/schemas/curations-schema.json").toURI())
+            val curationsExample = File("../examples/curations.yml").toJsonNode()
+
+            val errors = curationsSchema.validate(curationsExample)
+
+            errors should beEmpty()
+        }
     }
 
     private fun File.toJsonNode() = mapper.readTree(inputStream())
