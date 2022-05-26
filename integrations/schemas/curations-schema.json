@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oss-review-toolkit.org/curations.yml",
+  "title": "ORT curations",
+  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to correct metadata and set the concluded license for a specific packages (dependencies) in curation files. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-curations-yml.md.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "curations": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string"
+          },
+          "authors": {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "concluded_license": {
+            "type": "string"
+          },
+          "cpe": {
+            "type": "string"
+          },
+          "declared_license_mapping": {
+            "type": "object"
+          },
+          "description": {
+            "type": "string"
+          },
+          "homepage_url": {
+            "type": "string"
+          },
+          "purl": {
+            "type": "string"
+          },
+          "binary_artifact": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "hash": {
+                "$ref": "#/definitions/hash"
+              },
+              "hash_algorithm": {
+                "type": "string"
+              }
+            },
+            "if": {
+              "properties": {
+                "hash": {
+                  "type": "object"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "hash"
+              ]
+            },
+            "else": {
+              "required": [
+                "hash",
+                "hash_algorithm"
+              ]
+            },
+            "required": [
+              "url"
+            ]
+          },
+          "source_artifact": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "hash": {
+                "$ref": "#/definitions/hash"
+              },
+              "hash_algorithm": {
+                "type": "string"
+              }
+            },
+            "if": {
+              "properties": {
+                "hash": {
+                  "type": "object"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "hash"
+              ]
+            },
+            "else": {
+              "required": [
+                "hash",
+                "hash_algorithm"
+              ]
+            },
+            "required": [
+              "url"
+            ]
+          },
+          "vcs": {
+            "$ref": "#/definitions/vcsMatcher"
+          },
+          "is_meta_data_only": {
+            "type": "boolean"
+          },
+          "is_modified": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "required": [
+      "id",
+      "curations"
+    ]
+  },
+  "definitions": {
+    "vcsMatcher": {
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        },
+        {
+          "required": [
+            "revision"
+          ]
+        },
+        {
+          "required": [
+            "path"
+          ]
+        }
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "hash": {
+      "type": ["string", "object"],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "algorithm": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "algorithm"
+      ]
+    }
+  }
+}
