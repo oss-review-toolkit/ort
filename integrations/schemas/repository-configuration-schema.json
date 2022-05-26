@@ -153,7 +153,19 @@
         "packages": {
           "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/curations-schema.json"
         }
-      }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "license_findings"
+          ]
+        },
+        {
+          "required": [
+            "packages"
+          ]
+        }
+      ]
     },
     "package_configurations": {
       "type": "array",
