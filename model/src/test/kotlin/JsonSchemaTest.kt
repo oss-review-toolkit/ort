@@ -73,6 +73,19 @@ class JsonSchemaTest : StringSpec() {
 
             errors should beEmpty()
         }
+
+        "package-configuration.yml validates successfully" {
+            val packageConfigurationSchema = JsonSchemaFactory
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
+                .objectMapper(mapper)
+                .build()
+                .getSchema(File("../integrations/schemas/package-configuration-schema.json").toURI())
+            val packageConfiguration = File("src/test/assets/package-configuration.yml").toJsonNode()
+
+            val errors = packageConfigurationSchema.validate(packageConfiguration)
+
+            errors should beEmpty()
+        }
     }
 
     private fun File.toJsonNode() = mapper.readTree(inputStream())
