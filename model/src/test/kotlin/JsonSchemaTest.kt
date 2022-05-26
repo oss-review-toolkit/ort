@@ -33,7 +33,7 @@ class JsonSchemaTest : StringSpec() {
     private val mapper = FileFormat.YAML.mapper
 
     private val repositoryConfigurationSchema = JsonSchemaFactory
-        .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
+        .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
         .objectMapper(mapper)
         .build()
         .getSchema(File("../integrations/schemas/repository-configuration-schema.json").toURI())
