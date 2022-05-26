@@ -40,7 +40,7 @@ class PdfTemplateReporterFunTest : StringSpec({
             it.read(header) shouldBe header.size
             String(header) shouldBe "%PDF"
         }
-        report.length() should beInRange(82000L..84000L)
+        report.length() should beInRange(82000L..86000L)
     }
 
     "Report generation is aborted when path to non-existing PDF theme file is given" {
