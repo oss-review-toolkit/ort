@@ -596,6 +596,16 @@ class Pip(
                 }
             }
 
+            val projectUrls = pkgInfo["project_urls"]
+            val vcsFallbackUrls = listOfNotNull(
+                homepageUrl,
+                pkgInfo["project_url"]?.textValue(),
+                projectUrls["Code"]?.textValue(),
+                projectUrls["Homepage"]?.textValue(),
+                projectUrls["Source"]?.textValue(),
+                projectUrls["Source Code"]?.textValue()
+            ).toTypedArray()
+
             Package(
                 id = id,
                 homepageUrl = homepageUrl,
@@ -606,7 +616,7 @@ class Pip(
                 binaryArtifact = getBinaryArtifact(pkgRelease),
                 sourceArtifact = getSourceArtifact(pkgRelease),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
+                vcsProcessed = processPackageVcs(VcsInfo.EMPTY, *vcsFallbackUrls)
             )
         }.onFailure {
             log.warn { "Unable to retrieve PyPI metadata for package '${id.toCoordinates()}'." }
