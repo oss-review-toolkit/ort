@@ -57,8 +57,8 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/click.git"
     revision: ""
     path: ""
 - id: "PyPI::flask:0.12"
@@ -157,8 +157,8 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/itsdangerous.git"
     revision: ""
     path: ""
 - id: "PyPI::jinja2:2.8.1"
@@ -225,8 +225,8 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/markupsafe.git"
     revision: ""
     path: ""
 - id: "PyPI::werkzeug:2.1.2"
@@ -258,7 +258,7 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/werkzeug.git"
     revision: ""
     path: ""
