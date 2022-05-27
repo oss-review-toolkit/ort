@@ -53,8 +53,8 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/django/django.git"
     revision: ""
     path: ""
 - id: "PyPI::pytz:2019.3"
