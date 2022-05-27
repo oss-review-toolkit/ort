@@ -92,8 +92,8 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/flask.git"
     revision: ""
     path: ""
 - id: "PyPI::itsdangerous:0.24"
@@ -157,8 +157,8 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/jinja.git"
     revision: ""
     path: ""
 - id: "PyPI::markupsafe:1.0"
@@ -224,7 +224,7 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/werkzeug.git"
     revision: ""
     path: ""
