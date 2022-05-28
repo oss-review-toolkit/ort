@@ -67,13 +67,19 @@ class PipFunTest : WordSpec() {
         }
 
         "Python 3" should {
-            "resolve requirements.txt dependencies correctly for example-python-flask".config(enabled = !Os.isWindows) {
+            "resolve requirements.txt dependencies correctly for example-python-flask" {
                 val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
 
                 val result = createPip().resolveSingleProject(definitionFile)
 
                 // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
-                val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
+                val expectedResultsFile = buildString {
+                    append("external/example-python-flask-expected-output")
+                    if (Os.isWindows) append("-windows")
+                    append(".yml")
+                }
+
+                val expectedResult = projectsDir.resolve(expectedResultsFile).readText()
 
                 result.toYaml() shouldBe expectedResult
             }
