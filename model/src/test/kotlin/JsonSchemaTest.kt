@@ -86,6 +86,19 @@ class JsonSchemaTest : StringSpec() {
 
             errors should beEmpty()
         }
+
+        "resolutions.yml example validates successfully" {
+            val curationsSchema = JsonSchemaFactory
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
+                .objectMapper(mapper)
+                .build()
+                .getSchema(File("../integrations/schemas/resolutions-schema.json").toURI())
+            val curationsExample = File("../examples/resolutions.yml").toJsonNode()
+
+            val errors = curationsSchema.validate(curationsExample)
+
+            errors should beEmpty()
+        }
     }
 
     private fun File.toJsonNode() = mapper.readTree(inputStream())
