@@ -55,90 +55,7 @@
       }
     },
     "resolutions": {
-      "type": "object",
-      "description": "Resolutions for issues and rule violations.",
-      "properties": {
-        "issues": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string"
-              },
-              "reason": {
-                "$ref": "#/definitions/issueResolutionReason"
-              },
-              "comment": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "message",
-              "reason"
-            ]
-          }
-        },
-        "rule_violations": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string"
-              },
-              "reason": {
-                "$ref": "#/definitions/ruleViolationResolutionReason"
-              },
-              "comment": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "message",
-              "reason"
-            ]
-          }
-        },
-        "vulnerabilities": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "reason": {
-                "$ref": "#/definitions/vulnerabilityResolutionReason"
-              },
-              "comment": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "id",
-              "reason"
-            ]
-          }
-        }
-      },
-      "anyOf": [
-        {
-          "required": [
-            "issues"
-          ]
-        },
-        {
-          "required": [
-            "rule_violations"
-          ]
-        },
-        {
-          "required": [
-            "vulnerabilities"
-          ]
-        }
-      ]
+      "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/resolutions-schema.json"
     },
     "curations": {
       "type": "object",
@@ -281,23 +198,6 @@
         "RUNTIME_DEPENDENCY_OF"
       ]
     },
-    "issueResolutionReason": {
-      "enum": [
-        "BUILD_TOOL_ISSUE",
-        "CANT_FIX_ISSUE",
-        "SCANNER_ISSUE"
-      ]
-    },
-    "ruleViolationResolutionReason": {
-      "enum": [
-        "CANT_FIX_EXCEPTION",
-        "DYNAMIC_LINKAGE_EXCEPTION",
-        "EXAMPLE_OF_EXCEPTION",
-        "LICENSE_ACQUIRED_EXCEPTION",
-        "NOT_MODIFIED_EXCEPTION",
-        "PATENT_GRANT_EXCEPTION"
-      ]
-    },
     "licenseFindingCurationReason": {
       "enum": [
         "CODE",
@@ -306,16 +206,6 @@
         "INCORRECT",
         "NOT_DETECTED",
         "REFERENCE"
-      ]
-    },
-    "vulnerabilityResolutionReason": {
-      "enum": [
-        "CANT_FIX_VULNERABILITY",
-        "INEFFECTIVE_VULNERABILITY",
-        "INVALID_MATCH_VULNERABILITY",
-        "MITIGATED_VULNERABILITY",
-        "WILL_NOT_FIX_VULNERABILITY",
-        "WORKAROUND_FOR_VULNERABILITY"
       ]
     }
   }
