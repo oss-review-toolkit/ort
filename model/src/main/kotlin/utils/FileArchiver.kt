@@ -122,7 +122,7 @@ class FileArchiver(
         if (zipFile == null) return false
 
         return try {
-            val unzipDuration = measureTime { zipFile.inputStream().use { it.unpackZip(directory) } }
+            val unzipDuration = measureTime { zipFile.unpackZip(directory) }
 
             log.info { "Unarchived directory '$directory' in $unzipDuration." }
 
