@@ -81,8 +81,9 @@ class FileArchiverTest : StringSpec() {
 
             val archiver = FileArchiver.createDefault()
             archiver.archive(workingDir, PROVENANCE)
-            archiver.unarchive(targetDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
 
+            result shouldBe true
             with(targetDir) {
                 shouldContainFileWithContent("LICENSE")
                 shouldContainFileWithContent("path/LICENSE")
@@ -97,8 +98,9 @@ class FileArchiverTest : StringSpec() {
 
             val archiver = FileArchiver.createDefault()
             archiver.archive(workingDir, PROVENANCE)
-            archiver.unarchive(targetDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
 
+            result shouldBe true
             with(targetDir) {
                 shouldContainFileWithContent("a/LICENSE")
                 shouldContainFileWithContent("b/License")
@@ -116,8 +118,9 @@ class FileArchiverTest : StringSpec() {
             val archiver = FileArchiver(listOf("a", "**/a"), storage)
 
             archiver.archive(workingDir, PROVENANCE)
-            archiver.unarchive(targetDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
 
+            result shouldBe true
             targetDir.shouldContainFileWithContent("a")
             targetDir.shouldContainFileWithContent("d/a")
 
