@@ -103,14 +103,19 @@ fun File.unpack(
  */
 fun File.unpackTryAllTypes(targetDirectory: File, filter: (ArchiveEntry) -> Boolean = { true }) {
     val typeFromName = ArchiveType.getType(name)
+    val suppressedExceptions = mutableListOf<Throwable>()
 
     enumValues<ArchiveType>().mapNotNullTo(mutableListOf(typeFromName)) { type ->
         type.takeUnless { type == typeFromName || type == ArchiveType.NONE }
     }.find { archiveType ->
         runCatching {
             unpack(targetDirectory, forceArchiveType = archiveType, filter)
+        }.onFailure {
+            suppressedExceptions += IOException("Unpacking '$this' as $archiveType failed.", it)
         }.isSuccess
-    } ?: throw IOException("Unable to unpack '$this'. This file is not a supported archive type.")
+    } ?: throw IOException("Unable to unpack '$this'. This file is not a supported archive type.").apply {
+        suppressedExceptions.forEach(::addSuppressed)
+    }
 }
 
 /**
