@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
+import io.kotest.matchers.file.shouldContainNFiles
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
@@ -151,6 +152,15 @@ class FileArchiverTest : StringSpec() {
                 shouldContainFileWithContent("c/a")
                 shouldContainFileWithContent("c/b")
             }
+        }
+
+        "Empty archives can be handled" {
+            val archiver = FileArchiver.createDefault()
+
+            archiver.archive(workingDir, PROVENANCE)
+
+            archiver.unarchive(targetDir, PROVENANCE) shouldBe true
+            targetDir shouldContainNFiles 0
         }
     }
 }
