@@ -81,12 +81,35 @@ class NodeSupportTest : WordSpec() {
             }
         }
 
+        "hasYarn2ResourceFile" should {
+            "return false if no Yarn 2+ resource file is present" {
+                setupProject(path = "a")
+
+                hasYarn2ResourceFile("a") shouldBe false
+            }
+
+            "return true if a Yarn 2+ resource file is present" {
+                setupProject(path = "a", hasYarn2ResourceFile = true)
+
+                hasYarn2ResourceFile("a") shouldBe true
+            }
+        }
+
         "Definition file mapping" should {
-            "happen for Yarn only if both Yarn and NPM lockfiles are present" {
+            "happen for Yarn 1 only if both Yarn and NPM lockfiles are present, but without a Yarn 2+ resource file" {
                 setupProject(path = "a", hasNpmLockFile = true, hasYarnLockFile = true)
 
                 mapDefinitionFilesForNpm(definitionFiles) should beEmpty()
                 mapDefinitionFilesForYarn(definitionFiles) should containExactly(absolutePaths("a/package.json"))
+                mapDefinitionFilesForYarn2(definitionFiles) should beEmpty()
+            }
+
+            "happen for Yarn 2+ only if both Yarn 2+ resource file and Yarn lockfile are present" {
+                setupProject(path = "a", hasYarnLockFile = true, hasYarn2ResourceFile = true)
+
+                mapDefinitionFilesForNpm(definitionFiles) should beEmpty()
+                mapDefinitionFilesForYarn(definitionFiles) should beEmpty()
+                mapDefinitionFilesForYarn2(definitionFiles) should containExactly(absolutePaths("a/package.json"))
             }
 
             "happen for NPM only if no lockfile is present" {
@@ -94,6 +117,7 @@ class NodeSupportTest : WordSpec() {
 
                 mapDefinitionFilesForNpm(definitionFiles) should containExactly(absolutePaths("a/package.json"))
                 mapDefinitionFilesForYarn(definitionFiles) should beEmpty()
+                mapDefinitionFilesForYarn2(definitionFiles) should beEmpty()
             }
         }
 
@@ -216,8 +240,12 @@ class NodeSupportTest : WordSpec() {
     }
 
     private fun setupProject(
-        path: String, matchers: List<String> = emptyList(), hasNpmLockFile: Boolean = false,
-        hasYarnLockFile: Boolean = false, flattenWorkspaceDefinition: Boolean = true
+        path: String,
+        matchers: List<String> = emptyList(),
+        hasNpmLockFile: Boolean = false,
+        hasYarnLockFile: Boolean = false,
+        hasYarn2ResourceFile: Boolean = false,
+        flattenWorkspaceDefinition: Boolean = true
     ) {
         val projectDir = tempDir.resolve(path)
 
@@ -230,6 +258,7 @@ class NodeSupportTest : WordSpec() {
 
         if (hasNpmLockFile) projectDir.resolve("package-lock.json").createNewFile()
         if (hasYarnLockFile) projectDir.resolve("yarn.lock").createNewFile()
+        if (hasYarn2ResourceFile) projectDir.resolve(".yarnrc.yml").createNewFile()
     }
 
     private fun absolutePaths(vararg files: String): Collection<File> = files.map { tempDir.resolve(it) }
@@ -237,4 +266,6 @@ class NodeSupportTest : WordSpec() {
     private fun hasNpmLockFile(path: String) = hasNpmLockFile(tempDir.resolve(path))
 
     private fun hasYarnLockFile(path: String) = hasYarnLockFile(tempDir.resolve(path))
+
+    private fun hasYarn2ResourceFile(path: String) = hasYarn2ResourceFile(tempDir.resolve(path))
 }
