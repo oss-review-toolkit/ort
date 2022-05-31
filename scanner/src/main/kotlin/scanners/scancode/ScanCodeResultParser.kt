@@ -106,6 +106,7 @@ internal fun generateSummary(
     endTime: Instant,
     scanPath: File,
     result: JsonNode,
+    detectedLicenseMapping: Map<String, String> = emptyMap(),
     parseExpressions: Boolean = true
 ) =
     generateSummary(
@@ -113,6 +114,7 @@ internal fun generateSummary(
         endTime,
         calculatePackageVerificationCode(scanPath),
         result,
+        detectedLicenseMapping,
         parseExpressions
     )
 
@@ -126,13 +128,14 @@ internal fun generateSummary(
     endTime: Instant,
     verificationCode: String,
     result: JsonNode,
+    detectedLicenseMapping: Map<String, String> = emptyMap(),
     parseExpressions: Boolean = true
 ) =
     ScanSummary(
         startTime = startTime,
         endTime = endTime,
         packageVerificationCode = verificationCode,
-        licenseFindings = getLicenseFindings(result, parseExpressions).toSortedSet(),
+        licenseFindings = getLicenseFindings(result, detectedLicenseMapping, parseExpressions).toSortedSet(),
         copyrightFindings = getCopyrightFindings(result).toSortedSet(),
         issues = getIssues(result)
     )
@@ -189,7 +192,11 @@ private fun generateScannerOptions(options: JsonNode?): String {
  * in the result, these are preferred over separate license findings. Otherwise, only separate license findings are
  * parsed.
  */
-private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): List<LicenseFinding> {
+private fun getLicenseFindings(
+    result: JsonNode,
+    detectedLicenseMapping: Map<String, String>,
+    parseExpressions: Boolean
+): List<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
     val header = result["headers"]?.singleOrNull()
@@ -217,14 +224,15 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
         ).map { (licenseMatch, replacements) ->
             val spdxLicenseExpression = replaceLicenseKeys(licenseMatch.expression, replacements)
 
-            LicenseFinding(
+            LicenseFinding.createAndMap(
                 license = spdxLicenseExpression,
                 location = TextLocation(
                     path = file["path"].textValue().removePrefix(input),
                     startLine = licenseMatch.startLine,
                     endLine = licenseMatch.endLine
                 ),
-                score = licenseMatch.score
+                score = licenseMatch.score,
+                detectedLicenseMapping = detectedLicenseMapping
             )
         }
     }
