@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
  * Collection of problematic FossID license expressions. Compiled from FossID's list of licenses. May be updated if
@@ -104,7 +103,8 @@ internal data class FindingsContainer(
  */
 internal fun <T : Summarizable> List<T>.mapSummary(
     ignoredFiles: Map<String, IgnoredFile>,
-    issues: MutableList<OrtIssue>
+    issues: MutableList<OrtIssue>,
+    detectedLicenseMapping: Map<String, String>
 ): FindingsContainer {
     val licenseFindings = mutableListOf<LicenseFinding>()
     val copyrightFindings = mutableListOf<CopyrightFinding>()
@@ -118,9 +118,9 @@ internal fun <T : Summarizable> List<T>.mapSummary(
             val license = fossIdLicenseMappings[it.identifier] ?: it.identifier
 
             runCatching {
-                license.toSpdx().normalize()
-            }.onSuccess { licenseExpression ->
-                licenseFindings += LicenseFinding(licenseExpression, location)
+                LicenseFinding.createAndMap(license, location, detectedLicenseMapping = detectedLicenseMapping)
+            }.onSuccess { licenseFinding ->
+                licenseFindings += licenseFinding.copy(license = licenseFinding.license.normalize())
             }.onFailure { spdxException ->
                 issues += createAndLogIssue(
                     source = "FossId",
