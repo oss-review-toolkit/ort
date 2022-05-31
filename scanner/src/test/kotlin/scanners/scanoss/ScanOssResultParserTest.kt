@@ -45,7 +45,7 @@ class ScanOssResultParserTest : WordSpec({
             }
 
             val time = Instant.now()
-            val summary = generateSummary(time, time, SpdxConstants.NONE, result)
+            val summary = generateSummary(time, time, SpdxConstants.NONE, result, emptyMap())
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",

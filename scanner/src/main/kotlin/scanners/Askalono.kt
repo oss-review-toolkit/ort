@@ -124,14 +124,15 @@ class Askalono internal constructor(
         result.lines().forEach { line ->
             val root = jsonMapper.readTree(line)
             root["result"]?.let { result ->
-                val licenseFinding = LicenseFinding(
+                val licenseFinding = LicenseFinding.createAndMap(
                     license = result["license"]["name"].textValue(),
                     location = TextLocation(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, File(root["path"].textValue())),
                         TextLocation.UNKNOWN_LINE
                     ),
-                    score = result["score"].floatValue()
+                    score = result["score"].floatValue(),
+                    detectedLicenseMapping = scannerConfig.detectedLicenseMapping
                 )
 
                 licenseFindings += licenseFinding

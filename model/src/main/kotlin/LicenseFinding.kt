@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.isSpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -51,9 +52,41 @@ data class LicenseFinding(
 ) : Comparable<LicenseFinding> {
     companion object {
         private val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
+
+        /**
+         * Create a [LicenseFinding] with [detectedLicenseMapping]s applied.
+         */
+        fun createAndMap(
+            license: String,
+            location: TextLocation,
+            score: Float? = null,
+            detectedLicenseMapping: Map<String, String>
+        ): LicenseFinding = LicenseFinding(
+            license = if (license.isSpdxExpression() || detectedLicenseMapping.isEmpty()) {
+                license
+            } else {
+                license.applyDetectedLicenseMapping(detectedLicenseMapping)
+            }.toSpdx(),
+            location = location,
+            score = score
+        )
     }
 
     constructor(license: String, location: TextLocation, score: Float? = null) : this(license.toSpdx(), location, score)
 
     override fun compareTo(other: LicenseFinding) = COMPARATOR.compare(this, other)
+}
+
+/**
+ * Apply [detectedLicenseMapping] from the [org.ossreviewtoolkit.model.config.ScannerConfiguration] to any license
+ * String.
+ */
+private fun String.applyDetectedLicenseMapping(detectedLicenseMapping: Map<String, String>): String {
+    var result = this
+    detectedLicenseMapping.forEach { (from, to) ->
+        // Replace a license restricted by whitespace boundaries.
+        result = result.replace("""(?<!\S)${Regex.escape(from)}""".toRegex(), to)
+    }
+
+    return result
 }
