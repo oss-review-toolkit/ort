@@ -28,6 +28,7 @@ import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
+import org.ossreviewtoolkit.analyzer.managers.Yarn2
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.toUri
@@ -58,6 +59,12 @@ fun hasYarnLockFile(directory: File) =
     }
 
 /**
+ * Return whether the [directory] contains a Yarn resource file in YAML format, specific to Yarn 2+.
+ * Yarn1 has a non-YAML `.yarnrc` configuration file.
+ */
+fun hasYarn2ResourceFile(directory: File) = File(directory, Yarn2.YARN2_RESOURCE_FILE).isFile
+
+/**
  * Map [definitionFiles] to contain only files handled by NPM.
  */
 fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
@@ -70,7 +77,15 @@ fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
  */
 fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
-        isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
+        isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule && !entry.hasYarn2ResourceFile
+    }.mapTo(mutableSetOf()) { it.definitionFile }
+
+/**
+ * Map [definitionFiles] to contain only files handled by Yarn 2+.
+ */
+fun mapDefinitionFilesForYarn2(definitionFiles: Collection<File>): Set<File> =
+    getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
+        isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule && entry.hasYarn2ResourceFile
     }.mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
@@ -115,6 +130,7 @@ private val YARN_LOCK_FILES = listOf("yarn.lock")
 private data class PackageJsonInfo(
     val definitionFile: File,
     val hasYarnLockfile: Boolean = false,
+    val hasYarn2ResourceFile: Boolean = false,
     val hasNpmLockfile: Boolean = false,
     val isYarnWorkspaceRoot: Boolean = false,
     val isYarnWorkspaceSubmodule: Boolean = false
@@ -132,6 +148,7 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
             isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
             hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
             hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
+            hasYarn2ResourceFile = hasYarn2ResourceFile(definitionFile.parentFile),
             isYarnWorkspaceSubmodule = definitionFile in yarnWorkspaceSubmodules
         )
     }
