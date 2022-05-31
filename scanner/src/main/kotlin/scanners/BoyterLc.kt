@@ -138,14 +138,15 @@ class BoyterLc internal constructor(
         result.flatMapTo(licenseFindings) { file ->
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
             file["LicenseGuesses"].map {
-                LicenseFinding(
+                LicenseFinding.createAndMap(
                     license = it["LicenseId"].textValue(),
                     location = TextLocation(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, filePath),
                         TextLocation.UNKNOWN_LINE
                     ),
-                    score = it["Percentage"].floatValue()
+                    score = it["Percentage"].floatValue(),
+                    detectedLicenseMapping = scannerConfig.detectedLicenseMapping
                 )
             }
         }

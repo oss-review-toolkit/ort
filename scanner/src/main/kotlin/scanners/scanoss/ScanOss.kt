@@ -119,7 +119,13 @@ class ScanOss internal constructor(
         }.toMap()
 
         val endTime = Instant.now()
-        return generateSummary(startTime, endTime, path, resolvedResponse)
+        return generateSummary(
+            startTime,
+            endTime,
+            path,
+            resolvedResponse,
+            scannerConfig.detectedLicenseMapping
+        )
     }
 
     internal fun generateRandomUUID() = UUID.randomUUID()

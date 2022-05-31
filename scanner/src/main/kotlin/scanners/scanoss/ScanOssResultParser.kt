@@ -36,12 +36,19 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
  * Generate a summary from the given SCANOSS [result], using [startTime] and [endTime] metadata. From the [scanPath]
  * the package verification code is generated.
  */
-internal fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: FullScanResponse) =
+internal fun generateSummary(
+    startTime: Instant,
+    endTime: Instant,
+    scanPath: File,
+    result: FullScanResponse,
+    detectedLicenseMapping: Map<String, String>,
+) =
     generateSummary(
         startTime,
         endTime,
         calculatePackageVerificationCode(scanPath),
-        result
+        result,
+        detectedLicenseMapping
     )
 
 /**
@@ -52,14 +59,15 @@ internal fun generateSummary(
     startTime: Instant,
     endTime: Instant,
     verificationCode: String,
-    result: FullScanResponse
+    result: FullScanResponse,
+    detectedLicenseMapping: Map<String, String>
 ): ScanSummary {
     val licenseFindings = mutableListOf<LicenseFinding>()
     val copyrightFindings = mutableListOf<CopyrightFinding>()
 
     result.forEach { (_, scanResponses) ->
         scanResponses.forEach { scanResponse ->
-            licenseFindings += getLicenseFindings(scanResponse)
+            licenseFindings += getLicenseFindings(scanResponse, detectedLicenseMapping)
             copyrightFindings += getCopyrightFindings(scanResponse)
         }
     }
@@ -77,7 +85,10 @@ internal fun generateSummary(
 /**
  * Get the license findings from the given [scanResponse].
  */
-private fun getLicenseFindings(scanResponse: ScanResponse): List<LicenseFinding> {
+private fun getLicenseFindings(
+    scanResponse: ScanResponse,
+    detectedLicenseMappings: Map<String, String>
+): List<LicenseFinding> {
     val score = scanResponse.matched.removeSuffix("%").toFloatOrNull()
     return scanResponse.licenses.map { license ->
         val licenseExpression = runCatching { SpdxExpression.parse(license.name) }.getOrNull()
@@ -88,14 +99,15 @@ private fun getLicenseFindings(scanResponse: ScanResponse): List<LicenseFinding>
             else -> "${SpdxConstants.LICENSE_REF_PREFIX}scanoss-${license.name}"
         }
 
-        LicenseFinding(
+        LicenseFinding.createAndMap(
             license = validatedLicense,
             location = TextLocation(
                 path = scanResponse.file,
                 startLine = TextLocation.UNKNOWN_LINE,
                 endLine = TextLocation.UNKNOWN_LINE
             ),
-            score = score
+            score = score,
+            detectedLicenseMapping = detectedLicenseMappings
         )
     }
 }

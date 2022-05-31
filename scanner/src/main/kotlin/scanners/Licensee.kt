@@ -109,14 +109,15 @@ class Licensee internal constructor(
 
         matchedFiles.mapTo(licenseFindings) {
             val filePath = File(it["filename"].textValue())
-            LicenseFinding(
+            LicenseFinding.createAndMap(
                 license = it["matched_license"].textValue(),
                 location = TextLocation(
                     // The path is already relative.
                     filePath.path,
                     TextLocation.UNKNOWN_LINE
                 ),
-                score = it["matcher"]["confidence"].floatValue()
+                score = it["matcher"]["confidence"].floatValue(),
+                detectedLicenseMapping = scannerConfig.detectedLicenseMapping
             )
         }
 
