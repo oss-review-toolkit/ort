@@ -138,7 +138,10 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                         }
                     } else {
                         // Tolerate scanners and Pub to be missing as they can be bootstrapped.
-                        if (category != "Scanner" && tool.javaClass.simpleName != "Pub") {
+                        // Tolerate Yarn2 because it is provided in code repositories that use it.
+                        if (category != "Scanner" && tool.javaClass.simpleName != "Pub"
+                            && tool.javaClass.simpleName != "Yarn2"
+                        ) {
                             statusCode = statusCode or 4
                         }
 

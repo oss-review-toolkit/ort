@@ -77,6 +77,7 @@ abstract class PackageManager(
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(
             // Ignore intermediate build system directories.
             ".gradle",
+            ".yarn",
             "node_modules",
             // Ignore resources in a standard Maven / Gradle project layout.
             "META-INF/maven",
