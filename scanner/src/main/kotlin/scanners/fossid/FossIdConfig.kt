@@ -30,12 +30,12 @@ import org.ossreviewtoolkit.utils.ort.log
  * * **"serverUrl":** The URL of the FossID server.
  * * **"user":** The user to connect to the FossID server.
  * * **"apiKey":** The API key of the user which connects to the FossID server.
+ * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
+ * completed. As a consequence, scan results won't be available in ORT result.
  * * **"packageNamespaceFilter":** If this optional filter is set, only packages having an identifier in given namespace
  * will be scanned.
  * * **"packageAuthorsFilter":** If this optional filter is set, only packages from a given author will be scanned.
  * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
- * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
- * completed. As a consequence, scan results won't be available in ORT result.
  * * **"deltaScans":** When set, ORT will create delta scans. When only changes in a repository need to be scanned,
  * delta scans reuse the identifications of latest scan on this repository to reduce the amount of findings. If
  * deltaScans is set and no scan exist yet, an initial scan called "origin" scan will be created.
@@ -53,11 +53,11 @@ internal data class FossIdConfig(
     /** The URL where the FossID service is running. */
     val serverUrl: String,
 
-    /** The API key to access the FossID server. */
-    val apiKey: String,
-
     /** The user to authenticate against the server. */
     val user: String,
+
+    /** The API key to access the FossID server. */
+    val apiKey: String,
 
     /** Flag whether the scanner should wait for the completion of FossID scans. */
     val waitForResult: Boolean,
@@ -87,11 +87,11 @@ internal data class FossIdConfig(
         /** Name of the configuration property for the server URL. */
         private const val SERVER_URL_PROPERTY = "serverUrl"
 
-        /** Name of the configuration property for the API key. */
-        private const val API_KEY_PROPERTY = "apiKey"
-
         /** Name of the configuration property for the user name. */
         private const val USER_PROPERTY = "user"
+
+        /** Name of the configuration property for the API key. */
+        private const val API_KEY_PROPERTY = "apiKey"
 
         /** Name of the configuration property for the packages namespace filter. */
         private const val NAMESPACE_FILTER_PROPERTY = "packageNamespaceFilter"
@@ -138,18 +138,18 @@ internal data class FossIdConfig(
 
             val serverUrl = fossIdScannerOptions[SERVER_URL_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID server URL configuration found.")
-            val apiKey = fossIdScannerOptions[API_KEY_PROPERTY]
-                ?: throw IllegalArgumentException("No FossID API Key configuration found.")
             val user = fossIdScannerOptions[USER_PROPERTY]
                 ?: throw IllegalArgumentException("No FossID User configuration found.")
+            val apiKey = fossIdScannerOptions[API_KEY_PROPERTY]
+                ?: throw IllegalArgumentException("No FossID API Key configuration found.")
+
+            val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
             val packageNamespaceFilter = fossIdScannerOptions[NAMESPACE_FILTER_PROPERTY].orEmpty()
             val packageAuthorsFilter = fossIdScannerOptions[AUTHORS_FILTER_PROPERTY].orEmpty()
             val addAuthenticationToUrl = fossIdScannerOptions[CREDENTIALS_IN_URL_PROPERTY]?.toBoolean() ?: false
-            val waitForResult = fossIdScannerOptions[WAIT_FOR_RESULT_PROPERTY]?.toBoolean() ?: true
+
             val deltaScans = fossIdScannerOptions[DELTA_SCAN_PROPERTY]?.toBoolean() ?: false
-
             val deltaScanLimit = fossIdScannerOptions[DELTA_SCAN_LIMIT_PROPERTY]?.toInt() ?: Int.MAX_VALUE
-
             val timeout = fossIdScannerOptions[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
             require(deltaScanLimit > 0) {
@@ -160,8 +160,8 @@ internal data class FossIdConfig(
 
             return FossIdConfig(
                 serverUrl,
-                apiKey,
                 user,
+                apiKey,
                 waitForResult,
                 packageNamespaceFilter,
                 packageAuthorsFilter,

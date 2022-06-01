@@ -775,7 +775,7 @@ private fun createConfig(
 ): FossIdConfig {
     val config = FossIdConfig(
         "https://www.example.org/fossid",
-        API_KEY, USER, waitForResult, packageNamespaceFilter, packageAuthorsFilter, addAuthenticationToUrl = false,
+        USER, API_KEY, waitForResult, packageNamespaceFilter, packageAuthorsFilter, addAuthenticationToUrl = false,
         deltaScans, deltaScanLimit, 60, emptyMap()
     )
 
