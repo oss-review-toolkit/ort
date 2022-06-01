@@ -27,6 +27,13 @@ import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.verify
+
+import java.net.Authenticator
+import java.net.PasswordAuthentication
 import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
@@ -377,6 +384,28 @@ class UtilsTest : WordSpec({
             val url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml"
 
             normalizeVcsUrl(url) shouldBe url
+        }
+    }
+
+    "requestPasswordAuthentication" should {
+        "return a correct authentication object for a host, port, and scheme combination" {
+            val host = "www.example.org"
+            val port = 442
+            val scheme = "https"
+
+            mockkStatic("org.ossreviewtoolkit.utils.ort.UtilsKt")
+            mockkStatic(Authenticator::class)
+            val passwordAuth = mockk<PasswordAuthentication>()
+
+            every {
+                Authenticator.requestPasswordAuthentication(host, null, port, scheme, null, null)
+            } returns passwordAuth
+
+            requestPasswordAuthentication(host, port, scheme) shouldBe passwordAuth
+
+            verify {
+                installAuthenticatorAndProxySelector()
+            }
         }
     }
 })
