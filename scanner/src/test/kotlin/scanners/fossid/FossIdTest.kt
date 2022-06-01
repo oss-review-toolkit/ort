@@ -23,10 +23,8 @@ import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAtLeastOne
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
@@ -483,22 +481,6 @@ class FossIdTest : WordSpec({
             }
         }
 
-        "apply filters for namespaces and authors" {
-            val id1 = createIdentifier(1)
-            val pkg1 = createPackage(id1, createVcsInfo())
-
-            val ignoredAuthor = "hacker"
-            val pkgAuthors = setOf("foo", "bar", ignoredAuthor)
-            val id2 = createIdentifier(2).copy(namespace = "anotherNamespace")
-            val pkg2 = createPackage(id2, createVcsInfo("anotherProject"), authors = pkgAuthors)
-
-            val config = createConfig(packageNamespaceFilter = id1.namespace, packageAuthorsFilter = ignoredAuthor)
-            val fossId = createFossId(config)
-
-            val scannerRun = fossId.scan(listOf(pkg1, pkg2))
-            scannerRun.results.collectIssues().keys should beEmpty()
-        }
-
         "create a delta scan for an existing scan" {
             val projectCode = projectCode(PROJECT)
             val originCode = "originalScanCode"
@@ -768,14 +750,12 @@ private fun createFossId(config: FossIdConfig): FossId =
  */
 private fun createConfig(
     waitForResult: Boolean = true,
-    packageNamespaceFilter: String = "",
-    packageAuthorsFilter: String = "",
     deltaScans: Boolean = true,
     deltaScanLimit: Int = Int.MAX_VALUE
 ): FossIdConfig {
     val config = FossIdConfig(
         "https://www.example.org/fossid",
-        USER, API_KEY, waitForResult, packageNamespaceFilter, packageAuthorsFilter, addAuthenticationToUrl = false,
+        USER, API_KEY, waitForResult, addAuthenticationToUrl = false,
         deltaScans, deltaScanLimit, 60, emptyMap()
     )
 
