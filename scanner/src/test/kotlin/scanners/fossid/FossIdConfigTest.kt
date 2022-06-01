@@ -48,8 +48,6 @@ class FossIdConfigTest : WordSpec({
                 "serverUrl" to SERVER_URL,
                 "apiKey" to API_KEY,
                 "user" to USER,
-                "packageNamespaceFilter" to NAMESPACE_FILTER,
-                "packageAuthorsFilter" to AUTHOR_FILTER,
                 "waitForResult" to "false",
                 "deltaScans" to "true",
                 "deltaScanLimit" to "42",
@@ -64,8 +62,6 @@ class FossIdConfigTest : WordSpec({
                 serverUrl = SERVER_URL,
                 apiKey = API_KEY,
                 user = USER,
-                packageAuthorsFilter = AUTHOR_FILTER,
-                packageNamespaceFilter = NAMESPACE_FILTER,
                 waitForResult = false,
                 deltaScans = true,
                 deltaScanLimit = 42,
@@ -89,8 +85,6 @@ class FossIdConfigTest : WordSpec({
                 serverUrl = SERVER_URL,
                 apiKey = API_KEY,
                 user = USER,
-                packageAuthorsFilter = "",
-                packageNamespaceFilter = "",
                 waitForResult = true,
                 deltaScans = false,
                 deltaScanLimit = Int.MAX_VALUE,
@@ -215,8 +209,6 @@ class FossIdConfigTest : WordSpec({
 private const val SERVER_URL = "https://www.example.org/fossid"
 private const val API_KEY = "test_api_key"
 private const val USER = "fossIdTestUser"
-private const val NAMESPACE_FILTER = "testFilterForNamespace"
-private const val AUTHOR_FILTER = "testFilterForAuthors"
 
 /**
  * Return a [ScannerConfiguration] with this map as options for the FossID scanner.
