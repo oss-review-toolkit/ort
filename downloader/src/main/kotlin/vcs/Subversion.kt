@@ -21,7 +21,6 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
-import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.net.URI
 import java.nio.file.Paths
@@ -34,6 +33,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.tmatesoft.svn.core.SVNDepth
@@ -257,14 +257,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
                 previousAuth: SVNAuthentication?,
                 authMayBeStored: Boolean
             ): SVNAuthentication? {
-                val auth = Authenticator.requestPasswordAuthentication(
-                    /* host = */ svnurl.host,
-                    /* addr = */ null,
-                    /* port = */ svnurl.port,
-                    /* protocol = */ svnurl.protocol,
-                    /* prompt = */ null,
-                    /* scheme = */ null
-                ) ?: return null
+                val auth = requestPasswordAuthentication(svnurl.host, svnurl.port, svnurl.protocol) ?: return null
 
                 return SVNPasswordAuthentication.newInstance(
                     auth.userName, auth.password, authMayBeStored, svnurl, /* isPartial = */ false

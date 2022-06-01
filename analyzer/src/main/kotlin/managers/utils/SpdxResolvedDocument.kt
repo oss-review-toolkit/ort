@@ -22,7 +22,6 @@
 package org.ossreviewtoolkit.analyzer.managers.utils
 
 import java.io.File
-import java.net.Authenticator
 import java.net.URI
 
 import org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile
@@ -36,6 +35,7 @@ import org.ossreviewtoolkit.utils.ort.addBasicAuthorization
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.downloadFile
 import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
@@ -326,14 +326,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
     return try {
         val client = OkHttpClientHelper.buildClient {
             // Use the authenticator also to request preemptive authentication.
-            val auth = Authenticator.requestPasswordAuthentication(
-                /* host = */ uri.host,
-                /* addr = */ null,
-                /* port = */ uri.port,
-                /* protocol = */ uri.scheme,
-                /* prompt = */ null,
-                /* scheme = */ null
-            )
+            val auth = requestPasswordAuthentication(uri)
 
             if (auth != null) {
                 addBasicAuthorization(auth.userName, String(auth.password))
