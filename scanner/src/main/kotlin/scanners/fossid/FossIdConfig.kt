@@ -30,20 +30,20 @@ import org.ossreviewtoolkit.utils.ort.log
  * * **"serverUrl":** The URL of the FossID server.
  * * **"user":** The user to connect to the FossID server.
  * * **"apiKey":** The API key of the user which connects to the FossID server.
- * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
+ * * **"waitForResult":** When set to false, ORT does not wait for repositories to be downloaded nor scans to be
  *   completed. As a consequence, scan results won't be available in ORT result.
  * * **"packageNamespaceFilter":** If this optional filter is set, only packages having an identifier in given namespace
  *   will be scanned.
  * * **"packageAuthorsFilter":** If this optional filter is set, only packages from a given author will be scanned.
- * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
- * * **"deltaScans":** When set, ORT will create delta scans. When only changes in a repository need to be scanned,
- *   delta scans reuse the identifications of latest scan on this repository to reduce the amount of findings. If
- *   deltaScans is set and no scan exist yet, an initial scan called "origin" scan will be created.
+ * * **"addAuthenticationToUrl":** If set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
+ * * **"deltaScans":** If set, ORT will create delta scans. When only changes in a repository need to be scanned,
+ *   delta scans reuse the identifications of the latest scan on this repository to reduce the amount of findings. If
+ *   *deltaScans* is set and no scan exist yet, an initial scan called "origin" scan will be created.
  * * **"deltaScanLimit":** This setting can be used to limit the number of delta scans to keep for a given repository.
  *   So if another delta scan is created, older delta scans are deleted until this number is reached. If unspecified, no
  *   limit is enforced on the number of delta scans to keep. This property is evaluated only if *deltaScans* is enabled.
  *
- * Naming conventions options. If they are not set, default naming convention are used.
+ * Naming conventions options. If they are not set, default naming conventions are used.
  * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
  *   variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
  *   [NAMING_CONVENTION_VARIABLE_PREFIX] e.g. namingVariableVar1 = "foo".
@@ -87,7 +87,7 @@ internal data class FossIdConfig(
         /** Name of the configuration property for the server URL. */
         private const val SERVER_URL_PROPERTY = "serverUrl"
 
-        /** Name of the configuration property for the user name. */
+        /** Name of the configuration property for the username. */
         private const val USER_PROPERTY = "user"
 
         /** Name of the configuration property for the API key. */
@@ -121,7 +121,7 @@ internal data class FossIdConfig(
         private const val TIMEOUT = "timeout"
 
         /**
-         * The scanner options beginning with this prefix will be used to parametrize project and scan names.
+         * The scanner options beginning with this prefix will be used to parameterize project and scan names.
          */
         private const val NAMING_CONVENTION_VARIABLE_PREFIX = "namingVariable"
 
