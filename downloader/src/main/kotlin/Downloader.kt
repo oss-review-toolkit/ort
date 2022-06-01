@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2021 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import java.net.URI
 
 import kotlin.time.TimeSource
 
-import org.ossreviewtoolkit.downloader.vcs.GitRepo
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Package
@@ -360,13 +359,7 @@ fun consolidateProjectPackagesByVcs(projects: Collection<Project>): Map<Package,
     // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual Git
     //       repositories that contain project definition files, which in many cases is doing duplicate work.
     val projectPackages = projects.map { it.toPackage() }
-    val projectPackagesByVcs = projectPackages.groupBy {
-        if (it.vcsProcessed.type == GitRepo().type) {
-            it.vcsProcessed
-        } else {
-            it.vcsProcessed.copy(path = "")
-        }
-    }
+    val projectPackagesByVcs = projectPackages.groupBy { it.vcsProcessed.copy(path = "") }
 
     return projectPackagesByVcs.entries.associate { (sameVcs, projectsWithSameVcs) ->
         // Find the original project which has the empty path, if any, or simply take the first project
