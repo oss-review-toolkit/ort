@@ -227,15 +227,6 @@ class FossId internal constructor(
         val (results, duration) = measureTimedValue {
             val results = mutableMapOf<Package, MutableList<ScanResult>>()
 
-            log.info {
-                if (config.packageNamespaceFilter.isEmpty()) "No package namespace filter is set."
-                else "Package namespace filter is '${config.packageNamespaceFilter}'."
-            }
-            log.info {
-                if (config.packageAuthorsFilter.isEmpty()) "No package authors filter is set."
-                else "Package authors filter is '${config.packageAuthorsFilter}'."
-            }
-
             fun addPackageWithSingleIssue(pkg: Package, issue: OrtIssue, provenance: Provenance) {
                 val time = Instant.now()
                 val summary = ScanSummary(time, time, "", sortedSetOf(), sortedSetOf(), listOf(issue))
@@ -244,8 +235,6 @@ class FossId internal constructor(
             }
 
             val filteredPackages = packages
-                .filter { config.packageNamespaceFilter.isEmpty() || it.id.namespace == config.packageNamespaceFilter }
-                .filter { config.packageAuthorsFilter.isEmpty() || config.packageAuthorsFilter in it.authors }
                 .partition { it.vcsProcessed.type == VcsType.GIT }
                 .let { (packagesInsideGit, packagesOutsideGit) ->
                     packagesOutsideGit.forEach {
