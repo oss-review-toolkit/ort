@@ -76,8 +76,8 @@ import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.ort.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -159,14 +159,7 @@ class FossId internal constructor(
 
             log.info { "Requesting authentication for host ${repoUri.host} ..." }
 
-            val creds = Authenticator.requestPasswordAuthentication(
-                /* host = */ repoUri.host,
-                /* addr = */ null,
-                /* port = */ repoUri.port,
-                /* protocol = */ repoUri.scheme,
-                /* prompt = */ null,
-                /* scheme = */ null
-            )
+            val creds = requestPasswordAuthentication(repoUri)
             return creds?.let {
                 repoUrl.replaceCredentialsInUri("${creds.userName}:${String(creds.password)}")
             } ?: repoUrl
@@ -231,8 +224,6 @@ class FossId internal constructor(
         packages: Set<Package>,
         labels: Map<String, String>
     ): Map<Package, List<ScanResult>> {
-        installAuthenticatorAndProxySelector()
-
         val (results, duration) = measureTimedValue {
             val results = mutableMapOf<Package, MutableList<ScanResult>>()
 

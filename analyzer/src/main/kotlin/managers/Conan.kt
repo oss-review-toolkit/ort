@@ -28,7 +28,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.net.Authenticator
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -57,6 +56,7 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.
@@ -214,14 +214,7 @@ class Conan(
                 log.info { "Found remote '$remoteName' pointing to URL $remoteUrl." }
 
                 // Request authentication for the extracted remote URL.
-                val auth = Authenticator.requestPasswordAuthentication(
-                    /* host = */ uri.host,
-                    /* addr = */ null,
-                    /* port = */ uri.port,
-                    /* protocol = */ uri.scheme,
-                    /* prompt = */ null,
-                    /* scheme = */ null
-                )
+                val auth = requestPasswordAuthentication(uri)
 
                 if (auth != null) {
                     // Configure Conan's authentication based on ORT's authentication for the remote.
