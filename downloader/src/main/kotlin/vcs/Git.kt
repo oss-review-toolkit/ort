@@ -51,8 +51,8 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 // TODO: Make this configurable.
@@ -61,8 +61,6 @@ const val GIT_HISTORY_DEPTH = 50
 class Git : VersionControlSystem(), CommandLineTool {
     companion object {
         init {
-            installAuthenticatorAndProxySelector()
-
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
             // discrepancies in the way .netrc files are interpreted between JGit's and ORT's implementation.
             CredentialsProvider.setDefault(AuthenticatorCredentialsProvider)
@@ -256,14 +254,7 @@ internal object AuthenticatorCredentialsProvider : CredentialsProvider() {
     override fun get(uri: URIish, vararg items: CredentialItem): Boolean {
         log.debug { "JGit queries credentials ${items.map { it.javaClass.simpleName }} for '${uri.host}'." }
 
-        val auth = Authenticator.requestPasswordAuthentication(
-            /* host = */ uri.host,
-            /* addr = */ null,
-            /* port = */ uri.port,
-            /* protocol = */ uri.scheme,
-            /* prompt = */ null,
-            /* scheme = */ null
-        ) ?: return false
+        val auth = requestPasswordAuthentication(uri.host, uri.port, uri.scheme) ?: return false
 
         log.debug { "Passing credentials for '${uri.host}' to JGit." }
 

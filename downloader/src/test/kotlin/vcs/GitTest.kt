@@ -26,6 +26,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.verify
 
@@ -37,6 +38,8 @@ import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.URIish
+
+import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class GitTest : WordSpec({
     var originalCredentialsProvider: CredentialsProvider? = null
@@ -83,20 +86,10 @@ class GitTest : WordSpec({
             val password = "tiger".toCharArray()
             val userCredential = mockk<CredentialItem.Username>()
             val passwordCredential = mockk<CredentialItem.Password>()
+
             every { userCredential.value = any() } just runs
             every { passwordCredential.value = any() } just runs
-
-            val authenticator = object : Authenticator() {
-                override fun getPasswordAuthentication(): PasswordAuthentication {
-                    requestingHost shouldBe TestUri.host
-                    requestingPort shouldBe TestUri.port
-                    requestingProtocol shouldBe TestUri.scheme
-
-                    return PasswordAuthentication(user, password)
-                }
-            }
-
-            Authenticator.setDefault(authenticator)
+            mockAuthentication(PasswordAuthentication(user, password))
 
             val credentialProvider = CredentialsProvider.getDefault()
 
@@ -112,11 +105,7 @@ class GitTest : WordSpec({
             val userCredential = CredentialItem.Username()
             val passwordCredential = CredentialItem.Password()
 
-            val authenticator = object : Authenticator() {
-                override fun getPasswordAuthentication(): PasswordAuthentication? = null
-            }
-
-            Authenticator.setDefault(authenticator)
+            mockAuthentication(null)
 
             val credentialProvider = CredentialsProvider.getDefault()
 
@@ -126,12 +115,7 @@ class GitTest : WordSpec({
         "throw for unsupported credential types" {
             val otherCredential = mockk<CredentialItem.StringType>(relaxed = true)
 
-            val authenticator = object : Authenticator() {
-                override fun getPasswordAuthentication(): PasswordAuthentication =
-                    PasswordAuthentication("someUser", "somePassword".toCharArray())
-            }
-
-            Authenticator.setDefault(authenticator)
+            mockAuthentication(PasswordAuthentication("someUser", "somePassword".toCharArray()))
 
             val credentialProvider = CredentialsProvider.getDefault()
 
@@ -149,3 +133,12 @@ class GitTest : WordSpec({
 })
 
 private val TestUri = URIish(URL("https://www.example.org:8080/foo"))
+
+/**
+ * Mocks the utility function to query password authentication for the test URI. Return the [result] provided.
+ */
+private fun mockAuthentication(result: PasswordAuthentication?) {
+    mockkStatic("org.ossreviewtoolkit.utils.ort.UtilsKt")
+
+    every { requestPasswordAuthentication(TestUri.host, TestUri.port, TestUri.scheme) } returns result
+}
