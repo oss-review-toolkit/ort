@@ -20,6 +20,9 @@
 package org.ossreviewtoolkit.utils.ort
 
 import java.io.File
+import java.net.Authenticator
+import java.net.PasswordAuthentication
+import java.net.URI
 
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.toSafeUri
@@ -146,6 +149,31 @@ fun installAuthenticatorAndProxySelector(): OrtProxySelector {
     OrtAuthenticator.install()
     return OrtProxySelector.install()
 }
+
+/**
+ * Request a [PasswordAuthentication] object for the given [host], [port], and [scheme]. Call
+ * [installAuthenticatorAndProxySelector] before to make sure that the [OrtAuthenticator] and the [OrtProxySelector]
+ * are active.
+ */
+fun requestPasswordAuthentication(host: String, port: Int, scheme: String): PasswordAuthentication? {
+    installAuthenticatorAndProxySelector()
+
+    return Authenticator.requestPasswordAuthentication(
+        /* host = */ host,
+        /* addr = */ null,
+        /* port = */ port,
+        /* protocol = */ scheme,
+        /* prompt = */ null,
+        /* scheme = */ null
+    )
+}
+
+/**
+ * Request a [PasswordAuthentication] object for the given [uri]. Call [installAuthenticatorAndProxySelector] before
+ * to make sure that the [OrtAuthenticator] and the [OrtProxySelector] are active.
+ */
+fun requestPasswordAuthentication(uri: URI): PasswordAuthentication? =
+    requestPasswordAuthentication(uri.host, uri.port, uri.scheme)
 
 /**
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
