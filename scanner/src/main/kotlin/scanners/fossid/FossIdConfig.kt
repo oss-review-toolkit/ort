@@ -31,22 +31,22 @@ import org.ossreviewtoolkit.utils.ort.log
  * * **"user":** The user to connect to the FossID server.
  * * **"apiKey":** The API key of the user which connects to the FossID server.
  * * **"waitForResult":** When set to false, ORT doesn't wait for repositories to be downloaded nor scans to be
- * completed. As a consequence, scan results won't be available in ORT result.
+ *   completed. As a consequence, scan results won't be available in ORT result.
  * * **"packageNamespaceFilter":** If this optional filter is set, only packages having an identifier in given namespace
- * will be scanned.
+ *   will be scanned.
  * * **"packageAuthorsFilter":** If this optional filter is set, only packages from a given author will be scanned.
  * * **"addAuthenticationToUrl":** When set, ORT will add credentials from its Authenticator to the URLs sent to FossID.
  * * **"deltaScans":** When set, ORT will create delta scans. When only changes in a repository need to be scanned,
- * delta scans reuse the identifications of latest scan on this repository to reduce the amount of findings. If
- * deltaScans is set and no scan exist yet, an initial scan called "origin" scan will be created.
+ *   delta scans reuse the identifications of latest scan on this repository to reduce the amount of findings. If
+ *   deltaScans is set and no scan exist yet, an initial scan called "origin" scan will be created.
  * * **"deltaScanLimit":** This setting can be used to limit the number of delta scans to keep for a given repository.
- * So if another delta scan is created, older delta scans are deleted until this number is reached. If unspecified, no
- * limit is enforced on the number of delta scans to keep. This property is evaluated only if *deltaScans* is enabled.
+ *   So if another delta scan is created, older delta scans are deleted until this number is reached. If unspecified, no
+ *   limit is enforced on the number of delta scans to keep. This property is evaluated only if *deltaScans* is enabled.
  *
  * Naming conventions options. If they are not set, default naming convention are used.
  * * **"namingProjectPattern":** A pattern for project names when projects are created on the FossID instance. Contains
- * variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
- * [NAMING_CONVENTION_VARIABLE_PREFIX] e.g. namingVariableVar1 = "foo".
+ *   variables prefixed by "$" e.g. "$Var1_$Var2". Variables are also passed as options and are prefixed by
+ *   [NAMING_CONVENTION_VARIABLE_PREFIX] e.g. namingVariableVar1 = "foo".
  * * **"namingScanPattern":** A pattern for scan names when scans are created on the FossID instance.
  */
 internal data class FossIdConfig(
