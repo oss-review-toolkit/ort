@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
@@ -213,33 +214,67 @@ class ExperimentalScanner(
      * Run package scanners for packages with incomplete scan results.
      */
     private fun runPackageScanners(controller: ScanController, context: ScanContext) {
-        controller.packages.forEach { pkg ->
-            val nestedProvenance = controller.getNestedProvenance(pkg.id) ?: return@forEach
-
-            // TODO: Use coroutines to execute scanners in parallel.
+        controller.getPackagesConsolidatedByProvenance().forEach { (provenance, packages) ->
             controller.getPackageScanners().forEach scanner@{ scanner ->
-                if (controller.hasCompleteScanResult(scanner, pkg)) {
-                    log.debug {
-                        "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
-                                "stored results are available."
+                val packagesWithIncompleteScanResult = packages.filter { pkg ->
+                    val hasNestedProvenance = controller.getNestedProvenance(pkg.id) != null
+                    if (!hasNestedProvenance) {
+                        log.debug {
+                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner ${scanner.name} as no " +
+                                    "nested provenance for the package could be resolved."
+                        }
                     }
 
-                    return@scanner
+                    val hasCompleteScanResult = controller.hasCompleteScanResult(scanner, pkg)
+                    if (hasCompleteScanResult) {
+                        log.debug {
+                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
+                                    "stored results are available."
+                        }
+                    }
+
+                    hasNestedProvenance && !hasCompleteScanResult
                 }
 
-                log.info { "Scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' started." }
+                if (packagesWithIncompleteScanResult.isEmpty()) return@scanner
 
-                val scanResult = scanner.scanPackage(pkg, context)
+                // Create a reference package with any VCS path removed, to ensure the full repository is scanned.
+                val referencePackage = packagesWithIncompleteScanResult.first().let { pkg ->
+                    if (provenance is RepositoryProvenance) {
+                        pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(path = ""))
+                    } else {
+                        pkg
+                    }
+                }
 
-                log.info { "Scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' finished." }
+                if (packagesWithIncompleteScanResult.size > 1) {
+                    log.info {
+                        val packageIds = packagesWithIncompleteScanResult.drop(1)
+                            .joinToString("\n") { "\t${it.id.toCoordinates()}" }
+                        "Scanning package '${referencePackage.id.toCoordinates()}' as reference for these packages " +
+                                "with the same provenance:\n$packageIds"
+                    }
+                }
 
-                val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
+                log.info {
+                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name} started."
+                }
 
-                controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
+                val scanResult = scanner.scanPackage(referencePackage, context)
 
-                // TODO: Run in coroutine.
-                if (scanner.criteria != null) {
-                    storeNestedScanResult(pkg, nestedProvenanceScanResult)
+                log.info {
+                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}' finished."
+                }
+
+                packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
+                    val nestedProvenance = controller.getNestedProvenance(pkg.id) ?: return@processResults
+                    val nestedProvenanceScanResult = scanResult.toNestedProvenanceScanResult(nestedProvenance)
+                    controller.addNestedScanResult(scanner, nestedProvenanceScanResult)
+
+                    // TODO: Run in coroutine.
+                    if (scanner.criteria != null) {
+                        storeNestedScanResult(pkg, nestedProvenanceScanResult)
+                    }
                 }
             }
         }
