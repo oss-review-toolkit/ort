@@ -181,6 +181,26 @@ class ScanController(
         }.map { (id, _) -> packages.first { it.id == id } }
 
     /**
+     * Return a map of [KnownProvenance]s associated with all [packages] with the same provenance, ignoring any VCS
+     * path. Packages without a resolved provenance are not included in the result.
+     */
+    fun getPackagesConsolidatedByProvenance(): Map<KnownProvenance, List<Package>> {
+        val packagesByProvenance = mutableMapOf<KnownProvenance, MutableList<Package>>()
+
+        packages.forEach { pkg ->
+            val consolidatedProvenance = when (val provenance = packageProvenances[pkg.id]) {
+                null -> return@forEach
+                is RepositoryProvenance -> provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = ""))
+                else -> provenance
+            }
+
+            packagesByProvenance.getOrPut(consolidatedProvenance) { mutableListOf() } += pkg
+        }
+
+        return packagesByProvenance
+    }
+
+    /**
      * Return all package [Identifier]s for the provided [provenance].
      */
     fun getPackagesForProvenanceWithoutVcsPath(provenance: KnownProvenance): Set<Identifier> =
