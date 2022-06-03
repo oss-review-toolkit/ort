@@ -158,10 +158,8 @@ RUN pip install --no-cache-dir scancode-toolkit==$SCANCODE_VERSION
 FROM run AS dist
 
 ARG ORT_VERSION
-COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar /opt/ort.tar
-
-RUN tar xf /opt/ort.tar -C /opt/ort --exclude="*.bat" --strip-components 1 && \
-    rm /opt/ort.tar && \
+RUN --mount=type=bind,from=build,source=/usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar,target=/opt/ort.tar \
+    tar xf /opt/ort.tar -C /opt/ort --exclude="*.bat" --strip-components 1 && \
     /opt/ort/bin/ort requirements
 
 COPY --from=build /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
