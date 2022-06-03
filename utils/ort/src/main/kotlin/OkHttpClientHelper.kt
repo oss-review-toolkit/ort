@@ -73,7 +73,8 @@ object OkHttpClientHelper {
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
 
     private val defaultClient by lazy {
-        installAuthenticatorAndProxySelector()
+        OrtAuthenticator.install()
+        OrtProxySelector.install()
 
         if (log.delegate.isDebugEnabled) {
             // Allow to track down leaked connections.
