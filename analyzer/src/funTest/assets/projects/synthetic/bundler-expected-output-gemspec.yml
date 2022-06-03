@@ -231,7 +231,7 @@ packages:
   description: "Use with Net::HTTP to do multipart form postspec. IO values that have\
     \ #content_type, #original_filename, and #local_path will be posted as a binary\
     \ file."
-  homepage_url: "https://github.com/nicksieger/multipart-post"
+  homepage_url: "https://github.com/socketry/multipart-post"
   binary_artifact:
     url: ""
     hash:
@@ -244,12 +244,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/nicksieger/multipart-post.git"
+    url: "https://github.com/socketry/multipart-post.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/nicksieger/multipart-post.git"
+    url: "https://github.com/socketry/multipart-post.git"
     revision: ""
     path: ""
 - id: "Gem::public_suffix:4.0.5"
