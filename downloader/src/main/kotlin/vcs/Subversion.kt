@@ -31,7 +31,8 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.installAuthenticatorAndProxySelector
+import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
+import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -245,7 +246,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
     /* privateKey = */ null,
     /* passphrase = */ charArrayOf()
 ) {
-    private val ortProxySelector = installAuthenticatorAndProxySelector()
+    private val ortProxySelector = OrtProxySelector.install().also { OrtAuthenticator.install() }
 
     init {
         authenticationProvider = object : ISVNAuthenticationProvider {

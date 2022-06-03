@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.verify
 
@@ -393,7 +394,8 @@ class UtilsTest : WordSpec({
             val port = 442
             val scheme = "https"
 
-            mockkStatic("org.ossreviewtoolkit.utils.ort.UtilsKt")
+            mockkObject(OrtAuthenticator)
+            mockkObject(OrtProxySelector)
             mockkStatic(Authenticator::class)
             val passwordAuth = mockk<PasswordAuthentication>()
 
@@ -404,7 +406,8 @@ class UtilsTest : WordSpec({
             requestPasswordAuthentication(host, port, scheme) shouldBe passwordAuth
 
             verify {
-                installAuthenticatorAndProxySelector()
+                OrtAuthenticator.install()
+                OrtProxySelector.install()
             }
         }
     }

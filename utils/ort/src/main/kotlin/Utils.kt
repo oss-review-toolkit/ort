@@ -142,21 +142,12 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 }
 
 /**
- * Install both the [OrtAuthenticator] and the [OrtProxySelector] to handle proxy authentication. Return the
- * [OrtProxySelector] instance for further configuration.
- */
-fun installAuthenticatorAndProxySelector(): OrtProxySelector {
-    OrtAuthenticator.install()
-    return OrtProxySelector.install()
-}
-
-/**
- * Request a [PasswordAuthentication] object for the given [host], [port], and [scheme]. Call
- * [installAuthenticatorAndProxySelector] before to make sure that the [OrtAuthenticator] and the [OrtProxySelector]
- * are active.
+ * Request a [PasswordAuthentication] object for the given [host], [port], and [scheme]. Install the [OrtAuthenticator]
+ * and the [OrtProxySelector] beforehand to ensure they are active.
  */
 fun requestPasswordAuthentication(host: String, port: Int, scheme: String): PasswordAuthentication? {
-    installAuthenticatorAndProxySelector()
+    OrtAuthenticator.install()
+    OrtProxySelector.install()
 
     return Authenticator.requestPasswordAuthentication(
         /* host = */ host,
@@ -169,8 +160,8 @@ fun requestPasswordAuthentication(host: String, port: Int, scheme: String): Pass
 }
 
 /**
- * Request a [PasswordAuthentication] object for the given [uri]. Call [installAuthenticatorAndProxySelector] before
- * to make sure that the [OrtAuthenticator] and the [OrtProxySelector] are active.
+ * Request a [PasswordAuthentication] object for the given [uri]. Install the [OrtAuthenticator] and the
+ * [OrtProxySelector] beforehand to ensure they are active.
  */
 fun requestPasswordAuthentication(uri: URI): PasswordAuthentication? =
     requestPasswordAuthentication(uri.host, uri.port, uri.scheme)

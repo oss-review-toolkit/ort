@@ -90,8 +90,9 @@ import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
+import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.ort.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.ort.logOnce
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -356,7 +357,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         return DefaultRepositorySystemSession(session).apply {
             setWorkspaceReader(skipDownloadWorkspaceReader)
-            installAuthenticatorAndProxySelector()
+            OrtAuthenticator.install()
+            OrtProxySelector.install()
             proxySelector = JreProxySelector()
         }
     }
