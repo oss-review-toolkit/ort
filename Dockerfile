@@ -155,7 +155,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
 ARG SCANCODE_VERSION
 RUN pip install --no-cache-dir scancode-toolkit==$SCANCODE_VERSION
 
-FROM run
+FROM run AS dist
 
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
 
