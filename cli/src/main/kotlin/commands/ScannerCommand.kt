@@ -269,9 +269,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         config: OrtConfiguration
     ): OrtResult {
         // Configure the scan storage, which is common to all scanners.
-        ScanResultsStorage.configure(config.scanner)
+        val storage = ScanResultsStorage.configure(config.scanner)
 
-        val storage = ScanResultsStorage.storage
         println("Using scan storage '${storage.name}'.")
 
         if (storage is FileBasedStorage) {
