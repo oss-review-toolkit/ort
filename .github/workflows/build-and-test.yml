@@ -117,31 +117,8 @@ jobs:
     - name: Validate Batect wrapper scripts
       uses: batect/batect-wrapper-validation-action@v0
     - name: Run functional tests
-      run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- jacocoFunTestReport -Dkotest.tags=!NoDockerTag -p analyzer
+      run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- jacocoFunTestReport -p analyzer
     - name: Upload code coverage data
       uses: codecov/codecov-action@v2
       with:
         flags: funTest-analyzer-docker
-  funTest-analyzer-no-docker:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-      with:
-        submodules: recursive
-    - name: Setup Java
-      uses: actions/setup-java@v2
-      with:
-        distribution: temurin
-        java-version: 11
-        cache: gradle
-    - name: Run functional tests
-      uses: burrunan/gradle-cache-action@v1
-      with:
-        job-id: funTest-analyzer-no-docker
-        arguments: :analyzer:funTest :analyzer:jacocoFunTestReport -Dkotest.tags=NoDockerTag
-    - name: Upload code coverage data
-      uses: codecov/codecov-action@v2
-      with:
-        flags: funTest-analyzer-no-docker
