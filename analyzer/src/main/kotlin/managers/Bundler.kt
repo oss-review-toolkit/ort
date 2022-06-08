@@ -246,15 +246,15 @@ class Bundler(
             // Project is a Gem, i.e. a library.
             gemSpecs[gemspecFile.nameWithoutExtension]
         } ?: GemSpec(
-            workingDir.name,
-            "",
-            "",
-            sortedSetOf(),
-            sortedSetOf(),
-            "",
-            emptySet(),
-            VcsInfo.EMPTY,
-            RemoteArtifact.EMPTY
+            name = workingDir.name,
+            version = "",
+            homepageUrl = "",
+            authors = sortedSetOf(),
+            declaredLicenses = sortedSetOf(),
+            description = "",
+            runtimeDependencies = emptySet(),
+            vcs = VcsInfo.EMPTY,
+            artifact = RemoteArtifact.EMPTY
         )
 
     private fun getPackageFromGemspec(gemSpec: GemSpec): Package {
