@@ -104,26 +104,26 @@ data class Package(
     val sourceArtifact: RemoteArtifact,
 
     /**
-     * Original VCS-related information as defined in the [Package]'s metadata.
+     * Original VCS-related information as defined in the package's metadata.
      */
     val vcs: VcsInfo,
 
     /**
-     * Processed VCS-related information about the [Package] in normalized form. The information is either derived from
+     * Processed VCS-related information about the package in normalized form. The information is either derived from
      * [vcs], guessed from additional data as a fallback, or empty. On top of that [PackageCuration]s may have been
      * applied.
      */
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
     /**
-     * Indicates whether this [Package] is just metadata, like e.g. Maven BOM artifacts which only define constraints
+     * Indicates whether the package is just metadata, like e.g. Maven BOM artifacts which only define constraints
      * for dependency versions.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val isMetaDataOnly: Boolean = false,
 
     /**
-     * Indicates whether the source code of this [Package] has been modified compared to the original source code,
+     * Indicates whether the source code of the package has been modified compared to the original source code,
      * e.g., in case of a fork of an upstream Open Source project.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
