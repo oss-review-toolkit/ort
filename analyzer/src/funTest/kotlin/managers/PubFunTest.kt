@@ -38,7 +38,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.NoDockerTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -96,7 +95,7 @@ class PubFunTest : WordSpec() {
                 result.toYaml() shouldBe expectedResult
             }
 
-            "resolve dependencies for a project with Flutter, Android and Cocoapods".config(tags = setOf(NoDockerTag)) {
+            "resolve dependencies for a project with Flutter, Android and Cocoapods" {
                 val workingDir = projectsDir.resolve("flutter-project-with-android-and-cocoapods")
                 val expectedResultFile =
                     projectsDir.parentFile.resolve("pub-expected-output-with-flutter-android-and-cocoapods.yml")
