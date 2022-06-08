@@ -342,7 +342,7 @@ class SpdxDocumentFile(
         dependencyOfRelation: SpdxRelationship.Type,
         dependsOnCase: (String) -> PackageReference? = { null }
     ): SortedSet<PackageReference> =
-        doc.relationships.mapNotNullTo(sortedSetOf()) { (source, relation, target) ->
+        doc.relationships.mapNotNullTo(sortedSetOf()) { (source, relation, target, _) ->
             val issues = mutableListOf<OrtIssue>()
 
             val isDependsOnRelation = relation == SpdxRelationship.Type.DEPENDS_ON || hasDefaultScopeLinkage(
