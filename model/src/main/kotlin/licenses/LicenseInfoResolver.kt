@@ -94,21 +94,20 @@ class LicenseInfoResolver(
                     originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.DECLARED)
                 }
 
-                originalDeclaredLicenses.addAll(
-                    licenseInfo.declaredLicenseInfo.processed.mapped.filterValues { it == license }.keys
-                )
+                originalDeclaredLicenses += licenseInfo.declaredLicenseInfo.processed.mapped.filterValues {
+                    it == license
+                }.keys
 
                 if (addAuthorsToCopyrights && licenseInfo.declaredLicenseInfo.authors.isNotEmpty()) {
-                    locations.add(
-                        ResolvedLicenseLocation(
-                            provenance = UnknownProvenance,
-                            location = UNDEFINED_TEXT_LOCATION,
-                            appliedCuration = null,
-                            matchingPathExcludes = emptyList(),
-                            copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) { author ->
-                                val statement = "Copyright (C) $author".takeUnless {
-                                    author.contains("Copyright", ignoreCase = true)
-                                } ?: author
+                    locations += ResolvedLicenseLocation(
+                        provenance = UnknownProvenance,
+                        location = UNDEFINED_TEXT_LOCATION,
+                        appliedCuration = null,
+                        matchingPathExcludes = emptyList(),
+                        copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) { author ->
+                            val statement = "Copyright (C) $author".takeUnless {
+                                author.contains("Copyright", ignoreCase = true)
+                            } ?: author
 
                                 ResolvedCopyrightFinding(
                                     statement = statement,
@@ -148,7 +147,7 @@ class LicenseInfoResolver(
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
-                resolvedLocations[license]?.let { locations.addAll(it) }
+                resolvedLocations[license]?.let { locations += it }
 
                 originalExpressions += detectedLicenses.entries.filter { (expression, _) ->
                     license in expression.decompose()
