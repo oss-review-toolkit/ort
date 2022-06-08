@@ -137,27 +137,28 @@ class Bundler(
 
         val gemSpecs = resolveGemsMetadata(workingDir)
 
-        val (projectName, version, homepageUrl, authors, declaredLicenses) = parseProject(workingDir, gemSpecs)
-        val projectId = Identifier(managerName, "", projectName, version)
-        val groupedDeps = getDependencyGroups(workingDir)
+        return with(parseProject(workingDir, gemSpecs)) {
+            val projectId = Identifier(managerName, "", name, version)
+            val groupedDeps = getDependencyGroups(workingDir)
 
-        for ((groupName, dependencyList) in groupedDeps) {
-            parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemSpecs, issues)
+            for ((groupName, dependencyList) in groupedDeps) {
+                parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemSpecs, issues)
+            }
+
+            val project = Project(
+                id = projectId,
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                authors = authors,
+                declaredLicenses = declaredLicenses.toSortedSet(),
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
+                homepageUrl = homepageUrl,
+                scopeDependencies = scopes.toSortedSet()
+            )
+
+            val packages = gemSpecs.values.mapTo(sortedSetOf()) { getPackageFromGemspec(it) }
+            listOf(ProjectAnalyzerResult(project, packages, issues))
         }
-
-        val project = Project(
-            id = projectId,
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = authors,
-            declaredLicenses = declaredLicenses.toSortedSet(),
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
-            homepageUrl = homepageUrl,
-            scopeDependencies = scopes.toSortedSet()
-        )
-
-        val packages = gemSpecs.values.mapTo(sortedSetOf()) { getPackageFromGemspec(it) }
-        return listOf(ProjectAnalyzerResult(project, packages, issues))
     }
 
     private fun parseScope(
