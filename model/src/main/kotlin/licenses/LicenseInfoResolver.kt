@@ -98,13 +98,13 @@ class LicenseInfoResolver(
                     it == license
                 }.keys
 
-                if (addAuthorsToCopyrights && licenseInfo.declaredLicenseInfo.authors.isNotEmpty()) {
+                licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() && addAuthorsToCopyrights }?.also {
                     locations += ResolvedLicenseLocation(
                         provenance = UnknownProvenance,
                         location = UNDEFINED_TEXT_LOCATION,
                         appliedCuration = null,
                         matchingPathExcludes = emptyList(),
-                        copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) { author ->
+                        copyrights = it.mapTo(mutableSetOf()) { author ->
                             val statement = "Copyright (C) $author".takeUnless {
                                 author.contains("Copyright", ignoreCase = true)
                             } ?: author
