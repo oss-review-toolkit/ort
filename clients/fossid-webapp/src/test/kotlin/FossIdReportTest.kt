@@ -21,7 +21,6 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.file.shouldHaveName
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.sequences.shouldContain
