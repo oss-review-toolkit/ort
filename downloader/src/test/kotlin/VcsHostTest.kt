@@ -182,7 +182,7 @@ class VcsHostTest : WordSpec({
         "not be applicable to a URL pointing to a GitHub registry" {
             val urls = listOf(
                 "https://npm.pkg.github.com/download/@org/project/1.2.3/1234567890",
-                "https://maven.pkg.github.com/org/respository",
+                "https://maven.pkg.github.com/org/repository",
                 "https://nuget.pkg.github.com/OWNER/index.json"
             )
 
