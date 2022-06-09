@@ -140,7 +140,7 @@ repository:
     url: "https://github.com/jshttp/mime-types.git"
     revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
     path: ""
-  # Will only be present if an '.ort.yml' configuration file with scope excludes was provided. Otherwise this is an empty object.
+  # Will only be present if an '.ort.yml' configuration file with scope excludes was provided. Otherwise, this is an empty object.
   config:
     excludes:
       scopes:
@@ -232,7 +232,7 @@ analyzer:
           path: ""
       curations: []
 # ...
-# Finally a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
+# Finally, a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
     issues: {}
 # A field to quickly check if the analyzer result contains any issues.
     has_issues: false
