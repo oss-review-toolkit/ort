@@ -307,7 +307,7 @@ enum class VcsHost(
 
         override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://${vcsInfo.type.toString().lowercase()}.$hostname/~$userOrOrg/$project/blob/${vcsInfo.revision}/" +
-                    "${vcsInfo.path}"
+                    vcsInfo.path
     };
 
     companion object {
