@@ -30,7 +30,7 @@ whether licenses are applicable to development projects. The [example.rules.kts]
 categories and generates issues if the rules detect a misuse.
 
 In addition, there are some other categories to be evaluated by the templates for the notice file: The
-*include-in-notice-file* category controls whether or not the license requires attribution. Similarly, assigning the
+*include-in-notice-file* category controls whether the license requires attribution. Similarly, assigning the
 *include-source-code-offer-in-notice-file* category will ensure a written source code offer is included in the notices.
 
 The point to take is that users can freely choose their license classifications and define their rule sets and
