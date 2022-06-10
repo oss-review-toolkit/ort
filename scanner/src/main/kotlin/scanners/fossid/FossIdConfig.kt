@@ -142,15 +142,15 @@ internal data class FossIdConfig(
             log.info { "waitForResult parameter is set to '$waitForResult'" }
 
             return FossIdConfig(
-                serverUrl,
-                user,
-                apiKey,
-                waitForResult,
-                addAuthenticationToUrl,
-                deltaScans,
-                deltaScanLimit,
-                timeout,
-                fossIdScannerOptions
+                serverUrl = serverUrl,
+                user = user,
+                apiKey = apiKey,
+                waitForResult = waitForResult,
+                addAuthenticationToUrl = addAuthenticationToUrl,
+                deltaScans = deltaScans,
+                deltaScanLimit = deltaScanLimit,
+                timeout = timeout,
+                options = fossIdScannerOptions
             )
         }
     }
