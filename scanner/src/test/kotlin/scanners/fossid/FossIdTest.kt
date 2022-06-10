@@ -754,15 +754,15 @@ private fun createConfig(
     deltaScanLimit: Int = Int.MAX_VALUE
 ): FossIdConfig {
     val config = FossIdConfig(
-        "https://www.example.org/fossid",
-        USER,
-        API_KEY,
-        waitForResult,
+        serverUrl = "https://www.example.org/fossid",
+        user = USER,
+        apiKey = API_KEY,
+        waitForResult = waitForResult,
         addAuthenticationToUrl = false,
-        deltaScans,
-        deltaScanLimit,
-        60,
-        emptyMap()
+        deltaScans = deltaScans,
+        deltaScanLimit = deltaScanLimit,
+        timeout = 60,
+        options = emptyMap()
     )
 
     val namingProvider = createNamingProviderMock()
@@ -888,18 +888,18 @@ private fun createIdentifiedFile(index: Int): IdentifiedFile {
     )
 
     val license = org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.License(
-        LicenseMatchType.SNIPPET,
-        index,
-        "lic$index",
-        0,
-        0,
-        0,
-        "name$index"
+        fileLicenseMatchType = LicenseMatchType.SNIPPET,
+        id = index,
+        identifier = "lic$index",
+        isFoss = 0,
+        isOsiApproved = 0,
+        isSpdxStandard = 0,
+        name = "name$index"
     )
 
     file.file = org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.File(
-        "identified$index",
-        "licenseIdentifier1",
+        id = "identified$index",
+        licenseIdentifier = "licenseIdentifier1",
         licenseIncludeInReport = false,
         licenseIsCopyleft = false,
         licenseIsFoss = true,
@@ -931,7 +931,7 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
     val license = License(index, LicenseMatchType.FILE, index, index, index, index, "created$index", "updated$index")
 
     license.file = LicenseFile(
-        "licenseMarkedIdentifier$index",
+        licenseIdentifier = "licenseMarkedIdentifier$index",
         licenseIncludeInReport = true,
         licenseIsCopyleft = false,
         licenseIsFoss = true,
