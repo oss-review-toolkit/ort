@@ -1,0 +1,124 @@
+---
+project:
+  id: "Poetry::src/funTest/assets/projects/synthetic/poetry/requirements-from-poetry.txt:<REPLACE_REVISION>"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/poetry/requirements-from-poetry.txt"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::graphviz:0.19.1"
+    - id: "PyPI::jinja2:3.0.1"
+      dependencies:
+      - id: "PyPI::markupsafe:2.0.1"
+packages:
+- id: "PyPI::graphviz:0.19.1"
+  purl: "pkg:pypi/graphviz@0.19.1"
+  authors:
+  - "Sebastian Bank"
+  declared_licenses:
+  - "MIT"
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Simple Python interface for Graphviz"
+  homepage_url: "https://github.com/xflr6/graphviz"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/9d/fb/886e8ec7862989afc0c35d15813b6c665fe134cc6027cdde2fa300abe9a2/graphviz-0.19.1-py3-none-any.whl"
+    hash:
+      value: "c0e5b8e7497c70c0c4cd83cc8c3bdedf"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/f6/14/aa3ec10e4ab1524ba69f4742ef9cfa01fd668d0840afe5d5e6f708a95031/graphviz-0.19.1.zip"
+    hash:
+      value: "d89e5ac1159e330aa7455f6fafbcd3ea"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/xflr6/graphviz.git"
+    revision: ""
+    path: ""
+- id: "PyPI::jinja2:3.0.1"
+  purl: "pkg:pypi/jinja2@3.0.1"
+  authors:
+  - "Armin Ronacher"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "A very fast and expressive template engine."
+  homepage_url: "https://palletsprojects.com/p/jinja/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/80/21/ae597efc7ed8caaa43fb35062288baaf99a7d43ff0cf66452ddf47604ee6/Jinja2-3.0.1-py3-none-any.whl"
+    hash:
+      value: "b377af8123a32e992984222bff51e152"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/39/11/8076571afd97303dfeb6e466f27187ca4970918d4b36d5326725514d3ed3/Jinja2-3.0.1.tar.gz"
+    hash:
+      value: "25ba6ef98c164878acff1036fbd72a1d"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/jinja.git"
+    revision: ""
+    path: ""
+- id: "PyPI::markupsafe:2.0.1"
+  purl: "pkg:pypi/markupsafe@2.0.1"
+  authors:
+  - "Armin Ronacher"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "Safely add untrusted strings to HTML/XML markup."
+  homepage_url: "https://palletsprojects.com/p/markupsafe/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/81/8b/f28eac2790d49dde61f89ae9e007ac65002edc90bb2dd63c3b9e653820d2/MarkupSafe-2.0.1-cp310-cp310-macosx_10_9_universal2.whl"
+    hash:
+      value: "f42b3feff99f5f5f0fa9637d2e790288"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/bf/10/ff66fea6d1788c458663a84d88787bae15d45daa16f6b3ef33322a51fc7e/MarkupSafe-2.0.1.tar.gz"
+    hash:
+      value: "892e0fefa3c488387e5cc0cad2daa523"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/markupsafe.git"
+    revision: ""
+    path: ""
