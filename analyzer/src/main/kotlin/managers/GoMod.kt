@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.utils.ort.log
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.
  *
  * Note: The file `go.sum` is not a lockfile as go modules already allows for reproducible builds without that file.
- * Thus no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
+ * Thus, no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
  */
 class GoMod(
     name: String,
