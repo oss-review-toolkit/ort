@@ -59,6 +59,7 @@ class PackageManagerTest : WordSpec({
         "pip-requirements/requirements.txt",
         "pip-setup/setup.py",
         "pipenv/Pipfile.lock",
+        "poetry/poetry.lock",
         "pub/pubspec.yaml",
         "sbt/build.sbt",
         "spdx-package/package.spdx.yml",
@@ -118,6 +119,7 @@ class PackageManagerTest : WordSpec({
                     "pip-setup/setup.py"
                 )
                 managedFilesByName["Pipenv"] should containExactlyInAnyOrder("pipenv/Pipfile.lock")
+                managedFilesByName["Poetry"] should containExactlyInAnyOrder("poetry/poetry.lock")
                 managedFilesByName["Pub"] should containExactlyInAnyOrder("pub/pubspec.yaml")
                 managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
                 managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder(
