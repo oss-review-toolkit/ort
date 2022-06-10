@@ -359,9 +359,9 @@ private val PSEUDO_VERSION_REGEXES = listOf(
     // Format for no known base version, e.g. v0.0.0-20191109021931-daa7c04131f5.
     "^v0\\.0\\.0-$DATE_REVISION_PATTERN$".toRegex(),
     // Format for base version is a release version, e.g. v1.2.4-0.20191109021931-daa7c04131f5.
-    "^v[0-9]+\\.[0-9]+\\.[0-9]+-0\\.$DATE_REVISION_PATTERN$".toRegex(),
+    "^v\\d+\\.\\d+\\.\\d+-0\\.$DATE_REVISION_PATTERN$".toRegex(),
     // base version is a pre-release version, e.g. v1.2.4-pre.0.20191109021931-daa7c04131f5.
-    "^v[0-9]+\\.[0-9]+\\.[0-9]+-pre.0\\.$DATE_REVISION_PATTERN$".toRegex(),
+    "^v\\d+\\.\\d+\\.\\d+-pre.0\\.$DATE_REVISION_PATTERN$".toRegex(),
 )
 
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
