@@ -755,8 +755,14 @@ private fun createConfig(
 ): FossIdConfig {
     val config = FossIdConfig(
         "https://www.example.org/fossid",
-        USER, API_KEY, waitForResult, addAuthenticationToUrl = false,
-        deltaScans, deltaScanLimit, 60, emptyMap()
+        USER,
+        API_KEY,
+        waitForResult,
+        addAuthenticationToUrl = false,
+        deltaScans,
+        deltaScanLimit,
+        60,
+        emptyMap()
     )
 
     val namingProvider = createNamingProviderMock()
@@ -871,9 +877,16 @@ private fun textLocation(fileIndex: Int): TextLocation =
  */
 private fun createIdentifiedFile(index: Int): IdentifiedFile {
     val file = IdentifiedFile(
-        comment = null, identificationId = index, identificationCopyright = "copyright$index",
-        isDistributed = index, rowId = index, userName = "$USER$index", userSurname = null, userUsername = null
+        comment = null,
+        identificationId = index,
+        identificationCopyright = "copyright$index",
+        isDistributed = index,
+        rowId = index,
+        userName = "$USER$index",
+        userSurname = null,
+        userUsername = null
     )
+
     val license = org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.License(
         LicenseMatchType.SNIPPET,
         index,
@@ -883,6 +896,7 @@ private fun createIdentifiedFile(index: Int): IdentifiedFile {
         0,
         "name$index"
     )
+
     file.file = org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.File(
         "identified$index",
         "licenseIdentifier1",
@@ -898,6 +912,7 @@ private fun createIdentifiedFile(index: Int): IdentifiedFile {
         sha1 = null,
         sha256 = null
     )
+
     return file
 }
 
@@ -906,10 +921,15 @@ private fun createIdentifiedFile(index: Int): IdentifiedFile {
  */
 private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
     val file = MarkedAsIdentifiedFile(
-        identificationId = index, identificationCopyright = "copyrightMarked$index",
-        isDistributed = index, rowId = index, comment = null
+        identificationId = index,
+        identificationCopyright = "copyrightMarked$index",
+        isDistributed = index,
+        rowId = index,
+        comment = null
     )
+
     val license = License(index, LicenseMatchType.FILE, index, index, index, index, "created$index", "updated$index")
+
     license.file = LicenseFile(
         "licenseMarkedIdentifier$index",
         licenseIncludeInReport = true,
@@ -918,6 +938,7 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
         licenseIsSpdxStandard = true,
         licenseName = "test$index"
     )
+
     file.file = org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.File(
         id = "marked$index",
         md5 = null,
@@ -927,6 +948,7 @@ private fun createMarkedIdentifiedFile(index: Int): MarkedAsIdentifiedFile {
         size = index,
         licenses = mutableMapOf(index to license)
     )
+
     return file
 }
 
