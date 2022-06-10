@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -59,7 +60,9 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     ): ManagedFileInfo {
         require(absoluteProjectPath.isAbsolute)
 
-        log.debug { "Using the following configuration settings:\n$repositoryConfiguration" }
+        log.debug {
+            "Using the following configuration settings:\n${yamlMapper.writeValueAsString(repositoryConfiguration)}"
+        }
 
         // Associate files by the package manager factory that manages them.
         val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
