@@ -71,11 +71,6 @@ abstract class PathScanner(
 ) : Scanner(name, scannerConfig, downloaderConfig) {
     companion object {
         /**
-         * The number of threads to use for the storage dispatcher.
-         */
-        const val NUM_STORAGE_THREADS = 5
-
-        /**
          * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
          */
         const val PROP_CRITERIA_NAME = "regScannerName"

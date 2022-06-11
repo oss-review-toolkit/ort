@@ -119,6 +119,11 @@ data class PostgresStorageConfiguration(
     val sslrootcert: String? = null,
 
     /**
+     * The number of parallel transactions to use for the storage dispatcher.
+     */
+    val parallelTransactions: Int = 5,
+
+    /**
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
      */
     val type: StorageType = StorageType.PACKAGE_BASED
