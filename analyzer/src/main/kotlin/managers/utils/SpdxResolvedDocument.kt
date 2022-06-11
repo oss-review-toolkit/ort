@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ internal data class SpdxResolvedDocument(
 ) {
     companion object {
         fun load(cache: SpdxDocumentCache, rootDocumentFile: File, managerName: String): SpdxResolvedDocument {
-            val rootDocument = cache.load(rootDocumentFile)
+            val rootDocument = cache.load(rootDocumentFile).getOrThrow()
 
             val references = mutableMapOf<SpdxExternalDocumentReference, ResolvedSpdxDocument>()
             val issues = mutableMapOf<String, OrtIssue>()
@@ -106,6 +106,7 @@ internal data class SpdxResolvedDocument(
             // while package identifiers from the root document are not qualified. Thus, there can be no clash.
             val packages = collectPackages(references) + rootDocument.getPackages()
             val relations = collectAndQualifyRelations(references) + rootDocument.relationships
+
             return SpdxResolvedDocument(resolvedRootDocument, managerName, references, relations, packages, issues)
         }
     }
@@ -297,9 +298,7 @@ private fun SpdxExternalDocumentReference.resolveFromFile(
     baseUri: URI,
     managerName: String
 ): ResolutionResult {
-    return uri.toDefinitionFile()?.let {
-        ResolutionResult(cache.load(it), uri, verifyChecksum(it, baseUri, managerName))
-    } ?: ResolutionResult(
+    val file = uri.toDefinitionFile() ?: return ResolutionResult(
         null,
         baseUri,
         createAndLogIssue(
@@ -307,6 +306,20 @@ private fun SpdxExternalDocumentReference.resolveFromFile(
             message = "The file pointed to by '$uri' in reference '$externalDocumentId' does not exist."
         )
     )
+
+    val document = cache.load(file).getOrElse {
+        return ResolutionResult(
+            null,
+            uri,
+            createAndLogIssue(
+                source = managerName,
+                message = "Failed to parse the SPDX document pointed to by '$uri' in reference " +
+                        "'$externalDocumentId': ${it.message}"
+            )
+        )
+    }
+
+    return ResolutionResult(document, uri, verifyChecksum(file, baseUri, managerName))
 }
 
 /**
@@ -342,7 +355,16 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
             return ResolutionResult(null, uri, issue)
         }
 
-        ResolutionResult(cache.load(file), uri, verifyChecksum(file, baseUri, managerName))
+        val document = cache.load(file).getOrElse {
+            val issue = createAndLogIssue(
+                source = managerName,
+                message = "Failed to parse SPDX document from $uri (referred from $baseUri as part of " +
+                        "'$externalDocumentId'): ${it.message}"
+            )
+            return ResolutionResult(null, uri, issue)
+        }
+
+        ResolutionResult(document, uri, verifyChecksum(file, baseUri, managerName))
     } finally {
         tempDir.safeDeleteRecursively(force = true)
     }
