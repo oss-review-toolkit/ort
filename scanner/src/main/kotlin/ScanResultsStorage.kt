@@ -152,15 +152,15 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             val dataSource = DatabaseUtils.createHikariDataSource(
                 config = config,
                 applicationNameSuffix = TOOL_NAME,
-                // Use a value slightly higher than the number of threads accessing the storage.
-                maxPoolSize = PathScanner.NUM_STORAGE_THREADS + 3
+                // Use a value slightly higher than the number of transactions accessing the storage.
+                maxPoolSize = config.parallelTransactions + 3
             )
 
             log.info {
                 "Using Postgres storage with URL '${config.url}' and schema '${config.schema}'."
             }
 
-            return PostgresStorage(dataSource)
+            return PostgresStorage(dataSource, config.parallelTransactions)
         }
 
         /**
