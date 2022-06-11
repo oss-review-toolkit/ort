@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -414,10 +414,12 @@ class SpdxDocumentFile(
         }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
-        definitionFiles.associateWith(spdxDocumentCache::load).filter { (_, spdxDocument) ->
+        definitionFiles.associateWith {
+            spdxDocumentCache.load(it).getOrNull()
+        }.filter { (_, spdxDocument) ->
             // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies,
             // or a package-style SPDX document that describes a single (dependency-)package.
-            spdxDocument.isProject()
+            spdxDocument?.isProject() == true
         }.keys.also { remainingFiles ->
             if (remainingFiles.isEmpty()) return definitionFiles
 
@@ -432,6 +434,7 @@ class SpdxDocumentFile(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val transitiveDocument = SpdxResolvedDocument.load(spdxDocumentCache, definitionFile, managerName)
+
         val spdxDocument = transitiveDocument.rootDocument.document
 
         val packages = mutableSetOf<Package>()
