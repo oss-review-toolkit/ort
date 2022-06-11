@@ -173,7 +173,7 @@ class CycloneDxReporter : Reporter {
                 input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
             }
 
-            input.ortResult.getPackages().forEach { (pkg, _) ->
+            input.ortResult.getPackages(omitExcluded = true).forEach { (pkg, _) ->
                 val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
                 addPackageToBom(input, pkg, bom, dependencyType)
             }
@@ -206,7 +206,7 @@ class CycloneDxReporter : Reporter {
                 )
 
                 val dependencies = input.ortResult.dependencyNavigator.projectDependencies(project)
-                val packages = input.ortResult.getPackages().mapNotNull { (pkg, _) ->
+                val packages = input.ortResult.getPackages(omitExcluded = true).mapNotNull { (pkg, _) ->
                     pkg.takeIf { it.id in dependencies }
                 }
 
