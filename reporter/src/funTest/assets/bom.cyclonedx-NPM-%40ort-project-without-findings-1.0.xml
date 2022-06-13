@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bom serialNumber="urn:uuid:01234567-0123-0123-0123-01234567" version="1" xmlns="http://cyclonedx.org/schema/bom/1.3">
+  <externalReferences><reference type="website"><url>https://github.com/oss-review-toolkit/ort</url></reference></externalReferences>
+</bom>
