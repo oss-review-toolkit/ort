@@ -78,35 +78,35 @@ class Yarn2(
     override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
 
     override fun command(workingDir: File?): String {
-        if (workingDir == null) {
-            return ""
-        }
+        if (workingDir == null) return ""
+
         return yarn2ExecutablesByPath.getOrPut(workingDir) {
             val yarnConfig = yamlMapper.readTree(workingDir.resolve(YARN2_RESOURCE_FILE))
-            val yarnCommand = yarnConfig.get(YARN_PATH_PROPERTY_NAME)
-            yarnCommand?.let { command ->
-                val yarnExecutable = workingDir.resolve(command.textValue())
+            val yarnCommand = requireNotNull(yarnConfig[YARN_PATH_PROPERTY_NAME]) {
+                "No Yarn 2+ executable could be found in 'yarnrc.yml'."
+            }
 
-                // TODO: Yarn2 executable is a `cjs` file. Check if under Windows it needs to be run with `node`.
+            val yarnExecutable = workingDir.resolve(yarnCommand.textValue())
 
-                // TODO: This is a security risk to blindly run code coming from a repository other than ORT's. ORT
-                //  should download the Yarn2 binary from the official repository and run it.
-                require(yarnExecutable.isFile) {
-                    "The Yarn 2+ program '${yarnExecutable.name}' does not exist."
+            // TODO: Yarn2 executable is a `cjs` file. Check if under Windows it needs to be run with `node`.
+
+            // TODO: This is a security risk to blindly run code coming from a repository other than ORT's. ORT
+            //       should download the Yarn2 binary from the official repository and run it.
+            require(yarnExecutable.isFile) {
+                "The Yarn 2+ program '${yarnExecutable.name}' does not exist."
+            }
+
+            if (!yarnExecutable.canExecute()) {
+                log.warn {
+                    "The Yarn 2+ program '${yarnExecutable.name}' should be executable. Changing its rights."
                 }
 
-                if (!yarnExecutable.canExecute()) {
-                    log.warn {
-                        "The Yarn 2+ program '${yarnExecutable.name}' should be executable. Changing its rights."
-                    }
-
-                    require(yarnExecutable.setExecutable(true)) {
-                        "Cannot set the Yarn 2+ program to be executable."
-                    }
+                require(yarnExecutable.setExecutable(true)) {
+                    "Cannot set the Yarn 2+ program to be executable."
                 }
+            }
 
-                yarnExecutable.absolutePath
-            } ?: throw IllegalStateException("No Yarn 2+ executable could be found in 'yarnrc.yml'.")
+            yarnExecutable.absolutePath
         }
     }
 
