@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-
-typealias ScannerOptions = Map<String, String>
 
 /**
  * The configuration model of the scanner.
@@ -84,7 +82,7 @@ data class ScannerConfiguration(
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */
     @JsonAlias("scanner")
-    val options: Map<String, ScannerOptions>? = null,
+    val options: Map<String, Options>? = null,
 
     /**
      * A map with the configurations of the scan result storages available. Based on this information the actual

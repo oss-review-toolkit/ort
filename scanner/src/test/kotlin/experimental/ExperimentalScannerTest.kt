@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2021 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,8 +59,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -796,7 +796,7 @@ private class FakePackageScannerWrapper(
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
         createScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)
 
-    override fun filterSecretOptions(options: ScannerOptions) = options
+    override fun filterSecretOptions(options: Options) = options
 }
 
 /**
@@ -810,7 +810,7 @@ private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
     override fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult =
         createScanResult(provenance, details)
 
-    override fun filterSecretOptions(options: ScannerOptions) = options
+    override fun filterSecretOptions(options: Options) = options
 }
 
 /**
@@ -829,7 +829,7 @@ private class FakePathScannerWrapper : PathScannerWrapper {
         return createScanSummary(licenseFindings = licenseFindings)
     }
 
-    override fun filterSecretOptions(options: ScannerOptions) = options
+    override fun filterSecretOptions(options: Options) = options
 }
 
 /**

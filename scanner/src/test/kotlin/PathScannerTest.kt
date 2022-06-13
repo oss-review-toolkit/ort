@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.config.ScannerOptions
 
 class PathScannerTest : WordSpec({
     "getScannerCriteria()" should {
@@ -87,7 +87,7 @@ private const val SCANNER_VERSION = "3.2.1.final"
 /**
  * Creates a [ScannerConfiguration] with the given properties for the test scanner.
  */
-private fun createScannerConfig(properties: ScannerOptions): ScannerConfiguration {
+private fun createScannerConfig(properties: Options): ScannerConfiguration {
     val options = mapOf(SCANNER_NAME to properties)
     return ScannerConfiguration(options = options)
 }
