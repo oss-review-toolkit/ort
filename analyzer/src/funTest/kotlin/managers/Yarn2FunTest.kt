@@ -42,7 +42,7 @@ class Yarn2FunTest : WordSpec({
             result shouldBe expectedResult
         }
 
-        // Todo: Add a test showcasing Yarn 2+ workspaces support.
+        // TODO: Add a test showcasing Yarn 2+ workspaces support.
     }
 })
 
