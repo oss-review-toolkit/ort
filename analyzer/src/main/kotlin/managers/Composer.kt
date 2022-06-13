@@ -49,7 +49,6 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.stashDirectories
@@ -95,9 +94,6 @@ class Composer(
                 "composer"
             }
         }
-
-    override fun run(workingDir: File?, vararg args: String) =
-        ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args).requireSuccess()
 
     override fun getVersionArguments() = "--no-ansi --version"
 
