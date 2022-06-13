@@ -191,8 +191,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     val stats = AccessStatistics()
 
     /**
-     * Read all [ScanResult]s for a package with [id] from the storage. Return a list of [ScanResult]s wrapped in a
-     * [Result], which is a [Failure] if an unexpected error occurred and a [Success] otherwise.
+     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the package denoted by the given
+     * [id] wrapped in a [Result].
      */
     fun read(id: Identifier): Result<List<ScanResult>> {
         val (result, duration) = measureTimedValue { readInternal(id) }
@@ -214,13 +214,12 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     }
 
     /**
-     * Read those [ScanResult]s for the given [package][pkg] from the storage that are
-     * [compatible][ScannerCriteria.matches] with the provided [scannerCriteria]. Also, [Package.sourceArtifact],
-     * [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches the expected source code
-     * location. That check is important to find the correct results when different revisions of a package using the
-     * same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during development). Return a
-     * list of [ScanResult]s wrapped in a [Result], which is a [Failure] if an unexpected error occurred and a [Success]
-     * otherwise.
+     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the given [package][pkg] that
+     * are [compatible][ScannerCriteria.matches] with the provided [scannerCriteria] wrapped in a [Result]. Also,
+     * [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches
+     * the expected source code location. That check is important to find the correct results when different revisions
+     * of a package using the same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during
+     * development).
      */
     fun read(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
         val (result, duration) = measureTimedValue { readInternal(pkg, scannerCriteria) }
@@ -242,13 +241,12 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     }
 
     /**
-     * Read those [ScanResult]s for the given [packages] from the storage that are
-     * [compatible][ScannerCriteria.matches] with the provided [scannerCriteria]. Also, [Package.sourceArtifact],
-     * [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches the expected source code
-     * location. That check is important to find the correct results when different revisions of a package using the
-     * same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during development). Return the list
-     * of [ScanResult]s mapped to the [Identifier]s of the [packages], wrapped in a [Result], which is a [Failure] if
-     * an unexpected error occurred and a [Success] otherwise.
+     * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the given [packages] that
+     * are [compatible][ScannerCriteria.matches] with the provided [scannerCriteria] wrapped in a [Result]. Also,
+     * [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches
+     * the expected source code location. That check is important to find the correct results when different revisions
+     * of a package using the same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during
+     * development).
      */
     fun read(
         packages: Collection<Package>,
