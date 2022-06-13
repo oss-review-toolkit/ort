@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.ort.log
 
@@ -106,7 +107,7 @@ class Yarn2(
                 }
             }
 
-            yarnExecutable.absolutePath
+            if (Os.isWindows) "node ${yarnExecutable.absolutePath}" else yarnExecutable.absolutePath
         }
     }
 
