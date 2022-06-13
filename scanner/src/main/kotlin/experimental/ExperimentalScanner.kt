@@ -42,8 +42,8 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -110,7 +110,7 @@ class ExperimentalScanner(
             storageStats = AccessStatistics() // TODO: Record access statistics.
         )
 
-        val filteredScannerOptions = mutableMapOf<String, ScannerOptions>()
+        val filteredScannerOptions = mutableMapOf<String, Options>()
 
         projectScannerWrappers.forEach { scannerWrapper ->
             scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
