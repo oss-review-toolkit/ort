@@ -48,6 +48,7 @@ import org.apache.maven.project.ProjectBuildingException
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.repository.RemoteRepository
 
+import org.ossreviewtoolkit.analyzer.managers.Gradle
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
