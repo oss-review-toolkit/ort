@@ -148,7 +148,10 @@ class CycloneDxReporter : Reporter {
             ?: setOf(FileFormat.XML)
 
         if (createSingleBom) {
-            val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
+            val bom = Bom().apply {
+                serialNumber = "urn:uuid:${UUID.randomUUID()}"
+                components = mutableListOf()
+            }
 
             // In case of multiple projects it is not always clear for which project to create the BOM:
             //
@@ -181,7 +184,10 @@ class CycloneDxReporter : Reporter {
             outputFiles += writeBom(bom, schemaVersion, outputDir, REPORT_BASE_FILENAME, outputFileFormats)
         } else {
             projects.forEach { project ->
-                val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
+                val bom = Bom().apply {
+                    serialNumber = "urn:uuid:${UUID.randomUUID()}"
+                    components = mutableListOf()
+                }
 
                 // Add information about projects as external references at the BOM level.
                 bom.addExternalReference(
