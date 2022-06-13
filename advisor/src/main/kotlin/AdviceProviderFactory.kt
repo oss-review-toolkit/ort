@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.advisor
 
 import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.model.config.AdviceProviderOptions
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
@@ -59,7 +59,7 @@ abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
      * Return a map with options for the [AdviceProvider] managed by this factory or an empty map if no options are
      * available.
      */
-    protected fun AdvisorConfiguration.providerOptions(): AdviceProviderOptions =
+    protected fun AdvisorConfiguration.providerOptions(): Options =
         options.orEmpty()[providerName].orEmpty()
 
     /**
