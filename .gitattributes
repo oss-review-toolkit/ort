@@ -15,6 +15,7 @@ analyzer/src/funTest/assets/projects/synthetic/spdx/**/*.spdx.*	text eol=lf
 # Use Unix line endings for expected test results for consistency across platforms.
 **/src/*/assets/**/*expected*.yml		text eol=lf
 reporter/src/funTest/assets/*-expected-*	text eol=lf
+reporter/src/funTest/assets/*.json	text eol=lf
 
 # Use Unix line endings for Freemarker templates for consistency across platforms.
 reporter/src/main/resources/**/*.ftl	text eol=lf
