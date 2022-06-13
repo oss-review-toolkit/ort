@@ -27,3 +27,9 @@ fun String.patchAsciiDocTemplateResult() =
         // Asciidoctor renders time zones differently depending on the platform.
         // For macOS the time is rendered as `00:00:00 +0000` while for Linux it is `00:00:00 UTC`.
         .replace("""[+-]\d{4}""".toRegex(), "UTC")
+
+fun String.patchCycloneDxResult() =
+    replace(
+        """urn:uuid:[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}""".toRegex(),
+        "urn:uuid:01234567-0123-0123-0123-01234567"
+    )
