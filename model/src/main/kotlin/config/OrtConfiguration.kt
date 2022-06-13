@@ -150,3 +150,8 @@ data class OrtConfiguration(
 internal data class OrtConfigurationWrapper(
     val ort: OrtConfiguration
 )
+
+/**
+ * A typealias for key-value pairs, used in several configuration classes.
+ */
+typealias Options = Map<String, String>

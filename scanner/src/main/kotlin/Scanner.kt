@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +36,8 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.model.utils.filterByProject
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.log
@@ -156,7 +157,7 @@ fun scanOrtResult(
         "The package and project scanners need to refer to the same global scanner configuration."
     }
 
-    val filteredScannerOptions = mutableMapOf<String, ScannerOptions>()
+    val filteredScannerOptions = mutableMapOf<String, Options>()
 
     packageScanner?.scannerConfig?.options?.get(packageScanner.scannerName)?.let { packageScannerOptions ->
         val filteredPackageScannerOptions = packageScanner.filterSecretOptions(packageScannerOptions)
@@ -239,5 +240,5 @@ abstract class Scanner(
     /**
      * Filter the scanner-specific options to remove / obfuscate any secrets, like credentials.
      */
-    open fun filterSecretOptions(options: ScannerOptions) = options
+    open fun filterSecretOptions(options: Options) = options
 }

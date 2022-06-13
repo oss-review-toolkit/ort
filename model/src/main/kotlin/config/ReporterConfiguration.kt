@@ -22,13 +22,6 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
- * Type alias for a map with configuration options for a single _Reporter_. In addition to the concrete configuration
- * classes for the reporters shipped with ORT, [ReporterConfiguration] holds a map with generic options that can be used
- * to configure external plugins via the ORT configuration.
- */
-typealias ReporterOptions = Map<String, String>
-
-/**
  * The base configuration model of the reporter.
  */
 data class ReporterConfiguration(
@@ -37,5 +30,5 @@ data class ReporterConfiguration(
      * for the FossId reporter. See the documentation of the reporter for available options.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val options: Map<String, ReporterOptions>? = null
+    val options: Map<String, Options>? = null
 )

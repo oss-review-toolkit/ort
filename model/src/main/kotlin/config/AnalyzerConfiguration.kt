@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2020-2021 Bosch.IO GmbH
+ * Copyright (C) 2020-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
-typealias PackageManagerOptions = Map<String, String>
-
 @JsonIgnoreProperties(value = ["ignore_tool_versions"]) // Backwards compatibility.
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AnalyzerConfiguration(
@@ -41,7 +39,7 @@ data class AnalyzerConfiguration(
      * Package manager specific configuration options. The key needs to match the name of the package manager class,
      * e.g. "NuGet" for the NuGet package manager. See the documentation of the respective class for available options.
      */
-    val options: Map<String, PackageManagerOptions>? = null,
+    val options: Map<String, Options>? = null,
 
     /**
      * Configuration of the SW360 package curation provider.

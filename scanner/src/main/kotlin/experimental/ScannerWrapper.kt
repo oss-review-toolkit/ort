@@ -29,8 +29,8 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.config.ScannerOptions
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 /**
@@ -73,7 +73,7 @@ sealed interface ScannerWrapper {
     /**
      * Filter the scanner-specific options to remove / obfuscate any secrets, like credentials.
      */
-    fun filterSecretOptions(options: ScannerOptions): ScannerOptions
+    fun filterSecretOptions(options: Options): Options
 }
 
 /**
