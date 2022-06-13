@@ -49,7 +49,7 @@ FROM eclipse-temurin:11-jdk-focal AS run
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.12 \
-    CARGO_VERSION=0.58.0-0ubuntu1~20.04.1 \
+    CARGO_VERSION=0.60.0ubuntu1-0ubuntu1~20.04.1 \
     COCOAPODS_VERSION=1.11.2 \
     COMPOSER_VERSION=1.10.1-1 \
     CONAN_VERSION=1.48.1 \
