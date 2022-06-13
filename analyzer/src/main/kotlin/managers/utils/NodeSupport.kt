@@ -62,7 +62,7 @@ fun hasYarnLockFile(directory: File) =
  * Return whether the [directory] contains a Yarn resource file in YAML format, specific to Yarn 2+.
  * Yarn1 has a non-YAML `.yarnrc` configuration file.
  */
-fun hasYarn2ResourceFile(directory: File) = File(directory, Yarn2.YARN2_RESOURCE_FILE).isFile
+fun hasYarn2ResourceFile(directory: File) = directory.resolve(Yarn2.YARN2_RESOURCE_FILE).isFile
 
 /**
  * Map [definitionFiles] to contain only files handled by NPM.
