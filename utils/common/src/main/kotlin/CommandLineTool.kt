@@ -66,14 +66,18 @@ interface CommandLineTool {
      * Run the command in the [workingDir] directory with arguments as specified by [args] and the given [environment].
      */
     fun run(vararg args: String, workingDir: File? = null, environment: Map<String, String> = emptyMap()) =
-        ProcessCapture(command(workingDir), *args, workingDir = workingDir, environment = environment)
-            .requireSuccess()
+        ProcessCapture(
+            *command(workingDir).split(' ').toTypedArray(),
+            *args,
+            workingDir = workingDir,
+            environment = environment
+        ).requireSuccess()
 
     /**
      * Run the command in the [workingDir] directory with arguments as specified by [args].
      */
     fun run(workingDir: File?, vararg args: String) =
-        ProcessCapture(workingDir, command(workingDir), *args).requireSuccess()
+        ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args).requireSuccess()
 
     /**
      * Get the version of the command by parsing its output.
