@@ -18,26 +18,29 @@ project:
   scopes:
   - name: "all"
     dependencies:
-    - id: "GoMod::github.com/fatih/color:v1.7.0"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
+    - id: "GoMod::github.com/fatih/color:v1.13.0"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
+      - id: "GoMod::github.com/mattn/go-colorable:v0.1.9"
         linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
+        dependencies:
+        - id: "GoMod::github.com/mattn/go-isatty:v0.0.12"
+          linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
       linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
-    - id: "GoMod::github.com/fatih/color:v1.7.0"
+    - id: "GoMod::github.com/fatih/color:v1.13.0"
       linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
+    - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
       linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
+    - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
       linkage: "PROJECT_STATIC"
 packages:
-- id: "GoMod::github.com/fatih/color:v1.7.0"
-  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@v1.7.0"
+- id: "GoMod::github.com/fatih/color:v1.13.0"
+  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@v1.13.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -55,15 +58,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/fatih/color.git"
-    revision: "v1.7.0"
+    revision: "v1.13.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/fatih/color.git"
-    revision: "v1.7.0"
+    revision: "v1.13.0"
     path: ""
-- id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.4"
+- id: "GoMod::github.com/mattn/go-colorable:v0.1.9"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.9"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -81,15 +84,41 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/mattn/go-colorable.git"
-    revision: "v0.1.4"
+    revision: "v0.1.9"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/mattn/go-colorable.git"
-    revision: "v0.1.4"
+    revision: "v0.1.9"
     path: ""
-- id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.8"
+- id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.12"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/mattn/go-colorable.git"
+    revision: "v0.1.12"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mattn/go-colorable.git"
+    revision: "v0.1.12"
+    path: ""
+- id: "GoMod::github.com/mattn/go-isatty:v0.0.12"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -107,15 +136,15 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
-    revision: "v0.0.8"
+    revision: "v0.0.12"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
-    revision: "v0.0.8"
+    revision: "v0.0.12"
     path: ""
-- id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.10"
+- id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.14"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -133,10 +162,10 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
-    revision: "v0.0.10"
+    revision: "v0.0.14"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
-    revision: "v0.0.10"
+    revision: "v0.0.14"
     path: ""
