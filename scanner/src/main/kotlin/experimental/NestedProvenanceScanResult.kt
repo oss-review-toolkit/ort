@@ -99,7 +99,8 @@ data class NestedProvenanceScanResult(
                     licenseFindings = licenseFindings,
                     copyrightFindings = copyrightFindings,
                     issues = issues
-                )
+                ),
+                additionalData = allScanResults.map { it.additionalData }.reduce { acc, map -> acc + map }
             )
         }
     }
