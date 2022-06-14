@@ -26,17 +26,25 @@ project:
         dependencies:
         - id: "GoMod::github.com/mattn/go-isatty:v0.0.12"
           linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/google/uuid:v1.0.0"
+      linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
       linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/pborman/uuid:v1.2.1"
       linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
     - id: "GoMod::github.com/fatih/color:v1.13.0"
       linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/google/uuid:v1.0.0"
+      linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
       linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/pborman/uuid:v1.2.1"
       linkage: "PROJECT_STATIC"
 packages:
 - id: "GoMod::github.com/fatih/color:v1.13.0"
@@ -64,6 +72,32 @@ packages:
     type: "Git"
     url: "https://github.com/fatih/color.git"
     revision: "v1.13.0"
+    path: ""
+- id: "GoMod::github.com/google/uuid:v1.0.0"
+  purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@v1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/uuid.git"
+    revision: "v1.0.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/uuid.git"
+    revision: "v1.0.0"
     path: ""
 - id: "GoMod::github.com/mattn/go-colorable:v0.1.9"
   purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.9"
@@ -168,4 +202,30 @@ packages:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
     revision: "v0.0.14"
+    path: ""
+- id: "GoMod::github.com/pborman/uuid:v1.2.1"
+  purl: "pkg:golang/github.com%2Fpborman%2Fuuid@v1.2.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/pborman/uuid.git"
+    revision: "v1.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pborman/uuid.git"
+    revision: "v1.2.1"
     path: ""
